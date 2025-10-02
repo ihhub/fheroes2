@@ -54,7 +54,7 @@ public:
         _isFound = true;
     }
 
-    void Set( const int32_t position, const Artifact & );
+    void Set( const int32_t position, const Artifact & artifact );
     void Reset();
 
     fheroes2::Image GetPuzzleMapSurface() const;

@@ -30,7 +30,6 @@
 #include <iterator>
 #include <numeric>
 #include <utility>
-#include <vector>
 
 #include "agg_image.h"
 #include "army_troop.h"
@@ -47,6 +46,7 @@
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
+#include "math_tools.h"
 #include "mp2.h"
 #include "pal.h"
 #include "race.h"
@@ -59,7 +59,6 @@
 #include "ui_constants.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
-#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -68,6 +67,18 @@ namespace
 {
     const int32_t dialogHeightDeduction = 150;
 
+    fheroes2::Sprite renderMonsterOnBackground( const fheroes2::Sprite & monsterSprite )
+    {
+        const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        fheroes2::Sprite image = fheroes2::Crop( backgroundOriginal, 36, 267, 43, 43 );
+        image.setPosition( 0, 0 );
+
+        fheroes2::Blit( monsterSprite, 0, 0, image, ( image.width() - monsterSprite.width() ) / 2, ( image.height() - monsterSprite.height() ) / 2, monsterSprite.width(),
+                        monsterSprite.height() );
+
+        return image;
+    }
+
     // Returns the town type according the given player color, race and castle/town state.
     int getPackedTownType( const int townRace, const bool isCastle )
     {
@@ -75,7 +86,7 @@ namespace
         return townRace * 2 + ( isCastle ? 0 : 1 );
     }
 
-    class SelectEnumMonster final : public Dialog::ItemSelectionWindow
+    class SelectEnumMonster : public Dialog::ItemSelectionWindow
     {
     public:
         explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
@@ -88,10 +99,7 @@ namespace
 
         void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
         {
-            const Monster mons( index );
-            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-
-            renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+            renderItem( getImage( index ), Monster{ index }.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
         void ActionListPressRight( int & index ) override
@@ -107,6 +115,93 @@ namespace
 
     private:
         static const int32_t _offsetY{ 43 };
+
+        virtual fheroes2::Sprite getImage( const int index )
+        {
+            const Monster mons( index );
+            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+            return renderMonsterOnBackground( monsterSprite );
+        }
+    };
+
+    class MultiMonsterSelection final : public SelectEnumMonster
+    {
+    public:
+        using SelectEnumMonster::SelectEnumMonster;
+
+        using Interface::ListBox<int>::ActionListDoubleClick;
+        using Interface::ListBox<int>::ActionListSingleClick;
+        using Interface::ListBox<int>::ActionListPressRight;
+
+        void setup( std::vector<int> allowed, const std::vector<int> & selected )
+        {
+            _ids = std::move( allowed );
+
+            for ( const int id : selected ) {
+                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
+                    _selected.emplace( id );
+                }
+            }
+
+            if ( _selected.empty() ) {
+                _selected.insert( _ids.begin(), _ids.end() );
+            }
+
+            SetListContent( _ids );
+            // For multi-selection we don't have any current item.
+            SetCurrent( 0 );
+        }
+
+        std::vector<int> getSelected() const
+        {
+            return { _selected.begin(), _selected.end() };
+        }
+
+        void ActionListSingleClick( int & id ) override
+        {
+            updateStatus( id );
+        }
+
+        void ActionListDoubleClick( int & id ) override
+        {
+            updateStatus( id );
+        }
+
+    private:
+        std::vector<int> _ids;
+        std::set<int> _selected;
+
+        void updateStatus( const int id )
+        {
+            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
+
+            if ( _selected.count( id ) == 0 ) {
+                _selected.emplace( id );
+            }
+            else {
+                _selected.erase( id );
+            }
+
+            setButtonOkayStatus( !_selected.empty() );
+        }
+
+        bool isDoubleClicked() override
+        {
+            return false;
+        }
+
+        fheroes2::Sprite getImage( const int index ) override
+        {
+            const Monster mons( index );
+            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+            fheroes2::Sprite image = renderMonsterOnBackground( monsterSprite );
+
+            if ( _selected.count( index ) == 0 ) {
+                fheroes2::ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+
+            return image;
+        }
     };
 
     class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
@@ -124,7 +219,7 @@ namespace
         {
             const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
-            renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+            renderItem( port, Heroes::getDefaultName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
         void ActionListPressRight( int & index ) override
@@ -288,13 +383,14 @@ namespace
             // If this assertion blows up then you are setting different number of items.
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
-            const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
+            const fheroes2::Sprite & image = getObjectImage( _objectInfo[objectId] );
+
             const int32_t imageHeight = image.height();
             const int32_t imageWidth = image.width();
             if ( imageHeight > fheroes2::tileWidthPx * 3 || imageWidth > fheroes2::tileWidthPx * 5 ) {
                 // Reduce the size of very tall images to fit the list.
                 const double ratio = std::max( imageHeight / ( fheroes2::tileWidthPx * 3. ), imageWidth / ( fheroes2::tileWidthPx * 5. ) );
-                fheroes2::Image resized( static_cast<int32_t>( imageWidth / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
+                fheroes2::Sprite resized( static_cast<int32_t>( imageWidth / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
                 fheroes2::Resize( image, resized );
                 renderItem( resized, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
             }
@@ -315,6 +411,11 @@ namespace
         virtual void showPopupWindow( const Maps::ObjectInfo & info ) = 0;
 
         virtual std::string getObjectName( const Maps::ObjectInfo & info ) = 0;
+
+        virtual fheroes2::Sprite getObjectImage( const Maps::ObjectInfo & object ) const
+        {
+            return fheroes2::generateMapObjectImage( object );
+        }
 
         const std::vector<Maps::ObjectInfo> & _objectInfo;
 
@@ -349,6 +450,12 @@ namespace
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
             return Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName();
+        }
+
+        fheroes2::Sprite getObjectImage( const Maps::ObjectInfo & object ) const override
+        {
+            const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( object );
+            return renderMonsterOnBackground( image );
         }
     };
 
@@ -569,11 +676,6 @@ namespace
             fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
         }
 
-        int getCurrentId() const
-        {
-            return _currentId;
-        }
-
         void initListBackgroundRestorer( fheroes2::Rect roi )
         {
             _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
@@ -584,22 +686,8 @@ namespace
             return _isDoubleClicked;
         }
 
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
-        }
-
         void RedrawItem( const Maps::ObjectInfo & info, int32_t dstx, int32_t dsty, bool current ) override
         {
-            if ( _color < 0 ) {
-                assert( 0 );
-                return;
-            }
-
             const fheroes2::Sprite mineSprite( fheroes2::generateMapObjectImage( info ) );
 
             fheroes2::Display & display = fheroes2::Display::instance();
@@ -641,14 +729,8 @@ namespace
             // Do nothing.
         }
 
-        void setOwnerColor( const int32_t color )
-        {
-            _color = color;
-        }
-
     private:
         bool _isDoubleClicked{ false };
-        int32_t _color{ 0 };
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 }
@@ -731,16 +813,7 @@ namespace Dialog
         setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
 
         // Render dialog buttons.
-        _window->renderOkayCancelButtons( _buttonOk, _buttonCancel, isEvilInterface );
-    }
-
-    void ItemSelectionWindow::updateScrollBarImage()
-    {
-        const int32_t scrollBarWidth = _scrollbar.width();
-
-        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
-                                                              { 0, 7, scrollBarWidth, 8 } ) );
-        _scrollbar.moveToIndex( _topId );
+        _window->renderOkayCancelButtons( _buttonOk, _buttonCancel );
     }
 
     // An image with text should have offset of 10 pixels from all left and right edges.
@@ -772,11 +845,11 @@ namespace Dialog
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( !_isDoubleClicked && le.HandleEvents() ) {
-            _buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonOk.area() ) );
-            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonCancel.area() ) );
+        while ( !isDoubleClicked() && le.HandleEvents() ) {
+            _buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonOk.area() ) );
+            _buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            if ( _buttonOk.isEnabled() && ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
                 return Dialog::OK;
             }
             if ( le.MouseClickLeft( _buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -800,7 +873,7 @@ namespace Dialog
             display.render( roi );
         }
 
-        if ( _isDoubleClicked ) {
+        if ( isDoubleClicked() ) {
             return Dialog::OK;
         }
 
@@ -842,14 +915,20 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
     return {};
 }
 
-Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
+Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList /* = {} */,
+                           const int32_t spellsLevel /* = -1 */ )
 {
-    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
+    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, excludeSpellsList );
 
     if ( includeRandomSpells ) {
         // We add random spell items to the end of the list.
-        for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
-            spells.push_back( randomSpellId );
+        if ( spellsLevel == -1 ) {
+            for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
+                spells.push_back( randomSpellId );
+            }
+        }
+        else {
+            spells.push_back( Spell::RANDOM + spellsLevel );
         }
     }
 
@@ -955,6 +1034,17 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
     return ( result == Dialog::OK ) ? listbox.GetCurrent() : Heroes::UNKNOWN;
 }
 
+void Dialog::multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected )
+{
+    MultiMonsterSelection monsterList( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monsters:" ) );
+    monsterList.setup( std::move( allowed ), selected );
+
+    const int32_t result = monsterList.selectItemsEventProcessing();
+    if ( result == Dialog::OK ) {
+        selected = monsterList.getSelected();
+    }
+}
+
 int Dialog::selectHeroType( const int heroType )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -998,11 +1088,12 @@ int Dialog::selectHeroType( const int heroType )
     std::array<fheroes2::Rect, 7> raceRect;
 
     // Random race.
-    raceRect.back() = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
-    fheroes2::Copy( randomRaceSprite, 4, 4, display, raceRect.back().x + 4, raceRect.back().y + 4, raceImageWidth, raceImageHeight );
+    fheroes2::Rect & randomRaceRect = raceRect.back();
+    randomRaceRect = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
+    fheroes2::Copy( randomRaceSprite, 4, 4, display, randomRaceRect.x + 4, randomRaceRect.y + 4, raceImageWidth, raceImageHeight );
     fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
     text.set( _( "race|Random" ), fheroes2::FontType::smallWhite() );
-    text.draw( raceRect.back().x, raceRect.back().y + raceRect.back().height + 4, raceBorderWidth, display );
+    text.draw( randomRaceRect.x, randomRaceRect.y + randomRaceRect.height + 4, raceBorderWidth, display );
 
     pos.x += stepX;
     for ( uint32_t i = 0; i < 6; ++i ) {
@@ -1027,12 +1118,10 @@ int Dialog::selectHeroType( const int heroType )
     pos.x = area.x + area.width / 2;
     pos.y += 175;
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
     fheroes2::Rect heroRoi;
@@ -1048,17 +1137,23 @@ int Dialog::selectHeroType( const int heroType )
 
     LocalEvent & le = LocalEvent::Get();
     bool needRedraw = true;
-    int heroRace = 0;
+    // Set the default race to be Random.
+    // This value comes from ICN::MINIHERO images.
+    int heroRace = 6;
     int heroColor = 0;
 
     if ( heroType > -1 ) {
         heroRace = heroType % 7;
         heroColor = heroType / 7;
     }
+    else {
+        // This is an invalid hero!
+        assert( heroType < 7 * 7 );
+    }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             return heroColor * 7 + heroRace;
@@ -1130,7 +1225,7 @@ int Dialog::selectHeroType( const int heroType )
         needRedraw = false;
     }
 
-    return Heroes::UNKNOWN;
+    return -1;
 }
 
 int Dialog::selectMonsterType( const int monsterType )
@@ -1223,17 +1318,19 @@ void Dialog::selectTownType( int & type, int & color )
     // Neutral color.
     fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
     const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
-    colorRect.back() = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
-    fheroes2::Copy( neutralColorSprite, 0, 0, display, colorRect.back().x + 4, colorRect.back().y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
+    fheroes2::Rect & neutralColorRect = colorRect.back();
+    neutralColorRect = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
+    fheroes2::Copy( neutralColorSprite, 0, 0, display, neutralColorRect.x + 4, neutralColorRect.y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
     text.set( _( "doubleLinedRace|Neutral" ), fheroes2::FontType::smallWhite() );
-    text.draw( colorRect.back().x + ( colorRect.back().width - text.width() ) / 2, colorRect.back().y + colorRect.back().height + 4, display );
+    text.draw( neutralColorRect.x + ( neutralColorRect.width - text.width() ) / 2, neutralColorRect.y + neutralColorRect.height + 4, display );
 
     // Random race.
-    raceRect.back() = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
-    fheroes2::Copy( randomRaceSprite, 4, 4, display, raceRect.back().x + 4, raceRect.back().y + 4, raceImageWidth, raceImageHeight );
+    fheroes2::Rect & randomRaceRect = raceRect.back();
+    randomRaceRect = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
+    fheroes2::Copy( randomRaceSprite, 4, 4, display, randomRaceRect.x + 4, randomRaceRect.y + 4, raceImageWidth, raceImageHeight );
     fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
     text.set( _( "race|Random" ), fheroes2::FontType::smallWhite() );
-    text.draw( raceRect.back().x, raceRect.back().y + raceRect.back().height + 4, raceBorderWidth, display );
+    text.draw( randomRaceRect.x, randomRaceRect.y + randomRaceRect.height + 4, raceBorderWidth, display );
 
     pos.x += stepX;
     for ( uint32_t i = 0; i < 6; ++i ) {
@@ -1258,22 +1355,27 @@ void Dialog::selectTownType( int & type, int & color )
     pos.x = area.x + area.width / 2;
     pos.y += 260;
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
-    const int32_t townButtonIcnId = isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD;
-    const fheroes2::Sprite & townButtonImage = fheroes2::AGG::GetICN( townButtonIcnId, 0 );
-    fheroes2::Button buttonTown{ 0, 0, townButtonIcnId, 0, 1 };
-    fheroes2::Button buttonCastle{ 0, 0, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1 };
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const fheroes2::Point buttonOffset{ area.x + ( area.width - townButtonImage.width() ) / 2, area.y + area.height - townButtonImage.height() - 7 };
+    fheroes2::ButtonGroup castleTownButtons( { fheroes2::getSupportedText( gettext_noop( "TOWN" ), fheroes2::FontType::buttonReleasedWhite() ),
+                                               fheroes2::getSupportedText( gettext_noop( "CASTLE" ), fheroes2::FontType::buttonReleasedWhite() ) } );
+    fheroes2::ButtonBase & buttonTown = castleTownButtons.button( 0 );
+    fheroes2::ButtonBase & buttonCastle = castleTownButtons.button( 1 );
+
+    const int32_t buttonWidth = buttonTown.area().width;
+    const int32_t buttonHeight = buttonTown.area().height;
+
+    const fheroes2::Point buttonOffset{ area.x + ( area.width - buttonWidth ) / 2, area.y + area.height - buttonHeight - 7 };
+
     buttonTown.setPosition( buttonOffset.x, buttonOffset.y );
     buttonCastle.setPosition( buttonOffset.x, buttonOffset.y );
-    fheroes2::addGradientShadow( townButtonImage, display, buttonOffset, { -5, 5 } );
+    // We draw the shadow only once for both buttons because the button states overlap.
+    buttonTown.drawShadow( display );
 
     const fheroes2::Rect castleRoi{ pos.x - 2 * fheroes2::tileWidthPx - fheroes2::tileWidthPx / 2, pos.y - 4 * fheroes2::tileWidthPx + fheroes2::tileWidthPx / 2,
                                     5 * fheroes2::tileWidthPx, 5 * fheroes2::tileWidthPx };
@@ -1306,11 +1408,11 @@ void Dialog::selectTownType( int & type, int & color )
     }
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         if ( isCastle ) {
-            if ( le.isMouseLeftButtonPressedInArea( buttonTown.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonTown.area() ) ) {
                 buttonTown.drawOnPress();
             }
             else if ( le.MouseClickLeft( buttonTown.area() ) ) {
@@ -1323,7 +1425,7 @@ void Dialog::selectTownType( int & type, int & color )
             }
         }
         else {
-            if ( le.isMouseLeftButtonPressedInArea( buttonCastle.area() ) ) {
+            if ( le.isMouseLeftButtonPressedAndHeldInArea( buttonCastle.area() ) ) {
                 buttonCastle.drawOnPress();
             }
             else if ( le.MouseClickLeft( buttonCastle.area() ) ) {
@@ -1439,7 +1541,7 @@ int Dialog::selectLandscapeMiscellaneousObjectType( const int objectType )
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
 
-void Dialog::selectMineType( int32_t & type, int32_t & color )
+int32_t Dialog::selectMineType( const int32_t type )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 380, 395, true, display );
@@ -1651,40 +1753,35 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     };
     redrawAppearanceText( objectInfo[listbox.getCurrentId()] );
 
-    // TODO: Implement owner color selection.
-    listbox.setOwnerColor( 0 );
-
     listbox.Redraw();
 
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
     display.render( background.totalArea() );
 
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         bool needRedraw = listbox.QueueEventProcessing();
 
         if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            type = objectInfoIndexes[listbox.getCurrentId()];
-            color = 0;
-            return;
+            return objectInfoIndexes[listbox.getCurrentId()];
         }
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            return;
+            return type;
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to select the color." ), Dialog::ZERO );
         }
         else {
             for ( uint32_t i = 0; i < resourceCount; ++i ) {
@@ -1725,6 +1822,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
         listbox.Redraw();
         display.render( area );
     }
+
+    return type;
 }
 
 int Dialog::selectMountainType( const int mountainType )
@@ -1770,4 +1869,117 @@ int Dialog::selectAdventureMiscellaneousObjectType( const int objectType )
     GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Adventure Object:" ) );
 
     return selectObjectType( objectType, objectInfo.size(), listbox );
+}
+
+PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t availableColors )
+{
+    const int32_t stepX = 70;
+    const int32_t minWidth = 250;
+    const int32_t colorsWidth = 30 + stepX * ( Color::Count( availableColors ) + 1 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    fheroes2::StandardWindow background( std::max( minWidth, colorsWidth ), 160, true, display );
+
+    const fheroes2::Rect & area = background.activeArea();
+
+    fheroes2::Text text( _( "Select color" ), fheroes2::FontType::normalYellow() );
+    text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
+
+    // Render color selection sprites.
+    fheroes2::Point pos( area.x + 20 + ( area.width - colorsWidth ) / 2, area.y + 40 );
+    const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
+
+    const std::vector<uint8_t> darkGrayPalette = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+    fheroes2::ApplyPalette( colorSpriteBorder, darkGrayPalette );
+
+    std::array<fheroes2::Rect, 7> colorRect;
+
+    // Neutral color.
+    fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
+    const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
+    fheroes2::Rect & neutralColorRect = colorRect.back();
+    neutralColorRect = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
+    fheroes2::Copy( neutralColorSprite, 0, 0, display, neutralColorRect.x + 4, neutralColorRect.y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
+    text.set( _( "doubleLinedRace|Neutral" ), fheroes2::FontType::smallWhite() );
+    text.draw( neutralColorRect.x + ( neutralColorRect.width - text.width() ) / 2, neutralColorRect.y + neutralColorRect.height + 4, display );
+
+    pos.x += stepX;
+    for ( int32_t i = 0; i < 7; ++i ) {
+        const PlayerColor currentColor = Color::IndexToColor( i );
+
+        if ( ( availableColors & currentColor ) == 0 ) {
+            continue;
+        }
+
+        const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
+
+        fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
+        colorRect[i] = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
+        fheroes2::Copy( colorSprite, 0, 0, display, colorRect[i].x + 4, colorRect[i].y + 4, colorSprite.width(), colorSprite.height() );
+        text.set( Color::String( currentColor ), fheroes2::FontType::smallWhite() );
+        text.draw( colorRect[i].x + ( colorRect[i].width - text.width() ) / 2, colorRect[i].y + colorRect[i].height + 4, display );
+
+        pos.x += stepX;
+    }
+
+    int selectedColorIndex = Color::GetIndex( color );
+
+    for ( int32_t i = 0; i < 7; ++i ) {
+        if ( colorRect[i] != fheroes2::Rect{} ) {
+            fheroes2::Blit( ( i == selectedColorIndex ) ? colorSpriteBorderSelected : colorSpriteBorder, display, colorRect[i].x, colorRect[i].y );
+        }
+    }
+
+    // Render dialog buttons.
+    fheroes2::Button buttonOk;
+    fheroes2::Button buttonCancel;
+    background.renderOkayCancelButtons( buttonOk, buttonCancel );
+
+    display.render( background.totalArea() );
+
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents() ) {
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
+
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            return Color::IndexToColor( selectedColorIndex );
+        }
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return color;
+        }
+
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to select the color." ), Dialog::ZERO );
+        }
+        else {
+            for ( size_t i = 0; i < 7; ++i ) {
+                if ( static_cast<int>( i ) != selectedColorIndex && colorRect[i] != fheroes2::Rect{} && le.MouseClickLeft( colorRect[i] ) ) {
+                    fheroes2::Blit( colorSpriteBorder, display, colorRect[selectedColorIndex].x, colorRect[selectedColorIndex].y );
+                    fheroes2::Blit( colorSpriteBorderSelected, display, colorRect[i].x, colorRect[i].y );
+
+                    display.render( fheroes2::getBoundaryRect( colorRect[selectedColorIndex], colorRect[i] ) );
+
+                    selectedColorIndex = static_cast<int>( i );
+
+                    break;
+                }
+
+                if ( le.isMouseRightButtonPressedInArea( colorRect[i] ) ) {
+                    fheroes2::showStandardTextMessage( i == 6 ? _( "race|Neutral" ) : Color::String( Color::IndexToColor( static_cast<int>( i ) ) ),
+                                                       _( "Click to select this color." ), Dialog::ZERO );
+
+                    break;
+                }
+            }
+        }
+    }
+
+    return color;
 }

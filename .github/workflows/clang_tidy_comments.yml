@@ -19,7 +19,7 @@ jobs:
         shell: bash
     steps:
     - name: Download analysis results
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
@@ -27,13 +27,13 @@ jobs:
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
           });
-          const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "clang-tidy-result"
-          })[0];
+          const clangTidyArtifact = artifacts.data.artifacts.find((artifact) =>
+              artifact.name === "clang-tidy-result"
+          );
           const download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              artifact_id: matchArtifact.id,
+              artifact_id: clangTidyArtifact.id,
               archive_format: "zip",
           });
           const fs = require("fs");
@@ -43,14 +43,14 @@ jobs:
         mkdir clang-tidy-result
         unzip -j clang-tidy-result.zip -d clang-tidy-result
     - name: Set environment variables
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const assert = require("node:assert").strict;
           const fs = require("fs");
           function exportVar(varName, fileName, regEx) {
               const val = fs.readFileSync("${{ github.workspace }}/clang-tidy-result/" + fileName, {
-                  encoding: "ascii"
+                  encoding: "ascii",
               }).trimEnd();
               assert.ok(regEx.test(val), "Invalid value format for " + varName);
               core.exportVariable(varName, val);
@@ -58,13 +58,13 @@ jobs:
           exportVar("PR_ID", "pr-id.txt", /^[0-9]+$/);
           exportVar("PR_HEAD_REPO", "pr-head-repo.txt", /^[-./0-9A-Z_a-z]+$/);
           exportVar("PR_HEAD_SHA", "pr-head-sha.txt", /^[0-9A-Fa-f]+$/);
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         repository: ${{ env.PR_HEAD_REPO }}
         ref: ${{ env.PR_HEAD_SHA }}
         persist-credentials: false
     - name: Redownload analysis results
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
@@ -72,13 +72,13 @@ jobs:
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
           });
-          const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "clang-tidy-result"
-          })[0];
+          const clangTidyArtifact = artifacts.data.artifacts.find((artifact) =>
+              artifact.name === "clang-tidy-result"
+          );
           const download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              artifact_id: matchArtifact.id,
+              artifact_id: clangTidyArtifact.id,
               archive_format: "zip",
           });
           const fs = require("fs");

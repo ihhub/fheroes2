@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <string>
 
+#include "color.h"
 #include "game_mode.h"
 
 class IStreamBase;
@@ -52,10 +53,11 @@ namespace GameOver
         LOSS_TIME = 0x00000800,
         // These loss conditions apply if the enemy player won because of the corresponding win condition
         LOSS_ENEMY_WINS_TOWN = 0x00010000,
-        LOSS_ENEMY_WINS_GOLD = 0x00020000,
+        LOSS_ENEMY_WINS_ARTIFACT = 0x00020000,
+        LOSS_ENEMY_WINS_GOLD = 0x00040000,
 
-        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD,
-        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD
+        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD,
+        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
     };
 
     const char * GetString( uint32_t cond );
@@ -85,10 +87,10 @@ namespace GameOver
         friend OStreamBase & operator<<( OStreamBase & stream, const Result & res );
         friend IStreamBase & operator>>( IStreamBase & stream, Result & res );
 
-        Result();
+        Result() = default;
 
-        int colors;
-        uint32_t result;
+        PlayerColorsSet _colors{ 0 };
+        uint32_t result{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const Result & res );
