@@ -96,16 +96,12 @@ namespace
 
             body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
             body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
-
             body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
             body.add( { fheroes2::getLanguageName( info.mainLanguage ), fheroes2::FontType::normalWhite() } );
-
             body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
-
             body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
             body.add( { info.description, fheroes2::FontType::normalWhite() } );
-
             body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
             body.add( { info.filename, fheroes2::FontType::smallWhite() } );
 
