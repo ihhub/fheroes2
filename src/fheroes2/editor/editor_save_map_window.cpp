@@ -82,8 +82,7 @@ namespace
         void ActionListDoubleClick( Maps::FileInfo & info ) override;
         void ActionListSingleClick( Maps::FileInfo & info ) override;
 
-
-        void ActionListPressRight( Maps::FileInfo & info )
+        void ActionListPressRight( Maps::FileInfo & info ) override
         {
             const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.getSupportedLanguage() );
 
