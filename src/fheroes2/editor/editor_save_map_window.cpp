@@ -84,25 +84,18 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
+            if ( info.version != GameVersion::RESURRECTION ) {
+                // The Editor doesn't support original map formats so you are trying to do some nonsence hacks.
+                assert( 0 );
+                return;
+            }
+
             const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.getSupportedLanguage() );
 
             fheroes2::MultiFontText body;
 
             body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
-            switch ( info.version ) {
-            case GameVersion::SUCCESSION_WARS:
-                body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
-                break;
-            case GameVersion::PRICE_OF_LOYALTY:
-                body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
-                break;
-            case GameVersion::RESURRECTION:
-                body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
-                break;
-            default:
-                assert( 0 );
-                break;
-            }
+            body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
 
             if ( info.version == GameVersion::RESURRECTION ) {
                 body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
