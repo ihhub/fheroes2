@@ -917,9 +917,13 @@ namespace
 
     // Show a right click popup for any keyboard button.
     // Returns true if a popup was shown.
-    static bool showRightClickHelpForAnyKey( const std::vector<std::vector<KeyboardButton>> & buttons, const std::vector<std::string> & buttonLetters,
-                                             const std::vector<std::string> & returnLetters, const LayoutType layoutType, const bool isExtraLanguageSupported,
-                                             LocalEvent & le, const fheroes2::ButtonSprite * okayBtn )
+    bool showRightClickHelpForAnyKey( const std::vector<std::vector<KeyboardButton>> & buttons, 
+                                      const std::vector<std::string> & buttonLetters,
+                                      const std::vector<std::string> & returnLetters, 
+                                      const LayoutType layoutType, 
+                                      const bool isExtraLanguageSupported,
+                                      LocalEvent & le, 
+                                      const fheroes2::ButtonSprite * okayBtn )
     {
 
         // Handle OKAY button
@@ -949,7 +953,7 @@ namespace
                     title += outCh;
                     title += '\'';
 
-                    fheroes2::showStandardTextMessage( title.c_str(), _( "Insert this character." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( title, _( "Insert this character." ), Dialog::ZERO );
                     return true;
                 }
 
@@ -1080,8 +1084,7 @@ namespace
             }
 
             // right click help for any key on the virtual keyboard.
-            if ( showRightClickHelpForAnyKey( buttons, buttonLetters, returnLetters, layoutType, isExtraLanguageSupported, le, &okayButton ) )
-            {
+            if ( showRightClickHelpForAnyKey( buttons, buttonLetters, returnLetters, layoutType, isExtraLanguageSupported, le, &okayButton ) ) {
                 continue; // avoid multiple popups in one frame
             }
 
