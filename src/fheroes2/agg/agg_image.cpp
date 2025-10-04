@@ -4868,6 +4868,14 @@ namespace
 
             break;
         }
+        case ICN::RESOLUTION_ICON: {
+            _icnVsSprite[id].resize( 1 );
+
+            fheroes2::h2d::readImage( "resolution_icon.image", _icnVsSprite[id][0] );
+
+            break;
+        }
+
         case ICN::COVR0010:
         case ICN::COVR0011:
         case ICN::COVR0012: {

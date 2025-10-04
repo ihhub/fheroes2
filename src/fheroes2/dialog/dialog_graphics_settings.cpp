@@ -77,7 +77,7 @@ namespace
             resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
         }
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::RESOLUTION_ICON, 0 ), _( "Resolution" ),
                               std::move( resolutionName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
