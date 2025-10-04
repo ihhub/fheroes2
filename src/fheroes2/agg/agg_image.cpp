@@ -1432,12 +1432,12 @@ namespace
             if ( useOriginalResources() ) {
                 const int buttonIcnID = ICN::ECPANEL;
                 // We don't add all the ICN buttons in original order because when we render the buttons we want a different order.
-                for ( size_t i = 0; i < 4; ++i ) {
-                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( i ) );
+                for ( uint32_t i = 0; i < 4; ++i ) {
+                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, i );
                 }
                 // Save Map
-                _icnVsSprite[id][6] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 4 ) );
-                _icnVsSprite[id][7] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 5 ) );
+                _icnVsSprite[id][6] = fheroes2::AGG::GetICN( buttonIcnID, 4U );
+                _icnVsSprite[id][7] = fheroes2::AGG::GetICN( buttonIcnID, 5U );
                 // Add generated buttons.
                 const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
                 const fheroes2::Size buttonSize{ _icnVsSprite[id][0].width() - 10, _icnVsSprite[id][0].height() };
@@ -1447,8 +1447,8 @@ namespace
                                              buttonSize, isEvilInterface, ICN::STONEBAK );
 
                 // Quit
-                _icnVsSprite[id][10] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 6 ) );
-                _icnVsSprite[id][11] = fheroes2::AGG::GetICN( buttonIcnID, static_cast<uint32_t>( 7 ) );
+                _icnVsSprite[id][10] = fheroes2::AGG::GetICN( buttonIcnID, 6U );
+                _icnVsSprite[id][11] = fheroes2::AGG::GetICN( buttonIcnID, 7U );
 
                 break;
             }
