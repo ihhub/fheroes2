@@ -1189,7 +1189,7 @@ bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string
     for ( const auto & [unit, unitPos] : _rects ) {
         assert( unit != nullptr );
 
-        const fheroes2::Rect unitRoi = unitPos + offset;
+        const fheroes2::Rect unitRoi = _isInsideBattleField ? ( unitPos + offset ) : unitPos;
         if ( le.isMouseCursorPosInArea( unitRoi ) ) {
             msg = _( "View %{monster} info" );
             StringReplaceWithLowercase( msg, "%{monster}", unit->GetName() );
@@ -1246,8 +1246,13 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
     }
 }
 
-void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output )
+void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output,
+                                const fheroes2::Rect & dialogRoi )
 {
+    if ( _restorer ) {
+        _restorer->restore();
+    }
+
     if ( _orderOfUnits.expired() ) {
         // Nothing to show.
         return;
@@ -1260,18 +1265,37 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         return unit->isValid();
     } ) );
 
-    const int32_t unitsToDraw = std::min( _area.width / turnOrderMonsterIconSize, validUnitCount );
+    if ( validUnitCount == 0 ) {
+        // Nothing to draw.
+        return;
+    }
+
+    auto & display = fheroes2::Display::instance();
+    _isInsideBattleField = ( dialogRoi.y <= turnOrderMonsterIconSize );
+
+    const int32_t unitsToDraw = std::min( _battleRoi.width / turnOrderMonsterIconSize, validUnitCount );
 
     if ( _rects.size() != static_cast<size_t>( unitsToDraw ) ) {
         // Update units icons positions.
 
-        width = turnOrderMonsterIconSize * unitsToDraw;
+        _renderingRoi.width = turnOrderMonsterIconSize * unitsToDraw;
 
-        int32_t offsetX = ( _area.width - width ) / 2;
+        int32_t offsetX = ( _battleRoi.width - _renderingRoi.width ) / 2;
 
-        x = _area.x + offsetX;
-        y = _area.y;
-        height = turnOrderMonsterIconSize;
+        if ( !_isInsideBattleField ) {
+            offsetX += dialogRoi.x;
+        }
+
+        if ( _isInsideBattleField ) {
+            _renderingRoi.x = _battleRoi.x + offsetX;
+            _renderingRoi.y = _battleRoi.y;
+        }
+        else {
+            _renderingRoi.x = offsetX;
+            _renderingRoi.y = dialogRoi.y - turnOrderMonsterIconSize;
+        }
+
+        _renderingRoi.height = turnOrderMonsterIconSize;
 
         _rects.clear();
         _rects.reserve( unitsToDraw );
@@ -1279,9 +1303,18 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         for ( int32_t index = 0; index < unitsToDraw; ++index ) {
             // Just for now place 'nullptr' instead of a pointer to unit.
             // These pointers will be updated in the next loop.
-            _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+            if ( _isInsideBattleField ) {
+                _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+            }
+            else {
+                _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, _renderingRoi.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+            }
 
             offsetX += turnOrderMonsterIconSize;
+        }
+
+        if ( !_isInsideBattleField ) {
+            _restorer = std::make_unique<fheroes2::ImageRestorer>( display, _renderingRoi.x, _renderingRoi.y, _renderingRoi.width, _renderingRoi.height );
         }
     }
 
@@ -1310,7 +1343,7 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
             unitColor = currentUnitColor;
         }
 
-        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, unitColor, output );
+        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, unitColor, _isInsideBattleField ? output : display );
 
         ++unitRectIndex;
         ++unitsProcessed;
@@ -1445,6 +1478,10 @@ Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
 
+    // Turn order dialog can be outside the battlefield area.
+    // We need to restore the original background before doing extra animation.
+    _turnOrder.restore();
+
     // Fade-out battlefield.
     const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
 
@@ -1525,7 +1562,7 @@ void Battle::Interface::fullRedraw()
     // Fade-in battlefield.
     if ( !isDefaultScreenSize ) {
         // We need to expand the ROI for the next render to properly render window borders and shadow.
-        display.updateNextRenderRoi( _background->totalArea() );
+        display.updateNextRenderRoi( fheroes2::getBoundaryRect( _background->totalArea(), _turnOrder.getRenderingRoi() ) );
     }
 
     fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
@@ -1560,7 +1597,8 @@ void Battle::Interface::RedrawPartialFinish()
 {
     redrawPreRender();
 
-    fheroes2::Display::instance().render( _interfacePosition );
+    auto & display = fheroes2::Display::instance();
+    display.render( fheroes2::getBoundaryRect( _interfacePosition, _turnOrder.getRenderingRoi() ) );
 }
 
 void Battle::Interface::redrawPreRender()
@@ -1571,7 +1609,7 @@ void Battle::Interface::redrawPreRender()
         if ( cell != nullptr ) {
             unit = cell->GetUnit();
         }
-        _turnOrder.redraw( _currentUnit, _contourColor, unit, _mainSurface );
+        _turnOrder.redraw( _currentUnit, _contourColor, unit, _mainSurface, border.GetRect() );
     }
 
 #ifdef WITH_DEBUG
@@ -3018,7 +3056,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
-    else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder ) ) {
+    else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder.getRenderingRoi() ) ) {
         cursor.SetThemes( Cursor::POINTER );
         if ( _turnOrder.queueEventProcessing( *this, msg, _interfacePosition.getPosition() ) ) {
             humanturn_redraw = true;
