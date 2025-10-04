@@ -182,6 +182,9 @@ namespace AI
         double getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                const uint32_t distanceToObject ) const;
 
+        double getFutureObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
+                                     const uint32_t distanceToObject ) const;
+
         // Returns the strength of the army guarding the given tile. Note that the army is obtained by calling
         // Army::setFromTile(), so this method is not suitable for hero armies or castle garrisons.
         double getTileArmyStrength( const Maps::Tile & tile );
