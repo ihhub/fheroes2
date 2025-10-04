@@ -92,6 +92,10 @@ namespace
             // Do nothing.
         }
 
+        TileRestorer( const TileRestorer & ) = delete;
+
+        TileRestorer & operator=( const TileRestorer & ) = delete;
+
         ~TileRestorer()
         {
             _originalTile = _copyTile;
@@ -104,7 +108,7 @@ namespace
 
     int32_t daysToNextWeek()
     {
-        const int32_t currentDay = ( world.CountDay() % numOfDaysPerWeek );
+        const int32_t currentDay = ( static_cast<int32_t>( world.CountDay() ) % numOfDaysPerWeek );
         if ( currentDay == 0 ) {
             // This is the last day of week.
             return 1;
@@ -1736,48 +1740,6 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     return 0;
 }
 
-double AI::Planner::getFutureGeneralObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
-{
-    Maps::Tile & tile = world.getTile( index );
-    const MP2::MapObjectType objectType = tile.getMainObjectType();
-
-    switch ( objectType ) {
-    case MP2::OBJ_AIR_ALTAR:
-    case MP2::OBJ_ARCHER_HOUSE:
-    case MP2::OBJ_ARTESIAN_SPRING:
-    case MP2::OBJ_BARROW_MOUNDS:
-    case MP2::OBJ_CAVE:
-    case MP2::OBJ_DESERT_TENT:
-    case MP2::OBJ_DWARF_COTTAGE:
-    case MP2::OBJ_EARTH_ALTAR:
-    case MP2::OBJ_EXCAVATION:
-    case MP2::OBJ_FIRE_ALTAR:
-    case MP2::OBJ_GOBLIN_HUT:
-    case MP2::OBJ_HALFLING_HOLE:
-    case MP2::OBJ_MAGIC_GARDEN:
-    case MP2::OBJ_PEASANT_HUT:
-    case MP2::OBJ_RUINS:
-    case MP2::OBJ_TREE_CITY:
-    case MP2::OBJ_TREE_HOUSE:
-    case MP2::OBJ_WAGON_CAMP:
-    case MP2::OBJ_WATCH_TOWER:
-    case MP2::OBJ_WATER_ALTAR:
-    case MP2::OBJ_WATER_WHEEL:
-    case MP2::OBJ_WINDMILL: {
-        assert( MP2::isWeekLife( objectType ) );
-
-        TileRestorer restorer( tile );
-        Maps::updateObjectInfoTile( tile, false );
-
-        return getObjectValue( hero, index, objectType, valueToIgnore, distanceToObject );
-    }
-    default:
-        break;
-    }
-
-    return getObjectValue( hero, index, objectType, valueToIgnore, distanceToObject );
-}
-
 double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t index, const double valueToIgnore, const uint32_t distanceToObject ) const
 {
     // Fighters have higher priority for battles and smaller values for other objects.
@@ -2264,13 +2226,43 @@ double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, co
 double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                           const uint32_t distanceToObject ) const
 {
-    assert( objectType == world.getTile( index ).getMainObjectType() );
+    Maps::Tile & tile = world.getTile( index );
 
-#ifdef NDEBUG
-    (void)objectType;
-#endif
+    switch ( objectType ) {
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_ARTESIAN_SPRING:
+    case MP2::OBJ_BARROW_MOUNDS:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_RUINS:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_WATER_WHEEL:
+    case MP2::OBJ_WINDMILL: {
+        assert( MP2::isWeekLife( objectType ) );
 
-    return getFutureGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
+        const TileRestorer restorer( tile );
+        Maps::updateObjectInfoTile( tile, false );
+
+        return getObjectValue( hero, index, objectType, valueToIgnore, distanceToObject );
+    }
+    default:
+        break;
+    }
+
+    return getObjectValue( hero, index, objectType, valueToIgnore, distanceToObject );
 }
 
 int AI::Planner::getCourierMainTarget( const Heroes & hero, const double lowestPossibleValue )
