@@ -172,6 +172,16 @@ namespace fheroes2
             return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, moveUp );
         }
 
+        int32_t height() const
+        {
+            return _text.height( _textInputArea.width );
+        }
+
+        FontType fontType() const
+        {
+            return _fontType;
+        }
+
     private:
         Image & _output;
         TextInput _text;
@@ -179,6 +189,7 @@ namespace fheroes2
         ImageRestorer _background;
         Rect _textInputArea;
         bool _isSingleLineTextCenterAligned{ false };
+        const FontType _fontType{ FontType::normalWhite() };
     };
 
     // Renderer of current time and FPS on screen
