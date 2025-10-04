@@ -366,10 +366,10 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             // Handle new line input for multi-line texts only.
             if ( isMultiLine && le.getPressedKeyValue() == fheroes2::Key::KEY_ENTER ) {
                 // We should verify the height of the text before allowing to enter one more line.
-                const int32_t fontHeight = fheroes2::getFontHeight( textInput.fontType().size );
-
-                if ( textInput.height() + fontHeight <= textInputArea.height ) {
-                    result.insert( charInsertPos, 1, '\n' );
+                std::string tmp = result;
+                tmp.insert( charInsertPos, 1, '\n' );
+                if ( textInput.height( tmp ) <= textInputArea.height ) {
+                    result = std::move( tmp );
                     ++charInsertPos;
                 }
             }
@@ -381,7 +381,13 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 charInsertPos = newPos;
             }
             else {
-                charInsertPos = InsertKeySym( result, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                // We should verify the height of the text before allowing to enter one more line.
+                std::string tmp = result;
+                const size_t tempCharInsertPos = InsertKeySym( tmp, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                if ( textInput.height( tmp ) <= textInputArea.height ) {
+                    result = std::move( tmp );
+                    charInsertPos = tempCharInsertPos;
+                }
             }
             redraw = true;
         }

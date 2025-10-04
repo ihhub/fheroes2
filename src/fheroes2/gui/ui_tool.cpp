@@ -211,8 +211,8 @@ namespace fheroes2
     TextInputField::TextInputField( const Rect & textArea, const bool isMultiLine, const bool isCenterAligned, Image & output,
                                     const std::optional<SupportedLanguage> language )
         : _output( output )
-        , _text( _fontType, textArea.width, isMultiLine, language )
-        , _cursor( getCursorSprite( _fontType ) )
+        , _text( FontType::normalWhite(), textArea.width, isMultiLine, language )
+        , _cursor( getCursorSprite( FontType::normalWhite() ) )
         // We enlarge background to have space for cursor at text edges and space for diacritics.
         , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
         , _textInputArea( textArea )

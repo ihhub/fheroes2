@@ -172,18 +172,14 @@ namespace fheroes2
             return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, moveUp );
         }
 
-        int32_t height() const
+        int32_t height( const std::string & text ) const
         {
-            return _text.height( _textInputArea.width );
-        }
-
-        FontType fontType() const
-        {
-            return _fontType;
+            TextInput tmp{ _text };
+            tmp.set( text, 0 );
+            return tmp.height( _textInputArea.width );
         }
 
     private:
-        const FontType _fontType{ FontType::normalWhite() };
         Image & _output;
         TextInput _text;
         MovableSprite _cursor;
