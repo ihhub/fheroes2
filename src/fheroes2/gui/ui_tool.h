@@ -183,13 +183,13 @@ namespace fheroes2
         }
 
     private:
+        const FontType _fontType{ FontType::normalWhite() };
         Image & _output;
         TextInput _text;
         MovableSprite _cursor;
         ImageRestorer _background;
         Rect _textInputArea;
         bool _isSingleLineTextCenterAligned{ false };
-        const FontType _fontType{ FontType::normalWhite() };
     };
 
     // Renderer of current time and FPS on screen
