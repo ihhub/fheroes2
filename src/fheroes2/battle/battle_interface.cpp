@@ -1271,7 +1271,7 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
     }
 
     auto & display = fheroes2::Display::instance();
-    _isInsideBattleField = display.height() < dialogRoi.height + turnOrderMonsterIconSize;
+    _isInsideBattleField = ( dialogRoi.y <= turnOrderMonsterIconSize );
 
     const int32_t unitsToDraw = std::min( _battleRoi.width / turnOrderMonsterIconSize, validUnitCount );
 
@@ -1283,7 +1283,7 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         int32_t offsetX = ( _battleRoi.width - _renderingRoi.width ) / 2;
 
         if ( !_isInsideBattleField ) {
-            offsetX += ( display.width() - dialogRoi.width ) / 2;
+            offsetX += dialogRoi.x;
         }
 
         if ( _isInsideBattleField ) {
