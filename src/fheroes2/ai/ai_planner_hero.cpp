@@ -2499,7 +2499,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                     }
                 }
                 else {
-                    const int32_t daysToReachObject = completeDaysToTarget( _pathfinder.buildPath(  pair.first ), hero );
+                    const int32_t daysToReachObject = completeDaysToTarget( _pathfinder.buildPath( pair.first ), hero );
                     if ( daysToReachObject < dayToBecomeValid ) {
                         const double extraValue = valueStorage.futureValue( pair, 0 );
                         if ( extraValue > 0 ) {
@@ -2585,7 +2585,6 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
 
         double value = 0;
-        
         if ( isCurrentlyValid ) {
             value = valueStorage.value( { idx, objType }, dist );
         }
