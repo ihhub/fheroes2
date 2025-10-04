@@ -85,7 +85,7 @@ namespace
     public:
         TileRestorer() = delete;
 
-        TileRestorer( Maps::Tile & tile )
+        explicit TileRestorer( Maps::Tile & tile )
             : _originalTile( tile )
             , _copyTile( tile )
         {
