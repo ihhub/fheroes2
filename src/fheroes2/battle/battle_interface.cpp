@@ -7032,9 +7032,9 @@ void Battle::PopupDamageInfo::setSpellAttackInfo( const HeroBase * hero, const U
 {
     assert( hero != nullptr );
 
-    // TODO: Currently, this functionality only supports a simple single-target spell case
-    // We should refactor this to apply to all cases
-    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
+    // TODO: Currently, this functionality only supports damage spell cases with mouse hover-over a single _defender
+    // We should refactor this to apply to cases where multiple targets is within area of effect (ex. Cold Ring)
+    if ( !spell.isDamage() ) {
         return;
     }
 
