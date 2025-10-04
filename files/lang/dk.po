@@ -3579,7 +3579,7 @@ msgid "saveLoadDialog|Date"
 msgstr "Dato"
 
 msgid "Are you sure you want to delete file:"
-msgstr "Er du sikker på at du vil slette denne fil:"
+msgstr "Er du sikker på du vil slette denne fil:"
 
 msgid "Warning"
 msgstr "Advarsel"
