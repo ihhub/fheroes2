@@ -94,6 +94,8 @@ namespace
 
         TileRestorer( const TileRestorer & ) = delete;
 
+        TileRestorer( TileRestorer && ) = delete;
+
         TileRestorer & operator=( const TileRestorer & ) = delete;
 
         ~TileRestorer()
