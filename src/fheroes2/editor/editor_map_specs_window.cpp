@@ -358,8 +358,10 @@ namespace
                 fheroes2::showStandardTextMessage( {}, getDefaultTownTitle( townInfo.race, isTown, townInfo.tileIndex, _mapWidth ), Dialog::ZERO );
             }
             else {
-                // TODO: update showStandardTextMessage() to handle "LocalizedStrings".
-                fheroes2::showStandardTextMessage( {}, townInfo.castleMetadata->customName, Dialog::ZERO );
+                auto text = getLocalizedText( getCustomTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
+                                              fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
             }
         }
 
