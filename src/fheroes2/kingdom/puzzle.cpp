@@ -51,8 +51,10 @@
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -126,6 +128,10 @@ namespace
                 return true;
             }
 
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+            }
+
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
                 fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
@@ -194,6 +200,10 @@ namespace
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
         }
 
@@ -272,6 +282,10 @@ namespace
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
         }
 
