@@ -61,12 +61,8 @@ namespace
         const fheroes2::ButtonBase & quickSaveButton = optionButtons.button( 4 );
         const fheroes2::ButtonBase & quitButton = optionButtons.button( 5 );
 
-        const auto & scenarioInfo = config.getCurrentMapInfo();
-
-        std::string scenarioFilePath;
-        if ( !Maps::tryGetMatchingFile( StringLower( System::GetFileName( scenarioInfo.filename ) ), scenarioFilePath ) ) {
-            restartGameButton.disable();
-        }
+        // For now this button is disabled.
+        restartGameButton.disable();
 
         background.renderSymmetricButtons( optionButtons, 0, false );
 
