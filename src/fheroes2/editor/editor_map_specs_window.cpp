@@ -72,11 +72,6 @@
 #include "ui_tool.h"
 #include "ui_window.h"
 
-namespace fheroes2
-{
-    enum class SupportedLanguage : uint8_t;
-}
-
 namespace
 {
     const int32_t descriptionBoxWidth = 292;
@@ -221,9 +216,8 @@ namespace
         if ( isTown ) {
             return replacePosAndRace( _( "[%{pos}]: %{race} town" ), race, tileIndex, mapWidth );
         }
-        else {
-            return replacePosAndRace( _( "[%{pos}]: %{race} castle" ), race, tileIndex, mapWidth );
-        }
+
+        return replacePosAndRace( _( "[%{pos}]: %{race} castle" ), race, tileIndex, mapWidth );
     }
 
     std::vector<fheroes2::LocalizedString> getCustomTownTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const bool isTown,
