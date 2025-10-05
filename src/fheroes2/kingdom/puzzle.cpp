@@ -129,7 +129,7 @@ namespace
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
 
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
@@ -203,7 +203,7 @@ namespace
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
         }
 
@@ -285,7 +285,7 @@ namespace
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
         }
 
