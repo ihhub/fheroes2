@@ -219,7 +219,7 @@ namespace
         StringReplace( text, "%{race}", Race::String( race ) );
 
         return text;
-    };
+    }
 
     std::string getDefaultTownTitle( const int race, const bool isTown, const int32_t tileIndex, const int32_t mapWidth )
     {
