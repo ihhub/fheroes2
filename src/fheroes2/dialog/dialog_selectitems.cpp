@@ -816,7 +816,18 @@ namespace Dialog
         _window->renderOkayCancelButtons( _buttonOk, _buttonCancel );
     }
 
-    // An image with text should have offset of 10 pixels from all left and right edges.
+    void ItemSelectionWindow::renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination,
+                                          const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
+
+        fheroes2::Text text( std::move( itemText ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
+        text.drawInRoi( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display, _window->activeArea() );
+    }
+
     void ItemSelectionWindow::renderItem( const fheroes2::Sprite & itemSprite, std::vector<fheroes2::LocalizedString> itemText, const fheroes2::Point & destination,
                                           const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const
     {
@@ -824,9 +835,11 @@ namespace Dialog
 
         fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
 
-        auto text = fheroes2::getLocalizedText( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
-        text.draw( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display );
+        auto text = fheroes2::getLocalizedText( std::move( itemText ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        // TODO: crop with "..." too wide strings to fit the given width.
+        const fheroes2::Rect & roi = _window->activeArea();
+        text->drawInRoi( destination.x + textOffsetX, destination.y + itemOffsetY - ( text->height() / 2 ) + 2, display,
+                         { destination.x + textOffsetX, roi.y, roi.width - textOffsetX - 55, roi.height } );
     }
 
     int32_t ItemSelectionWindow::selectItemsEventProcessing()

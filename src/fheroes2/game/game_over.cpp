@@ -26,7 +26,6 @@
 #include <cassert>
 #include <cstddef>
 #include <utility>
-#include <vector>
 
 #include "artifact.h"
 #include "audio.h"
@@ -81,6 +80,7 @@ namespace
                 const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
                 assert( town != nullptr );
                 if ( town ) {
+                    // TODO: pass map language for the custom town name.
                     strings = fheroes2::getLocalizedStrings( _( "You captured %{name}!\nYou are victorious." ), gameLanguage, "%{name}", town->GetName(), gameLanguage );
                 }
                 break;
@@ -91,6 +91,7 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero ) {
+                    // TODO: pass map language for custom hero name.
                     strings = fheroes2::getLocalizedStrings( _( "You have captured the enemy hero %{name}!\nYour quest is complete." ), gameLanguage, "%{name}",
                                                              hero->GetName(), gameLanguage );
                 }
@@ -194,6 +195,7 @@ namespace
             assert( town != nullptr );
 
             if ( town ) {
+                // TODO: pass map language for custom town name.
                 strings = fheroes2::getLocalizedStrings( _( "The enemy has captured %{name}!\nThey are triumphant." ), gameLanguage, "%{name}", town->GetName(),
                                                          gameLanguage );
             }
@@ -206,6 +208,7 @@ namespace
             assert( hero != nullptr );
 
             if ( hero ) {
+                // TODO: pass map language for custom hero name.
                 strings = fheroes2::getLocalizedStrings( _( "You have lost the hero %{name}.\nYour quest is over." ), gameLanguage, "%{name}", hero->GetName(),
                                                          gameLanguage );
             }
@@ -392,6 +395,7 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t 
 
         if ( town ) {
             msg = town->isCastle() ? _( "Lose the castle '%{name}'." ) : _( "Lose the town '%{name}'." );
+            // TODO: pass map language for custom town name.
             translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), gameLanguage ) );
         }
     }
@@ -401,6 +405,7 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t 
 
         if ( hero ) {
             msg = _( "Lose the hero: %{name}." );
+            // TODO: pass map language for custom hero name.
             translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), gameLanguage ) );
         }
     }
@@ -469,7 +474,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
         const Kingdom & kingdom = world.GetKingdom( static_cast<PlayerColor>( humanColors ) );
 
-#if defined( WITH_DEBUG )
+#ifdef WITH_DEBUG
         const Player * player = Players::Get( static_cast<PlayerColor>( humanColors ) );
         assert( player != nullptr );
 
@@ -492,7 +497,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             if ( result != GameOver::COND_NONE ) {
                 // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
                 // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
-                if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
+                if ( result != GameOver::LOSS_ALL || !kingdom.GetCastles().empty() && kingdom.GetLostTownDays() != 0 ) {
                     DialogLoss( result );
                 }
 
@@ -535,7 +540,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
             const Kingdom & kingdom = world.GetKingdom( currentColor );
 
-#if defined( WITH_DEBUG )
+#ifdef WITH_DEBUG
             const Player * player = Players::Get( currentColor );
             assert( player != nullptr );
 
@@ -579,7 +584,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
                 const Kingdom & kingdom = world.GetKingdom( currentColor );
 
-#if defined( WITH_DEBUG )
+#ifdef WITH_DEBUG
                 const Player * player = Players::Get( currentColor );
                 assert( player != nullptr );
 

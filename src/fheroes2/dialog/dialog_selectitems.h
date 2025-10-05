@@ -92,6 +92,9 @@ namespace Dialog
         }
 
         // An image with text should have offset of 10 pixels from all left and right edges.
+        void renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
+                         const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
+
         void renderItem( const fheroes2::Sprite & itemSprite, std::vector<fheroes2::LocalizedString> itemText, const fheroes2::Point & destination,
                          const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
 

@@ -37,7 +37,7 @@ namespace fheroes2
 
         LocalizedString( std::string text_, std::optional<SupportedLanguage> language_ )
             : text( std::move( text_ ) )
-            , language( std::move( language_ ) )
+            , language( language_ )
         {
             // Do nothing.
         }
