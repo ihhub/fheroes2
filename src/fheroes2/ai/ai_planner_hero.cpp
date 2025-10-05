@@ -119,7 +119,7 @@ namespace
         return numOfDaysPerWeek - currentDay + 1;
     }
 
-    int32_t completeDaysToTarget( const std::list<Route::Step> & steps, const Heroes & hero )
+    int32_t completedDaysToTarget( const std::list<Route::Step> & steps, const Heroes & hero )
     {
         int32_t days{ 0 };
         uint32_t currentMovePoints = hero.GetMovePoints();
@@ -326,8 +326,8 @@ namespace
         return true;
     }
 
-    bool isValidObjectForHeroes( const Heroes & hero, const double heroArmyStrength, const int32_t index, AIWorldPathfinder & pathfinder, AI::Planner & ai,
-                                 const double armyStrengthThreshold, const bool underHero )
+    bool isValidObjectForHero( const Heroes & hero, const double heroArmyStrength, const int32_t index, AIWorldPathfinder & pathfinder, AI::Planner & ai,
+                               const double armyStrengthThreshold, const bool underHero )
     {
         const Maps::Tile & tile = world.getTile( index );
         const MP2::MapObjectType objectType = tile.getMainObjectType( !underHero );
@@ -825,7 +825,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = isValidObjectForHeroes( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold, false );
+            const bool valid = isValidObjectForHero( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold, false );
             _currentValidObjects[index] = valid;
             return valid;
         }
@@ -2228,8 +2228,6 @@ double AI::Planner::getObjectValue( const Heroes & hero, const int32_t index, co
 double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                           const uint32_t distanceToObject ) const
 {
-    Maps::Tile & tile = world.getTile( index );
-
     switch ( objectType ) {
     case MP2::OBJ_AIR_ALTAR:
     case MP2::OBJ_ARCHER_HOUSE:
@@ -2255,6 +2253,7 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_WINDMILL: {
         assert( MP2::isWeekLife( objectType ) );
 
+        Maps::Tile & tile = world.getTile( index );
         const TileRestorer restorer( tile );
         Maps::updateObjectInfoTile( tile, false );
 
@@ -2478,6 +2477,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                 const int32_t dayToBecomeValid = objectValidator.whenGoingToBeValidInDays( pair.first );
 
                 if ( !isValidObject && dayToBecomeValid < 1 ) {
+                    // This is not a valid object and it is not going to be valid in the future.
                     continue;
                 }
 
@@ -2485,22 +2485,21 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                     continue;
                 }
 
+                double extraValue = 0;
+
                 if ( isValidObject ) {
-                    const double extraValue = valueStorage.value( pair, 0 );
-                    if ( extraValue > 0 ) {
-                        // There is no need to reduce the quality of the object even if the path has others.
-                        value += extraValue;
-                    }
+                    extraValue = valueStorage.value( pair, 0 );
                 }
                 else {
-                    const int32_t daysToReachObject = completeDaysToTarget( _pathfinder.buildPath( pair.first ), hero );
+                    const int32_t daysToReachObject = completedDaysToTarget( _pathfinder.buildPath( pair.first ), hero );
                     if ( daysToReachObject < dayToBecomeValid ) {
-                        const double extraValue = valueStorage.futureValue( pair, 0 );
-                        if ( extraValue > 0 ) {
-                            // There is no need to reduce the quality of the object even if the path has others.
-                            value += extraValue;
-                        }
+                        extraValue = valueStorage.futureValue( pair, 0 );
                     }
+                }
+
+                if ( extraValue > 0 ) {
+                    // There is no need to reduce the quality of the object even if the path has others.
+                    value += extraValue;
                 }
             }
         }
@@ -2557,6 +2556,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         const int32_t daysToBeAvailable = objectValidator.whenGoingToBeValidInDays( idx );
 
         if ( !isCurrentlyValid && daysToBeAvailable < 1 ) {
+            // This is not a valid object and it is not going to be valid in the future.
             continue;
         }
 
@@ -2571,7 +2571,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
 
         if ( !isCurrentlyValid ) {
-            const int32_t daysToReachObject = completeDaysToTarget( _pathfinder.buildPath( idx ), hero );
+            const int32_t daysToReachObject = completedDaysToTarget( _pathfinder.buildPath( idx ), hero );
             if ( daysToReachObject < daysToBeAvailable ) {
                 // Only objects that are not reachable at the moment can be predicted.
                 continue;
@@ -2968,7 +2968,7 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
 
 bool AI::Planner::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
 {
-    return isValidObjectForHeroes( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, hero.getAIMinimumJoiningArmyStrength(), underHero );
+    return isValidObjectForHero( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, hero.getAIMinimumJoiningArmyStrength(), underHero );
 }
 
 void AI::Planner::HeroesPreBattle( HeroBase & hero, bool isAttacking )
