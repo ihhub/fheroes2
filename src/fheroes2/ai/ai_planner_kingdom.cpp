@@ -942,7 +942,6 @@ bool AI::Planner::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleL
         heroLimit = static_cast<int32_t>( GameStatic::GetKingdomMaxHeroes() );
     }
 
-
     if ( availableHeroCount >= heroLimit ) {
         return false;
     }
