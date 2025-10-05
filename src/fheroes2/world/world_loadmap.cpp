@@ -1591,7 +1591,14 @@ void World::setUltimateArtifact()
         assert( radius >= 0 );
 
         // Remove the predefined Ultimate Artifact object.
-        existingUltimateArtIter->removeObjectPartsByUID( existingUltimateArtIter->getMainObjectPart()._uid );
+        const uint32_t uid = existingUltimateArtIter->getMainObjectPart()._uid;
+        existingUltimateArtIter->removeObjectPartsByUID( uid );
+
+        // Also, remove the shadow of the Artifact.
+        const int32_t neighborTileIndex = Maps::GetDirectionIndex( existingUltimateArtIter->GetIndex(), Direction::LEFT );
+        if ( neighborTileIndex >= 0 ) {
+            vec_tiles[neighborTileIndex].removeObjectPartsByUID( uid );
+        }
     }
 
     const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
