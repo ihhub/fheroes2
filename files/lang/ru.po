@@ -223,9 +223,7 @@ msgstr ""
 "КАРТУ"
 
 msgid "INFO"
-msgstr ""
-" СЦЕНА-\n"
-"РИЙ"
+msgstr "СЦЕНАРИЙ"
 
 msgid ""
 "BATTLE\n"
