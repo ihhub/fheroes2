@@ -55,6 +55,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -517,8 +518,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             swapArtifacts.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
 
         // selector troops event
         if ( ( le.isMouseCursorPosInArea( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
@@ -773,6 +775,43 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         }
         else if ( le.isMouseRightButtonPressedInArea( hero2Area ) ) {
             Dialog::QuickInfo( otherHero );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArtifactsToHero1.area() ) ) {
+            message = _( "Move all artifacts from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", otherHero.GetName() );
+            StringReplace( message, "%{to_hero_name}", GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Artifact Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
+            message = _( "Move all artifacts from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", GetName() );
+            StringReplace( message, "%{to_hero_name}", otherHero.GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Artifact Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( swapArtifacts.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Swap Artifacts" ), _( "Swap all artifacts between heroes." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArmyToHero1.area() ) ) {
+            message = _( "Move army from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", otherHero.GetName() );
+            StringReplace( message, "%{to_hero_name}", GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Army Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArmyToHero2.area() ) ) {
+            message = _( "Move army from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", GetName() );
+            StringReplace( message, "%{to_hero_name}", otherHero.GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Army Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( swapArmies.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Swap Armies" ), _( "Swap armies between heroes." ), Dialog::ZERO );
         }
     }
 
