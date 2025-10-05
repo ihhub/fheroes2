@@ -24,21 +24,16 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <list>
-#include <map>
 #include <utility>
 
 #include "artifact.h"
-#include "dir.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
 #include "serialize.h"
-#include "settings.h"
 #include "skill.h"
 #include "spell.h"
-#include "system.h"
 #include "tools.h"
 #include "translations.h"
 
