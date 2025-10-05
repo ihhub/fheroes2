@@ -134,7 +134,7 @@ void AI::OptimizeTroopsOrder( Army & army )
         }
 
         if ( left.isFlying() != right.isFlying() ) {
-            return right.isFlying();
+            return left.isFlying();
         }
 
         return left.GetStrength() < right.GetStrength();
