@@ -55,6 +55,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -517,8 +518,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             swapArtifacts.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
 
         // selector troops event
         if ( ( le.isMouseCursorPosInArea( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
@@ -773,6 +775,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         }
         else if ( le.isMouseRightButtonPressedInArea( hero2Area ) ) {
             Dialog::QuickInfo( otherHero );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
     }
 
