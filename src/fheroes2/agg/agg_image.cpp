@@ -1483,15 +1483,20 @@ namespace
 
             // end of line symbol is set to make sure that the buttons' height is for 2 line text.
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
-                                                      { fheroes2::getSupportedText( "\n", buttonFontType ),
-                                                        fheroes2::getSupportedText( "\n", buttonFontType ),
+                                                      { fheroes2::getSupportedText( "\n", buttonFontType ), fheroes2::getSupportedText( "\n", buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "INFO" ), buttonFontType ),
                                                         fheroes2::getSupportedText( "\n", buttonFontType ) },
                                                       isEvilInterface, 80 );
 
             // Copy images from the original buttons.
-            const std::array<fheroes2::Rect, 8> imageRoi = { fheroes2::Rect{ 20, 15, 59, 27 }, fheroes2::Rect{ 19, 16, 59, 27 }, fheroes2::Rect{ 28, 15, 42, 27 },
-                fheroes2::Rect{ 27, 16, 42, 27 }, fheroes2::Rect{}, fheroes2::Rect{}, fheroes2::Rect{ 21, 17, 59, 25 }, fheroes2::Rect{ 20, 18, 59, 25 } };
+            const std::array<fheroes2::Rect, 8> imageRoi = { fheroes2::Rect{ 20, 15, 59, 27 },
+                                                             fheroes2::Rect{ 19, 16, 59, 27 },
+                                                             fheroes2::Rect{ 28, 15, 42, 27 },
+                                                             fheroes2::Rect{ 27, 16, 42, 27 },
+                                                             fheroes2::Rect{},
+                                                             fheroes2::Rect{},
+                                                             fheroes2::Rect{ 21, 17, 59, 25 },
+                                                             fheroes2::Rect{ 20, 18, 59, 25 } };
             for ( size_t i = 0; i < imageRoi.size(); ++i ) {
                 const auto & originalImage = fheroes2::AGG::GetICN( originalIcnID, static_cast<uint32_t>( i ) );
                 fheroes2::Copy( originalImage, imageRoi[i].x, imageRoi[i].y, _icnVsSprite[id][i],
