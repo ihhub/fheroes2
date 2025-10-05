@@ -901,4 +901,23 @@ namespace fheroes2
 
         return multiFontText;
     }
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<std::pair<LocalizedString, FontType>> texts )
+    {
+        if ( texts.empty() ) {
+            return {};
+        }
+
+        if ( texts.size() == 1 ) {
+            auto & [text, font] = texts.front();
+            return std::make_unique<Text>( std::move( text.text ), font, text.language );
+        }
+
+        auto multiFontText = std::make_unique<MultiFontText>();
+        for ( auto & [text, font] : texts ) {
+            multiFontText->add( Text( std::move( text.text ), font, text.language ) );
+        }
+
+        return multiFontText;
+    }
 }

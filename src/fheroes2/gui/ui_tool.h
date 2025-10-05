@@ -300,4 +300,6 @@ namespace fheroes2
                                                       std::string_view replacement, const SupportedLanguage replacementLanguage );
 
     std::unique_ptr<TextBase> getLocalizedText( std::vector<LocalizedString> texts, const FontType font );
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<std::pair<LocalizedString, FontType>> texts );
 }

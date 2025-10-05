@@ -92,20 +92,24 @@ namespace
 
             const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.getSupportedLanguage() );
 
-            fheroes2::MultiFontText body;
+            const Settings & conf = Settings::Get();
+            const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
 
-            body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
-            body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
-            body.add( { fheroes2::getLanguageName( info.mainLanguage ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.description, fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
-            body.add( { info.filename, fheroes2::FontType::smallWhite() } );
+            std::vector<std::pair<fheroes2::LocalizedString, fheroes2::FontType>> strings;
 
-            fheroes2::showMessage( header, body, Dialog::ZERO );
+            strings.emplace_back( fheroes2::LocalizedString( _( "Map Type:\n" ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "Resurrection" ), gameLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nLanguage:\n" ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( fheroes2::getLanguageName( info.mainLanguage ), gameLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nSize: " ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( std::to_string( info.width ) + " x " + std::to_string( info.height ), gameLanguage ),
+                                  fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nDescription: " ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( info.description, info.mainLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nLocation: " ), gameLanguage ), fheroes2::FontType::smallYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( info.filename, gameLanguage ), fheroes2::FontType::smallWhite() );
+
+            fheroes2::showMessage( header, *fheroes2::getLocalizedText( strings ), Dialog::ZERO );
         }
 
         void initListBackgroundRestorer( fheroes2::Rect roi )
