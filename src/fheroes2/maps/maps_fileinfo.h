@@ -269,4 +269,6 @@ namespace Maps
 
     // Only for RESURRECTION map files.
     MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount );
+
+    bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath );
 }

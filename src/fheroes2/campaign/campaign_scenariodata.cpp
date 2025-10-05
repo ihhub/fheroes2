@@ -613,31 +613,6 @@ namespace
             return {};
         }
     }
-
-    bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
-    {
-        static const auto fileNameToPath = []() {
-            std::map<std::string, std::string> result;
-
-            const ListFiles files = Settings::FindFiles( "maps", "", false );
-
-            for ( const std::string & file : files ) {
-                result.try_emplace( StringLower( System::GetFileName( file ) ), file );
-            }
-
-            return result;
-        }();
-
-        const auto result = fileNameToPath.find( fileName );
-
-        if ( result != fileNameToPath.end() ) {
-            matchingFilePath = result->second;
-
-            return true;
-        }
-
-        return false;
-    }
 }
 
 namespace Campaign
@@ -817,14 +792,14 @@ namespace Campaign
     bool Campaign::ScenarioData::isMapFilePresent() const
     {
         std::string matchingFilePath;
-        return tryGetMatchingFile( _fileName, matchingFilePath );
+        return Maps::tryGetMatchingFile( _fileName, matchingFilePath );
     }
 
     Maps::FileInfo Campaign::ScenarioData::loadMap() const
     {
         std::string matchingFilePath;
 
-        if ( tryGetMatchingFile( _fileName, matchingFilePath ) ) {
+        if ( Maps::tryGetMatchingFile( _fileName, matchingFilePath ) ) {
             Maps::FileInfo fi;
 
             if ( fi.readMP2Map( std::move( matchingFilePath ), false ) ) {

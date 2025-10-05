@@ -25,15 +25,19 @@
 #include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
 #include "game_interface.h"
+#include "game_io.h"
 #include "game_mode.h"
 #include "icn.h"
 #include "localevent.h"
+#include "maps_fileinfo.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_window.h"
+#include "world.h"
 
 namespace
 {
@@ -44,16 +48,27 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        auto & config = Settings::Get();
+        const bool isEvilInterface = config.isEvilInterfaceEnabled();
         const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_FILE_DIALOG_EVIL : ICN::BUTTONS_FILE_DIALOG_GOOD;
         fheroes2::ButtonGroup optionButtons( bigButtonsICN );
         fheroes2::StandardWindow background( optionButtons, false, 0, display );
-        background.renderSymmetricButtons( optionButtons, 0, false );
 
         const fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
         const fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
-        const fheroes2::ButtonBase & saveGameButton = optionButtons.button( 2 );
-        const fheroes2::ButtonBase & quitButton = optionButtons.button( 3 );
+        fheroes2::ButtonBase & restartGameButton = optionButtons.button( 2 );
+        const fheroes2::ButtonBase & saveGameButton = optionButtons.button( 3 );
+        const fheroes2::ButtonBase & quickSaveButton = optionButtons.button( 4 );
+        const fheroes2::ButtonBase & quitButton = optionButtons.button( 5 );
+
+        const auto & scenarioInfo = config.getCurrentMapInfo();
+
+        std::string scenarioFilePath;
+        if ( !Maps::tryGetMatchingFile( StringLower( System::GetFileName( scenarioInfo.filename ) ), scenarioFilePath ) ) {
+            restartGameButton.disable();
+        }
+
+        background.renderSymmetricButtons( optionButtons, 0, false );
 
         fheroes2::Button buttonCancel;
 
@@ -83,11 +98,25 @@ namespace
                     break;
                 }
             }
+            else if ( restartGameButton.isEnabled() && le.MouseClickLeft( restartGameButton.area() ) ) {
+                // TODO: restart the campaign here.
+                fheroes2::showStandardTextMessage( _( "Restart Game" ), "This option is under construction.", Dialog::OK );
+                result = fheroes2::GameMode::CANCEL;
+                break;
+            }
             else if ( le.MouseClickLeft( saveGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 background.hideWindow();
 
                 return Interface::AdventureMap::Get().EventSaveGame();
+            }
+            else if ( le.MouseClickLeft( quickSaveButton.area() ) ) {
+                if ( !Game::QuickSave() ) {
+                    fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
+                }
+
+                result = fheroes2::GameMode::CANCEL;
+                break;
             }
 
             if ( le.MouseClickLeft( quitButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
@@ -107,8 +136,14 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( loadGameButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( restartGameButton.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Restart Game" ), _( "Restart the scenario." ), Dialog::ZERO );
+            }
             else if ( le.isMouseRightButtonPressedInArea( saveGameButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Game" ), _( "Save the current game." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( quickSaveButton.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Quick Save" ), _( "Save the current game without name selection." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( quitButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Dialog::ZERO );
