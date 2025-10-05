@@ -28,6 +28,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -36,7 +37,6 @@
 #include "math_base.h"
 #include "timing.h"
 #include "ui_base.h"
-#include "ui_language.h"
 #include "ui_text.h"
 
 enum class InterfaceType : uint8_t;

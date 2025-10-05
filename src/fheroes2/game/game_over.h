@@ -24,7 +24,6 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
 #include <vector>
 
 #include "color.h"

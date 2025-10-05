@@ -38,6 +38,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "game_string.h"
 #include "ground.h"
 #include "heroes_base.h"
 #include "icn.h"

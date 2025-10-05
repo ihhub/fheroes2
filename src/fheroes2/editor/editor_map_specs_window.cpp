@@ -46,7 +46,9 @@
 #include "editor_rumor_window.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "game_over.h"
+#include "game_string.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -192,26 +194,6 @@ namespace
         return castleIcon;
     }
 
-    std::string getHeroTitle( const std::string & name, const int race, const int32_t tileIndex, const int32_t mapWidth )
-    {
-        std::string title;
-
-        if ( name.empty() ) {
-            title = _( "[%{pos}]: %{race} hero" );
-        }
-        else {
-            title = _( "[%{pos}]: %{name}, %{race} hero" );
-
-            StringReplace( title, "%{name}", name );
-        }
-
-        StringReplace( title, "%{pos}", std::to_string( tileIndex % mapWidth ) + ", " + std::to_string( tileIndex / mapWidth ) );
-
-        StringReplace( title, "%{race}", Race::String( race ) );
-
-        return title;
-    }
-
     std::string replacePosAndRace( std::string text, const int race, const int32_t tileIndex, const int32_t mapWidth )
     {
         StringReplace( text, "%{pos}", std::to_string( tileIndex % mapWidth ) + ", " + std::to_string( tileIndex / mapWidth ) );
@@ -219,6 +201,19 @@ namespace
         StringReplace( text, "%{race}", Race::String( race ) );
 
         return text;
+    }
+
+    std::string getHeroTitle( const std::string & name, const int race, const int32_t tileIndex, const int32_t mapWidth )
+    {
+        if ( name.empty() ) {
+            return replacePosAndRace( _( "[%{pos}]: %{race} hero" ), race, tileIndex, mapWidth );
+        }
+
+        std::string title = replacePosAndRace( _( "[%{pos}]: %{name}, %{race} hero" ), race, tileIndex, mapWidth );
+
+        StringReplace( title, "%{name}", name );
+
+        return title;
     }
 
     std::string getDefaultTownTitle( const int race, const bool isTown, const int32_t tileIndex, const int32_t mapWidth )
@@ -234,10 +229,10 @@ namespace
     std::vector<fheroes2::LocalizedString> getCustomTownTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const bool isTown,
                                                                const int32_t tileIndex, const int32_t mapWidth )
     {
-        std::vector<fheroes2::LocalizedString> strings;
         const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
+            // You should call `getDefaultTownTitle` for this case!
             assert( 0 );
             return { { getDefaultTownTitle( race, isTown, tileIndex, mapWidth ), gameLanguage } };
         }

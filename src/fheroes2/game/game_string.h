@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <utility>
 
 class IStreamBase;
 class OStreamBase;

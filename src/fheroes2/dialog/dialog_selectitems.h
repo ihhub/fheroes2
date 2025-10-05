@@ -43,6 +43,11 @@
 
 class Kingdom;
 
+namespace fheroes2
+{
+    struct LocalizedString;
+}
+
 namespace Dialog
 {
     class ItemSelectionWindow : public Interface::ListBox<int>

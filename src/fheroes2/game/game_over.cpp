@@ -23,8 +23,12 @@
 
 #include "game_over.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <memory>
+#include <optional>
+#include <string>
 #include <utility>
 
 #include "artifact.h"
@@ -51,9 +55,15 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
+
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace
 {
