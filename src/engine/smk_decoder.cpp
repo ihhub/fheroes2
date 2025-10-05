@@ -236,7 +236,8 @@ void SMKVideoSequence::resetFrame()
     _currentFrameId = 0;
 }
 
-void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette )
+void SMKVideoSequence::getCurrentFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height,
+                                        std::vector<uint8_t> & palette ) const
 {
     if ( !_videoFile || image.empty() || x < 0 || y < 0 || x >= image.width() || y >= image.height() || !image.singleLayer() ) {
         width = 0;
@@ -301,7 +302,10 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
 
     palette.resize( 256 * 3 );
     memcpy( palette.data(), paletteData, 256 * 3 );
+}
 
+void SMKVideoSequence::skipFrame()
+{
     ++_currentFrameId;
     if ( _currentFrameId < _frameCount ) {
         if ( const signed char returnValue = smk_next( _videoFile.get() ); returnValue < 0 ) {
