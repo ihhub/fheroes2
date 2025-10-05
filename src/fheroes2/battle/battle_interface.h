@@ -225,7 +225,7 @@ namespace Battle
         StatusListBox * _battleStatusLog{ nullptr };
     };
 
-    class TurnOrder final : public fheroes2::Rect
+    class TurnOrder final
     {
     public:
         TurnOrder() = default;
@@ -236,13 +236,26 @@ namespace Battle
 
         void set( const fheroes2::Rect & roi, const std::shared_ptr<const Units> & units, const PlayerColor opponentColor )
         {
-            _area = roi;
+            _battleRoi = roi;
             _orderOfUnits = units;
             _opponentColor = opponentColor;
         }
 
-        void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output );
+        void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi );
+
         bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset ) const;
+
+        const fheroes2::Rect & getRenderingRoi() const
+        {
+            return _renderingRoi;
+        }
+
+        void restore()
+        {
+            if ( _restorer ) {
+                _restorer->restore();
+            }
+        }
 
     private:
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
@@ -251,8 +264,12 @@ namespace Battle
 
         std::weak_ptr<const Units> _orderOfUnits;
         PlayerColor _opponentColor{ PlayerColor::NONE };
-        fheroes2::Rect _area;
+        fheroes2::Rect _renderingRoi;
+        fheroes2::Rect _battleRoi;
         std::vector<UnitPos> _rects;
+
+        std::unique_ptr<fheroes2::ImageRestorer> _restorer;
+        bool _isInsideBattleField{ false };
     };
 
     class PopupDamageInfo : public Dialog::FrameBorder
