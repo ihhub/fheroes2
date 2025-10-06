@@ -333,18 +333,18 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", otherHero.GetName() );
-    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
     text.draw( cur_pt.x + 320 - text.width() / 2, cur_pt.y + 29, display );
 
     // Render hero's levels.
     message = _( "hero|Level %{level}" );
     StringReplace( message, "%{level}", GetLevel() );
-    text.set( message, fheroes2::FontType::smallWhite() );
+    text.set( std::move( message ), fheroes2::FontType::smallWhite() );
     text.draw( cur_pt.x + 143 - text.width() / 2, cur_pt.y + 52, display );
 
     message = _( "hero|Level %{level}" );
     StringReplace( message, "%{level}", otherHero.GetLevel() );
-    text.set( message, fheroes2::FontType::smallWhite() );
+    text.set( std::move( message ), fheroes2::FontType::smallWhite() );
     text.draw( cur_pt.x + 495 - text.width() / 2, cur_pt.y + 52, display );
 
     const int iconsH1XOffset = 34;
