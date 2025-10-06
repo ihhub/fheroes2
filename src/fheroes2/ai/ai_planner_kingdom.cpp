@@ -933,7 +933,7 @@ bool AI::Planner::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleL
     int32_t heroLimit = isEarlyGameWithSingleCastle ? 2 : world.w() / Maps::SMALL + 2;
 
     if ( heroLimit < static_cast<int32_t>( sortedCastleList.size() ) ) {
-        // In most cases the number of heroes must at least be equal to the number of heroes.
+        // In most cases the number of heroes must at least be equal to the number of castles.
         heroLimit = static_cast<int32_t>( sortedCastleList.size() );
     }
 
