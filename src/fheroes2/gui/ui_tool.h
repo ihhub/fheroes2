@@ -172,6 +172,13 @@ namespace fheroes2
             return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, moveUp );
         }
 
+        int32_t height( const std::string & text ) const
+        {
+            TextInput tmp{ _text };
+            tmp.set( text, 0 );
+            return tmp.height( _textInputArea.width );
+        }
+
     private:
         Image & _output;
         TextInput _text;
