@@ -53,7 +53,7 @@ namespace
 {
     const std::string autoSaveName{ "AUTOSAVE" };
 
-    const std::string quickSaveName{ "QUICK_SAVE" };
+    const std::string quickSaveName{ "QUICKSAVE" };
 
     const uint16_t saveFileMagicNumber{ 0xFF03 };
 
