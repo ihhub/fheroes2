@@ -159,6 +159,10 @@ namespace fheroes2
         KEY_HOME,
         KEY_END,
 
+        // These keys are from mouse buttons.
+        KEY_MOUSE_BUTTON_BACKWARD,
+        KEY_MOUSE_BUTTON_FORWARD,
+
         // Put all new keys before this line.
         LAST_KEY
     };
