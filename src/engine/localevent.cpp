@@ -904,7 +904,7 @@ namespace EventProcessing
             case SDL_BUTTON_X1:
                 // We treat the Backward mouse button as a normal keyboard button to allow to use it for hot-key mapping.
                 eventHandler.onKeyboardEvent( fheroes2::Key::KEY_MOUSE_BUTTON_BACKWARD, 0,
-                                              ( button.state == SDL_PRESSED )  ? LocalEvent::KeyboardEventState::KEY_DOWN : LocalEvent::KeyboardEventState::KEY_UP );
+                                              ( button.state == SDL_PRESSED ) ? LocalEvent::KeyboardEventState::KEY_DOWN : LocalEvent::KeyboardEventState::KEY_UP );
                 return;
             case SDL_BUTTON_X2:
                 // We treat the Forward mouse button as a normal keyboard button to allow to use it for hot-key mapping.
