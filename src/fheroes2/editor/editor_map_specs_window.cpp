@@ -259,7 +259,7 @@ namespace
 
         auto text = getLocalizedText( getCustomTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, mapWidth ),
                                       fheroes2::FontType::normalWhite() );
-        // TODO: crop with "..." too wide strings to fit the given width.
+        text->fitToOneRow( roi.width - townIcon.width() - 5 );
         text->drawInRoi( roi.x + townIcon.width() + 5, roi.y + 12, output, roi );
 
         return { roi.x, roi.y + 4, townIcon.width() + 5 + text->width(), townIcon.height() };

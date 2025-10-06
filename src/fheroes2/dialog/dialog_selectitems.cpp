@@ -837,7 +837,7 @@ namespace Dialog
         fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
 
         auto text = fheroes2::getLocalizedText( std::move( itemText ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        // TODO: crop with "..." too wide strings to fit the given width.
+        text->fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
         const fheroes2::Rect & roi = _window->activeArea();
         text->drawInRoi( destination.x + textOffsetX, destination.y + itemOffsetY - ( text->height() / 2 ) + 2, display,
                          { destination.x + textOffsetX, roi.y, roi.width - textOffsetX - 55, roi.height } );

@@ -1228,6 +1228,38 @@ namespace fheroes2
         }
     }
 
+    void MultiFontText::fitToOneRow( const int32_t maxWidth )
+    {
+        int32_t widthLeft = maxWidth;
+
+        for ( size_t i = 0; i < _texts.size(); ++i ) {
+            const auto languageSwitcher = getLanguageSwitcher( _texts[i] );
+
+            const FontCharHandler charHandler( _texts[i]._fontType );
+
+            const int32_t originalTextWidth
+                = getLineWidth( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), charHandler, true );
+
+            // TODO: Handle the case when the line will be truncated right at the beginning of the next text and the truncation symbol will be wider then the `widthLeft`.
+
+            if ( originalTextWidth <= widthLeft ) {
+                // Nothing to do. The text is not longer than the provided maximum width. Go to the next text.
+                widthLeft -= originalTextWidth;
+                continue;
+            }
+
+            const int32_t maxCharacterCount
+                = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), charHandler,
+                                        widthLeft - getTruncationSymbolWidth( _texts[i]._fontType ) );
+
+            _texts[i]._text.resize( maxCharacterCount );
+            _texts[i]._text += truncationSymbol;
+
+            // Remove other texts that do not fit the given width.
+            _texts.resize( i + 1 );
+        }
+    }
+
     std::string MultiFontText::text() const
     {
         std::string output;
