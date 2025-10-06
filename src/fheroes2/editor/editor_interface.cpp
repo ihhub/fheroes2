@@ -986,6 +986,8 @@ namespace Interface
                 continue;
             }
 
+            bool isCursorOverGameArea = false;
+
             // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
