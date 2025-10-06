@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 13:23+0000\n"
+"POT-Creation-Date: 2025-10-06 05:37+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8623,6 +8623,10 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} trifft %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Stufe %{level}"
 
 msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
 msgstr ""
