@@ -336,10 +336,10 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept the changes made." ), Dialog::ZERO );
             }
             else if ( buttonToggleOn.isEnabled() && le.isMouseRightButtonPressedInArea( buttonToggleOn.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Toggle All On" ), _( "Select all spells." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Enable All Spells" ), _( "Click to enable all spells." ), Dialog::ZERO );
             }
             else if ( buttonToggleOff.isEnabled() && le.isMouseRightButtonPressedInArea( buttonToggleOff.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Toggle All Off" ), _( "Unselect all spells." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Disable All Spells" ), _( "Click to disable all spells." ), Dialog::ZERO );
             }
             else if ( buttonToggleOn.isEnabled() && le.MouseClickLeft( buttonToggleOn.area() ) ) {
                 toggleAllOn = true;

@@ -1800,73 +1800,53 @@ namespace
                                   isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
             break;
         }
-        case ICN::BUTTON_TOGGLE_ALL_ON_GOOD: {
-            _icnVsSprite[id].resize( 2 );
-
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], "", { 86, 25 }, false, ICN::STONEBAK );
-
-            fheroes2::Sprite icon;
-            fheroes2::h2d::readImage( "toggle-all-on-released.image", icon );
-
-            fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][0], ( _icnVsSprite[id][0].width() - icon.width() ) / 2, ( _icnVsSprite[id][0].height() - icon.height() ) / 2,
-                            icon.width(), icon.height() );
-
-            fheroes2::h2d::readImage( "toggle-all-on-pressed.image", icon );
-
-            fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][1], ( _icnVsSprite[id][1].width() - icon.width() ) / 2 - 1,
-                            ( _icnVsSprite[id][1].height() - icon.height() ) / 2 + 1, icon.width(), icon.height() );
-            break;
-        }
+        case ICN::BUTTON_TOGGLE_ALL_ON_GOOD:
         case ICN::BUTTON_TOGGLE_ALL_ON_EVIL: {
+            const bool isEvilInterface = ( id == ICN::BUTTON_TOGGLE_ALL_ON_EVIL );
+
             _icnVsSprite[id].resize( 2 );
 
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], "", { 86, 25 }, true, ICN::STONBAKE );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], "", { 86, 25 }, isEvilInterface, isEvilInterface ? ICN::STONBAKE : ICN::STONEBAK );
 
             fheroes2::Sprite icon;
             fheroes2::h2d::readImage( "toggle-all-on-released.image", icon );
-            fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            if ( isEvilInterface ) {
+                fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            }
 
             fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][0], ( _icnVsSprite[id][0].width() - icon.width() ) / 2, ( _icnVsSprite[id][0].height() - icon.height() ) / 2,
                             icon.width(), icon.height() );
 
             fheroes2::h2d::readImage( "toggle-all-on-pressed.image", icon );
-            fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            if ( isEvilInterface ) {
+                fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            }
 
             fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][1], ( _icnVsSprite[id][1].width() - icon.width() ) / 2 - 1,
                             ( _icnVsSprite[id][1].height() - icon.height() ) / 2 + 1, icon.width(), icon.height() );
             break;
         }
-        case ICN::BUTTON_TOGGLE_ALL_OFF_GOOD: {
-            _icnVsSprite[id].resize( 2 );
-
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], "", { 86, 25 }, false, ICN::STONEBAK );
-
-            fheroes2::Sprite icon;
-            fheroes2::h2d::readImage( "toggle-all-off-released.image", icon );
-
-            fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][0], ( _icnVsSprite[id][0].width() - icon.width() ) / 2, ( _icnVsSprite[id][0].height() - icon.height() ) / 2,
-                            icon.width(), icon.height() );
-
-            fheroes2::h2d::readImage( "toggle-all-off-pressed.image", icon );
-
-            fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][1], ( _icnVsSprite[id][1].width() - icon.width() ) / 2 - 1,
-                            ( _icnVsSprite[id][1].height() - icon.height() ) / 2 + 1, icon.width(), icon.height() );
-            break;
-        }
+        case ICN::BUTTON_TOGGLE_ALL_OFF_GOOD:
         case ICN::BUTTON_TOGGLE_ALL_OFF_EVIL: {
+            const bool isEvilInterface = ( id == ICN::BUTTON_TOGGLE_ALL_OFF_EVIL );
+
             _icnVsSprite[id].resize( 2 );
 
-            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], "", { 86, 25 }, true, ICN::STONBAKE );
+            fheroes2::makeButtonSprites( _icnVsSprite[id][0], _icnVsSprite[id][1], "", { 86, 25 }, isEvilInterface, isEvilInterface ? ICN::STONBAKE : ICN::STONEBAK );
 
             fheroes2::Sprite icon;
             fheroes2::h2d::readImage( "toggle-all-off-released.image", icon );
-            fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            if ( isEvilInterface ) {
+                fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            }
 
             fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][0], ( _icnVsSprite[id][0].width() - icon.width() ) / 2, ( _icnVsSprite[id][0].height() - icon.height() ) / 2,
                             icon.width(), icon.height() );
 
             fheroes2::h2d::readImage( "toggle-all-off-pressed.image", icon );
-            fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            if ( isEvilInterface ) {
+                fheroes2::ApplyPalette( icon, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+            }
 
             fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][1], ( _icnVsSprite[id][1].width() - icon.width() ) / 2 - 1,
                             ( _icnVsSprite[id][1].height() - icon.height() ) / 2 + 1, icon.width(), icon.height() );
