@@ -171,7 +171,7 @@ namespace
                                                 ICN::BUTTON_TOGGLE_ALL_ON_GOOD,
                                                 ICN::BUTTON_TOGGLE_ALL_OFF_GOOD,
                                                 ICN::BUTTON_TOGGLE_ALL_ON_EVIL,
-                                                ICN::BUTTON_TOGGLE_ALL_OFF_EVIL};
+                                                ICN::BUTTON_TOGGLE_ALL_OFF_EVIL };
 
     bool isLanguageDependentIcnId( const int id )
     {

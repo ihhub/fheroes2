@@ -235,7 +235,7 @@ namespace Editor
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
         buttonToggleOn.disable();
 
-        background.renderButton( buttonToggleOff, isEvilInterface ? ICN::BUTTON_TOGGLE_ALL_OFF_EVIL :ICN::BUTTON_TOGGLE_ALL_OFF_GOOD, 0, 1, { 0, 7 },
+        background.renderButton( buttonToggleOff, isEvilInterface ? ICN::BUTTON_TOGGLE_ALL_OFF_EVIL : ICN::BUTTON_TOGGLE_ALL_OFF_GOOD, 0, 1, { 0, 7 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         fheroes2::ButtonGroup levelSelection;
