@@ -851,8 +851,10 @@ namespace EventProcessing
                 // The map is empty let's populate it.
                 for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
                     const fheroes2::Key key = static_cast<fheroes2::Key>( i );
-                    const auto [dummy, iEmplaced] = sdlValueToKey.try_emplace( getSDLKey( key ), key );
-                    assert( iEmplaced );
+                    const auto [dummy, isEmplaced] = sdlValueToKey.try_emplace( getSDLKey( key ), key );
+                    if ( !isEmplaced ) {
+                        assert( 0 );
+                    }
                 }
             }
 
