@@ -1595,8 +1595,8 @@ void World::setUltimateArtifact()
         existingUltimateArtIter->removeObjectPartsByUID( uid );
 
         // Also, remove the shadow of the Artifact.
-        const int32_t neighborTileIndex = Maps::GetDirectionIndex( existingUltimateArtIter->GetIndex(), Direction::LEFT );
-        if ( neighborTileIndex >= 0 ) {
+        if ( Maps::isValidDirection( tileId, Direction::LEFT ) ) {
+            const int32_t neighborTileIndex = Maps::GetDirectionIndex( tileId, Direction::LEFT );
             vec_tiles[neighborTileIndex].removeObjectPartsByUID( uid );
         }
     }
