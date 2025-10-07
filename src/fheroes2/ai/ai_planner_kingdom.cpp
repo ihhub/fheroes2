@@ -45,6 +45,7 @@
 #include "game_interface.h"
 #include "game_mode.h"
 #include "game_over.h"
+#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
@@ -929,7 +930,17 @@ bool AI::Planner::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleL
                                      const bool moreTasksForHeroes )
 {
     const bool isEarlyGameWithSingleCastle = world.CountDay() < 5 && sortedCastleList.size() == 1;
-    const int32_t heroLimit = isEarlyGameWithSingleCastle ? 2 : world.w() / Maps::SMALL + 2;
+    int32_t heroLimit = isEarlyGameWithSingleCastle ? 2 : world.w() / Maps::SMALL + 2;
+
+    if ( heroLimit < static_cast<int32_t>( sortedCastleList.size() ) ) {
+        // In most cases the number of heroes must at least be equal to the number of castles.
+        heroLimit = static_cast<int32_t>( sortedCastleList.size() );
+    }
+
+    if ( heroLimit > static_cast<int32_t>( GameStatic::GetKingdomMaxHeroes() ) ) {
+        // Make sure we limit the number of heroes to the allowed number.
+        heroLimit = static_cast<int32_t>( GameStatic::GetKingdomMaxHeroes() );
+    }
 
     if ( availableHeroCount >= heroLimit ) {
         return false;

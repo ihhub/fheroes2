@@ -350,6 +350,12 @@ public:
         setStates( DRAG_ONGOING );
     }
 
+    // Only for cases when a continuous pressed event is required.
+    void resetLongPress()
+    {
+        _mouseButtonLongPressDelay.reset();
+    }
+
 private:
     enum class MouseButtonType : uint8_t
     {

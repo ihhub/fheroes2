@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-06 05:37+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -7955,6 +7955,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} incontra %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Livello %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Artefatti"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Mostra Artefatti"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
