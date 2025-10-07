@@ -457,6 +457,20 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
             }
+            else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) ) {
+                const Troops temp = hero->GetArmy().getTroops();
+
+                hero->GetArmy().Assign( _army );
+                _army.Assign( temp );
+
+                topArmyBar.ResetSelected();
+                bottomArmyBar.ResetSelected();
+
+                topArmyBar.Redraw( display );
+                bottomArmyBar.Redraw( display );
+
+                display.render();
+            }
 
             // Army bar events processing.
             if ( ( bottomArmyBar.isValid()
