@@ -38,6 +38,7 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
+#include "game_string.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
