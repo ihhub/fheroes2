@@ -1245,22 +1245,26 @@ namespace fheroes2
                 break;
             }
 
-            const int32_t truncationSymbolWidth = getTruncationSymbolWidth( _texts[i]._fontType );
+            // This is not the last text and we need to keep space for the possible truncation symbol.
+            const int32_t correctedWidthLeft = widthLeft - getTruncationSymbolWidth( _texts[i]._fontType );
+            if ( originalTextWidth > correctedWidthLeft ) {
+                // The text does not fit the given width.
 
-            if ( originalTextWidth <= widthLeft - truncationSymbolWidth ) {
-                // Nothing to do. The text is not longer than the provided maximum width. Go to the next text.
-                widthLeft -= originalTextWidth;
-                continue;
+                const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ),
+                                                                        static_cast<int32_t>( _texts[i]._text.size() ), charHandler, correctedWidthLeft );
+
+                // Remove the characters that do not fit the given width.
+                _texts[i]._text.resize( maxCharacterCount );
+                _texts[i]._text += truncationSymbol;
+
+                // Remove other texts that do not fit the given width.
+                _texts.resize( i + 1 );
+
+                break;
             }
 
-            const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ),
-                                                                    static_cast<int32_t>( _texts[i]._text.size() ), charHandler, widthLeft - truncationSymbolWidth );
-
-            _texts[i]._text.resize( maxCharacterCount );
-            _texts[i]._text += truncationSymbol;
-
-            // Remove other texts that do not fit the given width.
-            _texts.resize( i + 1 );
+            // The text is not longer than the provided maximum width. Go to the next text.
+            widthLeft -= originalTextWidth;
         }
     }
 

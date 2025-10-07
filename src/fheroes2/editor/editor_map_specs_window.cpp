@@ -209,6 +209,7 @@ namespace
         const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
+            // You should directly call `getDefaultHeroTitle` for this case!
             assert( 0 );
             return { { getDefaultHeroTitle( race, tileIndex, mapWidth ), gameLanguage } };
         }
@@ -233,7 +234,7 @@ namespace
         const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
-            // You should call `getDefaultTownTitle` for this case!
+            // You should directly call `getDefaultTownTitle` for this case!
             assert( 0 );
             return { { getDefaultTownTitle( race, isTown, tileIndex, mapWidth ), gameLanguage } };
         }
@@ -296,8 +297,8 @@ namespace
         return selectConditionRoi;
     }
 
-    fheroes2::Rect renderTownIconAndName( const TownInfo & townInfo, const bool isEvilInterface, const int32_t mapWidth, const fheroes2::Rect & roi,
-                                          fheroes2::Image & output )
+    fheroes2::Rect renderConditionsTownIconAndName( const TownInfo & townInfo, const bool isEvilInterface, const int32_t mapWidth, const fheroes2::Rect & roi,
+                                                    fheroes2::Image & output )
     {
         const auto * castleMetadata = townInfo.castleMetadata;
         assert( castleMetadata != nullptr );
@@ -1097,7 +1098,7 @@ namespace
 
                 const fheroes2::Rect roi{ _restorer.rect() };
 
-                _selectConditionRoi = renderTownIconAndName( _mapTownInfos[selectedTownIndex], _isEvilInterface, _mapWidth, roi, output );
+                _selectConditionRoi = renderConditionsTownIconAndName( _mapTownInfos[selectedTownIndex], _isEvilInterface, _mapWidth, roi, output );
 
                 if ( !_isNormalVictoryAllowed ) {
                     _allowNormalVictory.hide();
@@ -1416,7 +1417,7 @@ namespace
                         if ( le.MouseClickLeft( checkboxRect ) ) {
                             const PlayerColor color = _alliancesCheckboxes[allianceNumber][playerNumber]->getColor();
 
-                            // There can be a maximum of  (active_players - 1) in one alliance to have at least one player in the other alliance.
+                            // There can be a maximum of (active_players - 1) in one alliance to have at least one player in the other alliance.
                             if ( ( ( _alliances[allianceNumber] & color ) == 0 )
                                  && ( ( Color::Count( _availableColors ) - Color::Count( _alliances[allianceNumber] ) ) > 1 ) ) {
                                 for ( size_t i = 0; i < _alliancesCheckboxes.size(); ++i ) {
@@ -1742,7 +1743,7 @@ namespace
                     }
                 }
 
-                _selectConditionRoi = renderTownIconAndName( _mapTownInfos[selectedTownIndex], _isEvilInterface, _mapWidth, _restorer.rect(), output );
+                _selectConditionRoi = renderConditionsTownIconAndName( _mapTownInfos[selectedTownIndex], _isEvilInterface, _mapWidth, _restorer.rect(), output );
 
                 break;
             }
