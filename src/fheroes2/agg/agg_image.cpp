@@ -1481,7 +1481,7 @@ namespace
             // We need to create symmetrical by size buttons and then copy images on them.
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
 
-            // end of line symbol is set to make sure that the buttons' height is for 2 line text.
+            // End of line symbol '\n' is set to make sure that the buttons' height is set for 2 line text.
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
                                                       { fheroes2::getSupportedText( "\n", buttonFontType ), fheroes2::getSupportedText( "\n", buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "INFO" ), buttonFontType ),
