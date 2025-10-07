@@ -40,7 +40,6 @@
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
-#include "game_language.h"
 #include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
 #include "heroes_indicator.h"

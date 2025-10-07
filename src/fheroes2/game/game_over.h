@@ -24,6 +24,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 #include <vector>
 
 #include "color.h"
@@ -32,6 +33,11 @@
 
 class IStreamBase;
 class OStreamBase;
+
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace GameOver
 {
