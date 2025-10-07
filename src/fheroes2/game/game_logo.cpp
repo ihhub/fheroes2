@@ -26,11 +26,21 @@
 #include "game_delays.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "math_base.h"
 #include "screen.h"
 #include "translations.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+
+namespace
+{
+    void outputMainMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "fheroes2 Resurrection Team presents" )
+    }
+}
 
 void fheroes2::showTeamInfo()
 {
