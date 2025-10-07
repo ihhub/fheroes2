@@ -1500,7 +1500,7 @@ namespace
             for ( size_t i = 0; i < imageRoi.size(); ++i ) {
                 const auto & originalImage = fheroes2::AGG::GetICN( originalIcnID, static_cast<uint32_t>( i ) );
                 fheroes2::Copy( originalImage, imageRoi[i].x, imageRoi[i].y, _icnVsSprite[id][i],
-                                ( _icnVsSprite[id][0].width() - originalImage.width() ) / 2 + imageRoi[i].x, imageRoi[i].y, imageRoi[i].width, imageRoi[i].height );
+                                ( _icnVsSprite[id][i].width() - originalImage.width() ) / 2 + imageRoi[i].x, imageRoi[i].y, imageRoi[i].width, imageRoi[i].height );
             }
             break;
         }
