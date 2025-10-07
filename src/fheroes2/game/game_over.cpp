@@ -90,8 +90,8 @@ namespace
                 const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
                 assert( town != nullptr );
                 if ( town ) {
-                    // TODO: pass map language for the custom town name.
-                    strings = fheroes2::getLocalizedStrings( _( "You captured %{name}!\nYou are victorious." ), gameLanguage, "%{name}", town->GetName(), gameLanguage );
+                    strings = fheroes2::getLocalizedStrings( _( "You captured %{name}!\nYou are victorious." ), gameLanguage, "%{name}", town->GetName(),
+                                                             conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
                 }
                 break;
             }
@@ -101,9 +101,8 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero ) {
-                    // TODO: pass map language for custom hero name.
                     strings = fheroes2::getLocalizedStrings( _( "You have captured the enemy hero %{name}!\nYour quest is complete." ), gameLanguage, "%{name}",
-                                                             hero->GetName(), gameLanguage );
+                                                             hero->GetName(), conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
                 }
 
                 break;
@@ -205,9 +204,8 @@ namespace
             assert( town != nullptr );
 
             if ( town ) {
-                // TODO: pass map language for custom town name.
                 strings = fheroes2::getLocalizedStrings( _( "The enemy has captured %{name}!\nThey are triumphant." ), gameLanguage, "%{name}", town->GetName(),
-                                                         gameLanguage );
+                                                         conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
             }
 
             break;
@@ -218,9 +216,8 @@ namespace
             assert( hero != nullptr );
 
             if ( hero ) {
-                // TODO: pass map language for custom hero name.
                 strings = fheroes2::getLocalizedStrings( _( "You have lost the hero %{name}.\nYour quest is over." ), gameLanguage, "%{name}", hero->GetName(),
-                                                         gameLanguage );
+                                                         conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
             }
 
             break;
@@ -303,7 +300,7 @@ const char * GameOver::GetString( uint32_t cond )
     return "None";
 }
 
-std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t cond )
+std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uint32_t conditions, const std::optional<fheroes2::SupportedLanguage> mapLanguage )
 {
     // This should be populated only for strings that are set for objects within the Editor.
     std::optional<std::pair<std::string, fheroes2::LocalizedString>> translationReplacement;
@@ -312,10 +309,10 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t 
     const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
     std::string msg;
 
-    if ( WINS_ALL == cond ) {
+    if ( conditions == WINS_ALL ) {
         msg = GetString( WINS_ALL );
     }
-    else if ( cond == WINS_SIDE ) {
+    else if ( conditions == WINS_SIDE ) {
         const Player * currentPlayer = Settings::Get().GetPlayers().GetCurrent();
         assert( currentPlayer != nullptr );
 
@@ -357,26 +354,26 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t 
             StringReplace( msg, "%{enemies}", enemiesList );
         }
     }
-    else if ( WINS_TOWN & cond ) {
+    else if ( conditions & WINS_TOWN ) {
         const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
         assert( town != nullptr );
 
         if ( town ) {
             msg = town->isCastle() ? _( "Capture the castle '%{name}'." ) : _( "Capture the town '%{name}'." );
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), gameLanguage ) );
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), mapLanguage ) );
         }
     }
-    else if ( WINS_HERO & cond ) {
+    else if ( conditions & WINS_HERO ) {
         const Heroes * hero = world.GetHeroesCondWins();
         assert( hero != nullptr );
 
         if ( hero ) {
             msg = _( "Defeat the hero '%{name}'." );
 
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), gameLanguage ) );
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), mapLanguage ) );
         }
     }
-    else if ( WINS_ARTIFACT & cond ) {
+    else if ( conditions & WINS_ARTIFACT ) {
         if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
             msg = _( "Find the ultimate artifact." );
         }
@@ -387,39 +384,37 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( uint32_t 
             StringReplace( msg, "%{name}", art.GetName() );
         }
     }
-    else if ( WINS_GOLD & cond ) {
+    else if ( conditions & WINS_GOLD ) {
         msg = _( "Accumulate %{count} gold." );
         StringReplace( msg, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
     }
 
-    if ( WINS_ALL != cond && ( WINS_ALL & cond ) ) {
+    if ( WINS_ALL != conditions && ( conditions & WINS_ALL ) ) {
         msg.append( _( ", or you may win by defeating all enemy heroes and capturing all enemy towns and castles." ) );
     }
 
-    if ( LOSS_ALL == cond ) {
+    if ( conditions == LOSS_ALL ) {
         msg = GetString( LOSS_ALL );
     }
-    else if ( LOSS_TOWN & cond ) {
+    else if ( conditions & LOSS_TOWN ) {
         const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().LossMapsPositionObject() );
         assert( town != nullptr );
 
         if ( town ) {
             msg = town->isCastle() ? _( "Lose the castle '%{name}'." ) : _( "Lose the town '%{name}'." );
-            // TODO: pass map language for custom town name.
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), gameLanguage ) );
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), mapLanguage ) );
         }
     }
-    else if ( LOSS_HERO & cond ) {
+    else if ( conditions & LOSS_HERO ) {
         const Heroes * hero = world.GetHeroesCondLoss();
         assert( hero != nullptr );
 
         if ( hero ) {
             msg = _( "Lose the hero: %{name}." );
-            // TODO: pass map language for custom hero name.
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), gameLanguage ) );
+            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), mapLanguage ) );
         }
     }
-    else if ( LOSS_TIME & cond ) {
+    else if ( conditions & LOSS_TIME ) {
         const uint32_t dayCount = conf.getCurrentMapInfo().LossCountDays() - 1;
         const uint32_t month = dayCount / ( numOfDaysPerWeek * numOfWeeksPerMonth );
         const uint32_t week = ( dayCount - month * ( numOfDaysPerWeek * numOfWeeksPerMonth ) ) / numOfDaysPerWeek;

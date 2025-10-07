@@ -144,17 +144,18 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 347, CONDITION_LABEL_WIDTH, display );
 
     std::unique_ptr<fheroes2::TextBase> conditionsText
-        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionWins() ), fheroes2::FontType::smallWhite() );
-    text.setUniformVerticalAlignment( false );
-    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
+        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionWins(), mapInfo.getSupportedLanguage() ), fheroes2::FontType::smallWhite() );
+    conditionsText->setUniformVerticalAlignment( false );
+    conditionsText->draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Loss\nConditions" ), fheroes2::FontType::smallWhite() );
     text.setUniformVerticalAlignment( true );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 392, CONDITION_LABEL_WIDTH, display );
 
-    conditionsText = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionLoss() ), fheroes2::FontType::smallWhite() );
-    text.setUniformVerticalAlignment( false );
-    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
+    conditionsText
+        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionLoss(), mapInfo.getSupportedLanguage() ), fheroes2::FontType::smallWhite() );
+    conditionsText->setUniformVerticalAlignment( false );
+    conditionsText->draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
     const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
     fheroes2::Button buttonOk( shadowOffset.x + OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 0 ).width() / 2, shadowOffset.y + 426, buttonOkIcnId, 0, 1 );

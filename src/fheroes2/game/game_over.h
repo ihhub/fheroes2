@@ -62,7 +62,7 @@ namespace GameOver
     };
 
     const char * GetString( uint32_t cond );
-    std::vector<fheroes2::LocalizedString> GetActualDescription( uint32_t cond );
+    std::vector<fheroes2::LocalizedString> GetActualDescription( const uint32_t conditions, const std::optional<fheroes2::SupportedLanguage> mapLanguage );
 
     class Result
     {
