@@ -1470,15 +1470,15 @@ namespace
             const int originalIcnID = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
             if ( useOriginalResources() ) {
-                // Since we are using original resources we don't need to invent anything. Just copy existing images.
+                // Since we are using original resources we don't need to do anything. Just copy existing images.
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     _icnVsSprite[id][i] = fheroes2::AGG::GetICN( originalIcnID, static_cast<uint32_t>( i ) );
                 }
                 break;
             }
 
-            // 3 out of 4 buttons contain images. What we want to do is to create symmetrical by size buttons
-            // and then copy images on them.
+            // 3 out of 4 buttons contain images.
+            // We need to create symmetrical by size buttons and then copy images on them.
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
 
             // end of line symbol is set to make sure that the buttons' height is for 2 line text.
@@ -1489,6 +1489,7 @@ namespace
                                                       isEvilInterface, 80 );
 
             // Copy images from the original buttons.
+            // Let's hope that game resources remain the same for other versions of the game.
             const std::array<fheroes2::Rect, 8> imageRoi = { fheroes2::Rect{ 20, 15, 59, 27 },
                                                              fheroes2::Rect{ 19, 16, 59, 27 },
                                                              fheroes2::Rect{ 28, 15, 42, 27 },
@@ -1511,14 +1512,10 @@ namespace
             const bool isEvilInterface = ( id == ICN::BUTTON_QUIT_EVIL );
 
             if ( useOriginalResources() ) {
-                int buttonIcnID = ICN::UNKNOWN;
-                std::pair<int, int> icnIndex;
+                const int buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 
-                buttonIcnID = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
-                icnIndex = { 6, 7 };
-
-                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.first );
-                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, icnIndex.second );
+                _icnVsSprite[id][0] = fheroes2::AGG::GetICN( buttonIcnID, 6 );
+                _icnVsSprite[id][1] = fheroes2::AGG::GetICN( buttonIcnID, 7 );
                 break;
             }
 
