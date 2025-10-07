@@ -2462,7 +2462,24 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     }
 
     if ( priorityTarget == -1 ) {
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find a meaningful tile to visit" )
+        if ( hero.Modes( Heroes::PATROL ) && hero.GetPatrolCenter() != hero.GetCenter() ) {
+            const int32_t patrolIndex = hero.GetPatrolCenter().x + hero.GetPatrolCenter().y * world.w();
+
+            auto [dist, useDimensionDoor] = getDistanceToTile( _pathfinder, patrolIndex );
+            if ( dist == 0 || MP2::isOffGameActionObject( world.getTile( patrolIndex ).getMainObjectType() ) ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find a meaningful tile to visit and cannot return to the patrol position" )
+                return -1;
+            }
+
+            // This hero is on patrol. Since no tasks to perform go back to the original patrol position.
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find a meaningful tile to visit and returning back to the patrol position" )
+            priorityTarget = patrolIndex;
+            // Make the priority slightly higher than the limit.
+            maxPriority = -dangerousTaskPenalty + 1;
+        }
+        else {
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find a meaningful tile to visit" )
+        }
     }
     else {
         DEBUG_LOG( DBG_AI, DBG_INFO,
