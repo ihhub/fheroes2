@@ -198,17 +198,24 @@ namespace
         return text;
     }
 
-    std::string getHeroTitle( const std::string & name, const int race, const int32_t tileIndex, const int32_t mapWidth )
+    std::string getDefaultHeroTitle( const int race, const int32_t tileIndex, const int32_t mapWidth )
     {
+        return replacePosAndRace( _( "[%{pos}]: %{race} hero" ), race, tileIndex, mapWidth );
+    }
+
+    std::vector<fheroes2::LocalizedString> getCustomHeroTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race,
+                                                               const int32_t tileIndex, const int32_t mapWidth )
+    {
+        const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+
         if ( name.empty() ) {
-            return replacePosAndRace( _( "[%{pos}]: %{race} hero" ), race, tileIndex, mapWidth );
+            assert( 0 );
+            return { { getDefaultHeroTitle( race, tileIndex, mapWidth ), gameLanguage } };
         }
 
         std::string title = replacePosAndRace( _( "[%{pos}]: %{name}, %{race} hero" ), race, tileIndex, mapWidth );
 
-        StringReplace( title, "%{name}", name );
-
-        return title;
+        return fheroes2::getLocalizedStrings( replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage, "%{name}", name, language );
     }
 
     std::string getDefaultTownTitle( const int race, const bool isTown, const int32_t tileIndex, const int32_t mapWidth )
@@ -287,8 +294,15 @@ namespace
             const auto & heroInfo = _heroInfos[index];
             const auto * heroMetadata = heroInfo.heroMetadata;
 
-            renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
-                        getHeroTitle( heroMetadata->customName, heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85, itemsOffsetY / 2, current );
+            if ( heroMetadata->customName.empty() ) {
+                renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
+                            getDefaultHeroTitle( heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85, itemsOffsetY / 2, current );
+            }
+            else {
+                renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
+                            getCustomHeroTitle( heroMetadata->customName, heroInfo.language, heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85,
+                            itemsOffsetY / 2, current );
+            }
         }
 
         void ActionListPressRight( int & index ) override
@@ -297,8 +311,16 @@ namespace
 
             const auto & heroInfo = _heroInfos[index];
 
-            fheroes2::showStandardTextMessage( {}, getHeroTitle( heroInfo.heroMetadata->customName, heroInfo.heroMetadata->race, heroInfo.tileIndex, _mapWidth ),
-                                               Dialog::ZERO );
+            if ( heroInfo.heroMetadata->customName.empty() ) {
+                fheroes2::showStandardTextMessage( {}, getDefaultHeroTitle( heroInfo.heroMetadata->race, heroInfo.tileIndex, _mapWidth ), Dialog::ZERO );
+            }
+            else {
+                auto text = getLocalizedText( getCustomHeroTitle( heroInfo.heroMetadata->customName, heroInfo.language, heroInfo.heroMetadata->race, heroInfo.tileIndex,
+                                                                  _mapWidth ),
+                                              fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
+            }
         }
 
         static const int32_t itemsOffsetY{ 35 };
@@ -1106,9 +1128,17 @@ namespace
                     fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
                 }
 
-                fheroes2::Text extraText( getHeroTitle( heroMetadata->customName, heroMetadata->race, _heroToKill.first, _mapWidth ), fheroes2::FontType::normalWhite() );
-                extraText.fitToOneRow( roi.width );
-                extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
+                if ( heroMetadata->customName.empty() ) {
+                    fheroes2::Text extraText( getDefaultHeroTitle( heroMetadata->race, _heroToKill.first, _mapWidth ), fheroes2::FontType::normalWhite() );
+                    extraText.fitToOneRow( roi.width );
+                    extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
+                }
+                else {
+                    auto extraText = getLocalizedText( getCustomHeroTitle( heroMetadata->customName, _language, heroMetadata->race, _heroToKill.first, _mapWidth ),
+                                                       fheroes2::FontType::normalWhite() );
+                    extraText->fitToOneRow( roi.width );
+                    extraText->drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
+                }
 
                 break;
             }
@@ -1768,10 +1798,19 @@ namespace
                     fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
                 }
 
-                fheroes2::Text extraText( getHeroTitle( heroMetadata->customName, heroMetadata->race, static_cast<int32_t>( _heroToLose[0] ), _mapWidth ),
-                                          fheroes2::FontType::normalWhite() );
-                extraText.fitToOneRow( roi.width );
-                extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
+                if ( heroMetadata->customName.empty() ) {
+                    fheroes2::Text extraText( getDefaultHeroTitle( heroMetadata->race, static_cast<int32_t>( _heroToLose[0] ), _mapWidth ),
+                                              fheroes2::FontType::normalWhite() );
+                    extraText.fitToOneRow( roi.width );
+                    extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
+                }
+                else {
+                    auto extraText = getLocalizedText( getCustomHeroTitle( heroMetadata->customName, _language, heroMetadata->race,
+                                                                           static_cast<int32_t>( _heroToLose[0] ), _mapWidth ),
+                                                       fheroes2::FontType::normalWhite() );
+                    extraText->fitToOneRow( roi.width );
+                    extraText->drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
+                }
 
                 break;
             }
