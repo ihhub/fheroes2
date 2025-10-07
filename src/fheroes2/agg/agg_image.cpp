@@ -1464,7 +1464,8 @@ namespace
         }
         case ICN::BUTTONS_ADVENTURE_OPTIONS_DIALOG_GOOD:
         case ICN::BUTTONS_ADVENTURE_OPTIONS_DIALOG_EVIL: {
-            _icnVsSprite[id].resize( 8 );
+            constexpr size_t imageCount{ 8 };
+            _icnVsSprite[id].resize( imageCount );
 
             const bool isEvilInterface = ( id == ICN::BUTTONS_ADVENTURE_OPTIONS_DIALOG_EVIL );
             const int originalIcnID = isEvilInterface ? ICN::APANELE : ICN::APANEL;
@@ -1490,14 +1491,14 @@ namespace
 
             // Copy images from the original buttons.
             // Let's hope that game resources remain the same for other versions of the game.
-            const std::array<fheroes2::Rect, 8> imageRoi = { fheroes2::Rect{ 20, 15, 59, 27 },
-                                                             fheroes2::Rect{ 19, 16, 59, 27 },
-                                                             fheroes2::Rect{ 28, 15, 42, 27 },
-                                                             fheroes2::Rect{ 27, 16, 42, 27 },
-                                                             fheroes2::Rect{},
-                                                             fheroes2::Rect{},
-                                                             fheroes2::Rect{ 21, 17, 59, 25 },
-                                                             fheroes2::Rect{ 20, 18, 59, 25 } };
+            const std::array<fheroes2::Rect, imageCount> imageRoi = { fheroes2::Rect{ 20, 15, 59, 27 },
+                                                                      fheroes2::Rect{ 19, 16, 59, 27 },
+                                                                      fheroes2::Rect{ 28, 15, 42, 27 },
+                                                                      fheroes2::Rect{ 27, 16, 42, 27 },
+                                                                      fheroes2::Rect{},
+                                                                      fheroes2::Rect{},
+                                                                      fheroes2::Rect{ 21, 17, 59, 25 },
+                                                                      fheroes2::Rect{ 20, 18, 59, 25 } };
             for ( size_t i = 0; i < imageRoi.size(); ++i ) {
                 const auto & originalImage = fheroes2::AGG::GetICN( originalIcnID, static_cast<uint32_t>( i ) );
                 fheroes2::Copy( originalImage, imageRoi[i].x, imageRoi[i].y, _icnVsSprite[id][i],
