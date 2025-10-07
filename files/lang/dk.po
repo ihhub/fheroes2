@@ -3827,7 +3827,7 @@ msgid "N"
 msgstr "N"
 
 msgid "Are you sure you want to delete the map:"
-msgstr "Er du sikker på, du vil slette dette kort:"
+msgstr "Er du sikker på, at du vil slette dette kort:"
 
 msgid "No maps exist at that size."
 msgstr "Ingen kort i den størrelse"
