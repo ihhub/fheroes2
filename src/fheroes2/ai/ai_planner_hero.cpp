@@ -2566,7 +2566,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
 
         if ( !isCurrentlyValid && useDimensionDoor ) {
-            // TODO: at the moment future objects cannot be estimated by using Dimension Door.
+            // TODO: at the moment future objects cannot be estimated for Dimension Door usage.
             continue;
         }
 
