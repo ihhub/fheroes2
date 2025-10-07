@@ -44,6 +44,8 @@ namespace
 
 void fheroes2::showTeamInfo()
 {
+    outputMainMenuInTextSupportMode();
+
     const ScreenPaletteRestorer restorer;
 
     Display & display = Display::instance();
