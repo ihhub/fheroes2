@@ -249,10 +249,63 @@ namespace
         return fheroes2::getLocalizedStrings( replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage, "%{name}", name, language );
     }
 
-    fheroes2::Rect renderTownIconAndName( const Maps::Map_Format::CastleMetadata * castleMetadata, const TownInfo & townInfo, const bool isTown, const int townIcnId,
-                                          const int32_t mapWidth, const fheroes2::Rect & roi, fheroes2::Image & output )
+    fheroes2::Rect renderConditionsHeroIconAndName( const HeroInfo & heroInfo, const int32_t mapWidth, const fheroes2::Rect & roi, fheroes2::Image & output )
     {
-        const fheroes2::Sprite townIcon( getTownIcon( isTown, townInfo.race, townInfo.color, townIcnId ) );
+        const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+
+        const int32_t heroFrameWidth = 111;
+        const int32_t heroFrameHeight = 105;
+
+        fheroes2::Rect selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
+
+        fheroes2::Blit( heroFrame, 88, 66, output, selectConditionRoi.x, selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
+
+        // To render hero icons we use castle flags and frame.
+        const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( heroInfo.color );
+        const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
+        const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+        Blit( castleLeftFlag, 0, 0, output, selectConditionRoi.x - 21, selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
+        Blit( castleRightFlag, 0, 0, output, selectConditionRoi.x + selectConditionRoi.width + 2, selectConditionRoi.y + 45, castleRightFlag.width(),
+              castleRightFlag.height() );
+
+        const auto * heroMetadata = heroInfo.heroMetadata;
+
+        assert( heroMetadata != nullptr );
+
+        if ( heroMetadata->customPortrait > 0 ) {
+            const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroMetadata->customPortrait ), 0 );
+
+            fheroes2::Copy( heroPortrait, 0, 0, output, selectConditionRoi.x + 5, selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
+        }
+        else {
+            fheroes2::renderHeroRacePortrait( heroMetadata->race, { selectConditionRoi.x + 5, selectConditionRoi.y + 6, 101, 93 }, output );
+        }
+
+        if ( heroMetadata->customName.empty() ) {
+            fheroes2::Text extraText( getDefaultHeroTitle( heroMetadata->race, heroInfo.tileIndex, mapWidth ), fheroes2::FontType::normalWhite() );
+            extraText.fitToOneRow( roi.width );
+            extraText.drawInRoi( roi.x, selectConditionRoi.y + selectConditionRoi.height + 5, roi.width, output, roi );
+        }
+        else {
+            auto extraText = getLocalizedText( getCustomHeroTitle( heroMetadata->customName, heroInfo.language, heroMetadata->race, heroInfo.tileIndex, mapWidth ),
+                                               fheroes2::FontType::normalWhite() );
+            extraText->fitToOneRow( roi.width );
+            extraText->drawInRoi( roi.x, selectConditionRoi.y + selectConditionRoi.height + 5, roi.width, output, roi );
+        }
+
+        return selectConditionRoi;
+    }
+
+    fheroes2::Rect renderTownIconAndName( const TownInfo & townInfo, const bool isEvilInterface, const int32_t mapWidth, const fheroes2::Rect & roi,
+                                          fheroes2::Image & output )
+    {
+        const auto * castleMetadata = townInfo.castleMetadata;
+        assert( castleMetadata != nullptr );
+
+        const bool isTown
+            = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
+
+        const fheroes2::Sprite townIcon( getTownIcon( isTown, townInfo.race, townInfo.color, isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS ) );
 
         fheroes2::Blit( townIcon, output, roi.x, roi.y + 4 );
 
@@ -1042,16 +1095,9 @@ namespace
                     }
                 }
 
-                const auto & townInfo = _mapTownInfos[selectedTownIndex];
-                const auto * castleMetadata = townInfo.castleMetadata;
-                const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
-
-                const bool isTown
-                    = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
-
                 const fheroes2::Rect roi{ _restorer.rect() };
 
-                _selectConditionRoi = renderTownIconAndName( castleMetadata, townInfo, isTown, townIcnId, _mapWidth, roi, output );
+                _selectConditionRoi = renderTownIconAndName( _mapTownInfos[selectedTownIndex], _isEvilInterface, _mapWidth, roi, output );
 
                 if ( !_isNormalVictoryAllowed ) {
                     _allowNormalVictory.hide();
@@ -1087,17 +1133,6 @@ namespace
                     _restorer.restore();
                 }
 
-                const fheroes2::Rect roi{ _restorer.rect() };
-
-                const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-
-                const int32_t heroFrameWidth = 111;
-                const int32_t heroFrameHeight = 105;
-
-                _selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
-
-                fheroes2::Blit( heroFrame, 88, 66, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
-
                 assert( !_mapHeroInfos.empty() );
 
                 size_t selectedHeroIndex = 0;
@@ -1108,37 +1143,7 @@ namespace
                     }
                 }
 
-                // To render hero icons we use castle flags and frame.
-                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( _heroToKill.second );
-                const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
-                const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
-                Blit( castleLeftFlag, 0, 0, output, _selectConditionRoi.x - 21, _selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
-                Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
-                      castleRightFlag.height() );
-
-                const auto * heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
-                const int32_t heroPortraitId = heroMetadata->customPortrait;
-
-                if ( heroPortraitId > 0 ) {
-                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroPortraitId ), 0 );
-
-                    fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
-                }
-                else {
-                    fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
-                }
-
-                if ( heroMetadata->customName.empty() ) {
-                    fheroes2::Text extraText( getDefaultHeroTitle( heroMetadata->race, _heroToKill.first, _mapWidth ), fheroes2::FontType::normalWhite() );
-                    extraText.fitToOneRow( roi.width );
-                    extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
-                }
-                else {
-                    auto extraText = getLocalizedText( getCustomHeroTitle( heroMetadata->customName, _language, heroMetadata->race, _heroToKill.first, _mapWidth ),
-                                                       fheroes2::FontType::normalWhite() );
-                    extraText->fitToOneRow( roi.width );
-                    extraText->drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
-                }
+                _selectConditionRoi = renderConditionsHeroIconAndName( _mapHeroInfos[selectedHeroIndex], _mapWidth, _restorer.rect(), output );
 
                 break;
             }
@@ -1737,16 +1742,7 @@ namespace
                     }
                 }
 
-                const auto & townInfo = _mapTownInfos[selectedTownIndex];
-                const auto * castleMetadata = townInfo.castleMetadata;
-                const int townIcnId = _isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS;
-
-                const bool isTown
-                    = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
-
-                const fheroes2::Rect roi{ _restorer.rect() };
-
-                _selectConditionRoi = renderTownIconAndName( castleMetadata, townInfo, isTown, townIcnId, _mapWidth, roi, output );
+                _selectConditionRoi = renderTownIconAndName( _mapTownInfos[selectedTownIndex], _isEvilInterface, _mapWidth, _restorer.rect(), output );
 
                 break;
             }
@@ -1756,17 +1752,6 @@ namespace
                     // TODO: optimize the rendering.
                     _restorer.restore();
                 }
-
-                const fheroes2::Rect roi{ _restorer.rect() };
-
-                const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-
-                const int32_t heroFrameWidth = 111;
-                const int32_t heroFrameHeight = 105;
-
-                _selectConditionRoi = { roi.x + ( roi.width - heroFrameWidth ) / 2, roi.y + 4, heroFrameWidth, heroFrameHeight };
-
-                fheroes2::Blit( heroFrame, 88, 66, output, _selectConditionRoi.x, _selectConditionRoi.y, heroFrameWidth, heroFrameHeight );
 
                 assert( !_mapHeroInfos.empty() );
 
@@ -1778,39 +1763,7 @@ namespace
                     }
                 }
 
-                // To render hero icons we use castle flags and frame.
-                const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( static_cast<PlayerColor>( _heroToLose[1] ) );
-                const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
-                const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
-                Blit( castleLeftFlag, 0, 0, output, _selectConditionRoi.x - 21, _selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
-                Blit( castleRightFlag, 0, 0, output, _selectConditionRoi.x + _selectConditionRoi.width + 2, _selectConditionRoi.y + 45, castleRightFlag.width(),
-                      castleRightFlag.height() );
-
-                const auto * heroMetadata = _mapHeroInfos[selectedHeroIndex].heroMetadata;
-                const int32_t heroPortraitId = heroMetadata->customPortrait;
-
-                if ( heroPortraitId > 0 ) {
-                    const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroPortraitId ), 0 );
-
-                    fheroes2::Copy( heroPortrait, 0, 0, output, _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
-                }
-                else {
-                    fheroes2::renderHeroRacePortrait( heroMetadata->race, { _selectConditionRoi.x + 5, _selectConditionRoi.y + 6, 101, 93 }, output );
-                }
-
-                if ( heroMetadata->customName.empty() ) {
-                    fheroes2::Text extraText( getDefaultHeroTitle( heroMetadata->race, static_cast<int32_t>( _heroToLose[0] ), _mapWidth ),
-                                              fheroes2::FontType::normalWhite() );
-                    extraText.fitToOneRow( roi.width );
-                    extraText.drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
-                }
-                else {
-                    auto extraText = getLocalizedText( getCustomHeroTitle( heroMetadata->customName, _language, heroMetadata->race,
-                                                                           static_cast<int32_t>( _heroToLose[0] ), _mapWidth ),
-                                                       fheroes2::FontType::normalWhite() );
-                    extraText->fitToOneRow( roi.width );
-                    extraText->drawInRoi( roi.x, _selectConditionRoi.y + _selectConditionRoi.height + 5, roi.width, output, roi );
-                }
+                _selectConditionRoi = renderConditionsHeroIconAndName( _mapHeroInfos[selectedHeroIndex], _mapWidth, _restorer.rect(), output );
 
                 break;
             }
