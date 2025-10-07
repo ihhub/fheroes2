@@ -987,6 +987,8 @@ namespace fheroes2
             fitToOneRow( _maxTextWidth );
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
+
         const FontCharHandler charHandler( _fontType );
 
         const Sprite & charSprite = charHandler.getSprite( cursorChar );
@@ -1004,8 +1006,6 @@ namespace fheroes2
             }
             return;
         }
-
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
 
         int32_t textLineBegin = _visibleTextBeginPos;
 
