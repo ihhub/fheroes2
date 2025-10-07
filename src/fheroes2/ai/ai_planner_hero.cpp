@@ -100,7 +100,7 @@ namespace
 
         ~TileRestorer()
         {
-            _originalTile = _copyTile;
+            _originalTile = std::move( _copyTile );
         }
 
     private:
