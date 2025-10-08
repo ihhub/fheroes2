@@ -91,7 +91,7 @@ namespace
                 return;
             }
 
-            const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.getSupportedLanguage() );
+            const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.mainLanguage );
 
             const Settings & conf = Settings::Get();
             const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
