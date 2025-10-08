@@ -1430,7 +1430,6 @@ namespace
         const bool _isEvilInterface{ false };
         uint32_t _victoryArtifactId{ ultimateArtifactId };
         const int32_t _mapWidth{ 0 };
-        const fheroes2::SupportedLanguage _language{ fheroes2::SupportedLanguage::English };
         // Town or hero loss metadata include tile ID and color.
         std::pair<int32_t, PlayerColor> _heroToKill{ 0, PlayerColor::NONE };
         std::pair<int32_t, PlayerColor> _townToCapture{ 0, PlayerColor::NONE };
