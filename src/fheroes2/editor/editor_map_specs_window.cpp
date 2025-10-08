@@ -320,9 +320,9 @@ namespace
 
             const auto & heroInfo = _heroInfos[index];
 
-            auto text = getLocalizedText( getHeroTitle( heroInfo.heroMetadata->customName, heroInfo.language, heroInfo.heroMetadata->race, heroInfo.tileIndex,
-                                                        _mapWidth ),
-                                          fheroes2::FontType::normalWhite() );
+            auto text
+                = getLocalizedText( getHeroTitle( heroInfo.heroMetadata->customName, heroInfo.language, heroInfo.heroMetadata->race, heroInfo.tileIndex, _mapWidth ),
+                                    fheroes2::FontType::normalWhite() );
 
             fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
         }
