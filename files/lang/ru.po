@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 05:37+0000\n"
+"POT-Creation-Date: 2025-10-08 02:04+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -177,12 +177,26 @@ msgstr ""
 "ЗАГРУЗИТЬ\n"
 "ИГРУ"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "СНАЧАЛА"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "СОХРАНИТЬ\n"
 "ИГРУ"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"БЫСТРАЯ\n"
+"БИТВА"
 
 msgid "QUIT"
 msgstr "ВЫЙТИ"
@@ -3064,6 +3078,13 @@ msgstr "В казне: "
 msgid "Need: "
 msgstr "Необходимо: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Начать сначала"
+
+msgid "There was an issue during saving."
+msgstr "Возникла проблема при сохранении."
+
 msgid "New Game"
 msgstr "Новая игра"
 
@@ -3076,10 +3097,22 @@ msgstr "Загрузка игры"
 msgid "Load a previously saved game."
 msgstr "Загрузка ранее сохранённой игры."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Начать сначала текущий сценарий."
+
 msgid "Save Game"
 msgstr "Сохранить игру"
 
 msgid "Save the current game."
+msgstr "Сохранить текущую игру."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Квиксильвер"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Сохранить текущую игру."
 
 msgid "Quit"
@@ -5483,6 +5516,10 @@ msgstr "переместить карту мира вправо-вниз"
 msgid "hotkey|save game"
 msgstr "сохранить игру"
 
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "быстрая битва"
+
 msgid "hotkey|next hero"
 msgstr "следующий герой"
 
@@ -6315,9 +6352,6 @@ msgstr "Вы хотите перезаписать файл игры?"
 
 msgid "Game saved successfully."
 msgstr "Игра успешно сохранена."
-
-msgid "There was an issue during saving."
-msgstr "Возникла проблема при сохранении."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"

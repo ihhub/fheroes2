@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 05:37+0000\n"
+"POT-Creation-Date: 2025-10-08 02:04+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -174,12 +174,23 @@ msgstr ""
 "NAHRAŤ\n"
 "HRU"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "REŠTART"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ULOŽIŤ\n"
 "HRU"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr ""
@@ -3094,6 +3105,13 @@ msgstr "Celkovo: "
 msgid "Need: "
 msgstr "Potreba: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Reštart"
+
+msgid "There was an issue during saving."
+msgstr "Pri ukladaní nastal problém."
+
 msgid "New Game"
 msgstr "Nová hra"
 
@@ -3106,10 +3124,22 @@ msgstr "Nahraj hru"
 msgid "Load a previously saved game."
 msgstr "Nahraj predtým uloženú hru."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Začni terajší scenár od začiatku."
+
 msgid "Save Game"
 msgstr "Ulož hru"
 
 msgid "Save the current game."
+msgstr "Ulož terajšiu hru."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Ortutie"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Ulož terajšiu hru."
 
 msgid "Quit"
@@ -5625,6 +5655,10 @@ msgstr "mapa vpravo dole"
 msgid "hotkey|save game"
 msgstr "ulož hru"
 
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "ukonči"
+
 msgid "hotkey|next hero"
 msgstr "ďalší hrdina"
 
@@ -6462,9 +6496,6 @@ msgstr "Naozaj chceš prepísať uložený súbor s týmto názvom?"
 
 msgid "Game saved successfully."
 msgstr "Hra bola úspešne uložená."
-
-msgid "There was an issue during saving."
-msgstr "Pri ukladaní nastal problém."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"

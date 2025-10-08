@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 05:37+0000\n"
+"POT-Creation-Date: 2025-10-08 02:04+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -174,12 +174,26 @@ msgstr ""
 "CARREGAR\n"
 "JOGO"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "REINICIAR"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "SALVAR\n"
 "JOGO"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"COMBATE\n"
+"RÁPIDO"
 
 msgid "QUIT"
 msgstr "SAIR"
@@ -3064,6 +3078,13 @@ msgstr "Total: "
 msgid "Need: "
 msgstr "Necessário: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Reiniciar"
+
+msgid "There was an issue during saving."
+msgstr "Houve um problema durante o salvamento."
+
 msgid "New Game"
 msgstr "Novo Jogo"
 
@@ -3076,10 +3097,22 @@ msgstr "Carregar Jogo"
 msgid "Load a previously saved game."
 msgstr "Carregar um jogo salvo anteriormente."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Reiniciar o cenário atual."
+
 msgid "Save Game"
 msgstr "Salvar Jogo"
 
 msgid "Save the current game."
+msgstr "Salvar o jogo atual."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Mercúrio"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Salvar o jogo atual."
 
 msgid "Quit"
@@ -5491,6 +5524,10 @@ msgstr "mapa mundi para baixo e direita"
 msgid "hotkey|save game"
 msgstr "salvar jogo"
 
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "combate rápido"
+
 msgid "hotkey|next hero"
 msgstr "próximo herói"
 
@@ -6333,9 +6370,6 @@ msgstr ""
 
 msgid "Game saved successfully."
 msgstr "Jogo salvo com sucesso."
-
-msgid "There was an issue during saving."
-msgstr "Houve um problema durante o salvamento."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"

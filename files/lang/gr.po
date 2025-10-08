@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 05:37+0000\n"
+"POT-Creation-Date: 2025-10-08 02:04+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -143,8 +143,18 @@ msgid ""
 msgstr ""
 
 msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+
+msgid ""
 "SAVE\n"
 "GAME"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"SAVE"
 msgstr ""
 
 msgid "QUIT"
@@ -2728,6 +2738,12 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
+msgid "Restart Game"
+msgstr ""
+
+msgid "There was an issue during saving."
+msgstr ""
+
 msgid "New Game"
 msgstr ""
 
@@ -2740,10 +2756,19 @@ msgstr ""
 msgid "Load a previously saved game."
 msgstr ""
 
+msgid "Restart the scenario."
+msgstr ""
+
 msgid "Save Game"
 msgstr ""
 
 msgid "Save the current game."
+msgstr ""
+
+msgid "Quick Save"
+msgstr ""
+
+msgid "Save the current game without name selection."
 msgstr ""
 
 msgid "Quit"
@@ -4970,6 +4995,9 @@ msgstr ""
 msgid "hotkey|save game"
 msgstr ""
 
+msgid "hotkey|quick save"
+msgstr ""
+
 msgid "hotkey|next hero"
 msgstr ""
 
@@ -5709,9 +5737,6 @@ msgid "Are you sure you want to overwrite the save with this name?"
 msgstr ""
 
 msgid "Game saved successfully."
-msgstr ""
-
-msgid "There was an issue during saving."
 msgstr ""
 
 msgid ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 05:37+0000\n"
+"POT-Creation-Date: 2025-10-08 02:04+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -151,12 +151,23 @@ msgstr ""
 "WCZYTAJ\n"
 "GRĘ"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OD NOWA"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ZAPISZ\n"
 "GRĘ"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "WYJŚCIE"
@@ -3106,6 +3117,13 @@ msgstr "Masz: "
 msgid "Need: "
 msgstr "Potrzeba: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Rozpocznij od nowa"
+
+msgid "There was an issue during saving."
+msgstr "Wystąpił problem w czasie zapisu gry."
+
 msgid "New Game"
 msgstr "Nowa gra"
 
@@ -3118,10 +3136,22 @@ msgstr "Wczytaj grę"
 msgid "Load a previously saved game."
 msgstr "Wczytaj uprzednio zapisaną grę."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Rozpocznij od nowa obecny scenariusz."
+
 msgid "Save Game"
 msgstr "Zapisz grę"
 
 msgid "Save the current game."
+msgstr "Zapisz bieżącą grę."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Zapisz bieżącą grę."
 
 msgid "Quit"
@@ -5628,6 +5658,10 @@ msgstr "porusz bohatera w dół w prawo"
 msgid "hotkey|save game"
 msgstr "zapisz grę"
 
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "wyjdź"
+
 msgid "hotkey|next hero"
 msgstr "pokaż następnego bohatera"
 
@@ -6474,9 +6508,6 @@ msgstr "Czy na pewno chcesz zapisać stan gry z taką samą nazwą?"
 
 msgid "Game saved successfully."
 msgstr "Stan gry zapisany."
-
-msgid "There was an issue during saving."
-msgstr "Wystąpił problem w czasie zapisu gry."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
