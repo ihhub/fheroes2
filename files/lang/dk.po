@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -5023,6 +5023,22 @@ msgstr "Klik for kun at vise niveau %{level} besværgelser."
 
 msgid "Spells level"
 msgstr "Magi-niveau"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Forbudt magi"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klik for kun at vise niveau %{level} besværgelser."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Vis besværgelser"
 
 msgid "Riddle:"
 msgstr "Gåde:"

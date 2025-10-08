@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4997,6 +4997,22 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Pergaminho Mágico"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Clique para ativar o modo de patrulha do herói."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Feitiço Aleatório"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Clique para editar eventos diários."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Ver Feitiços"
 
 msgid "Riddle:"
 msgstr "Enigma:"

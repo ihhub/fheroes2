@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -5137,6 +5137,22 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Parchemin magique"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Cliquez ici pour sélectionner cette couleur."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Sortilège aléatoire"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Cliquez pour quitter les résultats de la bataille."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Voir les sorts"
 
 msgid "Riddle:"
 msgstr ""

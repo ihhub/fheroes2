@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4946,6 +4946,22 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Kouzelný svitek"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klikněte pro povolení režimu hlídkování hrdiny."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Náhodné kouzlo"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klikněte pro úpravu denních událostí."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Zobrazit kouzla"
 
 msgid "Riddle:"
 msgstr "Hádanka:"

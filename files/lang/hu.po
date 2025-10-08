@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -4959,6 +4959,22 @@ msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
 
 msgid "Spells level"
 msgstr "Varázslatok szintje"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Tiltott varázslatok"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Varázslatok mutatása"
 
 msgid "Riddle:"
 msgstr "Találós kérdés:"

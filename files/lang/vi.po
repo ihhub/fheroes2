@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5124,6 +5124,22 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Sách Phép"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Xem Phép"
 
 msgid "Riddle:"
 msgstr ""

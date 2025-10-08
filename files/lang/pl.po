@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5122,6 +5122,22 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Zwój z Zaklęciem"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Losowa"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Pokaż zaklęcia"
 
 msgid "Riddle:"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -4492,6 +4492,18 @@ msgid "Click to show only level %{level} spells."
 msgstr ""
 
 msgid "Spells level"
+msgstr ""
+
+msgid "Click to enable all spells."
+msgstr ""
+
+msgid "Enable All Spells"
+msgstr ""
+
+msgid "Click to disable all spells."
+msgstr ""
+
+msgid "Disable All Spells"
 msgstr ""
 
 msgid "Riddle:"
