@@ -21,8 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdint>
-
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game_hotkeys.h"
@@ -42,27 +40,20 @@ namespace
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        fheroes2::StandardWindow background( 289, 204, true, display );
-
-        fheroes2::Button buttonWorld;
-        fheroes2::Button buttonPuzzle;
-        fheroes2::Button buttonInfo;
-        fheroes2::Button buttonDig;
-        fheroes2::Button buttonCancel;
-
-        const int32_t largeButtonsXOffset = 30;
-        const int32_t largeButtonsYOffset = 15;
-
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
+        const int imageIcn = isEvilInterface ? ICN::BUTTONS_ADVENTURE_OPTIONS_DIALOG_EVIL : ICN::BUTTONS_ADVENTURE_OPTIONS_DIALOG_GOOD;
+        fheroes2::ButtonGroup optionButtons( imageIcn );
 
-        background.renderButton( buttonWorld, apanel, 0, 1, { largeButtonsXOffset, largeButtonsYOffset }, fheroes2::StandardWindow::Padding::TOP_LEFT );
-        background.renderButton( buttonPuzzle, apanel, 2, 3, { largeButtonsXOffset, largeButtonsYOffset }, fheroes2::StandardWindow::Padding::TOP_RIGHT );
-        background.renderButton( buttonInfo, isEvilInterface ? ICN::BUTTON_INFO_EVIL : ICN::BUTTON_INFO_GOOD, 0, 1, { largeButtonsXOffset, largeButtonsYOffset + 2 },
-                                 fheroes2::StandardWindow::Padding::CENTER_LEFT );
-        background.renderButton( buttonDig, apanel, 6, 7, { largeButtonsXOffset, largeButtonsYOffset + 2 }, fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::StandardWindow background( optionButtons, false, 0, display );
+        background.renderSymmetricButtons( optionButtons, 0, false );
+
+        fheroes2::ButtonBase & buttonWorld = optionButtons.button( 0 );
+        fheroes2::ButtonBase & buttonPuzzle = optionButtons.button( 1 );
+        fheroes2::ButtonBase & buttonInfo = optionButtons.button( 2 );
+        fheroes2::ButtonBase & buttonDig = optionButtons.button( 3 );
+
+        fheroes2::Button buttonCancel;
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
