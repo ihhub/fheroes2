@@ -214,8 +214,7 @@ namespace
             return { { getDefaultHeroTitle( race, tileIndex, mapWidth ), gameLanguage } };
         }
 
-        std::string title = replacePosAndRace( _( "[%{pos}]: %{name}, %{race} hero" ), race, tileIndex, mapWidth );
-
+        std::string title = _( "[%{pos}]: %{name}, %{race} hero" );
         return fheroes2::getLocalizedStrings( replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage, "%{name}", name, language );
     }
 
