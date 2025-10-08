@@ -988,7 +988,7 @@ namespace Interface
 
             bool isCursorOverGameArea = false;
 
-            // Hotkeys
+            // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     res = EventExit();

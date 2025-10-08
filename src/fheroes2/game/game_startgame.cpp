@@ -1107,6 +1107,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                     EventSaveGame();
                 }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_QUICK_SAVE ) ) {
+                    if ( !Game::QuickSave() ) {
+                        fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
+                    }
+                }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = EventLoadGame();
                 }
