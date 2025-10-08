@@ -81,17 +81,19 @@ namespace
             }
         }
 
+        const auto & mapInfo = conf.getCurrentMapInfo();
+
         if ( strings.empty() ) {
             switch ( cond ) {
             case GameOver::WINS_ALL:
                 break;
 
             case GameOver::WINS_TOWN: {
-                const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
+                const Castle * town = world.getCastleEntrance( mapInfo.WinsMapsPositionObject() );
                 assert( town != nullptr );
                 if ( town ) {
                     strings = fheroes2::getLocalizedStrings( _( "You captured %{name}!\nYou are victorious." ), gameLanguage, "%{name}", town->GetName(),
-                                                             conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
+                                                             mapInfo.getSupportedLanguage().value_or( gameLanguage ) );
                 }
                 break;
             }
@@ -102,7 +104,7 @@ namespace
 
                 if ( hero ) {
                     strings = fheroes2::getLocalizedStrings( _( "You have captured the enemy hero %{name}!\nYour quest is complete." ), gameLanguage, "%{name}",
-                                                             hero->GetName(), conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
+                                                             hero->GetName(), mapInfo.getSupportedLanguage().value_or( gameLanguage ) );
                 }
 
                 break;
@@ -111,11 +113,11 @@ namespace
             case GameOver::WINS_ARTIFACT: {
                 std::string tempText = _( "You have found the %{name}.\nYour quest is complete." );
 
-                if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
+                if ( mapInfo.WinsFindUltimateArtifact() ) {
                     StringReplace( tempText, "%{name}", _( "Ultimate Artifact" ) );
                 }
                 else {
-                    const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
+                    const Artifact art = mapInfo.WinsFindArtifactID();
                     StringReplace( tempText, "%{name}", art.GetName() );
                 }
 
@@ -131,7 +133,7 @@ namespace
 
             case GameOver::WINS_GOLD: {
                 std::string tempText = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
-                StringReplace( tempText, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
+                StringReplace( tempText, "%{count}", mapInfo.getWinningGoldAccumulationValue() );
 
                 strings.emplace_back( std::move( tempText ), gameLanguage );
                 break;
@@ -158,9 +160,11 @@ namespace
 
         std::vector<fheroes2::LocalizedString> strings;
 
+        const auto & mapInfo = conf.getCurrentMapInfo();
+
         switch ( cond ) {
         case GameOver::LOSS_ENEMY_WINS_TOWN: {
-            const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
+            const Castle * town = world.getCastleEntrance( mapInfo.WinsMapsPositionObject() );
             assert( town != nullptr );
 
             if ( town ) {
@@ -174,11 +178,11 @@ namespace
         case GameOver::LOSS_ENEMY_WINS_ARTIFACT: {
             std::string tempText = _( "The enemy has found the %{name}.\nYour quest is a failure." );
 
-            if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
+            if ( mapInfo.WinsFindUltimateArtifact() ) {
                 StringReplace( tempText, "%{name}", _( "Ultimate Artifact" ) );
             }
             else {
-                const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
+                const Artifact art = mapInfo.WinsFindArtifactID();
                 StringReplace( tempText, "%{name}", art.GetName() );
             }
 
@@ -189,7 +193,7 @@ namespace
 
         case GameOver::LOSS_ENEMY_WINS_GOLD: {
             std::string tempText = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
-            StringReplace( tempText, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
+            StringReplace( tempText, "%{count}", mapInfo.getWinningGoldAccumulationValue() );
 
             strings.emplace_back( std::move( tempText ), gameLanguage );
             break;
@@ -200,12 +204,12 @@ namespace
             break;
 
         case GameOver::LOSS_TOWN: {
-            const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().LossMapsPositionObject() );
+            const Castle * town = world.getCastleEntrance( mapInfo.LossMapsPositionObject() );
             assert( town != nullptr );
 
             if ( town ) {
                 strings = fheroes2::getLocalizedStrings( _( "The enemy has captured %{name}!\nThey are triumphant." ), gameLanguage, "%{name}", town->GetName(),
-                                                         conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
+                                                         mapInfo.getSupportedLanguage().value_or( gameLanguage ) );
             }
 
             break;
@@ -217,7 +221,7 @@ namespace
 
             if ( hero ) {
                 strings = fheroes2::getLocalizedStrings( _( "You have lost the hero %{name}.\nYour quest is over." ), gameLanguage, "%{name}", hero->GetName(),
-                                                         conf.getCurrentMapInfo().getSupportedLanguage().value_or( gameLanguage ) );
+                                                         mapInfo.getSupportedLanguage().value_or( gameLanguage ) );
             }
 
             break;
@@ -309,6 +313,8 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
     const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
     std::string msg;
 
+    const auto & mapInfo = conf.getCurrentMapInfo();
+
     if ( conditions == WINS_ALL ) {
         msg = GetString( WINS_ALL );
     }
@@ -355,7 +361,7 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
         }
     }
     else if ( conditions & WINS_TOWN ) {
-        const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().WinsMapsPositionObject() );
+        const Castle * town = world.getCastleEntrance( mapInfo.WinsMapsPositionObject() );
         assert( town != nullptr );
 
         if ( town ) {
@@ -374,11 +380,11 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
         }
     }
     else if ( conditions & WINS_ARTIFACT ) {
-        if ( conf.getCurrentMapInfo().WinsFindUltimateArtifact() ) {
+        if ( mapInfo.WinsFindUltimateArtifact() ) {
             msg = _( "Find the ultimate artifact." );
         }
         else {
-            const Artifact art = conf.getCurrentMapInfo().WinsFindArtifactID();
+            const Artifact art = mapInfo.WinsFindArtifactID();
 
             msg = _( "Find the '%{name}' artifact." );
             StringReplace( msg, "%{name}", art.GetName() );
@@ -386,7 +392,7 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
     }
     else if ( conditions & WINS_GOLD ) {
         msg = _( "Accumulate %{count} gold." );
-        StringReplace( msg, "%{count}", conf.getCurrentMapInfo().getWinningGoldAccumulationValue() );
+        StringReplace( msg, "%{count}", mapInfo.getWinningGoldAccumulationValue() );
     }
 
     if ( WINS_ALL != conditions && ( conditions & WINS_ALL ) ) {
@@ -397,7 +403,7 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
         msg = GetString( LOSS_ALL );
     }
     else if ( conditions & LOSS_TOWN ) {
-        const Castle * town = world.getCastleEntrance( conf.getCurrentMapInfo().LossMapsPositionObject() );
+        const Castle * town = world.getCastleEntrance( mapInfo.LossMapsPositionObject() );
         assert( town != nullptr );
 
         if ( town ) {
@@ -415,7 +421,7 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
         }
     }
     else if ( conditions & LOSS_TIME ) {
-        const uint32_t dayCount = conf.getCurrentMapInfo().LossCountDays() - 1;
+        const uint32_t dayCount = mapInfo.LossCountDays() - 1;
         const uint32_t month = dayCount / ( numOfDaysPerWeek * numOfWeeksPerMonth );
         const uint32_t week = ( dayCount - month * ( numOfDaysPerWeek * numOfWeeksPerMonth ) ) / numOfDaysPerWeek;
         const uint32_t day = dayCount % numOfDaysPerWeek;
