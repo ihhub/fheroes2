@@ -247,7 +247,6 @@ namespace fheroes2
             _language = language;
         }
 
-        // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
         void fitToOneRow( const int32_t maxWidth ) override;
 
         std::string text() const override
