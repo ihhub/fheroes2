@@ -485,7 +485,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
         const Kingdom & kingdom = world.GetKingdom( static_cast<PlayerColor>( humanColors ) );
 
-#ifdef WITH_DEBUG
+#if defined( WITH_DEBUG )
         const Player * player = Players::Get( static_cast<PlayerColor>( humanColors ) );
         assert( player != nullptr );
 
@@ -551,7 +551,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
             const Kingdom & kingdom = world.GetKingdom( currentColor );
 
-#ifdef WITH_DEBUG
+#if defined( WITH_DEBUG )
             const Player * player = Players::Get( currentColor );
             assert( player != nullptr );
 
@@ -595,7 +595,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
                 const Kingdom & kingdom = world.GetKingdom( currentColor );
 
-#ifdef WITH_DEBUG
+#if defined( WITH_DEBUG )
                 const Player * player = Players::Get( currentColor );
                 assert( player != nullptr );
 
