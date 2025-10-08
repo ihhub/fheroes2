@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -5111,6 +5111,22 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Pegamino del Hechizo"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Cualquier torre"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Ver Todo"
 
 msgid "Riddle:"
 msgstr ""

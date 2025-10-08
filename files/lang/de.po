@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5073,6 +5073,22 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Die Spruchrolle"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klicken um die ausgewählte Auflösung anzuwenden."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Zaubersprüche anzeigen"
 
 msgid "Riddle:"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-09-12 21:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4953,6 +4953,22 @@ msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
 
 msgid "Spells level"
 msgstr "Besvärjelsenivå"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klicka här för att aktivera hjältens patrulläge."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Bannlysta Besvärjelser"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Visa Besvärjelser"
 
 msgid "Riddle:"
 msgstr "Gåta:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 02:04+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -4817,6 +4817,21 @@ msgstr ""
 #, fuzzy
 msgid "Spells level"
 msgstr "Büyü başarısız oldu!"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Yapılan Büyü"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Disable All Spells"
+msgstr ""
 
 msgid "Riddle:"
 msgstr ""
