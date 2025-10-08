@@ -198,54 +198,31 @@ namespace
         return text;
     }
 
-    std::string getDefaultHeroTitle( const int race, const int32_t tileIndex, const int32_t mapWidth )
-    {
-        return replacePosAndRace( _( "[%{pos}]: %{race} hero" ), race, tileIndex, mapWidth );
-    }
-
-    std::vector<fheroes2::LocalizedString> getCustomHeroTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race,
-                                                               const int32_t tileIndex, const int32_t mapWidth )
+    std::vector<fheroes2::LocalizedString> getHeroTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const int32_t tileIndex,
+                                                         const int32_t mapWidth )
     {
         const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
-            // You should directly call `getDefaultHeroTitle` for this case!
-            assert( 0 );
-            return { { getDefaultHeroTitle( race, tileIndex, mapWidth ), gameLanguage } };
+            return { { replacePosAndRace( _( "[%{pos}]: %{race} hero" ), race, tileIndex, mapWidth ), gameLanguage } };
         }
 
         std::string title = _( "[%{pos}]: %{name}, %{race} hero" );
         return fheroes2::getLocalizedStrings( replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage, "%{name}", name, language );
     }
 
-    std::string getDefaultTownTitle( const int race, const bool isTown, const int32_t tileIndex, const int32_t mapWidth )
-    {
-        if ( isTown ) {
-            return replacePosAndRace( _( "[%{pos}]: %{race} town" ), race, tileIndex, mapWidth );
-        }
-
-        return replacePosAndRace( _( "[%{pos}]: %{race} castle" ), race, tileIndex, mapWidth );
-    }
-
-    std::vector<fheroes2::LocalizedString> getCustomTownTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const bool isTown,
-                                                               const int32_t tileIndex, const int32_t mapWidth )
+    std::vector<fheroes2::LocalizedString> getTownTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const bool isTown,
+                                                         const int32_t tileIndex, const int32_t mapWidth )
     {
         const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
-            // You should directly call `getDefaultTownTitle` for this case!
-            assert( 0 );
-            return { { getDefaultTownTitle( race, isTown, tileIndex, mapWidth ), gameLanguage } };
+            std::string title = isTown ? _( "[%{pos}]: %{race} town" ) : _( "[%{pos}]: %{race} castle" );
+
+            return { { replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage } };
         }
 
-        std::string title;
-        if ( isTown ) {
-            title = _( "[%{pos}]: %{name}, %{race} town" );
-        }
-        else {
-            title = _( "[%{pos}]: %{name}, %{race} castle" );
-        }
-
+        std::string title = isTown ? _( "[%{pos}]: %{name}, %{race} town" ) : _( "[%{pos}]: %{name}, %{race} castle" );
         return fheroes2::getLocalizedStrings( replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage, "%{name}", name, language );
     }
 
@@ -281,17 +258,10 @@ namespace
             fheroes2::renderHeroRacePortrait( heroMetadata->race, { selectConditionRoi.x + 5, selectConditionRoi.y + 6, 101, 93 }, output );
         }
 
-        if ( heroMetadata->customName.empty() ) {
-            fheroes2::Text extraText( getDefaultHeroTitle( heroMetadata->race, heroInfo.tileIndex, mapWidth ), fheroes2::FontType::normalWhite() );
-            extraText.fitToOneRow( roi.width );
-            extraText.drawInRoi( roi.x, selectConditionRoi.y + selectConditionRoi.height + 5, roi.width, output, roi );
-        }
-        else {
-            auto extraText = getLocalizedText( getCustomHeroTitle( heroMetadata->customName, heroInfo.language, heroMetadata->race, heroInfo.tileIndex, mapWidth ),
-                                               fheroes2::FontType::normalWhite() );
-            extraText->fitToOneRow( roi.width );
-            extraText->drawInRoi( roi.x, selectConditionRoi.y + selectConditionRoi.height + 5, roi.width, output, roi );
-        }
+        auto extraText = getLocalizedText( getHeroTitle( heroMetadata->customName, heroInfo.language, heroMetadata->race, heroInfo.tileIndex, mapWidth ),
+                                           fheroes2::FontType::normalWhite() );
+        extraText->fitToOneRow( roi.width );
+        extraText->drawInRoi( roi.x, selectConditionRoi.y + selectConditionRoi.height + 5, roi.width, output, roi );
 
         return selectConditionRoi;
     }
@@ -309,15 +279,7 @@ namespace
 
         fheroes2::Blit( townIcon, output, roi.x, roi.y + 4 );
 
-        if ( castleMetadata->customName.empty() ) {
-            fheroes2::Text text( getDefaultTownTitle( townInfo.race, isTown, townInfo.tileIndex, mapWidth ), fheroes2::FontType::normalWhite() );
-            text.fitToOneRow( roi.width - townIcon.width() - 5 );
-            text.drawInRoi( roi.x + townIcon.width() + 5, roi.y + 12, output, roi );
-
-            return { roi.x, roi.y + 4, townIcon.width() + 5 + text.width(), townIcon.height() };
-        }
-
-        auto text = getLocalizedText( getCustomTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, mapWidth ),
+        auto text = getLocalizedText( getTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, mapWidth ),
                                       fheroes2::FontType::normalWhite() );
         text->fitToOneRow( roi.width - townIcon.width() - 5 );
         text->drawInRoi( roi.x + townIcon.width() + 5, roi.y + 12, output, roi );
@@ -347,15 +309,9 @@ namespace
             const auto & heroInfo = _heroInfos[index];
             const auto * heroMetadata = heroInfo.heroMetadata;
 
-            if ( heroMetadata->customName.empty() ) {
-                renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
-                            getDefaultHeroTitle( heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85, itemsOffsetY / 2, current );
-            }
-            else {
-                renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
-                            getCustomHeroTitle( heroMetadata->customName, heroInfo.language, heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85,
-                            itemsOffsetY / 2, current );
-            }
+            renderItem( getHeroIcon( heroMetadata->customPortrait, heroMetadata->race, heroInfo.color, _townIcnId ),
+                        getHeroTitle( heroMetadata->customName, heroInfo.language, heroMetadata->race, heroInfo.tileIndex, _mapWidth ), { dstx, dsty }, 40, 85,
+                        itemsOffsetY / 2, current );
         }
 
         void ActionListPressRight( int & index ) override
@@ -364,16 +320,11 @@ namespace
 
             const auto & heroInfo = _heroInfos[index];
 
-            if ( heroInfo.heroMetadata->customName.empty() ) {
-                fheroes2::showStandardTextMessage( {}, getDefaultHeroTitle( heroInfo.heroMetadata->race, heroInfo.tileIndex, _mapWidth ), Dialog::ZERO );
-            }
-            else {
-                auto text = getLocalizedText( getCustomHeroTitle( heroInfo.heroMetadata->customName, heroInfo.language, heroInfo.heroMetadata->race, heroInfo.tileIndex,
-                                                                  _mapWidth ),
-                                              fheroes2::FontType::normalWhite() );
+            auto text = getLocalizedText( getHeroTitle( heroInfo.heroMetadata->customName, heroInfo.language, heroInfo.heroMetadata->race, heroInfo.tileIndex,
+                                                        _mapWidth ),
+                                          fheroes2::FontType::normalWhite() );
 
-                fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
-            }
+            fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
         }
 
         static const int32_t itemsOffsetY{ 35 };
@@ -409,15 +360,9 @@ namespace
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-            if ( castleMetadata->customName.empty() ) {
-                renderItem( getTownIcon( isTown, townInfo.race, townInfo.color, _townIcnId ), getDefaultTownTitle( townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
-                            { dstx, dsty }, 45, 95, itemsOffsetY / 2, current );
-            }
-            else {
-                renderItem( getTownIcon( isTown, townInfo.race, townInfo.color, _townIcnId ),
-                            getCustomTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ), { dstx, dsty }, 45,
-                            95, itemsOffsetY / 2, current );
-            }
+            renderItem( getTownIcon( isTown, townInfo.race, townInfo.color, _townIcnId ),
+                        getTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ), { dstx, dsty }, 45, 95,
+                        itemsOffsetY / 2, current );
         }
 
         void ActionListPressRight( int & index ) override
@@ -429,15 +374,10 @@ namespace
             const bool isTown
                 = std::find( castleMetadata->builtBuildings.begin(), castleMetadata->builtBuildings.end(), BUILD_CASTLE ) == castleMetadata->builtBuildings.end();
 
-            if ( castleMetadata->customName.empty() ) {
-                fheroes2::showStandardTextMessage( {}, getDefaultTownTitle( townInfo.race, isTown, townInfo.tileIndex, _mapWidth ), Dialog::ZERO );
-            }
-            else {
-                auto text = getLocalizedText( getCustomTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
-                                              fheroes2::FontType::normalWhite() );
+            auto text = getLocalizedText( getTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
+                                          fheroes2::FontType::normalWhite() );
 
-                fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
-            }
+            fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
         }
 
         static const int32_t itemsOffsetY{ 35 };
