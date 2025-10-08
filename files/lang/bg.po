@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 05:37+0000\n"
+"POT-Creation-Date: 2025-10-08 06:19+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -176,12 +176,23 @@ msgstr ""
 "ЗАРЕДИ\n"
 "ИГРА"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "РЕСТАРТ"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ЗАПАЗИ\n"
 "ИГРА"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "ИЗХОД"
@@ -3109,6 +3120,13 @@ msgstr "Общо: "
 msgid "Need: "
 msgstr "Още: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Рестарт"
+
+msgid "There was an issue during saving."
+msgstr "Имаше проблем по време на запазването."
+
 msgid "New Game"
 msgstr "Нова Игра"
 
@@ -3121,10 +3139,22 @@ msgstr "Зареди Игра"
 msgid "Load a previously saved game."
 msgstr "Зареди запазена игра."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Рестартирай текущия сценарий."
+
 msgid "Save Game"
 msgstr "Запази играта"
 
 msgid "Save the current game."
+msgstr "Запази текущата игра."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Куиксилвър"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Запази текущата игра."
 
 msgid "Quit"
@@ -5130,6 +5160,22 @@ msgstr ""
 msgid "Spells level"
 msgstr "Свитък за заклинание"
 
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Преглед на магиите"
+
 msgid "Riddle:"
 msgstr ""
 
@@ -5663,6 +5709,10 @@ msgstr "карта на света надолу и вдясно"
 
 msgid "hotkey|save game"
 msgstr "запази играта"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "напусни"
 
 msgid "hotkey|next hero"
 msgstr "следващия герой"
@@ -6506,9 +6556,6 @@ msgstr "Сигурен ли си че искаш да презапишеш за�
 
 msgid "Game saved successfully."
 msgstr "Играта е запазена успешно."
-
-msgid "There was an issue during saving."
-msgstr "Имаше проблем по време на запазването."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"

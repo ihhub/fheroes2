@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 05:37+0000\n"
+"POT-Creation-Date: 2025-10-08 06:19+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -176,12 +176,26 @@ msgstr ""
 "NAHRÁT\n"
 "HRU"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OPAKOVAT"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ULOŽIT\n"
 "HRU"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"RYCHLÝ\n"
+"BOJ"
 
 msgid "QUIT"
 msgstr "KONEC"
@@ -3033,6 +3047,13 @@ msgstr "Celkem: "
 msgid "Need: "
 msgstr "Potřeba: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Opakovat"
+
+msgid "There was an issue during saving."
+msgstr "Během ukládání se vyskytla chyba."
+
 msgid "New Game"
 msgstr "Nová hra"
 
@@ -3045,10 +3066,22 @@ msgstr "Načíst hru"
 msgid "Load a previously saved game."
 msgstr "Načíst dříve uloženou hru."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Restartuj aktuální scénář."
+
 msgid "Save Game"
 msgstr "Uložit hru"
 
 msgid "Save the current game."
+msgstr "Uložit aktuální hru."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Uložit aktuální hru."
 
 msgid "Quit"
@@ -4914,6 +4947,22 @@ msgstr ""
 msgid "Spells level"
 msgstr "Kouzelný svitek"
 
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klikněte pro povolení režimu hlídkování hrdiny."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Náhodné kouzlo"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klikněte pro úpravu denních událostí."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Zobrazit kouzla"
+
 msgid "Riddle:"
 msgstr "Hádanka:"
 
@@ -5436,6 +5485,10 @@ msgstr "Dolů vpravo na mapě světa"
 
 msgid "hotkey|save game"
 msgstr "Uložit hru"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "rychlý boj"
 
 msgid "hotkey|next hero"
 msgstr "Následující hrdina"
@@ -6262,9 +6315,6 @@ msgstr "Opravdu si přejete přepsat uloženou hru s tímto názvem?"
 
 msgid "Game saved successfully."
 msgstr "Hra byla uložena."
-
-msgid "There was an issue during saving."
-msgstr "Během ukládání se vyskytla chyba."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
