@@ -3579,7 +3579,7 @@ msgid "saveLoadDialog|Date"
 msgstr "Dato"
 
 msgid "Are you sure you want to delete file:"
-msgstr "Er du sikker på at du vil slette denne fil:"
+msgstr "Er du sikker på du vil slette denne fil:"
 
 msgid "Warning"
 msgstr "Advarsel"
@@ -3826,9 +3826,8 @@ msgstr "Kort-niveau:"
 msgid "N"
 msgstr "N"
 
-#, fuzzy
 msgid "Are you sure you want to delete the map:"
-msgstr "Er du sikker på at du vil slette denne fil:"
+msgstr "Er du sikker på, at du vil slette dette kort:"
 
 msgid "No maps exist at that size."
 msgstr "Ingen kort i den størrelse"
@@ -4732,7 +4731,6 @@ msgstr "[%{pos}]: %{name}, %{race} borg"
 msgid "None."
 msgstr "Ingen."
 
-#, fuzzy
 msgid "One side defeats the other."
 msgstr "En side besejrer den anden."
 
@@ -6152,9 +6150,8 @@ msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 msgid "Click to return to the main menu."
 msgstr "Klik her for at vende tilbage til hovedmenuen."
 
-#, fuzzy
 msgid "The map is corrupted or doesn't exist."
-msgstr "Kortet er beskadiget."
+msgstr "Kortet findes ikke eller er beskadiget."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologer kundgør, at månedens væsen er %{name}."
