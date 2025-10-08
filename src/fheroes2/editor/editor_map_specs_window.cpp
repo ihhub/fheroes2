@@ -324,7 +324,7 @@ namespace
                 = getLocalizedText( getHeroTitle( heroInfo.heroMetadata->customName, heroInfo.language, heroInfo.heroMetadata->race, heroInfo.tileIndex, _mapWidth ),
                                     fheroes2::FontType::normalWhite() );
 
-            fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
+            fheroes2::showMessage( fheroes2::Text{}, *text, Dialog::ZERO );
         }
 
         static const int32_t itemsOffsetY{ 35 };
@@ -377,7 +377,7 @@ namespace
             auto text = getLocalizedText( getTownTitle( castleMetadata->customName, townInfo.language, townInfo.race, isTown, townInfo.tileIndex, _mapWidth ),
                                           fheroes2::FontType::normalWhite() );
 
-            fheroes2::showMessage( fheroes2::Text(), *text, Dialog::ZERO );
+            fheroes2::showMessage( fheroes2::Text{}, *text, Dialog::ZERO );
         }
 
         static const int32_t itemsOffsetY{ 35 };
