@@ -124,6 +124,8 @@ void AI::OptimizeTroopsOrder( Army & army )
         }
     }
 
+    assert( archers.size() + others.size() <= 5 );
+
     // Sort troops by tactical priority. For melee units, the order of comparison is as follows:
     // 1. Comparison by speed (faster units first);
     // 2. Comparison by type (flying units first);
@@ -134,7 +136,7 @@ void AI::OptimizeTroopsOrder( Army & army )
         }
 
         if ( left.isFlying() != right.isFlying() ) {
-            return left.isFlying();
+            return right.isFlying();
         }
 
         return left.GetStrength() < right.GetStrength();
@@ -146,7 +148,12 @@ void AI::OptimizeTroopsOrder( Army & army )
     std::array<size_t, 5> slotOrder = { 2, 1, 3, 0, 4 };
     switch ( archers.size() ) {
     case 1:
-        slotOrder = { 0, 2, 1, 3, 4 };
+        if ( others.size() == 1 ) {
+            slotOrder = { 0, 2, 1, 3, 4 };
+        }
+        else {
+            slotOrder = { 0, 1, 2, 3, 4 };
+        }
         break;
     case 2:
     case 3:
