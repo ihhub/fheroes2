@@ -46,6 +46,7 @@ class Kingdom;
 namespace fheroes2
 {
     struct LocalizedString;
+    class TextBase;
 }
 
 namespace Dialog
