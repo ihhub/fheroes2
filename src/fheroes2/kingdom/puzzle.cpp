@@ -103,6 +103,21 @@ namespace
         }
     }
 
+    void drawPuzzleDialog( const fheroes2::Rect & radarArea, const bool isEvilInterface )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Sprite & puzzleImage = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 );
+        fheroes2::Copy( puzzleImage, 0, 0, display, radarArea );
+        // The original puzzle image has a rendered button. We should remove it.
+        const auto & streamsImage = fheroes2::AGG::GetICN( ICN::EDITPANL, 3 );
+        fheroes2::Sprite croppedImage = fheroes2::Crop( streamsImage, 0, streamsImage.height() - 40, streamsImage.width(), 40 );
+        if ( isEvilInterface ) {
+            fheroes2::ApplyPalette( croppedImage, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+
+        fheroes2::Copy( croppedImage, 0, 0, display, radarArea.x, radarArea.y + puzzleImage.height() - 40, radarArea.width, 40 );
+    }
+
     bool revealPuzzle( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty, fheroes2::Button & buttonExit,
                        const std::function<fheroes2::Rect()> * drawControlPanel = nullptr )
     {
@@ -179,16 +194,7 @@ namespace
 
         fheroes2::fadeOutDisplay( back.rect(), false );
 
-        const fheroes2::Sprite & puzzleImage = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 );
-        fheroes2::Copy( puzzleImage, 0, 0, display, radarArea );
-        // The original puzzle image has a rendered button. We should remove it.
-        const auto & streamsImage = fheroes2::AGG::GetICN( ICN::EDITPANL, 3 );
-        fheroes2::Sprite croppedImage = fheroes2::Crop( streamsImage, 0, streamsImage.height() - 40, streamsImage.width(), 40 );
-        if ( isEvilInterface ) {
-            fheroes2::ApplyPalette( croppedImage, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-        }
-
-        fheroes2::Copy( croppedImage, 0, 0, display, radarArea.x, radarArea.y + puzzleImage.height() - 40, radarArea.width, 40 );
+        drawPuzzleDialog( radarArea, isEvilInterface );
 
         display.updateNextRenderRoi( radarArea );
 
@@ -273,16 +279,7 @@ namespace
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }
 
-            const fheroes2::Sprite & puzzleImage = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 );
-            fheroes2::Copy( puzzleImage, 0, 0, display, radarArea );
-            // The original puzzle image has a rendered button. We should remove it.
-            const auto & streamsImage = fheroes2::AGG::GetICN( ICN::EDITPANL, 3 );
-            fheroes2::Sprite croppedImage = fheroes2::Crop( streamsImage, 0, streamsImage.height() - 40, streamsImage.width(), 40 );
-            if ( isEvilInterface ) {
-                fheroes2::ApplyPalette( croppedImage, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
-            }
-
-            fheroes2::Copy( croppedImage, 0, 0, display, radarArea.x, radarArea.y + puzzleImage.height() - 40, radarArea.width, 40 );
+            drawPuzzleDialog( radarArea, isEvilInterface );
 
             display.updateNextRenderRoi( radarArea );
 
