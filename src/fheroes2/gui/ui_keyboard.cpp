@@ -971,8 +971,11 @@ namespace
         }
     }
 
-    bool showRightClickHelpForAnyKey( const std::vector<std::vector<KeyboardButton>> & buttons, const std::vector<std::string> & buttonLetters,
-                                      const std::vector<std::string> & returnLetters, LocalEvent & le, const fheroes2::ButtonSprite * okayButton )
+    bool showRightClickHelpForAnyKey( const std::vector<std::vector<KeyboardButton>> & buttons, 
+                                      const std::vector<std::string> & buttonLetters,
+                                      const std::vector<std::string> & returnLetters, 
+                                      LocalEvent & le, 
+                                      const fheroes2::ButtonSprite * okayButton )
     {
         // OKAY button 
         if ( okayButton && le.isMouseRightButtonPressedInArea( okayButton->area() ) ) {
