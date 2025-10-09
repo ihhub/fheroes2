@@ -143,8 +143,10 @@ void Dialog::GameInfo()
     text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 347, CONDITION_LABEL_WIDTH, display );
 
+    const auto mapLanguage = mapInfo.getSupportedLanguage();
+
     std::unique_ptr<fheroes2::TextBase> conditionsText
-        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionWins(), mapInfo.getSupportedLanguage() ), fheroes2::FontType::smallWhite() );
+        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionWins(), mapLanguage ), fheroes2::FontType::smallWhite() );
     conditionsText->setUniformVerticalAlignment( false );
     conditionsText->draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
@@ -153,7 +155,7 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 392, CONDITION_LABEL_WIDTH, display );
 
     conditionsText
-        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionLoss(), mapInfo.getSupportedLanguage() ), fheroes2::FontType::smallWhite() );
+        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionLoss(), mapLanguage ), fheroes2::FontType::smallWhite() );
     conditionsText->setUniformVerticalAlignment( false );
     conditionsText->draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
