@@ -135,6 +135,8 @@ namespace Dialog
         {
             return _isDoubleClicked;
         }
+
+        void renderText( fheroes2::TextBase & text, const fheroes2::Point & destination, const int32_t textOffsetX, const int32_t itemOffsetY ) const;
     };
 
     Monster selectMonster( const int monsterId );

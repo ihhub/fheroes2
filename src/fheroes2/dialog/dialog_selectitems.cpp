@@ -825,8 +825,7 @@ namespace Dialog
         fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
 
         fheroes2::Text text( std::move( itemText ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
-        text.drawInRoi( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display, _window->activeArea() );
+        renderText( text, destination, textOffsetX, itemOffsetY );
     }
 
     void ItemSelectionWindow::renderItem( const fheroes2::Sprite & itemSprite, std::vector<fheroes2::LocalizedString> itemText, const fheroes2::Point & destination,
@@ -837,10 +836,17 @@ namespace Dialog
         fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
 
         auto text = fheroes2::getLocalizedText( std::move( itemText ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text->fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
+        renderText( *text, destination, textOffsetX, itemOffsetY );
+    }
+
+    void ItemSelectionWindow::renderText( fheroes2::TextBase & text, const fheroes2::Point & destination, const int32_t textOffsetX, const int32_t itemOffsetY ) const
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        text.fitToOneRow( _window->activeArea().width - textOffsetX - 55 );
         const fheroes2::Rect & roi = _window->activeArea();
-        text->drawInRoi( destination.x + textOffsetX, destination.y + itemOffsetY - ( text->height() / 2 ) + 2, display,
-                         { destination.x + textOffsetX, roi.y, roi.width - textOffsetX - 55, roi.height } );
+        text.drawInRoi( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display,
+                        { destination.x + textOffsetX, roi.y, roi.width - textOffsetX - 55, roi.height } );
     }
 
     int32_t ItemSelectionWindow::selectItemsEventProcessing()
