@@ -459,10 +459,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 Dialog::QuickInfo( *hero );
             }
             else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
-                const Troops temp = hero->GetArmy().getTroops();
-
-                hero->GetArmy().Assign( _army );
-                _army.Assign( temp );
+                hero->GetArmy().SwapTroops( _army );
 
                 topArmyBar.ResetSelected();
                 bottomArmyBar.ResetSelected();
