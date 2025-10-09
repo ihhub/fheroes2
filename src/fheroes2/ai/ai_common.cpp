@@ -156,8 +156,20 @@ void AI::OptimizeTroopsOrder( Army & army )
         }
         break;
     case 2:
+        if ( others.size() == 3 ) {
+            slotOrder = { 0, 2, 3, 1, 4 };
+        }
+        else {
+            slotOrder = { 0, 4, 2, 1, 3 };
+        }
+        break;
     case 3:
-        slotOrder = { 0, 4, 2, 1, 3 };
+        if ( others.size() == 1 ) {
+            slotOrder = { 0, 4, 2, 1, 3 };
+        }
+        else {
+            slotOrder = { 0, 3, 2, 1, 4 };
+        }
         break;
     case 4:
         slotOrder = { 0, 4, 2, 3, 1 };
