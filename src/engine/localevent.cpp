@@ -1052,6 +1052,15 @@ namespace EventProcessing
             else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_START ) {
                 buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_Y;
             }
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_GUIDE ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_BACK;
+            }
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_LEFT ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_LEFT_SHOULDER;
+            }
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_RIGHT ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_RIGHT_SHOULDER;
+            }
 #endif
 
             eventHandler.onControllerButtonEvent( button.state == SDL_PRESSED, buttonType );
