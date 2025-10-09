@@ -276,7 +276,7 @@ namespace
 
         const fheroes2::Rect & radarRect = radar.GetRect();
 
-        const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
+        const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit, exitButtonIcnID]() {
             if ( isHideInterface ) {
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }
@@ -286,6 +286,7 @@ namespace
             display.updateNextRenderRoi( radarArea );
 
             buttonExit.draw();
+            fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
             return radarRect;
         };
