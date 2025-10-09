@@ -986,7 +986,9 @@ namespace Interface
                 continue;
             }
 
-            // Hotkeys
+            bool isCursorOverGameArea = false;
+
+            // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     res = EventExit();
@@ -1012,21 +1014,29 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
+
+                        isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
                     if ( !_gameArea.isDragScroll() ) {
                         _gameArea.SetScroll( SCROLL_RIGHT );
+
+                        isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
                     if ( !_gameArea.isDragScroll() ) {
                         _gameArea.SetScroll( SCROLL_TOP );
+
+                        isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
                     if ( !_gameArea.isDragScroll() ) {
                         _gameArea.SetScroll( SCROLL_BOTTOM );
+
+                        isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
@@ -1057,8 +1067,6 @@ namespace Interface
             if ( res != fheroes2::GameMode::CANCEL ) {
                 break;
             }
-
-            bool isCursorOverGameArea = false;
 
             // Mouse is captured by radar
             if ( _radar.isMouseCaptured() ) {

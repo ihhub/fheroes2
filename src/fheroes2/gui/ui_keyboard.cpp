@@ -895,6 +895,18 @@ namespace
 
                     return buttonInfo.action( renderer );
                 }
+
+                if ( le.MouseLongPressLeft( buttonInfo.button.area() ) ) {
+                    assert( buttonInfo.action );
+
+                    const auto actionType = buttonInfo.action( renderer );
+                    if ( actionType == DialogAction::DoNothing ) {
+                        // Only for the event of entering a character.
+                        le.resetLongPress();
+                    }
+
+                    return actionType;
+                }
             }
         }
 

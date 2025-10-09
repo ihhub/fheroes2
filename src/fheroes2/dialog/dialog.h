@@ -129,7 +129,7 @@ namespace Dialog
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
     int ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
-    void MakeGiftResource( Kingdom & kingdom );
+    int MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
     void ThievesGuild( const bool oracle );
     void GameInfo();

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 13:23+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -171,12 +171,26 @@ msgstr ""
 "INDLÆS\n"
 "SPIL"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OMKAMP"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "GEM\n"
 "SPIL"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"HURTIG-\n"
+"KAMP"
 
 msgid "QUIT"
 msgstr "AFSLUT"
@@ -3112,6 +3126,13 @@ msgstr "Total: "
 msgid "Need: "
 msgstr "Behov: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Genstart"
+
+msgid "There was an issue during saving."
+msgstr "Mens spillet forsøgtes gemt, opstod der et problem."
+
 msgid "New Game"
 msgstr "Nyt spil"
 
@@ -3124,10 +3145,22 @@ msgstr "Indlæs spil"
 msgid "Load a previously saved game."
 msgstr "Indlæs et tidligere gemt spil."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Genstart det igangværende scenarie."
+
 msgid "Save Game"
 msgstr "Gem spil"
 
 msgid "Save the current game."
+msgstr "Gem nuværende spil."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Kviksølver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Gem nuværende spil."
 
 msgid "Quit"
@@ -3579,7 +3612,7 @@ msgid "saveLoadDialog|Date"
 msgstr "Dato"
 
 msgid "Are you sure you want to delete file:"
-msgstr "Er du sikker på at du vil slette denne fil:"
+msgstr "Er du sikker på du vil slette denne fil:"
 
 msgid "Warning"
 msgstr "Advarsel"
@@ -3826,9 +3859,8 @@ msgstr "Kort-niveau:"
 msgid "N"
 msgstr "N"
 
-#, fuzzy
 msgid "Are you sure you want to delete the map:"
-msgstr "Er du sikker på at du vil slette denne fil:"
+msgstr "Er du sikker på, at du vil slette dette kort:"
 
 msgid "No maps exist at that size."
 msgstr "Ingen kort i den størrelse"
@@ -4732,7 +4764,6 @@ msgstr "[%{pos}]: %{name}, %{race} borg"
 msgid "None."
 msgstr "Ingen."
 
-#, fuzzy
 msgid "One side defeats the other."
 msgstr "En side besejrer den anden."
 
@@ -4992,6 +5023,22 @@ msgstr "Klik for kun at vise niveau %{level} besværgelser."
 
 msgid "Spells level"
 msgstr "Magi-niveau"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Forbudt magi"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klik for kun at vise niveau %{level} besværgelser."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Vis besværgelser"
 
 msgid "Riddle:"
 msgstr "Gåde:"
@@ -5515,6 +5562,10 @@ msgstr "Verdenskort ned til højre"
 
 msgid "hotkey|save game"
 msgstr "Gem spil"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "Hurtigkamp"
 
 msgid "hotkey|next hero"
 msgstr "Næste helt"
@@ -6152,9 +6203,8 @@ msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 msgid "Click to return to the main menu."
 msgstr "Klik her for at vende tilbage til hovedmenuen."
 
-#, fuzzy
 msgid "The map is corrupted or doesn't exist."
-msgstr "Kortet er beskadiget."
+msgstr "Kortet findes ikke eller er beskadiget."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologer kundgør, at månedens væsen er %{name}."
@@ -6356,9 +6406,6 @@ msgstr "Er du sikker på, om du vil overskrive det gemte spil med dette navn?"
 
 msgid "Game saved successfully."
 msgstr "Spillet blev gemt."
-
-msgid "There was an issue during saving."
-msgstr "Mens spillet forsøgtes gemt, opstod der et problem."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8471,6 +8518,10 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møder %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Level %{level}"
 
 msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
 msgstr ""

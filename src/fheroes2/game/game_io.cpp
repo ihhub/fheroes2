@@ -53,6 +53,8 @@ namespace
 {
     const std::string autoSaveName{ "AUTOSAVE" };
 
+    const std::string quickSaveName{ "QUICKSAVE" };
+
     const uint16_t saveFileMagicNumber{ 0xFF03 };
 
     uint16_t versionOfCurrentSaveFile = CURRENT_FORMAT_VERSION;
@@ -104,6 +106,11 @@ namespace
 bool Game::AutoSave()
 {
     return Game::Save( System::concatPath( GetSaveDir(), autoSaveName + GetSaveFileExtension() ), true );
+}
+
+bool Game::QuickSave()
+{
+    return Game::Save( System::concatPath( GetSaveDir(), quickSaveName + GetSaveFileExtension() ), false );
 }
 
 bool Game::Save( const std::string & filePath, const bool autoSave /* = false */ )

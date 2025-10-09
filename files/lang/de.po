@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 13:23+0000\n"
+"POT-Creation-Date: 2025-10-08 07:19+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -166,12 +166,23 @@ msgstr ""
 "SPIEL\n"
 "LADEN"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "NEUSTART"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "SPIEL\n"
 "SPEICHERN"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "BEENDEN"
@@ -3067,6 +3078,13 @@ msgstr "Insgesamt: "
 msgid "Need: "
 msgstr "Bedarf: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Neustart"
+
+msgid "There was an issue during saving."
+msgstr "Es gab ein Problem beim Speichern."
+
 msgid "New Game"
 msgstr "Neues Spiel"
 
@@ -3079,10 +3097,22 @@ msgstr "Spiel laden"
 msgid "Load a previously saved game."
 msgstr "Zuvor gespeichertes Spiel laden."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Neustart des aktuellen Szenarios."
+
 msgid "Save Game"
 msgstr "Spiel speichern"
 
 msgid "Save the current game."
+msgstr "Das aktuelle Spiel speichern."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Das aktuelle Spiel speichern."
 
 msgid "Quit"
@@ -5044,6 +5074,22 @@ msgstr ""
 msgid "Spells level"
 msgstr "Die Spruchrolle"
 
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klicken um die ausgewählte Auflösung anzuwenden."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Zaubersprüche anzeigen"
+
 msgid "Riddle:"
 msgstr ""
 
@@ -5581,6 +5627,10 @@ msgstr "Weltkarte runter rechts"
 
 msgid "hotkey|save game"
 msgstr "Spiel speichern"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "Beenden"
 
 msgid "hotkey|next hero"
 msgstr "Nächster Held"
@@ -6443,9 +6493,6 @@ msgstr ""
 
 msgid "Game saved successfully."
 msgstr "Spiel erfolgreich gespeichert."
-
-msgid "There was an issue during saving."
-msgstr "Es gab ein Problem beim Speichern."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8623,6 +8670,10 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} trifft %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Stufe %{level}"
 
 msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
 msgstr ""
