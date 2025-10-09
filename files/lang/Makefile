@@ -40,11 +40,11 @@ be.mo bg.mo ru.mo uk.mo: %.mo: %.po
 	$(call MSGFMT,CP1251)
 
 # German, Danish, French, Italian, Dutch, Norwegian, Portuguese, Spanish and Swedish translations use CP1252
-de.mo dk.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
+de.mo da.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 	$(call MSGFMT,CP1252)
 	
 # Greek uses CP1253
-gr.mo: gr.po
+el.mo: el.po
 	$(call MSGFMT,CP1253)
 
 # Turkish uses CP1254
