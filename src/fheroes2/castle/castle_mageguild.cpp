@@ -33,6 +33,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "kingdom.h"
 #include "localevent.h"
 #include "mageguild.h"
 #include "math_base.h"
@@ -51,7 +52,7 @@ namespace
     const int32_t bottomBarOffsetY = 461;
 }
 
-void Castle::_openMageGuild( const Heroes * hero ) const
+Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -76,12 +77,20 @@ void Castle::_openMageGuild( const Heroes * hero ) const
     dst_pt.y = cur_pt.y + bottomBarOffsetY;
 
     // The original ICN::WELLXTRA image does not have a yellow outer frame.
-    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-    const int32_t barHeight = bottomBar.height();
-    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
-    fheroes2::Copy( bottomBar, 1, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
-    fheroes2::Copy( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 1, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
-                    dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
+    fheroes2::Button buttonPrevCastle( cur_pt.x, dst_pt.y, ICN::SMALLBAR, 1, 2 );
+    fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
+    buttonPrevCastle.subscribe( &timedButtonPrevCastle );
+
+    // bottom small bar
+    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const int32_t statusBarWidth = bar.width();
+    dst_pt.x = cur_pt.x + buttonPrevCastle.area().width;
+    fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, statusBarWidth, bar.height() );
+
+    // button next castle
+    fheroes2::Button buttonNextCastle( dst_pt.x + statusBarWidth, dst_pt.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
+    buttonNextCastle.subscribe( &timedButtonNextCastle );
 
     // text bar
     const char * textAlternative;
@@ -116,7 +125,19 @@ void Castle::_openMageGuild( const Heroes * hero ) const
         spellRows[levelIndex]->redraw( display );
     }
 
-    fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
+    fheroes2::Button buttonExit( cur_pt.x + 32, cur_pt.y + bottomBarOffsetY - 32, exitButtonIcnID, 0, 1 );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+
+    // fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth - 16, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+
+    if ( GetKingdom().GetCastles().size() < 2 ) {
+        buttonPrevCastle.disable();
+        buttonNextCastle.disable();
+    }
+
+    buttonPrevCastle.draw();
+    buttonNextCastle.draw();
 
     buttonExit.draw();
 
@@ -132,6 +153,21 @@ void Castle::_openMageGuild( const Heroes * hero ) const
 
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
+        if ( buttonPrevCastle.isEnabled() ) {
+            buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPrevCastle.area() ) );
+
+            if ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) {
+                return MageGuildDialogResult::PrevMageGuildWindow;
+            }
+        }
+        if ( buttonNextCastle.isEnabled() ) {
+            buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNextCastle.area() ) );
+
+            if ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) {
+                return MageGuildDialogResult::NextMageGuildWindow;
+            }
+        }
+
         spellRows[0]->queueEventProcessing( false ) || spellRows[1]->queueEventProcessing( false ) || spellRows[2]->queueEventProcessing( false )
             || spellRows[3]->queueEventProcessing( false ) || spellRows[4]->queueEventProcessing( false );
 
@@ -139,4 +175,6 @@ void Castle::_openMageGuild( const Heroes * hero ) const
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
     }
+
+    return MageGuildDialogResult::DoNothing;
 }

@@ -303,16 +303,18 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     assert( it != myCastles.end() );
 
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, false, true, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
-        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ||
+             result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) {
             if ( it == myCastles.begin() ) {
                 it = myCastles.end();
             }
             --it;
         }
-        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ||
+                  result == Castle::CastleDialogReturnValue::NextMageGuildWindow ) {
             ++it;
             if ( it == myCastles.end() ) {
                 it = myCastles.begin();
@@ -324,7 +326,10 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
         const bool openConstructionWindow
             = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
-        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
+        const bool openMageGuildWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) || ( result == Castle::CastleDialogReturnValue::NextMageGuildWindow );
+
+        result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, false, renderBackgroundDialog );
     }
 
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
