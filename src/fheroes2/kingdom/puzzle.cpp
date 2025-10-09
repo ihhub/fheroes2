@@ -198,9 +198,10 @@ namespace
 
         display.updateNextRenderRoi( radarArea );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD ), 0, 1 );
+        const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
         buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         buttonExit.draw();
 
@@ -268,9 +269,10 @@ namespace
 
         fheroes2::Copy( background, 0, 0, display, puzzleArea );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD ), 0, 1 );
+        const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
         buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         const fheroes2::Rect & radarRect = radar.GetRect();
 
