@@ -189,13 +189,14 @@ namespace
         return castleIcon;
     }
 
-    std::string replacePosAndRace( std::string text, const int race, const int32_t tileIndex, const int32_t mapWidth )
+    void replacePosition( std::string & text, const int32_t tileIndex, const int32_t mapWidth )
     {
         StringReplace( text, "%{pos}", std::to_string( tileIndex % mapWidth ) + ", " + std::to_string( tileIndex / mapWidth ) );
+    }
 
+    void replaceRace( std::string & text, const int race )
+    {
         StringReplace( text, "%{race}", Race::String( race ) );
-
-        return text;
     }
 
     std::vector<fheroes2::LocalizedString> getHeroTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const int32_t tileIndex,
@@ -204,11 +205,18 @@ namespace
         const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
-            return { { replacePosAndRace( _( "[%{pos}]: %{race} hero" ), race, tileIndex, mapWidth ), gameLanguage } };
+            std::string text = _( "[%{pos}]: %{race} hero" );
+            replacePosition( text, tileIndex, mapWidth );
+            replaceRace( text, race );
+
+            return { { std::move( text ), gameLanguage } };
         }
 
-        std::string title = _( "[%{pos}]: %{name}, %{race} hero" );
-        return fheroes2::getLocalizedStrings( replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage, "%{name}", name, language );
+        std::string text = _( "[%{pos}]: %{name}, %{race} hero" );
+        replacePosition( text, tileIndex, mapWidth );
+        replaceRace( text, race );
+
+        return fheroes2::getLocalizedStrings( std::move( text ), gameLanguage, "%{name}", name, language );
     }
 
     std::vector<fheroes2::LocalizedString> getTownTitle( const std::string & name, const fheroes2::SupportedLanguage language, const int race, const bool isTown,
@@ -217,13 +225,18 @@ namespace
         const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
         if ( name.empty() ) {
-            std::string title = isTown ? _( "[%{pos}]: %{race} town" ) : _( "[%{pos}]: %{race} castle" );
+            std::string text = isTown ? _( "[%{pos}]: %{race} town" ) : _( "[%{pos}]: %{race} castle" );
+            replacePosition( text, tileIndex, mapWidth );
+            replaceRace( text, race );
 
-            return { { replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage } };
+            return { { std::move( text ), gameLanguage } };
         }
 
-        std::string title = isTown ? _( "[%{pos}]: %{name}, %{race} town" ) : _( "[%{pos}]: %{name}, %{race} castle" );
-        return fheroes2::getLocalizedStrings( replacePosAndRace( std::move( title ), race, tileIndex, mapWidth ), gameLanguage, "%{name}", name, language );
+        std::string text = isTown ? _( "[%{pos}]: %{name}, %{race} town" ) : _( "[%{pos}]: %{name}, %{race} castle" );
+        replacePosition( text, tileIndex, mapWidth );
+        replaceRace( text, race );
+
+        return fheroes2::getLocalizedStrings( std::move( text ), gameLanguage, "%{name}", name, language );
     }
 
     fheroes2::Rect renderConditionsHeroIconAndName( const HeroInfo & heroInfo, const int32_t mapWidth, const fheroes2::Rect & roi, fheroes2::Image & output )
