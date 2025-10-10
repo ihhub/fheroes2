@@ -306,15 +306,15 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, false, true, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
-        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ||
-             result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) {
+        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow
+             || result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) {
             if ( it == myCastles.begin() ) {
                 it = myCastles.end();
             }
             --it;
         }
-        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ||
-                  result == Castle::CastleDialogReturnValue::NextMageGuildWindow ) {
+        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow
+                  || result == Castle::CastleDialogReturnValue::NextMageGuildWindow ) {
             ++it;
             if ( it == myCastles.end() ) {
                 it = myCastles.begin();
