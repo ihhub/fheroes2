@@ -1040,7 +1040,7 @@ namespace fheroes2
                     os << "Add " << bonus.value << " to hero's Attack Skill" << std::endl;
                     break;
                 case ArtifactBonusType::DEFENCE_SKILL:
-                    os << "Add " << bonus.value << " to hero's Defence Skill" << std::endl;
+                    os << "Add " << bonus.value << " to hero's Defense Skill" << std::endl;
                     break;
                 case ArtifactBonusType::SPELL_POWER_SKILL:
                     os << "Add " << bonus.value << " to hero's Spell Power Skill" << std::endl;
