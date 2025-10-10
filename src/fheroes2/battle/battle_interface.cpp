@@ -2064,6 +2064,11 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
+    // Summoned Elementals: hide the counter until the appearance fade is complete.
+    if ( unit.Modes( CAP_SUMMONELEM ) && unit.GetCustomAlpha() < 255 ) {
+        return;
+    }
+
     const fheroes2::Rect & rt = unit.GetRectPosition();
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
