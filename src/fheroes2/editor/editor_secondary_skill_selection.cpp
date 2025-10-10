@@ -254,6 +254,16 @@ namespace Editor
 
         background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
+        fheroes2::Button buttonToggleOn;
+        fheroes2::Button buttonToggleOff;
+
+        background.renderButton( buttonToggleOn, isEvilInterface ? ICN::BUTTON_TOGGLE_ALL_ON_EVIL : ICN::BUTTON_TOGGLE_ALL_ON_GOOD, 0, 1, { 0, 7 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        buttonToggleOn.disable();
+
+        background.renderButton( buttonToggleOff, isEvilInterface ? ICN::BUTTON_TOGGLE_ALL_OFF_EVIL : ICN::BUTTON_TOGGLE_ALL_OFF_GOOD, 0, 1, { 0, 7 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
         SecondarySkillContainerUI skillContainer( activeArea.getPosition(), skills );
 
         skillContainer.draw( display );
@@ -268,6 +278,13 @@ namespace Editor
 
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
+            if ( buttonToggleOn.isEnabled() ) {
+                buttonToggleOn.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonToggleOn.area() ) );
+            }
+            else if ( buttonToggleOff.isEnabled() ) {
+                buttonToggleOff.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonToggleOff.area() ) );
+            }
+
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 return false;
             }
@@ -276,15 +293,62 @@ namespace Editor
                 break;
             }
 
+            bool toggleAllOn = false;
+            bool toggleAllOff = false;
+
             if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept the changes made." ), Dialog::ZERO );
             }
+            else if ( buttonToggleOn.isEnabled() && le.isMouseRightButtonPressedInArea( buttonToggleOn.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Enable All Secondary Skills" ), _( "Click to enable all secondary skills." ), Dialog::ZERO );
+            }
+            else if ( buttonToggleOff.isEnabled() && le.isMouseRightButtonPressedInArea( buttonToggleOff.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Disable All Secondary Skills" ), _( "Click to disable all secondary skills." ), Dialog::ZERO );
+            }
+            else if ( buttonToggleOn.isEnabled() && le.MouseClickLeft( buttonToggleOn.area() ) ) {
+                toggleAllOn = true;
 
-            if ( skillContainer.processEvents( le ) ) {
-                const fheroes2::Rect & roi = skillContainer.redrawChangedSkill( display );
+                for ( auto & [skill, isSelected] : skills ) {
+                    isSelected = true;
+                }
+
+                buttonToggleOn.disable();
+                buttonToggleOff.enable();
+            }
+            else if ( buttonToggleOff.isEnabled() && le.MouseClickLeft( buttonToggleOff.area() ) ) {
+                toggleAllOff = true;
+
+                for ( auto & [skill, isSelected] : skills ) {
+                    isSelected = false;
+                }
+
+                buttonToggleOff.disable();
+                buttonToggleOn.enable();
+            }
+
+            if ( toggleAllOn || toggleAllOff || skillContainer.processEvents( le ) ) {
+                fheroes2::Rect roi;
+
+                if ( toggleAllOn ) {
+                    buttonToggleOff.draw();
+
+                    skillContainer.draw( display );
+
+                    roi = activeArea;
+                }
+                else if ( toggleAllOff ) {
+                    buttonToggleOn.draw();
+
+                    skillContainer.draw( display );
+
+                    roi = activeArea;
+                }
+                else {
+                    roi = skillContainer.redrawChangedSkill( display );
+                }
 
                 // Check if all skills are being disabled. If they are disable the OKAY button.
                 bool areAllSkillsDisabled = true;
