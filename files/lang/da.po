@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -5017,6 +5017,22 @@ msgstr "Gem kort:"
 
 msgid "Click to save the current map."
 msgstr "Klik for at gemme det aktuelle kort."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Fjern færdighed"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Klik for kun at vise niveau %{level} besværgelser."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Fjern færdighed"
 
 msgid "Click to show only level %{level} spells."
 msgstr "Klik for kun at vise niveau %{level} besværgelser."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -4486,6 +4486,18 @@ msgid "Save Map:"
 msgstr ""
 
 msgid "Click to save the current map."
+msgstr ""
+
+msgid "Click to enable all secondary skills."
+msgstr ""
+
+msgid "Enable All Secondary Skills"
+msgstr ""
+
+msgid "Click to disable all secondary skills."
+msgstr ""
+
+msgid "Disable All Secondary Skills"
 msgstr ""
 
 msgid "Click to show only level %{level} spells."

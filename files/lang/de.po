@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5066,6 +5066,22 @@ msgstr "Karte speichern"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klicken um das aktuelle Spiel zu speichern."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Sekundärfertigkeit löschen"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Klicken um die ausgewählte Auflösung anzuwenden."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Sekundärfertigkeit löschen"
 
 msgid "Click to show only level %{level} spells."
 msgstr ""

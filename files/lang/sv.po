@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2025-10-08 20:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4941,6 +4941,22 @@ msgstr "Spara Karta:"
 
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Klicka här för att aktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Radera Sekundär Förmåga"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Klicka här för att inaktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Radera Sekundär Förmåga"
 
 msgid "Click to show only level %{level} spells."
 msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."

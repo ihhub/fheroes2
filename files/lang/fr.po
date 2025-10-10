@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -5130,6 +5130,22 @@ msgstr "Sauvegarder la carte"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Enregistrer le jeu en cours."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Cliquez ici pour sélectionner cette couleur."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Sortilège aléatoire"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Cliquez pour quitter les résultats de la bataille."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Voir les sorts"
 
 msgid "Click to show only level %{level} spells."
 msgstr ""

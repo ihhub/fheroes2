@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4967,6 +4967,22 @@ msgstr "Зберегти мапу:"
 
 msgid "Click to save the current map."
 msgstr "Тицьніть, щоб зберегти поточну мапу."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Тицьніть для увімкнення патрулювання героєм."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Видалити вторинне вміння"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Видалити вторинне вміння"
 
 msgid "Click to show only level %{level} spells."
 msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
