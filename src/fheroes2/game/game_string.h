@@ -23,17 +23,26 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <utility>
 
 class IStreamBase;
 class OStreamBase;
 
 namespace fheroes2
 {
-
     enum class SupportedLanguage : uint8_t;
 
     struct LocalizedString
     {
+        LocalizedString() = default;
+
+        LocalizedString( std::string text_, std::optional<SupportedLanguage> language_ )
+            : text( std::move( text_ ) )
+            , language( language_ )
+        {
+            // Do nothing.
+        }
+
         std::string text;
 
         std::optional<SupportedLanguage> language;

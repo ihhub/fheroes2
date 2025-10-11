@@ -987,6 +987,8 @@ namespace fheroes2
             fitToOneRow( _maxTextWidth );
         }
 
+        const auto langugeSwitcher = getLanguageSwitcher( *this );
+
         const FontCharHandler charHandler( _fontType );
 
         const Sprite & charSprite = charHandler.getSprite( cursorChar );
@@ -1004,8 +1006,6 @@ namespace fheroes2
             }
             return;
         }
-
-        const auto langugeSwitcher = getLanguageSwitcher( *this );
 
         int32_t textLineBegin = _visibleTextBeginPos;
 
@@ -1225,6 +1225,46 @@ namespace fheroes2
             }
 
             --widthIter;
+        }
+    }
+
+    void MultiFontText::fitToOneRow( const int32_t maxWidth )
+    {
+        int32_t widthLeft = maxWidth;
+
+        for ( size_t i = 0; i < _texts.size(); ++i ) {
+            const auto languageSwitcher = getLanguageSwitcher( _texts[i] );
+
+            const FontCharHandler charHandler( _texts[i]._fontType );
+
+            const int32_t originalTextWidth
+                = getLineWidth( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), charHandler, true );
+
+            if ( ( i + 1 == _texts.size() ) && originalTextWidth <= widthLeft ) {
+                // This is the last text and all texts fit the given width.
+                break;
+            }
+
+            // This is not the last text and we need to keep space for the possible truncation symbol.
+            const int32_t correctedWidthLeft = widthLeft - getTruncationSymbolWidth( _texts[i]._fontType );
+            if ( originalTextWidth > correctedWidthLeft ) {
+                // The text does not fit the given width.
+
+                const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ),
+                                                                        static_cast<int32_t>( _texts[i]._text.size() ), charHandler, correctedWidthLeft );
+
+                // Remove the characters that do not fit the given width.
+                _texts[i]._text.resize( maxCharacterCount );
+                _texts[i]._text += truncationSymbol;
+
+                // Remove other texts that do not fit the given width.
+                _texts.resize( i + 1 );
+
+                break;
+            }
+
+            // The text is not longer than the provided maximum width. Go to the next text.
+            widthLeft -= originalTextWidth;
         }
     }
 
