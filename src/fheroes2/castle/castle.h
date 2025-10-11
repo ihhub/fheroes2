@@ -141,7 +141,9 @@ public:
         NextCastle, // Open main dialog of the next castle.
         PreviousCastle, // Open main dialog of the previous castle.
         NextCostructionWindow, // Open construction dialog of the next castle.
-        PreviousCostructionWindow // Open construction dialog of the previous castle.
+        PreviousCostructionWindow, // Open construction dialog of the previous castle.
+        NextMageGuildWindow, // Open Mage Guild dialog of the next castle.
+        PreviousMageGuildWindow, // Open Mage Guild dialog of the previous castle.
     };
 
     Castle() = default;
@@ -287,7 +289,7 @@ public:
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
-    CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog );
+    CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool openMageGuildWindow, const bool fade, const bool renderBackgroundDialog );
 
     int GetAttackModificator( const std::string * /* unused */ ) const
     {
@@ -389,6 +391,13 @@ private:
         RecruitHero // Recruit a hero.
     };
 
+    enum class MageGuildDialogResult : int
+    {
+        DoNothing,
+        NextMageGuildWindow, // Open Mage Guild dialog for the next castle.
+        PrevMageGuildWindow, // Open Mage Guild dialog for the previous castle.
+    };
+
     // Checks whether this particular building is currently built in the castle (unlike
     // the isBuild(), upgraded versions of the same building are not taken into account)
     bool _isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
@@ -400,7 +409,7 @@ private:
 
     void _openTavern() const;
     void _openWell();
-    void _openMageGuild( const Heroes * hero ) const;
+    MageGuildDialogResult _openMageGuild( const Heroes * hero ) const;
     void _joinRNDArmy();
     void _postLoad();
 
