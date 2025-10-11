@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4892,6 +4892,22 @@ msgstr "Вялікія мапы"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Назва абранай мапы."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Выпадковае заклінанне"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Прагледзець заклінанні"
 
 msgid "Click to show only level %{level} spells."
 msgstr ""

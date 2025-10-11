@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 07:19+0000\n"
+"POT-Creation-Date: 2025-10-10 22:54+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4990,6 +4990,22 @@ msgstr "Salvar Mapa:"
 
 msgid "Click to save the current map."
 msgstr "Clique para salvar o mapa atual."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Clique para ativar o modo de patrulha do herói."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Excluir Habilidade Secundária"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Clique para editar eventos diários."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Excluir Habilidade Secundária"
 
 msgid "Click to show only level %{level} spells."
 msgstr ""
