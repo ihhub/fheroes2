@@ -47,6 +47,7 @@
 #include "logging.h"
 #include "math_base.h"
 #include "mus.h"
+#include "pal.h"
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
@@ -100,6 +101,21 @@ namespace
 
             fheroes2::Blit( piece, display, dstx + piece.x() - fheroes2::borderWidthPx, dsty + piece.y() - fheroes2::borderWidthPx );
         }
+    }
+
+    void drawPuzzleDialog( const fheroes2::Rect & radarArea, const bool isEvilInterface )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Sprite & puzzleImage = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 );
+        fheroes2::Copy( puzzleImage, 0, 0, display, radarArea );
+        // The original puzzle image has a rendered button. We should remove it.
+        const auto & streamsImage = fheroes2::AGG::GetICN( ICN::EDITPANL, 3 );
+        fheroes2::Sprite croppedImage = fheroes2::Crop( streamsImage, 0, streamsImage.height() - 40, streamsImage.width(), 40 );
+        if ( isEvilInterface ) {
+            fheroes2::ApplyPalette( croppedImage, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+
+        fheroes2::Copy( croppedImage, 0, 0, display, radarArea.x, radarArea.y + puzzleImage.height() - 40, radarArea.width, 40 );
     }
 
     bool revealPuzzle( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty, fheroes2::Button & buttonExit,
@@ -178,11 +194,14 @@ namespace
 
         fheroes2::fadeOutDisplay( back.rect(), false );
 
-        fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+        drawPuzzleDialog( radarArea, isEvilInterface );
+
         display.updateNextRenderRoi( radarArea );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+        const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
+        buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         buttonExit.draw();
 
@@ -250,20 +269,24 @@ namespace
 
         fheroes2::Copy( background, 0, 0, display, puzzleArea );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+        const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
+        buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         const fheroes2::Rect & radarRect = radar.GetRect();
 
-        const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
+        const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit, exitButtonIcnID]() {
             if ( isHideInterface ) {
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }
 
-            fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+            drawPuzzleDialog( radarArea, isEvilInterface );
+
             display.updateNextRenderRoi( radarArea );
 
             buttonExit.draw();
+            fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
             return radarRect;
         };
