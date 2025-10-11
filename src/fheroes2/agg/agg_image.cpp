@@ -4201,6 +4201,11 @@ namespace
                 _icnVsSprite[id][207].reset();
                 Copy( shadow, shadow.width() - shadowOffset, 0, _icnVsSprite[id][207], 0, shadow.y(), shadowOffset, shadow.height() );
                 Copy( body, 0, 0, _icnVsSprite[id][207], shadowOffset, 0, body.width(), body.height() );
+
+                // Make Ultimate Artifact from the original Random Artifact object.
+                _icnVsSprite[id][164] = _icnVsSprite[id][163];
+                _icnVsSprite[id][165] = _icnVsSprite[id][162];
+                ApplyPalette( _icnVsSprite[id][164], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
             }
             break;
         case ICN::TWNSDW_5:
