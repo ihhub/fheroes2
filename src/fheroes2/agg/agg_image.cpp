@@ -4202,10 +4202,15 @@ namespace
                 Copy( shadow, shadow.width() - shadowOffset, 0, _icnVsSprite[id][207], 0, shadow.y(), shadowOffset, shadow.height() );
                 Copy( body, 0, 0, _icnVsSprite[id][207], shadowOffset, 0, body.width(), body.height() );
 
-                // Make Ultimate Artifact from the original Random Artifact object.
-                _icnVsSprite[id][164] = _icnVsSprite[id][163];
-                _icnVsSprite[id][165] = _icnVsSprite[id][162];
+                // Ultimate Artifact object has 2 major flaws:
+                // - no shadow
+                // - some leftovers from Random Artifact object
+                //
+                // So, let's fix both of them.
                 ApplyPalette( _icnVsSprite[id][164], PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+                copyTransformLayer( _icnVsSprite[id][163], _icnVsSprite[id][164] );
+                _icnVsSprite[id][165] = _icnVsSprite[id][162];
             }
             break;
         case ICN::TWNSDW_5:
