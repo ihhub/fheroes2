@@ -130,8 +130,6 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
     fheroes2::Button buttonExit( cur_pt.x + 32, cur_pt.y + bottomBarOffsetY - 32, exitButtonIcnID, 0, 1 );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
-    // fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth - 16, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
-
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
         buttonNextCastle.disable();
