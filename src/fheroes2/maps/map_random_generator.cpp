@@ -51,7 +51,7 @@
 namespace
 {
     // ObjectInfo ObjctGroup based indicies do not match old objects
-    const int neutralColorIndex{ Color::GetIndex( Color::UNUSED ) };
+    const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     const int randomCastleIndex = 12;
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
@@ -314,12 +314,12 @@ namespace
 
     bool placeCastle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, int targetX, int targetY )
     {
-        const int regionX = region._centerIndex % mapFormat.size;
-        const int regionY = region._centerIndex / mapFormat.size;
-        const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapFormat.size - 4 );
-        const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapFormat.size - 3 );
+        const int regionX = region._centerIndex % mapFormat.width;
+        const int regionY = region._centerIndex / mapFormat.width;
+        const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapFormat.width - 4 );
+        const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapFormat.width - 3 );
 
-        auto & tile = world.getTile( castleY * mapFormat.size + castleX );
+        auto & tile = world.getTile( castleY * mapFormat.width + castleX );
         const fheroes2::Point tilePos = tile.GetCenter();
 
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
@@ -338,9 +338,9 @@ namespace
             putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, randomCastleIndex );
             markObjectPlacement( data, castleInfo, tilePos, true );
 
-            const uint8_t color = Color::IndexToColor( region._colorIndex );
+            const PlayerColor color = Color::IndexToColor( region._colorIndex );
             // By default use random (default) army for the neutral race town/castle.
-            if ( color == Color::NONE ) {
+            if ( color == PlayerColor::NONE ) {
                 Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
             }
 
@@ -455,7 +455,6 @@ namespace Maps::Generator
         }
 
         // Step 4. We're ready to save the result; reset the current world first
-        world.generateForEditor( width );
         mapFormat.tiles.clear();
         mapFormat.tiles.resize( static_cast<size_t>( width ) * height );
 
@@ -465,7 +464,7 @@ namespace Maps::Generator
             }
 
             for ( const Node & node : region._nodes ) {
-                world.getTile( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), false, false );
+                world.getTile( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), 0 );
             }
 
             // Fix missing references
@@ -496,7 +495,7 @@ namespace Maps::Generator
                 yMax = std::min( yMax, nodeY );
 
                 if ( node.type == NodeType::BORDER ) {
-                    Maps::setTerrainOnTiles( node.index, node.index, region._groundType );
+                    Maps::setTerrainOnTiles( mapFormat, node.index, node.index, region._groundType );
                 }
             }
 
@@ -523,7 +522,7 @@ namespace Maps::Generator
                 }
             }
 
-            Maps::updateRoadOnTile( world.getTile( region._centerIndex ), true );
+            Maps::updateRoadOnTile( mapFormat, region._centerIndex, true );
         }
 
         // set up region connectors based on frequency settings & border length
