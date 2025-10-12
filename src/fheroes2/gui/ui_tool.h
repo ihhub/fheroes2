@@ -28,9 +28,11 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
+#include "game_string.h"
 #include "image.h"
 #include "math_base.h"
 #include "timing.h"
@@ -300,4 +302,11 @@ namespace fheroes2
 
     // Render "hero on a horse" portrait dependent from hero race. Used in Editor.
     void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output );
+
+    std::vector<LocalizedString> getLocalizedStrings( std::string text, const SupportedLanguage currentLanguage, const std::string_view toReplace,
+                                                      std::string_view replacement, const SupportedLanguage replacementLanguage );
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<LocalizedString> texts, const FontType font );
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<std::pair<LocalizedString, FontType>> texts );
 }
