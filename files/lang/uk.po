@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-10 22:54+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4695,17 +4695,17 @@ msgstr "[%{pos}]: %{race} герой"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race} герой"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} місто"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} замок"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} місто"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} місто"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} замок"
+
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} місто"
 
 msgid "None."
 msgstr "Нема."

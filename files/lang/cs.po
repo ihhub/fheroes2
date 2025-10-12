@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-10 22:54+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4672,17 +4672,17 @@ msgstr "[%{pos}]: %{race} hrdina"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race} hrdina"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} město"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} hrad"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} město"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} město"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} hrad"
+
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} město"
 
 msgid "None."
 msgstr "Nic."
