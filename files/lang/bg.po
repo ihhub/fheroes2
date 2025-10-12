@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-10 22:54+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4843,19 +4843,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{name1} среща %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race} герой"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} %{race} герой"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{name1} среща %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} герой"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} среща %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "%{name1} среща %{name2}"
 
 #, fuzzy
