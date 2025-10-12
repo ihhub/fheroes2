@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstring>
 #include <iterator>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <utility>
@@ -217,40 +218,45 @@ namespace
         return palette.data();
     }
 
+    // Updates `roi` to be only inside {0, 0, width, height} rectangle.
+    // Returns false if `roi` is out of such rectangle.
     bool getActiveArea( fheroes2::Rect & roi, const int32_t width, const int32_t height )
     {
-        if ( roi.width <= 0 || roi.height <= 0 || roi.x >= width || roi.y >= height )
+        if ( roi.width <= 0 || roi.height <= 0 || roi.x >= width || roi.y >= height ) {
             return false;
+        }
 
         if ( roi.x < 0 ) {
-            const int32_t offsetX = -roi.x;
-            if ( offsetX >= roi.width )
+            if ( -roi.x >= roi.width ) {
                 return false;
+            }
 
+            roi.width += roi.x;
             roi.x = 0;
-            roi.width -= offsetX;
         }
 
         if ( roi.y < 0 ) {
-            const int32_t offsetY = -roi.y;
-            if ( offsetY >= roi.height )
+            if ( -roi.y >= roi.height ) {
                 return false;
+            }
 
+            roi.height += roi.y;
             roi.y = 0;
-            roi.height -= offsetY;
         }
 
-        if ( roi.x + roi.width > width ) {
-            const int32_t offsetX = roi.x + roi.width - width;
-            if ( offsetX >= roi.width )
+        if ( const int32_t offsetX = roi.x + roi.width - width; offsetX > 0 ) {
+            if ( offsetX >= roi.width ) {
                 return false;
+            }
+
             roi.width -= offsetX;
         }
 
-        if ( roi.y + roi.height > height ) {
-            const int32_t offsetY = roi.y + roi.height - height;
-            if ( offsetY >= roi.height )
+        if ( const int32_t offsetY = roi.y + roi.height - height; offsetY > 0 ) {
+            if ( offsetY >= roi.height ) {
                 return false;
+            }
+
             roi.height -= offsetY;
         }
 
@@ -448,10 +454,11 @@ namespace
 
         bool isVisible() const override
         {
-            if ( _emulation )
+            if ( _emulation ) {
                 return fheroes2::Cursor::isVisible();
-            else
-                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            }
+
+            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
@@ -790,6 +797,36 @@ namespace
         }
     };
 #else
+    bool shouldUseFullscreenDesktopMode()
+    {
+        return fheroes2::cursor().isSoftwareEmulation();
+    }
+
+    std::optional<bool> isWindowInAnyDisplay( const fheroes2::ResolutionInfo & resolutionInfo, const fheroes2::Point & windowPos )
+    {
+        const int numDisplays = SDL_GetNumVideoDisplays();
+        if ( numDisplays < 1 ) {
+            ERROR_LOG( "Failed to get the number of video displays. The error value: " << numDisplays << ", description: " << SDL_GetError() )
+            return std::nullopt;
+        }
+
+        for ( int displayIndex = 0; displayIndex < numDisplays; ++displayIndex ) {
+            SDL_Rect displayBounds;
+            if ( SDL_GetDisplayBounds( displayIndex, &displayBounds ) != 0 ) {
+                ERROR_LOG( "Failed to get display bounds for display #" << displayIndex << ". The error: " << SDL_GetError() )
+                continue;
+            }
+            const int displayMaxX = displayBounds.x + displayBounds.w;
+            const int displayMaxY = displayBounds.y + displayBounds.h;
+            const int32_t windowMaxX = windowPos.x + resolutionInfo.screenWidth;
+            const int32_t windowMaxY = windowPos.y + resolutionInfo.screenHeight;
+            if ( windowPos.x >= displayBounds.x && windowMaxX < displayMaxX && windowPos.y >= displayBounds.y && windowMaxY < displayMaxY ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
@@ -815,7 +852,7 @@ namespace
             }
             else {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                if ( shouldUseFullscreenDesktopMode() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
@@ -824,6 +861,9 @@ namespace
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+
+                // Update the window position, in case we get queried for it
+                SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
 
                 // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
                 // to full-screen mode, the in-game display area may not occupy the entire screen, and black bars will remain on the sides of the screen. In this
@@ -866,18 +906,19 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
-                std::set<fheroes2::ResolutionInfo> resolutionSet;
+            std::set<fheroes2::ResolutionInfo> resolutionSet;
 
-                const int displayCount = SDL_GetNumVideoDisplays();
-                if ( displayCount >= 1 ) {
-                    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+            const int displayCount = SDL_GetNumVideoDisplays();
+            if ( displayCount >= 1 ) {
+                for ( int displayId = 0; displayId < displayCount; ++displayId ) {
+                    const int displayModeCount = SDL_GetNumDisplayModes( displayId );
                     if ( displayModeCount >= 1 ) {
                         for ( int i = 0; i < displayModeCount; ++i ) {
                             SDL_DisplayMode videoMode;
-                            const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
+                            const int returnCode = SDL_GetDisplayMode( displayId, i, &videoMode );
                             if ( returnCode != 0 ) {
-                                ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                                ERROR_LOG( "Failed to get display mode on display " << displayId << ". The error value: " << returnCode
+                                                                                    << ", description: " << SDL_GetError() )
                             }
                             else {
                                 resolutionSet.emplace( videoMode.w, videoMode.h );
@@ -885,24 +926,71 @@ namespace
                         }
                     }
                     else {
-                        ERROR_LOG( "Failed to get the number of display modes. The error value: " << displayModeCount << ", description: " << SDL_GetError() )
+                        ERROR_LOG( "Failed to get the number of display modes for display" << displayId << ". The error value: " << displayModeCount
+                                                                                           << ", description: " << SDL_GetError() )
                     }
                 }
-                else {
-                    ERROR_LOG( "Failed to get the number of displays. The error value: " << displayCount << ", description: " << SDL_GetError() )
-                }
+            }
+            else {
+                ERROR_LOG( "Failed to get the number of displays. The error value: " << displayCount << ", description: " << SDL_GetError() )
+            }
 
 #if defined( TARGET_NINTENDO_SWITCH )
-                // Nintendo Switch supports arbitrary resolutions via the HW scaler
-                // 848x480 is the smallest resolution supported by fheroes2
-                resolutionSet.emplace( 848, 480 );
+            // Nintendo Switch supports arbitrary resolutions via the HW scaler
+            // 848x480 is the smallest resolution supported by fheroes2
+            resolutionSet.emplace( 848, 480 );
 #endif
-                resolutionSet = FilterResolutions( resolutionSet );
+            resolutionSet = FilterResolutions( resolutionSet );
 
+            if ( displayCount < 1 ) {
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
-            }();
+            }
 
-            return filteredResolutions;
+            if ( !shouldUseFullscreenDesktopMode() ) {
+                // If software emulation is not enabled it means that we need to use resolutions supported
+                // by the hardware.
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
+            // We should limit all available resolutions to the one which is currently chosen on the system
+            // to avoid ending up having application window which is bigger than the screen resolution.
+            SDL_DisplayMode maxDisplayMode{};
+
+            for ( int displayId = 0; displayId < displayCount; ++displayId ) {
+                SDL_DisplayMode displayMode;
+
+                const int returnValue = SDL_GetCurrentDisplayMode( displayId, &displayMode );
+                if ( returnValue < 0 ) {
+                    ERROR_LOG( "Failed to retrieve the current display mode for display " << displayId << ". The error value: " << returnValue
+                                                                                          << ", description: " << SDL_GetError() )
+                    continue;
+                }
+
+                // There is no an ideal formula of how to choose the biggest resolution among multiple displays
+                // so let's use a simple and well-known approach.
+                maxDisplayMode.w = std::max( maxDisplayMode.w, displayMode.w );
+                maxDisplayMode.h = std::max( maxDisplayMode.h, displayMode.h );
+            }
+
+            if ( maxDisplayMode.w == 0 || maxDisplayMode.h == 0 ) {
+                // None of displays returned a value display mode.
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
+            // If the current display resolution is somehow very small, ignore it.
+            // It could happen when a device has smaller than the required by the engine resolution.
+            if ( maxDisplayMode.w < fheroes2::Display::DEFAULT_WIDTH || maxDisplayMode.h < fheroes2::Display::DEFAULT_HEIGHT ) {
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
+            std::vector<fheroes2::ResolutionInfo> temp;
+            for ( auto iter = resolutionSet.rbegin(); iter != resolutionSet.rend(); ++iter ) {
+                if ( iter->screenWidth <= maxDisplayMode.w && iter->screenHeight <= maxDisplayMode.h ) {
+                    temp.emplace_back( *iter );
+                }
+            }
+
+            return temp;
         }
 
         void setTitle( const std::string & title ) override
@@ -952,6 +1040,29 @@ namespace
             }
 
             _toggleVSync();
+        }
+
+        fheroes2::Point getWindowPos() const override
+        {
+            if ( isFullScreen() ) {
+                return _prevWindowPos;
+            }
+            if ( _window == nullptr ) {
+                return { -1, -1 };
+            }
+            fheroes2::Point result;
+            SDL_GetWindowPosition( _window, &result.x, &result.y );
+            return result;
+        }
+
+        void setWindowPos( const fheroes2::Point pos ) override
+        {
+            if ( pos == fheroes2::Point{ -1, -1 } ) {
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
+            }
+            else {
+                _prevWindowPos = pos;
+            }
         }
 
     private:
@@ -1059,7 +1170,7 @@ namespace
                 resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
             }
 
-#if defined( ANDROID )
+#if defined( ANDROID ) || defined( __IPHONEOS__ )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set the " SDL_HINT_ORIENTATIONS " hint." )
@@ -1069,7 +1180,7 @@ namespace
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
-                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                if ( shouldUseFullscreenDesktopMode() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
@@ -1078,6 +1189,14 @@ namespace
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+            }
+
+            std::optional<bool> isInDisplay = isWindowInAnyDisplay( resolutionInfo, _prevWindowPos );
+
+            // check if the previous window position is within display or error occured
+            if ( !isInDisplay || !*isInDisplay ) {
+                // reset position if it is not within the bounds of any display
+                _prevWindowPos = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
             }
 
             _window = SDL_CreateWindow( System::encLocalToUTF8( _previousWindowTitle ).c_str(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
@@ -1319,9 +1438,6 @@ namespace fheroes2
     Display::Display()
         : _engine( RenderEngine::create() )
         , _cursor( RenderCursor::create() )
-        , _preprocessing( nullptr )
-        , _postprocessing( nullptr )
-        , _renderSurface( nullptr )
     {
         _disableTransformLayer();
     }
@@ -1360,6 +1476,11 @@ namespace fheroes2
         _screenSize = { info.screenWidth, info.screenHeight };
     }
 
+    void Display::setWindowPos( const Point point )
+    {
+        _engine->setWindowPos( point );
+    }
+
     Display & Display::instance()
     {
         static Display display;
@@ -1369,22 +1490,25 @@ namespace fheroes2
     void Display::render( const Rect & roi )
     {
         Rect temp( roi );
-        if ( !getActiveArea( temp, width(), height() ) )
+        if ( !getActiveArea( temp, width(), height() ) ) {
             return;
-
-        getActiveArea( _prevRoi, width(), height() );
+        }
 
         if ( _cursor->isVisible() && _cursor->isSoftwareEmulation() && !_cursor->_image.empty() ) {
             const Sprite & cursorImage = _cursor->_image;
-            const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
-            Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );
+            Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
-            if ( !backup.empty() ) {
-                // ROI must include cursor's area as well, otherwise cursor won't be rendered.
-                Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
-                if ( getActiveArea( cursorROI, width(), height() ) ) {
-                    temp = getBoundaryRect( temp, cursorROI );
-                }
+            if ( _cursor->_keepInScreenArea ) {
+                cursorROI.x = std::clamp( cursorROI.x, 0, width() - cursorROI.width );
+                cursorROI.y = std::clamp( cursorROI.y, 0, height() - cursorROI.height );
+            }
+
+            const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );
+            Blit( cursorImage, 0, 0, *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );
+
+            // ROI must include cursor's area as well, otherwise cursor won't be rendered.
+            if ( !backup.empty() && getActiveArea( cursorROI, width(), height() ) ) {
+                temp = getBoundaryRect( temp, cursorROI );
             }
 
             // Previous position of cursor must be updated as well to avoid ghost effect.
@@ -1410,6 +1534,7 @@ namespace fheroes2
     void Display::updateNextRenderRoi( const Rect & roi )
     {
         _prevRoi = getBoundaryRect( _prevRoi, roi );
+        getActiveArea( _prevRoi, width(), height() );
     }
 
     void Display::_renderFrame( const Rect & roi ) const

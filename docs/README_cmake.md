@@ -60,7 +60,7 @@ cmake --build build --config Release
 
 After building, executable can be found in `build\Release` directory.
 
-## Using Demo data
+## Using Demo Data
 
 CMake project allows to download and install original HoMM II Demo files which used by fheroes2 project.
 To do this please add `-DGET_HOMM2_DEMO=ON` to configuration options. For example:

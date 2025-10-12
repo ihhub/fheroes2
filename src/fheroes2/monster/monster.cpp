@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -781,18 +781,18 @@ uint32_t Monster::GetDwelling() const
 
 const char * Monster::GetName() const
 {
-    return _( fheroes2::getMonsterData( id ).generalStats.name );
+    return _( fheroes2::getMonsterData( id ).generalStats.untranslatedName );
 }
 
 const char * Monster::GetMultiName() const
 {
-    return _( fheroes2::getMonsterData( id ).generalStats.pluralName );
+    return _( fheroes2::getMonsterData( id ).generalStats.untranslatedPluralName );
 }
 
 const char * Monster::GetPluralName( uint32_t count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
-    return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
+    return count == 1 ? _( generalStats.untranslatedName ) : _( generalStats.untranslatedPluralName );
 }
 
 const char * Monster::getRandomRaceMonstersName( const uint32_t building )

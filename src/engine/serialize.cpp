@@ -408,6 +408,7 @@ std::string_view ROStreamBuf::getStringView( const size_t size /* = 0 */ )
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
     _file.reset( std::fopen( fn.c_str(), mode.c_str() ) );
+    // codechecker_false_positive [alpha.unix.Stream] Opened stream never closed. Potential resource leak
     if ( !_file ) {
         ERROR_LOG( "Error opening file " << fn )
     }

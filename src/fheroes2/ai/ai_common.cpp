@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +34,7 @@
 
 #include "army.h"
 #include "army_troop.h"
+#include "artifact_ultimate.h"
 #include "castle.h"
 #include "color.h"
 #include "difficulty.h"
@@ -41,9 +42,19 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps.h"
+#include "maps_tiles.h"
 #include "payment.h"
+#include "players.h"
+#include "puzzle.h"
 #include "resource.h"
 #include "resource_trading.h"
+#include "world.h"
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 bool AI::BuildIfPossible( Castle & castle, const BuildingType building )
 {
@@ -113,6 +124,8 @@ void AI::OptimizeTroopsOrder( Army & army )
         }
     }
 
+    assert( archers.size() + others.size() <= 5 );
+
     // Sort troops by tactical priority. For melee units, the order of comparison is as follows:
     // 1. Comparison by speed (faster units first);
     // 2. Comparison by type (flying units first);
@@ -135,11 +148,28 @@ void AI::OptimizeTroopsOrder( Army & army )
     std::array<size_t, 5> slotOrder = { 2, 1, 3, 0, 4 };
     switch ( archers.size() ) {
     case 1:
-        slotOrder = { 0, 2, 1, 3, 4 };
+        if ( others.size() == 1 ) {
+            slotOrder = { 0, 2, 1, 3, 4 };
+        }
+        else {
+            slotOrder = { 0, 1, 2, 3, 4 };
+        }
         break;
     case 2:
+        if ( others.size() == 3 ) {
+            slotOrder = { 0, 2, 3, 1, 4 };
+        }
+        else {
+            slotOrder = { 0, 4, 2, 1, 3 };
+        }
+        break;
     case 3:
-        slotOrder = { 0, 4, 2, 1, 3 };
+        if ( others.size() == 1 ) {
+            slotOrder = { 0, 4, 2, 1, 3 };
+        }
+        else {
+            slotOrder = { 0, 3, 2, 1, 4 };
+        }
         break;
     case 4:
         slotOrder = { 0, 4, 2, 3, 1 };
@@ -356,4 +386,53 @@ bool AI::tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain )
     kingdom.OddFundsResource( *transaction );
 
     return true;
+}
+
+void AI::shareObjectVisitInfoWithAllies( const Kingdom & kingdom, const int32_t tileIndex )
+{
+    if ( !Difficulty::isObjectVisitInfoSharingAllowedForAI( Game::getDifficulty() ) ) {
+        return;
+    }
+
+    if ( !kingdom.isControlAI() ) {
+        return;
+    }
+
+    const PlayerColorsSet friendColors = Players::GetPlayerFriends( kingdom.GetColor() );
+    if ( friendColors == 0 ) {
+        // No allies.
+        return;
+    }
+
+    if ( ( friendColors & Players::HumanColors() ) != 0 ) {
+        // Some allies are human players.
+        return;
+    }
+
+    const MP2::MapObjectType objectType = world.getTile( tileIndex ).getMainObjectType( false );
+
+    const PlayerColorsVector playerColors( friendColors );
+    for ( const PlayerColor color : playerColors ) {
+        ColorBase( color ).GetKingdom().SetVisited( tileIndex, objectType );
+    }
+}
+
+bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero )
+{
+    if ( art.isFound() ) {
+        return false;
+    }
+
+    // The hero's kingdom must have a fully open obelisk map
+    if ( !hero.GetKingdom().PuzzleMaps().all() ) {
+        return false;
+    }
+
+    if ( hero.IsFullBagArtifacts() ) {
+        return false;
+    }
+
+    const int32_t idx = art.getPosition();
+
+    return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).isSuitableForUltimateArtifact();
 }

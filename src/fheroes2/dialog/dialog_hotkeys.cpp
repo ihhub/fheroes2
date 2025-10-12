@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,6 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
-#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_window.h"
 
@@ -74,7 +73,7 @@ namespace
             text.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
             text.add( fheroes2::Text{ StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalWhite() } );
 
-            _restorer.update( offset.x, offset.y, fheroes2::boxAreaWidthPx, text.height() );
+            _restorer.update( offset.x, offset.y, fheroes2::boxAreaWidthPx, text.height( fheroes2::boxAreaWidthPx ) );
 
             text.draw( offset.x, offset.y, fheroes2::boxAreaWidthPx, output );
         }
@@ -230,15 +229,6 @@ namespace
             _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
         }
 
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
-        }
-
     private:
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
@@ -300,7 +290,7 @@ namespace fheroes2
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
             listbox.QueueEventProcessing();
 

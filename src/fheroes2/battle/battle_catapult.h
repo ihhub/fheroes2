@@ -34,7 +34,7 @@ class HeroBase;
 
 namespace Rand
 {
-    class DeterministicRandomGenerator;
+    class PCG32;
 }
 
 namespace Battle
@@ -48,8 +48,7 @@ namespace Battle
         Catapult & operator=( const Catapult & ) = delete;
 
         static const std::vector<CastleDefenseStructure> & getAllowedTargets();
-        static CastleDefenseStructure GetTarget( const std::map<CastleDefenseStructure, int> & stateOfCatapultTargets,
-                                                 Rand::DeterministicRandomGenerator & randomGenerator );
+        static CastleDefenseStructure GetTarget( const std::map<CastleDefenseStructure, int> & stateOfCatapultTargets, Rand::PCG32 & randomGenerator );
         static fheroes2::Point GetTargetPosition( const CastleDefenseStructure target, const bool hit );
 
         uint32_t GetShots() const
@@ -57,12 +56,12 @@ namespace Battle
             return catShots;
         }
 
-        int GetDamage( Rand::DeterministicRandomGenerator & randomGenerator ) const;
-        bool IsNextShotHit( Rand::DeterministicRandomGenerator & randomGenerator ) const;
+        int GetDamage( Rand::PCG32 & randomGenerator ) const;
+        bool IsNextShotHit( Rand::PCG32 & randomGenerator ) const;
 
     private:
-        uint32_t catShots;
-        uint32_t doubleDamageChance;
-        bool canMiss;
+        uint32_t catShots{ 0 };
+        uint32_t doubleDamageChance{ 0 };
+        bool canMiss{ false };
     };
 }

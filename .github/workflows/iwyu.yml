@@ -2,19 +2,24 @@ name: IWYU
 
 on:
   workflow_call:
+    inputs:
+      run:
+        type: boolean
+        required: true
 
 permissions: {}
 
 jobs:
   iwyu:
     name: IWYU
+    if: ${{ inputs.run }}
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     defaults:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies and iwyu
       run: |
         sudo apt-get -y update

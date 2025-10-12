@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -118,8 +118,8 @@ namespace
         LOCALE_BG,
         LOCALE_CA,
         LOCALE_CS,
+        LOCALE_DA,
         LOCALE_DE,
-        LOCALE_DK,
         LOCALE_EL,
         LOCALE_ES,
         LOCALE_ET,
@@ -172,8 +172,8 @@ namespace
                                                                                   { "cs", LocaleType::LOCALE_CS },
                                                                                   { "czech", LocaleType::LOCALE_CS },
                                                                                   // Danish
-                                                                                  { "dk", LocaleType::LOCALE_DK },
-                                                                                  { "danish", LocaleType::LOCALE_DK },
+                                                                                  { "da", LocaleType::LOCALE_DA },
+                                                                                  { "danish", LocaleType::LOCALE_DA },
                                                                                   // German
                                                                                   { "de", LocaleType::LOCALE_DE },
                                                                                   { "german", LocaleType::LOCALE_DE },
@@ -613,8 +613,8 @@ const char * Translation::ngettext( const char * str, const char * plural, size_
         switch ( current->getLocale() ) {
         case LocaleType::LOCALE_AF:
         case LocaleType::LOCALE_BG:
+        case LocaleType::LOCALE_DA:
         case LocaleType::LOCALE_DE:
-        case LocaleType::LOCALE_DK:
         case LocaleType::LOCALE_ES:
         case LocaleType::LOCALE_ET:
         case LocaleType::LOCALE_EU:

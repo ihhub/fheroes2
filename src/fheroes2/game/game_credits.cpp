@@ -279,7 +279,7 @@ namespace
 
         std::string contributors( "LeHerosInconnu\n"
                                   "undef21\n"
-                                  "shprotru\n"
+                                  "Pavel Sereda\n"
                                   "Arkadiy Illarionov\n"
                                   "a1exsh\n"
                                   "vincent-grosbois\n"

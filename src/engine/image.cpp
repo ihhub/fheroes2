@@ -440,45 +440,35 @@ namespace
 
 namespace fheroes2
 {
-    Image::Image( const int32_t width_, const int32_t height_ )
+    Image::Image( Image && image ) noexcept
+        : _data( std::move( image._data ) )
     {
-        Image::resize( width_, height_ );
+        std::swap( _width, image._width );
+        std::swap( _height, image._height );
+        std::swap( _singleLayer, image._singleLayer );
     }
 
-    Image::Image( const Image & image_ )
+    Image & Image::operator=( const Image & image )
     {
-        copy( image_ );
-    }
-
-    Image::Image( Image && image_ ) noexcept
-        : _data( std::move( image_._data ) )
-    {
-        std::swap( _width, image_._width );
-        std::swap( _height, image_._height );
-        std::swap( _singleLayer, image_._singleLayer );
-    }
-
-    Image & Image::operator=( const Image & image_ )
-    {
-        if ( this == &image_ ) {
+        if ( this == &image ) {
             return *this;
         }
 
-        copy( image_ );
+        copy( image );
 
         return *this;
     }
 
-    Image & Image::operator=( Image && image_ ) noexcept
+    Image & Image::operator=( Image && image ) noexcept
     {
-        if ( this == &image_ ) {
+        if ( this == &image ) {
             return *this;
         }
 
-        std::swap( _width, image_._width );
-        std::swap( _height, image_._height );
-        std::swap( _data, image_._data );
-        std::swap( _singleLayer, image_._singleLayer );
+        std::swap( _width, image._width );
+        std::swap( _height, image._height );
+        std::swap( _data, image._data );
+        std::swap( _singleLayer, image._singleLayer );
 
         return *this;
     }
@@ -562,22 +552,6 @@ namespace fheroes2
         memcpy( _data.get(), image._data.get(), size );
     }
 
-    Sprite::Sprite( const int32_t width_, const int32_t height_, const int32_t x_ /* = 0 */, const int32_t y_ /* = 0 */ )
-        : Image( width_, height_ )
-        , _x( x_ )
-        , _y( y_ )
-    {
-        // Do nothing.
-    }
-
-    Sprite::Sprite( const Image & image, const int32_t x_ /* = 0 */, const int32_t y_ /* = 0 */ )
-        : Image( image )
-        , _x( x_ )
-        , _y( y_ )
-    {
-        // Do nothing.
-    }
-
     Sprite::Sprite( Sprite && sprite ) noexcept
         : Image( std::move( sprite ) )
     {
@@ -609,6 +583,16 @@ namespace fheroes2
 
         std::swap( _x, sprite._x );
         std::swap( _y, sprite._y );
+
+        return *this;
+    }
+
+    Sprite & Sprite::operator=( Image && image ) noexcept
+    {
+        Image::operator=( std::move( image ) );
+
+        _x = 0;
+        _y = 0;
 
         return *this;
     }
@@ -653,13 +637,6 @@ namespace fheroes2
         _copy.resize( _width, _height );
 
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
-    }
-
-    ImageRestorer::~ImageRestorer()
-    {
-        if ( !_isRestored ) {
-            restore();
-        }
     }
 
     void ImageRestorer::update( const int32_t x_, const int32_t y_, const int32_t width, const int32_t height )
@@ -868,6 +845,37 @@ namespace fheroes2
         }
     }
 
+    void addGradientShadowForArea( Image & out, const Point & outPos, const int32_t areaWidth, const int32_t areaHeight, const int32_t shadowOffset )
+    {
+        if ( out.empty() || outPos.x < 0 || outPos.y < 0 || shadowOffset < 1 ) {
+            return;
+        }
+
+        // Render shadow at the left side of the area
+        int32_t offsetY = outPos.y + shadowOffset;
+        ApplyTransform( out, outPos.x - shadowOffset, offsetY, shadowOffset, 1, 5 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowOffset, offsetY, 1, areaHeight, 5 );
+        ApplyTransform( out, outPos.x - shadowOffset + 1, offsetY, shadowOffset - 1, 1, 4 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowOffset + 1, offsetY, 1, areaHeight - 4, 4 );
+        ApplyTransform( out, outPos.x - shadowOffset + 2, offsetY, shadowOffset - 2, 1, 3 );
+        ++offsetY;
+        ApplyTransform( out, outPos.x - shadowOffset + 2, offsetY, 1, areaHeight - 6, 3 );
+        ApplyTransform( out, outPos.x - shadowOffset + 3, offsetY, shadowOffset - 3, areaHeight - shadowOffset - 3, 2 );
+
+        // Render shadow at the bottom side of the area
+        offsetY = outPos.y + areaHeight;
+        const int32_t shadowBottomEdge = outPos.y + areaHeight + shadowOffset;
+        ApplyTransform( out, outPos.x - shadowOffset + 3, offsetY, areaWidth - 6, shadowOffset - 3, 2 );
+        ApplyTransform( out, outPos.x - shadowOffset + 2, shadowBottomEdge - 3, areaWidth - 4, 1, 3 );
+        ApplyTransform( out, outPos.x - shadowOffset + areaWidth - 3, offsetY, 1, shadowOffset - 3, 3 );
+        ApplyTransform( out, outPos.x - shadowOffset + 1, shadowBottomEdge - 2, areaWidth - 2, 1, 4 );
+        ApplyTransform( out, outPos.x - shadowOffset + areaWidth - 2, offsetY, 1, shadowOffset - 2, 4 );
+        ApplyTransform( out, outPos.x - shadowOffset, shadowBottomEdge - 1, areaWidth, 1, 5 );
+        ApplyTransform( out, outPos.x - shadowOffset + areaWidth - 1, offsetY, 1, shadowOffset, 5 );
+    }
+
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
         if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
@@ -878,11 +886,6 @@ namespace fheroes2
         Blit( in, out, -shadowOffset.x, 0 );
 
         return out;
-    }
-
-    void AddTransparency( Image & image, const uint8_t valueToReplace )
-    {
-        ReplaceColorIdByTransformId( image, valueToReplace, 1 );
     }
 
     void AlphaBlit( const Image & in, Image & out, const uint8_t alphaValue, const bool flip /* = false */ )
@@ -1077,11 +1080,6 @@ namespace fheroes2
         ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, palette.data() );
     }
 
-    void ApplyAlpha( const Image & in, Image & out, const uint8_t alpha )
-    {
-        ApplyAlpha( in, 0, 0, out, 0, 0, in.width(), in.height(), alpha );
-    }
-
     void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alpha )
     {
         std::vector<uint8_t> palette( 256 );
@@ -1149,9 +1147,14 @@ namespace fheroes2
         Blit( in, 0, 0, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height, flip );
     }
 
-    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip /* = false */ )
+    void Blit( const Image & in, Image & out, const int32_t outX, const int32_t outY, const bool flip /* = false */ )
     {
         Blit( in, 0, 0, out, outX, outY, in.width(), in.height(), flip );
+    }
+
+    void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, const bool flip /* = false */ )
+    {
+        Blit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
     }
 
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip /* = false */ )
@@ -1280,15 +1283,6 @@ namespace fheroes2
         }
     }
 
-    void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, const bool flip /* = false */ )
-    {
-        if ( inPos.x < 0 || inPos.y < 0 ) {
-            return;
-        }
-
-        Blit( in, inPos.x, inPos.y, out, outPos.x, outPos.y, size.width, size.height, flip );
-    }
-
     void Copy( const Image & in, Image & out )
     {
         if ( !out.singleLayer() && !in.singleLayer() ) {
@@ -1316,7 +1310,7 @@ namespace fheroes2
         }
     }
 
-    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi )
+    void Copy( const Image & in, const int32_t inX, const int32_t inY, Image & out, const Rect & outRoi )
     {
         Copy( in, inX, inY, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height );
     }
@@ -1367,7 +1361,7 @@ namespace fheroes2
         }
     }
 
-    void CopyTransformLayer( const Image & in, Image & out )
+    void copyTransformLayer( const Image & in, Image & out )
     {
         if ( in.empty() || out.empty() || in.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
             assert( 0 );
@@ -1382,6 +1376,45 @@ namespace fheroes2
         }
 
         memcpy( out.transform(), in.transform(), in.width() * in.height() );
+    }
+
+    void copyTransformLayer( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
+    {
+        if ( in.empty() || out.empty() || in.singleLayer() ) {
+            assert( 0 );
+            return;
+        }
+
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
+            return;
+        }
+
+        if ( out.singleLayer() ) {
+            // Add the transform layer.
+            Image temp;
+            Copy( out, temp );
+            out = std::move( temp );
+        }
+
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
+
+        if ( inX == 0 && inY == 0 && outX == 0 && outY == 0 && width == widthIn && width == widthOut && height == in.height() && height == out.height() ) {
+            // Both images have identical width and height and a full copy is requested.
+            copyTransformLayer( in, out );
+            return;
+        }
+
+        const int32_t offsetInY = inY * widthIn + inX;
+        const int32_t offsetOutY = outY * widthOut + outX;
+
+        const uint8_t * transformInY = in.transform() + offsetInY;
+        uint8_t * transformOutY = out.transform() + offsetOutY;
+        const uint8_t * transformInYEnd = transformInY + static_cast<ptrdiff_t>( height ) * widthIn;
+
+        for ( ; transformInY != transformInYEnd; transformInY += widthIn, transformOutY += widthOut ) {
+            memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
+        }
     }
 
     Sprite CreateContour( const Image & image, const uint8_t value )

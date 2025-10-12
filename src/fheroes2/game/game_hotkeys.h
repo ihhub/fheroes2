@@ -48,7 +48,7 @@ namespace Game
 
 #if defined( WITH_DEBUG )
         // This hotkey is only for debug mode.
-        DEBUG_TOGGLE_DEVELOPER_MODE,
+        GLOBAL_TOGGLE_DEVELOPER_MODE,
 #endif
 
         MAIN_MENU_NEW_GAME,
@@ -111,6 +111,7 @@ namespace Game
         WORLD_DOWN_RIGHT,
         //
         WORLD_SAVE_GAME,
+        WORLD_QUICK_SAVE,
         WORLD_NEXT_HERO,
         WORLD_QUICK_SELECT_HERO,
         WORLD_START_HERO_MOVEMENT,
@@ -152,6 +153,7 @@ namespace Game
         BATTLE_OPTIONS,
         BATTLE_SKIP,
         BATTLE_CAST_SPELL,
+        BATTLE_TOGGLE_TURN_ORDER_DISPLAY,
 
         TOWN_DWELLING_LEVEL_1,
         TOWN_DWELLING_LEVEL_2,

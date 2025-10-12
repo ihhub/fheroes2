@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -92,7 +92,7 @@ namespace
 
 const char * Artifact::GetName() const
 {
-    return _( fheroes2::getArtifactData( id ).name );
+    return _( fheroes2::getArtifactData( id ).untranslatedName );
 }
 
 bool Artifact::isUltimate() const
@@ -501,7 +501,7 @@ Artifact Artifact::getArtifactFromMapSpriteIndex( const uint32_t index )
 
 const char * Artifact::getDiscoveryDescription( const Artifact & art )
 {
-    return _( fheroes2::getArtifactData( art.GetID() ).discoveryEventDescription );
+    return _( fheroes2::getArtifactData( art.GetID() ).untranslatedDiscoveryEventDescription );
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const Artifact & art )

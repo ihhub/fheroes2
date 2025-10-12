@@ -30,6 +30,8 @@
 #include <vector>
 
 #include "artifact.h"
+#include "color.h"
+#include "game_string.h"
 #include "position.h"
 #include "resource.h"
 #include "skill.h"
@@ -71,9 +73,9 @@ struct MapEvent final : public MapBaseObject
 
     void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
-    bool isAllow( const int color ) const
+    bool isAllow( const PlayerColor color ) const
     {
-        return ( color & colors ) != 0;
+        return ( colors & color ) != 0;
     }
 
     void SetVisited()
@@ -87,7 +89,7 @@ struct MapEvent final : public MapBaseObject
     Artifact artifact;
     bool isComputerPlayerAllowed{ false };
     bool isSingleTimeEvent{ true };
-    int colors{ 0 };
+    PlayerColorsSet colors{ 0 };
     std::string message;
 
     Skill::Secondary secondarySkill;
@@ -148,7 +150,7 @@ struct MapSign final : public MapBaseObject
 
     void setDefaultMessage();
 
-    std::string message;
+    fheroes2::LocalizedString message;
 };
 
 OStreamBase & operator<<( OStreamBase & stream, const MapEvent & obj );

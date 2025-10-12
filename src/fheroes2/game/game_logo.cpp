@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,14 +26,26 @@
 #include "game_delays.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "math_base.h"
 #include "screen.h"
 #include "translations.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
+namespace
+{
+    void outputMainMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "fheroes2 Resurrection Team presents" )
+    }
+}
+
 void fheroes2::showTeamInfo()
 {
+    outputMainMenuInTextSupportMode();
+
     const ScreenPaletteRestorer restorer;
 
     Display & display = Display::instance();

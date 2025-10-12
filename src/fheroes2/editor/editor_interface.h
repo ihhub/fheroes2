@@ -52,7 +52,7 @@ namespace Interface
         void reset() override;
 
         // Start Map Editor interface main function.
-        fheroes2::GameMode startEdit( const bool isNewMap );
+        fheroes2::GameMode startEdit();
 
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
@@ -92,6 +92,8 @@ namespace Interface
         {
             _cursorUpdater = cursorUpdater;
         }
+
+        bool generateNewMap( const int32_t size );
 
         bool loadMap( const std::string & filePath );
 
@@ -141,7 +143,9 @@ namespace Interface
             , _editorPanel( *this )
             , _warningMessage( *this )
         {
-            // Do nothing.
+            _historyManager.setStateCallback( [&editorPanel = _editorPanel]( const bool isUndoAvailable, const bool isRedoAvailable ) {
+                editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable );
+            } );
         }
 
         bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );

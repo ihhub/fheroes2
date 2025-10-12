@@ -514,42 +514,37 @@ uint32_t Spell::weightForRace( const int race ) const
 
 Spell Spell::getRandomSpell( const int level )
 {
-    assert( level > 0 && level < 6 );
+    assert( level >= 1 && level <= 5 );
 
-    std::vector<Spell> validSpells;
-    validSpells.reserve( Spell::SPELL_COUNT );
-
-    for ( int32_t spellId = NONE; spellId < PETRIFY; ++spellId ) {
-        const Spell spell( spellId );
-
-        if ( level != spell.Level() ) {
-            continue;
-        }
-
-        validSpells.push_back( spell );
-    }
+    const std::vector<int32_t> validSpells = getAllSpellIdsSuitableForSpellBook( level );
 
     assert( !validSpells.empty() );
 
-    return validSpells.empty() ? Spell::NONE : Rand::Get( validSpells );
+    return validSpells.empty() ? Spell::NONE : Spell( Rand::Get( validSpells ) );
 }
 
-std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */ )
+std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */, const std::set<int32_t> & spellsToExclude /* = {} */ )
 {
-    std::vector<int> result;
-    result.reserve( SPELL_COUNT );
+    if ( spellLevel < -1 || spellLevel == 0 || spellLevel > 5 ) {
+        // Have you add a new spell level? Check your logic!
+        assert( 0 );
 
-    for ( int spellId = 0; spellId < SPELL_COUNT; ++spellId ) {
-        if ( spellId == NONE || ( spellId >= RANDOM && spellId <= PETRIFY ) ) {
+        return {};
+    }
+
+    std::vector<int> result;
+    if ( spellLevel == -1 ) {
+        // Reserve memory only for vector with all spells.
+        result.reserve( SPELL_COUNT );
+    }
+
+    for ( int32_t spellId = NONE + 1; spellId < SPELL_COUNT; ++spellId ) {
+        if ( const int level = Spell( spellId ).Level(); ( spellLevel != -1 && level != spellLevel ) || level < 1 ) {
             continue;
         }
 
-        if ( spellLevel > 0 ) {
-            const Spell spell( spellId );
-
-            if ( spell.Level() != spellLevel ) {
-                continue;
-            }
+        if ( spellsToExclude.count( spellId ) != 0 ) {
+            continue;
         }
 
         result.push_back( spellId );

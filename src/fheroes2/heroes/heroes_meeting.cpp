@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <set>
 #include <string>
 #include <utility>
@@ -54,6 +55,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -90,16 +92,71 @@ namespace
             }
         }
     }
+
+    void swapArtifacts( BagArtifacts & firstBag, BagArtifacts & secondBag )
+    {
+        const auto moveRemainingArtifact = []( BagArtifacts & from, BagArtifacts & to, const BagArtifacts::reverse_iterator & fromIter ) {
+            if ( fromIter == from.rend() ) {
+                return;
+            }
+
+            // If there is any artifact left that has not yet been moved, it is assumed that it goes first in the list of artifacts (in place of the missing Magic Book)
+            assert( fromIter == std::prev( from.rend() ) );
+
+            if ( !fromIter->isValid() ) {
+                return;
+            }
+
+            assert( *fromIter != Artifact::MAGIC_BOOK );
+
+            // Just try to put this artifact to the first empty slot (if any)
+            if ( !to.PushArtifact( *fromIter ) ) {
+                return;
+            }
+
+            fromIter->Reset();
+        };
+
+        for ( auto firstBagIter = firstBag.rbegin(), secondBagIter = secondBag.rbegin(); firstBagIter != firstBag.rend() && secondBagIter != secondBag.rend();
+              ++firstBagIter, ++secondBagIter ) {
+            // It is assumed that the only non-transferable artifact is a Magic Book, and that it always comes first in the list of artifacts
+            if ( *firstBagIter == Artifact::MAGIC_BOOK ) {
+                assert( firstBagIter == std::prev( firstBag.rend() ) );
+
+                ++firstBagIter;
+            }
+            if ( *secondBagIter == Artifact::MAGIC_BOOK ) {
+                assert( secondBagIter == std::prev( secondBag.rend() ) );
+
+                ++secondBagIter;
+            }
+
+            if ( firstBagIter == firstBag.rend() ) {
+                moveRemainingArtifact( secondBag, firstBag, secondBagIter );
+
+                break;
+            }
+            if ( secondBagIter == secondBag.rend() ) {
+                moveRemainingArtifact( firstBag, secondBag, firstBagIter );
+
+                break;
+            }
+
+            std::swap( *firstBagIter, *secondBagIter );
+        }
+    }
 }
 
-class MeetingArmyBar : public ArmyBar
+class MeetingArmyBar final : public ArmyBar
 {
 public:
     using ArmyBar::RedrawItem;
 
     explicit MeetingArmyBar( Army * army )
         : ArmyBar( army, true, false, false )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
@@ -154,14 +211,16 @@ private:
     fheroes2::Image _cachedBackground;
 };
 
-class MeetingArtifactBar : public ArtifactsBar
+class MeetingArtifactBar final : public ArtifactsBar
 {
 public:
     using ArtifactsBar::RedrawItem;
 
     explicit MeetingArtifactBar( Heroes * hero )
         : ArtifactsBar( hero, true, false, false, false, nullptr )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
@@ -191,12 +250,14 @@ private:
     fheroes2::Image _cachedBackground;
 };
 
-class MeetingPrimarySkillsBar : public PrimarySkillsBar
+class MeetingPrimarySkillsBar final : public PrimarySkillsBar
 {
 public:
     explicit MeetingPrimarySkillsBar( Heroes * hero )
         : PrimarySkillsBar( hero, true, false, false )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override
     {
@@ -204,12 +265,14 @@ public:
     }
 };
 
-class MeetingSecondarySkillsBar : public SecondarySkillsBar
+class MeetingSecondarySkillsBar final : public SecondarySkillsBar
 {
 public:
     explicit MeetingSecondarySkillsBar( const Heroes & hero )
         : SecondarySkillsBar( hero )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
@@ -262,12 +325,28 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::Point dst_pt( cur_pt );
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
+    // shadow
+    if ( !isDefaultScreenSize ) {
+        fheroes2::addGradientShadowForArea( display, dst_pt, backSprite.width(), backSprite.height(), fheroes2::borderWidthPx );
+    }
+
     // header
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", otherHero.GetName() );
-    const fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
     text.draw( cur_pt.x + 320 - text.width() / 2, cur_pt.y + 29, display );
+
+    // Render hero's levels.
+    message = _( "hero|Level %{level}" );
+    StringReplace( message, "%{level}", GetLevel() );
+    text.set( std::move( message ), fheroes2::FontType::smallWhite() );
+    text.draw( cur_pt.x + 143 - text.width() / 2, cur_pt.y + 52, display );
+
+    message = _( "hero|Level %{level}" );
+    StringReplace( message, "%{level}", otherHero.GetLevel() );
+    text.set( std::move( message ), fheroes2::FontType::smallWhite() );
+    text.draw( cur_pt.x + 495 - text.width() / 2, cur_pt.y + 52, display );
 
     const int iconsH1XOffset = 34;
     const int iconsH2XOffset = 571;
@@ -331,7 +410,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     MeetingSecondarySkillsBar secskill_bar1( *this );
     secskill_bar1.setTableSize( { 8, 1 } );
     secskill_bar1.setInBetweenItemsOffset( { -1, 0 } );
-    secskill_bar1.SetContent( secondary_skills.ToVector() );
+    secskill_bar1.SetContent( _secondarySkills.ToVector() );
     secskill_bar1.setRenderingOffset( { cur_pt.x + 22, cur_pt.y + 199 } );
     secskill_bar1.Redraw( display );
 
@@ -422,7 +501,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.isMouseLeftButtonPressedInArea( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
@@ -458,8 +537,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             swapArtifacts.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
 
         // selector troops event
         if ( ( le.isMouseCursorPosInArea( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
@@ -650,13 +730,17 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
@@ -667,24 +751,24 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
+
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
+
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
             display.render();
         }
         else if ( le.MouseClickLeft( swapArtifacts.area() ) ) {
-            BagArtifacts temp;
-
-            moveArtifacts( GetBagArtifacts(), temp );
-            moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
-            moveArtifacts( temp, otherHero.GetBagArtifacts() );
+            ::swapArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -710,6 +794,43 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         }
         else if ( le.isMouseRightButtonPressedInArea( hero2Area ) ) {
             Dialog::QuickInfo( otherHero );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArtifactsToHero1.area() ) ) {
+            message = _( "Move all artifacts from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", otherHero.GetName() );
+            StringReplace( message, "%{to_hero_name}", GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Artifact Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
+            message = _( "Move all artifacts from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", GetName() );
+            StringReplace( message, "%{to_hero_name}", otherHero.GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Artifact Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( swapArtifacts.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Swap Artifacts" ), _( "Swap all artifacts between heroes." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArmyToHero1.area() ) ) {
+            message = _( "Move army from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", otherHero.GetName() );
+            StringReplace( message, "%{to_hero_name}", GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Army Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArmyToHero2.area() ) ) {
+            message = _( "Move army from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", GetName() );
+            StringReplace( message, "%{to_hero_name}", otherHero.GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Army Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( swapArmies.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Swap Armies" ), _( "Swap armies between heroes." ), Dialog::ZERO );
         }
     }
 

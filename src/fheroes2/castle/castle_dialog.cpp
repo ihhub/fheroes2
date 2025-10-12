@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -53,6 +53,7 @@
 #include "localevent.h"
 #include "m82.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
@@ -179,7 +180,7 @@ namespace
             return false;
         }
 
-        return hero->BuySpellBook( &castle );
+        return hero->BuySpellBook( castle );
     }
 
     void openHeroDialog( ArmyBar & topArmyBar, ArmyBar & bottomArmyBar, Heroes & hero )
@@ -316,7 +317,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { statusBarPosition.x + 16, statusBarPosition.y + 3, bar.width() - 16 * 2, 0 } );
+    statusBar.setRoi( { statusBarPosition.x + 16, statusBarPosition.y, bar.width() - 16 * 2, 0 } );
 
     // Next castle button.
     fheroes2::Button buttonNextCastle( statusBarPosition.x + bar.width(), statusBarPosition.y, ICN::SMALLBAR, 3, 4 );
@@ -404,13 +405,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.isFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
-                buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) );
+                buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPrevCastle.area() ) );
             }
             if ( buttonNextCastle.isEnabled() ) {
-                buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNextCastle.area() ) );
+                buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNextCastle.area() ) );
             }
 
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
@@ -456,6 +457,17 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             }
             else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
+            }
+            else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
+                hero->GetArmy().SwapTroops( _army );
+
+                topArmyBar.ResetSelected();
+                bottomArmyBar.ResetSelected();
+
+                topArmyBar.Redraw( display );
+                bottomArmyBar.Redraw( display );
+
+                display.render( fheroes2::getBoundaryRect( topArmyBar.GetArea(), bottomArmyBar.GetArea() ) );
             }
 
             // Army bar events processing.

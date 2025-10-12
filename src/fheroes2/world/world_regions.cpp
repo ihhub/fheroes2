@@ -263,13 +263,14 @@ void World::ComputeStaticAnalysis()
     std::vector<int> regionCenters;
     TileDataVector castleCenters;
     for ( const Castle * castle : vec_castles ) {
-        castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
+        castleCenters.emplace_back( castle->GetIndex(), static_cast<int>( castle->GetColor() ) );
     }
     std::sort( castleCenters.begin(), castleCenters.end(), []( const TileData & left, const TileData & right ) {
         // Sort castles by color primarily (NONE is last)
         // If same color then compare map index
-        if ( left.second == right.second )
+        if ( left.second == right.second ) {
             return left.first < right.first;
+        }
         return left.second > right.second;
     } );
 

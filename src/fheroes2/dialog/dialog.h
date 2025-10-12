@@ -116,7 +116,7 @@ namespace Dialog
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
     bool SelectCount( std::string header, const int32_t min, const int32_t max, int32_t & selectedValue, const int32_t step = 1,
-                      const fheroes2::DialogElement * uiElement = nullptr );
+                      const fheroes2::DialogElement * topUiElement = nullptr, const fheroes2::DialogElement * bottomUiElement = nullptr );
 
     // If character limit is set to 0, then no limitation for the resulting string will be applied.
     bool inputString( const fheroes2::TextBase & title, const fheroes2::TextBase & body, std::string & result, const size_t charLimit, const bool isMultiLine,
@@ -129,7 +129,7 @@ namespace Dialog
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
     int ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeMax, int32_t & redistributeCount, bool & useFastSplit, const std::string & troopName );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
-    void MakeGiftResource( Kingdom & kingdom );
+    int MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
     void ThievesGuild( const bool oracle );
     void GameInfo();

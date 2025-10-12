@@ -73,7 +73,7 @@ namespace
 
     bool needFadeIn{ false };
 
-    std::string CapturedExtInfoString( const int resource, const int color, const Funds & funds )
+    std::string CapturedExtInfoString( const int resource, const PlayerColor color, const Funds & funds )
     {
         std::string output = std::to_string( world.CountCapturedMines( resource, color ) );
 
@@ -844,7 +844,7 @@ void Kingdom::openOverviewDialog()
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.isMouseRightButtonPressedInArea( buttonHeroes.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Heroes" ), _( "View Heroes." ), Dialog::ZERO );

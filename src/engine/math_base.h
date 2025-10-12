@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@ namespace fheroes2
 {
     // overload this function for floating types
     template <typename _Type>
-    bool isEqual( const _Type & value1, const _Type & value2 )
+    constexpr bool isEqual( const _Type & value1, const _Type & value2 )
     {
         return ( value1 == value2 );
     }
@@ -40,51 +40,51 @@ namespace fheroes2
     template <typename _Type>
     struct PointBase2D
     {
-        PointBase2D()
+        constexpr PointBase2D()
             : x( 0 )
             , y( 0 )
         {}
 
-        PointBase2D( _Type _x, _Type _y )
+        constexpr PointBase2D( _Type _x, _Type _y )
             : x( _x )
             , y( _y )
         {}
 
-        bool operator==( const PointBase2D & point ) const
+        constexpr bool operator==( const PointBase2D & point ) const
         {
             return isEqual( x, point.x ) && isEqual( y, point.y );
         }
 
-        bool operator!=( const PointBase2D & point ) const
+        constexpr bool operator!=( const PointBase2D & point ) const
         {
             return !( *this == point );
         }
 
-        PointBase2D & operator+=( const PointBase2D & point )
+        constexpr PointBase2D & operator+=( const PointBase2D & point )
         {
             x += point.x;
             y += point.y;
             return *this;
         }
 
-        PointBase2D & operator-=( const PointBase2D & point )
+        constexpr PointBase2D & operator-=( const PointBase2D & point )
         {
             x -= point.x;
             y -= point.y;
             return *this;
         }
 
-        PointBase2D operator+( const PointBase2D & point ) const
+        constexpr PointBase2D operator+( const PointBase2D & point ) const
         {
             return PointBase2D( x + point.x, y + point.y );
         }
 
-        PointBase2D operator-( const PointBase2D & point ) const
+        constexpr PointBase2D operator-( const PointBase2D & point ) const
         {
             return PointBase2D( x - point.x, y - point.y );
         }
 
-        bool operator<( const PointBase2D & point ) const
+        constexpr bool operator<( const PointBase2D & point ) const
         {
             return x == point.x ? y < point.y : x < point.x;
         }
@@ -96,51 +96,51 @@ namespace fheroes2
     template <typename _Type>
     struct SizeBase2D
     {
-        SizeBase2D()
+        constexpr SizeBase2D()
             : width( 0 )
             , height( 0 )
         {}
 
-        SizeBase2D( _Type _width, _Type _height )
+        constexpr SizeBase2D( _Type _width, _Type _height )
             : width( _width )
             , height( _height )
         {}
 
-        bool operator==( const SizeBase2D & size ) const
+        constexpr bool operator==( const SizeBase2D & size ) const
         {
             return isEqual( width, size.width ) && isEqual( height, size.height );
         }
 
-        bool operator!=( const SizeBase2D & size ) const
+        constexpr bool operator!=( const SizeBase2D & size ) const
         {
             return !( *this == size );
         }
 
-        bool operator<( const SizeBase2D & size ) const
+        constexpr bool operator<( const SizeBase2D & size ) const
         {
             return width < size.width || ( width == size.width && height < size.height );
         }
 
-        SizeBase2D & operator+=( const SizeBase2D & size )
+        constexpr SizeBase2D & operator+=( const SizeBase2D & size )
         {
             width += size.width;
             height += size.height;
             return *this;
         }
 
-        SizeBase2D & operator-=( const SizeBase2D & size )
+        constexpr SizeBase2D & operator-=( const SizeBase2D & size )
         {
             width -= size.width;
             height -= size.height;
             return *this;
         }
 
-        SizeBase2D operator+( const SizeBase2D & size ) const
+        constexpr SizeBase2D operator+( const SizeBase2D & size ) const
         {
             return SizeBase2D( width + size.width, height + size.height );
         }
 
-        SizeBase2D operator-( const SizeBase2D & size ) const
+        constexpr SizeBase2D operator-( const SizeBase2D & size ) const
         {
             return SizeBase2D( width - size.width, height - size.height );
         }
@@ -152,75 +152,75 @@ namespace fheroes2
     template <typename _TypePoint, typename _TypeSize>
     struct RectBase2D
     {
-        RectBase2D()
+        constexpr RectBase2D()
             : x( 0 )
             , y( 0 )
             , width( 0 )
             , height( 0 )
         {}
 
-        RectBase2D( _TypePoint _x, _TypePoint _y, _TypeSize _width, _TypeSize _height )
+        constexpr RectBase2D( _TypePoint _x, _TypePoint _y, _TypeSize _width, _TypeSize _height )
             : x( _x )
             , y( _y )
             , width( _width )
             , height( _height )
         {}
 
-        RectBase2D( const PointBase2D<_TypePoint> & point, const SizeBase2D<_TypeSize> & size )
+        constexpr RectBase2D( const PointBase2D<_TypePoint> & point, const SizeBase2D<_TypeSize> & size )
             : x( point.x )
             , y( point.y )
             , width( size.width )
             , height( size.height )
         {}
 
-        bool operator==( const RectBase2D & rect ) const
+        constexpr bool operator==( const RectBase2D & rect ) const
         {
             return isEqual( x, rect.x ) && isEqual( y, rect.y ) && isEqual( width, rect.width ) && isEqual( height, rect.height );
         }
 
-        bool operator!=( const RectBase2D & rect ) const
+        constexpr bool operator!=( const RectBase2D & rect ) const
         {
             return !( *this == rect );
         }
 
-        RectBase2D & operator+=( const PointBase2D<_TypePoint> & point )
+        constexpr RectBase2D & operator+=( const PointBase2D<_TypePoint> & point )
         {
             x += point.x;
             y += point.y;
             return *this;
         }
 
-        RectBase2D & operator-=( const PointBase2D<_TypePoint> & point )
+        constexpr RectBase2D & operator-=( const PointBase2D<_TypePoint> & point )
         {
             x -= point.x;
             y -= point.y;
             return *this;
         }
 
-        RectBase2D operator+( const PointBase2D<_TypePoint> & point ) const
+        constexpr RectBase2D operator+( const PointBase2D<_TypePoint> & point ) const
         {
             return RectBase2D( x + point.x, y + point.y, width, height );
         }
 
-        RectBase2D operator-( const PointBase2D<_TypePoint> & point ) const
+        constexpr RectBase2D operator-( const PointBase2D<_TypePoint> & point ) const
         {
             return RectBase2D( x - point.x, y - point.y, width, height );
         }
 
         // Check whether a point within the rectangle
-        bool operator&( const PointBase2D<_TypePoint> & point ) const
+        constexpr bool operator&( const PointBase2D<_TypePoint> & point ) const
         {
             return point.x >= x && point.y >= y && point.x < ( x + width ) && point.y < ( y + height );
         }
 
         // Check whether rectangles are intersecting each other
-        bool operator&( const RectBase2D & rect ) const
+        constexpr bool operator&( const RectBase2D & rect ) const
         {
             return x <= rect.x + rect.width && rect.x <= x + width && y <= rect.y + rect.height && rect.y <= y + height;
         }
 
         // Find intersection rectangle
-        RectBase2D operator^( const RectBase2D & rect ) const
+        constexpr RectBase2D operator^( const RectBase2D & rect ) const
         {
             RectBase2D output = rect;
             if ( output.x < x ) {
@@ -250,7 +250,7 @@ namespace fheroes2
             return output;
         }
 
-        PointBase2D<_TypePoint> getPosition() const
+        constexpr PointBase2D<_TypePoint> getPosition() const
         {
             return PointBase2D<_TypePoint>( x, y );
         }

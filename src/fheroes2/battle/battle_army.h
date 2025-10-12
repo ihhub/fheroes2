@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,11 +31,14 @@
 #include <vector>
 
 #include "army.h"
+#include "army_troop.h"
 #include "battle_troop.h"
 #include "bitmodes.h"
 #include "monster.h"
 
 class HeroBase;
+
+enum class PlayerColor : uint8_t;
 
 namespace Battle
 {
@@ -132,10 +135,12 @@ namespace Battle
         bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
 
-        uint32_t GetDeadHitPoints() const;
-        uint32_t GetDeadCounts() const;
+        uint32_t getTotalNumberOfDeadUnits() const;
 
-        int GetColor() const;
+        uint32_t calculateNumberOfDeadUnitsForNecromancy() const;
+        uint32_t calculateExperienceBasedOnLosses() const;
+
+        PlayerColor GetColor() const;
         int GetControl() const;
 
         // Returns the cost of surrender (in units of gold) for the current army on the battlefield
@@ -147,9 +152,28 @@ namespace Battle
         void resetIdleAnimation() const;
 
         void NewTurn();
-        void SyncArmyCount();
+
+        void syncOriginalArmy() const;
 
     private:
+        template <typename T>
+        void _applyActionToTroopsFromOriginalArmy( const T & action ) const
+        {
+            for ( uint32_t index = 0; index < army.Size(); ++index ) {
+                Troop * troop = army.GetTroop( index );
+                if ( troop == nullptr || !troop->isValid() ) {
+                    continue;
+                }
+
+                const Unit * unit = FindUID( uids.at( index ) );
+                if ( unit == nullptr ) {
+                    continue;
+                }
+
+                action( *troop, *unit );
+            }
+        }
+
         Army & army;
         std::vector<uint32_t> uids;
     };

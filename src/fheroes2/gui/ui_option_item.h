@@ -25,6 +25,8 @@
 
 #include "math_base.h"
 
+enum class InterfaceType : uint8_t;
+
 namespace fheroes2
 {
     enum UiOptionTextWidth : int32_t
@@ -39,7 +41,7 @@ namespace fheroes2
 
     void drawScrollSpeed( const fheroes2::Rect & optionRoi, const int speed );
 
-    void drawInterfaceType( const fheroes2::Rect & optionRoi, const bool isEvilInterface );
+    void drawInterfaceType( const fheroes2::Rect & optionRoi, const InterfaceType interfaceType );
 
     void drawCursorType( const fheroes2::Rect & optionRoi, const bool isMonochromeCursor );
 }

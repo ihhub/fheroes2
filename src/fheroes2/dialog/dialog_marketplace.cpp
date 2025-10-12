@@ -446,36 +446,36 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     // message loop
     while ( le.HandleEvents() ) {
         if ( buttonGift.isEnabled() ) {
-            buttonGift.drawOnState( le.isMouseLeftButtonPressedInArea( buttonGift.area() ) );
+            buttonGift.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonGift.area() ) );
         }
         if ( buttonTrade.isEnabled() ) {
-            buttonTrade.drawOnState( le.isMouseLeftButtonPressedInArea( buttonTrade.area() ) );
+            buttonTrade.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonTrade.area() ) );
         }
         if ( buttonLeft.isEnabled() ) {
-            buttonLeft.drawOnState( le.isMouseLeftButtonPressedInArea( buttonLeft.area() ) );
+            buttonLeft.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonLeft.area() ) );
         }
         if ( buttonRight.isEnabled() ) {
-            buttonRight.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRight.area() ) );
+            buttonRight.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRight.area() ) );
         }
 
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
-            Dialog::MakeGiftResource( kingdom );
+            if ( Dialog::MakeGiftResource( kingdom ) == Dialog::OK ) {
+                resourceTo = Resource::UNKNOWN;
+                resourceFrom = Resource::UNKNOWN;
+                gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
-            resourceTo = Resource::UNKNOWN;
-            resourceFrom = Resource::UNKNOWN;
-            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
+                cursorTo.hide();
+                cursorFrom.hide();
 
-            cursorTo.hide();
-            cursorFrom.hide();
-
-            fundsFrom = kingdom.GetFunds();
-            RedrawFromResource( pt1, fundsFrom );
+                fundsFrom = kingdom.GetFunds();
+                RedrawFromResource( pt1, fundsFrom );
+            }
 
             display.render();
         }

@@ -116,9 +116,10 @@ namespace Interface
         Maps::ObjectGroup getSelectedObjectGroup() const;
 
         void getTownObjectProperties( int32_t & type, int32_t & color ) const;
-        void getMineObjectProperties( int32_t & type, int32_t & color ) const;
 
         static const char * getObjectGroupName( const Maps::ObjectGroup groupName );
+
+        void updateUndoRedoButtonsStates( const bool isUndoAvailable, const bool isRedoAvailable );
 
     private:
         static int _getGroundId( const uint8_t brushId );
@@ -134,7 +135,6 @@ namespace Interface
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
 
         static int32_t _generateTownObjectProperties( const int32_t type, const int32_t color );
-        static int32_t _generateMineObjectProperties( const int32_t type, const int32_t color );
 
         void _setCursor();
 

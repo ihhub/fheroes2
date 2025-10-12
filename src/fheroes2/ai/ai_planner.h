@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,11 @@ class Kingdom;
 
 struct VecCastles;
 struct VecHeroes;
+
+namespace fheroes2
+{
+    enum class GameMode : int;
+}
 
 namespace MP2
 {
@@ -157,11 +162,13 @@ namespace AI
     public:
         static Planner & Get();
 
-        void KingdomTurn( Kingdom & kingdom );
+        // Returns the state of the game. By default it should be end of turn.
+        fheroes2::GameMode KingdomTurn( Kingdom & kingdom );
 
         // Implements the logic of transparent casting of the Summon Boat spell at the beginning of the hero's movement
         void HeroesBeginMovement( Heroes & hero );
-        // Implements the logic of transparent casting of the Summon Boat spell during the hero's movement
+        // Implements the logic of preparing for digging up of the Ultimate Artifact as well as the logic of transparent
+        // casting of the Summon Boat spell during the hero's movement
         void HeroesActionNewPosition( Heroes & hero );
 
         void HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
@@ -174,6 +181,9 @@ namespace AI
 
         double getObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
                                const uint32_t distanceToObject ) const;
+
+        double getFutureObjectValue( const Heroes & hero, const int32_t index, const MP2::MapObjectType objectType, const double valueToIgnore,
+                                     const uint32_t distanceToObject ) const;
 
         // Returns the strength of the army guarding the given tile. Note that the army is obtained by calling
         // Army::setFromTile(), so this method is not suitable for hero armies or castle garrisons.
@@ -193,8 +203,8 @@ namespace AI
         // (if there is one) by giving him the best available troops.
         void reinforceCastle( Castle & castle );
 
-        // Returns true if heroes can still do tasks but they have no move points.
-        bool HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue );
+        // Returns the state of the game. By default it should be end of turn.
+        fheroes2::GameMode HeroesTurn( VecHeroes & heroes, uint32_t & currentProgressValue, uint32_t endProgressValue, bool & moreTasksAvailable );
 
         bool recruitHero( Castle & castle, bool buyArmy );
 

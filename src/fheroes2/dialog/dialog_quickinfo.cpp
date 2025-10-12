@@ -371,7 +371,7 @@ namespace
     std::string showBarrierInfo( const Maps::Tile & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Barrier" );
-        const int32_t barrierColor = getColorFromTile( tile );
+        const int32_t barrierColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getBarrierColorName( barrierColor ) );
 
         if ( kingdom.IsVisitTravelersTent( barrierColor ) ) {
@@ -385,7 +385,7 @@ namespace
     std::string showTentInfo( const Maps::Tile & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Tent" );
-        const int32_t tentColor = getColorFromTile( tile );
+        const int32_t tentColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
         if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
@@ -415,7 +415,7 @@ namespace
         str.append( "\n\n" );
 
         // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
-        if ( tile.GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == tile.GetIndex() ) {
+        if ( tile.isSuitableForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == tile.GetIndex() ) {
             str.append( _( "(digging ok)" ) );
         }
         else {
@@ -448,7 +448,7 @@ namespace
 
     std::string getQuickInfoText( const Maps::Tile & tile )
     {
-        const int32_t playerColor = Settings::Get().CurrentColor();
+        const PlayerColor playerColor = Settings::Get().CurrentColor();
         const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         if ( objectType == MP2::OBJ_ABANDONED_MINE || isCaptureObjectProtected( tile ) ) {
@@ -461,25 +461,25 @@ namespace
         case MP2::OBJ_MONSTER:
             return showMonsterInfo( tile, kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) );
 
+        case MP2::OBJ_COAST:
         case MP2::OBJ_EVENT:
         case MP2::OBJ_NONE:
-        case MP2::OBJ_COAST:
             return showGroundInfo( tile );
 
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DAEMON_CAVE:
-        case MP2::OBJ_SPHINX:
-        case MP2::OBJ_PYRAMID:
-        case MP2::OBJ_WAGON:
-        case MP2::OBJ_SKELETON:
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_ARTESIAN_SPRING:
+        case MP2::OBJ_DAEMON_CAVE:
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_OBELISK:
+        case MP2::OBJ_PYRAMID:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_SKELETON:
+        case MP2::OBJ_SPHINX:
+        case MP2::OBJ_WAGON:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL:
             return showObjectVisitInfo( objectType, kingdom.isVisited( tile ) );
 
         case MP2::OBJ_MAGELLANS_MAPS:
@@ -509,51 +509,52 @@ namespace
         }
 
         // join army
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREE_HOUSE:
         case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_CAVE:
         case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_EXCAVATION:
+        case MP2::OBJ_GOBLIN_HUT:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_WATCH_TOWER:
         // recruit army
+        case MP2::OBJ_DESERT_TENT:
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_DESERT_TENT:
         // battle and recruit army
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_TROLL_BRIDGE:
-        case MP2::OBJ_BARROW_MOUNDS:
         case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_WATER_ALTAR:
             return showDwellingInfo( tile, kingdom.isVisited( tile ) );
 
-        case MP2::OBJ_GAZEBO:
         case MP2::OBJ_FORT:
-        case MP2::OBJ_XANADU:
+        case MP2::OBJ_GAZEBO:
         case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
         case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_XANADU:
             return showLocalVisitTileInfo( tile );
 
-        case MP2::OBJ_MAGIC_WELL:
-        case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_IDOL:
-        case MP2::OBJ_OASIS:
-        case MP2::OBJ_TEMPLE:
-        case MP2::OBJ_BUOY:
-        case MP2::OBJ_MERMAID:
-        case MP2::OBJ_WATERING_HOLE:
         case MP2::OBJ_ARENA:
-        case MP2::OBJ_STABLES:
+        case MP2::OBJ_BLACK_CAT:
+        case MP2::OBJ_BUOY:
+        case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_FOUNTAIN:
+        case MP2::OBJ_IDOL:
+        case MP2::OBJ_MAGIC_WELL:
+        case MP2::OBJ_MERMAID:
+        case MP2::OBJ_OASIS:
         case MP2::OBJ_SIRENS:
+        case MP2::OBJ_STABLES:
+        case MP2::OBJ_TEMPLE:
+        case MP2::OBJ_WATERING_HOLE:
             return showLocalVisitObjectInfo( objectType );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
@@ -574,6 +575,7 @@ namespace
             return showTreeOfKnowledgeInfo( tile, kingdom.isVisited( tile ) );
         // These objects do not have extra text for quick info.
         case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
         default:
             return MP2::StringObject( objectType );
@@ -626,7 +628,7 @@ namespace
         const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
         fheroes2::Blit( r_flag, display, dst_pt.x + flagOffset.x + castleIcon.width(), dst_pt.y + flagOffset.y );
 
-        const int currentColor = conf.CurrentColor();
+        const PlayerColor currentColor = conf.CurrentColor();
         const Kingdom & kingdom = world.GetKingdom( currentColor );
 
         const bool isDetailedView = castle.isFriends( currentColor ) || kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
@@ -699,7 +701,7 @@ namespace
 
         const Settings & conf = Settings::Get();
 
-        const bool isNeutralHero = ( hero.GetColor() == Color::NONE );
+        const bool isNeutralHero = ( hero.GetColor() == PlayerColor::NONE );
         const bool isFullInfo = [&hero, showFullInfo, &conf, isNeutralHero]() {
             if ( showFullInfo ) {
                 return *showFullInfo;
@@ -901,9 +903,9 @@ void Dialog::QuickInfo( const Maps::Tile & tile )
 {
     std::string infoString;
 
-    const int32_t playerColor = Settings::Get().CurrentColor();
+    const PlayerColor playerColor = Settings::Get().CurrentColor();
 
-    if ( ( playerColor != 0 ) && tile.isFog( playerColor ) ) {
+    if ( ( playerColor != PlayerColor::NONE ) && tile.isFog( playerColor ) ) {
         infoString = _( "Uncharted Territory" );
     }
     else {

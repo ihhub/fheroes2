@@ -31,7 +31,6 @@
 
 #include "agg_image.h"
 #include "artifact.h"
-#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
@@ -68,8 +67,8 @@ namespace
 
 namespace Editor
 {
-    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const uint8_t humanPlayerColors, const uint8_t computerPlayerColors,
-                             const fheroes2::SupportedLanguage language )
+    bool eventDetailsDialog( Maps::Map_Format::AdventureMapEventMetadata & eventMetadata, const PlayerColorsSet humanPlayerColors,
+                             const PlayerColorsSet computerPlayerColors, const fheroes2::SupportedLanguage language )
     {
         // First, make sure that the event has proper player colors according to the map specification.
         eventMetadata.humanPlayerColors = eventMetadata.humanPlayerColors & humanPlayerColors;
@@ -78,12 +77,13 @@ namespace Editor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         const bool isDefaultScreenSize = display.isDefaultSize();
 
         fheroes2::StandardWindow background( sectionWidth * 2 + elementOffset * 3, fheroes2::Display::DEFAULT_HEIGHT, !isDefaultScreenSize, display );
         const fheroes2::Rect dialogRoi = background.activeArea();
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         if ( isDefaultScreenSize ) {
             const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
@@ -238,7 +238,7 @@ namespace Editor
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
         display.render( background.totalArea() );
 
@@ -246,10 +246,10 @@ namespace Editor
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-            buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteArtifact.area() ) );
-            buttonDeleteSecondarySkill.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDeleteSecondarySkill.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+            buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+            buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteArtifact.area() ) );
+            buttonDeleteSecondarySkill.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteSecondarySkill.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -263,7 +263,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = humanCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = humanCheckbox->getColor();
+                    const PlayerColor color = humanCheckbox->getColor();
                     if ( humanCheckbox->toggle() ) {
                         eventMetadata.humanPlayerColors |= color;
                     }
@@ -292,7 +292,7 @@ namespace Editor
                 const fheroes2::Rect & checkboxRect = computerCheckbox->getRect();
 
                 if ( le.MouseClickLeft( checkboxRect ) ) {
-                    const int color = computerCheckbox->getColor();
+                    const PlayerColor color = computerCheckbox->getColor();
                     if ( computerCheckbox->toggle() ) {
                         eventMetadata.computerPlayerColors |= color;
                     }

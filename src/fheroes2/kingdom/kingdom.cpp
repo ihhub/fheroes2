@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,7 +35,6 @@
 #include "battle.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
-#include "color.h"
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
@@ -103,31 +102,21 @@ namespace
     }
 }
 
-Kingdom::Kingdom()
-    : color( Color::NONE )
-    , lost_town_days( 0 )
-    , visited_tents_colors( 0 )
-    , _topCastleInKingdomView( -1 )
-    , _topHeroInKingdomView( -1 )
-{
-    // Do nothing.
-}
-
-void Kingdom::Init( const int clr )
+void Kingdom::Init( const PlayerColor color )
 {
     clear();
 
-    color = clr;
+    _color = color;
 
-    if ( ( color & Color::ALL ) == 0 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
+    if ( ( Color::allPlayerColors() & _color ) == 0 ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown player: " << Color::String( _color ) << "(" << static_cast<int>( _color ) << ")" )
 
         return;
     }
 
     resource = _getKingdomStartingResources( Game::getDifficulty() );
 
-    const Player * player = Players::Get( color );
+    const Player * player = Players::Get( _color );
     assert( player != nullptr );
 
     // Some human players can have handicap for resources.
@@ -138,8 +127,8 @@ void Kingdom::clear()
 {
     modes = 0;
 
-    color = Color::NONE;
-    visited_tents_colors = 0;
+    _color = PlayerColor::NONE;
+    _visitedTentsColors = 0;
     lost_town_days = Game::GetLostTownDays() + 1;
 
     heroes.clear();
@@ -153,12 +142,7 @@ void Kingdom::clear()
 
 int Kingdom::GetControl() const
 {
-    return Players::GetPlayerControl( color );
-}
-
-int Kingdom::GetColor() const
-{
-    return color;
+    return Players::GetPlayerControl( _color );
 }
 
 int Kingdom::GetRace() const
@@ -166,14 +150,9 @@ int Kingdom::GetRace() const
     return Players::GetPlayerRace( GetColor() );
 }
 
-bool Kingdom::isLoss() const
-{
-    return castles.empty() && heroes.empty();
-}
-
 bool Kingdom::isPlay() const
 {
-    return Players::GetPlayerInGame( color );
+    return Players::GetPlayerInGame( _color );
 }
 
 void Kingdom::LossPostActions()
@@ -182,7 +161,7 @@ void Kingdom::LossPostActions()
         return;
     }
 
-    Players::SetPlayerInGame( color, false );
+    Players::SetPlayerInGame( _color, false );
 
     // Heroes::Dismiss() calls Kingdom::RemoveHero(), which eventually calls heroes.erase()
     while ( !heroes.empty() ) {
@@ -196,7 +175,7 @@ void Kingdom::LossPostActions()
     for ( Castle * castle : castles ) {
         assert( castle != nullptr && castle->GetColor() == GetColor() );
 
-        castle->ChangeColor( Color::NONE );
+        castle->ChangeColor( PlayerColor::NONE );
     }
 
     castles.clear();
@@ -286,12 +265,6 @@ void Kingdom::ActionNewWeek()
 
     // Settle a new set of recruits
     GetRecruits();
-}
-
-void Kingdom::ActionNewMonth()
-{
-    // Clear the visited objects with a lifetime of one month, even if this kingdom has already been vanquished
-    visit_object.remove_if( Visit::isMonthLife );
 }
 
 void Kingdom::AddHero( Heroes * hero )
@@ -450,18 +423,20 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 
 bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const
 {
-    if ( !MP2::isInGameActionObject( objectType ) )
+    if ( !MP2::isInGameActionObject( objectType ) ) {
         return false;
+    }
 
-    if ( isVisited( tile.GetIndex(), objectType ) )
+    if ( isVisited( tile.GetIndex(), objectType ) ) {
         return false;
+    }
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE ) {
-        const int tileColor = getColorFromTile( tile );
+        const PlayerColor tileColor = getColorFromTile( tile );
 
         // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
-        return color == tileColor || !Players::isFriends( color, tileColor );
+        return _color == tileColor || !Players::isFriends( _color, static_cast<PlayerColorsSet>( tileColor ) );
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with getMainObjectType( true )
@@ -469,21 +444,23 @@ bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjec
         const Heroes * hero = tile.getHero();
 
         // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
-        return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
+        return hero && ( _color == hero->GetColor() || !Players::isFriends( _color, static_cast<PlayerColorsSet>( hero->GetColor() ) ) );
     }
 
-    if ( MP2::isCaptureObject( objectType ) )
-        return !Players::isFriends( color, getColorFromTile( tile ) );
+    if ( MP2::isCaptureObject( objectType ) ) {
+        return !Players::isFriends( _color, static_cast<PlayerColorsSet>( getColorFromTile( tile ) ) );
+    }
 
-    if ( MP2::isValuableResourceObject( objectType ) )
+    if ( MP2::isValuableResourceObject( objectType ) ) {
         return doesTileContainValuableItems( tile );
+    }
 
     return true;
 }
 
 bool Kingdom::opponentsCanRecruitMoreHeroes() const
 {
-    for ( int opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+    for ( const PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
         if ( world.GetKingdom( opponentColor ).canRecruitHeroes() )
             return true;
     }
@@ -492,7 +469,7 @@ bool Kingdom::opponentsCanRecruitMoreHeroes() const
 
 bool Kingdom::opponentsHaveHeroes() const
 {
-    for ( int opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+    for ( const PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
         if ( world.GetKingdom( opponentColor ).hasHeroes() )
             return true;
     }
@@ -514,11 +491,6 @@ void Kingdom::OddFundsResource( const Funds & funds )
 {
     resource = resource - funds;
     resource.Trim();
-}
-
-uint32_t Kingdom::GetLostTownDays() const
-{
-    return lost_town_days;
 }
 
 const Recruits & Kingdom::GetRecruits()
@@ -559,31 +531,22 @@ const Recruits & Kingdom::GetRecruits()
         recruits.SetHero2( world.GetHeroForHire( Race::NONE, recruits.GetID1() ) );
     }
 
-    assert( recruits.GetID1() != recruits.GetID2() && recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID2() != Heroes::UNKNOWN );
+    // Heroes for recruitment must be different except if there are no heroes left (both are Heroes::UNKNOWN).
+    assert( recruits.GetID1() != recruits.GetID2() || ( recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN ) );
 
     return recruits;
 }
 
-Recruits & Kingdom::GetCurrentRecruits()
-{
-    return recruits;
-}
-
-Puzzle & Kingdom::PuzzleMaps()
-{
-    return puzzle_maps;
-}
-
-void Kingdom::SetVisitTravelersTent( int col )
+void Kingdom::SetVisitTravelersTent( const int barrierColor )
 {
     // visited_tents_color is a bitfield
-    visited_tents_colors |= ( 1 << col );
+    _visitedTentsColors |= ( 1 << barrierColor );
 }
 
-bool Kingdom::IsVisitTravelersTent( int col ) const
+bool Kingdom::IsVisitTravelersTent( const int barrierColor ) const
 {
     // visited_tents_color is a bitfield
-    return ( visited_tents_colors & ( 1 << col ) ) != 0;
+    return ( _visitedTentsColors & ( 1 << barrierColor ) ) != 0;
 }
 
 bool Kingdom::AllowRecruitHero( bool check_payment ) const
@@ -611,8 +574,10 @@ void Kingdom::ApplyPlayWithStartingHero()
         // If there is, move it to the castle
         if ( hero && hero->GetColor() == GetColor() ) {
             const bool patrol = hero->Modes( Heroes::PATROL );
+
             if ( hero->isValid() ) {
                 hero->Move2Dest( Maps::GetIndexFromAbsPoint( cp ) );
+                castle->trainHeroInMageGuild( *hero );
             }
             else {
                 hero->Dismiss( 0 );
@@ -629,13 +594,12 @@ void Kingdom::ApplyPlayWithStartingHero()
     }
 
     if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInFirstCastle ) {
-        // get first castle
         const Castle * first = castles.GetFirstCastle();
         if ( first == nullptr ) {
             first = castles.front();
         }
 
-        // If no heroes exist and at least one castle / town must be.
+        // If there are no heroes, then there must be at least one castle or town
         assert( first != nullptr );
 
         Heroes * hero = world.GetHeroForHire( first->GetRace() );
@@ -712,7 +676,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
     if ( isControlAI() ) {
         const Funds incomeBonus = Difficulty::getResourceIncomeBonusForAI( Game::getDifficulty(), *this );
         if ( incomeBonus.GetValidItemsCount() != 0 ) {
-            DEBUG_LOG( DBG_AI, DBG_TRACE, "AI bonus to the resource income has been applied to " << Color::String( color ) << ": " << incomeBonus.String() )
+            DEBUG_LOG( DBG_AI, DBG_TRACE, "AI bonus to the resource income has been applied to " << Color::String( _color ) << ": " << incomeBonus.String() )
 
             totalIncome += incomeBonus;
         }
@@ -720,14 +684,14 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
         const int32_t goldBonus = static_cast<int32_t>( totalIncome.gold * Difficulty::getGoldIncomeBonusForAI( Game::getDifficulty() ) );
         if ( goldBonus != 0 ) {
             DEBUG_LOG( DBG_AI, DBG_TRACE,
-                       "AI bonus to the gold income has been applied to " << Color::String( color ) << ", original income: " << totalIncome.gold
+                       "AI bonus to the gold income has been applied to " << Color::String( _color ) << ", original income: " << totalIncome.gold
                                                                           << ", bonus income: " << goldBonus )
 
             totalIncome.gold += goldBonus;
         }
     }
 
-    const Player * player = Players::Get( color );
+    const Player * player = Players::Get( _color );
     assert( player != nullptr );
 
     // Some human players can have handicap for resources.
@@ -778,8 +742,8 @@ void Kingdoms::Init()
 {
     clear();
 
-    const Colors colors( Settings::Get().GetPlayers().GetColors() );
-    std::for_each( colors.begin(), colors.end(), [this]( const int color ) { GetKingdom( color ).Init( color ); } );
+    const PlayerColorsVector colors( Settings::Get().GetPlayers().GetColors() );
+    std::for_each( colors.begin(), colors.end(), [this]( const PlayerColor color ) { GetKingdom( color ).Init( color ); } );
 }
 
 void Kingdoms::clear()
@@ -796,20 +760,20 @@ void Kingdoms::ApplyPlayWithStartingHero()
     } );
 }
 
-const Kingdom & Kingdoms::GetKingdom( const int color ) const
+const Kingdom & Kingdoms::GetKingdom( const PlayerColor color ) const
 {
     switch ( color ) {
-    case Color::BLUE:
+    case PlayerColor::BLUE:
         return _kingdoms[0];
-    case Color::GREEN:
+    case PlayerColor::GREEN:
         return _kingdoms[1];
-    case Color::RED:
+    case PlayerColor::RED:
         return _kingdoms[2];
-    case Color::YELLOW:
+    case PlayerColor::YELLOW:
         return _kingdoms[3];
-    case Color::ORANGE:
+    case PlayerColor::ORANGE:
         return _kingdoms[4];
-    case Color::PURPLE:
+    case PlayerColor::PURPLE:
         return _kingdoms[5];
     default:
         break;
@@ -818,20 +782,20 @@ const Kingdom & Kingdoms::GetKingdom( const int color ) const
     return _kingdoms[6];
 }
 
-Kingdom & Kingdoms::GetKingdom( const int color )
+Kingdom & Kingdoms::GetKingdom( const PlayerColor color )
 {
     switch ( color ) {
-    case Color::BLUE:
+    case PlayerColor::BLUE:
         return _kingdoms[0];
-    case Color::GREEN:
+    case PlayerColor::GREEN:
         return _kingdoms[1];
-    case Color::RED:
+    case PlayerColor::RED:
         return _kingdoms[2];
-    case Color::YELLOW:
+    case PlayerColor::YELLOW:
         return _kingdoms[3];
-    case Color::ORANGE:
+    case PlayerColor::ORANGE:
         return _kingdoms[4];
-    case Color::PURPLE:
+    case PlayerColor::PURPLE:
         return _kingdoms[5];
     default:
         break;
@@ -855,30 +819,25 @@ void Kingdoms::NewWeek()
     std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewWeek(); } );
 }
 
-void Kingdoms::NewMonth()
+PlayerColorsSet Kingdoms::GetNotLossColors() const
 {
-    std::for_each( _kingdoms.begin(), _kingdoms.end(), []( Kingdom & kingdom ) { kingdom.ActionNewMonth(); } );
-}
-
-int Kingdoms::GetNotLossColors() const
-{
-    int result = 0;
+    PlayerColorsSet result = 0;
     for ( const Kingdom & kingdom : _kingdoms ) {
-        if ( kingdom.GetColor() && !kingdom.isLoss() ) {
+        if ( kingdom.GetColor() != PlayerColor::NONE && !kingdom.isLoss() ) {
             result |= kingdom.GetColor();
         }
     }
     return result;
 }
 
-int Kingdoms::FindWins( const int cond ) const
+PlayerColor Kingdoms::FindWins( const uint32_t cond ) const
 {
     for ( const Kingdom & kingdom : _kingdoms ) {
-        if ( kingdom.GetColor() && world.KingdomIsWins( kingdom, cond ) ) {
+        if ( kingdom.GetColor() != PlayerColor::NONE && world.KingdomIsWins( kingdom, cond ) ) {
             return kingdom.GetColor();
         }
     }
-    return 0;
+    return PlayerColor::NONE;
 }
 
 void Kingdoms::AddHeroes( const AllHeroes & heroes )
@@ -887,7 +846,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
         assert( hero != nullptr );
 
         // Skip neutral heroes.
-        if ( hero->GetColor() != Color::NONE ) {
+        if ( hero->GetColor() != PlayerColor::NONE ) {
             GetKingdom( hero->GetColor() ).AddHero( hero );
         }
     }
@@ -899,7 +858,7 @@ void Kingdoms::AddCastles( const AllCastles & castles )
         assert( castle != nullptr );
 
         // Skip neutral castles and towns.
-        if ( castle->GetColor() != Color::NONE ) {
+        if ( castle->GetColor() != PlayerColor::NONE ) {
             GetKingdom( castle->GetColor() ).AddCastle( castle );
         }
     }
@@ -945,7 +904,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
         assert( hero != nullptr );
 
         if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
-            const uint32_t crystalBallDistance = hero->GetVisionsDistance();
+            const uint32_t crystalBallDistance = Heroes::GetVisionsDistance();
 
             if ( Maps::GetStraightLineDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;
@@ -998,14 +957,25 @@ Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
 
 OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom )
 {
-    return stream << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
+    return stream << kingdom.modes << kingdom._color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
+                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom._visitedTentsColors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
 {
-    stream >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
-        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
+    stream >> kingdom.modes;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
+        int temp;
+        stream >> temp;
+        kingdom._color = static_cast<PlayerColor>( temp );
+    }
+    else {
+        stream >> kingdom._color;
+    }
+
+    stream >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object >> kingdom.puzzle_maps
+        >> kingdom._visitedTentsColors;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1100_RELEASE ) {

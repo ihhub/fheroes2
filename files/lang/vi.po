@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 14:16+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -17,62 +17,45 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.4.2\n"
 
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"TẠO\n"
-"GAME"
+msgid "SELECT"
+msgstr "CHỌN"
 
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"LƯU\n"
-"GAME"
+msgid "S"
+msgstr "S"
 
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"TẢI\n"
-"GAME"
+msgid "M"
+msgstr "M"
 
-msgid "INFO"
-msgstr "THÔNG TIN"
+msgid "L"
+msgstr "L"
 
-msgid "QUIT"
-msgstr "RỜI KHỎI"
+msgid "X-L"
+msgstr "X-L"
 
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"TẠO\n"
-"GAME"
+msgid "ALL"
+msgstr "TẤT CẢ"
 
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"LƯU\n"
-"GAME"
+msgid "EXIT"
+msgstr "THOÁT"
 
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"TẢI\n"
-"GAME"
-
-msgid "CANCEL"
-msgstr "TỪ BỎ"
+msgid "smallerButton|EXIT"
+msgstr "THOÁT"
 
 msgid "OKAY"
 msgstr "ĐƯỢC"
+
+msgid "HEROES"
+msgstr "TƯỚNG"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"THỊ TRẤN/\n"
+"LÂU ĐÀI"
+
+msgid "CANCEL"
+msgstr "TỪ BỎ"
 
 msgid "ACCEPT"
 msgstr "ĐỒNG Ý"
@@ -92,144 +75,23 @@ msgstr "CÓ"
 msgid "NO"
 msgstr "KHÔNG"
 
-msgid "EXIT"
-msgstr "THOÁT"
-
-msgid "smallerButton|EXIT"
-msgstr "THOÁT"
-
 msgid "DISMISS"
 msgstr "GIẢI TÁN"
 
 msgid "UPGRADE"
 msgstr "NÂNG CẤP"
 
-msgid "RESTART"
-msgstr "LÀM LẠI"
-
-msgid "HEROES"
-msgstr "TƯỚNG"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"THỊ TRẤN/\n"
-"LÂU ĐÀI"
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "TẤT CẢ"
-
-msgid "SELECT"
-msgstr "CHỌN"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"GAME\n"
-"THƯỜNG"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"CHỈ\n"
-"CHIẾN ĐẤU"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"CHIẾN\n"
-"DỊCH"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"CHƠI\n"
-"NHIỀU\n"
-"NGƯỜI"
-
-msgid "CONFIG"
-msgstr "ĐIỀU CHỈNH"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"CHIẾN DỊCH\n"
-"THƯỜNG"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"CHIẾN DỊCH\n"
-"MỞ RỘNG"
-
-msgid "HOT SEAT"
-msgstr "GHẾ NÓNG"
-
-msgid "2 PLAYERS"
-msgstr "2 NGƯỜI CHƠI"
-
-msgid "3 PLAYERS"
-msgstr "3 NGƯỜI CHƠI"
-
-msgid "4 PLAYERS"
-msgstr "4 NGƯỜI CHƠI"
-
-msgid "5 PLAYERS"
-msgstr "5 NGƯỜI CHƠI"
-
-msgid "6 PLAYERS"
-msgstr "6 NGƯỜI CHƠI"
-
 msgid "GIFT"
 msgstr "QUÀ"
+
+msgid "RESTART"
+msgstr "LÀM LẠI"
 
 msgid "MAX"
 msgstr "MAX"
 
-msgid "DIFFICULTY"
-msgstr "ĐỘ KHÓ"
-
-msgid "VIEW INTRO"
-msgstr "XEM GIỚI THIỆU"
-
 msgid "MIN"
 msgstr "MIN"
-
-msgid "RESET"
-msgstr "CÀI LẠI"
-
-msgid "START"
-msgstr "LÀM LẠI"
-
-msgid "TOWN"
-msgstr "THỊ TRẤN"
-
-msgid "CASTLE"
-msgstr "LÂU ĐÀI"
-
-#, fuzzy
-msgid "RESTRICT"
-msgstr "LÀM LẠI"
 
 msgid ""
 "D\n"
@@ -259,15 +121,6 @@ msgstr ""
 "O\n"
 "Á\n"
 "T"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
 
 msgid ""
 "C\n"
@@ -306,23 +159,174 @@ msgstr ""
 "N\n"
 "G"
 
-msgid "RUMORS"
+msgid ""
+"NEW\n"
+"GAME"
 msgstr ""
-
-msgid "EVENTS"
-msgstr ""
-
-msgid "LANGUAGE"
-msgstr ""
+"TẠO\n"
+"GAME"
 
 msgid ""
-"AUTO\n"
-"COMBAT"
+"LOAD\n"
+"GAME"
 msgstr ""
+"TẢI\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "LÀM LẠI"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"LƯU\n"
+"GAME"
 
 msgid ""
 "QUICK\n"
-"COMBAT"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "RỜI KHỎI"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "LÀM LẠI"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"TẠO\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"TẢI\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LƯU\n"
+"GAME"
+
+msgid "INFO"
+msgstr "THÔNG TIN"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"CHỈ\n"
+"CHIẾN ĐẤU"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"GAME\n"
+"THƯỜNG"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"CHIẾN\n"
+"DỊCH"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"CHƠI\n"
+"NHIỀU\n"
+"NGƯỜI"
+
+msgid "HOT SEAT"
+msgstr "GHẾ NÓNG"
+
+msgid "2 PLAYERS"
+msgstr "2 NGƯỜI CHƠI"
+
+msgid "3 PLAYERS"
+msgstr "3 NGƯỜI CHƠI"
+
+msgid "4 PLAYERS"
+msgstr "4 NGƯỜI CHƠI"
+
+msgid "5 PLAYERS"
+msgstr "5 NGƯỜI CHƠI"
+
+msgid "6 PLAYERS"
+msgstr "6 NGƯỜI CHƠI"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"CHIẾN DỊCH\n"
+"THƯỜNG"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"CHIẾN DỊCH\n"
+"MỞ RỘNG"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "ĐỘ KHÓ"
+
+msgid "VIEW INTRO"
+msgstr "XEM GIỚI THIỆU"
+
+msgid "RESET"
+msgstr "CÀI LẠI"
+
+msgid "START"
+msgstr "LÀM LẠI"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
 msgstr ""
 
 msgid "Warrior"
@@ -517,8 +521,8 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"The Moat reduces the defense skill of troops trapped in it by %{count} and "
-"restricts their movement range."
+"The Moat interrupts any movement through it and reduces the defense skill of "
+"troops present in it by %{count}."
 msgstr ""
 "Hào giảm -%{count} kỹ năng phòng thủ của bất kỳ đơn vị nào và làm chậm một "
 "nửa tốc độ di chuyển."
@@ -713,9 +717,6 @@ msgstr "May mắn"
 msgid "Spell Points"
 msgstr "Điểm Phép thuật"
 
-msgid "Hero's Options"
-msgstr "Tùy chọn Tướng"
-
 msgid "Cast Spell"
 msgstr "Niệm Chú"
 
@@ -733,6 +734,9 @@ msgstr "Màn hình Tướng"
 
 msgid "Captain's Options"
 msgstr "Tùy chọn Đội trưởng"
+
+msgid "Hero's Options"
+msgstr "Tùy chọn Tướng"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -820,6 +824,14 @@ msgstr "Niệm %{spell}"
 msgid "Select spell target"
 msgstr "Chọn mục tiêu niệm chú"
 
+#, fuzzy
+msgid "Are you sure you want to enable the auto combat mode?"
+msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
+
+#, fuzzy
+msgid "Are you sure you want to resolve the battle in the quick combat mode?"
+msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
+
 msgid "View Ballista info"
 msgstr "Xem thông tin Máy bắn đá"
 
@@ -885,13 +897,15 @@ msgstr "Thanh Tin nhắn"
 msgid "Shows the results of individual monster's actions."
 msgstr "Hiển thị kết quả hành động của từng quái vật."
 
-#, fuzzy
-msgid "Are you sure you want to enable the auto combat mode?"
-msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
+msgid ""
+"AUTO\n"
+"COMBAT"
+msgstr ""
 
-#, fuzzy
-msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
+msgid ""
+"QUICK\n"
+"COMBAT"
+msgstr ""
 
 #, fuzzy
 msgid "The computer continues the combat for you."
@@ -2728,9 +2742,12 @@ msgstr ""
 "Chợ có thể được sử dụng để chuyển đổi một loại tài nguyên thành một loại tài "
 "nguyên khác. Ngươi càng kiểm soát nhiều chợ, tỷ giá hối đoái càng tốt."
 
+#, fuzzy
 msgid ""
-"The Moat slows attacking units. Any unit entering the moat must end its turn "
-"there and becomes more vulnerable to attack."
+"The Moat slows and weakens attacking units. Any walking unit entering the "
+"moat must end its turn there and can only move within the moat one hex at a "
+"time. Any creature present in the moat will have its defense skill reduced "
+"by %{count}."
 msgstr ""
 "Hào làm chậm các đơn vị tấn công. Bất kỳ đơn vị nào đi vào hào đều phải kết "
 "thúc lượt của mình ở đó và trở nên dễ bị tấn công hơn."
@@ -3094,6 +3111,13 @@ msgstr "Tổng: "
 msgid "Need: "
 msgstr "Cần: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Chơi lại"
+
+msgid "There was an issue during saving."
+msgstr "Đã xảy ra sự cố trong quá trình lưu."
+
 msgid "New Game"
 msgstr "Trò chơi Mới"
 
@@ -3106,10 +3130,22 @@ msgstr "Tải Trò chơi"
 msgid "Load a previously saved game."
 msgstr "Tải một trò chơi đã lưu trước đó."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Chơi lại kịch bản hiện tại."
+
 msgid "Save Game"
 msgstr "Lưu Trò chơi"
 
 msgid "Save the current game."
+msgstr "Lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Lưu trò chơi hiện tại."
 
 msgid "Quit"
@@ -3502,6 +3538,18 @@ msgstr "Chọn Độ phân giải:"
 msgid "Click to apply the selected resolution."
 msgstr "Nhấp để áp dụng độ phân giải đã chọn."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Nhấp để chọn chủng tộc."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Nhấp để chọn chủng tộc."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Nhấp để áp dụng văn bản đã nhập."
+
 msgid "Click to apply the entered text."
 msgstr "Nhấp để áp dụng văn bản đã nhập."
 
@@ -3546,6 +3594,12 @@ msgstr ""
 "\n"
 "Vị trí: "
 
+msgid "saveLoadDialog|Name"
+msgstr ""
+
+msgid "saveLoadDialog|Date"
+msgstr ""
+
 msgid "Are you sure you want to delete file:"
 msgstr "Ngươi có chắc muốn xóa file:"
 
@@ -3557,6 +3611,21 @@ msgstr "Nhấp để lưu trò chơi hiện tại."
 
 msgid "Click to load a previously saved game."
 msgstr "Nhấp để tải chò trơi đã lưu trước đây."
+
+msgid "Click here if you wish to sort save files by their name."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Name"
+msgstr "Tên của Ngươi"
+
+msgid ""
+"Click here if you you wish to sort save files by their last modified date."
+msgstr ""
+
+#, fuzzy
+msgid "Sort by Date"
+msgstr "Hỗ trợ chúng tôi tại"
 
 msgid "File to Save:"
 msgstr "Tệp để Lưu:"
@@ -3584,6 +3653,10 @@ msgstr "Chọn Quái vật:"
 
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"
+
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Chọn Quái vật:"
 
 msgid "race|Random"
 msgstr "Ngẫu nhiên"
@@ -3616,6 +3689,12 @@ msgstr "Đặt Lâu đài/thị trấn"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Trung lập"
+
+msgid "TOWN"
+msgstr "THỊ TRẤN"
+
+msgid "CASTLE"
+msgstr "LÂU ĐÀI"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Nhấp để bắt đầu đặt lâu đài/thị trấn đã chọn"
@@ -3654,6 +3733,10 @@ msgid "%{mineName} appearance:"
 msgstr "%{name} cái %{race}"
 
 #, fuzzy
+msgid "Click to select the color."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Nhấp vào đây để chọn kịch bản để chơi."
 
@@ -3676,6 +3759,10 @@ msgstr "Chọn Đối tượng Đại dương:"
 #, fuzzy
 msgid "Select Adventure Object:"
 msgstr "Chọn Đối tượng Đại dương:"
+
+#, fuzzy
+msgid "Select color"
+msgstr "Chọn Quái vật:"
 
 msgid "Players Icon"
 msgstr "Biểu tượng Người chơi"
@@ -3774,6 +3861,10 @@ msgstr "Độ khó bản đồ:"
 
 msgid "N"
 msgstr "N"
+
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Ngươi có chắc muốn xóa file:"
 
 #, fuzzy
 msgid "No maps exist at that size."
@@ -3966,6 +4057,30 @@ msgstr "Ngẫu nhiên Lâu đài"
 msgid "Random Town Name"
 msgstr "Ngẫu nhiên Thị trấn"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Nhấp để xem thị trấn sau."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Ngẫu nhiên Phép"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Lâu đài Mây"
@@ -3973,6 +4088,10 @@ msgstr "Lâu đài Mây"
 #, fuzzy
 msgid "Default Buildings"
 msgstr "Hành động Mặc định"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "LÀM LẠI"
 
 #, fuzzy
 msgid "Default Army"
@@ -3986,12 +4105,17 @@ msgstr "Lâu đài"
 msgid "Town Army"
 msgstr "Thị trấn"
 
-msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+#, fuzzy
+msgid "Click to change the Castle name."
+msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
 msgid "Enter Castle name"
 msgstr "Mất tướng: %{name}."
+
+#, fuzzy
+msgid "Reset the Castle name."
+msgstr "Mất lâu đài '%{name}'."
 
 msgid "Allow to build a castle in this town."
 msgstr ""
@@ -4008,8 +4132,24 @@ msgstr ""
 msgid "Use default defenders army."
 msgstr ""
 
-msgid "Set custom Castle Army. Right-click to reset unit."
+#, fuzzy
+msgid "Reset the army."
+msgstr "Giải tán đội quân này."
+
+#, fuzzy
+msgid "Set custom Castle Army."
+msgstr "Lâu đài"
+
+msgid "Set spells to appear in the Mage Guild."
 msgstr ""
+
+#, fuzzy
+msgid "Set Spells"
+msgstr "Chọn Phép:"
+
+#, fuzzy
+msgid "Castle Settings"
+msgstr "Cài đặt Trò chơi"
 
 #, fuzzy
 msgid "Message Text:"
@@ -4164,6 +4304,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Click to make selection."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
 
@@ -4183,6 +4327,10 @@ msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 #, fuzzy
 msgid "Action objects must be placed on clear tiles."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
+#, fuzzy
+msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr "Thị trấn không thể đặt trên nước."
 
 #, fuzzy
 msgid ""
@@ -4208,17 +4356,6 @@ msgid ""
 msgstr ""
 "Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
 "đối với bản đồ hiện tại sẽ bị mất.)"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "LÀM LẠI"
 
 msgid "Main Menu"
 msgstr "Trình đơn Chính"
@@ -4307,11 +4444,20 @@ msgstr "với 1 bảo vật."
 msgid "The total number of obelisks is %{count}."
 msgstr ""
 
+msgid "There are no players on the map, so no one can own this object."
+msgstr ""
+
 msgid "Roads"
 msgstr "Đường"
 
 msgid "Streams"
 msgstr "Suối"
+
+#, fuzzy
+msgid ""
+"A maximum of %{count} heroes including jailed heroes can be placed on the "
+"map."
+msgstr "Thị trấn không thể đặt trên nước."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4624,14 +4770,9 @@ msgstr ""
 "Xem các tùy chọn hệ thống soạn thảo, cho phép ngươi tùy chỉnh trình chỉnh "
 "sửa."
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr "Tạo bản đồ rộng %{size} ô vuông và cao %{size} ô vuông."
-
-msgid "Cancel back to the New Map menu."
-msgstr "Hủy quay lại menu Bản đồ Mới."
-
-msgid "Cancel back to the main menu."
-msgstr "Hủy quay lại menu chính."
+#, fuzzy
+msgid "Exit the Editor and return to the game's Main Menu."
+msgstr "Nhấp để quay lại màn hình chính."
 
 msgid "From Scratch"
 msgstr "Từ Đầu"
@@ -4645,8 +4786,15 @@ msgstr "Tạo một bản đồ được tạo ngẫu nhiên."
 msgid "Random"
 msgstr "Ngẫu nhiên"
 
-msgid "Cancel back to the Map Editor main menu."
-msgstr "Hủy quay lại menu chính của Biên tập Bản đồ."
+msgid "Back"
+msgstr ""
+
+#, fuzzy
+msgid "Return to the Editor's main menu options."
+msgstr "Nhấp để quay lại màn hình chính."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr "Tạo bản đồ rộng %{size} ô vuông và cao %{size} ô vuông."
 
 msgid "No maps available!"
 msgstr "Không có bản đồ nào!"
@@ -4660,19 +4808,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race} tướng"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} %{race} %{townOrCastle}"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} tướng"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 #, fuzzy
@@ -4680,7 +4828,7 @@ msgid "None."
 msgstr "Không"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Hãy chọn một tướng khác."
 
 #, fuzzy
@@ -4791,6 +4939,18 @@ msgstr ""
 "\n"
 "Vị trí: "
 
+msgid "RUMORS"
+msgstr ""
+
+msgid "EVENTS"
+msgstr ""
+
+msgid "LANGUAGE"
+msgstr ""
+
+msgid "ABOUT"
+msgstr ""
+
 msgid ""
 "The entered map description exceeds the maximum allowed 5 rows. It will be "
 "shortened to fit the map description field."
@@ -4809,9 +4969,8 @@ msgstr ""
 msgid "Change Map Description"
 msgstr "Chọn Mô tả"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Nhấp để xem thị trấn sau."
+msgid "About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -4831,6 +4990,11 @@ msgstr "Sự kiện"
 #, fuzzy
 msgid "Click to change the language of the map."
 msgstr "Thay đổi ngôn ngữ của trò chơi."
+
+msgid ""
+"Click to edit notes from the map creator. These notes are optional and do "
+"not appear during gameplay."
+msgstr ""
 
 #, fuzzy
 msgid "Click to change your map name."
@@ -4869,6 +5033,12 @@ msgstr ""
 "người thiết kế kịch bản. Các bản đồ khó hơn có thể bao gồm nhiều kẻ thù hơn "
 "hoặc mạnh hơn, ít tài nguyên hơn hoặc các điều kiện đặc biệt khác khiến mọi "
 "thứ trở nên khó khăn hơn đối với người chơi."
+
+#, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "người chơi mầu %{color}"
 
 #, fuzzy
 msgid "editor|%{count} %{resource}"
@@ -4947,6 +5117,45 @@ msgstr "Lưu Bản đồ"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Nhấp để lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Xem Phép"
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Sách Phép"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Xem Phép"
 
 msgid "Riddle:"
 msgstr ""
@@ -5085,11 +5294,10 @@ msgid "View the intro video for the current state of the campaign."
 msgstr "Xem video Giới thiệu để biết trạng thái hiện tại của chiến dịch."
 
 msgid ""
-"Select the campaign difficulty. This can be lowered at any point during the "
-"campaign."
+"Select the campaign difficulty. This can be changed at any point during the "
+"campaign. However, the final score will be calculated based solely on the "
+"lowest difficulty of a completed scenario during the campaign."
 msgstr ""
-"Chọn độ khó của chiến dịch. Điều này có thể được hạ xuống bất cứ lúc nào "
-"trong chiến dịch."
 
 msgid "Restart the current scenario."
 msgstr "Chơi lại kịch bản hiện tại."
@@ -5097,10 +5305,11 @@ msgstr "Chơi lại kịch bản hiện tại."
 msgid "Difficulty"
 msgstr "Độ khó"
 
+#, fuzzy
 msgid ""
-"You have changed to a lower difficulty for the campaign. You will not be "
-"able to revert this after this point. The high score will be calculated "
-"based solely on the new difficulty. Do you want to proceed?"
+"You have changed the campaign difficulty. The final high score will be "
+"calculated based solely on the lowest difficulty level for a completed "
+"scenario during the campaign. Do you want to proceed?"
 msgstr ""
 "Ngươi đã thay đổi độ khó thấp hơn cho chiến dịch. Ngươi sẽ không thể hoàn "
 "nguyên điều này sau thời điểm này. Điểm cao sẽ được tính chỉ dựa trên độ khó "
@@ -5120,6 +5329,10 @@ msgstr "Ngày đã qua"
 
 msgid "The number of days spent on this campaign."
 msgstr "Số ngày đã qua trong chiến dịch này."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Kịch bản"
 
 msgid "Project Coordination and Core Development"
 msgstr "Điều phối Dự án và Phát triển Lõi"
@@ -5476,6 +5689,10 @@ msgstr "bản đồ thế giới phải dưới"
 msgid "hotkey|save game"
 msgstr "lưu trò chơi"
 
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "thoát"
+
 msgid "hotkey|next hero"
 msgstr "tướng tiếp theo"
 
@@ -5580,6 +5797,10 @@ msgstr "bỏ lượt trong trận chiến"
 
 msgid "hotkey|cast battle spell"
 msgstr "niệm chú trong trận chiến"
+
+#, fuzzy
+msgid "hotkey|toggle display of battle turn order"
+msgstr "chuyển đổi chế độ tự động chiến đấu"
 
 msgid "hotkey|dwelling level 1"
 msgstr "nhà lính cấp 1"
@@ -5704,17 +5925,6 @@ msgstr "' ngôn ngữ, nhưng ngôn ngữ hiện tại của trò chơi là '"
 msgid "No save files to load."
 msgstr "Không có tệp lưu để tải."
 
-msgid "Hot Seat"
-msgstr "Ghế Nóng"
-
-#, fuzzy
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Chơi chế độ Ghế nóng, trong đó 2 đến 6 người chơi cùng chơi quanh một máy "
-"tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
-
 msgid "A single player game playing out a single map."
 msgstr "Một trò chơi một người chơi chơi trên một bản đồ duy nhất."
 
@@ -5736,6 +5946,20 @@ msgid ""
 msgstr ""
 "Một trò chơi nhiều người chơi, trong đó một số người chơi sẽ đấu với nhau "
 "trên một bản đồ."
+
+msgid "Hot Seat"
+msgstr "Ghế Nóng"
+
+#, fuzzy
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Chơi chế độ Ghế nóng, trong đó 2 đến 6 người chơi cùng chơi quanh một máy "
+"tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
+
+msgid "Cancel back to the main menu."
+msgstr "Hủy quay lại menu chính."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Resurrection Team giới thiệu"
@@ -5795,43 +6019,8 @@ msgstr ""
 "File video cần thiết cho chiến dịch bị thiếu. Hãy đảm bảo tất cả các file "
 "cần thiết có sẵn trong hệ thống."
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
-msgstr ""
-"Chiến dịch của Roland hoặc Archibald từ bản gốc Heroes of Might and Magic II."
-
-msgid "Original Campaign"
-msgstr "Chiến dịch Gốc"
-
-msgid "Expansion Campaign"
-msgstr "Chiến dịch Mở rộng"
-
-msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr "Một trong bốn chiến dịch mới từ bản mở rộng Giá của Lòng Trung thành."
-
 msgid "Loading video. Please wait..."
 msgstr "Đang tải video. Xin đợi..."
-
-msgid "Host"
-msgstr "Chủ nhà"
-
-msgid ""
-"The host sets up the game options. There can only be one host per network "
-"game."
-msgstr ""
-"Chủ nhà thiết lập các lựa chọn trò chơi. Chỉ có thể có một máy chủ cho mỗi "
-"trò chơi mạng."
-
-msgid "Guest"
-msgstr "Khách"
-
-msgid ""
-"The guest waits for the host to set up the game, then is automatically added "
-"in. There can be multiple guests for TCP/IP games."
-msgstr ""
-"Khách đợi chủ nhà thiết lập trò chơi, sau đó sẽ tự động được thêm vào. Có "
-"thể có nhiều khách cho trò chơi TCP/IP."
 
 msgid ""
 "fheroes2 needs data files from the original Heroes of Might and Magic II to "
@@ -5854,14 +6043,6 @@ msgstr "Chỉ Chiến đấu"
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 "Thiết lập và chơi một trận chiến mà không cần phải tải bất cứ bản đồ nào."
-
-#, fuzzy
-msgid ""
-"Play a Hot Seat game, where 2 to 6 players play on the same device, "
-"switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-"Chơi chế độ Ghế nóng, trong đó 2 đến 6 người chơi cùng chơi quanh một máy "
-"tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
 
 msgid "2 Players"
 msgstr "2 người chơi"
@@ -5900,6 +6081,29 @@ msgstr "6 người chơi"
 
 msgid "Play with 6 human players."
 msgstr "Chơi với 6 người chơi."
+
+msgid "Original Campaign"
+msgstr "Chiến dịch Gốc"
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+"Chiến dịch của Roland hoặc Archibald từ bản gốc Heroes of Might and Magic II."
+
+msgid "Expansion Campaign"
+msgstr "Chiến dịch Mở rộng"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr "Một trong bốn chiến dịch mới từ bản mở rộng Giá của Lòng Trung thành."
+
+#, fuzzy
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Chơi chế độ Ghế nóng, trong đó 2 đến 6 người chơi cùng chơi quanh một máy "
+"tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
 
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Thành phố rồng đã thất thủ! Bây giờ ngươi đã là Bậc thầy của Rồng."
@@ -5951,6 +6155,14 @@ msgid ""
 msgstr ""
 "Địch đã chiếm được %{name}!\n"
 "Chúng đã chiến thắng."
+
+#, fuzzy
+msgid ""
+"The enemy has found the %{name}.\n"
+"Your quest is a failure."
+msgstr ""
+"Ngươi đã tìm thấy %{name}.\n"
+"Nhiệm vụ của ngươi kết thúc."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -6106,11 +6318,21 @@ msgstr "Nhấp để chấp nhận các cài đặt này và bắt đầu trò c
 msgid "Click to return to the main menu."
 msgstr "Nhấp để quay lại màn hình chính."
 
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "File lưu bị hỏng."
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tháng của %{name}."
 
+msgid "New Month!"
+msgstr "Tháng Mới!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tuần của %{name}."
+
+msgid "New Week!"
+msgstr "Tuần Mới!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Sau khi tăng trưởng đều đặn, dân số của %{monster} đã tăng gấp đôi!"
@@ -6128,17 +6350,13 @@ msgstr[0] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} tăng trưởng +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Tất cả dân số đều giảm một nửa."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Tất cả các nhà tăng dân số."
-
-msgid "New Month!"
-msgstr "Tháng Mới!"
-
-msgid "New Week!"
-msgstr "Tuần Mới!"
 
 msgid "Beware!"
 msgstr "Coi chừng!"
@@ -6306,9 +6524,6 @@ msgstr "Ngươi có chắc chắn muốn ghi đè lưu bằng tên này không?"
 
 msgid "Game saved successfully."
 msgstr "Chò trơi được lưu thành công."
-
-msgid "There was an issue during saving."
-msgstr "Đã xảy ra sự cố trong quá trình lưu."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -6558,6 +6773,10 @@ msgstr "Tiếng Slovak"
 msgid "Vietnamese"
 msgstr "Tiếng Việt"
 
+#, fuzzy
+msgid "Greek"
+msgstr "Xanh"
+
 msgid "Slow"
 msgstr "Chậm"
 
@@ -6567,22 +6786,17 @@ msgstr "Nhanh"
 msgid "Very Fast"
 msgstr "Rất nhanh"
 
-msgid "Evil"
-msgstr "Xấu"
+msgid "Dynamic"
+msgstr ""
 
 msgid "Good"
 msgstr "Tốt"
 
+msgid "Evil"
+msgstr "Xấu"
+
 msgid ", FPS: "
 msgstr ", FPS: "
-
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} cướp"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} lính"
 
 msgid "Ector"
 msgstr "Ector"
@@ -6608,6 +6822,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6616,9 +6833,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6707,6 +6921,9 @@ msgstr "Brother Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6725,14 +6942,19 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} cướp"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} lính"
 
 msgid " gives you maximum morale"
 msgstr " cho ngươi tối đa tinh thần"
@@ -6785,6 +7007,11 @@ msgstr ""
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr "Lục soát trại của kẻ thù, ngươi phát hiện ra một kho báu ẩn giấu."
+
+msgid ""
+"Your ship bumps into a barrel drifting at sea. Inside, you discover a stash "
+"of lost treasure."
+msgstr ""
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -7359,9 +7586,10 @@ msgstr ""
 "Sự thận trọng là phần tốt hơn của lòng dũng cảm và ngươi quyết định tránh "
 "cuộc chiến này ngay hôm nay."
 
+#, fuzzy
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it "
-"and find %{gold} gold pieces."
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
 msgstr ""
 "Sau hàng giờ cố gắng câu chiếc rương ngoài biển, ngươi mở nó ra và tìm thấy "
 "%{gold} vàng."
@@ -7374,11 +7602,11 @@ msgstr ""
 "%{gold} vàng và %{art}."
 
 msgid ""
-"After spending hours trying to fish the chest out of the sea, you open it, "
-"only to find it empty."
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
 msgstr ""
-"Sau hàng giờ cố gắng câu chiếc rương ngoài biển, ngươi mở nó ra, và chỉ thấy "
-"nó trống rỗng."
+"Sau hàng giờ cố gắng câu chiếc rương ngoài biển, ngươi mở nó ra và tìm thấy "
+"%{gold} vàng."
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
@@ -7388,13 +7616,6 @@ msgstr ""
 "Sau khi lùng sục khắp khu vực, ngươi sẽ phát hiện ra một kho báu ẩn giấu. "
 "Ngươi có thể lấy vàng hoặc phân phát vàng cho nông dân để lấy kinh nghiệm. "
 "Ngươi có muốn giữ vàng không?"
-
-msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
-msgstr ""
-"Sau khi lùng sục khắp khu vực, ngươi sẽ tìm thấy một chiếc rương ẩn chứa "
-"những %{gold} miếng vàng."
 
 msgid ""
 "After scouring the area, you fall upon a hidden chest, containing the "
@@ -8160,6 +8381,18 @@ msgstr ""
 "phức tạp. Một nhà tiên tri vĩ đại đã dạy tôi kỹ năng của ông ấy. Ta có câu "
 "trả lời mà ngươi đang tìm kiếm.\""
 
+msgid ""
+"The sting of your previous encounter still lingers, and you keep your "
+"distance from the intimidating cat until you have regained your courage in "
+"battle."
+msgstr ""
+
+msgid ""
+"You come upon a great cat, purring as it rubs against your leg. Charmed, you "
+"reach down, but it bites you and flees. At least the laughter at your "
+"misfortune lifts your troops' spirits."
+msgstr ""
+
 msgid "No spell book is present."
 msgstr "Không có cuốn sách thần chú nào hiện diện."
 
@@ -8284,7 +8517,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} chủng tộc %{race} (Cấp %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Màn hình Tướng"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8320,7 +8553,7 @@ msgid "Enter hero's name"
 msgstr "Mất tướng: %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
@@ -8430,6 +8663,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} gặp %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Cấp bậc %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Bảo vật"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Xem Bảo vật"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Tướng địch bây giờ đã có thể nhận dạng đầy đủ."
@@ -9595,6 +9858,14 @@ msgstr "Đầm lầy"
 msgid "Frozen Lake"
 msgstr ""
 
+#, fuzzy
+msgid "Black Cat"
+msgstr "Ngọc trai Đen"
+
+#, fuzzy
+msgid "Barrel"
+msgstr "Rào chắn"
+
 msgid "randomRace|level 1 creatures"
 msgstr ""
 
@@ -10105,8 +10376,9 @@ msgstr "Tấn công 2 ô lục giác"
 msgid "Flyer"
 msgstr "Loài bay"
 
-msgid "Always retaliates"
-msgstr "Luôn phản đòn"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Không có sự phản đòn của kẻ thù"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Tấn công tất cả kẻ thù lân cận"
@@ -11338,9 +11610,6 @@ msgstr ""
 msgid "Endless Pouch of Crystal"
 msgstr "Túi Pha lê Vô tận"
 
-msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr "%{name} cung cấp %{count} đơn vị pha lê mỗi ngày."
-
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
@@ -11351,6 +11620,9 @@ msgstr ""
 "pha lê nhỏ ở một góc. Tò mò, ngươi bẻ một mảnh ra và nhận thấy rằng viên pha "
 "lê ban đầu mọc lại mảnh bị mất. Ngươi quyết định nhét toàn bộ miếng dán vào "
 "một cái túi và mang theo bên mình."
+
+msgid "The %{name} provides %{count} unit of crystal per day."
+msgstr "%{name} cung cấp %{count} đơn vị pha lê mỗi ngày."
 
 msgid "Spiked Helm"
 msgstr "Mũ Gai"
@@ -11459,14 +11731,6 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Cánh tay Liệt sĩ"
 
-#, fuzzy
-msgid ""
-"The %{name} increases the hero's spell power by %{count} but adds the undead "
-"morale penalty."
-msgstr ""
-"%{name} tăng sức mạnh phép thuật của ngươi thêm %{count} nhưng lại thêm hình "
-"phạt về tinh thần cho xác sống."
-
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
 "ground. Despite its missing a body, it is still moving. Your troops find the "
@@ -11479,6 +11743,14 @@ msgstr ""
 "đội của ngươi nhận thấy cánh tay bị chặt rời thật đáng kinh tởm, nhưng ngươi "
 "không thể tự mình đánh rơi nó: nó dường như chứa một loại sức mạnh ma thuật "
 "nào đó ảnh hưởng đến việc đưa ra quyết định của ngươi."
+
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's spell power by %{count} but adds the undead "
+"morale penalty."
+msgstr ""
+"%{name} tăng sức mạnh phép thuật của ngươi thêm %{count} nhưng lại thêm hình "
+"phạt về tinh thần cho xác sống."
 
 msgid "Breastplate of Anduran"
 msgstr "Áo giáp của Anduran"
@@ -11523,9 +11795,9 @@ msgstr "Chiến Bào của Anduran"
 
 #, fuzzy
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts. It provides "
-"maximum luck and morale for the hero's troops and gives the hero the Town "
-"Portal spell."
+"The %{name} combines the powers of the three Anduran artifacts (+5 to "
+"attack, defense, and spell power). It also provides maximum luck and morale "
+"for the hero's troops and gives the hero the Town Portal spell."
 msgstr ""
 "%{name} kết hợp sức mạnh của ba hiện vật Anduran. Nó mang lại may mắn và "
 "tinh thần tối đa cho quân đội của ngươi và mang lại cho ngươi phép Cổng Thị "
@@ -12441,55 +12713,34 @@ msgstr ""
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
 
-msgid ""
-"Check the newest version of the game at\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
-msgstr ""
-"Kiểm tra phiên bản mới nhất của trò chơi tại\n"
-"https://github.com/ihhub/\n"
-"fheroes2/releases"
+#~ msgid "Always retaliates"
+#~ msgstr "Luôn phản đòn"
 
-#~ msgid "Select count %{resource}:"
-#~ msgstr "Chọn số lượng %{resource}:"
+#~ msgid "CONFIG"
+#~ msgstr "ĐIỀU CHỈNH"
 
-#~ msgid "Enable auto combat"
-#~ msgstr "Kích hoạt tự động chiến đấu"
+#~ msgid "Cancel back to the New Map menu."
+#~ msgstr "Hủy quay lại menu Bản đồ Mới."
 
-#~ msgid "hotkey|finish the battle in auto mode"
-#~ msgstr "kết thúc trận chiến với chế độ tự động"
+#~ msgid "Cancel back to the Map Editor main menu."
+#~ msgstr "Hủy quay lại menu chính của Biên tập Bản đồ."
 
-#~ msgid "Please Remember"
-#~ msgstr "Hãy Nhớ"
+#~ msgid "Host"
+#~ msgstr "Chủ nhà"
 
 #~ msgid ""
-#~ "You can always change the language, resolution and settings of the game "
-#~ "by clicking on the "
-#~ msgstr "Ngươi có thể thay đổi độ phân giải bằng cách nhấp vào "
-
-#~ msgid "door"
-#~ msgstr "cửa"
-
-#~ msgid " on the left side of the Main Menu, or with the "
-#~ msgstr " ở bên phía trái của Trình đơn Chính, hoặc với "
-
-#~ msgid " button from the "
-#~ msgstr " nút từ "
-
-#~ msgid "NEW GAME"
-#~ msgstr "TRÒ CHƠI MỚI"
-
-#~ msgid ""
-#~ " menu. \n"
-#~ "\n"
-#~ "Enjoy the game!"
+#~ "The host sets up the game options. There can only be one host per network "
+#~ "game."
 #~ msgstr ""
-#~ " trình đơn.\n"
-#~ "\n"
-#~ "Hãy thưởng thức trò chơi!"
+#~ "Chủ nhà thiết lập các lựa chọn trò chơi. Chỉ có thể có một máy chủ cho "
+#~ "mỗi trò chơi mạng."
 
-#~ msgid "Warning!"
-#~ msgstr "Cảnh báo!"
+#~ msgid "Guest"
+#~ msgstr "Khách"
 
-#~ msgid "Dummy 1"
-#~ msgstr "Bù nhìn 1"
+#~ msgid ""
+#~ "The guest waits for the host to set up the game, then is automatically "
+#~ "added in. There can be multiple guests for TCP/IP games."
+#~ msgstr ""
+#~ "Khách đợi chủ nhà thiết lập trò chơi, sau đó sẽ tự động được thêm vào. Có "
+#~ "thể có nhiều khách cho trò chơi TCP/IP."

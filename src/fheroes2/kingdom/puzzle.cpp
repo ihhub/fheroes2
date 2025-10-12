@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -51,8 +51,10 @@
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -120,10 +122,14 @@ namespace
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             // If exit button was pressed before reveal animation is finished, return true to indicate early exit.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 return true;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
 
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
@@ -191,9 +197,13 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( !earlyExit && le.HandleEvents() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
         }
 
@@ -269,9 +279,13 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && !earlyExit ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
         }
 
