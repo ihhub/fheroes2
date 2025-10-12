@@ -563,6 +563,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     if ( isMagicGuild ) {
                         // We do not use fheroes2::ButtonRestorer here as it causes flickering.
                         buttonExit.disable();
+                        buttonExit.draw( display );
+                        display.updateNextRenderRoi( buttonExit.area() );
 
                         if ( purchaseSpellBookIfNecessary( *this, hero ) ) {
                             // Guest hero purchased the spellbook, redraw the resource panel
@@ -581,6 +583,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         }
 
                         buttonExit.enable();
+                        buttonExit.draw( display );
+                        display.updateNextRenderRoi( buttonExit.area() );
                     }
                     else if ( isMonsterDwelling ) {
                         const fheroes2::ButtonRestorer exitRestorer( buttonExit );
