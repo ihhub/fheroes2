@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -174,12 +174,23 @@ msgstr ""
 "ÎNCARCĂ\n"
 "JOCUL"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "RESTART"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "SALVEAZĂ\n"
 "JOCUL"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "ÎNCHIDE"
@@ -2943,6 +2954,12 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
+msgid "Restart Game"
+msgstr ""
+
+msgid "There was an issue during saving."
+msgstr ""
+
 msgid "New Game"
 msgstr ""
 
@@ -2955,10 +2972,21 @@ msgstr "Încarcă jocul"
 msgid "Load a previously saved game."
 msgstr ""
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Întoarce-te la luptă."
+
 msgid "Save Game"
 msgstr "Salvează jocul"
 
 msgid "Save the current game."
+msgstr ""
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Luptă automată"
+
+msgid "Save the current game without name selection."
 msgstr ""
 
 msgid "Quit"
@@ -4489,19 +4517,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race1} %{name1}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{name} cel %{race}"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{name} cel %{race}"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{name} cel %{race}"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "%{race1} %{name1}"
 
 #, fuzzy
@@ -4765,12 +4793,43 @@ msgstr "Salvează harta"
 msgid "Click to save the current map."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Vrajă aleatorie"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Vrajă aleatorie"
+
 msgid "Click to show only level %{level} spells."
 msgstr ""
 
 #, fuzzy
 msgid "Spells level"
 msgstr "Pergament magic"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Vrajă aleatorie"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Disable All Spells"
+msgstr ""
 
 msgid "Riddle:"
 msgstr ""
@@ -5278,6 +5337,9 @@ msgid "hotkey|world map down right"
 msgstr ""
 
 msgid "hotkey|save game"
+msgstr ""
+
+msgid "hotkey|quick save"
 msgstr ""
 
 msgid "hotkey|next hero"
@@ -6042,9 +6104,6 @@ msgid "Are you sure you want to overwrite the save with this name?"
 msgstr ""
 
 msgid "Game saved successfully."
-msgstr ""
-
-msgid "There was an issue during saving."
 msgstr ""
 
 msgid ""
@@ -7707,6 +7766,35 @@ msgid ""
 msgstr ""
 
 msgid "%{name1} meets %{name2}"
+msgstr ""
+
+msgid "hero|Level %{level}"
+msgstr ""
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Artefacte"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Artefacte"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."

@@ -47,6 +47,8 @@ namespace Game
     std::string GetSaveFileExtension( const int gameType );
 
     bool AutoSave();
+    bool QuickSave();
+
     bool Save( const std::string & filePath, const bool autoSave = false );
 
     // Returns GameMode::CANCEL in case of failure.

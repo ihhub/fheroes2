@@ -159,6 +159,10 @@ namespace fheroes2
         KEY_HOME,
         KEY_END,
 
+        // These keys are from mouse buttons.
+        KEY_MOUSE_BUTTON_BACKWARD,
+        KEY_MOUSE_BUTTON_FORWARD,
+
         // Put all new keys before this line.
         LAST_KEY
     };
@@ -348,6 +352,12 @@ public:
     void registerDrag()
     {
         setStates( DRAG_ONGOING );
+    }
+
+    // Only for cases when a continuous pressed event is required.
+    void resetLongPress()
+    {
+        _mouseButtonLongPressDelay.reset();
     }
 
 private:

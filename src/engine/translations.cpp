@@ -118,8 +118,8 @@ namespace
         LOCALE_BG,
         LOCALE_CA,
         LOCALE_CS,
+        LOCALE_DA,
         LOCALE_DE,
-        LOCALE_DK,
         LOCALE_EL,
         LOCALE_ES,
         LOCALE_ET,
@@ -127,7 +127,6 @@ namespace
         LOCALE_FI,
         LOCALE_FR,
         LOCALE_GL,
-        LOCALE_GR,
         LOCALE_HE,
         LOCALE_HR,
         LOCALE_HU,
@@ -173,8 +172,8 @@ namespace
                                                                                   { "cs", LocaleType::LOCALE_CS },
                                                                                   { "czech", LocaleType::LOCALE_CS },
                                                                                   // Danish
-                                                                                  { "dk", LocaleType::LOCALE_DK },
-                                                                                  { "danish", LocaleType::LOCALE_DK },
+                                                                                  { "da", LocaleType::LOCALE_DA },
+                                                                                  { "danish", LocaleType::LOCALE_DA },
                                                                                   // German
                                                                                   { "de", LocaleType::LOCALE_DE },
                                                                                   { "german", LocaleType::LOCALE_DE },
@@ -199,9 +198,6 @@ namespace
                                                                                   // Galician
                                                                                   { "gl", LocaleType::LOCALE_GL },
                                                                                   { "galician", LocaleType::LOCALE_GL },
-                                                                                  // Greek
-                                                                                  { "gr", LocaleType::LOCALE_GR },
-                                                                                  { "greek", LocaleType::LOCALE_GR },
                                                                                   // Hebrew
                                                                                   { "he", LocaleType::LOCALE_HE },
                                                                                   { "hebrew", LocaleType::LOCALE_HE },
@@ -617,14 +613,13 @@ const char * Translation::ngettext( const char * str, const char * plural, size_
         switch ( current->getLocale() ) {
         case LocaleType::LOCALE_AF:
         case LocaleType::LOCALE_BG:
+        case LocaleType::LOCALE_DA:
         case LocaleType::LOCALE_DE:
-        case LocaleType::LOCALE_DK:
         case LocaleType::LOCALE_ES:
         case LocaleType::LOCALE_ET:
         case LocaleType::LOCALE_EU:
         case LocaleType::LOCALE_FI:
         case LocaleType::LOCALE_GL:
-        case LocaleType::LOCALE_GR:
         case LocaleType::LOCALE_HE:
         case LocaleType::LOCALE_HU:
         case LocaleType::LOCALE_ID:

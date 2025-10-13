@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -177,12 +177,26 @@ msgstr ""
 "ЗАГРУЗИТЬ\n"
 "ИГРУ"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "СНАЧАЛА"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "СОХРАНИТЬ\n"
 "ИГРУ"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"БЫСТРАЯ\n"
+"БИТВА"
 
 msgid "QUIT"
 msgstr "ВЫЙТИ"
@@ -223,9 +237,7 @@ msgstr ""
 "КАРТУ"
 
 msgid "INFO"
-msgstr ""
-" СЦЕНА-\n"
-"РИЙ"
+msgstr "СЦЕНАРИЙ"
 
 msgid ""
 "BATTLE\n"
@@ -3066,6 +3078,13 @@ msgstr "В казне: "
 msgid "Need: "
 msgstr "Необходимо: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Начать сначала"
+
+msgid "There was an issue during saving."
+msgstr "Возникла проблема при сохранении."
+
 msgid "New Game"
 msgstr "Новая игра"
 
@@ -3078,10 +3097,22 @@ msgstr "Загрузка игры"
 msgid "Load a previously saved game."
 msgstr "Загрузка ранее сохранённой игры."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Начать сначала текущий сценарий."
+
 msgid "Save Game"
 msgstr "Сохранить игру"
 
 msgid "Save the current game."
+msgstr "Сохранить текущую игру."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Квиксильвер"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Сохранить текущую игру."
 
 msgid "Quit"
@@ -4676,17 +4707,17 @@ msgstr "[%{pos}]: герой - %{race}"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, герой - %{race}"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} (город)"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} (замок)"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} (город)"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} (город)"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} (замок)"
+
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} (город)"
 
 msgid "None."
 msgstr "Нет."
@@ -4952,11 +4983,43 @@ msgstr "Сохранить карту:"
 msgid "Click to save the current map."
 msgstr "Нажмите, чтобы сохранить текущую карту."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Удалить вторичный навык"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Нажмите, чтобы показать заклинания только %{level} уровня."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Удалить вторичный навык"
+
 msgid "Click to show only level %{level} spells."
 msgstr "Нажмите, чтобы показать заклинания только %{level} уровня."
 
 msgid "Spells level"
 msgstr "Уровень заклинаний"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Запретить заклинания"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Нажмите, чтобы показать заклинания только %{level} уровня."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Просмотреть заклинания"
 
 msgid "Riddle:"
 msgstr "Загадка:"
@@ -5484,6 +5547,10 @@ msgstr "переместить карту мира вправо-вниз"
 
 msgid "hotkey|save game"
 msgstr "сохранить игру"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "быстрая битва"
 
 msgid "hotkey|next hero"
 msgstr "следующий герой"
@@ -6317,9 +6384,6 @@ msgstr "Вы хотите перезаписать файл игры?"
 
 msgid "Game saved successfully."
 msgstr "Игра успешно сохранена."
-
-msgid "There was an issue during saving."
-msgstr "Возникла проблема при сохранении."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8412,6 +8476,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} встретил %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Уровень %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Артефакты"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Показать артефакты"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."

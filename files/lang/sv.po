@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
-"PO-Revision-Date: 2025-09-12 21:11+0200\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"PO-Revision-Date: 2025-10-08 20:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -177,11 +177,25 @@ msgstr ""
 "SPEL"
 
 msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+"OMSTARTA\n"
+"SPEL"
+
+msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "SPARA\n"
 "SPEL"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"SNABB-\n"
+"SPARA"
 
 msgid "QUIT"
 msgstr "AVSLUTA"
@@ -3049,6 +3063,12 @@ msgstr "Totalt: "
 msgid "Need: "
 msgstr "Behöver: "
 
+msgid "Restart Game"
+msgstr "Starta om Spel"
+
+msgid "There was an issue during saving."
+msgstr "Det uppstod ett problem under sparningen."
+
 msgid "New Game"
 msgstr "Nytt Spel"
 
@@ -3061,11 +3081,20 @@ msgstr "Ladda Spel"
 msgid "Load a previously saved game."
 msgstr "Ladda ett tidigare sparat spel."
 
+msgid "Restart the scenario."
+msgstr "Omstarta scenariet."
+
 msgid "Save Game"
 msgstr "Spara Spel"
 
 msgid "Save the current game."
 msgstr "Spara nuvarande spel."
+
+msgid "Quick Save"
+msgstr "Snabbspara"
+
+msgid "Save the current game without name selection."
+msgstr "Spara nuvarande spel utan namnval."
 
 msgid "Quit"
 msgstr "Avsluta"
@@ -3757,9 +3786,8 @@ msgstr "Kartsvårighet:"
 msgid "N"
 msgstr "N"
 
-#, fuzzy
 msgid "Are you sure you want to delete the map:"
-msgstr "Är du säker på att du vill radera filen:"
+msgstr "Är du säker på att du vill radera kartan:"
 
 msgid "No maps exist at that size."
 msgstr "Finns inga kartor av den storleken."
@@ -4644,22 +4672,21 @@ msgstr "[%{pos}]: %{race}hjälte"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race}hjälte"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race}stad"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race}borg"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race}stad"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race}stad"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race}borg"
 
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race}stad"
+
 msgid "None."
 msgstr "Inga."
 
-#, fuzzy
 msgid "One side defeats the other."
 msgstr "En sida besegrar den andra."
 
@@ -4915,11 +4942,39 @@ msgstr "Spara Karta:"
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Klicka här för att aktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Radera Sekundär Förmåga"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Klicka här för att inaktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Radera Sekundär Förmåga"
+
 msgid "Click to show only level %{level} spells."
 msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
 
 msgid "Spells level"
 msgstr "Besvärjelsenivå"
+
+msgid "Click to enable all spells."
+msgstr "Klicka här för att aktivera alla besvärjelser."
+
+msgid "Enable All Spells"
+msgstr "Aktivera Alla Besvärjelser"
+
+msgid "Click to disable all spells."
+msgstr "Klicka här för att inaktivera alla besvärjelser."
+
+msgid "Disable All Spells"
+msgstr "Inaktivera Alla Besvärjelser"
 
 msgid "Riddle:"
 msgstr "Gåta:"
@@ -5443,6 +5498,9 @@ msgstr "Kartvy: Sydost"
 
 msgid "hotkey|save game"
 msgstr "Spara spel"
+
+msgid "hotkey|quick save"
+msgstr "Snabbspara"
 
 msgid "hotkey|next hero"
 msgstr "Nästa hjälte"
@@ -6075,9 +6133,8 @@ msgstr "Klicka för att acceptera dessa inställningar och starta ett nytt spel.
 msgid "Click to return to the main menu."
 msgstr "Klicka för att gå tillbaka till huvudmenyn."
 
-#, fuzzy
 msgid "The map is corrupted or doesn't exist."
-msgstr "Kartan är korrupt."
+msgstr "Kartan är korrupt eller existerar inte."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."
@@ -6275,9 +6332,6 @@ msgstr "Är du säker på att du vill skriva över sparningen med detta namn?"
 
 msgid "Game saved successfully."
 msgstr "Sparning lyckades."
-
-msgid "There was an issue during saving."
-msgstr "Det uppstod ett problem under sparningen."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8385,6 +8439,33 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} möter %{name2}"
+
+msgid "hero|Level %{level}"
+msgstr "Nivå %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr "Flytta alla artefakter från %{from_hero_name} till %{to_hero_name}."
+
+msgid "Artifact Transfer"
+msgstr "Artefaktbyte"
+
+msgid "Swap Artifacts"
+msgstr "Byt Artefakter"
+
+msgid "Swap all artifacts between heroes."
+msgstr "Byt alla artefakter mellan hjältar."
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr "Flytta armé från %{from_hero_name} till %{to_hero_name}."
+
+msgid "Army Transfer"
+msgstr "Armébyte"
+
+msgid "Swap Armies"
+msgstr "Byt Arméer"
+
+msgid "Swap armies between heroes."
+msgstr "Byt arméer mellan hjältar."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."

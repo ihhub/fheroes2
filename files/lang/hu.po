@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -174,12 +174,26 @@ msgstr ""
 "JÁTÉK\n"
 "BETÖLTÉS"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "ÚJRA"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "JÁTÉK\n"
 "MENTÉS"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"GYORS\n"
+"CSATA"
 
 msgid "QUIT"
 msgstr "KILÉPÉS"
@@ -3046,6 +3060,13 @@ msgstr "Összesen: "
 msgid "Need: "
 msgstr "Szükséges: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Újra"
+
+msgid "There was an issue during saving."
+msgstr "Valami szösz került a gépezetbe mentés közben."
+
 msgid "New Game"
 msgstr "Új játék"
 
@@ -3058,10 +3079,22 @@ msgstr "Játék betöltése"
 msgid "Load a previously saved game."
 msgstr "Mentett játék betöltése."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Aktuális küldetés újraindítása."
+
 msgid "Save Game"
 msgstr "Játék mentése"
 
 msgid "Save the current game."
+msgstr "Aktuális játék mentése."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Aktuális játék mentése."
 
 msgid "Quit"
@@ -4644,17 +4677,17 @@ msgstr "[%{pos}]: %{race} hős"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%[%{pos}]: %{name}, %{race} hős"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} város"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} vár"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} város"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} város"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} vár"
+
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} város"
 
 msgid "None."
 msgstr "Nincs."
@@ -4921,11 +4954,43 @@ msgstr "Térkép mentése:"
 msgid "Click to save the current map."
 msgstr "Kattints az aktuális térkép mentéséhez."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Másodlagos képesség törlése"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Másodlagos képesség törlése"
+
 msgid "Click to show only level %{level} spells."
 msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
 
 msgid "Spells level"
 msgstr "Varázslatok szintje"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Tiltott varázslatok"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Varázslatok mutatása"
 
 msgid "Riddle:"
 msgstr "Találós kérdés:"
@@ -5449,6 +5514,10 @@ msgstr "világtérkép: le-jobbra"
 
 msgid "hotkey|save game"
 msgstr "játék mentése"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "gyors csata"
 
 msgid "hotkey|next hero"
 msgstr "következő hős"
@@ -6280,9 +6349,6 @@ msgstr "Biztosan felülírod a mentést ezzel a névvel?"
 
 msgid "Game saved successfully."
 msgstr "A játék sikeresen mentve."
-
-msgid "There was an issue during saving."
-msgstr "Valami szösz került a gépezetbe mentés közben."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8368,6 +8434,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} és %{name2} találkozik"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "%{level} szint"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Varázstárgyak"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Varázstárgyak mutatása"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -178,12 +178,26 @@ msgstr ""
 "CHAR-\n"
 "GER"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "REJOUER"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "SAUVE-\n"
 "GARDER"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"COMBAT\n"
+"RAPIDE"
 
 msgid "QUIT"
 msgstr ""
@@ -3103,6 +3117,13 @@ msgstr "Total : "
 msgid "Need: "
 msgstr "Besoin : "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Recommencer"
+
+msgid "There was an issue during saving."
+msgstr "Il y a eu un problème lors de la sauvegarde."
+
 msgid "New Game"
 msgstr "Nouvelle partie"
 
@@ -3115,10 +3136,22 @@ msgstr "Charger une partie"
 msgid "Load a previously saved game."
 msgstr "Charger une partie sauvegardée."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Recommencer le scénario actuel."
+
 msgid "Save Game"
 msgstr "Enregistrer"
 
 msgid "Save the current game."
+msgstr "Enregistrer le jeu en cours."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Enregistrer le jeu en cours."
 
 msgid "Quit"
@@ -4757,16 +4790,12 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race1} %{name1} vs. %{race2} %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "Héros %{race} %{color}"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{townOrCastle} %{race} %{color}"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} vs. %{race2} %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "Héros %{race} %{color}"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
@@ -5051,12 +5080,44 @@ msgstr "Sauvegarder la carte"
 msgid "Click to save the current map."
 msgstr "Enregistrer le jeu en cours."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Cliquez ici pour sélectionner cette couleur."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Sortilège aléatoire"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Cliquez pour quitter les résultats de la bataille."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Voir les sorts"
+
 msgid "Click to show only level %{level} spells."
 msgstr ""
 
 #, fuzzy
 msgid "Spells level"
 msgstr "Parchemin magique"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Cliquez ici pour sélectionner cette couleur."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Sortilège aléatoire"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Cliquez pour quitter les résultats de la bataille."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Voir les sorts"
 
 msgid "Riddle:"
 msgstr ""
@@ -5583,6 +5644,10 @@ msgstr "Déplacement vers le bas et la droite"
 
 msgid "hotkey|save game"
 msgstr "Sauvegarder la partie"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "Combat rapide"
 
 msgid "hotkey|next hero"
 msgstr "Héros suivant"
@@ -6423,9 +6488,6 @@ msgstr "Voulez-vous vraiment remplacer la sauvegarde avec ce nom ?"
 
 msgid "Game saved successfully."
 msgstr "Sauvegarde réussie."
-
-msgid "There was an issue during saving."
-msgstr "Il y a eu un problème lors de la sauvegarde."
 
 # Needs line break to have insectile space but keep partie and ? together.
 msgid ""
@@ -8594,6 +8656,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "Rencontre entre %{name1} et %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Niveau %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Artéfacts"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Voir artéfacts"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Les héros ennemis sont désormais parfaitement identifiables."

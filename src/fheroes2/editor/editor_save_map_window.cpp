@@ -38,6 +38,7 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
+#include "game_string.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -84,20 +85,32 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
+            if ( info.version != GameVersion::RESURRECTION ) {
+                // The Editor doesn't support original map formats so you are trying to do some nonsence hacks.
+                assert( 0 );
+                return;
+            }
 
-            fheroes2::MultiFontText body;
+            const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.mainLanguage );
 
-            body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() } );
-            body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.description, fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
-            body.add( { info.filename, fheroes2::FontType::smallWhite() } );
+            const Settings & conf = Settings::Get();
+            const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
 
-            fheroes2::showMessage( header, body, Dialog::ZERO );
+            std::vector<std::pair<fheroes2::LocalizedString, fheroes2::FontType>> strings;
+
+            strings.emplace_back( fheroes2::LocalizedString( _( "Map Type:\n" ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "Resurrection" ), gameLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nLanguage:\n" ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( fheroes2::getLanguageName( info.mainLanguage ), gameLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nSize: " ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( std::to_string( info.width ) + " x " + std::to_string( info.height ), gameLanguage ),
+                                  fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nDescription: " ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( info.description, info.mainLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nLocation: " ), gameLanguage ), fheroes2::FontType::smallYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( info.filename, gameLanguage ), fheroes2::FontType::smallWhite() );
+
+            fheroes2::showMessage( header, *fheroes2::getLocalizedText( strings ), Dialog::ZERO );
         }
 
         void initListBackgroundRestorer( fheroes2::Rect roi )

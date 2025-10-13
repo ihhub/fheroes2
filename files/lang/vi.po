@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -173,12 +173,23 @@ msgstr ""
 "TẢI\n"
 "GAME"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "LÀM LẠI"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "LƯU\n"
 "GAME"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "RỜI KHỎI"
@@ -3100,6 +3111,13 @@ msgstr "Tổng: "
 msgid "Need: "
 msgstr "Cần: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Chơi lại"
+
+msgid "There was an issue during saving."
+msgstr "Đã xảy ra sự cố trong quá trình lưu."
+
 msgid "New Game"
 msgstr "Trò chơi Mới"
 
@@ -3112,10 +3130,22 @@ msgstr "Tải Trò chơi"
 msgid "Load a previously saved game."
 msgstr "Tải một trò chơi đã lưu trước đó."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Chơi lại kịch bản hiện tại."
+
 msgid "Save Game"
 msgstr "Lưu Trò chơi"
 
 msgid "Save the current game."
+msgstr "Lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Lưu trò chơi hiện tại."
 
 msgid "Quit"
@@ -4778,19 +4808,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race} tướng"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} %{race} %{townOrCastle}"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} tướng"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 #, fuzzy
@@ -5088,12 +5118,44 @@ msgstr "Lưu Bản đồ"
 msgid "Click to save the current map."
 msgstr "Nhấp để lưu trò chơi hiện tại."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Xem Phép"
+
 msgid "Click to show only level %{level} spells."
 msgstr ""
 
 #, fuzzy
 msgid "Spells level"
 msgstr "Sách Phép"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Xem Phép"
 
 msgid "Riddle:"
 msgstr ""
@@ -5626,6 +5688,10 @@ msgstr "bản đồ thế giới phải dưới"
 
 msgid "hotkey|save game"
 msgstr "lưu trò chơi"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "thoát"
 
 msgid "hotkey|next hero"
 msgstr "tướng tiếp theo"
@@ -6458,9 +6524,6 @@ msgstr "Ngươi có chắc chắn muốn ghi đè lưu bằng tên này không?"
 
 msgid "Game saved successfully."
 msgstr "Chò trơi được lưu thành công."
-
-msgid "There was an issue during saving."
-msgstr "Đã xảy ra sự cố trong quá trình lưu."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8600,6 +8663,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} gặp %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Cấp bậc %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Bảo vật"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Xem Bảo vật"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Tướng địch bây giờ đã có thể nhận dạng đầy đủ."

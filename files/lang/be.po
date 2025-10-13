@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-12 02:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -177,12 +177,26 @@ msgstr ""
 "ЗАГРУ-\n"
 "ЗІЦЬ"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "НАНОВА"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ЗАХА-\n"
 "ВАЦЬ"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"ХУТКІ\n"
+"БОЙ"
 
 msgid "QUIT"
 msgstr ""
@@ -2996,6 +3010,13 @@ msgstr "У казне: "
 msgid "Need: "
 msgstr "Трэба: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Перазапусціць"
+
+msgid "There was an issue during saving."
+msgstr ""
+
 msgid "New Game"
 msgstr "Новая гульня"
 
@@ -3008,10 +3029,22 @@ msgstr "Загрузіць гульню"
 msgid "Load a previously saved game."
 msgstr "Працягнуць захаваную гульню."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Пакінуць замак"
+
 msgid "Save Game"
 msgstr "Захаваць гульню"
 
 msgid "Save the current game."
+msgstr "Захаваць бягучую гульню."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Хуткі бой"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Захаваць бягучую гульню."
 
 msgid "Quit"
@@ -4578,19 +4611,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race} %{name}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} гулец"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} гулец"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race} %{name}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} гулец"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr ""
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "%{race} %{name}"
 
 msgid "None."
 msgstr "Няма."
@@ -4860,12 +4893,44 @@ msgstr "Вялікія мапы"
 msgid "Click to save the current map."
 msgstr "Назва абранай мапы."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Выпадковае заклінанне"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Прагледзець заклінанні"
+
 msgid "Click to show only level %{level} spells."
 msgstr ""
 
 #, fuzzy
 msgid "Spells level"
 msgstr "Няўдалае заклінанне!"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Выпадковае заклінанне"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Прагледзець заклінанні"
 
 msgid "Riddle:"
 msgstr ""
@@ -5384,6 +5449,10 @@ msgstr ""
 
 msgid "hotkey|save game"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "Найлепшыя дасягненні"
 
 msgid "hotkey|next hero"
 msgstr ""
@@ -6162,9 +6231,6 @@ msgid "Are you sure you want to overwrite the save with this name?"
 msgstr ""
 
 msgid "Game saved successfully."
-msgstr ""
-
-msgid "There was an issue during saving."
 msgstr ""
 
 msgid ""
@@ -7834,6 +7900,35 @@ msgid ""
 msgstr ""
 
 msgid "%{name1} meets %{name2}"
+msgstr ""
+
+msgid "hero|Level %{level}"
+msgstr ""
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Артэфакты"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Прагледзець артэфакты"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."

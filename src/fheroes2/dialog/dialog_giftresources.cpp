@@ -228,7 +228,7 @@ namespace
     };
 }
 
-void Dialog::MakeGiftResource( Kingdom & kingdom )
+int Dialog::MakeGiftResource( Kingdom & kingdom )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -341,4 +341,6 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
             funds2 *= count;
         kingdom.OddFundsResource( funds2 );
     }
+
+    return result;
 }

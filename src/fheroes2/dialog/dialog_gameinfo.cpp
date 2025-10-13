@@ -43,6 +43,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -81,6 +82,8 @@ void Dialog::GameInfo()
     Settings & conf = Settings::Get();
     const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
+    const auto mapLanguage = mapInfo.getSupportedLanguage();
+
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -96,7 +99,7 @@ void Dialog::GameInfo()
 
     const fheroes2::Rect scenarioNameRoi{ 37 + shadowOffset.x, 29 + shadowOffset.y, 349, 19 };
 
-    fheroes2::Text text( mapInfo.name, fheroes2::FontType::normalWhite(), mapInfo.getSupportedLanguage() );
+    fheroes2::Text text( mapInfo.name, fheroes2::FontType::normalWhite(), mapLanguage );
     text.fitToOneRow( scenarioNameRoi.width );
     text.draw( scenarioNameRoi.x, shadowOffset.y + 32, scenarioNameRoi.width, display );
 
@@ -124,7 +127,7 @@ void Dialog::GameInfo()
     text.set( Maps::SizeString( mapInfo.width ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
-    text.set( mapInfo.description, fheroes2::FontType::smallWhite(), mapInfo.getSupportedLanguage() );
+    text.set( mapInfo.description, fheroes2::FontType::smallWhite(), mapLanguage );
     text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
@@ -142,17 +145,18 @@ void Dialog::GameInfo()
     text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 347, CONDITION_LABEL_WIDTH, display );
 
-    text.set( GameOver::GetActualDescription( mapInfo.ConditionWins() ), fheroes2::FontType::smallWhite() );
-    text.setUniformVerticalAlignment( false );
-    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
+    std::unique_ptr<fheroes2::TextBase> conditionsText
+        = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionWins(), mapLanguage ), fheroes2::FontType::smallWhite() );
+    conditionsText->setUniformVerticalAlignment( false );
+    conditionsText->draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Loss\nConditions" ), fheroes2::FontType::smallWhite() );
     text.setUniformVerticalAlignment( true );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 392, CONDITION_LABEL_WIDTH, display );
 
-    text.set( GameOver::GetActualDescription( mapInfo.ConditionLoss() ), fheroes2::FontType::smallWhite() );
-    text.setUniformVerticalAlignment( false );
-    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
+    conditionsText = fheroes2::getLocalizedText( GameOver::GetActualDescription( mapInfo.ConditionLoss(), mapLanguage ), fheroes2::FontType::smallWhite() );
+    conditionsText->setUniformVerticalAlignment( false );
+    conditionsText->draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
     const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
     fheroes2::Button buttonOk( shadowOffset.x + OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 0 ).width() / 2, shadowOffset.y + 426, buttonOkIcnId, 0, 1 );
@@ -172,7 +176,7 @@ void Dialog::GameInfo()
         }
 
         if ( le.isMouseRightButtonPressedInArea( scenarioNameRoi ) ) {
-            text.set( mapInfo.name, fheroes2::FontType::normalYellow(), mapInfo.getSupportedLanguage() );
+            text.set( mapInfo.name, fheroes2::FontType::normalYellow(), mapLanguage );
             fheroes2::showMessage( text, fheroes2::Text{}, Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {

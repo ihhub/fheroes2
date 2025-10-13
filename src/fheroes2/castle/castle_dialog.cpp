@@ -53,6 +53,7 @@
 #include "localevent.h"
 #include "m82.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
@@ -456,6 +457,17 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             }
             else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
+            }
+            else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
+                hero->GetArmy().SwapTroops( _army );
+
+                topArmyBar.ResetSelected();
+                bottomArmyBar.ResetSelected();
+
+                topArmyBar.Redraw( display );
+                bottomArmyBar.Redraw( display );
+
+                display.render( fheroes2::getBoundaryRect( topArmyBar.GetArea(), bottomArmyBar.GetArea() ) );
             }
 
             // Army bar events processing.
