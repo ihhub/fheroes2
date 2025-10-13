@@ -77,18 +77,18 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + bottomBarOffsetY;
 
-    // The original ICN::WELLXTRA image does not have a yellow outer frame.
+    // Create Previous Castle button.
     fheroes2::Button buttonPrevCastle( cur_pt.x, dst_pt.y, ICN::SMALLBAR, 1, 2 );
     fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
-    // bottom small bar
+    // Create the status bar.
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t statusBarWidth = bar.width();
     dst_pt.x = cur_pt.x + buttonPrevCastle.area().width;
     fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, statusBarWidth, bar.height() );
 
-    // button next castle
+    // Create Next Castle button.
     fheroes2::Button buttonNextCastle( dst_pt.x + statusBarWidth, dst_pt.y, ICN::SMALLBAR, 3, 4 );
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
