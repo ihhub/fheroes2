@@ -391,7 +391,7 @@ private:
         RecruitHero // Recruit a hero.
     };
 
-    enum class MageGuildDialogResult : int
+    enum class MageGuildDialogResult : uint8_t
     {
         DoNothing,
         NextMageGuildWindow, // Open Mage Guild dialog for the next castle.
