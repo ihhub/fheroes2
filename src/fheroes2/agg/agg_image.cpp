@@ -5243,7 +5243,7 @@ namespace
 
             fheroes2::Copy( croppedImage, 0, 8, original, 0, original.height() - 40, original.width(), 40 );
 
-            fheroes2::CreateDitheringTransition( croppedImage, 0, 0,  original, 0, original.height() - 48, original.width(), 8, false, false );
+            fheroes2::CreateDitheringTransition( croppedImage, 0, 0, original, 0, original.height() - 48, original.width(), 8, false, false );
 
             break;
         }
