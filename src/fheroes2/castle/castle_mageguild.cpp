@@ -79,20 +79,29 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
     fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
-    // Create the status bar UI element.
-    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-    const int32_t statusBarWidth = bar.width();
-    dst_pt.x = cur_pt.x + buttonPrevCastle.area().width;
-    fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, statusBarWidth, bar.height() );
+    // Exit button.
+    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
     // Create Next Castle button.
-    fheroes2::Button buttonNextCastle( dst_pt.x + statusBarWidth, dst_pt.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::Button buttonNextCastle( buttonExit.area().x - fheroes2::AGG::GetICN( ICN::SMALLBAR, 3 ).width(), dst_pt.y, ICN::SMALLBAR, 3, 4 );
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
 
+    // Create the status bar UI element.
+    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const int32_t barHeight = bottomBar.height();
+    const fheroes2::Point bottonBarOffset{ buttonPrevCastle.area().x + buttonPrevCastle.area().width, dst_pt.y };
+    const int32_t bottomBarWidth{ fheroes2::Display::DEFAULT_WIDTH - exitWidth - buttonNextCastle.area().width - buttonPrevCastle.area().width };
+
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Copy( bottomBar, 1, 0, display, bottonBarOffset.x, bottonBarOffset.y, bottomBarWidth / 2, barHeight );
+    fheroes2::Copy( bottomBar, bottomBar.width() - ( bottomBarWidth - bottomBarWidth / 2 ), 0, display, bottonBarOffset.x + bottomBarWidth / 2, bottonBarOffset.y,
+                    bottomBarWidth - bottomBarWidth / 2, barHeight );
+
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y, bar.width() - 16 * 2, 0 } );
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y, bottomBarWidth, 0 } );
 
     // Default text for status bar.
     std::string defaultStatusBarText;
@@ -125,10 +134,6 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
         spellRows[levelIndex]->redraw( display );
     }
 
-    const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
-    fheroes2::Button buttonExit( cur_pt.x + 32, cur_pt.y + bottomBarOffsetY - 32, exitButtonIcnID, 0, 1 );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
-
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
         buttonNextCastle.disable();
@@ -139,11 +144,33 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
     buttonExit.draw();
 
-    display.render();
-
-    std::string statusMessage;
-
     LocalEvent & le = LocalEvent::Get();
+
+    auto updateStatusBar = [&le, &buttonExit, &buttonPrevCastle, &buttonNextCastle, &statusBar, &defaultStatusBarText]() {
+        std::string statusMessage;
+
+        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
+            statusMessage = _( "Exit Mage Guild" );
+        }
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
+            statusMessage = _( "Show previous town" );
+        }
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
+            statusMessage = _( "Show next town" );
+        }
+
+        if ( statusMessage.empty() ) {
+            statusBar.ShowMessage( defaultStatusBarText );
+        }
+        else {
+            statusBar.ShowMessage( statusMessage );
+            statusMessage.clear();
+        }
+    };
+
+    updateStatusBar();
+
+    display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
@@ -181,23 +208,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
             fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
         }
 
-        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
-            statusMessage = _( "Exit Mage Guild" );
-        }
-        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
-            statusMessage = _( "Show previous town" );
-        }
-        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
-            statusMessage = _( "Show next town" );
-        }
-
-        if ( statusMessage.empty() ) {
-            statusBar.ShowMessage( defaultStatusBarText );
-        }
-        else {
-            statusBar.ShowMessage( statusMessage );
-            statusMessage.clear();
-        }
+        updateStatusBar();
     }
 
     return MageGuildDialogResult::DoNothing;
