@@ -72,9 +72,6 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
-    // status bar
-    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
-
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + bottomBarOffsetY;
 
