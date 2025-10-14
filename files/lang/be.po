@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2791,6 +2791,18 @@ msgid ""
 "of the castle's side of the battlefield."
 msgstr ""
 
+msgid "Set garrison combat formation to 'Spread'"
+msgstr ""
+
+msgid "Set garrison combat formation to 'Grouped'"
+msgstr ""
+
+msgid "Exit Castle Options"
+msgstr ""
+
+msgid "Castle Options"
+msgstr "Налады замка"
+
 msgid "Spread Formation"
 msgstr ""
 
@@ -2804,18 +2816,6 @@ msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 #, fuzzy
 msgid "Click to show the previous town."
 msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
-
-msgid "Set garrison combat formation to 'Spread'"
-msgstr ""
-
-msgid "Set garrison combat formation to 'Grouped'"
-msgstr ""
-
-msgid "Exit Castle Options"
-msgstr ""
-
-msgid "Castle Options"
-msgstr "Налады замка"
 
 msgid "Not enough resources to recruit creatures."
 msgstr ""

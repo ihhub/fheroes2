@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2850,18 +2850,6 @@ msgstr ""
 "Бойовий порядок \"Згуртованість\" об'єднує підрозділи замку в центрі поля "
 "бою на стороні замку."
 
-msgid "Spread Formation"
-msgstr "Порядок Розосередженість"
-
-msgid "Grouped Formation"
-msgstr "Порядок Згуртованість"
-
-msgid "Click to show the next town."
-msgstr "Тицьніть щоб показати наступне місто."
-
-msgid "Click to show the previous town."
-msgstr "Тицьніть щоб показати попереднє місто."
-
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Встановити бойовий порядок \"Розосередження\""
 
@@ -2873,6 +2861,18 @@ msgstr "Вийти з налаштувань замку"
 
 msgid "Castle Options"
 msgstr "Налаштування замку"
+
+msgid "Spread Formation"
+msgstr "Порядок Розосередженість"
+
+msgid "Grouped Formation"
+msgstr "Порядок Згуртованість"
+
+msgid "Click to show the next town."
+msgstr "Тицьніть щоб показати наступне місто."
+
+msgid "Click to show the previous town."
+msgstr "Тицьніть щоб показати попереднє місто."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Недостатньо ресурсів для найму істот."

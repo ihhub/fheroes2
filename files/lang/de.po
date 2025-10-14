@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2840,18 +2840,6 @@ msgstr ""
 "Die 'Gruppierte' Kampfformation bündelt Eure Armee in der Mitte Eurer Seite "
 "des Schlachtfelds."
 
-msgid "Spread Formation"
-msgstr "Verstreute Formation"
-
-msgid "Grouped Formation"
-msgstr "Gruppierte Formation"
-
-msgid "Click to show the next town."
-msgstr "Klickt, um die nächste Stadt anzuzeigen."
-
-msgid "Click to show the previous town."
-msgstr "Klickt, um die vorherige Stadt anzuzeigen."
-
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Kampfformation der Garnison auf \"verstreut\" einstellen"
 
@@ -2863,6 +2851,18 @@ msgstr "Burg Optionen verlassen"
 
 msgid "Castle Options"
 msgstr "Burg Optionen"
+
+msgid "Spread Formation"
+msgstr "Verstreute Formation"
+
+msgid "Grouped Formation"
+msgstr "Gruppierte Formation"
+
+msgid "Click to show the next town."
+msgstr "Klickt, um die nächste Stadt anzuzeigen."
+
+msgid "Click to show the previous town."
+msgstr "Klickt, um die vorherige Stadt anzuzeigen."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nicht genügend Ressourcen, um Kreaturen zu rekrutieren."

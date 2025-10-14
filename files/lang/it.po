@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2689,6 +2689,18 @@ msgid ""
 "of the castle's side of the battlefield."
 msgstr ""
 
+msgid "Set garrison combat formation to 'Spread'"
+msgstr ""
+
+msgid "Set garrison combat formation to 'Grouped'"
+msgstr ""
+
+msgid "Exit Castle Options"
+msgstr "Esci dal castello"
+
+msgid "Castle Options"
+msgstr "Opzioni Castello"
+
 msgid "Spread Formation"
 msgstr "Formazione sparsa"
 
@@ -2702,18 +2714,6 @@ msgstr "Clicca per andare alla città succ."
 #, fuzzy
 msgid "Click to show the previous town."
 msgstr "Clicca per andare alla città prec."
-
-msgid "Set garrison combat formation to 'Spread'"
-msgstr ""
-
-msgid "Set garrison combat formation to 'Grouped'"
-msgstr ""
-
-msgid "Exit Castle Options"
-msgstr "Esci dal castello"
-
-msgid "Castle Options"
-msgstr "Opzioni Castello"
 
 #, fuzzy
 msgid "Not enough resources to recruit creatures."

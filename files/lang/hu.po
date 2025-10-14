@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -2823,18 +2823,6 @@ msgstr ""
 "'Szoros' csataalakzatban a várvédő egységeid szorosan egymás mellett "
 "helyezkednek el a harcmező várvédő oldalának közepén."
 
-msgid "Spread Formation"
-msgstr "Laza felállás"
-
-msgid "Grouped Formation"
-msgstr "Szoros felállás"
-
-msgid "Click to show the next town."
-msgstr "Kattints a következő város mutatásához."
-
-msgid "Click to show the previous town."
-msgstr "Kattints az előző város mutatásához."
-
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "A helyőrség csataalakzata legyen 'Laza'."
 
@@ -2846,6 +2834,18 @@ msgstr "Kilépés a vár beállításokból"
 
 msgid "Castle Options"
 msgstr "Vár beállítások"
+
+msgid "Spread Formation"
+msgstr "Laza felállás"
+
+msgid "Grouped Formation"
+msgstr "Szoros felállás"
+
+msgid "Click to show the next town."
+msgstr "Kattints a következő város mutatásához."
+
+msgid "Click to show the previous town."
+msgstr "Kattints az előző város mutatásához."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nincs elég erőforrás a lények toborzásához."

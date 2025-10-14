@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2914,6 +2914,18 @@ msgstr ""
 "\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
 "din side av slagmarken."
 
+msgid "Set garrison combat formation to 'Spread'"
+msgstr "Sett kampoppstillingen til garnisonen til \"Spredd\"."
+
+msgid "Set garrison combat formation to 'Grouped'"
+msgstr "Sett kampoppstillingen til garnisonen til \"Gruppert\"."
+
+msgid "Exit Castle Options"
+msgstr "Forlat borgvalg"
+
+msgid "Castle Options"
+msgstr "Borgvalg"
+
 msgid "Spread Formation"
 msgstr "Spredd oppstilling"
 
@@ -2927,18 +2939,6 @@ msgstr "Klikk for å vise neste by."
 #, fuzzy
 msgid "Click to show the previous town."
 msgstr "Klikk for å vise forrige by."
-
-msgid "Set garrison combat formation to 'Spread'"
-msgstr "Sett kampoppstillingen til garnisonen til \"Spredd\"."
-
-msgid "Set garrison combat formation to 'Grouped'"
-msgstr "Sett kampoppstillingen til garnisonen til \"Gruppert\"."
-
-msgid "Exit Castle Options"
-msgstr "Forlat borgvalg"
-
-msgid "Castle Options"
-msgstr "Borgvalg"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Ikke nok råvarer til å verve krigere."
