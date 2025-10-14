@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2878,6 +2878,18 @@ msgstr ""
 "Wybór zwartej formacji sprawia, że twoja armia zbierze się razem pośrodku "
 "twojej części pola bitwy."
 
+msgid "Set garrison combat formation to 'Spread'"
+msgstr "Ustaw szyk garnizonu na 'luźny'"
+
+msgid "Set garrison combat formation to 'Grouped'"
+msgstr "Ustaw szyk garnizonu na 'zwarty'"
+
+msgid "Exit Castle Options"
+msgstr "Wyjście z zamku"
+
+msgid "Castle Options"
+msgstr "Opcje zamku"
+
 msgid "Spread Formation"
 msgstr "Luźna formacja"
 
@@ -2891,18 +2903,6 @@ msgstr "Kliknij aby przejść do następnego miasta."
 #, fuzzy
 msgid "Click to show the previous town."
 msgstr "Kliknij aby przejść do poprzedniego miasta."
-
-msgid "Set garrison combat formation to 'Spread'"
-msgstr "Ustaw szyk garnizonu na 'luźny'"
-
-msgid "Set garrison combat formation to 'Grouped'"
-msgstr "Ustaw szyk garnizonu na 'zwarty'"
-
-msgid "Exit Castle Options"
-msgstr "Wyjście z zamku"
-
-msgid "Castle Options"
-msgstr "Opcje zamku"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Brak zasobów aby kupić stworzenia."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 04:02+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2878,18 +2878,6 @@ msgstr ""
 "La formation de combat 'groupée' regroupe les troupes du château au centre "
 "du champ de bataille, à l'intérieur du château."
 
-msgid "Spread Formation"
-msgstr "Formation dispersée"
-
-msgid "Grouped Formation"
-msgstr "Formation groupée"
-
-msgid "Click to show the next town."
-msgstr "Cliquez pour afficher le village suivant."
-
-msgid "Click to show the previous town."
-msgstr "Cliquez pour afficher le village précédent."
-
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Utiliser la formation de combat 'dispersée' pour la garnison"
 
@@ -2901,6 +2889,18 @@ msgstr "Quitter les options du château"
 
 msgid "Castle Options"
 msgstr "Options du château"
+
+msgid "Spread Formation"
+msgstr "Formation dispersée"
+
+msgid "Grouped Formation"
+msgstr "Formation groupée"
+
+msgid "Click to show the next town."
+msgstr "Cliquez pour afficher le village suivant."
+
+msgid "Click to show the previous town."
+msgstr "Cliquez pour afficher le village précédent."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Pas assez de ressources pour recruter des créatures."

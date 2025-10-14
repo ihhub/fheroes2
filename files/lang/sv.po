@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-10-08 20:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2827,18 +2827,6 @@ msgstr ""
 "'Grupperad' stridsformation buntar ihop hjältens trupper till mitten av "
 "dennes sida av slagfältet."
 
-msgid "Spread Formation"
-msgstr "Utspridd formation"
-
-msgid "Grouped Formation"
-msgstr "Grupperad formation"
-
-msgid "Click to show the next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Click to show the previous town."
-msgstr "Klicka för att visa föregående stad."
-
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Utspridd'"
 
@@ -2850,6 +2838,18 @@ msgstr "Lämna Borgalternativ"
 
 msgid "Castle Options"
 msgstr "Borgalternativ"
+
+msgid "Spread Formation"
+msgstr "Utspridd formation"
+
+msgid "Grouped Formation"
+msgstr "Grupperad formation"
+
+msgid "Click to show the next town."
+msgstr "Klicka för att visa nästa stad."
+
+msgid "Click to show the previous town."
+msgstr "Klicka för att visa föregående stad."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "För lite resurser för att rekrytera varelser."

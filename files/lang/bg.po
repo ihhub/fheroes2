@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2879,6 +2879,18 @@ msgstr ""
 "\"Групираната\" бойна формация обединява армията ти в центъра от твоята "
 "страна на бойното поле."
 
+msgid "Set garrison combat formation to 'Spread'"
+msgstr "Задай гарнизонна бойна формация \"Разпростиране\""
+
+msgid "Set garrison combat formation to 'Grouped'"
+msgstr "Задай гарнизонна бойна формация \"Групиране\""
+
+msgid "Exit Castle Options"
+msgstr "Изход от Опции на замъка"
+
+msgid "Castle Options"
+msgstr "Опции на замъка"
+
 msgid "Spread Formation"
 msgstr "Формация Разпростиране"
 
@@ -2892,18 +2904,6 @@ msgstr "Кликни, за да покажеш следващия град."
 #, fuzzy
 msgid "Click to show the previous town."
 msgstr "Кликни, за да покажеш предишния град."
-
-msgid "Set garrison combat formation to 'Spread'"
-msgstr "Задай гарнизонна бойна формация \"Разпростиране\""
-
-msgid "Set garrison combat formation to 'Grouped'"
-msgstr "Задай гарнизонна бойна формация \"Групиране\""
-
-msgid "Exit Castle Options"
-msgstr "Изход от Опции на замъка"
-
-msgid "Castle Options"
-msgstr "Опции на замъка"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Няма достатъчно ресурси за набиране на същества."

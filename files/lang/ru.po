@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2844,18 +2844,6 @@ msgstr ""
 "Сомкнутый боевой порядок предписывает отрядам армии замка организовать "
 "плотное построение посередине стартового расположения войск в бою."
 
-msgid "Spread Formation"
-msgstr "Разомкнутый строй"
-
-msgid "Grouped Formation"
-msgstr "Сомкнутый строй"
-
-msgid "Click to show the next town."
-msgstr "Нажмите, чтобы показать следующий город."
-
-msgid "Click to show the previous town."
-msgstr "Нажмите, чтобы показать предыдущий город."
-
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Боевой порядок гарнизона - Разомкнутый"
 
@@ -2867,6 +2855,18 @@ msgstr "Закрыть Настройки замка"
 
 msgid "Castle Options"
 msgstr "Настройки замка"
+
+msgid "Spread Formation"
+msgstr "Разомкнутый строй"
+
+msgid "Grouped Formation"
+msgstr "Сомкнутый строй"
+
+msgid "Click to show the next town."
+msgstr "Нажмите, чтобы показать следующий город."
+
+msgid "Click to show the previous town."
+msgstr "Нажмите, чтобы показать предыдущий город."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Недостаточно средств для найма существ."

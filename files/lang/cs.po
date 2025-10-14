@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 02:21+0000\n"
+"POT-Creation-Date: 2025-10-14 22:58+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -2812,18 +2812,6 @@ msgstr ""
 "'Těsná' bojová formace seskupí tvoje jednotky do středu na tvé straně "
 "bojiště."
 
-msgid "Spread Formation"
-msgstr "Volná formace"
-
-msgid "Grouped Formation"
-msgstr "Těsná formace"
-
-msgid "Click to show the next town."
-msgstr "Klikni pro zobrazení následujícího města."
-
-msgid "Click to show the previous town."
-msgstr "Klikni pro zobrazení předchozího města."
-
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastavit bojovou formaci pevnosti na 'Volná'"
 
@@ -2835,6 +2823,18 @@ msgstr "Odejít z hradu"
 
 msgid "Castle Options"
 msgstr "Možnosti hradu"
+
+msgid "Spread Formation"
+msgstr "Volná formace"
+
+msgid "Grouped Formation"
+msgstr "Těsná formace"
+
+msgid "Click to show the next town."
+msgstr "Klikni pro zobrazení následujícího města."
+
+msgid "Click to show the previous town."
+msgstr "Klikni pro zobrazení předchozího města."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nemáš dost prostředků pro najmutí jednotek."
