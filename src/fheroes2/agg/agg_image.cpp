@@ -5232,19 +5232,20 @@ namespace
 
         case ICN::VIEWPUZL:
         case ICN::EVIWPUZL: {
-            auto & original = _icnVsSprite[id][0];
+            if ( _icnVsSprite[id].size() == 1 ) {
+                auto & original = _icnVsSprite[id][0];
 
-            // The original puzzle image has a rendered button. We should remove it.
-            const auto & streamsImage = fheroes2::AGG::GetICN( ICN::EDITPANL, 3 );
-            fheroes2::Sprite croppedImage = fheroes2::Crop( streamsImage, 0, streamsImage.height() - 48, streamsImage.width(), 48 );
-            if ( id == ICN::EVIWPUZL ) {
-                fheroes2::ApplyPalette( croppedImage, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                // The original puzzle image has a rendered button. We should remove it.
+                const auto & streamsImage = fheroes2::AGG::GetICN( ICN::EDITPANL, 3 );
+                fheroes2::Sprite croppedImage = fheroes2::Crop( streamsImage, 0, streamsImage.height() - 48, streamsImage.width(), 48 );
+                if ( id == ICN::EVIWPUZL ) {
+                    fheroes2::ApplyPalette( croppedImage, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                }
+
+                fheroes2::Copy( croppedImage, 0, 8, original, 0, original.height() - 40, original.width(), 40 );
+
+                fheroes2::CreateDitheringTransition( croppedImage, 0, 0, original, 0, original.height() - 48, original.width(), 8, false, false );
             }
-
-            fheroes2::Copy( croppedImage, 0, 8, original, 0, original.height() - 40, original.width(), 40 );
-
-            fheroes2::CreateDitheringTransition( croppedImage, 0, 0, original, 0, original.height() - 48, original.width(), 8, false, false );
-
             break;
         }
 
