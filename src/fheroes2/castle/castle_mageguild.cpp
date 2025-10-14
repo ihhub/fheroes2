@@ -173,6 +173,12 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
+        else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+        }
     }
 
     return MageGuildDialogResult::DoNothing;
