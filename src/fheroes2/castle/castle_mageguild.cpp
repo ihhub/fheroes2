@@ -41,6 +41,7 @@
 #include "settings.h"
 #include "spell.h"
 #include "spell_storage.h"
+#include "statusbar.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -82,7 +83,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
     fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
-    // Create the status bar.
+    // Create the status bar UI element.
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t statusBarWidth = bar.width();
     dst_pt.x = cur_pt.x + buttonPrevCastle.area().width;
@@ -93,16 +94,18 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
 
-    // text bar
-    const char * textAlternative;
+    StatusBar statusBar;
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y, bar.width() - 16 * 2, 0 } );
+
+    // Default text for status bar.
+    std::string defaultStatusBarText;
     if ( hero == nullptr || !hero->HaveSpellBook() ) {
-        textAlternative = _( "The above spells are available here." );
+        defaultStatusBarText = _( "The above spells are available here." );
     }
     else {
-        textAlternative = _( "The spells the hero can learn have been added to their book." );
+        defaultStatusBarText = _( "The spells the hero can learn have been added to their book." );
     }
-    fheroes2::Text statusText( textAlternative, fheroes2::FontType::normalWhite() );
-    statusText.draw( cur_pt.x + ( fheroes2::Display::DEFAULT_WIDTH - exitWidth ) / 2 - statusText.width() / 2, cur_pt.y + 464, display );
 
     const int guildLevel = GetLevelMageGuild();
 
@@ -142,6 +145,8 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
     display.render();
 
+    std::string statusMessage;
+
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
@@ -178,6 +183,24 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+        }
+
+        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
+            statusMessage = _( "Exit Mage Guild" );
+        }
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
+            statusMessage = _( "Show previous town" );
+        }
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
+            statusMessage = _( "Show next town" );
+        }
+
+        if ( statusMessage.empty() ) {
+            statusBar.ShowMessage( defaultStatusBarText );
+        }
+        else {
+            statusBar.ShowMessage( statusMessage );
+            statusMessage.clear();
         }
     }
 
