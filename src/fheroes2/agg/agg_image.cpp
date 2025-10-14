@@ -2419,7 +2419,7 @@ namespace
                 break;
             }
 
-            _icnVsSprite[id].resize( 73 );
+            _icnVsSprite[id].resize( 74 );
 
             for ( uint32_t i = 60; i < 66; ++i ) {
                 // Mass Cure spell. ( when i == 60 ).
@@ -2478,6 +2478,18 @@ namespace
                     text.draw( ( imageWidth - text.width() ) / 2, 22, originalImage );
                 }
             }
+
+            // Mass Dispel icon.
+            {
+                const auto & spellAnimation = fheroes2::AGG::GetICN( ICN::MAGIC07, 2 );
+                _icnVsSprite[id][73] = fheroes2::Crop( spellAnimation, 28, 27, 39, 36 );
+
+                fheroes2::Sprite contour;
+                fheroes2::h2d::readImage( "mass-dispel-contour.image", contour );
+
+                fheroes2::Blit( contour, _icnVsSprite[id][73] );
+            }
+
             break;
         case ICN::CSLMARKER:
             _icnVsSprite[id].resize( 3 );
