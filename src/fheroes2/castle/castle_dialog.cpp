@@ -577,9 +577,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             needRedraw = true;
                         }
 
-                        const auto result = mageGuildDialogHandler( hero );
-                        if ( result != CastleDialogReturnValue::DoNothing ) {
-                            return result;
+                        const auto mageGuildResult = mageGuildDialogHandler( hero );
+                        if ( mageGuildResult != CastleDialogReturnValue::DoNothing ) {
+                            return mageGuildResult;
                         }
                     }
                     else if ( isMonsterDwelling ) {
