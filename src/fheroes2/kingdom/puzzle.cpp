@@ -47,7 +47,6 @@
 #include "logging.h"
 #include "math_base.h"
 #include "mus.h"
-#include "pal.h"
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
