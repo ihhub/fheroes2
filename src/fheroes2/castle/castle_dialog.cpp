@@ -293,7 +293,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         return CastleDialogReturnValue::DoNothing;
     };
 
-    auto mageGuildDialogHandler = [this]( Heroes * visitingHero ) {
+    auto mageGuildDialogHandler = [this]( const Heroes * visitingHero ) {
         const auto result = _openMageGuild( visitingHero );
         switch ( result ) {
         case MageGuildDialogResult::NextMageGuildWindow:
