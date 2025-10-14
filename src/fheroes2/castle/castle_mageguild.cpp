@@ -64,34 +64,31 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
                                             fheroes2::Display::DEFAULT_HEIGHT );
 
-    const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
-    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
+    const fheroes2::Point dialogOffset{ restorer.x(), restorer.y() };
+    const fheroes2::Point bottomUIOffset{ dialogOffset.x, dialogOffset.y + bottomBarOffsetY };
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
-
-    dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y + bottomBarOffsetY;
+    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, dialogOffset.x, dialogOffset.y );
 
     // Create Previous Castle button.
-    fheroes2::Button buttonPrevCastle( cur_pt.x, dst_pt.y, ICN::SMALLBAR, 1, 2 );
+    fheroes2::Button buttonPrevCastle( bottomUIOffset.x, bottomUIOffset.y, ICN::SMALLBAR, 1, 2 );
     fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
     // Exit button.
     const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
-    fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    fheroes2::Button buttonExit( bottomUIOffset.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, bottomUIOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
     // Create Next Castle button.
-    fheroes2::Button buttonNextCastle( buttonExit.area().x - fheroes2::AGG::GetICN( ICN::SMALLBAR, 3 ).width(), dst_pt.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::Button buttonNextCastle( buttonExit.area().x - fheroes2::AGG::GetICN( ICN::SMALLBAR, 3 ).width(), bottomUIOffset.y, ICN::SMALLBAR, 3, 4 );
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
 
     // Create the status bar UI element.
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
-    const fheroes2::Point bottonBarOffset{ buttonPrevCastle.area().x + buttonPrevCastle.area().width, dst_pt.y };
+    const fheroes2::Point bottonBarOffset{ buttonPrevCastle.area().x + buttonPrevCastle.area().width, bottomUIOffset.y };
     const int32_t bottomBarWidth{ fheroes2::Display::DEFAULT_WIDTH - exitWidth - buttonNextCastle.area().width - buttonPrevCastle.area().width };
 
     // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
@@ -101,7 +98,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
-    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y, bottomBarWidth, 0 } );
+    statusBar.setRoi( { bottomUIOffset.x + 16, bottomUIOffset.y, bottomBarWidth, 0 } );
 
     // Default text for status bar.
     std::string defaultStatusBarText;
@@ -114,7 +111,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
     const int guildLevel = GetLevelMageGuild();
 
-    fheroes2::renderMageGuildBuilding( _race, guildLevel, cur_pt );
+    fheroes2::renderMageGuildBuilding( _race, guildLevel, dialogOffset );
 
     const bool haveLibraryCapability = HaveLibraryCapability();
     const bool hasLibrary = isLibraryBuilt();
@@ -130,7 +127,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
         spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
 
-        spellRows[levelIndex]->setPosition( { cur_pt.x + 250, cur_pt.y + 365 - 90 * static_cast<int32_t>( levelIndex ) } );
+        spellRows[levelIndex]->setPosition( { dialogOffset.x + 250, dialogOffset.y + 365 - 90 * static_cast<int32_t>( levelIndex ) } );
         spellRows[levelIndex]->redraw( display );
     }
 
