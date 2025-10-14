@@ -179,7 +179,6 @@ namespace
         fheroes2::fadeOutDisplay( back.rect(), false );
 
         fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
-
         display.updateNextRenderRoi( radarArea );
 
         const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
@@ -266,7 +265,6 @@ namespace
             }
 
             fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
-
             display.updateNextRenderRoi( radarArea );
 
             buttonExit.draw();
