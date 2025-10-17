@@ -217,7 +217,8 @@ namespace
     }
 }
 
-Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
+Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool openMageGuildWindow, const bool fade,
+                                                    const bool renderBackgroundDialog )
 {
     // Set the cursor image. This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
@@ -293,10 +294,31 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         return CastleDialogReturnValue::DoNothing;
     };
 
+    auto mageGuildDialogHandler = [this]( const Heroes * visitingHero ) {
+        const auto result = _openMageGuild( visitingHero );
+        switch ( result ) {
+        case MageGuildDialogResult::NextMageGuildWindow:
+            return CastleDialogReturnValue::NextMageGuildWindow;
+        case MageGuildDialogResult::PrevMageGuildWindow:
+            return CastleDialogReturnValue::PreviousMageGuildWindow;
+        default:
+            assert( result == MageGuildDialogResult::DoNothing );
+            break;
+        }
+
+        return CastleDialogReturnValue::DoNothing;
+    };
+
     if ( openConstructionWindow && isBuild( BUILD_CASTLE ) ) {
         const CastleDialogReturnValue constructionResult = constructionDialogHandler();
         if ( constructionResult != CastleDialogReturnValue::DoNothing ) {
             return constructionResult;
+        }
+    }
+    else if ( openMageGuildWindow && isBuild( BUILD_MAGEGUILD ) ) {
+        const auto result = mageGuildDialogHandler( hero );
+        if ( result != CastleDialogReturnValue::DoNothing ) {
+            return result;
         }
     }
 
@@ -567,7 +589,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             needRedraw = true;
                         }
 
-                        _openMageGuild( hero );
+                        const auto mageGuildResult = mageGuildDialogHandler( hero );
+                        if ( mageGuildResult != CastleDialogReturnValue::DoNothing ) {
+                            return mageGuildResult;
+                        }
                     }
                     else if ( isMonsterDwelling ) {
                         const fheroes2::ButtonRestorer exitRestorer( buttonExit );

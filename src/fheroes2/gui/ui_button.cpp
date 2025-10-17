@@ -728,7 +728,7 @@ namespace fheroes2
 
             _button.disable();
             _button.draw( display );
-            display.render( _button.area() );
+            display.updateNextRenderRoi( _button.area() );
         }
     }
 
@@ -739,7 +739,7 @@ namespace fheroes2
 
             _button.enable();
             _button.draw( display );
-            display.render( _button.area() );
+            display.updateNextRenderRoi( _button.area() );
         }
     }
 
