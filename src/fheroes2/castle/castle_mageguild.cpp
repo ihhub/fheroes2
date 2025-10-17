@@ -167,7 +167,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
     updateStatusBar();
 
-    display.render();
+    display.render( restorer.rect() );
 
     // message loop
     while ( le.HandleEvents() ) {
