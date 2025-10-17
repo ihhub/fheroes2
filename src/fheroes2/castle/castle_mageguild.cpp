@@ -196,7 +196,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
             || spellRows[3]->queueEventProcessing( false ) || spellRows[4]->queueEventProcessing( false );
 
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit Mage Guild" ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
