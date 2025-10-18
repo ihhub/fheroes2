@@ -741,6 +741,8 @@ namespace
         case MP2::OBJ_STONE_LITHS:
         // TODO: AI doesn't know how it use Trading Post object properly.
         case MP2::OBJ_TRADING_POST:
+        // TODO: Add AI logic for visiting Waterhole.
+        case MP2::OBJ_WATERHOLE:
         // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
         case MP2::OBJ_WHIRLPOOL:
             return false;
@@ -1564,6 +1566,10 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_MAGELLANS_MAPS: {
         // Very valuable object.
         return 5000;
+    }
+    case MP2::OBJ_WATERHOLE: {
+        // TODO: Add the logic for visiting Waterhole and corresponding object value.
+        return -dangerousTaskPenalty;
     }
     case MP2::OBJ_BOAT:
     case MP2::OBJ_COAST:

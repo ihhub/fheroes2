@@ -492,6 +492,8 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Black Cat" );
     case OBJ_NON_ACTION_BARREL:
         return _( "Barrel" );
+    case OBJ_NON_ACTION_WATERHOLE:
+        return _( "Waterhole" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );
@@ -616,6 +618,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_SHIPWRECK:
     case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_SIRENS:
+    case OBJ_WATERHOLE:
     case OBJ_WHIRLPOOL:
         return true;
 
@@ -848,6 +851,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_SKELETON:
     case OBJ_TREASURE_CHEST:
+    case OBJ_WATERHOLE:
     case OBJ_WHIRLPOOL:
         return DIRECTION_ALL;
     case OBJ_ABANDONED_MINE:

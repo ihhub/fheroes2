@@ -3944,6 +3944,11 @@ void Heroes::Action( const int tileIndex )
         ActionToDaemonCave( *this, objectType, tileIndex );
         break;
 
+    case MP2::OBJ_WATERHOLE:
+        // TODO: Add a logic for the Waterhole.
+        fheroes2::showStandardTextMessage( MP2::StringObject( MP2::OBJ_WATERHOLE ), "This object is under construction!", Dialog::OK );
+        break;
+
     case MP2::OBJ_STONE_LITHS:
         ActionToTeleports( *this, tileIndex );
         break;
