@@ -199,10 +199,10 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
             fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit Mage Guild" ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show the next town." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
         }
 
         updateStatusBar();
