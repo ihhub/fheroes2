@@ -252,13 +252,13 @@ namespace fheroes2
         case SupportedLanguage::Hungarian:
             return "hu";
         case SupportedLanguage::Danish:
-            return "dk";
+            return "da";
         case SupportedLanguage::Slovak:
             return "sk";
         case SupportedLanguage::Vietnamese:
             return "vi";
         case SupportedLanguage::Greek:
-            return "gr";
+            return "el";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
