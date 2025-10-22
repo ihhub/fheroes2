@@ -45,10 +45,8 @@
 #include "world.h"
 
 HeroBase::HeroBase( const int type, const int race )
-    : magic_point( 0 )
-    , move_point( 0 )
 {
-    bag_artifacts.assign( BagArtifacts::maxCapacity, Artifact::UNKNOWN );
+    _bagArtifacts.assign( BagArtifacts::maxCapacity, Artifact::UNKNOWN );
     LoadDefaults( type, race );
 }
 
@@ -66,7 +64,7 @@ void HeroBase::LoadDefaults( const int type, const int race )
 
             const Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() )
-                spell_book.Append( spell );
+                _spellBook.Append( spell );
             break;
         }
 
@@ -74,7 +72,7 @@ void HeroBase::LoadDefaults( const int type, const int race )
             const Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() ) {
                 SpellBookActivate();
-                spell_book.Append( spell );
+                _spellBook.Append( spell );
             }
             break;
         }
@@ -84,11 +82,6 @@ void HeroBase::LoadDefaults( const int type, const int race )
         }
     }
 }
-
-HeroBase::HeroBase()
-    : magic_point( 0 )
-    , move_point( 0 )
-{}
 
 bool HeroBase::isCaptain() const
 {
@@ -106,7 +99,7 @@ bool HeroBase::isPotentSpellcaster() const
     if ( knowledge <= 5 )
         return false;
 
-    for ( const Spell & spell : spell_book ) {
+    for ( const Spell & spell : _spellBook ) {
         // This list is based on spells AI can use efficiently - should be updated later on
         switch ( spell.GetID() ) {
         case Spell::BLIND:
@@ -142,25 +135,38 @@ bool HeroBase::isPotentSpellcaster() const
     return false;
 }
 
+uint32_t HeroBase::getManaIndexSprite() const
+{
+    if ( _spellPoints == 0U ) {
+        return 0U;
+    }
+
+    // Each 5 spell points interval is represented by 1 pixel in the hero's spell points bar.
+    const uint32_t value = _spellPoints / 5U + 1U;
+
+    // Valid sprite index range is (0 - 25).
+    return std::min( value, 25U );
+}
+
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const
 {
-    return magic_point >= spell.spellPoints( this );
+    return _spellPoints >= spell.spellPoints( this );
 }
 
 bool HeroBase::haveMovePoints( const Spell & spell ) const
 {
-    return move_point >= spell.minMovePoints();
+    return _movePoints >= spell.minMovePoints();
 }
 
 void HeroBase::EditSpellBook()
 {
-    spell_book.Edit( *this );
+    _spellBook.Edit( *this );
 }
 
 Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
                                const std::function<void( const std::string & )> & statusCallback ) const
 {
-    return spell_book.Open( *this, filter, canCastSpell, restorePreviousState, statusCallback );
+    return _spellBook.Open( *this, filter, canCastSpell, restorePreviousState, statusCallback );
 }
 
 SpellStorage HeroBase::getAllSpells() const
@@ -172,64 +178,67 @@ SpellStorage HeroBase::getAllSpells() const
 
     SpellStorage storage;
 
-    storage.Append( spell_book );
-    storage.Append( bag_artifacts );
+    storage.Append( _spellBook );
+    storage.Append( _bagArtifacts );
 
     return storage;
 }
 
-bool HeroBase::HaveSpell( const Spell & spell, const bool skip_bag ) const
+bool HeroBase::HaveSpell( const Spell & spell, const bool skipBag /* = false */ ) const
 {
-    return HaveSpellBook() && ( spell_book.isPresentSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell.GetID() ) ) );
+    return HaveSpellBook() && ( _spellBook.isPresentSpell( spell ) || ( !skipBag && _bagArtifacts.ContainSpell( spell.GetID() ) ) );
 }
 
-void HeroBase::AppendSpellToBook( const Spell & spell, const bool without_wisdom )
+void HeroBase::AppendSpellToBook( const Spell & spell, const bool withoutWisdom /* = false */ )
 {
-    if ( without_wisdom || CanLearnSpell( spell ) )
-        spell_book.Append( spell );
+    if ( withoutWisdom || CanLearnSpell( spell ) ) {
+        _spellBook.Append( spell );
+    }
 }
 
-void HeroBase::AppendSpellsToBook( const SpellStorage & spells, const bool without_wisdom )
+void HeroBase::AppendSpellsToBook( const SpellStorage & spells, const bool withoutWisdom /* = false */ )
 {
-    for ( const auto & spell : spells )
-        AppendSpellToBook( spell, without_wisdom );
+    for ( const auto & spell : spells ) {
+        AppendSpellToBook( spell, withoutWisdom );
+    }
 }
 
 bool HeroBase::SpellBookActivate()
 {
-    return !HaveSpellBook() && bag_artifacts.PushArtifact( Artifact::MAGIC_BOOK );
+    return !HaveSpellBook() && _bagArtifacts.PushArtifact( Artifact::MAGIC_BOOK );
 }
 
 void HeroBase::SpellBookDeactivate()
 {
-    bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+    _bagArtifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
 
     // Hero should not have more than one spell book
     assert( !HaveSpellBook() );
 
-    spell_book.clear();
+    _spellBook.clear();
 }
 
 bool HeroBase::hasArtifact( const Artifact & art ) const
 {
-    return bag_artifacts.isPresentArtifact( art );
+    return _bagArtifacts.isPresentArtifact( art );
 }
 
 int HeroBase::GetAttackModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL );
     }
     else {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL, *strs );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL, *strs );
     }
 
     // check castle modificator
     const Castle * castle = inCastle();
 
-    if ( castle )
+    if ( castle ) {
         result += castle->GetAttackModificator( strs );
+    }
 
     return result;
 }
@@ -238,17 +247,18 @@ int HeroBase::GetDefenseModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL );
     }
     else {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL, *strs );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL, *strs );
     }
 
     // check castle modificator
     const Castle * castle = inCastle();
 
-    if ( castle )
+    if ( castle ) {
         result += castle->GetDefenseModificator( strs );
+    }
 
     return result;
 }
@@ -257,19 +267,20 @@ int HeroBase::GetPowerModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL );
-        result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL );
+        result -= _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL );
     }
     else {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, *strs );
-        result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL, *strs );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, *strs );
+        result -= _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL, *strs );
     }
 
     // check castle modificator
     const Castle * castle = inCastle();
 
-    if ( castle )
+    if ( castle ) {
         result += castle->GetPowerModificator( strs );
+    }
 
     return result;
 }
@@ -278,17 +289,18 @@ int HeroBase::GetKnowledgeModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL );
     }
     else {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, *strs );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, *strs );
     }
 
     // check castle modificator
     const Castle * castle = inCastle();
 
-    if ( castle )
+    if ( castle ) {
         result += castle->GetKnowledgeModificator( strs );
+    }
 
     return result;
 }
@@ -301,20 +313,20 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
     result += GetArmy().GetMoraleModificator( strs );
 
     if ( strs == nullptr ) {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE );
         if ( Modes( Heroes::SHIPMASTER ) ) {
-            result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST );
+            result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST );
         }
 
-        result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE );
+        result -= _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE );
     }
     else {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE, *strs );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE, *strs );
         if ( Modes( Heroes::SHIPMASTER ) ) {
-            result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST, *strs );
+            result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST, *strs );
         }
 
-        result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE, *strs );
+        result -= _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE, *strs );
     }
 
     return result;
@@ -328,15 +340,15 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     result += GetArmy().GetLuckModificator( strs );
 
     if ( strs == nullptr ) {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK );
         if ( Modes( Heroes::SHIPMASTER ) ) {
-            result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST );
+            result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST );
         }
     }
     else {
-        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK, *strs );
+        result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK, *strs );
         if ( Modes( Heroes::SHIPMASTER ) ) {
-            result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST, *strs );
+            result += _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST, *strs );
         }
     }
 
@@ -459,7 +471,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
             const VecCastles & castles = hero->GetKingdom().GetCastles();
-            bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
+            const bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
                 if ( res != nullptr ) {
                     *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
@@ -573,8 +585,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
 void HeroBase::SpellCasted( const Spell & spell )
 {
-    magic_point -= std::min( spell.spellPoints( this ), magic_point );
-    move_point -= std::min( spell.movePoints(), move_point );
+    _spellPoints -= std::min( spell.spellPoints( this ), _spellPoints );
+    _movePoints -= std::min( spell.movePoints(), _movePoints );
 }
 
 bool HeroBase::CanLearnSpell( const Spell & spell ) const
@@ -587,12 +599,12 @@ bool HeroBase::CanLearnSpell( const Spell & spell ) const
 
 OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero )
 {
-    return stream << static_cast<const Skill::Primary &>( hero ) << static_cast<const MapPosition &>( hero ) << hero.modes << hero.magic_point << hero.move_point
-                  << hero.spell_book << hero.bag_artifacts;
+    return stream << static_cast<const Skill::Primary &>( hero ) << static_cast<const MapPosition &>( hero ) << hero.modes << hero._spellPoints << hero._movePoints
+                  << hero._spellBook << hero._bagArtifacts;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero )
 {
-    return stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero.magic_point >> hero.move_point >> hero.spell_book
-           >> hero.bag_artifacts;
+    return stream >> static_cast<Skill::Primary &>( hero ) >> static_cast<MapPosition &>( hero ) >> hero.modes >> hero._spellPoints >> hero._movePoints >> hero._spellBook
+           >> hero._bagArtifacts;
 }

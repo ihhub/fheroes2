@@ -529,8 +529,8 @@ void Battle::Only::copyHero( const Heroes & in, Heroes & out )
     out._secondarySkills.ToVector() = in._secondarySkills.ToVector();
     out._army.Assign( in._army );
 
-    out.bag_artifacts = in.bag_artifacts;
-    out.spell_book = in.spell_book;
+    out._bagArtifacts = in._bagArtifacts;
+    out._spellBook = in._spellBook;
 
     out.SetSpellPoints( out.GetMaxSpellPoints() );
 }

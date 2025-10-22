@@ -269,7 +269,7 @@ Heroes::Heroes( const int heroId, const int race )
         PickupArtifact( Artifact::TRUE_COMPASS_MOBILITY );
 
         _experience = 777;
-        magic_point = 120;
+        _spellPoints = 120;
 
         // This hero has all the spells in his spell book
         for ( const int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
@@ -277,10 +277,10 @@ Heroes::Heroes( const int heroId, const int race )
         }
     }
 
-    if ( !magic_point ) {
+    if ( !_spellPoints ) {
         SetSpellPoints( GetMaxSpellPoints() );
     }
-    move_point = GetMaxMovePoints();
+    _movePoints = GetMaxMovePoints();
 }
 
 void Heroes::LoadFromMP2( const int32_t mapIndex, const PlayerColor colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
@@ -589,7 +589,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const PlayerColor colorType, c
     }
 
     SetSpellPoints( GetMaxSpellPoints() );
-    move_point = GetMaxMovePoints();
+    _movePoints = GetMaxMovePoints();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, _name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
@@ -738,17 +738,17 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         // Default Spell points.
         if ( isEditor ) {
             // There is no way to set "default spell points" condition, so we will consider 'UINT32_MAX' as it.
-            magic_point = UINT32_MAX;
+            _spellPoints = UINT32_MAX;
         }
         else {
-            magic_point = GetMaxSpellPoints();
+            _spellPoints = GetMaxSpellPoints();
         }
     }
     else {
-        magic_point = static_cast<uint32_t>( heroMetadata.magicPoints );
+        _spellPoints = static_cast<uint32_t>( heroMetadata.magicPoints );
     }
 
-    move_point = GetMaxMovePoints();
+    _movePoints = GetMaxMovePoints();
 }
 
 Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
@@ -761,14 +761,14 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     heroMetadata.customPortrait = _portrait;
 
     // Hero's artifacts.
-    const size_t artifactCount = bag_artifacts.size();
+    const size_t artifactCount = _bagArtifacts.size();
     assert( artifactCount == heroMetadata.artifactMetadata.size() );
     for ( size_t i = 0; i < artifactCount; ++i ) {
-        heroMetadata.artifact[i] = bag_artifacts[i].GetID();
+        heroMetadata.artifact[i] = _bagArtifacts[i].GetID();
         // The spell scroll may contain a spell.
 
         if ( heroMetadata.artifact[i] == Artifact::SPELL_SCROLL ) {
-            const int32_t artifactSpellId = bag_artifacts[i].getSpellId();
+            const int32_t artifactSpellId = _bagArtifacts[i].getSpellId();
 
             assert( artifactSpellId != Spell::NONE );
 
@@ -777,10 +777,10 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     }
 
     // Hero's spells.
-    const size_t bookSize = spell_book.size();
+    const size_t bookSize = _spellBook.size();
     heroMetadata.availableSpells.reserve( bookSize );
     for ( size_t i = 0; i < bookSize; ++i ) {
-        heroMetadata.availableSpells.push_back( spell_book[i].GetID() );
+        heroMetadata.availableSpells.push_back( _spellBook[i].GetID() );
     }
 
     // Hero's secondary skills.
@@ -809,7 +809,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     heroMetadata.customKnowledge = static_cast<int16_t>( knowledge );
 
     // Hero's spell points.
-    heroMetadata.magicPoints = ( magic_point == UINT32_MAX ) ? static_cast<int16_t>( -1 ) : static_cast<int16_t>( magic_point );
+    heroMetadata.magicPoints = ( _spellPoints == UINT32_MAX ) ? static_cast<int16_t>( -1 ) : static_cast<int16_t>( _spellPoints );
 
     // Hero's race.
     heroMetadata.race = static_cast<uint8_t>( _race );
@@ -853,16 +853,7 @@ uint32_t Heroes::GetMobilityIndexSprite() const
         return 0;
     }
 
-    const uint32_t value = ( move_point + 50U ) / 100U;
-
-    // Valid sprite index range is (0 - 25).
-    return std::min( value, 25U );
-}
-
-uint32_t Heroes::GetManaIndexSprite() const
-{
-    // Add 2 to round values.
-    const uint32_t value = ( GetSpellPoints() + 2U ) / 5U;
+    const uint32_t value = ( _movePoints + 50U ) / 100U;
 
     // Valid sprite index range is (0 - 25).
     return std::min( value, 25U );
@@ -876,7 +867,7 @@ int Heroes::getStatsValue() const
 
 double Heroes::getRecruitValue() const
 {
-    return _army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 10.0 + getStatsValue() ) * SKILL_VALUE );
+    return _army.GetStrength() + ( ( _bagArtifacts.getArtifactValue() * 10.0 + getStatsValue() ) * SKILL_VALUE );
 }
 
 double Heroes::getMeetingValue( const Heroes & receivingHero ) const
@@ -884,10 +875,10 @@ double Heroes::getMeetingValue( const Heroes & receivingHero ) const
     // TODO: add logic to check artifacts with curses and those which are invaluable for a hero.
 
     // Magic Book is not transferable.
-    const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
-    const uint32_t canFit = BagArtifacts::maxCapacity - receivingHero.bag_artifacts.CountArtifacts();
+    const uint32_t artCount = _bagArtifacts.CountArtifacts() - _bagArtifacts.Count( Artifact::MAGIC_BOOK );
+    const uint32_t canFit = BagArtifacts::maxCapacity - receivingHero._bagArtifacts.CountArtifacts();
 
-    double artifactValue = bag_artifacts.getArtifactValue() * 5.0;
+    double artifactValue = _bagArtifacts.getArtifactValue() * 5.0;
     if ( artCount > canFit ) {
         artifactValue = canFit * ( artifactValue / artCount );
     }
@@ -1044,7 +1035,7 @@ int Heroes::getMoraleWithModifiers( std::string * text ) const
     result += GetMoraleModificator( text );
 
     // A special artifact ability presence must be the last check.
-    const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+    const Artifact maxMoraleArtifact = _bagArtifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
     if ( maxMoraleArtifact.isValid() ) {
         if ( text != nullptr ) {
             *text += maxMoraleArtifact.GetName();
@@ -1080,7 +1071,7 @@ int Heroes::getLuckWithModifiers( std::string * text ) const
     // bonus artifact
     result += GetLuckModificator( text );
 
-    const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
+    const Artifact maxLuckArtifact = _bagArtifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
     if ( maxLuckArtifact.isValid() ) {
         if ( text != nullptr ) {
             *text += maxLuckArtifact.GetName();
@@ -1121,7 +1112,7 @@ bool Heroes::Recruit( const PlayerColor col, const fheroes2::Point & pt )
     setDirection( Direction::RIGHT );
 
     if ( !Modes( SAVEMP ) ) {
-        move_point = GetMaxMovePoints();
+        _movePoints = GetMaxMovePoints();
     }
 
     if ( !_army.isValid() ) {
@@ -1159,7 +1150,7 @@ bool Heroes::Recruit( const Castle & castle )
 
 void Heroes::ActionNewDay()
 {
-    move_point = GetMaxMovePoints();
+    _movePoints = GetMaxMovePoints();
 
     if ( world.CountDay() > 1 ) {
         _replenishSpellPoints();
@@ -1403,7 +1394,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    if ( !bag_artifacts.PushArtifact( art ) ) {
+    if ( !_bagArtifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
             if ( art.GetID() == Artifact::MAGIC_BOOK ) {
                 if ( HaveSpellBook() ) {
@@ -1430,7 +1421,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+    const auto assembledArtifacts = _bagArtifacts.assembleArtifactSetIfPossible();
 
     if ( isControlHuman() ) {
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
@@ -1649,7 +1640,7 @@ bool Heroes::isMoveEnabled() const
 bool Heroes::CanMove() const
 {
     const Maps::Tile & tile = world.getTile( GetIndex() );
-    return move_point >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
+    return _movePoints >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 }
 
 void Heroes::SetMove( const bool enable )
@@ -2000,7 +1991,7 @@ uint32_t Heroes::_getStartingXp()
 
 void Heroes::ActionPreBattle()
 {
-    spell_book.resetState();
+    _spellBook.resetState();
 }
 
 void Heroes::ActionNewPosition( const bool allowMonsterAttack )
@@ -2099,7 +2090,7 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
         else if ( PORT_SMALL == type ) {
             const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::PORTXTRA, 0 );
             const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
-            const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
+            const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, getManaIndexSprite() );
 
             const int barw = 7;
 
@@ -2145,7 +2136,7 @@ std::string Heroes::String() const
        << "magic points    : " << GetSpellPoints() << " / " << GetMaxSpellPoints() << std::endl
        << "morale, luck    : " << GetMorale() << ", " << GetLuck() << std ::endl
        << "position x, y   : " << GetCenter().x << ", " << GetCenter().y << std::endl
-       << "move points     : " << move_point << " / " << GetMaxMovePoints() << std::endl
+       << "move points     : " << _movePoints << " / " << GetMaxMovePoints() << std::endl
        << "direction       : " << Direction::String( _direction ) << std::endl
        << "index sprite    : " << _spriteIndex << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
@@ -2168,8 +2159,8 @@ std::string Heroes::String() const
 
     if ( isControlAI() ) {
         os << "skills          : " << _secondarySkills.String() << std::endl
-           << "artifacts       : " << bag_artifacts.String() << std::endl
-           << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
+           << "artifacts       : " << _bagArtifacts.String() << std::endl
+           << "spell book      : " << ( HaveSpellBook() ? _spellBook.String() : "disabled" ) << std::endl
            << "army dump       : " << _army.String() << std::endl
            << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
     }
