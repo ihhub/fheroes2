@@ -140,8 +140,8 @@ public:
         Close, // Close the dialog.
         NextCastle, // Open main dialog of the next castle.
         PreviousCastle, // Open main dialog of the previous castle.
-        NextCostructionWindow, // Open construction dialog of the next castle.
-        PreviousCostructionWindow, // Open construction dialog of the previous castle.
+        NextConstructionWindow, // Open construction dialog of the next castle.
+        PreviousConstructionWindow, // Open construction dialog of the previous castle.
         NextMageGuildWindow, // Open Mage Guild dialog of the next castle.
         PreviousMageGuildWindow, // Open Mage Guild dialog of the previous castle.
     };

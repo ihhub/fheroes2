@@ -264,9 +264,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         switch ( result ) {
         case ConstructionDialogResult::NextConstructionWindow:
-            return CastleDialogReturnValue::NextCostructionWindow;
+            return CastleDialogReturnValue::NextConstructionWindow;
         case ConstructionDialogResult::PrevConstructionWindow:
-            return CastleDialogReturnValue::PreviousCostructionWindow;
+            return CastleDialogReturnValue::PreviousConstructionWindow;
         case ConstructionDialogResult::RecruitHero:
             hero = world.GetHero( *this );
             generateHeroImage( surfaceHero, hero );
