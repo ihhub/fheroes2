@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2025-10-22 23:53+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -12069,11 +12069,13 @@ msgstr "Umožní hrdinovi se magicky přenést na místo poblíž."
 msgid "Dimension Door"
 msgstr "Dimenzní brána"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "Přenese hrdinu do jakéhokoli města nebo hradu, který vlastníš."
-
 msgid "Town Gate"
 msgstr "Městská brána"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12282,6 +12284,9 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr "Přenese hrdinu do jakéhokoli města nebo hradu, který vlastníš."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Vždy vrací útok"

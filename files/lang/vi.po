@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2025-10-22 23:53+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -12498,12 +12498,13 @@ msgstr ""
 msgid "Dimension Door"
 msgstr "Cửa Kích thước"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Trả người điều khiển về bất kỳ thị trấn hoặc lâu đài nào hiện đang sở hữu."
-
 msgid "Town Gate"
 msgstr "Cổng Thành"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12712,6 +12713,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Trả người điều khiển về bất kỳ thị trấn hoặc lâu đài nào hiện đang sở hữu."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Luôn phản đòn"
