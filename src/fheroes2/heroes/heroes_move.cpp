@@ -450,13 +450,13 @@ void Heroes::_angleStep( const int targetDirection )
 
 void Heroes::_applyMovementPenalty( const uint32_t penalty )
 {
-    if ( penalty > move_point ) {
-        move_point = 0;
+    if ( penalty > _movePoints ) {
+        _movePoints = 0;
 
         return;
     }
 
-    move_point -= penalty;
+    _movePoints -= penalty;
 }
 
 fheroes2::Point Heroes::getCurrentPixelOffset() const
