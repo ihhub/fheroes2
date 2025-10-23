@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2025-10-22 23:53+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -12177,13 +12177,13 @@ msgstr "Переносит героя в расположенную поблиз
 msgid "Dimension Door"
 msgstr "Портал"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Возвращает героя в ближайший город или замок, если там уже не находится "
-"другой герой."
-
 msgid "Town Gate"
 msgstr "Врата в город"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12391,6 +12391,11 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Возвращает героя в ближайший город или замок, если там уже не находится "
+#~ "другой герой."
 
 #~ msgid "1"
 #~ msgstr "1"

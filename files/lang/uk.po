@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2025-10-22 23:53+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -12187,11 +12187,13 @@ msgstr "Магічно переносить заклинача на невели
 msgid "Dimension Door"
 msgstr "Просторова Брама"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
-
 msgid "Town Gate"
 msgstr "Міський Портал"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12398,6 +12400,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Завжди наносить контрудар"

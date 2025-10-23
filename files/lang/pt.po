@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2025-10-22 23:53+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -12270,12 +12270,13 @@ msgstr ""
 msgid "Dimension Door"
 msgstr "Porta Dimensional"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Devolve o conjurador para qualquer cidade ou castelo que atualmente possui."
-
 msgid "Town Gate"
 msgstr "Portão da Cidade"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12491,6 +12492,11 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Devolve o conjurador para qualquer cidade ou castelo que atualmente "
+#~ "possui."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Sempre retaliar"

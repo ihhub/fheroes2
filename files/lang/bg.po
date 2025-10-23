@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2025-10-22 23:53+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -12468,11 +12468,13 @@ msgstr "Позволява на заклинателя магически да �
 msgid "Dimension Door"
 msgstr "Врата между измеренията"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "Връща заклинателя във всеки град или замък, притежаван в момента."
-
 msgid "Town Gate"
 msgstr "Градска порта"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12680,6 +12682,9 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr "Връща заклинателя във всеки град или замък, притежаван в момента."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Винаги отмъщава"
