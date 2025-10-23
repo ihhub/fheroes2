@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -2750,13 +2750,13 @@ msgstr ""
 "varázskönyvre, de nincs szabad hely a könyv számára. Próbálj meg egy "
 "varázstárgyat átadni egy másik hősnek."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Kattints a következő város mutatásához."
 
 msgid "Show next town"
 msgstr "Következő város mutatása"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Kattints az előző város mutatásához."
 
 msgid "Show previous town"
@@ -2785,6 +2785,9 @@ msgstr "A fenti varázslatok érhetők el itt."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "A hős által megtanulható varázslatok beíródtak a varázskönyvébe."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2840,12 +2843,6 @@ msgstr "Laza felállás"
 
 msgid "Grouped Formation"
 msgstr "Szoros felállás"
-
-msgid "Click to show the next town."
-msgstr "Kattints a következő város mutatásához."
-
-msgid "Click to show the previous town."
-msgstr "Kattints az előző város mutatásához."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nincs elég erőforrás a lények toborzásához."
@@ -12343,6 +12340,12 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Kattints a következő város mutatásához."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Kattints az előző város mutatásához."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr ""

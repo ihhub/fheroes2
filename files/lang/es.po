@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2762,13 +2762,13 @@ msgstr ""
 "actualmente no tienes espacio para un libro de hechizos. Prueba dando uno de "
 "tus artefactos a otro héroe."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Haga clic para ver la siguiente ciudad."
 
 msgid "Show next town"
 msgstr "Ver ciudad siguiente"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Haga clic para ver la ciudad anterior."
 
 msgid "Show previous town"
@@ -2797,6 +2797,9 @@ msgstr "Los hechizos anteriores están disponibles aquí."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Los hechizos que el héroe puede aprender se han añadido a su libro."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Una generosa propina para el camarero te cede el siguiente rumor:"
@@ -2851,12 +2854,6 @@ msgstr "Formación Desplegada"
 
 msgid "Grouped Formation"
 msgstr "Formación Agrupada"
-
-msgid "Click to show the next town."
-msgstr "Haga clic para ver la siguiente ciudad."
-
-msgid "Click to show the previous town."
-msgstr "Haga clic para ver la ciudad anterior."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "No hay suficientes recursos para reclutar criaturas."
@@ -12402,6 +12399,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Haga clic para ver la siguiente ciudad."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Haga clic para ver la ciudad anterior."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr "LLeva al Héroe a cualquier ciudad o castillo que posea."

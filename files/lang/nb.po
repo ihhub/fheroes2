@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2840,13 +2840,15 @@ msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine skatter til en annen helt."
 
-msgid "Click to show next town."
+#, fuzzy
+msgid "Click to show the next town."
 msgstr "Klikk for å vise neste by."
 
 msgid "Show next town"
 msgstr "Vis neste by"
 
-msgid "Click to show previous town."
+#, fuzzy
+msgid "Click to show the previous town."
 msgstr "Klikk for å vise forrige by."
 
 msgid "Show previous town"
@@ -2876,6 +2878,9 @@ msgstr "Trolldommene ovenfor er tilgjengelige her."
 #, fuzzy
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Med nok visdom kan du lære deg trolldommene over."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Et sjenerøst tips til bartenderen får han til å dele dette ryktet:"
@@ -2931,14 +2936,6 @@ msgstr "Spredd oppstilling"
 
 msgid "Grouped Formation"
 msgstr "Gruppert oppstilling"
-
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Klikk for å vise neste by."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Klikk for å vise forrige by."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Ikke nok råvarer til å verve krigere."
@@ -12890,6 +12887,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klikk for å vise neste by."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klikk for å vise forrige by."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr ""

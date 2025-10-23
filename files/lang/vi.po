@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2795,13 +2795,15 @@ msgstr ""
 "ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
 "cổ vật của ngươi cho một anh tướng khác."
 
-msgid "Click to show next town."
+#, fuzzy
+msgid "Click to show the next town."
 msgstr "Nhấp để xem thị trấn sau."
 
 msgid "Show next town"
 msgstr "Xem thị trấn sau"
 
-msgid "Click to show previous town."
+#, fuzzy
+msgid "Click to show the previous town."
 msgstr "Nhấp để xem thị trấn trước."
 
 msgid "Show previous town"
@@ -2830,6 +2832,9 @@ msgstr "Các phép thuật trên có sẵn ở đây."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Các phép mà tướng có thể học đã được thêm vào cuốn sách của họ."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2887,14 +2892,6 @@ msgstr "Đội hình Dàn trải"
 
 msgid "Grouped Formation"
 msgstr "Đội hình Tập trung"
-
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Nhấp để xem thị trấn sau."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Nhấp để xem thị trấn trước."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Không đủ tài nguyên để chiêu mộ sinh vật."
@@ -12713,6 +12710,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Nhấp để xem thị trấn sau."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Nhấp để xem thị trấn trước."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr ""

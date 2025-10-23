@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2801,13 +2801,15 @@ msgstr ""
 "masz jednak na nią miejsca. Spróbuj przekazać jeden ze swoich artefaktów "
 "innemu bohaterowi."
 
-msgid "Click to show next town."
+#, fuzzy
+msgid "Click to show the next town."
 msgstr "Kliknij aby przejść do następnego miasta."
 
 msgid "Show next town"
 msgstr "Pokaż następne miasto"
 
-msgid "Click to show previous town."
+#, fuzzy
+msgid "Click to show the previous town."
 msgstr "Kliknij aby przejść do poprzedniego miasta."
 
 msgid "Show previous town"
@@ -2838,6 +2840,9 @@ msgid "The spells the hero can learn have been added to their book."
 msgstr ""
 "Zaklęcia, których bohater mógł się nauczyć, zostały dodane do jego Księgi "
 "Zaklęć."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2895,14 +2900,6 @@ msgstr "Luźna formacja"
 
 msgid "Grouped Formation"
 msgstr "Zwarta formacja"
-
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Kliknij aby przejść do następnego miasta."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Kliknij aby przejść do poprzedniego miasta."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Brak zasobów aby kupić stworzenia."
@@ -12708,6 +12705,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Kliknij aby przejść do następnego miasta."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Kliknij aby przejść do poprzedniego miasta."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr ""

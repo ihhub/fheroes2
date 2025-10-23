@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -2809,13 +2809,13 @@ msgstr ""
 "magikerlauget. Men helten har desværre ikke plads til at bære en magibog. "
 "Prøv at afgive én af dine artefakter til en anden helt."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Klik for at se næste by."
 
 msgid "Show next town"
 msgstr "Se næste by"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Klik for at se forrige by."
 
 msgid "Show previous town"
@@ -2844,6 +2844,9 @@ msgstr "Med nok visdom kan alle disse besværgelser læres af dine helte."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "De besværgelser, den besøgende helt kan lære, er nu i magibogen."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "En generøs mængde drikkepenge får krokarlen til at dele dette rygte:"
@@ -2900,12 +2903,6 @@ msgstr "Spredt formation"
 
 msgid "Grouped Formation"
 msgstr "Gruppeformation"
-
-msgid "Click to show the next town."
-msgstr "Klik for at se næste by."
-
-msgid "Click to show the previous town."
-msgstr "Klik for at se forrige by."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Der er ikke nok resurser til at rekruttere væsener for."
@@ -12495,6 +12492,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klik for at se næste by."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klik for at se forrige by."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr "Returnerer kasteren til enhver af spillerens byer eller borge."

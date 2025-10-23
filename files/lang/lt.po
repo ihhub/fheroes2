@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2590,14 +2590,14 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Rodyti kitą miestą"
 
 msgid "Show next town"
 msgstr "Rodyti kitą miestą"
 
 #, fuzzy
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Rodyti ankstesnį miestą"
 
 msgid "Show previous town"
@@ -2630,6 +2630,9 @@ msgstr "Šie burtai buvo įdėti į jūsų knygą."
 #, fuzzy
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Šie burtai buvo įdėti į jūsų knygą."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2683,14 +2686,6 @@ msgstr ""
 
 msgid "Grouped Formation"
 msgstr ""
-
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Rodyti kitą miestą"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Rodyti ankstesnį miestą"
 
 msgid "Not enough resources to recruit creatures."
 msgstr ""
@@ -11363,3 +11358,11 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Click to show next town."
+#~ msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+#~ msgid "Click to show previous town."
+#~ msgstr "Rodyti ankstesnį miestą"
