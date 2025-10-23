@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2779,14 +2779,14 @@ msgstr ""
 "у Вас немає вільного місця під книгу. Спробуйте передати один із артефактів "
 "іншому герою."
 
-msgid "Click to show next town."
-msgstr "Натисніть щоб побачити наступне місто."
+msgid "Click to show the next town."
+msgstr "Тицьніть щоб показати наступне місто."
 
 msgid "Show next town"
 msgstr "Показати наступне місто"
 
-msgid "Click to show previous town."
-msgstr "Натисніть щоб побачити попереднє місто."
+msgid "Click to show the previous town."
+msgstr "Тицьніть щоб показати попереднє місто."
 
 msgid "Show previous town"
 msgstr "Показати попереднє місто"
@@ -2814,6 +2814,9 @@ msgstr "Вищевказані заклинання доступні тут."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Доступні для вивчення заклинання додано в Книгу Заклинань."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Щедрі чайові для бармена породжують такі чутки:"
@@ -2867,12 +2870,6 @@ msgstr "Порядок Розосередженість"
 
 msgid "Grouped Formation"
 msgstr "Порядок Згуртованість"
-
-msgid "Click to show the next town."
-msgstr "Тицьніть щоб показати наступне місто."
-
-msgid "Click to show the previous town."
-msgstr "Тицьніть щоб показати попереднє місто."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Недостатньо ресурсів для найму істот."
@@ -12400,6 +12397,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Натисніть щоб побачити наступне місто."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Натисніть щоб побачити попереднє місто."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."

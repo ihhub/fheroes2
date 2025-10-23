@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -2741,13 +2741,13 @@ msgstr ""
 "Pro vstup do věže si musíš zakoupit knihu kouzel, teď ale nemáš pro ni "
 "místo. Zkus podarovat jeden ze svých artefaktů jinému hrdinovi."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Klikni pro zobrazení následujícího města."
 
 msgid "Show next town"
 msgstr "Zobrazit následující město"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Klikni pro zobrazení předchozího města."
 
 msgid "Show previous town"
@@ -2776,6 +2776,9 @@ msgstr "Nacházejí se zde výše uvedená kouzla."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Do knihy byla přidána kouzla, která se hrdina může naučit."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Vrchní po štědrém spropitném postil tuto zvěst:"
@@ -2829,12 +2832,6 @@ msgstr "Volná formace"
 
 msgid "Grouped Formation"
 msgstr "Těsná formace"
-
-msgid "Click to show the next town."
-msgstr "Klikni pro zobrazení následujícího města."
-
-msgid "Click to show the previous town."
-msgstr "Klikni pro zobrazení předchozího města."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nemáš dost prostředků pro najmutí jednotek."
@@ -12284,6 +12281,12 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klikni pro zobrazení následujícího města."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klikni pro zobrazení předchozího města."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr "Přenese hrdinu do jakéhokoli města nebo hradu, který vlastníš."

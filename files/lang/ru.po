@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2773,13 +2773,13 @@ msgstr ""
 "к сожалению, Ваша сумка и так переполнена артефактами. Попробуйте передать "
 "один из Ваших артефактов другому герою."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Нажмите, чтобы показать следующий город."
 
 msgid "Show next town"
 msgstr "Следующий город"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Нажмите, чтобы показать предыдущий город."
 
 msgid "Show previous town"
@@ -2808,6 +2808,9 @@ msgstr "Доступные заклинания."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Заклинания, доступные герою, добавлены в книгу заклинаний."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Щедрые чаевые вытянули из уст трактирщика следующий слух:"
@@ -2861,12 +2864,6 @@ msgstr "Разомкнутый строй"
 
 msgid "Grouped Formation"
 msgstr "Сомкнутый строй"
-
-msgid "Click to show the next town."
-msgstr "Нажмите, чтобы показать следующий город."
-
-msgid "Click to show the previous town."
-msgstr "Нажмите, чтобы показать предыдущий город."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Недостаточно средств для найма существ."
@@ -12391,6 +12388,12 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Нажмите, чтобы показать следующий город."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Нажмите, чтобы показать предыдущий город."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr ""

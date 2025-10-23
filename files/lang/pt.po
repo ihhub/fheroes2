@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2769,13 +2769,13 @@ msgstr ""
 "Você deve comprar um grimório para usar a guilda dos magos, mas atualmente "
 "você não tem espaço para ele. Tente dar um de seus artefatos a outro herói."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Clique para mostrar a próxima cidade."
 
 msgid "Show next town"
 msgstr "Mostrar a cidade seguinte"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Clique para mostrar a cidade anterior."
 
 msgid "Show previous town"
@@ -2804,6 +2804,9 @@ msgstr "Os feitiços acima estão disponíveis aqui."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Os feitiços que o herói pode aprender foram colocados no grimório."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "A gorjeta generosa para o barman rende o boato que se segue:"
@@ -2857,12 +2860,6 @@ msgstr "Formação Aberta"
 
 msgid "Grouped Formation"
 msgstr "Formação Fechada"
-
-msgid "Click to show the next town."
-msgstr "Clique para mostrar a próxima cidade."
-
-msgid "Click to show the previous town."
-msgstr "Clique para mostrar a cidade anterior."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Não há recursos suficientes para recrutar criaturas."
@@ -12492,6 +12489,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Clique para mostrar a próxima cidade."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Clique para mostrar a cidade anterior."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr ""

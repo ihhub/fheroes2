@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 23:53+0000\n"
+"POT-Creation-Date: 2025-10-23 07:52+0000\n"
 "PO-Revision-Date: 2025-10-08 20:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2756,13 +2756,13 @@ msgstr ""
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Klicka för att visa nästa stad."
 
 msgid "Show next town"
 msgstr "Visa nästa stad"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Klicka för att visa föregående stad."
 
 msgid "Show previous town"
@@ -2791,6 +2791,9 @@ msgstr "Ovanstående besvärjelser är tillgängliga här."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Besvärjelser som hjälten kan lära sig har lagts till dennes bok."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Ett generöst tips från bartendern som uppger detta rykte:"
@@ -2844,12 +2847,6 @@ msgstr "Utspridd formation"
 
 msgid "Grouped Formation"
 msgstr "Grupperad formation"
-
-msgid "Click to show the next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Click to show the previous town."
-msgstr "Klicka för att visa föregående stad."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "För lite resurser för att rekrytera varelser."
@@ -12345,6 +12342,12 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klicka för att visa nästa stad."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klicka för att visa föregående stad."
 
 #~ msgid "Returns the caster to any town or castle currently owned."
 #~ msgstr ""
