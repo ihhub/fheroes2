@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -2884,6 +2884,10 @@ msgstr ""
 "'Gruppe'-formation samler borgens tropper i midten af borgens side af "
 "slagmarken."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Måned: %{month}, Uge: %{week}, Dag: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
 "Indstil garnisonen til at stå opstille sig i 'spredt' formation under kamp"
@@ -2894,9 +2898,6 @@ msgstr ""
 
 msgid "Exit Castle Options"
 msgstr "Forlad borg-vindue"
-
-msgid "Castle Options"
-msgstr "Borg-vindue"
 
 msgid "Spread Formation"
 msgstr "Spredt formation"
@@ -12492,6 +12493,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Borg-vindue"
 
 #~ msgid "Click to show next town."
 #~ msgstr "Klik for at se næste by."

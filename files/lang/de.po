@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2843,6 +2843,10 @@ msgstr ""
 "Die 'Gruppierte' Kampfformation bündelt Eure Armee in der Mitte Eurer Seite "
 "des Schlachtfelds."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Monat: %{month}, Woche: %{week}, Tag: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Kampfformation der Garnison auf \"verstreut\" einstellen"
 
@@ -2851,9 +2855,6 @@ msgstr "Kampfformation der Garnison auf \"gruppiert\" einstellen"
 
 msgid "Exit Castle Options"
 msgstr "Burg Optionen verlassen"
-
-msgid "Castle Options"
-msgstr "Burg Optionen"
 
 msgid "Spread Formation"
 msgstr "Verstreute Formation"
@@ -12685,6 +12686,9 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Burg Optionen"
 
 #~ msgid "Click to show next town."
 #~ msgstr "Klickt, um die nächste Stadt anzuzeigen."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-10-08 20:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2830,6 +2830,10 @@ msgstr ""
 "'Grupperad' stridsformation buntar ihop hjältens trupper till mitten av "
 "dennes sida av slagfältet."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Månad: %{month}, Vecka: %{week}, Dag: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Utspridd'"
 
@@ -2838,9 +2842,6 @@ msgstr "Ändra granisonstruppernas stridsformation till 'Grupperad'"
 
 msgid "Exit Castle Options"
 msgstr "Lämna Borgalternativ"
-
-msgid "Castle Options"
-msgstr "Borgalternativ"
 
 msgid "Spread Formation"
 msgstr "Utspridd formation"
@@ -12342,6 +12343,9 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Borgalternativ"
 
 #~ msgid "Click to show next town."
 #~ msgstr "Klicka för att visa nästa stad."

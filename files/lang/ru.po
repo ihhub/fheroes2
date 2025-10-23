@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2847,6 +2847,10 @@ msgstr ""
 "Сомкнутый боевой порядок предписывает отрядам армии замка организовать "
 "плотное построение посередине стартового расположения войск в бою."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Месяц: %{month}, Неделя: %{week}, День: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Боевой порядок гарнизона - Разомкнутый"
 
@@ -2855,9 +2859,6 @@ msgstr "Боевой порядок гарнизона - Сомкнутый"
 
 msgid "Exit Castle Options"
 msgstr "Закрыть Настройки замка"
-
-msgid "Castle Options"
-msgstr "Настройки замка"
 
 msgid "Spread Formation"
 msgstr "Разомкнутый строй"
@@ -12388,6 +12389,9 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Настройки замка"
 
 #~ msgid "Click to show next town."
 #~ msgstr "Нажмите, чтобы показать следующий город."

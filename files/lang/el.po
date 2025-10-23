@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -2524,6 +2524,9 @@ msgid ""
 "of the castle's side of the battlefield."
 msgstr ""
 
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr ""
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
 
@@ -2531,9 +2534,6 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Castle Options"
-msgstr ""
-
-msgid "Castle Options"
 msgstr ""
 
 msgid "Spread Formation"

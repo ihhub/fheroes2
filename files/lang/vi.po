@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2875,6 +2875,10 @@ msgstr ""
 "Đội hình chiến đấu 'Tập trung' tập hợp quân đội của ngươi lại với nhau ở "
 "trung tâm của phe ngươi trên chiến trường."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Tháng: %{month}, Tuần: %{week}, Ngày: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Đặt đội hình chiến đấu đồn trú thành 'Dàn trải'"
 
@@ -2883,9 +2887,6 @@ msgstr "Đặt đội hình chiến đấu đồn trú thành 'Tập trung'"
 
 msgid "Exit Castle Options"
 msgstr "Thoát khỏi Lựa chọn Lâu đài"
-
-msgid "Castle Options"
-msgstr "Lựa chọn Lâu đài"
 
 msgid "Spread Formation"
 msgstr "Đội hình Dàn trải"
@@ -12710,6 +12711,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Lựa chọn Lâu đài"
 
 #~ msgid "Click to show next town."
 #~ msgstr "Nhấp để xem thị trấn sau."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2884,6 +2884,10 @@ msgstr ""
 "\"Групираната\" бойна формация обединява армията ти в центъра от твоята "
 "страна на бойното поле."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Месец: %{month}, Седмица: %{week}, Ден: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Задай гарнизонна бойна формация \"Разпростиране\""
 
@@ -2892,9 +2896,6 @@ msgstr "Задай гарнизонна бойна формация \"Групи
 
 msgid "Exit Castle Options"
 msgstr "Изход от Опции на замъка"
-
-msgid "Castle Options"
-msgstr "Опции на замъка"
 
 msgid "Spread Formation"
 msgstr "Формация Разпростиране"
@@ -12679,6 +12680,9 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Опции на замъка"
 
 #~ msgid "Click to show next town."
 #~ msgstr "Кликни, за да покажеш следващия град."
