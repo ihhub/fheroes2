@@ -491,6 +491,11 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         return false;
     };
 
+    std::string defaultTitle( _( "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}" ) );
+    StringReplace( defaultTitle, "%{month}", world.GetMonth() );
+    StringReplace( defaultTitle, "%{week}", world.GetWeek() );
+    StringReplace( defaultTitle, "%{day}", world.GetDay() );
+
     LocalEvent & le = LocalEvent::Get();
 
     auto updateStatusBar = [&]() {
@@ -594,7 +599,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
             statusBar.ShowMessage( _( "Show next town" ) );
         }
         else {
-            statusBar.ShowMessage( _( "Castle Options" ) );
+            statusBar.ShowMessage( defaultTitle );
         }
     };
 
