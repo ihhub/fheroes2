@@ -303,28 +303,41 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     assert( it != myCastles.end() );
 
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
+    bool openConstructionWindow{ false };
+    bool openMageGuildWindow{ false };
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, true, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
-        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+        switch ( result ) {
+        case Castle::CastleDialogReturnValue::PreviousCastle:
+        case Castle::CastleDialogReturnValue::PreviousConstructionWindow:
+        case Castle::CastleDialogReturnValue::PreviousMageGuildWindow:
             if ( it == myCastles.begin() ) {
                 it = myCastles.end();
             }
             --it;
-        }
-        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+            break;
+        case Castle::CastleDialogReturnValue::NextCastle:
+        case Castle::CastleDialogReturnValue::NextConstructionWindow:
+        case Castle::CastleDialogReturnValue::NextMageGuildWindow:
             ++it;
             if ( it == myCastles.end() ) {
                 it = myCastles.begin();
             }
+            break;
+        default:
+            break;
         }
 
         assert( it != myCastles.end() );
 
-        const bool openConstructionWindow
-            = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+        openConstructionWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousConstructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextConstructionWindow );
 
-        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
+        openMageGuildWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) || ( result == Castle::CastleDialogReturnValue::NextMageGuildWindow );
+
+        result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, false, renderBackgroundDialog );
     }
 
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
@@ -1106,6 +1119,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                     EventSaveGame();
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_QUICK_SAVE ) ) {
+                    if ( !Game::QuickSave() ) {
+                        fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = EventLoadGame();

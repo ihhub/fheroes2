@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -177,12 +177,26 @@ msgstr ""
 "ЗАГРУЗИТЬ\n"
 "ИГРУ"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "СНАЧАЛА"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "СОХРАНИТЬ\n"
 "ИГРУ"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"БЫСТРАЯ\n"
+"БИТВА"
 
 msgid "QUIT"
 msgstr "ВЫЙТИ"
@@ -223,9 +237,7 @@ msgstr ""
 "КАРТУ"
 
 msgid "INFO"
-msgstr ""
-" СЦЕНА-\n"
-"РИЙ"
+msgstr "СЦЕНАРИЙ"
 
 msgid ""
 "BATTLE\n"
@@ -2761,13 +2773,13 @@ msgstr ""
 "к сожалению, Ваша сумка и так переполнена артефактами. Попробуйте передать "
 "один из Ваших артефактов другому герою."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Нажмите, чтобы показать следующий город."
 
 msgid "Show next town"
 msgstr "Следующий город"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Нажмите, чтобы показать предыдущий город."
 
 msgid "Show previous town"
@@ -2796,6 +2808,9 @@ msgstr "Доступные заклинания."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Заклинания, доступные герою, добавлены в книгу заклинаний."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Щедрые чаевые вытянули из уст трактирщика следующий слух:"
@@ -2832,17 +2847,9 @@ msgstr ""
 "Сомкнутый боевой порядок предписывает отрядам армии замка организовать "
 "плотное построение посередине стартового расположения войск в бою."
 
-msgid "Spread Formation"
-msgstr "Разомкнутый строй"
-
-msgid "Grouped Formation"
-msgstr "Сомкнутый строй"
-
-msgid "Click to show the next town."
-msgstr "Нажмите, чтобы показать следующий город."
-
-msgid "Click to show the previous town."
-msgstr "Нажмите, чтобы показать предыдущий город."
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Месяц: %{month}, Неделя: %{week}, День: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Боевой порядок гарнизона - Разомкнутый"
@@ -2853,8 +2860,11 @@ msgstr "Боевой порядок гарнизона - Сомкнутый"
 msgid "Exit Castle Options"
 msgstr "Закрыть Настройки замка"
 
-msgid "Castle Options"
-msgstr "Настройки замка"
+msgid "Spread Formation"
+msgstr "Разомкнутый строй"
+
+msgid "Grouped Formation"
+msgstr "Сомкнутый строй"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Недостаточно средств для найма существ."
@@ -3066,6 +3076,13 @@ msgstr "В казне: "
 msgid "Need: "
 msgstr "Необходимо: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Начать сначала"
+
+msgid "There was an issue during saving."
+msgstr "Возникла проблема при сохранении."
+
 msgid "New Game"
 msgstr "Новая игра"
 
@@ -3078,10 +3095,22 @@ msgstr "Загрузка игры"
 msgid "Load a previously saved game."
 msgstr "Загрузка ранее сохранённой игры."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Начать сначала текущий сценарий."
+
 msgid "Save Game"
 msgstr "Сохранить игру"
 
 msgid "Save the current game."
+msgstr "Сохранить текущую игру."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Квиксильвер"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Сохранить текущую игру."
 
 msgid "Quit"
@@ -4676,17 +4705,17 @@ msgstr "[%{pos}]: герой - %{race}"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, герой - %{race}"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} (город)"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} (замок)"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} (город)"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} (город)"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} (замок)"
+
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} (город)"
 
 msgid "None."
 msgstr "Нет."
@@ -4952,11 +4981,43 @@ msgstr "Сохранить карту:"
 msgid "Click to save the current map."
 msgstr "Нажмите, чтобы сохранить текущую карту."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Удалить вторичный навык"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Нажмите, чтобы показать заклинания только %{level} уровня."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Удалить вторичный навык"
+
 msgid "Click to show only level %{level} spells."
 msgstr "Нажмите, чтобы показать заклинания только %{level} уровня."
 
 msgid "Spells level"
 msgstr "Уровень заклинаний"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Запретить заклинания"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Нажмите, чтобы показать заклинания только %{level} уровня."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Просмотреть заклинания"
 
 msgid "Riddle:"
 msgstr "Загадка:"
@@ -5484,6 +5545,10 @@ msgstr "переместить карту мира вправо-вниз"
 
 msgid "hotkey|save game"
 msgstr "сохранить игру"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "быстрая битва"
 
 msgid "hotkey|next hero"
 msgstr "следующий герой"
@@ -6317,9 +6382,6 @@ msgstr "Вы хотите перезаписать файл игры?"
 
 msgid "Game saved successfully."
 msgstr "Игра успешно сохранена."
-
-msgid "There was an issue during saving."
-msgstr "Возникла проблема при сохранении."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8412,6 +8474,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} встретил %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Уровень %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Артефакты"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Показать артефакты"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
@@ -12083,13 +12175,13 @@ msgstr "Переносит героя в расположенную поблиз
 msgid "Dimension Door"
 msgstr "Портал"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Возвращает героя в ближайший город или замок, если там уже не находится "
-"другой герой."
-
 msgid "Town Gate"
 msgstr "Врата в город"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12297,6 +12389,20 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Настройки замка"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Нажмите, чтобы показать следующий город."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Нажмите, чтобы показать предыдущий город."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Возвращает героя в ближайший город или замок, если там уже не находится "
+#~ "другой герой."
 
 #~ msgid "1"
 #~ msgstr "1"

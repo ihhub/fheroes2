@@ -51,8 +51,10 @@
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -126,6 +128,10 @@ namespace
                 return true;
             }
 
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
+            }
+
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
                 fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
@@ -175,8 +181,10 @@ namespace
         fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
         display.updateNextRenderRoi( radarArea );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+        const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
+        buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         buttonExit.draw();
 
@@ -194,6 +202,10 @@ namespace
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
         }
 
@@ -240,12 +252,14 @@ namespace
 
         fheroes2::Copy( background, 0, 0, display, puzzleArea );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+        const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
+        buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         const fheroes2::Rect & radarRect = radar.GetRect();
 
-        const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
+        const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit, exitButtonIcnID]() {
             if ( isHideInterface ) {
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }
@@ -254,6 +268,7 @@ namespace
             display.updateNextRenderRoi( radarArea );
 
             buttonExit.draw();
+            fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
             return radarRect;
         };
@@ -272,6 +287,10 @@ namespace
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
         }
 

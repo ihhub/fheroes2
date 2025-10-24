@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -173,12 +173,23 @@ msgstr ""
 "TẢI\n"
 "GAME"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "LÀM LẠI"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "LƯU\n"
 "GAME"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "RỜI KHỎI"
@@ -2784,13 +2795,15 @@ msgstr ""
 "ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
 "cổ vật của ngươi cho một anh tướng khác."
 
-msgid "Click to show next town."
+#, fuzzy
+msgid "Click to show the next town."
 msgstr "Nhấp để xem thị trấn sau."
 
 msgid "Show next town"
 msgstr "Xem thị trấn sau"
 
-msgid "Click to show previous town."
+#, fuzzy
+msgid "Click to show the previous town."
 msgstr "Nhấp để xem thị trấn trước."
 
 msgid "Show previous town"
@@ -2819,6 +2832,9 @@ msgstr "Các phép thuật trên có sẵn ở đây."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Các phép mà tướng có thể học đã được thêm vào cuốn sách của họ."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2859,19 +2875,9 @@ msgstr ""
 "Đội hình chiến đấu 'Tập trung' tập hợp quân đội của ngươi lại với nhau ở "
 "trung tâm của phe ngươi trên chiến trường."
 
-msgid "Spread Formation"
-msgstr "Đội hình Dàn trải"
-
-msgid "Grouped Formation"
-msgstr "Đội hình Tập trung"
-
 #, fuzzy
-msgid "Click to show the next town."
-msgstr "Nhấp để xem thị trấn sau."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Nhấp để xem thị trấn trước."
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Tháng: %{month}, Tuần: %{week}, Ngày: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Đặt đội hình chiến đấu đồn trú thành 'Dàn trải'"
@@ -2882,8 +2888,11 @@ msgstr "Đặt đội hình chiến đấu đồn trú thành 'Tập trung'"
 msgid "Exit Castle Options"
 msgstr "Thoát khỏi Lựa chọn Lâu đài"
 
-msgid "Castle Options"
-msgstr "Lựa chọn Lâu đài"
+msgid "Spread Formation"
+msgstr "Đội hình Dàn trải"
+
+msgid "Grouped Formation"
+msgstr "Đội hình Tập trung"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Không đủ tài nguyên để chiêu mộ sinh vật."
@@ -3100,6 +3109,13 @@ msgstr "Tổng: "
 msgid "Need: "
 msgstr "Cần: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Chơi lại"
+
+msgid "There was an issue during saving."
+msgstr "Đã xảy ra sự cố trong quá trình lưu."
+
 msgid "New Game"
 msgstr "Trò chơi Mới"
 
@@ -3112,10 +3128,22 @@ msgstr "Tải Trò chơi"
 msgid "Load a previously saved game."
 msgstr "Tải một trò chơi đã lưu trước đó."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Chơi lại kịch bản hiện tại."
+
 msgid "Save Game"
 msgstr "Lưu Trò chơi"
 
 msgid "Save the current game."
+msgstr "Lưu trò chơi hiện tại."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Lưu trò chơi hiện tại."
 
 msgid "Quit"
@@ -4778,19 +4806,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} %{race} tướng"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} %{race} %{townOrCastle}"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} %{race} tướng"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{race1} %{name1} vs %{race2} %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 #, fuzzy
@@ -5088,12 +5116,44 @@ msgstr "Lưu Bản đồ"
 msgid "Click to save the current map."
 msgstr "Nhấp để lưu trò chơi hiện tại."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Xem Phép"
+
 msgid "Click to show only level %{level} spells."
 msgstr ""
 
 #, fuzzy
 msgid "Spells level"
 msgstr "Sách Phép"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Xem Phép"
 
 msgid "Riddle:"
 msgstr ""
@@ -5626,6 +5686,10 @@ msgstr "bản đồ thế giới phải dưới"
 
 msgid "hotkey|save game"
 msgstr "lưu trò chơi"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "thoát"
 
 msgid "hotkey|next hero"
 msgstr "tướng tiếp theo"
@@ -6458,9 +6522,6 @@ msgstr "Ngươi có chắc chắn muốn ghi đè lưu bằng tên này không?"
 
 msgid "Game saved successfully."
 msgstr "Chò trơi được lưu thành công."
-
-msgid "There was an issue during saving."
-msgstr "Đã xảy ra sự cố trong quá trình lưu."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8600,6 +8661,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} gặp %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Cấp bậc %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Bảo vật"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Xem Bảo vật"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Tướng địch bây giờ đã có thể nhận dạng đầy đủ."
@@ -12405,12 +12496,13 @@ msgstr ""
 msgid "Dimension Door"
 msgstr "Cửa Kích thước"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Trả người điều khiển về bất kỳ thị trấn hoặc lâu đài nào hiện đang sở hữu."
-
 msgid "Town Gate"
 msgstr "Cổng Thành"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12619,6 +12711,19 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Lựa chọn Lâu đài"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Nhấp để xem thị trấn sau."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Nhấp để xem thị trấn trước."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Trả người điều khiển về bất kỳ thị trấn hoặc lâu đài nào hiện đang sở hữu."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Luôn phản đòn"

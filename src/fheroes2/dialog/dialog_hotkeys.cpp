@@ -73,7 +73,7 @@ namespace
             text.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
             text.add( fheroes2::Text{ StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalWhite() } );
 
-            _restorer.update( offset.x, offset.y, fheroes2::boxAreaWidthPx, text.height() );
+            _restorer.update( offset.x, offset.y, fheroes2::boxAreaWidthPx, text.height( fheroes2::boxAreaWidthPx ) );
 
             text.draw( offset.x, offset.y, fheroes2::boxAreaWidthPx, output );
         }

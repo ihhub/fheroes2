@@ -465,17 +465,17 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
-            Dialog::MakeGiftResource( kingdom );
+            if ( Dialog::MakeGiftResource( kingdom ) == Dialog::OK ) {
+                resourceTo = Resource::UNKNOWN;
+                resourceFrom = Resource::UNKNOWN;
+                gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
-            resourceTo = Resource::UNKNOWN;
-            resourceFrom = Resource::UNKNOWN;
-            gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
+                cursorTo.hide();
+                cursorFrom.hide();
 
-            cursorTo.hide();
-            cursorFrom.hide();
-
-            fundsFrom = kingdom.GetFunds();
-            RedrawFromResource( pt1, fundsFrom );
+                fundsFrom = kingdom.GetFunds();
+                RedrawFromResource( pt1, fundsFrom );
+            }
 
             display.render();
         }

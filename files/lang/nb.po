@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -159,12 +159,23 @@ msgstr ""
 "LAST INN\n"
 "PARTI"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OMSTART"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "LAGRE\n"
 "PARTI"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "AVSLUTT"
@@ -2829,13 +2840,15 @@ msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine skatter til en annen helt."
 
-msgid "Click to show next town."
+#, fuzzy
+msgid "Click to show the next town."
 msgstr "Klikk for å vise neste by."
 
 msgid "Show next town"
 msgstr "Vis neste by"
 
-msgid "Click to show previous town."
+#, fuzzy
+msgid "Click to show the previous town."
 msgstr "Klikk for å vise forrige by."
 
 msgid "Show previous town"
@@ -2865,6 +2878,9 @@ msgstr "Trolldommene ovenfor er tilgjengelige her."
 #, fuzzy
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Med nok visdom kan du lære deg trolldommene over."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Et sjenerøst tips til bartenderen får han til å dele dette ryktet:"
@@ -2903,19 +2919,9 @@ msgstr ""
 "\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
 "din side av slagmarken."
 
-msgid "Spread Formation"
-msgstr "Spredd oppstilling"
-
-msgid "Grouped Formation"
-msgstr "Gruppert oppstilling"
-
 #, fuzzy
-msgid "Click to show the next town."
-msgstr "Klikk for å vise neste by."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Klikk for å vise forrige by."
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Måned: %{month}, Uke : %{week}, Dag : %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Sett kampoppstillingen til garnisonen til \"Spredd\"."
@@ -2926,8 +2932,11 @@ msgstr "Sett kampoppstillingen til garnisonen til \"Gruppert\"."
 msgid "Exit Castle Options"
 msgstr "Forlat borgvalg"
 
-msgid "Castle Options"
-msgstr "Borgvalg"
+msgid "Spread Formation"
+msgstr "Spredd oppstilling"
+
+msgid "Grouped Formation"
+msgstr "Gruppert oppstilling"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Ikke nok råvarer til å verve krigere."
@@ -3146,6 +3155,13 @@ msgstr "Totalt: "
 msgid "Need: "
 msgstr "Trenger: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Start på nytt"
+
+msgid "There was an issue during saving."
+msgstr "Det oppstod et problem under lagringen."
+
 msgid "New Game"
 msgstr "Nytt parti"
 
@@ -3158,10 +3174,22 @@ msgstr "Last inn et parti"
 msgid "Load a previously saved game."
 msgstr "Last inn et tidligere lagret parti."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Start det nåværende kartet på nytt."
+
 msgid "Save Game"
 msgstr "Lagre spill"
 
 msgid "Save the current game."
+msgstr "Lagre det nåværende spillet."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Autokamp"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Lagre det nåværende spillet."
 
 msgid "Quit"
@@ -4850,19 +4878,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{name1} møter %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} spiller"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} spiller"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{name1} møter %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} spiller"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} møter %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "%{name1} møter %{name2}"
 
 #, fuzzy
@@ -5160,12 +5188,44 @@ msgstr "Lagre kart"
 msgid "Click to save the current map."
 msgstr "Klikk for å lagre det nåværende spillet."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Vis trolldommer"
+
 msgid "Click to show only level %{level} spells."
 msgstr ""
 
 #, fuzzy
 msgid "Spells level"
 msgstr "Trolldomsrull"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Vis trolldommer"
 
 msgid "Riddle:"
 msgstr ""
@@ -5704,6 +5764,10 @@ msgstr "Verdenskart ned til høyre"
 
 msgid "hotkey|save game"
 msgstr "Lagre parti"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "Avslutt"
 
 msgid "hotkey|next hero"
 msgstr "Neste helt"
@@ -6557,9 +6621,6 @@ msgstr "Er du sikker på at du vil overskrive lagringspunktet med dette navnet?"
 
 msgid "Game saved successfully."
 msgstr "Lagring vellykket."
-
-msgid "There was an issue during saving."
-msgstr "Det oppstod et problem under lagringen."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8717,6 +8778,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Level %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Gjenstander"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Vis skatter"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
@@ -12574,13 +12665,13 @@ msgstr ""
 "Verdens-\n"
 "portal"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Sender helten til en hvilken som helst by eller borg i heltens nåværende "
-"besittelse."
-
 msgid "Town Gate"
 msgstr "Byflukt"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12797,6 +12888,20 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Borgvalg"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klikk for å vise neste by."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klikk for å vise forrige by."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Sender helten til en hvilken som helst by eller borg i heltens nåværende "
+#~ "besittelse."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Tar alltid igjen"

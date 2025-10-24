@@ -55,6 +55,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -146,14 +147,16 @@ namespace
     }
 }
 
-class MeetingArmyBar : public ArmyBar
+class MeetingArmyBar final : public ArmyBar
 {
 public:
     using ArmyBar::RedrawItem;
 
     explicit MeetingArmyBar( Army * army )
         : ArmyBar( army, true, false, false )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
@@ -208,14 +211,16 @@ private:
     fheroes2::Image _cachedBackground;
 };
 
-class MeetingArtifactBar : public ArtifactsBar
+class MeetingArtifactBar final : public ArtifactsBar
 {
 public:
     using ArtifactsBar::RedrawItem;
 
     explicit MeetingArtifactBar( Heroes * hero )
         : ArtifactsBar( hero, true, false, false, false, nullptr )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
@@ -245,12 +250,14 @@ private:
     fheroes2::Image _cachedBackground;
 };
 
-class MeetingPrimarySkillsBar : public PrimarySkillsBar
+class MeetingPrimarySkillsBar final : public PrimarySkillsBar
 {
 public:
     explicit MeetingPrimarySkillsBar( Heroes * hero )
         : PrimarySkillsBar( hero, true, false, false )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override
     {
@@ -258,12 +265,14 @@ public:
     }
 };
 
-class MeetingSecondarySkillsBar : public SecondarySkillsBar
+class MeetingSecondarySkillsBar final : public SecondarySkillsBar
 {
 public:
     explicit MeetingSecondarySkillsBar( const Heroes & hero )
         : SecondarySkillsBar( hero )
-    {}
+    {
+        // Do nothing.
+    }
 
     void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
@@ -325,8 +334,19 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", otherHero.GetName() );
-    const fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
     text.draw( cur_pt.x + 320 - text.width() / 2, cur_pt.y + 29, display );
+
+    // Render hero's levels.
+    message = _( "hero|Level %{level}" );
+    StringReplace( message, "%{level}", GetLevel() );
+    text.set( std::move( message ), fheroes2::FontType::smallWhite() );
+    text.draw( cur_pt.x + 143 - text.width() / 2, cur_pt.y + 52, display );
+
+    message = _( "hero|Level %{level}" );
+    StringReplace( message, "%{level}", otherHero.GetLevel() );
+    text.set( std::move( message ), fheroes2::FontType::smallWhite() );
+    text.draw( cur_pt.x + 495 - text.width() / 2, cur_pt.y + 52, display );
 
     const int iconsH1XOffset = 34;
     const int iconsH2XOffset = 571;
@@ -474,7 +494,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // This dialog currently does not have borders so its ROI is the same as fade ROI.
     fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
 
-    const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+    const int32_t hero1ScoutAreaBonus = _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
     const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
 
     LocalEvent & le = LocalEvent::Get();
@@ -517,8 +537,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             swapArtifacts.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
 
         // selector troops event
         if ( ( le.isMouseCursorPosInArea( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
@@ -550,8 +571,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
-            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> assembledArtifacts = _bagArtifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero._bagArtifacts.assembleArtifactSetIfPossible();
 
             // MSVC 2017 fails to use the std::set<...>::merge( std::set<...> && ) overload here, so we have to use a temporary variable
             assembledArtifacts.merge( otherHeroAssembledArtifacts );
@@ -774,6 +795,43 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.isMouseRightButtonPressedInArea( hero2Area ) ) {
             Dialog::QuickInfo( otherHero );
         }
+        else if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArtifactsToHero1.area() ) ) {
+            message = _( "Move all artifacts from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", otherHero.GetName() );
+            StringReplace( message, "%{to_hero_name}", GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Artifact Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArtifactsToHero2.area() ) ) {
+            message = _( "Move all artifacts from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", GetName() );
+            StringReplace( message, "%{to_hero_name}", otherHero.GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Artifact Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( swapArtifacts.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Swap Artifacts" ), _( "Swap all artifacts between heroes." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArmyToHero1.area() ) ) {
+            message = _( "Move army from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", otherHero.GetName() );
+            StringReplace( message, "%{to_hero_name}", GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Army Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( moveArmyToHero2.area() ) ) {
+            message = _( "Move army from %{from_hero_name} to %{to_hero_name}." );
+            StringReplace( message, "%{from_hero_name}", GetName() );
+            StringReplace( message, "%{to_hero_name}", otherHero.GetName() );
+
+            fheroes2::showStandardTextMessage( _( "Army Transfer" ), std::move( message ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( swapArmies.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Swap Armies" ), _( "Swap armies between heroes." ), Dialog::ZERO );
+        }
     }
 
     selectArmy1.ResetSelected();
@@ -791,7 +849,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     restorer.restore();
 
     // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
-    if ( hero1ScoutAreaBonus < bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+    if ( hero1ScoutAreaBonus < _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
         Scout( GetIndex() );
         ScoutRadar();
     }

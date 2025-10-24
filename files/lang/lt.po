@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -144,8 +144,18 @@ msgid ""
 msgstr ""
 
 msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+
+msgid ""
 "SAVE\n"
 "GAME"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"SAVE"
 msgstr ""
 
 msgid "QUIT"
@@ -2580,14 +2590,14 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Rodyti kitą miestą"
 
 msgid "Show next town"
 msgstr "Rodyti kitą miestą"
 
 #, fuzzy
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Rodyti ankstesnį miestą"
 
 msgid "Show previous town"
@@ -2620,6 +2630,9 @@ msgstr "Šie burtai buvo įdėti į jūsų knygą."
 #, fuzzy
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Šie burtai buvo įdėti į jūsų knygą."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2655,19 +2668,9 @@ msgid ""
 "of the castle's side of the battlefield."
 msgstr ""
 
-msgid "Spread Formation"
-msgstr ""
-
-msgid "Grouped Formation"
-msgstr ""
-
 #, fuzzy
-msgid "Click to show the next town."
-msgstr "Rodyti kitą miestą"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Rodyti ankstesnį miestą"
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Mėnuo: %{month}, Savaitė: %{week}, Diena: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2679,7 +2682,10 @@ msgstr ""
 msgid "Exit Castle Options"
 msgstr "Išeiti iš pilies"
 
-msgid "Castle Options"
+msgid "Spread Formation"
+msgstr ""
+
+msgid "Grouped Formation"
 msgstr ""
 
 msgid "Not enough resources to recruit creatures."
@@ -2880,6 +2886,12 @@ msgstr ""
 msgid "Need: "
 msgstr ""
 
+msgid "Restart Game"
+msgstr ""
+
+msgid "There was an issue during saving."
+msgstr ""
+
 msgid "New Game"
 msgstr ""
 
@@ -2893,10 +2905,20 @@ msgid "Load a previously saved game."
 msgstr "Atverti prieš tai įrašytą žaidimą"
 
 #, fuzzy
+msgid "Restart the scenario."
+msgstr "Prarasti pilį '%{name}'."
+
+#, fuzzy
 msgid "Save Game"
 msgstr "Įkelti žaidimą"
 
 msgid "Save the current game."
+msgstr ""
+
+msgid "Quick Save"
+msgstr ""
+
+msgid "Save the current game without name selection."
 msgstr ""
 
 msgid "Quit"
@@ -4487,18 +4509,18 @@ msgstr ""
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "Žiūrėti %{name}"
 
-msgid "[%{pos}]: %{race} town"
-msgstr ""
-
 msgid "[%{pos}]: %{race} castle"
 msgstr ""
 
-#, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "Žiūrėti %{name}"
+msgid "[%{pos}]: %{race} town"
+msgstr ""
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "Žiūrėti %{name}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "Žiūrėti %{name}"
 
 msgid "None."
@@ -4765,12 +4787,43 @@ msgstr "Įkelti žaidimą"
 msgid "Click to save the current map."
 msgstr "Rodyti kitą miestą"
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Atsitiktinis miestas"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Gynybos įgūdis"
+
 msgid "Click to show only level %{level} spells."
 msgstr ""
 
 #, fuzzy
 msgid "Spells level"
 msgstr "Burtų galia"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Atsitiktinis miestas"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Rodyti kitą miestą"
+
+msgid "Disable All Spells"
+msgstr ""
 
 msgid "Riddle:"
 msgstr ""
@@ -5294,6 +5347,10 @@ msgstr ""
 
 msgid "hotkey|save game"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "Geriausi rezultatai"
 
 #, fuzzy
 msgid "hotkey|next hero"
@@ -6067,9 +6124,6 @@ msgstr ""
 
 msgid "Game saved successfully."
 msgstr "Žaidimas sėkmingai įrašytas."
-
-msgid "There was an issue during saving."
-msgstr ""
 
 #, fuzzy
 msgid ""
@@ -7751,6 +7805,36 @@ msgid ""
 msgstr ""
 
 msgid "%{name1} meets %{name2}"
+msgstr ""
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Atsitiktinė pilis"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Magiškas artefaktas"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Rodyti magiškus artefaktus"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
@@ -11068,10 +11152,12 @@ msgstr ""
 msgid "Dimension Door"
 msgstr ""
 
-msgid "Returns the caster to any town or castle currently owned."
+msgid "Town Gate"
 msgstr ""
 
-msgid "Town Gate"
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
 msgstr ""
 
 msgid ""
@@ -11273,3 +11359,11 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Click to show next town."
+#~ msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+#~ msgid "Click to show previous town."
+#~ msgstr "Rodyti ankstesnį miestą"

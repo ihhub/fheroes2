@@ -43,6 +43,12 @@
 
 class Kingdom;
 
+namespace fheroes2
+{
+    struct LocalizedString;
+    class TextBase;
+}
+
 namespace Dialog
 {
     class ItemSelectionWindow : public Interface::ListBox<int>
@@ -95,6 +101,9 @@ namespace Dialog
         void renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
                          const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
 
+        void renderItem( const fheroes2::Sprite & itemSprite, std::vector<fheroes2::LocalizedString> itemText, const fheroes2::Point & destination,
+                         const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
+
         int32_t selectItemsEventProcessing();
 
         fheroes2::Rect getBackgroundArea() const;
@@ -127,6 +136,8 @@ namespace Dialog
         {
             return _isDoubleClicked;
         }
+
+        void renderText( fheroes2::TextBase & text, const fheroes2::Point & destination, const int32_t textOffsetX, const int32_t itemOffsetY ) const;
     };
 
     Monster selectMonster( const int monsterId );

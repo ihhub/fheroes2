@@ -440,19 +440,19 @@ public:
 
     uint32_t GetMovePoints() const
     {
-        return move_point;
+        return _movePoints;
     }
 
     void IncreaseMovePoints( const uint32_t point )
     {
-        move_point += point;
+        _movePoints += point;
     }
 
     bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
 
     void ResetMovePoints()
     {
-        move_point = 0;
+        _movePoints = 0;
     }
 
     bool HasSecondarySkill( const int skill ) const;
@@ -470,23 +470,20 @@ public:
 
     bool HasUltimateArtifact() const
     {
-        return bag_artifacts.ContainUltimateArtifact();
+        return _bagArtifacts.ContainUltimateArtifact();
     }
 
     uint32_t GetCountArtifacts() const
     {
-        return bag_artifacts.CountArtifacts();
+        return _bagArtifacts.CountArtifacts();
     }
 
     bool IsFullBagArtifacts() const
     {
-        return bag_artifacts.isFull();
+        return _bagArtifacts.isFull();
     }
 
     uint32_t GetMobilityIndexSprite() const;
-
-    // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
-    uint32_t GetManaIndexSprite() const;
 
     int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
                     const fheroes2::SupportedLanguage language );

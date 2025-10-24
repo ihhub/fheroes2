@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:02+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -180,12 +180,26 @@ msgstr ""
 "ТАЖИТИ\n"
 "ГРУ"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "РЕСТАРТ"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ЗАПИС\n"
 "ГРИ"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"ШВИДКИЙ\n"
+"БІЙ"
 
 msgid "QUIT"
 msgstr "ВИЙТИ"
@@ -2765,14 +2779,14 @@ msgstr ""
 "у Вас немає вільного місця під книгу. Спробуйте передати один із артефактів "
 "іншому герою."
 
-msgid "Click to show next town."
-msgstr "Натисніть щоб побачити наступне місто."
+msgid "Click to show the next town."
+msgstr "Тицьніть щоб показати наступне місто."
 
 msgid "Show next town"
 msgstr "Показати наступне місто"
 
-msgid "Click to show previous town."
-msgstr "Натисніть щоб побачити попереднє місто."
+msgid "Click to show the previous town."
+msgstr "Тицьніть щоб показати попереднє місто."
 
 msgid "Show previous town"
 msgstr "Показати попереднє місто"
@@ -2800,6 +2814,9 @@ msgstr "Вищевказані заклинання доступні тут."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Доступні для вивчення заклинання додано в Книгу Заклинань."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Щедрі чайові для бармена породжують такі чутки:"
@@ -2836,17 +2853,9 @@ msgstr ""
 "Бойовий порядок \"Згуртованість\" об'єднує підрозділи замку в центрі поля "
 "бою на стороні замку."
 
-msgid "Spread Formation"
-msgstr "Порядок Розосередженість"
-
-msgid "Grouped Formation"
-msgstr "Порядок Згуртованість"
-
-msgid "Click to show the next town."
-msgstr "Тицьніть щоб показати наступне місто."
-
-msgid "Click to show the previous town."
-msgstr "Тицьніть щоб показати попереднє місто."
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Місяць: %{month}, Тиждень: %{week}, День: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Встановити бойовий порядок \"Розосередження\""
@@ -2857,8 +2866,11 @@ msgstr "Встановити бойовий порядок \"Згуртован�
 msgid "Exit Castle Options"
 msgstr "Вийти з налаштувань замку"
 
-msgid "Castle Options"
-msgstr "Налаштування замку"
+msgid "Spread Formation"
+msgstr "Порядок Розосередженість"
+
+msgid "Grouped Formation"
+msgstr "Порядок Згуртованість"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Недостатньо ресурсів для найму істот."
@@ -3070,6 +3082,13 @@ msgstr "Загалом: "
 msgid "Need: "
 msgstr "Потрібно: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Перезапуск"
+
+msgid "There was an issue during saving."
+msgstr "Під час збереження виникла проблема."
+
 msgid "New Game"
 msgstr "Нова Гра"
 
@@ -3082,10 +3101,22 @@ msgstr "Завантажити Гру"
 msgid "Load a previously saved game."
 msgstr "Завантажити раніше збережену гру."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Перезапустити поточний сценарій."
+
 msgid "Save Game"
 msgstr "Зберегти Гру"
 
 msgid "Save the current game."
+msgstr "Збережіть поточну гру."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Квіксілвер"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Збережіть поточну гру."
 
 msgid "Quit"
@@ -4662,17 +4693,17 @@ msgstr "[%{pos}]: %{race} герой"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race} герой"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} місто"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} замок"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} місто"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} місто"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} замок"
+
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} місто"
 
 msgid "None."
 msgstr "Нема."
@@ -4935,11 +4966,43 @@ msgstr "Зберегти мапу:"
 msgid "Click to save the current map."
 msgstr "Тицьніть, щоб зберегти поточну мапу."
 
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Тицьніть для увімкнення патрулювання героєм."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Видалити вторинне вміння"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Видалити вторинне вміння"
+
 msgid "Click to show only level %{level} spells."
 msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
 
 msgid "Spells level"
 msgstr "Рівень заклинань"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Тицьніть для увімкнення патрулювання героєм."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Заборонені заклинання"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Переглянути заклинання"
 
 msgid "Riddle:"
 msgstr "Загадка:"
@@ -5464,6 +5527,10 @@ msgstr "світова мапа донизу й праворуч"
 
 msgid "hotkey|save game"
 msgstr "зберегти гру"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "швидкий бій"
 
 msgid "hotkey|next hero"
 msgstr "наступний герой"
@@ -6303,9 +6370,6 @@ msgstr "Ви впевнені, що хочете перезаписати збе
 
 msgid "Game saved successfully."
 msgstr "Гру збережено успішно."
-
-msgid "There was an issue during saving."
-msgstr "Під час збереження виникла проблема."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -8426,6 +8490,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} зустрічає %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Рівень %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Артефакти"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Огляд артефактів"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Ворожі герої тепер повністю ідентифіковані."
@@ -12091,11 +12185,13 @@ msgstr "Магічно переносить заклинача на невели
 msgid "Dimension Door"
 msgstr "Просторова Брама"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
-
 msgid "Town Gate"
 msgstr "Міський Портал"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12302,6 +12398,18 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Налаштування замку"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Натисніть щоб побачити наступне місто."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Натисніть щоб побачити попереднє місто."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
 
 #~ msgid "Always retaliates"
 #~ msgstr "Завжди наносить контрудар"
