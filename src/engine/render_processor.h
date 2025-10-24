@@ -84,7 +84,7 @@ namespace fheroes2
 
         bool isCyclingUpdateRequired() const
         {
-            return _enableCycling && _lastRenderCall.getMs() >= _cyclingInterval;
+            return _enableCycling && _cyclingTimer.getMs() + _previousCyclingInterval >= 2 * _cyclingInterval && _lastRenderCall.getMs() > _frameHalfInterval;
         }
 
     private:
@@ -96,11 +96,18 @@ namespace fheroes2
         fheroes2::Time _cyclingTimer;
         fheroes2::Time _lastRenderCall;
 
+        // This variable represents the inaccuracy of the previous color cycling rendering to be taken into account in the next one.
+        uint64_t _previousCyclingInterval{ _cyclingInterval };
+
         uint32_t _cyclingCounter{ 0 };
 
         bool _enableRenderers{ false };
         bool _enableCycling{ false };
 
         static const uint64_t _cyclingInterval{ 220 };
+
+        // Lets assume that the desynchronization of one frame is not noticeable on 60 FPS.
+        // To reduce the render calls we may do color cycling update 8 ms earlier or later.
+        static constexpr uint64_t _frameHalfInterval{ 8 };
     };
 }
