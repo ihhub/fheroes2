@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2796,6 +2796,10 @@ msgid ""
 "of the castle's side of the battlefield."
 msgstr ""
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Месяц: %{month}, Тыдзень: %{week}, Дзень: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
 
@@ -2804,9 +2808,6 @@ msgstr ""
 
 msgid "Exit Castle Options"
 msgstr ""
-
-msgid "Castle Options"
-msgstr "Налады замка"
 
 msgid "Spread Formation"
 msgstr ""
@@ -11404,6 +11405,9 @@ msgstr "Ён сказаў ёй: Бэ бэ бэ... а потым яна сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Адраджаецца невядомая сіла..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Налады замка"
 
 #~ msgid "CONFIG"
 #~ msgstr "НАЛАДЫ"

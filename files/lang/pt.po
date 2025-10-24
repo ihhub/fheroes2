@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 07:52+0000\n"
+"POT-Creation-Date: 2025-10-23 23:54+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2843,6 +2843,10 @@ msgstr ""
 "A formação de combate 'Fechada' agrupa as unidades do castelo no centro do "
 "lado do castelo no campo de batalha."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Mês: %{month}, Semana: %{week}, Dia: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Definir formação de combate da guarnição para 'Aberta'"
 
@@ -2851,9 +2855,6 @@ msgstr "Definir formação de combate da guarnição para 'Fechada'"
 
 msgid "Exit Castle Options"
 msgstr "Sair das Opções do Castelo"
-
-msgid "Castle Options"
-msgstr "Opções do Castelo"
 
 msgid "Spread Formation"
 msgstr "Formação Aberta"
@@ -12489,6 +12490,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Opções do Castelo"
 
 #~ msgid "Click to show next town."
 #~ msgstr "Clique para mostrar a próxima cidade."
