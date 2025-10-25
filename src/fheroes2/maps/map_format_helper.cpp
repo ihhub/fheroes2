@@ -1311,7 +1311,7 @@ namespace Maps
         return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
-    void setTerrainOnTiles( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
+    void setTerrainWithTransition( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
         assert( map.width == world.w() && map.width == world.h() );
 

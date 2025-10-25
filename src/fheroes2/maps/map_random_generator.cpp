@@ -501,7 +501,7 @@ namespace Maps::Generator
                 yMax = std::min( yMax, nodeY );
 
                 if ( node.type == NodeType::BORDER ) {
-                    Maps::setTerrainOnTiles( mapFormat, node.index, node.index, region._groundType );
+                    Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region._groundType );
                 }
             }
 
