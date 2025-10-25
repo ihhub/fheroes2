@@ -108,8 +108,7 @@ namespace
     {
         const bool isSystemInfoDisplayed = Settings::Get().isSystemInfoEnabled();
 
-        fheroes2::Sprite image = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), 69, 47, 65, 65 );
-        image.setPosition( 0, 0 );
+        fheroes2::Sprite image = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
         fheroes2::Text info;
         if ( isSystemInfoDisplayed ) {
             info.set( _( "FPS" ), fheroes2::FontType( fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW ) );
