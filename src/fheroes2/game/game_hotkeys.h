@@ -81,6 +81,10 @@ namespace Game
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
 
+        // This hotkey is only for debug mode as of now.
+        EDITOR_RANDOM_MAP_GENERATION,
+        EDITOR_RANDOM_MAP_CONFIGURATION,
+
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
         CAMPAIGN_PRICE_OF_LOYALTY,

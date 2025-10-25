@@ -62,6 +62,7 @@
 #include "localevent.h"
 #include "map_format_helper.h"
 #include "map_object_info.h"
+#include "map_random_generator.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -1011,6 +1012,33 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
                 }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_GENERATION ) ) {
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                    Maps::Generator::Configuration rmgConfig;
+                    rmgConfig.playerCount = _playerCount;
+                    rmgConfig.regionSizeLimit = _regionSizeLimit;
+
+                    if ( Maps::Generator::generateMap( _mapFormat, rmgConfig, world.w(), world.h() ) ) {
+                        _redraw |= mapUpdateFlags;
+
+                        action.commit();
+                    }
+                    else {
+                        _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
+                    }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
+                    int32_t newCount = _playerCount;
+                    if ( Dialog::SelectCount( "Pick player count", 2, 6, newCount ) ) {
+                        _playerCount = newCount;
+                    }
+                    newCount = _regionSizeLimit;
+                    if ( Dialog::SelectCount( "Limit region size", 100, 10000, newCount ) ) {
+                        _regionSizeLimit = newCount;
+                    }
+                }
+                // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
@@ -1203,7 +1231,7 @@ namespace Interface
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
-                        Maps::setTerrainOnTiles( _mapFormat, _areaSelectionStartTileId, _tileUnderCursor, groundId );
+                        Maps::setTerrainWithTransition( _mapFormat, _areaSelectionStartTileId, _tileUnderCursor, groundId );
                         _validateObjectsOnTerrainUpdate();
 
                         action.commit();
@@ -1761,13 +1789,13 @@ namespace Interface
             if ( brushSize.width > 0 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
 
-                Maps::setTerrainOnTiles( _mapFormat, indices.x, indices.y, groundId );
+                Maps::setTerrainWithTransition( _mapFormat, indices.x, indices.y, groundId );
             }
             else {
                 assert( brushSize.width == 0 );
 
                 // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainOnTiles( _mapFormat, tileIndex, tileIndex, groundId );
+                Maps::setTerrainWithTransition( _mapFormat, tileIndex, tileIndex, groundId );
 
                 _areaSelectionStartTileId = -1;
             }
@@ -2229,7 +2257,7 @@ namespace Interface
             world.getTile( i ).setIndex( i );
         }
 
-        Maps::setTerrainOnTiles( _mapFormat, 0, tilesCount - 1, Maps::Ground::WATER );
+        Maps::setTerrainWithTransition( _mapFormat, 0, tilesCount - 1, Maps::Ground::WATER );
 
         Maps::resetObjectUID();
 
