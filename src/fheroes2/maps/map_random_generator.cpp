@@ -21,6 +21,7 @@
 #include "map_random_generator.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -320,6 +321,10 @@ namespace
         const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapFormat.width - 3 );
 
         auto & tile = world.getTile( castleY * mapFormat.width + castleX );
+        if ( tile.isWater() ) {
+            return false;
+        }
+
         const fheroes2::Point tilePos = tile.GetCenter();
 
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
@@ -455,6 +460,7 @@ namespace Maps::Generator
         }
 
         // Step 4. We're ready to save the result; reset the current world first
+        world.generateMapForEditor( width );
         mapFormat.tiles.clear();
         mapFormat.tiles.resize( static_cast<size_t>( width ) * height );
 
@@ -464,7 +470,7 @@ namespace Maps::Generator
             }
 
             for ( const Node & node : region._nodes ) {
-                world.getTile( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), 0 );
+                Maps::setTerrainOnTile( mapFormat, node.index, region._groundType );
             }
 
             // Fix missing references

@@ -1458,6 +1458,11 @@ namespace Maps
         }
     }
 
+    void setTerrainOnTile( Maps::Map_Format::MapFormat & map, const int32_t tileId, const int groundId )
+    {
+        setTerrain( map, tileId, Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
+    }
+
     bool addStream( Map_Format::MapFormat & map, const int32_t tileId )
     {
         assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
