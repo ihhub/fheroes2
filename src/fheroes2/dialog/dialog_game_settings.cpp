@@ -144,7 +144,7 @@ namespace
         }
         info.draw( ( background.width() - info.width() ) / 2, optionWindowSize - 18, background );
 
-        fheroes2::drawOption( optionRoi, background, _( "Army Estimation" ), isArmyEstimationNumeric ? _( "Numerical" ) : _( "Original" ),
+        fheroes2::drawOption( optionRoi, background, _( "Army Estimation" ), isArmyEstimationNumeric ? _( "Numeric" ) : _( "Original" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
@@ -241,7 +241,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowArmyEstimationModeRoi ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Army Estimation" ),
-                    _( "Toggle how the amount of troops is reported in the game when right-clicking an army on the adventure map. \nOriginal means armies will be reported by text, E.G. \"Few\".\nNumerical means they will be reported as number ranges, E.G \"1-4\"." ),
+                    _( "Toggle how army sizes are reported in the game when right-clicking them on the adventure map. \nOriginal means they will be represented by text, E.G. \"Few\".\nNumeric means they will be represented by numeric ranges, E.G \"1-4\"." ),
                     0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
