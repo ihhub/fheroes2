@@ -59,6 +59,7 @@ namespace
         HotKeys,
         CursorType,
         TextSupportMode,
+        ArmyEstimationMode,
         UpdateSettings,
         Exit
     };
@@ -75,6 +76,7 @@ namespace
     const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect textSupportModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
                                              optionWindowSize };
+    const fheroes2::Rect armyEstimationModeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize, optionWindowSize };
 
     void drawLanguage( const fheroes2::Rect & optionRoi )
     {
@@ -124,11 +126,32 @@ namespace
         }
     }
 
+    void drawArmyNumberEstimationOption( const fheroes2::Rect & optionRoi )
+    {
+        const bool isArmyEstimationNumeric = Settings ::Get().isArmyEstimationViewNumeric();
+        const fheroes2::Sprite & creature = fheroes2::AGG::GetICN( ICN::MONS32, 29 );
+        fheroes2::Sprite background = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+        fheroes2::Blit( creature, 0, 0, background, ( background.width() - creature.width() ) / 2, 12, creature.width(), creature.height() );
+        fheroes2::Text info;
+
+        if ( isArmyEstimationNumeric ) {
+            info.set( _( "1-4" ), fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
+        }
+        else {
+            info.set( _( "few" ), fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
+        }
+        info.draw( ( background.width() - info.width() ) / 2, optionWindowSize - 18, background );
+
+        fheroes2::drawOption( optionRoi, background, _( "Army Estimation" ), isArmyEstimationNumeric ? _( "Numerical" ) : _( "Original" ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+    }
+
+
     SelectedWindow showConfigurationWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289, 272, true, display );
+        fheroes2::StandardWindow background( 289, 382, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
@@ -147,14 +170,16 @@ namespace
         const fheroes2::Rect windowHotKeyRoi( hotKeyRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowArmyEstimationModeRoi( armyEstimationModeRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowTextSupportModeRoi]() {
+        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowTextSupportModeRoi, &windowArmyEstimationModeRoi]() {
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
             drawAudioOptions( windowAudioRoi );
             drawHotKeyOptions( windowHotKeyRoi );
             drawCursorTypeOptions( windowCursorTypeRoi );
             drawTextSupportModeOptions( windowTextSupportModeRoi );
+            drawArmyNumberEstimationOption( windowArmyEstimationModeRoi );
         };
 
         drawOptions();
@@ -188,6 +213,9 @@ namespace
             if ( le.MouseClickLeft( windowTextSupportModeRoi ) ) {
                 return SelectedWindow::TextSupportMode;
             }
+            if ( le.MouseClickLeft( windowArmyEstimationModeRoi ) ) {
+                return SelectedWindow::ArmyEstimationMode;
+            }
 
             if ( le.isMouseRightButtonPressedInArea( windowLanguageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Language" ), _( "Change the language of the game." ), 0 );
@@ -207,6 +235,12 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowTextSupportModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Text Support" ), _( "Toggle text support mode to output extra information about windows and events in the game." ),
                                                    0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowArmyEstimationModeRoi ) ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Army Estimation" ),
+                    _( "Toggle how the amount of troops is reported in the game when right-clicking an army on the adventure map. \nOriginal means armies will be reported by text, E.G. \"Few\".\nNumerical means they will be reported as number ranges, E.G \"1-4\"." ),
+                    0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
@@ -280,6 +314,10 @@ namespace fheroes2
                 break;
             case SelectedWindow::TextSupportMode:
                 conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
+                windowType = SelectedWindow::UpdateSettings;
+                break;
+            case SelectedWindow::ArmyEstimationMode:
+                conf.setNumericArmyEstimationView( !conf.isArmyEstimationViewNumeric() );
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             case SelectedWindow::UpdateSettings:

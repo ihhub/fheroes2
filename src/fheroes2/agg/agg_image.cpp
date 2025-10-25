@@ -4958,6 +4958,15 @@ namespace
             }
             break;
         }
+        case ICN::EMPTY_OPTION_ICON_BACKGROUND: {
+            _icnVsSprite[id].resize( 1 );
+
+            fheroes2::Sprite & background = _icnVsSprite[id][0];
+            background.resize( 65, 65 );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), 69, 47, background, 0, 0, 65, 65 );
+
+            break;
+        }
         case ICN::GAME_OPTION_ICON: {
             _icnVsSprite[id].resize( 2 );
 
