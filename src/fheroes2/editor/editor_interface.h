@@ -168,10 +168,8 @@ namespace Interface
         int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
 
-#if defined( WITH_DEBUG )
         int32_t _playerCount = 2;
         int32_t _regionSizeLimit = 600;
-#endif
 
         std::function<void( const int32_t )> _cursorUpdater;
 

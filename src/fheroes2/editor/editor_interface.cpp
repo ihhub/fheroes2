@@ -1012,7 +1012,6 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
                 }
-#if defined( WITH_DEBUG )
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_GENERATION ) ) {
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
@@ -1039,7 +1038,6 @@ namespace Interface
                         _regionSizeLimit = newCount;
                     }
                 }
-#endif
                 // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() ) {

@@ -81,11 +81,9 @@ namespace Game
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
 
-#if defined( WITH_DEBUG )
         // This hotkey is only for debug mode as of now.
         EDITOR_RANDOM_MAP_GENERATION,
         EDITOR_RANDOM_MAP_CONFIGURATION,
-#endif
 
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
