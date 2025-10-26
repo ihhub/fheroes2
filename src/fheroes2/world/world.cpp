@@ -354,14 +354,14 @@ void World::generateBattleOnlyMap()
     }
 }
 
-void World::generateUninitializedMap( const int32_t size )
+void World::generateUninitializedMap( const int32_t mapSideSize )
 {
-    assert( size > 0 );
+    assert( mapSideSize > 0 );
 
     Reset();
 
-    width = size;
-    height = size;
+    width = mapSideSize;
+    height = mapSideSize;
 
     Maps::FileInfo fi;
 
@@ -381,19 +381,6 @@ void World::generateUninitializedMap( const int32_t size )
     // The tiles are cleared and resizing their vector also initializes tiles with the default values.
     assert( vec_tiles.empty() );
     vec_tiles.resize( static_cast<size_t>( width ) * height );
-}
-
-void World::generateMapForEditor( const int32_t size )
-{
-    generateUninitializedMap( size );
-
-    // Initialize all tiles.
-    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
-
-        const uint8_t terrainFlag = static_cast<uint8_t>( Rand::Get( 0, 3 ) );
-        vec_tiles[i].setTerrain( static_cast<uint16_t>( Rand::Get( 16, 19 ) ), terrainFlag );
-    }
 }
 
 const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const

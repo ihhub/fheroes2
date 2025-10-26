@@ -400,12 +400,14 @@ namespace Maps::Generator
             return x * width + y;
         };
 
+        const int32_t tilesCount = width * height;
+
         // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
 
         // Aiming for region size to be ~400 tiles in a 300-600 range
         // const int minimumRegionCount = playerCount + 1;
-        const int expectedRegionCount = ( width * height ) / static_cast<int>( config.regionSizeLimit );
+        const int expectedRegionCount = tilesCount / static_cast<int>( config.regionSizeLimit );
 
         // Step 2. Determine region layout and placement
         // Insert empty region that represents water and map edges
@@ -460,9 +462,14 @@ namespace Maps::Generator
         }
 
         // Step 4. We're ready to save the result; reset the current world first
-        world.generateMapForEditor( width );
+        world.generateUninitializedMap( width );
         mapFormat.tiles.clear();
-        mapFormat.tiles.resize( static_cast<size_t>( width ) * height );
+        mapFormat.tiles.resize( tilesCount );
+        // Initialize the map in `world` container and in `mapFormat`.
+        for ( int32_t i = 0; i < tilesCount; ++i ) {
+            world.getTile( i ).setIndex( i );
+            Maps::setTerrainOnTile( mapFormat, i, Maps::Ground::WATER );
+        }
 
         for ( const Region & region : mapRegions ) {
             if ( region._id == 0 ) {

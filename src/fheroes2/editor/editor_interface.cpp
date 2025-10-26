@@ -2277,9 +2277,8 @@ namespace Interface
 
         for ( int32_t i = 0; i < tilesCount; ++i ) {
             world.getTile( i ).setIndex( i );
+            Maps::setTerrainOnTile( _mapFormat, i, Maps::Ground::WATER );
         }
-
-        Maps::setTerrainWithTransition( _mapFormat, 0, tilesCount - 1, Maps::Ground::WATER );
 
         Maps::resetObjectUID();
 
