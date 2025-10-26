@@ -1881,7 +1881,7 @@ namespace
             canonicalBackground._disableTransformLayer();
 
             const fheroes2::Sprite & creature = fheroes2::AGG::GetICN( ICN::MONS32, 34 );
-            const uint32_t iconBackgroundSize = canonicalBackground.width();
+            const int32_t iconBackgroundSize = canonicalBackground.width();
             fheroes2::Blit( creature, 0, 0, canonicalBackground, ( iconBackgroundSize - creature.width() ) / 2, 8, creature.width(), creature.height() );
 
             // We need to copy the image before drawing text on it.
