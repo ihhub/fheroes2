@@ -93,6 +93,9 @@ namespace Interface
             _cursorUpdater = cursorUpdater;
         }
 
+        // Generate a random map and start Map Editor interface main function.
+        bool generateRandomMap( const int32_t mapWidth );
+
         bool generateNewMap( const int32_t size );
 
         bool loadMap( const std::string & filePath );

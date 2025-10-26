@@ -1030,11 +1030,11 @@ namespace Interface
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
                     int32_t newCount = _playerCount;
-                    if ( Dialog::SelectCount( "Pick player count", 2, 6, newCount ) ) {
+                    if ( Dialog::SelectCount( _( "Pick player count" ), 2, 6, newCount ) ) {
                         _playerCount = newCount;
                     }
                     newCount = _regionSizeLimit;
-                    if ( Dialog::SelectCount( "Limit region size", 100, 10000, newCount ) ) {
+                    if ( Dialog::SelectCount( _( "Limit region size" ), 200, 10000, newCount ) ) {
                         _regionSizeLimit = newCount;
                     }
                 }
@@ -2220,6 +2220,28 @@ namespace Interface
         }
 
         return false;
+    }
+
+    bool EditorInterface::generateRandomMap( const int32_t mapWidth )
+    {
+        if ( !generateNewMap( mapWidth ) ) {
+            return false;
+        }
+
+        int32_t newCount = _playerCount;
+        if ( Dialog::SelectCount( _( "Pick player count" ), 2, 6, newCount ) ) {
+            _playerCount = newCount;
+        }
+        newCount = _regionSizeLimit;
+        if ( Dialog::SelectCount( _( "Limit region size" ), 200, 10000, newCount ) ) {
+            _regionSizeLimit = newCount;
+        }
+
+        Maps::Generator::Configuration rmgConfig;
+        rmgConfig.playerCount = _playerCount;
+        rmgConfig.regionSizeLimit = _regionSizeLimit;
+
+        return Maps::Generator::generateMap( _mapFormat, rmgConfig, world.w(), world.h() );
     }
 
     bool EditorInterface::generateNewMap( const int32_t mapWidth )

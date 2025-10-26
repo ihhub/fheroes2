@@ -2606,6 +2606,7 @@ namespace
             break;
         case ICN::BTNDCCFG:
         case ICN::BTNEMAIN:
+        case ICN::BTNENEW:
         case ICN::BTNESIZE:
         case ICN::BTNHOTST:
         case ICN::BTNMP:
