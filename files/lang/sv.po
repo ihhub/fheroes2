@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-23 23:54+0000\n"
-"PO-Revision-Date: 2025-10-08 20:01+0200\n"
+"PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -2793,7 +2793,7 @@ msgid "The spells the hero can learn have been added to their book."
 msgstr "Besvärjelser som hjälten kan lära sig har lagts till dennes bok."
 
 msgid "Exit Mage Guild"
-msgstr ""
+msgstr "Lämna Magisamfund"
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Ett generöst tips från bartendern som uppger detta rykte:"
@@ -2830,9 +2830,8 @@ msgstr ""
 "'Grupperad' stridsformation buntar ihop hjältens trupper till mitten av "
 "dennes sida av slagfältet."
 
-#, fuzzy
 msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr "Månad: %{month}, Vecka: %{week}, Dag: %{day}"
+msgstr "Borgalternativ. Månad: %{month}, Vecka: %{week}, Dag: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Utspridd'"
@@ -4940,21 +4939,17 @@ msgstr "Spara Karta:"
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
 
-#, fuzzy
 msgid "Click to enable all secondary skills."
-msgstr "Klicka här för att aktivera alla besvärjelser."
+msgstr "Klicka här för att aktivera alla sekundära förmågor."
 
-#, fuzzy
 msgid "Enable All Secondary Skills"
-msgstr "Radera Sekundär Förmåga"
+msgstr "Aktivera Alla Sekundära Förmågor"
 
-#, fuzzy
 msgid "Click to disable all secondary skills."
-msgstr "Klicka här för att inaktivera alla besvärjelser."
+msgstr "Klicka här för att inaktivera alla sekundära förmågor."
 
-#, fuzzy
 msgid "Disable All Secondary Skills"
-msgstr "Radera Sekundär Förmåga"
+msgstr "Inaktivera Alla Sekundära Förmågor"
 
 msgid "Click to show only level %{level} spells."
 msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
@@ -12137,6 +12132,9 @@ msgid ""
 "Returns the caster to the nearest town or castle currently owned. This spell "
 "cannot be cast if the hero is already in a town or a castle."
 msgstr ""
+"Förflyttar hjälten till närmsta kontrollerade stad eller borg. Denna "
+"besvärjelse kan inte kastas om hjälten redan befinner sig i en stad eller "
+"en borg."
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
