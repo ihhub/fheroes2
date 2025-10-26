@@ -60,7 +60,8 @@ namespace
     const fheroes2::Rect interfacePresenceRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect armyEstimationModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect cursorTypeRoi{ optionOffset.x + 43, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + 43 + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + 43 + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
+                                         optionWindowSize };
 
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
     {
