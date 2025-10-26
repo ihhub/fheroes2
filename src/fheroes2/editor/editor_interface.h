@@ -32,6 +32,8 @@
 #include "map_format_info.h"
 #include "timing.h"
 
+enum class PlayerColor : uint8_t;
+
 namespace Maps
 {
     class Tile;
