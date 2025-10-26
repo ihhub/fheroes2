@@ -2003,61 +2003,16 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectPlacement( tilePos, groupType, type, errorMessage ) ) {
+            if ( !verifyObjectPlacement( tilePos, Maps::ObjectGroup::KINGDOM_TOWNS, type, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
                 return;
             }
 
-            const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
-            const int32_t basementId = fheroes2::getTownBasementId( groundType );
-
-            const auto & townObjectInfo = Maps::getObjectInfo( groupType, type );
-
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( !_setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
+            if ( !placeCastle( tilePos.x, tilePos.y, Color::IndexToColor( color ), type ) ) {
                 return;
             }
-
-            // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
-            // Every time an object is being placed on a map the counter is going to be increased by 1.
-            // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
-            assert( Maps::getLastObjectUID() > 0 );
-            const uint32_t objectId = Maps::getLastObjectUID() - 1;
-
-            Maps::setLastObjectUID( objectId );
-
-            if ( !_setObjectOnTile( tile, groupType, type ) ) {
-                return;
-            }
-
-            const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
-
-            if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( _mapFormat.tiles[bottomIndex] ) ) {
-                // Update road if there is one in front of the town/castle entrance.
-                Maps::updateRoadSpriteOnTile( _mapFormat, bottomIndex, false );
-            }
-
-            // By default use random (default) army for the neutral race town/castle.
-            if ( Color::IndexToColor( color ) == PlayerColor::NONE ) {
-                Maps::setDefaultCastleDefenderArmy( _mapFormat.castleMetadata[Maps::getLastObjectUID()] );
-            }
-
-            // Add flags.
-            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
-            Maps::setLastObjectUID( objectId );
-
-            if ( !_setObjectOnTile( world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
-                return;
-            }
-
-            Maps::setLastObjectUID( objectId );
-
-            if ( !_setObjectOnTile( world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
-                return;
-            }
-
-            world.addCastle( tile.GetIndex(), Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) ), Color::IndexToColor( color ) );
 
             action.commit();
 
@@ -2224,10 +2179,6 @@ namespace Interface
 
     bool EditorInterface::generateRandomMap( const int32_t mapWidth )
     {
-        if ( !generateNewMap( mapWidth ) ) {
-            return false;
-        }
-
         int32_t newCount = _playerCount;
         if ( Dialog::SelectCount( _( "Pick player count" ), 2, 6, newCount ) ) {
             _playerCount = newCount;
@@ -2241,7 +2192,7 @@ namespace Interface
         rmgConfig.playerCount = _playerCount;
         rmgConfig.regionSizeLimit = _regionSizeLimit;
 
-        return Maps::Generator::generateMap( _mapFormat, rmgConfig, world.w(), world.h() );
+        return Maps::Generator::generateMap( _mapFormat, rmgConfig, mapWidth, mapWidth );
     }
 
     bool EditorInterface::generateNewMap( const int32_t mapWidth )
@@ -2397,6 +2348,68 @@ namespace Interface
         else {
             _mapFormat = std::move( mapBackup );
         }
+    }
+
+    bool EditorInterface::placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type )
+    {
+        if ( type < 0 ) {
+            // Check your logic!
+            assert( 0 );
+            return false;
+        }
+
+        auto & tile = world.getTile( posX, posY );
+
+        const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
+
+        if ( !_setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
+            return false;
+        }
+
+        // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
+        // Every time an object is being placed on a map the counter is going to be increased by 1.
+        // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
+        assert( Maps::getLastObjectUID() > 0 );
+        const uint32_t objectId = Maps::getLastObjectUID() - 1;
+
+        Maps::setLastObjectUID( objectId );
+
+        if ( !_setObjectOnTile( tile, Maps::ObjectGroup::KINGDOM_TOWNS, type ) ) {
+            return false;
+        }
+
+        const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
+
+        if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( _mapFormat.tiles[bottomIndex] ) ) {
+            // Update road if there is one in front of the town/castle entrance.
+            Maps::updateRoadSpriteOnTile( _mapFormat, bottomIndex, false );
+        }
+
+        // By default use random (default) army for the neutral race town/castle.
+        if ( color == PlayerColor::NONE ) {
+            Maps::setDefaultCastleDefenderArmy( _mapFormat.castleMetadata[Maps::getLastObjectUID()] );
+        }
+
+        // Add flags.
+        assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
+        Maps::setLastObjectUID( objectId );
+
+        if ( !_setObjectOnTile( world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 ) ) {
+            return false;
+        }
+
+        Maps::setLastObjectUID( objectId );
+
+        if ( !_setObjectOnTile( world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
+            return false;
+        }
+
+        const Maps::ObjectInfo & townObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, type );
+        const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
+
+        world.addCastle( tile.GetIndex(), race, color );
+
+        return true;
     }
 
     void EditorInterface::_validateObjectsOnTerrainUpdate()

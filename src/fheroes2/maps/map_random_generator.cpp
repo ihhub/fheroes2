@@ -33,6 +33,7 @@
 
 #include "color.h"
 #include "direction.h"
+#include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
 #include "map_format_helper.h"
@@ -313,19 +314,19 @@ namespace
         return false;
     }
 
-    bool placeCastle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, int targetX, int targetY )
+    bool placeCastle( Interface::EditorInterface & interface, const int32_t mapWidth, NodeCache & data, const Region & region, int targetX, int targetY )
     {
-        const int regionX = region._centerIndex % mapFormat.width;
-        const int regionY = region._centerIndex / mapFormat.width;
-        const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapFormat.width - 4 );
-        const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapFormat.width - 3 );
+        const int regionX = region._centerIndex % mapWidth;
+        const int regionY = region._centerIndex / mapWidth;
+        const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapWidth - 4 );
+        const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapWidth - 3 );
 
-        auto & tile = world.getTile( castleY * mapFormat.width + castleX );
+        const auto & tile = world.getTile( castleX, castleY );
         if ( tile.isWater() ) {
             return false;
         }
 
-        const fheroes2::Point tilePos = tile.GetCenter();
+        const fheroes2::Point tilePos( castleX, castleY );
 
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
 
@@ -333,39 +334,14 @@ namespace
         const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, randomCastleIndex );
 
         if ( canFitObject( data, basementInfo, tilePos ) && canFitObject( data, castleInfo, tilePos, true ) ) {
-            putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-            markObjectPlacement( data, basementInfo, tilePos, false );
-
-            assert( Maps::getLastObjectUID() > 0 );
-            const uint32_t objectId = Maps::getLastObjectUID() - 1;
-
-            Maps::setLastObjectUID( objectId );
-            putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, randomCastleIndex );
-            markObjectPlacement( data, castleInfo, tilePos, true );
-
             const PlayerColor color = Color::IndexToColor( region._colorIndex );
-            // By default use random (default) army for the neutral race town/castle.
-            if ( color == PlayerColor::NONE ) {
-                Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
+
+            if ( interface.placeCastle( castleX, castleY, color, randomCastleIndex ) ) {
+                markObjectPlacement( data, basementInfo, tilePos, false );
+                markObjectPlacement( data, castleInfo, tilePos, true );
+
+                return true;
             }
-
-            // Add flags.
-            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 ) ) {
-                return false;
-            }
-
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 + 1 ) ) {
-                return false;
-            }
-
-            world.addCastle( tile.GetIndex(), Race::IndexToRace( randomCastleIndex ), color );
-
-            return true;
         }
         return false;
     }
@@ -392,6 +368,12 @@ namespace Maps::Generator
             return false;
         }
 
+        // Initialization step. Reset the current map in `world` and `mapFormat` containers first.
+        Interface::EditorInterface & interface = Interface::EditorInterface::Get();
+        if ( !interface.generateNewMap( width ) ) {
+            return false;
+        }
+
         NodeCache data( width, height );
 
         auto mapBoundsCheck = [width, height]( int x, int y ) {
@@ -400,14 +382,12 @@ namespace Maps::Generator
             return x * width + y;
         };
 
-        const int32_t tilesCount = width * height;
-
         // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
 
         // Aiming for region size to be ~400 tiles in a 300-600 range
         // const int minimumRegionCount = playerCount + 1;
-        const int expectedRegionCount = tilesCount / static_cast<int>( config.regionSizeLimit );
+        const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
 
         // Step 2. Determine region layout and placement
         // Insert empty region that represents water and map edges
@@ -461,16 +441,7 @@ namespace Maps::Generator
             }
         }
 
-        // Step 4. We're ready to save the result; reset the current world first
-        world.generateUninitializedMap( width );
-        mapFormat.tiles.clear();
-        mapFormat.tiles.resize( tilesCount );
-        // Initialize the map in `world` container and in `mapFormat`.
-        for ( int32_t i = 0; i < tilesCount; ++i ) {
-            world.getTile( i ).setIndex( i );
-            Maps::setTerrainOnTile( mapFormat, i, Maps::Ground::WATER );
-        }
-
+        // Step 4. We're ready to save the result
         for ( const Region & region : mapRegions ) {
             if ( region._id == 0 ) {
                 continue;
@@ -512,13 +483,13 @@ namespace Maps::Generator
                 }
             }
 
-            if ( region._colorIndex != neutralColorIndex && !placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
+            if ( region._colorIndex != neutralColorIndex && !placeCastle( interface, mapFormat.width, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
                 // return early if we can't place a starting player castle
                 return false;
             }
             if ( region._nodes.size() > 400 ) {
                 // place non-mandatory castles in bigger neutral regions
-                placeCastle( mapFormat, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
+                placeCastle( interface, mapFormat.width, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
             }
 
             if ( config.basicOnly ) {

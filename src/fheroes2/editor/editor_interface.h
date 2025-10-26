@@ -96,13 +96,15 @@ namespace Interface
         // Generate a random map and start Map Editor interface main function.
         bool generateRandomMap( const int32_t mapWidth );
 
-        bool generateNewMap( const int32_t size );
+        bool generateNewMap( const int32_t mapWidth );
 
         bool loadMap( const std::string & filePath );
 
         void saveMapToFile();
 
         void openMapSpecificationsDialog();
+
+        bool placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type );
 
     private:
         class WarningMessage
