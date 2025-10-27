@@ -1877,8 +1877,7 @@ namespace
             _icnVsSprite[id].resize( 2 );
 
             fheroes2::Sprite & canonicalBackground = _icnVsSprite[id][0];
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 ), canonicalBackground );
-            canonicalBackground._disableTransformLayer();
+            canonicalBackground = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
             const fheroes2::Sprite & creature = fheroes2::AGG::GetICN( ICN::MONS32, 34 );
             const int32_t iconBackgroundSize = canonicalBackground.width();
@@ -1886,12 +1885,11 @@ namespace
 
             // We need to copy the image before drawing text on it.
             fheroes2::Sprite & numericBackground = _icnVsSprite[id][1];
-            fheroes2::Copy( canonicalBackground, numericBackground );
-            numericBackground._disableTransformLayer();
+            numericBackground = canonicalBackground;
 
-            fheroes2::Text estimationMode( _( "few" ), fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
+            fheroes2::Text estimationMode( _( "army|Few" ), fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
             estimationMode.draw( ( iconBackgroundSize - estimationMode.width() ) / 2, iconBackgroundSize - 18, canonicalBackground );
-            estimationMode.set( _( "1-4" ), fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
+            estimationMode.set( "1-4", fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
             estimationMode.draw( ( iconBackgroundSize - estimationMode.width() ) / 2, iconBackgroundSize - 18, numericBackground );
 
             break;
