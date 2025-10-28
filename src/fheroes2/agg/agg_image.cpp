@@ -1887,9 +1887,10 @@ namespace
             fheroes2::Sprite & numericBackground = _icnVsSprite[id][1];
             numericBackground = canonicalBackground;
 
-            fheroes2::Text estimationMode( _( "army|Few" ), fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
+            const fheroes2::FontType font = fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE );
+            fheroes2::Text estimationMode( fheroes2::getSupportedText( gettext_noop( "army|Few" ), font ), font );
             estimationMode.draw( ( iconBackgroundSize - estimationMode.width() ) / 2, iconBackgroundSize - 18, canonicalBackground );
-            estimationMode.set( "1-4", fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE ) );
+            estimationMode.set( "1-4", font );
             estimationMode.draw( ( iconBackgroundSize - estimationMode.width() ) / 2, iconBackgroundSize - 18, numericBackground );
 
             break;
