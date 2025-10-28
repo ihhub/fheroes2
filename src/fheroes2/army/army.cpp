@@ -30,6 +30,7 @@
 #include <numeric>
 #include <set>
 #include <sstream>
+#include <unordered_map>
 #include <utility>
 
 #include "army_troop.h"
@@ -81,6 +82,12 @@ namespace
         ARMY_SWARM = 250,
         ARMY_ZOUNDS = 500,
         ARMY_LEGION = 1000
+    };
+
+    const std::unordered_map<ArmySize, std::string> troopSizeNumbers{
+        { ArmySize::ARMY_FEW, "1-4" },       { ArmySize::ARMY_SEVERAL, "5-9" },    { ArmySize::ARMY_PACK, "10-19" },
+        { ArmySize::ARMY_LOTS, "20-49" },    { ArmySize::ARMY_HORDE, "50-99" },    { ArmySize::ARMY_THRONG, "100-249" },
+        { ArmySize::ARMY_SWARM, "250-499" }, { ArmySize::ARMY_ZOUNDS, "500-999" }, { ArmySize::ARMY_LEGION, "1000+" },
     };
 
     ArmySize getArmySize( const uint32_t count )
@@ -148,39 +155,48 @@ namespace
 std::string Army::TroopSizeString( const Troop & troop )
 {
     std::string str;
+    const ArmySize armySize = getArmySize( troop.GetCount() );
 
-    switch ( getArmySize( troop.GetCount() ) ) {
-    case ArmySize::ARMY_FEW:
-        str = _( "A few\n%{monster}" );
-        break;
-    case ArmySize::ARMY_SEVERAL:
-        str = _( "Several\n%{monster}" );
-        break;
-    case ArmySize::ARMY_PACK:
-        str = _( "A pack of\n%{monster}" );
-        break;
-    case ArmySize::ARMY_LOTS:
-        str = _( "Lots of\n%{monster}" );
-        break;
-    case ArmySize::ARMY_HORDE:
-        str = _( "A horde of\n%{monster}" );
-        break;
-    case ArmySize::ARMY_THRONG:
-        str = _( "A throng of\n%{monster}" );
-        break;
-    case ArmySize::ARMY_SWARM:
-        str = _( "A swarm of\n%{monster}" );
-        break;
-    case ArmySize::ARMY_ZOUNDS:
-        str = _( "Zounds...\n%{monster}" );
-        break;
-    case ArmySize::ARMY_LEGION:
-        str = _( "A legion of\n%{monster}" );
-        break;
-    default:
-        // Are you passing the correct value?
-        assert( 0 );
-        break;
+    // Numeric estimates
+    if ( Settings::Get().isArmyEstimationViewNumeric() ) {
+        str = _( "%{monster}\n%{range}" );
+        StringReplace( str, "%{range}", troopSizeNumbers.at( armySize ) );
+    }
+    // Verbal estimates
+    else {
+        switch ( armySize ) {
+        case ArmySize::ARMY_FEW:
+            str = _( "A few\n%{monster}" );
+            break;
+        case ArmySize::ARMY_SEVERAL:
+            str = _( "Several\n%{monster}" );
+            break;
+        case ArmySize::ARMY_PACK:
+            str = _( "A pack of\n%{monster}" );
+            break;
+        case ArmySize::ARMY_LOTS:
+            str = _( "Lots of\n%{monster}" );
+            break;
+        case ArmySize::ARMY_HORDE:
+            str = _( "A horde of\n%{monster}" );
+            break;
+        case ArmySize::ARMY_THRONG:
+            str = _( "A throng of\n%{monster}" );
+            break;
+        case ArmySize::ARMY_SWARM:
+            str = _( "A swarm of\n%{monster}" );
+            break;
+        case ArmySize::ARMY_ZOUNDS:
+            str = _( "Zounds...\n%{monster}" );
+            break;
+        case ArmySize::ARMY_LEGION:
+            str = _( "A legion of\n%{monster}" );
+            break;
+        default:
+            // Are you passing the correct value?
+            assert( 0 );
+            break;
+        }
     }
 
     StringReplaceWithLowercase( str, "%{monster}", troop.GetMultiName() );
@@ -189,6 +205,12 @@ std::string Army::TroopSizeString( const Troop & troop )
 
 std::string Army::SizeString( uint32_t size )
 {
+    // Numeric estimates
+    if ( Settings::Get().isArmyEstimationViewNumeric() ) {
+        return troopSizeNumbers.at( getArmySize( size ) );
+    }
+
+    // Verbal estimates
     switch ( getArmySize( size ) ) {
     case ArmySize::ARMY_FEW:
         return _( "army|Few" );

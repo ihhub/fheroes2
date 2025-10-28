@@ -171,7 +171,8 @@ namespace
                                                 ICN::BUTTON_TOGGLE_ALL_ON_GOOD,
                                                 ICN::BUTTON_TOGGLE_ALL_OFF_GOOD,
                                                 ICN::BUTTON_TOGGLE_ALL_ON_EVIL,
-                                                ICN::BUTTON_TOGGLE_ALL_OFF_EVIL };
+                                                ICN::BUTTON_TOGGLE_ALL_OFF_EVIL,
+                                                ICN::ARMY_ESTIMATION_ICON };
 
     bool isLanguageDependentIcnId( const int id )
     {
@@ -1870,6 +1871,28 @@ namespace
 
             fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][1], ( _icnVsSprite[id][1].width() - icon.width() ) / 2 - 1,
                             ( _icnVsSprite[id][1].height() - icon.height() ) / 2 + 1, icon.width(), icon.height() );
+            break;
+        }
+        case ICN::ARMY_ESTIMATION_ICON: {
+            _icnVsSprite[id].resize( 2 );
+
+            fheroes2::Sprite & canonicalBackground = _icnVsSprite[id][0];
+            canonicalBackground = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+
+            const fheroes2::Sprite & creature = fheroes2::AGG::GetICN( ICN::MONS32, 34 );
+            const int32_t iconBackgroundSize = canonicalBackground.width();
+            fheroes2::Blit( creature, 0, 0, canonicalBackground, ( iconBackgroundSize - creature.width() ) / 2, 8, creature.width(), creature.height() );
+
+            // We need to copy the image before drawing text on it.
+            fheroes2::Sprite & numericBackground = _icnVsSprite[id][1];
+            numericBackground = canonicalBackground;
+
+            const fheroes2::FontType font = fheroes2::FontType( fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE );
+            fheroes2::Text estimationMode( fheroes2::getSupportedText( gettext_noop( "army|Few" ), font ), font );
+            estimationMode.draw( ( iconBackgroundSize - estimationMode.width() ) / 2, iconBackgroundSize - 18, canonicalBackground );
+            estimationMode.set( "1-4", font );
+            estimationMode.draw( ( iconBackgroundSize - estimationMode.width() ) / 2, iconBackgroundSize - 18, numericBackground );
+
             break;
         }
         default:
@@ -4956,6 +4979,16 @@ namespace
             if ( !_icnVsSprite[id].empty() ) {
                 _icnVsSprite[id][0]._disableTransformLayer();
             }
+            break;
+        }
+        case ICN::EMPTY_OPTION_ICON_BACKGROUND: {
+            _icnVsSprite[id].resize( 1 );
+
+            fheroes2::Sprite & background = _icnVsSprite[id][0];
+            background.resize( 65, 65 );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), 69, 47, background, 0, 0, 65, 65 );
+            background._disableTransformLayer();
+
             break;
         }
         case ICN::GAME_OPTION_ICON: {

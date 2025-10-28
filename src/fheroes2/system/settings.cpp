@@ -80,7 +80,8 @@ namespace
         GAME_BATTLE_AUTO_RESOLVE = 0x04000000,
         GAME_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        GAME_NUMERIC_ARMY_ESTIMATION_VIEW = 0x40000000,
     };
 
     enum EditorOptions : uint32_t
@@ -255,6 +256,11 @@ bool Settings::Read( const std::string & filePath )
         else {
             setInterfaceType( InterfaceType::DYNAMIC );
         }
+    }
+
+    // Numeric/verbal army size estimate
+    if ( config.Exists( "army estimation view type" ) ) {
+        setNumericArmyEstimationView( config.StrParams( "army estimation view type" ) == "numeric" );
     }
 
     if ( config.Exists( "hide interface" ) ) {
@@ -543,6 +549,9 @@ std::string Settings::String() const
 
     os << std::endl << "# Save files sorting method: name/date" << std::endl;
     os << "save file sorting = " << ( _saveFileSortType == SaveFileSortingMethod::TIMESTAMP ? "date" : "name" ) << std::endl;
+
+    os << std::endl << "# Show army size estimates: in 'canonical' (few, several, lots, ...) or 'numeric' (1-4, 5-9, 10-19, ...) way" << std::endl;
+    os << "army estimation view type = " << ( _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW ) ? "numeric" : "canonical" ) << std::endl;
 
     return os.str();
 }
@@ -873,6 +882,16 @@ void Settings::setHideInterface( const bool enable )
     }
 }
 
+void Settings::setNumericArmyEstimationView( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
+    }
+}
+
 void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
@@ -928,6 +947,11 @@ bool Settings::isBattleShowDamageInfoEnabled() const
 bool Settings::isHideInterfaceEnabled() const
 {
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
+}
+
+bool Settings::isArmyEstimationViewNumeric() const
+{
+    return _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
 }
 
 bool Settings::isEvilInterfaceEnabled() const
