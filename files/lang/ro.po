@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -328,6 +328,9 @@ msgid ""
 "L"
 msgstr ""
 
+msgid "army|Few"
+msgstr "(1-4)"
+
 msgid "Warrior"
 msgstr "Războinic"
 
@@ -339,6 +342,12 @@ msgstr "Explorator"
 
 msgid "None"
 msgstr "Nimic"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Zboară %{monster} aici"
 
 msgid ""
 "A few\n"
@@ -402,9 +411,6 @@ msgid ""
 msgstr ""
 "O legiune de\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "(1-4)"
 
 msgid "army|Several"
 msgstr "(4-9)"
@@ -3141,6 +3147,16 @@ msgstr "Arată"
 msgid "Interface"
 msgstr "Interfață"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Anexare"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Tipul interfeței"
 
@@ -3154,6 +3170,15 @@ msgid "Scroll Speed"
 msgstr "Viteză de defilare"
 
 msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
 msgstr ""
 
 msgid "Select Game Language:"

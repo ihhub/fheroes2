@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -308,6 +308,9 @@ msgid ""
 "L"
 msgstr ""
 
+msgid "army|Few"
+msgstr "Mało"
+
 msgid "Warrior"
 msgstr "Wojownik"
 
@@ -319,6 +322,12 @@ msgstr "Badacz"
 
 msgid "None"
 msgstr "Brak"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Przefruń jednostką (%{monster}) tutaj"
 
 msgid ""
 "A few\n"
@@ -382,9 +391,6 @@ msgid ""
 msgstr ""
 "Legion\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Mało"
 
 msgid "army|Several"
 msgstr "Parę"
@@ -3319,6 +3325,16 @@ msgstr "Pokaż"
 msgid "Interface"
 msgstr "Interfejs"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Aneksja"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Typ interfejsu"
 
@@ -3333,6 +3349,15 @@ msgstr "Prędkość przewijania"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Zmień prędkość przewijania okna."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Wybierz język gry:"
