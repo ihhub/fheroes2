@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -333,6 +333,9 @@ msgstr ""
 "Y\n"
 "E"
 
+msgid "army|Few"
+msgstr "Birkaç"
+
 msgid "Warrior"
 msgstr "Savaşçı"
 
@@ -344,6 +347,12 @@ msgstr "Kaşif"
 
 msgid "None"
 msgstr "Hiç"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "%{monster} Buraya uçur"
 
 msgid ""
 "A few\n"
@@ -407,9 +416,6 @@ msgid ""
 msgstr ""
 "Bir lejyon\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Birkaç"
 
 msgid "army|Several"
 msgstr "Birçok"
@@ -3171,6 +3177,15 @@ msgstr "Göster"
 msgid "Interface"
 msgstr "Arayüz"
 
+msgid "Army Estimation"
+msgstr ""
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Arayüz Tipi"
 
@@ -3185,6 +3200,15 @@ msgstr "Kaydırma Hızı"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Pencereyi kaydırma hızını ayarlar."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Oyunun dilini seç:"

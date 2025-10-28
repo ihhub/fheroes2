@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -340,6 +340,9 @@ msgstr ""
 "K\n"
 "A"
 
+msgid "army|Few"
+msgstr "Málo"
+
 msgid "Warrior"
 msgstr "Válečník"
 
@@ -351,6 +354,12 @@ msgstr "Průzkumník"
 
 msgid "None"
 msgstr "Nic"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Přeleť s %{monster} sem"
 
 msgid ""
 "A few\n"
@@ -414,9 +423,6 @@ msgid ""
 msgstr ""
 "Legie\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Málo"
 
 msgid "army|Several"
 msgstr "Několik"
@@ -3247,6 +3253,16 @@ msgstr "Zobrazit"
 msgid "Interface"
 msgstr "Rozhraní"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animace"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Rozhraní"
 
@@ -3261,6 +3277,15 @@ msgstr "Rychlost posunu"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastavit rychlost posouvání okna."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Vybrat jazyk hry:"

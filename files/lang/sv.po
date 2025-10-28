@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 12:51+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -339,6 +339,9 @@ msgstr ""
 "L\n"
 "L"
 
+msgid "army|Few"
+msgstr "Några"
+
 msgid "Warrior"
 msgstr "Krigare"
 
@@ -350,6 +353,12 @@ msgstr "Utforskare"
 
 msgid "None"
 msgstr "Inga"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Flyg %{monster} hit"
 
 msgid ""
 "A few\n"
@@ -413,9 +422,6 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Några"
 
 msgid "army|Several"
 msgstr "Flera"
@@ -3257,6 +3263,16 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animering"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Gränssnittsstil"
 
@@ -3273,6 +3289,15 @@ msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Välj skrollhastigheten."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Välj spelspråk:"

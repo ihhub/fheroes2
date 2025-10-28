@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -337,6 +337,9 @@ msgstr ""
 "J\n"
 "E"
 
+msgid "army|Few"
+msgstr "Få"
+
 msgid "Warrior"
 msgstr "Kriger"
 
@@ -348,6 +351,12 @@ msgstr "Udforsker"
 
 msgid "None"
 msgstr "Ingen"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Flyv %{monster} hertil"
 
 msgid ""
 "A few\n"
@@ -411,9 +420,6 @@ msgid ""
 msgstr ""
 "En legion af\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Få"
 
 msgid "army|Several"
 msgstr "Flere"
@@ -3326,6 +3332,16 @@ msgstr "Vis"
 msgid "Interface"
 msgstr "Interface"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animation"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Interface-type"
 
@@ -3342,6 +3358,15 @@ msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Bestemmer vinduets rullehastighed."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Vælg spilsprog:"

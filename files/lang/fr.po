@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -339,6 +339,9 @@ msgstr ""
 "O\n"
 "N"
 
+msgid "army|Few"
+msgstr "1-4"
+
 msgid "Warrior"
 msgstr "Guerrier"
 
@@ -350,6 +353,12 @@ msgstr "Voyageur"
 
 msgid "None"
 msgstr "Aucune"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Faire voler %{monster} ici"
 
 msgid ""
 "A few\n"
@@ -413,9 +422,6 @@ msgid ""
 msgstr ""
 "Une légion de\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "1-4"
 
 msgid "army|Several"
 msgstr "5-9"
@@ -3326,6 +3332,16 @@ msgstr "Attachée"
 msgid "Interface"
 msgstr "Interface"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animation"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Type d'interface"
 
@@ -3340,6 +3356,15 @@ msgstr "Défilement"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"

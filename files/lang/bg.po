@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -331,6 +331,9 @@ msgid ""
 "L"
 msgstr ""
 
+msgid "army|Few"
+msgstr "Малко"
+
 msgid "Warrior"
 msgstr "Войн"
 
@@ -342,6 +345,12 @@ msgstr "Изследовател"
 
 msgid "None"
 msgstr "Без"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Прелети %{monster} тук"
 
 msgid ""
 "A few\n"
@@ -405,9 +414,6 @@ msgid ""
 msgstr ""
 "Легион от\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Малко"
 
 msgid "army|Several"
 msgstr "Няколко"
@@ -3322,6 +3328,16 @@ msgstr "Покажи"
 msgid "Interface"
 msgstr "Интерфейс"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Анексирам"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Интерфейс"
 
@@ -3336,6 +3352,15 @@ msgstr "Скорост на Превъртане"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Задава скоростта, с която превърташ прозореца."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Език на играта:"

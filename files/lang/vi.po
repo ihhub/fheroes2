@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -329,6 +329,9 @@ msgid ""
 "L"
 msgstr ""
 
+msgid "army|Few"
+msgstr "Một vài"
+
 msgid "Warrior"
 msgstr "Chiến binh"
 
@@ -340,6 +343,12 @@ msgstr "Thám hiểm"
 
 msgid "None"
 msgstr "Không"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Bay %{monster} tới đây"
 
 msgid ""
 "A few\n"
@@ -403,9 +412,6 @@ msgid ""
 msgstr ""
 "Quân đoàn\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Một vài"
 
 msgid "army|Several"
 msgstr "Một số"
@@ -3313,6 +3319,16 @@ msgstr "Hiện"
 msgid "Interface"
 msgstr "Giao diện"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Thôn tính"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Kiểu Giao diện"
 
@@ -3327,6 +3343,15 @@ msgstr "Tốc độ Cuộn"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Đặt tốc độ cuộn cửa sổ."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Chọn Ngôn ngữ Trò chơi:"

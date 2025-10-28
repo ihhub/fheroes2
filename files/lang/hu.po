@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 23:54+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -342,6 +342,9 @@ msgstr ""
 "A\n"
 "T"
 
+msgid "army|Few"
+msgstr "Néhány"
+
 msgid "Warrior"
 msgstr "Harcos"
 
@@ -353,6 +356,12 @@ msgstr "Felfedező"
 
 msgid "None"
 msgstr "Nincs"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "%{monster} ide repül"
 
 msgid ""
 "A few\n"
@@ -416,9 +425,6 @@ msgid ""
 msgstr ""
 "Légiónyi\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Néhány"
 
 msgid "army|Several"
 msgstr "Több"
@@ -3265,6 +3271,16 @@ msgstr "Mutat"
 msgid "Interface"
 msgstr "Kezelőfelület"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animáció"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Kezelőfelület típusa"
 
@@ -3279,6 +3295,15 @@ msgstr "Képernyőgörgetés sebessége"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Beállítja az ablakok görgetésének sebességét."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Játék nyelvének kiválasztása:"
