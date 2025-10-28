@@ -958,7 +958,7 @@ bool Settings::isArmyEstimationViewNumeric() const
 
 bool Settings::isScreenScalingTypeNearest() const
 {
-    return _gameOptions.Modes(GAME_SCREEN_SCALING_TYPE_NEAREST);
+    return _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST );
 }
 
 bool Settings::isEvilInterfaceEnabled() const
