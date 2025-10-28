@@ -50,16 +50,15 @@ namespace
         Exit
     };
 
-    const fheroes2::Size offsetBetweenOptions{ 92, 110 };
-    const fheroes2::Point optionOffset{ 20, 31 };
-    const int32_t optionWindowSize{ 65 };
+    const fheroes2::Size offsetBetweenOptions{ fheroes2::threeOptionsStepX, fheroes2::optionsStepY };
+    const fheroes2::Point optionOffset{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY };
 
-    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect interfacePresenceRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect armyEstimationModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + 43, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + 43 + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                         optionWindowSize };
+    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect interfacePresenceRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect armyEstimationModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect cursorTypeRoi{ fheroes2::twoOptionsOffsetX, optionOffset.y + offsetBetweenOptions.height, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect scrollSpeedRoi{ fheroes2::twoOptionsOffsetX + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, fheroes2::optionIconSize,
+                                         fheroes2::optionIconSize };
 
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
     {
