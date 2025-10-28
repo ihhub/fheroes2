@@ -37,6 +37,7 @@
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
+#include "interface_gamearea.h"
 #include "localevent.h"
 #include "maps_tiles.h"
 #include "monster.h"
@@ -220,9 +221,17 @@ namespace Interface
     fheroes2::Rect EditorPanel::getBrushArea() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL
-             || _selectedInstrument == Instrument::MONSTERS ) {
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
             return { 0, 0, 1, 1 };
+        }
+
+        if ( _selectedInstrument == Instrument::MONSTERS ) {
+            const int32_t objectType = getSelectedObjectType();
+            if ( objectType >= 0 ) {
+                return { 0, 0, 1, 1 };
+            }
+
+            return {};
         }
 
         if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS || _selectedInstrument == Instrument::ADVENTURE_OBJECTS
@@ -1271,7 +1280,9 @@ namespace Interface
             }
         }
         _setCursor();
-        _interface.updateCursor( 0 );
+
+        // The cursor must be set according to the position of mouse cursor.
+        _interface.updateCursor( _interface.getGameArea().GetValidTileIdFromPoint( LocalEvent::Get().getMouseCursorPos() ) );
     }
 
     void EditorPanel::getTownObjectProperties( int32_t & type, int32_t & color ) const

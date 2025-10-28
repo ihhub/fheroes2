@@ -21,11 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cstdint>
-#include <iterator>
 #include <string>
-#include <vector>
+#include <utility>
 
 #include "agg_image.h"
 #include "castle.h" // IWYU pragma: associated
@@ -35,121 +33,27 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "kingdom.h"
 #include "localevent.h"
 #include "mageguild.h"
 #include "math_base.h"
-#include "math_tools.h"
-#include "race.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
 #include "spell_storage.h"
+#include "statusbar.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
+#include "ui_mage_guild.h"
+#include "ui_tool.h"
 
 namespace
 {
     const int32_t bottomBarOffsetY = 461;
-
-    class RowSpells
-    {
-    public:
-        RowSpells( const fheroes2::Point & pos, const Castle & castle, const int lvl );
-        void Redraw( fheroes2::Image & output );
-        bool QueueEventProcessing();
-
-    private:
-        std::vector<fheroes2::Rect> coords;
-        SpellStorage spells;
-    };
 }
 
-RowSpells::RowSpells( const fheroes2::Point & pos, const Castle & castle, const int lvl )
-{
-    const bool hide = castle.GetLevelMageGuild() < lvl;
-    const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
-    const fheroes2::Sprite & roll_hide = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
-    const fheroes2::Sprite & roll = ( hide ? roll_hide : roll_show );
-
-    int32_t count = 0;
-
-    switch ( lvl ) {
-    case 1:
-    case 2:
-        count = 3;
-        break;
-    case 3:
-    case 4:
-        count = 2;
-        break;
-    case 5:
-        count = 1;
-        break;
-    default:
-        break;
-    }
-
-    for ( int32_t i = 0; i < count; ++i )
-        coords.emplace_back( pos.x + i * 110 - roll.width() / 2, pos.y, roll.width(), roll.height() );
-
-    if ( castle.HaveLibraryCapability() ) {
-        if ( !hide && castle.isLibraryBuild() )
-            coords.emplace_back( pos.x + count * 110 - roll_show.width() / 2, pos.y, roll_show.width(), roll_show.height() );
-        else
-            coords.emplace_back( pos.x + count * 110 - roll_hide.width() / 2, pos.y, roll_hide.width(), roll_hide.height() );
-    }
-
-    spells.reserve( 6 );
-    spells = castle.GetMageGuild().GetSpells( castle.GetLevelMageGuild(), castle.isLibraryBuild(), lvl );
-    spells.resize( coords.size(), Spell::NONE );
-}
-
-void RowSpells::Redraw( fheroes2::Image & output )
-{
-    const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
-
-    for ( std::vector<fheroes2::Rect>::iterator it = coords.begin(); it != coords.end(); ++it ) {
-        const fheroes2::Rect & dst = ( *it );
-        const Spell & spell = spells[std::distance( coords.begin(), it )];
-
-        // roll hide
-        if ( dst.width < roll_show.width() || spell == Spell::NONE ) {
-            const fheroes2::Sprite & roll_hide = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
-            fheroes2::Blit( roll_hide, output, dst.x, dst.y );
-        }
-        // roll show
-        else {
-            fheroes2::Blit( roll_show, output, dst.x, dst.y );
-
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
-
-            const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
-            text.draw( dst.x + 18, dst.y + 57, 78, fheroes2::Display::instance() );
-        }
-    }
-}
-
-bool RowSpells::QueueEventProcessing()
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    const int32_t index = GetRectIndex( coords, le.getMouseCursorPos() );
-
-    if ( 0 <= index && ( le.MouseClickLeft() || le.isMouseRightButtonPressed() ) ) {
-        const Spell & spell = spells[index];
-
-        if ( spell != Spell::NONE ) {
-            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
-        }
-    }
-
-    return 0 <= index;
-}
-
-void Castle::_openMageGuild( const Heroes * hero ) const
+Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -160,107 +64,149 @@ void Castle::_openMageGuild( const Heroes * hero ) const
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
                                             fheroes2::Display::DEFAULT_HEIGHT );
 
-    const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
-    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
+    const fheroes2::Point dialogOffset{ restorer.x(), restorer.y() };
+    const fheroes2::Point bottomUIOffset{ dialogOffset.x, dialogOffset.y + bottomBarOffsetY };
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, dialogOffset.x, dialogOffset.y );
 
-    // status bar
+    // Create Previous Castle button.
+    fheroes2::Button buttonPrevCastle( bottomUIOffset.x, bottomUIOffset.y, ICN::SMALLBAR, 1, 2 );
+    fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
+    buttonPrevCastle.subscribe( &timedButtonPrevCastle );
+
+    // Exit button.
     const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    fheroes2::Button buttonExit( bottomUIOffset.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, bottomUIOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
-    dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y + bottomBarOffsetY;
+    // Create Next Castle button.
+    fheroes2::Button buttonNextCastle( buttonExit.area().x - fheroes2::AGG::GetICN( ICN::SMALLBAR, 3 ).width(), bottomUIOffset.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
+    buttonNextCastle.subscribe( &timedButtonNextCastle );
 
-    // The original ICN::WELLXTRA image does not have a yellow outer frame.
+    // Create the status bar UI element.
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
-    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
-    fheroes2::Copy( bottomBar, 1, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
-    fheroes2::Copy( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 1, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
-                    dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
+    const fheroes2::Point bottonBarOffset{ buttonPrevCastle.area().x + buttonPrevCastle.area().width, bottomUIOffset.y };
+    const int32_t bottomBarWidth{ fheroes2::Display::DEFAULT_WIDTH - exitWidth - buttonNextCastle.area().width - buttonPrevCastle.area().width };
 
-    // text bar
-    const char * textAlternative;
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Copy( bottomBar, 1, 0, display, bottonBarOffset.x, bottonBarOffset.y, bottomBarWidth / 2, barHeight );
+    fheroes2::Copy( bottomBar, bottomBar.width() - ( bottomBarWidth - bottomBarWidth / 2 ), 0, display, bottonBarOffset.x + bottomBarWidth / 2, bottonBarOffset.y,
+                    bottomBarWidth - bottomBarWidth / 2, barHeight );
+
+    StatusBar statusBar;
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { bottomUIOffset.x + 16, bottomUIOffset.y, bottomBarWidth, 0 } );
+
+    // Default text for status bar.
+    std::string defaultStatusBarText;
     if ( hero == nullptr || !hero->HaveSpellBook() ) {
-        textAlternative = _( "The above spells are available here." );
+        defaultStatusBarText = _( "The above spells are available here." );
     }
     else {
-        textAlternative = _( "The spells the hero can learn have been added to their book." );
-    }
-    fheroes2::Text statusText( textAlternative, fheroes2::FontType::normalWhite() );
-    statusText.draw( cur_pt.x + ( fheroes2::Display::DEFAULT_WIDTH - exitWidth ) / 2 - statusText.width() / 2, cur_pt.y + 464, display );
-
-    const int level = GetLevelMageGuild();
-    // sprite
-    int icn = ICN::UNKNOWN;
-    switch ( _race ) {
-    case Race::KNGT:
-        icn = ICN::MAGEGLDK;
-        break;
-    case Race::BARB:
-        icn = ICN::MAGEGLDB;
-        break;
-    case Race::SORC:
-        icn = ICN::MAGEGLDS;
-        break;
-    case Race::WRLK:
-        icn = ICN::MAGEGLDW;
-        break;
-    case Race::WZRD:
-        icn = ICN::MAGEGLDZ;
-        break;
-    case Race::NECR:
-        icn = ICN::MAGEGLDN;
-        break;
-    default:
-        break;
-    }
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, level - 1 );
-    const fheroes2::Rect area = fheroes2::GetActiveROI( sprite );
-
-    fheroes2::Point inPos( 0, 0 );
-    fheroes2::Point outPos( cur_pt.x + 100 - area.x - area.width / 2, cur_pt.y + 290 - sprite.height() );
-    fheroes2::Size inSize( sprite.width(), sprite.height() );
-
-    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
-        fheroes2::Blit( sprite, inPos, display, outPos, inSize );
+        defaultStatusBarText = _( "The spells the hero can learn have been added to their book." );
     }
 
-    RowSpells spells5( { cur_pt.x + 250, cur_pt.y + 5 }, *this, 5 );
-    RowSpells spells4( { cur_pt.x + 250, cur_pt.y + 95 }, *this, 4 );
-    RowSpells spells3( { cur_pt.x + 250, cur_pt.y + 185 }, *this, 3 );
-    RowSpells spells2( { cur_pt.x + 250, cur_pt.y + 275 }, *this, 2 );
-    RowSpells spells1( { cur_pt.x + 250, cur_pt.y + 365 }, *this, 1 );
+    const int guildLevel = GetLevelMageGuild();
 
-    spells1.Redraw( display );
-    spells2.Redraw( display );
-    spells3.Redraw( display );
-    spells4.Redraw( display );
-    spells5.Redraw( display );
+    fheroes2::renderMageGuildBuilding( _race, guildLevel, dialogOffset );
 
-    fheroes2::Button buttonExit( cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    const bool haveLibraryCapability = HaveLibraryCapability();
+    const bool hasLibrary = isLibraryBuilt();
+
+    std::array<std::unique_ptr<fheroes2::SpellsInOneRow>, 5> spellRows;
+
+    for ( size_t levelIndex = 0; levelIndex < spellRows.size(); ++levelIndex ) {
+        const int32_t spellsLevel = static_cast<int32_t>( levelIndex ) + 1;
+        const int32_t count = MageGuild::getMaxSpellsCount( spellsLevel, haveLibraryCapability );
+
+        SpellStorage spells = GetMageGuild().GetSpells( guildLevel, hasLibrary, spellsLevel );
+        spells.resize( count, Spell::NONE );
+
+        spellRows[levelIndex] = std::make_unique<fheroes2::SpellsInOneRow>( std::move( spells ) );
+
+        spellRows[levelIndex]->setPosition( { dialogOffset.x + 250, dialogOffset.y + 365 - 90 * static_cast<int32_t>( levelIndex ) } );
+        spellRows[levelIndex]->redraw( display );
+    }
+
+    if ( GetKingdom().GetCastles().size() < 2 ) {
+        buttonPrevCastle.disable();
+        buttonNextCastle.disable();
+    }
+
+    buttonPrevCastle.draw();
+    buttonNextCastle.draw();
 
     buttonExit.draw();
 
-    display.render();
-
     LocalEvent & le = LocalEvent::Get();
+
+    auto updateStatusBar = [&le, &buttonExit, &buttonPrevCastle, &buttonNextCastle, &statusBar, &defaultStatusBarText]() {
+        std::string statusMessage;
+
+        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
+            statusMessage = _( "Exit Mage Guild" );
+        }
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
+            statusMessage = _( "Show previous town" );
+        }
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
+            statusMessage = _( "Show next town" );
+        }
+
+        if ( statusMessage.empty() ) {
+            statusBar.ShowMessage( defaultStatusBarText );
+        }
+        else {
+            statusBar.ShowMessage( statusMessage );
+            statusMessage.clear();
+        }
+    };
+
+    updateStatusBar();
+
+    display.render( restorer.rect() );
 
     // message loop
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
-
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
 
-        spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
-            || spells5.QueueEventProcessing();
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+
+        if ( buttonPrevCastle.isEnabled() ) {
+            buttonPrevCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPrevCastle.area() ) );
+
+            if ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) {
+                return MageGuildDialogResult::PrevMageGuildWindow;
+            }
+        }
+        if ( buttonNextCastle.isEnabled() ) {
+            buttonNextCastle.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNextCastle.area() ) );
+
+            if ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) {
+                return MageGuildDialogResult::NextMageGuildWindow;
+            }
+        }
+
+        spellRows[0]->queueEventProcessing( false ) || spellRows[1]->queueEventProcessing( false ) || spellRows[2]->queueEventProcessing( false )
+            || spellRows[3]->queueEventProcessing( false ) || spellRows[4]->queueEventProcessing( false );
 
         if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit Mage Guild" ), Dialog::ZERO );
         }
+        else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show the next town." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
+        }
+
+        updateStatusBar();
     }
+
+    return MageGuildDialogResult::DoNothing;
 }

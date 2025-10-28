@@ -21,7 +21,6 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
 
 #include "image.h"
 #include "math_base.h"
@@ -93,9 +92,7 @@ namespace fheroes2
         void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel );
         // Renders a button background with shadow which adapts its dimensions according to the width and height of the provided text.
         void renderTextAdaptedButtonSprite( ButtonSprite & button, const char * buttonText, const Point & offset, const Padding padding );
-        // Renders a button background with shadow which has specified heights and widths.
-        void renderCustomButtonSprite( ButtonSprite & button, const std::string & buttonText, const fheroes2::Size buttonSize, const Point & offset,
-                                       const Padding padding );
+
         // Renders the buttons in a symmetric button group in either a grid or a single column. The y offset parameter will move all the buttons.
         void renderSymmetricButtons( ButtonGroup & buttons, const int32_t offsetY, const bool isSingleColumn );
 

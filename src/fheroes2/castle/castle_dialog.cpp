@@ -53,6 +53,7 @@
 #include "localevent.h"
 #include "m82.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
@@ -216,7 +217,8 @@ namespace
     }
 }
 
-Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
+Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool openMageGuildWindow, const bool fade,
+                                                    const bool renderBackgroundDialog )
 {
     // Set the cursor image. This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
@@ -263,9 +265,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         switch ( result ) {
         case ConstructionDialogResult::NextConstructionWindow:
-            return CastleDialogReturnValue::NextCostructionWindow;
+            return CastleDialogReturnValue::NextConstructionWindow;
         case ConstructionDialogResult::PrevConstructionWindow:
-            return CastleDialogReturnValue::PreviousCostructionWindow;
+            return CastleDialogReturnValue::PreviousConstructionWindow;
         case ConstructionDialogResult::RecruitHero:
             hero = world.GetHero( *this );
             generateHeroImage( surfaceHero, hero );
@@ -292,10 +294,31 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         return CastleDialogReturnValue::DoNothing;
     };
 
+    auto mageGuildDialogHandler = [this]( const Heroes * visitingHero ) {
+        const auto result = _openMageGuild( visitingHero );
+        switch ( result ) {
+        case MageGuildDialogResult::NextMageGuildWindow:
+            return CastleDialogReturnValue::NextMageGuildWindow;
+        case MageGuildDialogResult::PrevMageGuildWindow:
+            return CastleDialogReturnValue::PreviousMageGuildWindow;
+        default:
+            assert( result == MageGuildDialogResult::DoNothing );
+            break;
+        }
+
+        return CastleDialogReturnValue::DoNothing;
+    };
+
     if ( openConstructionWindow && isBuild( BUILD_CASTLE ) ) {
         const CastleDialogReturnValue constructionResult = constructionDialogHandler();
         if ( constructionResult != CastleDialogReturnValue::DoNothing ) {
             return constructionResult;
+        }
+    }
+    else if ( openMageGuildWindow && isBuild( BUILD_MAGEGUILD ) ) {
+        const auto result = mageGuildDialogHandler( hero );
+        if ( result != CastleDialogReturnValue::DoNothing ) {
+            return result;
         }
     }
 
@@ -446,16 +469,27 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show the next town." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
             }
             else if ( isBuild( BUILD_CAPTAIN ) && le.isMouseRightButtonPressedInArea( rectSign1 ) ) {
                 Dialog::QuickInfo( GetCaptain() );
             }
             else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
+            }
+            else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
+                hero->GetArmy().SwapTroops( _army );
+
+                topArmyBar.ResetSelected();
+                bottomArmyBar.ResetSelected();
+
+                topArmyBar.Redraw( display );
+                bottomArmyBar.Redraw( display );
+
+                display.render( fheroes2::getBoundaryRect( topArmyBar.GetArea(), bottomArmyBar.GetArea() ) );
             }
 
             // Army bar events processing.
@@ -555,7 +589,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             needRedraw = true;
                         }
 
-                        _openMageGuild( hero );
+                        const auto mageGuildResult = mageGuildDialogHandler( hero );
+                        if ( mageGuildResult != CastleDialogReturnValue::DoNothing ) {
+                            return mageGuildResult;
+                        }
                     }
                     else if ( isMonsterDwelling ) {
                         const fheroes2::ButtonRestorer exitRestorer( buttonExit );

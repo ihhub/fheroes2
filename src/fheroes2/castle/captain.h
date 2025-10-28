@@ -86,7 +86,5 @@ public:
     fheroes2::Sprite GetPortrait( const PortraitType type ) const;
 
 private:
-    int GetManaIndexSprite() const;
-
     Castle & home;
 };

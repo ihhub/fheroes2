@@ -105,6 +105,7 @@ namespace Game
         WORLD_DOWN_RIGHT,
         //
         WORLD_SAVE_GAME,
+        WORLD_QUICK_SAVE,
         WORLD_NEXT_HERO,
         WORLD_QUICK_SELECT_HERO,
         WORLD_START_HERO_MOVEMENT,

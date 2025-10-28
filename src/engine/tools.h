@@ -27,7 +27,6 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <functional>
 #include <iomanip>
 #include <limits>
 #include <locale>
@@ -82,13 +81,6 @@ constexpr int CountBits( uint32_t val )
 namespace fheroes2
 {
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
-
-    template <class T>
-    void hashCombine( uint32_t & seed, const T & v )
-    {
-        std::hash<T> hasher;
-        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
-    }
 
     template <size_t N>
     std::bitset<N> makeBitsetFromVector( const std::vector<int> & vector )

@@ -1,13 +1,13 @@
 # Hungarian translation for fheroes2
-# Copyright (C) 2024 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2024-2025 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
-"PO-Revision-Date: 2025-07-10 23:37+0200\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
@@ -174,12 +174,26 @@ msgstr ""
 "JÁTÉK\n"
 "BETÖLTÉS"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "ÚJRA"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "JÁTÉK\n"
 "MENTÉS"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"GYORS\n"
+"CSATA"
 
 msgid "QUIT"
 msgstr "KILÉPÉS"
@@ -328,6 +342,9 @@ msgstr ""
 "A\n"
 "T"
 
+msgid "army|Few"
+msgstr "Néhány"
+
 msgid "Warrior"
 msgstr "Harcos"
 
@@ -339,6 +356,12 @@ msgstr "Felfedező"
 
 msgid "None"
 msgstr "Nincs"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "%{monster} ide repül"
 
 msgid ""
 "A few\n"
@@ -402,9 +425,6 @@ msgid ""
 msgstr ""
 "Légiónyi\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Néhány"
 
 msgid "army|Several"
 msgstr "Több"
@@ -2736,13 +2756,13 @@ msgstr ""
 "varázskönyvre, de nincs szabad hely a könyv számára. Próbálj meg egy "
 "varázstárgyat átadni egy másik hősnek."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Kattints a következő város mutatásához."
 
 msgid "Show next town"
 msgstr "Következő város mutatása"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Kattints az előző város mutatásához."
 
 msgid "Show previous town"
@@ -2771,6 +2791,9 @@ msgstr "A fenti varázslatok érhetők el itt."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "A hős által megtanulható varázslatok beíródtak a varázskönyvébe."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2809,17 +2832,9 @@ msgstr ""
 "'Szoros' csataalakzatban a várvédő egységeid szorosan egymás mellett "
 "helyezkednek el a harcmező várvédő oldalának közepén."
 
-msgid "Spread Formation"
-msgstr "Laza felállás"
-
-msgid "Grouped Formation"
-msgstr "Szoros felállás"
-
-msgid "Click to show the next town."
-msgstr "Kattints a következő város mutatásához."
-
-msgid "Click to show the previous town."
-msgstr "Kattints az előző város mutatásához."
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Hónap: %{month}, hét: %{week}, nap: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "A helyőrség csataalakzata legyen 'Laza'."
@@ -2830,8 +2845,11 @@ msgstr "A helyőrség csataalakzata legyen 'Szoros'."
 msgid "Exit Castle Options"
 msgstr "Kilépés a vár beállításokból"
 
-msgid "Castle Options"
-msgstr "Vár beállítások"
+msgid "Spread Formation"
+msgstr "Laza felállás"
+
+msgid "Grouped Formation"
+msgstr "Szoros felállás"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nincs elég erőforrás a lények toborzásához."
@@ -3005,7 +3023,7 @@ msgid "Music"
 msgstr "Zene"
 
 msgid "Effects"
-msgstr "Effektusok"
+msgstr "Hatások"
 
 msgid "MIDI"
 msgstr "MIDI"
@@ -3046,6 +3064,13 @@ msgstr "Összesen: "
 msgid "Need: "
 msgstr "Szükséges: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Újra"
+
+msgid "There was an issue during saving."
+msgstr "Valami szösz került a gépezetbe mentés közben."
+
 msgid "New Game"
 msgstr "Új játék"
 
@@ -3058,10 +3083,22 @@ msgstr "Játék betöltése"
 msgid "Load a previously saved game."
 msgstr "Mentett játék betöltése."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Aktuális küldetés újraindítása."
+
 msgid "Save Game"
 msgstr "Játék mentése"
 
 msgid "Save the current game."
+msgstr "Aktuális játék mentése."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Aktuális játék mentése."
 
 msgid "Quit"
@@ -3234,6 +3271,16 @@ msgstr "Mutat"
 msgid "Interface"
 msgstr "Kezelőfelület"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animáció"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Kezelőfelület típusa"
 
@@ -3248,6 +3295,15 @@ msgstr "Képernyőgörgetés sebessége"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Beállítja az ablakok görgetésének sebességét."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Játék nyelvének kiválasztása:"
@@ -3458,6 +3514,15 @@ msgstr "Játék felbontás kiválasztása:"
 msgid "Click to apply the selected resolution."
 msgstr "Kattints a kiválasztott képernyőfelbontás alkalmazásához."
 
+msgid "Click to select the maximum amount."
+msgstr "Kattints a maximális mennyiség kiválasztásához."
+
+msgid "Click to select the minimum amount."
+msgstr "Kattints a minimális mennyiség kiválasztásához."
+
+msgid "Click to apply the entered number."
+msgstr "Kattints a begépelt szám alkalmazásához."
+
 msgid "Click to apply the entered text."
 msgstr "Kattints a begépelt szöveg elküldéséhez."
 
@@ -3560,6 +3625,9 @@ msgstr "Lény kiválasztása:"
 msgid "Select Hero:"
 msgstr "Hős kiválasztása:"
 
+msgid "Select Monsters:"
+msgstr "Lények kiválasztása:"
+
 msgid "race|Random"
 msgstr "Véletlen"
 
@@ -3629,6 +3697,9 @@ msgstr ""
 
 msgid "%{mineName} appearance:"
 msgstr "%{mineName} előfordulásai:"
+
+msgid "Click to select the color."
+msgstr "Kattints a szín kiválasztásához."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kattints ide az erőforrástermelő %{object} elhelyezéséhez."
@@ -3746,6 +3817,10 @@ msgstr "Térkép nehézsége:"
 
 msgid "N"
 msgstr "N"
+
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Biztosan törlöd ezt a fájlt?:"
 
 msgid "No maps exist at that size."
 msgstr "Nincs ilyen méretű térkép."
@@ -3933,6 +4008,27 @@ msgstr "Véletlenszerű vár név"
 msgid "Random Town Name"
 msgstr "Véletlenszerű város neve"
 
+msgid "BANNED SPELLS"
+msgstr "TILTOTT VARÁZSLATOK"
+
+msgid "Click to accept the changes made."
+msgstr "Kattints a változtatások elfogadásához."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Kilépés a párbeszédablakból és a változtatások elvetése."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr "Kattints a varázslatok Varázstoronyban való megjelenésének tiltásához."
+
+msgid "Banned Spells"
+msgstr "Tiltott varázslatok"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr "Válaszd ki a Varázstoronyban megjelenő varázslatokat."
+
+msgid "SET SPELLS"
+msgstr "VARÁZSLATOK BEÁLLÍTÁSA"
+
 msgid "Allow Castle build"
 msgstr "Vár építhetőség"
 
@@ -3982,11 +4078,11 @@ msgstr "Sereg alaphelyzetbe állítása."
 msgid "Set custom Castle Army."
 msgstr "Várvédők egyéni beállítása."
 
-msgid "Click to accept the changes made."
-msgstr "Kattints a változtatások elfogadásához."
+msgid "Set spells to appear in the Mage Guild."
+msgstr "Állítsd be a Varázstoronyban megjelenő varázslatokat."
 
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Kilépés a párbeszédablakból és a változtatások elvetése."
+msgid "Set Spells"
+msgstr "Varázslatok beállítása"
 
 msgid "Castle Settings"
 msgstr "Vár-beállítások"
@@ -4078,7 +4174,7 @@ msgid "Delete an existing event."
 msgstr "Meglévő esemény törlése."
 
 msgid "Effects:"
-msgstr "Effektusok:"
+msgstr "Hatások:"
 
 msgid "Conditions:"
 msgstr "Feltételek:"
@@ -4131,6 +4227,9 @@ msgstr ""
 "váltódik ki. Ha nincs bejelölve, akkor mindahányszor a megadott játékos "
 "rálép területre."
 
+msgid "Click to make selection."
+msgstr "Kattints a kiválasztáshoz."
+
 msgid "%{objects} cannot be placed on water."
 msgstr "Vízen nem helyezhetők el %{objects}."
 
@@ -4148,9 +4247,8 @@ msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
 
-#, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
-msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
+msgstr "Maximum %{count} %{objects} helyezhető el a térképen."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4270,11 +4368,12 @@ msgstr "Utak"
 msgid "Streams"
 msgstr "Folyóvizek"
 
-#, fuzzy
 msgid ""
 "A maximum of %{count} heroes including jailed heroes can be placed on the "
 "map."
-msgstr "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
+msgstr ""
+"Maximum %{count} hős (beleértve a börtönben lévőket) helyezhető el a "
+"térképen ugyanabból a színből."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4601,22 +4700,23 @@ msgstr "[%{pos}]: %{race} hős"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%[%{pos}]: %{name}, %{race} hős"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} város"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} vár"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} város"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} város"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} vár"
 
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} város"
+
 msgid "None."
 msgstr "Nincs."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "Egyik oldal legyőzi a másikat."
 
 msgid "Accumulate gold."
@@ -4801,6 +4901,13 @@ msgstr ""
 "több vagy erősebb ellenfelet, kevesebb erőforrást, vagy egyéb speciális "
 "nehezítő feltételt tartalmazhatnak az emberi játékos számára."
 
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+"%{object}\n"
+"(%{color} játékos)"
+
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
 
@@ -4869,6 +4976,44 @@ msgstr "Térkép mentése:"
 
 msgid "Click to save the current map."
 msgstr "Kattints az aktuális térkép mentéséhez."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Másodlagos képesség törlése"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Másodlagos képesség törlése"
+
+msgid "Click to show only level %{level} spells."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+msgid "Spells level"
+msgstr "Varázslatok szintje"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Tiltott varázslatok"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Varázslatok mutatása"
 
 msgid "Riddle:"
 msgstr "Találós kérdés:"
@@ -5041,6 +5186,9 @@ msgstr "Nap eltelt"
 
 msgid "The number of days spent on this campaign."
 msgstr "Az eltöltött napok száma ebben a hadjáratban."
+
+msgid "Scenario Title"
+msgstr "Küldetés címe"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projekt-koordináció és fő fejlesztés"
@@ -5390,6 +5538,10 @@ msgstr "világtérkép: le-jobbra"
 msgid "hotkey|save game"
 msgstr "játék mentése"
 
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "gyors csata"
+
 msgid "hotkey|next hero"
 msgstr "következő hős"
 
@@ -5492,9 +5644,8 @@ msgstr "kör kihagyása a csatában"
 msgid "hotkey|cast battle spell"
 msgstr "varázslat idézése csatában"
 
-#, fuzzy
 msgid "hotkey|toggle display of battle turn order"
-msgstr "automatikus csata mód kapcsoló"
+msgstr "csata körsorrendje kijelzésének kapcsolója"
 
 msgid "hotkey|dwelling level 1"
 msgstr "toborzóhely 1. szint"
@@ -6023,11 +6174,21 @@ msgstr "Kattints a beállítások elfogadásához és új játék indításához
 msgid "Click to return to the main menu."
 msgstr "Kattints a főmenübe való visszatéréshez."
 
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "A térkép fájl sérült."
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} havát."
 
+msgid "New Month!"
+msgstr "Új hónap!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} hetét."
+
+msgid "New Week!"
+msgstr "Új hét!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "A(z) %{monster} népessége megduplázódott!"
@@ -6044,17 +6205,11 @@ msgstr[1] "A(z) %{monster} népessége %{count} százalékkal megnövekedett!"
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} szaporulat: +%{count}."
 
-msgid " All populations are halved."
-msgstr " Minden populáció megfeleződött."
+msgid "All populations are halved."
+msgstr "Az össznépesség megfeleződött."
 
-msgid " All dwellings increase population."
-msgstr " Mindegyik toborzóhelynek nőtt a szaporulata."
-
-msgid "New Month!"
-msgstr "Új hónap!"
-
-msgid "New Week!"
-msgstr "Új hét!"
+msgid "All dwellings increase population."
+msgstr "Mindegyik toborzóhelynek nőtt a népessége."
 
 msgid "Beware!"
 msgstr "Vigyázat!"
@@ -6217,9 +6372,6 @@ msgstr "Biztosan felülírod a mentést ezzel a névvel?"
 
 msgid "Game saved successfully."
 msgstr "A játék sikeresen mentve."
-
-msgid "There was an issue during saving."
-msgstr "Valami szösz került a gépezetbe mentés közben."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -6494,12 +6646,6 @@ msgstr "Gonosz"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} rabló"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} már ki van fosztva"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6524,6 +6670,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6532,9 +6681,6 @@ msgstr "Atlasz"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6623,6 +6769,9 @@ msgstr "Brax atya"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6641,14 +6790,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} rabló"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} már ki van fosztva"
 
 msgid " gives you maximum morale"
 msgstr " maximális morált ad"
@@ -7250,13 +7402,12 @@ msgstr ""
 "A megfontoltság a vitézség tiszteletre méltó oldala. Ma úgy döntesz, hogy "
 "elállsz a harctól."
 
-#, fuzzy
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it, "
 "only to find it empty."
 msgstr ""
-"Több órás munkával sikerül kihalásznod egy ládát a tengerből. Kinyitod, és "
-"%{gold} aranyat találsz benne."
+"Több órás munkával sikerül kihalásznod egy ládát a tengerből, de mikor "
+"kinyitod, teljesen üres."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8155,7 +8306,7 @@ msgstr "Véletlenszerű hős (%{level}. szint)"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Véletlenszerű %{race} hős (%{level}. szint)"
 
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Hős osztály:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8191,7 +8342,7 @@ msgstr "Járőrözési sugár beállítása"
 msgid "Enter hero's name"
 msgstr "Hős nevének megadása"
 
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Kattints az osztály megváltoztatásához."
 
 msgid ""
@@ -8306,6 +8457,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} és %{name2} találkozik"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "%{level} szint"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Varázstárgyak"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Varázstárgyak mutatása"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."
@@ -9960,8 +10141,8 @@ msgstr "Két hexára támad"
 msgid "Flyer"
 msgstr "Repül"
 
-msgid "Always retaliates"
-msgstr "Mindig visszatámad"
+msgid "Unlimited retaliation"
+msgstr "Korlátlan visszatámadás"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Minden mellette álló ellenséget támad"
@@ -11976,12 +12157,13 @@ msgstr ""
 msgid "Dimension Door"
 msgstr "Dimenziókapu"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"A varázslat megidézőjét visszarepíti bármelyik saját városba vagy várba."
-
 msgid "Town Gate"
 msgstr "Városkapu"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12184,6 +12366,22 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Vár beállítások"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Kattints a következő város mutatásához."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Kattints az előző város mutatásához."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "A varázslat megidézőjét visszarepíti bármelyik saját városba vagy várba."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Mindig visszatámad"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

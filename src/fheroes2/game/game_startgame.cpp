@@ -28,6 +28,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -133,43 +134,63 @@ namespace
 
     void ShowNewWeekDialog()
     {
-        // restore the original music on exit
+        // Restore the original music on exit
         const AudioManager::MusicRestorer musicRestorer;
 
         const bool isNewMonth = world.BeginMonth();
 
         AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
+        auto [headerText, messageText] = [isNewMonth]() -> std::pair<std::string, std::string> {
+            if ( isNewMonth ) {
+                return { _( "New Month!" ), _( "Astrologers proclaim the Month of the %{name}." ) };
+            }
+
+            return { _( "New Week!" ), _( "Astrologers proclaim the Week of the %{name}." ) };
+        }();
+
         const Week & week = world.GetWeekType();
 
-        // head
-        std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
-        StringReplace( message, "%{name}", week.GetName() );
-        message += "\n\n";
+        StringReplace( messageText, "%{name}", week.GetName() );
+        messageText += "\n\n";
 
-        if ( week.GetType() == WeekName::MONSTERS ) {
+        std::unique_ptr<const fheroes2::MonsterDialogElement> monsterDialogElement;
+
+        switch ( week.GetType() ) {
+        case WeekName::MONSTERS: {
             const Monster monster( week.GetMonster() );
-            const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+            assert( monster.isValid() );
 
-            if ( monster.isValid() && count ) {
-                if ( isNewMonth )
-                    message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
-                                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
-                else
-                    message += _( "%{monster} growth +%{count}." );
-                StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
-                StringReplace( message, "%{count}", count );
-                message += "\n\n";
+            const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+            assert( count > 0 );
+
+            if ( isNewMonth ) {
+                messageText += ( count == 100 ) ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             }
+            else {
+                messageText += _( "%{monster} growth +%{count}." );
+            }
+
+            StringReplaceWithLowercase( messageText, "%{monster}", monster.GetMultiName() );
+            StringReplace( messageText, "%{count}", count );
+
+            monsterDialogElement = std::make_unique<const fheroes2::MonsterDialogElement>( monster );
+
+            break;
+        }
+        case WeekName::PLAGUE:
+            messageText += _( "All populations are halved." );
+            break;
+        default:
+            messageText += _( "All dwellings increase population." );
+            break;
         }
 
-        if ( week.GetType() == WeekName::PLAGUE )
-            message += _( " All populations are halved." );
-        else
-            message += _( " All dwellings increase population." );
-
-        fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
+        fheroes2::showStandardTextMessage( std::move( headerText ), std::move( messageText ), Dialog::OK,
+                                           monsterDialogElement ? std::vector<const fheroes2::DialogElement *>{ monsterDialogElement.get() }
+                                                                : std::vector<const fheroes2::DialogElement *>{} );
     }
 
     void ShowWarningLostTownsDialog()
@@ -282,28 +303,41 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     assert( it != myCastles.end() );
 
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
+    bool openConstructionWindow{ false };
+    bool openMageGuildWindow{ false };
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, true, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
-        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+        switch ( result ) {
+        case Castle::CastleDialogReturnValue::PreviousCastle:
+        case Castle::CastleDialogReturnValue::PreviousConstructionWindow:
+        case Castle::CastleDialogReturnValue::PreviousMageGuildWindow:
             if ( it == myCastles.begin() ) {
                 it = myCastles.end();
             }
             --it;
-        }
-        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+            break;
+        case Castle::CastleDialogReturnValue::NextCastle:
+        case Castle::CastleDialogReturnValue::NextConstructionWindow:
+        case Castle::CastleDialogReturnValue::NextMageGuildWindow:
             ++it;
             if ( it == myCastles.end() ) {
                 it = myCastles.begin();
             }
+            break;
+        default:
+            break;
         }
 
         assert( it != myCastles.end() );
 
-        const bool openConstructionWindow
-            = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+        openConstructionWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousConstructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextConstructionWindow );
 
-        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
+        openMageGuildWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) || ( result == Castle::CastleDialogReturnValue::NextMageGuildWindow );
+
+        result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, false, renderBackgroundDialog );
     }
 
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
@@ -1085,6 +1119,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                     EventSaveGame();
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_QUICK_SAVE ) ) {
+                    if ( !Game::QuickSave() ) {
+                        fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = EventLoadGame();

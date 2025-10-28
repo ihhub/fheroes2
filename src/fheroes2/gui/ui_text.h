@@ -165,6 +165,9 @@ namespace fheroes2
         // Returns true if nothing to draw.
         virtual bool empty() const = 0;
 
+        // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
+        virtual void fitToOneRow( const int32_t maxWidth ) = 0;
+
         // Returns full text. Multi-text class cannot return by reference hence returning by value.
         virtual std::string text() const = 0;
 
@@ -244,8 +247,7 @@ namespace fheroes2
             _language = language;
         }
 
-        // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        virtual void fitToOneRow( const int32_t maxWidth );
+        void fitToOneRow( const int32_t maxWidth ) override;
 
         std::string text() const override
         {
@@ -319,6 +321,8 @@ namespace fheroes2
             return _cursorArea;
         }
 
+        size_t getCursorPositionInAdjacentLine( const size_t currentPos, const int32_t maxWidth, const bool moveUp );
+
     private:
         // Update the area of text occupied by cursor and fit the text if the `_autoFitToWidth` is > 0.
         void _updateCursorAreaInText();
@@ -364,6 +368,8 @@ namespace fheroes2
             return _texts.empty();
         }
 
+        void fitToOneRow( const int32_t maxWidth ) override;
+
         std::string text() const override;
 
     private:
@@ -383,6 +389,7 @@ namespace fheroes2
         const Sprite & getSprite( const uint8_t character ) const;
 
         int32_t getWidth( const uint8_t character ) const;
+        int32_t getWidth( const std::string_view text ) const;
 
         int32_t getSpaceCharWidth() const
         {

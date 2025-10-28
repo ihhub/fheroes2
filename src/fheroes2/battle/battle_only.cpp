@@ -444,9 +444,9 @@ void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
 
     for ( const size_t idx : { 0, 1 } ) {
         if ( armyInfo[idx].hero ) {
-            const fheroes2::Sprite & port1 = armyInfo[idx].hero->GetPortrait( PORT_BIG );
-            if ( !port1.empty() ) {
-                fheroes2::Copy( port1, 0, 0, display, armyInfo[idx].portraitRoi );
+            const fheroes2::Sprite & port = armyInfo[idx].hero->GetPortrait( PORT_BIG );
+            if ( !port.empty() ) {
+                fheroes2::Copy( port, 0, 0, display, armyInfo[idx].portraitRoi );
             }
         }
         else {
@@ -523,14 +523,14 @@ void Battle::Only::copyHero( const Heroes & in, Heroes & out )
     out.knowledge = in.knowledge;
     out.power = in.power;
     out._id = in._id;
-    out.portrait = in.portrait;
+    out._portrait = in._portrait;
     out._race = in._race;
 
-    out.secondary_skills.ToVector() = in.secondary_skills.ToVector();
-    out.army.Assign( in.army );
+    out._secondarySkills.ToVector() = in._secondarySkills.ToVector();
+    out._army.Assign( in._army );
 
-    out.bag_artifacts = in.bag_artifacts;
-    out.spell_book = in.spell_book;
+    out._bagArtifacts = in._bagArtifacts;
+    out._spellBook = in._spellBook;
 
     out.SetSpellPoints( out.GetMaxSpellPoints() );
 }

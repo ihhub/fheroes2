@@ -25,7 +25,9 @@
 
 #include <cstdint>
 #include <memory>
+#include <set>
 #include <string>
+#include <vector>
 
 #include "artifact.h"
 #include "color.h"
@@ -40,6 +42,12 @@
 #include "ui_window.h"
 
 class Kingdom;
+
+namespace fheroes2
+{
+    struct LocalizedString;
+    class TextBase;
+}
 
 namespace Dialog
 {
@@ -89,15 +97,33 @@ namespace Dialog
             // Do nothing.
         }
 
-        void updateScrollBarImage();
-
         // An image with text should have offset of 10 pixels from all left and right edges.
         void renderItem( const fheroes2::Sprite & itemSprite, std::string itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
                          const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
 
+        void renderItem( const fheroes2::Sprite & itemSprite, std::vector<fheroes2::LocalizedString> itemText, const fheroes2::Point & destination,
+                         const int32_t middleImageOffsetX, const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const;
+
         int32_t selectItemsEventProcessing();
 
         fheroes2::Rect getBackgroundArea() const;
+
+    protected:
+        void setButtonOkayStatus( const bool enabled )
+        {
+            if ( enabled == _buttonOk.isEnabled() ) {
+                return;
+            }
+
+            if ( enabled ) {
+                _buttonOk.enable();
+            }
+            else {
+                _buttonOk.disable();
+            }
+
+            _buttonOk.draw();
+        }
 
     private:
         bool _isDoubleClicked{ false };
@@ -105,6 +131,13 @@ namespace Dialog
         std::unique_ptr<fheroes2::ImageRestorer> _backgroundRestorer;
         fheroes2::Button _buttonOk;
         fheroes2::Button _buttonCancel;
+
+        virtual bool isDoubleClicked()
+        {
+            return _isDoubleClicked;
+        }
+
+        void renderText( fheroes2::TextBase & text, const fheroes2::Point & destination, const int32_t textOffsetX, const int32_t itemOffsetY ) const;
     };
 
     Monster selectMonster( const int monsterId );
@@ -113,12 +146,14 @@ namespace Dialog
 
     Artifact selectArtifact( const int artifactId, const bool isForVictoryConditions );
 
-    Spell selectSpell( const int spellId, const bool includeRandomSpells );
+    Spell selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList = {}, const int32_t spellsLevel = -1 );
 
     int32_t selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, std::string title, std::string description = {},
                                  int32_t castlePositionIndex = -1 );
 
     Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
+
+    void multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected );
 
     // These functions should be called only from the Editor as they rely on Maps::ObjectInfo structures that are not the same as in-game items.
     int selectHeroType( const int heroType );

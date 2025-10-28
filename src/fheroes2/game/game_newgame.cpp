@@ -193,7 +193,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     loadingScreen.draw( display.width() / 2 - loadingScreen.width() / 2, display.height() / 2 - loadingScreen.height() / 2 + 2, display );
     display.render();
 
-    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+    Video::ShowVideo( { { "INTRO.SMK", Video::VideoControl::PLAY_CUTSCENE } } );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
@@ -208,12 +208,17 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     const std::array<fheroes2::Rect, 2> campaignRoi{ fheroes2::Rect( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 ),
                                                      fheroes2::Rect( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 ) };
 
-    const uint64_t customDelay = static_cast<uint64_t>( std::lround( 1000.0 / video->fps() ) );
+    const uint64_t customDelay = static_cast<uint64_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
 
     outputNewSuccessionWarsCampaignInTextSupportMode();
 
     AudioManager::ResetAudio();
-    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
+    std::unique_ptr<SMKVideoSequence> audio = getVideo( "CHOOSEW.SMK" );
+    if ( audio ) {
+        for ( auto channel : audio->getAudioChannels() ) {
+            Mixer::Play( channel.data(), static_cast<uint32_t>( channel.size() ), false );
+        }
+    }
 
     const fheroes2::ScreenPaletteRestorer screenRestorer;
 
@@ -260,7 +265,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
             display.render( frameRoi );
 
-            if ( video->frameCount() <= video->getCurrentFrame() ) {
+            if ( video->frameCount() <= video->getCurrentFrameId() ) {
                 video->resetFrame();
             }
         }
@@ -368,7 +373,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         for ( size_t i = 0; i < activeCampaignArea.size(); ++i ) {
             if ( le.isMouseCursorPosInArea( activeCampaignArea[i] ) && videos[i] ) {
                 highlightCampaignId = i;
-                customDelay = static_cast<uint64_t>( std::lround( 1000.0 / videos[highlightCampaignId]->fps() ) );
+                customDelay = static_cast<uint64_t>( std::lround( videos[highlightCampaignId]->microsecondsPerFrame() / 1000 ) );
                 break;
             }
         }
@@ -390,7 +395,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
             display.render( frameRoi );
 
-            if ( videos[highlightCampaignId]->frameCount() <= videos[highlightCampaignId]->getCurrentFrame() ) {
+            if ( videos[highlightCampaignId]->frameCount() <= videos[highlightCampaignId]->getCurrentFrameId() ) {
                 videos[highlightCampaignId]->resetFrame();
             }
         }

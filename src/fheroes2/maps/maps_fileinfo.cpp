@@ -223,8 +223,9 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         difficulty = Difficulty::EXPERT;
         break;
     default:
-        difficulty = Difficulty::NORMAL;
-        break;
+        // Most likely it is a corrupted or hacked map.
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Difficulty level for map " << filename << " is not being set." )
+        return false;
     }
 
     // Width & height of the map in tiles
@@ -312,6 +313,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 
         Maps::Tile tile;
         tile.Init( mp2tile );
+        tile.sortObjectParts();
 
         if ( const auto [color, dummy] = getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex ); ( colorsAvailableForHumans & color ) == 0 ) {
             const PlayerColorsSet side1 = colorsAvailableForHumans | color;
@@ -328,6 +330,10 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // Map name
     fs.seek( 58 );
     name = fs.getString( mapNameLength );
+    if ( name.empty() ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain a name." )
+        return false;
+    }
 
     // Map description
     fs.seek( 118 );
@@ -746,4 +752,29 @@ MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, cons
     }
 
     return validMaps;
+}
+
+bool Maps::tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
+{
+    static const auto fileNameToPath = []() {
+        std::map<std::string, std::string> result;
+
+        const ListFiles files = Settings::FindFiles( "maps", "", false );
+
+        for ( const std::string & file : files ) {
+            result.try_emplace( StringLower( System::GetFileName( file ) ), file );
+        }
+
+        return result;
+    }();
+
+    const auto result = fileNameToPath.find( fileName );
+
+    if ( result != fileNameToPath.end() ) {
+        matchingFilePath = result->second;
+
+        return true;
+    }
+
+    return false;
 }

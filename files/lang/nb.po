@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -159,12 +159,23 @@ msgstr ""
 "LAST INN\n"
 "PARTI"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OMSTART"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "LAGRE\n"
 "PARTI"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "AVSLUTT"
@@ -304,6 +315,9 @@ msgid ""
 "L"
 msgstr ""
 
+msgid "army|Few"
+msgstr "Få"
+
 msgid "Warrior"
 msgstr "Kriger"
 
@@ -315,6 +329,12 @@ msgstr "Utforsker"
 
 msgid "None"
 msgstr "Ingen"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Fly %{monster} hit"
 
 msgid ""
 "A few\n"
@@ -378,9 +398,6 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Få"
 
 msgid "army|Several"
 msgstr "Flere"
@@ -2829,13 +2846,15 @@ msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine skatter til en annen helt."
 
-msgid "Click to show next town."
+#, fuzzy
+msgid "Click to show the next town."
 msgstr "Klikk for å vise neste by."
 
 msgid "Show next town"
 msgstr "Vis neste by"
 
-msgid "Click to show previous town."
+#, fuzzy
+msgid "Click to show the previous town."
 msgstr "Klikk for å vise forrige by."
 
 msgid "Show previous town"
@@ -2865,6 +2884,9 @@ msgstr "Trolldommene ovenfor er tilgjengelige her."
 #, fuzzy
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Med nok visdom kan du lære deg trolldommene over."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Et sjenerøst tips til bartenderen får han til å dele dette ryktet:"
@@ -2903,19 +2925,9 @@ msgstr ""
 "\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
 "din side av slagmarken."
 
-msgid "Spread Formation"
-msgstr "Spredd oppstilling"
-
-msgid "Grouped Formation"
-msgstr "Gruppert oppstilling"
-
 #, fuzzy
-msgid "Click to show the next town."
-msgstr "Klikk for å vise neste by."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Klikk for å vise forrige by."
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Måned: %{month}, Uke : %{week}, Dag : %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Sett kampoppstillingen til garnisonen til \"Spredd\"."
@@ -2926,8 +2938,11 @@ msgstr "Sett kampoppstillingen til garnisonen til \"Gruppert\"."
 msgid "Exit Castle Options"
 msgstr "Forlat borgvalg"
 
-msgid "Castle Options"
-msgstr "Borgvalg"
+msgid "Spread Formation"
+msgstr "Spredd oppstilling"
+
+msgid "Grouped Formation"
+msgstr "Gruppert oppstilling"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Ikke nok råvarer til å verve krigere."
@@ -3146,6 +3161,13 @@ msgstr "Totalt: "
 msgid "Need: "
 msgstr "Trenger: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Start på nytt"
+
+msgid "There was an issue during saving."
+msgstr "Det oppstod et problem under lagringen."
+
 msgid "New Game"
 msgstr "Nytt parti"
 
@@ -3158,10 +3180,22 @@ msgstr "Last inn et parti"
 msgid "Load a previously saved game."
 msgstr "Last inn et tidligere lagret parti."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Start det nåværende kartet på nytt."
+
 msgid "Save Game"
 msgstr "Lagre spill"
 
 msgid "Save the current game."
+msgstr "Lagre det nåværende spillet."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Autokamp"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Lagre det nåværende spillet."
 
 msgid "Quit"
@@ -3337,6 +3371,16 @@ msgstr "Bundet"
 msgid "Interface"
 msgstr "Grensesnitt"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Underleggelse"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Grensesnitt"
 
@@ -3353,6 +3397,15 @@ msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Setter farten du panorerer rundt kartet på."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Velg språk:"
@@ -3557,6 +3610,18 @@ msgstr "Velg en oppløsning:"
 msgid "Click to apply the selected resolution."
 msgstr "Trykk for å bruke den valgte oppløsningen."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Trykk for å bekrefte den innskrevne teksten."
+
 msgid "Click to apply the entered text."
 msgstr "Trykk for å bekrefte den innskrevne teksten."
 
@@ -3662,6 +3727,10 @@ msgstr "Velg monster:"
 msgid "Select Hero:"
 msgstr "Velg helt:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Velg monster:"
+
 msgid "race|Random"
 msgstr "Tilfeldig"
 
@@ -3747,6 +3816,10 @@ msgstr "Råvare"
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{race}en %{name}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
 
 #, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
@@ -3875,6 +3948,10 @@ msgstr "Kartets utfordring:"
 
 msgid "N"
 msgstr ""
+
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Er du sikker på at du vil slette filen:"
 
 #, fuzzy
 msgid "No maps exist at that size."
@@ -4070,6 +4147,30 @@ msgstr "Vilkårlig borg"
 msgid "Random Town Name"
 msgstr "Vilkårlig by"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klikk for å vise neste by."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Tilfeldig"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Himmelslott"
@@ -4129,13 +4230,12 @@ msgstr "Bortvis denne troppen."
 msgid "Set custom Castle Army."
 msgstr "Borg"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Klikk for å vise neste by."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klikk for å vise neste by."
+msgid "Set Spells"
+msgstr "Velg trolldom:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4292,6 +4392,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4799,19 +4903,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "%{name1} møter %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} spiller"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} spiller"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "%{name1} møter %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} spiller"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "%{name1} møter %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "%{name1} møter %{name2}"
 
 #, fuzzy
@@ -4819,7 +4923,7 @@ msgid "None."
 msgstr "Ingen"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Vennligst velg en annen helt."
 
 #, fuzzy
@@ -5028,6 +5132,12 @@ msgstr ""
 "ting mer utfordrende for den menneskelige spilleren."
 
 #, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "%{color} spiller"
+
+#, fuzzy
 msgid "editor|%{count} %{resource}"
 msgstr "Velg mengde %{resource}:"
 
@@ -5102,6 +5212,45 @@ msgstr "Lagre kart"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Klikk for å lagre det nåværende spillet."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Vis trolldommer"
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Trolldomsrull"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Vis trolldommer"
 
 msgid "Riddle:"
 msgstr ""
@@ -5277,6 +5426,10 @@ msgstr "Dager brukt"
 
 msgid "The number of days spent on this campaign."
 msgstr "Antall dager som har blitt brukt på felttoget så langt."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Kart"
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -5636,6 +5789,10 @@ msgstr "Verdenskart ned til høyre"
 
 msgid "hotkey|save game"
 msgstr "Lagre parti"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "Avslutt"
 
 msgid "hotkey|next hero"
 msgstr "Neste helt"
@@ -6283,11 +6440,21 @@ msgstr "Klikk her for å bekrefte disse valgene og begynne på et nytt parti."
 msgid "Click to return to the main menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Lagringsfilen er korrupt."
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologene kunngjør at det er måneden av %{name}."
 
+msgid "New Month!"
+msgstr ""
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologene kunngjør at det er uka av %{name}."
+
+msgid "New Week!"
+msgstr "Ny uke!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Etter en vanlig vekst dobles nå alle befolkninger med %{monster}!"
@@ -6308,17 +6475,13 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Alle befolkninger med %{monster} vokser med +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Alle befolkninger halveres."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Alle bostedenes befolkninger opplever vanlig vekst."
-
-msgid "New Month!"
-msgstr ""
-
-msgid "New Week!"
-msgstr "Ny uke!"
 
 msgid "Beware!"
 msgstr "Viktig beskjed!"
@@ -6483,9 +6646,6 @@ msgstr "Er du sikker på at du vil overskrive lagringspunktet med dette navnet?"
 
 msgid "Game saved successfully."
 msgstr "Lagring vellykket."
-
-msgid "There was an issue during saving."
-msgstr "Det oppstod et problem under lagringen."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -6762,14 +6922,6 @@ msgstr "Ond"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} ranet"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "%{object} plyndret"
-
 msgid "Ector"
 msgstr "Hektor"
 
@@ -6794,6 +6946,9 @@ msgstr "Kragg Hakk"
 msgid "Fineous"
 msgstr "Finneas"
 
+msgid "Jaclyn"
+msgstr "Bina"
+
 msgid "Jezebel"
 msgstr "Izabell"
 
@@ -6802,9 +6957,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Herkon"
-
-msgid "Jaclyn"
-msgstr "Bina"
 
 msgid "Gem"
 msgstr "Edelsten"
@@ -6893,6 +7045,9 @@ msgstr "Broder Brax"
 msgid "Dainwin"
 msgstr "Deinvinn"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Josef"
 
@@ -6911,14 +7066,19 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Harkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} ranet"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "%{object} plyndret"
 
 msgid " gives you maximum morale"
 msgstr " gir deg den beste kampånden"
@@ -8498,7 +8658,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Heltevindu"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8534,7 +8694,7 @@ msgid "Enter hero's name"
 msgstr "Mist helten kalt %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Klikk for å vise neste by."
 
 #, fuzzy
@@ -8643,6 +8803,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Level %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Gjenstander"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Vis skatter"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
@@ -10365,8 +10555,9 @@ msgstr "Tofeltsangrep"
 msgid "Flyer"
 msgstr "Flyger"
 
-msgid "Always retaliates"
-msgstr "Tar alltid igjen"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Ingen fiendtlige hevnslag"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Angriper alle fiender rundt seg"
@@ -12499,13 +12690,13 @@ msgstr ""
 "Verdens-\n"
 "portal"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Sender helten til en hvilken som helst by eller borg i heltens nåværende "
-"besittelse."
-
 msgid "Town Gate"
 msgstr "Byflukt"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12722,6 +12913,23 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Borgvalg"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klikk for å vise neste by."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klikk for å vise forrige by."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Sender helten til en hvilken som helst by eller borg i heltens nåværende "
+#~ "besittelse."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Tar alltid igjen"
 
 #~ msgid "CONFIG"
 #~ msgstr "VALG"

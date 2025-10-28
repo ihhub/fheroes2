@@ -46,17 +46,20 @@ namespace
         InterfaceType,
         InterfacePresence,
         CursorType,
+        ArmyEstimationMode,
         Exit
     };
 
-    const fheroes2::Rect interfaceTypeRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY, fheroes2::optionIconSize, fheroes2::optionIconSize };
-    const fheroes2::Rect interfacePresenceRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
-                                               fheroes2::optionIconSize };
+    const fheroes2::Size offsetBetweenOptions{ 92, 110 };
+    const fheroes2::Point optionOffset{ 20, 31 };
+    const int32_t optionWindowSize{ 65 };
 
-    const fheroes2::Rect cursorTypeRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize,
-                                        fheroes2::optionIconSize };
-    const fheroes2::Rect scrollSpeedRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
-                                         fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect interfacePresenceRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect armyEstimationModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + 43, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + 43 + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
+                                         optionWindowSize };
 
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
     {
@@ -75,7 +78,15 @@ namespace
             value = _( "Show" );
         }
 
-        fheroes2::drawOption( optionRoi, interfaceStateIcon, _( "Interface" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, interfaceStateIcon, _( "Interface" ), std::move( value ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+    }
+
+    void drawArmyNumberEstimationOption( const fheroes2::Rect & optionRoi )
+    {
+        const bool isArmyEstimationNumeric = Settings ::Get().isArmyEstimationViewNumeric();
+
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ARMY_ESTIMATION_ICON, isArmyEstimationNumeric ? 1 : 0 ), _( "Army Estimation" ),
+                              isArmyEstimationNumeric ? _( "Numeric" ) : _( "Canonical" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     SelectedWindow showConfigurationWindow( bool & saveConfiguration )
@@ -91,20 +102,24 @@ namespace
         const fheroes2::Rect windowInterfacePresenceRoi( interfacePresenceRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowArmyEstimationModeRoi( armyEstimationModeRoi + windowRoi.getPosition() );
 
         Settings & conf = Settings::Get();
 
-        const auto drawOptions = [&conf, &windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
-            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-            drawInterfacePresence( windowInterfacePresenceRoi );
-            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-            drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
-        };
+        const auto drawOptions
+            = [&conf, &windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi, &windowArmyEstimationModeRoi]() {
+                  drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+                  drawInterfacePresence( windowInterfacePresenceRoi );
+                  drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+                  drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
+                  drawArmyNumberEstimationOption( windowArmyEstimationModeRoi );
+              };
 
         drawOptions();
 
-        fheroes2::Button buttonOk;
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
+        fheroes2::Button buttonOk;
         const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         background.renderButton( buttonOk, buttonOkIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
@@ -134,6 +149,9 @@ namespace
             }
             if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
                 return SelectedWindow::CursorType;
+            }
+            if ( le.MouseClickLeft( windowArmyEstimationModeRoi ) ) {
+                return SelectedWindow::ArmyEstimationMode;
             }
 
             if ( le.MouseClickLeft( windowScrollSpeedRoi ) ) {
@@ -167,8 +185,14 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowCursorTypeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
             }
-            if ( le.isMouseRightButtonPressedInArea( windowScrollSpeedRoi ) ) {
+            else if ( le.isMouseRightButtonPressedInArea( windowScrollSpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowArmyEstimationModeRoi ) ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Army Estimation" ),
+                    _( "Toggle how army sizes are displayed when right-clicking armies on the adventure map. \n\nCanonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n\nNumeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")." ),
+                    0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
@@ -221,6 +245,12 @@ namespace fheroes2
                 break;
             case SelectedWindow::CursorType:
                 conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
+                saveConfiguration = true;
+
+                windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::ArmyEstimationMode:
+                conf.setNumericArmyEstimationView( !conf.isArmyEstimationViewNumeric() );
                 saveConfiguration = true;
 
                 windowType = SelectedWindow::Configuration;

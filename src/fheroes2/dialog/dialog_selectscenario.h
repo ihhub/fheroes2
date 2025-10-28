@@ -102,5 +102,5 @@ private:
 
 namespace Dialog
 {
-    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & allMaps, const bool isForEditor );
+    const Maps::FileInfo * SelectScenario( MapsFileInfoList & all, const bool isForEditor );
 }

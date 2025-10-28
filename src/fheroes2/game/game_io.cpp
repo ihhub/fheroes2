@@ -53,27 +53,25 @@ namespace
 {
     const std::string autoSaveName{ "AUTOSAVE" };
 
-    const uint16_t SAV2ID3 = 0xFF03;
+    const std::string quickSaveName{ "QUICKSAVE" };
+
+    const uint16_t saveFileMagicNumber{ 0xFF03 };
 
     uint16_t versionOfCurrentSaveFile = CURRENT_FORMAT_VERSION;
 
     std::string lastSaveName;
 
-    struct HeaderSAV
+    struct HeaderSAV final
     {
         enum
         {
             REQUIRES_POL_RESOURCES = 0x4000
         };
 
-        HeaderSAV()
-            : status( 0 )
-            , gameType( 0 )
-        {}
+        HeaderSAV() = default;
 
         HeaderSAV( const Maps::FileInfo & fi, const int type, const uint32_t worldDay, const uint32_t worldWeek, const uint32_t worldMonth )
-            : status( 0 )
-            , info( fi )
+            : info( fi )
             , gameType( type )
         {
             time_t rawtime;
@@ -85,23 +83,23 @@ namespace
             info.worldMonth = worldMonth;
 
             if ( fi.version != GameVersion::SUCCESSION_WARS ) {
-                status |= REQUIRES_POL_RESOURCES;
+                requirements |= REQUIRES_POL_RESOURCES;
             }
         }
 
-        uint16_t status;
+        uint16_t requirements{ 0 };
         Maps::FileInfo info;
-        int gameType;
+        int gameType{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const HeaderSAV & hdr )
     {
-        return stream << hdr.status << hdr.info << hdr.gameType;
+        return stream << hdr.requirements << hdr.info << hdr.gameType;
     }
 
     IStreamBase & operator>>( IStreamBase & stream, HeaderSAV & hdr )
     {
-        return stream >> hdr.status >> hdr.info >> hdr.gameType;
+        return stream >> hdr.requirements >> hdr.info >> hdr.gameType;
     }
 }
 
@@ -110,11 +108,14 @@ bool Game::AutoSave()
     return Game::Save( System::concatPath( GetSaveDir(), autoSaveName + GetSaveFileExtension() ), true );
 }
 
+bool Game::QuickSave()
+{
+    return Game::Save( System::concatPath( GetSaveDir(), quickSaveName + GetSaveFileExtension() ), false );
+}
+
 bool Game::Save( const std::string & filePath, const bool autoSave /* = false */ )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
-
-    const Settings & conf = Settings::Get();
 
     StreamFile fileStream;
     fileStream.setBigendian( true );
@@ -126,10 +127,12 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // Always use the latest version of the file save format
     SetVersionOfCurrentSaveFile( CURRENT_FORMAT_VERSION );
-    uint16_t saveFileVersion = CURRENT_FORMAT_VERSION;
+    const uint16_t saveFileVersion = CURRENT_FORMAT_VERSION;
 
     // Header
-    fileStream << SAV2ID3 << std::to_string( saveFileVersion ) << saveFileVersion
+    const Settings & conf = Settings::Get();
+
+    fileStream << saveFileMagicNumber << std::to_string( saveFileVersion ) << saveFileVersion
                << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
     if ( fileStream.fail() ) {
         return false;
@@ -138,7 +141,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     RWStreamBuf dataStream;
     dataStream.setBigendian( true );
 
-    dataStream << World::Get() << Settings::Get() << GameOver::Result::Get();
+    dataStream << World::Get() << conf << GameOver::Result::Get();
     if ( dataStream.fail() ) {
         return false;
     }
@@ -148,7 +151,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     }
 
     // End-of-data marker
-    dataStream << SAV2ID3;
+    dataStream << saveFileMagicNumber;
     if ( dataStream.fail() || !Compression::zipStreamBuf( dataStream, fileStream ) ) {
         return false;
     }
@@ -177,10 +180,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    uint16_t savId = 0;
-    fileStream >> savId;
+    uint16_t magicNumber = 0;
+    fileStream >> magicNumber;
 
-    if ( savId != SAV2ID3 ) {
+    if ( magicNumber != saveFileMagicNumber ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
 
         showGenericErrorMessage();
@@ -235,7 +238,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    if ( ( header.status & HeaderSAV::REQUIRES_POL_RESOURCES ) && !conf.isPriceOfLoyaltySupported() ) {
+    if ( ( header.requirements & HeaderSAV::REQUIRES_POL_RESOURCES ) && !conf.isPriceOfLoyaltySupported() ) {
         fheroes2::showStandardTextMessage( _( "Error" ),
                                            _( "This save file requires \"The Price of Loyalty\" game assets, but they have not been provided to the engine." ),
                                            Dialog::OK );
@@ -263,7 +266,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
     uint16_t endOfDataMarker = 0;
     dataStream >> endOfDataMarker;
-    if ( dataStream.fail() || endOfDataMarker != SAV2ID3 ) {
+    if ( dataStream.fail() || endOfDataMarker != saveFileMagicNumber ) {
         showGenericErrorMessage();
         return fheroes2::GameMode::CANCEL;
     }
@@ -313,10 +316,10 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
         return false;
     }
 
-    uint16_t savId = 0;
-    fs >> savId;
+    uint16_t magicNumber = 0;
+    fs >> magicNumber;
 
-    if ( savId != SAV2ID3 ) {
+    if ( magicNumber != saveFileMagicNumber ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
         return false;
     }

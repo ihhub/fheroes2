@@ -40,7 +40,6 @@
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
-#include "game_language.h"
 #include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
 #include "heroes_indicator.h"
@@ -62,6 +61,7 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -110,7 +110,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Hero portrait.
     const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
-    if ( isEditor && !isValidId( portrait ) ) {
+    if ( isEditor && !isValidId( _portrait ) ) {
         fheroes2::renderHeroRacePortrait( _race, portPos, display );
     }
     else {
@@ -118,40 +118,50 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     }
 
     // In Editor there could be set to use "default" experience for hero. This state is transferred by setting 'experience = UINT32_MAX'.
-    bool useDefaultExperience = isEditor && ( experience == UINT32_MAX );
+    bool useDefaultExperience = isEditor && ( _experience == UINT32_MAX );
 
     if ( useDefaultExperience ) {
-        experience = GetStartingXp();
+        _experience = _getStartingXp();
     }
 
     // Dialog title.
     const fheroes2::Rect titleRoi( dialogRoi.x + 60, dialogRoi.y + 1, 519, 17 );
 
-    auto drawTitleText = [&display, &titleRoi, &dialogRoi, &backgroundImage, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
-        if ( restoreBackground ) {
-            fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
-        }
+    auto drawTitleText
+        = [&display, &titleRoi, &dialogRoi, &backgroundImage, language, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
+              if ( restoreBackground ) {
+                  fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
+              }
 
-        std::string titleText;
-        if ( !heroName.empty() ) {
-            titleText = _( "%{name} the %{race} (Level %{level})" );
-            StringReplace( titleText, "%{name}", heroName );
-        }
-        else if ( heroRace == Race::RAND ) {
-            // In Editor the empty name is a sign that the default random hero (with a random name) will be used on the game start.
-            titleText = _( "Random hero (Level %{level})" );
-        }
-        else {
-            titleText = _( "Random %{race} hero (Level %{level})" );
-        }
-        StringReplace( titleText, "%{race}", Race::String( heroRace ) );
-        StringReplace( titleText, "%{level}", GetLevel() );
+              std::string titleText;
+              if ( !heroName.empty() ) {
+                  titleText = _( "%{name} the %{race} (Level %{level})" );
+                  StringReplace( titleText, "%{race}", Race::String( heroRace ) );
+                  StringReplace( titleText, "%{level}", GetLevel() );
 
-        const fheroes2::Text title( std::move( titleText ), fheroes2::FontType::normalWhite() );
-        title.drawInRoi( titleRoi.x + ( titleRoi.width - title.width() ) / 2, titleRoi.y + 2, display, titleRoi );
-    };
+                  const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
 
-    drawTitleText( name, _race, false );
+                  auto title = fheroes2::getLocalizedText( fheroes2::getLocalizedStrings( std::move( titleText ), gameLanguage, "%{name}", heroName, language ),
+                                                           fheroes2::FontType::normalWhite() );
+                  title->drawInRoi( titleRoi.x + ( titleRoi.width - title->width() ) / 2, titleRoi.y + 2, display, titleRoi );
+                  return;
+              }
+
+              if ( heroRace == Race::RAND ) {
+                  // In Editor the empty name is a sign that the default random hero (with a random name) will be used on the game start.
+                  titleText = _( "Random hero (Level %{level})" );
+              }
+              else {
+                  titleText = _( "Random %{race} hero (Level %{level})" );
+              }
+              StringReplace( titleText, "%{race}", Race::String( heroRace ) );
+              StringReplace( titleText, "%{level}", GetLevel() );
+
+              const fheroes2::Text title( std::move( titleText ), fheroes2::FontType::normalWhite() );
+              title.drawInRoi( titleRoi.x + ( titleRoi.width - title.width() ) / 2, titleRoi.y + 2, display, titleRoi );
+          };
+
+    drawTitleText( _name, _race, false );
 
     fheroes2::Point dst_pt( dialogRoi.x + 156, dialogRoi.y + 31 );
 
@@ -213,7 +223,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Army format cursor.
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
-    const fheroes2::Point cursorFormatPos = army.isSpreadFormation() ? army1_pt : army2_pt;
+    const fheroes2::Point cursorFormatPos = _army.isSpreadFormation() ? army1_pt : army2_pt;
 
     // Do not show Army format in Editor.
     if ( !isEditor ) {
@@ -270,7 +280,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, 0, display, crestRect.x, crestRect.y, crestRect.width, crestRect.height,
                                 PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        const fheroes2::Text raceText( _( "Hero race:" ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text raceText( _( "Hero class:" ), fheroes2::FontType::normalWhite() );
         raceText.drawInRoi( crestRect.x, crestRect.y + 6, crestRect.width, display, crestRect );
 
         const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( _race, true ) );
@@ -296,7 +306,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.y = dialogRoi.y + 130;
 
     // In Editor mode we allow to edit army and remove all customized troops from the army.
-    ArmyBar selectArmy( &army, false, readonly, isEditor, !isEditor );
+    ArmyBar selectArmy( &_army, false, readonly, isEditor, !isEditor );
     selectArmy.setTableSize( { 5, 1 } );
     selectArmy.setRenderingOffset( dst_pt );
     selectArmy.setInBetweenItemsOffset( { 6, 0 } );
@@ -306,7 +316,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     SecondarySkillsBar secskill_bar( *this, false, isEditor, isEditor );
     secskill_bar.setTableSize( { 8, 1 } );
     secskill_bar.setInBetweenItemsOffset( { 5, 0 } );
-    secskill_bar.SetContent( secondary_skills.ToVector() );
+    secskill_bar.SetContent( _secondarySkills.ToVector() );
     secskill_bar.setRenderingOffset( { dialogRoi.x + 3, dialogRoi.y + 233 } );
     secskill_bar.Redraw( display );
 
@@ -417,13 +427,12 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        // Exit this dialog.
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
-
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Exit the dialog handling loop to close it.
             break;
         }
+
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         // Manage hero's army.
         if ( le.isMouseCursorPosInArea( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
@@ -490,11 +499,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         if ( le.isMouseCursorPosInArea( moraleIndicator.GetArea() ) ) {
             MoraleIndicator::QueueEventProcessing( moraleIndicator );
-            message = fheroes2::MoraleString( army.GetMorale() );
+            message = fheroes2::MoraleString( _army.GetMorale() );
         }
         else if ( le.isMouseCursorPosInArea( luckIndicator.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator );
-            message = fheroes2::LuckString( army.GetLuck() );
+            message = fheroes2::LuckString( _army.GetLuck() );
         }
         else if ( le.isMouseCursorPosInArea( experienceInfo.GetArea() ) ) {
             if ( isEditor ) {
@@ -503,23 +512,23 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
                 if ( le.MouseClickLeft() ) {
                     const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
-                    int32_t value = static_cast<int32_t>( experience );
+                    int32_t value = static_cast<int32_t>( _experience );
 
                     if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), value, 1, &tempExperienceUI ) ) {
                         useDefaultExperience = false;
-                        experience = static_cast<uint32_t>( value );
+                        _experience = static_cast<uint32_t>( value );
                         experienceInfo.setDefaultState( useDefaultExperience );
                         experienceInfo.Redraw();
-                        drawTitleText( name, _race, true );
+                        drawTitleText( _name, _race, true );
                         needRedraw = true;
                     }
                 }
                 else if ( le.MouseClickRight() ) {
                     useDefaultExperience = true;
-                    experience = GetStartingXp();
+                    _experience = _getStartingXp();
                     experienceInfo.setDefaultState( useDefaultExperience );
                     experienceInfo.Redraw();
-                    drawTitleText( name, _race, true );
+                    drawTitleText( _name, _race, true );
                     needRedraw = true;
                 }
             }
@@ -557,15 +566,15 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 spellPointsInfo.QueueEventProcessing();
             }
         }
-        else if ( !readonly && !isEditor && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
+        else if ( !readonly && !isEditor && le.MouseClickLeft( rectSpreadArmyFormat ) && !_army.isSpreadFormation() ) {
             cursorFormat.setPosition( army1_pt.x, army1_pt.y );
             needRedraw = true;
-            army.SetSpreadFormation( true );
+            _army.SetSpreadFormation( true );
         }
-        else if ( !readonly && !isEditor && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
+        else if ( !readonly && !isEditor && le.MouseClickLeft( rectGroupedArmyFormat ) && _army.isSpreadFormation() ) {
             cursorFormat.setPosition( army2_pt.x, army2_pt.y );
             needRedraw = true;
-            army.SetSpreadFormation( false );
+            _army.SetSpreadFormation( false );
         }
         else if ( le.isMouseCursorPosInArea( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
             if ( isEditor ) {
@@ -590,16 +599,16 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             }
         }
         else if ( isEditor && le.MouseClickLeft( portPos ) ) {
-            const int newPortrait = Dialog::selectHeroes( portrait );
+            const int newPortrait = Dialog::selectHeroes( _portrait );
             if ( newPortrait != Heroes::UNKNOWN ) {
-                portrait = newPortrait;
+                _portrait = newPortrait;
                 PortraitRedraw( portPos.x, portPos.y, PORT_BIG, display );
                 needRedraw = true;
             }
         }
         else if ( le.isMouseRightButtonPressedInArea( portPos ) ) {
             if ( isEditor ) {
-                portrait = 0;
+                _portrait = 0;
                 fheroes2::renderHeroRacePortrait( _race, portPos, display );
                 needRedraw = true;
             }
@@ -629,26 +638,23 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
         else if ( isEditor ) {
             if ( le.MouseClickLeft( titleRoi ) ) {
-                std::string res = name;
-
-                // TODO: add support for languages. As of now we do not support any other language except English.
-                (void)language;
-
+                std::string res = _name;
                 const fheroes2::Text body{ _( "Enter hero's name" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, fheroes2::SupportedLanguage::English ) && !res.empty() ) {
-                    name = std::move( res );
-                    drawTitleText( name, _race, true );
+
+                if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, language ) && !res.empty() ) {
+                    _name = std::move( res );
+                    drawTitleText( _name, _race, true );
                     needRedraw = true;
                 }
             }
             else if ( le.MouseClickRight( titleRoi ) ) {
-                name.clear();
-                drawTitleText( name, _race, true );
+                _name.clear();
+                drawTitleText( _name, _race, true );
                 needRedraw = true;
             }
             else if ( le.isMouseCursorPosInArea( raceRect ) ) {
                 assert( !needRedraw );
-                message = _( "Click to change race." );
+                message = _( "Click to change class." );
                 if ( le.MouseClickLeft() || le.isMouseWheelDown() ) {
                     _race = Race::getNextRace( _race );
                     needRedraw = true;
@@ -659,10 +665,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 }
 
                 if ( needRedraw ) {
-                    drawTitleText( name, _race, true );
+                    drawTitleText( _name, _race, true );
                     redrawRace( _race );
 
-                    if ( portrait == 0 ) {
+                    if ( _portrait == 0 ) {
                         fheroes2::renderHeroRacePortrait( _race, portPos, display );
                     }
 
@@ -707,12 +713,12 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             }
             else if ( Modes( NOTDISMISS ) ) {
                 message = _( "Dismissal of %{name} the %{race} is prohibited by scenario" );
-                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{name}", _name );
                 StringReplace( message, "%{race}", Race::String( _race ) );
             }
             else if ( buttonDismiss->isEnabled() ) {
                 message = _( "Dismiss %{name} the %{race}" );
-                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{name}", _name );
                 StringReplace( message, "%{race}", Race::String( _race ) );
             }
         }
@@ -784,7 +790,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     if ( isEditor ) {
         if ( useDefaultExperience ) {
             // Tell Editor that default experience value is set.
-            experience = UINT32_MAX;
+            _experience = UINT32_MAX;
         }
 
         if ( useDefaultSpellPoints ) {

@@ -335,20 +335,25 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
+        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists, true );
+        if ( lists.empty() ) {
+            // This can happen if all maps have been deleted.
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        }
+
         if ( fileInfo == nullptr ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
         if ( !editorInterface.loadMap( fileInfo->filename ) ) {
-            return fheroes2::GameMode::CANCEL;
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         fheroes2::fadeOutDisplay();

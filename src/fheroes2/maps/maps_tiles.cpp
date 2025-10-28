@@ -514,6 +514,12 @@ void Maps::Tile::setBoat( const int direction, const PlayerColor color )
     assert( isWater() );
 
     setMainObjectType( MP2::OBJ_BOAT );
+
+    // Make sure that the object part is being cleared before setting a new one.
+    _mainObjectPart = {};
+
+    // A boat is an object so it must be on the object layer.
+    _mainObjectPart.layerType = ObjectLayerType::OBJECT_LAYER;
     _mainObjectPart.icnType = MP2::OBJ_ICN_TYPE_BOAT32;
 
     switch ( direction ) {
@@ -546,6 +552,9 @@ void Maps::Tile::setBoat( const int direction, const PlayerColor color )
         _mainObjectPart.icnIndex = 18;
         break;
     }
+
+    // Boats are not passable.
+    assert( !_mainObjectPart.isPassabilityTransparent() );
 
 #ifdef WITH_DEBUG
     const uint32_t newUid = getNewObjectUID();
@@ -1045,6 +1054,33 @@ bool Maps::Tile::isSuitableForDisembarkation() const
         }
 
         return part.isPassabilityTransparent() || isObjectPartShadow( part );
+    };
+
+    return ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || isObjectPartPassable( _mainObjectPart ) )
+           && std::all_of( _groundObjectPart.begin(), _groundObjectPart.end(), isObjectPartPassable );
+}
+
+bool Maps::Tile::isSuitableForSummoningBoat() const
+{
+    // Tiles with heroes are a special case because heroes are moving objects and, strictly speaking, are not part of the map itself, so the checks below do not work with
+    // them
+    if ( _mainObjectType == MP2::OBJ_HERO ) {
+        return false;
+    }
+
+    // Tiles with events are not suitable for summoning a boat (at least for now)
+    if ( _mainObjectType == MP2::OBJ_EVENT ) {
+        return false;
+    }
+
+    // It is impossible to summon a boat on land
+    if ( !isWater() ) {
+        return false;
+    }
+
+    const auto isObjectPartPassable = []( const Maps::ObjectPart & part ) {
+        // The part of the Lighthouse flag that is located on the adjacent tile doesn't affect the passability
+        return part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 || part.isPassabilityTransparent() || isObjectPartShadow( part );
     };
 
     return ( _mainObjectPart.icnType == MP2::OBJ_ICN_TYPE_UNKNOWN || isObjectPartPassable( _mainObjectPart ) )

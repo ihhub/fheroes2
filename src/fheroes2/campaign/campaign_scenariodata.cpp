@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,21 +24,16 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <list>
-#include <map>
 #include <utility>
 
 #include "artifact.h"
-#include "dir.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
 #include "serialize.h"
-#include "settings.h"
 #include "skill.h"
 #include "spell.h"
-#include "system.h"
 #include "tools.h"
 #include "translations.h"
 
@@ -613,31 +608,6 @@ namespace
             return {};
         }
     }
-
-    bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
-    {
-        static const auto fileNameToPath = []() {
-            std::map<std::string, std::string> result;
-
-            const ListFiles files = Settings::FindFiles( "maps", "", false );
-
-            for ( const std::string & file : files ) {
-                result.try_emplace( StringLower( System::GetFileName( file ) ), file );
-            }
-
-            return result;
-        }();
-
-        const auto result = fileNameToPath.find( fileName );
-
-        if ( result != fileNameToPath.end() ) {
-            matchingFilePath = result->second;
-
-            return true;
-        }
-
-        return false;
-    }
 }
 
 namespace Campaign
@@ -817,14 +787,14 @@ namespace Campaign
     bool Campaign::ScenarioData::isMapFilePresent() const
     {
         std::string matchingFilePath;
-        return tryGetMatchingFile( _fileName, matchingFilePath );
+        return Maps::tryGetMatchingFile( _fileName, matchingFilePath );
     }
 
     Maps::FileInfo Campaign::ScenarioData::loadMap() const
     {
         std::string matchingFilePath;
 
-        if ( tryGetMatchingFile( _fileName, matchingFilePath ) ) {
+        if ( Maps::tryGetMatchingFile( _fileName, matchingFilePath ) ) {
             Maps::FileInfo fi;
 
             if ( fi.readMP2Map( std::move( matchingFilePath ), false ) ) {

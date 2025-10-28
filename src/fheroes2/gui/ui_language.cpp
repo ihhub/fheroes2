@@ -66,10 +66,10 @@ namespace
             { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian },
             { "nl", fheroes2::SupportedLanguage::Dutch },      { "dutch", fheroes2::SupportedLanguage::Dutch },
             { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian },
-            { "dk", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish },
+            { "da", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish },
             { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
             { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese },
-            { "gr", fheroes2::SupportedLanguage::Greek },      { "greek", fheroes2::SupportedLanguage::Greek } };
+            { "el", fheroes2::SupportedLanguage::Greek },      { "greek", fheroes2::SupportedLanguage::Greek } };
 }
 
 namespace fheroes2
@@ -252,13 +252,13 @@ namespace fheroes2
         case SupportedLanguage::Hungarian:
             return "hu";
         case SupportedLanguage::Danish:
-            return "dk";
+            return "da";
         case SupportedLanguage::Slovak:
             return "sk";
         case SupportedLanguage::Vietnamese:
             return "vi";
         case SupportedLanguage::Greek:
-            return "gr";
+            return "el";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );

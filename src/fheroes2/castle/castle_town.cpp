@@ -491,9 +491,121 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         return false;
     };
 
-    display.render( restorer.rect() );
+    std::string defaultTitle( _( "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}" ) );
+    StringReplace( defaultTitle, "%{month}", world.GetMonth() );
+    StringReplace( defaultTitle, "%{week}", world.GetWeek() );
+    StringReplace( defaultTitle, "%{day}", world.GetDay() );
 
     LocalEvent & le = LocalEvent::Get();
+
+    auto updateStatusBar = [&]() {
+        const bool isCaptainBuilt = isBuild( BUILD_CAPTAIN );
+
+        if ( le.isMouseCursorPosInArea( dwelling1.GetArea() ) ) {
+            dwelling1.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( dwelling2.GetArea() ) ) {
+            dwelling2.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( dwelling3.GetArea() ) ) {
+            dwelling3.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( dwelling4.GetArea() ) ) {
+            dwelling4.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( dwelling5.GetArea() ) ) {
+            dwelling5.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( dwelling6.GetArea() ) ) {
+            dwelling6.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingMageGuild.GetArea() ) ) {
+            buildingMageGuild.SetStatusMessage( statusBar );
+        }
+        else if ( !isSkipTavernInteraction && le.isMouseCursorPosInArea( buildingTavern.GetArea() ) ) {
+            buildingTavern.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingThievesGuild.GetArea() ) ) {
+            buildingThievesGuild.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingShipyard.GetArea() ) ) {
+            buildingShipyard.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingStatue.GetArea() ) ) {
+            buildingStatue.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingMarketplace.GetArea() ) ) {
+            buildingMarketplace.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingWell.GetArea() ) ) {
+            buildingWell.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingWel2.GetArea() ) ) {
+            buildingWel2.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingSpec.GetArea() ) ) {
+            buildingSpec.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingLTurret.GetArea() ) ) {
+            buildingLTurret.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingRTurret.GetArea() ) ) {
+            buildingRTurret.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingMoat.GetArea() ) ) {
+            buildingMoat.SetStatusMessage( statusBar );
+        }
+        else if ( le.isMouseCursorPosInArea( buildingCaptain.GetArea() ) ) {
+            buildingCaptain.SetStatusMessage( statusBar );
+        }
+        else if ( hero1 && le.isMouseCursorPosInArea( rectHero1 ) ) {
+            if ( !allow_buy_hero1 ) {
+                statusBar.ShowMessage( not_allow1_msg );
+            }
+            else {
+                std::string str = _( "Recruit %{name} the %{race}" );
+                StringReplace( str, "%{name}", hero1->GetName() );
+                StringReplace( str, "%{race}", Race::String( hero1->GetRace() ) );
+                statusBar.ShowMessage( str );
+            }
+        }
+        else if ( hero2 && le.isMouseCursorPosInArea( rectHero2 ) ) {
+            if ( !allow_buy_hero2 ) {
+                statusBar.ShowMessage( not_allow2_msg );
+            }
+            else {
+                std::string str = _( "Recruit %{name} the %{race}" );
+                StringReplace( str, "%{name}", hero2->GetName() );
+                StringReplace( str, "%{race}", Race::String( hero2->GetRace() ) );
+                statusBar.ShowMessage( str );
+            }
+        }
+        else if ( isCaptainBuilt && le.isMouseCursorPosInArea( rectSpreadArmyFormat ) ) {
+            statusBar.ShowMessage( _( "Set garrison combat formation to 'Spread'" ) );
+        }
+        else if ( isCaptainBuilt && le.isMouseCursorPosInArea( rectGroupedArmyFormat ) ) {
+            statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
+        }
+        else if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
+            statusBar.ShowMessage( _( "Exit Castle Options" ) );
+        }
+        else if ( le.isMouseCursorPosInArea( resActiveArea ) ) {
+            statusBar.ShowMessage( _( "Show Income" ) );
+        }
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
+            statusBar.ShowMessage( _( "Show previous town" ) );
+        }
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
+            statusBar.ShowMessage( _( "Show next town" ) );
+        }
+        else {
+            statusBar.ShowMessage( defaultTitle );
+        }
+    };
+
+    updateStatusBar();
+
+    display.render( restorer.rect() );
 
     while ( le.HandleEvents() ) {
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
@@ -653,82 +765,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
             fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
         }
 
-        // status info
-        if ( le.isMouseCursorPosInArea( dwelling1.GetArea() ) )
-            dwelling1.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( dwelling2.GetArea() ) )
-            dwelling2.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( dwelling3.GetArea() ) )
-            dwelling3.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( dwelling4.GetArea() ) )
-            dwelling4.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( dwelling5.GetArea() ) )
-            dwelling5.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( dwelling6.GetArea() ) )
-            dwelling6.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingMageGuild.GetArea() ) )
-            buildingMageGuild.SetStatusMessage( statusBar );
-        else if ( !isSkipTavernInteraction && le.isMouseCursorPosInArea( buildingTavern.GetArea() ) )
-            buildingTavern.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingThievesGuild.GetArea() ) )
-            buildingThievesGuild.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingShipyard.GetArea() ) )
-            buildingShipyard.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingStatue.GetArea() ) )
-            buildingStatue.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingMarketplace.GetArea() ) )
-            buildingMarketplace.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingWell.GetArea() ) )
-            buildingWell.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingWel2.GetArea() ) )
-            buildingWel2.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingSpec.GetArea() ) )
-            buildingSpec.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingLTurret.GetArea() ) )
-            buildingLTurret.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingRTurret.GetArea() ) )
-            buildingRTurret.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingMoat.GetArea() ) )
-            buildingMoat.SetStatusMessage( statusBar );
-        else if ( le.isMouseCursorPosInArea( buildingCaptain.GetArea() ) )
-            buildingCaptain.SetStatusMessage( statusBar );
-        else if ( hero1 && le.isMouseCursorPosInArea( rectHero1 ) ) {
-            if ( !allow_buy_hero1 )
-                statusBar.ShowMessage( not_allow1_msg );
-            else {
-                std::string str = _( "Recruit %{name} the %{race}" );
-                StringReplace( str, "%{name}", hero1->GetName() );
-                StringReplace( str, "%{race}", Race::String( hero1->GetRace() ) );
-                statusBar.ShowMessage( str );
-            }
-        }
-        else if ( hero2 && le.isMouseCursorPosInArea( rectHero2 ) ) {
-            if ( !allow_buy_hero2 )
-                statusBar.ShowMessage( not_allow2_msg );
-            else {
-                std::string str = _( "Recruit %{name} the %{race}" );
-                StringReplace( str, "%{name}", hero2->GetName() );
-                StringReplace( str, "%{race}", Race::String( hero2->GetRace() ) );
-                statusBar.ShowMessage( str );
-            }
-        }
-        else if ( isCaptainBuilt && le.isMouseCursorPosInArea( rectSpreadArmyFormat ) )
-            statusBar.ShowMessage( _( "Set garrison combat formation to 'Spread'" ) );
-        else if ( isCaptainBuilt && le.isMouseCursorPosInArea( rectGroupedArmyFormat ) )
-            statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
-        else if ( le.isMouseCursorPosInArea( buttonExit.area() ) )
-            statusBar.ShowMessage( _( "Exit Castle Options" ) );
-        else if ( le.isMouseCursorPosInArea( resActiveArea ) )
-            statusBar.ShowMessage( _( "Show Income" ) );
-        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
-            statusBar.ShowMessage( _( "Show previous town" ) );
-        }
-        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
-            statusBar.ShowMessage( _( "Show next town" ) );
-        }
-        else {
-            statusBar.ShowMessage( _( "Castle Options" ) );
-        }
+        updateStatusBar();
     }
 
     return ConstructionDialogResult::DoNothing;

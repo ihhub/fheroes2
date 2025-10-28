@@ -86,7 +86,7 @@ namespace
         { gettext_noop( "Holy Shout" ), 12, 0, 0, 23, 20, gettext_noop( "Damages all undead in the battle. This is an improved version of Holy Word." ) },
         { gettext_noop( "Anti-Magic" ), 7, 0, 0, 17, 0, gettext_noop( "Prevents any magic against the selected creatures." ) },
         { gettext_noop( "Dispel Magic" ), 5, 0, 0, 18, 0, gettext_noop( "Removes all magic spells from a single target." ) },
-        { gettext_noop( "Mass Dispel" ), 12, 0, 0, 18, 0, gettext_noop( "Removes all magic spells from all creatures." ) },
+        { gettext_noop( "Mass Dispel" ), 12, 0, 0, 73, 0, gettext_noop( "Removes all magic spells from all creatures." ) },
         { gettext_noop( "Magic Arrow" ), 3, 0, 0, 38, 10, gettext_noop( "Causes a magic arrow to strike the selected target." ) },
         { gettext_noop( "Berserker" ), 12, 0, 0, 19, 0, gettext_noop( "Causes a creature to attack its nearest neighbor." ) },
         { gettext_noop( "Armageddon" ), 20, 0, 0, 16, 50, gettext_noop( "Holy terror strikes the battlefield, causing severe damage to all creatures." ) },
@@ -128,7 +128,8 @@ namespace
           gettext_noop(
               "Summons the nearest unoccupied, friendly boat to an adjacent shore location. A friendly boat is one which you just built or were the most recent player to occupy." ) },
         { gettext_noop( "Dimension Door" ), 10, 225, 69, 47, 0, gettext_noop( "Allows the caster to magically transport to a nearby location." ) },
-        { gettext_noop( "Town Gate" ), 10, 225, 69, 48, 0, gettext_noop( "Returns the caster to any town or castle currently owned." ) },
+        { gettext_noop( "Town Gate" ), 10, 225, 69, 48, 0,
+          gettext_noop( "Returns the caster to the nearest town or castle currently owned. This spell cannot be cast if the hero is already in a town or a castle." ) },
         { gettext_noop( "Town Portal" ), 20, 225, 69, 49, 0, gettext_noop( "Returns the hero to the town or castle of choice, provided it is controlled by you." ) },
         { gettext_noop( "Visions" ), 6, 0, 0, 50, 3, gettext_noop( "Visions predicts the likely outcome of an encounter with a neutral army camp." ) },
         { gettext_noop( "Haunt" ), 8, 0, 0, 51, 4,
@@ -514,42 +515,37 @@ uint32_t Spell::weightForRace( const int race ) const
 
 Spell Spell::getRandomSpell( const int level )
 {
-    assert( level > 0 && level < 6 );
+    assert( level >= 1 && level <= 5 );
 
-    std::vector<Spell> validSpells;
-    validSpells.reserve( Spell::SPELL_COUNT );
-
-    for ( int32_t spellId = NONE; spellId < PETRIFY; ++spellId ) {
-        const Spell spell( spellId );
-
-        if ( level != spell.Level() ) {
-            continue;
-        }
-
-        validSpells.push_back( spell );
-    }
+    const std::vector<int32_t> validSpells = getAllSpellIdsSuitableForSpellBook( level );
 
     assert( !validSpells.empty() );
 
-    return validSpells.empty() ? Spell::NONE : Rand::Get( validSpells );
+    return validSpells.empty() ? Spell::NONE : Spell( Rand::Get( validSpells ) );
 }
 
-std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */ )
+std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */, const std::set<int32_t> & spellsToExclude /* = {} */ )
 {
-    std::vector<int> result;
-    result.reserve( SPELL_COUNT );
+    if ( spellLevel < -1 || spellLevel == 0 || spellLevel > 5 ) {
+        // Have you add a new spell level? Check your logic!
+        assert( 0 );
 
-    for ( int spellId = 0; spellId < SPELL_COUNT; ++spellId ) {
-        if ( spellId == NONE || ( spellId >= RANDOM && spellId <= PETRIFY ) ) {
+        return {};
+    }
+
+    std::vector<int> result;
+    if ( spellLevel == -1 ) {
+        // Reserve memory only for vector with all spells.
+        result.reserve( SPELL_COUNT );
+    }
+
+    for ( int32_t spellId = NONE + 1; spellId < SPELL_COUNT; ++spellId ) {
+        if ( const int level = Spell( spellId ).Level(); ( spellLevel != -1 && level != spellLevel ) || level < 1 ) {
             continue;
         }
 
-        if ( spellLevel > 0 ) {
-            const Spell spell( spellId );
-
-            if ( spell.Level() != spellLevel ) {
-                continue;
-            }
+        if ( spellsToExclude.count( spellId ) != 0 ) {
+            continue;
         }
 
         result.push_back( spellId );

@@ -129,8 +129,7 @@ namespace Battle
 
         bool isFlying() const;
         bool isDoubleAttack() const;
-
-        bool AllowResponse() const;
+        bool isRetaliationAllowed() const;
         // Checks whether this unit is forced to fight in melee (there is an enemy unit nearby)
         bool isHandFighting() const;
 
@@ -201,6 +200,11 @@ namespace Battle
         uint32_t GetInitialCount() const
         {
             return _initialCount;
+        }
+
+        uint32_t GetMaxCount() const
+        {
+            return _maxCount;
         }
 
         uint32_t GetDead() const
@@ -300,9 +304,11 @@ namespace Battle
 
         uint32_t HowManyWillBeKilled( const uint32_t dmg ) const;
 
-        void SetResponse();
+        void setRetaliationAsCompleted();
+
         void UpdateDirection();
         bool UpdateDirection( const fheroes2::Rect & pos );
+
         void PostKilledAction();
 
         uint32_t GetMagicResist( const Spell & spell, const HeroBase * applyingHero ) const;
@@ -337,7 +343,7 @@ namespace Battle
     private:
         // Returns the count of killed troops.
         uint32_t _applyDamage( const uint32_t dmg );
-        uint32_t _resurrect( const uint32_t points, const bool allowToExceedInitialCount, const bool isTemporary );
+        uint32_t _resurrect( const uint32_t points, const bool allowToExceedMaxCount, const bool isTemporary );
 
         // Applies a damage-causing spell to this unit.
         void _spellApplyDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero, TargetInfo & target );
@@ -355,7 +361,8 @@ namespace Battle
 
         const uint32_t _uid{ 0 };
         uint32_t _hitPoints{ 0 };
-        uint32_t _initialCount{ 0 };
+        const uint32_t _initialCount{ 0 };
+        uint32_t _maxCount{ 0 };
         uint32_t _deadCount{ 0 };
         uint32_t _shotsLeft{ 0 };
         uint32_t _disruptingRaysNum{ 0 };

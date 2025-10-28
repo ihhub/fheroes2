@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
-"PO-Revision-Date: 2025-06-07 12:43+0200\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -177,11 +177,25 @@ msgstr ""
 "SPEL"
 
 msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+"OMSTARTA\n"
+"SPEL"
+
+msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "SPARA\n"
 "SPEL"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"SNABB-\n"
+"SPARA"
 
 msgid "QUIT"
 msgstr "AVSLUTA"
@@ -325,6 +339,9 @@ msgstr ""
 "L\n"
 "L"
 
+msgid "army|Few"
+msgstr "Några"
+
 msgid "Warrior"
 msgstr "Krigare"
 
@@ -336,6 +353,12 @@ msgstr "Utforskare"
 
 msgid "None"
 msgstr "Inga"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Flyg %{monster} hit"
 
 msgid ""
 "A few\n"
@@ -399,9 +422,6 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Några"
 
 msgid "army|Several"
 msgstr "Flera"
@@ -2328,10 +2348,10 @@ msgid "Upg. Armory"
 msgstr "Uppg. Rustkammare"
 
 msgid "Jousting Arena"
-msgstr "Turneringsarena"
+msgstr "Rännarbana"
 
 msgid "Upg. Jousting Arena"
-msgstr "Uppg. Turneringsarena"
+msgstr "Uppg. Rännarbana"
 
 msgid "Cathedral"
 msgstr "Katedral"
@@ -2742,13 +2762,13 @@ msgstr ""
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Klicka för att visa nästa stad."
 
 msgid "Show next town"
 msgstr "Visa nästa stad"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Klicka för att visa föregående stad."
 
 msgid "Show previous town"
@@ -2777,6 +2797,9 @@ msgstr "Ovanstående besvärjelser är tillgängliga här."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Besvärjelser som hjälten kan lära sig har lagts till dennes bok."
+
+msgid "Exit Mage Guild"
+msgstr "Lämna Magisamfund"
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Ett generöst tips från bartendern som uppger detta rykte:"
@@ -2813,17 +2836,8 @@ msgstr ""
 "'Grupperad' stridsformation buntar ihop hjältens trupper till mitten av "
 "dennes sida av slagfältet."
 
-msgid "Spread Formation"
-msgstr "Utspridd formation"
-
-msgid "Grouped Formation"
-msgstr "Grupperad formation"
-
-msgid "Click to show the next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Click to show the previous town."
-msgstr "Klicka för att visa föregående stad."
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Borgalternativ. Månad: %{month}, Vecka: %{week}, Dag: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Utspridd'"
@@ -2834,8 +2848,11 @@ msgstr "Ändra granisonstruppernas stridsformation till 'Grupperad'"
 msgid "Exit Castle Options"
 msgstr "Lämna Borgalternativ"
 
-msgid "Castle Options"
-msgstr "Borgalternativ"
+msgid "Spread Formation"
+msgstr "Utspridd formation"
+
+msgid "Grouped Formation"
+msgstr "Grupperad formation"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "För lite resurser för att rekrytera varelser."
@@ -3049,6 +3066,12 @@ msgstr "Totalt: "
 msgid "Need: "
 msgstr "Behöver: "
 
+msgid "Restart Game"
+msgstr "Starta om Spel"
+
+msgid "There was an issue during saving."
+msgstr "Det uppstod ett problem under sparningen."
+
 msgid "New Game"
 msgstr "Nytt Spel"
 
@@ -3061,11 +3084,20 @@ msgstr "Ladda Spel"
 msgid "Load a previously saved game."
 msgstr "Ladda ett tidigare sparat spel."
 
+msgid "Restart the scenario."
+msgstr "Omstarta scenariet."
+
 msgid "Save Game"
 msgstr "Spara Spel"
 
 msgid "Save the current game."
 msgstr "Spara nuvarande spel."
+
+msgid "Quick Save"
+msgstr "Snabbspara"
+
+msgid "Save the current game without name selection."
+msgstr "Spara nuvarande spel utan namnval."
 
 msgid "Quit"
 msgstr "Avsluta"
@@ -3231,6 +3263,16 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animering"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Gränssnittsstil"
 
@@ -3247,6 +3289,15 @@ msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Välj skrollhastigheten."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Välj spelspråk:"
@@ -3457,6 +3508,15 @@ msgstr "Ange Spelupplösning:"
 msgid "Click to apply the selected resolution."
 msgstr "Klicka här för att anta den valda upplösningen."
 
+msgid "Click to select the maximum amount."
+msgstr "Klicka för att ange maximalt antal."
+
+msgid "Click to select the minimum amount."
+msgstr "Klicka för att ange minimalt antal."
+
+msgid "Click to apply the entered number."
+msgstr "Klicka här för att anta det angivna antalet."
+
 msgid "Click to apply the entered text."
 msgstr "Klicka här för att anta den inmatade texten."
 
@@ -3557,6 +3617,9 @@ msgstr "Välj Varelse:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
+msgid "Select Monsters:"
+msgstr "Välj Varelser:"
+
 msgid "race|Random"
 msgstr "Slumpad"
 
@@ -3624,6 +3687,9 @@ msgstr "Resurstyp:"
 
 msgid "%{mineName} appearance:"
 msgstr "Utseende %{mineName}:"
+
+msgid "Click to select the color."
+msgstr "Klicka för att välja färg."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klicka här för att välja %{object} som resursalstrare för placering."
@@ -3741,6 +3807,9 @@ msgstr "Kartsvårighet:"
 
 msgid "N"
 msgstr "N"
+
+msgid "Are you sure you want to delete the map:"
+msgstr "Är du säker på att du vill radera kartan:"
 
 msgid "No maps exist at that size."
 msgstr "Finns inga kartor av den storleken."
@@ -3933,6 +4002,27 @@ msgstr "Slumpat Borgnamn"
 msgid "Random Town Name"
 msgstr "Slumpat Stadsnamn"
 
+msgid "BANNED SPELLS"
+msgstr "BANNLYSTA BESVÄRJELSER"
+
+msgid "Click to accept the changes made."
+msgstr "Klicka för att acceptera ändringarna."
+
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Stäng denna menyn, eventuella ändringar sparas ej."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr "Klicka för att bannlysa besvärjelser från att visas i Magisamfundet."
+
+msgid "Banned Spells"
+msgstr "Bannlysta Besvärjelser"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr "Ange vilka besvärjelser som kommer att visas i Magisamfundet"
+
+msgid "SET SPELLS"
+msgstr "ANGE BESVÄRJELSER"
+
 msgid "Allow Castle build"
 msgstr "Tillåt Borgbygge"
 
@@ -3951,16 +4041,14 @@ msgstr "Borgarmé"
 msgid "Town Army"
 msgstr "Stadsarmé"
 
-#, fuzzy
 msgid "Click to change the Castle name."
-msgstr "Klicka för att ändra kartans namn."
+msgstr "Klicka för att ändra Borgens namn."
 
 msgid "Enter Castle name"
 msgstr "Skriv Borgnamn"
 
-#, fuzzy
 msgid "Reset the Castle name."
-msgstr "Förlora borgen '%{name}'."
+msgstr "Återställ Borgens namn."
 
 msgid "Allow to build a castle in this town."
 msgstr "Tillåt att en borg byggs i denna stad."
@@ -3979,24 +4067,20 @@ msgstr "Begränsa Byggnadskonstruktion"
 msgid "Use default defenders army."
 msgstr "Använd försvararnas standardarmé."
 
-#, fuzzy
 msgid "Reset the army."
-msgstr "Avskeda armén."
+msgstr "Återställ armén."
 
-#, fuzzy
 msgid "Set custom Castle Army."
-msgstr "Borgarmé"
+msgstr "Anpassa Borgarmén."
 
-msgid "Click to accept the changes made."
-msgstr "Klicka för att acceptera ändringarna."
+msgid "Set spells to appear in the Mage Guild."
+msgstr "Ange vilka besvärjelser att visas i Magisamfundet."
 
-#, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klicka för att acceptera ändringarna."
+msgid "Set Spells"
+msgstr "Ange Besvärjelser"
 
-#, fuzzy
 msgid "Castle Settings"
-msgstr "Spelinställningar"
+msgstr "Borginställningar"
 
 msgid "Message Text:"
 msgstr "Meddelandetext:"
@@ -4138,6 +4222,9 @@ msgstr ""
 "den inte är ifylld så kommer händelsen aktiveras när de valda spelarna "
 "kliver i rutan."
 
+msgid "Click to make selection."
+msgstr "Klicka för att göra ett val."
+
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects}  kan inte placeras på vatten."
 
@@ -4155,9 +4242,8 @@ msgstr "Föremål kan inte placeras utanför kartan."
 msgid "Action objects must be placed on clear tiles."
 msgstr "Händelseföremål måste placeras på fria rutor."
 
-#, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
-msgstr "Maximalt %{count} obelisker kan placeras på kartan."
+msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4278,11 +4364,12 @@ msgstr "Vägar"
 msgid "Streams"
 msgstr "Floder"
 
-#, fuzzy
 msgid ""
 "A maximum of %{count} heroes including jailed heroes can be placed on the "
 "map."
-msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
+msgstr ""
+"Maximalt %{count} hjältar (inklusive fängslade hjältar) kan placeras på "
+"kartan."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -4607,22 +4694,22 @@ msgstr "[%{pos}]: %{race}hjälte"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race}hjälte"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race}stad"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race}borg"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race}stad"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race}stad"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race}borg"
 
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race}stad"
+
 msgid "None."
 msgstr "Inga."
 
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "En sida besegrar den andra."
 
 msgid "Accumulate gold."
@@ -4799,6 +4886,13 @@ msgstr ""
 "svårare fiender, färre resurser eller andra särskilda villkor som gör det "
 "svårare för en mänsklig spelare."
 
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr ""
+"%{object}\n"
+"(%{color} spelare"
+
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
 
@@ -4869,6 +4963,36 @@ msgstr "Spara Karta:"
 
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
+
+msgid "Click to enable all secondary skills."
+msgstr "Klicka här för att aktivera alla sekundära förmågor."
+
+msgid "Enable All Secondary Skills"
+msgstr "Aktivera Alla Sekundära Förmågor"
+
+msgid "Click to disable all secondary skills."
+msgstr "Klicka här för att inaktivera alla sekundära förmågor."
+
+msgid "Disable All Secondary Skills"
+msgstr "Inaktivera Alla Sekundära Förmågor"
+
+msgid "Click to show only level %{level} spells."
+msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
+
+msgid "Spells level"
+msgstr "Besvärjelsenivå"
+
+msgid "Click to enable all spells."
+msgstr "Klicka här för att aktivera alla besvärjelser."
+
+msgid "Enable All Spells"
+msgstr "Aktivera Alla Besvärjelser"
+
+msgid "Click to disable all spells."
+msgstr "Klicka här för att inaktivera alla besvärjelser."
+
+msgid "Disable All Spells"
+msgstr "Inaktivera Alla Besvärjelser"
 
 msgid "Riddle:"
 msgstr "Gåta:"
@@ -5041,6 +5165,9 @@ msgstr "Gångna dagar"
 
 msgid "The number of days spent on this campaign."
 msgstr "Antal gångna dagar för denna kampanj."
+
+msgid "Scenario Title"
+msgstr "Scenarietitel"
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination och huvudutveckling"
@@ -5292,7 +5419,7 @@ msgid "hotkey|hot seat game"
 msgstr "Heta stolen"
 
 msgid "hotkey|battle only game"
-msgstr "Endast strid"
+msgstr "Stridsläge"
 
 msgid "hotkey|choose the original campaign"
 msgstr "Välj orginalkampanj"
@@ -5389,6 +5516,9 @@ msgstr "Kartvy: Sydost"
 
 msgid "hotkey|save game"
 msgstr "Spara spel"
+
+msgid "hotkey|quick save"
+msgstr "Snabbspara"
 
 msgid "hotkey|next hero"
 msgstr "Nästa hjälte"
@@ -5492,9 +5622,8 @@ msgstr "Hoppa över runda i strid"
 msgid "hotkey|cast battle spell"
 msgstr "Kasta stridsbesvärjelse"
 
-#, fuzzy
 msgid "hotkey|toggle display of battle turn order"
-msgstr "Aktivera Automatiskt Stridsläge"
+msgstr "Visa turordningen för strid"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bostad, nivå 1"
@@ -6022,11 +6151,20 @@ msgstr "Klicka för att acceptera dessa inställningar och starta ett nytt spel.
 msgid "Click to return to the main menu."
 msgstr "Klicka för att gå tillbaka till huvudmenyn."
 
+msgid "The map is corrupted or doesn't exist."
+msgstr "Kartan är korrupt eller existerar inte."
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."
 
+msgid "New Month!"
+msgstr "Ny Månad!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologerna utropar %{name} vecka."
+
+msgid "New Week!"
+msgstr "Ny Vecka!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Efter en vanlig ökning har beståndet av %{monster} fördubblats!"
@@ -6045,17 +6183,11 @@ msgstr[1] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Populationen av %{monster} ökar med +%{count}."
 
-msgid " All populations are halved."
-msgstr " Alla populationer är halverade."
+msgid "All populations are halved."
+msgstr "Alla populationer är halverade."
 
-msgid " All dwellings increase population."
-msgstr " Alla boningar ökar sin population."
-
-msgid "New Month!"
-msgstr "Ny Månad!"
-
-msgid "New Week!"
-msgstr "Ny Vecka!"
+msgid "All dwellings increase population."
+msgstr "Alla boningar ökar sin population."
 
 msgid "Beware!"
 msgstr "Varsko!"
@@ -6218,9 +6350,6 @@ msgstr "Är du säker på att du vill skriva över sparningen med detta namn?"
 
 msgid "Game saved successfully."
 msgstr "Sparning lyckades."
-
-msgid "There was an issue during saving."
-msgstr "Det uppstod ett problem under sparningen."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -6491,12 +6620,6 @@ msgstr "Ond"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}splundrare"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} plundrat"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6521,6 +6644,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6529,9 +6655,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6620,6 +6743,9 @@ msgstr "Broder Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6638,14 +6764,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object}splundrare"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} plundrat"
 
 msgid " gives you maximum morale"
 msgstr " ger dig maximalt med stridsmoral"
@@ -7259,13 +7388,12 @@ msgstr ""
 "Det är bättre att fly än att illa fäkta, så du bestämmer dig för att undvika "
 "denna strid för idag."
 
-#, fuzzy
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it, "
 "only to find it empty."
 msgstr ""
 "Efter att ha spenderat flera timmar på att försöka fiska upp kistan ur sjön, "
-"öppnar du den och hittar %{gold} guldmynt."
+"öppnar du den bara för att upptäcka att den är tom."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -8183,8 +8311,8 @@ msgstr "Slumpad hjälte (Nivå %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Slumpad %{race}hjälte (Nivå %{level})"
 
-msgid "Hero race:"
-msgstr "Hjälteklass"
+msgid "Hero class:"
+msgstr "Hjälteklass:"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avskeda denna Hjälte?"
@@ -8217,7 +8345,7 @@ msgstr "Ange patrullradie i antal rutor"
 msgid "Enter hero's name"
 msgstr "Ange hjältens namn"
 
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Klicka för byta klass."
 
 msgid ""
@@ -8329,6 +8457,33 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} möter %{name2}"
+
+msgid "hero|Level %{level}"
+msgstr "Nivå %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr "Flytta alla artefakter från %{from_hero_name} till %{to_hero_name}."
+
+msgid "Artifact Transfer"
+msgstr "Artefaktbyte"
+
+msgid "Swap Artifacts"
+msgstr "Byt Artefakter"
+
+msgid "Swap all artifacts between heroes."
+msgstr "Byt alla artefakter mellan hjältar."
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr "Flytta armé från %{from_hero_name} till %{to_hero_name}."
+
+msgid "Army Transfer"
+msgstr "Armébyte"
+
+msgid "Swap Armies"
+msgstr "Byt Arméer"
+
+msgid "Swap armies between heroes."
+msgstr "Byt arméer mellan hjältar."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."
@@ -9974,8 +10129,8 @@ msgstr "Två-rutsanfall"
 msgid "Flyer"
 msgstr "Flygare"
 
-msgid "Always retaliates"
-msgstr "Vedergäller alltid"
+msgid "Unlimited retaliation"
+msgstr "Obegränsad vedergällning"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Anfaller alla närliggande fiender"
@@ -11995,11 +12150,16 @@ msgstr ""
 "Dimensions-\n"
 "portal"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "För tillbaka Hjälten till någon stad eller borg som du kontrollerar."
-
 msgid "Town Gate"
 msgstr "Stadsport"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
+"Förflyttar hjälten till närmsta kontrollerade stad eller borg. Denna "
+"besvärjelse kan inte kastas om hjälten redan befinner sig i en stad eller en "
+"borg."
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12206,6 +12366,37 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Borgalternativ"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klicka för att visa nästa stad."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klicka för att visa föregående stad."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "För tillbaka Hjälten till någon stad eller borg som du kontrollerar."
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "2"
+#~ msgstr "2"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "4"
+#~ msgstr "4"
+
+#~ msgid "5"
+#~ msgstr "5"
+
+#~ msgid "Always retaliates"
+#~ msgstr "Vedergäller alltid"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

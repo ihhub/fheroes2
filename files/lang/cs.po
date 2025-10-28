@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -176,12 +176,26 @@ msgstr ""
 "NAHRÁT\n"
 "HRU"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OPAKOVAT"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ULOŽIT\n"
 "HRU"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"RYCHLÝ\n"
+"BOJ"
 
 msgid "QUIT"
 msgstr "KONEC"
@@ -326,6 +340,9 @@ msgstr ""
 "K\n"
 "A"
 
+msgid "army|Few"
+msgstr "Málo"
+
 msgid "Warrior"
 msgstr "Válečník"
 
@@ -337,6 +354,12 @@ msgstr "Průzkumník"
 
 msgid "None"
 msgstr "Nic"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Přeleť s %{monster} sem"
 
 msgid ""
 "A few\n"
@@ -400,9 +423,6 @@ msgid ""
 msgstr ""
 "Legie\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Málo"
 
 msgid "army|Several"
 msgstr "Několik"
@@ -2727,13 +2747,13 @@ msgstr ""
 "Pro vstup do věže si musíš zakoupit knihu kouzel, teď ale nemáš pro ni "
 "místo. Zkus podarovat jeden ze svých artefaktů jinému hrdinovi."
 
-msgid "Click to show next town."
+msgid "Click to show the next town."
 msgstr "Klikni pro zobrazení následujícího města."
 
 msgid "Show next town"
 msgstr "Zobrazit následující město"
 
-msgid "Click to show previous town."
+msgid "Click to show the previous town."
 msgstr "Klikni pro zobrazení předchozího města."
 
 msgid "Show previous town"
@@ -2762,6 +2782,9 @@ msgstr "Nacházejí se zde výše uvedená kouzla."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Do knihy byla přidána kouzla, která se hrdina může naučit."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Vrchní po štědrém spropitném postil tuto zvěst:"
@@ -2798,17 +2821,9 @@ msgstr ""
 "'Těsná' bojová formace seskupí tvoje jednotky do středu na tvé straně "
 "bojiště."
 
-msgid "Spread Formation"
-msgstr "Volná formace"
-
-msgid "Grouped Formation"
-msgstr "Těsná formace"
-
-msgid "Click to show the next town."
-msgstr "Klikni pro zobrazení následujícího města."
-
-msgid "Click to show the previous town."
-msgstr "Klikni pro zobrazení předchozího města."
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Měsíc: %{month}, Týden: %{week}, Den: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastavit bojovou formaci pevnosti na 'Volná'"
@@ -2819,8 +2834,11 @@ msgstr "Nastavit bojovou formaci pevnosti na 'Těsná'"
 msgid "Exit Castle Options"
 msgstr "Odejít z hradu"
 
-msgid "Castle Options"
-msgstr "Možnosti hradu"
+msgid "Spread Formation"
+msgstr "Volná formace"
+
+msgid "Grouped Formation"
+msgstr "Těsná formace"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nemáš dost prostředků pro najmutí jednotek."
@@ -3033,6 +3051,13 @@ msgstr "Celkem: "
 msgid "Need: "
 msgstr "Potřeba: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Opakovat"
+
+msgid "There was an issue during saving."
+msgstr "Během ukládání se vyskytla chyba."
+
 msgid "New Game"
 msgstr "Nová hra"
 
@@ -3045,10 +3070,22 @@ msgstr "Načíst hru"
 msgid "Load a previously saved game."
 msgstr "Načíst dříve uloženou hru."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Restartuj aktuální scénář."
+
 msgid "Save Game"
 msgstr "Uložit hru"
 
 msgid "Save the current game."
+msgstr "Uložit aktuální hru."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Uložit aktuální hru."
 
 msgid "Quit"
@@ -3216,6 +3253,16 @@ msgstr "Zobrazit"
 msgid "Interface"
 msgstr "Rozhraní"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animace"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Rozhraní"
 
@@ -3230,6 +3277,15 @@ msgstr "Rychlost posunu"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastavit rychlost posouvání okna."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Vybrat jazyk hry:"
@@ -3439,6 +3495,18 @@ msgstr "Nastav rozlišení hry:"
 msgid "Click to apply the selected resolution."
 msgstr "Kliknutím se rozlišení změní na vybrané."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Klikněte pro výběr této třídy."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Klikněte pro výběr této třídy."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Klikněte pro použití zadaného textu."
+
 msgid "Click to apply the entered text."
 msgstr "Klikněte pro použití zadaného textu."
 
@@ -3541,6 +3609,10 @@ msgstr "Vybrat jednotku:"
 msgid "Select Hero:"
 msgstr "Vybrat hrdinu:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Vybrat jednotku:"
+
 msgid "race|Random"
 msgstr "Náhodný"
 
@@ -3608,6 +3680,10 @@ msgstr "Typ suroviny:"
 
 msgid "%{mineName} appearance:"
 msgstr "Vzhled %{mineName}:"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Kliknout pro výběr barvy."
 
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klikněte pro výběr %{object} jako generátoru surovin k umístění."
@@ -3727,6 +3803,10 @@ msgstr "Obtížnost mapy:"
 
 msgid "N"
 msgstr "N"
+
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Opravdu chceš smazat soubor:"
 
 msgid "No maps exist at that size."
 msgstr "V této velikosti neexistují žádné mapy."
@@ -3913,6 +3993,29 @@ msgstr "Náhodný název hradu"
 msgid "Random Town Name"
 msgstr "Náhodný název města"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+msgid "Click to accept the changes made."
+msgstr "Klikněte pro potvrzení provedených změn."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Klikněte pro potvrzení provedených změn."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Náhodné kouzlo"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 msgid "Allow Castle build"
 msgstr "Povolit stavbu hradu"
 
@@ -3965,12 +4068,12 @@ msgstr "Propustit tuto armádu."
 msgid "Set custom Castle Army."
 msgstr "Armáda hradu"
 
-msgid "Click to accept the changes made."
-msgstr "Klikněte pro potvrzení provedených změn."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Klikněte pro potvrzení provedených změn."
+msgid "Set Spells"
+msgstr "Seslat kouzlo:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4115,6 +4218,10 @@ msgstr ""
 "Pokud je toto zaškrtávací políčko zaškrtnuto, událost se spustí pouze "
 "jednou. Pokud není zaškrtnuto, událost se spustí pokaždé, když některý z "
 "uvedených hráčů překročí políčko s událostí."
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Kliknout pro výběr barvy."
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} nelze umístit na vodu."
@@ -4588,22 +4695,23 @@ msgstr "[%{pos}]: %{race} hrdina"
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race} hrdina"
 
-msgid "[%{pos}]: %{race} town"
-msgstr "[%{pos}]: %{race} město"
-
 msgid "[%{pos}]: %{race} castle"
 msgstr "[%{pos}]: %{race} hrad"
 
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "[%{pos}]: %{name}, %{race} město"
+msgid "[%{pos}]: %{race} town"
+msgstr "[%{pos}]: %{race} město"
 
 msgid "[%{pos}]: %{name}, %{race} castle"
 msgstr "[%{pos}]: %{name}, %{race} hrad"
 
+msgid "[%{pos}]: %{name}, %{race} town"
+msgstr "[%{pos}]: %{name}, %{race} město"
+
 msgid "None."
 msgstr "Nic."
 
-msgid "One side defeats another."
+#, fuzzy
+msgid "One side defeats the other."
 msgstr "Jedna strana poráží druhou."
 
 msgid "Accumulate gold."
@@ -4780,6 +4888,12 @@ msgstr ""
 "silnější nepřátele, méně surovin nebo jiné speciální podmínky, které ztěžují "
 "hru hráči."
 
+#, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "%{color} hráč"
+
 msgid "editor|%{count} %{resource}"
 msgstr "%{count} %{resource}"
 
@@ -4848,6 +4962,45 @@ msgstr "Uložit mapu:"
 
 msgid "Click to save the current map."
 msgstr "Klikni pro uložení aktuální mapy."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Klikněte pro povolení režimu hlídkování hrdiny."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Odstranit druhotnou schopnost"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Klikněte pro úpravu denních událostí."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Odstranit druhotnou schopnost"
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Kouzelný svitek"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Klikněte pro povolení režimu hlídkování hrdiny."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Náhodné kouzlo"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Klikněte pro úpravu denních událostí."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Zobrazit kouzla"
 
 msgid "Riddle:"
 msgstr "Hádanka:"
@@ -5019,6 +5172,10 @@ msgstr "Uběhlo dní"
 
 msgid "The number of days spent on this campaign."
 msgstr "Počet dní od začátku této kampaně."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scénář"
 
 msgid "Project Coordination and Core Development"
 msgstr "Koordinace projektu a hlavní vývoj"
@@ -5367,6 +5524,10 @@ msgstr "Dolů vpravo na mapě světa"
 
 msgid "hotkey|save game"
 msgstr "Uložit hru"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "rychlý boj"
 
 msgid "hotkey|next hero"
 msgstr "Následující hrdina"
@@ -5993,11 +6154,21 @@ msgstr "Klikni pro potvrzení volby a spusti novou hru."
 msgid "Click to return to the main menu."
 msgstr "Klikni pro návrat do hlavního menu."
 
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Mapa je poškozena."
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologové hlásí, že nastává měsíc %{name}."
 
+msgid "New Month!"
+msgstr "Nový měsíc!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologové hlásí, že nastává týden %{name}."
+
+msgid "New Week!"
+msgstr "Začal nový týden!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Při pravidelném nárůstu došlo ke zdvojení populace %{monster}!"
@@ -6018,17 +6189,13 @@ msgstr[2] ""
 msgid "%{monster} growth +%{count}."
 msgstr "Růst %{monster} +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Populace jednotek k najmutí klesá na polovinu."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Všechna obydlí zvyšují svou populaci."
-
-msgid "New Month!"
-msgstr "Nový měsíc!"
-
-msgid "New Week!"
-msgstr "Začal nový týden!"
 
 msgid "Beware!"
 msgstr "Pozor!"
@@ -6187,9 +6354,6 @@ msgstr "Opravdu si přejete přepsat uloženou hru s tímto názvem?"
 
 msgid "Game saved successfully."
 msgstr "Hra byla uložena."
-
-msgid "There was an issue during saving."
-msgstr "Během ukládání se vyskytla chyba."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -6461,12 +6625,6 @@ msgstr "Zlý"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} vykraden"
-
-msgid "pyramid|%{object} raided"
-msgstr "%{object} byla vykradena"
-
 # Heroes names section - translate not needed
 msgid "Ector"
 msgstr "Ector"
@@ -6492,6 +6650,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6500,9 +6661,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6591,6 +6749,9 @@ msgstr "Bratr Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6609,14 +6770,17 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "%{object} vykraden"
+
+msgid "pyramid|%{object} raided"
+msgstr "%{object} byla vykradena"
 
 msgid " gives you maximum morale"
 msgstr " dává maximální morálku"
@@ -8113,7 +8277,8 @@ msgstr "Náhodný hrdina (Úroveň %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Náhodný hrdina %{race} (Úroveň %{level})"
 
-msgid "Hero race:"
+#, fuzzy
+msgid "Hero class:"
 msgstr "Rasa hrdiny:"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8150,7 +8315,8 @@ msgstr "Nastavte hlídkový rádius v polích"
 msgid "Enter hero's name"
 msgstr "Zadejte jméno hrdiny"
 
-msgid "Click to change race."
+#, fuzzy
+msgid "Click to change class."
 msgstr "Klikni pro změnu rasy."
 
 msgid ""
@@ -8266,6 +8432,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} se setkává s %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Úroveň %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Artefakty"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Zobraz artefakty"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Nepřátelští hrdinové jsou nyní plně identifikovatelní."
@@ -9915,8 +10111,9 @@ msgstr "Útok přes dvě pole"
 msgid "Flyer"
 msgstr "Létá"
 
-msgid "Always retaliates"
-msgstr "Vždy vrací útok"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Nepřítel nevrací úder"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Útočí na všechny nepřátele v okolí"
@@ -11895,11 +12092,13 @@ msgstr "Umožní hrdinovi se magicky přenést na místo poblíž."
 msgid "Dimension Door"
 msgstr "Dimenzní brána"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "Přenese hrdinu do jakéhokoli města nebo hradu, který vlastníš."
-
 msgid "Town Gate"
 msgstr "Městská brána"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12108,6 +12307,21 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Castle Options"
+#~ msgstr "Možnosti hradu"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Klikni pro zobrazení následujícího města."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Klikni pro zobrazení předchozího města."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr "Přenese hrdinu do jakéhokoli města nebo hradu, který vlastníš."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Vždy vrací útok"
 
 #, fuzzy
 #~ msgid "A maximum of 72 %{objects} can be placed on the map."

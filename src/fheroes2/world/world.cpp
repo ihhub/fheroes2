@@ -930,7 +930,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
+    tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -1368,7 +1368,7 @@ uint32_t World::GetWeekSeed() const
 {
     uint32_t weekSeed = _seed;
 
-    fheroes2::hashCombine( weekSeed, week );
+    Rand::combineSeedWithValueHash( weekSeed, week );
 
     return weekSeed;
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-19 04:50+0000\n"
+"POT-Creation-Date: 2025-10-28 04:13+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -151,12 +151,23 @@ msgstr ""
 "WCZYTAJ\n"
 "GRĘ"
 
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OD NOWA"
+
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
 "ZAPISZ\n"
 "GRĘ"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
 
 msgid "QUIT"
 msgstr "WYJŚCIE"
@@ -297,6 +308,9 @@ msgid ""
 "L"
 msgstr ""
 
+msgid "army|Few"
+msgstr "Mało"
+
 msgid "Warrior"
 msgstr "Wojownik"
 
@@ -308,6 +322,12 @@ msgstr "Badacz"
 
 msgid "None"
 msgstr "Brak"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Przefruń jednostką (%{monster}) tutaj"
 
 msgid ""
 "A few\n"
@@ -371,9 +391,6 @@ msgid ""
 msgstr ""
 "Legion\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Mało"
 
 msgid "army|Several"
 msgstr "Parę"
@@ -2790,13 +2807,15 @@ msgstr ""
 "masz jednak na nią miejsca. Spróbuj przekazać jeden ze swoich artefaktów "
 "innemu bohaterowi."
 
-msgid "Click to show next town."
+#, fuzzy
+msgid "Click to show the next town."
 msgstr "Kliknij aby przejść do następnego miasta."
 
 msgid "Show next town"
 msgstr "Pokaż następne miasto"
 
-msgid "Click to show previous town."
+#, fuzzy
+msgid "Click to show the previous town."
 msgstr "Kliknij aby przejść do poprzedniego miasta."
 
 msgid "Show previous town"
@@ -2827,6 +2846,9 @@ msgid "The spells the hero can learn have been added to their book."
 msgstr ""
 "Zaklęcia, których bohater mógł się nauczyć, zostały dodane do jego Księgi "
 "Zaklęć."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2867,19 +2889,9 @@ msgstr ""
 "Wybór zwartej formacji sprawia, że twoja armia zbierze się razem pośrodku "
 "twojej części pola bitwy."
 
-msgid "Spread Formation"
-msgstr "Luźna formacja"
-
-msgid "Grouped Formation"
-msgstr "Zwarta formacja"
-
 #, fuzzy
-msgid "Click to show the next town."
-msgstr "Kliknij aby przejść do następnego miasta."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Kliknij aby przejść do poprzedniego miasta."
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Miesiąc: %{month}, Tydzień: %{week}, Dzień: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ustaw szyk garnizonu na 'luźny'"
@@ -2890,8 +2902,11 @@ msgstr "Ustaw szyk garnizonu na 'zwarty'"
 msgid "Exit Castle Options"
 msgstr "Wyjście z zamku"
 
-msgid "Castle Options"
-msgstr "Opcje zamku"
+msgid "Spread Formation"
+msgstr "Luźna formacja"
+
+msgid "Grouped Formation"
+msgstr "Zwarta formacja"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Brak zasobów aby kupić stworzenia."
@@ -3106,6 +3121,13 @@ msgstr "Masz: "
 msgid "Need: "
 msgstr "Potrzeba: "
 
+#, fuzzy
+msgid "Restart Game"
+msgstr "Rozpocznij od nowa"
+
+msgid "There was an issue during saving."
+msgstr "Wystąpił problem w czasie zapisu gry."
+
 msgid "New Game"
 msgstr "Nowa gra"
 
@@ -3118,10 +3140,22 @@ msgstr "Wczytaj grę"
 msgid "Load a previously saved game."
 msgstr "Wczytaj uprzednio zapisaną grę."
 
+#, fuzzy
+msgid "Restart the scenario."
+msgstr "Rozpocznij od nowa obecny scenariusz."
+
 msgid "Save Game"
 msgstr "Zapisz grę"
 
 msgid "Save the current game."
+msgstr "Zapisz bieżącą grę."
+
+#, fuzzy
+msgid "Quick Save"
+msgstr "Quick Silver"
+
+#, fuzzy
+msgid "Save the current game without name selection."
 msgstr "Zapisz bieżącą grę."
 
 msgid "Quit"
@@ -3291,6 +3325,16 @@ msgstr "Pokaż"
 msgid "Interface"
 msgstr "Interfejs"
 
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Aneksja"
+
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
+
 msgid "Interface Type"
 msgstr "Typ interfejsu"
 
@@ -3305,6 +3349,15 @@ msgstr "Prędkość przewijania"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Zmień prędkość przewijania okna."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Wybierz język gry:"
@@ -3509,6 +3562,18 @@ msgstr "Wybierz rozdzielczość gry:"
 msgid "Click to apply the selected resolution."
 msgstr "Użyj wskazanej rozdzielczości."
 
+#, fuzzy
+msgid "Click to select the maximum amount."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Click to select the minimum amount."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Click to apply the entered number."
+msgstr "Zatwierdź podany tekst."
+
 msgid "Click to apply the entered text."
 msgstr "Zatwierdź podany tekst."
 
@@ -3614,6 +3679,10 @@ msgstr "Wybierz potwora:"
 msgid "Select Hero:"
 msgstr "Wybierz bohatera:"
 
+#, fuzzy
+msgid "Select Monsters:"
+msgstr "Wybierz potwora:"
+
 msgid "race|Random"
 msgstr "Losowo"
 
@@ -3699,6 +3768,10 @@ msgstr "Surowiec"
 #, fuzzy
 msgid "%{mineName} appearance:"
 msgstr "%{name}, %{race}"
+
+#, fuzzy
+msgid "Click to select the color."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
 #, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
@@ -3822,6 +3895,10 @@ msgstr "Poziom:"
 
 msgid "N"
 msgstr "N"
+
+#, fuzzy
+msgid "Are you sure you want to delete the map:"
+msgstr "Czy na pewno chcesz usunąć plik:"
 
 #, fuzzy
 msgid "No maps exist at that size."
@@ -4016,6 +4093,30 @@ msgstr "Losowy zamek"
 msgid "Random Town Name"
 msgstr "Losowe miasto"
 
+msgid "BANNED SPELLS"
+msgstr ""
+
+#, fuzzy
+msgid "Click to accept the changes made."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Exit this dialog, discarding the changes made."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+msgid "Click to ban spells from appearing in the Mage Guild."
+msgstr ""
+
+#, fuzzy
+msgid "Banned Spells"
+msgstr "Losowa"
+
+msgid "Select spells that will appear in the Mage Guild."
+msgstr ""
+
+msgid "SET SPELLS"
+msgstr ""
+
 #, fuzzy
 msgid "Allow Castle build"
 msgstr "Zamek w chmurach"
@@ -4075,13 +4176,12 @@ msgstr "Zwolnij ten oddział."
 msgid "Set custom Castle Army."
 msgstr "Zamek"
 
-#, fuzzy
-msgid "Click to accept the changes made."
-msgstr "Kliknij aby przejść do następnego miasta."
+msgid "Set spells to appear in the Mage Guild."
+msgstr ""
 
 #, fuzzy
-msgid "Exit this dialog, discarding the changes made."
-msgstr "Kliknij aby przejść do następnego miasta."
+msgid "Set Spells"
+msgstr "Wybierz zaklęcie:"
 
 #, fuzzy
 msgid "Castle Settings"
@@ -4238,6 +4338,10 @@ msgid ""
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
 msgstr ""
+
+#, fuzzy
+msgid "Click to make selection."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -4727,19 +4831,19 @@ msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "Spotkanie: %{name1} i %{name2}"
 
 #, fuzzy
-msgid "[%{pos}]: %{race} town"
-msgstr "%{color} gracz"
-
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
 msgstr "%{color} gracz"
 
 #, fuzzy
-msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "Spotkanie: %{name1} i %{name2}"
+msgid "[%{pos}]: %{race} town"
+msgstr "%{color} gracz"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
+msgstr "Spotkanie: %{name1} i %{name2}"
+
+#, fuzzy
+msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "Spotkanie: %{name1} i %{name2}"
 
 #, fuzzy
@@ -4747,7 +4851,7 @@ msgid "None."
 msgstr "Brak"
 
 #, fuzzy
-msgid "One side defeats another."
+msgid "One side defeats the other."
 msgstr "Wybierz innego bohatera."
 
 #, fuzzy
@@ -4954,6 +5058,12 @@ msgstr ""
 "przeciwnicy, mniej zasobów lub inne specjalne warunki utrudniające rozgrywkę."
 
 #, fuzzy
+msgid ""
+"editor|%{object}\n"
+"(%{color} player)"
+msgstr "%{color} gracz"
+
+#, fuzzy
 msgid "editor|%{count} %{resource}"
 msgstr "Wybierz ilość %{resource}:"
 
@@ -5028,6 +5138,45 @@ msgstr "Zapisz grę"
 #, fuzzy
 msgid "Click to save the current map."
 msgstr "Zapisz bieżącą grę."
+
+#, fuzzy
+msgid "Click to enable all secondary skills."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Enable All Secondary Skills"
+msgstr "Losowa"
+
+#, fuzzy
+msgid "Click to disable all secondary skills."
+msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Disable All Secondary Skills"
+msgstr "Pokaż zaklęcia"
+
+msgid "Click to show only level %{level} spells."
+msgstr ""
+
+#, fuzzy
+msgid "Spells level"
+msgstr "Zwój z Zaklęciem"
+
+#, fuzzy
+msgid "Click to enable all spells."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Enable All Spells"
+msgstr "Losowa"
+
+#, fuzzy
+msgid "Click to disable all spells."
+msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Disable All Spells"
+msgstr "Pokaż zaklęcia"
 
 msgid "Riddle:"
 msgstr ""
@@ -5202,6 +5351,10 @@ msgstr "Ilość dni"
 
 msgid "The number of days spent on this campaign."
 msgstr "Ilość dni spędzonych na tej kampanii."
+
+#, fuzzy
+msgid "Scenario Title"
+msgstr "Scenariusz"
 
 msgid "Project Coordination and Core Development"
 msgstr "Koordynacja projektu i development"
@@ -5559,6 +5712,10 @@ msgstr "porusz bohatera w dół w prawo"
 
 msgid "hotkey|save game"
 msgstr "zapisz grę"
+
+#, fuzzy
+msgid "hotkey|quick save"
+msgstr "wyjdź"
 
 msgid "hotkey|next hero"
 msgstr "pokaż następnego bohatera"
@@ -6197,11 +6354,21 @@ msgstr "Kliknij, aby użyć tych ustawień i rozpocząć nową grę."
 msgid "Click to return to the main menu."
 msgstr "Kliknij, aby wrócić do głównego menu."
 
+#, fuzzy
+msgid "The map is corrupted or doesn't exist."
+msgstr "Plik z zapisaną grą jest uszkodzony."
+
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologowie ogłaszają, że symbolem tego miesiąca będzie %{name}."
 
+msgid "New Month!"
+msgstr "Nowy miesiąc!"
+
 msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologowie ogłaszają, że symbolem tego tygodnia będzie %{name}."
+
+msgid "New Week!"
+msgstr "Nowy tydzień!"
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Dzięki naturalnemu przyrostowi, populacja %{monster} jest podwojona!"
@@ -6226,17 +6393,13 @@ msgstr[2] ""
 msgid "%{monster} growth +%{count}."
 msgstr "%{monster} zwiększają populację o +%{count}."
 
-msgid " All populations are halved."
+#, fuzzy
+msgid "All populations are halved."
 msgstr " Ginie połowa populacji królestwa."
 
-msgid " All dwellings increase population."
+#, fuzzy
+msgid "All dwellings increase population."
 msgstr " Populacja całego królestwa zwiększa się."
-
-msgid "New Month!"
-msgstr "Nowy miesiąc!"
-
-msgid "New Week!"
-msgstr "Nowy tydzień!"
 
 msgid "Beware!"
 msgstr "Uwaga!"
@@ -6400,9 +6563,6 @@ msgstr "Czy na pewno chcesz zapisać stan gry z taką samą nazwą?"
 
 msgid "Game saved successfully."
 msgstr "Stan gry zapisany."
-
-msgid "There was an issue during saving."
-msgstr "Wystąpił problem w czasie zapisu gry."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
@@ -6676,14 +6836,6 @@ msgstr "Zły"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-#, fuzzy
-msgid "shipAndGraveyard|%{object} robber"
-msgstr "Rabuś %{object}"
-
-#, fuzzy
-msgid "pyramid|%{object} raided"
-msgstr "Splądrowana %{object}"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -6708,6 +6860,9 @@ msgstr "Crag Hack"
 msgid "Fineous"
 msgstr "Fineous"
 
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Jezebel"
 msgstr "Jezebel"
 
@@ -6716,9 +6871,6 @@ msgstr "Atlas"
 
 msgid "Ergon"
 msgstr "Ergon"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Gem"
@@ -6807,6 +6959,9 @@ msgstr "Brat Brax"
 msgid "Dainwin"
 msgstr "Dainwin"
 
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Joseph"
 msgstr "Joseph"
 
@@ -6825,14 +6980,19 @@ msgstr "Drakonia"
 msgid "Elderian"
 msgstr "Elderian"
 
-msgid "Gallavant"
-msgstr "Gallavant"
-
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
+msgstr "Rabuś %{object}"
+
+#, fuzzy
+msgid "pyramid|%{object} raided"
+msgstr "Splądrowana %{object}"
 
 msgid " gives you maximum morale"
 msgstr " zapewnia ci maksymalne morale"
@@ -8364,7 +8524,7 @@ msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name}, %{race} (poziom %{level})"
 
 #, fuzzy
-msgid "Hero race:"
+msgid "Hero class:"
 msgstr "Ekran bohatera"
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -8400,7 +8560,7 @@ msgid "Enter hero's name"
 msgstr "Przegrywa bohater: %{name}."
 
 #, fuzzy
-msgid "Click to change race."
+msgid "Click to change class."
 msgstr "Kliknij aby przejść do następnego miasta."
 
 #, fuzzy
@@ -8510,6 +8670,36 @@ msgstr ""
 
 msgid "%{name1} meets %{name2}"
 msgstr "Spotkanie: %{name1} i %{name2}"
+
+#, fuzzy
+msgid "hero|Level %{level}"
+msgstr "Poziom %{level}"
+
+msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+#, fuzzy
+msgid "Artifact Transfer"
+msgstr "Artefakty"
+
+#, fuzzy
+msgid "Swap Artifacts"
+msgstr "Pokaż Artefakty"
+
+msgid "Swap all artifacts between heroes."
+msgstr ""
+
+msgid "Move army from %{from_hero_name} to %{to_hero_name}."
+msgstr ""
+
+msgid "Army Transfer"
+msgstr ""
+
+msgid "Swap Armies"
+msgstr ""
+
+msgid "Swap armies between heroes."
+msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Można już w pełni zidentyfikować wrogich bohaterów."
@@ -10213,8 +10403,9 @@ msgstr "Atakuje dwa pola"
 msgid "Flyer"
 msgstr "Latający"
 
-msgid "Always retaliates"
-msgstr "Zawsze kontratakuje"
+#, fuzzy
+msgid "Unlimited retaliation"
+msgstr "Powstrzymuje kontratak"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Atakuje wszystkich przyległych przeciwników"
@@ -12319,13 +12510,13 @@ msgstr ""
 msgid "Dimension Door"
 msgstr "Brama między Wymiarami"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Pozwala bohaterowi rzucającemu zaklęcie przenieść się do najbliższego "
-"własnego miasta lub zamku."
-
 msgid "Town Gate"
 msgstr "Miejska Brama"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12540,6 +12731,23 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "Castle Options"
+#~ msgstr "Opcje zamku"
+
+#~ msgid "Click to show next town."
+#~ msgstr "Kliknij aby przejść do następnego miasta."
+
+#~ msgid "Click to show previous town."
+#~ msgstr "Kliknij aby przejść do poprzedniego miasta."
+
+#~ msgid "Returns the caster to any town or castle currently owned."
+#~ msgstr ""
+#~ "Pozwala bohaterowi rzucającemu zaklęcie przenieść się do najbliższego "
+#~ "własnego miasta lub zamku."
+
+#~ msgid "Always retaliates"
+#~ msgstr "Zawsze kontratakuje"
 
 #~ msgid "CONFIG"
 #~ msgstr "KONFIGURACJA"

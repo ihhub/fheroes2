@@ -27,6 +27,7 @@
 #include <iterator>
 #include <memory>
 #include <optional>
+#include <ostream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -37,10 +38,12 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
+#include "game_string.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -52,7 +55,6 @@
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
 #include "ui_language.h"
-#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -83,25 +85,32 @@ namespace
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
-            const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
+            if ( info.version != GameVersion::RESURRECTION ) {
+                // The Editor doesn't support original map formats so you are trying to do some nonsence hacks.
+                assert( 0 );
+                return;
+            }
 
-            fheroes2::MultiFontText body;
+            const fheroes2::Text header( info.name, fheroes2::FontType::normalYellow(), info.mainLanguage );
 
-            body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.name, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() } );
-            body.add( { _( "\n\nSize: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { std::to_string( info.width ) + " x " + std::to_string( info.height ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nDescription: " ), fheroes2::FontType::normalYellow() } );
-            body.add( { info.description, fheroes2::FontType::normalWhite() } );
-            body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
-            body.add( { info.filename, fheroes2::FontType::smallWhite() } );
+            const Settings & conf = Settings::Get();
+            const fheroes2::SupportedLanguage gameLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
 
-            fheroes2::showMessage( header, body, Dialog::ZERO );
-        }
+            std::vector<std::pair<fheroes2::LocalizedString, fheroes2::FontType>> strings;
 
-        int getCurrentId() const
-        {
-            return _currentId;
+            strings.emplace_back( fheroes2::LocalizedString( _( "Map Type:\n" ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "Resurrection" ), gameLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nLanguage:\n" ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( fheroes2::getLanguageName( info.mainLanguage ), gameLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nSize: " ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( std::to_string( info.width ) + " x " + std::to_string( info.height ), gameLanguage ),
+                                  fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nDescription: " ), gameLanguage ), fheroes2::FontType::normalYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( info.description, info.mainLanguage ), fheroes2::FontType::normalWhite() );
+            strings.emplace_back( fheroes2::LocalizedString( _( "\n\nLocation: " ), gameLanguage ), fheroes2::FontType::smallYellow() );
+            strings.emplace_back( fheroes2::LocalizedString( info.filename, gameLanguage ), fheroes2::FontType::smallWhite() );
+
+            fheroes2::showMessage( header, *fheroes2::getLocalizedText( strings ), Dialog::ZERO );
         }
 
         void initListBackgroundRestorer( fheroes2::Rect roi )
@@ -112,15 +121,6 @@ namespace
         bool isDoubleClicked() const
         {
             return _isDoubleClicked;
-        }
-
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
         }
 
     private:
@@ -389,7 +389,10 @@ namespace Editor
                 msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
-                    System::Unlink( listbox.GetCurrent().filename );
+                    if ( !System::Unlink( listbox.GetCurrent().filename ) ) {
+                        ERROR_LOG( "Unable to delete file " << listbox.GetCurrent().filename )
+                    }
+
                     listbox.RemoveSelected();
 
                     if ( lists.empty() ) {

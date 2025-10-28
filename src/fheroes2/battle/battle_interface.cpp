@@ -718,6 +718,34 @@ namespace
         return Battle::CellDirection::UNKNOWN;
     }
 
+    // Mapping a color bit flag to a color code
+    uint8_t GetArmyColorFromPlayerColor( const PlayerColor playerColor )
+    {
+        switch ( playerColor ) {
+        // Units under Berserker spell.
+        case PlayerColor::UNUSED:
+            return Battle::ArmyColor::ARMY_COLOR_BLACK;
+        case PlayerColor::BLUE:
+            return Battle::ArmyColor::ARMY_COLOR_BLUE;
+        case PlayerColor::GREEN:
+            return Battle::ArmyColor::ARMY_COLOR_GREEN;
+        case PlayerColor::RED:
+            return Battle::ArmyColor::ARMY_COLOR_RED;
+        case PlayerColor::YELLOW:
+            return Battle::ArmyColor::ARMY_COLOR_YELLOW;
+        case PlayerColor::ORANGE:
+            return Battle::ArmyColor::ARMY_COLOR_ORANGE;
+        case PlayerColor::PURPLE:
+            return Battle::ArmyColor::ARMY_COLOR_PURPLE;
+        case PlayerColor::NONE:
+            return Battle::ArmyColor::ARMY_COLOR_GRAY;
+        default:
+            // Did you add another player color?
+            assert( 0 );
+            return Battle::ArmyColor::ARMY_COLOR_GRAY;
+        }
+    }
+
     // The cast down is applied below the 2nd battlefield row (count is started from 0)
     // and for the (rowNumber - 2) columns starting from the side of the hero.
     bool isHeroCastDown( const int32_t cellindex, const bool isLeftOpponent )
@@ -1154,34 +1182,38 @@ void Battle::Status::clear()
     _lastMessage = "";
 }
 
-bool Battle::TurnOrder::queueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
     for ( const auto & [unit, unitPos] : _rects ) {
         assert( unit != nullptr );
 
-        const fheroes2::Rect unitRoi = unitPos + offset;
+        const fheroes2::Rect unitRoi = _isInsideBattleField ? ( unitPos + offset ) : unitPos;
         if ( le.isMouseCursorPosInArea( unitRoi ) ) {
             msg = _( "View %{monster} info" );
             StringReplaceWithLowercase( msg, "%{monster}", unit->GetName() );
-        }
 
-        if ( le.MouseClickLeft( unitRoi ) ) {
-            Dialog::ArmyInfo( *unit, Dialog::BUTTONS, unit->isReflect() );
-            return true;
-        }
-        else if ( le.isMouseRightButtonPressedInArea( unitRoi ) ) {
-            Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
-            return true;
+            interface.setUnitTobeHighlighted( unit );
+
+            // Process mouse buttons events.
+            if ( le.MouseClickLeft( unitRoi ) ) {
+                Dialog::ArmyInfo( *unit, Dialog::BUTTONS, unit->isReflect() );
+                return true;
+            }
+            if ( le.isMouseRightButtonPressed() ) {
+                Dialog::ArmyInfo( *unit, Dialog::ZERO, unit->isReflect() );
+                return true;
+            }
+            // There is no need to process other items of `_rects`.
+            return false;
         }
     }
 
     return false;
 }
 
-void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                                     fheroes2::Image & output ) const
+void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t unitColor, fheroes2::Image & output )
 {
     // Render background.
     const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
@@ -1205,53 +1237,22 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
     const fheroes2::Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
     number.drawInRoi( pos.x + 2, pos.y + 4, output, pos );
 
-    if ( isCurrentUnit ) {
-        fheroes2::DrawRect( output, pos, currentUnitColor );
-    }
-    else {
-        uint8_t color = ARMY_COLOR_GRAY;
+    fheroes2::DrawRect( output, pos, unitColor );
 
-        switch ( unit.GetCurrentColor() ) {
-        case PlayerColor::UNUSED: // Berserkers
-            color = ARMY_COLOR_BLACK;
-            break;
-        case PlayerColor::BLUE:
-            color = ARMY_COLOR_BLUE;
-            break;
-        case PlayerColor::GREEN:
-            color = ARMY_COLOR_GREEN;
-            break;
-        case PlayerColor::RED:
-            color = ARMY_COLOR_RED;
-            break;
-        case PlayerColor::YELLOW:
-            color = ARMY_COLOR_YELLOW;
-            break;
-        case PlayerColor::ORANGE:
-            color = ARMY_COLOR_ORANGE;
-            break;
-        case PlayerColor::PURPLE:
-            color = ARMY_COLOR_PURPLE;
-            break;
-        case PlayerColor::NONE:
-            break;
-        default:
-            assert( 0 ); // Did you add another player color?
-            break;
-        }
-
-        fheroes2::DrawRect( output, pos, color );
-
-        if ( unit.Modes( Battle::TR_MOVED ) ) {
-            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize,
-                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize, 3 );
-        }
+    if ( unit.Modes( Battle::TR_MOVED ) ) {
+        fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize,
+                                PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize, 3 );
     }
 }
 
-void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
+void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output,
+                                const fheroes2::Rect & dialogRoi )
 {
+    if ( _restorer ) {
+        _restorer->restore();
+    }
+
     if ( _orderOfUnits.expired() ) {
         // Nothing to show.
         return;
@@ -1264,18 +1265,37 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         return unit->isValid();
     } ) );
 
-    const int32_t unitsToDraw = std::min( _area.width / turnOrderMonsterIconSize, validUnitCount );
+    if ( validUnitCount == 0 ) {
+        // Nothing to draw.
+        return;
+    }
+
+    auto & display = fheroes2::Display::instance();
+    _isInsideBattleField = ( dialogRoi.y <= turnOrderMonsterIconSize );
+
+    const int32_t unitsToDraw = std::min( _battleRoi.width / turnOrderMonsterIconSize, validUnitCount );
 
     if ( _rects.size() != static_cast<size_t>( unitsToDraw ) ) {
         // Update units icons positions.
 
-        width = turnOrderMonsterIconSize * unitsToDraw;
+        _renderingRoi.width = turnOrderMonsterIconSize * unitsToDraw;
 
-        int32_t offsetX = ( _area.width - width ) / 2;
+        int32_t offsetX = ( _battleRoi.width - _renderingRoi.width ) / 2;
 
-        x = _area.x + offsetX;
-        y = _area.y;
-        height = turnOrderMonsterIconSize;
+        if ( !_isInsideBattleField ) {
+            offsetX += dialogRoi.x;
+        }
+
+        if ( _isInsideBattleField ) {
+            _renderingRoi.x = _battleRoi.x + offsetX;
+            _renderingRoi.y = _battleRoi.y;
+        }
+        else {
+            _renderingRoi.x = offsetX;
+            _renderingRoi.y = dialogRoi.y - turnOrderMonsterIconSize;
+        }
+
+        _renderingRoi.height = turnOrderMonsterIconSize;
 
         _rects.clear();
         _rects.reserve( unitsToDraw );
@@ -1283,9 +1303,18 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         for ( int32_t index = 0; index < unitsToDraw; ++index ) {
             // Just for now place 'nullptr' instead of a pointer to unit.
             // These pointers will be updated in the next loop.
-            _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+            if ( _isInsideBattleField ) {
+                _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, 0, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+            }
+            else {
+                _rects.emplace_back( nullptr, fheroes2::Rect( offsetX, _renderingRoi.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+            }
 
             offsetX += turnOrderMonsterIconSize;
+        }
+
+        if ( !_isInsideBattleField ) {
+            _restorer = std::make_unique<fheroes2::ImageRestorer>( display, _renderingRoi.x, _renderingRoi.y, _renderingRoi.width, _renderingRoi.height );
         }
     }
 
@@ -1308,7 +1337,13 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         }
 
         _rects[unitRectIndex].first = unit;
-        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, current == unit, currentUnitColor, output );
+
+        uint8_t unitColor = GetArmyColorFromPlayerColor( unit->GetCurrentColor() );
+        if ( current == unit || underCursor == unit ) {
+            unitColor = currentUnitColor;
+        }
+
+        _redrawUnit( _rects[unitRectIndex].second, *unit, unit->GetColor() == _opponentColor, unitColor, _isInsideBattleField ? output : display );
 
         ++unitRectIndex;
         ++unitsProcessed;
@@ -1396,11 +1431,11 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _buttonSettings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
     // opponents
-    if ( HeroBase * opponent = arena.GetCommander1(); opponent != nullptr ) {
-        _opponent1 = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, false );
+    if ( HeroBase * opponent = arena.getAttackingArmyCommander(); opponent != nullptr ) {
+        _attackingOpponent = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, false );
     }
-    if ( HeroBase * opponent = arena.GetCommander2(); opponent != nullptr ) {
-        _opponent2 = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, true );
+    if ( HeroBase * opponent = arena.getDefendingArmyCommander(); opponent != nullptr ) {
+        _defendingOpponent = std::make_unique<OpponentSprite>( _surfaceInnerArea, opponent, true );
     }
 
     if ( Arena::GetCastle() ) {
@@ -1443,6 +1478,10 @@ Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
 
+    // Turn order dialog can be outside the battlefield area.
+    // We need to restore the original background before doing extra animation.
+    _turnOrder.restore();
+
     // Fade-out battlefield.
     const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
 
@@ -1461,7 +1500,7 @@ Battle::Interface::~Interface()
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
-    _turnOrder.set( _interfacePosition, units, arena.GetArmy2Color() );
+    _turnOrder.set( _interfacePosition, units, arena.getDefendingArmyColor() );
 }
 
 fheroes2::Point Battle::Interface::getRelativeMouseCursorPos() const
@@ -1523,7 +1562,7 @@ void Battle::Interface::fullRedraw()
     // Fade-in battlefield.
     if ( !isDefaultScreenSize ) {
         // We need to expand the ROI for the next render to properly render window borders and shadow.
-        display.updateNextRenderRoi( _background->totalArea() );
+        display.updateNextRenderRoi( fheroes2::getBoundaryRect( _background->totalArea(), _turnOrder.getRenderingRoi() ) );
     }
 
     fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
@@ -1558,13 +1597,19 @@ void Battle::Interface::RedrawPartialFinish()
 {
     redrawPreRender();
 
-    fheroes2::Display::instance().render( _interfacePosition );
+    auto & display = fheroes2::Display::instance();
+    display.render( fheroes2::getBoundaryRect( _interfacePosition, _turnOrder.getRenderingRoi() ) );
 }
 
 void Battle::Interface::redrawPreRender()
 {
     if ( Settings::Get().BattleShowTurnOrder() ) {
-        _turnOrder.redraw( _currentUnit, _contourColor, _mainSurface );
+        const Unit * unit = nullptr;
+        const Cell * cell = Board::GetCell( _currentCellIndex );
+        if ( cell != nullptr ) {
+            unit = cell->GetUnit();
+        }
+        _turnOrder.redraw( _currentUnit, _contourColor, unit, _mainSurface, border.GetRect() );
     }
 
 #ifdef WITH_DEBUG
@@ -1888,10 +1933,10 @@ void Battle::Interface::RedrawArmies()
 
 void Battle::Interface::RedrawOpponents()
 {
-    if ( _opponent1 )
-        _opponent1->Redraw( _mainSurface );
-    if ( _opponent2 )
-        _opponent2->Redraw( _mainSurface );
+    if ( _attackingOpponent )
+        _attackingOpponent->Redraw( _mainSurface );
+    if ( _defendingOpponent )
+        _defendingOpponent->Redraw( _mainSurface );
 
     RedrawOpponentsFlags();
 }
@@ -1918,18 +1963,19 @@ void Battle::Interface::RedrawOpponentsFlags()
         return ICN::HEROFL06;
     };
 
-    if ( _opponent1 ) {
-        const int icn = getFlagIcn( arena.GetForce1().GetColor() );
+    if ( _attackingOpponent ) {
+        const int icn = getFlagIcn( arena.getAttackingForce().GetColor() );
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, animation_flags_frame ) );
-        fheroes2::Blit( flag, _mainSurface, _opponent1->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
-                        _opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
+        fheroes2::Blit( flag, _mainSurface, _attackingOpponent->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
+                        _attackingOpponent->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
-    if ( _opponent2 ) {
-        const int icn = getFlagIcn( arena.GetForce2().GetColor() );
+    if ( _defendingOpponent ) {
+        const int icn = getFlagIcn( arena.getDefendingForce().GetColor() );
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, animation_flags_frame ) );
-        fheroes2::Blit( flag, _mainSurface, _opponent2->Offset().x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
-                        _opponent2->Offset().y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
+        fheroes2::Blit( flag, _mainSurface,
+                        _defendingOpponent->Offset().x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
+                        _defendingOpponent->Offset().y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
     }
 }
 
@@ -1954,7 +2000,13 @@ void Battle::Interface::RedrawTroopSprite( const Unit & unit )
         drawnPosition = _drawTroopSprite( unit, monsterSprite );
     }
 
-    if ( _currentUnit == &unit && _spriteInsteadCurrentUnit == nullptr ) {
+    if ( _unitToHighlight == &unit ) {
+        // Additional unit to pay attention to. Highlight this unit's contour.
+        const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, GetArmyColorFromPlayerColor( unit.GetArmyColor() ) );
+        fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
+        setUnitTobeHighlighted( nullptr );
+    }
+    else if ( _currentUnit == &unit && _spriteInsteadCurrentUnit == nullptr ) {
         // Current unit's turn which is idling. Highlight this unit's contour.
         const fheroes2::Sprite & monsterContour = fheroes2::CreateContour( monsterSprite, _contourColor );
         fheroes2::Blit( monsterContour, _mainSurface, drawnPosition.x, drawnPosition.y, unit.isReflect() );
@@ -3004,9 +3056,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
-    else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder ) ) {
+    else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder.getRenderingRoi() ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        if ( _turnOrder.queueEventProcessing( msg, _interfacePosition.getPosition() ) ) {
+        if ( _turnOrder.queueEventProcessing( *this, msg, _interfacePosition.getPosition() ) ) {
             humanturn_redraw = true;
         }
     }
@@ -3055,10 +3107,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                                                Dialog::ZERO );
         }
     }
-    else if ( _opponent1 && le.isMouseCursorPosInArea( _opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
-        const fheroes2::Rect opponent1Area = _opponent1->GetArea() + _interfacePosition.getPosition();
-        if ( arena.GetCurrentColor() == arena.GetArmy1Color() ) {
-            if ( _opponent1->GetHero()->isCaptain() ) {
+    else if ( _attackingOpponent && le.isMouseCursorPosInArea( _attackingOpponent->GetArea() + _interfacePosition.getPosition() ) ) {
+        const fheroes2::Rect attackingOpponentArea = _attackingOpponent->GetArea() + _interfacePosition.getPosition();
+        if ( arena.GetCurrentColor() == arena.getAttackingArmyColor() ) {
+            if ( _attackingOpponent->GetHero()->isCaptain() ) {
                 msg = _( "View Captain's options" );
             }
             else {
@@ -3066,13 +3118,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             }
             cursor.SetThemes( Cursor::WAR_HERO );
 
-            if ( le.MouseClickLeft( opponent1Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *_opponent1->GetHero(), true, status ), actions );
+            if ( le.MouseClickLeft( attackingOpponentArea ) ) {
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *_attackingOpponent->GetHero(), true, status ), actions );
                 humanturn_redraw = true;
             }
         }
         else {
-            if ( _opponent1->GetHero()->isCaptain() ) {
+            if ( _attackingOpponent->GetHero()->isCaptain() ) {
                 msg = _( "View opposing Captain" );
             }
             else {
@@ -3080,21 +3132,21 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             }
             cursor.SetThemes( Cursor::WAR_INFO );
 
-            if ( le.MouseClickLeft( opponent1Area ) ) {
-                arena.DialogBattleHero( *_opponent1->GetHero(), true, status );
+            if ( le.MouseClickLeft( attackingOpponentArea ) ) {
+                arena.DialogBattleHero( *_attackingOpponent->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
-        if ( le.isMouseRightButtonPressedInArea( opponent1Area ) ) {
-            arena.DialogBattleHero( *_opponent1->GetHero(), false, status );
+        if ( le.isMouseRightButtonPressedInArea( attackingOpponentArea ) ) {
+            arena.DialogBattleHero( *_attackingOpponent->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
-    else if ( _opponent2 && le.isMouseCursorPosInArea( _opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
-        const fheroes2::Rect opponent2Area = _opponent2->GetArea() + _interfacePosition.getPosition();
-        if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
-            if ( _opponent2->GetHero()->isCaptain() ) {
+    else if ( _defendingOpponent && le.isMouseCursorPosInArea( _defendingOpponent->GetArea() + _interfacePosition.getPosition() ) ) {
+        const fheroes2::Rect defendingOpponentArea = _defendingOpponent->GetArea() + _interfacePosition.getPosition();
+        if ( arena.GetCurrentColor() == arena.getDefendingForce().GetColor() ) {
+            if ( _defendingOpponent->GetHero()->isCaptain() ) {
                 msg = _( "View Captain's options" );
             }
             else {
@@ -3103,13 +3155,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
             cursor.SetThemes( Cursor::WAR_HERO );
 
-            if ( le.MouseClickLeft( opponent2Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *_opponent2->GetHero(), true, status ), actions );
+            if ( le.MouseClickLeft( defendingOpponentArea ) ) {
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *_defendingOpponent->GetHero(), true, status ), actions );
                 humanturn_redraw = true;
             }
         }
         else {
-            if ( _opponent2->GetHero()->isCaptain() ) {
+            if ( _defendingOpponent->GetHero()->isCaptain() ) {
                 msg = _( "View opposing Captain" );
             }
             else {
@@ -3118,14 +3170,14 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
             cursor.SetThemes( Cursor::WAR_INFO );
 
-            if ( le.MouseClickLeft( opponent2Area ) ) {
-                arena.DialogBattleHero( *_opponent2->GetHero(), true, status );
+            if ( le.MouseClickLeft( defendingOpponentArea ) ) {
+                arena.DialogBattleHero( *_defendingOpponent->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
-        if ( le.isMouseRightButtonPressedInArea( opponent2Area ) ) {
-            arena.DialogBattleHero( *_opponent2->GetHero(), false, status );
+        if ( le.isMouseRightButtonPressedInArea( defendingOpponentArea ) ) {
+            arena.DialogBattleHero( *_defendingOpponent->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
@@ -4120,9 +4172,9 @@ void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const PlayerColor 
         return;
     }
 
-    const bool attackersTurn = ( deathColor == arena.GetArmy2Color() );
-    OpponentSprite * attackingHero = attackersTurn ? _opponent1.get() : _opponent2.get();
-    OpponentSprite * defendingHero = attackersTurn ? _opponent2.get() : _opponent1.get();
+    const bool attackersTurn = ( deathColor == arena.getDefendingArmyColor() );
+    OpponentSprite * attackingHero = attackersTurn ? _attackingOpponent.get() : _defendingOpponent.get();
+    OpponentSprite * defendingHero = attackersTurn ? _defendingOpponent.get() : _attackingOpponent.get();
     // 60% of joyful animation
     if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
         attackingHero->SetAnimation( OP_JOY );
@@ -4562,8 +4614,8 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
 
     // set spell cast animation
     if ( caster ) {
-        const bool isLeftOpponent = ( caster->GetColor() == arena.GetArmy1Color() );
-        opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
+        const bool isLeftOpponent = ( caster->GetColor() == arena.getAttackingArmyColor() );
+        opponent = isLeftOpponent ? _attackingOpponent.get() : _defendingOpponent.get();
         if ( opponent != nullptr ) {
             if ( isMassSpell ) {
                 opponent->SetAnimation( OP_CAST_MASS );
@@ -4934,8 +4986,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
         // Set the rainbow animation direction to match the army side.
         // Also, if the creature is under effect of the Berserker spell (or similar), then check its original color.
-        bool isRainbowFromRight
-            = ( unit.GetCurrentColor() == PlayerColor::UNUSED ) ? ( unit.GetColor() == arena.GetArmy2Color() ) : ( unit.GetCurrentColor() == arena.GetArmy2Color() );
+        bool isRainbowFromRight = ( unit.GetCurrentColor() == PlayerColor::UNUSED ) ? ( unit.GetColor() == arena.getDefendingArmyColor() )
+                                                                                    : ( unit.GetCurrentColor() == arena.getDefendingArmyColor() );
 
         // The distance from the right or left battlefield border to the 'lucky' creature in the direction from the beginning of the animation to its end.
         const int32_t borderDistance = isRainbowFromRight ? battleArea.width - rainbowDescendPoint.x : rainbowDescendPoint.x;
@@ -5326,7 +5378,7 @@ void Battle::Interface::_redrawActionArrowSpell( const Unit & target )
     const HeroBase * caster = arena.GetCurrentCommander();
 
     if ( caster ) {
-        const fheroes2::Point missileStart = caster == _opponent1->GetHero() ? _opponent1->GetCastPosition() : _opponent2->GetCastPosition();
+        const fheroes2::Point missileStart = caster == _attackingOpponent->GetHero() ? _attackingOpponent->GetCastPosition() : _defendingOpponent->GetCastPosition();
 
         const fheroes2::Point targetPos = target.GetCenterPoint();
         const double angle = GetAngle( missileStart, targetPos );
@@ -5498,10 +5550,10 @@ void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, c
     }
 
     // Animate casting.
-    const bool isLeftOpponent = ( caster.GetColor() == arena.GetArmy1Color() );
+    const bool isLeftOpponent = ( caster.GetColor() == arena.getAttackingArmyColor() );
     const bool isCastDown = isHeroCastDown( targetCell, isLeftOpponent );
 
-    OpponentSprite * opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
+    OpponentSprite * opponent = isLeftOpponent ? _attackingOpponent.get() : _defendingOpponent.get();
     assert( opponent != nullptr );
 
     opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
@@ -5669,7 +5721,8 @@ void Battle::Interface::_redrawActionLightningBoltSpell( const Unit & target )
 {
     _currentUnit = nullptr;
 
-    const fheroes2::Point startingPos = arena.GetCurrentCommander() == _opponent1->GetHero() ? _opponent1->GetCastPosition() : _opponent2->GetCastPosition();
+    const fheroes2::Point startingPos
+        = arena.GetCurrentCommander() == _attackingOpponent->GetHero() ? _attackingOpponent->GetCastPosition() : _defendingOpponent->GetCastPosition();
     const fheroes2::Rect & pos = target.GetRectPosition();
     const fheroes2::Point endPos( pos.x + pos.width / 2, pos.y );
 
@@ -5680,7 +5733,8 @@ void Battle::Interface::_redrawActionLightningBoltSpell( const Unit & target )
 
 void Battle::Interface::_redrawActionChainLightningSpell( const TargetsInfo & targets )
 {
-    const fheroes2::Point startingPos = arena.GetCurrentCommander() == _opponent1->GetHero() ? _opponent1->GetCastPosition() : _opponent2->GetCastPosition();
+    const fheroes2::Point startingPos
+        = arena.GetCurrentCommander() == _attackingOpponent->GetHero() ? _attackingOpponent->GetCastPosition() : _defendingOpponent->GetCastPosition();
     std::vector<fheroes2::Point> points;
     points.reserve( size( targets ) + 1 );
     points.push_back( startingPos );
@@ -5832,7 +5886,8 @@ void Battle::Interface::_redrawRaySpell( const Unit & target, const int spellICN
     LocalEvent & le = LocalEvent::Get();
 
     // Casting hero position
-    const fheroes2::Point startingPos = arena.GetCurrentCommander() == _opponent1->GetHero() ? _opponent1->GetCastPosition() : _opponent2->GetCastPosition();
+    const fheroes2::Point startingPos
+        = arena.GetCurrentCommander() == _attackingOpponent->GetHero() ? _attackingOpponent->GetCastPosition() : _defendingOpponent->GetCastPosition();
     const fheroes2::Point targetPos = target.GetCenterPoint();
 
     const std::vector<fheroes2::Point> path = getLinePoints( startingPos, targetPos, size );
@@ -6264,8 +6319,8 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     // Animate casting.
-    const bool isLeftOpponent = ( caster.GetColor() == arena.GetArmy1Color() );
-    OpponentSprite * opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
+    const bool isLeftOpponent = ( caster.GetColor() == arena.getAttackingArmyColor() );
+    OpponentSprite * opponent = isLeftOpponent ? _attackingOpponent.get() : _defendingOpponent.get();
     assert( opponent != nullptr );
 
     opponent->SetAnimation( OP_CAST_MASS );
@@ -6773,8 +6828,8 @@ void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
 bool Battle::Interface::IdleTroopsAnimation() const
 {
     if ( Game::validateAnimationDelay( Game::BATTLE_IDLE_DELAY ) ) {
-        const bool redrawNeeded = arena.GetForce1().animateIdleUnits();
-        return arena.GetForce2().animateIdleUnits() || redrawNeeded;
+        const bool redrawNeeded = arena.getAttackingForce().animateIdleUnits();
+        return arena.getDefendingForce().animateIdleUnits() || redrawNeeded;
     }
 
     return false;
@@ -6782,18 +6837,18 @@ bool Battle::Interface::IdleTroopsAnimation() const
 
 void Battle::Interface::ResetIdleTroopAnimation() const
 {
-    arena.GetForce1().resetIdleAnimation();
-    arena.GetForce2().resetIdleAnimation();
+    arena.getAttackingForce().resetIdleAnimation();
+    arena.getDefendingForce().resetIdleAnimation();
 }
 
 void Battle::Interface::SwitchAllUnitsAnimation( const int32_t animationState ) const
 {
-    for ( Battle::Unit * unit : arena.GetForce1() ) {
+    for ( Battle::Unit * unit : arena.getAttackingForce() ) {
         if ( unit->isValid() ) {
             unit->SwitchAnimation( animationState );
         }
     }
-    for ( Battle::Unit * unit : arena.GetForce2() ) {
+    for ( Battle::Unit * unit : arena.getDefendingForce() ) {
         if ( unit->isValid() ) {
             unit->SwitchAnimation( animationState );
         }
@@ -6814,11 +6869,11 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 
         // Perform heroes idle animation only if heroes are not performing any other animation (e.g. spell casting).
         if ( Game::hasEveryDelayPassed( { Game::BATTLE_OPPONENTS_DELAY } ) ) {
-            if ( _opponent1 && _opponent1->updateAnimationState() ) {
+            if ( _attackingOpponent && _attackingOpponent->updateAnimationState() ) {
                 humanturn_redraw = true;
             }
 
-            if ( _opponent2 && _opponent2->updateAnimationState() ) {
+            if ( _defendingOpponent && _defendingOpponent->updateAnimationState() ) {
                 humanturn_redraw = true;
             }
         }

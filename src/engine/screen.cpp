@@ -799,6 +799,11 @@ namespace
         }
     };
 #else
+    bool shouldUseFullscreenDesktopMode()
+    {
+        return fheroes2::cursor().isSoftwareEmulation();
+    }
+
     std::optional<bool> isWindowInAnyDisplay( const fheroes2::ResolutionInfo & resolutionInfo, const fheroes2::Point & windowPos )
     {
         const int numDisplays = SDL_GetNumVideoDisplays();
@@ -904,18 +909,19 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
-                std::set<fheroes2::ResolutionInfo> resolutionSet;
+            std::set<fheroes2::ResolutionInfo> resolutionSet;
 
-                const int displayCount = SDL_GetNumVideoDisplays();
-                if ( displayCount >= 1 ) {
-                    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+            const int displayCount = SDL_GetNumVideoDisplays();
+            if ( displayCount >= 1 ) {
+                for ( int displayId = 0; displayId < displayCount; ++displayId ) {
+                    const int displayModeCount = SDL_GetNumDisplayModes( displayId );
                     if ( displayModeCount >= 1 ) {
                         for ( int i = 0; i < displayModeCount; ++i ) {
                             SDL_DisplayMode videoMode;
-                            const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
+                            const int returnCode = SDL_GetDisplayMode( displayId, i, &videoMode );
                             if ( returnCode != 0 ) {
-                                ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                                ERROR_LOG( "Failed to get display mode on display " << displayId << ". The error value: " << returnCode
+                                                                                    << ", description: " << SDL_GetError() )
                             }
                             else {
                                 resolutionSet.emplace( videoMode.w, videoMode.h );
@@ -923,24 +929,71 @@ namespace
                         }
                     }
                     else {
-                        ERROR_LOG( "Failed to get the number of display modes. The error value: " << displayModeCount << ", description: " << SDL_GetError() )
+                        ERROR_LOG( "Failed to get the number of display modes for display" << displayId << ". The error value: " << displayModeCount
+                                                                                           << ", description: " << SDL_GetError() )
                     }
                 }
-                else {
-                    ERROR_LOG( "Failed to get the number of displays. The error value: " << displayCount << ", description: " << SDL_GetError() )
-                }
+            }
+            else {
+                ERROR_LOG( "Failed to get the number of displays. The error value: " << displayCount << ", description: " << SDL_GetError() )
+            }
 
 #if defined( TARGET_NINTENDO_SWITCH )
-                // Nintendo Switch supports arbitrary resolutions via the HW scaler
-                // 848x480 is the smallest resolution supported by fheroes2
-                resolutionSet.emplace( 848, 480 );
+            // Nintendo Switch supports arbitrary resolutions via the HW scaler
+            // 848x480 is the smallest resolution supported by fheroes2
+            resolutionSet.emplace( 848, 480 );
 #endif
-                resolutionSet = FilterResolutions( resolutionSet );
+            resolutionSet = FilterResolutions( resolutionSet );
 
+            if ( displayCount < 1 ) {
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
-            }();
+            }
 
-            return filteredResolutions;
+            if ( !shouldUseFullscreenDesktopMode() ) {
+                // If software emulation is not enabled it means that we need to use resolutions supported
+                // by the hardware.
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
+            // We should limit all available resolutions to the one which is currently chosen on the system
+            // to avoid ending up having application window which is bigger than the screen resolution.
+            SDL_DisplayMode maxDisplayMode{};
+
+            for ( int displayId = 0; displayId < displayCount; ++displayId ) {
+                SDL_DisplayMode displayMode;
+
+                const int returnValue = SDL_GetCurrentDisplayMode( displayId, &displayMode );
+                if ( returnValue < 0 ) {
+                    ERROR_LOG( "Failed to retrieve the current display mode for display " << displayId << ". The error value: " << returnValue
+                                                                                          << ", description: " << SDL_GetError() )
+                    continue;
+                }
+
+                // There is no an ideal formula of how to choose the biggest resolution among multiple displays
+                // so let's use a simple and well-known approach.
+                maxDisplayMode.w = std::max( maxDisplayMode.w, displayMode.w );
+                maxDisplayMode.h = std::max( maxDisplayMode.h, displayMode.h );
+            }
+
+            if ( maxDisplayMode.w == 0 || maxDisplayMode.h == 0 ) {
+                // None of displays returned a value display mode.
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
+            // If the current display resolution is somehow very small, ignore it.
+            // It could happen when a device has smaller than the required by the engine resolution.
+            if ( maxDisplayMode.w < fheroes2::Display::DEFAULT_WIDTH || maxDisplayMode.h < fheroes2::Display::DEFAULT_HEIGHT ) {
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }
+
+            std::vector<fheroes2::ResolutionInfo> temp;
+            for ( auto iter = resolutionSet.rbegin(); iter != resolutionSet.rend(); ++iter ) {
+                if ( iter->screenWidth <= maxDisplayMode.w && iter->screenHeight <= maxDisplayMode.h ) {
+                    temp.emplace_back( *iter );
+                }
+            }
+
+            return temp;
         }
 
         void setTitle( const std::string & title ) override
@@ -1120,7 +1173,7 @@ namespace
                 resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
             }
 
-#if defined( ANDROID )
+#if defined( ANDROID ) || defined( __IPHONEOS__ )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set the " SDL_HINT_ORIENTATIONS " hint." )
