@@ -29,11 +29,11 @@ namespace Maps::Map_Format
 
 namespace Maps::Generator
 {
-    struct Configuration
+    struct Configuration final
     {
-        int32_t playerCount = 2;
-        int32_t regionSizeLimit = 300;
-        bool basicOnly = true;
+        int32_t playerCount{ 2 };
+        int32_t regionSizeLimit{ 300 };
+        bool basicOnly{ true };
     };
 
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, int32_t width, int32_t height );
