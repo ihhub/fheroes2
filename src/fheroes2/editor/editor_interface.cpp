@@ -1025,15 +1025,7 @@ namespace Interface
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
-                    int32_t newCount = _randomMapConfig.playerCount;
-                    if ( Dialog::SelectCount( _( "Pick player count" ), 2, 6, newCount ) ) {
-                        _randomMapConfig.playerCount = newCount;
-                    }
-
-                    newCount = _randomMapConfig.regionSizeLimit;
-                    if ( Dialog::SelectCount( _( "Limit region size" ), 200, 10000, newCount ) ) {
-                        _randomMapConfig.regionSizeLimit = newCount;
-                    }
+                    _updateRandomMapConfiguration();
                 }
 #endif
                 // map scrolling control
@@ -2175,7 +2167,7 @@ namespace Interface
         return false;
     }
 
-    bool EditorInterface::generateRandomMap( const int32_t mapWidth )
+    void EditorInterface::_updateRandomMapConfiguration()
     {
         int32_t newCount = _randomMapConfig.playerCount;
         if ( Dialog::SelectCount( _( "Pick player count" ), 2, 6, newCount ) ) {
@@ -2186,6 +2178,11 @@ namespace Interface
         if ( Dialog::SelectCount( _( "Limit region size" ), 200, 10000, newCount ) ) {
             _randomMapConfig.regionSizeLimit = newCount;
         }
+    }
+
+    bool EditorInterface::generateRandomMap( const int32_t mapWidth )
+    {
+        _updateRandomMapConfiguration();
 
         return Maps::Generator::generateMap( _mapFormat, _randomMapConfig, mapWidth, mapWidth );
     }
