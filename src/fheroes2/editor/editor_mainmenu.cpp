@@ -186,7 +186,6 @@ namespace Editor
         }
         mapSizeButtons.disable();
 
-        // TODO: Change to From Scratch and Random buttons when random map generator has been implemented.
         if ( !straightToSelectMapSize ) {
             outputEditorMainMenuInTextSupportMode();
 
