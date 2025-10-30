@@ -392,7 +392,7 @@ namespace Maps::Generator
 
         const double radius = sqrt( ( innerLayer + outerLayer ) * config.regionSizeLimit / M_PI );
         const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * 0.85;
-        const double innerRadius = innerLayer == 1 ? 0 : outerRadius / 3;
+        const double innerRadius = ( innerLayer == 1 ) ? 0 : outerRadius / 3;
 
         const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
 
@@ -409,7 +409,7 @@ namespace Maps::Generator
                 const int centerTile = mapBoundsCheck( x, y );
 
                 const int factor = regionCount / config.playerCount;
-                const bool isPlayerRegion = layer == 1 && ( i % factor ) == 0;
+                const bool isPlayerRegion = ( layer == 1 ) && ( ( i % factor ) == 0 );
 
                 const int groundType = isPlayerRegion ? Rand::Get( playerStartingTerrain ) : Rand::Get( neutralTerrain );
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
