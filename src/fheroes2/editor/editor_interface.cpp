@@ -1037,7 +1037,6 @@ namespace Interface
                     }
                 }
 #endif
-                // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
