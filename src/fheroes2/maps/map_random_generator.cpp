@@ -58,7 +58,7 @@ namespace
 
     const std::array<fheroes2::Point, 8> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
 
-    enum class NodeType
+    enum class NodeType : uint8_t
     {
         OPEN,
         BORDER,
@@ -67,26 +67,27 @@ namespace
         PATH
     };
 
-    struct Node
+    struct Node final
     {
         int index{ -1 };
-        NodeType type = NodeType::OPEN;
+        NodeType type{ NodeType::OPEN };
         uint32_t region{ 0 };
         uint16_t mapObject{ 0 };
-        uint16_t passability = DIRECTION_ALL;
+        uint16_t passability{ DIRECTION_ALL };
 
         Node() = default;
-        explicit Node( int index_ )
+
+        explicit Node( const int index_ )
             : index( index_ )
         {
             // Do nothing
         }
     };
 
-    class NodeCache
+    class NodeCache final
     {
     public:
-        NodeCache( int32_t width, int32_t height )
+        NodeCache( const int32_t width, const int32_t height )
             : mapSize( width )
             , outOfBounds( -1 )
             , data( static_cast<size_t>( width ) * height )
@@ -109,10 +110,11 @@ namespace
             if ( position.x < 0 || position.x >= mapSize || position.y < 0 || position.y >= mapSize ) {
                 return outOfBounds;
             }
+
             return data[position.y * mapSize + position.x];
         }
 
-        Node & getNode( int32_t index )
+        Node & getNode( const int32_t index )
         {
             return getNode( { index % mapSize, index / mapSize } );
         }
@@ -123,7 +125,7 @@ namespace
         std::vector<Node> data;
     };
 
-    struct Region
+    struct Region final
     {
         uint32_t _id{ 0 };
         int32_t _centerIndex{ -1 };
@@ -131,12 +133,12 @@ namespace
         std::vector<Node> _nodes;
         size_t _sizeLimit{ 0 };
         size_t _lastProcessedNode{ 0 };
-        int _colorIndex = neutralColorIndex;
-        int _groundType = Maps::Ground::GRASS;
+        int _colorIndex{ neutralColorIndex };
+        int _groundType{ Maps::Ground::GRASS };
 
         Region() = default;
 
-        Region( uint32_t regionIndex, int32_t mapIndex, int playerColor, int ground, size_t expectedSize )
+        Region( const uint32_t regionIndex, const int32_t mapIndex, const int playerColor, const int ground, const size_t expectedSize )
             : _id( regionIndex )
             , _centerIndex( mapIndex )
             , _sizeLimit( expectedSize )
@@ -249,7 +251,6 @@ namespace
 
     void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction = false )
     {
-        // mark object placement
         fheroes2::Rect objectRect;
 
         for ( const auto & objectPart : objectInfo.groundLevelParts ) {
@@ -289,7 +290,7 @@ namespace
             return false;
         }
 
-        // do not update passabilities after every object
+        // Do not update passabilities after every object.
         if ( !Maps::setObjectOnTile( tile, objectInfo, false ) ) {
             assert( 0 );
             return false;
@@ -308,6 +309,7 @@ namespace
             markObjectPlacement( data, objectInfo, tilePos, true );
             return true;
         }
+
         return false;
     }
 
@@ -340,6 +342,7 @@ namespace
                 return true;
             }
         }
+
         return false;
     }
 
