@@ -244,7 +244,6 @@ namespace Editor
                 else if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     return fheroes2::GameMode::MAIN_MENU;
                 }
-
                 else if ( le.isMouseRightButtonPressedInArea( buttonNewMap.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map, either from scratch or using the random map generator." ), Dialog::ZERO );
                 }
