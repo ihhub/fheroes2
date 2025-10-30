@@ -70,10 +70,9 @@ namespace
     struct Node final
     {
         int index{ -1 };
-        NodeType type{ NodeType::OPEN };
         uint32_t region{ 0 };
-        uint16_t mapObject{ 0 };
         uint16_t passability{ DIRECTION_ALL };
+        NodeType type{ NodeType::OPEN };
 
         Node() = default;
 
