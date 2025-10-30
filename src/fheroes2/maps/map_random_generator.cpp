@@ -235,7 +235,7 @@ namespace
         }
 
         if ( isAction ) {
-            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; x++ ) {
+            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
                 const Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, 1 } );
                 if ( pathNode.index == -1 || pathNode.type == NodeType::OBSTACLE ) {
                     return false;
@@ -274,7 +274,7 @@ namespace
         }
 
         if ( isAction ) {
-            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; x++ ) {
+            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
                 Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
                 pathNode.type = NodeType::PATH;
             }
@@ -403,11 +403,11 @@ namespace Maps::Generator
 
         const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
 
-        for ( size_t layer = 0; layer < mapLayers.size(); layer++ ) {
+        for ( size_t layer = 0; layer < mapLayers.size(); ++layer ) {
             const int regionCount = mapLayers[layer].first;
             const double startingAngle = Rand::Get( 360 );
             const double offsetAngle = 360.0 / regionCount;
-            for ( int i = 0; i < regionCount; i++ ) {
+            for ( int i = 0; i < regionCount; ++i ) {
                 const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
                 const double distance = mapLayers[layer].second;
 
@@ -499,7 +499,7 @@ namespace Maps::Generator
             const std::vector<int> resoures = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
             for ( const int resource : resoures ) {
                 // TODO: do a gradual distribution instead of guesses
-                for ( int tries = 0; tries < 5; tries++ ) {
+                for ( int tries = 0; tries < 5; ++tries ) {
                     if ( placeMine( mapFormat, data, region, resource ) ) {
                         break;
                     }
