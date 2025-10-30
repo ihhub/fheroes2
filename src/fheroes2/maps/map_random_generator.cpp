@@ -380,7 +380,6 @@ namespace Maps::Generator
         // TODO: Balanced set up only / Pyramid later
 
         // Aiming for region size to be ~400 tiles in a 300-600 range
-        // const int minimumRegionCount = playerCount + 1;
         const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
 
         // Step 2. Determine region layout and placement
