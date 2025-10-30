@@ -279,13 +279,11 @@ namespace Editor
 
                     prepareMapSizeMenu();
                 }
-
-                if ( le.MouseClickLeft( buttonRandomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) {
+                else if ( le.MouseClickLeft( buttonRandomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) {
                     generateRandomMap = true;
 
                     prepareMapSizeMenu();
                 }
-
                 else if ( le.MouseClickLeft( buttonBack.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     mapCreationModeButtons.disable();
                     buttonBack.disable();
@@ -303,7 +301,6 @@ namespace Editor
 
                     outputEditorMainMenuInTextSupportMode();
                 }
-
                 else if ( le.isMouseRightButtonPressedInArea( buttonScratchMap.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "From Scratch" ), _( "Start from scratch with a blank map." ), Dialog::ZERO );
                 }
