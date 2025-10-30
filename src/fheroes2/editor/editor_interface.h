@@ -171,7 +171,7 @@ namespace Interface
 
         void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
 
-        void _updateRandomMapConfiguration();
+        bool _updateRandomMapConfiguration();
 
         EditorPanel _editorPanel;
 
