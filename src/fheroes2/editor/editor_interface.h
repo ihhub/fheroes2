@@ -30,6 +30,7 @@
 #include "history_manager.h"
 #include "interface_base.h"
 #include "map_format_info.h"
+#include "map_random_generator.h"
 #include "timing.h"
 
 enum class PlayerColor : uint8_t;
@@ -175,8 +176,7 @@ namespace Interface
         int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
 
-        int32_t _playerCount{ 2 };
-        int32_t _regionSizeLimit{ 600 };
+        Maps::Generator::Configuration _randomMapConfig;
 
         std::function<void( const int32_t )> _cursorUpdater;
 

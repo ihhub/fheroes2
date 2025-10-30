@@ -62,7 +62,6 @@
 #include "localevent.h"
 #include "map_format_helper.h"
 #include "map_object_info.h"
-#include "map_random_generator.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -1012,14 +1011,11 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
                 }
+#if defined( WITH_DEBUG )
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_GENERATION ) ) {
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                    Maps::Generator::Configuration rmgConfig;
-                    rmgConfig.playerCount = _playerCount;
-                    rmgConfig.regionSizeLimit = _regionSizeLimit;
-
-                    if ( Maps::Generator::generateMap( _mapFormat, rmgConfig, _mapFormat.width, _mapFormat.width ) ) {
+                    if ( Maps::Generator::generateMap( _mapFormat, _randomMapConfig, _mapFormat.width, _mapFormat.width ) ) {
                         _redraw |= mapUpdateFlags;
 
                         action.commit();
@@ -1029,15 +1025,17 @@ namespace Interface
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
-                    int32_t newCount = _playerCount;
+                    int32_t newCount = _randomMapConfig.playerCount;
                     if ( Dialog::SelectCount( _( "Pick player count" ), 2, 6, newCount ) ) {
-                        _playerCount = newCount;
+                        _randomMapConfig.playerCount = newCount;
                     }
-                    newCount = _regionSizeLimit;
+
+                    newCount = _randomMapConfig.regionSizeLimit;
                     if ( Dialog::SelectCount( _( "Limit region size" ), 200, 10000, newCount ) ) {
-                        _regionSizeLimit = newCount;
+                        _randomMapConfig.regionSizeLimit = newCount;
                     }
                 }
+#endif
                 // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() ) {
@@ -2179,20 +2177,17 @@ namespace Interface
 
     bool EditorInterface::generateRandomMap( const int32_t mapWidth )
     {
-        int32_t newCount = _playerCount;
+        int32_t newCount = _randomMapConfig.playerCount;
         if ( Dialog::SelectCount( _( "Pick player count" ), 2, 6, newCount ) ) {
-            _playerCount = newCount;
+            _randomMapConfig.playerCount = newCount;
         }
-        newCount = _regionSizeLimit;
+
+        newCount = _randomMapConfig.regionSizeLimit;
         if ( Dialog::SelectCount( _( "Limit region size" ), 200, 10000, newCount ) ) {
-            _regionSizeLimit = newCount;
+            _randomMapConfig.regionSizeLimit = newCount;
         }
 
-        Maps::Generator::Configuration rmgConfig;
-        rmgConfig.playerCount = _playerCount;
-        rmgConfig.regionSizeLimit = _regionSizeLimit;
-
-        return Maps::Generator::generateMap( _mapFormat, rmgConfig, mapWidth, mapWidth );
+        return Maps::Generator::generateMap( _mapFormat, _randomMapConfig, mapWidth, mapWidth );
     }
 
     bool EditorInterface::generateNewMap( const int32_t mapWidth )

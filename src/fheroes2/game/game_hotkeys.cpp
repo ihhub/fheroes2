@@ -170,10 +170,12 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
 
+#if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_GENERATION )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|generate random map" ), fheroes2::Key::KEY_F5 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|configure random map generator" ), fheroes2::Key::KEY_F6 };
+#endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
