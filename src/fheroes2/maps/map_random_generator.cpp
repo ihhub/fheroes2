@@ -49,7 +49,7 @@
 
 namespace
 {
-    // ObjectInfo ObjctGroup based indicies do not match old objects
+    // ObjectInfo ObjectGroup based indicies do not match old objects
     const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     const int randomCastleIndex = 12;
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
@@ -148,11 +148,6 @@ namespace
             _nodes.reserve( expectedSize );
             _nodes.emplace_back( mapIndex );
             _nodes[0].region = regionIndex;
-        }
-
-        size_t getNeighboursCount() const
-        {
-            return _neighbours.size();
         }
     };
 
