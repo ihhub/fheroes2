@@ -212,7 +212,7 @@ public:
 
     // Generates a map without initializing tiles.
     // WARNING: call this method only when reading a map from a file
-    void generateUninitializedMap( const int32_t mapSideSize );
+    void generateUninitializedMap( const int32_t size );
 
     static World & Get();
 

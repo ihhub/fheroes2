@@ -354,14 +354,14 @@ void World::generateBattleOnlyMap()
     }
 }
 
-void World::generateUninitializedMap( const int32_t mapSideSize )
+void World::generateUninitializedMap( const int32_t size )
 {
-    assert( mapSideSize > 0 );
+    assert( size > 0 );
 
     Reset();
 
-    width = mapSideSize;
-    height = mapSideSize;
+    width = size;
+    height = size;
 
     Maps::FileInfo fi;
 
