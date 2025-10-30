@@ -87,17 +87,17 @@ namespace
     {
     public:
         NodeCache( const int32_t width, const int32_t height )
-            : mapSize( width )
-            , outOfBounds( -1 )
-            , data( static_cast<size_t>( width ) * height )
+            : _mapSize( width )
+            , _outOfBounds( -1 )
+            , _data( static_cast<size_t>( width ) * height )
         {
-            outOfBounds.type = NodeType::BORDER;
+            _outOfBounds.type = NodeType::BORDER;
 
             for ( int32_t y = 0; y < height; ++y ) {
                 const int32_t rowIndex = y * width;
                 for ( int32_t x = 0; x < width; ++x ) {
                     const int32_t index = rowIndex + x;
-                    Node & node = data[index];
+                    Node & node = _data[index];
 
                     node.index = index;
                 }
@@ -106,22 +106,22 @@ namespace
 
         Node & getNode( const fheroes2::Point position )
         {
-            if ( position.x < 0 || position.x >= mapSize || position.y < 0 || position.y >= mapSize ) {
-                return outOfBounds;
+            if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
+                return _outOfBounds;
             }
 
-            return data[position.y * mapSize + position.x];
+            return _data[position.y * _mapSize + position.x];
         }
 
         Node & getNode( const int32_t index )
         {
-            return getNode( { index % mapSize, index / mapSize } );
+            return getNode( { index % _mapSize, index / _mapSize } );
         }
 
     private:
-        int32_t mapSize{ 0 };
-        Node outOfBounds;
-        std::vector<Node> data;
+        const int32_t _mapSize{ 0 };
+        Node _outOfBounds;
+        std::vector<Node> _data;
     };
 
     struct Region final
