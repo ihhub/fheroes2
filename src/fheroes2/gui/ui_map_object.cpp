@@ -327,12 +327,12 @@ namespace fheroes2
 
     int32_t getMineObjectInfoId( const int resourceType, const int groundType )
     {
-        // 8 terrain and 5 resources
-        // 2 abandoned mines: grass & dirt
-        // Sawmills for different terrains: Grass/Swamp, Snow, Lava, Desert, Dirt, Wasteland.
-        // 2 alchemists labs: regular and snow
+        // 8 terrains and 5 resources:
+        // - 2 abandoned mines: Grass and Dirt
+        // - 6 Sawmills for different terrains: Grass/Swamp, Snow, Lava, Desert, Dirt, Wasteland
+        // - 2 alchemists labs: regular and Snow
 
-        // if you add new mine type update this logic!
+        // If you add new mine type update this logic!
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() == 50 );
 
         const int groundIndex = mineIndexFromGroundType( groundType );
@@ -351,10 +351,10 @@ namespace fheroes2
         case Resource::WOOD:
             return 5 * 8 + 2 + sawmillIndexFromGroundType( groundType );
         case Resource::MERCURY:
-            return groundType == Maps::Ground::SNOW ? 49 : 48;
+            return ( groundType == Maps::Ground::SNOW ) ? 49 : 48;
         case Resource::UNKNOWN:
-            // must be an abandoned mine
-            return groundType == Maps::Ground::GRASS ? 40 : 41;
+            // Must be an abandoned mine.
+            return ( groundType == Maps::Ground::GRASS ) ? 40 : 41;
         default:
             // Have you added a new resource type?!
             assert( 0 );
