@@ -282,6 +282,8 @@ namespace Editor
                     generateRandomMap = true;
 
                     prepareMapSizeMenu();
+
+                    fheroes2::showStandardTextMessage( _( "Warning!" ), "This is a work-in-progress feature.", Dialog::OK );
                 }
                 else if ( le.MouseClickLeft( buttonBack.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     mapCreationModeButtons.disable();
