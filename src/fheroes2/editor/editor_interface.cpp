@@ -1012,7 +1012,7 @@ namespace Interface
                     eventViewWorld();
                 }
 #if defined( WITH_DEBUG )
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_GENERATION ) ) {
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE ) ) {
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                     if ( Maps::Generator::generateMap( _mapFormat, _randomMapConfig, _mapFormat.width, _mapFormat.width ) ) {
@@ -1024,8 +1024,17 @@ namespace Interface
                         _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
                     }
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
-                    _updateRandomMapConfiguration();
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE ) ) {
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                    if ( generateRandomMap( _mapFormat.width ) ) {
+                        _redraw |= mapUpdateFlags;
+
+                        action.commit();
+                    }
+                    else {
+                        _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
+                    }
                 }
 #endif
                 // map scrolling control

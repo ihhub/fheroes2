@@ -83,8 +83,8 @@ namespace Game
 
 #if defined( WITH_DEBUG )
         // These hotkey are temporary and going to be removed once random map generator is good enough.
-        EDITOR_RANDOM_MAP_GENERATION,
-        EDITOR_RANDOM_MAP_CONFIGURATION,
+        EDITOR_RANDOM_MAP_REGENERATE,
+        EDITOR_RANDOM_MAP_RECONFIGURE,
 #endif
 
         CAMPAIGN_ROLAND,
