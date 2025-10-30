@@ -82,7 +82,8 @@ namespace Game
         EDITOR_TOGGLE_PASSABILITY,
 
 #if defined( WITH_DEBUG )
-        // These hotkey are temporary and going to be removed once random map generator is good enough.
+        // These hotkeys are temporary and going to be removed once random map generator is good enough.
+        // TODO: remove these hotkey when the time is right.
         EDITOR_RANDOM_MAP_REGENERATE,
         EDITOR_RANDOM_MAP_RECONFIGURE,
 #endif
