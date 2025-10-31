@@ -93,6 +93,7 @@ namespace
             , _data( static_cast<size_t>( width ) * height )
         {
             assert( width > 0 && height > 0 );
+            assert( width == height );
 
             _outOfBounds.type = NodeType::BORDER;
 
