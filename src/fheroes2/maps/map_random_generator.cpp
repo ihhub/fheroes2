@@ -456,7 +456,8 @@ namespace Maps::RandomGenerator
                 continue;
             }
 
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Region #" << region._id << " of size " << region._nodes.size() << " tiles has " << region._neighbours.size() << " neighbours" )
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
+                       "Region #" << region._id << " of size " << region._nodes.size() << " tiles has " << region._neighbours.size() << " neighbours" )
 
             int xMin = 0;
             int xMax = width;
