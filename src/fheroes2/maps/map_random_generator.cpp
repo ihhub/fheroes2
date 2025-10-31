@@ -301,7 +301,7 @@ namespace
         return true;
     }
 
-    bool actionObjectPlacer( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Maps::Tile & tile, Maps::ObjectGroup groupType, int32_t type )
+    bool actionObjectPlacer( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
@@ -313,7 +313,7 @@ namespace
         return false;
     }
 
-    bool placeCastle( Interface::EditorInterface & interface, const int32_t mapWidth, NodeCache & data, const Region & region, int targetX, int targetY )
+    bool placeCastle( Interface::EditorInterface & interface, const int32_t mapWidth, NodeCache & data, const Region & region, const int targetX, const int targetY )
     {
         const int regionX = region._centerIndex % mapWidth;
         const int regionY = region._centerIndex / mapWidth;
