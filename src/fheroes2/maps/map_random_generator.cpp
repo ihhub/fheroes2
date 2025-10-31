@@ -197,7 +197,7 @@ namespace
         }
     }
 
-    bool canFitObject( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction = false )
+    bool canFitObject( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
     {
         fheroes2::Rect objectRect;
 
@@ -326,7 +326,7 @@ namespace
         const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
         const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, randomCastleIndex );
 
-        if ( canFitObject( data, basementInfo, tilePos ) && canFitObject( data, castleInfo, tilePos, true ) ) {
+        if ( canFitObject( data, basementInfo, tilePos, false ) && canFitObject( data, castleInfo, tilePos, true ) ) {
             const PlayerColor color = Color::IndexToColor( region._colorIndex );
 
             if ( interface.placeCastle( castleX, castleY, color, randomCastleIndex ) ) {
