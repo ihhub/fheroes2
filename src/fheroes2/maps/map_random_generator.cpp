@@ -450,6 +450,7 @@ namespace Maps::Random_Generator
         // Step 5. Object placement
         for ( Region & region : mapRegions ) {
             if ( region._id == 0 ) {
+                // Skip the first region as we have nothing to do here for now.
                 continue;
             }
 
