@@ -73,7 +73,6 @@ namespace
     {
         int index{ -1 };
         uint32_t region{ 0 };
-        uint16_t passability{ DIRECTION_ALL };
         NodeType type{ NodeType::OPEN };
 
         Node() = default;
@@ -145,11 +144,6 @@ namespace
         }
     };
 
-    uint16_t getDirectionBitmask( uint8_t direction, bool reflect = false )
-    {
-        return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
-    }
-
     void checkAdjacentTiles( NodeCache & rawData, Region & region )
     {
         Node & previousNode = region._nodes[region._lastProcessedNode];
@@ -171,15 +165,13 @@ namespace
             //       This will speed up the below calculations.
             const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
             Node & newTile = rawData.getNode( newPosition + directionOffsets[direction] );
-            if ( newTile.passability & getDirectionBitmask( direction, true ) ) {
-                if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
-                    newTile.region = region._id;
-                    region._nodes.push_back( newTile );
-                }
-                else if ( newTile.region != region._id ) {
-                    previousNode.type = NodeType::BORDER;
-                    region._neighbours.insert( newTile.region );
-                }
+            if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
+                newTile.region = region._id;
+                region._nodes.push_back( newTile );
+            }
+            else if ( newTile.region != region._id ) {
+                previousNode.type = NodeType::BORDER;
+                region._neighbours.insert( newTile.region );
             }
         }
     }
