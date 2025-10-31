@@ -354,7 +354,7 @@ namespace
     }
 }
 
-namespace Maps::Generator
+namespace Maps::RandomGenerator
 {
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
