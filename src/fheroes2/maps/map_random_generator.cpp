@@ -56,7 +56,8 @@ namespace
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
-    const std::array<fheroes2::Point, 8> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
+    constexpr uint8_t directionCount{ 8 };
+    const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
 
     enum class NodeType : uint8_t
     {
@@ -162,7 +163,7 @@ namespace
         Node & previousNode = region._nodes[region._lastProcessedNode];
         const int nodeIndex = previousNode.index;
 
-        for ( uint8_t direction = 0; direction < 8; ++direction ) {
+        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
             if ( region._nodes.size() > region._sizeLimit ) {
                 previousNode.type = NodeType::BORDER;
                 break;
