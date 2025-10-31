@@ -83,7 +83,7 @@ namespace Game
 
 #if defined( WITH_DEBUG )
         // These hotkeys are temporary and going to be removed once random map generator is good enough.
-        // TODO: remove these hotkey when the time is right.
+        // TODO: remove these hotkeys when the time is right.
         EDITOR_RANDOM_MAP_REGENERATE,
         EDITOR_RANDOM_MAP_RECONFIGURE,
 #endif
