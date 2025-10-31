@@ -27,7 +27,7 @@ namespace Maps::Map_Format
     struct MapFormat;
 }
 
-namespace Maps::Generator
+namespace Maps::RandomGenerator
 {
     struct Configuration final
     {
