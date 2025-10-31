@@ -180,7 +180,7 @@ namespace Interface
         int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
 
-        Maps::Generator::Configuration _randomMapConfig;
+        Maps::RandomGenerator::Configuration _randomMapConfig;
 
         std::function<void( const int32_t )> _cursorUpdater;
 
