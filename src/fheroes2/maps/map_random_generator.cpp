@@ -31,7 +31,6 @@
 #include <vector>
 
 #include "color.h"
-#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
