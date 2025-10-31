@@ -49,7 +49,7 @@
 
 namespace
 {
-    // ObjectInfo ObjectGroup based indicies do not match old objects
+    // ObjectInfo ObjectGroup based indicies do not match old objects.
     const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     const int randomCastleIndex = 12;
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
@@ -171,7 +171,8 @@ namespace
                 break;
             }
 
-            // only check diagonal 50% of the time to get more circular distribution; randomness for uneven edges
+            // Check diagonal direction only 50% of the time to get more circular distribution.
+            // It gives randomness for uneven edges.
             if ( direction > 3 && Rand::Get( 1 ) ) {
                 break;
             }
@@ -193,7 +194,7 @@ namespace
 
     void regionExpansion( NodeCache & rawData, Region & region )
     {
-        // Process only "open" nodes that exist at the start of the loop and ignore what's added
+        // Process only "open" nodes that exist at the start of the loop and ignore what's added.
         const size_t nodesEnd = region._nodes.size();
 
         while ( region._lastProcessedNode < nodesEnd ) {
@@ -289,7 +290,7 @@ namespace
             return false;
         }
 
-        // Do not update passabilities after every object.
+        // Do not update passabilities after every object placement.
         if ( !Maps::setObjectOnTile( tile, objectInfo, false ) ) {
             assert( 0 );
             return false;
@@ -380,14 +381,14 @@ namespace Maps::Generator
             return x * width + y;
         };
 
-        // Step 1. Map generator configuration
-        // TODO: Balanced set up only / Pyramid later
+        // Step 1. Setup map generator configuration.
+        // TODO: Implement balanced set up only / Pyramid later.
 
-        // Aiming for region size to be ~400 tiles in a 300-600 range
+        // Aiming for region size to be ~400 tiles in a 300-600 range.
         const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
 
-        // Step 2. Determine region layout and placement
-        // Insert empty region that represents water and map edges
+        // Step 2. Determine region layout and placement.
+        //         Insert empty region that represents water and map edges
         std::vector<Region> mapRegions = { { 0, 0, neutralColorIndex, Ground::WATER, 0 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
@@ -424,11 +425,11 @@ namespace Maps::Generator
             }
         }
 
-        // Step 3. Grow all regions one step at the time so they would compete for space
+        // Step 3. Grow all regions one step at the time so they would compete for space.
         bool stillRoomToExpand = true;
         while ( stillRoomToExpand ) {
             stillRoomToExpand = false;
-            // Skip the border region
+            // Skip the border region.
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
                 regionExpansion( data, region );
@@ -438,7 +439,7 @@ namespace Maps::Generator
             }
         }
 
-        // Step 4. We're ready to save the result
+        // Step 4. Apply terrain changes into the map format.
         for ( const Region & region : mapRegions ) {
             if ( region._id == 0 ) {
                 continue;
@@ -448,7 +449,7 @@ namespace Maps::Generator
                 Maps::setTerrainOnTile( mapFormat, node.index, region._groundType );
             }
 
-            // Fix missing references
+            // Fix missing references.
             for ( const uint32_t adjacent : region._neighbours ) {
                 mapRegions[adjacent]._neighbours.insert( region._id );
             }
@@ -481,11 +482,12 @@ namespace Maps::Generator
             }
 
             if ( region._colorIndex != neutralColorIndex && !placeCastle( interface, mapFormat.width, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
-                // return early if we can't place a starting player castle
+                // Return early if we can't place a starting player castle.
                 return false;
             }
+
             if ( region._nodes.size() > 400 ) {
-                // place non-mandatory castles in bigger neutral regions
+                // Place non-mandatory castles in bigger neutral regions.
                 placeCastle( interface, mapFormat.width, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
             }
 
@@ -494,7 +496,7 @@ namespace Maps::Generator
             }
 
             for ( const int resource : resources ) {
-                // TODO: do a gradual distribution instead of guesses
+                // TODO: do a gradual distribution instead of guesses.
                 for ( int tries = 0; tries < 5; ++tries ) {
                     if ( placeMine( mapFormat, data, region, resource ) ) {
                         break;
@@ -505,15 +507,18 @@ namespace Maps::Generator
             Maps::updateRoadOnTile( mapFormat, region._centerIndex, true );
         }
 
-        // set up region connectors based on frequency settings & border length
-        // generate road based paths
-        // place objects avoiding the borders
-        //
-        // make sure objects accessible before
-        // make sure paths are accessible - delete obstacles
+        // TODO: set up region connectors based on frequency settings and border length.
 
-        // place treasures
-        // place monsters
+        // TODO: generate road based paths.
+
+        // TODO: place objects while avoiding the borders.
+        //       Make sure that objects are accessible.
+        //       Also, make sure that paths are accessible. Possibly delete obstacles.
+
+        // TODO: place treasure objects.
+
+        // TODO: place monsters.
+
         return true;
     }
 }
