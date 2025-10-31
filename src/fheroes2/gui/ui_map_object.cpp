@@ -87,6 +87,68 @@ namespace
             maxOffset.y = std::max( maxOffset.y, objectPart.tileOffset.y );
         }
     }
+
+    constexpr int32_t mineIndexFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            // Logically Water is not allowed but let's do this.
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 1;
+        case Maps::Ground::SNOW:
+            return 2;
+        case Maps::Ground::SWAMP:
+            return 3;
+        case Maps::Ground::LAVA:
+            return 4;
+        case Maps::Ground::DESERT:
+            return 5;
+        case Maps::Ground::DIRT:
+            return 6;
+        case Maps::Ground::WASTELAND:
+            return 7;
+        case Maps::Ground::BEACH:
+            return 0;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
+    }
+
+    constexpr int32_t sawmillIndexFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            // Logically Water is not allowed but let's do this.
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 0;
+        case Maps::Ground::SNOW:
+            return 1;
+        case Maps::Ground::SWAMP:
+            return 0;
+        case Maps::Ground::LAVA:
+            return 2;
+        case Maps::Ground::DESERT:
+            return 3;
+        case Maps::Ground::DIRT:
+            return 4;
+        case Maps::Ground::WASTELAND:
+            return 5;
+        case Maps::Ground::BEACH:
+            return 3;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
+    }
 }
 
 namespace fheroes2
@@ -260,68 +322,6 @@ namespace fheroes2
             break;
         }
 
-        return 0;
-    }
-
-    constexpr int32_t mineIndexFromGroundType( const int groundType )
-    {
-        switch ( groundType ) {
-        case Maps::Ground::WATER:
-            // Logically Water is not allowed but let's do this.
-            assert( 0 );
-            return 0;
-        case Maps::Ground::GRASS:
-            return 1;
-        case Maps::Ground::SNOW:
-            return 2;
-        case Maps::Ground::SWAMP:
-            return 3;
-        case Maps::Ground::LAVA:
-            return 4;
-        case Maps::Ground::DESERT:
-            return 5;
-        case Maps::Ground::DIRT:
-            return 6;
-        case Maps::Ground::WASTELAND:
-            return 7;
-        case Maps::Ground::BEACH:
-            return 0;
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            break;
-        }
-        return 0;
-    }
-
-    constexpr int32_t sawmillIndexFromGroundType( const int groundType )
-    {
-        switch ( groundType ) {
-        case Maps::Ground::WATER:
-            // Logically Water is not allowed but let's do this.
-            assert( 0 );
-            return 0;
-        case Maps::Ground::GRASS:
-            return 0;
-        case Maps::Ground::SNOW:
-            return 1;
-        case Maps::Ground::SWAMP:
-            return 0;
-        case Maps::Ground::LAVA:
-            return 2;
-        case Maps::Ground::DESERT:
-            return 3;
-        case Maps::Ground::DIRT:
-            return 4;
-        case Maps::Ground::WASTELAND:
-            return 5;
-        case Maps::Ground::BEACH:
-            return 3;
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            break;
-        }
         return 0;
     }
 
