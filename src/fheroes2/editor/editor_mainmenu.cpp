@@ -240,10 +240,12 @@ namespace Editor
                 else if ( le.MouseClickLeft( buttonLoadMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU ) ) {
                     return fheroes2::GameMode::EDITOR_LOAD_MAP;
                 }
-                else if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+
+                if ( le.MouseClickLeft( buttonMainMenu.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     return fheroes2::GameMode::MAIN_MENU;
                 }
-                else if ( le.isMouseRightButtonPressedInArea( buttonNewMap.area() ) ) {
+
+                if ( le.isMouseRightButtonPressedInArea( buttonNewMap.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map, either from scratch or using the random map generator." ), Dialog::ZERO );
                 }
                 else if ( le.isMouseRightButtonPressedInArea( buttonLoadMap.area() ) ) {
