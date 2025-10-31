@@ -59,6 +59,8 @@ namespace
     constexpr uint8_t directionCount{ 8 };
     const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
 
+    const std::array<int, 7> resources{ Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
+
     enum class NodeType : uint8_t
     {
         OPEN,
@@ -491,8 +493,7 @@ namespace Maps::Generator
                 continue;
             }
 
-            const std::vector<int> resoures = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
-            for ( const int resource : resoures ) {
+            for ( const int resource : resources ) {
                 // TODO: do a gradual distribution instead of guesses
                 for ( int tries = 0; tries < 5; ++tries ) {
                     if ( placeMine( mapFormat, data, region, resource ) ) {
