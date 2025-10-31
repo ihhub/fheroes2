@@ -112,7 +112,11 @@ namespace
 
         Node & getNode( const int32_t index )
         {
-            return getNode( { index % _mapSize, index / _mapSize } );
+            if ( index < 0 || index >= _mapSize * _mapSize ) {
+                return _outOfBounds;
+            }
+            
+            return _data[index];
         }
 
     private:
