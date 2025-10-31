@@ -2001,7 +2001,7 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectPlacement( tilePos, Maps::ObjectGroup::KINGDOM_TOWNS, type, errorMessage ) ) {
+            if ( !verifyObjectPlacement( tilePos, groupType, type, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
                 return;
             }
