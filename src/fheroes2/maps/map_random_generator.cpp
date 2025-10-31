@@ -424,7 +424,7 @@ namespace Maps::Random_Generator
         bool stillRoomToExpand = true;
         while ( stillRoomToExpand ) {
             stillRoomToExpand = false;
-            // Skip the border region.
+            // Skip the first region which is the border region.
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
                 regionExpansion( data, region );
