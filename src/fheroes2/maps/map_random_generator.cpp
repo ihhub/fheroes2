@@ -49,7 +49,6 @@
 
 namespace
 {
-    // ObjectInfo ObjectGroup based indicies do not match old objects.
     const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     const int randomCastleIndex = 12;
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
