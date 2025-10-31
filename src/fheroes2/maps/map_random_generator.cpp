@@ -243,7 +243,7 @@ namespace
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction = false )
+    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction )
     {
         fheroes2::Rect objectRect;
 
