@@ -110,6 +110,11 @@ namespace
             return _data[position.y * _mapSize + position.x];
         }
 
+        Node & getNode( const int32_t index )
+        {
+            return getNode( { index % _mapSize, index / _mapSize } );
+        }
+
     private:
         const int32_t _mapSize{ 0 };
         Node _outOfBounds;
