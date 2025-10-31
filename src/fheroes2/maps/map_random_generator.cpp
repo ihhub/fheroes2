@@ -97,14 +97,8 @@ namespace
 
             _outOfBounds.type = NodeType::BORDER;
 
-            for ( int32_t y = 0; y < height; ++y ) {
-                const int32_t rowIndex = y * width;
-                for ( int32_t x = 0; x < width; ++x ) {
-                    const int32_t index = rowIndex + x;
-                    Node & node = _data[index];
-
-                    node.index = index;
-                }
+            for ( size_t i = 0; i < _data.size(); ++i ) {
+                _data[i].index = static_cast<int>( i );
             }
         }
 
