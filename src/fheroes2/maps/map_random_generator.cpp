@@ -144,6 +144,8 @@ namespace
             , _colorIndex( playerColor )
             , _groundType( ground )
         {
+            assert( expectedSize > 0 );
+
             _nodes.reserve( expectedSize );
             _nodes.emplace_back( mapIndex );
             _nodes[0].region = regionIndex;
