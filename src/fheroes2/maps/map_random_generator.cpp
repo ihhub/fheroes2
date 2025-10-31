@@ -357,7 +357,7 @@ namespace
 
 namespace Maps::Generator
 {
-    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, int32_t width, int32_t height )
+    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
         if ( config.playerCount < 2 || config.playerCount > 6 ) {
             assert( config.playerCount <= 6 );
