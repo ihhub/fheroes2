@@ -285,7 +285,10 @@ namespace Editor
 
                     prepareMapSizeMenu();
 
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "This feature is still in development and may have limited functionality or errors. Expect inconsistencies as improvements are made.", Dialog::OK );
+                    fheroes2::showStandardTextMessage(
+                        _( "Warning!" ),
+                        "This feature is still in development and may have limited functionality or errors. Expect inconsistencies as improvements are made.",
+                        Dialog::OK );
                 }
                 else if ( le.MouseClickLeft( buttonBack.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     mapCreationModeButtons.disable();
