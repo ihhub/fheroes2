@@ -1015,7 +1015,7 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE ) ) {
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                    if ( Maps::RandomGenerator::generateMap( _mapFormat, _randomMapConfig, _mapFormat.width, _mapFormat.width ) ) {
+                    if ( Maps::Random_Generator::generateMap( _mapFormat, _randomMapConfig, _mapFormat.width, _mapFormat.width ) ) {
                         _redraw |= mapUpdateFlags;
 
                         action.commit();
@@ -2177,7 +2177,7 @@ namespace Interface
 
     bool EditorInterface::_updateRandomMapConfiguration()
     {
-        Maps::RandomGenerator::Configuration temp{ _randomMapConfig };
+        Maps::Random_Generator::Configuration temp{ _randomMapConfig };
 
         if ( !Dialog::SelectCount( _( "Pick player count" ), 2, 6, temp.playerCount ) ) {
             return false;
@@ -2198,7 +2198,7 @@ namespace Interface
             return false;
         }
 
-        return Maps::RandomGenerator::generateMap( _mapFormat, _randomMapConfig, mapWidth, mapWidth );
+        return Maps::Random_Generator::generateMap( _mapFormat, _randomMapConfig, mapWidth, mapWidth );
     }
 
     bool EditorInterface::generateNewMap( const int32_t mapWidth )
