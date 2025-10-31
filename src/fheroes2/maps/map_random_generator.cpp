@@ -111,11 +111,6 @@ namespace
             return _data[position.y * _mapSize + position.x];
         }
 
-        Node & getNode( const int32_t index )
-        {
-            return getNode( { index % _mapSize, index / _mapSize } );
-        }
-
     private:
         const int32_t _mapSize{ 0 };
         Node _outOfBounds;
@@ -172,6 +167,8 @@ namespace
                 break;
             }
 
+            // TODO: use node index and pre-calculate offsets in advance.
+            //       This will speed up the below calculations.
             const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
             Node & newTile = rawData.getNode( newPosition + directionOffsets[direction] );
             if ( newTile.passability & getDirectionBitmask( direction, true ) ) {
