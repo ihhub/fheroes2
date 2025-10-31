@@ -287,7 +287,7 @@ namespace Editor
 
                     fheroes2::showStandardTextMessage(
                         _( "Warning!" ),
-                        "This feature is still in development and may have limited functionality or errors. Expect inconsistencies as improvements are made.",
+                        "This feature is still in development and has some limitations. Errors might occur. This feature will continue to change as we are working on improving it.",
                         Dialog::OK );
                 }
                 else if ( le.MouseClickLeft( buttonBack.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
