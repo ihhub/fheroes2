@@ -116,7 +116,7 @@ namespace
             if ( index < 0 || index >= _mapSize * _mapSize ) {
                 return _outOfBounds;
             }
-            
+
             return _data[index];
         }
 
