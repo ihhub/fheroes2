@@ -2389,7 +2389,7 @@ namespace Editor
                 std::string notes = mapFormat.creatorNotes;
 
                 const fheroes2::Text body{ _( "About" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, notes, 150, true, mapFormat.mainLanguage ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, notes, Maps::Map_Format::messageCharLimit, true, mapFormat.mainLanguage ) ) {
                     mapFormat.creatorNotes = std::move( notes );
                 }
             }
