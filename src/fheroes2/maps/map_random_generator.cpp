@@ -153,7 +153,7 @@ namespace
         }
     };
 
-    void checkAdjacentTiles( NodeCache & rawData, Region & region )
+    void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
     {
         Node & previousNode = region._nodes[region._lastProcessedNode];
         const int nodeIndex = previousNode.index;
@@ -166,7 +166,7 @@ namespace
 
             // Check diagonal direction only 50% of the time to get more circular distribution.
             // It gives randomness for uneven edges.
-            if ( direction > 3 && Rand::Get( 1 ) ) {
+            if ( direction > 3 && Rand::GetWithGen( 0, 1, randomGenerator ) ) {
                 break;
             }
 
@@ -185,13 +185,13 @@ namespace
         }
     }
 
-    void regionExpansion( NodeCache & rawData, Region & region )
+    void regionExpansion( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added.
         const size_t nodesEnd = region._nodes.size();
 
         while ( region._lastProcessedNode < nodesEnd ) {
-            checkAdjacentTiles( rawData, region );
+            checkAdjacentTiles( rawData, region, randomGenerator );
             ++region._lastProcessedNode;
         }
     }
@@ -339,9 +339,15 @@ namespace
         return false;
     }
 
-    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource )
+    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource, Rand::PCG32 & randomGenerator )
     {
-        const auto & node = Rand::Get( region._nodes );
+        const auto & node = Rand::GetWithGen( region._nodes, randomGenerator );
+        if ( node.type == NodeType::BORDER ) {
+            return false;
+        }
+        // TODO: check bottom tiles
+        // store node reference ??
+        // set radius for mine type
         Maps::Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
@@ -365,6 +371,9 @@ namespace Maps::Random_Generator
         if ( !interface.generateNewMap( width ) ) {
             return false;
         }
+
+        const uint32_t generatorSeed = ( config.seed ) ? config.seed : Rand::Get( std::numeric_limits<uint32_t>::max() );
+        Rand::PCG32 randomGenerator( generatorSeed );
 
         NodeCache data( width, height );
 
@@ -396,7 +405,7 @@ namespace Maps::Random_Generator
 
         for ( size_t layer = 0; layer < mapLayers.size(); ++layer ) {
             const int regionCount = mapLayers[layer].first;
-            const double startingAngle = Rand::Get( 360 );
+            const double startingAngle = Rand::GetWithGen( 0, 360, randomGenerator );
             const double offsetAngle = 360.0 / regionCount;
             for ( int i = 0; i < regionCount; ++i ) {
                 const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
@@ -409,7 +418,7 @@ namespace Maps::Random_Generator
                 const int factor = regionCount / config.playerCount;
                 const bool isPlayerRegion = ( layer == 1 ) && ( ( i % factor ) == 0 );
 
-                const int groundType = isPlayerRegion ? Rand::Get( playerStartingTerrain ) : Rand::Get( neutralTerrain );
+                const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
@@ -425,7 +434,7 @@ namespace Maps::Random_Generator
             // Skip the first region which is the border region.
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
-                regionExpansion( data, region );
+                regionExpansion( data, region, randomGenerator );
                 if ( region._lastProcessedNode != region._nodes.size() ) {
                     stillRoomToExpand = true;
                 }
@@ -492,8 +501,10 @@ namespace Maps::Random_Generator
 
             for ( const int resource : resources ) {
                 // TODO: do a gradual distribution instead of guesses.
+                // TODO: MapEconomy to track the values
+                // TODO: not every mine, depends on richness setting & region side
                 for ( int tries = 0; tries < 5; ++tries ) {
-                    if ( placeMine( mapFormat, data, region, resource ) ) {
+                    if ( placeMine( mapFormat, data, region, resource, randomGenerator ) ) {
                         break;
                     }
                 }

@@ -33,6 +33,8 @@ namespace Maps::Random_Generator
     {
         int32_t playerCount{ 2 };
         int32_t regionSizeLimit{ 300 };
+        uint32_t seed{ 0 };
+
         // TODO: remove this member once random map generator is good enough.
         bool basicOnly{ true };
     };
