@@ -550,11 +550,15 @@ namespace fheroes2
         }
 
         // We need to add truncation symbol.
-        std::string temp = _text;
         _text += truncationSymbol;
         while ( height( maxWidth ) > maxHeight ) {
-            temp.pop_back();
-            _text = temp;
+            // Remove the truncation symbol and one more character before it.
+            for ( size_t i = 0; i < truncationSymbol.size(); ++i ) {
+                _text.pop_back();
+            }
+
+            _text.pop_back();
+
             _text += truncationSymbol;
         }
     }
