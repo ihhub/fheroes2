@@ -172,7 +172,7 @@ namespace
         }
 
     protected:
-        void onToggleOn() final
+        void onToggleOn() override
         {
             _selected = {};
 
@@ -183,7 +183,7 @@ namespace
             setButtonOkayStatus( true );
         }
 
-        void onToggleOff() final
+        void onToggleOff() override
         {
             _selected = {};
 
