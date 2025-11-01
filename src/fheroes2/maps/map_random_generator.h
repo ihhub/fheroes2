@@ -29,11 +29,36 @@ namespace Maps::Map_Format
 
 namespace Maps::Random_Generator
 {
+    enum class Layout : uint8_t
+    {
+        BALANCED,
+        PYRAMID,
+        ISLANDS,
+        QUEST
+    };
+
+    enum class ResourceDensity : uint8_t
+    {
+        SCARCE,
+        NORMAL,
+        ABUNDANT
+    };
+
+    enum class MonsterStrength : uint8_t
+    {
+        WEAK,
+        NORMAL,
+        STRONG,
+        DEADLY
+    };
+
     struct Configuration final
     {
         int32_t playerCount{ 2 };
-        int32_t regionSizeLimit{ 300 };
         uint32_t seed{ 0 };
+
+        // layout
+        // water percentage
 
         // TODO: remove this member once random map generator is good enough.
         bool basicOnly{ true };

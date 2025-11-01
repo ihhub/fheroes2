@@ -2183,10 +2183,6 @@ namespace Interface
             return false;
         }
 
-        if ( !Dialog::SelectCount( _( "Limit region size" ), 200, 10000, temp.regionSizeLimit ) ) {
-            return false;
-        }
-
         _randomMapConfig = temp;
 
         return true;

@@ -49,7 +49,10 @@
 namespace
 {
     const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
+    const int32_t smallestStartingRegionSize = 200;
+    const double emptySpacePercentage = 0.4;
     const int randomCastleIndex = 12;
+    const int randomTownIndex = 13;
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
@@ -152,6 +155,42 @@ namespace
             _nodes[0].region = regionIndex;
         }
     };
+
+    struct RegionalObjects final
+    {
+        uint32_t castleCount{ 0 };
+        uint32_t mineCount{ 0 };
+        uint32_t objectCount{ 0 };
+        uint32_t powerUpsCount{ 0 };
+        uint32_t treasureCount{ 0 };
+    };
+    const RegionalObjects regionNormalObjectSet{ 1, 6, 2, 1, 1 };
+
+    int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
+    {
+        const int32_t tileCount = width * height;
+
+        // Calculate based on richness setting
+        int32_t requiredSpace = 0;
+        requiredSpace += regionNormalObjectSet.castleCount * 49;
+        requiredSpace += regionNormalObjectSet.mineCount * 15;
+        requiredSpace += regionNormalObjectSet.objectCount * 6;
+        requiredSpace += regionNormalObjectSet.powerUpsCount * 9;
+        requiredSpace += regionNormalObjectSet.treasureCount * 16;
+        requiredSpace = static_cast<int32_t>( requiredSpace / ( 1.0 - emptySpacePercentage ) );
+
+        const double innerRadius = std::ceil( sqrt( requiredSpace / M_PI ) );
+        const int32_t borderSize = static_cast<int32_t>( 2 * ( innerRadius + 1 ) * M_PI );
+        const int32_t targetRegionSize = requiredSpace + borderSize;
+
+        // Inner and outer circles, update later to handle other layouts
+        const int32_t upperLimit = config.playerCount * 3;
+
+        int32_t average = tileCount / targetRegionSize;
+        int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
+
+        return tileCount / canFit;
+    }
 
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
     {
@@ -362,13 +401,16 @@ namespace Maps::Random_Generator
             assert( config.playerCount <= 6 );
             return false;
         }
-        if ( config.regionSizeLimit < 200 ) {
-            return false;
-        }
 
         // Initialization step. Reset the current map in `world` and `mapFormat` containers first.
         Interface::EditorInterface & interface = Interface::EditorInterface::Get();
         if ( !interface.generateNewMap( width ) ) {
+            return false;
+        }
+
+        // Aiming for region size to be ~400 tiles in a 300-600 range.
+        const int32_t regionSizeLimit = calculateRegionSizeLimit( config, width, height );
+        if ( regionSizeLimit < smallestStartingRegionSize ) {
             return false;
         }
 
@@ -384,10 +426,8 @@ namespace Maps::Random_Generator
         };
 
         // Step 1. Setup map generator configuration.
-        // TODO: Implement balanced set up only / Pyramid later.
-
-        // Aiming for region size to be ~400 tiles in a 300-600 range.
-        const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
+        // TODO: Add support for layouts other than BALANCED
+        const int expectedRegionCount = ( width * height ) / regionSizeLimit;
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
@@ -397,7 +437,7 @@ namespace Maps::Random_Generator
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
         const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), config.playerCount );
 
-        const double radius = sqrt( ( innerLayer + outerLayer ) * config.regionSizeLimit / M_PI );
+        const double radius = sqrt( ( innerLayer + outerLayer ) * regionSizeLimit / M_PI );
         const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * 0.85;
         const double innerRadius = ( innerLayer == 1 ) ? 0 : outerRadius / 3;
 
@@ -422,7 +462,7 @@ namespace Maps::Random_Generator
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, config.regionSizeLimit );
+                mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, regionSizeLimit );
                 data.getNode( centerTile ).region = regionID;
             }
         }
