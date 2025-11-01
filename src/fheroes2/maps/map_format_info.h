@@ -52,6 +52,8 @@ namespace Maps::Map_Format
         std::vector<TileObjectInfo> objects;
     };
 
+    constexpr size_t eventMessageCharLimit{ 999 };
+
     struct CastleMetadata
     {
         // Color, type and whether it is castle or town must come from ObjectInfo to make sure
