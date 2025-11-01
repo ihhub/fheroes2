@@ -37,11 +37,11 @@ StatusBar::StatusBar()
     // Do nothing.
 }
 
-void StatusBar::ShowMessage( std::string msg )
+fheroes2::Rect StatusBar::updateMessage( std::string msg )
 {
     if ( msg == _prevMessage ) {
         // No updates.
-        return;
+        return {};
     }
 
     _prevMessage = msg;
@@ -60,6 +60,19 @@ void StatusBar::ShowMessage( std::string msg )
     // Draw text aligned and cutoff with the ROI, accounting for the +3 ROI offset
     drawInRoi( messageRoi.x, messageRoi.y + 2, messageRoi );
 
-    fheroes2::Display::instance().render( fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi ) );
+    auto area = fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi );
+
     _prevMessageRoi = messageRoi;
+
+    return area;
+}
+
+void StatusBar::ShowMessage( std::string msg )
+{
+    const auto area = updateMessage( std::move( msg ) );
+    if ( area == fheroes2::Rect{} ) {
+        return;
+    }
+
+    fheroes2::Display::instance().render( area );
 }
