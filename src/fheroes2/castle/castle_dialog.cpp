@@ -436,15 +436,21 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             statusMessage = _( "View Hero" );
         }
 
+        fheroes2::Rect area;
+
         if ( statusMessage.empty() ) {
-            statusBar.ShowMessage( currentDate );
+            area = statusBar.updateMessage( currentDate );
         }
         else {
-            statusBar.ShowMessage( statusMessage );
+            area = statusBar.updateMessage( statusMessage );
             statusMessage.clear();
         }
 
-        return isRedrawNeeded;
+        if ( area != fheroes2::Rect{} ) {
+            display.updateNextRenderRoi( area );
+        }
+
+        return isRedrawNeeded || area != fheroes2::Rect{};
     };
 
     updateStatusBar();
