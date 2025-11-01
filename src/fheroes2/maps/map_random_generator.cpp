@@ -164,17 +164,23 @@ namespace
         uint32_t powerUpsCount{ 0 };
         uint32_t treasureCount{ 0 };
     };
-    const RegionalObjects regionNormalObjectSet{ 1, 6, 2, 1, 1 };
+    constexpr std::array<RegionalObjects, (size_t)Maps::Random_Generator::ResourceDensity::UNUSED> regionObjectSets = { {
+        { 1, 2, 1, 1, 0 },
+        { 1, 6, 2, 1, 1 },
+        { 1, 7, 2, 2, 3 },
+    } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
-        // Calculate based on richness setting
         int32_t requiredSpace = 0;
-        requiredSpace += regionNormalObjectSet.castleCount * 49;
-        requiredSpace += regionNormalObjectSet.mineCount * 15;
-        requiredSpace += regionNormalObjectSet.objectCount * 6;
-        requiredSpace += regionNormalObjectSet.powerUpsCount * 9;
-        requiredSpace += regionNormalObjectSet.treasureCount * 16;
+
+        // Determine required space based on expected object count and their footprint (in tiles)
+        const auto & objectSet = regionObjectSets[static_cast<size_t>( config.resourceDensity )];
+        requiredSpace += objectSet.castleCount * 49;
+        requiredSpace += objectSet.mineCount * 15;
+        requiredSpace += objectSet.objectCount * 6;
+        requiredSpace += objectSet.powerUpsCount * 9;
+        requiredSpace += objectSet.treasureCount * 16;
         requiredSpace = static_cast<int32_t>( requiredSpace / ( 1.0 - emptySpacePercentage ) );
 
         const double innerRadius = std::ceil( sqrt( requiredSpace / M_PI ) );

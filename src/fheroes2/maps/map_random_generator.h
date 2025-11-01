@@ -42,7 +42,8 @@ namespace Maps::Random_Generator
     {
         SCARCE, // 2-tier resources (Crystals, Gems, etc) are harder to come by
         NORMAL, // 2-tier resources are common, gold mines are rare
-        ABUNDANT // Even neutral regions have mines, rare treasures are common
+        ABUNDANT, // Even neutral regions have mines, rare treasures are common
+        UNUSED
     };
 
     enum class MonsterStrength : uint8_t
