@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
