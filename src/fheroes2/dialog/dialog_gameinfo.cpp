@@ -178,7 +178,7 @@ void Dialog::GameInfo()
         }
 
         if ( le.isMouseRightButtonPressedInArea( scenarioDescripionRoi ) ) {
-            const fheroes2::Text header( _( "Scenario Description" ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( _( "Map Description" ), fheroes2::FontType::normalYellow() );
             const fheroes2::Text body( mapInfo.description, fheroes2::FontType::normalWhite(), mapLanguage );
             fheroes2::showMessage( header, body, Dialog::ZERO, {} );
         }
