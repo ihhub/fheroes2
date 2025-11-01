@@ -1226,7 +1226,7 @@ namespace Maps
                 sortedObjects.emplace( info );
 
 #if defined( WITH_DEBUG )
-                if ( object.group != Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS && object.group != Maps::ObjectGroup::LANDSCAPE_FLAGS ) {
+                if ( object.group != ObjectGroup::LANDSCAPE_TOWN_BASEMENTS && object.group != ObjectGroup::LANDSCAPE_FLAGS ) {
                     const auto [iter, inserted] = objectsUIDs.try_emplace( object.id, info );
                     if ( !inserted ) {
                         incorrectObjects.emplace( iter->second );
@@ -1311,7 +1311,7 @@ namespace Maps
         return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
-    void setTerrainOnTiles( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
+    void setTerrainWithTransition( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
         assert( map.width == world.w() && map.width == world.h() );
 
@@ -1456,6 +1456,11 @@ namespace Maps
             (void)isMetadataEmplaced;
 #endif
         }
+    }
+
+    void setTerrainOnTile( Map_Format::MapFormat & map, const int32_t tileId, const int groundId )
+    {
+        setTerrain( map, tileId, Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
     }
 
     bool addStream( Map_Format::MapFormat & map, const int32_t tileId )
@@ -1948,7 +1953,7 @@ namespace Maps
 
     void captureObject( const Map_Format::MapFormat & map, const int32_t tileIndex, const uint32_t objectId, const MP2::MapObjectType objectType )
     {
-        if ( Maps::isCapturableObject( objectType ) ) {
+        if ( isCapturableObject( objectType ) ) {
             auto ownershipMetadata = map.capturableObjectsMetadata.find( objectId );
             if ( ownershipMetadata != map.capturableObjectsMetadata.end() ) {
                 world.CaptureObject( tileIndex, ownershipMetadata->second.ownerColor );
@@ -2077,8 +2082,8 @@ namespace Maps
             // Since the tile has a road object, update it.
             roadObjectIter->index = imageIndex;
 
-            Maps::Tile & worldTile = world.getTile( tileIndex );
-            Maps::Tile::updateTileObjectIcnIndex( worldTile, worldTile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD ), imageIndex );
+            Tile & worldTile = world.getTile( tileIndex );
+            Tile::updateTileObjectIcnIndex( worldTile, worldTile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD ), imageIndex );
         }
         else {
             // This tile has no roads. Add one.

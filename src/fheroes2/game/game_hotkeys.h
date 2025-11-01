@@ -81,6 +81,13 @@ namespace Game
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
 
+#if defined( WITH_DEBUG )
+        // These hotkeys are temporary and going to be removed once random map generator is good enough.
+        // TODO: remove these hotkeys when the time is right.
+        EDITOR_RANDOM_MAP_REGENERATE,
+        EDITOR_RANDOM_MAP_RECONFIGURE,
+#endif
+
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
         CAMPAIGN_PRICE_OF_LOYALTY,

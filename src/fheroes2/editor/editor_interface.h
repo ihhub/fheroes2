@@ -30,7 +30,10 @@
 #include "history_manager.h"
 #include "interface_base.h"
 #include "map_format_info.h"
+#include "map_random_generator.h"
 #include "timing.h"
+
+enum class PlayerColor : uint8_t;
 
 namespace Maps
 {
@@ -93,13 +96,20 @@ namespace Interface
             _cursorUpdater = cursorUpdater;
         }
 
-        bool generateNewMap( const int32_t size );
+        // Generate a random map and start Map Editor interface main function.
+        bool generateRandomMap( const int32_t mapWidth );
+
+        bool generateNewMap( const int32_t mapWidth );
 
         bool loadMap( const std::string & filePath );
 
         void saveMapToFile();
 
         void openMapSpecificationsDialog();
+
+        // TODO: move this function into map_format_helper.h|cpp files as it belongs there.
+        //       This is needed for the future support of random map generation from the Main Menu screen.
+        bool placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type );
 
     private:
         class WarningMessage
@@ -163,10 +173,14 @@ namespace Interface
 
         void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
 
+        bool _updateRandomMapConfiguration();
+
         EditorPanel _editorPanel;
 
         int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
+
+        Maps::Random_Generator::Configuration _randomMapConfig;
 
         std::function<void( const int32_t )> _cursorUpdater;
 
