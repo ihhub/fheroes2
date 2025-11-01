@@ -55,7 +55,7 @@ namespace Maps::Random_Generator
     struct Configuration final
     {
         int32_t playerCount{ 2 };
-        uint32_t seed{ 0 };
+        int32_t seed{ 0 };
 
         // layout
         // water percentage

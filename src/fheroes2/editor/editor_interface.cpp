@@ -2183,6 +2183,10 @@ namespace Interface
             return false;
         }
 
+        if ( !Dialog::SelectCount( _( "Input map seed" ), 0, std::numeric_limits<int32_t>::max(), temp.seed ) ) {
+            return false;
+        }
+
         _randomMapConfig = temp;
 
         return true;
