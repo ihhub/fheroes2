@@ -382,7 +382,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, 0, neutralColorIndex, Ground::WATER, 0 } };
+        std::vector<Region> mapRegions = { { 0, 0, neutralColorIndex, Ground::WATER, 1 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
