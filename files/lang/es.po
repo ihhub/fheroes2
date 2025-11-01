@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4346,6 +4346,9 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Se pueden colocar un máximo de %{count} obeliscos en el mapa."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4494,6 +4497,13 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Se pueden colocar un máximo de %{count} obeliscos en el mapa."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Icono de los jugadores"
+
+msgid "Limit region size"
+msgstr ""
 
 #, fuzzy
 msgid "The map is corrupted."
@@ -4789,9 +4799,17 @@ msgstr ""
 "Desplegar el menú de opciones de sistema, permitiéndote personalizar tu "
 "partida."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Haz clic para volver al menú principal."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Advertencia"
 
 msgid "From Scratch"
 msgstr ""
@@ -4813,8 +4831,16 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Haz clic para volver al menú principal."
 
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Haz clic para volver al menú principal."
 
 msgid "No maps available!"
 msgstr "¡Ningún mapa disponible!"
@@ -5649,6 +5675,14 @@ msgstr "Mostrar el siguiente héroe"
 
 msgid "hotkey|toggle passability"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Resumen del reino"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Resumen del reino"
 
 msgid "hotkey|roland campaign"
 msgstr ""

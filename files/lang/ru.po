@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4279,6 +4279,9 @@ msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 "На карте можно разместить не более %{count} объектов типа \"%{objects}\"."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4417,6 +4420,13 @@ msgstr "На одной карте можно разместить только 
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На карте можно разместить не более %{count} обелисков."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Значок игроков"
+
+msgid "Limit region size"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Карта повреждена."
@@ -4697,8 +4707,16 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Открывает окно системных настроек редактора карт."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Выход из редактора и возврат в главное меню игры."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Внимание"
 
 msgid "From Scratch"
 msgstr "С нуля"
@@ -4718,8 +4736,17 @@ msgstr "Назад"
 msgid "Return to the Editor's main menu options."
 msgstr "Вернуться в главное меню редактора карт."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Создать карту размером %{size}x%{size} клеток."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Создать карту размером %{size}x%{size} клеток."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Вернуться в главное меню редактора карт."
 
 msgid "No maps available!"
 msgstr "Нет доступных карт!"
@@ -5507,6 +5534,14 @@ msgstr "открыть главное меню"
 
 msgid "hotkey|toggle passability"
 msgstr "переключить отображение проходимости"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "новая случайная карта"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "новая случайная карта"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"

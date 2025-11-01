@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4266,6 +4266,9 @@ msgstr "Об'єкти дії мають бути розміщені на чис�
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} %{objects}."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4403,6 +4406,13 @@ msgstr "На мапі можна розмістити лише один випа
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Кількість гравців"
+
+msgid "Limit region size"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -4683,8 +4693,16 @@ msgstr ""
 "Перегляд системних параметрів редактора, за допомогою яких ви можете "
 "налаштувати редактор."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Вийти з редактора та повернутися до головного меню."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Попередження"
 
 msgid "From Scratch"
 msgstr "З чистого аркуша"
@@ -4704,10 +4722,21 @@ msgstr "Назад"
 msgid "Return to the Editor's main menu options."
 msgstr "Повернутися до головного меню редактора."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Створити мапу розміром %{size} квадратів у ширину і %{size} квадратів у "
+"висоту."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Створити мапу розміром %{size} квадратів у ширину і %{size} квадратів у "
 "висоту."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Повернутися до головного меню редактора."
 
 msgid "No maps available!"
 msgstr "Нема доступних мап!"
@@ -5489,6 +5518,14 @@ msgstr "відкрити головне меню гри"
 
 msgid "hotkey|toggle passability"
 msgstr "відобразити прохідність"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "нова випадкова мапа"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "нова випадкова мапа"
 
 msgid "hotkey|roland campaign"
 msgstr "кампанія Роланда"

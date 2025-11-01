@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4355,6 +4355,9 @@ msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Thị trấn không thể đặt trên nước."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4494,6 +4497,13 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Bảo vật không thể đặt trên nước."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Biểu tượng Người chơi"
+
+msgid "Limit region size"
 msgstr ""
 
 #, fuzzy
@@ -4793,9 +4803,17 @@ msgstr ""
 "Xem các tùy chọn hệ thống soạn thảo, cho phép ngươi tùy chỉnh trình chỉnh "
 "sửa."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Nhấp để quay lại màn hình chính."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Cảnh báo"
 
 msgid "From Scratch"
 msgstr "Từ Đầu"
@@ -4816,8 +4834,17 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Nhấp để quay lại màn hình chính."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Tạo bản đồ rộng %{size} ô vuông và cao %{size} ô vuông."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Tạo bản đồ rộng %{size} ô vuông và cao %{size} ô vuông."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Nhấp để quay lại màn hình chính."
 
 msgid "No maps available!"
 msgstr "Không có bản đồ nào!"
@@ -5647,6 +5674,14 @@ msgstr "trình đơn bản đồ mới"
 #, fuzzy
 msgid "hotkey|toggle passability"
 msgstr "chuyển đổi trạng thái"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "bản đồ mới ngẫu nhiên"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "bản đồ mới ngẫu nhiên"
 
 msgid "hotkey|roland campaign"
 msgstr "chiến dịch roland"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4245,6 +4245,9 @@ msgstr "Händelseföremål måste placeras på fria rutor."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4383,6 +4386,13 @@ msgstr "Endast en Slumpad Främsta Artefakt kan placeras på kartan."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Maximalt %{count} obelisker kan placeras på kartan."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Spelarikon"
+
+msgid "Limit region size"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Kartan är korrupt."
@@ -4661,8 +4671,16 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Stäng Kartredigeraren och återvänd till spelets huvudmeny."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Varning"
 
 msgid "From Scratch"
 msgstr "Blank karta"
@@ -4682,8 +4700,17 @@ msgstr "Tillbaka"
 msgid "Return to the Editor's main menu options."
 msgstr "Återgå till Kartredigerarens huvudmeny."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Återgå till Kartredigerarens huvudmeny."
 
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
@@ -5453,6 +5480,14 @@ msgstr "öppna spelets huvudmeny"
 
 msgid "hotkey|toggle passability"
 msgstr "Aktivera framkomlighet"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Ny slumpad karta"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Ny slumpad karta"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
