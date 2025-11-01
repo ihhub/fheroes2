@@ -904,11 +904,7 @@ namespace Dialog
                 return Dialog::CANCEL;
             }
 
-            bool toggleAllOn = false;
-            bool toggleAllOff = false;
-
             if ( _buttonToggleOn.isEnabled() && le.MouseClickLeft( _buttonToggleOn.area() ) ) {
-                toggleAllOn = true;
                 needRedraw = true;
 
                 onToggleOn();
@@ -917,7 +913,6 @@ namespace Dialog
                 _buttonToggleOff.enable();
             }
             else if ( _buttonToggleOff.isEnabled() && le.MouseClickLeft( _buttonToggleOff.area() ) ) {
-                toggleAllOff = true;
                 needRedraw = true;
 
                 onToggleOff();
