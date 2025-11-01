@@ -45,7 +45,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        auto & config = Settings::Get();
+        const auto & config = Settings::Get();
         const bool isEvilInterface = config.isEvilInterfaceEnabled();
         const int bigButtonsICN = isEvilInterface ? ICN::BUTTONS_FILE_DIALOG_EVIL : ICN::BUTTONS_FILE_DIALOG_GOOD;
         fheroes2::ButtonGroup optionButtons( bigButtonsICN );
