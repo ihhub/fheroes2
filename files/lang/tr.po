@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -4142,6 +4142,9 @@ msgstr ""
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4263,6 +4266,12 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+msgid "Pick player count"
+msgstr ""
+
+msgid "Limit region size"
 msgstr ""
 
 #, fuzzy
@@ -4525,9 +4534,17 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Savaşa geri dön."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Uyarı"
 
 msgid "From Scratch"
 msgstr ""
@@ -4548,8 +4565,16 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Savaşa geri dön."
 
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Savaşa geri dön."
 
 msgid "No maps available!"
 msgstr ""
@@ -5312,6 +5337,12 @@ msgid "hotkey|open game main menu"
 msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "hotkey|toggle passability"
+msgstr ""
+
+msgid "hotkey|re-generate random map"
+msgstr ""
+
+msgid "hotkey|re-configure random map"
 msgstr ""
 
 msgid "hotkey|roland campaign"

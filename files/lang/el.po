@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -3852,6 +3852,9 @@ msgstr ""
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -3971,6 +3974,12 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+msgid "Pick player count"
+msgstr ""
+
+msgid "Limit region size"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4227,7 +4236,14 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
+msgstr ""
+
+msgid "Warning!"
 msgstr ""
 
 msgid "From Scratch"
@@ -4248,7 +4264,14 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr ""
 
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+msgid "Return to the previous menu options."
 msgstr ""
 
 msgid "No maps available!"
@@ -4974,6 +4997,12 @@ msgid "hotkey|open game main menu"
 msgstr ""
 
 msgid "hotkey|toggle passability"
+msgstr ""
+
+msgid "hotkey|re-generate random map"
+msgstr ""
+
+msgid "hotkey|re-configure random map"
 msgstr ""
 
 msgid "hotkey|roland campaign"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4299,6 +4299,9 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "%{objects} kann/können nicht auf Wasser platziert werden."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4440,6 +4443,13 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Spielerikone"
+
+msgid "Limit region size"
 msgstr ""
 
 #, fuzzy
@@ -4740,9 +4750,17 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Editor-Systemoptionen anzeigen, mit denen der Editor angepasst werden kann."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Achtung"
 
 msgid "From Scratch"
 msgstr "Von Grund auf neu"
@@ -4763,10 +4781,21 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Eine Karte erstellen, die %{size} Quadrate breit und %{size} Quadrate hoch "
+"ist."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Eine Karte erstellen, die %{size} Quadrate breit und %{size} Quadrate hoch "
 "ist."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Klicken, um zum Hauptmenü zurückzukehren."
 
 msgid "No maps available!"
 msgstr "Keine Karten vorhanden!"
@@ -5602,6 +5631,14 @@ msgstr "Neue Karte Menü"
 #, fuzzy
 msgid "hotkey|toggle passability"
 msgstr "Status umschalten"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Neue zufällige Karte Menü"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Neue zufällige Karte Menü"
 
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"

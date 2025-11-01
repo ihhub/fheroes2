@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4369,6 +4369,9 @@ msgstr "To zaklęcie nie może być rzucone z łodzi."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4508,6 +4511,13 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Ikona graczy"
+
+msgid "Limit region size"
 msgstr ""
 
 #, fuzzy
@@ -4793,9 +4803,17 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Pokazuje menu z opcjami systemowymi, pozwalając na zmianę ustawień gry."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Kliknij, aby wrócić do głównego menu."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Uwaga"
 
 msgid "From Scratch"
 msgstr "Od początku"
@@ -4816,8 +4834,17 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Kliknij, aby wrócić do głównego menu."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Utwórz mapę o długości %{size} i szerokości %{size}."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Utwórz mapę o długości %{size} i szerokości %{size}."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Kliknij, aby wrócić do głównego menu."
 
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
@@ -5648,6 +5675,14 @@ msgstr "nowa mapa"
 #, fuzzy
 msgid "hotkey|toggle passability"
 msgstr "pokaż/ukryj okno statusu"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "nowa losowa mapa"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "nowa losowa mapa"
 
 msgid "hotkey|roland campaign"
 msgstr "kampania Rolanda"

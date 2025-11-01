@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4286,6 +4286,9 @@ msgstr "Objetos de ação devem ser colocados em ladrilhos livres."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Um máximo de %{count} %{objects} pode ser colocado no mapa."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4424,6 +4427,13 @@ msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Ícone dos Jogadores"
+
+msgid "Limit region size"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "O mapa está corrompido."
@@ -4706,8 +4716,16 @@ msgstr ""
 "Visualizar as opções do sistema do editor, que permitem personalizar o "
 "editor."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Sair do Editor e retornar ao Menu Principal do jogo."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Aviso"
 
 msgid "From Scratch"
 msgstr "Do Zero"
@@ -4727,10 +4745,21 @@ msgstr "Voltar"
 msgid "Return to the Editor's main menu options."
 msgstr "Retornar às opções do menu principal do Editor."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Criar um mapa que tenha %{size} quadrados de largura e %{size} quadrados de "
+"altura."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Criar um mapa que tenha %{size} quadrados de largura e %{size} quadrados de "
 "altura."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Retornar às opções do menu principal do Editor."
 
 msgid "No maps available!"
 msgstr "Nenhum mapa disponível!"
@@ -5515,6 +5544,14 @@ msgstr "abrir menu principal do jogo"
 
 msgid "hotkey|toggle passability"
 msgstr "alternar transitabilidade"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "novo mapa aleatório"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "novo mapa aleatório"
 
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"

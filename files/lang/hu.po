@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -4250,6 +4250,9 @@ msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximum %{count} %{objects} helyezhető el a térképen."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4387,6 +4390,13 @@ msgstr "Csak egy véletlenszerű Szent Varázstárgy helyezhető el a térképen
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Játékos ikon"
+
+msgid "Limit region size"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "A térkép fájl sérült."
@@ -4667,8 +4677,16 @@ msgstr ""
 "Tekintsd meg a szerkesztő rendszer beállításait, amik lehetővé teszik annak "
 "testreszabását."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Kilépés a szerkesztőből és visszatérés a játék főmenüjébe."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Figyelmeztetés"
 
 msgid "From Scratch"
 msgstr "Elölről kezd"
@@ -4688,8 +4706,17 @@ msgstr "Vissza"
 msgid "Return to the Editor's main menu options."
 msgstr "Visszatérés a szerkesztő főmenüjébe."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Egy %{size} széles és %{size} magas térképet hoz létre."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Egy %{size} széles és %{size} magas térképet hoz létre."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Visszatérés a szerkesztő főmenüjébe."
 
 msgid "No maps available!"
 msgstr "Nincs használható térkép!"
@@ -5474,6 +5501,14 @@ msgstr "főmenü megnyitása"
 
 msgid "hotkey|toggle passability"
 msgstr "átjárhatóság kapcsoló"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "véletlenszerű térkép"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "véletlenszerű térkép"
 
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"

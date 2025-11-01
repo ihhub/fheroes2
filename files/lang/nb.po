@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-01 03:33+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4423,6 +4423,9 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4564,6 +4567,13 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Spillerikon"
+
+msgid "Limit region size"
 msgstr ""
 
 #, fuzzy
@@ -4863,9 +4873,17 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis karttegnerens systeminnstillinger der den kan skreddersys."
 
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+#, fuzzy
+msgid "Warning!"
+msgstr "Advarsel"
 
 msgid "From Scratch"
 msgstr "Fra bunnen av"
@@ -4886,10 +4904,21 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Lag et kart som har en høyde på %{size} kvadrater og en bredde på %{size} "
+"kvadrater."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Lag et kart som har en høyde på %{size} kvadrater og en bredde på %{size} "
 "kvadrater."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
 msgid "No maps available!"
 msgstr "Ingen kart er tilgjengelige!"
@@ -5726,6 +5755,14 @@ msgstr "Menyen for nye kart"
 #, fuzzy
 msgid "hotkey|toggle passability"
 msgstr "Slå av/på status"
+
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Nytt automatisk kart"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Nytt automatisk kart"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
