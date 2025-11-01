@@ -48,6 +48,7 @@
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
+#include "map_format_info.h"
 #include "math_base.h"
 #include "pal.h"
 #include "race.h"
@@ -641,7 +642,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 std::string res = _name;
                 const fheroes2::Text body{ _( "Enter hero's name" ), fheroes2::FontType::normalWhite() };
 
-                if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, language ) && !res.empty() ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, res, Maps::Map_Format::nameCharLimit, false, language ) && !res.empty() ) {
                     _name = std::move( res );
                     drawTitleText( _name, _race, true );
                     needRedraw = true;

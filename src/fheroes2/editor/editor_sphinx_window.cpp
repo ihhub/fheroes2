@@ -69,10 +69,6 @@ namespace
 
     const size_t longestAnswer{ 64 };
 
-    // TODO: expand the riddle area to support more characters.
-    //       At the moment only up to 140 of the biggest characters can be added.
-    const size_t longestRiddle{ 140 };
-
     const std::array<int, 7> resourceTypes = { Resource::WOOD, Resource::SULFUR, Resource::CRYSTAL, Resource::MERCURY, Resource::ORE, Resource::GEMS, Resource::GOLD };
 
     class AnswerListBox : public Interface::ListBox<std::string>
@@ -178,6 +174,7 @@ namespace Editor
         text.draw( riddleRoi.x + ( riddleRoi.width - text.width() ) / 2, offsetY, display );
 
         text.set( metadata.riddle, fheroes2::FontType::normalWhite(), language );
+        text.fitToArea( riddleArea.width - 10, riddleArea.height - 10 );
         text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
 
         const fheroes2::Rect answerRoi{ windowArea.x + elementOffset + riddleRoi.width + elementOffset, offsetY + text.height(), answerArea.width, answerArea.height };
@@ -317,11 +314,12 @@ namespace Editor
                 std::string temp = metadata.riddle;
 
                 const fheroes2::Text body{ _( "Riddle:" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, temp, longestRiddle, true, language ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, Maps::Map_Format::messageCharLimit, true, language ) ) {
                     metadata.riddle = std::move( temp );
 
                     riddleRoiRestorer.restore();
                     text.set( metadata.riddle, fheroes2::FontType::normalWhite(), language );
+                    text.fitToArea( riddleArea.width - 10, riddleArea.height - 10 );
                     text.draw( riddleRoi.x + 5, riddleRoi.y + 5, riddleRoi.width - 10, display );
                     isRedrawNeeded = true;
                 }
@@ -426,6 +424,11 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonDelete.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Answer" ), _( "Delete an existing answer for the question." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( riddleRoi ) ) {
+                const fheroes2::Text header( _( "Riddle" ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( metadata.riddle, fheroes2::FontType::normalWhite(), language );
+                fheroes2::showMessage( header, body, Dialog::ZERO, {} );
             }
             else if ( le.isMouseRightButtonPressedInArea( artifactRoi ) ) {
                 // Since Artifact class does not allow to set a random spell (for obvious reasons),

@@ -2145,6 +2145,7 @@ namespace Editor
         fheroes2::ImageRestorer descriptionBackground( display, descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, descriptionTextRoi.height );
 
         text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+        text.fitToArea( descriptionTextRoi.width, descriptionTextRoi.height );
         text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
 
         // Victory conditions.
@@ -2241,19 +2242,7 @@ namespace Editor
 
         auto renderMapDescription = [&text, &mapFormat, &display, &descriptionTextRoi, &descriptionBackground]() {
             text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
-
-            // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
-            if ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                fheroes2::showStandardTextMessage(
-                    _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
-                    Dialog::OK );
-
-                // As a temporary solution we cut the end of the text to fit 5 rows.
-                while ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                    mapFormat.description.pop_back();
-                    text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
-                }
-            }
+            text.fitToArea( descriptionTextRoi.width, descriptionTextRoi.height );
 
             descriptionBackground.restore();
             text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
@@ -2338,13 +2327,10 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( descriptionTextRoi ) ) {
-                // TODO: Edit texts directly in this dialog.
-                // TODO: Limit description to 5 text lines.
-
                 std::string descripton = mapFormat.description;
 
                 const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150, true, mapFormat.mainLanguage ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, Maps::Map_Format::messageCharLimit, true, mapFormat.mainLanguage ) ) {
                     mapFormat.description = std::move( descripton );
 
                     renderMapDescription();
@@ -2389,7 +2375,7 @@ namespace Editor
                 std::string notes = mapFormat.creatorNotes;
 
                 const fheroes2::Text body{ _( "About" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, notes, 150, true, mapFormat.mainLanguage ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, notes, Maps::Map_Format::messageCharLimit, true, mapFormat.mainLanguage ) ) {
                     mapFormat.creatorNotes = std::move( notes );
                 }
             }

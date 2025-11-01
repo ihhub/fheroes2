@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -127,8 +128,11 @@ void Dialog::GameInfo()
     text.set( Maps::SizeString( mapInfo.width ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
+    const fheroes2::Rect scenarioDescripionRoi{ shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, 37 };
+
     text.set( mapInfo.description, fheroes2::FontType::smallWhite(), mapLanguage );
-    text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
+    text.fitToArea( scenarioDescripionRoi.width, scenarioDescripionRoi.height );
+    text.draw( scenarioDescripionRoi.x, scenarioDescripionRoi.y, scenarioDescripionRoi.width, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x, shadowOffset.y + 152, DIALOG_CONTENT_WIDTH, display );
@@ -167,7 +171,6 @@ void Dialog::GameInfo()
 
     LocalEvent & le = LocalEvent::Get();
 
-    // message loop
     while ( le.HandleEvents() ) {
         buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
@@ -175,7 +178,12 @@ void Dialog::GameInfo()
             break;
         }
 
-        if ( le.isMouseRightButtonPressedInArea( scenarioNameRoi ) ) {
+        if ( le.isMouseRightButtonPressedInArea( scenarioDescripionRoi ) ) {
+            const fheroes2::Text header( _( "Map Description" ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( mapInfo.description, fheroes2::FontType::normalWhite(), mapLanguage );
+            fheroes2::showMessage( header, body, Dialog::ZERO, {} );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( scenarioNameRoi ) ) {
             text.set( mapInfo.name, fheroes2::FontType::normalYellow(), mapLanguage );
             fheroes2::showMessage( text, fheroes2::Text{}, Dialog::ZERO );
         }

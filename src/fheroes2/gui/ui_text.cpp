@@ -525,6 +525,44 @@ namespace fheroes2
         _text += truncationSymbol;
     }
 
+    void Text::fitToArea( const int32_t maxWidth, const int32_t maxHeight )
+    {
+        assert( maxWidth > 0 && maxHeight > 1 ); // Why is the limit less than 1?
+        if ( maxWidth <= 0 || maxHeight <= 0 ) {
+            return;
+        }
+
+        if ( _text.empty() ) {
+            // Nothing needs to be done.
+            return;
+        }
+
+        const auto languageSwitcher = getLanguageSwitcher( *this );
+        const FontCharHandler charHandler( _fontType );
+
+        if ( height( maxWidth ) <= maxHeight ) {
+            // Nothing we need to do as the text fits to the area.
+            return;
+        }
+
+        while ( !_text.empty() && ( height( maxWidth ) > maxHeight ) ) {
+            _text.pop_back();
+        }
+
+        // We need to add truncation symbol.
+        _text += truncationSymbol;
+        while ( height( maxWidth ) > maxHeight ) {
+            // Remove the truncation symbol and one more character before it.
+            for ( size_t i = 0; i < truncationSymbol.size(); ++i ) {
+                _text.pop_back();
+            }
+
+            _text.pop_back();
+
+            _text += truncationSymbol;
+        }
+    }
+
     void Text::_getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
     {
         assert( !_text.empty() );

@@ -835,7 +835,7 @@ namespace Editor
                     std::string res = castleMetadata.customName;
 
                     const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
-                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, language ) && !res.empty() ) {
+                    if ( Dialog::inputString( fheroes2::Text{}, body, res, Maps::Map_Format::nameCharLimit, false, language ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }
