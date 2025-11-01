@@ -179,14 +179,14 @@ namespace
                 _selected.emplace( id );
             }
 
-            setButtonOkayStatus( !_selected.empty() );
+            setButtonOkayStatus( true );
         }
 
         void onToggleOff() final
         {
             _selected = {};
 
-            setButtonOkayStatus( !_selected.empty() );
+            setButtonOkayStatus( false );
         }
 
     private:
@@ -911,6 +911,7 @@ namespace Dialog
 
                 _buttonToggleOn.disable();
                 _buttonToggleOff.enable();
+                _buttonToggleOff.draw();
             }
             else if ( _buttonToggleOff.isEnabled() && le.MouseClickLeft( _buttonToggleOff.area() ) ) {
                 needRedraw = true;
@@ -919,6 +920,7 @@ namespace Dialog
 
                 _buttonToggleOff.disable();
                 _buttonToggleOn.enable();
+                _buttonToggleOn.draw();
             }
 
             if ( le.isMouseRightButtonPressedInArea( _buttonOk.area() ) ) {
