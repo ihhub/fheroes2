@@ -68,6 +68,7 @@ namespace
         BORDER,
         ACTION,
         OBSTACLE,
+        CONNECTOR,
         PATH
     };
 
@@ -164,10 +165,10 @@ namespace
         uint32_t powerUpsCount{ 0 };
         uint32_t treasureCount{ 0 };
     };
-    constexpr std::array<RegionalObjects, (size_t)Maps::Random_Generator::ResourceDensity::UNUSED> regionObjectSets = { {
-        { 1, 2, 1, 1, 0 },
-        { 1, 6, 2, 1, 1 },
-        { 1, 7, 2, 2, 3 },
+    constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::UNUSED )> regionObjectSets = { {
+        { 1, 2, 1, 1, 0 }, // ResourceDensity::SCARCE
+        { 1, 6, 2, 1, 1 }, // ResourceDensity::NORMAL
+        { 1, 7, 2, 2, 3 } // ResourceDensity::ABUNDANT
     } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
@@ -365,6 +366,7 @@ namespace
                 Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
                 pathNode.type = NodeType::PATH;
             }
+            // Mark extra nodes as path to avoid objects clumping together
             data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
             data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
 
@@ -403,29 +405,32 @@ namespace
         return false;
     }
 
-    bool placeCastle( Interface::EditorInterface & interface, const int32_t mapWidth, NodeCache & data, const Region & region, const int targetX, const int targetY )
+    fheroes2::Point adjustCastlePlacement( const int32_t regionCenter, const int32_t mapWidth, const int targetX, const int targetY )
     {
-        const int regionX = region._centerIndex % mapWidth;
-        const int regionY = region._centerIndex / mapWidth;
+        const int regionX = regionCenter % mapWidth;
+        const int regionY = regionCenter / mapWidth;
         const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapWidth - 4 );
         const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapWidth - 3 );
+        return { castleX, castleY };
+    }
 
-        const auto & tile = world.getTile( castleX, castleY );
+    bool placeCastle( Interface::EditorInterface & interface, NodeCache & data, const Region & region, const fheroes2::Point tilePos, bool isCastle = true )
+    {
+        const auto & tile = world.getTile( tilePos.x, tilePos.y );
         if ( tile.isWater() ) {
             return false;
         }
 
-        const fheroes2::Point tilePos( castleX, castleY );
-
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
+        const int32_t castleObjectId = isCastle ? randomCastleIndex : randomTownIndex;
 
         const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, randomCastleIndex );
+        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
         if ( canFitObject( data, basementInfo, tilePos, false ) && canFitObject( data, castleInfo, tilePos, true ) ) {
             const PlayerColor color = Color::IndexToColor( region._colorIndex );
 
-            if ( interface.placeCastle( castleX, castleY, color, randomCastleIndex ) ) {
+            if ( interface.placeCastle( tilePos.x, tilePos.y, color, castleObjectId ) ) {
                 markObjectPlacement( data, basementInfo, tilePos, false );
                 markObjectPlacement( data, castleInfo, tilePos, true );
 
@@ -555,6 +560,9 @@ namespace Maps::Random_Generator
         }
 
         // Step 5. Object placement
+        std::vector<int> startingLocations;
+        std::vector<int> actionLocations;
+
         for ( Region & region : mapRegions ) {
             if ( region._id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
@@ -582,14 +590,22 @@ namespace Maps::Random_Generator
                 }
             }
 
-            if ( region._colorIndex != neutralColorIndex && !placeCastle( interface, mapFormat.width, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
-                // Return early if we can't place a starting player castle.
-                return false;
+            const int centerX = ( xMin + xMax ) / 2;
+            const int centerY = ( yMin + yMax ) / 2;
+
+            if ( region._colorIndex != neutralColorIndex ) {
+                const fheroes2::Point castlePos = adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY );
+                if ( !placeCastle( interface, data, region, castlePos ) ) {
+                    // Return early if we can't place a starting player castle.
+                    return false;
+                }
+                startingLocations.push_back( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
             }
 
             if ( region._nodes.size() > 400 ) {
                 // Place non-mandatory castles in bigger neutral regions.
-                placeCastle( interface, mapFormat.width, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
+                const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
+                placeCastle( interface, data, region, adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
             }
 
             std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
@@ -606,6 +622,7 @@ namespace Maps::Random_Generator
                     }
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
+                        actionLocations.push_back( tile.index );
                         break;
                     }
                 }
@@ -619,8 +636,25 @@ namespace Maps::Random_Generator
         // TODO: generate road based paths.
 
         // TODO: place objects while avoiding the borders.
-        //       Make sure that objects are accessible.
-        //       Also, make sure that paths are accessible. Possibly delete obstacles.
+
+        AIWorldPathfinder pathfinder;
+        pathfinder.reset();
+        const PlayerColor testPlayer = PlayerColor::BLUE;
+
+        // Have to remove fog first otherwise pathfinder won't work
+        for ( int idx = 0; idx < width * height; idx++ ) {
+            world.getTile( idx ).ClearFog( static_cast<PlayerColorsSet>( testPlayer ) );
+        }
+
+        for ( const int start : startingLocations ) {
+            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, 0U );
+            for ( const int action : actionLocations ) {
+                if ( pathfinder.getDistance( action ) == 0 ) {
+                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
+                    return false;
+                }
+            }
+        }
 
         // TODO: place treasure objects.
 
