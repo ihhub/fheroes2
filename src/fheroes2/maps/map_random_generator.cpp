@@ -168,8 +168,6 @@ namespace
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
-        const int32_t tileCount = width * height;
-
         // Calculate based on richness setting
         int32_t requiredSpace = 0;
         requiredSpace += regionNormalObjectSet.castleCount * 49;
@@ -186,10 +184,13 @@ namespace
         // Inner and outer circles, update later to handle other layouts
         const int32_t upperLimit = config.playerCount * 3;
 
-        int32_t average = tileCount / targetRegionSize;
+        const int32_t totalTileCount = width * height;
+        assert( config.waterPercentage < 100 );
+        const int32_t groundTiles = totalTileCount * ( 100 - config.waterPercentage ) / 100;
+        int32_t average = groundTiles / targetRegionSize;
         int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
 
-        return tileCount / canFit;
+        return groundTiles / canFit;
     }
 
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
