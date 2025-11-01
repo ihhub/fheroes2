@@ -54,6 +54,7 @@ namespace Maps::Map_Format
     };
 
     constexpr size_t messageCharLimit{ 999 };
+    constexpr size_t nameCharLimit{ 30 };
 
     struct CastleMetadata
     {
