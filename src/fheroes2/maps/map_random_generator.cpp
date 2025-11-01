@@ -182,11 +182,16 @@ namespace
         requiredSpace += objectSet.objectCount * 6;
         requiredSpace += objectSet.powerUpsCount * 9;
         requiredSpace += objectSet.treasureCount * 16;
+
+        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Space required for density " << (int)config.resourceDensity << " is " << requiredSpace );
+
         requiredSpace = static_cast<int32_t>( requiredSpace / ( 1.0 - emptySpacePercentage ) );
 
         const double innerRadius = std::ceil( sqrt( requiredSpace / M_PI ) );
         const int32_t borderSize = static_cast<int32_t>( 2 * ( innerRadius + 1 ) * M_PI );
         const int32_t targetRegionSize = requiredSpace + borderSize;
+
+        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Target size is " << requiredSpace << " + " << borderSize << " = " << targetRegionSize );
 
         // Inner and outer circles, update later to handle other layouts
         const int32_t upperLimit = config.playerCount * 3;
@@ -477,6 +482,9 @@ namespace Maps::Random_Generator
         }
 
         const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( std::numeric_limits<uint32_t>::max() );
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Generating a map with seed " << generatorSeed );
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Region size limit " << regionSizeLimit << ", water " << config.waterPercentage << "%" );
+
         Rand::PCG32 randomGenerator( generatorSeed );
 
         NodeCache data( width, height );
@@ -489,7 +497,8 @@ namespace Maps::Random_Generator
 
         // Step 1. Setup map generator configuration.
         // TODO: Add support for layouts other than MIRRORED
-        const int expectedRegionCount = ( width * height ) / regionSizeLimit;
+        const int32_t groundTiles = ( width * height ) * ( 100 - config.waterPercentage ) / 100;
+        const int expectedRegionCount = groundTiles / regionSizeLimit;
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
@@ -597,6 +606,7 @@ namespace Maps::Random_Generator
                 const fheroes2::Point castlePos = adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY );
                 if ( !placeCastle( interface, data, region, castlePos ) ) {
                     // Return early if we can't place a starting player castle.
+                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
                 startingLocations.push_back( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
