@@ -190,13 +190,61 @@ namespace
         // Inner and outer circles, update later to handle other layouts
         const int32_t upperLimit = config.playerCount * 3;
 
-        const int32_t totalTileCount = width * height;
         assert( config.waterPercentage < 100 );
+        const int32_t totalTileCount = width * height;
         const int32_t groundTiles = totalTileCount * ( 100 - config.waterPercentage ) / 100;
+
         int32_t average = groundTiles / targetRegionSize;
         int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
 
         return groundTiles / canFit;
+    }
+
+    struct PlacementTile final
+    {
+        int index{ 0 };
+        float distance{ 0.0f };
+        int ring{ 0 };
+    };
+
+    std::vector<PlacementTile> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator, bool ringShuffle = true,
+                                                            float noise = 0.0f )
+    {
+        std::vector<PlacementTile> ordered;
+        if ( region._centerIndex < 0 || region._nodes.empty() || mapWidth <= 0 )
+            return ordered;
+
+        ordered.reserve( region._nodes.size() );
+        std::vector<std::vector<PlacementTile>> buckets( 6 );
+
+        const int centerX = region._centerIndex % mapWidth;
+        const int centerY = region._centerIndex / mapWidth;
+
+        for ( const Node & node : region._nodes ) {
+            if ( node.type != NodeType::OPEN || node.index < 0 )
+                continue;
+
+            const int dx = ( node.index % mapWidth ) - centerX;
+            const int dy = ( node.index / mapWidth ) - centerY;
+
+            const float distance = std::sqrt( static_cast<float>( dx * dx + dy * dy ) );
+            const int ring = static_cast<int>( std::floor( distance ) );
+            if ( ring >= buckets.size() ) {
+                buckets.resize( ring + 1 );
+            }
+            buckets[ring].push_back( { node.index, distance, ring } );
+        }
+
+        if ( ringShuffle && noise == 0.0f ) {
+            for ( auto & bucket : buckets ) {
+                if ( !bucket.empty() ) {
+                    Rand::ShuffleWithGen( bucket, randomGenerator );
+                }
+                // Concatenate rings in ascending order
+                ordered.insert( ordered.end(), bucket.begin(), bucket.end() );
+            }
+        }
+        return ordered;
     }
 
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
@@ -317,6 +365,9 @@ namespace
                 Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
                 pathNode.type = NodeType::PATH;
             }
+            data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
+            data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
+
             data.getNode( mainTilePos ).type = NodeType::ACTION;
         }
     }
@@ -385,9 +436,8 @@ namespace
         return false;
     }
 
-    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource, Rand::PCG32 & randomGenerator )
+    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
     {
-        const auto & node = Rand::GetWithGen( region._nodes, randomGenerator );
         if ( node.type == NodeType::BORDER ) {
             return false;
         }
@@ -421,7 +471,7 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        const uint32_t generatorSeed = ( config.seed ) ? config.seed : Rand::Get( std::numeric_limits<uint32_t>::max() );
+        const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( std::numeric_limits<uint32_t>::max() );
         Rand::PCG32 randomGenerator( generatorSeed );
 
         NodeCache data( width, height );
@@ -433,7 +483,7 @@ namespace Maps::Random_Generator
         };
 
         // Step 1. Setup map generator configuration.
-        // TODO: Add support for layouts other than BALANCED
+        // TODO: Add support for layouts other than MIRRORED
         const int expectedRegionCount = ( width * height ) / regionSizeLimit;
 
         // Step 2. Determine region layout and placement.
@@ -542,16 +592,20 @@ namespace Maps::Random_Generator
                 placeCastle( interface, mapFormat.width, data, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
             }
 
-            if ( config.basicOnly ) {
-                continue;
-            }
+            std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
 
             for ( const int resource : resources ) {
-                // TODO: do a gradual distribution instead of guesses.
                 // TODO: MapEconomy to track the values
                 // TODO: not every mine, depends on richness setting & region side
-                for ( int tries = 0; tries < 5; ++tries ) {
-                    if ( placeMine( mapFormat, data, region, resource, randomGenerator ) ) {
+                for ( const PlacementTile tile : sortedTiles ) {
+                    if ( tile.distance < 4 ) {
+                        continue;
+                    }
+                    if ( tile.distance < 10 && ( resource != Resource::WOOD && resource != Resource::ORE ) ) {
+                        continue;
+                    }
+                    const auto & node = data.getNode( tile.index );
+                    if ( placeMine( mapFormat, data, node, resource ) ) {
                         break;
                     }
                 }

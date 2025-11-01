@@ -57,14 +57,11 @@ namespace Maps::Random_Generator
     struct Configuration final
     {
         int32_t playerCount{ 2 };
-        Layout mapLayout{ Layout::BALANCED };
+        Layout mapLayout{ Layout::MIRRORED };
         ResourceDensity resourceDensity{ ResourceDensity::NORMAL };
         MonsterStrength monsterStrength{ MonsterStrength::NORMAL };
         int32_t waterPercentage{ 0 };
         int32_t seed{ 0 };
-
-        // TODO: remove this member once random map generator is good enough.
-        bool basicOnly{ true };
     };
 
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height );
