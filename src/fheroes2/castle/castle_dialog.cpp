@@ -476,7 +476,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
 
-    
     while ( le.HandleEvents() && result == CastleDialogReturnValue::DoNothing ) {
         bool needRedraw = false;
         bool needFadeIn = false;
