@@ -4993,11 +4993,20 @@ namespace
             break;
         }
         case ICN::GAME_OPTION_ICON: {
-            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id].resize( 4 );
+
+            // All option icons are non-transparent so we should disable their transform layer to optimize image processing.
+            // TODO: implement storage of single-layer images in "resurrection.h2d" file.
 
             fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+            _icnVsSprite[id][0]._disableTransformLayer();
             fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+            _icnVsSprite[id][1]._disableTransformLayer();
 
+            fheroes2::h2d::readImage( "graphics_filter_nearest_icon.image", _icnVsSprite[id][2] );
+            _icnVsSprite[id][2]._disableTransformLayer();
+            fheroes2::h2d::readImage( "graphics_filter_linear_icon.image", _icnVsSprite[id][3] );
+            _icnVsSprite[id][3]._disableTransformLayer();
             break;
         }
         case ICN::RESOLUTION_ICON: {
