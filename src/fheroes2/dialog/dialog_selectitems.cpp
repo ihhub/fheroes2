@@ -151,6 +151,8 @@ namespace
             SetListContent( _ids );
             // For multi-selection we don't have any current item.
             SetCurrent( 0 );
+
+            enableToggleButtons();
         }
 
         std::vector<int> getSelected() const
@@ -166,6 +168,25 @@ namespace
         void ActionListDoubleClick( int & id ) override
         {
             updateStatus( id );
+        }
+
+    protected:
+        void onToggleOn() final
+        {
+            _selected = {};
+
+            for ( const int id : _ids ) {
+                _selected.emplace( id );
+            }
+
+            setButtonOkayStatus( !_selected.empty() );
+        }
+
+        void onToggleOff() final
+        {
+            _selected = {};
+
+            setButtonOkayStatus( !_selected.empty() );
         }
 
     private:
@@ -869,6 +890,13 @@ namespace Dialog
             _buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonOk.area() ) );
             _buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonCancel.area() ) );
 
+            if ( _buttonToggleOn.isEnabled() ) {
+                _buttonToggleOn.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonToggleOn.area() ) );
+            }
+            else if ( _buttonToggleOff.isEnabled() ) {
+                _buttonToggleOff.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonToggleOff.area() ) );
+            }
+
             if ( _buttonOk.isEnabled() && ( le.MouseClickLeft( _buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
                 return Dialog::OK;
             }
@@ -876,11 +904,39 @@ namespace Dialog
                 return Dialog::CANCEL;
             }
 
+            bool toggleAllOn = false;
+            bool toggleAllOff = false;
+
+            if ( _buttonToggleOn.isEnabled() && le.MouseClickLeft( _buttonToggleOn.area() ) ) {
+                toggleAllOn = true;
+                needRedraw = true;
+
+                onToggleOn();
+
+                _buttonToggleOn.disable();
+                _buttonToggleOff.enable();
+            }
+            else if ( _buttonToggleOff.isEnabled() && le.MouseClickLeft( _buttonToggleOff.area() ) ) {
+                toggleAllOff = true;
+                needRedraw = true;
+
+                onToggleOff();
+
+                _buttonToggleOff.disable();
+                _buttonToggleOn.enable();
+            }
+
             if ( le.isMouseRightButtonPressedInArea( _buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( _buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+            }
+            else if ( _buttonToggleOn.isEnabled() && le.isMouseRightButtonPressedInArea( _buttonToggleOn.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Enable All Items" ), _( "Click to enable all items." ), Dialog::ZERO );
+            }
+            else if ( _buttonToggleOff.isEnabled() && le.isMouseRightButtonPressedInArea( _buttonToggleOff.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Disable All Items" ), _( "Click to disable all items." ), Dialog::ZERO );
             }
 
             QueueEventProcessing();
@@ -904,6 +960,21 @@ namespace Dialog
     {
         assert( _window );
         return _window->totalArea();
+    }
+
+    void ItemSelectionWindow::enableToggleButtons()
+    {
+        _buttonToggleOn.enable();
+        _buttonToggleOff.enable();
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        _window->renderButton( _buttonToggleOn, isEvilInterface ? ICN::BUTTON_TOGGLE_ALL_ON_EVIL : ICN::BUTTON_TOGGLE_ALL_ON_GOOD, 0, 1, { 0, 7 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        _buttonToggleOn.disable();
+
+        _window->renderButton( _buttonToggleOff, isEvilInterface ? ICN::BUTTON_TOGGLE_ALL_OFF_EVIL : ICN::BUTTON_TOGGLE_ALL_OFF_GOOD, 0, 1, { 0, 7 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
     }
 }
 
@@ -1056,7 +1127,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 void Dialog::multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected )
 {
-    MultiMonsterSelection monsterList( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monsters:" ) );
+    MultiMonsterSelection monsterList( { 380, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monsters:" ) );
     monsterList.setup( std::move( allowed ), selected );
 
     const int32_t result = monsterList.selectItemsEventProcessing();
