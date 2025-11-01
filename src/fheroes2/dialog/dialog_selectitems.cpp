@@ -27,6 +27,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <initializer_list>
 #include <iterator>
 #include <numeric>
 #include <utility>
