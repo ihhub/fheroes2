@@ -327,6 +327,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 
     fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() );
     descriptionText.setUniformVerticalAlignment( false );
+    descriptionText.fitToArea( SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, SELECTED_SCENARIO_DESCRIPTION_HEIGHT - 3 );
     descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X + 4, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 3,
                           SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, display );
 }
