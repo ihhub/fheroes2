@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3609,6 +3609,22 @@ msgstr "Szárazföldi objektum"
 
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Tiltott varázslatok"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Ide kattintva csak %{level}. szintű varázslatok jelennek meg."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Varázslatok mutatása"
 
 msgid "Select Skill:"
 msgstr "Képesség kiválasztása:"

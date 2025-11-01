@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3601,6 +3601,22 @@ msgstr "Terrängföremål"
 
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klicka här för att aktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Aktivera Alla Besvärjelser"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klicka här för att inaktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Inaktivera Alla Besvärjelser"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"

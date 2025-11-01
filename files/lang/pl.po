@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3663,6 +3663,22 @@ msgstr "Brak obiektu"
 
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Losowa"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Pokaż zaklęcia"
 
 msgid "Select Skill:"
 msgstr "Wybierz umiejętność:"
