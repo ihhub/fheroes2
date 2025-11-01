@@ -53,7 +53,7 @@ namespace Maps::Map_Format
         std::vector<TileObjectInfo> objects;
     };
 
-    constexpr size_t eventMessageCharLimit{ 999 };
+    constexpr size_t messageCharLimit{ 999 };
 
     struct CastleMetadata
     {
