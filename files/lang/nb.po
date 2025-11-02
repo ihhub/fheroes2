@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3287,6 +3287,13 @@ msgstr ""
 "Taps-\n"
 "vilkår"
 
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Plassering: "
+
 msgid "First select recipients!"
 msgstr "Velg først mottakere!"
 
@@ -4024,11 +4031,9 @@ msgstr ""
 "sterkere fiender, færre råvarer, eller andre spesielle vilkår som skal gjøre "
 "ting mer utfordrende for den menneskelige spilleren."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Kartbeskrivelse"
-
-msgid "The description of the currently selected map."
-msgstr "Beskrivelse av det utvalgte kartet."
 
 msgid "Jump"
 msgstr "Sprang"
@@ -5072,13 +5077,6 @@ msgstr ""
 "Kartets\n"
 "utfordring"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Plassering: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -5089,11 +5087,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5332,6 +5325,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -12966,6 +12962,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Beskrivelse av det utvalgte kartet."
 
 #~ msgid "Castle Options"
 #~ msgstr "Borgvalg"

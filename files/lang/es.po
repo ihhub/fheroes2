@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3196,6 +3196,10 @@ msgstr ""
 "Condiciones\n"
 "de Derrota"
 
+#, fuzzy
+msgid "Map Description"
+msgstr "Descripción seleccionada"
+
 msgid "First select recipients!"
 msgstr "¡Selecciona primero los destinatarios!"
 
@@ -3940,11 +3944,9 @@ msgstr ""
 "algunas otras condiciones que vuelvan las cosas más duras para el jugador "
 "humano."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Descripción seleccionada"
-
-msgid "The description of the currently selected map."
-msgstr "La descripción del mapa actualmente elegido."
 
 msgid "Jump"
 msgstr "Salta"
@@ -4993,10 +4995,6 @@ msgstr ""
 "Dificultad\n"
 "del Mapa"
 
-#, fuzzy
-msgid "Map Description"
-msgstr "Descripción seleccionada"
-
 msgid "RUMORS"
 msgstr "RUMORES"
 
@@ -5007,11 +5005,6 @@ msgid "LANGUAGE"
 msgstr "IDIOMA"
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5244,6 +5237,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -12475,6 +12471,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "La descripción del mapa actualmente elegido."
 
 #~ msgid "Castle Options"
 #~ msgstr "Opciones del Castillo"

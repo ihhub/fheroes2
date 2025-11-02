@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3250,6 +3250,9 @@ msgstr ""
 "Tabs-\n"
 "vilkår"
 
+msgid "Map Description"
+msgstr "Kortbeskrivelse"
+
 msgid "First select recipients!"
 msgstr "Vælg først modtagere!"
 
@@ -3954,11 +3957,9 @@ msgstr ""
 "flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
 "gør det sværere for menneskelige spillere."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Valgte beskrivelse"
-
-msgid "The description of the currently selected map."
-msgstr "Beskrivelsen til det valgte kort."
 
 msgid "Jump"
 msgstr "Hop"
@@ -4916,9 +4917,6 @@ msgstr "Klik her for at ændre helten, hvis tab ville betyde nederlag."
 msgid "Map Difficulty"
 msgstr "Kort-niveau"
 
-msgid "Map Description"
-msgstr "Kortbeskrivelse"
-
 msgid "RUMORS"
 msgstr "RYGTER"
 
@@ -4930,13 +4928,6 @@ msgstr "SPROG"
 
 msgid "ABOUT"
 msgstr "OM"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Den indtastede kortbeskrivelse overskrider de maksimalt tilladte 5 rækker. "
-"Den vil blive forkortet, så den passer til kortbeskrivelsesfeltet."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5157,6 +5148,10 @@ msgstr "Fjern svar"
 
 msgid "Delete an existing answer for the question."
 msgstr "Fjern et eksisterende svar på gåden."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Gåde:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakter vil blive givet som belønning."
@@ -12569,6 +12564,16 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Beskrivelsen til det valgte kort."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "Den indtastede kortbeskrivelse overskrider de maksimalt tilladte 5 "
+#~ "rækker. Den vil blive forkortet, så den passer til kortbeskrivelsesfeltet."
 
 #~ msgid "Castle Options"
 #~ msgstr "Borg-vindue"

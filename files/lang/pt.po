@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3207,6 +3207,9 @@ msgstr ""
 "de\n"
 "Derrota"
 
+msgid "Map Description"
+msgstr "Descrição do Mapa"
+
 msgid "First select recipients!"
 msgstr "Primeiro selecione o recipiente!"
 
@@ -3921,11 +3924,9 @@ msgstr ""
 "mais inimigos, menos recursos ou outras condições especiais que tornem as "
 "coisas mais difíceis para o jogador humano."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Descrição Selecionada"
-
-msgid "The description of the currently selected map."
-msgstr "A descrição do mapa atualmente selecionado."
 
 msgid "Jump"
 msgstr "Saltar"
@@ -4891,9 +4892,6 @@ msgstr "Clique aqui para alterar o herói cuja perda significaria a derrota."
 msgid "Map Difficulty"
 msgstr "Dificuldade do Mapa"
 
-msgid "Map Description"
-msgstr "Descrição do Mapa"
-
 msgid "RUMORS"
 msgstr "RUMORES"
 
@@ -4905,13 +4903,6 @@ msgstr "IDIOMA"
 
 msgid "ABOUT"
 msgstr "SOBRE"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"A descrição do mapa inserida excede o máximo permitido de 5 linhas. Ela será "
-"reduzida para caber no campo de descrição do mapa."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5133,6 +5124,10 @@ msgstr "Apagar Resposta"
 
 msgid "Delete an existing answer for the question."
 msgstr "Apagar uma resposta existente para a pergunta."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Enigma:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Nenhum artefato será dado como recompensa."
@@ -12568,6 +12563,16 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "A descrição do mapa atualmente selecionado."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "A descrição do mapa inserida excede o máximo permitido de 5 linhas. Ela "
+#~ "será reduzida para caber no campo de descrição do mapa."
 
 #~ msgid "Castle Options"
 #~ msgstr "Opções do Castelo"

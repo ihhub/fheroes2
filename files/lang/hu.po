@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3187,6 +3187,9 @@ msgstr ""
 "Vesztési\n"
 "feltételek"
 
+msgid "Map Description"
+msgstr "Térkép leírása"
+
 msgid "First select recipients!"
 msgstr "Először válaszd ki a kedvezményezetteket!"
 
@@ -3891,11 +3894,9 @@ msgstr ""
 "ellenfeleket, kevesebb erőforrást, vagy más különleges nehezítő feltételeket "
 "foglalhatnak magukban."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Kiválasztott leírás"
-
-msgid "The description of the currently selected map."
-msgstr "A kiválasztott térkép leírása."
 
 msgid "Jump"
 msgstr "Ugrás"
@@ -4851,9 +4852,6 @@ msgstr ""
 msgid "Map Difficulty"
 msgstr "Térkép nehézség"
 
-msgid "Map Description"
-msgstr "Térkép leírása"
-
 msgid "RUMORS"
 msgstr "SZÓBESZÉDEK"
 
@@ -4865,14 +4863,6 @@ msgstr "NYELV"
 
 msgid "ABOUT"
 msgstr "LEÍRÁS"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"A megadott térképleírás hosszabb, mint a maximálisan elfogadott 5 sor. A "
-"térképleírás lerövidítésre kerül, hogy beleférjen a rendelkezésre álló "
-"mezőbe."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5093,6 +5083,10 @@ msgstr "Válasz törlése"
 
 msgid "Delete an existing answer for the question."
 msgstr "Meglévő válasz törlése."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Találós kérdés:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Nincs varázstárgy jutalom."
@@ -12417,6 +12411,17 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "A kiválasztott térkép leírása."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "A megadott térképleírás hosszabb, mint a maximálisan elfogadott 5 sor. A "
+#~ "térképleírás lerövidítésre kerül, hogy beleférjen a rendelkezésre álló "
+#~ "mezőbe."
 
 #~ msgid "Castle Options"
 #~ msgstr "Vár beállítások"

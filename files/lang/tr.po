@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3096,6 +3096,9 @@ msgstr ""
 "Yenilgi\n"
 "Şartları"
 
+msgid "Map Description"
+msgstr ""
+
 msgid "First select recipients!"
 msgstr "Önce alıcıları seçin!"
 
@@ -3776,11 +3779,9 @@ msgid ""
 "things tougher for the human player."
 msgstr ""
 
-msgid "Selected Description"
-msgstr ""
-
-msgid "The description of the currently selected map."
-msgstr ""
+#, fuzzy
+msgid "Selected Map Description"
+msgstr "Oyunun çözünürlüğünü seç"
 
 msgid "Jump"
 msgstr ""
@@ -4714,9 +4715,6 @@ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 msgid "Map Difficulty"
 msgstr ""
 
-msgid "Map Description"
-msgstr ""
-
 msgid "RUMORS"
 msgstr "SÖYLENTİLER"
 
@@ -4727,11 +4725,6 @@ msgid "LANGUAGE"
 msgstr "DİL"
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -4946,6 +4939,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -2846,6 +2846,9 @@ msgid ""
 "Conditions"
 msgstr ""
 
+msgid "Map Description"
+msgstr ""
+
 msgid "First select recipients!"
 msgstr ""
 
@@ -3499,10 +3502,7 @@ msgid ""
 "things tougher for the human player."
 msgstr ""
 
-msgid "Selected Description"
-msgstr ""
-
-msgid "The description of the currently selected map."
+msgid "Selected Map Description"
 msgstr ""
 
 msgid "Jump"
@@ -4393,9 +4393,6 @@ msgstr ""
 msgid "Map Difficulty"
 msgstr ""
 
-msgid "Map Description"
-msgstr ""
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4406,11 +4403,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -4607,6 +4599,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
