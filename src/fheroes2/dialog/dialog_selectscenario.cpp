@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -327,6 +328,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 
     fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() );
     descriptionText.setUniformVerticalAlignment( false );
+    descriptionText.fitToArea( SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, SELECTED_SCENARIO_DESCRIPTION_HEIGHT - 3 );
     descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X + 4, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 3,
                           SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, display );
 }
@@ -791,7 +793,9 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                 _( "The map difficulty of the currently selected map. The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( curDescription ) ) {
-            ShowToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
+            const fheroes2::Text header( _( "Selected Map Description" ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( scenarioList.GetCurrent().description, fheroes2::FontType::normalWhite(), scenarioList.GetCurrent().mainLanguage );
+            fheroes2::showMessage( header, body, Dialog::ZERO, {} );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );

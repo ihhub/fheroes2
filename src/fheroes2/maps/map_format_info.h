@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>
@@ -51,6 +52,9 @@ namespace Maps::Map_Format
 
         std::vector<TileObjectInfo> objects;
     };
+
+    constexpr size_t messageCharLimit{ 999 };
+    constexpr size_t nameCharLimit{ 30 };
 
     struct CastleMetadata
     {
