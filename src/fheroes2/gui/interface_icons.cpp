@@ -24,6 +24,7 @@
 #include "interface_icons.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <iterator>
 #include <vector>
 
