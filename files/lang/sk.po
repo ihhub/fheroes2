@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3650,6 +3650,22 @@ msgstr "Režim terénu"
 
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Náhodná"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Zobraz kúzla"
 
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"

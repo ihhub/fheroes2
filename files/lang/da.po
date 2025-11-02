@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3671,6 +3671,22 @@ msgstr "Terræn-objekt"
 
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Forbudt magi"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klik for kun at vise niveau %{level} besværgelser."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Vis besværgelser"
 
 msgid "Select Skill:"
 msgstr "Vælg evne:"

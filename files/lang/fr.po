@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3677,6 +3677,22 @@ msgstr "Objets généraux"
 
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Cliquez ici pour sélectionner cette couleur."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Sortilège aléatoire"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Cliquez pour quitter les résultats de la bataille."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Voir les sorts"
 
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
