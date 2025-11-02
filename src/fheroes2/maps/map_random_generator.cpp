@@ -213,15 +213,14 @@ namespace
         int ring{ 0 };
     };
 
-    std::vector<PlacementTile> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator, bool ringShuffle = true,
-                                                            float noise = 0.0f )
+    std::vector<PlacementTile> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
     {
         std::vector<PlacementTile> ordered;
         if ( region._centerIndex < 0 || region._nodes.empty() || mapWidth <= 0 )
             return ordered;
 
         ordered.reserve( region._nodes.size() );
-        std::vector<std::vector<PlacementTile>> buckets( 6 );
+        std::vector<std::vector<PlacementTile>> buckets( 10 );
 
         const int centerX = region._centerIndex % mapWidth;
         const int centerY = region._centerIndex / mapWidth;
@@ -234,21 +233,20 @@ namespace
             const int dy = ( node.index / mapWidth ) - centerY;
 
             const float distance = std::sqrt( static_cast<float>( dx * dx + dy * dy ) );
-            const int ring = static_cast<int>( std::floor( distance ) );
+            const int noise = Rand::GetWithGen( 0, 2, randomGenerator );
+            const int ring = static_cast<int>( std::floor( distance ) ) + noise;
             if ( ring >= buckets.size() ) {
                 buckets.resize( ring + 1 );
             }
             buckets[ring].push_back( { node.index, distance, ring } );
         }
 
-        if ( ringShuffle && noise == 0.0f ) {
-            for ( auto & bucket : buckets ) {
-                if ( !bucket.empty() ) {
-                    Rand::ShuffleWithGen( bucket, randomGenerator );
-                }
-                // Concatenate rings in ascending order
-                ordered.insert( ordered.end(), bucket.begin(), bucket.end() );
+        for ( auto & bucket : buckets ) {
+            if ( !bucket.empty() ) {
+                Rand::ShuffleWithGen( bucket, randomGenerator );
             }
+            // Concatenate rings in ascending order
+            ordered.insert( ordered.end(), bucket.begin(), bucket.end() );
         }
         return ordered;
     }
@@ -611,8 +609,7 @@ namespace Maps::Random_Generator
                 }
                 startingLocations.push_back( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
             }
-
-            if ( region._nodes.size() > 400 ) {
+            else if ( region._nodes.size() > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
                 placeCastle( interface, data, region, adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
@@ -622,8 +619,8 @@ namespace Maps::Random_Generator
 
             for ( const int resource : resources ) {
                 // TODO: MapEconomy to track the values
-                // TODO: not every mine, depends on richness setting & region side
                 for ( const PlacementTile tile : sortedTiles ) {
+                    // TODO: a finer distribution based on ring #
                     if ( tile.distance < 4 ) {
                         continue;
                     }
@@ -647,6 +644,8 @@ namespace Maps::Random_Generator
 
         // TODO: place objects while avoiding the borders.
 
+        // TODO: place treasure objects.
+
         AIWorldPathfinder pathfinder;
         pathfinder.reset();
         const PlayerColor testPlayer = PlayerColor::BLUE;
@@ -665,8 +664,6 @@ namespace Maps::Random_Generator
                 }
             }
         }
-
-        // TODO: place treasure objects.
 
         // TODO: place monsters.
 
