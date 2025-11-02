@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <limits>
 #include <ostream>
 #include <set>
 #include <utility>
@@ -45,6 +46,7 @@
 #include "resource.h"
 #include "ui_map_object.h"
 #include "world.h"
+#include "world_pathfinding.h"
 
 namespace
 {
@@ -159,11 +161,11 @@ namespace
 
     struct RegionalObjects final
     {
-        uint32_t castleCount{ 0 };
-        uint32_t mineCount{ 0 };
-        uint32_t objectCount{ 0 };
-        uint32_t powerUpsCount{ 0 };
-        uint32_t treasureCount{ 0 };
+        int32_t castleCount{ 0 };
+        int32_t mineCount{ 0 };
+        int32_t objectCount{ 0 };
+        int32_t powerUpsCount{ 0 };
+        int32_t treasureCount{ 0 };
     };
     constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::UNUSED )> regionObjectSets = { {
         { 1, 2, 1, 1, 0 }, // ResourceDensity::SCARCE
@@ -183,7 +185,7 @@ namespace
         requiredSpace += objectSet.powerUpsCount * 9;
         requiredSpace += objectSet.treasureCount * 16;
 
-        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Space required for density " << (int)config.resourceDensity << " is " << requiredSpace );
+        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Space required for density " << static_cast<int32_t>( config.resourceDensity ) << " is " << requiredSpace );
 
         requiredSpace = static_cast<int32_t>( requiredSpace / ( 1.0 - emptySpacePercentage ) );
 
@@ -200,8 +202,8 @@ namespace
         const int32_t totalTileCount = width * height;
         const int32_t groundTiles = totalTileCount * ( 100 - config.waterPercentage ) / 100;
 
-        int32_t average = groundTiles / targetRegionSize;
-        int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
+        const int32_t average = groundTiles / targetRegionSize;
+        const int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
 
         return groundTiles / canFit;
     }
@@ -209,7 +211,7 @@ namespace
     struct PlacementTile final
     {
         int index{ 0 };
-        float distance{ 0.0f };
+        float distance{ 0.0F };
         int ring{ 0 };
     };
 
@@ -233,9 +235,9 @@ namespace
             const int dy = ( node.index / mapWidth ) - centerY;
 
             const float distance = std::sqrt( static_cast<float>( dx * dx + dy * dy ) );
-            const int noise = Rand::GetWithGen( 0, 2, randomGenerator );
+            const int noise = static_cast<int>( Rand::GetWithGen( 0, 2, randomGenerator ) );
             const int ring = static_cast<int>( std::floor( distance ) ) + noise;
-            if ( ring >= buckets.size() ) {
+            if ( static_cast<size_t>( ring ) >= buckets.size() ) {
                 buckets.resize( ring + 1 );
             }
             buckets[ring].push_back( { node.index, distance, ring } );
@@ -609,13 +611,13 @@ namespace Maps::Random_Generator
                 }
                 startingLocations.push_back( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
             }
-            else if ( region._nodes.size() > regionSizeLimit ) {
+            else if ( static_cast<int32_t>( region._nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
                 placeCastle( interface, data, region, adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
             }
 
-            std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
+            const std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
 
             for ( const int resource : resources ) {
                 // TODO: MapEconomy to track the values
