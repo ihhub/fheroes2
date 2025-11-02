@@ -418,6 +418,10 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     }
     case Spell::CURSE:
     case Spell::MASSCURSE:
+        if ( target.GetDamageMax() == target.GetDamageMin() ) {
+            // It is useless to apply Curse spell as the monster already has minimal damage.
+            return 0;
+        }
         ratio = 0.15;
         break;
     case Spell::BERSERKER:
@@ -443,8 +447,10 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         break;
     case Spell::BLESS:
     case Spell::MASSBLESS: {
-        if ( target.GetDamageMax() == target.GetDamageMin() )
+        if ( target.GetDamageMax() == target.GetDamageMin() ) {
+            // It is useless to apply Bless spell as the monster already has maximum damage.
             return 0.0;
+        }
         ratio = 0.15;
         break;
     }
