@@ -91,11 +91,6 @@ namespace Interface
             ActionListPressRight( item );
         }
 
-        virtual void ActionListLongPress( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
-        {
-            ActionListLongPress( item );
-        }
-
         virtual bool ActionListCursor( Item & /* item */, const fheroes2::Point & /* cursor */ )
         {
             return false;
@@ -549,7 +544,6 @@ namespace Interface
 
                     if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
                         // This is a legitimate click and not a mouse-up on a finished drag.
-
                         if ( id == _currentId ) {
                             ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
