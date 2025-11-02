@@ -51,6 +51,19 @@ namespace
     const int32_t iconsCursorHeight = 32;
 }
 
+void Interface::HeroesIcons::rotateHeroPortraits( const HEROES currentHero )
+{
+    VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
+    auto heroIndex = std::find( heroes.begin(), heroes.end(), currentHero );
+    const auto index = std::distance( heroes.begin(), heroIndex );
+    std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
+
+    Interface::AdventureMap & I = Interface::AdventureMap::Get();
+
+    I.SetFocus( currentHero, false );
+    I.RedrawFocus();
+}
+
 bool Interface::IconsBar::isVisible()
 {
     const Settings & conf = Settings::Get();
@@ -224,25 +237,28 @@ void Interface::HeroesIcons::ActionCurrentDn()
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
-        Game::OpenHeroesDialog( *item, false, true );
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP ) ) {
+            rotateHeroPortraits( item );
+        }
+        else {
+            Game::OpenHeroesDialog( *item, false, true );
+        }
     }
 }
 
 void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 {
     if ( item ) {
-        // TODO: Use shift hotkey instead
-        // TODO: Make it work in case a hero is selected too.
-        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) ) {
-            VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
-            auto heroIndex = std::find( heroes.begin(), heroes.end(), item );
-            const auto index = std::distance( heroes.begin(), heroIndex );
-            std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
-        }
-        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-        I.SetFocus( item, false );
-        I.RedrawFocus();
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP ) ) {
+            rotateHeroPortraits( item );
+        }
+        else {
+            Interface::AdventureMap & I = Interface::AdventureMap::Get();
+
+            I.SetFocus( item, false );
+            I.RedrawFocus();
+        }
     }
 }
 
@@ -256,15 +272,7 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 void Interface::HeroesIcons::ActionListLongPress( HEROES & item )
 {
     if ( item ) {
-        VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
-        auto heroIndex = std::find( heroes.begin(), heroes.end(), item );
-        const auto index = std::distance( heroes.begin(), heroIndex );
-        std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
-
-        Interface::AdventureMap & I = Interface::AdventureMap::Get();
-
-        I.SetFocus( item, false );
-        I.RedrawFocus();
+        rotateHeroPortraits( item );
     }
 }
 
