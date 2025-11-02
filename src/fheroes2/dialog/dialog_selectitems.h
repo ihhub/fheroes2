@@ -125,12 +125,26 @@ namespace Dialog
             _buttonOk.draw();
         }
 
+        void enableToggleButtons();
+
+        virtual void onToggleOn()
+        {
+            // Do nothing.
+        }
+
+        virtual void onToggleOff()
+        {
+            // Do nothing.
+        }
+
     private:
         bool _isDoubleClicked{ false };
         std::unique_ptr<fheroes2::StandardWindow> _window;
         std::unique_ptr<fheroes2::ImageRestorer> _backgroundRestorer;
         fheroes2::Button _buttonOk;
         fheroes2::Button _buttonCancel;
+        fheroes2::Button _buttonToggleOn;
+        fheroes2::Button _buttonToggleOff;
 
         virtual bool isDoubleClicked()
         {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3593,6 +3593,22 @@ msgstr "Terén"
 
 msgid "Accept the choice made."
 msgstr "Přijmout vybranou volbu."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klikněte pro povolení režimu hlídkování hrdiny."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Náhodné kouzlo"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klikněte pro úpravu denních událostí."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Zobrazit kouzla"
 
 msgid "Select Skill:"
 msgstr "Vybrat dovednost:"

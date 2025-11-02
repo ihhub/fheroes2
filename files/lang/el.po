@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -3237,6 +3237,18 @@ msgid "Terrain object"
 msgstr ""
 
 msgid "Accept the choice made."
+msgstr ""
+
+msgid "Click to enable all items."
+msgstr ""
+
+msgid "Enable All Items"
+msgstr ""
+
+msgid "Click to disable all items."
+msgstr ""
+
+msgid "Disable All Items"
 msgstr ""
 
 msgid "Select Skill:"

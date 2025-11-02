@@ -339,7 +339,7 @@ namespace
         return false;
     }
 
-    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, const int resource )
+    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const int resource )
     {
         const auto & node = Rand::Get( region._nodes );
         Maps::Tile & mineTile = world.getTile( node.index );
