@@ -51,8 +51,9 @@ namespace
     const int32_t iconsCursorHeight = 32;
 }
 
-void Interface::HeroesIcons::rotateHeroPortraits( const HEROES currentHero )
+void Interface::HeroesIcons::rotateHeroPortraits( HEROES item )
 {
+    const auto & currentHero = item;
     VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
     auto heroIndex = std::find( heroes.begin(), heroes.end(), currentHero );
     const auto index = std::distance( heroes.begin(), heroIndex );

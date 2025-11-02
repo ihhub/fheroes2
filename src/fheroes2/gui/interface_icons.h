@@ -134,7 +134,7 @@ namespace Interface
         void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
 
-        void rotateHeroPortraits( const HEROES currentHero );
+        void rotateHeroPortraits( HEROES item );
 
         fheroes2::Point _topLeftCorner;
     };
