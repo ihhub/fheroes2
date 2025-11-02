@@ -219,7 +219,7 @@ namespace
     void FileInfoListBox::ActionListLongPress( Maps::FileInfo & /*unused*/ )
     {
         // Do nothing.
-	}
+    }
 
     void sortMapInfos( MapsFileInfoList & mapInfos )
     {

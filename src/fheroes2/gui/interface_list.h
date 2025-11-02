@@ -25,8 +25,8 @@
 
 #include <algorithm>
 
-#include "localevent.h"
 #include "game_hotkeys.h"
+#include "localevent.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
 
@@ -549,7 +549,7 @@ namespace Interface
 
                     if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
                         // This is a legitimate click and not a mouse-up on a finished drag.
-                        
+
                         if ( id == _currentId ) {
                             ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
