@@ -200,6 +200,11 @@ namespace
             // Do nothing.
         }
 
+        void ActionListLongPress( HeroRow & /* unused */ ) override
+        {
+            // Do nothing.
+        }
+
         void ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
         void ActionListDoubleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
         void ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
@@ -473,6 +478,11 @@ namespace
         }
 
         void ActionListPressRight( CstlRow & /* unused */ ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListLongPress( CstlRow & /* unused */ ) override
         {
             // Do nothing.
         }

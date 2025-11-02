@@ -123,12 +123,14 @@ namespace Interface
         using Interface::ListBox<HEROES>::ActionListDoubleClick;
         using Interface::ListBox<HEROES>::ActionListSingleClick;
         using Interface::ListBox<HEROES>::ActionListPressRight;
+        using Interface::ListBox<HEROES>::ActionListLongPress;
 
         void ActionCurrentUp() override;
         void ActionCurrentDn() override;
         void ActionListDoubleClick( HEROES & item ) override;
         void ActionListSingleClick( HEROES & item ) override;
         void ActionListPressRight( HEROES & item ) override;
+        void ActionListLongPress( HEROES & item ) override;
         void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
 
@@ -157,12 +159,19 @@ namespace Interface
         using Interface::ListBox<CASTLE>::ActionListDoubleClick;
         using Interface::ListBox<CASTLE>::ActionListSingleClick;
         using Interface::ListBox<CASTLE>::ActionListPressRight;
+        using Interface::ListBox<CASTLE>::ActionListLongPress;
 
         void ActionCurrentUp() override;
         void ActionCurrentDn() override;
         void ActionListDoubleClick( CASTLE & item ) override;
         void ActionListSingleClick( CASTLE & item ) override;
         void ActionListPressRight( CASTLE & item ) override;
+
+        void ActionListLongPress( CASTLE & /* unused */ ) override
+        {
+            // Do nothing.
+        }
+
         void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
 

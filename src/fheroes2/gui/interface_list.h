@@ -26,6 +26,7 @@
 #include <algorithm>
 
 #include "localevent.h"
+#include "game_hotkeys.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
 
@@ -73,6 +74,7 @@ namespace Interface
         virtual void ActionListDoubleClick( Item & ) = 0;
         virtual void ActionListSingleClick( Item & ) = 0;
         virtual void ActionListPressRight( Item & ) = 0;
+        virtual void ActionListLongPress( Item & ) = 0;
 
         virtual void ActionListDoubleClick( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
@@ -87,6 +89,11 @@ namespace Interface
         virtual void ActionListPressRight( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListPressRight( item );
+        }
+
+        virtual void ActionListLongPress( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
+        {
+            ActionListLongPress( item );
         }
 
         virtual bool ActionListCursor( Item & /* item */, const fheroes2::Point & /* cursor */ )
@@ -426,6 +433,13 @@ namespace Interface
 
                 return true;
             }
+            if ( !_lockClick && le.MouseLongPressLeft( rtAreaItems ) ) {
+                const fheroes2::Point & mousePos = le.getMouseCursorPos();
+                const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
+                Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
+                ActionListLongPress( item );
+                return true;
+            }
             if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) || le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
                 const fheroes2::Point mousePosition = le.getMouseCursorPos();
 
@@ -499,6 +513,7 @@ namespace Interface
 
                     if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
                         // This is a legitimate click and not a mouse-up on a finished drag.
+                        
                         if ( id == _currentId ) {
                             ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
@@ -506,6 +521,10 @@ namespace Interface
                             _currentId = id;
                             ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
+                        return true;
+                    }
+                    if ( le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
+                        ActionListLongPress( item );
                         return true;
                     }
 

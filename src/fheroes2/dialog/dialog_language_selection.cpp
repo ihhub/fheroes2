@@ -60,6 +60,7 @@ namespace
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListSingleClick;
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListPressRight;
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListDoubleClick;
+        using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListLongPress;
 
         explicit LanguageList( const fheroes2::Point & offset )
             : Interface::ListBox<fheroes2::SupportedLanguage>( offset )
@@ -97,6 +98,11 @@ namespace
         }
 
         void ActionListPressRight( fheroes2::SupportedLanguage & /*language*/ ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListLongPress( fheroes2::SupportedLanguage & /*language*/ ) override
         {
             // Do nothing.
         }

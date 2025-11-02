@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -226,6 +226,14 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 {
     if ( item ) {
+        // TODO: Use shift hotkey instead
+        // TODO: Make it work in case a hero is selected too.
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) ) {
+            VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
+            auto heroIndex = std::find( heroes.begin(), heroes.end(), item );
+            size_t index = std::distance( heroes.begin(), heroIndex );
+            std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
+        }
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.SetFocus( item, false );
@@ -237,6 +245,21 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
         Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
+    }
+}
+
+void Interface::HeroesIcons::ActionListLongPress( HEROES & item )
+{
+    if ( item ) {
+        VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
+        auto heroIndex = std::find( heroes.begin(), heroes.end(), item );
+        size_t index = std::distance( heroes.begin(), heroIndex );
+        std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
+
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+
+        I.SetFocus( item, false );
+        I.RedrawFocus();
     }
 }
 

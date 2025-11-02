@@ -124,6 +124,7 @@ namespace
         using Interface::ListBox<Maps::FileInfo>::ActionListDoubleClick;
         using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
         using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
+        using Interface::ListBox<Maps::FileInfo>::ActionListLongPress;
 
         using ListBox::ListBox;
 
@@ -134,6 +135,7 @@ namespace
         void ActionCurrentDn() override;
         void ActionListDoubleClick( Maps::FileInfo & info ) override;
         void ActionListSingleClick( Maps::FileInfo & info ) override;
+        void ActionListLongPress( Maps::FileInfo & info ) override;
 
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
@@ -227,6 +229,11 @@ namespace
     }
 
     void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ )
+    {
+        // Do nothing.
+    }
+
+    void FileInfoListBox::ActionListLongPress( Maps::FileInfo & /*unused*/ )
     {
         // Do nothing.
     }
