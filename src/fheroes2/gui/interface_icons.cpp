@@ -23,10 +23,16 @@
 
 #include "interface_icons.h"
 
+#include <stddef.h>
+#include <algorithm>
+#include <iterator>
+#include <vector>
+
 #include "agg_image.h"
 #include "castle.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "heroes_base.h"
