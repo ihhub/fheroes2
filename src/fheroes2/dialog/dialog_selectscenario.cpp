@@ -792,7 +792,9 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                 _( "The map difficulty of the currently selected map. The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( curDescription ) ) {
-            ShowToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
+            const fheroes2::Text header( _( "Selected Map Description" ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( scenarioList.GetCurrent().description, fheroes2::FontType::normalWhite(), scenarioList.GetCurrent().mainLanguage );
+            fheroes2::showMessage( header, body, Dialog::ZERO, {} );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );
