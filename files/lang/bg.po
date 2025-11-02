@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3671,6 +3671,22 @@ msgstr "Режим терен"
 
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Преглед на магиите"
 
 msgid "Select Skill:"
 msgstr "Избери умение:"

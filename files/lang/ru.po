@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3632,6 +3632,22 @@ msgstr "Объект ландшафта"
 
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Запретить заклинания"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Нажмите, чтобы показать заклинания только %{level} уровня."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Просмотреть заклинания"
 
 msgid "Select Skill:"
 msgstr "Выберите навык:"

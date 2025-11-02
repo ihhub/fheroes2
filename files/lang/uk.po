@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 03:33+0000\n"
+"POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3622,6 +3622,22 @@ msgstr "Об'єкт місцевості"
 
 msgid "Accept the choice made."
 msgstr "Підтвердити ваш вибір."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Тицьніть для увімкнення патрулювання героєм."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Заборонені заклинання"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Переглянути заклинання"
 
 msgid "Select Skill:"
 msgstr "Оберіть навичку:"
