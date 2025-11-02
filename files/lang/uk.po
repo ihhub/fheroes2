@@ -6,6 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-11-01 16:41+0200\n"
 "POT-Creation-Date: 2025-11-01 23:37+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
@@ -180,11 +181,12 @@ msgstr ""
 "ТАЖИТИ\n"
 "ГРУ"
 
-#, fuzzy
 msgid ""
 "RESTART\n"
 "GAME"
-msgstr "РЕСТАРТ"
+msgstr ""
+"ПЕРЕЗАПУСК\n"
+"ГРИ"
 
 msgid ""
 "SAVE\n"
@@ -193,13 +195,12 @@ msgstr ""
 "ЗАПИС\n"
 "ГРИ"
 
-#, fuzzy
 msgid ""
 "QUICK\n"
 "SAVE"
 msgstr ""
 "ШВИДКИЙ\n"
-"БІЙ"
+"ЗАПИС"
 
 msgid "QUIT"
 msgstr "ВИЙТИ"
@@ -363,11 +364,12 @@ msgstr "Розвідник"
 msgid "None"
 msgstr "Відсутні"
 
-#, fuzzy
 msgid ""
 "%{monster}\n"
 "%{range}"
-msgstr "%{monster} перелетіти сюди"
+msgstr ""
+"%{monster}\n"
+"%{range}"
 
 msgid ""
 "A few\n"
@@ -2822,7 +2824,7 @@ msgid "The spells the hero can learn have been added to their book."
 msgstr "Доступні для вивчення заклинання додано в Книгу Заклинань."
 
 msgid "Exit Mage Guild"
-msgstr ""
+msgstr "Вийти з Гільдії Магів"
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Щедрі чайові для бармена породжують такі чутки:"
@@ -2859,9 +2861,8 @@ msgstr ""
 "Бойовий порядок \"Згуртованість\" об'єднує підрозділи замку в центрі поля "
 "бою на стороні замку."
 
-#, fuzzy
 msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr "Місяць: %{month}, Тиждень: %{week}, День: %{day}"
+msgstr "Параметри замку. Місяць: %{month}, Тиждень: %{week}, День: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Встановити бойовий порядок \"Розосередження\""
@@ -3088,9 +3089,8 @@ msgstr "Загалом: "
 msgid "Need: "
 msgstr "Потрібно: "
 
-#, fuzzy
 msgid "Restart Game"
-msgstr "Перезапуск"
+msgstr "Перезапустити гру"
 
 msgid "There was an issue during saving."
 msgstr "Під час збереження виникла проблема."
@@ -3107,9 +3107,8 @@ msgstr "Завантажити Гру"
 msgid "Load a previously saved game."
 msgstr "Завантажити раніше збережену гру."
 
-#, fuzzy
 msgid "Restart the scenario."
-msgstr "Перезапустити поточний сценарій."
+msgstr "Перезапустити сценарій."
 
 msgid "Save Game"
 msgstr "Зберегти Гру"
@@ -3117,13 +3116,11 @@ msgstr "Зберегти Гру"
 msgid "Save the current game."
 msgstr "Збережіть поточну гру."
 
-#, fuzzy
 msgid "Quick Save"
-msgstr "Квіксілвер"
+msgstr "Швидкий запис"
 
-#, fuzzy
 msgid "Save the current game without name selection."
-msgstr "Збережіть поточну гру."
+msgstr "Збережіть поточну гру без вибору назви."
 
 msgid "Quit"
 msgstr "Вихід"
@@ -3284,15 +3281,14 @@ msgstr "Показати"
 msgid "Interface"
 msgstr "Інтерфейс"
 
-#, fuzzy
 msgid "Army Estimation"
-msgstr "Анімація"
+msgstr "Оцінка армії"
 
 msgid "Canonical"
-msgstr ""
+msgstr "Канонічний"
 
 msgid "Numeric"
-msgstr ""
+msgstr "Числовий"
 
 msgid "Interface Type"
 msgstr "Тип Інтерфейсу"
@@ -3317,6 +3313,12 @@ msgid ""
 "\n"
 "Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
 msgstr ""
+"Перемикач способу відображення розміру армії при натисканні правою кнопкою "
+"миші по армії на мапі пригод. \n"
+" \n"
+"Канонічний: у вигляді описового тексту (наприклад, \"Декілька\")\n"
+"\n"
+"Числовий: у вигляді числового діапазону (наприклад \"1-4\")."
 
 msgid "Select Game Language:"
 msgstr "Вибрати мову гри:"
@@ -3846,9 +3848,8 @@ msgstr "Складність мапи:"
 msgid "N"
 msgstr "Н"
 
-#, fuzzy
 msgid "Are you sure you want to delete the map:"
-msgstr "Ви впевнені, що хочете видалити файл:"
+msgstr "Ви впевнені, що хочете видалити мапу:"
 
 msgid "No maps exist at that size."
 msgstr "Немає мап такого розміру."
@@ -4283,7 +4284,7 @@ msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} %{objects}."
 
 msgid "Not able to generate a map with given parameters."
-msgstr ""
+msgstr "Неможливо створити мапу з заданими параметрами."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4423,12 +4424,11 @@ msgstr "На мапі можна розмістити лише один випа
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
 
-#, fuzzy
 msgid "Pick player count"
-msgstr "Кількість гравців"
+msgstr "Виберіть кількість гравців"
 
 msgid "Limit region size"
-msgstr ""
+msgstr "Обмежте розмір регіону"
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -4712,13 +4712,13 @@ msgstr ""
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
+"Створіть нову мапу, або з нуля, або використавуючи генератор випадкових мап."
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Вийти з редактора та повернутися до головного меню."
 
-#, fuzzy
 msgid "Warning!"
-msgstr "Попередження"
+msgstr "Попередження!"
 
 msgid "From Scratch"
 msgstr "З чистого аркуша"
@@ -4738,21 +4738,19 @@ msgstr "Назад"
 msgid "Return to the Editor's main menu options."
 msgstr "Повернутися до головного меню редактора."
 
-#, fuzzy
 msgid ""
 "Generate a random map that is %{size} squares wide and %{size} squares high."
 msgstr ""
-"Створити мапу розміром %{size} квадратів у ширину і %{size} квадратів у "
-"висоту."
+"Створити випадкову мапу розміром %{size} квадратів у ширину і %{size} "
+"квадратів у висоту."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Створити мапу розміром %{size} квадратів у ширину і %{size} квадратів у "
 "висоту."
 
-#, fuzzy
 msgid "Return to the previous menu options."
-msgstr "Повернутися до головного меню редактора."
+msgstr "Повернутися до попереднього меню налаштувань."
 
 msgid "No maps available!"
 msgstr "Нема доступних мап!"
@@ -4778,7 +4776,6 @@ msgstr "[%{pos}]: %{name}, %{race} місто"
 msgid "None."
 msgstr "Нема."
 
-#, fuzzy
 msgid "One side defeats the other."
 msgstr "Одна сторона перемагає іншу."
 
@@ -5036,21 +5033,17 @@ msgstr "Зберегти мапу:"
 msgid "Click to save the current map."
 msgstr "Тицьніть, щоб зберегти поточну мапу."
 
-#, fuzzy
 msgid "Click to enable all secondary skills."
-msgstr "Тицьніть для увімкнення патрулювання героєм."
+msgstr "Тицьніть, щоб увімкнути всі вторинні навички."
 
-#, fuzzy
 msgid "Enable All Secondary Skills"
-msgstr "Видалити вторинне вміння"
+msgstr "Увімкнути всі вторинні навички."
 
-#, fuzzy
 msgid "Click to disable all secondary skills."
-msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
+msgstr "Тицьніть, щоб вимкнути всі вторинні навички."
 
-#, fuzzy
 msgid "Disable All Secondary Skills"
-msgstr "Видалити вторинне вміння"
+msgstr "Вимкнути Всі вторинні навички"
 
 msgid "Click to show only level %{level} spells."
 msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
@@ -5058,21 +5051,17 @@ msgstr "Тицьніть, щоб показати лише заклинання 
 msgid "Spells level"
 msgstr "Рівень заклинань"
 
-#, fuzzy
 msgid "Click to enable all spells."
-msgstr "Тицьніть для увімкнення патрулювання героєм."
+msgstr "Тицьніть, щоб увімкнути всі заклинання."
 
-#, fuzzy
 msgid "Enable All Spells"
-msgstr "Заборонені заклинання"
+msgstr "Увімкнути Всі заклинання"
 
-#, fuzzy
 msgid "Click to disable all spells."
-msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
+msgstr "Тицьніть, щоб вимкнути всі заклинання."
 
-#, fuzzy
 msgid "Disable All Spells"
-msgstr "Переглянути заклинання"
+msgstr "Вимкнути Всі заклинання"
 
 msgid "Riddle:"
 msgstr "Загадка:"
@@ -5535,13 +5524,11 @@ msgstr "відкрити головне меню гри"
 msgid "hotkey|toggle passability"
 msgstr "відобразити прохідність"
 
-#, fuzzy
 msgid "hotkey|re-generate random map"
-msgstr "нова випадкова мапа"
+msgstr "перегенерувати випадкову мапу"
 
-#, fuzzy
 msgid "hotkey|re-configure random map"
-msgstr "нова випадкова мапа"
+msgstr "переналаштувати випадкову мапу"
 
 msgid "hotkey|roland campaign"
 msgstr "кампанія Роланда"
@@ -5606,9 +5593,8 @@ msgstr "світова мапа донизу й праворуч"
 msgid "hotkey|save game"
 msgstr "зберегти гру"
 
-#, fuzzy
 msgid "hotkey|quick save"
-msgstr "швидкий бій"
+msgstr "швидке збереження"
 
 msgid "hotkey|next hero"
 msgstr "наступний герой"
@@ -6246,9 +6232,8 @@ msgstr "Тицьніть, щоб прийняти ці налаштування 
 msgid "Click to return to the main menu."
 msgstr "Тицьніть для повернення до головного меню."
 
-#, fuzzy
 msgid "The map is corrupted or doesn't exist."
-msgstr "Мапа пошкоджена."
+msgstr "Мапа пошкоджена або відсутня."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астрологи оголошують місяць %{name}."
@@ -8569,35 +8554,32 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} зустрічає %{name2}"
 
-#, fuzzy
 msgid "hero|Level %{level}"
-msgstr "Рівень %{level}"
+msgstr "рівень %{level}"
 
 msgid "Move all artifacts from %{from_hero_name} to %{to_hero_name}."
-msgstr ""
+msgstr "Перемістити всі артефакти з %{from_hero_name} до %{to_hero_name}."
 
-#, fuzzy
 msgid "Artifact Transfer"
-msgstr "Артефакти"
+msgstr "Передача артефактів"
 
-#, fuzzy
 msgid "Swap Artifacts"
-msgstr "Огляд артефактів"
+msgstr "Обміняти артефакти"
 
 msgid "Swap all artifacts between heroes."
-msgstr ""
+msgstr "Обміняти всі артефакти між героями."
 
 msgid "Move army from %{from_hero_name} to %{to_hero_name}."
-msgstr ""
+msgstr "Перемістити армію від %{from_hero_name} до %{to_hero_name}."
 
 msgid "Army Transfer"
-msgstr ""
+msgstr "Передача армії"
 
 msgid "Swap Armies"
-msgstr ""
+msgstr "Обміняти армії"
 
 msgid "Swap armies between heroes."
-msgstr ""
+msgstr "Обміняти армії між героями."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Ворожі герої тепер повністю ідентифіковані."
@@ -12270,6 +12252,9 @@ msgid ""
 "Returns the caster to the nearest town or castle currently owned. This spell "
 "cannot be cast if the hero is already in a town or a castle."
 msgstr ""
+"Повертає заклинателя до найближчого міста або замку, який наразі належить "
+"йому. Це заклинання не можна застосувати, якщо герой вже перебуває в місті "
+"або замку."
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
