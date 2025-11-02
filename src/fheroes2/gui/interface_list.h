@@ -128,6 +128,15 @@ namespace Interface
             _scrollbar.setImage( image );
         }
 
+        void updateScrollBarImage()
+        {
+            const int32_t scrollBarWidth = _scrollbar.width();
+
+            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
+                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
+            _scrollbar.moveToIndex( _topId );
+        }
+
         fheroes2::Scrollbar & GetScrollbar()
         {
             return _scrollbar;
@@ -210,6 +219,11 @@ namespace Interface
         Item & GetCurrent() // always call this function only after IsValid()!
         {
             return ( *content )[_currentId];
+        }
+
+        int getCurrentId() const
+        {
+            return _currentId;
         }
 
         Item * GetFromPosition( const fheroes2::Point & mp )
@@ -340,38 +354,58 @@ namespace Interface
         {
             LocalEvent & le = LocalEvent::Get();
 
-            _buttonPgUp.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonPgUp.area() ) );
-            _buttonPgDn.drawOnState( le.isMouseLeftButtonPressedInArea( _buttonPgDn.area() ) );
+            _buttonPgUp.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonPgUp.area() ) );
+            _buttonPgDn.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonPgDn.area() ) );
 
             if ( !IsValid() ) {
                 return false;
             }
 
-            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_PAGE_UP ) && ( _topId > 0 ) ) {
-                needRedraw = true;
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_PAGE_UP ) ) {
+                SetCurrentVisible();
+                if ( _topId > 0 ) {
+                    needRedraw = true;
 
-                if ( _topId > maxItems ) {
-                    _topId -= maxItems;
-                }
-                else {
-                    _topId = 0;
-                }
+                    const int prevTop = _topId;
+                    if ( _topId > maxItems ) {
+                        _topId -= maxItems;
+                    }
+                    else {
+                        _topId = 0;
+                    }
 
-                UpdateScrollbarRange();
-                _scrollbar.moveToIndex( _topId );
+                    UpdateScrollbarRange();
+                    _scrollbar.moveToIndex( _topId );
+                    _currentId = std::clamp( _currentId - ( prevTop - _topId ), _topId, _lastVisibleId() );
+                }
+                // The view is at the top of the list, but selection isn't
+                else if ( _currentId != 0 ) {
+                    _currentId = 0;
+                    needRedraw = true;
+                }
 
                 return true;
             }
-            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_PAGE_DOWN ) && ( _topId + maxItems < _size() ) ) {
-                needRedraw = true;
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_PAGE_DOWN ) ) {
+                SetCurrentVisible();
+                if ( _topId + maxItems < _size() ) {
+                    needRedraw = true;
 
-                _topId += maxItems;
-                if ( _topId + maxItems >= _size() ) {
-                    _topId = _size() - maxItems;
+                    const int prevTop = _topId;
+                    _topId += maxItems;
+                    if ( _topId + maxItems >= _size() ) {
+                        _topId = _size() - maxItems;
+                    }
+
+                    UpdateScrollbarRange();
+                    _scrollbar.moveToIndex( _topId );
+                    _currentId = std::clamp( _currentId + ( _topId - prevTop ), _topId, _lastVisibleId() );
                 }
-
-                UpdateScrollbarRange();
-                _scrollbar.moveToIndex( _topId );
+                // The view is at the bottom of the list, but the selection isn't
+                else if ( _currentId < _size() - 1 ) {
+                    _currentId = _size() - 1;
+                    needRedraw = true;
+                }
 
                 return true;
             }
@@ -393,20 +427,22 @@ namespace Interface
 
                 return true;
             }
-            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_HOME ) && ( _topId > 0 ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_HOME ) && ( _topId > 0 || _currentId > 0 ) ) {
                 needRedraw = true;
 
                 _topId = 0;
+                _currentId = _topId;
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
 
                 return true;
             }
-            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() ) ) {
+            if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() || _currentId < _lastVisibleId() ) ) {
                 needRedraw = true;
 
-                _topId = _size() - maxItems;
+                _topId = std::max( 0, _size() - maxItems );
+                _currentId = _size() - 1;
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
@@ -574,6 +610,11 @@ namespace Interface
 
         fheroes2::TimedEventValidator _timedButtonPgUp;
         fheroes2::TimedEventValidator _timedButtonPgDn;
+
+        int _lastVisibleId() const
+        {
+            return std::min( _topId + maxItems, _size() ) - 1;
+        }
 
         void Verify()
         {

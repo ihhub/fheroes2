@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,51 +21,82 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "smacker.h"
 
 namespace fheroes2
 {
     class Image;
 }
 
-class SMKVideoSequence
+class SMKVideoSequence final
 {
 public:
     explicit SMKVideoSequence( const std::string & filePath );
-    ~SMKVideoSequence();
+    ~SMKVideoSequence() = default;
 
     SMKVideoSequence( const SMKVideoSequence & ) = delete;
     SMKVideoSequence & operator=( const SMKVideoSequence & ) = delete;
 
     void resetFrame();
 
+    // Input image must be resized to accommodate the frame, and also it must be a single layer image as video frames shouldn't have any transform-related information.
+    // If the image is smaller than the frame then only a part of the frame will be drawn.
+    void getCurrentFrame( fheroes2::Image & image, int32_t x, int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette ) const;
+
     // Input image must be resized to accommodate the frame and also it must be a single layer image as video frames shouldn't have any transform-related information.
     // If the image is smaller than the frame then only a part of the frame will be drawn.
-    void getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette );
+    void getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette )
+    {
+        getCurrentFrame( image, x, y, width, height, palette );
+        skipFrame();
+    }
+
+    void skipFrame();
 
     std::vector<uint8_t> getCurrentPalette() const;
 
-    const std::vector<std::vector<uint8_t>> & getAudioChannels() const;
+    const std::vector<std::vector<uint8_t>> & getAudioChannels() const
+    {
+        return _audioChannel;
+    }
 
-    int32_t width() const;
-    int32_t height() const;
-    double fps() const;
-    unsigned long frameCount() const;
+    int32_t width() const
+    {
+        return _width;
+    }
 
-    unsigned long getCurrentFrame() const
+    int32_t height() const
+    {
+        return _height;
+    }
+
+    double microsecondsPerFrame() const
+    {
+        return _microsecondsPerFrame;
+    }
+
+    unsigned long frameCount() const
+    {
+        return _frameCount;
+    }
+
+    unsigned long getCurrentFrameId() const
     {
         return _currentFrameId;
     }
 
 private:
     std::vector<std::vector<uint8_t>> _audioChannel;
-    int32_t _width;
-    int32_t _height;
-    int32_t _heightScaleFactor;
-    double _fps;
-    unsigned long _frameCount;
-    unsigned long _currentFrameId;
+    int32_t _width{ 0 };
+    int32_t _height{ 0 };
+    int32_t _heightScaleFactor{ 1 };
+    double _microsecondsPerFrame{ 0 };
+    unsigned long _frameCount{ 0 };
+    unsigned long _currentFrameId{ 0 };
 
-    struct smk_t * _videoFile;
+    std::unique_ptr<struct smk_t, void ( * )( struct smk_t * )> _videoFile{ nullptr, smk_close };
 };

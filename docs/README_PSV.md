@@ -1,4 +1,4 @@
-# PlayStation Vita port of [**fheroes2**](README.md) project
+# PlayStation Vita Port of [fheroes2](README.md) Project
 
 ## Install
 
@@ -11,7 +11,7 @@ Copy HEROES2.AGG and HEROES2X.AGG (if you own Price of Loyalty expansion) from t
 
 Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/music/" folder.
 
-fheroes2 supports ingame cinematics. To play into and/or other videos, make sure that all of "*.SMK" files are placed
+fheroes2 supports in-game cinematics. To play intro and/or other videos, make sure that all of "*.SMK" files are placed
 inside "ux0:data/fheroes2/heroes2/anim/" folder.
 
 [rePatch reDux0](https://github.com/dots-tb/rePatch-reDux0) OR [FdFix](https://github.com/TheOfficialFloW/FdFix) plugin
@@ -54,7 +54,7 @@ Text input is done with D-Pad.
 * Up - Previous character
 * R1, L1 - Switch current character between uppercase/lowercase
 
-## Vita specific options
+## Vita Specific Options
 
 Pointer movement speed can be changed with 'gamepad_pointer_speed' parameter in "ux0:data/fheroes2/fheroes2.cfg".
 

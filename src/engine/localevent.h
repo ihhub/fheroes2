@@ -159,6 +159,10 @@ namespace fheroes2
         KEY_HOME,
         KEY_END,
 
+        // These keys are from mouse buttons.
+        KEY_MOUSE_BUTTON_BACKWARD,
+        KEY_MOUSE_BUTTON_FORWARD,
+
         // Put all new keys before this line.
         LAST_KEY
     };
@@ -259,6 +263,11 @@ public:
         return isMouseLeftButtonPressed() && ( area & _mousePressLeftPos );
     }
 
+    bool isMouseLeftButtonPressedAndHeldInArea( const fheroes2::Rect & area ) const
+    {
+        return isMouseLeftButtonPressedInArea( area ) && isMouseCursorPosInArea( area );
+    }
+
     bool isMouseRightButtonPressed() const
     {
         return ( _actionStates & MOUSE_PRESSED ) && _currentMouseButton == MouseButtonType::MOUSE_BUTTON_RIGHT;
@@ -328,9 +337,11 @@ public:
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
-        if ( newSpeed > 0 ) {
-            _controllerPointerSpeed = newSpeed / _constrollerSpeedModifier;
+        if ( newSpeed <= 0 ) {
+            return;
         }
+
+        _controllerPointerSpeed = newSpeed / _controllerSpeedModifier;
     }
 
     bool isDragInProgress() const
@@ -341,6 +352,12 @@ public:
     void registerDrag()
     {
         setStates( DRAG_ONGOING );
+    }
+
+    // Only for cases when a continuous pressed event is required.
+    void resetLongPress()
+    {
+        _mouseButtonLongPressDelay.reset();
     }
 
 private:
@@ -473,8 +490,8 @@ private:
     fheroes2::Rect _mouseCursorRenderArea;
 
     // used to convert user-friendly pointer speed values into more usable ones
-    const double _constrollerSpeedModifier{ 2000000.0 };
-    double _controllerPointerSpeed{ 10.0 / _constrollerSpeedModifier };
+    const double _controllerSpeedModifier{ 2000000.0 };
+    double _controllerPointerSpeed{ 10.0 / _controllerSpeedModifier };
     fheroes2::PointBase2D<double> _emulatedPointerPos;
 
     // bigger value corresponds to faster pointer movement speed with bigger stick axis values

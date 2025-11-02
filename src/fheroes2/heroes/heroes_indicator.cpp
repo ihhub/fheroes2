@@ -74,11 +74,6 @@ HeroesIndicator::HeroesIndicator( const Heroes * hero )
     assert( _hero != nullptr );
 }
 
-const fheroes2::Rect & HeroesIndicator::GetArea() const
-{
-    return _area;
-}
-
 void HeroesIndicator::SetPos( const fheroes2::Point & pt )
 {
     _area.x = pt.x;
@@ -90,7 +85,7 @@ void HeroesIndicator::SetPos( const fheroes2::Point & pt )
 void LuckIndicator::Redraw()
 {
     std::string modificators;
-    _luck = _hero->GetLuckWithModificators( &modificators );
+    _luck = _hero->getLuckWithModifiers( &modificators );
 
     _description.clear();
     _description.append( Luck::Description( _luck ) );
@@ -136,7 +131,7 @@ void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
 void MoraleIndicator::Redraw()
 {
     std::string modificators;
-    _morale = _hero->GetMoraleWithModificators( &modificators );
+    _morale = _hero->getMoraleWithModifiers( &modificators );
 
     _description.clear();
     _description.append( Morale::Description( _morale ) );
@@ -234,16 +229,21 @@ void ExperienceIndicator::Redraw() const
         fheroes2::Text text{ std::move( experienceString ), fheroes2::FontType::smallWhite() };
         if ( text.width() > renderRoi.width + 1 ) {
             // The experience string is much longer than the rendering area. We want to avoid too long strings.
-            const uint32_t millions = experienceValue / 1000000;
+            constexpr uint32_t millionValue = 1000000;
+            const uint32_t millions = experienceValue / millionValue;
 
-            if ( experienceValue < 10000000 ) {
-                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 10000 ) + _( "million|M" );
+            if ( experienceValue < 10 * millionValue ) {
+                // Show two digits after the point ("x.xxM").
+                experienceString
+                    = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * millionValue ) / ( millionValue / 100 ) ) + _( "million|M" );
             }
             else {
-                experienceString = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * 1000000 ) / 100000 ) + _( "million|M" );
+                // Show one digit after the point ("xx.xM").
+                experienceString
+                    = std::to_string( millions ) + "." + std::to_string( ( experienceValue - millions * millionValue ) / ( millionValue / 10 ) ) + _( "million|M" );
             }
 
-            text.set( experienceString, fheroes2::FontType::smallWhite() );
+            text.set( std::move( experienceString ), fheroes2::FontType::smallWhite() );
             text.drawInRoi( renderRoi.x + ( experienceImage.width() - text.width() ) / 2 - widthReduction, _area.y + 25, display, renderRoi );
         }
 
@@ -278,17 +278,49 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * hero )
     StringReplace( _description, "%{max}", _hero->GetMaxSpellPoints() );
 }
 
-void SpellPointsIndicator::Redraw() const
+void SpellPointsIndicator::Redraw()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
+
+    const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 22, 33, 9 };
+
+    fheroes2::Text text;
+    if ( _isDefault ) {
+        text.set( std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
+    }
+    else {
+        text.set( std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
+    }
+
+    const bool drawOneLinedText = _isDefault || ( text.width() <= renderRoi.width );
+    if ( drawOneLinedText && _needBackgroundRestore ) {
+        _needBackgroundRestore = false;
+        redrawOnlyBackground();
+    }
+
+    // Draw the SpellPoints indicator sprite.
     fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    const fheroes2::Text text( _isDefault ? std::to_string( _hero->GetMaxSpellPoints() )
-                                          : std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ),
-                               fheroes2::FontType::smallWhite() );
-    text.draw( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display );
+    if ( drawOneLinedText ) {
+        text.drawInRoi( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display, renderRoi );
+    }
+    else {
+        // The spell points do not fit the render area. Expand the area to the top.
+        fheroes2::Copy( sprite, 0, 21, display, renderRoi.x - 1, renderRoi.y - renderRoi.height - 1, renderRoi.width + 2, renderRoi.height + 1 );
+
+        // Render the current Spell Points value at the top line.
+        text.set( std::to_string( _hero->GetSpellPoints() ) + "/", fheroes2::FontType::smallWhite() );
+        text.drawInRoi( renderRoi.x, renderRoi.y - renderRoi.height + 1, display, { renderRoi.x, renderRoi.y - renderRoi.height, renderRoi.width, renderRoi.height } );
+
+        // Render the maximum Spell Points value in the bottom line.
+        text.set( std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
+        text.drawInRoi( renderRoi.x + renderRoi.width - text.width() - 1, renderRoi.y + 1, display, renderRoi );
+
+        // The background of the two-lined text should be restored if the one-lined variant is going to be rendered.
+        _needBackgroundRestore = true;
+    }
 }
 
 void SpellPointsIndicator::QueueEventProcessing() const

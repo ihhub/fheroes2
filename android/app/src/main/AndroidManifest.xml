@@ -30,12 +30,14 @@
 
     <application
         android:allowBackup="true"
+        android:appCategory="game"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/full_backup_content"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_label"
-        android:supportsRtl="false">
+        android:supportsRtl="false"
+        tools:ignore="UnusedAttribute">
 
         <activity
             android:name=".GameActivity"

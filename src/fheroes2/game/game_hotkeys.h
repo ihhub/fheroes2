@@ -48,7 +48,7 @@ namespace Game
 
 #if defined( WITH_DEBUG )
         // This hotkey is only for debug mode.
-        DEBUG_TOGGLE_DEVELOPER_MODE,
+        GLOBAL_TOGGLE_DEVELOPER_MODE,
 #endif
 
         MAIN_MENU_NEW_GAME,
@@ -81,6 +81,13 @@ namespace Game
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
 
+#if defined( WITH_DEBUG )
+        // These hotkeys are temporary and going to be removed once random map generator is good enough.
+        // TODO: remove these hotkeys when the time is right.
+        EDITOR_RANDOM_MAP_REGENERATE,
+        EDITOR_RANDOM_MAP_RECONFIGURE,
+#endif
+
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
         CAMPAIGN_PRICE_OF_LOYALTY,
@@ -105,6 +112,7 @@ namespace Game
         WORLD_DOWN_RIGHT,
         //
         WORLD_SAVE_GAME,
+        WORLD_QUICK_SAVE,
         WORLD_NEXT_HERO,
         WORLD_QUICK_SELECT_HERO,
         WORLD_START_HERO_MOVEMENT,
@@ -146,6 +154,7 @@ namespace Game
         BATTLE_OPTIONS,
         BATTLE_SKIP,
         BATTLE_CAST_SPELL,
+        BATTLE_TOGGLE_TURN_ORDER_DISPLAY,
 
         TOWN_DWELLING_LEVEL_1,
         TOWN_DWELLING_LEVEL_2,

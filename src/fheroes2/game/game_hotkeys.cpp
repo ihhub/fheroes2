@@ -109,7 +109,7 @@ namespace
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle text support mode" ), fheroes2::Key::KEY_F10 };
 
 #if defined( WITH_DEBUG )
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )]
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_DEVELOPER_MODE )]
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
 #endif
 
@@ -170,6 +170,13 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
 
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-generate random map" ), fheroes2::Key::KEY_F5 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-configure random map" ), fheroes2::Key::KEY_F6 };
+#endif
+
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ARCHIBALD )]
@@ -213,6 +220,8 @@ namespace
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|world map down right" ), fheroes2::Key::KEY_KP_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SAVE_GAME )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|save game" ), fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_QUICK_SAVE )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|quick save" ), fheroes2::Key::KEY_F2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next hero" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO )]
@@ -285,6 +294,8 @@ namespace
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|skip turn in battle" ), fheroes2::Key::KEY_SPACE };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_CAST_SPELL )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|cast battle spell" ), fheroes2::Key::KEY_C };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER_DISPLAY )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle display of battle turn order" ), fheroes2::Key::KEY_T };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|dwelling level 1" ), fheroes2::Key::KEY_1 };
@@ -503,7 +514,7 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
         conf.Save( Settings::configFileName );
     }
 #if defined( WITH_DEBUG )
-    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::DEBUG_TOGGLE_DEVELOPER_MODE )].key ) {
+    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::GLOBAL_TOGGLE_DEVELOPER_MODE )].key ) {
         Logging::setDebugLevel( DBG_DEVEL ^ Logging::getDebugLevel() );
     }
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {

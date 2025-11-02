@@ -2,7 +2,7 @@
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2024                                             #
+#   Copyright (C) 2022 - 2025                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -30,12 +30,14 @@ set -e -o pipefail
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 
-C_LIKE_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java|rc)$" || true) \
+C_LIKE_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java|rc|js)$" || true) \
+                                                   | (grep -v "^ios/SDL_uikit_main\.c$" || true) \
+                                                   | (grep -v "^ios/ShaderTypes\.h$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
-SCRIPT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(\.(sh|py|ps1)|CMakeLists.txt|Makefile[^/]*|Android.mk|Application.mk)$" || true) \
+SCRIPT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(\.(sh|py|ps1)|Android\.mk|Application\.mk|CMakeLists\.txt|Makefile[^/]*)$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 WINBAT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.bat$" || true) \
-                                                   | (grep -v "^android/gradlew.bat$" || true) \
+                                                   | (grep -v "^android/gradlew\.bat$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 
 if [ -z "$C_LIKE_FILES_TO_CHECK" ] && [ -z "$SCRIPT_FILES_TO_CHECK" ] && [ -z "$WINBAT_FILES_TO_CHECK" ]; then

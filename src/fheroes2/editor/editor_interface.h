@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,10 @@
 #include "history_manager.h"
 #include "interface_base.h"
 #include "map_format_info.h"
+#include "map_random_generator.h"
 #include "timing.h"
+
+enum class PlayerColor : uint8_t;
 
 namespace Maps
 {
@@ -52,7 +55,7 @@ namespace Interface
         void reset() override;
 
         // Start Map Editor interface main function.
-        fheroes2::GameMode startEdit( const bool isNewMap );
+        fheroes2::GameMode startEdit();
 
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
@@ -93,11 +96,20 @@ namespace Interface
             _cursorUpdater = cursorUpdater;
         }
 
+        // Generate a random map and start Map Editor interface main function.
+        bool generateRandomMap( const int32_t mapWidth );
+
+        bool generateNewMap( const int32_t mapWidth );
+
         bool loadMap( const std::string & filePath );
 
         void saveMapToFile();
 
         void openMapSpecificationsDialog();
+
+        // TODO: move this function into map_format_helper.h|cpp files as it belongs there.
+        //       This is needed for the future support of random map generation from the Main Menu screen.
+        bool placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type );
 
     private:
         class WarningMessage
@@ -141,7 +153,9 @@ namespace Interface
             , _editorPanel( *this )
             , _warningMessage( *this )
         {
-            // Do nothing.
+            _historyManager.setStateCallback( [&editorPanel = _editorPanel]( const bool isUndoAvailable, const bool isRedoAvailable ) {
+                editorPanel.updateUndoRedoButtonsStates( isUndoAvailable, isRedoAvailable );
+            } );
         }
 
         bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
@@ -159,10 +173,14 @@ namespace Interface
 
         void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
 
+        bool _updateRandomMapConfiguration();
+
         EditorPanel _editorPanel;
 
         int32_t _areaSelectionStartTileId{ -1 };
         int32_t _tileUnderCursor{ -1 };
+
+        Maps::Random_Generator::Configuration _randomMapConfig;
 
         std::function<void( const int32_t )> _cursorUpdater;
 

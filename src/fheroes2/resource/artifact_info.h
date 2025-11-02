@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -181,12 +181,12 @@ namespace fheroes2
 
     struct ArtifactData
     {
-        const char * name;
+        const char * untranslatedName;
 
         // Do not use this member directly. Use getDescription() method.
-        const char * baseDescription;
+        const char * untranslatedBaseDescription;
 
-        const char * discoveryEventDescription;
+        const char * untranslatedDiscoveryEventDescription;
 
         std::vector<ArtifactBonus> bonuses;
         std::vector<ArtifactCurse> curses;

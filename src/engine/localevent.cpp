@@ -62,7 +62,6 @@
 #include "audio.h"
 #include "image.h"
 #include "logging.h"
-#include "math_tools.h"
 #include "render_processor.h"
 #include "screen.h"
 
@@ -550,6 +549,14 @@ namespace EventProcessing
 
         static const char * getKeyName( const fheroes2::Key key )
         {
+            if ( key == fheroes2::Key::KEY_MOUSE_BUTTON_BACKWARD ) {
+                return "Mouse Backward";
+            }
+
+            if ( key == fheroes2::Key::KEY_MOUSE_BUTTON_FORWARD ) {
+                return "Mouse Forward";
+            }
+
             return SDL_GetKeyName( static_cast<SDL_Keycode>( getSDLKey( key ) ) );
         }
 
@@ -819,6 +826,10 @@ namespace EventProcessing
                 return SDLK_HOME;
             case fheroes2::Key::KEY_END:
                 return SDLK_END;
+            case fheroes2::Key::KEY_MOUSE_BUTTON_BACKWARD:
+                return SDL_BUTTON_X1;
+            case fheroes2::Key::KEY_MOUSE_BUTTON_FORWARD:
+                return SDL_BUTTON_X2;
             default:
                 // Did you add a new key? Add the logic above!
                 assert( 0 );
@@ -840,7 +851,10 @@ namespace EventProcessing
                 // The map is empty let's populate it.
                 for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
                     const fheroes2::Key key = static_cast<fheroes2::Key>( i );
-                    sdlValueToKey.emplace( getSDLKey( key ), key );
+                    const auto [dummy, isEmplaced] = sdlValueToKey.try_emplace( getSDLKey( key ), key );
+                    if ( !isEmplaced ) {
+                        assert( 0 );
+                    }
                 }
             }
 
@@ -889,6 +903,16 @@ namespace EventProcessing
             case SDL_BUTTON_RIGHT:
                 buttonType = LocalEvent::MouseButtonType::MOUSE_BUTTON_RIGHT;
                 break;
+            case SDL_BUTTON_X1:
+                // We treat the Backward mouse button as a normal keyboard button to allow to use it for hot-key mapping.
+                eventHandler.onKeyboardEvent( fheroes2::Key::KEY_MOUSE_BUTTON_BACKWARD, 0,
+                                              ( button.state == SDL_PRESSED ) ? LocalEvent::KeyboardEventState::KEY_DOWN : LocalEvent::KeyboardEventState::KEY_UP );
+                return;
+            case SDL_BUTTON_X2:
+                // We treat the Forward mouse button as a normal keyboard button to allow to use it for hot-key mapping.
+                eventHandler.onKeyboardEvent( fheroes2::Key::KEY_MOUSE_BUTTON_FORWARD, 0,
+                                              ( button.state == SDL_PRESSED ) ? LocalEvent::KeyboardEventState::KEY_DOWN : LocalEvent::KeyboardEventState::KEY_UP );
+                return;
             default:
                 VERBOSE_LOG( "Unknown mouse button " << static_cast<int>( button.button ) )
                 return;
@@ -1027,6 +1051,15 @@ namespace EventProcessing
             }
             else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_START ) {
                 buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_Y;
+            }
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_GUIDE ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_BACK;
+            }
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_LEFT ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_LEFT_SHOULDER;
+            }
+            else if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_DPAD_RIGHT ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_RIGHT_SHOULDER;
             }
 #endif
 
@@ -1193,24 +1226,14 @@ LocalEvent & LocalEvent::Get()
     return le;
 }
 
-bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool allowExit /* = false */ )
+bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing /* = true */, const bool allowExit /* = false */ )
 {
     // Event processing might be computationally heavy.
     // We want to make sure that we do not slow down by going into sleep mode when it is not needed.
     const fheroes2::Time eventProcessingTimer;
 
-    // We can have more than one event which requires rendering. We must render only once and only when sleeping is excepted.
-    fheroes2::Rect renderRoi;
-
     // Mouse area must be updated only once so we will use only the latest area for rendering.
     _mouseCursorRenderArea = {};
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    if ( fheroes2::RenderProcessor::instance().isCyclingUpdateRequired() ) {
-        // To maintain color cycling animation we need to render the whole frame with an updated palette.
-        renderRoi = { 0, 0, display.width(), display.height() };
-    }
 
     // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "ongoing" states
     resetStates( KEY_PRESSED );
@@ -1229,15 +1252,22 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
         return false;
     }
 
-    if ( isDisplayRefreshRequired ) {
-        renderRoi = { 0, 0, display.width(), display.height() };
-    }
-
     if ( _engine->isControllerValid() ) {
         ProcessControllerAxisMotion();
     }
 
-    renderRoi = fheroes2::getBoundaryRect( renderRoi, _mouseCursorRenderArea );
+    // We can have more than one event which requires rendering. We must render only once and only when sleeping is expected.
+    fheroes2::Rect renderRoi;
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    // To maintain color cycling animation we need to render the whole frame with an updated palette.
+    if ( isDisplayRefreshRequired || fheroes2::RenderProcessor::instance().isCyclingUpdateRequired() ) {
+        renderRoi = { 0, 0, display.width(), display.height() };
+    }
+    else {
+        renderRoi = _mouseCursorRenderArea;
+    }
 
     static_assert( globalLoopSleepTime == 1, "Since you have changed the sleep time, make sure that the sleep does not last too long." );
 

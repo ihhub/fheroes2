@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "settings.h"
 #include "spell.h"
 #include "tools.h"
@@ -341,8 +342,7 @@ namespace fheroes2
                 continue;
             }
 
-            const Maps::Tile & tile = world.getTile( tileIdx );
-            if ( !tile.isWater() || tile.getMainObjectType() != MP2::OBJ_NONE ) {
+            if ( !world.getTile( tileIdx ).isSuitableForSummoningBoat() ) {
                 continue;
             }
 
@@ -371,7 +371,7 @@ namespace fheroes2
     int32_t getSummonableBoat( const Heroes & hero )
     {
         const int32_t center = hero.GetIndex();
-        const int heroColor = hero.GetColor();
+        const PlayerColor heroColor = hero.GetColor();
 
         const bool isResurrectionMap = ( Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION );
 
@@ -382,7 +382,7 @@ namespace fheroes2
             // created with this in mind. In fheroes2, however, the AI is able to use this spell. To mitigate the impact of this on the gameplay of the original maps,
             // AI is prohibited from summoning "neutral" boats (i.e. boats placed on the map by the map creator and not yet used by anyone) on these maps.
             if ( [&hero, heroColor, isResurrectionMap, boatSource]() {
-                     const int boatColor = world.getTile( boatSource ).getBoatOwnerColor();
+                     const PlayerColor boatColor = world.getTile( boatSource ).getBoatOwnerColor();
 
                      // Boats belonging to the hero's kingdom can always be summoned
                      if ( boatColor == heroColor ) {
@@ -390,7 +390,7 @@ namespace fheroes2
                      }
 
                      // Non-neutral boats (belonging to any other kingdom) can never be summoned
-                     if ( boatColor != Color::NONE ) {
+                     if ( boatColor != PlayerColor::NONE ) {
                          return true;
                      }
 
@@ -400,7 +400,18 @@ namespace fheroes2
                      }
 
                      // On original HoMM2 maps, neutral boats can only be summoned by human players
-                     return hero.isControlAI();
+                     {
+#if defined( WITH_DEBUG )
+                         const Player * player = Players::Get( heroColor );
+                         assert( player != nullptr );
+
+                         const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+                         const bool isAIAutoControlMode = false;
+#endif
+
+                         return hero.isControlAI() && !isAIAutoControlMode;
+                     }
                  }() ) {
                 continue;
             }

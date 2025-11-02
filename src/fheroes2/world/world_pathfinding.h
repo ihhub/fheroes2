@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -116,7 +116,7 @@ protected:
     // of them may change even if the position of the hero does not change, so it should be possible to compare the
     // old values with the new ones to determine whether the pathfinder cache needs to be recalculated.
     int _pathStart{ -1 };
-    int _color{ Color::NONE };
+    PlayerColor _color{ PlayerColor::NONE };
     uint32_t _remainingMovePoints{ 0 };
     uint8_t _pathfindingSkill{ Skill::Level::EXPERT };
 };
@@ -168,7 +168,7 @@ public:
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
-    void reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill );
+    void reEvaluateIfNeeded( const int start, const PlayerColor color, const double armyStrength, const uint8_t skill );
 
     // Finds the most profitable tile for fog discovery. Returns a pair consisting of the tile index (-1 if no suitable tile
     // was found) and a boolean value, which takes the value true if there is fog next to this tile (that is, most likely,
@@ -194,7 +194,7 @@ public:
     std::list<Route::Step> buildPath( const int targetIndex ) const;
 
     // Used for non-hero armies, like castles or monsters
-    uint32_t getDistance( const int start, const int targetIndex, const int color, const double armyStrength, const uint8_t skill = Skill::Level::EXPERT );
+    uint32_t getDistance( const int start, const int targetIndex, const PlayerColor color, const double armyStrength, const uint8_t skill = Skill::Level::EXPERT );
     // Faster, but does not re-evaluate the map (exposed method of the base class)
     using WorldPathfinder::getDistance;
 

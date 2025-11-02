@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +26,11 @@
 
 class Army;
 
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
+
 namespace Maps
 {
     class Tile;
@@ -44,12 +49,12 @@ namespace Maps
     bool readMapInEditor( const Map_Format::MapFormat & map );
     bool readAllTiles( const Map_Format::MapFormat & map );
 
-    bool saveMapInEditor( Map_Format::MapFormat & map );
-
-    void readTileTerrain( Tile & tile, const Map_Format::TileInfo & info );
     bool readTileObject( Tile & tile, const Map_Format::TileObjectInfo & object );
 
-    void writeTile( const Tile & tile, Map_Format::TileInfo & info );
+    void setTerrainWithTransition( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId );
+
+    // Does not set or correct terrain transitions
+    void setTerrainOnTile( Map_Format::MapFormat & map, const int32_t tileId, const int groundId );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
 
@@ -72,6 +77,11 @@ namespace Maps
 
     bool isJailObject( const ObjectGroup group, const uint32_t index );
 
+    // Returns true if object can be owned, excluding Towns and Castles.
+    bool isCapturableObject( const MP2::MapObjectType objectType );
+
+    void captureObject( const Map_Format::MapFormat & map, const int32_t tileIndex, const uint32_t objectId, const MP2::MapObjectType objectType );
+
     uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector );
 
     // Should be used only for the neutral color player.
@@ -85,4 +95,10 @@ namespace Maps
     void saveCastleArmy( const Army & army, Map_Format::CastleMetadata & metadata );
     bool loadHeroArmy( Army & army, const Map_Format::HeroMetadata & metadata );
     void saveHeroArmy( const Army & army, Map_Format::HeroMetadata & metadata );
+
+    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad );
+
+    void updateRoadSpriteOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool forceRoadOnTile );
+
+    bool doesContainRoads( const Map_Format::TileInfo & tile );
 }

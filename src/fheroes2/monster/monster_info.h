@@ -60,7 +60,7 @@ namespace fheroes2
         SPELL_CASTER,
         HP_REGENERATION,
         TWO_CELL_MELEE_ATTACK,
-        ALWAYS_RETALIATE,
+        UNLIMITED_RETALIATION,
         ALL_ADJACENT_CELL_MELEE_ATTACK,
         NO_MELEE_PENALTY,
         NO_ENEMY_RETALIATION,
@@ -178,8 +178,8 @@ namespace fheroes2
 
     struct MonsterGeneralStats
     {
-        const char * name;
-        const char * pluralName;
+        const char * untranslatedName;
+        const char * untranslatedPluralName;
 
         uint32_t baseGrowth;
         uint32_t race;

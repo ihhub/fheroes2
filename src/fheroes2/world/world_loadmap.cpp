@@ -29,6 +29,7 @@
 #include <functional>
 #include <list>
 #include <map>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string>
@@ -41,6 +42,8 @@
 #include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
+#include "direction.h"
+#include "game_language.h"
 #include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -65,6 +68,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "ui_language.h"
 #include "world.h" // IWYU pragma: associated
 #include "world_object_uid.h"
 
@@ -127,7 +131,7 @@ namespace
 
         const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-        // do not let the player get a random artifact that allows him to win the game
+        // Do not let the player get a random artifact that allows him to win the game.
         if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
             fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
         }
@@ -141,19 +145,20 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename )
+        ERROR_LOG( "Map file " << filename << " is corrupted or missing." )
         return false;
     }
 
     // Read magic number.
     if ( fs.getBE32() != 0x5C000000 ) {
         // It is not a MP2 or MX2 file.
+        ERROR_LOG( "File " << filename << " is not a valid map." )
         return false;
     }
 
     const size_t totalFileSize = fs.size();
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -203,7 +208,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     const int32_t worldSize = width * height;
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -216,7 +221,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
                              + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -269,7 +274,12 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             }
         }
 
-        tile.Init( i, mp2tile );
+        assert( tile == Maps::Tile{} );
+
+        tile.setIndex( i );
+        tile.setTerrain( mp2tile.terrainImageIndex, mp2tile.terrainFlags );
+
+        tile.Init( mp2tile );
 
         // Read extra information if it's present.
         size_t addonIndex = mp2tile.nextAddonIndex;
@@ -278,8 +288,21 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: incorrect addon index " << addonIndex )
                 break;
             }
-            tile.pushGroundObjectPart( vec_mp2addons[addonIndex] );
-            tile.pushTopObjectPart( vec_mp2addons[addonIndex] );
+
+            const auto & objectInfo = vec_mp2addons[addonIndex];
+
+            const MP2::ObjectIcnType groundObjectIcnType = static_cast<MP2::ObjectIcnType>( objectInfo.objectNameN1 >> 2 );
+            const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( objectInfo.objectNameN2 >> 2 );
+
+            if ( groundObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+                tile.pushGroundObjectPart( { static_cast<Maps::ObjectLayerType>( objectInfo.quantityN & 0x03 ), objectInfo.level1ObjectUID, groundObjectIcnType,
+                                             objectInfo.bottomIcnImageIndex } );
+            }
+
+            if ( topObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+                tile.pushTopObjectPart( { Maps::OBJECT_LAYER, objectInfo.level2ObjectUID, topObjectIcnType, objectInfo.topIcnImageIndex } );
+            }
+
             addonIndex = vec_mp2addons[addonIndex].nextAddonIndex;
         }
 
@@ -297,7 +320,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     fs.seek( afterAddonInfoPos );
 
     if ( totalFileSize < afterAddonInfoPos + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -350,7 +373,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         }
 
         // Add the castle to the list of objects which can be captured.
-        map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_CASTLE, Color::NONE );
+        map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_CASTLE, PlayerColor::NONE );
     }
 
     // If this assertion blows up it means that we are not reading the data properly from the file.
@@ -359,7 +382,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     if ( totalFileSize
          < afterAddonInfoPos
                + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+        ERROR_LOG( "Map file " << filename << " is corrupted." )
         return false;
     }
 
@@ -376,10 +399,10 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         switch ( objectType ) {
         case 0x00:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_SAWMILL, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_SAWMILL, PlayerColor::NONE );
             break;
         case 0x01:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ALCHEMIST_LAB, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ALCHEMIST_LAB, PlayerColor::NONE );
             break;
         case 0x02: // Ore mine.
         case 0x03: // Sulfur mine.
@@ -387,16 +410,16 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         case 0x05: // Gems mine.
         case 0x06: // Gold mine.
             // TODO: should we verify the mine type by something?
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINE, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINE, PlayerColor::NONE );
             break;
         case 0x64:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_LIGHTHOUSE, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_LIGHTHOUSE, PlayerColor::NONE );
             break;
         case 0x65:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_DRAGON_CITY, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_DRAGON_CITY, PlayerColor::NONE );
             break;
         case 0x67:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ABANDONED_MINE, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ABANDONED_MINE, PlayerColor::NONE );
             break;
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -424,7 +447,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         const uint32_t h = fs.get();
 
         if ( fs.tell() == fs.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
+            ERROR_LOG( "Map file " << filename << " is corrupted." )
             return false;
         }
 
@@ -550,7 +573,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     }
 
                     if ( hero ) {
-                        hero->LoadFromMP2( objectTileId, Color::NONE, raceType, true, pblock );
+                        hero->LoadFromMP2( objectTileId, PlayerColor::NONE, raceType, true, pblock );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( raceType ) )
@@ -564,10 +587,10 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                                    << "incorrect size block: " << pblock.size() )
                 }
                 else {
-                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
+                    std::pair<PlayerColor, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.getMainObjectPart().icnIndex );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
-                    if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE ) {
+                    if ( colorRace.second == Race::RAND && colorRace.first != PlayerColor::NONE ) {
                         colorRace.second = kingdom.GetRace();
                     }
 
@@ -664,6 +687,12 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         }
     }
 
+    // For the original French version we update the language-specific characters
+    // to match CP1252 only if the French language is selected.
+    if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+        fixFrenchCharactersInStrings();
+    }
+
     // If this assertion blows up it means that we are not reading the data properly from the file.
     assert( fs.tell() + 4 == fs.size() );
 
@@ -686,13 +715,14 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     Maps::Map_Format::MapFormat map;
     if ( !Maps::Map_Format::loadMap( filename, map ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file '" << filename << "' is corrupted or missing." )
+        ERROR_LOG( "Map file '" << filename << "' is corrupted or missing." )
         return false;
     }
 
-    width = map.size;
-    height = map.size;
+    width = map.width;
+    height = map.width;
 
+    assert( vec_tiles.empty() );
     vec_tiles.resize( static_cast<size_t>( width ) * height );
 
     if ( !Maps::readAllTiles( map ) ) {
@@ -716,15 +746,19 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & artifactObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
     const auto & treasuresObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
     const auto & powerUpsObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
+    const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+    const auto & monsterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS );
 
 #if defined( WITH_DEBUG )
-    std::set<uint32_t> standardMetadataUIDs;
+    std::set<uint32_t> resourceMetadataUIDs;
     std::set<uint32_t> castleMetadataUIDs;
     std::set<uint32_t> heroMetadataUIDs;
     std::set<uint32_t> sphinxMetadataUIDs;
     std::set<uint32_t> signMetadataUIDs;
     std::set<uint32_t> adventureMapEventMetadataUIDs;
     std::set<uint32_t> selectionObjectMetadataUIDs;
+    std::set<uint32_t> monsterMetadataUIDs;
+    std::set<uint32_t> artifactMetadataUIDs;
 #endif
 
     const auto areSpellsValid = []( const Maps::Map_Format::SelectionObjectMetadata & metadata, const int spellLevel ) {
@@ -752,7 +786,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( map.castleMetadata.find( object.id ) != map.castleMetadata.end() );
                 auto & castleInfo = map.castleMetadata[object.id];
 
-                const int color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
+                const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
 
                 int race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
                 const bool isRandom = ( race == Race::RAND );
@@ -760,7 +794,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 if ( isRandom ) {
                     assert( townObjects[object.index].objectType == MP2::OBJ_RANDOM_CASTLE || townObjects[object.index].objectType == MP2::OBJ_RANDOM_TOWN );
 
-                    if ( ( color & Color::ALL ) == 0 ) {
+                    if ( ( Color::allPlayerColors() & color ) == 0 ) {
                         // This is a neutral town.
                         race = Race::Rand();
                     }
@@ -808,13 +842,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & metadata = heroObjects[object.index].metadata;
                 auto & heroInfo = map.heroMetadata[object.id];
 
-                const int color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+                const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
 
                 // Check the race correctness.
                 assert( heroInfo.race == Race::IndexToRace( metadata[1] ) );
 
                 // Heroes can not be neutral.
-                assert( color != Color::NONE );
+                assert( color != PlayerColor::NONE );
 
                 const Kingdom & kingdom = GetKingdom( color );
 
@@ -845,15 +879,49 @@ bool World::loadResurrectionMap( const std::string & filename )
             }
             else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
 #if defined( WITH_DEBUG )
-                standardMetadataUIDs.emplace( object.id );
+                monsterMetadataUIDs.emplace( object.id );
 #endif
-                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
-                auto & objectInfo = map.standardMetadata[object.id];
+                assert( map.monsterMetadata.find( object.id ) != map.monsterMetadata.end() );
+                auto & objectInfo = map.monsterMetadata[object.id];
 
                 std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+                tileData[0] = static_cast<uint32_t>( objectInfo.count );
 
-                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
-                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
+                switch ( monsterObjects[object.index].objectType ) {
+                case MP2::OBJ_RANDOM_MONSTER:
+                case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+                case MP2::OBJ_RANDOM_MONSTER_STRONG:
+                case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+                case MP2::OBJ_RANDOM_MONSTER_WEAK: {
+                    auto & selected = objectInfo.selected;
+                    if ( selected.empty() ) {
+                        // Nothing to do. Use the default behavior.
+                        break;
+                    }
+
+                    // Verify that the input data is correct.
+                    if ( monsterObjects[object.index].objectType == MP2::OBJ_RANDOM_MONSTER ) {
+                        selected.erase( std::remove_if( selected.begin(), selected.end(), []( const int value ) { return !Monster{ value }.isValid(); } ),
+                                        selected.end() );
+                    }
+                    else {
+                        const auto level = Monster{ static_cast<int>( object.index ) + 1 }.GetRandomUnitLevel();
+
+                        selected.erase( std::remove_if( selected.begin(), selected.end(),
+                                                        [level]( const int value ) {
+                                                            const Monster temp{ value };
+                                                            return !temp.isValid() || temp.GetRandomUnitLevel() != level;
+                                                        } ),
+                                        selected.end() );
+                    }
+
+                    if ( !objectInfo.selected.empty() ) {
+                        tileData[1] = Rand::Get( objectInfo.selected );
+                    }
+                    break;
+                }
+                default:
+                    break;
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
@@ -871,8 +939,8 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
                     eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
 
-                    const int humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
-                    const int computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
+                    const PlayerColorsSet humanColors = Players::HumanColors() & eventInfo.humanPlayerColors;
+                    const PlayerColorsSet computerColors = ( ~Players::HumanColors() ) & eventInfo.computerPlayerColors;
 
                     if ( humanColors == 0 && computerColors == 0 ) {
                         // This event is not being executed for anyone. Skip it.
@@ -908,7 +976,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     auto & heroInfo = map.heroMetadata[object.id];
 
-                    const int color = Color::NONE;
+                    const PlayerColor color = PlayerColor::NONE;
 
                     if ( heroInfo.race == Race::RAND ) {
                         heroInfo.race = static_cast<uint8_t>( Race::Rand() );
@@ -950,10 +1018,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                     auto & signInfo = map.signMetadata[object.id];
 
                     auto signObject = std::make_unique<MapSign>();
-                    signObject->message = std::move( signInfo.message );
+                    signObject->message.text = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
-                    if ( signObject->message.empty() ) {
+                    if ( signObject->message.text.empty() ) {
                         signObject->setDefaultMessage();
+                    }
+                    else {
+                        signObject->message.language = map.mainLanguage;
                     }
 
                     map_objects.add( std::move( signObject ) );
@@ -1027,6 +1098,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                     break;
                 }
                 default:
+                    // Update object ownership.
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+
                     // Other objects do not have metadata as of now.
                     break;
                 }
@@ -1042,10 +1116,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                     auto & signInfo = map.signMetadata[object.id];
 
                     auto signObject = std::make_unique<MapSign>();
-                    signObject->message = std::move( signInfo.message );
+                    signObject->message.text = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
-                    if ( signObject->message.empty() ) {
+                    if ( signObject->message.text.empty() ) {
                         signObject->setDefaultMessage();
+                    }
+                    else {
+                        signObject->message.language = map.mainLanguage;
                     }
 
                     map_objects.add( std::move( signObject ) );
@@ -1053,42 +1130,43 @@ bool World::loadResurrectionMap( const std::string & filename )
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
 #if defined( WITH_DEBUG )
-                standardMetadataUIDs.emplace( object.id );
+                artifactMetadataUIDs.emplace( object.id );
 #endif
 
-                assert( map.standardMetadata.find( object.id ) != map.standardMetadata.end() );
-                auto & objectInfo = map.standardMetadata[object.id];
+                assert( map.artifactMetadata.find( object.id ) != map.artifactMetadata.end() );
+                auto & artifactInfo = map.artifactMetadata[object.id];
 
                 std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 
-                for ( size_t idx = 0; idx < objectInfo.metadata.size(); ++idx ) {
-                    tileData[idx] = static_cast<uint32_t>( objectInfo.metadata[idx] );
-                }
-
                 assert( object.index < artifactObjects.size() );
-                if ( artifactObjects[object.index].objectType == MP2::OBJ_ARTIFACT && artifactObjects[object.index].metadata[0] == Artifact::SPELL_SCROLL ) {
+                const auto & objectInfo = artifactObjects[object.index];
+
+                if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                    tileData[0] = static_cast<uint32_t>( artifactInfo.radius );
+                }
+                else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
+                    assert( artifactInfo.selected.size() == 1 );
+
                     // This is a hack we need to do since in the original game spells start from 0.
                     // TODO: fix this hack.
-                    assert( tileData[0] > 0 );
-                    tileData[0] = tileData[0] - 1U;
+                    assert( artifactInfo.selected.front() > 0 );
+                    tileData[0] = static_cast<uint32_t>( artifactInfo.selected.front() ) - 1U;
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
                 assert( object.index < treasuresObjects.size() );
-
                 const auto & objectInfo = treasuresObjects[object.index];
 
-                if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.standardMetadata.find( object.id ) != map.standardMetadata.end() ) {
-                    // Some maps may have resource objects being set by older Editor versions.
-                    // Therefore, we cannot have a strict check whether metadata for this object exists like we do for other objects.
+                if ( objectInfo.objectType == MP2::OBJ_RESOURCE && map.resourceMetadata.find( object.id ) != map.resourceMetadata.end() ) {
+                    // Some maps might be corrupted or broken due to issues in the older versions of the Editor.
 #if defined( WITH_DEBUG )
-                    standardMetadataUIDs.emplace( object.id );
+                    resourceMetadataUIDs.emplace( object.id );
 #endif
 
                     std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 
                     tileData[0] = objectInfo.metadata[0];
-                    tileData[1] = map.standardMetadata[object.id].metadata[0];
+                    tileData[1] = map.resourceMetadata[object.id].count;
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
@@ -1133,20 +1211,29 @@ bool World::loadResurrectionMap( const std::string & filename )
                     break;
                 }
             }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                assert( object.index < minesObjects.size() );
+
+                const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
+
+                Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+            }
         }
     }
 
 #if defined( WITH_DEBUG )
-    assert( standardMetadataUIDs.size() == map.standardMetadata.size() );
+    assert( resourceMetadataUIDs.size() == map.resourceMetadata.size() );
     assert( castleMetadataUIDs.size() == map.castleMetadata.size() );
     assert( heroMetadataUIDs.size() == map.heroMetadata.size() );
     assert( sphinxMetadataUIDs.size() == map.sphinxMetadata.size() );
     assert( signMetadataUIDs.size() == map.signMetadata.size() );
     assert( adventureMapEventMetadataUIDs.size() == map.adventureMapEventMetadata.size() );
     assert( selectionObjectMetadataUIDs.size() == map.selectionObjectMetadata.size() );
+    assert( monsterMetadataUIDs.size() == map.monsterMetadata.size() );
+    assert( artifactMetadataUIDs.size() == map.artifactMetadata.size() );
 
-    for ( const uint32_t uid : standardMetadataUIDs ) {
-        assert( map.standardMetadata.find( uid ) != map.standardMetadata.end() );
+    for ( const uint32_t uid : resourceMetadataUIDs ) {
+        assert( map.resourceMetadata.find( uid ) != map.resourceMetadata.end() );
     }
 
     for ( const uint32_t uid : castleMetadataUIDs ) {
@@ -1172,6 +1259,14 @@ bool World::loadResurrectionMap( const std::string & filename )
     for ( const uint32_t uid : selectionObjectMetadataUIDs ) {
         assert( map.selectionObjectMetadata.find( uid ) != map.selectionObjectMetadata.end() );
     }
+
+    for ( const uint32_t uid : monsterMetadataUIDs ) {
+        assert( map.monsterMetadata.find( uid ) != map.monsterMetadata.end() );
+    }
+
+    for ( const uint32_t uid : artifactMetadataUIDs ) {
+        assert( map.artifactMetadata.find( uid ) != map.artifactMetadata.end() );
+    }
 #endif
 
     // Load daily events.
@@ -1184,8 +1279,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
         event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
 
-        const int humanColors = Players::HumanColors() & event.humanPlayerColors;
-        const int computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
+        const PlayerColorsSet humanColors = Players::HumanColors() & event.humanPlayerColors;
+        const PlayerColorsSet computerColors = ( ~Players::HumanColors() ) & event.computerPlayerColors;
 
         if ( humanColors == 0 && computerColors == 0 ) {
             // This event is not being executed for anyone. Skip it.
@@ -1215,15 +1310,15 @@ bool World::loadResurrectionMap( const std::string & filename )
     if ( map.lossConditionType == Maps::FileInfo::LOSS_HERO ) {
         auto iter = hiredHeroTileId.find( map.lossConditionMetadata[0] );
         if ( iter == hiredHeroTileId.end() ) {
-            VERBOSE_LOG( "A hero at tile " << map.lossConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Loss Condition hero at tile " << map.lossConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
     else if ( map.lossConditionType == Maps::FileInfo::LOSS_TOWN ) {
         const Castle * castle
-            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.size ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.size ) } );
+            = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] % map.width ), static_cast<int32_t>( map.lossConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
-            VERBOSE_LOG( "A castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Loss Condition castle at tile " << map.lossConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
@@ -1231,15 +1326,15 @@ bool World::loadResurrectionMap( const std::string & filename )
     if ( map.victoryConditionType == Maps::FileInfo::VICTORY_KILL_HERO ) {
         auto iter = hiredHeroTileId.find( map.victoryConditionMetadata[0] );
         if ( iter == hiredHeroTileId.end() ) {
-            VERBOSE_LOG( "A hero at tile " << map.victoryConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Victory Condition hero at tile " << map.victoryConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
     else if ( map.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN ) {
         const Castle * castle = vec_castles.Get(
-            { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.size ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.size ) } );
+            { static_cast<int32_t>( map.victoryConditionMetadata[0] % map.width ), static_cast<int32_t>( map.victoryConditionMetadata[0] / map.width ) } );
         if ( castle == nullptr ) {
-            VERBOSE_LOG( "A castle at tile " << map.victoryConditionMetadata[0] << " does not exist." )
+            ERROR_LOG( "A Victory Condition castle at tile " << map.victoryConditionMetadata[0] << " does not exist." )
             return false;
         }
     }
@@ -1248,7 +1343,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     updateArtifactStats();
 
-    if ( !ProcessNewMP2Map( filename, false ) ) {
+    if ( !_processNewResurrectionMap( filename ) ) {
         return false;
     }
 
@@ -1267,36 +1362,74 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
             // You are trying to load a PoL map named as a MP2 file.
             return false;
         }
+
+        // On some hacked MP2 maps boats are placed on land. One example is the map "Roc around the .".
+        if ( tile.getMainObjectType() == MP2::OBJ_BOAT && !tile.isWater() ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "Invalid MP2 format: boat at tile index " << tile.GetIndex() << " is placed on the land! It is removed from this tile to avoid bugs." )
+
+            // Remove the "hacked" boat from the map.
+            removeMainObjectFromTile( tile );
+
+            // Search for the water around and move the boat there.
+            for ( const int32_t tileIndex : Maps::getAroundIndexes( tile.GetIndex(), 1 ) ) {
+                Maps::Tile & nearbyTile = world.getTile( tileIndex );
+                if ( nearbyTile.isWater() && nearbyTile.getMainObjectType() == MP2::OBJ_NONE ) {
+                    nearbyTile.setBoat( Direction::RIGHT, PlayerColor::NONE );
+
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "The boat is placed on water on the empty nearby tile with index " << nearbyTile.GetIndex() << "." )
+
+                    break;
+                }
+            }
+        }
     }
 
-    // add heroes to kingdoms
+    // Add heroes and castles to kingdoms.
     vec_kingdoms.AddHeroes( vec_heroes );
-
-    // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
 
-    setHeroIdsForMapConditions();
-
-    // Search for a tile with a predefined Ultimate Artifact
-    const auto ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tile & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
-    int32_t ultimateArtifactTileId = -1;
-    int32_t ultimateArtifactRadius = 0;
-    if ( ultArtTileIter != vec_tiles.end() ) {
-        ultimateArtifactTileId = ultArtTileIter->GetIndex();
-        ultimateArtifactRadius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
-
-        // Remove the predefined Ultimate Artifact object
-        ultArtTileIter->removeObjectPartsByUID( ultArtTileIter->getMainObjectPart()._uid );
+    if ( !setHeroIdsForMapConditions() ) {
+        return false;
     }
 
-    setUltimateArtifact( ultimateArtifactTileId, ultimateArtifactRadius );
+    // Set up Ultimate Artifact.
+    setUltimateArtifact();
 
     PostLoad( true, false );
 
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    addDebugHero();
+    tryAddDebugHero();
+
+    return true;
+}
+
+bool World::_processNewResurrectionMap( const std::string & filename )
+{
+    for ( Maps::Tile & tile : vec_tiles ) {
+        if ( !updateTileMetadata( tile, tile.getMainObjectType(), false ) ) {
+            ERROR_LOG( "Failed to load Resurrection map '" << filename << "'." )
+            return false;
+        }
+    }
+
+    // Add heroes and castles to kingdoms.
+    vec_kingdoms.AddHeroes( vec_heroes );
+    vec_kingdoms.AddCastles( vec_castles );
+
+    if ( !setHeroIdsForMapConditions() ) {
+        return false;
+    }
+
+    // Set up Ultimate Artifact.
+    setUltimateArtifact();
+
+    PostLoad( true, false );
+
+    vec_kingdoms.ApplyPlayWithStartingHero();
+
+    tryAddDebugHero();
 
     return true;
 }
@@ -1317,6 +1450,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARREL:
     case MP2::OBJ_BARRIER:
     case MP2::OBJ_BOAT:
     case MP2::OBJ_CAMPFIRE:
@@ -1355,11 +1489,11 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_RUINS:
     case MP2::OBJ_SAWMILL:
     case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-    case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_STONE_LITHS:
     case MP2::OBJ_TRAVELLER_TENT:
@@ -1435,9 +1569,37 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     return true;
 }
 
-void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
+void World::setUltimateArtifact()
 {
-    assert( radius >= 0 );
+    int32_t tileId = -1;
+    int32_t radius = 0;
+
+    const auto existingUltimateArtIter
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+    if ( existingUltimateArtIter != vec_tiles.end() ) {
+        // An Ultimate Artifact exists on this map.
+#if defined( WITH_DEBUG )
+        // We need to make sure that only 1 Ultimate Artifact exists on the map.
+        auto artifactCount
+            = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
+        assert( artifactCount == 1 );
+#endif
+
+        tileId = existingUltimateArtIter->GetIndex();
+        radius = static_cast<int32_t>( existingUltimateArtIter->metadata()[0] );
+
+        assert( radius >= 0 );
+
+        // Remove the predefined Ultimate Artifact object.
+        const uint32_t uid = existingUltimateArtIter->getMainObjectPart()._uid;
+        existingUltimateArtIter->removeObjectPartsByUID( uid );
+
+        // Also, remove the shadow of the Artifact.
+        if ( Maps::isValidDirection( tileId, Direction::LEFT ) ) {
+            const int32_t neighborTileIndex = Maps::GetDirectionIndex( tileId, Direction::LEFT );
+            vec_tiles[neighborTileIndex].removeObjectPartsByUID( uid );
+        }
+    }
 
     const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;
@@ -1450,7 +1612,7 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
             return false;
         }
 
-        return getTile( idx ).GoodForUltimateArtifact();
+        return getTile( idx ).isSuitableForUltimateArtifact();
     };
 
     if ( tileId < 0 ) {
@@ -1471,10 +1633,10 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
 
             ultimate_artifact.Set( pos, getUltimateArtifact() );
 
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact index: " << pos )
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact has been placed at tile " << pos )
         }
         else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "no suitable tile to place the Ultimate Artifact was found" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "No suitable tile to place the Ultimate Artifact was found" )
         }
 
         return;
@@ -1496,6 +1658,10 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
                                     [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
                     pool.end() );
 
+        // If this assertion blows up then the map is corrupted.
+        // The Editor has the same Ultimate Artifact placement conditions as the game.
+        assert( !pool.empty() );
+
         if ( !pool.empty() ) {
             pos = Rand::Get( pool );
         }
@@ -1506,15 +1672,15 @@ void World::setUltimateArtifact( const int32_t tileId, const int32_t radius )
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
 }
 
-void World::addDebugHero()
+void World::tryAddDebugHero()
 {
     if ( !IS_DEVEL() ) {
         return;
     }
 
     // If we are in developer mode, then add the DEBUG_HERO
-    const int color = Color::GetFirst( Players::HumanColors() );
-    assert( color != Color::NONE );
+    const PlayerColor color = Color::GetFirst( Players::HumanColors() );
+    assert( color != PlayerColor::NONE );
 
     Kingdom & kingdom = GetKingdom( color );
     if ( kingdom.GetCastles().empty() ) {
@@ -1531,22 +1697,20 @@ void World::addDebugHero()
     }
 }
 
-void World::setHeroIdsForMapConditions()
+bool World::setHeroIdsForMapConditions()
 {
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-    // update wins, loss conditions
     if ( GameOver::WINS_HERO & mapInfo.ConditionWins() ) {
         const fheroes2::Point & pos = mapInfo.WinsMapsPositionObject();
 
         const Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
-            heroIdAsWinCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+            ERROR_LOG( "The hero whose defeat is a game win condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
+            return false;
         }
-        else {
-            heroIdAsWinCondition = hero->GetID();
-        }
+
+        heroIdAsWinCondition = hero->GetID();
     }
 
     if ( GameOver::LOSS_HERO & mapInfo.ConditionLoss() ) {
@@ -1554,12 +1718,14 @@ void World::setHeroIdsForMapConditions()
 
         Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
-            heroIdAsLossCondition = Heroes::UNKNOWN;
-            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+            ERROR_LOG( "The hero whose defeat is a game loss condition was not found at the position ['" << pos.x << ", " << pos.y << "']." )
+            return false;
         }
-        else {
-            heroIdAsLossCondition = hero->GetID();
-            hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
-        }
+
+        heroIdAsLossCondition = hero->GetID();
+
+        hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
     }
+
+    return true;
 }

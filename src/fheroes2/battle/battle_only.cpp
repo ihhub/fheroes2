@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -62,7 +62,7 @@
 
 namespace
 {
-    const std::array<int32_t, 2> playerColor{ Color::BLUE, Color::RED };
+    const std::array<PlayerColor, 2> playerColor{ PlayerColor::BLUE, PlayerColor::RED };
     const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 571 };
     const std::array<int32_t, 2> primarySkillOffsetX{ 216, 389 };
     const std::array<int32_t, 2> secondarySkillOffsetX{ 22, 353 };
@@ -195,11 +195,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     fheroes2::Button buttonReset( cur_pt.x + 30, cur_pt.y + 428, ICN::BUTTON_RESET_GOOD, 0, 1 );
     fheroes2::Button buttonStart( cur_pt.x + 178, cur_pt.y + 428, ICN::BUTTON_START_GOOD, 0, 1 );
-    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_EXIT_GOOD, 0, 1 );
+    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1 );
 
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ), display, buttonReset.area().getPosition(), { -5, 5 } );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ), display, buttonStart.area().getPosition(), { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
     buttonStart.draw();
     buttonExit.draw();
@@ -216,13 +216,13 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         bool needRedrawControlInfo = false;
 
         if ( buttonStart.isEnabled() ) {
-            buttonStart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonStart.area() ) );
+            buttonStart.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonStart.area() ) );
         }
         if ( buttonExit.isEnabled() ) {
-            buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
+            buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
         }
         if ( buttonReset.isEnabled() ) {
-            buttonReset.drawOnState( le.isMouseLeftButtonPressedInArea( buttonReset.area() ) );
+            buttonReset.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonReset.area() ) );
         }
 
         if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
@@ -444,9 +444,9 @@ void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
 
     for ( const size_t idx : { 0, 1 } ) {
         if ( armyInfo[idx].hero ) {
-            const fheroes2::Sprite & port1 = armyInfo[idx].hero->GetPortrait( PORT_BIG );
-            if ( !port1.empty() ) {
-                fheroes2::Copy( port1, 0, 0, display, armyInfo[idx].portraitRoi );
+            const fheroes2::Sprite & port = armyInfo[idx].hero->GetPortrait( PORT_BIG );
+            if ( !port.empty() ) {
+                fheroes2::Copy( port, 0, 0, display, armyInfo[idx].portraitRoi );
             }
         }
         else {
@@ -505,7 +505,7 @@ void Battle::Only::StartBattle()
     Battle::Loader( ( armyInfo[0].hero ? armyInfo[0].hero->GetArmy() : armyInfo[0].monster ), ( armyInfo[1].hero ? armyInfo[1].hero->GetArmy() : armyInfo[1].monster ),
                     1 );
 
-    conf.SetCurrentColor( Color::NONE );
+    conf.SetCurrentColor( PlayerColor::NONE );
 }
 
 void Battle::Only::reset()
@@ -523,14 +523,14 @@ void Battle::Only::copyHero( const Heroes & in, Heroes & out )
     out.knowledge = in.knowledge;
     out.power = in.power;
     out._id = in._id;
-    out.portrait = in.portrait;
+    out._portrait = in._portrait;
     out._race = in._race;
 
-    out.secondary_skills.ToVector() = in.secondary_skills.ToVector();
-    out.army.Assign( in.army );
+    out._secondarySkills.ToVector() = in._secondarySkills.ToVector();
+    out._army.Assign( in._army );
 
-    out.bag_artifacts = in.bag_artifacts;
-    out.spell_book = in.spell_book;
+    out._bagArtifacts = in._bagArtifacts;
+    out._spellBook = in._spellBook;
 
     out.SetSpellPoints( out.GetMaxSpellPoints() );
 }

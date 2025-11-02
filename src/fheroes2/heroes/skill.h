@@ -43,8 +43,8 @@ namespace Skill
 
     class Secondary;
 
-    int GetLeadershipModifiers( int level, std::string * strs );
-    int GetLuckModifiers( int level, std::string * strs );
+    int getLeadershipModifiers( int level, std::string * strs );
+    int getLuckModifiers( int level, std::string * strs );
 
     uint32_t GetNecromancyBonus( const HeroBase & hero );
     uint32_t GetNecromancyPercent( const HeroBase & hero );

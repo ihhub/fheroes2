@@ -90,11 +90,11 @@ namespace Campaign
         // NOTE: Carry over forces shouldn't use these other than id, type and startScenarioID
         // IDs are here so that we just have to store an int instead of the entire award data in a campaign save data
         // also usable when we have to remove specific awards when completing a mission (PoL campaign)
-        int32_t _id;
-        int32_t _type;
-        int32_t _subType;
-        int32_t _amount;
-        int32_t _startScenarioID;
+        int32_t _id{ 0 };
+        int32_t _type{ 0 };
+        int32_t _subType{ 0 };
+        int32_t _amount{ 0 };
+        int32_t _startScenarioID{ 0 };
         std::string _customName;
 
         CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType );

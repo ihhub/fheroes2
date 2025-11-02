@@ -1,4 +1,4 @@
-# [**fheroes2**](README.md) privacy policy
+# [fheroes2](README.md) Privacy Policy
 
 **fheroes2** is provided at no cost and is intended for use as is.
 This document is used to inform regarding our policies with the collection,
@@ -12,7 +12,7 @@ information in any of its official GitHub and Google Play Store releases.
 The project does not contain any library or programming module from
 third-party suppliers which collects sensitive personal information from its users.
 
-## Contact information
+## Contact Information
 
 If you have any questions or concerns about any of the matters in relation to
 this Privacy Policy then there are several ways of contacting us:
