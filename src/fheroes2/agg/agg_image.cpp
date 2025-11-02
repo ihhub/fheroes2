@@ -4997,15 +4997,53 @@ namespace
             // All option icons are non-transparent so we should disable their transform layer to optimize image processing.
             // TODO: implement storage of single-layer images in "resurrection.h2d" file.
 
+            // TODO: Cut the icons from the embedded background in resurrection.h2d and use the empty background ICN to make the icons instead.
+            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+
             fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
             _icnVsSprite[id][0]._disableTransformLayer();
             fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
             _icnVsSprite[id][1]._disableTransformLayer();
 
-            fheroes2::h2d::readImage( "graphics_filter_nearest_icon.image", _icnVsSprite[id][2] );
+            fheroes2::Sprite monocle;
+            fheroes2::h2d::readImage( "monocle.image", monocle );
+            fheroes2::ReplaceColorIdByTransformId( monocle, 142, 1U );
+            // Shadows
+            fheroes2::ReplaceColorIdByTransformId( monocle, 58, 4U );
+            fheroes2::ReplaceColorIdByTransformId( monocle, 60, 3U );
+            fheroes2::ReplaceColorIdByTransformId( monocle, 62, 2U );
+            // Inner lens glass shine
+            fheroes2::ReplaceColorIdByTransformId( monocle, 19, 9U );
+            fheroes2::ReplaceColorIdByTransformId( monocle, 18, 8U );
+            fheroes2::ReplaceColorIdByTransformId( monocle, 17, 7U );
+            fheroes2::Copy( background, _icnVsSprite[id][2] );
+
+            fheroes2::Sprite creature = fheroes2::AGG::GetICN( ICN::MONS32, 38 );
+            // Remove shadows
+            setTransformLayerTransparent( creature );
+            fheroes2::Sprite linearCreature;
+
+            linearCreature.resize( creature.width() * 2, creature.height() * 2 );
+
+            SubpixelResize( creature, linearCreature );
+
+            linearCreature.setPosition( creature.x() * 2, creature.y() * 2 );
+
+            fheroes2::Blit( linearCreature, 0, 0, _icnVsSprite[id][2], 14, 10, linearCreature.width(), linearCreature.height() );
+            fheroes2::Blit( monocle, 0, 0, _icnVsSprite[id][2], 1, 8, monocle.width(), monocle.height() );
+
+            fheroes2::Copy( background, _icnVsSprite[id][3] );
+            fheroes2::Sprite nearestCreature;
+
+            nearestCreature.setPosition( creature.x() * 2, creature.y() * 2 );
+            nearestCreature.resize( linearCreature.width(), linearCreature.height() );
+            Resize( creature, nearestCreature );
+
+            fheroes2::Blit( nearestCreature, 0, 0, _icnVsSprite[id][3], 14, 10, linearCreature.width(), linearCreature.height() );
+            fheroes2::Blit( monocle, 0, 0, _icnVsSprite[id][3], 1, 8, monocle.width(), monocle.height() );
+
             _icnVsSprite[id][2]._disableTransformLayer();
-            fheroes2::h2d::readImage( "graphics_filter_linear_icon.image", _icnVsSprite[id][3] );
-            _icnVsSprite[id][3]._disableTransformLayer();
+
             break;
         }
         case ICN::RESOLUTION_ICON: {
