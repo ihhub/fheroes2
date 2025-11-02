@@ -27,8 +27,6 @@
 #include <iterator>
 #include <vector>
 
-#include <stddef.h>
-
 #include "agg_image.h"
 #include "castle.h"
 #include "dialog.h"
