@@ -231,7 +231,7 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
         if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) ) {
             VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
             auto heroIndex = std::find( heroes.begin(), heroes.end(), item );
-            size_t index = std::distance( heroes.begin(), heroIndex );
+            const auto index = std::distance( heroes.begin(), heroIndex );
             std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
         }
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
@@ -253,7 +253,7 @@ void Interface::HeroesIcons::ActionListLongPress( HEROES & item )
     if ( item ) {
         VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
         auto heroIndex = std::find( heroes.begin(), heroes.end(), item );
-        size_t index = std::distance( heroes.begin(), heroIndex );
+        const auto index = std::distance( heroes.begin(), heroIndex );
         std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
