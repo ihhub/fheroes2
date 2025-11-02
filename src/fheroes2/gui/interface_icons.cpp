@@ -249,7 +249,6 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 {
     if ( item ) {
-
         if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP ) ) {
             rotateHeroPortraits( item );
         }
