@@ -23,10 +23,11 @@
 
 #include "interface_icons.h"
 
-#include <stddef.h>
 #include <algorithm>
 #include <iterator>
 #include <vector>
+
+#include <stddef.h>
 
 #include "agg_image.h"
 #include "castle.h"
