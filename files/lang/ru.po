@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3204,6 +3204,9 @@ msgstr ""
 "Условия\n"
 "поражения"
 
+msgid "Map Description"
+msgstr "Описание карты"
+
 msgid "First select recipients!"
 msgstr "Сначала выберите получателя!"
 
@@ -3914,11 +3917,9 @@ msgstr ""
 "Более сложные карты могут иметь больше (или более сильных) врагов, меньше "
 "ресурсов или другие особые условия, осложняющие игру человеку."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Описание"
-
-msgid "The description of the currently selected map."
-msgstr "Расширенное описание выбранной карты."
 
 msgid "Jump"
 msgstr "Прыжком"
@@ -4880,9 +4881,6 @@ msgstr ""
 msgid "Map Difficulty"
 msgstr "Сложность карты"
 
-msgid "Map Description"
-msgstr "Описание карты"
-
 msgid "RUMORS"
 msgstr "СЛУХИ"
 
@@ -4894,13 +4892,6 @@ msgstr "ЯЗЫК"
 
 msgid "ABOUT"
 msgstr "О КАРТЕ"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Введённое описание карты превышает максимально допустимый размер в 5 строк. "
-"Оно будет сокращено до размера текстового поля описания карты."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5122,6 +5113,10 @@ msgstr "Удалить ответ"
 
 msgid "Delete an existing answer for the question."
 msgstr "Удалить имеющийся ответ на вопрос."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Загадка:"
 
 msgid "No artifact will be given as a reward."
 msgstr "В вознаграждении не будет выдаваться артефакт."
@@ -12465,6 +12460,16 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Расширенное описание выбранной карты."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "Введённое описание карты превышает максимально допустимый размер в 5 "
+#~ "строк. Оно будет сокращено до размера текстового поля описания карты."
 
 #~ msgid "Castle Options"
 #~ msgstr "Настройки замка"

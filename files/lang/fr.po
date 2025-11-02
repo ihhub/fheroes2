@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3246,6 +3246,13 @@ msgstr ""
 "Conditions\n"
 "de défaite"
 
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Emplacement : "
+
 msgid "First select recipients!"
 msgstr "Sélectionnez d'abord les destinataires !"
 
@@ -3966,11 +3973,9 @@ msgstr ""
 "ou d'autres conditions spéciales rendant les choses plus difficiles pour le "
 "joueur humain."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Description sélectionnée"
-
-msgid "The description of the currently selected map."
-msgstr "La description de la carte actuellement sélectionnée."
 
 msgid "Jump"
 msgstr "Immédiat"
@@ -4969,13 +4974,6 @@ msgstr ""
 "Difficulté\n"
 "de la carte"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Emplacement : "
-
 msgid "RUMORS"
 msgstr "RUMEURS"
 
@@ -4987,11 +4985,6 @@ msgid "LANGUAGE"
 msgstr "LANGUE"
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5224,6 +5217,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -12710,6 +12706,9 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "La description de la carte actuellement sélectionnée."
 
 #~ msgid "Castle Options"
 #~ msgstr "Options du château"

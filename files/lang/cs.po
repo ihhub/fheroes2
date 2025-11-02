@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3173,6 +3173,9 @@ msgstr ""
 "Podmínky\n"
 "prohry"
 
+msgid "Map Description"
+msgstr "Popis mapy"
+
 msgid "First select recipients!"
 msgstr "Nejprve vyber příjemce!"
 
@@ -3876,11 +3879,9 @@ msgstr ""
 "scénáře. Náročnější mapy mohou zahrnovat více nebo silnější nepřátele, méně "
 "surovin či jiné speciální podmínky, které ztěžují hráči hru."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Vybraný popis"
-
-msgid "The description of the currently selected map."
-msgstr "Popis aktuálně vybrané mapy."
 
 msgid "Jump"
 msgstr "Skok"
@@ -4843,9 +4844,6 @@ msgstr "Klikněte zde pro změnu hrdiny, jehož ztráta by znamenala porážku."
 msgid "Map Difficulty"
 msgstr "Obtížnost mapy"
 
-msgid "Map Description"
-msgstr "Popis mapy"
-
 msgid "RUMORS"
 msgstr "POVĚSTI"
 
@@ -4857,13 +4855,6 @@ msgstr "JAZYK"
 
 msgid "ABOUT"
 msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Zadaný popis mapy překračuje maximálně povolených 5 řádků. Bude zkrácen tak, "
-"aby se vešel do pole pro popis mapy."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5081,6 +5072,10 @@ msgstr "Odstranit odpověď"
 
 msgid "Delete an existing answer for the question."
 msgstr "Smazat stávající odpověď na tuto otázku."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Hádanka:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Žádný artefakt nebude udělen jako odměna."
@@ -12359,6 +12354,16 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Popis aktuálně vybrané mapy."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "Zadaný popis mapy překračuje maximálně povolených 5 řádků. Bude zkrácen "
+#~ "tak, aby se vešel do pole pro popis mapy."
 
 #~ msgid "Castle Options"
 #~ msgstr "Možnosti hradu"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3183,6 +3183,9 @@ msgstr ""
 "Förlust-\n"
 "villkor"
 
+msgid "Map Description"
+msgstr "Kartbeskrivning"
+
 msgid "First select recipients!"
 msgstr "Först välj mottagare!"
 
@@ -3879,11 +3882,9 @@ msgstr ""
 "kreatör. Svårare kartor kan innehåller fler och/eller starkare fienden, "
 "färre resurser eller andra specialvillkor som gör det svårare för spelaren."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Vald beskrivning"
-
-msgid "The description of the currently selected map."
-msgstr "Den valda kartans beskrivning."
 
 msgid "Jump"
 msgstr "Hoppa"
@@ -4837,9 +4838,6 @@ msgstr "Klicka för att ändra Hjälten vars besegring innebär förlust."
 msgid "Map Difficulty"
 msgstr "Kartsvårighet"
 
-msgid "Map Description"
-msgstr "Kartbeskrivning"
-
 msgid "RUMORS"
 msgstr "RYKTEN"
 
@@ -4851,13 +4849,6 @@ msgstr "SPRÅK"
 
 msgid "ABOUT"
 msgstr "OM"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Kartans beskrivning överstiger högsta tillåtna 5 rader. Beskrivningen kommer "
-"att nedkortas för att få plats i beskrivningsfältet."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5072,6 +5063,10 @@ msgstr "Radera Svar"
 
 msgid "Delete an existing answer for the question."
 msgstr "Radera ett redan existerande svar till frågan."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Gåta:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakt kommer att ges som belöning."
@@ -12417,6 +12412,16 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Den valda kartans beskrivning."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "Kartans beskrivning överstiger högsta tillåtna 5 rader. Beskrivningen "
+#~ "kommer att nedkortas för att få plats i beskrivningsfältet."
 
 #~ msgid "Castle Options"
 #~ msgstr "Borgalternativ"

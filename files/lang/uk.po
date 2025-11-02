@@ -6,8 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-11-01 16:41+0200\n"
-"POT-Creation-Date: 2025-11-01 23:37+0000\n"
+"POT-Creation-Date: 2025-11-02 13:40+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3201,6 +3200,9 @@ msgid ""
 "Conditions"
 msgstr "Умови поразки"
 
+msgid "Map Description"
+msgstr "Опис мапи"
+
 msgid "First select recipients!"
 msgstr "Спершу виберіть отримувачів!"
 
@@ -3904,11 +3906,9 @@ msgstr ""
 "ресурсів або додаткові умови, що можуть зробити гру складнішою для гравця-"
 "людини."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Опис"
-
-msgid "The description of the currently selected map."
-msgstr "Опис обраної вами мапи."
 
 msgid "Jump"
 msgstr "Стрибками"
@@ -4866,9 +4866,6 @@ msgstr ""
 "Складність\n"
 "мапи"
 
-msgid "Map Description"
-msgstr "Опис мапи"
-
 msgid "RUMORS"
 msgstr "ЧУТКИ"
 
@@ -4880,13 +4877,6 @@ msgstr "МОВА"
 
 msgid "ABOUT"
 msgstr "ПРО МАПУ"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Введений опис мапи перевищує максимально дозволені 5 рядків. Його буде "
-"скорочено до розміру поля опису мапи."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5098,6 +5088,10 @@ msgstr "Видалити відповідь"
 
 msgid "Delete an existing answer for the question."
 msgstr "Видалити існуючу відповідь на запитання."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Загадка:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Жоден артефакт не буде виданий у якості винагороди."
@@ -12461,6 +12455,16 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Опис обраної вами мапи."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "Введений опис мапи перевищує максимально дозволені 5 рядків. Його буде "
+#~ "скорочено до розміру поля опису мапи."
 
 #~ msgid "Castle Options"
 #~ msgstr "Налаштування замку"
