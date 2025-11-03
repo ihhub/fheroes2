@@ -250,9 +250,12 @@ namespace
         }
 
         for ( auto & bucket : buckets ) {
-            if ( !bucket.empty() ) {
-                Rand::ShuffleWithGen( bucket, randomGenerator );
+            if ( bucket.empty() ) {
+                continue;
             }
+
+            Rand::ShuffleWithGen( bucket, randomGenerator );
+
             // Concatenate rings in ascending order
             ordered.insert( ordered.end(), bucket.begin(), bucket.end() );
         }
