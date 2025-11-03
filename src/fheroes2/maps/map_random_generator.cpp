@@ -657,7 +657,7 @@ namespace Maps::Random_Generator
         const PlayerColor testPlayer = PlayerColor::BLUE;
 
         // Have to remove fog first otherwise pathfinder won't work
-        for ( int idx = 0; idx < width * height; idx++ ) {
+        for ( int idx = 0; idx < width * height; ++idx ) {
             world.getTile( idx ).ClearFog( static_cast<PlayerColorsSet>( testPlayer ) );
         }
 
