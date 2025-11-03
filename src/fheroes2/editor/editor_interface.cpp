@@ -2009,7 +2009,7 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( !placeCastle( tilePos.x, tilePos.y, Color::IndexToColor( color ), type ) ) {
+            if ( !_placeCastle( tilePos.x, tilePos.y, Color::IndexToColor( color ), type ) ) {
                 return;
             }
 
@@ -2361,7 +2361,7 @@ namespace Interface
         }
     }
 
-    bool EditorInterface::placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type )
+    bool EditorInterface::_placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type )
     {
         if ( type < 0 ) {
             // Check your logic!
