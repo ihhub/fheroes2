@@ -452,14 +452,6 @@ namespace
         const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
         if ( canFitObject( data, basementInfo, tilePos, false ) && canFitObject( data, castleInfo, tilePos, true ) ) {
-            const PlayerColor color = Color::IndexToColor( region.colorIndex );
-
-            if ( castleObjectId < 0 ) {
-                // Check your logic!
-                assert( 0 );
-                return false;
-            }
-
             if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
                 return false;
             }
@@ -484,6 +476,7 @@ namespace
             }
 
             // By default use random (default) army for the neutral race town/castle.
+            const PlayerColor color = Color::IndexToColor( region.colorIndex );
             if ( color == PlayerColor::NONE ) {
                 Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
             }
