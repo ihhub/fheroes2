@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4481,7 +4481,10 @@ msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
 msgid "Pick player count"
 msgstr "Spiller-ikon"
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4766,16 +4769,15 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Afslut Editoren og vend tilbage til hovedmenuen."
-
-#, fuzzy
-msgid "Warning!"
-msgstr "Advarsel"
 
 msgid "From Scratch"
 msgstr "Fra bunden"
@@ -12564,6 +12566,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Advarsel"
 
 #~ msgid "The description of the currently selected map."
 #~ msgstr "Beskrivelsen til det valgte kort."

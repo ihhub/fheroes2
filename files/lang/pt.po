@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4449,7 +4449,10 @@ msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
 msgid "Pick player count"
 msgstr "Ícone dos Jogadores"
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4733,16 +4736,15 @@ msgstr ""
 "Visualizar as opções do sistema do editor, que permitem personalizar o "
 "editor."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Sair do Editor e retornar ao Menu Principal do jogo."
-
-#, fuzzy
-msgid "Warning!"
-msgstr "Aviso"
 
 msgid "From Scratch"
 msgstr "Do Zero"
@@ -12563,6 +12565,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Aviso"
 
 #~ msgid "The description of the currently selected map."
 #~ msgstr "A descrição do mapa atualmente selecionado."
