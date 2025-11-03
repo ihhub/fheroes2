@@ -2188,7 +2188,7 @@ namespace Interface
             return false;
         }
 
-        if ( !Dialog::SelectCount( _( "Input map seed (0 for random)" ), 0, std::numeric_limits<int32_t>::max(), temp.seed ) ) {
+        if ( !Dialog::SelectCount( _( "Set map seed (set 0 for make the seed random)" ), 0, std::numeric_limits<int32_t>::max(), temp.seed ) ) {
             return false;
         }
 
