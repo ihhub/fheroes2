@@ -133,29 +133,29 @@ namespace
 
     struct Region final
     {
-        uint32_t _id{ 0 };
-        int32_t _centerIndex{ -1 };
-        std::set<uint32_t> _neighbours;
-        std::vector<Node> _nodes;
-        size_t _sizeLimit{ 0 };
-        size_t _lastProcessedNode{ 0 };
-        int _colorIndex{ neutralColorIndex };
-        int _groundType{ Maps::Ground::GRASS };
+        uint32_t id{ 0 };
+        int32_t centerIndex{ -1 };
+        std::set<uint32_t> neighbours;
+        std::vector<Node> nodes;
+        size_t sizeLimit{ 0 };
+        size_t lastProcessedNode{ 0 };
+        int colorIndex{ neutralColorIndex };
+        int groundType{ Maps::Ground::GRASS };
 
         Region() = default;
 
         Region( const uint32_t regionIndex, const int32_t mapIndex, const int playerColor, const int ground, const size_t expectedSize )
-            : _id( regionIndex )
-            , _centerIndex( mapIndex )
-            , _sizeLimit( expectedSize )
-            , _colorIndex( playerColor )
-            , _groundType( ground )
+            : id( regionIndex )
+            , centerIndex( mapIndex )
+            , sizeLimit( expectedSize )
+            , colorIndex( playerColor )
+            , groundType( ground )
         {
             assert( expectedSize > 0 );
 
-            _nodes.reserve( expectedSize );
-            _nodes.emplace_back( mapIndex );
-            _nodes[0].region = regionIndex;
+            nodes.reserve( expectedSize );
+            nodes.emplace_back( mapIndex );
+            nodes[0].region = regionIndex;
         }
     };
 
@@ -218,18 +218,18 @@ namespace
 
     std::vector<PlacementTile> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
     {
-        if ( region._centerIndex < 0 || region._nodes.empty() || mapWidth <= 0 ) {
+        if ( region.centerIndex < 0 || region.nodes.empty() || mapWidth <= 0 ) {
             return {};
         }
 
         std::vector<PlacementTile> ordered;
-        ordered.reserve( region._nodes.size() );
+        ordered.reserve( region.nodes.size() );
         std::vector<std::vector<PlacementTile>> buckets( 10 );
 
-        const int centerX = region._centerIndex % mapWidth;
-        const int centerY = region._centerIndex / mapWidth;
+        const int centerX = region.centerIndex % mapWidth;
+        const int centerY = region.centerIndex / mapWidth;
 
-        for ( const Node & node : region._nodes ) {
+        for ( const Node & node : region.nodes ) {
             if ( node.type != NodeType::OPEN || node.index < 0 ) {
                 continue;
             }
@@ -259,11 +259,11 @@ namespace
 
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
     {
-        Node & previousNode = region._nodes[region._lastProcessedNode];
+        Node & previousNode = region.nodes[region.lastProcessedNode];
         const int nodeIndex = previousNode.index;
 
         for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
-            if ( region._nodes.size() > region._sizeLimit ) {
+            if ( region.nodes.size() > region.sizeLimit ) {
                 previousNode.type = NodeType::BORDER;
                 break;
             }
@@ -279,12 +279,12 @@ namespace
             const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
             Node & newTile = rawData.getNode( newPosition + directionOffsets[direction] );
             if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
-                newTile.region = region._id;
-                region._nodes.push_back( newTile );
+                newTile.region = region.id;
+                region.nodes.push_back( newTile );
             }
-            else if ( newTile.region != region._id ) {
+            else if ( newTile.region != region.id ) {
                 previousNode.type = NodeType::BORDER;
-                region._neighbours.insert( newTile.region );
+                region.neighbours.insert( newTile.region );
             }
         }
     }
@@ -292,11 +292,11 @@ namespace
     void regionExpansion( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added.
-        const size_t nodesEnd = region._nodes.size();
+        const size_t nodesEnd = region.nodes.size();
 
-        while ( region._lastProcessedNode < nodesEnd ) {
+        while ( region.lastProcessedNode < nodesEnd ) {
             checkAdjacentTiles( rawData, region, randomGenerator );
-            ++region._lastProcessedNode;
+            ++region.lastProcessedNode;
         }
     }
 
@@ -438,7 +438,7 @@ namespace
         const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
         if ( canFitObject( data, basementInfo, tilePos, false ) && canFitObject( data, castleInfo, tilePos, true ) ) {
-            const PlayerColor color = Color::IndexToColor( region._colorIndex );
+            const PlayerColor color = Color::IndexToColor( region.colorIndex );
 
             if ( interface.placeCastle( tilePos.x, tilePos.y, color, castleObjectId ) ) {
                 markObjectPlacement( data, basementInfo, tilePos, false );
@@ -550,7 +550,7 @@ namespace Maps::Random_Generator
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
                 regionExpansion( data, region, randomGenerator );
-                if ( region._lastProcessedNode != region._nodes.size() ) {
+                if ( region.lastProcessedNode != region.nodes.size() ) {
                     stillRoomToExpand = true;
                 }
             }
@@ -558,17 +558,17 @@ namespace Maps::Random_Generator
 
         // Step 4. Apply terrain changes into the map format.
         for ( const Region & region : mapRegions ) {
-            if ( region._id == 0 ) {
+            if ( region.id == 0 ) {
                 continue;
             }
 
-            for ( const Node & node : region._nodes ) {
-                Maps::setTerrainOnTile( mapFormat, node.index, region._groundType );
+            for ( const Node & node : region.nodes ) {
+                Maps::setTerrainOnTile( mapFormat, node.index, region.groundType );
             }
 
             // Fix missing references.
-            for ( const uint32_t adjacent : region._neighbours ) {
-                mapRegions[adjacent]._neighbours.insert( region._id );
+            for ( const uint32_t adjacent : region.neighbours ) {
+                mapRegions[adjacent].neighbours.insert( region.id );
             }
         }
 
@@ -577,20 +577,20 @@ namespace Maps::Random_Generator
         std::vector<int> actionLocations;
 
         for ( Region & region : mapRegions ) {
-            if ( region._id == 0 ) {
+            if ( region.id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
                 continue;
             }
 
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
-                       "Region #" << region._id << " of size " << region._nodes.size() << " tiles has " << region._neighbours.size() << " neighbours" )
+                       "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
             int xMin = 0;
             int xMax = width;
             int yMin = 0;
             int yMax = height;
 
-            for ( const Node & node : region._nodes ) {
+            for ( const Node & node : region.nodes ) {
                 const int nodeX = node.index % width;
                 const int nodeY = node.index / width;
                 xMin = std::max( xMin, nodeX );
@@ -599,15 +599,15 @@ namespace Maps::Random_Generator
                 yMax = std::min( yMax, nodeY );
 
                 if ( node.type == NodeType::BORDER ) {
-                    Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region._groundType );
+                    Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region.groundType );
                 }
             }
 
             const int centerX = ( xMin + xMax ) / 2;
             const int centerY = ( yMin + yMax ) / 2;
 
-            if ( region._colorIndex != neutralColorIndex ) {
-                const fheroes2::Point castlePos = adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY );
+            if ( region.colorIndex != neutralColorIndex ) {
+                const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
                 if ( !placeCastle( interface, data, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
@@ -615,10 +615,10 @@ namespace Maps::Random_Generator
                 }
                 startingLocations.push_back( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
             }
-            else if ( static_cast<int32_t>( region._nodes.size() ) > regionSizeLimit ) {
+            else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
-                placeCastle( interface, data, region, adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
+                placeCastle( interface, data, region, adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
             }
 
             const std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
@@ -641,7 +641,7 @@ namespace Maps::Random_Generator
                 }
             }
 
-            Maps::updateRoadOnTile( mapFormat, region._centerIndex, true );
+            Maps::updateRoadOnTile( mapFormat, region.centerIndex, true );
         }
 
         // TODO: set up region connectors based on frequency settings and border length.
