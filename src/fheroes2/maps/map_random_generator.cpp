@@ -424,7 +424,7 @@ namespace
         return { castleX, castleY };
     }
 
-    bool placeCastle( Interface::EditorInterface & interface, NodeCache & data, const Region & region, const fheroes2::Point tilePos, bool isCastle = true )
+    bool placeCastle( Interface::EditorInterface & interface, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
     {
         const auto & tile = world.getTile( tilePos.x, tilePos.y );
         if ( tile.isWater() ) {
@@ -608,7 +608,7 @@ namespace Maps::Random_Generator
 
             if ( region._colorIndex != neutralColorIndex ) {
                 const fheroes2::Point castlePos = adjustCastlePlacement( region._centerIndex, mapFormat.width, centerX, centerY );
-                if ( !placeCastle( interface, data, region, castlePos ) ) {
+                if ( !placeCastle( interface, data, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
