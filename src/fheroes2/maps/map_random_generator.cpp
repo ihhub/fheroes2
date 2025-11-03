@@ -176,6 +176,9 @@ namespace
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
+        // Water percentage cannot be 100 or more, or negative.
+        assert( config.waterPercentage >= 0 && config.waterPercentage < 100 );
+
         int32_t requiredSpace = 0;
 
         // Determine required space based on expected object count and their footprint (in tiles)
@@ -199,7 +202,6 @@ namespace
         // Inner and outer circles, update later to handle other layouts
         const int32_t upperLimit = config.playerCount * 3;
 
-        assert( config.waterPercentage < 100 );
         const int32_t totalTileCount = width * height;
         const int32_t groundTiles = totalTileCount * ( 100 - config.waterPercentage ) / 100;
 
