@@ -305,6 +305,14 @@ namespace Maps
 
         void ClearFog( const PlayerColorsSet colors );
 
+        // WARNING!
+        // Use this method only for map generation!
+        // This method does not reset pathfinding state.
+        void removeFogForPlayers( const PlayerColorsSet colors )
+        {
+            _fogColors &= ~colors;
+        }
+
         const std::array<uint32_t, 3> & metadata() const
         {
             return _metadata;

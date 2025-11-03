@@ -663,8 +663,10 @@ namespace Maps::Random_Generator
 
         // Have to remove fog first otherwise pathfinder won't work
         for ( int idx = 0; idx < width * height; ++idx ) {
-            world.getTile( idx ).ClearFog( static_cast<PlayerColorsSet>( testPlayer ) );
+            world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
         }
+
+        world.resetPathfinder();
 
         for ( const int start : startingLocations ) {
             pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, 0U );
