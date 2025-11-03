@@ -493,7 +493,7 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( std::numeric_limits<uint32_t>::max() );
+        const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( 999999 );
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Generating a map with seed " << generatorSeed );
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Region size limit " << regionSizeLimit << ", water " << config.waterPercentage << "%" );
 
