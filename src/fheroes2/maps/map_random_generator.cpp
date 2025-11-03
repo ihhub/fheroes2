@@ -25,13 +25,14 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <limits>
+#include <map>
 #include <ostream>
 #include <set>
 #include <utility>
 #include <vector>
 
 #include "color.h"
+#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
@@ -42,6 +43,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "race.h"
 #include "rand.h"
 #include "resource.h"
 #include "ui_map_object.h"
