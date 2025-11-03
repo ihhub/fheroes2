@@ -52,7 +52,7 @@ namespace
 {
     const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     const int32_t smallestStartingRegionSize{ 200 };
-    const double emptySpacePercentage{ 0.4 };
+    constexpr int32_t emptySpacePercentage{ 40 };
     const int randomCastleIndex{ 12 };
     const int randomTownIndex{ 13 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
@@ -191,7 +191,7 @@ namespace
 
         DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Space required for density " << static_cast<int32_t>( config.resourceDensity ) << " is " << requiredSpace );
 
-        requiredSpace = static_cast<int32_t>( requiredSpace / ( 1.0 - emptySpacePercentage ) );
+        requiredSpace = requiredSpace * 100 / ( 100 - emptySpacePercentage );
 
         const double innerRadius = std::ceil( sqrt( requiredSpace / M_PI ) );
         const int32_t borderSize = static_cast<int32_t>( 2 * ( innerRadius + 1 ) * M_PI );
