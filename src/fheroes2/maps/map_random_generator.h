@@ -31,11 +31,11 @@ namespace Maps::Random_Generator
 {
     enum class Layout : uint8_t
     {
-        MIRRORED, // Multiplayer map with equal distances and distribution of resources
+        MIRRORED, // Multi-player map with equal distances and distribution of resources
         BALANCED, // Standard option; some players might have an advantaged position
         ISLANDS, // Water-based map that requires castles on the coast to make it navigable
         PYRAMID, // Map with AI-only players that get resource advantages
-        QUEST // Singleplayer only map with non-standard winning condition
+        QUEST // Single-player only map with non-standard winning condition
     };
 
     enum class ResourceDensity : uint8_t

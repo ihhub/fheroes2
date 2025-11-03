@@ -457,8 +457,8 @@ namespace
             return false;
         }
         // TODO: check bottom tiles
-        // store node reference ??
-        // set radius for mine type
+        //       Do we need to store node reference?
+        //       Also, set radius for mine type.
         Maps::Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
@@ -480,7 +480,6 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        // Aiming for region size to be ~400 tiles in a 300-600 range.
         const int32_t regionSizeLimit = calculateRegionSizeLimit( config, width, height );
         if ( regionSizeLimit < smallestStartingRegionSize ) {
             return false;
