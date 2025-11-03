@@ -120,6 +120,8 @@ namespace
         if ( editorInterface.generateRandomMap( mapSize ) ) {
             return editorInterface.startEdit();
         }
+
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to generate a random map with given parameters." ), Dialog::OK );
         return fheroes2::GameMode::EDITOR_NEW_MAP;
     }
 }
@@ -286,7 +288,7 @@ namespace Editor
                     prepareMapSizeMenu();
 
                     fheroes2::showStandardTextMessage(
-                        _( "Warning!" ),
+                        _( "Warning" ),
                         "This feature is still in development and has some limitations. Errors might occur. This feature will continue to change as we are working on improving it.",
                         Dialog::OK );
                 }

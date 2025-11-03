@@ -2009,7 +2009,7 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( !placeCastle( tilePos.x, tilePos.y, Color::IndexToColor( color ), type ) ) {
+            if ( !_placeCastle( tilePos.x, tilePos.y, Color::IndexToColor( color ), type ) ) {
                 return;
             }
 
@@ -2184,7 +2184,11 @@ namespace Interface
             return false;
         }
 
-        if ( !Dialog::SelectCount( _( "Limit region size" ), 200, 10000, temp.regionSizeLimit ) ) {
+        if ( !Dialog::SelectCount( _( "Set water percentage" ), 0, 99, temp.waterPercentage ) ) {
+            return false;
+        }
+
+        if ( !Dialog::SelectCount( _( "Set map seed (set 0 to make the seed random)" ), 0, 999999, temp.seed ) ) {
             return false;
         }
 
@@ -2357,7 +2361,7 @@ namespace Interface
         }
     }
 
-    bool EditorInterface::placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type )
+    bool EditorInterface::_placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type )
     {
         if ( type < 0 ) {
             // Check your logic!
