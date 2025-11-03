@@ -119,6 +119,17 @@ namespace
             return _data[position.y * _mapSize + position.x];
         }
 
+        const Node & getNode( const fheroes2::Point position ) const
+        {
+            if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
+                // We shouldn't try to get a tile with an invalid index.
+                // TODO: here we must add an assertion and make sure that we never reach this place.
+                return _outOfBounds;
+            }
+
+            return _data[position.y * _mapSize + position.x];
+        }
+
         Node & getNode( const int32_t index )
         {
             if ( index < 0 || index >= _mapSize * _mapSize ) {
@@ -314,7 +325,7 @@ namespace
         }
     }
 
-    bool canFitObject( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
+    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
     {
         fheroes2::Rect objectRect;
 
