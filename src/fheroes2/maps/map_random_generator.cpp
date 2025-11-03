@@ -226,7 +226,7 @@ namespace
 
         std::vector<PlacementTile> ordered;
         ordered.reserve( region.nodes.size() );
-        std::vector<std::vector<PlacementTile>> buckets( 10 );
+        std::vector<std::vector<PlacementTile>> buckets;
 
         const int centerX = region.centerIndex % mapWidth;
         const int centerY = region.centerIndex / mapWidth;
