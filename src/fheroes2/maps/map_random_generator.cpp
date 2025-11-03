@@ -161,11 +161,11 @@ namespace
 
     struct RegionalObjects final
     {
-        int32_t castleCount{ 0 };
-        int32_t mineCount{ 0 };
-        int32_t objectCount{ 0 };
-        int32_t powerUpsCount{ 0 };
-        int32_t treasureCount{ 0 };
+        uint8_t castleCount{ 0 };
+        uint8_t mineCount{ 0 };
+        uint8_t objectCount{ 0 };
+        uint8_t powerUpsCount{ 0 };
+        uint8_t treasureCount{ 0 };
     };
 
     constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSets = { {
