@@ -46,6 +46,7 @@
 #include "resource.h"
 #include "ui_map_object.h"
 #include "world.h"
+#include "world_object_uid.h"
 #include "world_pathfinding.h"
 
 namespace
@@ -285,8 +286,12 @@ namespace
 
             // TODO: use node index and pre-calculate offsets in advance.
             //       This will speed up the below calculations.
-            const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex );
-            Node & newTile = rawData.getNode( newPosition + directionOffsets[direction] );
+            const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex ) + directionOffsets[direction];
+            if ( !Maps::isValidAbsPoint( newPosition.x, newPosition.y ) ) {
+                continue;
+            }
+
+            Node & newTile = rawData.getNode( newPosition );
             if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
                 newTile.region = region.id;
                 region.nodes.push_back( newTile );
@@ -433,9 +438,9 @@ namespace
         return { castleX, castleY };
     }
 
-    bool placeCastle( Interface::EditorInterface & interface, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
+    bool placeCastle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
     {
-        const auto & tile = world.getTile( tilePos.x, tilePos.y );
+        auto & tile = world.getTile( tilePos.x, tilePos.y );
         if ( tile.isWater() ) {
             return false;
         }
@@ -449,12 +454,63 @@ namespace
         if ( canFitObject( data, basementInfo, tilePos, false ) && canFitObject( data, castleInfo, tilePos, true ) ) {
             const PlayerColor color = Color::IndexToColor( region.colorIndex );
 
-            if ( interface.placeCastle( tilePos.x, tilePos.y, color, castleObjectId ) ) {
-                markObjectPlacement( data, basementInfo, tilePos, false );
-                markObjectPlacement( data, castleInfo, tilePos, true );
-
-                return true;
+            if ( castleObjectId < 0 ) {
+                // Check your logic!
+                assert( 0 );
+                return false;
             }
+
+            if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
+                return false;
+            }
+
+            // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
+            // Every time an object is being placed on a map the counter is going to be increased by 1.
+            // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
+            assert( Maps::getLastObjectUID() > 0 );
+            const uint32_t objectId = Maps::getLastObjectUID() - 1;
+
+            Maps::setLastObjectUID( objectId );
+
+            if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId ) ) {
+                return false;
+            }
+
+            const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
+
+            if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( mapFormat.tiles[bottomIndex] ) ) {
+                // Update road if there is one in front of the town/castle entrance.
+                Maps::updateRoadSpriteOnTile( mapFormat, bottomIndex, false );
+            }
+
+            // By default use random (default) army for the neutral race town/castle.
+            if ( color == PlayerColor::NONE ) {
+                Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
+            }
+
+            // Add flags.
+            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
+            Maps::setLastObjectUID( objectId );
+
+            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 ) ) {
+                return false;
+            }
+
+            Maps::setLastObjectUID( objectId );
+
+            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
+                return false;
+            }
+
+            const Maps::ObjectInfo & townObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
+            const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
+
+            world.addCastle( tile.GetIndex(), race, color );
+
+            markObjectPlacement( data, basementInfo, tilePos, false );
+            markObjectPlacement( data, castleInfo, tilePos, true );
+
+            return true;
         }
 
         return false;
@@ -620,7 +676,7 @@ namespace Maps::Random_Generator
 
             if ( region.colorIndex != neutralColorIndex ) {
                 const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
-                if ( !placeCastle( interface, data, region, castlePos, true ) ) {
+                if ( !placeCastle( mapFormat, data, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
@@ -630,7 +686,7 @@ namespace Maps::Random_Generator
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
-                placeCastle( interface, data, region, adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
+                placeCastle( mapFormat, data, region, adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
             }
 
             const std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
