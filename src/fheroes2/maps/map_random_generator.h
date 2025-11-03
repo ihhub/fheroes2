@@ -43,7 +43,9 @@ namespace Maps::Random_Generator
         SCARCE, // 2-tier resources (Crystals, Gems, etc) are harder to come by
         NORMAL, // 2-tier resources are common, gold mines are rare
         ABUNDANT, // Even neutral regions have mines, rare treasures are common
-        UNUSED
+
+        // Put all new entries above this line.
+        ITEM_COUNT
     };
 
     enum class MonsterStrength : uint8_t
@@ -57,11 +59,12 @@ namespace Maps::Random_Generator
     struct Configuration final
     {
         int32_t playerCount{ 2 };
+        int32_t waterPercentage{ 0 };
+        int32_t seed{ 0 };
+
         Layout mapLayout{ Layout::MIRRORED };
         ResourceDensity resourceDensity{ ResourceDensity::NORMAL };
         MonsterStrength monsterStrength{ MonsterStrength::NORMAL };
-        int32_t waterPercentage{ 0 };
-        int32_t seed{ 0 };
     };
 
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height );

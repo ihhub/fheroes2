@@ -51,10 +51,10 @@
 namespace
 {
     const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
-    const int32_t smallestStartingRegionSize = 200;
-    const double emptySpacePercentage = 0.4;
-    const int randomCastleIndex = 12;
-    const int randomTownIndex = 13;
+    const int32_t smallestStartingRegionSize{ 200 };
+    const double emptySpacePercentage{ 0.4 };
+    const int randomCastleIndex{ 12 };
+    const int randomTownIndex{ 13 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
@@ -167,7 +167,8 @@ namespace
         int32_t powerUpsCount{ 0 };
         int32_t treasureCount{ 0 };
     };
-    constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::UNUSED )> regionObjectSets = { {
+
+    constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSets = { {
         { 1, 2, 1, 1, 0 }, // ResourceDensity::SCARCE
         { 1, 6, 2, 1, 1 }, // ResourceDensity::NORMAL
         { 1, 7, 2, 2, 3 } // ResourceDensity::ABUNDANT
@@ -193,7 +194,7 @@ namespace
         const int32_t borderSize = static_cast<int32_t>( 2 * ( innerRadius + 1 ) * M_PI );
         const int32_t targetRegionSize = requiredSpace + borderSize;
 
-        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Target size is " << requiredSpace << " + " << borderSize << " = " << targetRegionSize );
+        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Region target size is " << requiredSpace << " + " << borderSize << " = " << targetRegionSize );
 
         // Inner and outer circles, update later to handle other layouts
         const int32_t upperLimit = config.playerCount * 3;
@@ -211,16 +212,17 @@ namespace
     struct PlacementTile final
     {
         int index{ 0 };
-        float distance{ 0.0F };
+        float distance{ 0 };
         int ring{ 0 };
     };
 
     std::vector<PlacementTile> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
     {
-        std::vector<PlacementTile> ordered;
-        if ( region._centerIndex < 0 || region._nodes.empty() || mapWidth <= 0 )
-            return ordered;
+        if ( region._centerIndex < 0 || region._nodes.empty() || mapWidth <= 0 ) {
+            return {};
+        }
 
+        std::vector<PlacementTile> ordered;
         ordered.reserve( region._nodes.size() );
         std::vector<std::vector<PlacementTile>> buckets( 10 );
 
@@ -228,8 +230,9 @@ namespace
         const int centerY = region._centerIndex / mapWidth;
 
         for ( const Node & node : region._nodes ) {
-            if ( node.type != NodeType::OPEN || node.index < 0 )
+            if ( node.type != NodeType::OPEN || node.index < 0 ) {
                 continue;
+            }
 
             const int dx = ( node.index % mapWidth ) - centerX;
             const int dy = ( node.index / mapWidth ) - centerY;
@@ -240,6 +243,7 @@ namespace
             if ( static_cast<size_t>( ring ) >= buckets.size() ) {
                 buckets.resize( ring + 1 );
             }
+
             buckets[ring].push_back( { node.index, distance, ring } );
         }
 
@@ -371,6 +375,7 @@ namespace
                 Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
                 pathNode.type = NodeType::PATH;
             }
+
             // Mark extra nodes as path to avoid objects clumping together
             data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
             data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
