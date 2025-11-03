@@ -181,7 +181,7 @@ namespace
 
         int32_t requiredSpace = 0;
 
-        // Determine required space based on expected object count and their footprint (in tiles)
+        // Determine required space based on expected object count and their footprint (in tiles).
         const auto & objectSet = regionObjectSets[static_cast<size_t>( config.resourceDensity )];
         requiredSpace += objectSet.castleCount * 49;
         requiredSpace += objectSet.mineCount * 15;
@@ -199,7 +199,7 @@ namespace
 
         DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Region target size is " << requiredSpace << " + " << borderSize << " = " << targetRegionSize );
 
-        // Inner and outer circles, update later to handle other layouts
+        // Inner and outer circles, update later to handle other layouts.
         const int32_t upperLimit = config.playerCount * 3;
 
         const int32_t totalTileCount = width * height;
@@ -256,7 +256,7 @@ namespace
 
             Rand::ShuffleWithGen( bucket, randomGenerator );
 
-            // Concatenate rings in ascending order
+            // Concatenate rings in ascending order.
             ordered.insert( ordered.end(), bucket.begin(), bucket.end() );
         }
         return ordered;
@@ -648,8 +648,6 @@ namespace Maps::Random_Generator
                     }
                 }
             }
-
-            Maps::updateRoadOnTile( mapFormat, region.centerIndex, true );
         }
 
         // TODO: set up region connectors based on frequency settings and border length.
