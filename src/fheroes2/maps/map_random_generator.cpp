@@ -633,7 +633,7 @@ namespace Maps::Random_Generator
 
             for ( const int resource : resources ) {
                 // TODO: MapEconomy to track the values
-                for ( const PlacementTile tile : sortedTiles ) {
+                for ( const PlacementTile & tile : sortedTiles ) {
                     // TODO: a finer distribution based on ring #
                     if ( tile.distance < 4 ) {
                         continue;
