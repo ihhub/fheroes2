@@ -32,7 +32,6 @@ jobs:
           echo "+*$file" >> skipfile.txt
         done
         echo "-*" >> skipfile.txt
-        cat skipfile.txt # Debug: view the skip file content
     - name: Install dependencies and codechecker
       run: |
         sudo apt-get -y update

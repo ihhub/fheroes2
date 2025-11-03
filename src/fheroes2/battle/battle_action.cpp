@@ -1044,7 +1044,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
     const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, hero );
 
-    if ( firstUnitResist >= 50 || ( applyRandomMagicResistance && firstUnitResist >= Rand::GetWithGen( 1, 100, _randomGenerator ) ) ) {
+    if ( firstUnitResist >= 100 || ( applyRandomMagicResistance && firstUnitResist >= Rand::GetWithGen( 1, 100, _randomGenerator ) ) ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
         res.defender = unit;
