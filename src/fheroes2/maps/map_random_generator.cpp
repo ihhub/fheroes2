@@ -110,6 +110,8 @@ namespace
         Node & getNode( const fheroes2::Point position )
         {
             if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
+                // We shouldn't try to get a tile with an invalid index.
+                // TODO: here we must add an assertion and make sure that we never reach this place.
                 return _outOfBounds;
             }
 
@@ -119,6 +121,8 @@ namespace
         Node & getNode( const int32_t index )
         {
             if ( index < 0 || index >= _mapSize * _mapSize ) {
+                // We shouldn't try to get a tile with an invalid index.
+                assert( 0 );
                 return _outOfBounds;
             }
 
