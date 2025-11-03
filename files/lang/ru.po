@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4442,7 +4442,10 @@ msgstr "На карте можно разместить не более %{count}
 msgid "Pick player count"
 msgstr "Значок игроков"
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4724,16 +4727,15 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Открывает окно системных настроек редактора карт."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Выход из редактора и возврат в главное меню игры."
-
-#, fuzzy
-msgid "Warning!"
-msgstr "Внимание"
 
 msgid "From Scratch"
 msgstr "С нуля"
@@ -12460,6 +12462,10 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Внимание"
 
 #~ msgid "The description of the currently selected map."
 #~ msgstr "Расширенное описание выбранной карты."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2025-02-11 15:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4514,7 +4514,10 @@ msgstr "Un maximum de %{count} obélisques peuvent être placés sur la carte."
 msgid "Pick player count"
 msgstr "Icônes des joueurs"
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4806,6 +4809,9 @@ msgstr ""
 "Affiche les options système de l'éditeur, qui vous permettent de "
 "personnaliser l'application."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
@@ -4813,10 +4819,6 @@ msgstr ""
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Cliquez pour revenir au menu principal."
-
-#, fuzzy
-msgid "Warning!"
-msgstr "Attention"
 
 msgid "From Scratch"
 msgstr "À partir de zéro"
@@ -12706,6 +12708,10 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Attention"
 
 #~ msgid "The description of the currently selected map."
 #~ msgstr "La description de la carte actuellement sélectionnée."

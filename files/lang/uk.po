@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2025-09-06 11:43+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4427,8 +4427,11 @@ msgstr "На мапі можна розмістити максимум %{count} 
 msgid "Pick player count"
 msgstr "Виберіть кількість гравців"
 
-msgid "Limit region size"
-msgstr "Обмежте розмір регіону"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -4709,6 +4712,10 @@ msgstr ""
 "Перегляд системних параметрів редактора, за допомогою яких ви можете "
 "налаштувати редактор."
 
+#, fuzzy
+msgid "Failed to generate a random map with given parameters."
+msgstr "Неможливо створити мапу з заданими параметрами."
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
@@ -4716,9 +4723,6 @@ msgstr ""
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Вийти з редактора та повернутися до головного меню."
-
-msgid "Warning!"
-msgstr "Попередження!"
 
 msgid "From Scratch"
 msgstr "З чистого аркуша"
@@ -12455,6 +12459,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Limit region size"
+#~ msgstr "Обмежте розмір регіону"
+
+#~ msgid "Warning!"
+#~ msgstr "Попередження!"
 
 #~ msgid "The description of the currently selected map."
 #~ msgstr "Опис обраної вами мапи."

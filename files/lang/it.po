@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4351,7 +4351,10 @@ msgstr ""
 msgid "Pick player count"
 msgstr "Icona dei Giocatori"
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4636,6 +4639,9 @@ msgstr ""
 "Mostra il menù di opzioni per il sistema per modificare l'esperienza del "
 "gioco."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
@@ -4643,9 +4649,6 @@ msgstr ""
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Torna al combattimento."
-
-msgid "Warning!"
-msgstr ""
 
 msgid "From Scratch"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4405,7 +4405,10 @@ msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
 msgid "Pick player count"
 msgstr "Ikona hráče"
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4686,6 +4689,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Zobrazí systémové menu, s volbami pro úpravu chování hry."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
@@ -4693,10 +4699,6 @@ msgstr ""
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Vrátit se do hlavního menu hry."
-
-#, fuzzy
-msgid "Warning!"
-msgstr "Varování"
 
 msgid "From Scratch"
 msgstr "Od začátku"
@@ -12354,6 +12356,10 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Varování"
 
 #~ msgid "The description of the currently selected map."
 #~ msgstr "Popis aktuálně vybrané mapy."

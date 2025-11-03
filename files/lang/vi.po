@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4524,7 +4524,10 @@ msgstr ""
 msgid "Pick player count"
 msgstr "Biểu tượng Người chơi"
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4824,6 +4827,9 @@ msgstr ""
 "Xem các tùy chọn hệ thống soạn thảo, cho phép ngươi tùy chỉnh trình chỉnh "
 "sửa."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
@@ -4831,10 +4837,6 @@ msgstr ""
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Nhấp để quay lại màn hình chính."
-
-#, fuzzy
-msgid "Warning!"
-msgstr "Cảnh báo"
 
 msgid "From Scratch"
 msgstr "Từ Đầu"
@@ -12783,6 +12785,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Cảnh báo"
 
 #~ msgid "The description of the currently selected map."
 #~ msgstr "Mô tả của bản đồ hiện được chọn."

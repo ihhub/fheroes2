@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 13:40+0000\n"
+"POT-Creation-Date: 2025-11-03 12:04+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -4288,7 +4288,10 @@ msgstr ""
 msgid "Pick player count"
 msgstr ""
 
-msgid "Limit region size"
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4551,6 +4554,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
@@ -4558,10 +4564,6 @@ msgstr ""
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Savaşa geri dön."
-
-#, fuzzy
-msgid "Warning!"
-msgstr "Uyarı"
 
 msgid "From Scratch"
 msgstr ""
@@ -11305,6 +11307,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Uyarı"
 
 #~ msgid "CONFIG"
 #~ msgstr "AYARLAR"
