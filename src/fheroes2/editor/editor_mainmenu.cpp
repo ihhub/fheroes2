@@ -120,6 +120,8 @@ namespace
         if ( editorInterface.generateRandomMap( mapSize ) ) {
             return editorInterface.startEdit();
         }
+
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to generate a random map with given parameters." ), Dialog::OK );
         return fheroes2::GameMode::EDITOR_NEW_MAP;
     }
 }
