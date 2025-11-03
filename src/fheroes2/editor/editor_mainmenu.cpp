@@ -288,7 +288,7 @@ namespace Editor
                     prepareMapSizeMenu();
 
                     fheroes2::showStandardTextMessage(
-                        _( "Warning!" ),
+                        _( "Warning" ),
                         "This feature is still in development and has some limitations. Errors might occur. This feature will continue to change as we are working on improving it.",
                         Dialog::OK );
                 }
