@@ -471,6 +471,9 @@ namespace Maps::Random_Generator
 {
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
+        // Make sure that we are generating a valid map.
+        assert( width > 0 && height > 0 );
+
         if ( config.playerCount < 2 || config.playerCount > 6 ) {
             assert( config.playerCount <= 6 );
             return false;
