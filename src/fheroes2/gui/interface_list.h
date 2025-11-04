@@ -75,7 +75,7 @@ namespace Interface
         virtual void ActionListSingleClick( Item & ) = 0;
         virtual void ActionListPressRight( Item & ) = 0;
 
-        virtual void ActionListLongPress( Item & )
+        virtual void ActionListLongPress( Item & /*unused*/ )
         {
             // Do nothing.
         }
