@@ -167,7 +167,6 @@ namespace Interface
         void ActionListDoubleClick( CASTLE & item ) override;
         void ActionListSingleClick( CASTLE & item ) override;
         void ActionListPressRight( CASTLE & item ) override;
-
         void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
 
