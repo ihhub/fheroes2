@@ -74,7 +74,11 @@ namespace Interface
         virtual void ActionListDoubleClick( Item & ) = 0;
         virtual void ActionListSingleClick( Item & ) = 0;
         virtual void ActionListPressRight( Item & ) = 0;
-        virtual void ActionListLongPress( Item & ) = 0;
+
+        virtual void ActionListLongPress( Item & )
+        {
+            // Do nothing.
+        }
 
         virtual void ActionListDoubleClick( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {

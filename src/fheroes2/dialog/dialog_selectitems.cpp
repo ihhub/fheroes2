@@ -686,7 +686,6 @@ namespace
         using Interface::ListBox<Maps::ObjectInfo>::ActionListDoubleClick;
         using Interface::ListBox<Maps::ObjectInfo>::ActionListSingleClick;
         using Interface::ListBox<Maps::ObjectInfo>::ActionListPressRight;
-        using Interface::ListBox<Maps::ObjectInfo>::ActionListLongPress;
 
         using ListBox::ListBox;
 
@@ -749,11 +748,6 @@ namespace
         }
 
         void ActionListSingleClick( Maps::ObjectInfo & /*unused*/ ) override
-        {
-            // Do nothing.
-        }
-
-        void ActionListLongPress( Maps::ObjectInfo & /*unused*/ ) override
         {
             // Do nothing.
         }

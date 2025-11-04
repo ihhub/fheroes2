@@ -805,7 +805,6 @@ namespace Battle
         using ::Interface::ListBox<std::string>::ActionListDoubleClick;
         using ::Interface::ListBox<std::string>::ActionListSingleClick;
         using ::Interface::ListBox<std::string>::ActionListPressRight;
-        using ::Interface::ListBox<std::string>::ActionListLongPress;
 
         void SetPosition( int32_t px, int32_t py )
         {
@@ -957,11 +956,6 @@ namespace Battle
         }
 
         void ActionListPressRight( std::string & /* unused */ ) override
-        {
-            // Do nothing.
-        }
-
-        void ActionListLongPress( std::string & /* unused */ ) override
         {
             // Do nothing.
         }

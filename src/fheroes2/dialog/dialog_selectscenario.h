@@ -43,7 +43,6 @@ public:
     using Interface::ListBox<Maps::FileInfo>::ActionListDoubleClick;
     using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
     using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
-    using Interface::ListBox<Maps::FileInfo>::ActionListLongPress;
 
     explicit ScenarioListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
@@ -71,11 +70,6 @@ public:
     }
 
     void ActionListPressRight( Maps::FileInfo & /* info */ ) override
-    {
-        // Do nothing.
-    }
-
-    void ActionListLongPress( Maps::FileInfo & /* info */ ) override
     {
         // Do nothing.
     }

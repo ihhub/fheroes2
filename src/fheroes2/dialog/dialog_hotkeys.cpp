@@ -128,7 +128,6 @@ namespace
         using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ActionListSingleClick;
         using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ActionListPressRight;
         using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ActionListDoubleClick;
-        using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ActionListLongPress;
 
         void RedrawItem( const std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & hotKeyEvent, int32_t offsetX, int32_t offsetY, bool current ) override
         {
@@ -223,11 +222,6 @@ namespace
 
             Game::setHotKeyForEvent( hotKeyEvent.first, hotKeyUI.getKey() );
             Game::HotKeySave();
-        }
-
-        void ActionListLongPress( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & /*unused*/ ) override
-        {
-            // Do nothing.
         }
 
         void initListBackgroundRestorer( fheroes2::Rect roi )

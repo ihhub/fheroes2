@@ -62,7 +62,6 @@ namespace
         using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListDoubleClick;
         using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListSingleClick;
         using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListPressRight;
-        using Interface::ListBox<Maps::Map_Format::DailyEvent>::ActionListLongPress;
 
         EventListBox( const fheroes2::Point & pt, const fheroes2::SupportedLanguage language )
             : ListBox( pt )
@@ -132,11 +131,6 @@ namespace
         }
 
         void ActionListPressRight( Maps::Map_Format::DailyEvent & /*unused*/ ) override
-        {
-            // Do nothing.
-        }
-
-        void ActionListLongPress( Maps::Map_Format::DailyEvent & /*unused*/ ) override
         {
             // Do nothing.
         }

@@ -77,7 +77,6 @@ namespace
         using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListSingleClick;
         using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListPressRight;
         using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListDoubleClick;
-        using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListLongPress;
 
         explicit ResolutionList( const fheroes2::Point & offset )
             : Interface::ListBox<fheroes2::ResolutionInfo>( offset )
@@ -143,11 +142,6 @@ namespace
 
                 fheroes2::showStandardTextMessage( leftText + middleText + rightText, scaledResolutionText, Dialog::ZERO );
             }
-        }
-
-        void ActionListLongPress( fheroes2::ResolutionInfo & /*unused*/ ) override
-        {
-            // Do nothing.
         }
 
         void ActionListDoubleClick( fheroes2::ResolutionInfo & /*unused*/ ) override

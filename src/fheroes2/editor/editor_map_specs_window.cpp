@@ -627,7 +627,6 @@ namespace
         using Interface::ListBox<uint8_t>::ActionListDoubleClick;
         using Interface::ListBox<uint8_t>::ActionListSingleClick;
         using Interface::ListBox<uint8_t>::ActionListPressRight;
-        using Interface::ListBox<uint8_t>::ActionListLongPress;
 
         DropBoxList( const DropBoxList & ) = delete;
         DropBoxList & operator=( const DropBoxList & ) = delete;
@@ -725,11 +724,6 @@ namespace
             else {
                 fheroes2::showStandardTextMessage( _( "Special Victory Condition" ), getVictoryConditionText( condition ), Dialog::ZERO );
             }
-        }
-
-        void ActionListLongPress( uint8_t & /* item */ ) override
-        {
-            // Do nothing.
         }
 
         fheroes2::Rect getArea() const

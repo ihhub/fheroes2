@@ -61,7 +61,6 @@ namespace
         using Interface::ListBox<std::string>::ActionListDoubleClick;
         using Interface::ListBox<std::string>::ActionListSingleClick;
         using Interface::ListBox<std::string>::ActionListPressRight;
-        using Interface::ListBox<std::string>::ActionListLongPress;
 
         RumorListBox( const fheroes2::Point & pt, const fheroes2::SupportedLanguage language )
             : ListBox( pt )
@@ -113,11 +112,6 @@ namespace
         }
 
         void ActionListPressRight( std::string & /*unused*/ ) override
-        {
-            // Do nothing.
-        }
-
-        void ActionListLongPress( std::string & /*unused*/ ) override
         {
             // Do nothing.
         }

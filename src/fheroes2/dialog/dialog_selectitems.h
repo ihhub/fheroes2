@@ -57,7 +57,6 @@ namespace Dialog
         using Interface::ListBox<int>::ActionListDoubleClick;
         using Interface::ListBox<int>::ActionListSingleClick;
         using Interface::ListBox<int>::ActionListPressRight;
-        using Interface::ListBox<int>::ActionListLongPress;
 
         ItemSelectionWindow() = delete;
 
@@ -94,11 +93,6 @@ namespace Dialog
         }
 
         void ActionListPressRight( int & /* unused */ ) override
-        {
-            // Do nothing.
-        }
-
-        void ActionListLongPress( int & /* unused */ ) override
         {
             // Do nothing.
         }
