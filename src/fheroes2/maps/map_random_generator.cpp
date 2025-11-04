@@ -650,7 +650,7 @@ namespace Maps::Random_Generator
         std::vector<int> startingLocations;
         std::vector<int> actionLocations;
 
-        for ( Region & region : mapRegions ) {
+        for ( const Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
                 continue;
