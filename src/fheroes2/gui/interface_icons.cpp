@@ -59,9 +59,10 @@ void Interface::HeroesIcons::rotateHeroPortraits( HEROES item )
         return;
     }
     const auto & currentHero = item;
-    auto heroIndex = std::find( heroes.begin(), heroes.end(), currentHero );
-    const auto index = std::distance( heroes.begin(), heroIndex );
-    std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
+    auto heroIterator = std::find( heroes.begin(), heroes.end(), currentHero );
+    assert( heroIterator != heroes.end() );
+    const auto iteratorDistance = std::distance( heroes.begin(), heroIterator );
+    std::rotate( heroes.begin(), heroes.begin() + iteratorDistance, heroes.begin() + iteratorDistance + 1 );
 
     Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
