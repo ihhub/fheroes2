@@ -45,6 +45,8 @@
 #include "ui_scrollbar.h"
 #include "world.h"
 
+enum class PlayerColor : uint8_t;
+
 namespace
 {
     const int32_t iconsCursorWidth = 56;
