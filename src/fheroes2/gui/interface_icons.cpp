@@ -53,8 +53,12 @@ namespace
 
 void Interface::HeroesIcons::rotateHeroPortraits( HEROES item )
 {
+    const PlayerColor currentColor = Settings::Get().CurrentColor();
+    VecHeroes & heroes = world.GetKingdom( currentColor ).GetHeroes();
+    if ( heroes.size() <= 1 ) {
+        return;
+    }
     const auto & currentHero = item;
-    VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
     auto heroIndex = std::find( heroes.begin(), heroes.end(), currentHero );
     const auto index = std::distance( heroes.begin(), heroIndex );
     std::rotate( heroes.begin(), heroes.begin() + index, heroes.begin() + index + 1 );
