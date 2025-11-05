@@ -107,6 +107,8 @@ namespace Interface
 
         void openMapSpecificationsDialog();
 
+        bool updateRandomMapConfiguration();
+
     private:
         class WarningMessage
         {
@@ -168,8 +170,6 @@ namespace Interface
         void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
 
         void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
-
-        bool _updateRandomMapConfiguration();
 
         // TODO: move this function into map_format_helper.h|cpp files as it belongs there.
         //       This is needed for the future support of random map generation from the Main Menu screen.

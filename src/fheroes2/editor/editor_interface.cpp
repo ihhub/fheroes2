@@ -1025,15 +1025,17 @@ namespace Interface
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE ) ) {
-                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    if ( updateRandomMapConfiguration() ) {
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                    if ( generateRandomMap( _mapFormat.width ) ) {
-                        _redraw |= mapUpdateFlags;
+                        if ( generateRandomMap( _mapFormat.width ) ) {
+                            _redraw |= mapUpdateFlags;
 
-                        action.commit();
-                    }
-                    else {
-                        _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
+                            action.commit();
+                        }
+                        else {
+                            _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
+                        }
                     }
                 }
 #endif
@@ -2176,7 +2178,7 @@ namespace Interface
         return false;
     }
 
-    bool EditorInterface::_updateRandomMapConfiguration()
+    bool EditorInterface::updateRandomMapConfiguration()
     {
         Maps::Random_Generator::Configuration temp{ _randomMapConfig };
 
@@ -2199,10 +2201,6 @@ namespace Interface
 
     bool EditorInterface::generateRandomMap( const int32_t mapWidth )
     {
-        if ( !_updateRandomMapConfiguration() ) {
-            return false;
-        }
-
         return Maps::Random_Generator::generateMap( _mapFormat, _randomMapConfig, mapWidth, mapWidth );
     }
 
