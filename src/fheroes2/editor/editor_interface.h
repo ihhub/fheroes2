@@ -171,8 +171,6 @@ namespace Interface
 
         void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
 
-        // TODO: move this function into map_format_helper.h|cpp files as it belongs there.
-        //       This is needed for the future support of random map generation from the Main Menu screen.
         bool _placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type );
 
         EditorPanel _editorPanel;
