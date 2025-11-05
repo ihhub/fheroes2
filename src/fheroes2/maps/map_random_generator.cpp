@@ -281,6 +281,32 @@ namespace
         return ordered;
     }
 
+    void checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
+    {
+        if ( node.type != NodeType::BORDER ) {
+            return;
+        }
+
+        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
+            const fheroes2::Point newPosition = Maps::GetPoint( node.index );
+            Node & newTile = data.getNode( newPosition + directionOffsets[direction] );
+
+            if ( newTile.region != region.id ) {
+                if ( region.connections.find( newTile.region ) == region.connections.end() ) {
+                    DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << newTile.region << ", via " << node.index )
+                    region.connections.emplace( newTile.region, node.index );
+                    node.type = NodeType::CONNECTOR;
+                }
+                if ( mapRegions[newTile.region].connections.find( region.id ) == mapRegions[newTile.region].connections.end() ) {
+                    DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Added connection between " << newTile.region << " and " << region.id << ", via " << newTile.index )
+                    mapRegions[newTile.region].connections.emplace( region.id, newTile.index );
+                    newTile.type = NodeType::CONNECTOR;
+                }
+                break;
+            }
+        }
+    }
+
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
     {
         Node & previousNode = region.nodes[region.lastProcessedNode];
@@ -724,10 +750,22 @@ namespace Maps::Random_Generator
         }
 
         // TODO: set up region connectors based on frequency settings and border length.
+        for ( Region & region : mapRegions ) {
+            for ( Node & node : region.nodes ) {
+                checkForRegionConnectors( data, mapRegions, region, node );
+            }
+        }
 
         // TODO: generate road based paths.
 
         // TODO: obstacles
+        for ( const Region & region : mapRegions ) {
+            for ( const Node & node : region.nodes ) {
+                if ( node.type == NodeType::BORDER ) {
+                    putObjectOnMap( mapFormat, world.getTile( node.index ), ObjectGroup::LANDSCAPE_TREES, 5 );
+                }
+            }
+        }
 
         // TODO: place objects while avoiding the borders.
 
