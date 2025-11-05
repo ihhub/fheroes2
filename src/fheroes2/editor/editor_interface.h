@@ -107,6 +107,8 @@ namespace Interface
 
         void openMapSpecificationsDialog();
 
+        bool updateRandomMapConfiguration();
+
     private:
         class WarningMessage
         {
@@ -168,8 +170,6 @@ namespace Interface
         void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
 
         void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
-
-        bool _updateRandomMapConfiguration();
 
         bool _placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type );
 

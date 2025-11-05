@@ -99,7 +99,7 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to go back to New Map menu." )
     }
 
-    fheroes2::GameMode editNewMapFromScratch( const Maps::MapSize & mapSize )
+    fheroes2::GameMode editNewMapFromScratch( const Maps::MapSize mapSize )
     {
         fheroes2::fadeOutDisplay();
         Game::setDisplayFadeIn();
@@ -111,12 +111,16 @@ namespace
         return fheroes2::GameMode::EDITOR_NEW_MAP;
     }
 
-    fheroes2::GameMode editNewRandomMap( const Maps::MapSize & mapSize )
+    fheroes2::GameMode editNewRandomMap( const Maps::MapSize mapSize )
     {
         fheroes2::fadeOutDisplay();
         Game::setDisplayFadeIn();
 
         Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+        if ( !editorInterface.updateRandomMapConfiguration() ) {
+            return fheroes2::GameMode::EDITOR_NEW_MAP;
+        }
+
         if ( editorInterface.generateRandomMap( mapSize ) ) {
             return editorInterface.startEdit();
         }
