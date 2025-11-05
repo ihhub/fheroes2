@@ -468,10 +468,10 @@ namespace Interface
 
                 return true;
             }
-            if ( !_lockClick && le.MouseLongPressLeft( rtAreaItems ) && content->size() > 1 ) {
+            if ( !_lockClick && le.MouseLongPressLeft( rtAreaItems )  ) {
                 const fheroes2::Point & mousePos = le.getMouseCursorPos();
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
-                if ( static_cast<size_t>( id ) <= ( content->size() - 1 ) ) {
+                if ( static_cast<size_t>( id + 1 ) <= content->size() ) {
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
                     ActionListLongPress( item );
                 }

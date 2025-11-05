@@ -53,24 +53,7 @@ namespace
     const int32_t iconsCursorHeight = 32;
 }
 
-void Interface::HeroesIcons::rotateHeroPortraits( HEROES item )
-{
-    const PlayerColor currentColor = Settings::Get().CurrentColor();
-    VecHeroes & heroes = world.GetKingdom( currentColor ).GetHeroes();
-    if ( heroes.size() <= 1 ) {
-        return;
-    }
-    const auto & currentHero = item;
-    auto heroIterator = std::find( heroes.begin(), heroes.end(), currentHero );
-    assert( heroIterator != heroes.end() );
-    const auto iteratorDistance = std::distance( heroes.begin(), heroIterator );
-    std::rotate( heroes.begin(), heroes.begin() + iteratorDistance, heroes.begin() + iteratorDistance + 1 );
 
-    Interface::AdventureMap & I = Interface::AdventureMap::Get();
-
-    I.SetFocus( currentHero, false );
-    I.RedrawFocus();
-}
 
 bool Interface::IconsBar::isVisible()
 {
@@ -118,6 +101,26 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 1 + i % 8 );
         fheroes2::Copy( background, 0, 0, output, offset.x + 5, offset.y + 5 + i * ( IconsBar::getItemHeight() + 10 ), background.width(), background.height() );
     }
+}
+
+void Interface::HeroesIcons::rotateHeroPortraits( HEROES item )
+{
+    assert( item != nullptr );
+    const PlayerColor currentColor = Settings::Get().CurrentColor();
+    VecHeroes & heroes = world.GetKingdom( currentColor ).GetHeroes();
+    if ( heroes.size() <= 1 ) {
+        return;
+    }
+    const auto & currentHero = item;
+    auto heroIterator = std::find( heroes.begin(), heroes.end(), currentHero );
+    assert( heroIterator != heroes.end() );
+    const auto iteratorDistance = std::distance( heroes.begin(), heroIterator );
+    std::rotate( heroes.begin(), heroes.begin() + iteratorDistance, heroes.begin() + iteratorDistance + 1 );
+
+    Interface::AdventureMap & I = Interface::AdventureMap::Get();
+
+    I.SetFocus( currentHero, false );
+    I.RedrawFocus();
 }
 
 void Interface::CastleIcons::RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current )
@@ -245,7 +248,7 @@ void Interface::HeroesIcons::ActionCurrentDn()
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
-        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP_MODIFIER ) ) {
             rotateHeroPortraits( item );
         }
         else {
@@ -257,7 +260,7 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 {
     if ( item ) {
-        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP_MODIFIER ) ) {
             rotateHeroPortraits( item );
         }
         else {
