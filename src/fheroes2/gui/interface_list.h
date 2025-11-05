@@ -468,7 +468,7 @@ namespace Interface
 
                 return true;
             }
-            if ( !_lockClick && le.MouseLongPressLeft( rtAreaItems )  ) {
+            if ( !_lockClick && le.MouseLongPressLeft( rtAreaItems ) ) {
                 const fheroes2::Point & mousePos = le.getMouseCursorPos();
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
                 if ( static_cast<size_t>( id + 1 ) <= content->size() ) {
