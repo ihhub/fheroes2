@@ -53,8 +53,6 @@ namespace
     const int32_t iconsCursorHeight = 32;
 }
 
-
-
 bool Interface::IconsBar::isVisible()
 {
     const Settings & conf = Settings::Get();
