@@ -747,6 +747,12 @@ namespace Maps::Random_Generator
 
         // TODO: place monsters.
 
+        // Set random map name and description to be unique.
+        mapFormat.name = "Random map " + std::to_string( generatorSeed );
+        mapFormat.description = "Randomly generated map of " + std::to_string( width ) + "x" + std::to_string( height ) + " with seed "
+                                + std::to_string( generatorSeed ) + ", " + std::to_string( config.playerCount ) + " players and "
+                                + std::to_string( config.waterPercentage ) + "% of water.";
+
         return true;
     }
 }
