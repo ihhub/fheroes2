@@ -154,7 +154,8 @@ namespace
         uint32_t id{ 0 };
         int32_t centerIndex{ -1 };
         std::set<uint32_t> neighbours;
-        std::vector<Node> nodes;
+        std::vector<std::reference_wrapper<Node>> nodes;
+        std::map<uint32_t, int32_t> connections;
         size_t sizeLimit{ 0 };
         size_t lastProcessedNode{ 0 };
         int colorIndex{ neutralColorIndex };
@@ -162,18 +163,18 @@ namespace
 
         Region() = default;
 
-        Region( const uint32_t regionIndex, const int32_t mapIndex, const int playerColor, const int ground, const size_t expectedSize )
+        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize )
             : id( regionIndex )
-            , centerIndex( mapIndex )
+            , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
         {
             assert( expectedSize > 0 );
 
+            centerNode.region = regionIndex;
             nodes.reserve( expectedSize );
-            nodes.emplace_back( mapIndex );
-            nodes[0].region = regionIndex;
+            nodes.emplace_back( centerNode );
         }
     };
 
@@ -294,7 +295,7 @@ namespace
             // Check diagonal direction only 50% of the time to get more circular distribution.
             // It gives randomness for uneven edges.
             if ( direction > 3 && Rand::GetWithGen( 0, 1, randomGenerator ) ) {
-                break;
+                continue;
             }
 
             // TODO: use node index and pre-calculate offsets in advance.
@@ -528,7 +529,6 @@ namespace
             return false;
         }
         // TODO: check bottom tiles
-        //       Do we need to store node reference?
         //       Also, set radius for mine type.
         Maps::Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
@@ -580,7 +580,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, 0, neutralColorIndex, Ground::WATER, 1 } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -611,8 +611,12 @@ namespace Maps::Random_Generator
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, regionSizeLimit );
-                data.getNode( centerTile ).region = regionID;
+                Node & centerNode = data.getNode( centerTile );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit );
+
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
+                           "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
+                                     << Color::String( Color::IndexToColor( regionColor ) ) )
             }
         }
 
@@ -642,7 +646,10 @@ namespace Maps::Random_Generator
 
             // Fix missing references.
             for ( const uint32_t adjacent : region.neighbours ) {
-                mapRegions[adjacent].neighbours.insert( region.id );
+                const auto result = mapRegions[adjacent].neighbours.insert( region.id );
+                if ( result.second ) {
+                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Missing link between " << region.id << " and " << adjacent )
+                }
             }
         }
 
@@ -650,7 +657,7 @@ namespace Maps::Random_Generator
         std::vector<int> startingLocations;
         std::vector<int> actionLocations;
 
-        for ( Region & region : mapRegions ) {
+        for ( const Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
                 continue;
@@ -720,6 +727,8 @@ namespace Maps::Random_Generator
 
         // TODO: generate road based paths.
 
+        // TODO: obstacles
+
         // TODO: place objects while avoiding the borders.
 
         // TODO: place treasure objects.
@@ -746,6 +755,14 @@ namespace Maps::Random_Generator
         }
 
         // TODO: place monsters.
+
+        // Visual debug
+        for ( const Region & region : mapRegions ) {
+            for ( const Node & node : region.nodes ) {
+                const uint32_t metadata = static_cast<uint32_t>( node.type ); // +100 * node.region;
+                world.getTile( node.index ).UpdateRegion( metadata );
+            }
+        }
 
         return true;
     }
