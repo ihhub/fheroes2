@@ -299,7 +299,7 @@ namespace
             const fheroes2::Point newPosition = Maps::GetPoint( node.index );
             Node & newTile = data.getNode( newPosition + directionOffsets[direction] );
 
-            if ( newTile.index == -1 || newTile.region == region.id ) {
+            if ( newTile.index == -1 || newTile.region == region.id || mapRegions[newTile.region].groundType == Maps::Ground::WATER ) {
                 continue;
             }
 
@@ -428,9 +428,7 @@ namespace
 
             Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
             objectRect.x = std::min( objectRect.x, objectPart.tileOffset.x );
-            objectRect.y = std::min( objectRect.y, objectPart.tileOffset.y );
             objectRect.width = std::max( objectRect.width, objectPart.tileOffset.x );
-            objectRect.height = std::max( objectRect.height, objectPart.tileOffset.y );
 
             node.type = NodeType::OBSTACLE;
         }
@@ -588,7 +586,7 @@ namespace
         for ( const auto & obstacleId : obstacleList ) {
             const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
             if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
-                markObjectPlacement( data, objectInfo, tilePos, false );
+                // markObjectPlacement( data, objectInfo, tilePos, false );
                 return true;
             }
         }
@@ -790,6 +788,9 @@ namespace Maps::Random_Generator
 
         // Step 6. Set up region connectors based on frequency settings and border length.
         for ( Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
             for ( Node & node : region.nodes ) {
                 checkForRegionConnectors( data, mapRegions, region, node );
             }
@@ -822,6 +823,7 @@ namespace Maps::Random_Generator
                 const auto & path = pathfinder.buildPath( connection.second );
                 for ( const auto & step : path ) {
                     data.getNode( step.GetIndex() ).type = NodeType::PATH;
+                    Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
                 }
             }
         }
@@ -852,7 +854,7 @@ namespace Maps::Random_Generator
         // Visual debug
         for ( const Region & region : mapRegions ) {
             for ( const Node & node : region.nodes ) {
-                const uint32_t metadata = static_cast<uint32_t>( node.type ); // +100 * node.region;
+                const uint32_t metadata = static_cast<uint32_t>( node.type ) + 100 * node.region;
                 world.getTile( node.index ).UpdateRegion( metadata );
             }
         }
