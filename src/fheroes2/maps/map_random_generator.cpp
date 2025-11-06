@@ -354,7 +354,7 @@ namespace
         }
     }
 
-    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
+    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
     {
         fheroes2::Rect objectRect;
 
@@ -366,7 +366,11 @@ namespace
 
             const Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
 
-            if ( node.index == -1 || node.type != NodeType::OPEN ) {
+            if ( node.index == -1 ) {
+                return false;
+            }
+            if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Rejected placement for " << (int)node.type << " borders " << skipBorders )
                 return false;
             }
 
@@ -377,7 +381,10 @@ namespace
         for ( const auto & partInfo : info.topLevelParts ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
-            if ( node.index == -1 || node.type != NodeType::OPEN ) {
+            if ( node.index == -1 ) {
+                return false;
+            }
+            if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
                 return false;
             }
 
@@ -419,23 +426,25 @@ namespace
             node.type = NodeType::OBSTACLE;
         }
 
+        if ( !isAction ) {
+            return;
+        }
+
         for ( const auto & partInfo : objectInfo.topLevelParts ) {
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
         }
 
-        if ( isAction ) {
-            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-                Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
-                pathNode.type = NodeType::PATH;
-            }
-
-            // Mark extra nodes as path to avoid objects clumping together
-            data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
-            data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
-
-            data.getNode( mainTilePos ).type = NodeType::ACTION;
+        for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
+            Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
+            pathNode.type = NodeType::PATH;
         }
+
+        // Mark extra nodes as path to avoid objects clumping together
+        data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
+        data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
+
+        data.getNode( mainTilePos ).type = NodeType::ACTION;
     }
 
     bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
@@ -448,7 +457,6 @@ namespace
 
         // Do not update passabilities after every object placement.
         if ( !Maps::setObjectOnTile( tile, objectInfo, false ) ) {
-            assert( 0 );
             return false;
         }
 
@@ -461,7 +469,7 @@ namespace
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
+        if ( canFitObject( data, objectInfo, tilePos, true, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
             markObjectPlacement( data, objectInfo, tilePos, true );
             return true;
         }
@@ -491,7 +499,7 @@ namespace
         const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
         const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
-        if ( canFitObject( data, basementInfo, tilePos, false ) && canFitObject( data, castleInfo, tilePos, true ) ) {
+        if ( canFitObject( data, basementInfo, tilePos, false, true ) && canFitObject( data, castleInfo, tilePos, true, true ) ) {
             if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
                 return false;
             }
@@ -551,14 +559,21 @@ namespace
 
     bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
     {
-        if ( node.type == NodeType::BORDER ) {
-            return false;
-        }
-        // TODO: check bottom tiles
-        //       Also, set radius for mine type.
         Maps::Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
+    }
+
+    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int obstacleId )
+    {
+        Maps::Tile & tile = world.getTile( node.index );
+        const fheroes2::Point tilePos = tile.GetCenter();
+        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
+        if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
+            markObjectPlacement( data, objectInfo, tilePos, false );
+            return true;
+        }
+        return false;
     }
 }
 
@@ -760,9 +775,16 @@ namespace Maps::Random_Generator
 
         // TODO: obstacles
         for ( const Region & region : mapRegions ) {
+            int32_t objectId = 0;
             for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
-                    putObjectOnMap( mapFormat, world.getTile( node.index ), ObjectGroup::LANDSCAPE_TREES, 5 );
+                    int tries = 15;
+                    while ( tries > 0 && !placeObstacle( mapFormat, data, node, objectId ) ) {
+                        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Couldn't place " << objectId << " at " << node.index )
+                        objectId = (objectId + 1) % 40;
+                        --tries;
+                    }
+                    objectId++;
                 }
             }
         }
