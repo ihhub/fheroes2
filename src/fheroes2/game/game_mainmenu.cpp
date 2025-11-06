@@ -109,6 +109,8 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
     bool exit = false;
 
     while ( !exit ) {
+        const fheroes2::GameMode previousGameMode = result;
+
         switch ( result ) {
         case fheroes2::GameMode::QUIT_GAME:
             exit = true;
@@ -200,6 +202,11 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
             assert( 0 );
             exit = true;
             break;
+        }
+
+        if (!exit)
+        {
+            Settings::Get().SetPreviousGameMode( previousGameMode );
         }
     }
 

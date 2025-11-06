@@ -271,6 +271,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isDefaultScreenSize = display.isDefaultSize();
+    const bool isComingFromMainMenu = ( Settings::Get().GetPreviousGameMode() == fheroes2::GameMode::MAIN_MENU );
 
     if ( isAfterGameCompletion ) {
         const auto inputPlayerName = []( std::string & playerName ) {
@@ -331,7 +332,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         // Fade-out game screen.
         fheroes2::fadeOutDisplay();
     }
-    else if ( isDefaultScreenSize ) {
+    else if ( isDefaultScreenSize && isComingFromMainMenu ) {
         fheroes2::fadeOutDisplay();
     }
 

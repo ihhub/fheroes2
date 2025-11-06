@@ -34,6 +34,7 @@
 #include "math_base.h"
 #include "players.h"
 #include "screen.h"
+#include "game_mode.h"
 
 class IStreamBase;
 class OStreamBase;
@@ -334,6 +335,16 @@ public:
         game_type = type;
     }
 
+    fheroes2::GameMode GetPreviousGameMode() const
+    {
+        return previous_game_mode;
+    }
+
+    void SetPreviousGameMode( fheroes2::GameMode mode )
+    {
+        previous_game_mode = mode;
+    }
+
     bool isCampaignGameType() const;
 
     Players & GetPlayers()
@@ -431,6 +442,7 @@ private:
     int battle_speed;
 
     int game_type;
+    fheroes2::GameMode previous_game_mode;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
 
