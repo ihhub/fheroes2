@@ -58,6 +58,7 @@ namespace
     constexpr int32_t emptySpacePercentage{ 40 };
     const int randomCastleIndex{ 12 };
     const int randomTownIndex{ 13 };
+    const int randomMonsterIndex{ 68 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
@@ -288,30 +289,32 @@ namespace
         return ordered;
     }
 
-    void checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
+    bool checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
     {
         if ( node.type != NodeType::BORDER ) {
-            return;
+            return false;
         }
 
         for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
             const fheroes2::Point newPosition = Maps::GetPoint( node.index );
             Node & newTile = data.getNode( newPosition + directionOffsets[direction] );
 
-            if ( newTile.index != -1 && newTile.region != region.id ) {
-                if ( region.connections.find( newTile.region ) == region.connections.end() ) {
-                    DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << newTile.region << ", via " << node.index )
-                    region.connections.emplace( newTile.region, node.index );
-                    node.type = NodeType::CONNECTOR;
-                }
-                if ( mapRegions[newTile.region].connections.find( region.id ) == mapRegions[newTile.region].connections.end() ) {
-                    DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Added connection between " << newTile.region << " and " << region.id << ", via " << newTile.index )
-                    mapRegions[newTile.region].connections.emplace( region.id, newTile.index );
-                    newTile.type = NodeType::CONNECTOR;
-                }
+            if ( newTile.index == -1 || newTile.region == region.id ) {
+                continue;
+            }
+
+            if ( region.connections.find( newTile.region ) == region.connections.end() ) {
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << newTile.region << ", via " << node.index )
+                region.connections.emplace( newTile.region, node.index );
+                mapRegions[newTile.region].connections.emplace( region.id, node.index );
+                node.type = NodeType::CONNECTOR;
+                newTile.type = NodeType::PATH;
                 break;
             }
         }
+
+        const bool connectionFound = node.type == NodeType::CONNECTOR;
+        return connectionFound;
     }
 
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
@@ -377,7 +380,6 @@ namespace
                 return false;
             }
             if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
-                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Rejected placement for " << (int)node.type << " borders " << skipBorders )
                 return false;
             }
 
@@ -711,7 +713,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 5. Object placement
+        // Step 5. Castles and mines placement
         std::set<int32_t> startingLocations;
         std::set<int32_t> actionLocations;
 
@@ -801,7 +803,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 7. Set up pathfinder to generate road based paths and validate the map.
+        // Step 7. Set up pathfinder to generate road based paths.
         AIWorldPathfinder pathfinder;
         pathfinder.reset();
         const PlayerColor testPlayer = PlayerColor::BLUE;
@@ -840,10 +842,10 @@ namespace Maps::Random_Generator
             }
         }
 
-        // TODO: place monsters.
+        // Step 11: place monsters.
         for ( const Region & region : mapRegions ) {
             for ( const auto connection : region.connections ) {
-                //
+                putObjectOnMap( mapFormat, world.getTile( connection.second ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
 
