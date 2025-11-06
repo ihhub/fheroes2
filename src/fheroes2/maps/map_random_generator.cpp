@@ -712,8 +712,8 @@ namespace Maps::Random_Generator
         }
 
         // Step 5. Object placement
-        std::vector<int> startingLocations;
-        std::vector<int> actionLocations;
+        std::set<int> startingLocations;
+        std::set<int> actionLocations;
 
         for ( const Region & region : mapRegions ) {
             if ( region.id == 0 ) {
@@ -752,7 +752,7 @@ namespace Maps::Random_Generator
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                startingLocations.push_back( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
+                startingLocations.insert( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
@@ -774,7 +774,7 @@ namespace Maps::Random_Generator
                     }
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
-                        actionLocations.push_back( tile.index );
+                        actionLocations.insert( tile.index );
                         break;
                     }
                 }
