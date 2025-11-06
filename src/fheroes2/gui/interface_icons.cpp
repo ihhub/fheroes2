@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,10 +23,15 @@
 
 #include "interface_icons.h"
 
+#include <algorithm>
+#include <iterator>
+#include <vector>
+
 #include "agg_image.h"
 #include "castle.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -39,6 +44,8 @@
 #include "ui_constants.h"
 #include "ui_scrollbar.h"
 #include "world.h"
+
+enum class PlayerColor : uint8_t;
 
 namespace
 {
@@ -92,6 +99,26 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 1 + i % 8 );
         fheroes2::Copy( background, 0, 0, output, offset.x + 5, offset.y + 5 + i * ( IconsBar::getItemHeight() + 10 ), background.width(), background.height() );
     }
+}
+
+void Interface::HeroesIcons::rotateHeroPortraits( Heroes * currentHero )
+{
+    assert( currentHero != nullptr );
+    const PlayerColor currentColor = Settings::Get().CurrentColor();
+    VecHeroes & heroes = world.GetKingdom( currentColor ).GetHeroes();
+    if ( heroes.size() <= 1 ) {
+        return;
+    }
+
+    auto heroIterator = std::find( heroes.begin(), heroes.end(), currentHero );
+    assert( heroIterator != heroes.end() );
+    const auto iteratorDistance = std::distance( heroes.begin(), heroIterator );
+    std::rotate( heroes.begin(), heroes.begin() + iteratorDistance, heroes.begin() + iteratorDistance + 1 );
+
+    Interface::AdventureMap & I = Interface::AdventureMap::Get();
+
+    I.SetFocus( currentHero, false );
+    I.RedrawFocus();
 }
 
 void Interface::CastleIcons::RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current )
@@ -219,17 +246,27 @@ void Interface::HeroesIcons::ActionCurrentDn()
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
-        Game::OpenHeroesDialog( *item, false, true );
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP_MODIFIER ) ) {
+            rotateHeroPortraits( item );
+        }
+        else {
+            Game::OpenHeroesDialog( *item, false, true );
+        }
     }
 }
 
 void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 {
     if ( item ) {
-        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP_MODIFIER ) ) {
+            rotateHeroPortraits( item );
+        }
+        else {
+            Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-        I.SetFocus( item, false );
-        I.RedrawFocus();
+            I.SetFocus( item, false );
+            I.RedrawFocus();
+        }
     }
 }
 
@@ -237,6 +274,13 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
         Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
+    }
+}
+
+void Interface::HeroesIcons::ActionListLongPress( HEROES & item )
+{
+    if ( item ) {
+        rotateHeroPortraits( item );
     }
 }
 
