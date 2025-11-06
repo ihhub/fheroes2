@@ -101,15 +101,15 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
     }
 }
 
-void Interface::HeroesIcons::rotateHeroPortraits( HEROES item )
+void Interface::HeroesIcons::rotateHeroPortraits( Heroes * currentHero )
 {
-    assert( item != nullptr );
+    assert( currentHero != nullptr );
     const PlayerColor currentColor = Settings::Get().CurrentColor();
     VecHeroes & heroes = world.GetKingdom( currentColor ).GetHeroes();
     if ( heroes.size() <= 1 ) {
         return;
     }
-    const auto & currentHero = item;
+
     auto heroIterator = std::find( heroes.begin(), heroes.end(), currentHero );
     assert( heroIterator != heroes.end() );
     const auto iteratorDistance = std::distance( heroes.begin(), heroIterator );
