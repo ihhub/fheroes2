@@ -67,6 +67,13 @@ namespace
 
     const std::array<int, 7> resources{ Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
 
+    // TODO: replace list of object indicies with a struct for a better variety
+    const std::map<int, std::vector<int>> obstaclesPerGround = {
+        { Maps::Ground::DESERT, { 24, 25, 26, 27, 28, 29 } },    { Maps::Ground::SNOW, { 30, 31, 32, 33, 34, 35 } },  { Maps::Ground::SWAMP, { 18, 19, 20, 21, 22, 23 } },
+        { Maps::Ground::WASTELAND, { 12, 13, 14, 15, 16, 17 } }, { Maps::Ground::BEACH, { 24, 25, 26, 27, 28, 29 } }, { Maps::Ground::LAVA, { 6, 7, 8, 9, 10, 11 } },
+        { Maps::Ground::DIRT, { 18, 19, 20, 21, 22, 23 } },      { Maps::Ground::GRASS, { 0, 1, 2, 3, 4, 5 } },       { Maps::Ground::WATER, {} },
+    };
+
     enum class NodeType : uint8_t
     {
         OPEN,
@@ -564,14 +571,24 @@ namespace
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
-    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int obstacleId )
+    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
     {
         Maps::Tile & tile = world.getTile( node.index );
+        const auto it = obstaclesPerGround.find( tile.GetGround() );
+        if ( it == obstaclesPerGround.end() || it->second.empty() ) {
+            return false;
+        }
+
+        std::vector<int> obstacleList = it->second;
+        Rand::ShuffleWithGen( obstacleList, randomGenerator );
+
         const fheroes2::Point tilePos = tile.GetCenter();
-        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
-        if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
-            markObjectPlacement( data, objectInfo, tilePos, false );
-            return true;
+        for ( const auto & obstacleId : obstacleList ) {
+            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
+            if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
+                markObjectPlacement( data, objectInfo, tilePos, false );
+                return true;
+            }
         }
         return false;
     }
@@ -764,35 +781,14 @@ namespace Maps::Random_Generator
             }
         }
 
-        // TODO: set up region connectors based on frequency settings and border length.
+        // Step 6. Set up region connectors based on frequency settings and border length.
         for ( Region & region : mapRegions ) {
             for ( Node & node : region.nodes ) {
                 checkForRegionConnectors( data, mapRegions, region, node );
             }
         }
 
-        // TODO: generate road based paths.
-
-        // TODO: obstacles
-        for ( const Region & region : mapRegions ) {
-            int32_t objectId = 0;
-            for ( const Node & node : region.nodes ) {
-                if ( node.type == NodeType::BORDER ) {
-                    int tries = 15;
-                    while ( tries > 0 && !placeObstacle( mapFormat, data, node, objectId ) ) {
-                        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Couldn't place " << objectId << " at " << node.index )
-                        objectId = (objectId + 1) % 40;
-                        --tries;
-                    }
-                    objectId++;
-                }
-            }
-        }
-
-        // TODO: place objects while avoiding the borders.
-
-        // TODO: place treasure objects.
-
+        // Step 7. Set up pathfinder to generate road based paths and validate the map.
         AIWorldPathfinder pathfinder;
         pathfinder.reset();
         const PlayerColor testPlayer = PlayerColor::BLUE;
@@ -801,6 +797,31 @@ namespace Maps::Random_Generator
         for ( int idx = 0; idx < width * height; ++idx ) {
             world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
         }
+        world.resetPathfinder();
+
+        for ( const int start : startingLocations ) {
+            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, 0U );
+            for ( const int action : actionLocations ) {
+                if ( pathfinder.getDistance( action ) == 0 ) {
+                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
+                    return false;
+                }
+            }
+        }
+
+        for ( const Region & region : mapRegions ) {
+            for ( const Node & node : region.nodes ) {
+                if ( node.type == NodeType::BORDER ) {
+                    placeObstacle( mapFormat, data, node, randomGenerator );
+                }
+            }
+        }
+
+        // TODO: place objects while avoiding the borders.
+
+        // TODO: place treasure objects.
+        //
+        // TODO: fill big empty islands with obstacles
 
         world.resetPathfinder();
 
