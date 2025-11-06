@@ -298,7 +298,7 @@ namespace
             const fheroes2::Point newPosition = Maps::GetPoint( node.index );
             Node & newTile = data.getNode( newPosition + directionOffsets[direction] );
 
-            if ( newTile.region != region.id ) {
+            if ( newTile.index != -1 && newTile.region != region.id ) {
                 if ( region.connections.find( newTile.region ) == region.connections.end() ) {
                     DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << newTile.region << ", via " << node.index )
                     region.connections.emplace( newTile.region, node.index );
@@ -712,10 +712,10 @@ namespace Maps::Random_Generator
         }
 
         // Step 5. Object placement
-        std::set<int> startingLocations;
-        std::set<int> actionLocations;
+        std::set<int32_t> startingLocations;
+        std::set<int32_t> actionLocations;
 
-        for ( const Region & region : mapRegions ) {
+        for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
                 continue;
@@ -752,12 +752,17 @@ namespace Maps::Random_Generator
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                startingLocations.insert( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
+                int32_t castleDoor = mapFormat.width * ( castlePos.y + 1 ) + castlePos.x;
+                region.centerIndex = castleDoor;
+                startingLocations.insert( castleDoor );
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
-                placeCastle( mapFormat, data, region, adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
+                const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
+                if ( placeCastle( mapFormat, data, region, castlePos, useNeutralCastles ) ) {
+                    region.centerIndex = mapFormat.width * ( castlePos.y + 1 ) + castlePos.x;
+                }
             }
 
             const std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
@@ -788,6 +793,14 @@ namespace Maps::Random_Generator
             }
         }
 
+        for ( const Region & region : mapRegions ) {
+            for ( const Node & node : region.nodes ) {
+                if ( node.type == NodeType::BORDER ) {
+                    placeObstacle( mapFormat, data, node, randomGenerator );
+                }
+            }
+        }
+
         // Step 7. Set up pathfinder to generate road based paths and validate the map.
         AIWorldPathfinder pathfinder;
         pathfinder.reset();
@@ -798,21 +811,15 @@ namespace Maps::Random_Generator
             world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
         }
         world.resetPathfinder();
+        world.updatePassabilities();
 
-        for ( const int start : startingLocations ) {
-            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, 0U );
-            for ( const int action : actionLocations ) {
-                if ( pathfinder.getDistance( action ) == 0 ) {
-                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
-                    return false;
-                }
-            }
-        }
-
+        // Set explicit paths
         for ( const Region & region : mapRegions ) {
-            for ( const Node & node : region.nodes ) {
-                if ( node.type == NodeType::BORDER ) {
-                    placeObstacle( mapFormat, data, node, randomGenerator );
+            pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
+            for ( const auto connection : region.connections ) {
+                const auto & path = pathfinder.buildPath( connection.second );
+                for ( const auto & step : path ) {
+                    data.getNode( step.GetIndex() ).type = NodeType::PATH;
                 }
             }
         }
@@ -823,10 +830,8 @@ namespace Maps::Random_Generator
         //
         // TODO: fill big empty islands with obstacles
 
-        world.resetPathfinder();
-
         for ( const int start : startingLocations ) {
-            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, 0U );
+            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const int action : actionLocations ) {
                 if ( pathfinder.getDistance( action ) == 0 ) {
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
@@ -836,6 +841,11 @@ namespace Maps::Random_Generator
         }
 
         // TODO: place monsters.
+        for ( const Region & region : mapRegions ) {
+            for ( const auto connection : region.connections ) {
+                //
+            }
+        }
 
         // Visual debug
         for ( const Region & region : mapRegions ) {
