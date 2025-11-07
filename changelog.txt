@@ -32,7 +32,7 @@ version 1.1.12 (09 November 2025)
 - make AI heroes predict weekly object states
 - add extra conditions on hiring AI heroes
 - fix blinking cursor while scrolling with keyboard in the Editor
-- remove dangling shadow part of the Ultimate Artifact
+- remove hanging shadow part of the Ultimate Artifact
 - show hero levels in the Hero Meeting dialog
 - allow to hold a character to repeat an action in the Virtual Keyboard
 - add a new resolution icon
