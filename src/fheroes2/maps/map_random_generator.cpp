@@ -671,12 +671,12 @@ namespace
         return false;
     }
 
-    fheroes2::Point adjustCastlePlacement( const int32_t regionCenter, const int32_t mapWidth, const int targetX, const int targetY )
+    fheroes2::Point adjustRegionToFitCastle( const Maps::Map_Format::MapFormat & mapFormat, Region & region )
     {
-        const int regionX = regionCenter % mapWidth;
-        const int regionY = regionCenter / mapWidth;
-        const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapWidth - 4 );
-        const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapWidth - 3 );
+        const fheroes2::Point startingLocation = Maps::GetPoint( region.centerIndex );
+        const int32_t castleX = std::min( std::max( startingLocation.x, 4 ), mapFormat.width - 4 );
+        const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
+        region.centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
         return { castleX, castleY };
     }
 
@@ -947,45 +947,26 @@ namespace Maps::Random_Generator
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
                        "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
-            int xMin = 0;
-            int xMax = width;
-            int yMin = 0;
-            int yMax = height;
-
             for ( const Node & node : region.nodes ) {
-                const int nodeX = node.index % width;
-                const int nodeY = node.index / width;
-                xMin = std::max( xMin, nodeX );
-                xMax = std::min( xMax, nodeX );
-                yMin = std::max( yMin, nodeY );
-                yMax = std::min( yMax, nodeY );
-
                 if ( node.type == NodeType::BORDER ) {
                     Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region.groundType );
                 }
             }
 
-            const int centerX = ( xMin + xMax ) / 2;
-            const int centerY = ( yMin + yMax ) / 2;
-
             if ( region.colorIndex != neutralColorIndex ) {
-                const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
+                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
                 if ( !placeCastle( mapFormat, data, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                const int32_t castleDoor = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
-                region.centerIndex = castleDoor;
-                startingLocations.insert( castleDoor );
+                startingLocations.insert( region.centerIndex );
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
-                const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
-                if ( placeCastle( mapFormat, data, region, castlePos, useNeutralCastles ) ) {
-                    region.centerIndex = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
-                }
+                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
+                placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
             }
 
             const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
