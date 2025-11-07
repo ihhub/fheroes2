@@ -296,26 +296,55 @@ namespace
             return false;
         }
 
-        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
-            const fheroes2::Point newPosition = Maps::GetPoint( node.index );
-            Node & newTile = data.getNode( newPosition + directionOffsets[direction] );
+        const fheroes2::Point position = Maps::GetPoint( node.index );
 
-            if ( newTile.index == -1 || newTile.region == region.id || mapRegions[newTile.region].groundType == Maps::Ground::WATER ) {
+        int distinctNeighbours = 0;
+        uint32_t seen = node.region;
+        for ( uint8_t direction = 0; direction < 8; ++direction ) {
+            Node & newTile = data.getNode( position + directionOffsets[direction] );
+
+            if ( newTile.index == -1 || newTile.region == region.id ) {
                 continue;
             }
 
-            if ( region.connections.find( newTile.region ) == region.connections.end() ) {
-                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << newTile.region << ", via " << node.index )
-                region.connections.emplace( newTile.region, node.index );
-                mapRegions[newTile.region].connections.emplace( region.id, node.index );
+            if ( seen != newTile.region ) {
+                seen = newTile.region;
+                if ( ++distinctNeighbours > 1 ) {
+                    return false;
+                }
+            }
+        }
+
+        for ( uint8_t direction = 0; direction < 4; ++direction ) {
+            Node & adjacent = data.getNode( position + directionOffsets[direction] );
+
+            if ( adjacent.index == -1 || adjacent.region == region.id || mapRegions[adjacent.region].groundType == Maps::Ground::WATER ) {
+                continue;
+            }
+
+            Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );
+            if ( twoAway.index == -1 || twoAway.type != NodeType::OPEN ) {
+                continue;
+            }
+
+            if ( region.connections.find( adjacent.region ) == region.connections.end() ) {
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << adjacent.region << ", via " << node.index )
+                region.connections.emplace( adjacent.region, node.index );
+                mapRegions[adjacent.region].connections.emplace( region.id, node.index );
                 node.type = NodeType::CONNECTOR;
-                newTile.type = NodeType::PATH;
+                adjacent.type = NodeType::PATH;
+                twoAway.type = NodeType::PATH;
+
+                Node & stepBack = data.getNode( position - directionOffsets[direction] );
+                if ( stepBack.index != -1 ) {
+                    stepBack.type = NodeType::PATH;
+                }
+
                 break;
             }
         }
 
-        const bool connectionFound = node.type == NodeType::CONNECTOR;
-        return connectionFound;
+        return node.type == NodeType::CONNECTOR;
     }
 
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
@@ -716,7 +745,7 @@ namespace Maps::Random_Generator
         std::set<int32_t> startingLocations;
         std::set<int32_t> actionLocations;
 
-        for ( const Region & region : mapRegions ) {
+        for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
                 continue;
