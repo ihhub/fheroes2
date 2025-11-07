@@ -246,14 +246,12 @@ namespace
         int ring{ 0 };
     };
 
-    std::vector<PlacementTile> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
+    std::vector<std::vector<PlacementTile>> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
     {
         if ( region.centerIndex < 0 || region.nodes.empty() || mapWidth <= 0 ) {
             return {};
         }
 
-        std::vector<PlacementTile> ordered;
-        ordered.reserve( region.nodes.size() );
         std::vector<std::vector<PlacementTile>> buckets;
 
         const int centerX = region.centerIndex % mapWidth;
@@ -283,11 +281,8 @@ namespace
             }
 
             Rand::ShuffleWithGen( bucket, randomGenerator );
-
-            // Concatenate rings in ascending order.
-            ordered.insert( ordered.end(), bucket.begin(), bucket.end() );
         }
-        return ordered;
+        return buckets;
     }
 
     bool checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
@@ -790,18 +785,23 @@ namespace Maps::Random_Generator
                 }
             }
 
-            const std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
+            const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            for ( const int resource : resources ) {
-                // TODO: MapEconomy to track the values
-                for ( const PlacementTile & tile : sortedTiles ) {
-                    // TODO: a finer distribution based on ring #
-                    if ( tile.distance < 4 ) {
-                        continue;
+            const size_t primary = std::max( tileRings.size() / 4, static_cast<size_t>( 4 ) );
+            const size_t secondary = std::max( tileRings.size() * 2 / 3, static_cast<size_t>( 7 ) );
+
+            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                for ( const PlacementTile & tile : tileRings[primary] ) {
+                    const auto & node = data.getNode( tile.index );
+                    if ( placeMine( mapFormat, data, node, resource ) ) {
+                        actionLocations.insert( tile.index );
+                        break;
                     }
-                    if ( tile.distance < 10 && ( resource != Resource::WOOD && resource != Resource::ORE ) ) {
-                        continue;
-                    }
+                }
+            }
+
+            for ( const int resource : { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY } ) {
+                for ( const PlacementTile & tile : tileRings[secondary] ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         actionLocations.insert( tile.index );
