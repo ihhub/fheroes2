@@ -298,7 +298,7 @@ namespace
 
         int distinctNeighbours = 0;
         uint32_t seen = node.region;
-        for ( uint8_t direction = 0; direction < 8; ++direction ) {
+        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
             const Node & newTile = data.getNode( position + directionOffsets[direction] );
 
             if ( newTile.index == -1 || newTile.region == region.id ) {
@@ -411,18 +411,18 @@ namespace
 
     bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
     {
-        bool result = true;
+        bool invalid = false;
         fheroes2::Rect objectRect;
 
         iterateOverObjectParts( info, [&]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 ) {
-                result = false;
+                invalid = true;
                 return;
             }
             if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
-                result = false;
+                invalid = true;
                 return;
             }
 
@@ -430,8 +430,8 @@ namespace
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
         } );
 
-        if ( !result ) {
-            return result;
+        if ( invalid ) {
+            return false;
         }
 
         if ( isAction ) {
@@ -466,8 +466,7 @@ namespace
         }
 
         for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-            Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
-            pathNode.type = NodeType::PATH;
+            data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } ).type = NodeType::PATH;
         }
 
         // Mark extra nodes as path to avoid objects clumping together
@@ -616,7 +615,6 @@ namespace
         for ( const auto & obstacleId : obstacleList ) {
             const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
             if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
-                // markObjectPlacement( data, objectInfo, tilePos, false );
                 return true;
             }
         }
@@ -856,7 +854,7 @@ namespace Maps::Random_Generator
         // Set explicit paths
         for ( const Region & region : mapRegions ) {
             pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const auto connection : region.connections ) {
+            for ( const auto & connection : region.connections ) {
                 const auto & path = pathfinder.buildPath( connection.second );
                 for ( const auto & step : path ) {
                     data.getNode( step.GetIndex() ).type = NodeType::PATH;
@@ -883,7 +881,7 @@ namespace Maps::Random_Generator
 
         // Step 11: place monsters.
         for ( const Region & region : mapRegions ) {
-            for ( const auto connection : region.connections ) {
+            for ( const auto & connection : region.connections ) {
                 putObjectOnMap( mapFormat, world.getTile( connection.second ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
