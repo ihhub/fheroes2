@@ -22,7 +22,7 @@ version 1.1.12 (09 November 2025)
 - add army swap hot-key support inside the Castle dialog
 - update the Swedish translation
 - fix incorrect text area calculation for hot key dialog
-- make AI heroes on patrol return to their original position if nothing to do
+- make AI heroes on patrol return to their original position if there's nothing to do
 - add a button to toggle on/off all spells in the Shrines and Castles for the Editor
 - add Restart and Quick Save buttons in File Options dialog
 - make Adventure Options button resizable for better translation support
