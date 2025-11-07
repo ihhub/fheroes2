@@ -53,7 +53,7 @@ version 1.1.12 (09 November 2025)
 - grammar fix for winning condition
 - add initial iOS support
 - remove translation need to numbers
-- fix an assertion for a map already being created by the previous engine version
+- fix an assertion for maps that were made with a previous engine version
 - fix changing the resource count in the Editor for new placed resources
 
 version 1.1.11 (14 September 2025)
