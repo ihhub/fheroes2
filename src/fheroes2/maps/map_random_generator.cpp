@@ -777,7 +777,7 @@ namespace Maps::Random_Generator
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                int32_t castleDoor = mapFormat.width * ( castlePos.y + 1 ) + castlePos.x;
+                const int32_t castleDoor = mapFormat.width * ( castlePos.y + 1 ) + castlePos.x;
                 region.centerIndex = castleDoor;
                 startingLocations.insert( castleDoor );
             }
