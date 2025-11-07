@@ -1,6 +1,6 @@
 version 1.1.12 (09 November 2025)
 - increase the limit for event messages, map description and about section, Sphinx riddle and Sign text to 999
-- make AI do not cast Curse and Mass Curse spells on monsters with no damage range
+- make AI not cast Curse and Mass Curse spells on monsters with no damage range
 - add a button inside multi-monster selection window to toggle all on/off
 - add basic random map generator support
 - add army estimation mode option
