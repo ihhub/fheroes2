@@ -394,41 +394,46 @@ namespace
         }
     }
 
-    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
+    template <class F>
+    bool iterateOverObjectParts( const Maps::ObjectInfo & info, F && lambda )
     {
-        fheroes2::Rect objectRect;
-
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
                 // Shadow and terrain layer parts are ignored.
                 continue;
             }
 
-            const Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
-
-            if ( node.index == -1 ) {
-                return false;
-            }
-            if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
-                return false;
-            }
-
-            objectRect.x = std::min( objectRect.x, objectPart.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, objectPart.tileOffset.x );
+            lambda( objectPart );
         }
+        for ( const auto & objectPart : info.topLevelParts ) {
+            lambda( objectPart );
+        }
+        return true;
+    }
 
-        for ( const auto & partInfo : info.topLevelParts ) {
+    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
+    {
+        bool result = true;
+        fheroes2::Rect objectRect;
+
+        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 ) {
-                return false;
+                result = false;
+                return;
             }
             if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
-                return false;
+                result = false;
+                return;
             }
 
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
+        } );
+
+        if ( !result ) {
+            return result;
         }
 
         if ( isAction ) {
@@ -446,30 +451,20 @@ namespace
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction )
+    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
     {
         fheroes2::Rect objectRect;
 
-        for ( const auto & objectPart : objectInfo.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadow and terrain layer parts are ignored.
-                continue;
-            }
-
-            Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
-            objectRect.x = std::min( objectRect.x, objectPart.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, objectPart.tileOffset.x );
+        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
+            Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
+            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
+            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
 
             node.type = NodeType::OBSTACLE;
-        }
+        } );
 
         if ( !isAction ) {
             return;
-        }
-
-        for ( const auto & partInfo : objectInfo.topLevelParts ) {
-            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
         }
 
         for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
