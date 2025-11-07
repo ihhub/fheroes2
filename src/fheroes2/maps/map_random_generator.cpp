@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cstddef>
 #include <functional>
+#include <initializer_list>
 #include <list>
 #include <map>
 #include <ostream>
