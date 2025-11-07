@@ -42,8 +42,9 @@
       <description>
         <p>Changes in v1.1.12 (09 November 2025):</p>
         <ul>
+          <li>add a hot key modifier to move hero portrait to the top of the heroes list</li>
           <li>increase the limit for event messages, map description and about section, Sphinx riddle and Sign text to 999</li>
-          <li>make AI do not cast Curse and Mass Curse spells on monsters with no damage range</li>
+          <li>make AI not cast Curse and Mass Curse spells on monsters with no damage range</li>
           <li>add a button inside multi-monster selection window to toggle all on/off</li>
           <li>add basic random map generator support</li>
           <li>add army estimation mode option</li>
@@ -64,18 +65,18 @@
           <li>use ISO 639-1 standard for language abbreviations</li>
           <li>add army swap hot-key support inside the Castle dialog</li>
           <li>update the Swedish translation</li>
-          <li>fix incorrect text area calculation for hot-key dialog</li>
-          <li>make AI heroes on patrol return to their original position if nothing to do</li>
+          <li>fix incorrect text area calculation for hot key dialog</li>
+          <li>make AI heroes on patrol return to their original position if there's nothing to do</li>
           <li>add a button to toggle on/off all spells in the Shrines and Castles for the Editor</li>
           <li>add Restart and Quick Save buttons in File Options dialog</li>
           <li>make Adventure Options button resizable for better translation support</li>
-          <li>allow to use Backward and Forward mouse buttons as hot-key buttons</li>
+          <li>allow to use Backward and Forward mouse buttons as hot key buttons</li>
           <li>do not cancel Marketplace resource selection if no gift was made</li>
           <li>add startup text mode message</li>
           <li>make AI heroes predict weekly object states</li>
           <li>add extra conditions on hiring AI heroes</li>
           <li>fix blinking cursor while scrolling with keyboard in the Editor</li>
-          <li>remove dangling shadow part of the Ultimate Artifact</li>
+          <li>remove hanging shadow part of the Ultimate Artifact</li>
           <li>show hero levels in the Hero Meeting dialog</li>
           <li>allow to hold a character to repeat an action in the Virtual Keyboard</li>
           <li>add a new resolution icon</li>
@@ -96,8 +97,8 @@
           <li>grammar fix for winning condition</li>
           <li>add initial iOS support</li>
           <li>remove translation need to numbers</li>
-          <li>fix an assertion for a map already being created by the previous engine version</li>
-          <li>fix changing the resource count in the Editor for new placed resources</li>
+          <li>fix an assertion for maps that were made with a previous engine version</li>
+          <li>fix changing the resource amount in the Editor for newly placed resources</li>
         </ul>
       </description>
     </release>
