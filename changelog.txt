@@ -54,7 +54,7 @@ version 1.1.12 (09 November 2025)
 - add initial iOS support
 - remove translation need to numbers
 - fix an assertion for maps that were made with a previous engine version
-- fix changing the resource count in the Editor for new placed resources
+- fix changing the resource amount in the Editor for newly placed resources
 
 version 1.1.11 (14 September 2025)
 - update the Russian translation
