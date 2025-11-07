@@ -25,6 +25,8 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <functional>
+#include <list>
 #include <map>
 #include <ostream>
 #include <set>
@@ -47,6 +49,8 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "route.h"
+#include "skill.h"
 #include "ui_map_object.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -296,7 +300,7 @@ namespace
         int distinctNeighbours = 0;
         uint32_t seen = node.region;
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
-            Node & newTile = data.getNode( position + directionOffsets[direction] );
+            const Node & newTile = data.getNode( position + directionOffsets[direction] );
 
             if ( newTile.index == -1 || newTile.region == region.id ) {
                 continue;
@@ -390,7 +394,7 @@ namespace
     }
 
     template <class F>
-    bool iterateOverObjectParts( const Maps::ObjectInfo & info, F && lambda )
+    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const F & lambda )
     {
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
@@ -577,6 +581,13 @@ namespace
 
             markObjectPlacement( data, basementInfo, tilePos, false );
             markObjectPlacement( data, castleInfo, tilePos, true );
+
+            // Force roads coming from the castle
+            const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
+            if ( Maps::isValidAbsIndex( nextIndex ) ) {
+                Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
+                Maps::updateRoadOnTile( mapFormat, nextIndex, true );
+            }
 
             return true;
         }
@@ -772,7 +783,7 @@ namespace Maps::Random_Generator
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                const int32_t castleDoor = mapFormat.width * ( castlePos.y + 1 ) + castlePos.x;
+                const int32_t castleDoor = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
                 region.centerIndex = castleDoor;
                 startingLocations.insert( castleDoor );
             }
@@ -781,7 +792,7 @@ namespace Maps::Random_Generator
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
                 const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
                 if ( placeCastle( mapFormat, data, region, castlePos, useNeutralCastles ) ) {
-                    region.centerIndex = mapFormat.width * ( castlePos.y + 1 ) + castlePos.x;
+                    region.centerIndex = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
                 }
             }
 
@@ -795,6 +806,7 @@ namespace Maps::Random_Generator
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         actionLocations.insert( tile.index );
+                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex - 1 );
                         break;
                     }
                 }
@@ -805,6 +817,7 @@ namespace Maps::Random_Generator
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         actionLocations.insert( tile.index );
+                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
                     }
                 }
