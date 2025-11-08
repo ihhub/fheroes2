@@ -47,6 +47,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -193,9 +194,9 @@ namespace
 
     struct ObjectPlacement final
     {
-        fheroes2::Point offset{};
-        const Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
-        const int32_t objectIndex{ 0 };
+        fheroes2::Point offset;
+        Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
+        int32_t objectIndex{ 0 };
     };
 
     struct ObjectSet final
@@ -623,7 +624,7 @@ namespace
                 const bool isAction = MP2::isInGameActionObject( info.objectType );
                 const fheroes2::Point position = mainTilePos + placement.offset;
 
-                iterateOverObjectParts( info, [&data, &mainTilePos, isAction, &invalid]( const auto & partInfo ) {
+                iterateOverObjectParts( info, [&data, &mainTilePos, isAction, &invalid, &position]( const auto & partInfo ) {
                     const Node & node = data.getNode( position + partInfo.tileOffset );
 
                     if ( node.index == -1 || node.region == 0 ) {
@@ -808,7 +809,8 @@ namespace
             assert( objectIndex < 6 );
             return treeTypeFromGroundType( groundType ) + objectIndex;
         }
-        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
+
+        if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
             assert( objectIndex < 8 );
             return mountainTypeFromGroundType( groundType ) + objectIndex;
         }
@@ -1009,7 +1011,7 @@ namespace Maps::Random_Generator
 
             const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            const auto minePlacementLambda = [&]( const std::vector<PlacementTile> ring, const int resource ) {
+            const auto minePlacementLambda = [&]( const std::vector<PlacementTile> & ring, const int resource ) {
                 for ( const PlacementTile & tile : ring ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
@@ -1096,7 +1098,7 @@ namespace Maps::Random_Generator
                     break;
                 }
 
-                Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
+                const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
 
                 std::vector<ObjectSet> shuffledObjectSets = prefabObjectSets;
                 Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
