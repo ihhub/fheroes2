@@ -73,6 +73,7 @@ namespace
 
     constexpr uint8_t directionCount{ 8 };
     const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
+    static constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     // TODO: replace list of object indicies with a struct for a better variety
     const std::map<int, std::vector<int>> obstaclesPerGround = {
@@ -270,37 +271,23 @@ namespace
 
     struct MapEconomy final
     {
-        uint8_t sawmillsCount{ 0 };
-        uint8_t oreMinesCount{ 0 };
-        std::array<std::pair<int, uint32_t>, 4> secondaryMines{ { { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 }, { Resource::GEMS, 0 }, { Resource::MERCURY, 0 } } };
+        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
+                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
 
         void increaseMineCount( const int resource )
         {
-            if ( resource == Resource::WOOD ) {
-                ++sawmillsCount;
-            }
-            else if ( resource == Resource::ORE ) {
-                ++oreMinesCount;
-            }
-            else {
-                for ( auto & [resType, count] : secondaryMines ) {
-                    if ( resType == resource ) {
-                        ++count;
-                    }
-                }
-            }
+            const auto it = minesCount.find( resource );
+            assert( it != minesCount.end() );
+            ++it->second;
         }
 
-        int pickNextMineResource( const bool isPrimary )
+        int pickNextMineResource()
         {
-            if ( isPrimary ) {
-                return ( sawmillsCount > oreMinesCount ) ? Resource::ORE : Resource::WOOD;
-            }
+            const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
+                                              [this]( const auto & a, const auto & b ) { return minesCount.at( a ) < minesCount.at( b ); } );
+            assert( it != secondaryResources.end() );
 
-            const auto it = std::min_element( secondaryMines.begin(), secondaryMines.end(), []( const auto & a, const auto & b ) { return a.second < b.second; } );
-            assert( it != secondaryMines.end() );
-
-            return it->first;
+            return *it;
         }
     };
 
@@ -1036,8 +1023,8 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            for ( size_t idx = 0; idx < mapEconomy.secondaryMines.size(); ++idx ) {
-                const int resource = mapEconomy.pickNextMineResource( false );
+            for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
+                const int resource = mapEconomy.pickNextMineResource();
                 for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
                     const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
                     if ( mineIndex != -1 ) {
