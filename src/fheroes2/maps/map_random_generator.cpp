@@ -1034,6 +1034,8 @@ namespace Maps::Random_Generator
 
             for ( size_t idx = 0; idx < mapEconomy.secondaryMines.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource( false );
+
+                assert( tileRings.size() >= 3 );
                 for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
                     const auto & ring = tileRings[ringIndex];
                     const int mineIndex = minePlacementLambda( ring, resource );
