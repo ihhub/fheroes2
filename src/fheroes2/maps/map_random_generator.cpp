@@ -624,7 +624,7 @@ namespace
                 const bool isAction = MP2::isInGameActionObject( info.objectType );
                 const fheroes2::Point position = mainTilePos + placement.offset;
 
-                iterateOverObjectParts( info, [&data, &mainTilePos, isAction, &invalid, &position]( const auto & partInfo ) {
+                iterateOverObjectParts( info, [&data, &position, isAction, &invalid]( const auto & partInfo ) {
                     const Node & node = data.getNode( position + partInfo.tileOffset );
 
                     if ( node.index == -1 || node.region == 0 ) {
