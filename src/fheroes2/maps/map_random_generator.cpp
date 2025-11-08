@@ -626,7 +626,7 @@ namespace
                 iterateOverObjectParts( info, [&]( const auto & partInfo ) {
                     const Node & node = data.getNode( position + partInfo.tileOffset );
 
-                    if ( node.index == -1 ) {
+                    if ( node.index == -1 || node.region == 0 ) {
                         invalid = true;
                         return;
                     }
@@ -1009,16 +1009,22 @@ namespace Maps::Random_Generator
 
             const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            const size_t primary = std::max( tileRings.size() / 4, static_cast<size_t>( 4 ) );
-            const size_t secondary = std::max( tileRings.size() * 2 / 3, static_cast<size_t>( 7 ) );
-
-            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( const PlacementTile & tile : tileRings[primary] ) {
+            const auto minePlacementLambda = [&]( const std::vector<PlacementTile> ring, const int resource ) {
+                for ( const PlacementTile & tile : ring ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tile.index );
-                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex - 1 );
+                        return tile.index;
+                    }
+                }
+                return -1;
+            };
+
+            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ringIndex++ ) {
+                    const auto & ring = tileRings[ringIndex];
+                    if ( minePlacementLambda( ring, resource ) != -1 ) {
                         break;
                     }
                 }
@@ -1026,12 +1032,11 @@ namespace Maps::Random_Generator
 
             for ( size_t idx = 0; idx < mapEconomy.secondaryMines.size(); idx++ ) {
                 const int resource = mapEconomy.pickNextMineResource( false );
-                for ( const PlacementTile & tile : tileRings[secondary] ) {
-                    const auto & node = data.getNode( tile.index );
-                    if ( placeMine( mapFormat, data, node, resource ) ) {
-                        mapEconomy.increaseMineCount( resource );
-                        actionLocations.insert( tile.index );
-                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
+                for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; ringIndex-- ) {
+                    const auto & ring = tileRings[ringIndex];
+                    const int mineIndex = minePlacementLambda( ring, resource );
+                    if ( mineIndex != -1 ) {
+                        putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
                     }
                 }
