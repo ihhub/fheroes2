@@ -969,7 +969,7 @@ namespace Maps::Random_Generator
 
             // Fix missing references.
             for ( const uint32_t adjacent : region.neighbours ) {
-                const auto & [_, inserted] = mapRegions[adjacent].neighbours.insert( region.id );
+                const auto & [iter, inserted] = mapRegions[adjacent].neighbours.insert( region.id );
                 if ( inserted ) {
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Missing link between " << region.id << " and " << adjacent )
                 }
