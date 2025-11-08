@@ -300,6 +300,7 @@ namespace
             }
 
             const auto it = std::min_element( secondaryMines.begin(), secondaryMines.end(), []( const auto & a, const auto & b ) { return a.second < b.second; } );
+            assert( it != secondaryMines.end() );
 
             return it->first;
         }
