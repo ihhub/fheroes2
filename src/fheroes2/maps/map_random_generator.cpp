@@ -273,8 +273,6 @@ namespace
         uint8_t sawmillsCount{ 0 };
         uint8_t oreMinesCount{ 0 };
         std::array<std::pair<int, uint32_t>, 4> secondaryMines{ { { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 }, { Resource::GEMS, 0 }, { Resource::MERCURY, 0 } } };
-        uint8_t rareArtifactCount{ 0 };
-        int32_t treasureValue{ 0 };
 
         void increaseMineCount( const int resource )
         {
