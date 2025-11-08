@@ -572,7 +572,7 @@ namespace
         bool invalid = false;
         fheroes2::Rect objectRect;
 
-        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
+        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect, skipBorders, &invalid]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 || node.region == 0 ) {
@@ -623,7 +623,7 @@ namespace
                 const bool isAction = MP2::isInGameActionObject( info.objectType );
                 const fheroes2::Point position = mainTilePos + placement.offset;
 
-                iterateOverObjectParts( info, [&]( const auto & partInfo ) {
+                iterateOverObjectParts( info, [&data, &mainTilePos, isAction, &invalid]( const auto & partInfo ) {
                     const Node & node = data.getNode( position + partInfo.tileOffset );
 
                     if ( node.index == -1 || node.region == 0 ) {
@@ -649,7 +649,7 @@ namespace
     {
         fheroes2::Rect objectRect;
 
-        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
+        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect]( const auto & partInfo ) {
             Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
@@ -815,7 +815,7 @@ namespace
         return objectIndex;
     }
 
-    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
+    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
     {
         Maps::Tile & tile = world.getTile( node.index );
         const auto it = obstaclesPerGround.find( tile.GetGround() );
@@ -965,8 +965,8 @@ namespace Maps::Random_Generator
 
             // Fix missing references.
             for ( const uint32_t adjacent : region.neighbours ) {
-                const auto result = mapRegions[adjacent].neighbours.insert( region.id );
-                if ( result.second ) {
+                const auto & [_, inserted] = mapRegions[adjacent].neighbours.insert( region.id );
+                if ( inserted ) {
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Missing link between " << region.id << " and " << adjacent )
                 }
             }
@@ -1076,8 +1076,8 @@ namespace Maps::Random_Generator
         // Set explicit paths
         for ( const Region & region : mapRegions ) {
             pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const auto & connection : region.connections ) {
-                const auto & path = pathfinder.buildPath( connection.second );
+            for ( const auto & [_, tileIndex] : region.connections ) {
+                const auto & path = pathfinder.buildPath( tileIndex );
                 for ( const auto & step : path ) {
                     data.getNode( step.GetIndex() ).type = NodeType::PATH;
                     Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
@@ -1135,8 +1135,8 @@ namespace Maps::Random_Generator
 
         // Step 11: place monsters.
         for ( const Region & region : mapRegions ) {
-            for ( const auto & connection : region.connections ) {
-                putObjectOnMap( mapFormat, world.getTile( connection.second ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
+            for ( const auto & [_, tileIndex] : region.connections ) {
+                putObjectOnMap( mapFormat, world.getTile( tileIndex ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
 
