@@ -1012,7 +1012,7 @@ namespace Maps::Random_Generator
 
             const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            const auto minePlacementLambda = [&]( const std::vector<PlacementTile> & ring, const int resource ) {
+            const auto tryToPlaceMine = [&]( const std::vector<PlacementTile> & ring, const int resource ) {
                 for ( const PlacementTile & tile : ring ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
@@ -1027,7 +1027,7 @@ namespace Maps::Random_Generator
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
                     const auto & ring = tileRings[ringIndex];
-                    if ( minePlacementLambda( ring, resource ) != -1 ) {
+                    if ( tryToPlaceMine( ring, resource ) != -1 ) {
                         break;
                     }
                 }
@@ -1041,7 +1041,7 @@ namespace Maps::Random_Generator
                 const int resource = mapEconomy.pickNextMineResource( false );
                 for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
                     const auto & ring = tileRings[ringIndex];
-                    const int mineIndex = minePlacementLambda( ring, resource );
+                    const int mineIndex = tryToPlaceMine( ring, resource );
                     if ( mineIndex != -1 ) {
                         putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
