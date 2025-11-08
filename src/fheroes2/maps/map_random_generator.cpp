@@ -1024,7 +1024,7 @@ namespace Maps::Random_Generator
             };
 
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ringIndex++ ) {
+                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
                     const auto & ring = tileRings[ringIndex];
                     if ( minePlacementLambda( ring, resource ) != -1 ) {
                         break;
@@ -1032,7 +1032,7 @@ namespace Maps::Random_Generator
                 }
             }
 
-            for ( size_t idx = 0; idx < mapEconomy.secondaryMines.size(); idx++ ) {
+            for ( size_t idx = 0; idx < mapEconomy.secondaryMines.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource( false );
                 for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; ringIndex-- ) {
                     const auto & ring = tileRings[ringIndex];
@@ -1093,7 +1093,7 @@ namespace Maps::Random_Generator
         for ( const Region & region : mapRegions ) {
             int treasureObjectsPlaced = 0;
 
-            for ( int k = 0; k < maxPlacementAttempts; k++ ) {
+            for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
                 if ( treasureObjectsPlaced == regionObjectSetup[static_cast<size_t>( config.resourceDensity )].treasureCount ) {
                     break;
                 }
