@@ -1026,8 +1026,7 @@ namespace Maps::Random_Generator
 
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    const auto & ring = tileRings[ringIndex];
-                    if ( tryToPlaceMine( ring, resource ) != -1 ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) != -1 ) {
                         break;
                     }
                 }
@@ -1040,8 +1039,7 @@ namespace Maps::Random_Generator
             for ( size_t idx = 0; idx < mapEconomy.secondaryMines.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource( false );
                 for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
-                    const auto & ring = tileRings[ringIndex];
-                    const int mineIndex = tryToPlaceMine( ring, resource );
+                    const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
                     if ( mineIndex != -1 ) {
                         putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
