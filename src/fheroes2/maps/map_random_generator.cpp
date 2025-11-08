@@ -266,6 +266,43 @@ namespace
         { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
     } };
 
+    struct MapEconomy final
+    {
+        uint8_t sawmillsCount{ 0 };
+        uint8_t oreMinesCount{ 0 };
+        std::array<std::pair<int, uint32_t>, 4> secondaryMines{ { { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 }, { Resource::GEMS, 0 }, { Resource::MERCURY, 0 } } };
+        uint8_t rareArtifactCount{ 0 };
+        int32_t treasureValue{ 0 };
+
+        void increaseMineCount( const int resource )
+        {
+            if ( resource == Resource::WOOD ) {
+                ++sawmillsCount;
+            }
+            else if ( resource == Resource::ORE ) {
+                ++oreMinesCount;
+            }
+            else {
+                for ( auto & pair : secondaryMines ) {
+                    if ( pair.first == resource ) {
+                        ++pair.second;
+                    }
+                }
+            }
+        }
+
+        int pickNextMineResource( const bool isPrimary )
+        {
+            if ( isPrimary ) {
+                return ( sawmillsCount > oreMinesCount ) ? Resource::ORE : Resource::WOOD;
+            }
+
+            const auto it = std::min_element( secondaryMines.begin(), secondaryMines.end(), []( const auto & a, const auto & b ) { return a.second < b.second; } );
+
+            return it->first;
+        }
+    };
+
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
         // Water percentage cannot be 100 or more, or negative.
@@ -847,6 +884,7 @@ namespace Maps::Random_Generator
         Rand::PCG32 randomGenerator( generatorSeed );
 
         NodeCache data( width, height );
+        MapEconomy mapEconomy;
 
         auto mapBoundsCheck = [width, height]( int x, int y ) {
             x = std::clamp( x, 0, width - 1 );
@@ -978,6 +1016,7 @@ namespace Maps::Random_Generator
                 for ( const PlacementTile & tile : tileRings[primary] ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
+                        mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tile.index );
                         putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex - 1 );
                         break;
@@ -985,10 +1024,12 @@ namespace Maps::Random_Generator
                 }
             }
 
-            for ( const int resource : { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY } ) {
+            for ( size_t idx = 0; idx < mapEconomy.secondaryMines.size(); idx++ ) {
+                const int resource = mapEconomy.pickNextMineResource( false );
                 for ( const PlacementTile & tile : tileRings[secondary] ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
+                        mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tile.index );
                         putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
