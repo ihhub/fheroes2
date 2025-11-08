@@ -1119,7 +1119,7 @@ namespace Maps::Random_Generator
                         const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
                         putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
                     }
-                    treasureObjectsPlaced++;
+                    ++treasureObjectsPlaced;
                     break;
                 }
             }
