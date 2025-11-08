@@ -1080,7 +1080,7 @@ namespace Maps::Random_Generator
         // Set explicit paths
         for ( const Region & region : mapRegions ) {
             pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const auto & [_, tileIndex] : region.connections ) {
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
                 const auto & path = pathfinder.buildPath( tileIndex );
                 for ( const auto & step : path ) {
                     data.getNode( step.GetIndex() ).type = NodeType::PATH;
@@ -1139,7 +1139,7 @@ namespace Maps::Random_Generator
 
         // Step 11: place monsters.
         for ( const Region & region : mapRegions ) {
-            for ( const auto & [_, tileIndex] : region.connections ) {
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
                 putObjectOnMap( mapFormat, world.getTile( tileIndex ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
