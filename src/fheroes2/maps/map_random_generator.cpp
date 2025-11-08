@@ -25,6 +25,9 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <functional>
+#include <initializer_list>
+#include <list>
 #include <map>
 #include <ostream>
 #include <set>
@@ -47,6 +50,8 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "route.h"
+#include "skill.h"
 #include "ui_map_object.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -59,6 +64,7 @@ namespace
     constexpr int32_t emptySpacePercentage{ 40 };
     const int randomCastleIndex{ 12 };
     const int randomTownIndex{ 13 };
+    const int randomMonsterIndex{ 68 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
@@ -66,7 +72,12 @@ namespace
     constexpr uint8_t directionCount{ 8 };
     const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
 
-    const std::array<int, 7> resources{ Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
+    // TODO: replace list of object indicies with a struct for a better variety
+    const std::map<int, std::vector<int>> obstaclesPerGround = {
+        { Maps::Ground::DESERT, { 24, 25, 26, 27, 28, 29 } },    { Maps::Ground::SNOW, { 30, 31, 32, 33, 34, 35 } },  { Maps::Ground::SWAMP, { 18, 19, 20, 21, 22, 23 } },
+        { Maps::Ground::WASTELAND, { 12, 13, 14, 15, 16, 17 } }, { Maps::Ground::BEACH, { 24, 25, 26, 27, 28, 29 } }, { Maps::Ground::LAVA, { 6, 7, 8, 9, 10, 11 } },
+        { Maps::Ground::DIRT, { 18, 19, 20, 21, 22, 23 } },      { Maps::Ground::GRASS, { 0, 1, 2, 3, 4, 5 } },       { Maps::Ground::WATER, {} },
+    };
 
     enum class NodeType : uint8_t
     {
@@ -155,7 +166,8 @@ namespace
         uint32_t id{ 0 };
         int32_t centerIndex{ -1 };
         std::set<uint32_t> neighbours;
-        std::vector<Node> nodes;
+        std::vector<std::reference_wrapper<Node>> nodes;
+        std::map<uint32_t, int32_t> connections;
         size_t sizeLimit{ 0 };
         size_t lastProcessedNode{ 0 };
         int colorIndex{ neutralColorIndex };
@@ -163,18 +175,18 @@ namespace
 
         Region() = default;
 
-        Region( const uint32_t regionIndex, const int32_t mapIndex, const int playerColor, const int ground, const size_t expectedSize )
+        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize )
             : id( regionIndex )
-            , centerIndex( mapIndex )
+            , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
         {
             assert( expectedSize > 0 );
 
+            centerNode.region = regionIndex;
             nodes.reserve( expectedSize );
-            nodes.emplace_back( mapIndex );
-            nodes[0].region = regionIndex;
+            nodes.emplace_back( centerNode );
         }
     };
 
@@ -237,14 +249,12 @@ namespace
         int ring{ 0 };
     };
 
-    std::vector<PlacementTile> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
+    std::vector<std::vector<PlacementTile>> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
     {
         if ( region.centerIndex < 0 || region.nodes.empty() || mapWidth <= 0 ) {
             return {};
         }
 
-        std::vector<PlacementTile> ordered;
-        ordered.reserve( region.nodes.size() );
         std::vector<std::vector<PlacementTile>> buckets;
 
         const int centerX = region.centerIndex % mapWidth;
@@ -274,11 +284,65 @@ namespace
             }
 
             Rand::ShuffleWithGen( bucket, randomGenerator );
-
-            // Concatenate rings in ascending order.
-            ordered.insert( ordered.end(), bucket.begin(), bucket.end() );
         }
-        return ordered;
+        return buckets;
+    }
+
+    bool checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
+    {
+        if ( node.type != NodeType::BORDER ) {
+            return false;
+        }
+
+        const fheroes2::Point position = Maps::GetPoint( node.index );
+
+        int distinctNeighbours = 0;
+        uint32_t seen = node.region;
+        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
+            const Node & newTile = data.getNode( position + directionOffsets[direction] );
+
+            if ( newTile.index == -1 || newTile.region == region.id ) {
+                continue;
+            }
+
+            if ( seen != newTile.region ) {
+                seen = newTile.region;
+                if ( ++distinctNeighbours > 1 ) {
+                    return false;
+                }
+            }
+        }
+
+        for ( uint8_t direction = 0; direction < 4; ++direction ) {
+            Node & adjacent = data.getNode( position + directionOffsets[direction] );
+
+            if ( adjacent.index == -1 || adjacent.region == region.id || mapRegions[adjacent.region].groundType == Maps::Ground::WATER ) {
+                continue;
+            }
+
+            Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );
+            if ( twoAway.index == -1 || twoAway.type != NodeType::OPEN ) {
+                continue;
+            }
+
+            if ( region.connections.find( adjacent.region ) == region.connections.end() ) {
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << adjacent.region << ", via " << node.index )
+                region.connections.emplace( adjacent.region, node.index );
+                mapRegions[adjacent.region].connections.emplace( region.id, node.index );
+                node.type = NodeType::CONNECTOR;
+                adjacent.type = NodeType::PATH;
+                twoAway.type = NodeType::PATH;
+
+                Node & stepBack = data.getNode( position - directionOffsets[direction] );
+                if ( stepBack.index != -1 ) {
+                    stepBack.type = NodeType::PATH;
+                }
+
+                break;
+            }
+        }
+
+        return node.type == NodeType::CONNECTOR;
     }
 
     void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
@@ -295,7 +359,7 @@ namespace
             // Check diagonal direction only 50% of the time to get more circular distribution.
             // It gives randomness for uneven edges.
             if ( direction > 3 && Rand::GetWithGen( 0, 1, randomGenerator ) ) {
-                break;
+                continue;
             }
 
             // TODO: use node index and pre-calculate offsets in advance.
@@ -328,35 +392,46 @@ namespace
         }
     }
 
-    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
+    template <class F>
+    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const F & lambda )
     {
-        fheroes2::Rect objectRect;
-
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
                 // Shadow and terrain layer parts are ignored.
                 continue;
             }
 
-            const Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
-
-            if ( node.index == -1 || node.type != NodeType::OPEN ) {
-                return false;
-            }
-
-            objectRect.x = std::min( objectRect.x, objectPart.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, objectPart.tileOffset.x );
+            lambda( objectPart );
         }
+        for ( const auto & objectPart : info.topLevelParts ) {
+            lambda( objectPart );
+        }
+        return true;
+    }
 
-        for ( const auto & partInfo : info.topLevelParts ) {
+    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
+    {
+        bool invalid = false;
+        fheroes2::Rect objectRect;
+
+        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
-            if ( node.index == -1 || node.type != NodeType::OPEN ) {
-                return false;
+            if ( node.index == -1 || node.region == 0 ) {
+                invalid = true;
+                return;
+            }
+            if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
+                invalid = true;
+                return;
             }
 
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
+        } );
+
+        if ( invalid ) {
+            return false;
         }
 
         if ( isAction ) {
@@ -374,42 +449,31 @@ namespace
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & objectInfo, const fheroes2::Point & mainTilePos, const bool isAction )
+    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
     {
         fheroes2::Rect objectRect;
 
-        for ( const auto & objectPart : objectInfo.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadow and terrain layer parts are ignored.
-                continue;
-            }
-
-            Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
-            objectRect.x = std::min( objectRect.x, objectPart.tileOffset.x );
-            objectRect.y = std::min( objectRect.y, objectPart.tileOffset.y );
-            objectRect.width = std::max( objectRect.width, objectPart.tileOffset.x );
-            objectRect.height = std::max( objectRect.height, objectPart.tileOffset.y );
-
-            node.type = NodeType::OBSTACLE;
-        }
-
-        for ( const auto & partInfo : objectInfo.topLevelParts ) {
+        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
+            Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
+
+            node.type = NodeType::OBSTACLE;
+        } );
+
+        if ( !isAction ) {
+            return;
         }
 
-        if ( isAction ) {
-            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-                Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } );
-                pathNode.type = NodeType::PATH;
-            }
-
-            // Mark extra nodes as path to avoid objects clumping together
-            data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
-            data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
-
-            data.getNode( mainTilePos ).type = NodeType::ACTION;
+        for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
+            data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } ).type = NodeType::PATH;
         }
+
+        // Mark extra nodes as path to avoid objects clumping together
+        data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
+        data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
+
+        data.getNode( mainTilePos ).type = NodeType::ACTION;
     }
 
     bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
@@ -422,7 +486,6 @@ namespace
 
         // Do not update passabilities after every object placement.
         if ( !Maps::setObjectOnTile( tile, objectInfo, false ) ) {
-            assert( 0 );
             return false;
         }
 
@@ -435,7 +498,7 @@ namespace
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
+        if ( canFitObject( data, objectInfo, tilePos, true, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
             markObjectPlacement( data, objectInfo, tilePos, true );
             return true;
         }
@@ -465,7 +528,7 @@ namespace
         const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
         const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
-        if ( canFitObject( data, basementInfo, tilePos, false ) && canFitObject( data, castleInfo, tilePos, true ) ) {
+        if ( canFitObject( data, basementInfo, tilePos, false, true ) && canFitObject( data, castleInfo, tilePos, true, true ) ) {
             if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
                 return false;
             }
@@ -517,6 +580,13 @@ namespace
             markObjectPlacement( data, basementInfo, tilePos, false );
             markObjectPlacement( data, castleInfo, tilePos, true );
 
+            // Force roads coming from the castle
+            const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
+            if ( Maps::isValidAbsIndex( nextIndex ) ) {
+                Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
+                Maps::updateRoadOnTile( mapFormat, nextIndex, true );
+            }
+
             return true;
         }
 
@@ -525,15 +595,30 @@ namespace
 
     bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
     {
-        if ( node.type == NodeType::BORDER ) {
-            return false;
-        }
-        // TODO: check bottom tiles
-        //       Do we need to store node reference?
-        //       Also, set radius for mine type.
         Maps::Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
+    }
+
+    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
+    {
+        Maps::Tile & tile = world.getTile( node.index );
+        const auto it = obstaclesPerGround.find( tile.GetGround() );
+        if ( it == obstaclesPerGround.end() || it->second.empty() ) {
+            return false;
+        }
+
+        std::vector<int> obstacleList = it->second;
+        Rand::ShuffleWithGen( obstacleList, randomGenerator );
+
+        const fheroes2::Point tilePos = tile.GetCenter();
+        for ( const auto & obstacleId : obstacleList ) {
+            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
+            if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -581,7 +666,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, 0, neutralColorIndex, Ground::WATER, 1 } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -612,8 +697,12 @@ namespace Maps::Random_Generator
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, regionSizeLimit );
-                data.getNode( centerTile ).region = regionID;
+                Node & centerNode = data.getNode( centerTile );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit );
+
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
+                           "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
+                                     << Color::String( Color::IndexToColor( regionColor ) ) )
             }
         }
 
@@ -643,15 +732,18 @@ namespace Maps::Random_Generator
 
             // Fix missing references.
             for ( const uint32_t adjacent : region.neighbours ) {
-                mapRegions[adjacent].neighbours.insert( region.id );
+                const auto result = mapRegions[adjacent].neighbours.insert( region.id );
+                if ( result.second ) {
+                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Missing link between " << region.id << " and " << adjacent )
+                }
             }
         }
 
-        // Step 5. Object placement
-        std::vector<int> startingLocations;
-        std::vector<int> actionLocations;
+        // Step 5. Castles and mines placement
+        std::set<int32_t> startingLocations;
+        std::set<int32_t> actionLocations;
 
-        for ( const Region & region : mapRegions ) {
+        for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
                 continue;
@@ -688,43 +780,66 @@ namespace Maps::Random_Generator
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                startingLocations.push_back( mapFormat.width * ( castlePos.y + 1 ) + castlePos.x );
+                const int32_t castleDoor = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
+                region.centerIndex = castleDoor;
+                startingLocations.insert( castleDoor );
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
-                placeCastle( mapFormat, data, region, adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY ), useNeutralCastles );
+                const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
+                if ( placeCastle( mapFormat, data, region, castlePos, useNeutralCastles ) ) {
+                    region.centerIndex = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
+                }
             }
 
-            const std::vector<PlacementTile> sortedTiles = findOpenTilesSortedJittered( region, width, randomGenerator );
+            const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            for ( const int resource : resources ) {
-                // TODO: MapEconomy to track the values
-                for ( const PlacementTile & tile : sortedTiles ) {
-                    // TODO: a finer distribution based on ring #
-                    if ( tile.distance < 4 ) {
-                        continue;
-                    }
-                    if ( tile.distance < 10 && ( resource != Resource::WOOD && resource != Resource::ORE ) ) {
-                        continue;
-                    }
+            const size_t primary = std::max( tileRings.size() / 4, static_cast<size_t>( 4 ) );
+            const size_t secondary = std::max( tileRings.size() * 2 / 3, static_cast<size_t>( 7 ) );
+
+            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                for ( const PlacementTile & tile : tileRings[primary] ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
-                        actionLocations.push_back( tile.index );
+                        actionLocations.insert( tile.index );
+                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex - 1 );
+                        break;
+                    }
+                }
+            }
+
+            for ( const int resource : { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY } ) {
+                for ( const PlacementTile & tile : tileRings[secondary] ) {
+                    const auto & node = data.getNode( tile.index );
+                    if ( placeMine( mapFormat, data, node, resource ) ) {
+                        actionLocations.insert( tile.index );
+                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
                     }
                 }
             }
         }
 
-        // TODO: set up region connectors based on frequency settings and border length.
+        // Step 6. Set up region connectors based on frequency settings and border length.
+        for ( Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
+            for ( Node & node : region.nodes ) {
+                checkForRegionConnectors( data, mapRegions, region, node );
+            }
+        }
 
-        // TODO: generate road based paths.
+        for ( const Region & region : mapRegions ) {
+            for ( const Node & node : region.nodes ) {
+                if ( node.type == NodeType::BORDER ) {
+                    placeObstacle( mapFormat, data, node, randomGenerator );
+                }
+            }
+        }
 
-        // TODO: place objects while avoiding the borders.
-
-        // TODO: place treasure objects.
-
+        // Step 7. Set up pathfinder to generate road based paths.
         AIWorldPathfinder pathfinder;
         pathfinder.reset();
         const PlayerColor testPlayer = PlayerColor::BLUE;
@@ -733,11 +848,29 @@ namespace Maps::Random_Generator
         for ( int idx = 0; idx < width * height; ++idx ) {
             world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
         }
-
         world.resetPathfinder();
+        world.updatePassabilities();
+
+        // Set explicit paths
+        for ( const Region & region : mapRegions ) {
+            pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
+            for ( const auto & connection : region.connections ) {
+                const auto & path = pathfinder.buildPath( connection.second );
+                for ( const auto & step : path ) {
+                    data.getNode( step.GetIndex() ).type = NodeType::PATH;
+                    Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
+                }
+            }
+        }
+
+        // TODO: place objects while avoiding the borders.
+
+        // TODO: place treasure objects.
+        //
+        // TODO: fill big empty islands with obstacles
 
         for ( const int start : startingLocations ) {
-            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, 0U );
+            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const int action : actionLocations ) {
                 if ( pathfinder.getDistance( action ) == 0 ) {
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
@@ -746,7 +879,20 @@ namespace Maps::Random_Generator
             }
         }
 
-        // TODO: place monsters.
+        // Step 11: place monsters.
+        for ( const Region & region : mapRegions ) {
+            for ( const auto & connection : region.connections ) {
+                putObjectOnMap( mapFormat, world.getTile( connection.second ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
+            }
+        }
+
+        // Visual debug
+        for ( const Region & region : mapRegions ) {
+            for ( const Node & node : region.nodes ) {
+                const uint32_t metadata = static_cast<uint32_t>( node.type ) + 100 * node.region;
+                world.getTile( node.index ).UpdateRegion( metadata );
+            }
+        }
 
         // Set random map name and description to be unique.
         mapFormat.name = "Random map " + std::to_string( generatorSeed );
