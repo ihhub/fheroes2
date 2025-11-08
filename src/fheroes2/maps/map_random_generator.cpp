@@ -886,7 +886,6 @@ namespace Maps::Random_Generator
         Rand::PCG32 randomGenerator( generatorSeed );
 
         NodeCache data( width, height );
-        MapEconomy mapEconomy;
 
         auto mapBoundsCheck = [width, height]( int x, int y ) {
             x = std::clamp( x, 0, width - 1 );
@@ -977,6 +976,8 @@ namespace Maps::Random_Generator
         // Step 5. Castles and mines placement
         std::set<int32_t> startingLocations;
         std::set<int32_t> actionLocations;
+
+        MapEconomy mapEconomy;
 
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
