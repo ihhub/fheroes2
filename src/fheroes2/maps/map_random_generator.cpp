@@ -620,8 +620,8 @@ namespace
         }
 
         bool invalid = false;
-        for ( const auto & placements : { set.obstacles, set.valuables, set.monsters } ) {
-            for ( const auto & placement : placements ) {
+        for ( const auto * placements : { &set.obstacles, &set.valuables, &set.monsters } ) {
+            for ( const auto & placement : *placements ) {
                 const auto & info = Maps::getObjectInfo( placement.groupType, placement.objectIndex );
                 const bool isAction = MP2::isInGameActionObject( info.objectType );
                 const fheroes2::Point position = mainTilePos + placement.offset;
