@@ -285,9 +285,9 @@ namespace
                 ++oreMinesCount;
             }
             else {
-                for ( auto & pair : secondaryMines ) {
-                    if ( pair.first == resource ) {
-                        ++pair.second;
+                for ( auto & [resType, count] : secondaryMines ) {
+                    if ( resType == resource ) {
+                        ++count;
                     }
                 }
             }
