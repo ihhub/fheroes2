@@ -417,7 +417,7 @@ namespace
         iterateOverObjectParts( info, [&]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
-            if ( node.index == -1 ) {
+            if ( node.index == -1 || node.region == 0 ) {
                 invalid = true;
                 return;
             }
