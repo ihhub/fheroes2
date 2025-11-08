@@ -206,6 +206,7 @@ namespace
         std::vector<ObjectPlacement> monsters;
         std::vector<fheroes2::Point> entranceCheck;
     };
+
     const std::vector<ObjectSet> prefabObjectSets
         = { { ObjectSet{
                   { ObjectPlacement{ { 0, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 },
