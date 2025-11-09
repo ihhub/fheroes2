@@ -254,6 +254,25 @@ namespace
                   { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } // entranceCheck
               } } };
 
+    const std::vector<ObjectSet> powerupObjectSets = { {
+        ObjectSet{
+            { ObjectPlacement{ { 0, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 },
+              ObjectPlacement{ { 3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
+            { ObjectPlacement{ { 1, -1 }, Maps::ObjectGroup::ADVENTURE_POWER_UPS, 10 }, ObjectPlacement{ { 1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+              ObjectPlacement{ { 2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
+            { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+            { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
+        },
+        ObjectSet{
+            { ObjectPlacement{ { 0, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 },
+              ObjectPlacement{ { 3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
+            { ObjectPlacement{ { 1, -1 }, Maps::ObjectGroup::ADVENTURE_POWER_UPS, 12 }, ObjectPlacement{ { 1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+              ObjectPlacement{ { 2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
+            { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+            { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
+        },
+    } };
+
     struct RegionalObjects final
     {
         uint8_t castleCount{ 0 };
@@ -268,6 +287,56 @@ namespace
         { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
         { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
     } };
+
+    // Evaluating all treasure and power-ups using gold equivalent
+    // Benchmark is 1500 gold = 1000 experience; 1 primary attribute point worth 2000 gold
+    // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
+    //
+    // Warning: list has to be kept in sync with ObjectInfo. Potentially add it as metadata during populate.
+    const std::map<std::pair<Maps::ObjectGroup, int32_t>, int32_t> valuationLookup = {
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 6 }, 750 }, // Gold pile
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 7 }, 6000 }, // Genie lamp
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 8 }, 750 }, // Random resource
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, 1500 }, // Treasure chest
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 10 }, 1000 }, // Campfire
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 10 }, 2000 }, // Fort
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 11 }, 1500 }, // Gazebo
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 12 }, 2000 }, // Witch
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 13 }, 2000 }, // Mercenary camp
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 14 }, 1000 }, // Shrine 1st
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 15 }, 2000 }, // Shrine 2nd
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 16 }, 3000 }, // Shrine 3rd
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 18 }, 2000 }, // Standing stones
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 20 }, 3000 }, // Tree of knowledge
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 21 }, 8000 }, // Xanadu
+        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 92 }, 2000 }, // Treasure
+        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 93 }, 4000 }, // Minor
+        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 94 }, 10000 }, // Major
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 0 }, 250 }, // Peasant hut
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 1 }, 4000 }, // Ruins
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 2 }, 1500 }, // Tree house
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 3 }, 2000 }, // Watch tower
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 4 }, 2000 }, // Watch tower
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 5 }, 2000 }, // Halfling hole
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 6 }, 2000 }, // Halfling hole
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 7 }, 1500 }, // Tree city
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 9 }, 4000 }, // Desert tent
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 10 }, 6000 }, // City of the dead
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 11 }, 1500 }, // Excavation
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 12 }, 6000 }, // Troll bridge
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 13 }, 2000 }, // Archer house
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 14 }, 1500 }, // Goblin hut
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 15 }, 2000 }, // Dwarf cottage
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 17 }, 2000 }, // Wagon camp
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 18 }, 1500 }, // Cave
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 21 }, 4000 }, // Earth elementals
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 22 }, 4000 }, // Air elementals
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 23 }, 4000 }, // Fire elementals
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 24 }, 4000 }, // Water elementals
+    };
+
+    constexpr int32_t monster3Threshold = 3250;
+    constexpr int32_t monster4Threshold = 8250;
 
     struct MapEconomy final
     {
@@ -1081,8 +1150,37 @@ namespace Maps::Random_Generator
 
         // TODO: place treasure objects.
         for ( const Region & region : mapRegions ) {
-            int treasureObjectsPlaced = 0;
+            int powerupObjectsPlaced = 0;
+            for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+                if ( powerupObjectsPlaced == regionObjectSetup[static_cast<size_t>( config.resourceDensity )].powerUpsCount ) {
+                    break;
+                }
 
+                const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
+
+                std::vector<ObjectSet> shuffledObjectSets = powerupObjectSets;
+                Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
+                for ( const auto & prefab : shuffledObjectSets ) {
+                    if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
+                        continue;
+                    }
+
+                    for ( const auto & obstacle : prefab.obstacles ) {
+                        placeSimpleObject( mapFormat, data, node, obstacle );
+                    }
+                    for ( const auto & treasure : prefab.valuables ) {
+                        placeSimpleObject( mapFormat, data, node, treasure );
+                    }
+                    for ( const auto & monster : prefab.monsters ) {
+                        const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
+                        putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
+                    }
+                    ++powerupObjectsPlaced;
+                    break;
+                }
+            }
+
+            int treasureObjectsPlaced = 0;
             for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
                 if ( treasureObjectsPlaced == regionObjectSetup[static_cast<size_t>( config.resourceDensity )].treasureCount ) {
                     break;
@@ -1100,6 +1198,7 @@ namespace Maps::Random_Generator
                     for ( const auto & obstacle : prefab.obstacles ) {
                         placeSimpleObject( mapFormat, data, node, obstacle );
                     }
+                    bool first = true;
                     for ( const auto & treasure : prefab.valuables ) {
                         placeSimpleObject( mapFormat, data, node, treasure );
                     }
