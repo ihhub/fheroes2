@@ -20,9 +20,27 @@
 
 #pragma once
 
-#include <cstdint>
+#include "map_random_generator_info.h"
+
+namespace Maps::Map_Format
+{
+    struct MapFormat;
+}
+
+namespace Rand
+{
+    class PCG32;
+}
 
 namespace Maps::Random_Generator
 {
+    int32_t localizeObjectToTerrain( const ObjectGroup groupType, const int32_t objectIndex, const int groundType );
 
+    bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+    bool placeCastle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle );
+    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource );
+    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator );
+    bool placeSimpleObject( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement );
+    void placeObjectSet( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const std::vector<ObjectSet> & set,
+                         const uint8_t expectedCount, Rand::PCG32 & randomGenerator );
 }

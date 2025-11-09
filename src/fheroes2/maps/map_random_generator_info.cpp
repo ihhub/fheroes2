@@ -19,3 +19,23 @@
  ***************************************************************************/
 
 #include "map_random_generator_info.h"
+
+#include <cassert>
+
+namespace Maps::Random_Generator
+{
+    NodeCache::NodeCache( const int32_t width, const int32_t height )
+        : _mapSize( width )
+        , _outOfBounds( -1 )
+        , _data( static_cast<size_t>( width ) * height )
+    {
+        assert( width > 0 && height > 0 );
+        assert( width == height );
+
+        _outOfBounds.type = NodeType::BORDER;
+
+        for ( size_t i = 0; i < _data.size(); ++i ) {
+            _data[i].index = static_cast<int>( i );
+        }
+    }
+}
