@@ -1,3 +1,62 @@
+version 1.1.12 (09 November 2025)
+- add a hot key modifier to move hero portrait to the top of the heroes list
+- increase the limit for event messages, map description and about section, Sphinx riddle and Sign text to 999
+- make AI not cast Curse and Mass Curse spells on monsters with no damage range
+- add a button inside multi-monster selection window to toggle all on/off
+- add basic random map generator support
+- add army estimation mode option
+- display month, week and day in the castle construction screen
+- add ability to switch between towns/castles in Mage Guild
+- update calculation display of hero's remaining spell points in the spell point bar
+- improve the Town Gate description
+- add "4 Dimensions" map
+- add new Mass Dispel icon
+- fix Castle dialog's status bar flickering
+- use bigger EXIT button for Puzzle dialog
+- update the French translation
+- update Random Ultimate Artifact icon
+- add translation support for Hero's and Town's names for Resurrection maps
+- add a button to toggle on/off all Secondary Skills in Witch's Hut
+- fix incorrect AI army pre-battle optimization for flying units
+- add missing button mapping for Switch
+- use ISO 639-1 standard for language abbreviations
+- add army swap hot-key support inside the Castle dialog
+- update the Swedish translation
+- fix incorrect text area calculation for hot key dialog
+- make AI heroes on patrol return to their original position if there's nothing to do
+- add a button to toggle on/off all spells in the Shrines and Castles for the Editor
+- add Restart and Quick Save buttons in File Options dialog
+- make Adventure Options button resizable for better translation support
+- allow to use Backward and Forward mouse buttons as hot key buttons
+- do not cancel Marketplace resource selection if no gift was made
+- add startup text mode message
+- make AI heroes predict weekly object states
+- add extra conditions on hiring AI heroes
+- fix blinking cursor while scrolling with keyboard in the Editor
+- remove hanging shadow part of the Ultimate Artifact
+- show hero levels in the Hero Meeting dialog
+- allow to hold a character to repeat an action in the Virtual Keyboard
+- add a new resolution icon
+- show Turn Order dialog above the arena if there is enough space
+- add missing popups for all buttons in the Hero Meeting dialog
+- add missing popup dialog for Exit button in the Puzzle dialog
+- set a limit on multi-line text input to avoid going beyond the dialog
+- align Save Map right-click info with scenario selector
+- update the Danish translation
+- add support for simultaneous playback of multiple videos
+- add ability to delete maps from the map lists
+- do not show cell selection frame when no monster is selected for a brush in the Editor
+- update the German translation
+- add up and down arrows for multiline dialog
+- retry other spells from the guaranteed list if the chosen spell was not added
+- update the Ukrainian translation
+- update the Hungarian translation
+- grammar fix for winning condition
+- add initial iOS support
+- remove translation need to numbers
+- fix an assertion for maps that were made with a previous engine version
+- fix changing the resource amount in the Editor for newly placed resources
+
 version 1.1.11 (14 September 2025)
 - update the Russian translation
 - allow to customize and ban spells for the Mage Guild in the Editor
