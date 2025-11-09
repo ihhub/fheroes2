@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 12:04+0000\n"
+"POT-Creation-Date: 2025-11-06 06:58+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -5085,6 +5085,9 @@ msgid "hotkey|next hero"
 msgstr ""
 
 msgid "hotkey|change to hero under cursor"
+msgstr ""
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
 msgstr ""
 
 msgid "hotkey|start hero movement"

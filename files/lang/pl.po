@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 12:04+0000\n"
+"POT-Creation-Date: 2025-11-06 06:58+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5772,6 +5772,9 @@ msgstr "pokaż następnego bohatera"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "pokaż następnego bohatera"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|start hero movement"
