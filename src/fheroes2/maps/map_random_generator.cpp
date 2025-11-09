@@ -910,6 +910,40 @@ namespace
         }
         return false;
     }
+
+    bool placeObjectSet( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const std::vector<ObjectSet> & set,
+                         const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
+    {
+        int objectsPlaced = 0;
+        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+            if ( objectsPlaced == expectedCount ) {
+                break;
+            }
+
+            const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
+
+            std::vector<ObjectSet> shuffledObjectSets = powerupObjectSets;
+            Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
+            for ( const auto & prefab : shuffledObjectSets ) {
+                if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
+                    continue;
+                }
+
+                for ( const auto & obstacle : prefab.obstacles ) {
+                    placeSimpleObject( mapFormat, data, node, obstacle );
+                }
+                for ( const auto & treasure : prefab.valuables ) {
+                    placeSimpleObject( mapFormat, data, node, treasure );
+                }
+                for ( const auto & monster : prefab.monsters ) {
+                    const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
+                    putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
+                }
+                ++objectsPlaced;
+                break;
+            }
+        }
+    }
 }
 
 namespace Maps::Random_Generator
@@ -1122,7 +1156,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 7. Set up pathfinder to generate road based paths.
+        // Step 7. Set up pathfinder and generate road network.
         AIWorldPathfinder pathfinder;
         pathfinder.reset();
         const PlayerColor testPlayer = PlayerColor::BLUE;
@@ -1146,74 +1180,23 @@ namespace Maps::Random_Generator
             }
         }
 
-        // TODO: place objects while avoiding the borders.
-
-        // TODO: place treasure objects.
+        // Step 8: Place powerups and treasure clusters while avoiding the paths.
+        const auto & regionConfiguration = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
         for ( const Region & region : mapRegions ) {
-            int powerupObjectsPlaced = 0;
-            for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-                if ( powerupObjectsPlaced == regionObjectSetup[static_cast<size_t>( config.resourceDensity )].powerUpsCount ) {
-                    break;
-                }
+            placeObjectSet( mapFormat, data, region, powerupObjectSets, regionConfiguration.powerUpsCount, randomGenerator );
+            placeObjectSet( mapFormat, data, region, prefabObjectSets, regionConfiguration.treasureCount, randomGenerator );
+        }
 
-                const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
+        // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
-                std::vector<ObjectSet> shuffledObjectSets = powerupObjectSets;
-                Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
-                for ( const auto & prefab : shuffledObjectSets ) {
-                    if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
-                        continue;
-                    }
-
-                    for ( const auto & obstacle : prefab.obstacles ) {
-                        placeSimpleObject( mapFormat, data, node, obstacle );
-                    }
-                    for ( const auto & treasure : prefab.valuables ) {
-                        placeSimpleObject( mapFormat, data, node, treasure );
-                    }
-                    for ( const auto & monster : prefab.monsters ) {
-                        const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                        putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
-                    }
-                    ++powerupObjectsPlaced;
-                    break;
-                }
-            }
-
-            int treasureObjectsPlaced = 0;
-            for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-                if ( treasureObjectsPlaced == regionObjectSetup[static_cast<size_t>( config.resourceDensity )].treasureCount ) {
-                    break;
-                }
-
-                const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
-
-                std::vector<ObjectSet> shuffledObjectSets = prefabObjectSets;
-                Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
-                for ( const auto & prefab : shuffledObjectSets ) {
-                    if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
-                        continue;
-                    }
-
-                    for ( const auto & obstacle : prefab.obstacles ) {
-                        placeSimpleObject( mapFormat, data, node, obstacle );
-                    }
-                    bool first = true;
-                    for ( const auto & treasure : prefab.valuables ) {
-                        placeSimpleObject( mapFormat, data, node, treasure );
-                    }
-                    for ( const auto & monster : prefab.monsters ) {
-                        const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                        putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
-                    }
-                    ++treasureObjectsPlaced;
-                    break;
-                }
+        // Step 10: Place missing monsters.
+        for ( const Region & region : mapRegions ) {
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
+                putObjectOnMap( mapFormat, world.getTile( tileIndex ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
 
-        // TODO: fill big empty islands with obstacles
-
+        // Step 11: Validate that map is playable.
         for ( const int start : startingLocations ) {
             pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const int action : actionLocations ) {
@@ -1221,13 +1204,6 @@ namespace Maps::Random_Generator
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
                     return false;
                 }
-            }
-        }
-
-        // Step 11: place monsters.
-        for ( const Region & region : mapRegions ) {
-            for ( const auto & [regionId, tileIndex] : region.connections ) {
-                putObjectOnMap( mapFormat, world.getTile( tileIndex ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
 
