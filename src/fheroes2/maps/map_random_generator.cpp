@@ -47,6 +47,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -60,17 +61,19 @@
 namespace
 {
     const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
-    const int32_t smallestStartingRegionSize{ 200 };
+    constexpr int32_t smallestStartingRegionSize{ 200 };
     constexpr int32_t emptySpacePercentage{ 40 };
-    const int randomCastleIndex{ 12 };
-    const int randomTownIndex{ 13 };
-    const int randomMonsterIndex{ 68 };
+    constexpr int randomCastleIndex{ 12 };
+    constexpr int randomTownIndex{ 13 };
+    constexpr int randomMonsterIndex{ 68 };
+    constexpr int maxPlacementAttempts{ 30 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
     constexpr uint8_t directionCount{ 8 };
     const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
+    constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     // TODO: replace list of object indicies with a struct for a better variety
     const std::map<int, std::vector<int>> obstaclesPerGround = {
@@ -190,6 +193,67 @@ namespace
         }
     };
 
+    struct ObjectPlacement final
+    {
+        fheroes2::Point offset;
+        Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
+        int32_t objectIndex{ 0 };
+    };
+
+    struct ObjectSet final
+    {
+        std::vector<ObjectPlacement> obstacles;
+        std::vector<ObjectPlacement> valuables;
+        std::vector<ObjectPlacement> monsters;
+        std::vector<fheroes2::Point> entranceCheck;
+    };
+
+    const std::vector<ObjectSet> prefabObjectSets
+        = { { ObjectSet{
+                  { ObjectPlacement{ { 0, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 },
+                    ObjectPlacement{ { 3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
+                  { ObjectPlacement{ { 1, -1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { 2, -1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { 1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { 2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
+                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+                  { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
+              },
+              ObjectSet{
+                  { ObjectPlacement{ { -3, 0 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { -3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 0 },
+                    ObjectPlacement{ { 0, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
+                  { ObjectPlacement{ { -2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { -1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { -2, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { -1, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
+                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+                  { { 0, -1 }, { 1, -1 }, { 1, 0 } } // entranceCheck
+              },
+              ObjectSet{
+                  { ObjectPlacement{ { 3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 0 }, ObjectPlacement{ { 1, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 5 },
+                    ObjectPlacement{ { 3, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
+                  { ObjectPlacement{ { 1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { 2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { 1, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { 2, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
+                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+                  { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 } } // entranceCheck
+              },
+              ObjectSet{
+                  { ObjectPlacement{ { -3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 1 }, ObjectPlacement{ { -1, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 4 },
+                    ObjectPlacement{ { -3, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 } }, // obstacles
+                  { ObjectPlacement{ { -1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { -2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { -1, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { -2, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
+                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+                  { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 } } // entranceCheck
+              },
+              ObjectSet{
+                  { ObjectPlacement{ { -3, 0 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { -1, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 5 },
+                    ObjectPlacement{ { -3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 } }, // obstacles
+                  { ObjectPlacement{ { -2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
+                    ObjectPlacement{ { -1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
+                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+                  { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } // entranceCheck
+              } } };
+
     struct RegionalObjects final
     {
         uint8_t castleCount{ 0 };
@@ -199,11 +263,33 @@ namespace
         uint8_t treasureCount{ 0 };
     };
 
-    constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSets = { {
-        { 1, 2, 1, 1, 0 }, // ResourceDensity::SCARCE
-        { 1, 6, 2, 1, 1 }, // ResourceDensity::NORMAL
-        { 1, 7, 2, 2, 3 } // ResourceDensity::ABUNDANT
+    constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
+        { 1, 2, 1, 1, 2 }, // ResourceDensity::SCARCE
+        { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
+        { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
     } };
+
+    struct MapEconomy final
+    {
+        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
+                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
+
+        void increaseMineCount( const int resource )
+        {
+            const auto it = minesCount.find( resource );
+            assert( it != minesCount.end() );
+            ++it->second;
+        }
+
+        int pickNextMineResource()
+        {
+            const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
+                                              [this]( const auto & a, const auto & b ) { return minesCount.at( a ) < minesCount.at( b ); } );
+            assert( it != secondaryResources.end() );
+
+            return *it;
+        }
+    };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
@@ -213,7 +299,7 @@ namespace
         int32_t requiredSpace = 0;
 
         // Determine required space based on expected object count and their footprint (in tiles).
-        const auto & objectSet = regionObjectSets[static_cast<size_t>( config.resourceDensity )];
+        const auto & objectSet = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
         requiredSpace += objectSet.castleCount * 49;
         requiredSpace += objectSet.mineCount * 15;
         requiredSpace += objectSet.objectCount * 6;
@@ -286,6 +372,66 @@ namespace
             Rand::ShuffleWithGen( bucket, randomGenerator );
         }
         return buckets;
+    }
+
+    constexpr int32_t treeTypeFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 0;
+        case Maps::Ground::SNOW:
+            return 30;
+        case Maps::Ground::SWAMP:
+            return 0;
+        case Maps::Ground::LAVA:
+            return 6;
+        case Maps::Ground::DESERT:
+            return 24;
+        case Maps::Ground::DIRT:
+            return 18;
+        case Maps::Ground::WASTELAND:
+            return 12;
+        case Maps::Ground::BEACH:
+            return 24;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
+    }
+
+    constexpr int32_t mountainTypeFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 6;
+        case Maps::Ground::SNOW:
+            return 12;
+        case Maps::Ground::SWAMP:
+            return 18;
+        case Maps::Ground::LAVA:
+            return 24;
+        case Maps::Ground::DESERT:
+            return 30;
+        case Maps::Ground::DIRT:
+            return 36;
+        case Maps::Ground::WASTELAND:
+            return 44;
+        case Maps::Ground::BEACH:
+            return 0;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
     }
 
     bool checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
@@ -414,7 +560,7 @@ namespace
         bool invalid = false;
         fheroes2::Rect objectRect;
 
-        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
+        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect, skipBorders, &invalid]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 || node.region == 0 ) {
@@ -449,11 +595,49 @@ namespace
         return true;
     }
 
+    bool canFitObjectSet( const NodeCache & data, const ObjectSet & set, const fheroes2::Point & mainTilePos )
+    {
+        for ( const fheroes2::Point offset : set.entranceCheck ) {
+            const Node & node = data.getNode( mainTilePos + offset );
+            if ( node.index == -1 || node.type != NodeType::OPEN ) {
+                return false;
+            }
+        }
+
+        for ( const auto * placements : { &set.obstacles, &set.valuables, &set.monsters } ) {
+            for ( const auto & placement : *placements ) {
+                const auto & info = Maps::getObjectInfo( placement.groupType, placement.objectIndex );
+                const bool isAction = MP2::isInGameActionObject( info.objectType );
+                const fheroes2::Point position = mainTilePos + placement.offset;
+                bool invalid = false;
+
+                iterateOverObjectParts( info, [&data, &position, isAction, &invalid]( const auto & partInfo ) {
+                    const Node & node = data.getNode( position + partInfo.tileOffset );
+
+                    if ( node.index == -1 || node.region == 0 ) {
+                        invalid = true;
+                        return;
+                    }
+                    if ( node.type != NodeType::OPEN && ( isAction || node.type != NodeType::BORDER ) ) {
+                        invalid = true;
+                        return;
+                    }
+                } );
+
+                if ( invalid ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
     {
         fheroes2::Rect objectRect;
 
-        iterateOverObjectParts( info, [&]( const auto & partInfo ) {
+        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect]( const auto & partInfo ) {
             Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
@@ -484,6 +668,12 @@ namespace
             return false;
         }
 
+        const MP2::MapObjectType mp2Type = objectInfo.objectType;
+        // Maps::setObjectOnTile isn't idempotent, check if object was already placed
+        if ( MP2::isInGameActionObject( mp2Type ) && tile.getMainObjectType() == mp2Type ) {
+            return false;
+        }
+
         // Do not update passabilities after every object placement.
         if ( !Maps::setObjectOnTile( tile, objectInfo, false ) ) {
             return false;
@@ -506,12 +696,12 @@ namespace
         return false;
     }
 
-    fheroes2::Point adjustCastlePlacement( const int32_t regionCenter, const int32_t mapWidth, const int targetX, const int targetY )
+    fheroes2::Point adjustRegionToFitCastle( const Maps::Map_Format::MapFormat & mapFormat, Region & region )
     {
-        const int regionX = regionCenter % mapWidth;
-        const int regionY = regionCenter / mapWidth;
-        const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapWidth - 4 );
-        const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapWidth - 3 );
+        const fheroes2::Point startingLocation = Maps::GetPoint( region.centerIndex );
+        const int32_t castleX = std::min( std::max( startingLocation.x, 4 ), mapFormat.width - 4 );
+        const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
+        region.centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
         return { castleX, castleY };
     }
 
@@ -600,7 +790,21 @@ namespace
         return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
-    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
+    int32_t localizeObjectToTerrain( const Maps::ObjectGroup groupType, const int32_t objectIndex, const int groundType )
+    {
+        if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
+            assert( objectIndex < 6 );
+            return treeTypeFromGroundType( groundType ) + objectIndex;
+        }
+
+        if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
+            assert( objectIndex < 8 );
+            return mountainTypeFromGroundType( groundType ) + objectIndex;
+        }
+        return objectIndex;
+    }
+
+    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
     {
         Maps::Tile & tile = world.getTile( node.index );
         const auto it = obstaclesPerGround.find( tile.GetGround() );
@@ -617,6 +821,23 @@ namespace
             if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    bool placeSimpleObject( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement )
+    {
+        const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
+        if ( !Maps::isValidAbsPoint( position.x, position.y ) ) {
+            return false;
+        }
+
+        Maps::Tile & tile = world.getTile( position.x, position.y );
+        const int32_t objectIndex = localizeObjectToTerrain( placement.groupType, placement.objectIndex, tile.GetGround() );
+        const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
+        if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
+            markObjectPlacement( data, objectInfo, position, false );
+            return true;
         }
         return false;
     }
@@ -732,8 +953,8 @@ namespace Maps::Random_Generator
 
             // Fix missing references.
             for ( const uint32_t adjacent : region.neighbours ) {
-                const auto result = mapRegions[adjacent].neighbours.insert( region.id );
-                if ( result.second ) {
+                const auto & [iter, inserted] = mapRegions[adjacent].neighbours.insert( region.id );
+                if ( inserted ) {
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Missing link between " << region.id << " and " << adjacent )
                 }
             }
@@ -742,6 +963,8 @@ namespace Maps::Random_Generator
         // Step 5. Castles and mines placement
         std::set<int32_t> startingLocations;
         std::set<int32_t> actionLocations;
+
+        MapEconomy mapEconomy;
 
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
@@ -752,69 +975,60 @@ namespace Maps::Random_Generator
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
                        "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
-            int xMin = 0;
-            int xMax = width;
-            int yMin = 0;
-            int yMax = height;
-
             for ( const Node & node : region.nodes ) {
-                const int nodeX = node.index % width;
-                const int nodeY = node.index / width;
-                xMin = std::max( xMin, nodeX );
-                xMax = std::min( xMax, nodeX );
-                yMin = std::max( yMin, nodeY );
-                yMax = std::min( yMax, nodeY );
-
                 if ( node.type == NodeType::BORDER ) {
                     Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region.groundType );
                 }
             }
 
-            const int centerX = ( xMin + xMax ) / 2;
-            const int centerY = ( yMin + yMax ) / 2;
-
             if ( region.colorIndex != neutralColorIndex ) {
-                const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
+                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
                 if ( !placeCastle( mapFormat, data, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                const int32_t castleDoor = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
-                region.centerIndex = castleDoor;
-                startingLocations.insert( castleDoor );
+                startingLocations.insert( region.centerIndex );
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
-                const fheroes2::Point castlePos = adjustCastlePlacement( region.centerIndex, mapFormat.width, centerX, centerY );
-                if ( placeCastle( mapFormat, data, region, castlePos, useNeutralCastles ) ) {
-                    region.centerIndex = mapFormat.width * ( castlePos.y + 2 ) + castlePos.x;
-                }
+                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
+                placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
             }
 
             const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            const size_t primary = std::max( tileRings.size() / 4, static_cast<size_t>( 4 ) );
-            const size_t secondary = std::max( tileRings.size() * 2 / 3, static_cast<size_t>( 7 ) );
-
-            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( const PlacementTile & tile : tileRings[primary] ) {
+            const auto tryToPlaceMine = [&]( const std::vector<PlacementTile> & ring, const int resource ) {
+                for ( const PlacementTile & tile : ring ) {
                     const auto & node = data.getNode( tile.index );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
+                        mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tile.index );
-                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex - 1 );
+                        return tile.index;
+                    }
+                }
+                return -1;
+            };
+
+            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) != -1 ) {
                         break;
                     }
                 }
             }
 
-            for ( const int resource : { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY } ) {
-                for ( const PlacementTile & tile : tileRings[secondary] ) {
-                    const auto & node = data.getNode( tile.index );
-                    if ( placeMine( mapFormat, data, node, resource ) ) {
-                        actionLocations.insert( tile.index );
-                        putObjectOnMap( mapFormat, world.getTile( tile.index + width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
+            if ( tileRings.size() < 4 ) {
+                continue;
+            }
+
+            for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
+                const int resource = mapEconomy.pickNextMineResource();
+                for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
+                    const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
+                    if ( mineIndex != -1 ) {
+                        putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
                     }
                 }
@@ -854,8 +1068,8 @@ namespace Maps::Random_Generator
         // Set explicit paths
         for ( const Region & region : mapRegions ) {
             pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const auto & connection : region.connections ) {
-                const auto & path = pathfinder.buildPath( connection.second );
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
+                const auto & path = pathfinder.buildPath( tileIndex );
                 for ( const auto & step : path ) {
                     data.getNode( step.GetIndex() ).type = NodeType::PATH;
                     Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
@@ -866,7 +1080,39 @@ namespace Maps::Random_Generator
         // TODO: place objects while avoiding the borders.
 
         // TODO: place treasure objects.
-        //
+        for ( const Region & region : mapRegions ) {
+            int treasureObjectsPlaced = 0;
+
+            for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+                if ( treasureObjectsPlaced == regionObjectSetup[static_cast<size_t>( config.resourceDensity )].treasureCount ) {
+                    break;
+                }
+
+                const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
+
+                std::vector<ObjectSet> shuffledObjectSets = prefabObjectSets;
+                Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
+                for ( const auto & prefab : shuffledObjectSets ) {
+                    if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
+                        continue;
+                    }
+
+                    for ( const auto & obstacle : prefab.obstacles ) {
+                        placeSimpleObject( mapFormat, data, node, obstacle );
+                    }
+                    for ( const auto & treasure : prefab.valuables ) {
+                        placeSimpleObject( mapFormat, data, node, treasure );
+                    }
+                    for ( const auto & monster : prefab.monsters ) {
+                        const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
+                        putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
+                    }
+                    ++treasureObjectsPlaced;
+                    break;
+                }
+            }
+        }
+
         // TODO: fill big empty islands with obstacles
 
         for ( const int start : startingLocations ) {
@@ -881,8 +1127,8 @@ namespace Maps::Random_Generator
 
         // Step 11: place monsters.
         for ( const Region & region : mapRegions ) {
-            for ( const auto & connection : region.connections ) {
-                putObjectOnMap( mapFormat, world.getTile( connection.second ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
+                putObjectOnMap( mapFormat, world.getTile( tileIndex ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
 
