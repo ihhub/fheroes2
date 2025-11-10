@@ -60,7 +60,7 @@
 #include "world_object_uid.h"
 #include "world_pathfinding.h"
 
-namespace Maps::Random_Generator
+namespace
 {
     constexpr int32_t smallestStartingRegionSize{ 200 };
     constexpr int32_t emptySpacePercentage{ 40 };
@@ -71,7 +71,10 @@ namespace Maps::Random_Generator
 
     constexpr uint8_t directionCount{ 8 };
     const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
-    constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
+}
+
+namespace Maps::Random_Generator
+{
 
     const std::vector<ObjectSet> prefabObjectSets
         = { { ObjectSet{
@@ -138,92 +141,11 @@ namespace Maps::Random_Generator
         },
     } };
 
-    struct RegionalObjects final
-    {
-        uint8_t castleCount{ 0 };
-        uint8_t mineCount{ 0 };
-        uint8_t objectCount{ 0 };
-        uint8_t powerUpsCount{ 0 };
-        uint8_t treasureCount{ 0 };
-    };
-
     constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
         { 1, 2, 1, 1, 2 }, // ResourceDensity::SCARCE
         { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
         { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
     } };
-
-    // Evaluating all treasure and power-ups using gold equivalent
-    // Benchmark is 1500 gold = 1000 experience; 1 primary attribute point worth 2000 gold
-    // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
-    //
-    // Warning: list has to be kept in sync with ObjectInfo. Potentially add it as metadata during populate.
-    const std::map<std::pair<Maps::ObjectGroup, int32_t>, int32_t> valuationLookup = {
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 6 }, 750 }, // Gold pile
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 7 }, 6000 }, // Genie lamp
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 8 }, 750 }, // Random resource
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, 1500 }, // Treasure chest
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 10 }, 1000 }, // Campfire
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 10 }, 2000 }, // Fort
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 11 }, 1500 }, // Gazebo
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 12 }, 2000 }, // Witch
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 13 }, 2000 }, // Mercenary camp
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 14 }, 1000 }, // Shrine 1st
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 15 }, 2000 }, // Shrine 2nd
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 16 }, 3000 }, // Shrine 3rd
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 18 }, 2000 }, // Standing stones
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 20 }, 3000 }, // Tree of knowledge
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 21 }, 8000 }, // Xanadu
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 92 }, 2000 }, // Treasure
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 93 }, 4000 }, // Minor
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 94 }, 10000 }, // Major
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 0 }, 250 }, // Peasant hut
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 1 }, 4000 }, // Ruins
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 2 }, 1500 }, // Tree house
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 3 }, 2000 }, // Watch tower
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 4 }, 2000 }, // Watch tower
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 5 }, 2000 }, // Halfling hole
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 6 }, 2000 }, // Halfling hole
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 7 }, 1500 }, // Tree city
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 9 }, 4000 }, // Desert tent
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 10 }, 6000 }, // City of the dead
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 11 }, 1500 }, // Excavation
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 12 }, 6000 }, // Troll bridge
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 13 }, 2000 }, // Archer house
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 14 }, 1500 }, // Goblin hut
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 15 }, 2000 }, // Dwarf cottage
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 17 }, 2000 }, // Wagon camp
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 18 }, 1500 }, // Cave
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 21 }, 4000 }, // Earth elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 22 }, 4000 }, // Air elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 23 }, 4000 }, // Fire elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 24 }, 4000 }, // Water elementals
-    };
-
-    constexpr int32_t monster3Threshold = 3250;
-    constexpr int32_t monster4Threshold = 8250;
-
-    struct MapEconomy final
-    {
-        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
-                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
-
-        void increaseMineCount( const int resource )
-        {
-            const auto it = minesCount.find( resource );
-            assert( it != minesCount.end() );
-            ++it->second;
-        }
-
-        int pickNextMineResource()
-        {
-            const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
-                                              [this]( const auto & a, const auto & b ) { return minesCount.at( a ) < minesCount.at( b ); } );
-            assert( it != secondaryResources.end() );
-
-            return *it;
-        }
-    };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
@@ -260,52 +182,6 @@ namespace Maps::Random_Generator
         const int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
 
         return groundTiles / canFit;
-    }
-
-    struct PlacementTile final
-    {
-        int index{ 0 };
-        float distance{ 0 };
-        int ring{ 0 };
-    };
-
-    std::vector<std::vector<PlacementTile>> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
-    {
-        if ( region.centerIndex < 0 || region.nodes.empty() || mapWidth <= 0 ) {
-            return {};
-        }
-
-        std::vector<std::vector<PlacementTile>> buckets;
-
-        const int centerX = region.centerIndex % mapWidth;
-        const int centerY = region.centerIndex / mapWidth;
-
-        for ( const Node & node : region.nodes ) {
-            if ( node.type != NodeType::OPEN || node.index < 0 ) {
-                continue;
-            }
-
-            const int dx = ( node.index % mapWidth ) - centerX;
-            const int dy = ( node.index / mapWidth ) - centerY;
-
-            const float distance = std::sqrt( static_cast<float>( dx * dx + dy * dy ) );
-            const int noise = static_cast<int>( Rand::GetWithGen( 0, 2, randomGenerator ) );
-            const int ring = static_cast<int>( std::floor( distance ) ) + noise;
-            if ( static_cast<size_t>( ring ) >= buckets.size() ) {
-                buckets.resize( ring + 1 );
-            }
-
-            buckets[ring].push_back( { node.index, distance, ring } );
-        }
-
-        for ( auto & bucket : buckets ) {
-            if ( bucket.empty() ) {
-                continue;
-            }
-
-            Rand::ShuffleWithGen( bucket, randomGenerator );
-        }
-        return buckets;
     }
 
     bool checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
@@ -576,15 +452,15 @@ namespace Maps::Random_Generator
                 placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
             }
 
-            const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
+            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            const auto tryToPlaceMine = [&]( const std::vector<PlacementTile> & ring, const int resource ) {
-                for ( const PlacementTile & tile : ring ) {
-                    const auto & node = data.getNode( tile.index );
+            const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
+                for ( const int32_t & tileIndex : ring ) {
+                    const auto & node = data.getNode( tileIndex );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         mapEconomy.increaseMineCount( resource );
-                        actionLocations.insert( tile.index );
-                        return tile.index;
+                        actionLocations.insert( tileIndex );
+                        return tileIndex;
                     }
                 }
                 return -1;

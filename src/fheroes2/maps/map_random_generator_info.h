@@ -25,10 +25,12 @@
 
 #include "map_object_info.h"
 #include "math_base.h"
+#include "resource.h"
 
 namespace Maps::Random_Generator
 {
-    const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
+    inline int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
+    inline constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     enum class NodeType : uint8_t
     {
@@ -126,6 +128,24 @@ namespace Maps::Random_Generator
             nodes.reserve( expectedSize );
             nodes.emplace_back( centerNode );
         }
+    };
+
+    struct MapEconomy final
+    {
+        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
+                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
+
+        void increaseMineCount( const int resource );
+        int pickNextMineResource();
+    };
+
+    struct RegionalObjects final
+    {
+        uint8_t castleCount{ 0 };
+        uint8_t mineCount{ 0 };
+        uint8_t objectCount{ 0 };
+        uint8_t powerUpsCount{ 0 };
+        uint8_t treasureCount{ 0 };
     };
 
     struct ObjectPlacement final

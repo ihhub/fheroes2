@@ -38,4 +38,20 @@ namespace Maps::Random_Generator
             _data[i].index = static_cast<int>( i );
         }
     }
+
+    void MapEconomy::increaseMineCount( const int resource )
+    {
+        const auto it = minesCount.find( resource );
+        assert( it != minesCount.end() );
+        ++it->second;
+    }
+
+    int MapEconomy::pickNextMineResource()
+    {
+        const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
+                                          [this]( const auto & a, const auto & b ) { return minesCount.at( a ) < minesCount.at( b ); } );
+        assert( it != secondaryResources.end() );
+
+        return *it;
+    }
 }
