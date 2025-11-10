@@ -392,7 +392,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool actionObjectPlacer( Map_Format::MapFormat & mapFormat, NodeCache & data, Tile & tile, const ObjectGroup groupType, const int32_t type )
+    bool placeActionObject( Map_Format::MapFormat & mapFormat, NodeCache & data, Tile & tile, const ObjectGroup groupType, const int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
@@ -486,7 +486,7 @@ namespace Maps::Random_Generator
     {
         Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-        return actionObjectPlacer( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType );
+        return placeActionObject( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
     bool placeObstacle( Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )

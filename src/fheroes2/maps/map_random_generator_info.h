@@ -35,6 +35,16 @@
 #include "math_base.h"
 #include "resource.h"
 
+namespace Maps::Map_Format
+{
+    struct MapFormat;
+}
+
+namespace Rand
+{
+    class PCG32;
+}
+
 namespace Maps::Random_Generator
 {
     inline int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
@@ -136,6 +146,11 @@ namespace Maps::Random_Generator
             nodes.reserve( expectedSize );
             nodes.emplace_back( centerNode );
         }
+
+        void checkAdjacentTiles( NodeCache & rawData, Rand::PCG32 & randomGenerator );
+        bool regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator );
+        bool checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node );
+        fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat );
     };
 
     struct MapEconomy final

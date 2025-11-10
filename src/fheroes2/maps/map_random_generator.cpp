@@ -63,13 +63,52 @@ namespace
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
-    constexpr uint8_t directionCount{ 8 };
-    const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
+    constexpr std::array<Maps::Random_Generator::RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
+        { 1, 2, 1, 1, 2 }, // ResourceDensity::SCARCE
+        { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
+        { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
+    } };
+
+    int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
+    {
+        // Water percentage cannot be 100 or more, or negative.
+        assert( config.waterPercentage >= 0 && config.waterPercentage < 100 );
+
+        int32_t requiredSpace = 0;
+
+        // Determine required space based on expected object count and their footprint (in tiles).
+        const auto & objectSet = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
+        requiredSpace += objectSet.castleCount * 49;
+        requiredSpace += objectSet.mineCount * 15;
+        requiredSpace += objectSet.objectCount * 6;
+        requiredSpace += objectSet.powerUpsCount * 9;
+        requiredSpace += objectSet.treasureCount * 16;
+
+        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Space required for density " << static_cast<int32_t>( config.resourceDensity ) << " is " << requiredSpace );
+
+        requiredSpace = requiredSpace * 100 / ( 100 - emptySpacePercentage );
+
+        const double innerRadius = std::ceil( sqrt( requiredSpace / M_PI ) );
+        const int32_t borderSize = static_cast<int32_t>( 2 * ( innerRadius + 1 ) * M_PI );
+        const int32_t targetRegionSize = requiredSpace + borderSize;
+
+        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Region target size is " << requiredSpace << " + " << borderSize << " = " << targetRegionSize );
+
+        // Inner and outer circles, update later to handle other layouts.
+        const int32_t upperLimit = config.playerCount * 3;
+
+        const int32_t totalTileCount = width * height;
+        const int32_t groundTiles = totalTileCount * ( 100 - config.waterPercentage ) / 100;
+
+        const int32_t average = groundTiles / targetRegionSize;
+        const int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
+
+        return groundTiles / canFit;
+    }
 }
 
 namespace Maps::Random_Generator
 {
-
     const std::vector<ObjectSet> prefabObjectSets
         = { { ObjectSet{
                   { ObjectPlacement{ { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
@@ -130,165 +169,6 @@ namespace Maps::Random_Generator
         },
     } };
 
-    constexpr std::array<RegionalObjects, static_cast<size_t>( ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
-        { 1, 2, 1, 1, 2 }, // ResourceDensity::SCARCE
-        { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
-        { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
-    } };
-
-    int32_t calculateRegionSizeLimit( const Configuration & config, const int32_t width, const int32_t height )
-    {
-        // Water percentage cannot be 100 or more, or negative.
-        assert( config.waterPercentage >= 0 && config.waterPercentage < 100 );
-
-        int32_t requiredSpace = 0;
-
-        // Determine required space based on expected object count and their footprint (in tiles).
-        const auto & objectSet = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
-        requiredSpace += objectSet.castleCount * 49;
-        requiredSpace += objectSet.mineCount * 15;
-        requiredSpace += objectSet.objectCount * 6;
-        requiredSpace += objectSet.powerUpsCount * 9;
-        requiredSpace += objectSet.treasureCount * 16;
-
-        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Space required for density " << static_cast<int32_t>( config.resourceDensity ) << " is " << requiredSpace );
-
-        requiredSpace = requiredSpace * 100 / ( 100 - emptySpacePercentage );
-
-        const double innerRadius = std::ceil( sqrt( requiredSpace / M_PI ) );
-        const int32_t borderSize = static_cast<int32_t>( 2 * ( innerRadius + 1 ) * M_PI );
-        const int32_t targetRegionSize = requiredSpace + borderSize;
-
-        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Region target size is " << requiredSpace << " + " << borderSize << " = " << targetRegionSize );
-
-        // Inner and outer circles, update later to handle other layouts.
-        const int32_t upperLimit = config.playerCount * 3;
-
-        const int32_t totalTileCount = width * height;
-        const int32_t groundTiles = totalTileCount * ( 100 - config.waterPercentage ) / 100;
-
-        const int32_t average = groundTiles / targetRegionSize;
-        const int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
-
-        return groundTiles / canFit;
-    }
-
-    bool checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
-    {
-        if ( node.type != NodeType::BORDER ) {
-            return false;
-        }
-
-        const fheroes2::Point position = Maps::GetPoint( node.index );
-
-        int distinctNeighbours = 0;
-        uint32_t seen = node.region;
-        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
-            const Node & newTile = data.getNode( position + directionOffsets[direction] );
-
-            if ( newTile.index == -1 || newTile.region == region.id ) {
-                continue;
-            }
-
-            if ( seen != newTile.region ) {
-                seen = newTile.region;
-                if ( ++distinctNeighbours > 1 ) {
-                    return false;
-                }
-            }
-        }
-
-        for ( uint8_t direction = 0; direction < 4; ++direction ) {
-            Node & adjacent = data.getNode( position + directionOffsets[direction] );
-
-            if ( adjacent.index == -1 || adjacent.region == region.id || mapRegions[adjacent.region].groundType == Ground::WATER ) {
-                continue;
-            }
-
-            Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );
-            if ( twoAway.index == -1 || twoAway.type != NodeType::OPEN ) {
-                continue;
-            }
-
-            if ( region.connections.find( adjacent.region ) == region.connections.end() ) {
-                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << adjacent.region << ", via " << node.index )
-                region.connections.emplace( adjacent.region, node.index );
-                mapRegions[adjacent.region].connections.emplace( region.id, node.index );
-                node.type = NodeType::CONNECTOR;
-                adjacent.type = NodeType::PATH;
-                twoAway.type = NodeType::PATH;
-
-                Node & stepBack = data.getNode( position - directionOffsets[direction] );
-                if ( stepBack.index != -1 ) {
-                    stepBack.type = NodeType::PATH;
-                }
-
-                break;
-            }
-        }
-
-        return node.type == NodeType::CONNECTOR;
-    }
-
-    void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
-    {
-        Node & previousNode = region.nodes[region.lastProcessedNode];
-        const int nodeIndex = previousNode.index;
-
-        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
-            if ( region.nodes.size() > region.sizeLimit ) {
-                previousNode.type = NodeType::BORDER;
-                break;
-            }
-
-            // Check diagonal direction only 50% of the time to get more circular distribution.
-            // It gives randomness for uneven edges.
-            if ( direction > 3 && Rand::GetWithGen( 0, 1, randomGenerator ) ) {
-                continue;
-            }
-
-            // TODO: use node index and pre-calculate offsets in advance.
-            //       This will speed up the below calculations.
-            const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex ) + directionOffsets[direction];
-            if ( !Maps::isValidAbsPoint( newPosition.x, newPosition.y ) ) {
-                continue;
-            }
-
-            Node & newTile = rawData.getNode( newPosition );
-            if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
-                newTile.region = region.id;
-                region.nodes.push_back( newTile );
-            }
-            else if ( newTile.region != region.id ) {
-                previousNode.type = NodeType::BORDER;
-                region.neighbours.insert( newTile.region );
-            }
-        }
-    }
-
-    void regionExpansion( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
-    {
-        // Process only "open" nodes that exist at the start of the loop and ignore what's added.
-        const size_t nodesEnd = region.nodes.size();
-
-        while ( region.lastProcessedNode < nodesEnd ) {
-            checkAdjacentTiles( rawData, region, randomGenerator );
-            ++region.lastProcessedNode;
-        }
-    }
-
-    fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat, Region & region )
-    {
-        const fheroes2::Point startingLocation = Maps::GetPoint( region.centerIndex );
-        const int32_t castleX = std::min( std::max( startingLocation.x, 4 ), mapFormat.width - 4 );
-        const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
-        region.centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
-        return { castleX, castleY };
-    }
-}
-
-namespace Maps::Random_Generator
-{
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
         // Make sure that we are generating a valid map.
@@ -377,9 +257,7 @@ namespace Maps::Random_Generator
             stillRoomToExpand = false;
             // Skip the first region which is the border region.
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
-                Region & region = mapRegions[regionID];
-                regionExpansion( data, region, randomGenerator );
-                if ( region.lastProcessedNode != region.nodes.size() ) {
+                if ( mapRegions[regionID].regionExpansion( data, randomGenerator ) ) {
                     stillRoomToExpand = true;
                 }
             }
@@ -426,7 +304,7 @@ namespace Maps::Random_Generator
             }
 
             if ( region.colorIndex != neutralColorIndex ) {
-                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
+                const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
                 if ( !placeCastle( mapFormat, data, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
@@ -437,7 +315,7 @@ namespace Maps::Random_Generator
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = config.resourceDensity == ResourceDensity::ABUNDANT;
-                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
+                const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
                 placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
             }
 
@@ -485,7 +363,7 @@ namespace Maps::Random_Generator
                 continue;
             }
             for ( Node & node : region.nodes ) {
-                checkForRegionConnectors( data, mapRegions, region, node );
+                region.checkNodeForConnections( data, mapRegions, node );
             }
         }
 

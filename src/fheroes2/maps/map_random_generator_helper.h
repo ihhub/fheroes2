@@ -28,6 +28,7 @@
 namespace Maps
 {
     class Tile;
+    struct ObjectInfo;
     enum class ObjectGroup : uint8_t;
 }
 namespace Maps::Random_Generator
@@ -51,10 +52,17 @@ namespace Rand
 
 namespace Maps::Random_Generator
 {
+    int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex );
+    int32_t pickMonsterByValue( const int32_t protectedObjectValue );
     int32_t localizeObjectToTerrain( const ObjectGroup groupType, const int32_t objectIndex, const int groundType );
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator );
 
+    bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders );
+    bool canFitObjectSet( const NodeCache & data, const ObjectSet & set, const fheroes2::Point & mainTilePos );
+    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction );
+
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex );
+    bool placeActionObject( Map_Format::MapFormat & mapFormat, NodeCache & data, Tile & tile, const ObjectGroup groupType, const int32_t type );
     bool placeCastle( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle );
     bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource );
     bool placeObstacle( Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator );
