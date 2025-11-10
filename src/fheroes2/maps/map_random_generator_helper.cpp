@@ -53,46 +53,46 @@ namespace Maps::Random_Generator
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
     //
     // Warning: list has to be kept in sync with ObjectInfo. Potentially add it as metadata during populate.
-    const std::map<std::pair<Maps::ObjectGroup, int32_t>, int32_t> valuationLookup = {
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 6 }, 750 }, // Gold pile
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 7 }, 6000 }, // Genie lamp
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 8 }, 750 }, // Random resource
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, 1500 }, // Treasure chest
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 10 }, 1000 }, // Campfire
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 10 }, 2000 }, // Fort
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 11 }, 1500 }, // Gazebo
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 12 }, 2000 }, // Witch
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 13 }, 2000 }, // Mercenary camp
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 14 }, 1000 }, // Shrine 1st
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 15 }, 2000 }, // Shrine 2nd
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 16 }, 3000 }, // Shrine 3rd
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 18 }, 2000 }, // Standing stones
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 20 }, 3000 }, // Tree of knowledge
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 21 }, 8000 }, // Xanadu
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 92 }, 2000 }, // Treasure
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 93 }, 4000 }, // Minor
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 94 }, 10000 }, // Major
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 0 }, 250 }, // Peasant hut
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 1 }, 4000 }, // Ruins
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 2 }, 1500 }, // Tree house
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 3 }, 2000 }, // Watch tower
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 4 }, 2000 }, // Watch tower
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 5 }, 2000 }, // Halfling hole
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 6 }, 2000 }, // Halfling hole
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 7 }, 1500 }, // Tree city
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 9 }, 4000 }, // Desert tent
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 10 }, 6000 }, // City of the dead
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 11 }, 1500 }, // Excavation
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 12 }, 6000 }, // Troll bridge
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 13 }, 2000 }, // Archer house
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 14 }, 1500 }, // Goblin hut
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 15 }, 2000 }, // Dwarf cottage
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 17 }, 2000 }, // Wagon camp
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 18 }, 1500 }, // Cave
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 21 }, 4000 }, // Earth elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 22 }, 4000 }, // Air elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 23 }, 4000 }, // Fire elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 24 }, 4000 }, // Water elementals
+    const std::map<std::pair<ObjectGroup, int32_t>, int32_t> valuationLookup = {
+        { { ObjectGroup::ADVENTURE_TREASURES, 6 }, 750 }, // Gold pile
+        { { ObjectGroup::ADVENTURE_TREASURES, 7 }, 6000 }, // Genie lamp
+        { { ObjectGroup::ADVENTURE_TREASURES, 8 }, 750 }, // Random resource
+        { { ObjectGroup::ADVENTURE_TREASURES, 9 }, 1500 }, // Treasure chest
+        { { ObjectGroup::ADVENTURE_TREASURES, 10 }, 1000 }, // Campfire
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 10 }, 2000 }, // Fort
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 11 }, 1500 }, // Gazebo
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 12 }, 2000 }, // Witch
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 13 }, 2000 }, // Mercenary camp
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 14 }, 1000 }, // Shrine 1st
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 15 }, 2000 }, // Shrine 2nd
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 16 }, 3000 }, // Shrine 3rd
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 18 }, 2000 }, // Standing stones
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 20 }, 3000 }, // Tree of knowledge
+        { { ObjectGroup::ADVENTURE_POWER_UPS, 21 }, 8000 }, // Xanadu
+        { { ObjectGroup::ADVENTURE_ARTIFACTS, 92 }, 2000 }, // Treasure
+        { { ObjectGroup::ADVENTURE_ARTIFACTS, 93 }, 4000 }, // Minor
+        { { ObjectGroup::ADVENTURE_ARTIFACTS, 94 }, 10000 }, // Major
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 0 }, 250 }, // Peasant hut
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 1 }, 4000 }, // Ruins
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 2 }, 1500 }, // Tree house
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 3 }, 2000 }, // Watch tower
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 4 }, 2000 }, // Watch tower
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 5 }, 2000 }, // Halfling hole
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 6 }, 2000 }, // Halfling hole
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 7 }, 1500 }, // Tree city
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 9 }, 4000 }, // Desert tent
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 10 }, 6000 }, // City of the dead
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 11 }, 1500 }, // Excavation
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 12 }, 6000 }, // Troll bridge
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 13 }, 2000 }, // Archer house
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 14 }, 1500 }, // Goblin hut
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 15 }, 2000 }, // Dwarf cottage
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 17 }, 2000 }, // Wagon camp
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 18 }, 1500 }, // Cave
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 21 }, 4000 }, // Earth elementals
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 22 }, 4000 }, // Air elementals
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 23 }, 4000 }, // Fire elementals
+        { { ObjectGroup::ADVENTURE_DWELLINGS, 24 }, 4000 }, // Water elementals
     };
 
     constexpr int32_t monster3Threshold = 3250;
@@ -101,24 +101,24 @@ namespace Maps::Random_Generator
     constexpr int32_t treeTypeFromGroundType( const int groundType )
     {
         switch ( groundType ) {
-        case Maps::Ground::WATER:
+        case Ground::WATER:
             assert( 0 );
             return 0;
-        case Maps::Ground::GRASS:
+        case Ground::GRASS:
             return 0;
-        case Maps::Ground::SNOW:
+        case Ground::SNOW:
             return 30;
-        case Maps::Ground::SWAMP:
+        case Ground::SWAMP:
             return 0;
-        case Maps::Ground::LAVA:
+        case Ground::LAVA:
             return 6;
-        case Maps::Ground::DESERT:
+        case Ground::DESERT:
             return 24;
-        case Maps::Ground::DIRT:
+        case Ground::DIRT:
             return 18;
-        case Maps::Ground::WASTELAND:
+        case Ground::WASTELAND:
             return 12;
-        case Maps::Ground::BEACH:
+        case Ground::BEACH:
             return 24;
         default:
             // Have you added a new ground? Add the logic above!
@@ -131,24 +131,24 @@ namespace Maps::Random_Generator
     constexpr int32_t mountainTypeFromGroundType( const int groundType )
     {
         switch ( groundType ) {
-        case Maps::Ground::WATER:
+        case Ground::WATER:
             assert( 0 );
             return 0;
-        case Maps::Ground::GRASS:
+        case Ground::GRASS:
             return 6;
-        case Maps::Ground::SNOW:
+        case Ground::SNOW:
             return 12;
-        case Maps::Ground::SWAMP:
+        case Ground::SWAMP:
             return 18;
-        case Maps::Ground::LAVA:
+        case Ground::LAVA:
             return 24;
-        case Maps::Ground::DESERT:
+        case Ground::DESERT:
             return 30;
-        case Maps::Ground::DIRT:
+        case Ground::DIRT:
             return 36;
-        case Maps::Ground::WASTELAND:
+        case Ground::WASTELAND:
             return 44;
-        case Maps::Ground::BEACH:
+        case Ground::BEACH:
             return 0;
         default:
             // Have you added a new ground? Add the logic above!
@@ -158,14 +158,14 @@ namespace Maps::Random_Generator
         return 0;
     }
 
-    int32_t localizeObjectToTerrain( const Maps::ObjectGroup groupType, const int32_t objectIndex, const int groundType )
+    int32_t localizeObjectToTerrain( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
     {
-        if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
+        if ( groupType == ObjectGroup::LANDSCAPE_TREES ) {
             assert( objectIndex < 6 );
             return treeTypeFromGroundType( groundType ) + objectIndex;
         }
 
-        if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
+        if ( groupType == ObjectGroup::LANDSCAPE_MOUNTAINS ) {
             assert( objectIndex < 8 );
             return mountainTypeFromGroundType( groundType ) + objectIndex;
         }
@@ -212,7 +212,7 @@ namespace Maps::Random_Generator
     }
 
     template <class F>
-    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const F & lambda )
+    bool iterateOverObjectParts( const ObjectInfo & info, const F & lambda )
     {
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
@@ -228,7 +228,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
+    bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
     {
         bool invalid = false;
         fheroes2::Rect objectRect;
@@ -306,7 +306,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
+    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
     {
         fheroes2::Rect objectRect;
 
@@ -333,7 +333,7 @@ namespace Maps::Random_Generator
         data.getNode( mainTilePos ).type = NodeType::ACTION;
     }
 
-    bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
@@ -357,7 +357,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool actionObjectPlacer( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t type )
+    bool actionObjectPlacer( Map_Format::MapFormat & mapFormat, NodeCache & data, Tile & tile, const ObjectGroup groupType, const int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
@@ -369,7 +369,7 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    bool placeCastle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
+    bool placeCastle( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
     {
         auto & tile = world.getTile( tilePos.x, tilePos.y );
         if ( tile.isWater() ) {
@@ -379,11 +379,11 @@ namespace Maps::Random_Generator
         const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
         const int32_t castleObjectId = isCastle ? randomCastleIndex : randomTownIndex;
 
-        const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
+        const auto & basementInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+        const auto & castleInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
         if ( canFitObject( data, basementInfo, tilePos, false, true ) && canFitObject( data, castleInfo, tilePos, true, true ) ) {
-            if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
+            if ( !putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
                 return false;
             }
 
@@ -395,7 +395,7 @@ namespace Maps::Random_Generator
 
             Maps::setLastObjectUID( objectId );
 
-            if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId ) ) {
+            if ( !putObjectOnMap( mapFormat, tile, ObjectGroup::KINGDOM_TOWNS, castleObjectId ) ) {
                 return false;
             }
 
@@ -416,17 +416,17 @@ namespace Maps::Random_Generator
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
 
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 ) ) {
+            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 ) ) {
                 return false;
             }
 
             Maps::setLastObjectUID( objectId );
 
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
+            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
                 return false;
             }
 
-            const Maps::ObjectInfo & townObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
+            const ObjectInfo & townObjectInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
             const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
 
             world.addCastle( tile.GetIndex(), race, color );
@@ -447,16 +447,16 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
+    bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
     {
-        Maps::Tile & mineTile = world.getTile( node.index );
+        Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-        return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
+        return actionObjectPlacer( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
-    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
+    bool placeObstacle( Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
     {
-        Maps::Tile & tile = world.getTile( node.index );
+        Tile & tile = world.getTile( node.index );
         const auto it = obstaclesPerGround.find( tile.GetGround() );
         if ( it == obstaclesPerGround.end() || it->second.empty() ) {
             return false;
@@ -467,22 +467,22 @@ namespace Maps::Random_Generator
 
         const fheroes2::Point tilePos = tile.GetCenter();
         for ( const auto & obstacleId : obstacleList ) {
-            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
-            if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
+            const auto & objectInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TREES, obstacleId );
+            if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
                 return true;
             }
         }
         return false;
     }
 
-    bool placeSimpleObject( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement )
+    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement )
     {
         const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
         if ( !Maps::isValidAbsPoint( position.x, position.y ) ) {
             return false;
         }
 
-        Maps::Tile & tile = world.getTile( position.x, position.y );
+        Tile & tile = world.getTile( position.x, position.y );
         const int32_t objectIndex = localizeObjectToTerrain( placement.groupType, placement.objectIndex, tile.GetGround() );
         const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
         if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
@@ -492,8 +492,8 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeObjectSet( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const std::vector<ObjectSet> & set,
-                         const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
+    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const std::vector<ObjectSet> & set, const uint8_t expectedCount,
+                         Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
         for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
@@ -518,7 +518,7 @@ namespace Maps::Random_Generator
                 }
                 for ( const auto & monster : prefab.monsters ) {
                     const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                    putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
+                    putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), ObjectGroup::MONSTERS, monster.objectIndex );
                 }
                 ++objectsPlaced;
                 break;

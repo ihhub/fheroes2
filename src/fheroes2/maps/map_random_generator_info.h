@@ -111,7 +111,7 @@ namespace Maps::Random_Generator
         size_t sizeLimit{ 0 };
         size_t lastProcessedNode{ 0 };
         int colorIndex{ neutralColorIndex };
-        int groundType{ Maps::Ground::GRASS };
+        int groundType{ Ground::GRASS };
 
         Region() = default;
 
@@ -151,7 +151,7 @@ namespace Maps::Random_Generator
     struct ObjectPlacement final
     {
         fheroes2::Point offset;
-        Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
+        ObjectGroup groupType{ ObjectGroup::NONE };
         int32_t objectIndex{ 0 };
     };
 
