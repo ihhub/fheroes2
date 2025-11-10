@@ -204,7 +204,7 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
             break;
         }
 
-        if (!exit)
+        if ( !exit )
         {
             Settings::Get().SetPreviousGameMode( previousGameMode );
         }
