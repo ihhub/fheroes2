@@ -20,24 +20,40 @@
 
 #include "map_random_generator_helper.h"
 
+#include <algorithm>
+#include <array>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <functional>
+#include <initializer_list>
+#include <map>
+#include <utility>
 
-#include <maps_tiles_helper.h>
-#include <world_object_uid.h>
-
+#include "color.h"
+#include "direction.h"
 #include "ground.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "map_random_generator_info.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "maps_tiles_helper.h"
+#include "mp2.h"
+#include "race.h"
 #include "rand.h"
 #include "ui_map_object.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int maxPlacementAttempts{ 30 };
+    constexpr int randomMonster3Index{ 69 };
+    constexpr int randomMonster4Index{ 70 };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
         { Maps::Ground::DESERT, { 24, 25, 26, 27, 28, 29 } },    { Maps::Ground::SNOW, { 30, 31, 32, 33, 34, 35 } },  { Maps::Ground::SWAMP, { 18, 19, 20, 21, 22, 23 } },
@@ -513,12 +529,21 @@ namespace Maps::Random_Generator
                 for ( const auto & obstacle : prefab.obstacles ) {
                     placeSimpleObject( mapFormat, data, node, obstacle );
                 }
+
+                int32_t groupValue = 0;
                 for ( const auto & treasure : prefab.valuables ) {
                     placeSimpleObject( mapFormat, data, node, treasure );
+                    const auto it = valuationLookup.find( { treasure.groupType, treasure.objectIndex } );
+                    // No valuation for the object? Add it!
+                    assert( it != valuationLookup.end() );
+                    groupValue += it->second;
                 }
                 for ( const auto & monster : prefab.monsters ) {
                     const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                    putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), ObjectGroup::MONSTERS, monster.objectIndex );
+                    int32_t monsterIndex = ( groupValue > monster4Threshold )   ? randomMonster4Index
+                                           : ( groupValue > monster3Threshold ) ? randomMonster3Index
+                                                                                : monster.objectIndex;
+                    putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), ObjectGroup::MONSTERS, monsterIndex );
                 }
                 ++objectsPlaced;
                 break;

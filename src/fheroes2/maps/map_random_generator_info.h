@@ -20,9 +20,17 @@
 
 #pragma once
 
+#include <array>
+#include <cassert>
+#include <cstddef>
 #include <cstdint>
+#include <functional>
+#include <map>
+#include <set>
 #include <vector>
 
+#include "color.h"
+#include "ground.h"
 #include "map_object_info.h"
 #include "math_base.h"
 #include "resource.h"
@@ -96,7 +104,7 @@ namespace Maps::Random_Generator
         }
 
     private:
-        const int32_t _mapSize{ 0 };
+        int32_t _mapSize{ 0 };
         Node _outOfBounds;
         std::vector<Node> _data;
     };

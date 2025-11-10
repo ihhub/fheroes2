@@ -20,7 +20,24 @@
 
 #pragma once
 
-#include "map_random_generator_info.h"
+#include <cstddef>
+#include <vector>
+
+#include "math_base.h"
+
+namespace Maps
+{
+    class Tile;
+    enum class ObjectGroup : uint8_t;
+}
+namespace Maps::Random_Generator
+{
+    class NodeCache;
+    struct Node;
+    struct ObjectPlacement;
+    struct ObjectSet;
+    struct Region;
+}
 
 namespace Maps::Map_Format
 {

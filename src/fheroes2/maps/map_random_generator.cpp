@@ -36,7 +36,6 @@
 #include <vector>
 
 #include "color.h"
-#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
@@ -47,17 +46,12 @@
 #include "map_random_generator_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "math_base.h"
-#include "mp2.h"
-#include "race.h"
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
 #include "skill.h"
-#include "ui_map_object.h"
 #include "world.h"
-#include "world_object_uid.h"
 #include "world_pathfinding.h"
 
 namespace

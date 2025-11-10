@@ -20,7 +20,9 @@
 
 #include "map_random_generator_info.h"
 
+#include <algorithm>
 #include <cassert>
+#include <utility>
 
 namespace Maps::Random_Generator
 {
