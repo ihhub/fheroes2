@@ -540,9 +540,9 @@ namespace Maps::Random_Generator
                 }
                 for ( const auto & monster : prefab.monsters ) {
                     const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                    int32_t monsterIndex = ( groupValue > monster4Threshold )   ? randomMonster4Index
-                                           : ( groupValue > monster3Threshold ) ? randomMonster3Index
-                                                                                : monster.objectIndex;
+                    const int32_t monsterIndex = ( groupValue > monster4Threshold )   ? randomMonster4Index
+                                                 : ( groupValue > monster3Threshold ) ? randomMonster3Index
+                                                                                      : monster.objectIndex;
                     putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), ObjectGroup::MONSTERS, monsterIndex );
                 }
                 ++objectsPlaced;
