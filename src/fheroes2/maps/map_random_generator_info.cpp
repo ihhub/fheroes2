@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <ostream>
 #include <utility>
 
 #include "logging.h"
@@ -95,7 +96,7 @@ namespace Maps::Random_Generator
             Node & newTile = rawData.getNode( newPosition );
             if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
                 newTile.region = id;
-                nodes.push_back( newTile );
+                nodes.emplace_back( newTile );
             }
             else if ( newTile.region != id ) {
                 previousNode.type = NodeType::BORDER;
