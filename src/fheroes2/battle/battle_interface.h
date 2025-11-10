@@ -257,6 +257,11 @@ namespace Battle
             }
         }
 
+        void clear()
+        {
+            _restorer.reset();
+        }
+
     private:
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
