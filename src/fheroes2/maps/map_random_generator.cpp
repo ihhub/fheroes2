@@ -110,66 +110,94 @@ namespace Maps::Random_Generator
 {
     const std::vector<ObjectSet>
         prefabObjectSets{ ObjectSet{
-                              { ObjectPlacement{ { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
-                                ObjectPlacement{ { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-                              { ObjectPlacement{ { 1, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                              { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
+                              // Obstacles.
+                              { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                                { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                              // Valuables.
+                              { { { 1, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, { { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                              // Monsters.
+                              { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+                              // Entrance check.
                               { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
                           },
                           ObjectSet{
-                              { ObjectPlacement{ { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
-                                ObjectPlacement{ { 0, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-                              { ObjectPlacement{ { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                              { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                              { { 0, -1 }, { 1, -1 }, { 1, 0 } } // entranceCheck
+                              // Obstacles.
+                              { { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                                { { 0, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                              // Valuables.
+                              { { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                              // Monsters.
+                              { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+                              // Entrance check.
+                              { { 0, -1 }, { 1, -1 }, { 1, 0 } }
                           },
                           ObjectSet{
-                              { ObjectPlacement{ { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 }, ObjectPlacement{ { 1, 2 }, ObjectGroup::LANDSCAPE_TREES, 5 },
-                                ObjectPlacement{ { 3, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-                              { ObjectPlacement{ { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { 1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { 2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                              { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                              { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 } } // entranceCheck
+                              // Obstacles.
+                              { { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 }, { { 1, 2 }, ObjectGroup::LANDSCAPE_TREES, 5 },
+                                { { 3, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                              // Valuables.
+                              { { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { 1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { 2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                              // Monsters.
+                              { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+                              // Entrance check.
+                              { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 } }
                           },
                           ObjectSet{
-                              { ObjectPlacement{ { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 }, ObjectPlacement{ { -1, 2 }, ObjectGroup::LANDSCAPE_TREES, 4 },
-                                ObjectPlacement{ { -3, 2 }, ObjectGroup::LANDSCAPE_TREES, 2 } }, // obstacles
-                              { ObjectPlacement{ { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                              { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                              { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 } } // entranceCheck
+                              // Obstacles.
+                              { { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 }, { { -1, 2 }, ObjectGroup::LANDSCAPE_TREES, 4 },
+                                { { -3, 2 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
+                              // Valuables.
+                              { { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                              // Monsters.
+                              { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+                              // Entrance check.
+                              { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 } }
                           },
                           ObjectSet{
-                              { ObjectPlacement{ { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { -1, -1 }, ObjectGroup::LANDSCAPE_TREES, 5 },
-                                ObjectPlacement{ { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 2 } }, // obstacles
-                              { ObjectPlacement{ { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-                                ObjectPlacement{ { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                              { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                              { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } // entranceCheck
+                              // Obstacles.
+                              { { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { -1, -1 }, ObjectGroup::LANDSCAPE_TREES, 5 },
+                                { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
+                              // Valuables.
+                              { { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                              // Monsters.
+                              { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+                              // Entrance check.
+                              { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } }
                           } };
 
     const std::vector<ObjectSet> powerupObjectSets{
         ObjectSet{
-            { ObjectPlacement{ { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
-              ObjectPlacement{ { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-            { ObjectPlacement{ { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 }, ObjectPlacement{ { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-              ObjectPlacement{ { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-            { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-            { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
+            // Obstacles.
+            { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+              { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+            // Valuables.
+            { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 }, { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+              { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+            // Monsters.
+            { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+            // Entrance check.
+            { { -1, 0 }, { -1, 1 }, { 0, 1 } }
         },
         ObjectSet{
-            { ObjectPlacement{ { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
-              ObjectPlacement{ { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-            { ObjectPlacement{ { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 }, ObjectPlacement{ { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-              ObjectPlacement{ { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-            { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-            { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
+            // Obstacles.
+            { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+              { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+            // Valuables.
+            { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 }, { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+              { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+            // Monsters.
+            { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+            // Entrance check.
+            { { -1, 0 }, { -1, 1 }, { 0, 1 } }
         },
     };
 
