@@ -366,7 +366,13 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
 
         if ( town ) {
             msg = town->isCastle() ? _( "Capture the castle '%{name}'." ) : _( "Capture the town '%{name}'." );
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), mapLanguage ) );
+
+            if ( mapLanguage.has_value() ) {
+                translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), mapLanguage ) );
+            }
+            else {
+                StringReplace( msg, "%{name}", town->GetName() );
+            }
         }
     }
     else if ( conditions & WINS_HERO ) {
@@ -376,7 +382,12 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
         if ( hero ) {
             msg = _( "Defeat the hero '%{name}'." );
 
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), mapLanguage ) );
+            if ( mapLanguage.has_value() ) {
+                translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), mapLanguage ) );
+            }
+            else {
+                StringReplace( msg, "%{name}", hero->GetName() );
+            }
         }
     }
     else if ( conditions & WINS_ARTIFACT ) {
@@ -408,7 +419,13 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
 
         if ( town ) {
             msg = town->isCastle() ? _( "Lose the castle '%{name}'." ) : _( "Lose the town '%{name}'." );
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), mapLanguage ) );
+
+            if ( mapLanguage.has_value() ) {
+                translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( town->GetName(), mapLanguage ) );
+            }
+            else {
+                StringReplace( msg, "%{name}", town->GetName() );
+            }
         }
     }
     else if ( conditions & LOSS_HERO ) {
@@ -417,7 +434,13 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
 
         if ( hero ) {
             msg = _( "Lose the hero: %{name}." );
-            translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), mapLanguage ) );
+
+            if ( mapLanguage.has_value() ) {
+                translationReplacement.emplace( "%{name}", fheroes2::LocalizedString( hero->GetName(), mapLanguage ) );
+            }
+            else {
+                StringReplace( msg, "%{name}", hero->GetName() );
+            }
         }
     }
     else if ( conditions & LOSS_TIME ) {
@@ -433,6 +456,8 @@ std::vector<fheroes2::LocalizedString> GameOver::GetActualDescription( const uin
     }
 
     if ( translationReplacement.has_value() ) {
+        assert( translationReplacement->second.language.has_value() );
+
         return fheroes2::getLocalizedStrings( std::move( msg ), gameLanguage, translationReplacement->first, translationReplacement->second.text,
                                               *( translationReplacement->second.language ) );
     }
