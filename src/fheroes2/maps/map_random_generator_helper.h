@@ -52,7 +52,6 @@ namespace Rand
 
 namespace Maps::Random_Generator
 {
-
     int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex );
     int32_t pickMonsterByValue( const int32_t protectedObjectValue );
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType );
