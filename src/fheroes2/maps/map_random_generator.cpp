@@ -443,7 +443,7 @@ namespace Maps::Random_Generator
         }
 
         // Step 11: Validate that map is playable.
-        for ( const int start : startingLocations ) {
+        for ( const int32_t start : startingLocations ) {
             pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const int action : actionLocations ) {
                 if ( pathfinder.getDistance( action ) == 0 ) {
