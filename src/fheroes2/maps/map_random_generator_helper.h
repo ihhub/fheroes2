@@ -31,6 +31,7 @@ namespace Maps
     struct ObjectInfo;
     enum class ObjectGroup : uint8_t;
 }
+
 namespace Maps::Random_Generator
 {
     class NodeCache;
