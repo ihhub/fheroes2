@@ -187,9 +187,11 @@ namespace Maps::Random_Generator
         const auto & objectInfo = Maps::getObjectInfo( group, objectIndex );
 
         const auto it = objectGoldValue.find( objectInfo.objectType );
-
-        // No valuation for the object? Add it!
-        assert( it != objectGoldValue.end() );
+        if ( it == objectGoldValue.end() ) {
+            // No valuation for the object? Add it!
+            assert( 0 );
+            return 0;
+        }
 
         return ( it == objectGoldValue.end() ) ? 0 : it->second;
     }
