@@ -132,7 +132,7 @@ namespace Maps::Random_Generator
         }
 
     private:
-        int32_t _mapSize{ 0 };
+        const int32_t _mapSize{ 0 };
         Node _outOfBounds{ -1, 0, NodeType::BORDER };
         std::vector<Node> _data;
     };
