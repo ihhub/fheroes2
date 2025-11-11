@@ -5125,8 +5125,8 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        for ( const int & charCode : { 138, 140, 141, 142, 143, 175, 192, 193, 194, 195, 196, 197, 198, 200, 201, 203,
-                                       204, 205, 206, 207, 209, 210, 211, 212, 213, 214, 216, 218, 219, 220, 221 } ) {
+        for ( const int charCode : { 138, 140, 141, 142, 143, 175, 192, 193, 194, 195, 196, 197, 198, 200, 201, 203,
+                                     204, 205, 206, 207, 209, 210, 211, 212, 213, 214, 216, 218, 219, 220, 221 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
         released[217 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 4 );
@@ -5787,18 +5787,18 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        for ( const int & charCode : { 192, 193, 194, 195, 200, 201, 202, 205, 206, 209, 211, 212, 213, 217, 218, 219 } ) {
+        for ( const int charCode : { 192, 193, 194, 195, 200, 201, 202, 205, 206, 209, 211, 212, 213, 217, 218, 219 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
 
-        for ( const int & charCode : { 196, 197, 203, 207, 214, 220 } ) {
+        for ( const int charCode : { 196, 197, 203, 207, 214, 220 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
         released[216 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 1 );
 
         // Offset A-related letters to have less space to neighboring letters. Keep the y-offset change from earlier.
-        for ( const int & charCode : { 65, 192, 193, 194, 195, 196, 197, 198 } ) {
+        for ( const int charCode : { 65, 192, 193, 194, 195, 196, 197, 198 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x - 2, released[charCode - 32].y() );
         }
 
@@ -6115,7 +6115,7 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        for ( const int & charCode : { 214, 220, 221 } ) {
+        for ( const int charCode : { 214, 220, 221 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 

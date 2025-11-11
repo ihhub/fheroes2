@@ -217,7 +217,7 @@ namespace
 
         int groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
 
-        for ( const int & direction : Direction::All() ) {
+        for ( const int direction : Direction::All() ) {
             // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
             fheroes2::Point tilePosition = Maps::getDirectionPoint( centerTile, direction );
             tilePosition.x = std::min( maxTilePos, std::max( 0, tilePosition.x ) );

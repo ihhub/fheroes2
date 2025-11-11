@@ -2113,7 +2113,7 @@ void Battle::Interface::RedrawCover()
         if ( humanturn_spell.isValid() ) {
             switch ( humanturn_spell.GetID() ) {
             case Spell::COLDRING: {
-                for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
+                for ( const int32_t around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -2124,7 +2124,7 @@ void Battle::Interface::RedrawCover()
             case Spell::FIREBALL:
             case Spell::METEORSHOWER: {
                 highlightedCells.emplace( cell );
-                for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
+                for ( const int32_t around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -2134,7 +2134,7 @@ void Battle::Interface::RedrawCover()
             }
             case Spell::FIREBLAST: {
                 highlightedCells.emplace( cell );
-                for ( const int32_t & around : Board::GetDistanceIndexes( _currentCellIndex, 2 ) ) {
+                for ( const int32_t around : Board::GetDistanceIndexes( _currentCellIndex, 2 ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -2182,7 +2182,7 @@ void Battle::Interface::RedrawCover()
         else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
                   && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
             highlightedCells.emplace( cell );
-            for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
+            for ( const int32_t around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                 const Cell * nearbyCell = Board::GetCell( around );
                 if ( nearbyCell != nullptr ) {
                     highlightedCells.emplace( nearbyCell );
@@ -2669,7 +2669,7 @@ void Battle::Interface::_redrawHighObjects( const int32_t cellId )
 void Battle::Interface::RedrawKilled()
 {
     // Redraw killed troops.
-    for ( const int32_t & cell : arena.getCellsOccupiedByGraveyard() ) {
+    for ( const int32_t cell : arena.getCellsOccupiedByGraveyard() ) {
         for ( const Unit * unit : arena.getGraveyardUnits( cell ) ) {
             if ( unit && cell != unit->GetTailIndex() ) {
                 RedrawTroopSprite( *unit );
