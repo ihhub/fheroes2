@@ -108,8 +108,7 @@ namespace
 
 namespace Maps::Random_Generator
 {
-    const std::vector<ObjectSet> prefabObjectSets
-        = { { ObjectSet{
+    const std::vector<ObjectSet> prefabObjectSets{ ObjectSet{
                   { ObjectPlacement{ { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
                     ObjectPlacement{ { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
                   { ObjectPlacement{ { 1, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
@@ -147,9 +146,9 @@ namespace Maps::Random_Generator
                   { ObjectPlacement{ { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
                   { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
                   { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } // entranceCheck
-              } } };
+              } };
 
-    const std::vector<ObjectSet> powerupObjectSets = { {
+    const std::vector<ObjectSet> powerupObjectSets{
         ObjectSet{
             { ObjectPlacement{ { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
               ObjectPlacement{ { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
@@ -166,7 +165,7 @@ namespace Maps::Random_Generator
             { ObjectPlacement{ { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
             { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
         },
-    } };
+    };
 
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
