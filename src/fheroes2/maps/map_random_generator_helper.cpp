@@ -266,7 +266,7 @@ namespace Maps::Random_Generator
         bool invalid = false;
         fheroes2::Rect objectRect;
 
-        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect, skipBorders, &invalid]( const auto & partInfo ) {
+        auto updateObjectArea = [&data, &mainTilePos, &objectRect, skipBorders, &invalid]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 || node.region == 0 ) {
@@ -280,7 +280,9 @@ namespace Maps::Random_Generator
 
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
-        } );
+        };
+
+        iterateOverObjectParts( info, updateObjectArea );
 
         if ( invalid ) {
             return false;
@@ -317,7 +319,7 @@ namespace Maps::Random_Generator
                 const fheroes2::Point position = mainTilePos + placement.offset;
                 bool invalid = false;
 
-                iterateOverObjectParts( info, [&data, &position, isAction, &invalid]( const auto & partInfo ) {
+                auto isValidObjectPart = [&data, &position, isAction, &invalid]( const auto & partInfo ) {
                     const Node & node = data.getNode( position + partInfo.tileOffset );
 
                     if ( node.index == -1 || node.region == 0 ) {
@@ -328,7 +330,9 @@ namespace Maps::Random_Generator
                         invalid = true;
                         return;
                     }
-                } );
+                };
+
+                iterateOverObjectParts( info, isValidObjectPart );
 
                 if ( invalid ) {
                     return false;
@@ -343,13 +347,15 @@ namespace Maps::Random_Generator
     {
         fheroes2::Rect objectRect;
 
-        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect]( const auto & partInfo ) {
+        auto updateObjectArea = [&data, &mainTilePos, &objectRect]( const auto & partInfo ) {
             Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
             objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
             objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
 
             node.type = NodeType::OBSTACLE;
-        } );
+        };
+
+        iterateOverObjectParts( info, updateObjectArea );
 
         if ( !isAction ) {
             return;
