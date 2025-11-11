@@ -68,6 +68,8 @@ namespace
         { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
     } };
 
+    const std::vector<Maps::Random_Generator::ObjectPlacement> randomMonsterSet{ { { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } };
+
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
         // Water percentage cannot be 100 or more, or negative.
@@ -108,8 +110,6 @@ namespace
 
 namespace Maps::Random_Generator
 {
-    const std::vector<ObjectPlacement> randomMonsterSet{ { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } };
-
     const std::vector<ObjectSet> prefabObjectSets{ ObjectSet{ // Obstacles.
                                                               { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 },
                                                                 { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
