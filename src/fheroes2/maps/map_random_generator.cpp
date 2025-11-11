@@ -349,7 +349,7 @@ namespace Maps::Random_Generator
             const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
             const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
-                for ( const int32_t & tileIndex : ring ) {
+                for ( const int32_t tileIndex : ring ) {
                     const auto & node = data.getNode( tileIndex );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         mapEconomy.increaseMineCount( resource );
