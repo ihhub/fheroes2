@@ -99,22 +99,6 @@ namespace
         { MP2::OBJ_WATER_ALTAR, 4000 },
         { MP2::OBJ_WITCH_DOCTORS_HUT, 2000 },
         { MP2::OBJ_XANADU, 8000 },
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     };
 
     constexpr int32_t treeTypeFromGroundType( const int groundType )
@@ -197,7 +181,6 @@ namespace
 
 namespace Maps::Random_Generator
 {
-
     int32_t getObjectGoldValue( const Maps::ObjectGroup group, const int32_t objectIndex )
     {
         const auto & objectInfo = Maps::getObjectInfo( group, objectIndex );
