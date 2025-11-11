@@ -379,9 +379,8 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        const MP2::MapObjectType mp2Type = objectInfo.objectType;
         // Maps::setObjectOnTile isn't idempotent, check if object was already placed
-        if ( MP2::isInGameActionObject( mp2Type ) && tile.getMainObjectType() == mp2Type ) {
+        if ( MP2::isInGameActionObject( objectInfo.objectType ) && tile.getMainObjectType() == objectInfo.objectType ) {
             return false;
         }
 
