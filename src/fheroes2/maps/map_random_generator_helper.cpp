@@ -241,7 +241,7 @@ namespace Maps::Random_Generator
             const int dx = ( node.index % mapWidth ) - centerX;
             const int dy = ( node.index / mapWidth ) - centerY;
 
-            const double distance = std::sqrt( static_cast<double>( dx ) * dx + static_cast<double>( dy ) * dy );
+            const double distance = std::sqrt( static_cast<double>( dx * dx + dy * dy ) );
             const uint32_t noise = static_cast<int>( Rand::GetWithGen( 0, 2, randomGenerator ) );
             const size_t ring = static_cast<size_t>( std::floor( distance ) + 0.5 ) + noise;
             if ( static_cast<size_t>( ring ) >= buckets.size() ) {
