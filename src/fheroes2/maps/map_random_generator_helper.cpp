@@ -524,7 +524,7 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const std::vector<ObjectSet> & set, const uint8_t expectedCount,
+    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, std::vector<ObjectSet> objects, const uint8_t expectedCount,
                          Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
@@ -535,9 +535,8 @@ namespace Maps::Random_Generator
 
             const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
 
-            std::vector<ObjectSet> shuffledObjectSets = set;
-            Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
-            for ( const auto & prefab : shuffledObjectSets ) {
+            Rand::ShuffleWithGen( objects, randomGenerator );
+            for ( const auto & prefab : objects ) {
                 if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
                     continue;
                 }

@@ -68,6 +68,6 @@ namespace Maps::Random_Generator
     bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource );
     bool placeObstacle( Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator );
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement );
-    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const std::vector<ObjectSet> & set, const uint8_t expectedCount,
+    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, std::vector<ObjectSet> objects, const uint8_t expectedCount,
                          Rand::PCG32 & randomGenerator );
 }
