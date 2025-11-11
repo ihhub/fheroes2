@@ -133,7 +133,9 @@ namespace Maps::Random_Generator
 
             if ( seen != newTile.region ) {
                 seen = newTile.region;
-                if ( ++distinctNeighbours > 1 ) {
+
+                ++distinctNeighbours;
+                if ( distinctNeighbours > 1 ) {
                     return false;
                 }
             }
