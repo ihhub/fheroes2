@@ -178,8 +178,8 @@ namespace Maps::Random_Generator
         int pickNextMineResource();
 
     private:
-        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
-                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
+        std::map<int, uint32_t> _minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
+                                             { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
     };
 
     struct RegionalObjects final

@@ -52,15 +52,15 @@ namespace Maps::Random_Generator
 
     void MapEconomy::increaseMineCount( const int resourceType )
     {
-        const auto it = minesCount.find( resourceType );
-        assert( it != minesCount.end() );
+        const auto it = _minesCount.find( resourceType );
+        assert( it != _minesCount.end() );
         ++it->second;
     }
 
     int MapEconomy::pickNextMineResource()
     {
         const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
-                                          [this]( const auto & a, const auto & b ) { return minesCount.at( a ) < minesCount.at( b ); } );
+                                          [this]( const auto & a, const auto & b ) { return _minesCount.at( a ) < _minesCount.at( b ); } );
         assert( it != secondaryResources.end() );
 
         return *it;
