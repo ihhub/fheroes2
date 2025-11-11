@@ -423,7 +423,6 @@ namespace Maps::Random_Generator
             return false;
         }
 
-
         if ( !putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
             return false;
         }
