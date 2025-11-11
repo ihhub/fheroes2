@@ -193,7 +193,7 @@ namespace Maps::Random_Generator
             return 0;
         }
 
-        return ( it == objectGoldValue.end() ) ? 0 : it->second;
+        return it->second;
     }
 
     int32_t pickMonsterByValue( const int32_t protectedObjectValue )
