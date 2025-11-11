@@ -48,7 +48,7 @@ namespace Rand
 namespace Maps::Random_Generator
 {
     inline int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
-    inline constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
+    constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     enum class NodeType : uint8_t
     {

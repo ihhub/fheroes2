@@ -59,56 +59,134 @@ namespace
         { Maps::Ground::WASTELAND, { 12, 13, 14, 15, 16, 17 } }, { Maps::Ground::BEACH, { 24, 25, 26, 27, 28, 29 } }, { Maps::Ground::LAVA, { 6, 7, 8, 9, 10, 11 } },
         { Maps::Ground::DIRT, { 18, 19, 20, 21, 22, 23 } },      { Maps::Ground::GRASS, { 0, 1, 2, 3, 4, 5 } },       { Maps::Ground::WATER, {} },
     };
-}
 
-namespace Maps::Random_Generator
-{
     // Evaluating all treasure and power-ups using gold equivalent
     // Benchmark is 1500 gold = 1000 experience; 1 primary attribute point worth 2000 gold
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
     //
     // Warning: list has to be kept in sync with ObjectInfo. Potentially add it as metadata during populate.
-    const std::map<std::pair<ObjectGroup, int32_t>, int32_t> valuationLookup = {
-        { { ObjectGroup::ADVENTURE_TREASURES, 6 }, 750 }, // Gold pile
-        { { ObjectGroup::ADVENTURE_TREASURES, 7 }, 6000 }, // Genie lamp
-        { { ObjectGroup::ADVENTURE_TREASURES, 8 }, 750 }, // Random resource
-        { { ObjectGroup::ADVENTURE_TREASURES, 9 }, 1500 }, // Treasure chest
-        { { ObjectGroup::ADVENTURE_TREASURES, 10 }, 1000 }, // Campfire
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 10 }, 2000 }, // Fort
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 11 }, 1500 }, // Gazebo
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 12 }, 2000 }, // Witch
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 13 }, 2000 }, // Mercenary camp
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 14 }, 1000 }, // Shrine 1st
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 15 }, 2000 }, // Shrine 2nd
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 16 }, 3000 }, // Shrine 3rd
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 18 }, 2000 }, // Standing stones
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 20 }, 3000 }, // Tree of knowledge
-        { { ObjectGroup::ADVENTURE_POWER_UPS, 21 }, 8000 }, // Xanadu
-        { { ObjectGroup::ADVENTURE_ARTIFACTS, 92 }, 2000 }, // Treasure
-        { { ObjectGroup::ADVENTURE_ARTIFACTS, 93 }, 4000 }, // Minor
-        { { ObjectGroup::ADVENTURE_ARTIFACTS, 94 }, 10000 }, // Major
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 0 }, 250 }, // Peasant hut
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 1 }, 4000 }, // Ruins
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 2 }, 1500 }, // Tree house
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 3 }, 2000 }, // Watch tower
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 4 }, 2000 }, // Watch tower
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 5 }, 2000 }, // Halfling hole
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 6 }, 2000 }, // Halfling hole
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 7 }, 1500 }, // Tree city
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 9 }, 4000 }, // Desert tent
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 10 }, 6000 }, // City of the dead
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 11 }, 1500 }, // Excavation
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 12 }, 6000 }, // Troll bridge
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 13 }, 2000 }, // Archer house
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 14 }, 1500 }, // Goblin hut
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 15 }, 2000 }, // Dwarf cottage
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 17 }, 2000 }, // Wagon camp
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 18 }, 1500 }, // Cave
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 21 }, 4000 }, // Earth elementals
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 22 }, 4000 }, // Air elementals
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 23 }, 4000 }, // Fire elementals
-        { { ObjectGroup::ADVENTURE_DWELLINGS, 24 }, 4000 }, // Water elementals
+    const std::map<std::pair<Maps::ObjectGroup, int32_t>, int32_t> valuationLookup = {
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 6 }, 750 }, // Gold pile
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 7 }, 6000 }, // Genie lamp
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 8 }, 750 }, // Random resource
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, 1500 }, // Treasure chest
+        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 10 }, 1000 }, // Campfire
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 10 }, 2000 }, // Fort
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 11 }, 1500 }, // Gazebo
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 12 }, 2000 }, // Witch
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 13 }, 2000 }, // Mercenary camp
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 14 }, 1000 }, // Shrine 1st
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 15 }, 2000 }, // Shrine 2nd
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 16 }, 3000 }, // Shrine 3rd
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 18 }, 2000 }, // Standing stones
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 20 }, 3000 }, // Tree of knowledge
+        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 21 }, 8000 }, // Xanadu
+        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 92 }, 2000 }, // Treasure
+        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 93 }, 4000 }, // Minor
+        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 94 }, 10000 }, // Major
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 0 }, 250 }, // Peasant hut
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 1 }, 4000 }, // Ruins
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 2 }, 1500 }, // Tree house
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 3 }, 2000 }, // Watch tower
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 4 }, 2000 }, // Watch tower
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 5 }, 2000 }, // Halfling hole
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 6 }, 2000 }, // Halfling hole
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 7 }, 1500 }, // Tree city
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 9 }, 4000 }, // Desert tent
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 10 }, 6000 }, // City of the dead
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 11 }, 1500 }, // Excavation
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 12 }, 6000 }, // Troll bridge
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 13 }, 2000 }, // Archer house
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 14 }, 1500 }, // Goblin hut
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 15 }, 2000 }, // Dwarf cottage
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 17 }, 2000 }, // Wagon camp
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 18 }, 1500 }, // Cave
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 21 }, 4000 }, // Earth elementals
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 22 }, 4000 }, // Air elementals
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 23 }, 4000 }, // Fire elementals
+        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 24 }, 4000 }, // Water elementals
     };
+
+    constexpr int32_t treeTypeFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 0;
+        case Maps::Ground::SNOW:
+            return 30;
+        case Maps::Ground::SWAMP:
+            return 0;
+        case Maps::Ground::LAVA:
+            return 6;
+        case Maps::Ground::DESERT:
+            return 24;
+        case Maps::Ground::DIRT:
+            return 18;
+        case Maps::Ground::WASTELAND:
+            return 12;
+        case Maps::Ground::BEACH:
+            return 24;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
+    }
+
+    constexpr int32_t mountainTypeFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 6;
+        case Maps::Ground::SNOW:
+            return 12;
+        case Maps::Ground::SWAMP:
+            return 18;
+        case Maps::Ground::LAVA:
+            return 24;
+        case Maps::Ground::DESERT:
+            return 30;
+        case Maps::Ground::DIRT:
+            return 36;
+        case Maps::Ground::WASTELAND:
+            return 44;
+        case Maps::Ground::BEACH:
+            return 0;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
+    }
+
+    template <class F>
+    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const F & lambda )
+    {
+        for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadow and terrain layer parts are ignored.
+                continue;
+            }
+
+            lambda( objectPart );
+        }
+        for ( const auto & objectPart : info.topLevelParts ) {
+            lambda( objectPart );
+        }
+        return true;
+    }
+}
+
+namespace Maps::Random_Generator
+{
 
     int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex )
     {
@@ -117,7 +195,7 @@ namespace Maps::Random_Generator
         // No valuation for the object? Add it!
         assert( it != valuationLookup.end() );
 
-        return it->second;
+        return ( it == valuationLookup.end() ) ? 0 : it->second;
     }
 
     int32_t pickMonsterByValue( const int32_t protectedObjectValue )
@@ -133,67 +211,7 @@ namespace Maps::Random_Generator
         return bestMonster;
     }
 
-    constexpr int32_t treeTypeFromGroundType( const int groundType )
-    {
-        switch ( groundType ) {
-        case Ground::WATER:
-            assert( 0 );
-            return 0;
-        case Ground::GRASS:
-            return 0;
-        case Ground::SNOW:
-            return 30;
-        case Ground::SWAMP:
-            return 0;
-        case Ground::LAVA:
-            return 6;
-        case Ground::DESERT:
-            return 24;
-        case Ground::DIRT:
-            return 18;
-        case Ground::WASTELAND:
-            return 12;
-        case Ground::BEACH:
-            return 24;
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            break;
-        }
-        return 0;
-    }
-
-    constexpr int32_t mountainTypeFromGroundType( const int groundType )
-    {
-        switch ( groundType ) {
-        case Ground::WATER:
-            assert( 0 );
-            return 0;
-        case Ground::GRASS:
-            return 6;
-        case Ground::SNOW:
-            return 12;
-        case Ground::SWAMP:
-            return 18;
-        case Ground::LAVA:
-            return 24;
-        case Ground::DESERT:
-            return 30;
-        case Ground::DIRT:
-            return 36;
-        case Ground::WASTELAND:
-            return 44;
-        case Ground::BEACH:
-            return 0;
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            break;
-        }
-        return 0;
-    }
-
-    int32_t localizeObjectToTerrain( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
+    int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
     {
         if ( groupType == ObjectGroup::LANDSCAPE_TREES ) {
             assert( objectIndex < 6 );
@@ -244,23 +262,6 @@ namespace Maps::Random_Generator
             Rand::ShuffleWithGen( bucket, randomGenerator );
         }
         return buckets;
-    }
-
-    template <class F>
-    bool iterateOverObjectParts( const ObjectInfo & info, const F & lambda )
-    {
-        for ( const auto & objectPart : info.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadow and terrain layer parts are ignored.
-                continue;
-            }
-
-            lambda( objectPart );
-        }
-        for ( const auto & objectPart : info.topLevelParts ) {
-            lambda( objectPart );
-        }
-        return true;
     }
 
     bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
@@ -518,7 +519,7 @@ namespace Maps::Random_Generator
         }
 
         Tile & tile = world.getTile( position.x, position.y );
-        const int32_t objectIndex = localizeObjectToTerrain( placement.groupType, placement.objectIndex, tile.GetGround() );
+        const int32_t objectIndex = selectTerrainVariantForObject( placement.groupType, placement.objectIndex, tile.GetGround() );
         const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
         if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
             markObjectPlacement( data, objectInfo, position, false );
