@@ -63,48 +63,42 @@ namespace
     // Evaluating all treasure and power-ups using gold equivalent
     // Benchmark is 1500 gold = 1000 experience; 1 primary attribute point worth 2000 gold
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
-    //
-    // Warning: list has to be kept in sync with ObjectInfo. Potentially add it as metadata during populate.
-    const std::map<std::pair<Maps::ObjectGroup, int32_t>, int32_t> valuationLookup = {
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 6 }, 750 }, // Gold pile
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 7 }, 6000 }, // Genie lamp
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 8 }, 750 }, // Random resource
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, 1500 }, // Treasure chest
-        { { Maps::ObjectGroup::ADVENTURE_TREASURES, 10 }, 1000 }, // Campfire
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 10 }, 2000 }, // Fort
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 11 }, 1500 }, // Gazebo
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 12 }, 2000 }, // Witch
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 13 }, 2000 }, // Mercenary camp
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 14 }, 1000 }, // Shrine 1st
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 15 }, 2000 }, // Shrine 2nd
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 16 }, 3000 }, // Shrine 3rd
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 18 }, 2000 }, // Standing stones
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 20 }, 3000 }, // Tree of knowledge
-        { { Maps::ObjectGroup::ADVENTURE_POWER_UPS, 21 }, 8000 }, // Xanadu
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 92 }, 2000 }, // Treasure
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 93 }, 4000 }, // Minor
-        { { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, 94 }, 10000 }, // Major
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 0 }, 250 }, // Peasant hut
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 1 }, 4000 }, // Ruins
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 2 }, 1500 }, // Tree house
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 3 }, 2000 }, // Watch tower
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 4 }, 2000 }, // Watch tower
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 5 }, 2000 }, // Halfling hole
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 6 }, 2000 }, // Halfling hole
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 7 }, 1500 }, // Tree city
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 9 }, 4000 }, // Desert tent
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 10 }, 6000 }, // City of the dead
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 11 }, 1500 }, // Excavation
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 12 }, 6000 }, // Troll bridge
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 13 }, 2000 }, // Archer house
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 14 }, 1500 }, // Goblin hut
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 15 }, 2000 }, // Dwarf cottage
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 17 }, 2000 }, // Wagon camp
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 18 }, 1500 }, // Cave
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 21 }, 4000 }, // Earth elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 22 }, 4000 }, // Air elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 23 }, 4000 }, // Fire elementals
-        { { Maps::ObjectGroup::ADVENTURE_DWELLINGS, 24 }, 4000 }, // Water elementals
+    const std::map<MP2::MapObjectType, int32_t> objectGoldValue = {
+        { MP2::OBJ_RESOURCE, 750 },
+        { MP2::OBJ_RANDOM_RESOURCE, 750 },
+        { MP2::OBJ_CAMPFIRE, 1000 },
+        { MP2::OBJ_TREASURE_CHEST, 1500 },
+        { MP2::OBJ_GENIE_LAMP, 6000 },
+        { MP2::OBJ_GAZEBO, 1500 },
+        { MP2::OBJ_MERCENARY_CAMP, 2000 },
+        { MP2::OBJ_FORT, 2000 },
+        { MP2::OBJ_STANDING_STONES, 2000 },
+        { MP2::OBJ_WITCH_DOCTORS_HUT, 2000 },
+        { MP2::OBJ_SHRINE_FIRST_CIRCLE, 1000 },
+        { MP2::OBJ_SHRINE_SECOND_CIRCLE, 2000 },
+        { MP2::OBJ_SHRINE_THIRD_CIRCLE, 3000 },
+        { MP2::OBJ_TREE_OF_KNOWLEDGE, 3000 },
+        { MP2::OBJ_XANADU, 8000 },
+        { MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 2000 },
+        { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 4000 },
+        { MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 10000 },
+        { MP2::OBJ_PEASANT_HUT, 250 },
+        { MP2::OBJ_GOBLIN_HUT, 1500 },
+        { MP2::OBJ_CAVE, 1500 },
+        { MP2::OBJ_HALFLING_HOLE, 1500 },
+        { MP2::OBJ_TREE_CITY, 1500 },
+        { MP2::OBJ_TREE_HOUSE, 1500 },
+        { MP2::OBJ_EXCAVATION, 1500 },
+        { MP2::OBJ_WAGON_CAMP, 2000 },
+        { MP2::OBJ_WATCH_TOWER, 2000 },
+        { MP2::OBJ_ARCHER_HOUSE, 2000 },
+        { MP2::OBJ_DWARF_COTTAGE, 2000 },
+        { MP2::OBJ_DESERT_TENT, 3000 },
+        { MP2::OBJ_RUINS, 4000 },
+        { MP2::OBJ_FIRE_ALTAR, 4000 },
+        { MP2::OBJ_WATER_ALTAR, 4000 },
+        { MP2::OBJ_AIR_ALTAR, 4000 },
+        { MP2::OBJ_EARTH_ALTAR, 4000 },
     };
 
     constexpr int32_t treeTypeFromGroundType( const int groundType )
@@ -188,14 +182,16 @@ namespace
 namespace Maps::Random_Generator
 {
 
-    int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex )
+    int32_t getObjectGoldValue( const Maps::ObjectGroup group, const int32_t objectIndex )
     {
-        const auto it = valuationLookup.find( { group, objectIndex } );
+        const auto & objectInfo = Maps::getObjectInfo( group, objectIndex );
+
+        const auto it = objectGoldValue.find( objectInfo.objectType );
 
         // No valuation for the object? Add it!
-        assert( it != valuationLookup.end() );
+        assert( it != objectGoldValue.end() );
 
-        return ( it == valuationLookup.end() ) ? 0 : it->second;
+        return ( it == objectGoldValue.end() ) ? 0 : it->second;
     }
 
     int32_t pickMonsterByValue( const int32_t protectedObjectValue )
