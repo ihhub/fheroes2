@@ -73,6 +73,14 @@ namespace Maps::Random_Generator
         {
             // Do nothing
         }
+
+        explicit Node( const int index_, const uint32_t region_, const NodeType type_ )
+            : index( index_ )
+            , region( region_ )
+            , type( type_ )
+        {
+            // Do nothing
+        }
     };
 
     class NodeCache final
@@ -85,6 +93,9 @@ namespace Maps::Random_Generator
             if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
                 // TODO: here we must add an assertion and make sure that we never reach this place.
+                assert( _outOfBounds.type == NodeType::BORDER );
+                assert( _outOfBounds.index == -1 );
+
                 return _outOfBounds;
             }
 
@@ -96,6 +107,9 @@ namespace Maps::Random_Generator
             if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
                 // However, since we are accessing const value it is fine to get an invalid item.
+                assert( _outOfBounds.type == NodeType::BORDER );
+                assert( _outOfBounds.index == -1 );
+
                 return _outOfBounds;
             }
 
@@ -107,6 +121,10 @@ namespace Maps::Random_Generator
             if ( index < 0 || index >= _mapSize * _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
                 assert( 0 );
+
+                assert( _outOfBounds.type == NodeType::BORDER );
+                assert( _outOfBounds.index == -1 );
+
                 return _outOfBounds;
             }
 
@@ -115,7 +133,7 @@ namespace Maps::Random_Generator
 
     private:
         int32_t _mapSize{ 0 };
-        Node _outOfBounds;
+        Node _outOfBounds{ -1, 0, NodeType::BORDER };
         std::vector<Node> _data;
     };
 
