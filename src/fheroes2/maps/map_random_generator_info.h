@@ -174,7 +174,7 @@ namespace Maps::Random_Generator
     class MapEconomy final
     {
     public:
-        void increaseMineCount( const int resource );
+        void increaseMineCount( const int resourceType );
         int pickNextMineResource();
 
     private:

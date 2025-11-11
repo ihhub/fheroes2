@@ -50,9 +50,9 @@ namespace Maps::Random_Generator
         }
     }
 
-    void MapEconomy::increaseMineCount( const int resource )
+    void MapEconomy::increaseMineCount( const int resourceType )
     {
-        const auto it = minesCount.find( resource );
+        const auto it = minesCount.find( resourceType );
         assert( it != minesCount.end() );
         ++it->second;
     }
