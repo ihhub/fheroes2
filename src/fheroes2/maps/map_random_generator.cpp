@@ -108,19 +108,19 @@ namespace
 
 namespace Maps::Random_Generator
 {
-+    const std::vector<ObjectSet> prefabObjectSets{ ObjectSet{ // Obstacles.
-+                                                              { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 },
-+                                                                { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
-+                                                                { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
-+                                                              // Valuables.
-+                                                              { { { 1, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-+                                                                { { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-+                                                                { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
-+                                                                { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-+                                                              // Monsters.
-+                                                              { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
-+                                                              // Entrance check.
-+                                                              { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+    const std::vector<ObjectSet> prefabObjectSets{ ObjectSet{ // Obstacles.
+                                                              { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                                                                { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                                                                { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                                                              // Valuables.
+                                                              { { { 1, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                                                              // Monsters.
+                                                              { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
+                                                              // Entrance check.
+                                                              { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
                                                    ObjectSet{ // Obstacles.
                                                               { { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 },
                                                                 { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
