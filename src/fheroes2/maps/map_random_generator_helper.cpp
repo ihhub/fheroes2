@@ -260,7 +260,7 @@ namespace Maps::Random_Generator
         return buckets;
     }
 
-    bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
+    bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders )
     {
         bool invalid = false;
         fheroes2::Rect objectRect;
@@ -287,7 +287,7 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        if ( isAction ) {
+        if ( MP2::isOffGameActionObject( info.objectType ) ) {
             for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
                 const Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, 1 } );
                 if ( pathNode.index == -1 || pathNode.type == NodeType::OBSTACLE ) {
@@ -342,7 +342,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
+    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
         fheroes2::Rect objectRect;
 
@@ -356,7 +356,7 @@ namespace Maps::Random_Generator
 
         iterateOverObjectParts( info, updateObjectArea );
 
-        if ( !isAction ) {
+        if ( !MP2::isOffGameActionObject( info.objectType ) ) {
             return;
         }
 
@@ -398,8 +398,8 @@ namespace Maps::Random_Generator
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( canFitObject( data, objectInfo, tilePos, true, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
-            markObjectPlacement( data, objectInfo, tilePos, true );
+        if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
+            markObjectPlacement( data, objectInfo, tilePos );
             return true;
         }
 
@@ -419,7 +419,7 @@ namespace Maps::Random_Generator
         const auto & basementInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
         const auto & castleInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
-        if ( !canFitObject( data, basementInfo, tilePos, false, true ) || !canFitObject( data, castleInfo, tilePos, true, true ) ) {
+        if ( !canFitObject( data, basementInfo, tilePos, true ) || !canFitObject( data, castleInfo, tilePos, true ) ) {
             return false;
         }
 
@@ -472,8 +472,8 @@ namespace Maps::Random_Generator
 
         world.addCastle( tile.GetIndex(), race, color );
 
-        markObjectPlacement( data, basementInfo, tilePos, false );
-        markObjectPlacement( data, castleInfo, tilePos, true );
+        markObjectPlacement( data, basementInfo, tilePos );
+        markObjectPlacement( data, castleInfo, tilePos );
 
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
@@ -506,7 +506,7 @@ namespace Maps::Random_Generator
         const fheroes2::Point tilePos = tile.GetCenter();
         for ( const auto & obstacleId : obstacleList ) {
             const auto & objectInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TREES, obstacleId );
-            if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
+            if ( canFitObject( data, objectInfo, tilePos, false ) && putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
                 return true;
             }
         }
@@ -524,7 +524,7 @@ namespace Maps::Random_Generator
         const int32_t objectIndex = selectTerrainVariantForObject( placement.groupType, placement.objectIndex, tile.GetGround() );
         const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
         if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
-            markObjectPlacement( data, objectInfo, position, false );
+            markObjectPlacement( data, objectInfo, position );
             return true;
         }
         return false;
