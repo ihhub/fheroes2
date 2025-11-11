@@ -121,7 +121,7 @@ namespace Maps::Random_Generator
                                                        // Monsters.
                                                        { { { 0, 0 }, ObjectGroup::MONSTERS, randomMonsterIndex } },
                                                        // Entrance check.
-                                                       { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
+                                                       { { -1, 0 }, { -1, 1 }, { 0, 1 } }
                                                    },
                                                    ObjectSet{ // Obstacles.
                                                               { { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 },
