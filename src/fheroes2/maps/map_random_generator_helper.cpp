@@ -419,69 +419,70 @@ namespace Maps::Random_Generator
         const auto & basementInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
         const auto & castleInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
-        if ( canFitObject( data, basementInfo, tilePos, false, true ) && canFitObject( data, castleInfo, tilePos, true, true ) ) {
-            if ( !putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
-                return false;
-            }
-
-            // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
-            // Every time an object is being placed on a map the counter is going to be increased by 1.
-            // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
-            assert( Maps::getLastObjectUID() > 0 );
-            const uint32_t objectId = Maps::getLastObjectUID() - 1;
-
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, tile, ObjectGroup::KINGDOM_TOWNS, castleObjectId ) ) {
-                return false;
-            }
-
-            const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
-
-            if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( mapFormat.tiles[bottomIndex] ) ) {
-                // Update road if there is one in front of the town/castle entrance.
-                Maps::updateRoadSpriteOnTile( mapFormat, bottomIndex, false );
-            }
-
-            // By default use random (default) army for the neutral race town/castle.
-            const PlayerColor color = Color::IndexToColor( region.colorIndex );
-            if ( color == PlayerColor::NONE ) {
-                Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
-            }
-
-            // Add flags.
-            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 ) ) {
-                return false;
-            }
-
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
-                return false;
-            }
-
-            const ObjectInfo & townObjectInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
-            const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
-
-            world.addCastle( tile.GetIndex(), race, color );
-
-            markObjectPlacement( data, basementInfo, tilePos, false );
-            markObjectPlacement( data, castleInfo, tilePos, true );
-
-            // Force roads coming from the castle
-            const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
-            if ( Maps::isValidAbsIndex( nextIndex ) ) {
-                Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
-                Maps::updateRoadOnTile( mapFormat, nextIndex, true );
-            }
-
-            return true;
+        if ( !canFitObject( data, basementInfo, tilePos, false, true ) || !canFitObject( data, castleInfo, tilePos, true, true ) ) {
+            return false;
         }
 
-        return false;
+
+        if ( !putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
+            return false;
+        }
+
+        // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
+        // Every time an object is being placed on a map the counter is going to be increased by 1.
+        // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
+        assert( Maps::getLastObjectUID() > 0 );
+        const uint32_t objectId = Maps::getLastObjectUID() - 1;
+
+        Maps::setLastObjectUID( objectId );
+
+        if ( !putObjectOnMap( mapFormat, tile, ObjectGroup::KINGDOM_TOWNS, castleObjectId ) ) {
+            return false;
+        }
+
+        const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
+
+        if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( mapFormat.tiles[bottomIndex] ) ) {
+            // Update road if there is one in front of the town/castle entrance.
+            Maps::updateRoadSpriteOnTile( mapFormat, bottomIndex, false );
+        }
+
+        // By default use random (default) army for the neutral race town/castle.
+        const PlayerColor color = Color::IndexToColor( region.colorIndex );
+        if ( color == PlayerColor::NONE ) {
+            Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
+        }
+
+        // Add flags.
+        assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
+        Maps::setLastObjectUID( objectId );
+
+        if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 ) ) {
+            return false;
+        }
+
+        Maps::setLastObjectUID( objectId );
+
+        if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
+            return false;
+        }
+
+        const ObjectInfo & townObjectInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
+        const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
+
+        world.addCastle( tile.GetIndex(), race, color );
+
+        markObjectPlacement( data, basementInfo, tilePos, false );
+        markObjectPlacement( data, castleInfo, tilePos, true );
+
+        // Force roads coming from the castle
+        const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
+        if ( Maps::isValidAbsIndex( nextIndex ) ) {
+            Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
+            Maps::updateRoadOnTile( mapFormat, nextIndex, true );
+        }
+
+        return true;
     }
 
     bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
