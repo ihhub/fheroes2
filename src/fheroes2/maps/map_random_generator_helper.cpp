@@ -161,8 +161,7 @@ namespace
         return 0;
     }
 
-    template <class F>
-    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const F & lambda )
+    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const std::function<void( const Maps::ObjectPartInfo & )> & lambda )
     {
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
