@@ -64,41 +64,57 @@ namespace
     // Benchmark is 1500 gold = 1000 experience; 1 primary attribute point worth 2000 gold
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
     const std::map<MP2::MapObjectType, int32_t> objectGoldValue = {
-        { MP2::OBJ_RESOURCE, 750 },
-        { MP2::OBJ_RANDOM_RESOURCE, 750 },
+        { MP2::OBJ_AIR_ALTAR, 4000 },
+        { MP2::OBJ_ARCHER_HOUSE, 2000 },
         { MP2::OBJ_CAMPFIRE, 1000 },
-        { MP2::OBJ_TREASURE_CHEST, 1500 },
-        { MP2::OBJ_GENIE_LAMP, 6000 },
-        { MP2::OBJ_GAZEBO, 1500 },
-        { MP2::OBJ_MERCENARY_CAMP, 2000 },
+        { MP2::OBJ_CAVE, 1500 },
+        { MP2::OBJ_DESERT_TENT, 3000 },
+        { MP2::OBJ_DWARF_COTTAGE, 2000 },
+        { MP2::OBJ_EARTH_ALTAR, 4000 },
+        { MP2::OBJ_EXCAVATION, 1500 },
+        { MP2::OBJ_FIRE_ALTAR, 4000 },
         { MP2::OBJ_FORT, 2000 },
-        { MP2::OBJ_STANDING_STONES, 2000 },
-        { MP2::OBJ_WITCH_DOCTORS_HUT, 2000 },
+        { MP2::OBJ_GAZEBO, 1500 },
+        { MP2::OBJ_GENIE_LAMP, 6000 },
+        { MP2::OBJ_GOBLIN_HUT, 1500 },
+        { MP2::OBJ_HALFLING_HOLE, 1500 },
+        { MP2::OBJ_MERCENARY_CAMP, 2000 },
+        { MP2::OBJ_PEASANT_HUT, 250 },
+        { MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 10000 },
+        { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 4000 },
+        { MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 2000 },
+        { MP2::OBJ_RANDOM_RESOURCE, 750 },
+        { MP2::OBJ_RESOURCE, 750 },
+        { MP2::OBJ_RUINS, 4000 },
         { MP2::OBJ_SHRINE_FIRST_CIRCLE, 1000 },
         { MP2::OBJ_SHRINE_SECOND_CIRCLE, 2000 },
         { MP2::OBJ_SHRINE_THIRD_CIRCLE, 3000 },
-        { MP2::OBJ_TREE_OF_KNOWLEDGE, 3000 },
-        { MP2::OBJ_XANADU, 8000 },
-        { MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 2000 },
-        { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 4000 },
-        { MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 10000 },
-        { MP2::OBJ_PEASANT_HUT, 250 },
-        { MP2::OBJ_GOBLIN_HUT, 1500 },
-        { MP2::OBJ_CAVE, 1500 },
-        { MP2::OBJ_HALFLING_HOLE, 1500 },
+        { MP2::OBJ_STANDING_STONES, 2000 },
+        { MP2::OBJ_TREASURE_CHEST, 1500 },
         { MP2::OBJ_TREE_CITY, 1500 },
         { MP2::OBJ_TREE_HOUSE, 1500 },
-        { MP2::OBJ_EXCAVATION, 1500 },
+        { MP2::OBJ_TREE_OF_KNOWLEDGE, 3000 },
         { MP2::OBJ_WAGON_CAMP, 2000 },
         { MP2::OBJ_WATCH_TOWER, 2000 },
-        { MP2::OBJ_ARCHER_HOUSE, 2000 },
-        { MP2::OBJ_DWARF_COTTAGE, 2000 },
-        { MP2::OBJ_DESERT_TENT, 3000 },
-        { MP2::OBJ_RUINS, 4000 },
-        { MP2::OBJ_FIRE_ALTAR, 4000 },
         { MP2::OBJ_WATER_ALTAR, 4000 },
-        { MP2::OBJ_AIR_ALTAR, 4000 },
-        { MP2::OBJ_EARTH_ALTAR, 4000 },
+        { MP2::OBJ_WITCH_DOCTORS_HUT, 2000 },
+        { MP2::OBJ_XANADU, 8000 },
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     };
 
     constexpr int32_t treeTypeFromGroundType( const int groundType )
