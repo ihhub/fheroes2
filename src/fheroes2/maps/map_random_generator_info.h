@@ -171,13 +171,15 @@ namespace Maps::Random_Generator
         fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat );
     };
 
-    struct MapEconomy final
+    class MapEconomy final
     {
-        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
-                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
-
+    public:
         void increaseMineCount( const int resource );
         int pickNextMineResource();
+
+    private:
+        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
+                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
     };
 
     struct RegionalObjects final
