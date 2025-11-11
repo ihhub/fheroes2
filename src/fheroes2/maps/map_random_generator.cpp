@@ -36,260 +36,39 @@
 #include <vector>
 
 #include "color.h"
-#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
-#include "maps.h"
+#include "map_random_generator_helper.h"
+#include "map_random_generator_info.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "math_base.h"
-#include "mp2.h"
-#include "race.h"
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
 #include "skill.h"
-#include "ui_map_object.h"
 #include "world.h"
-#include "world_object_uid.h"
 #include "world_pathfinding.h"
 
 namespace
 {
-    const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     constexpr int32_t smallestStartingRegionSize{ 200 };
     constexpr int32_t emptySpacePercentage{ 40 };
-    constexpr int randomCastleIndex{ 12 };
-    constexpr int randomTownIndex{ 13 };
     constexpr int randomMonsterIndex{ 68 };
-    constexpr int maxPlacementAttempts{ 30 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
-    constexpr uint8_t directionCount{ 8 };
-    const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
-    constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
-
-    // TODO: replace list of object indicies with a struct for a better variety
-    const std::map<int, std::vector<int>> obstaclesPerGround = {
-        { Maps::Ground::DESERT, { 24, 25, 26, 27, 28, 29 } },    { Maps::Ground::SNOW, { 30, 31, 32, 33, 34, 35 } },  { Maps::Ground::SWAMP, { 18, 19, 20, 21, 22, 23 } },
-        { Maps::Ground::WASTELAND, { 12, 13, 14, 15, 16, 17 } }, { Maps::Ground::BEACH, { 24, 25, 26, 27, 28, 29 } }, { Maps::Ground::LAVA, { 6, 7, 8, 9, 10, 11 } },
-        { Maps::Ground::DIRT, { 18, 19, 20, 21, 22, 23 } },      { Maps::Ground::GRASS, { 0, 1, 2, 3, 4, 5 } },       { Maps::Ground::WATER, {} },
-    };
-
-    enum class NodeType : uint8_t
-    {
-        OPEN,
-        BORDER,
-        ACTION,
-        OBSTACLE,
-        CONNECTOR,
-        PATH
-    };
-
-    struct Node final
-    {
-        int index{ -1 };
-        uint32_t region{ 0 };
-        NodeType type{ NodeType::OPEN };
-
-        Node() = default;
-
-        explicit Node( const int index_ )
-            : index( index_ )
-        {
-            // Do nothing
-        }
-    };
-
-    class NodeCache final
-    {
-    public:
-        NodeCache( const int32_t width, const int32_t height )
-            : _mapSize( width )
-            , _outOfBounds( -1 )
-            , _data( static_cast<size_t>( width ) * height )
-        {
-            assert( width > 0 && height > 0 );
-            assert( width == height );
-
-            _outOfBounds.type = NodeType::BORDER;
-
-            for ( size_t i = 0; i < _data.size(); ++i ) {
-                _data[i].index = static_cast<int>( i );
-            }
-        }
-
-        Node & getNode( const fheroes2::Point position )
-        {
-            if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
-                // We shouldn't try to get a tile with an invalid index.
-                // TODO: here we must add an assertion and make sure that we never reach this place.
-                return _outOfBounds;
-            }
-
-            return _data[position.y * _mapSize + position.x];
-        }
-
-        const Node & getNode( const fheroes2::Point position ) const
-        {
-            if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
-                // We shouldn't try to get a tile with an invalid index.
-                // However, since we are accessing const value it is fine to get an invalid item.
-                return _outOfBounds;
-            }
-
-            return _data[position.y * _mapSize + position.x];
-        }
-
-        Node & getNode( const int32_t index )
-        {
-            if ( index < 0 || index >= _mapSize * _mapSize ) {
-                // We shouldn't try to get a tile with an invalid index.
-                assert( 0 );
-                return _outOfBounds;
-            }
-
-            return _data[index];
-        }
-
-    private:
-        const int32_t _mapSize{ 0 };
-        Node _outOfBounds;
-        std::vector<Node> _data;
-    };
-
-    struct Region final
-    {
-        uint32_t id{ 0 };
-        int32_t centerIndex{ -1 };
-        std::set<uint32_t> neighbours;
-        std::vector<std::reference_wrapper<Node>> nodes;
-        std::map<uint32_t, int32_t> connections;
-        size_t sizeLimit{ 0 };
-        size_t lastProcessedNode{ 0 };
-        int colorIndex{ neutralColorIndex };
-        int groundType{ Maps::Ground::GRASS };
-
-        Region() = default;
-
-        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize )
-            : id( regionIndex )
-            , centerIndex( centerNode.index )
-            , sizeLimit( expectedSize )
-            , colorIndex( playerColor )
-            , groundType( ground )
-        {
-            assert( expectedSize > 0 );
-
-            centerNode.region = regionIndex;
-            nodes.reserve( expectedSize );
-            nodes.emplace_back( centerNode );
-        }
-    };
-
-    struct ObjectPlacement final
-    {
-        fheroes2::Point offset;
-        Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
-        int32_t objectIndex{ 0 };
-    };
-
-    struct ObjectSet final
-    {
-        std::vector<ObjectPlacement> obstacles;
-        std::vector<ObjectPlacement> valuables;
-        std::vector<ObjectPlacement> monsters;
-        std::vector<fheroes2::Point> entranceCheck;
-    };
-
-    const std::vector<ObjectSet> prefabObjectSets
-        = { { ObjectSet{
-                  { ObjectPlacement{ { 0, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { 3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 },
-                    ObjectPlacement{ { 3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-                  { ObjectPlacement{ { 1, -1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { 2, -1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { 1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { 2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                  { { -1, 0 }, { -1, 1 }, { 0, 1 } } // entranceCheck
-              },
-              ObjectSet{
-                  { ObjectPlacement{ { -3, 0 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { -3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 0 },
-                    ObjectPlacement{ { 0, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-                  { ObjectPlacement{ { -2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { -1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { -2, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { -1, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                  { { 0, -1 }, { 1, -1 }, { 1, 0 } } // entranceCheck
-              },
-              ObjectSet{
-                  { ObjectPlacement{ { 3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 0 }, ObjectPlacement{ { 1, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 5 },
-                    ObjectPlacement{ { 3, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 } }, // obstacles
-                  { ObjectPlacement{ { 1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { 2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { 1, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { 2, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                  { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 } } // entranceCheck
-              },
-              ObjectSet{
-                  { ObjectPlacement{ { -3, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 1 }, ObjectPlacement{ { -1, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 4 },
-                    ObjectPlacement{ { -3, 2 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 } }, // obstacles
-                  { ObjectPlacement{ { -1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 }, ObjectPlacement{ { -2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { -1, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { -2, 1 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                  { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 } } // entranceCheck
-              },
-              ObjectSet{
-                  { ObjectPlacement{ { -3, 0 }, Maps::ObjectGroup::LANDSCAPE_TREES, 3 }, ObjectPlacement{ { -1, -1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 5 },
-                    ObjectPlacement{ { -3, 1 }, Maps::ObjectGroup::LANDSCAPE_TREES, 2 } }, // obstacles
-                  { ObjectPlacement{ { -2, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 },
-                    ObjectPlacement{ { -1, 0 }, Maps::ObjectGroup::ADVENTURE_TREASURES, 9 } }, // valuables
-                  { ObjectPlacement{ { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } }, // monsters
-                  { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } // entranceCheck
-              } } };
-
-    struct RegionalObjects final
-    {
-        uint8_t castleCount{ 0 };
-        uint8_t mineCount{ 0 };
-        uint8_t objectCount{ 0 };
-        uint8_t powerUpsCount{ 0 };
-        uint8_t treasureCount{ 0 };
-    };
-
-    constexpr std::array<RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
+    constexpr std::array<Maps::Random_Generator::RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
         { 1, 2, 1, 1, 2 }, // ResourceDensity::SCARCE
         { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
         { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
     } };
 
-    struct MapEconomy final
-    {
-        std::map<int, uint32_t> minesCount{ { Resource::WOOD, 0 }, { Resource::ORE, 0 },     { Resource::CRYSTAL, 0 }, { Resource::SULFUR, 0 },
-                                            { Resource::GEMS, 0 }, { Resource::MERCURY, 0 }, { Resource::GOLD, 0 } };
-
-        void increaseMineCount( const int resource )
-        {
-            const auto it = minesCount.find( resource );
-            assert( it != minesCount.end() );
-            ++it->second;
-        }
-
-        int pickNextMineResource()
-        {
-            const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
-                                              [this]( const auto & a, const auto & b ) { return minesCount.at( a ) < minesCount.at( b ); } );
-            assert( it != secondaryResources.end() );
-
-            return *it;
-        }
-    };
+    const std::vector<Maps::Random_Generator::ObjectPlacement> randomMonsterSet{ { { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
@@ -327,524 +106,96 @@ namespace
 
         return groundTiles / canFit;
     }
-
-    struct PlacementTile final
-    {
-        int index{ 0 };
-        float distance{ 0 };
-        int ring{ 0 };
-    };
-
-    std::vector<std::vector<PlacementTile>> findOpenTilesSortedJittered( const Region & region, int mapWidth, Rand::PCG32 & randomGenerator )
-    {
-        if ( region.centerIndex < 0 || region.nodes.empty() || mapWidth <= 0 ) {
-            return {};
-        }
-
-        std::vector<std::vector<PlacementTile>> buckets;
-
-        const int centerX = region.centerIndex % mapWidth;
-        const int centerY = region.centerIndex / mapWidth;
-
-        for ( const Node & node : region.nodes ) {
-            if ( node.type != NodeType::OPEN || node.index < 0 ) {
-                continue;
-            }
-
-            const int dx = ( node.index % mapWidth ) - centerX;
-            const int dy = ( node.index / mapWidth ) - centerY;
-
-            const float distance = std::sqrt( static_cast<float>( dx * dx + dy * dy ) );
-            const int noise = static_cast<int>( Rand::GetWithGen( 0, 2, randomGenerator ) );
-            const int ring = static_cast<int>( std::floor( distance ) ) + noise;
-            if ( static_cast<size_t>( ring ) >= buckets.size() ) {
-                buckets.resize( ring + 1 );
-            }
-
-            buckets[ring].push_back( { node.index, distance, ring } );
-        }
-
-        for ( auto & bucket : buckets ) {
-            if ( bucket.empty() ) {
-                continue;
-            }
-
-            Rand::ShuffleWithGen( bucket, randomGenerator );
-        }
-        return buckets;
-    }
-
-    constexpr int32_t treeTypeFromGroundType( const int groundType )
-    {
-        switch ( groundType ) {
-        case Maps::Ground::WATER:
-            assert( 0 );
-            return 0;
-        case Maps::Ground::GRASS:
-            return 0;
-        case Maps::Ground::SNOW:
-            return 30;
-        case Maps::Ground::SWAMP:
-            return 0;
-        case Maps::Ground::LAVA:
-            return 6;
-        case Maps::Ground::DESERT:
-            return 24;
-        case Maps::Ground::DIRT:
-            return 18;
-        case Maps::Ground::WASTELAND:
-            return 12;
-        case Maps::Ground::BEACH:
-            return 24;
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            break;
-        }
-        return 0;
-    }
-
-    constexpr int32_t mountainTypeFromGroundType( const int groundType )
-    {
-        switch ( groundType ) {
-        case Maps::Ground::WATER:
-            assert( 0 );
-            return 0;
-        case Maps::Ground::GRASS:
-            return 6;
-        case Maps::Ground::SNOW:
-            return 12;
-        case Maps::Ground::SWAMP:
-            return 18;
-        case Maps::Ground::LAVA:
-            return 24;
-        case Maps::Ground::DESERT:
-            return 30;
-        case Maps::Ground::DIRT:
-            return 36;
-        case Maps::Ground::WASTELAND:
-            return 44;
-        case Maps::Ground::BEACH:
-            return 0;
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            break;
-        }
-        return 0;
-    }
-
-    bool checkForRegionConnectors( NodeCache & data, std::vector<Region> & mapRegions, Region & region, Node & node )
-    {
-        if ( node.type != NodeType::BORDER ) {
-            return false;
-        }
-
-        const fheroes2::Point position = Maps::GetPoint( node.index );
-
-        int distinctNeighbours = 0;
-        uint32_t seen = node.region;
-        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
-            const Node & newTile = data.getNode( position + directionOffsets[direction] );
-
-            if ( newTile.index == -1 || newTile.region == region.id ) {
-                continue;
-            }
-
-            if ( seen != newTile.region ) {
-                seen = newTile.region;
-                if ( ++distinctNeighbours > 1 ) {
-                    return false;
-                }
-            }
-        }
-
-        for ( uint8_t direction = 0; direction < 4; ++direction ) {
-            Node & adjacent = data.getNode( position + directionOffsets[direction] );
-
-            if ( adjacent.index == -1 || adjacent.region == region.id || mapRegions[adjacent.region].groundType == Maps::Ground::WATER ) {
-                continue;
-            }
-
-            Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );
-            if ( twoAway.index == -1 || twoAway.type != NodeType::OPEN ) {
-                continue;
-            }
-
-            if ( region.connections.find( adjacent.region ) == region.connections.end() ) {
-                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Found a connection between " << region.id << " and " << adjacent.region << ", via " << node.index )
-                region.connections.emplace( adjacent.region, node.index );
-                mapRegions[adjacent.region].connections.emplace( region.id, node.index );
-                node.type = NodeType::CONNECTOR;
-                adjacent.type = NodeType::PATH;
-                twoAway.type = NodeType::PATH;
-
-                Node & stepBack = data.getNode( position - directionOffsets[direction] );
-                if ( stepBack.index != -1 ) {
-                    stepBack.type = NodeType::PATH;
-                }
-
-                break;
-            }
-        }
-
-        return node.type == NodeType::CONNECTOR;
-    }
-
-    void checkAdjacentTiles( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
-    {
-        Node & previousNode = region.nodes[region.lastProcessedNode];
-        const int nodeIndex = previousNode.index;
-
-        for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
-            if ( region.nodes.size() > region.sizeLimit ) {
-                previousNode.type = NodeType::BORDER;
-                break;
-            }
-
-            // Check diagonal direction only 50% of the time to get more circular distribution.
-            // It gives randomness for uneven edges.
-            if ( direction > 3 && Rand::GetWithGen( 0, 1, randomGenerator ) ) {
-                continue;
-            }
-
-            // TODO: use node index and pre-calculate offsets in advance.
-            //       This will speed up the below calculations.
-            const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex ) + directionOffsets[direction];
-            if ( !Maps::isValidAbsPoint( newPosition.x, newPosition.y ) ) {
-                continue;
-            }
-
-            Node & newTile = rawData.getNode( newPosition );
-            if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
-                newTile.region = region.id;
-                region.nodes.push_back( newTile );
-            }
-            else if ( newTile.region != region.id ) {
-                previousNode.type = NodeType::BORDER;
-                region.neighbours.insert( newTile.region );
-            }
-        }
-    }
-
-    void regionExpansion( NodeCache & rawData, Region & region, Rand::PCG32 & randomGenerator )
-    {
-        // Process only "open" nodes that exist at the start of the loop and ignore what's added.
-        const size_t nodesEnd = region.nodes.size();
-
-        while ( region.lastProcessedNode < nodesEnd ) {
-            checkAdjacentTiles( rawData, region, randomGenerator );
-            ++region.lastProcessedNode;
-        }
-    }
-
-    template <class F>
-    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const F & lambda )
-    {
-        for ( const auto & objectPart : info.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadow and terrain layer parts are ignored.
-                continue;
-            }
-
-            lambda( objectPart );
-        }
-        for ( const auto & objectPart : info.topLevelParts ) {
-            lambda( objectPart );
-        }
-        return true;
-    }
-
-    bool canFitObject( const NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction, const bool skipBorders )
-    {
-        bool invalid = false;
-        fheroes2::Rect objectRect;
-
-        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect, skipBorders, &invalid]( const auto & partInfo ) {
-            const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
-
-            if ( node.index == -1 || node.region == 0 ) {
-                invalid = true;
-                return;
-            }
-            if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
-                invalid = true;
-                return;
-            }
-
-            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
-        } );
-
-        if ( invalid ) {
-            return false;
-        }
-
-        if ( isAction ) {
-            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-                const Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, 1 } );
-                if ( pathNode.index == -1 || pathNode.type == NodeType::OBSTACLE ) {
-                    return false;
-                }
-                if ( pathNode.type == NodeType::BORDER ) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    bool canFitObjectSet( const NodeCache & data, const ObjectSet & set, const fheroes2::Point & mainTilePos )
-    {
-        for ( const fheroes2::Point offset : set.entranceCheck ) {
-            const Node & node = data.getNode( mainTilePos + offset );
-            if ( node.index == -1 || node.type != NodeType::OPEN ) {
-                return false;
-            }
-        }
-
-        for ( const auto * placements : { &set.obstacles, &set.valuables, &set.monsters } ) {
-            for ( const auto & placement : *placements ) {
-                const auto & info = Maps::getObjectInfo( placement.groupType, placement.objectIndex );
-                const bool isAction = MP2::isInGameActionObject( info.objectType );
-                const fheroes2::Point position = mainTilePos + placement.offset;
-                bool invalid = false;
-
-                iterateOverObjectParts( info, [&data, &position, isAction, &invalid]( const auto & partInfo ) {
-                    const Node & node = data.getNode( position + partInfo.tileOffset );
-
-                    if ( node.index == -1 || node.region == 0 ) {
-                        invalid = true;
-                        return;
-                    }
-                    if ( node.type != NodeType::OPEN && ( isAction || node.type != NodeType::BORDER ) ) {
-                        invalid = true;
-                        return;
-                    }
-                } );
-
-                if ( invalid ) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    void markObjectPlacement( NodeCache & data, const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isAction )
-    {
-        fheroes2::Rect objectRect;
-
-        iterateOverObjectParts( info, [&data, &mainTilePos, &objectRect]( const auto & partInfo ) {
-            Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
-            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
-
-            node.type = NodeType::OBSTACLE;
-        } );
-
-        if ( !isAction ) {
-            return;
-        }
-
-        for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-            data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } ).type = NodeType::PATH;
-        }
-
-        // Mark extra nodes as path to avoid objects clumping together
-        data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
-        data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
-
-        data.getNode( mainTilePos ).type = NodeType::ACTION;
-    }
-
-    bool putObjectOnMap( Maps::Map_Format::MapFormat & mapFormat, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
-    {
-        const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
-        if ( objectInfo.empty() ) {
-            assert( 0 );
-            return false;
-        }
-
-        const MP2::MapObjectType mp2Type = objectInfo.objectType;
-        // Maps::setObjectOnTile isn't idempotent, check if object was already placed
-        if ( MP2::isInGameActionObject( mp2Type ) && tile.getMainObjectType() == mp2Type ) {
-            return false;
-        }
-
-        // Do not update passabilities after every object placement.
-        if ( !Maps::setObjectOnTile( tile, objectInfo, false ) ) {
-            return false;
-        }
-
-        Maps::addObjectToMap( mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
-
-        return true;
-    }
-
-    bool actionObjectPlacer( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t type )
-    {
-        const fheroes2::Point tilePos = tile.GetCenter();
-        const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-        if ( canFitObject( data, objectInfo, tilePos, true, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
-            markObjectPlacement( data, objectInfo, tilePos, true );
-            return true;
-        }
-
-        return false;
-    }
-
-    fheroes2::Point adjustRegionToFitCastle( const Maps::Map_Format::MapFormat & mapFormat, Region & region )
-    {
-        const fheroes2::Point startingLocation = Maps::GetPoint( region.centerIndex );
-        const int32_t castleX = std::min( std::max( startingLocation.x, 4 ), mapFormat.width - 4 );
-        const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
-        region.centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
-        return { castleX, castleY };
-    }
-
-    bool placeCastle( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
-    {
-        auto & tile = world.getTile( tilePos.x, tilePos.y );
-        if ( tile.isWater() ) {
-            return false;
-        }
-
-        const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
-        const int32_t castleObjectId = isCastle ? randomCastleIndex : randomTownIndex;
-
-        const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
-
-        if ( canFitObject( data, basementInfo, tilePos, false, true ) && canFitObject( data, castleInfo, tilePos, true, true ) ) {
-            if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
-                return false;
-            }
-
-            // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
-            // Every time an object is being placed on a map the counter is going to be increased by 1.
-            // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
-            assert( Maps::getLastObjectUID() > 0 );
-            const uint32_t objectId = Maps::getLastObjectUID() - 1;
-
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId ) ) {
-                return false;
-            }
-
-            const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
-
-            if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( mapFormat.tiles[bottomIndex] ) ) {
-                // Update road if there is one in front of the town/castle entrance.
-                Maps::updateRoadSpriteOnTile( mapFormat, bottomIndex, false );
-            }
-
-            // By default use random (default) army for the neutral race town/castle.
-            const PlayerColor color = Color::IndexToColor( region.colorIndex );
-            if ( color == PlayerColor::NONE ) {
-                Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
-            }
-
-            // Add flags.
-            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 ) ) {
-                return false;
-            }
-
-            Maps::setLastObjectUID( objectId );
-
-            if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
-                return false;
-            }
-
-            const Maps::ObjectInfo & townObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, castleObjectId );
-            const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
-
-            world.addCastle( tile.GetIndex(), race, color );
-
-            markObjectPlacement( data, basementInfo, tilePos, false );
-            markObjectPlacement( data, castleInfo, tilePos, true );
-
-            // Force roads coming from the castle
-            const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
-            if ( Maps::isValidAbsIndex( nextIndex ) ) {
-                Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
-                Maps::updateRoadOnTile( mapFormat, nextIndex, true );
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    bool placeMine( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
-    {
-        Maps::Tile & mineTile = world.getTile( node.index );
-        const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-        return actionObjectPlacer( mapFormat, data, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
-    }
-
-    int32_t localizeObjectToTerrain( const Maps::ObjectGroup groupType, const int32_t objectIndex, const int groundType )
-    {
-        if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
-            assert( objectIndex < 6 );
-            return treeTypeFromGroundType( groundType ) + objectIndex;
-        }
-
-        if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
-            assert( objectIndex < 8 );
-            return mountainTypeFromGroundType( groundType ) + objectIndex;
-        }
-        return objectIndex;
-    }
-
-    bool placeObstacle( Maps::Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
-    {
-        Maps::Tile & tile = world.getTile( node.index );
-        const auto it = obstaclesPerGround.find( tile.GetGround() );
-        if ( it == obstaclesPerGround.end() || it->second.empty() ) {
-            return false;
-        }
-
-        std::vector<int> obstacleList = it->second;
-        Rand::ShuffleWithGen( obstacleList, randomGenerator );
-
-        const fheroes2::Point tilePos = tile.GetCenter();
-        for ( const auto & obstacleId : obstacleList ) {
-            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId );
-            if ( canFitObject( data, objectInfo, tilePos, false, false ) && putObjectOnMap( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    bool placeSimpleObject( Maps::Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement )
-    {
-        const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
-        if ( !Maps::isValidAbsPoint( position.x, position.y ) ) {
-            return false;
-        }
-
-        Maps::Tile & tile = world.getTile( position.x, position.y );
-        const int32_t objectIndex = localizeObjectToTerrain( placement.groupType, placement.objectIndex, tile.GetGround() );
-        const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
-        if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
-            markObjectPlacement( data, objectInfo, position, false );
-            return true;
-        }
-        return false;
-    }
 }
 
 namespace Maps::Random_Generator
 {
+    const std::vector<ObjectSet> prefabObjectSets{ ObjectSet{ // Obstacles.
+                                                              { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                                                                { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                                                                { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                                                              // Valuables.
+                                                              { { { 1, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                                                              // Monsters.
+                                                              randomMonsterSet,
+                                                              // Entrance check.
+                                                              { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+                                                   ObjectSet{ // Obstacles.
+                                                              { { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                                                                { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                                                                { { 0, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                                                              // Valuables.
+                                                              { { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                                                              // Monsters.
+                                                              randomMonsterSet,
+                                                              // Entrance check.
+                                                              { { 0, -1 }, { 1, -1 }, { 1, 0 } } },
+                                                   ObjectSet{ // Obstacles.
+                                                              { { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                                                                { { 1, 2 }, ObjectGroup::LANDSCAPE_TREES, 5 },
+                                                                { { 3, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                                                              // Valuables.
+                                                              { { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { 2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                                                              // Monsters.
+                                                              randomMonsterSet,
+                                                              // Entrance check.
+                                                              { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 } } },
+                                                   ObjectSet{ // Obstacles.
+                                                              { { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                                                                { { -1, 2 }, ObjectGroup::LANDSCAPE_TREES, 4 },
+                                                                { { -3, 2 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
+                                                              // Valuables.
+                                                              { { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                                                                { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                                                              // Monsters.
+                                                              randomMonsterSet,
+                                                              // Entrance check.
+                                                              { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 } } },
+                                                   ObjectSet{ // Obstacles.
+                                                              { { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                                                                { { -1, -1 }, ObjectGroup::LANDSCAPE_TREES, 5 },
+                                                                { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
+                                                              // Valuables.
+                                                              { { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                                                              // Monsters.
+                                                              randomMonsterSet,
+                                                              // Entrance check.
+                                                              { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } } };
+
+    const std::vector<ObjectSet> powerupObjectSets{
+        ObjectSet{ // Obstacles.
+                   { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                   // Valuables.
+                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 },
+                     { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Monsters.
+                   randomMonsterSet,
+                   // Entrance check.
+                   { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+        ObjectSet{ // Obstacles.
+                   { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                   // Valuables.
+                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 },
+                     { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Monsters.
+                   randomMonsterSet,
+                   // Entrance check.
+                   { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+    };
+
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
         // Make sure that we are generating a valid map.
@@ -933,9 +284,7 @@ namespace Maps::Random_Generator
             stillRoomToExpand = false;
             // Skip the first region which is the border region.
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
-                Region & region = mapRegions[regionID];
-                regionExpansion( data, region, randomGenerator );
-                if ( region.lastProcessedNode != region.nodes.size() ) {
+                if ( mapRegions[regionID].regionExpansion( data, randomGenerator ) ) {
                     stillRoomToExpand = true;
                 }
             }
@@ -982,7 +331,7 @@ namespace Maps::Random_Generator
             }
 
             if ( region.colorIndex != neutralColorIndex ) {
-                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
+                const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
                 if ( !placeCastle( mapFormat, data, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
@@ -992,20 +341,20 @@ namespace Maps::Random_Generator
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
-                const bool useNeutralCastles = config.resourceDensity == Maps::Random_Generator::ResourceDensity::ABUNDANT;
-                const fheroes2::Point castlePos = adjustRegionToFitCastle( mapFormat, region );
+                const bool useNeutralCastles = ( config.resourceDensity == ResourceDensity::ABUNDANT );
+                const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
                 placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
             }
 
-            const std::vector<std::vector<PlacementTile>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
+            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            const auto tryToPlaceMine = [&]( const std::vector<PlacementTile> & ring, const int resource ) {
-                for ( const PlacementTile & tile : ring ) {
-                    const auto & node = data.getNode( tile.index );
+            const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
+                for ( const int32_t tileIndex : ring ) {
+                    const auto & node = data.getNode( tileIndex );
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         mapEconomy.increaseMineCount( resource );
-                        actionLocations.insert( tile.index );
-                        return tile.index;
+                        actionLocations.insert( tileIndex );
+                        return tileIndex;
                     }
                 }
                 return -1;
@@ -1028,7 +377,7 @@ namespace Maps::Random_Generator
                 for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
                     const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
                     if ( mineIndex != -1 ) {
-                        putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
+                        putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
                     }
                 }
@@ -1041,7 +390,7 @@ namespace Maps::Random_Generator
                 continue;
             }
             for ( Node & node : region.nodes ) {
-                checkForRegionConnectors( data, mapRegions, region, node );
+                region.checkNodeForConnections( data, mapRegions, node );
             }
         }
 
@@ -1053,7 +402,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 7. Set up pathfinder to generate road based paths.
+        // Step 7. Set up pathfinder and generate road network.
         AIWorldPathfinder pathfinder;
         pathfinder.reset();
         const PlayerColor testPlayer = PlayerColor::BLUE;
@@ -1077,58 +426,30 @@ namespace Maps::Random_Generator
             }
         }
 
-        // TODO: place objects while avoiding the borders.
-
-        // TODO: place treasure objects.
+        // Step 8: Place powerups and treasure clusters while avoiding the paths.
+        const auto & regionConfiguration = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
         for ( const Region & region : mapRegions ) {
-            int treasureObjectsPlaced = 0;
+            placeObjectSet( mapFormat, data, region, powerupObjectSets, regionConfiguration.powerUpsCount, randomGenerator );
+            placeObjectSet( mapFormat, data, region, prefabObjectSets, regionConfiguration.treasureCount, randomGenerator );
+        }
 
-            for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-                if ( treasureObjectsPlaced == regionObjectSetup[static_cast<size_t>( config.resourceDensity )].treasureCount ) {
-                    break;
-                }
+        // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
-                const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
-
-                std::vector<ObjectSet> shuffledObjectSets = prefabObjectSets;
-                Rand::ShuffleWithGen( shuffledObjectSets, randomGenerator );
-                for ( const auto & prefab : shuffledObjectSets ) {
-                    if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
-                        continue;
-                    }
-
-                    for ( const auto & obstacle : prefab.obstacles ) {
-                        placeSimpleObject( mapFormat, data, node, obstacle );
-                    }
-                    for ( const auto & treasure : prefab.valuables ) {
-                        placeSimpleObject( mapFormat, data, node, treasure );
-                    }
-                    for ( const auto & monster : prefab.monsters ) {
-                        const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                        putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), Maps::ObjectGroup::MONSTERS, monster.objectIndex );
-                    }
-                    ++treasureObjectsPlaced;
-                    break;
-                }
+        // Step 10: Place missing monsters.
+        for ( const Region & region : mapRegions ) {
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
+                putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
 
-        // TODO: fill big empty islands with obstacles
-
-        for ( const int start : startingLocations ) {
+        // Step 11: Validate that map is playable.
+        for ( const int32_t start : startingLocations ) {
             pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const int action : actionLocations ) {
                 if ( pathfinder.getDistance( action ) == 0 ) {
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
                     return false;
                 }
-            }
-        }
-
-        // Step 11: place monsters.
-        for ( const Region & region : mapRegions ) {
-            for ( const auto & [regionId, tileIndex] : region.connections ) {
-                putObjectOnMap( mapFormat, world.getTile( tileIndex ), Maps::ObjectGroup::MONSTERS, randomMonsterIndex );
             }
         }
 
