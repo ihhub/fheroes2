@@ -341,7 +341,7 @@ namespace Maps::Random_Generator
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
-                const bool useNeutralCastles = config.resourceDensity == ResourceDensity::ABUNDANT;
+                const bool useNeutralCastles = ( config.resourceDensity == ResourceDensity::ABUNDANT );
                 const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
                 placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
             }
