@@ -30,11 +30,15 @@
 
 #include "bitmodes.h"
 #include "dir.h"
-#include "game_mode.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "players.h"
 #include "screen.h"
+
+namespace fheroes2
+{
+    enum class GameMode : int;
+}
 
 class IStreamBase;
 class OStreamBase;
