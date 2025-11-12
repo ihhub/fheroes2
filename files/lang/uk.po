@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-06 06:58+0000\n"
-"PO-Revision-Date: 2025-09-06 11:43+0300\n"
+"PO-Revision-Date: 2025-11-12 16:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -3627,21 +3627,17 @@ msgstr "Об'єкт місцевості"
 msgid "Accept the choice made."
 msgstr "Підтвердити ваш вибір."
 
-#, fuzzy
 msgid "Click to enable all items."
-msgstr "Тицьніть для увімкнення патрулювання героєм."
+msgstr "Тицьніть, щоб увімкнути всі елементи."
 
-#, fuzzy
 msgid "Enable All Items"
-msgstr "Заборонені заклинання"
+msgstr "Увімкнути Всі елементи"
 
-#, fuzzy
 msgid "Click to disable all items."
-msgstr "Тицьніть, щоб показати лише заклинання %{level} рівня."
+msgstr "Тицьніть, щоб вимкнути усі елементи."
 
-#, fuzzy
 msgid "Disable All Items"
-msgstr "Переглянути заклинання"
+msgstr "Вимкнути Усі елементи"
 
 msgid "Select Skill:"
 msgstr "Оберіть навичку:"
@@ -3906,9 +3902,8 @@ msgstr ""
 "ресурсів або додаткові умови, що можуть зробити гру складнішою для гравця-"
 "людини."
 
-#, fuzzy
 msgid "Selected Map Description"
-msgstr "Опис"
+msgstr "Опис вибраної мапи"
 
 msgid "Jump"
 msgstr "Стрибками"
@@ -4428,10 +4423,11 @@ msgid "Pick player count"
 msgstr "Виберіть кількість гравців"
 
 msgid "Set water percentage"
-msgstr ""
+msgstr "Встановити відсоток води"
 
 msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
+"Встановити початкове значення мапи (встановіть 0 для випадкового значення)"
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -4712,9 +4708,8 @@ msgstr ""
 "Перегляд системних параметрів редактора, за допомогою яких ви можете "
 "налаштувати редактор."
 
-#, fuzzy
 msgid "Failed to generate a random map with given parameters."
-msgstr "Неможливо створити мапу з заданими параметрами."
+msgstr "Не вдалося створити випадкову мапу з заданими параметрами."
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
@@ -5093,9 +5088,8 @@ msgstr "Видалити відповідь"
 msgid "Delete an existing answer for the question."
 msgstr "Видалити існуючу відповідь на запитання."
 
-#, fuzzy
 msgid "Riddle"
-msgstr "Загадка:"
+msgstr "Загадка"
 
 msgid "No artifact will be given as a reward."
 msgstr "Жоден артефакт не буде виданий у якості винагороди."
@@ -5602,6 +5596,8 @@ msgstr "перейти на героя під курсором"
 
 msgid "hotkey|hold and left click to move hero portrait to top of list"
 msgstr ""
+"клацніть і утримуйте ліву кнопку миші, щоб перемістити портрет героя на "
+"вершину списку"
 
 msgid "hotkey|start hero movement"
 msgstr "почати рух героя"
