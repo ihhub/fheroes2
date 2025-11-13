@@ -208,4 +208,25 @@ namespace Maps::Random_Generator
         std::vector<ObjectPlacement> monsters;
         std::vector<fheroes2::Point> entranceCheck;
     };
+
+    enum class MonsterExpandedLevel : uint8_t
+    {
+        NO_MONSTER = 0,
+        PEASANT_TO_ARCHER = 1, // 0.92 -> 9 monster strength
+        ZOMBIE_TO_WOLF = 2, // 11 -> 18 monster strength
+        MUMMY_TO_ELEMENTAL = 3, // 21 -> 31 monster strength
+        DRUID_TO_TROLL = 4, // 36 -> 48 monster strength
+        LICH_TO_CYCLOPS = 5, // 57 -> 137 monster strength
+        GIANT_TO_DRAGON = 6, // 171 -> 504 monster strength
+
+        LEVEL_COUNT
+    };
+
+    struct MonsterSelection final
+    {
+        MonsterExpandedLevel level{ MonsterExpandedLevel::NO_MONSTER };
+        int32_t protectionThreshold{ -1 };
+        int32_t objectIndex{ -1 };
+        std::vector<int> allowedMonsters;
+    };
 }

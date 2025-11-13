@@ -49,10 +49,11 @@
 
 namespace
 {
+    using namespace Maps::Random_Generator;
+
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int maxPlacementAttempts{ 30 };
-    constexpr std::array<std::pair<int32_t, int32_t>, 4> randomMonsterThresholds = { { { 67, 0 }, { 68, 1250 }, { 69, 3250 }, { 70, 8250 } } };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
         { Maps::Ground::DESERT, { 24, 25, 26, 27, 28, 29 } },    { Maps::Ground::SNOW, { 30, 31, 32, 33, 34, 35 } },  { Maps::Ground::SWAMP, { 18, 19, 20, 21, 22, 23 } },
@@ -100,6 +101,33 @@ namespace
         { MP2::OBJ_WITCH_DOCTORS_HUT, 2000 },
         { MP2::OBJ_XANADU, 8000 },
     };
+
+    const std::array<Maps::Random_Generator::MonsterSelection, static_cast<size_t>( Maps::Random_Generator::MonsterExpandedLevel::LEVEL_COUNT )> advancedMonsterLists
+        = { {
+            { MonsterExpandedLevel::NO_MONSTER, -1, -1, {} },
+            { MonsterExpandedLevel::PEASANT_TO_ARCHER, 0, Monster::RANDOM_MONSTER_LEVEL_1 - 1, {} },
+            { MonsterExpandedLevel::ZOMBIE_TO_WOLF, 1250, Monster::RANDOM_MONSTER_LEVEL_2 - 1, {} },
+            { MonsterExpandedLevel::MUMMY_TO_ELEMENTAL,
+              2250,
+              Monster::RANDOM_MONSTER - 1,
+              { Monster::ROYAL_MUMMY, Monster::WOLF, Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN,
+                Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } },
+            { MonsterExpandedLevel::DRUID_TO_TROLL,
+              3500,
+              Monster::RANDOM_MONSTER_LEVEL_3 - 1,
+              { Monster::DRUID, Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
+                Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } },
+            { MonsterExpandedLevel::LICH_TO_CYCLOPS,
+              5500,
+              Monster::RANDOM_MONSTER - 1,
+              { Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::POWER_LICH,
+                Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS } },
+            { MonsterExpandedLevel::GIANT_TO_DRAGON,
+              8500,
+              Monster::RANDOM_MONSTER_LEVEL_4 - 1,
+              { Monster::GIANT, Monster::GENIE, Monster::PHOENIX, Monster::BONE_DRAGON, Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::TITAN,
+                Monster::BLACK_DRAGON } },
+        } };
 
     constexpr int32_t treeTypeFromGroundType( const int groundType )
     {
@@ -201,17 +229,17 @@ namespace Maps::Random_Generator
         return it->second;
     }
 
-    int32_t pickMonsterByValue( const int32_t protectedObjectValue )
+    MonsterSelection pickMonsterByValue( const int32_t protectedObjectValue )
     {
         assert( protectedObjectValue >= 0 );
 
-        int32_t bestMonster = 0;
-        for ( const auto & [monsterIndex, threshold] : randomMonsterThresholds ) {
-            if ( protectedObjectValue >= threshold ) {
-                bestMonster = monsterIndex;
+        size_t bestMonster = 0;
+        for ( size_t index = 0; index < advancedMonsterLists.size(); index++ ) {
+            if ( protectedObjectValue >= advancedMonsterLists[index].protectionThreshold ) {
+                bestMonster = index;
             }
         }
-        return bestMonster;
+        return advancedMonsterLists[bestMonster];
     }
 
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
@@ -519,6 +547,22 @@ namespace Maps::Random_Generator
         return false;
     }
 
+    void placeMonster( Map_Format::MapFormat & mapFormat, NodeCache & data, const int32_t index, const MonsterSelection & monster )
+    {
+        putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, monster.objectIndex );
+
+        if ( monster.allowedMonsters.empty() ) {
+            return;
+        }
+
+        for ( const Map_Format::TileObjectInfo & info : mapFormat.tiles[index].objects ) {
+            if ( info.group == ObjectGroup::MONSTERS ) {
+                mapFormat.monsterMetadata[info.id].selected = monster.allowedMonsters;
+                return;
+            }
+        }
+    }
+
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement )
     {
         const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
@@ -563,10 +607,10 @@ namespace Maps::Random_Generator
                     groupValue += getObjectGoldValue( treasure.groupType, treasure.objectIndex );
                 }
 
-                const int32_t monsterIndex = pickMonsterByValue( groupValue );
-                for ( const auto & monster : prefab.monsters ) {
-                    const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                    putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), ObjectGroup::MONSTERS, monsterIndex );
+                const MonsterSelection & monster = pickMonsterByValue( groupValue );
+                for ( const auto & placement : prefab.monsters ) {
+                    const int32_t index = Maps::GetIndexFromAbsPoint( Maps::GetPoint( node.index ) + placement.offset );
+                    placeMonster( mapFormat, data, index, monster );
                 }
                 ++objectsPlaced;
                 break;

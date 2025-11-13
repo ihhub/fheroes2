@@ -462,10 +462,12 @@ namespace Maps::Random_Generator
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
         // Step 10: Place missing monsters.
+        const auto & monsterSelection = pickMonsterByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.isInner && mapRegions[regionId].isInner ) {
-                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, 69 );
+                    placeMonster( mapFormat, data, tileIndex, monsterSelection );
+                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, monsterSelection.objectIndex );
                 }
                 else {
                     putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
