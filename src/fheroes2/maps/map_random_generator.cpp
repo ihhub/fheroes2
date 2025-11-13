@@ -324,6 +324,7 @@ namespace Maps::Random_Generator
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
                        "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
+            std::set<int32_t> extraNodes;
             for ( Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
                     Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region.groundType );
@@ -336,12 +337,18 @@ namespace Maps::Random_Generator
 
                         Node & adjacentNode = data.getNode( adjacentIndex );
                         if ( adjacentNode.region == 0 && adjacentNode.index == adjacentIndex ) {
-                            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Extra ground tile at " << adjacentIndex << " attaching to region " << region.id )
-                            adjacentNode.region = region.id;
-                            adjacentNode.type = NodeType::BORDER;
+                            extraNodes.insert( adjacentIndex );
                         }
                     }
                 }
+            }
+
+            for ( const int32_t extraNodeIndex : extraNodes ) {
+                Node & extra = data.getNode( extraNodeIndex );
+                region.nodes.push_back( extra );
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Extra ground tile at " << extra.index << " attaching to region " << region.id )
+                extra.region = region.id;
+                extra.type = NodeType::BORDER;
             }
 
             if ( region.colorIndex != neutralColorIndex ) {
