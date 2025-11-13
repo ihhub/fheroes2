@@ -230,12 +230,12 @@ namespace Maps::Random_Generator
         return it->second;
     }
 
-    MonsterSelection pickMonsterByValue( const int32_t protectedObjectValue )
+    MonsterSelection getMonstersByValue( const int32_t protectedObjectValue )
     {
         assert( protectedObjectValue >= 0 );
 
         size_t bestMonster = 0;
-        for ( size_t index = 0; index < advancedMonsterLists.size(); index++ ) {
+        for ( size_t index = 0; index < advancedMonsterLists.size(); ++index ) {
             if ( protectedObjectValue >= advancedMonsterLists[index].protectionThreshold ) {
                 bestMonster = index;
             }
@@ -550,6 +550,10 @@ namespace Maps::Random_Generator
 
     void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster )
     {
+        if ( index == -1 ) {
+            return;
+        }
+
         putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, monster.objectIndex );
 
         if ( monster.allowedMonsters.empty() ) {
@@ -608,7 +612,7 @@ namespace Maps::Random_Generator
                     groupValue += getObjectGoldValue( treasure.groupType, treasure.objectIndex );
                 }
 
-                const MonsterSelection & monster = pickMonsterByValue( groupValue );
+                const MonsterSelection & monster = getMonstersByValue( groupValue );
                 for ( const auto & placement : prefab.monsters ) {
                     const int32_t index = Maps::GetIndexFromAbsPoint( Maps::GetPoint( node.index ) + placement.offset );
                     placeMonster( mapFormat, index, monster );

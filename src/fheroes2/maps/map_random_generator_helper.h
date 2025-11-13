@@ -55,7 +55,7 @@ namespace Rand
 namespace Maps::Random_Generator
 {
     int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex );
-    MonsterSelection pickMonsterByValue( const int32_t protectedObjectValue );
+    MonsterSelection getMonstersByValue( const int32_t protectedObjectValue );
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType );
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator );
 
