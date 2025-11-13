@@ -176,6 +176,13 @@ namespace
         }
         return true;
     }
+
+    void markNodeAsType( Maps::Random_Generator::NodeCache & data, const fheroes2::Point position, const Maps::Random_Generator::NodeType type )
+    {
+        if ( Maps::isValidAbsPoint( position.x, position.y ) ) {
+            data.getNode( position ).type = type;
+        }
+    }
 }
 
 namespace Maps::Random_Generator
@@ -361,14 +368,14 @@ namespace Maps::Random_Generator
         }
 
         for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-            data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } ).type = NodeType::PATH;
+            markNodeAsType( data, mainTilePos + fheroes2::Point{ x, objectRect.height + 1 }, NodeType::PATH );
         }
 
         // Mark extra nodes as path to avoid objects clumping together
-        data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
-        data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
+        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 }, NodeType::PATH );
+        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 }, NodeType::PATH );
 
-        data.getNode( mainTilePos ).type = NodeType::ACTION;
+        markNodeAsType( data, mainTilePos, NodeType::ACTION );
     }
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
