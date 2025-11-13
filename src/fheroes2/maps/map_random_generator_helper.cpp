@@ -548,7 +548,7 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeMonster( Map_Format::MapFormat & mapFormat, NodeCache & data, const int32_t index, const MonsterSelection & monster )
+    void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster )
     {
         putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, monster.objectIndex );
 
@@ -611,7 +611,7 @@ namespace Maps::Random_Generator
                 const MonsterSelection & monster = pickMonsterByValue( groupValue );
                 for ( const auto & placement : prefab.monsters ) {
                     const int32_t index = Maps::GetIndexFromAbsPoint( Maps::GetPoint( node.index ) + placement.offset );
-                    placeMonster( mapFormat, data, index, monster );
+                    placeMonster( mapFormat, index, monster );
                 }
                 ++objectsPlaced;
                 break;

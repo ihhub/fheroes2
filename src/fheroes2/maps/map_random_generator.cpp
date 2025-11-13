@@ -327,7 +327,7 @@ namespace Maps::Random_Generator
                        "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
             std::set<int32_t> extraNodes;
-            for ( Node & node : region.nodes ) {
+            for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
                     Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region.groundType );
 
@@ -337,7 +337,7 @@ namespace Maps::Random_Generator
                             continue;
                         }
 
-                        Node & adjacentNode = data.getNode( adjacentIndex );
+                        const Node & adjacentNode = data.getNode( adjacentIndex );
                         if ( adjacentNode.region == 0 && adjacentNode.index == adjacentIndex ) {
                             extraNodes.insert( adjacentIndex );
                         }
@@ -347,7 +347,7 @@ namespace Maps::Random_Generator
 
             for ( const int32_t extraNodeIndex : extraNodes ) {
                 Node & extra = data.getNode( extraNodeIndex );
-                region.nodes.push_back( extra );
+                region.nodes.emplace_back( extra );
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Extra ground tile at " << extra.index << " attaching to region " << region.id )
                 extra.region = region.id;
                 extra.type = NodeType::BORDER;
@@ -467,7 +467,7 @@ namespace Maps::Random_Generator
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.isInner && mapRegions[regionId].isInner ) {
-                    placeMonster( mapFormat, data, tileIndex, monsterSelection );
+                    placeMonster( mapFormat, tileIndex, monsterSelection );
                     putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, monsterSelection.objectIndex );
                 }
                 else {
