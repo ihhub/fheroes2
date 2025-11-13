@@ -238,7 +238,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1 } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, false } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -264,13 +264,14 @@ namespace Maps::Random_Generator
 
                 const int factor = regionCount / config.playerCount;
                 const bool isPlayerRegion = ( layer == 1 ) && ( ( i % factor ) == 0 );
+                const bool isInnerRegion = ( layer == 0 );
 
                 const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit, isInnerRegion );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
@@ -463,7 +464,12 @@ namespace Maps::Random_Generator
         // Step 10: Place missing monsters.
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                if ( region.isInner && mapRegions[regionId].isInner ) {
+                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, 69 );
+                }
+                else {
+                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                }
             }
         }
 
