@@ -57,7 +57,8 @@ namespace Maps::Random_Generator
         ACTION,
         OBSTACLE,
         CONNECTOR,
-        PATH
+        PATH,
+        COAST
     };
 
     struct Node final

@@ -324,9 +324,23 @@ namespace Maps::Random_Generator
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
                        "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
-            for ( const Node & node : region.nodes ) {
+            for ( Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
                     Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region.groundType );
+
+                    // Detect additional ground tiles created by setTerrainWithTransition
+                    for ( const int32_t adjacentIndex : Maps::getAroundIndexes( node.index ) ) {
+                        if ( world.getTile( adjacentIndex ).isWater() ) {
+                            continue;
+                        }
+
+                        Node & adjacentNode = data.getNode( adjacentIndex );
+                        if ( adjacentNode.region == 0 && adjacentNode.index == adjacentIndex ) {
+                            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Extra ground tile at " << adjacentIndex << " attaching to region " << region.id )
+                            adjacentNode.region = region.id;
+                            adjacentNode.type = NodeType::BORDER;
+                        }
+                    }
                 }
             }
 
@@ -416,6 +430,10 @@ namespace Maps::Random_Generator
 
         // Set explicit paths
         for ( const Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
+
             pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 const auto & path = pathfinder.buildPath( tileIndex );
