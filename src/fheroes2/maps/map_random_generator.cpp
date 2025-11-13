@@ -44,6 +44,7 @@
 #include "map_object_info.h"
 #include "map_random_generator_helper.h"
 #include "map_random_generator_info.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "rand.h"
