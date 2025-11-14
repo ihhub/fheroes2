@@ -144,8 +144,13 @@ namespace Maps::Random_Generator
         for ( uint8_t direction = 0; direction < 4; ++direction ) {
             Node & adjacent = data.getNode( position + directionOffsets[direction] );
 
-            if ( adjacent.index == -1 || adjacent.region == id || mapRegions[adjacent.region].groundType == Ground::WATER ) {
+            if ( adjacent.index == -1 || adjacent.region == id ) {
                 continue;
+            }
+
+            if ( mapRegions[adjacent.region].groundType == Ground::WATER ) {
+                node.type = NodeType::COAST;
+                break;
             }
 
             Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );

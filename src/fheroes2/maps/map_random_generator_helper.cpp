@@ -40,6 +40,7 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "monster.h"
 #include "mp2.h"
 #include "race.h"
 #include "rand.h"
@@ -52,7 +53,6 @@ namespace
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int maxPlacementAttempts{ 30 };
-    constexpr std::array<std::pair<int32_t, int32_t>, 4> randomMonsterThresholds = { { { 67, 0 }, { 68, 1250 }, { 69, 3250 }, { 70, 8250 } } };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
         { Maps::Ground::DESERT, { 24, 25, 26, 27, 28, 29 } },    { Maps::Ground::SNOW, { 30, 31, 32, 33, 34, 35 } },  { Maps::Ground::SWAMP, { 18, 19, 20, 21, 22, 23 } },
@@ -176,6 +176,13 @@ namespace
         }
         return true;
     }
+
+    void markNodeAsType( Maps::Random_Generator::NodeCache & data, const fheroes2::Point position, const Maps::Random_Generator::NodeType type )
+    {
+        if ( Maps::isValidAbsPoint( position.x, position.y ) ) {
+            data.getNode( position ).type = type;
+        }
+    }
 }
 
 namespace Maps::Random_Generator
@@ -194,17 +201,44 @@ namespace Maps::Random_Generator
         return it->second;
     }
 
-    int32_t pickMonsterByValue( const int32_t protectedObjectValue )
+    MonsterSelection getMonstersByValue( const int32_t protectedObjectValue )
     {
         assert( protectedObjectValue >= 0 );
 
-        int32_t bestMonster = 0;
-        for ( const auto & [monsterIndex, threshold] : randomMonsterThresholds ) {
-            if ( protectedObjectValue >= threshold ) {
-                bestMonster = monsterIndex;
-            }
+        if ( protectedObjectValue > 8500 ) {
+            // 171 -> 504 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_4 - 1,
+                     { Monster::GIANT, Monster::GENIE, Monster::PHOENIX, Monster::BONE_DRAGON, Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::TITAN,
+                       Monster::BLACK_DRAGON } };
         }
-        return bestMonster;
+        if ( protectedObjectValue > 6000 ) {
+            // 57 -> 137 monster strength
+            return { Monster::RANDOM_MONSTER - 1,
+                     { Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::POWER_LICH,
+                       Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS } };
+        }
+        if ( protectedObjectValue > 4500 ) {
+            // 36 -> 48 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_3 - 1,
+                     { Monster::DRUID, Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
+                       Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } };
+        }
+        if ( protectedObjectValue > 3000 ) {
+            // 21 -> 31 monster strength
+            return { Monster::RANDOM_MONSTER - 1,
+                     { Monster::ROYAL_MUMMY, Monster::WOLF, Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN,
+                       Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } };
+        }
+        if ( protectedObjectValue > 1500 ) {
+            // 11 -> 18 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_2 - 1, {} };
+        }
+        if ( protectedObjectValue > 750 ) {
+            // 0.92 -> 9 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_1 - 1, {} };
+        }
+
+        return {};
     }
 
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
@@ -361,14 +395,14 @@ namespace Maps::Random_Generator
         }
 
         for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-            data.getNode( mainTilePos + fheroes2::Point{ x, objectRect.height + 1 } ).type = NodeType::PATH;
+            markNodeAsType( data, mainTilePos + fheroes2::Point{ x, objectRect.height + 1 }, NodeType::PATH );
         }
 
         // Mark extra nodes as path to avoid objects clumping together
-        data.getNode( mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 } ).type = NodeType::PATH;
-        data.getNode( mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 } ).type = NodeType::PATH;
+        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 }, NodeType::PATH );
+        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 }, NodeType::PATH );
 
-        data.getNode( mainTilePos ).type = NodeType::ACTION;
+        markNodeAsType( data, mainTilePos, NodeType::ACTION );
     }
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
@@ -512,6 +546,26 @@ namespace Maps::Random_Generator
         return false;
     }
 
+    void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster )
+    {
+        if ( index == -1 ) {
+            return;
+        }
+
+        putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, monster.objectIndex );
+
+        if ( monster.allowedMonsters.empty() ) {
+            return;
+        }
+
+        for ( const Map_Format::TileObjectInfo & info : mapFormat.tiles[index].objects ) {
+            if ( info.group == ObjectGroup::MONSTERS ) {
+                mapFormat.monsterMetadata[info.id].selected = monster.allowedMonsters;
+                return;
+            }
+        }
+    }
+
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement )
     {
         const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
@@ -556,10 +610,10 @@ namespace Maps::Random_Generator
                     groupValue += getObjectGoldValue( treasure.groupType, treasure.objectIndex );
                 }
 
-                const int32_t monsterIndex = pickMonsterByValue( groupValue );
-                for ( const auto & monster : prefab.monsters ) {
-                    const fheroes2::Point position = Maps::GetPoint( node.index ) + monster.offset;
-                    putObjectOnMap( mapFormat, world.getTile( position.x, position.y ), ObjectGroup::MONSTERS, monsterIndex );
+                const MonsterSelection & monster = getMonstersByValue( groupValue );
+                for ( const auto & placement : prefab.monsters ) {
+                    const int32_t index = Maps::GetIndexFromAbsPoint( Maps::GetPoint( node.index ) + placement.offset );
+                    placeMonster( mapFormat, index, monster );
                 }
                 ++objectsPlaced;
                 break;

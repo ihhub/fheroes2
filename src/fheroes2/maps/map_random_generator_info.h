@@ -57,7 +57,8 @@ namespace Maps::Random_Generator
         ACTION,
         OBSTACLE,
         CONNECTOR,
-        PATH
+        PATH,
+        COAST
     };
 
     struct Node final
@@ -148,15 +149,17 @@ namespace Maps::Random_Generator
         size_t lastProcessedNode{ 0 };
         int colorIndex{ neutralColorIndex };
         int groundType{ Ground::GRASS };
+        bool isInner{ false };
 
         Region() = default;
 
-        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize )
+        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const bool inner )
             : id( regionIndex )
             , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
+            , isInner( inner )
         {
             assert( expectedSize > 0 );
 
@@ -204,5 +207,11 @@ namespace Maps::Random_Generator
         std::vector<ObjectPlacement> valuables;
         std::vector<ObjectPlacement> monsters;
         std::vector<fheroes2::Point> entranceCheck;
+    };
+
+    struct MonsterSelection final
+    {
+        int32_t objectIndex{ -1 };
+        std::vector<int> allowedMonsters;
     };
 }
