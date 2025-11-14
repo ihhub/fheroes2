@@ -213,29 +213,29 @@ namespace Maps::Random_Generator
                      { Monster::GIANT, Monster::GENIE, Monster::PHOENIX, Monster::BONE_DRAGON, Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::TITAN,
                        Monster::BLACK_DRAGON } };
         }
-        else if ( protectedObjectValue > 6000 ) {
+        if ( protectedObjectValue > 6000 ) {
             // 57 -> 137 monster strength
             return { Monster::RANDOM_MONSTER - 1,
                      { Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::POWER_LICH,
                        Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS } };
         }
-        else if ( protectedObjectValue > 4500 ) {
+        if ( protectedObjectValue > 4500 ) {
             // 36 -> 48 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_3 - 1,
                      { Monster::DRUID, Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
                        Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } };
         }
-        else if ( protectedObjectValue > 3000 ) {
+        if ( protectedObjectValue > 3000 ) {
             // 21 -> 31 monster strength
             return { Monster::RANDOM_MONSTER - 1,
                      { Monster::ROYAL_MUMMY, Monster::WOLF, Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN,
                        Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } };
         }
-        else if ( protectedObjectValue > 1500 ) {
+        if ( protectedObjectValue > 1500 ) {
             // 11 -> 18 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_2 - 1, {} };
         }
-        else if ( protectedObjectValue > 750 ) {
+        if ( protectedObjectValue > 750 ) {
             // 0.92 -> 9 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_1 - 1, {} };
         }
