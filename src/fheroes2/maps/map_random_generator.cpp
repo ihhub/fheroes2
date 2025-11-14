@@ -197,6 +197,14 @@ namespace Maps::Random_Generator
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
     };
 
+    int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth )
+    {
+        const int32_t minimumRegionCount = playerCount + 1;
+        const int32_t tileCount = mapWidth * mapWidth;
+        const int32_t waterTiles = ( tileCount ) - ( smallestStartingRegionSize * minimumRegionCount );
+        return std::max( 0, waterTiles * 100 / tileCount );
+    }
+
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
         // Make sure that we are generating a valid map.
@@ -214,9 +222,6 @@ namespace Maps::Random_Generator
         }
 
         const int32_t regionSizeLimit = calculateRegionSizeLimit( config, width, height );
-        if ( regionSizeLimit < smallestStartingRegionSize ) {
-            return false;
-        }
 
         const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( 999999 );
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Generating a map with seed " << generatorSeed );
@@ -272,7 +277,7 @@ namespace Maps::Random_Generator
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit, isInnerRegion );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 10 / 9, isInnerRegion );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
@@ -319,7 +324,6 @@ namespace Maps::Random_Generator
 
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
-                // Skip the first region as we have nothing to do here for now.
                 continue;
             }
 
