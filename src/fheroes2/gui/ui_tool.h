@@ -212,7 +212,7 @@ namespace fheroes2
     private:
         std::chrono::time_point<std::chrono::steady_clock> _startTime;
         fheroes2::MovableText _text;
-        std::deque<double> _fps;
+        std::deque<double> _delays;
     };
 
     class TimedEventValidator : public ActionObject

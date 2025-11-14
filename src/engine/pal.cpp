@@ -170,23 +170,27 @@ namespace
 
 std::vector<uint8_t> PAL::GetCyclingPalette( const uint32_t stepId )
 {
-    std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
+    std::vector<uint8_t> palette = GetPalette( PaletteType::STANDARD );
 
     static const std::array<CyclingColorSet, 4> cycleSet{ CyclingColorSet{ 214, 4, false }, CyclingColorSet{ 218, 4, false }, CyclingColorSet{ 231, 5, true },
                                                           CyclingColorSet{ 238, 4, false } };
 
     for ( const CyclingColorSet & colorSet : cycleSet ) {
-        for ( uint32_t id = 0; id < colorSet.length; ++id ) {
-            uint32_t newColorID;
-            if ( colorSet.forward ) {
-                newColorID = colorSet.start + ( ( id + stepId ) % colorSet.length );
+        if ( colorSet.forward ) {
+            for ( uint32_t id = 0; id < colorSet.length; ++id ) {
+                const uint32_t newColorID = colorSet.start + ( ( id + stepId ) % colorSet.length );
+                palette[colorSet.start + id] = static_cast<uint8_t>( newColorID );
             }
-            else {
-                const uint32_t lastColorID = colorSet.length - 1;
-                newColorID = colorSet.start + lastColorID - ( ( lastColorID + stepId - id ) % colorSet.length );
-            }
+        }
+        else {
+            const uint32_t lastColorID = colorSet.length - 1;
+            const uint32_t lastColor = colorSet.start + lastColorID;
+            const uint32_t colorOffset = stepId + lastColorID;
 
-            palette[colorSet.start + id] = static_cast<uint8_t>( newColorID );
+            for ( uint32_t id = 0; id < colorSet.length; ++id ) {
+                const uint32_t newColorID = lastColor - ( ( colorOffset - id ) % colorSet.length );
+                palette[colorSet.start + id] = static_cast<uint8_t>( newColorID );
+            }
         }
     }
 

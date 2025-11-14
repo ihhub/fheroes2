@@ -6860,6 +6860,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     // Animation of the currently active unit's contour
     if ( Game::validateAnimationDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) ) {
         UpdateContourColor();
+        humanturn_redraw = true;
     }
 
     // Animation of flags and heroes idle.
