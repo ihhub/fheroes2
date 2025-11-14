@@ -50,8 +50,6 @@
 
 namespace
 {
-    using namespace Maps::Random_Generator;
-
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int maxPlacementAttempts{ 30 };
