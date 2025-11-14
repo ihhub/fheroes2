@@ -12537,6 +12537,3 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Вярнуцца ў галоўнае меню."
