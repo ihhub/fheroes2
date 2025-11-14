@@ -127,10 +127,25 @@ namespace
         ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
     }
 
-    void MapTypeToolTip( const Maps::FileInfo * /* info */ = nullptr )
+    void MapTypeToolTip( const Maps::FileInfo * info )
     {
-        ShowToolTip( _( "Map Type" ),
-                     _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
+        assert( info != nullptr );
+
+        switch ( info->version ) {
+        case GameVersion::SUCCESSION_WARS:
+            ShowToolTip( _( "Map Type" ), _( "This map is made for \"The Succession Wars\" version of the game." ) );
+            break;
+        case GameVersion::PRICE_OF_LOYALTY:
+            ShowToolTip( _( "Map Type" ), _( "This map is made for \"The Price of Loyalty\" version of the game." ) );
+            break;
+        case GameVersion::RESURRECTION:
+            ShowToolTip( _( "Map Type" ), _( "This map is made for \"Resurrection\" version of the game." ) );
+            break;
+        default:
+            // Did you add a new version?
+            assert( 0 );
+            break;
+        }
     }
 
     void mapInfo( const Maps::FileInfo * info )
@@ -767,7 +782,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
             ShowIfFound( scenarioList, le.getMouseCursorPos(), MapTypeToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapType ) ) {
-            MapTypeToolTip();
+            MapTypeToolTip( &( scenarioList.GetCurrent() ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
             ShowIfFound( scenarioList, le.getMouseCursorPos(), mapInfo );
