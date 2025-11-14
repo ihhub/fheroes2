@@ -103,33 +103,6 @@ namespace
         { MP2::OBJ_XANADU, 8000 },
     };
 
-    const std::array<Maps::Random_Generator::MonsterSelection, static_cast<size_t>( Maps::Random_Generator::MonsterExpandedLevel::LEVEL_COUNT )> advancedMonsterLists
-        = { {
-            { MonsterExpandedLevel::NO_MONSTER, -1, -1, {} },
-            { MonsterExpandedLevel::PEASANT_TO_ARCHER, 0, Monster::RANDOM_MONSTER_LEVEL_1 - 1, {} },
-            { MonsterExpandedLevel::ZOMBIE_TO_WOLF, 1250, Monster::RANDOM_MONSTER_LEVEL_2 - 1, {} },
-            { MonsterExpandedLevel::MUMMY_TO_ELEMENTAL,
-              2250,
-              Monster::RANDOM_MONSTER - 1,
-              { Monster::ROYAL_MUMMY, Monster::WOLF, Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN,
-                Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } },
-            { MonsterExpandedLevel::DRUID_TO_TROLL,
-              3500,
-              Monster::RANDOM_MONSTER_LEVEL_3 - 1,
-              { Monster::DRUID, Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
-                Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } },
-            { MonsterExpandedLevel::LICH_TO_CYCLOPS,
-              5500,
-              Monster::RANDOM_MONSTER - 1,
-              { Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::POWER_LICH,
-                Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS } },
-            { MonsterExpandedLevel::GIANT_TO_DRAGON,
-              8500,
-              Monster::RANDOM_MONSTER_LEVEL_4 - 1,
-              { Monster::GIANT, Monster::GENIE, Monster::PHOENIX, Monster::BONE_DRAGON, Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::TITAN,
-                Monster::BLACK_DRAGON } },
-        } };
-
     constexpr int32_t treeTypeFromGroundType( const int groundType )
     {
         switch ( groundType ) {
@@ -234,13 +207,40 @@ namespace Maps::Random_Generator
     {
         assert( protectedObjectValue >= 0 );
 
-        size_t bestMonster = 0;
-        for ( size_t index = 0; index < advancedMonsterLists.size(); ++index ) {
-            if ( protectedObjectValue >= advancedMonsterLists[index].protectionThreshold ) {
-                bestMonster = index;
-            }
+        if ( protectedObjectValue > 8500 ) {
+            // 171 -> 504 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_4 - 1,
+                     { Monster::GIANT, Monster::GENIE, Monster::PHOENIX, Monster::BONE_DRAGON, Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::TITAN,
+                       Monster::BLACK_DRAGON } };
         }
-        return advancedMonsterLists[bestMonster];
+        else if ( protectedObjectValue > 6000 ) {
+            // 57 -> 137 monster strength
+            return { Monster::RANDOM_MONSTER - 1,
+                     { Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::POWER_LICH,
+                       Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS } };
+        }
+        else if ( protectedObjectValue > 4500 ) {
+            // 36 -> 48 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_3 - 1,
+                     { Monster::DRUID, Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
+                       Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } };
+        }
+        else if ( protectedObjectValue > 3000 ) {
+            // 21 -> 31 monster strength
+            return { Monster::RANDOM_MONSTER - 1,
+                     { Monster::ROYAL_MUMMY, Monster::WOLF, Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN,
+                       Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } };
+        }
+        else if ( protectedObjectValue > 1500 ) {
+            // 11 -> 18 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_2 - 1, {} };
+        }
+        else if ( protectedObjectValue > 750 ) {
+            // 0.92 -> 9 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_1 - 1, {} };
+        }
+
+        return {};
     }
 
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
