@@ -373,57 +373,6 @@ namespace
 
 namespace fheroes2
 {
-    bool ButtonBase::press()
-    {
-        if ( !isEnabled() ) {
-            return false;
-        }
-
-        _isPressed = true;
-        notifySubscriber();
-        return true;
-    }
-
-    bool ButtonBase::release()
-    {
-        if ( !isEnabled() ) {
-            return false;
-        }
-
-        _isPressed = false;
-        notifySubscriber();
-        return true;
-    }
-
-    void ButtonBase::enable()
-    {
-        _isEnabled = true;
-        notifySubscriber();
-
-        _updateReleasedArea();
-    }
-
-    void ButtonBase::disable()
-    {
-        _isEnabled = false;
-        _isPressed = false; // button can't be disabled and pressed
-        notifySubscriber();
-
-        _updateReleasedArea();
-    }
-
-    void ButtonBase::show()
-    {
-        _isVisible = true;
-        notifySubscriber();
-    }
-
-    void ButtonBase::hide()
-    {
-        _isVisible = false;
-        notifySubscriber();
-    }
-
     bool ButtonBase::draw( Image & output ) const
     {
         if ( !isVisible() ) {
@@ -639,34 +588,6 @@ namespace fheroes2
         _value.emplace_back( returnValue );
     }
 
-    void ButtonGroup::draw( Image & output /* = Display::instance() */ ) const
-    {
-        for ( const auto & button : _button ) {
-            button->draw( output );
-        }
-    }
-
-    void ButtonGroup::drawShadows( Image & output ) const
-    {
-        for ( const auto & button : _button ) {
-            button->drawShadow( output );
-        }
-    }
-
-    void ButtonGroup::disable() const
-    {
-        for ( const auto & button : _button ) {
-            button->disable();
-        }
-    }
-
-    void ButtonGroup::enable() const
-    {
-        for ( const auto & button : _button ) {
-            button->enable();
-        }
-    }
-
     void ButtonGroup::drawOnState( const LocalEvent & le ) const
     {
         for ( const auto & button : _button ) {
@@ -751,13 +672,6 @@ namespace fheroes2
 
         _button.push_back( button );
         button->subscribe( this );
-    }
-
-    void OptionButtonGroup::draw( Image & output /* = Display::instance() */ ) const
-    {
-        for ( const ButtonBase * button : _button ) {
-            button->draw( output );
-        }
     }
 
     void OptionButtonGroup::senderUpdate( const ActionObject * sender )
