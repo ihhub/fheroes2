@@ -284,7 +284,7 @@ namespace fheroes2
         double allTime = 0;
         for ( size_t i = 0; i < _delays.size(); ++i ) {
             allTime += _delays[i];
-            if ( allTime > 1. ) {
+            if ( allTime > 1.0 ) {
                 // Remove all delays that exceed to one second time period.
                 _delays.resize( i + 1 );
             }
