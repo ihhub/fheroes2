@@ -123,7 +123,7 @@ namespace fheroes2
         // Button becomes disabled and released
         void disable()
         {
-             _isEnabled = false;
+            _isEnabled = false;
             _isPressed = false; // button can't be disabled and pressed
             notifySubscriber();
 
