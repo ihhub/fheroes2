@@ -33,6 +33,7 @@
 #include "color.h"
 #include "direction.h"
 #include "ground.h"
+#include "heroes.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
@@ -52,6 +53,7 @@ namespace
 {
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
+    constexpr int randomHeroIndex{ 7 };
     constexpr int maxPlacementAttempts{ 30 };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
@@ -572,6 +574,23 @@ namespace Maps::Random_Generator
 
         markObjectPlacement( data, basementInfo, tilePos );
         markObjectPlacement( data, castleInfo, tilePos );
+
+        if ( color != PlayerColor::NONE ) {
+            Tile & heroTile = world.getTile( bottomIndex );
+            const int32_t spriteIndex = Color::GetIndex( color ) * randomHeroIndex + ( randomHeroIndex - 1 );
+            putObjectOnMap( mapFormat, heroTile, ObjectGroup::KINGDOM_HEROES, spriteIndex );
+            Heroes * hero = world.GetHeroForHire( Race::IndexToRace( randomHeroIndex ) );
+            if ( hero ) {
+                hero->SetCenter( heroTile.GetCenter() );
+                hero->SetColor( color );
+                heroTile.setHero( hero );
+            }
+            else {
+                // How is it possible that the action was successful but no hero?
+                assert( 0 );
+            }
+            Maps::updateMapPlayers( mapFormat );
+        }
 
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );

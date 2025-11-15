@@ -154,14 +154,14 @@ namespace Maps::Random_Generator
 
         Region() = default;
 
-        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const int32_t treasureLimit,
+        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const int32_t treasure,
                 const bool inner )
             : id( regionIndex )
             , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
-            , treasureLimit( treasureLimit )
+            , treasureLimit( treasure )
             , isInner( inner )
         {
             assert( expectedSize > 0 );
