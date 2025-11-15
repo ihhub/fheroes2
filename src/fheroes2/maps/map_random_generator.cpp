@@ -139,8 +139,9 @@ namespace Maps::Random_Generator
                                                               { { 0, -1 }, { 1, -1 }, { 1, 0 } } },
                                                    ObjectSet{ // Obstacles.
                                                               { { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                                                                { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
                                                                 { { 1, 2 }, ObjectGroup::LANDSCAPE_TREES, 5 },
-                                                                { { 3, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                                                                { { 0, 2 }, ObjectGroup::LANDSCAPE_TREES, 4 } },
                                                               // Valuables.
                                                               { { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
@@ -153,7 +154,8 @@ namespace Maps::Random_Generator
                                                    ObjectSet{ // Obstacles.
                                                               { { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
                                                                 { { -1, 2 }, ObjectGroup::LANDSCAPE_TREES, 4 },
-                                                                { { -3, 2 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
+                                                                { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                                                                { { 0, 2 }, ObjectGroup::LANDSCAPE_TREES, 5 } },
                                                               // Valuables.
                                                               { { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
@@ -178,7 +180,7 @@ namespace Maps::Random_Generator
         ObjectSet{ // Obstacles.
                    { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
                    // Valuables.
-                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 },
+                   { { { 2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
                    // Monsters.
@@ -188,13 +190,45 @@ namespace Maps::Random_Generator
         ObjectSet{ // Obstacles.
                    { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
                    // Valuables.
-                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 },
+                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 18 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
                    // Monsters.
                    randomMonsterSet,
                    // Entrance check.
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+        ObjectSet{ // Obstacles.
+                   { { { 1, -2 }, ObjectGroup::LANDSCAPE_TREES, 1 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                   // Valuables.
+                   { { { 2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 },
+                     { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Monsters.
+                   randomMonsterSet,
+                   // Entrance check.
+                   { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+        ObjectSet{ // Obstacles.
+                   { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                   // Valuables.
+                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 13 },
+                     { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Monsters.
+                   randomMonsterSet,
+                   // Entrance check.
+                   { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+        ObjectSet{ // Obstacles.
+                   { { { -3, -1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
+                     { { -1, -1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 4 },
+                     { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 0 } },
+                   // Valuables.
+                   { { { -2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 16 },
+                     { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Monsters.
+                   randomMonsterSet,
+                   // Entrance check.
+                   { { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } } },
     };
 
     int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth )
