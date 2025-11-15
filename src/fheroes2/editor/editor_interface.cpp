@@ -1040,28 +1040,28 @@ namespace Interface
                 }
 #endif
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_RIGHT );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_TOP );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_BOTTOM );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
