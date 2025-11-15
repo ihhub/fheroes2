@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2807,26 +2807,6 @@ msgstr ""
 "masz jednak na nią miejsca. Spróbuj przekazać jeden ze swoich artefaktów "
 "innemu bohaterowi."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Kliknij aby przejść do następnego miasta."
-
-msgid "Show next town"
-msgstr "Pokaż następne miasto"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Kliknij aby przejść do poprzedniego miasta."
-
-msgid "Show previous town"
-msgstr "Pokaż poprzednie miasto"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Tego miasta nie można rozbudować do poziomu zamku."
-
-msgid "Town"
-msgstr "Miasto"
-
 msgid "Exit Castle"
 msgstr "Wyjście z zamku"
 
@@ -2836,8 +2816,28 @@ msgstr "Wyjście z miasta"
 msgid "Show Income"
 msgstr "Pokaż przychód"
 
+msgid "Show previous town"
+msgstr "Pokaż poprzednie miasto"
+
+msgid "Show next town"
+msgstr "Pokaż następne miasto"
+
 msgid "View Hero"
 msgstr "Pokaż bohatera"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Kliknij aby przejść do poprzedniego miasta."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Tego miasta nie można rozbudować do poziomu zamku."
+
+msgid "Town"
+msgstr "Miasto"
 
 msgid "The above spells are available here."
 msgstr "Tu są dostępne powyższe zaklęcia."

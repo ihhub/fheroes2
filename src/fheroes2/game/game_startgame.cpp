@@ -823,6 +823,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     conf.SetCurrentColor( playerColor );
 
                     if ( isHotSeatGame ) {
+                        // Move the area to the center of the map to avoid showing map borders.
+                        _gameArea.SetCenter( fheroes2::Point{ world.w() / 2, world.h() / 2 } );
+
                         if ( conf.getInterfaceType() == InterfaceType::DYNAMIC && _isCurrentInterfaceEvil != conf.isEvilInterfaceEnabled() ) {
                             reset();
                         }

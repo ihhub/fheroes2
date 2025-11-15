@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2768,24 +2768,6 @@ msgstr ""
 "actualmente no tienes espacio para un libro de hechizos. Prueba dando uno de "
 "tus artefactos a otro héroe."
 
-msgid "Click to show the next town."
-msgstr "Haga clic para ver la siguiente ciudad."
-
-msgid "Show next town"
-msgstr "Ver ciudad siguiente"
-
-msgid "Click to show the previous town."
-msgstr "Haga clic para ver la ciudad anterior."
-
-msgid "Show previous town"
-msgstr "Ver ciudad anterior"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-msgid "Town"
-msgstr "Pueblo"
-
 msgid "Exit Castle"
 msgstr "Salir del castillo"
 
@@ -2795,8 +2777,26 @@ msgstr "Salir de la ciudad"
 msgid "Show Income"
 msgstr "Mostrar Ingresos"
 
+msgid "Show previous town"
+msgstr "Ver ciudad anterior"
+
+msgid "Show next town"
+msgstr "Ver ciudad siguiente"
+
 msgid "View Hero"
 msgstr "Ver Heroe"
+
+msgid "Click to show the next town."
+msgstr "Haga clic para ver la siguiente ciudad."
+
+msgid "Click to show the previous town."
+msgstr "Haga clic para ver la ciudad anterior."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+msgid "Town"
+msgstr "Pueblo"
 
 msgid "The above spells are available here."
 msgstr "Los hechizos anteriores están disponibles aquí."

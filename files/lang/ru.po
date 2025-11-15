@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2779,24 +2779,6 @@ msgstr ""
 "к сожалению, Ваша сумка и так переполнена артефактами. Попробуйте передать "
 "один из Ваших артефактов другому герою."
 
-msgid "Click to show the next town."
-msgstr "Нажмите, чтобы показать следующий город."
-
-msgid "Show next town"
-msgstr "Следующий город"
-
-msgid "Click to show the previous town."
-msgstr "Нажмите, чтобы показать предыдущий город."
-
-msgid "Show previous town"
-msgstr "Предыдущий город"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "В этом городе нельзя построить замок."
-
-msgid "Town"
-msgstr "Город"
-
 msgid "Exit Castle"
 msgstr "Покинуть замок"
 
@@ -2806,8 +2788,26 @@ msgstr "Покинуть город"
 msgid "Show Income"
 msgstr "Показать доход"
 
+msgid "Show previous town"
+msgstr "Предыдущий город"
+
+msgid "Show next town"
+msgstr "Следующий город"
+
 msgid "View Hero"
 msgstr "Просмотреть героя"
+
+msgid "Click to show the next town."
+msgstr "Нажмите, чтобы показать следующий город."
+
+msgid "Click to show the previous town."
+msgstr "Нажмите, чтобы показать предыдущий город."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "В этом городе нельзя построить замок."
+
+msgid "Town"
+msgstr "Город"
 
 msgid "The above spells are available here."
 msgstr "Доступные заклинания."

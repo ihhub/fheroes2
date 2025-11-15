@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2762,24 +2762,6 @@ msgstr ""
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
 
-msgid "Click to show the next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Show next town"
-msgstr "Visa nästa stad"
-
-msgid "Click to show the previous town."
-msgstr "Klicka för att visa föregående stad."
-
-msgid "Show previous town"
-msgstr "Visa föregående stad"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Denna stad kan inte uppgraderas till en borg."
-
-msgid "Town"
-msgstr "Stad"
-
 msgid "Exit Castle"
 msgstr "Lämna Borgen"
 
@@ -2789,8 +2771,26 @@ msgstr "Lämna Staden"
 msgid "Show Income"
 msgstr "Visa Inkomst"
 
+msgid "Show previous town"
+msgstr "Visa föregående stad"
+
+msgid "Show next town"
+msgstr "Visa nästa stad"
+
 msgid "View Hero"
 msgstr "Visa Hjälte"
+
+msgid "Click to show the next town."
+msgstr "Klicka för att visa nästa stad."
+
+msgid "Click to show the previous town."
+msgstr "Klicka för att visa föregående stad."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Denna stad kan inte uppgraderas till en borg."
+
+msgid "Town"
+msgstr "Stad"
 
 msgid "The above spells are available here."
 msgstr "Ovanstående besvärjelser är tillgängliga här."

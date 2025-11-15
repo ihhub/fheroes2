@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2772,24 +2772,6 @@ msgstr ""
 "derzeit keinen Platz für ein Zauberbuch. Versuchet, eines Eurer Artefakte "
 "einem anderen Helden zu übergeben."
 
-msgid "Click to show the next town."
-msgstr "Klickt, um die nächste Stadt anzuzeigen."
-
-msgid "Show next town"
-msgstr "Nächste Stadt anzeigen"
-
-msgid "Click to show the previous town."
-msgstr "Klickt, um die vorherige Stadt anzuzeigen."
-
-msgid "Show previous town"
-msgstr "Vorherige Stadt anzeigen"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Diese Stadt darf nicht zu einer Burg ausgebaut werden."
-
-msgid "Town"
-msgstr "Stadt"
-
 msgid "Exit Castle"
 msgstr "Burg verlassen"
 
@@ -2799,8 +2781,26 @@ msgstr "Stadt verlassen"
 msgid "Show Income"
 msgstr "Einkommen anzeigen"
 
+msgid "Show previous town"
+msgstr "Vorherige Stadt anzeigen"
+
+msgid "Show next town"
+msgstr "Nächste Stadt anzeigen"
+
 msgid "View Hero"
 msgstr "Helden anzeigen"
+
+msgid "Click to show the next town."
+msgstr "Klickt, um die nächste Stadt anzuzeigen."
+
+msgid "Click to show the previous town."
+msgstr "Klickt, um die vorherige Stadt anzuzeigen."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Diese Stadt darf nicht zu einer Burg ausgebaut werden."
+
+msgid "Town"
+msgstr "Stadt"
 
 msgid "The above spells are available here."
 msgstr "Die oben genannten Zaubersprüche sind hier verfügbar."
