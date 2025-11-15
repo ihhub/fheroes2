@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <utility>
 #include <vector>
 
 #include "math_base.h"
@@ -47,6 +48,11 @@ namespace Maps::Map_Format
     struct MapFormat;
 }
 
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
+
 namespace Rand
 {
     class PCG32;
@@ -54,6 +60,7 @@ namespace Rand
 
 namespace Maps::Random_Generator
 {
+    int32_t getObjectGoldValue( const MP2::MapObjectType object );
     int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex );
     MonsterSelection getMonstersByValue( const int32_t protectedObjectValue );
     std::pair<ObjectGroup, int32_t> getRandomTreasure( const int32_t goldValueLimit, Rand::PCG32 & randomGenerator );

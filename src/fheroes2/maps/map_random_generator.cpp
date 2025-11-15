@@ -58,7 +58,6 @@ namespace
 {
     constexpr int32_t smallestStartingRegionSize{ 200 };
     constexpr int32_t emptySpacePercentage{ 40 };
-    constexpr int randomMonsterIndex{ 68 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
@@ -104,6 +103,27 @@ namespace
         const int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
 
         return groundTiles / canFit;
+    }
+
+    MP2::MapObjectType _getFakeMP2MineType( const int resource )
+    {
+        switch ( resource ) {
+        case Resource::WOOD:
+        case Resource::ORE:
+            return MP2::OBJ_SAWMILL;
+        case Resource::SULFUR:
+        case Resource::CRYSTAL:
+        case Resource::GEMS:
+        case Resource::MERCURY:
+            return MP2::OBJ_MINE;
+        case Resource::GOLD:
+            return MP2::OBJ_ABANDONED_MINE;
+        default:
+            // Have you added a new resource type?!
+            assert( 0 );
+            break;
+        }
+        return MP2::OBJ_NONE;
     }
 }
 
@@ -396,15 +416,18 @@ namespace Maps::Random_Generator
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tileIndex );
-                        return tileIndex;
+
+                        const int32_t mineValue = getObjectGoldValue( _getFakeMP2MineType( resource ) );
+                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( mineValue ) );
+                        return true;
                     }
                 }
-                return -1;
+                return false;
             };
 
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) != -1 ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
                         break;
                     }
                 }
@@ -417,9 +440,7 @@ namespace Maps::Random_Generator
             for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
                 for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
-                    const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
-                    if ( mineIndex != -1 ) {
-                        putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
                         break;
                     }
                 }
@@ -481,15 +502,15 @@ namespace Maps::Random_Generator
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
         // Step 10: Place missing monsters.
-        const auto & monsterSelection = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
+        const auto & weakGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 );
+        const auto & strongGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.isInner && mapRegions[regionId].isInner ) {
-                    placeMonster( mapFormat, tileIndex, monsterSelection );
-                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, monsterSelection.objectIndex );
+                    placeMonster( mapFormat, tileIndex, strongGuard );
                 }
                 else {
-                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                    placeMonster( mapFormat, tileIndex, weakGuard );
                 }
             }
         }
