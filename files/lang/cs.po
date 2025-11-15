@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -2747,24 +2747,6 @@ msgstr ""
 "Pro vstup do věže si musíš zakoupit knihu kouzel, teď ale nemáš pro ni "
 "místo. Zkus podarovat jeden ze svých artefaktů jinému hrdinovi."
 
-msgid "Click to show the next town."
-msgstr "Klikni pro zobrazení následujícího města."
-
-msgid "Show next town"
-msgstr "Zobrazit následující město"
-
-msgid "Click to show the previous town."
-msgstr "Klikni pro zobrazení předchozího města."
-
-msgid "Show previous town"
-msgstr "Zobrazit předchozí město"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-msgid "Town"
-msgstr "Město"
-
 msgid "Exit Castle"
 msgstr "Opustit hrad"
 
@@ -2774,8 +2756,26 @@ msgstr "Opustit město"
 msgid "Show Income"
 msgstr "Zobrazit příjmy"
 
+msgid "Show previous town"
+msgstr "Zobrazit předchozí město"
+
+msgid "Show next town"
+msgstr "Zobrazit následující město"
+
 msgid "View Hero"
 msgstr "Zobrazit hrdinu"
+
+msgid "Click to show the next town."
+msgstr "Klikni pro zobrazení následujícího města."
+
+msgid "Click to show the previous town."
+msgstr "Klikni pro zobrazení předchozího města."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+msgid "Town"
+msgstr "Město"
 
 msgid "The above spells are available here."
 msgstr "Nacházejí se zde výše uvedená kouzla."

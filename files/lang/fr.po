@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2810,24 +2810,6 @@ msgstr ""
 "vous n'avez actuellement pas de place pour un grimoire. Essayez de donner un "
 "de vos artéfacts à un autre héros."
 
-msgid "Click to show the next town."
-msgstr "Cliquez pour afficher le village suivant."
-
-msgid "Show next town"
-msgstr "Montrer le village suivant"
-
-msgid "Click to show the previous town."
-msgstr "Cliquez pour afficher le village précédent."
-
-msgid "Show previous town"
-msgstr "Montrer le village précédent"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Ce village ne peut pas être amélioré en château."
-
-msgid "Town"
-msgstr "Village"
-
 msgid "Exit Castle"
 msgstr "Quitter le château"
 
@@ -2837,8 +2819,26 @@ msgstr "Quitter le village"
 msgid "Show Income"
 msgstr "Afficher le revenu"
 
+msgid "Show previous town"
+msgstr "Montrer le village précédent"
+
+msgid "Show next town"
+msgstr "Montrer le village suivant"
+
 msgid "View Hero"
 msgstr "Voir le héros"
+
+msgid "Click to show the next town."
+msgstr "Cliquez pour afficher le village suivant."
+
+msgid "Click to show the previous town."
+msgstr "Cliquez pour afficher le village précédent."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Ce village ne peut pas être amélioré en château."
+
+msgid "Town"
+msgstr "Village"
 
 msgid "The above spells are available here."
 msgstr "Les sorts ci-dessus sont disponibles."
