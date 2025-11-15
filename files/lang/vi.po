@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2801,26 +2801,6 @@ msgstr ""
 "ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
 "cổ vật của ngươi cho một anh tướng khác."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Nhấp để xem thị trấn sau."
-
-msgid "Show next town"
-msgstr "Xem thị trấn sau"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Nhấp để xem thị trấn trước."
-
-msgid "Show previous town"
-msgstr "Xem thị trấn trước"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Thị trấn này có thể không được nâng cấp thành lâu đài."
-
-msgid "Town"
-msgstr "Thị trấn"
-
 msgid "Exit Castle"
 msgstr "Thoát khỏi Lâu đài"
 
@@ -2830,8 +2810,28 @@ msgstr "Thoát khỏi Thị trấn"
 msgid "Show Income"
 msgstr "Xem Thu nhập"
 
+msgid "Show previous town"
+msgstr "Xem thị trấn trước"
+
+msgid "Show next town"
+msgstr "Xem thị trấn sau"
+
 msgid "View Hero"
 msgstr "Xem Tướng"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Nhấp để xem thị trấn trước."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Thị trấn này có thể không được nâng cấp thành lâu đài."
+
+msgid "Town"
+msgstr "Thị trấn"
 
 msgid "The above spells are available here."
 msgstr "Các phép thuật trên có sẵn ở đây."

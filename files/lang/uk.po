@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-11-12 16:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2786,24 +2786,6 @@ msgstr ""
 "у Вас немає вільного місця під книгу. Спробуйте передати один із артефактів "
 "іншому герою."
 
-msgid "Click to show the next town."
-msgstr "Тицьніть щоб показати наступне місто."
-
-msgid "Show next town"
-msgstr "Показати наступне місто"
-
-msgid "Click to show the previous town."
-msgstr "Тицьніть щоб показати попереднє місто."
-
-msgid "Show previous town"
-msgstr "Показати попереднє місто"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Це Місто не можна покращити до Замку."
-
-msgid "Town"
-msgstr "Місто"
-
 msgid "Exit Castle"
 msgstr "Вийти з замку"
 
@@ -2813,8 +2795,26 @@ msgstr "Вийти з міста"
 msgid "Show Income"
 msgstr "Показати надходження"
 
+msgid "Show previous town"
+msgstr "Показати попереднє місто"
+
+msgid "Show next town"
+msgstr "Показати наступне місто"
+
 msgid "View Hero"
 msgstr "Оглянути героя"
+
+msgid "Click to show the next town."
+msgstr "Тицьніть щоб показати наступне місто."
+
+msgid "Click to show the previous town."
+msgstr "Тицьніть щоб показати попереднє місто."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Це Місто не можна покращити до Замку."
+
+msgid "Town"
+msgstr "Місто"
 
 msgid "The above spells are available here."
 msgstr "Вищевказані заклинання доступні тут."
