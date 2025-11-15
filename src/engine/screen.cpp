@@ -1512,7 +1512,7 @@ namespace fheroes2
             }
 
             // Previous position of cursor must be updated as well to avoid ghost effect.
-            _renderFrame( getBoundaryRect( temp, _prevRoi ) );
+            _renderFrame( temp );
 
             if ( _postprocessing ) {
                 _postprocessing();
@@ -1521,7 +1521,7 @@ namespace fheroes2
             Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
-            _renderFrame( getBoundaryRect( temp, _prevRoi ) );
+            _renderFrame( temp );
 
             if ( _postprocessing ) {
                 _postprocessing();
@@ -1555,7 +1555,7 @@ namespace fheroes2
         }
 
         if ( updateImage ) {
-            _engine->render( *this, roi );
+            _engine->render( *this, getBoundaryRect( roi, _prevRoi ) );
         }
     }
 
