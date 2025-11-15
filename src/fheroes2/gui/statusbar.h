@@ -38,7 +38,11 @@ public:
         _roi = roi;
     }
 
+    // Update and render a frame.
     void ShowMessage( std::string msg );
+
+    // Returns an area to redraw. An empty area means no need to redraw.
+    fheroes2::Rect updateMessage( std::string msg );
 
 private:
     fheroes2::Rect _roi;
