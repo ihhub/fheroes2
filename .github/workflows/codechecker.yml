@@ -20,6 +20,18 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+    - name: Identify changed files
+      id: changed-files
+      run: |
+        CHANGED_FILES=$(git diff --name-only --diff-filter=AM ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
+        echo "Changed files: $CHANGED_FILES"
+        echo "# CodeChecker skip file for changed files" > skipfile.txt
+        for file in $CHANGED_FILES; do
+          echo "+*$file" >> skipfile.txt
+        done
+        echo "-*" >> skipfile.txt
     - name: Install dependencies and codechecker
       run: |
         sudo apt-get -y update
@@ -33,7 +45,8 @@ jobs:
       run: |
         export PATH=$HOME/.python-venv/bin:$PATH
         CodeChecker analyze --analyzers clangsa --ctu-all --ctu-ast-mode load-from-pch --output codechecker-output \
-                            --review-status-config .codechecker-review-status-config build/compile_commands.json
+                            --review-status-config .codechecker-review-status-config build/compile_commands.json \
+                            --skip skipfile.txt
     - name: Display results
       run: |
         export PATH=$HOME/.python-venv/bin:$PATH
