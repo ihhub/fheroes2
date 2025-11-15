@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <ostream>
 #include <utility>
 
@@ -72,6 +73,11 @@ namespace Maps::Random_Generator
         const int nodeIndex = previousNode.index;
 
         for ( uint8_t direction = 0; direction < directionCount; ++direction ) {
+            if ( nodes.size() > sizeLimit ) {
+                previousNode.type = NodeType::BORDER;
+                break;
+            }
+
             // TODO: use node index and pre-calculate offsets in advance.
             //       This will speed up the below calculations.
             const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex ) + directionOffsets[direction];
@@ -81,9 +87,9 @@ namespace Maps::Random_Generator
 
             Node & newTile = rawData.getNode( newPosition );
 
-            if ( nodes.size() > sizeLimit || Maps::GetApproximateDistance( centerIndex, newTile.index ) > distanceLimit ) {
+            if ( Maps::GetApproximateDistance( centerIndex, newTile.index ) > distanceLimit ) {
                 previousNode.type = NodeType::BORDER;
-                break;
+                continue;
             }
 
             // Check diagonal direction only 50% of the time to get more circular distribution.
@@ -107,7 +113,7 @@ namespace Maps::Random_Generator
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added.
         const size_t nodesEnd = nodes.size();
-        const double distanceLimit = sqrt( sizeLimit / M_PI ) * 1.85;
+        const double distanceLimit = sqrt( static_cast<double>( sizeLimit ) / M_PI ) * 1.85;
 
         while ( lastProcessedNode < nodesEnd ) {
             checkAdjacentTiles( rawData, distanceLimit, randomGenerator );
