@@ -437,7 +437,7 @@ namespace Maps::Random_Generator
         for ( const Region & region : mapRegions ) {
             for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
-                    placeObstacle( mapFormat, data, node, randomGenerator );
+                    placeRandomObstacle( mapFormat, data, node, randomGenerator );
                 }
             }
         }

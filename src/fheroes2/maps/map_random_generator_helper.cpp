@@ -163,6 +163,36 @@ namespace
         return 0;
     }
 
+    std::pair<Maps::ObjectGroup, int32_t> convertMP2ToObjectInfo( const MP2::MapObjectType mp2Type )
+    {
+        static std::map<MP2::MapObjectType, std::pair<Maps::ObjectGroup, int32_t>> lookup;
+
+        const auto it = lookup.find( mp2Type );
+        if ( it != lookup.end() ) {
+            return it->second;
+        }
+
+        // No need to support every type of object
+        static const std::vector<Maps::ObjectGroup> limitedGroupList{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_DWELLINGS,
+                                                                      Maps::ObjectGroup::ADVENTURE_MINES,     Maps::ObjectGroup::ADVENTURE_POWER_UPS,
+                                                                      Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::MONSTERS };
+
+        for ( const auto & group : limitedGroupList ) {
+            const auto & groupObjects = Maps::getObjectsByGroup( group );
+            for ( size_t index = 0; index < groupObjects.size(); ++index ) {
+                if ( groupObjects[index].objectType == mp2Type ) {
+                    const std::pair<Maps::ObjectGroup, int32_t> pair{ group, static_cast<int32_t>( index ) };
+                    lookup.emplace( mp2Type, pair );
+                    return pair;
+                }
+            }
+        }
+
+        // New object group? Add it!
+        assert( 0 );
+        return {};
+    }
+
     bool iterateOverObjectParts( const Maps::ObjectInfo & info, const std::function<void( const Maps::ObjectPartInfo & )> & lambda )
     {
         for ( const auto & objectPart : info.groundLevelParts ) {
@@ -185,15 +215,10 @@ namespace
             data.getNode( position ).type = type;
         }
     }
-}
 
-namespace Maps::Random_Generator
-{
-    int32_t getObjectGoldValue( const Maps::ObjectGroup group, const int32_t objectIndex )
+    int32_t _getObjectGoldValue( const MP2::MapObjectType object )
     {
-        const auto & objectInfo = Maps::getObjectInfo( group, objectIndex );
-
-        const auto it = objectGoldValue.find( objectInfo.objectType );
+        const auto it = objectGoldValue.find( object );
         if ( it == objectGoldValue.end() ) {
             // No valuation for the object? Add it!
             assert( 0 );
@@ -201,6 +226,14 @@ namespace Maps::Random_Generator
         }
 
         return it->second;
+    }
+}
+
+namespace Maps::Random_Generator
+{
+    int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex )
+    {
+        return _getObjectGoldValue( Maps::getObjectInfo( group, objectIndex ).objectType );
     }
 
     MonsterSelection getMonstersByValue( const int32_t protectedObjectValue )
@@ -241,6 +274,25 @@ namespace Maps::Random_Generator
         }
 
         return {};
+    }
+
+    std::pair<ObjectGroup, int32_t> getRandomTreasure( const int32_t goldValueLimit, Rand::PCG32 & randomGenerator )
+    {
+        std::vector<MP2::MapObjectType> possibilities{
+            MP2::OBJ_TREASURE_CHEST,        MP2::OBJ_RESOURCE,
+            MP2::OBJ_RANDOM_RESOURCE,       MP2::OBJ_CAMPFIRE,
+            MP2::OBJ_RANDOM_ARTIFACT_TREASURE, MP2::OBJ_RANDOM_ARTIFACT_MINOR,
+            MP2::OBJ_RANDOM_ARTIFACT_MAJOR,
+        };
+        possibilities.erase( std::remove_if( possibilities.begin(), possibilities.end(),
+                                             [goldValueLimit]( const MP2::MapObjectType object ) { return _getObjectGoldValue( object ) > goldValueLimit; } ),
+                             possibilities.end() );
+
+        if ( possibilities.empty() ) {
+            return {};
+        }
+
+        return convertMP2ToObjectInfo( Rand::GetWithGen( possibilities, randomGenerator ) );
     }
 
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
@@ -527,7 +579,7 @@ namespace Maps::Random_Generator
         return placeActionObject( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
-    bool placeObstacle( Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
+    bool placeRandomObstacle( Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
     {
         Tile & tile = world.getTile( node.index );
         const auto it = obstaclesPerGround.find( tile.GetGround() );
@@ -608,8 +660,9 @@ namespace Maps::Random_Generator
 
                 int32_t groupValue = 0;
                 for ( const auto & treasure : prefab.valuables ) {
-                    placeSimpleObject( mapFormat, data, node, treasure );
-                    groupValue += getObjectGoldValue( treasure.groupType, treasure.objectIndex );
+                    const std::pair<ObjectGroup, int32_t> & selection = getRandomTreasure( 10000, randomGenerator );
+                    placeSimpleObject( mapFormat, data, node, { treasure.offset, selection.first, selection.second } );
+                    groupValue += getObjectGoldValue( selection.first, selection.second );
                 }
 
                 placeMonster( mapFormat, node.index, getMonstersByValue( groupValue ) );
