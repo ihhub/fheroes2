@@ -168,7 +168,7 @@ namespace Maps::Random_Generator
             nodes.emplace_back( centerNode );
         }
 
-        void checkAdjacentTiles( NodeCache & rawData, Rand::PCG32 & randomGenerator );
+        void checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
         bool regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator );
         bool checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node );
         fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat );

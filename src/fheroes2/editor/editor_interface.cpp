@@ -2188,7 +2188,7 @@ namespace Interface
 
         const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( temp.playerCount, mapWidth );
         temp.waterPercentage = std::min( temp.waterPercentage, waterLimit );
-        if ( !Dialog::SelectCount( _( "Set water percentage" ), 0, waterLimit, temp.waterPercentage ) ) {
+        if ( waterLimit > 0 && !Dialog::SelectCount( _( "Set water percentage" ), 0, waterLimit, temp.waterPercentage ) ) {
             return false;
         }
 

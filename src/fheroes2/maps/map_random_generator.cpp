@@ -249,9 +249,10 @@ namespace Maps::Random_Generator
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
         const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), config.playerCount );
+        const double distanceModifier = ( config.waterPercentage > 20 ) ? 0.8 : 0.9;
 
         const double radius = sqrt( ( innerLayer + outerLayer ) * regionSizeLimit / M_PI );
-        const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * 0.85;
+        const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * distanceModifier;
         const double innerRadius = ( innerLayer == 1 ) ? 0 : outerRadius / 3;
 
         const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
@@ -277,7 +278,7 @@ namespace Maps::Random_Generator
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 10 / 9, isInnerRegion );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 7 / 6, isInnerRegion );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
@@ -401,7 +402,7 @@ namespace Maps::Random_Generator
 
             for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
-                for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
+                for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
                     const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
                     if ( mineIndex != -1 ) {
                         putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), ObjectGroup::MONSTERS, randomMonsterIndex );
