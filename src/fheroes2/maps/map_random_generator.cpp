@@ -422,6 +422,9 @@ namespace Maps::Random_Generator
                 if ( node.type == NodeType::BORDER ) {
                     placeObstacle( mapFormat, data, node, randomGenerator );
                 }
+                else if ( node.type == NodeType::PATH ) {
+                    forceTempRoadOnTile( mapFormat, node.index );
+                }
             }
         }
 
@@ -442,13 +445,17 @@ namespace Maps::Random_Generator
             if ( region.groundType == Ground::WATER ) {
                 continue;
             }
+            for ( const Node & node : region.nodes ) {
+                Maps::removeRoadsFromTileInfo( mapFormat.tiles[node.index], node.index );
+            }
 
             pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 const auto & path = pathfinder.buildPath( tileIndex );
                 for ( const auto & step : path ) {
                     data.getNode( step.GetIndex() ).type = NodeType::PATH;
-                    Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
+                    // Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
+                    forceTempRoadOnTile( mapFormat, step.GetIndex() );
                 }
             }
         }

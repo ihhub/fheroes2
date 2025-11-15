@@ -61,7 +61,8 @@ namespace Maps::Random_Generator
 
     bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders );
     bool canFitObjectSet( const NodeCache & data, const ObjectSet & set, const fheroes2::Point & mainTilePos );
-    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos );
+    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isCastle );
+    void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex );
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex );
     bool placeActionObject( Map_Format::MapFormat & mapFormat, NodeCache & data, Tile & tile, const ObjectGroup groupType, const int32_t type );

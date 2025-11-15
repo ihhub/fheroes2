@@ -99,6 +99,8 @@ namespace Maps
     bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad );
 
     void updateRoadSpriteOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool forceRoadOnTile );
+    void removeRoadsFromTileInfo( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex );
+    void writeRoadSpriteToTileInfo( Map_Format::TileInfo & tile, const int32_t tileIndex, const uint8_t imageIndex );
 
     bool doesContainRoads( const Map_Format::TileInfo & tile );
 }

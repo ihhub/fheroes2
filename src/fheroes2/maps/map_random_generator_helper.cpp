@@ -376,7 +376,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isCastle )
     {
         fheroes2::Rect objectRect;
 
@@ -394,15 +394,22 @@ namespace Maps::Random_Generator
             return;
         }
 
+        const int32_t pathOffset = ( isCastle ) ? 2 : 1;
         for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-            markNodeAsType( data, mainTilePos + fheroes2::Point{ x, objectRect.height + 1 }, NodeType::PATH );
+            markNodeAsType( data, mainTilePos + fheroes2::Point{ x, objectRect.height + pathOffset }, NodeType::PATH );
         }
 
         // Mark extra nodes as path to avoid objects clumping together
-        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.x - 1, 0 }, NodeType::PATH );
-        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.width + 1, 0 }, NodeType::PATH );
+        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.x - pathOffset, 0 }, NodeType::PATH );
+        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.width + pathOffset, 0 }, NodeType::PATH );
 
         markNodeAsType( data, mainTilePos, NodeType::ACTION );
+    }
+
+    // Wouldn't render correctly but will speed up placement
+    void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
+    {
+        Maps::writeRoadSpriteToTileInfo( mapFormat.tiles[tileIndex], tileIndex, 0 );
     }
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
@@ -433,7 +440,7 @@ namespace Maps::Random_Generator
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
         if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
-            markObjectPlacement( data, objectInfo, tilePos );
+            markObjectPlacement( data, objectInfo, tilePos, false );
             return true;
         }
 
@@ -505,8 +512,8 @@ namespace Maps::Random_Generator
 
         world.addCastle( tile.GetIndex(), race, color );
 
-        markObjectPlacement( data, basementInfo, tilePos );
-        markObjectPlacement( data, castleInfo, tilePos );
+        markObjectPlacement( data, basementInfo, tilePos, true );
+        markObjectPlacement( data, castleInfo, tilePos, true );
 
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
@@ -577,7 +584,7 @@ namespace Maps::Random_Generator
         const int32_t objectIndex = selectTerrainVariantForObject( placement.groupType, placement.objectIndex, tile.GetGround() );
         const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
         if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
-            markObjectPlacement( data, objectInfo, position );
+            markObjectPlacement( data, objectInfo, position, false );
             return true;
         }
         return false;
