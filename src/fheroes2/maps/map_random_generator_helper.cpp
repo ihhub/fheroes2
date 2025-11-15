@@ -60,6 +60,8 @@ namespace
         { Maps::Ground::DIRT, { 18, 19, 20, 21, 22, 23 } },      { Maps::Ground::GRASS, { 0, 1, 2, 3, 4, 5 } },       { Maps::Ground::WATER, {} },
     };
 
+    const std::vector<Maps::Random_Generator::ObjectPlacement> randomMonsterSet{ { { 0, 0 }, Maps::ObjectGroup::MONSTERS, 0 } };
+
     // Evaluating all treasure and power-ups using gold equivalent
     // Benchmark is 1500 gold = 1000 experience; 1 primary attribute point worth 2000 gold
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
@@ -345,7 +347,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        for ( const auto * placements : { &set.obstacles, &set.valuables, &set.monsters } ) {
+        for ( const auto * placements : { &set.obstacles, &set.valuables, &randomMonsterSet } ) {
             for ( const auto & placement : *placements ) {
                 const auto & info = Maps::getObjectInfo( placement.groupType, placement.objectIndex );
                 const bool isAction = MP2::isInGameActionObject( info.objectType );
@@ -610,11 +612,8 @@ namespace Maps::Random_Generator
                     groupValue += getObjectGoldValue( treasure.groupType, treasure.objectIndex );
                 }
 
-                const MonsterSelection & monster = getMonstersByValue( groupValue );
-                for ( const auto & placement : prefab.monsters ) {
-                    const int32_t index = Maps::GetIndexFromAbsPoint( Maps::GetPoint( node.index ) + placement.offset );
-                    placeMonster( mapFormat, index, monster );
-                }
+                placeMonster( mapFormat, node.index, getMonstersByValue( groupValue ) );
+
                 ++objectsPlaced;
                 break;
             }

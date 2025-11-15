@@ -205,7 +205,6 @@ namespace Maps::Random_Generator
     {
         std::vector<ObjectPlacement> obstacles;
         std::vector<ObjectPlacement> valuables;
-        std::vector<ObjectPlacement> monsters;
         std::vector<fheroes2::Point> entranceCheck;
     };
 

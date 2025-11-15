@@ -69,8 +69,6 @@ namespace
         { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
     } };
 
-    const std::vector<Maps::Random_Generator::ObjectPlacement> randomMonsterSet{ { { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } };
-
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
         // Water percentage cannot be 100 or more, or negative.
@@ -120,8 +118,6 @@ namespace Maps::Random_Generator
                                                                 { { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
                                                    ObjectSet{ // Obstacles.
@@ -133,8 +129,6 @@ namespace Maps::Random_Generator
                                                                 { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { 0, -1 }, { 1, -1 }, { 1, 0 } } },
                                                    ObjectSet{ // Obstacles.
@@ -147,8 +141,6 @@ namespace Maps::Random_Generator
                                                                 { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 } } },
                                                    ObjectSet{ // Obstacles.
@@ -161,8 +153,6 @@ namespace Maps::Random_Generator
                                                                 { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 } } },
                                                    ObjectSet{ // Obstacles.
@@ -171,8 +161,6 @@ namespace Maps::Random_Generator
                                                                 { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
                                                               // Valuables.
                                                               { { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } } };
 
@@ -183,8 +171,6 @@ namespace Maps::Random_Generator
                    { { { 2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                   // Monsters.
-                   randomMonsterSet,
                    // Entrance check.
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
         ObjectSet{ // Obstacles.
@@ -193,8 +179,6 @@ namespace Maps::Random_Generator
                    { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 18 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                   // Monsters.
-                   randomMonsterSet,
                    // Entrance check.
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
         ObjectSet{ // Obstacles.
@@ -203,8 +187,6 @@ namespace Maps::Random_Generator
                    { { { 2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                   // Monsters.
-                   randomMonsterSet,
                    // Entrance check.
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
         ObjectSet{ // Obstacles.
@@ -213,8 +195,6 @@ namespace Maps::Random_Generator
                    { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 13 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                   // Monsters.
-                   randomMonsterSet,
                    // Entrance check.
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
         ObjectSet{ // Obstacles.
@@ -225,8 +205,6 @@ namespace Maps::Random_Generator
                    { { { -2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 16 },
                      { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                   // Monsters.
-                   randomMonsterSet,
                    // Entrance check.
                    { { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } } },
     };
