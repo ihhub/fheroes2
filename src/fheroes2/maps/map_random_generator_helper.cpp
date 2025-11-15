@@ -70,7 +70,7 @@ namespace
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
     const std::map<MP2::MapObjectType, int32_t> objectGoldValue = {
         // Mines.
-        { MP2::OBJ_ABANDONED_MINE, 5000 },
+        { MP2::OBJ_ABANDONED_MINE, 6000 },
         { MP2::OBJ_ALCHEMIST_LAB, 2000 },
         { MP2::OBJ_MINE, 2000 },
         { MP2::OBJ_SAWMILL, 750 },
@@ -78,7 +78,7 @@ namespace
         { MP2::OBJ_CAMPFIRE, 1000 },
         { MP2::OBJ_GENIE_LAMP, 6000 },
         { MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 10000 },
-        { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 4000 },
+        { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 4500 },
         { MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 2000 },
         { MP2::OBJ_RANDOM_RESOURCE, minimalTreasureValue },
         { MP2::OBJ_RESOURCE, minimalTreasureValue },

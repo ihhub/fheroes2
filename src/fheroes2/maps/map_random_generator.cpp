@@ -36,6 +36,7 @@
 #include <vector>
 
 #include "color.h"
+#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
@@ -47,6 +48,7 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
