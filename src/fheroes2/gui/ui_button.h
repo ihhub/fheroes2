@@ -415,7 +415,6 @@ namespace fheroes2
     public:
         void addButton( ButtonBase * button );
 
-        // Will draw on screen by default
         void draw( Image & output ) const
         {
             for ( const ButtonBase * button : _button ) {
