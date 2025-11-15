@@ -250,22 +250,24 @@ namespace Maps::Random_Generator
                        Monster::BLACK_DRAGON } };
         }
         if ( protectedObjectValue > 6000 ) {
-            // 57 -> 137 monster strength
+            // 49 -> 137 monster strength
             return { Monster::RANDOM_MONSTER - 1,
-                     { Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::POWER_LICH,
-                       Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS } };
+                     { Monster::TROLL, Monster::CHAMPION, Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD,
+                       Monster::ARCHMAGE, Monster::POWER_LICH, Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS, Monster::GENIE } };
         }
         if ( protectedObjectValue > 4500 ) {
-            // 36 -> 48 monster strength
+            // 27 -> 48 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_3 - 1,
-                     { Monster::DRUID, Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
+                     { Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT, Monster::DRUID,
+                       Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
                        Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } };
         }
         if ( protectedObjectValue > 3000 ) {
-            // 21 -> 31 monster strength
+            // 18 -> 31 monster strength
             return { Monster::RANDOM_MONSTER - 1,
-                     { Monster::ROYAL_MUMMY, Monster::WOLF, Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN,
-                       Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } };
+                     { Monster::NOMAD, Monster::IRON_GOLEM, Monster::ELF, Monster::ROYAL_MUMMY, Monster::WOLF, Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE,
+                       Monster::STEEL_GOLEM, Monster::GRIFFIN, Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT,
+                       Monster::FIRE_ELEMENT } };
         }
         if ( protectedObjectValue > 1500 ) {
             // 11 -> 18 monster strength
@@ -644,7 +646,7 @@ namespace Maps::Random_Generator
     {
         int objectsPlaced = 0;
         for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-            if ( objectsPlaced == expectedCount ) {
+            if ( objectsPlaced == expectedCount || region.treasureLimit < 0 ) {
                 break;
             }
 
@@ -663,7 +665,7 @@ namespace Maps::Random_Generator
                 const int32_t groupValueLimit = std::min( region.treasureLimit, maximumTreasureGroupValue );
                 int32_t groupValue = 0;
                 for ( const auto & treasure : prefab.valuables ) {
-                    std::pair<ObjectGroup, int32_t> selection{treasure.groupType, treasure.objectIndex};
+                    std::pair<ObjectGroup, int32_t> selection{ treasure.groupType, treasure.objectIndex };
                     if ( treasure.groupType != ObjectGroup::ADVENTURE_POWER_UPS ) {
                         const int32_t valueLimit = std::max( minimalTreasureValue, groupValueLimit - groupValue );
                         selection = getRandomTreasure( valueLimit, randomGenerator );
