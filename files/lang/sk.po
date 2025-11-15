@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2799,26 +2799,6 @@ msgstr ""
 "nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
 "hrdinovi."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Kliknutím zobraz ďalšie mesto."
-
-msgid "Show next town"
-msgstr "Ukáž ďalšie mesto"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Kliknutím zobraz predošlé mesto."
-
-msgid "Show previous town"
-msgstr "Ukáž predošlé mesto"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Toto mesto nemôže byť povýšené na hrad."
-
-msgid "Town"
-msgstr "Mesto"
-
 msgid "Exit Castle"
 msgstr "Preč z hradu"
 
@@ -2828,8 +2808,28 @@ msgstr "Preč z mesta"
 msgid "Show Income"
 msgstr "Ukáž príjem"
 
+msgid "Show previous town"
+msgstr "Ukáž predošlé mesto"
+
+msgid "Show next town"
+msgstr "Ukáž ďalšie mesto"
+
 msgid "View Hero"
 msgstr "Ukáž hrdinu"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Kliknutím zobraz predošlé mesto."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Toto mesto nemôže byť povýšené na hrad."
+
+msgid "Town"
+msgstr "Mesto"
 
 msgid "The above spells are available here."
 msgstr "Vyššie uvedené kúzla sú tu dostupné."

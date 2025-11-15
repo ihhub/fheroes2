@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2730,26 +2730,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
-
-msgid "Show next town"
-msgstr ""
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
-
-msgid "Show previous town"
-msgstr ""
-
-msgid "This town may not be upgraded to a castle."
-msgstr ""
-
-msgid "Town"
-msgstr "Горад"
-
 msgid "Exit Castle"
 msgstr "Пакінуць замак"
 
@@ -2759,8 +2739,28 @@ msgstr "Пакінуць горад"
 msgid "Show Income"
 msgstr "Паказаць прыбытак"
 
+msgid "Show previous town"
+msgstr ""
+
+msgid "Show next town"
+msgstr ""
+
 msgid "View Hero"
 msgstr "Даведацца пра героя"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+msgid "This town may not be upgraded to a castle."
+msgstr ""
+
+msgid "Town"
+msgstr "Горад"
 
 msgid "The above spells are available here."
 msgstr ""

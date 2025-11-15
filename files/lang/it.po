@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2626,26 +2626,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Clicca per andare alla città succ."
-
-msgid "Show next town"
-msgstr "Va alla città pross."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Clicca per andare alla città prec."
-
-msgid "Show previous town"
-msgstr "Vai alla città prec."
-
-msgid "This town may not be upgraded to a castle."
-msgstr ""
-
-msgid "Town"
-msgstr "Castello"
-
 msgid "Exit Castle"
 msgstr "Esci dal Castello"
 
@@ -2655,8 +2635,28 @@ msgstr "Esci dalla Città"
 msgid "Show Income"
 msgstr "Mostra Rendita"
 
+msgid "Show previous town"
+msgstr "Vai alla città prec."
+
+msgid "Show next town"
+msgstr "Va alla città pross."
+
 msgid "View Hero"
 msgstr "Mostra Eroe"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Clicca per andare alla città prec."
+
+msgid "This town may not be upgraded to a castle."
+msgstr ""
+
+msgid "Town"
+msgstr "Castello"
 
 msgid "The above spells are available here."
 msgstr "Qua sono disponibili queste magie."
