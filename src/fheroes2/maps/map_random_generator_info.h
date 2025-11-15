@@ -149,16 +149,19 @@ namespace Maps::Random_Generator
         size_t lastProcessedNode{ 0 };
         int colorIndex{ neutralColorIndex };
         int groundType{ Ground::GRASS };
+        int32_t treasureLimit{ 0 };
         bool isInner{ false };
 
         Region() = default;
 
-        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const bool inner )
+        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const int32_t treasureLimit,
+                const bool inner )
             : id( regionIndex )
             , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
+            , treasureLimit( treasureLimit )
             , isInner( inner )
         {
             assert( expectedSize > 0 );
@@ -192,6 +195,7 @@ namespace Maps::Random_Generator
         uint8_t objectCount{ 0 };
         uint8_t powerUpsCount{ 0 };
         uint8_t treasureCount{ 0 };
+        int32_t treasureValueLimit{ 0 };
     };
 
     struct ObjectPlacement final

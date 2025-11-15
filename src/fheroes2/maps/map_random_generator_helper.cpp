@@ -62,6 +62,9 @@ namespace
 
     const std::vector<Maps::Random_Generator::ObjectPlacement> randomMonsterSet{ { { 0, 0 }, Maps::ObjectGroup::MONSTERS, 0 } };
 
+    constexpr int32_t minimalTreasureValue{ 750 };
+    constexpr int32_t maximumTreasureGroupValue{ 14000 };
+
     // Evaluating all treasure and power-ups using gold equivalent
     // Benchmark is 1500 gold = 1000 experience; 1 primary attribute point worth 2000 gold
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
@@ -81,12 +84,12 @@ namespace
         { MP2::OBJ_GOBLIN_HUT, 1500 },
         { MP2::OBJ_HALFLING_HOLE, 1500 },
         { MP2::OBJ_MERCENARY_CAMP, 2000 },
-        { MP2::OBJ_PEASANT_HUT, 250 },
+        { MP2::OBJ_PEASANT_HUT, minimalTreasureValue },
         { MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 10000 },
         { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 4000 },
         { MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 2000 },
-        { MP2::OBJ_RANDOM_RESOURCE, 750 },
-        { MP2::OBJ_RESOURCE, 750 },
+        { MP2::OBJ_RANDOM_RESOURCE, minimalTreasureValue },
+        { MP2::OBJ_RESOURCE, minimalTreasureValue },
         { MP2::OBJ_RUINS, 4000 },
         { MP2::OBJ_SHRINE_FIRST_CIRCLE, 1000 },
         { MP2::OBJ_SHRINE_SECOND_CIRCLE, 2000 },
@@ -279,11 +282,10 @@ namespace Maps::Random_Generator
     std::pair<ObjectGroup, int32_t> getRandomTreasure( const int32_t goldValueLimit, Rand::PCG32 & randomGenerator )
     {
         std::vector<MP2::MapObjectType> possibilities{
-            MP2::OBJ_TREASURE_CHEST,        MP2::OBJ_RESOURCE,
-            MP2::OBJ_RANDOM_RESOURCE,       MP2::OBJ_CAMPFIRE,
-            MP2::OBJ_RANDOM_ARTIFACT_TREASURE, MP2::OBJ_RANDOM_ARTIFACT_MINOR,
-            MP2::OBJ_RANDOM_ARTIFACT_MAJOR,
+            MP2::OBJ_TREASURE_CHEST, MP2::OBJ_TREASURE_CHEST,           MP2::OBJ_RANDOM_RESOURCE,       MP2::OBJ_RANDOM_RESOURCE,
+            MP2::OBJ_CAMPFIRE,       MP2::OBJ_RANDOM_ARTIFACT_TREASURE, MP2::OBJ_RANDOM_ARTIFACT_MINOR, MP2::OBJ_RANDOM_ARTIFACT_MAJOR,
         };
+
         possibilities.erase( std::remove_if( possibilities.begin(), possibilities.end(),
                                              [goldValueLimit]( const MP2::MapObjectType object ) { return _getObjectGoldValue( object ) > goldValueLimit; } ),
                              possibilities.end() );
@@ -637,7 +639,7 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, std::vector<ObjectSet> objects, const uint8_t expectedCount,
+    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, std::vector<ObjectSet> objects, const uint8_t expectedCount,
                          Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
@@ -658,12 +660,19 @@ namespace Maps::Random_Generator
                     placeSimpleObject( mapFormat, data, node, obstacle );
                 }
 
+                const int32_t groupValueLimit = std::min( region.treasureLimit, maximumTreasureGroupValue );
                 int32_t groupValue = 0;
                 for ( const auto & treasure : prefab.valuables ) {
-                    const std::pair<ObjectGroup, int32_t> & selection = getRandomTreasure( 10000, randomGenerator );
+                    std::pair<ObjectGroup, int32_t> selection{treasure.groupType, treasure.objectIndex};
+                    if ( treasure.groupType != ObjectGroup::ADVENTURE_POWER_UPS ) {
+                        const int32_t valueLimit = std::max( minimalTreasureValue, groupValueLimit - groupValue );
+                        selection = getRandomTreasure( valueLimit, randomGenerator );
+                    }
                     placeSimpleObject( mapFormat, data, node, { treasure.offset, selection.first, selection.second } );
                     groupValue += getObjectGoldValue( selection.first, selection.second );
                 }
+                // It is possible to go into the negatives; intentional
+                region.treasureLimit -= groupValue;
 
                 placeMonster( mapFormat, node.index, getMonstersByValue( groupValue ) );
 

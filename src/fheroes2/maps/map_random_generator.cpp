@@ -64,9 +64,9 @@ namespace
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
     constexpr std::array<Maps::Random_Generator::RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
-        { 1, 2, 1, 1, 2 }, // ResourceDensity::SCARCE
-        { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
-        { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
+        { 1, 2, 1, 1, 2, 8500 }, // ResourceDensity::SCARCE
+        { 1, 6, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
+        { 1, 7, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
     } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
@@ -253,10 +253,11 @@ namespace Maps::Random_Generator
         // TODO: Add support for layouts other than MIRRORED
         const int32_t groundTiles = ( width * height ) * ( 100 - config.waterPercentage ) / 100;
         const int expectedRegionCount = groundTiles / regionSizeLimit;
+        const RegionalObjects & regionConfiguration = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, false } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, false } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -287,10 +288,11 @@ namespace Maps::Random_Generator
 
                 const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
+                const int32_t treasureLimit = isPlayerRegion ? regionConfiguration.treasureValueLimit : regionConfiguration.treasureValueLimit * 2;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, isInnerRegion );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, isInnerRegion );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
@@ -471,8 +473,7 @@ namespace Maps::Random_Generator
         }
 
         // Step 8: Place powerups and treasure clusters while avoiding the paths.
-        const auto & regionConfiguration = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
-        for ( const Region & region : mapRegions ) {
+        for ( Region & region : mapRegions ) {
             placeObjectSet( mapFormat, data, region, powerupObjectSets, regionConfiguration.powerUpsCount, randomGenerator );
             placeObjectSet( mapFormat, data, region, prefabObjectSets, regionConfiguration.treasureCount, randomGenerator );
         }
