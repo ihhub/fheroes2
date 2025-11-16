@@ -27,9 +27,11 @@
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
+#include <functional>
 #include <ostream>
 
 #include "ai_planner.h"
+#include "army.h"
 #include "color.h"
 #include "direction.h"
 #include "heroes.h"
