@@ -91,6 +91,89 @@ namespace
 
         return squaredDistanceLimit;
     }
+
+    void forEachMonsterProtectingTile( const int32_t tileIndex, const std::function<void( const int32_t )> & lambda )
+    {
+        const int width = world.w();
+        const int x = tileIndex % width;
+        const int y = tileIndex / width;
+        Maps::Tile & tile = world.getTile( tileIndex );
+
+        const auto isProtectedBy = [tileIndex, &tile]( const int32_t monsterTileIndex ) {
+            const Maps::Tile & monsterTile = world.getTile( monsterTileIndex );
+
+            if ( monsterTile.getMainObjectType() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
+                return false;
+            }
+
+            const int directionToMonster = Maps::GetDirection( tileIndex, monsterTileIndex );
+            const int directionFromMonster = Direction::Reflect( directionToMonster );
+
+            // The tile is directly accessible to the monster
+            if ( ( tile.GetPassable() & directionToMonster ) && ( monsterTile.GetPassable() & directionFromMonster ) ) {
+                return true;
+            }
+
+            // The tile is not directly accessible to the monster, but he can still attack in the diagonal direction if, when the hero moves away from the tile
+            // in question in the vertical direction and the monster moves away from his tile in the horizontal direction, they would have to meet
+            if ( directionFromMonster == Direction::TOP_LEFT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+                return true;
+            }
+            if ( directionFromMonster == Direction::TOP_RIGHT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+                return true;
+            }
+            if ( directionFromMonster == Direction::BOTTOM_RIGHT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+                return true;
+            }
+            if ( directionFromMonster == Direction::BOTTOM_LEFT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+                return true;
+            }
+
+            return false;
+        };
+
+        const auto validateAndCall = [&isProtectedBy, &lambda]( const int monsterTileIndex ) {
+            if ( isProtectedBy( monsterTileIndex ) ) {
+                lambda( monsterTileIndex );
+            }
+        };
+
+        if ( y > 0 ) {
+            if ( x > 0 ) {
+                validateAndCall( tileIndex - width - 1 );
+            }
+
+            validateAndCall( tileIndex - width );
+
+            if ( x < width - 1 ) {
+                validateAndCall( tileIndex - width + 1 );
+            }
+        }
+
+        if ( x > 0 ) {
+            validateAndCall( tileIndex - 1 );
+        }
+
+        if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
+            validateAndCall( tileIndex );
+        }
+
+        if ( x < width - 1 ) {
+            validateAndCall( tileIndex + 1 );
+        }
+
+        if ( y < world.h() - 1 ) {
+            if ( x > 0 ) {
+                validateAndCall( tileIndex + width - 1 );
+            }
+
+            validateAndCall( tileIndex + width );
+
+            if ( x < width - 1 ) {
+                validateAndCall( tileIndex + width + 1 );
+            }
+        }
+    }
 }
 
 struct ComparisonDistance
@@ -546,6 +629,26 @@ bool Maps::isTileUnderProtection( const int32_t tileIndex )
     return world.getTile( tileIndex ).getMainObjectType() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
 }
 
+bool Maps::isTileProtectionStrongerThan( const int32_t tileIndex, const double armyStrength )
+{
+    // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+    static Army tileArmy;
+    bool isStronger = false;
+
+    forEachMonsterProtectingTile( tileIndex, [&armyStrength, &isStronger]( const int32_t monsterIndex ) {
+        if ( isStronger ) {
+            return;
+        }
+
+        tileArmy.setFromTile( world.getTile( monsterIndex ) );
+
+        if ( tileArmy.GetStrength() > armyStrength ) {
+            isStronger = true;
+        }
+    } );
+    return isStronger;
+}
+
 Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile /* = true */ )
 {
     if ( !isValidAbsIndex( tileIndex ) ) {
@@ -568,84 +671,7 @@ Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bo
 
     result.reserve( 9 );
 
-    const int width = world.w();
-    const int x = tileIndex % width;
-    const int y = tileIndex / width;
-
-    const auto isProtectedBy = [tileIndex, &tile]( const int32_t monsterTileIndex ) {
-        const Maps::Tile & monsterTile = world.getTile( monsterTileIndex );
-
-        if ( monsterTile.getMainObjectType() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
-            return false;
-        }
-
-        const int directionToMonster = Maps::GetDirection( tileIndex, monsterTileIndex );
-        const int directionFromMonster = Direction::Reflect( directionToMonster );
-
-        // The tile is directly accessible to the monster
-        if ( ( tile.GetPassable() & directionToMonster ) && ( monsterTile.GetPassable() & directionFromMonster ) ) {
-            return true;
-        }
-
-        // The tile is not directly accessible to the monster, but he can still attack in the diagonal direction if, when the hero moves away from the tile
-        // in question in the vertical direction and the monster moves away from his tile in the horizontal direction, they would have to meet
-        if ( directionFromMonster == Direction::TOP_LEFT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
-            return true;
-        }
-        if ( directionFromMonster == Direction::TOP_RIGHT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
-            return true;
-        }
-        if ( directionFromMonster == Direction::BOTTOM_RIGHT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
-            return true;
-        }
-        if ( directionFromMonster == Direction::BOTTOM_LEFT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
-            return true;
-        }
-
-        return false;
-    };
-
-    const auto validateAndAdd = [&result, &isProtectedBy]( const int monsterTileIndex ) {
-        if ( isProtectedBy( monsterTileIndex ) ) {
-            result.push_back( monsterTileIndex );
-        }
-    };
-
-    if ( y > 0 ) {
-        if ( x > 0 ) {
-            validateAndAdd( tileIndex - width - 1 );
-        }
-
-        validateAndAdd( tileIndex - width );
-
-        if ( x < width - 1 ) {
-            validateAndAdd( tileIndex - width + 1 );
-        }
-    }
-
-    if ( x > 0 ) {
-        validateAndAdd( tileIndex - 1 );
-    }
-
-    if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
-        result.push_back( tileIndex );
-    }
-
-    if ( x < width - 1 ) {
-        validateAndAdd( tileIndex + 1 );
-    }
-
-    if ( y < world.h() - 1 ) {
-        if ( x > 0 ) {
-            validateAndAdd( tileIndex + width - 1 );
-        }
-
-        validateAndAdd( tileIndex + width );
-
-        if ( x < width - 1 ) {
-            validateAndAdd( tileIndex + width + 1 );
-        }
-    }
+    forEachMonsterProtectingTile( tileIndex, [&result]( const int32_t monsterIndex ) { result.push_back( monsterIndex ); } );
 
     return result;
 }
