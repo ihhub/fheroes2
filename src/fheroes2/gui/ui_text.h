@@ -400,7 +400,10 @@ namespace fheroes2
 
     private:
         // Returns true if character is valid for the current code page, excluding space (' ') and new line ('\n').
-        bool _isValid( const uint8_t character ) const;
+        bool _isValid( const uint8_t character ) const
+        {
+            return character >= 0x21 && character <= _charLimit;
+        }
 
         int32_t _getSpaceCharWidth() const;
 

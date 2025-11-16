@@ -417,10 +417,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     }
 }
 
-Interface::BorderWindow::BorderWindow( const fheroes2::Rect & rt )
-    : area( rt )
-{}
-
 const fheroes2::Rect & Interface::BorderWindow::GetRect() const
 {
     return Settings::Get().isHideInterfaceEnabled() && border.isValid() ? border.GetRect() : GetArea();
