@@ -2702,19 +2702,19 @@ msgid "Captain's Quarters"
 msgstr "Дом кашталяна"
 
 msgid "Mage Guild, Level 1"
-msgstr "1-ы паверх гільдыі магаў"
+msgstr "1 пав. гільдыі магаў"
 
 msgid "Mage Guild, Level 2"
-msgstr "2-і паверх гільдыі магаў"
+msgstr "2 пав. гільдыі магаў"
 
 msgid "Mage Guild, Level 3"
-msgstr "3-і паверх гільдыі магаў"
+msgstr "3 пав. гільдыі магаў"
 
 msgid "Mage Guild, Level 4"
-msgstr "4-ы паверх гільдыі магаў"
+msgstr "4 пав. гільдыі магаў"
 
 msgid "Mage Guild, Level 5"
-msgstr "5-ы паверх гільдыі магаў"
+msgstr "5 пав. гільдыі магаў"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -2986,13 +2986,13 @@ msgid "Shots"
 msgstr "Мае стрэлаў"
 
 msgid "Shots Left"
-msgstr "Засталося стрэлаў"
+msgstr "Заст.стрэлаў"
 
 msgid "Hit Points"
 msgstr "Здароўе"
 
 msgid "Hit Points Left"
-msgstr "Бягучае здароўе"
+msgstr "Заст. здароўя"
 
 msgid "You can't afford to upgrade your troops!"
 msgstr "Палепшыць гэты атрад вам не па кішэні!"
