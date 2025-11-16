@@ -1124,50 +1124,12 @@ namespace
         return 255U;
     }
 
-    void updateRoadSpritesInArea( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance,
-                                  const bool updateNonRoadTilesFromEdgesToCenter )
-    {
-        // We should update road sprites step by step starting from the tiles close connected to the center tile.
-        const int32_t centerX = centerTileIndex % map.width;
-        const int32_t centerY = centerTileIndex / map.width;
-
-        // We avoid getting out of map boundaries.
-        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
-        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
-
-        const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
-
-        for ( int32_t distance = 1; distance < distanceMax; ++distance ) {
-            const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
-
-            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
-                const int32_t indexOffsetY = tileY * map.width;
-                const int32_t distanceY = std::abs( tileY - centerY );
-
-                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
-                    if ( std::abs( tileX - centerX ) + distanceY != correctedDistance ) {
-                        continue;
-                    }
-
-                    const auto & tile = map.tiles[indexOffsetY + tileX];
-                    if ( updateNonRoadTilesFromEdgesToCenter && Maps::doesContainRoads( tile ) ) {
-                        continue;
-                    }
-
-                    Maps::updateRoadSpriteOnTile( map, indexOffsetY + tileX, false );
-                }
-            }
-        }
-    }
-
     void updateRoadSpritesAround( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex )
     {
-        updateRoadSpritesInArea( map, centerTileIndex, 2, false );
+        Maps::updateRoadSpritesInArea( map, centerTileIndex, 2, false );
         // To properly update the around sprites we call the update function the second time
         // for tiles not marked as road in reverse order and for 1 tile more distance from the center.
-        updateRoadSpritesInArea( map, centerTileIndex, 3, true );
+        Maps::updateRoadSpritesInArea( map, centerTileIndex, 3, true );
     }
 }
 
@@ -2100,6 +2062,44 @@ namespace Maps
             readTileObject( world.getTile( tileIndex ), info );
 
             tile.objects.emplace_back( std::move( info ) );
+        }
+    }
+
+    void updateRoadSpritesInArea( Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance,
+                                  const bool updateNonRoadTilesFromEdgesToCenter )
+    {
+        // We should update road sprites step by step starting from the tiles close connected to the center tile.
+        const int32_t centerX = centerTileIndex % map.width;
+        const int32_t centerY = centerTileIndex / map.width;
+
+        // We avoid getting out of map boundaries.
+        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
+
+        const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
+
+        for ( int32_t distance = 1; distance < distanceMax; ++distance ) {
+            const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
+
+            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+                const int32_t indexOffsetY = tileY * map.width;
+                const int32_t distanceY = std::abs( tileY - centerY );
+
+                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
+                    if ( std::abs( tileX - centerX ) + distanceY != correctedDistance ) {
+                        continue;
+                    }
+
+                    const auto & tile = map.tiles[indexOffsetY + tileX];
+                    if ( updateNonRoadTilesFromEdgesToCenter && Maps::doesContainRoads( tile ) ) {
+                        continue;
+                    }
+
+                    Maps::updateRoadSpriteOnTile( map, indexOffsetY + tileX, false );
+                }
+            }
         }
     }
 

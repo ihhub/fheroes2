@@ -446,6 +446,9 @@ namespace Maps::Random_Generator
                 continue;
             }
             for ( const Node & node : region.nodes ) {
+                if ( node.index == region.centerIndex ) {
+                    continue;
+                }
                 Maps::removeRoadsFromTileInfo( mapFormat.tiles[node.index], node.index );
             }
 
@@ -454,7 +457,6 @@ namespace Maps::Random_Generator
                 const auto & path = pathfinder.buildPath( tileIndex );
                 for ( const auto & step : path ) {
                     data.getNode( step.GetIndex() ).type = NodeType::PATH;
-                    // Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
                     forceTempRoadOnTile( mapFormat, step.GetIndex() );
                 }
             }
@@ -482,6 +484,8 @@ namespace Maps::Random_Generator
                 }
             }
         }
+
+        Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, false );
 
         // Step 11: Validate that map is playable.
         for ( const int32_t start : startingLocations ) {
