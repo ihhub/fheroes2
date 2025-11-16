@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -2739,24 +2739,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-msgid "Click to show the next town."
-msgstr ""
-
-msgid "Show next town"
-msgstr ""
-
-msgid "Click to show the previous town."
-msgstr ""
-
-msgid "Show previous town"
-msgstr ""
-
-msgid "This town may not be upgraded to a castle."
-msgstr ""
-
-msgid "Town"
-msgstr ""
-
 msgid "Exit Castle"
 msgstr ""
 
@@ -2766,7 +2748,25 @@ msgstr ""
 msgid "Show Income"
 msgstr ""
 
+msgid "Show previous town"
+msgstr ""
+
+msgid "Show next town"
+msgstr ""
+
 msgid "View Hero"
+msgstr ""
+
+msgid "Click to show the next town."
+msgstr ""
+
+msgid "Click to show the previous town."
+msgstr ""
+
+msgid "This town may not be upgraded to a castle."
+msgstr ""
+
+msgid "Town"
 msgstr ""
 
 msgid "The above spells are available here."

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
-"PO-Revision-Date: 2025-11-12 20:54+0300\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: be\n"
@@ -2808,11 +2808,23 @@ msgstr ""
 "толькі ваша сумка зараз і так перапоўнена артэфактамі. Паспрабуйце перадаць "
 "адзін са сваіх артэфактаў іншаму герою."
 
-msgid "Click to show the next town."
-msgstr "Націсніце, каб паказаць наступны горад."
+msgid "Exit Castle"
+msgstr "Выйсці з замка"
+
+msgid "Exit Town"
+msgstr "Выйсці з горада"
+
+msgid "Show Income"
+msgstr "Паглядзець даход"
+
+msgid "View Hero"
+msgstr "Паглядзець героя"
 
 msgid "Show next town"
 msgstr "Паказаць наступны горад"
+
+msgid "Click to show the next town."
+msgstr "Націсніце, каб паказаць наступны горад."
 
 msgid "Click to show the previous town."
 msgstr "Націсніце, каб паказаць папярэдні горад."
@@ -2825,18 +2837,6 @@ msgstr "У гэтым горадзе нельга пабудаваць зама�
 
 msgid "Town"
 msgstr "Горад"
-
-msgid "Exit Castle"
-msgstr "Выйсці з замка"
-
-msgid "Exit Town"
-msgstr "Выйсці з горада"
-
-msgid "Show Income"
-msgstr "Паглядзець даход"
-
-msgid "View Hero"
-msgstr "Паглядзець героя"
 
 msgid "The above spells are available here."
 msgstr "Вышэйпералічаныя чары можна вывучыць тут."

@@ -44,6 +44,7 @@
 #include "map_object_info.h"
 #include "map_random_generator_helper.h"
 #include "map_random_generator_info.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "rand.h"
@@ -238,7 +239,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1 } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, false } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -264,13 +265,14 @@ namespace Maps::Random_Generator
 
                 const int factor = regionCount / config.playerCount;
                 const bool isPlayerRegion = ( layer == 1 ) && ( ( i % factor ) == 0 );
+                const bool isInnerRegion = ( layer == 0 );
 
                 const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit, isInnerRegion );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
@@ -324,10 +326,31 @@ namespace Maps::Random_Generator
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
                        "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
+            std::set<int32_t> extraNodes;
             for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
                     Maps::setTerrainWithTransition( mapFormat, node.index, node.index, region.groundType );
+
+                    // Detect additional ground tiles created by setTerrainWithTransition
+                    for ( const int32_t adjacentIndex : Maps::getAroundIndexes( node.index ) ) {
+                        if ( world.getTile( adjacentIndex ).isWater() ) {
+                            continue;
+                        }
+
+                        const Node & adjacentNode = data.getNode( adjacentIndex );
+                        if ( adjacentNode.region == 0 && adjacentNode.index == adjacentIndex ) {
+                            extraNodes.insert( adjacentIndex );
+                        }
+                    }
                 }
+            }
+
+            for ( const int32_t extraNodeIndex : extraNodes ) {
+                Node & extra = data.getNode( extraNodeIndex );
+                region.nodes.emplace_back( extra );
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Extra ground tile at " << extra.index << " attaching to region " << region.id )
+                extra.region = region.id;
+                extra.type = NodeType::BORDER;
             }
 
             if ( region.colorIndex != neutralColorIndex ) {
@@ -416,6 +439,10 @@ namespace Maps::Random_Generator
 
         // Set explicit paths
         for ( const Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
+
             pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 const auto & path = pathfinder.buildPath( tileIndex );
@@ -436,9 +463,16 @@ namespace Maps::Random_Generator
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
         // Step 10: Place missing monsters.
+        const auto & monsterSelection = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                if ( region.isInner && mapRegions[regionId].isInner ) {
+                    placeMonster( mapFormat, tileIndex, monsterSelection );
+                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, monsterSelection.objectIndex );
+                }
+                else {
+                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                }
             }
         }
 

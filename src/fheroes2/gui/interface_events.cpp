@@ -609,6 +609,11 @@ void Interface::AdventureMap::EventKeyArrowPress( const int dir )
         return;
     }
 
+    if ( Settings::Get().ScrollSpeed() == SCROLL_SPEED_NONE ) {
+        // Scrolling is disabled.
+        return;
+    }
+
     switch ( dir ) {
     case Direction::TOP_LEFT:
         _gameArea.SetScroll( SCROLL_TOP );

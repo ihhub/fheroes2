@@ -115,7 +115,7 @@ namespace
             return unit.Modes( Battle::CAP_MIRROROWNER );
 
         case Spell::DISRUPTINGRAY:
-            return unit.GetDefense() < spell.ExtraValue();
+            return unit.GetDefense() <= 1;
 
         default:
             break;

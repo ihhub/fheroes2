@@ -333,7 +333,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
                           SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, display );
 }
 
-void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
+void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t baseYOffset, fheroes2::Display & display ) const
 {
     fheroes2::Text mapName{ info.name,
                             { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) },
