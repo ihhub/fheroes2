@@ -126,11 +126,11 @@ namespace
     void drawScreenScalingTypeOptions( const fheroes2::Rect & optionRoi, const bool isScreenScalingTypeNearest )
     {
         if ( isScreenScalingTypeNearest ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 2 ), _( "Screen Scaling Type" ), _( "Nearest" ),
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 3 ), _( "Screen Scaling Type" ), _( "Nearest" ),
                                   fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 3 ), _( "Screen Scaling Type" ), _( "Linear" ),
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 2 ), _( "Screen Scaling Type" ), _( "Linear" ),
                                   fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
