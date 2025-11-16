@@ -764,7 +764,6 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
         }
     }
 
-    bool useTeleports = false;
     const MP2::MapObjectType mainObjectType = world.getTile( currentNodeIdx ).getMainObjectType( false );
 
     if ( mainObjectType == MP2::OBJ_STONE_LITHS || mainObjectType == MP2::OBJ_WHIRLPOOL ) {
@@ -778,7 +777,6 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
                 teleports = world.GetWhirlpoolEndPoints( currentNodeIdx );
             }
         }
-        useTeleports = teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end();
 
         // Special case: movement via teleport
         for ( const int teleportIdx : teleports ) {
@@ -795,13 +793,15 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
                 nodesToExplore.push_back( teleportIdx );
             }
         }
+
+        // Check adjacent nodes only if we are either not on the teleport tile, or we got here from another endpoint of this teleport.
+        // Do not check them if we came to the tile with a teleport from a neighboring tile (and are going to use it for teleportation).
+        if ( !teleports.empty() && std::find( teleports.begin(), teleports.end(), currentNode._from ) == teleports.end() ) {
+            return;
+        }
     }
 
-    // Check adjacent nodes only if we are either not on the teleport tile, or we got here from another endpoint of this teleport.
-    // Do not check them if we came to the tile with a teleport from a neighboring tile (and are going to use it for teleportation).
-    if ( !useTeleports ) {
-        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
-    }
+    checkAdjacentNodes( nodesToExplore, currentNodeIdx );
 }
 
 uint32_t AIWorldPathfinder::getMaxMovePoints( const bool onWater ) const
