@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2846,26 +2846,6 @@ msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine skatter til en annen helt."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Klikk for å vise neste by."
-
-msgid "Show next town"
-msgstr "Vis neste by"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Klikk for å vise forrige by."
-
-msgid "Show previous town"
-msgstr "Vis forrige by"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Denne byen kan ikke oppgraderes til borg."
-
-msgid "Town"
-msgstr "By"
-
 msgid "Exit Castle"
 msgstr "Forlat borgen"
 
@@ -2875,8 +2855,28 @@ msgstr "Forlat byen"
 msgid "Show Income"
 msgstr "Vis inntekt"
 
+msgid "Show previous town"
+msgstr "Vis forrige by"
+
+msgid "Show next town"
+msgstr "Vis neste by"
+
 msgid "View Hero"
 msgstr "Vis helt"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Klikk for å vise forrige by."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Denne byen kan ikke oppgraderes til borg."
+
+msgid "Town"
+msgstr "By"
 
 msgid "The above spells are available here."
 msgstr "Trolldommene ovenfor er tilgjengelige her."
@@ -3286,6 +3286,13 @@ msgid ""
 msgstr ""
 "Taps-\n"
 "vilkår"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Plassering: "
 
 msgid "First select recipients!"
 msgstr "Velg først mottakere!"
@@ -3712,6 +3719,22 @@ msgstr "Terrengmodus"
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Vis trolldommer"
+
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
 
@@ -4008,11 +4031,9 @@ msgstr ""
 "sterkere fiender, færre råvarer, eller andre spesielle vilkår som skal gjøre "
 "ting mer utfordrende for den menneskelige spilleren."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Kartbeskrivelse"
-
-msgid "The description of the currently selected map."
-msgstr "Beskrivelse av det utvalgte kartet."
 
 msgid "Jump"
 msgstr "Sprang"
@@ -4423,6 +4444,9 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4564,6 +4588,16 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Spillerikon"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4863,6 +4897,13 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis karttegnerens systeminnstillinger der den kan skreddersys."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
@@ -4886,10 +4927,21 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Lag et kart som har en høyde på %{size} kvadrater og en bredde på %{size} "
+"kvadrater."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Lag et kart som har en høyde på %{size} kvadrater og en bredde på %{size} "
 "kvadrater."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
 msgid "No maps available!"
 msgstr "Ingen kart er tilgjengelige!"
@@ -5027,13 +5079,6 @@ msgstr ""
 "Kartets\n"
 "utfordring"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Plassering: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -5044,11 +5089,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5287,6 +5327,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5727,6 +5770,14 @@ msgstr "Menyen for nye kart"
 msgid "hotkey|toggle passability"
 msgstr "Slå av/på status"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Nytt automatisk kart"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Nytt automatisk kart"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
 
@@ -5800,6 +5851,9 @@ msgstr "Neste helt"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "Neste helt"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|start hero movement"
@@ -12913,6 +12967,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Advarsel"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Beskrivelse av det utvalgte kartet."
 
 #~ msgid "Castle Options"
 #~ msgstr "Borgvalg"

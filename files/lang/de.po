@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2772,24 +2772,6 @@ msgstr ""
 "derzeit keinen Platz für ein Zauberbuch. Versuchet, eines Eurer Artefakte "
 "einem anderen Helden zu übergeben."
 
-msgid "Click to show the next town."
-msgstr "Klickt, um die nächste Stadt anzuzeigen."
-
-msgid "Show next town"
-msgstr "Nächste Stadt anzeigen"
-
-msgid "Click to show the previous town."
-msgstr "Klickt, um die vorherige Stadt anzuzeigen."
-
-msgid "Show previous town"
-msgstr "Vorherige Stadt anzeigen"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Diese Stadt darf nicht zu einer Burg ausgebaut werden."
-
-msgid "Town"
-msgstr "Stadt"
-
 msgid "Exit Castle"
 msgstr "Burg verlassen"
 
@@ -2799,8 +2781,26 @@ msgstr "Stadt verlassen"
 msgid "Show Income"
 msgstr "Einkommen anzeigen"
 
+msgid "Show previous town"
+msgstr "Vorherige Stadt anzeigen"
+
+msgid "Show next town"
+msgstr "Nächste Stadt anzeigen"
+
 msgid "View Hero"
 msgstr "Helden anzeigen"
+
+msgid "Click to show the next town."
+msgstr "Klickt, um die nächste Stadt anzuzeigen."
+
+msgid "Click to show the previous town."
+msgstr "Klickt, um die vorherige Stadt anzuzeigen."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Diese Stadt darf nicht zu einer Burg ausgebaut werden."
+
+msgid "Town"
+msgstr "Stadt"
 
 msgid "The above spells are available here."
 msgstr "Die oben genannten Zaubersprüche sind hier verfügbar."
@@ -3205,6 +3205,12 @@ msgid ""
 msgstr ""
 "Verlust-\n"
 "bedingungen"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"Ort: "
 
 msgid "First select recipients!"
 msgstr "Zuerst die Empfänger auswählen!"
@@ -3629,6 +3635,22 @@ msgstr "Geländeobjekt"
 msgid "Accept the choice made."
 msgstr "Die getroffene Wahl bestätigen."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klicken um die ausgewählte Auflösung anzuwenden."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Zaubersprüche anzeigen"
+
 msgid "Select Skill:"
 msgstr "Fertigkeit auswählen:"
 
@@ -3902,11 +3924,9 @@ msgstr ""
 "spezielle Bedingungen enthalten, die die Dinge für den menschlichen Spieler "
 "schwieriger machen."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Ausgewählte Beschreibung"
-
-msgid "The description of the currently selected map."
-msgstr "Die Beschreibung der aktuell ausgewählten Karte."
 
 msgid "Jump"
 msgstr "Sprung"
@@ -4299,6 +4319,9 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "%{objects} kann/können nicht auf Wasser platziert werden."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4440,6 +4463,16 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Spielerikone"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4740,6 +4773,13 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Editor-Systemoptionen anzeigen, mit denen der Editor angepasst werden kann."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
@@ -4763,10 +4803,21 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Eine Karte erstellen, die %{size} Quadrate breit und %{size} Quadrate hoch "
+"ist."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Eine Karte erstellen, die %{size} Quadrate breit und %{size} Quadrate hoch "
 "ist."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Klicken, um zum Hauptmenü zurückzukehren."
 
 msgid "No maps available!"
 msgstr "Keine Karten vorhanden!"
@@ -4904,12 +4955,6 @@ msgstr ""
 "Karten-\n"
 "grad"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"Ort: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4920,11 +4965,6 @@ msgid "LANGUAGE"
 msgstr "SPRACHE"
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5164,6 +5204,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5603,6 +5646,14 @@ msgstr "Neue Karte Menü"
 msgid "hotkey|toggle passability"
 msgstr "Status umschalten"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Neue zufällige Karte Menü"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Neue zufällige Karte Menü"
+
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
 
@@ -5677,6 +5728,9 @@ msgstr "Nächster Held"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "Nächster Held"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|start hero movement"
@@ -12711,6 +12765,13 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Achtung"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Die Beschreibung der aktuell ausgewählten Karte."
 
 #~ msgid "Castle Options"
 #~ msgstr "Burg Optionen"

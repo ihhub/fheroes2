@@ -37,6 +37,71 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-11-09" version="v1.1.12">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.12</url>
+      <description>
+        <p>Changes in v1.1.12 (09 November 2025):</p>
+        <ul>
+          <li>add a hot key modifier to move hero portrait to the top of the heroes list</li>
+          <li>increase the limit for event messages, map description and about section, Sphinx riddle and Sign text to 999</li>
+          <li>make AI not cast Curse and Mass Curse spells on monsters with no damage range</li>
+          <li>add a button inside multi-monster selection window to toggle all on/off</li>
+          <li>add basic random map generator support</li>
+          <li>add army estimation mode option</li>
+          <li>display month, week and day in the castle construction screen</li>
+          <li>add ability to switch between towns/castles in Mage Guild</li>
+          <li>update calculation display of hero's remaining spell points in the spell point bar</li>
+          <li>improve the Town Gate description</li>
+          <li>add "4 Dimensions" map</li>
+          <li>add new Mass Dispel icon</li>
+          <li>fix Castle dialog's status bar flickering</li>
+          <li>use bigger EXIT button for Puzzle dialog</li>
+          <li>update the French translation</li>
+          <li>update Random Ultimate Artifact icon</li>
+          <li>add translation support for Hero's and Town's names for Resurrection maps</li>
+          <li>add a button to toggle on/off all Secondary Skills in Witch's Hut</li>
+          <li>fix incorrect AI army pre-battle optimization for flying units</li>
+          <li>add missing button mapping for Switch</li>
+          <li>use ISO 639-1 standard for language abbreviations</li>
+          <li>add army swap hot-key support inside the Castle dialog</li>
+          <li>update the Swedish translation</li>
+          <li>fix incorrect text area calculation for hot key dialog</li>
+          <li>make AI heroes on patrol return to their original position if there's nothing to do</li>
+          <li>add a button to toggle on/off all spells in the Shrines and Castles for the Editor</li>
+          <li>add Restart and Quick Save buttons in File Options dialog</li>
+          <li>make Adventure Options button resizable for better translation support</li>
+          <li>allow to use Backward and Forward mouse buttons as hot key buttons</li>
+          <li>do not cancel Marketplace resource selection if no gift was made</li>
+          <li>add startup text mode message</li>
+          <li>make AI heroes predict weekly object states</li>
+          <li>add extra conditions on hiring AI heroes</li>
+          <li>fix blinking cursor while scrolling with keyboard in the Editor</li>
+          <li>remove hanging shadow part of the Ultimate Artifact</li>
+          <li>show hero levels in the Hero Meeting dialog</li>
+          <li>allow to hold a character to repeat an action in the Virtual Keyboard</li>
+          <li>add a new resolution icon</li>
+          <li>show Turn Order dialog above the arena if there is enough space</li>
+          <li>add missing popups for all buttons in the Hero Meeting dialog</li>
+          <li>add missing popup dialog for Exit button in the Puzzle dialog</li>
+          <li>set a limit on multi-line text input to avoid going beyond the dialog</li>
+          <li>align Save Map right-click info with scenario selector</li>
+          <li>update the Danish translation</li>
+          <li>add support for simultaneous playback of multiple videos</li>
+          <li>add ability to delete maps from the map lists</li>
+          <li>do not show cell selection frame when no monster is selected for a brush in the Editor</li>
+          <li>update the German translation</li>
+          <li>add up and down arrows for multiline dialog</li>
+          <li>retry other spells from the guaranteed list if the chosen spell was not added</li>
+          <li>update the Ukrainian translation</li>
+          <li>update the Hungarian translation</li>
+          <li>grammar fix for winning condition</li>
+          <li>add initial iOS support</li>
+          <li>remove translation need to numbers</li>
+          <li>fix an assertion for maps that were made with a previous engine version</li>
+          <li>fix changing the resource amount in the Editor for newly placed resources</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-09-14" version="v1.1.11">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.11</url>
       <description>

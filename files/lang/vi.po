@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2801,26 +2801,6 @@ msgstr ""
 "ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
 "cổ vật của ngươi cho một anh tướng khác."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Nhấp để xem thị trấn sau."
-
-msgid "Show next town"
-msgstr "Xem thị trấn sau"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Nhấp để xem thị trấn trước."
-
-msgid "Show previous town"
-msgstr "Xem thị trấn trước"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Thị trấn này có thể không được nâng cấp thành lâu đài."
-
-msgid "Town"
-msgstr "Thị trấn"
-
 msgid "Exit Castle"
 msgstr "Thoát khỏi Lâu đài"
 
@@ -2830,8 +2810,28 @@ msgstr "Thoát khỏi Thị trấn"
 msgid "Show Income"
 msgstr "Xem Thu nhập"
 
+msgid "Show previous town"
+msgstr "Xem thị trấn trước"
+
+msgid "Show next town"
+msgstr "Xem thị trấn sau"
+
 msgid "View Hero"
 msgstr "Xem Tướng"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Nhấp để xem thị trấn trước."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Thị trấn này có thể không được nâng cấp thành lâu đài."
+
+msgid "Town"
+msgstr "Thị trấn"
 
 msgid "The above spells are available here."
 msgstr "Các phép thuật trên có sẵn ở đây."
@@ -3235,6 +3235,13 @@ msgid ""
 msgstr ""
 "Điều kiện\n"
 "Thua"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Vị trí: "
 
 msgid "First select recipients!"
 msgstr "Đầu tiên chọn người nhận!"
@@ -3662,6 +3669,22 @@ msgstr "Đối tượng địa hình"
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Ngẫu nhiên Phép"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Xem Phép"
+
 msgid "Select Skill:"
 msgstr "Chọn Kỹ năng:"
 
@@ -3943,11 +3966,9 @@ msgstr ""
 "hoặc mạnh hơn, ít tài nguyên hơn hoặc các điều kiện đặc biệt khác khiến mọi "
 "thứ trở nên khó khăn hơn đối với người chơi."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Chọn Mô tả"
-
-msgid "The description of the currently selected map."
-msgstr "Mô tả của bản đồ hiện được chọn."
 
 msgid "Jump"
 msgstr "Nhảy"
@@ -4355,6 +4376,9 @@ msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Thị trấn không thể đặt trên nước."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4494,6 +4518,16 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Bảo vật không thể đặt trên nước."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Biểu tượng Người chơi"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4793,6 +4827,13 @@ msgstr ""
 "Xem các tùy chọn hệ thống soạn thảo, cho phép ngươi tùy chỉnh trình chỉnh "
 "sửa."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Nhấp để quay lại màn hình chính."
@@ -4816,8 +4857,17 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Nhấp để quay lại màn hình chính."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Tạo bản đồ rộng %{size} ô vuông và cao %{size} ô vuông."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Tạo bản đồ rộng %{size} ô vuông và cao %{size} ô vuông."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Nhấp để quay lại màn hình chính."
 
 msgid "No maps available!"
 msgstr "Không có bản đồ nào!"
@@ -4955,13 +5005,6 @@ msgstr ""
 "Độ khó\n"
 "Bản đồ"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Vị trí: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4972,11 +5015,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5215,6 +5253,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5648,6 +5689,14 @@ msgstr "trình đơn bản đồ mới"
 msgid "hotkey|toggle passability"
 msgstr "chuyển đổi trạng thái"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "bản đồ mới ngẫu nhiên"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "bản đồ mới ngẫu nhiên"
+
 msgid "hotkey|roland campaign"
 msgstr "chiến dịch roland"
 
@@ -5722,6 +5771,9 @@ msgstr "tướng tiếp theo"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "tướng tiếp theo"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 msgid "hotkey|start hero movement"
 msgstr "bắt đầu di chuyển tướng"
@@ -12736,6 +12788,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Cảnh báo"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Mô tả của bản đồ hiện được chọn."
 
 #~ msgid "Castle Options"
 #~ msgstr "Lựa chọn Lâu đài"

@@ -232,7 +232,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    result.reserve( charLimit == 0 ? 48 : charLimit );
+    result.reserve( ( charLimit == 0 ) ? 48 : charLimit );
     size_t charInsertPos = result.size();
 
     const bool hasTitle = !title.empty();

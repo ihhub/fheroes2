@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2730,26 +2730,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
-
-msgid "Show next town"
-msgstr ""
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
-
-msgid "Show previous town"
-msgstr ""
-
-msgid "This town may not be upgraded to a castle."
-msgstr ""
-
-msgid "Town"
-msgstr "Горад"
-
 msgid "Exit Castle"
 msgstr "Пакінуць замак"
 
@@ -2759,8 +2739,28 @@ msgstr "Пакінуць горад"
 msgid "Show Income"
 msgstr "Паказаць прыбытак"
 
+msgid "Show previous town"
+msgstr ""
+
+msgid "Show next town"
+msgstr ""
+
 msgid "View Hero"
 msgstr "Даведацца пра героя"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+msgid "This town may not be upgraded to a castle."
+msgstr ""
+
+msgid "Town"
+msgstr "Горад"
 
 msgid "The above spells are available here."
 msgstr ""
@@ -3127,6 +3127,10 @@ msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+
+#, fuzzy
+msgid "Map Description"
+msgstr "Апісанне"
 
 msgid "First select recipients!"
 msgstr ""
@@ -3533,6 +3537,22 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr "Ужыць выбар."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Выпадковае заклінанне"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Прагледзець заклінанні"
+
 msgid "Select Skill:"
 msgstr ""
 
@@ -3820,11 +3840,9 @@ msgstr ""
 "Складанасць мапы вызначаецца яе аўтарам. Больш складаныя мапы могуць "
 "змяшчаць больш ворагаў, менш рэсурсаў або іншыя спецыяльныя абсавіны."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Апісанне"
-
-msgid "The description of the currently selected map."
-msgstr "Апісанне абранай мапы."
 
 msgid "Jump"
 msgstr ""
@@ -4207,6 +4225,9 @@ msgstr ""
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4326,6 +4347,16 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Іконка гульцоў"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4593,6 +4624,13 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Вярнуцца ў галоўнае меню."
@@ -4619,8 +4657,16 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Вярнуцца ў галоўнае меню."
 
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Вярнуцца ў галоўнае меню."
 
 msgid "No maps available!"
 msgstr ""
@@ -4746,10 +4792,6 @@ msgstr "Назва абранай мапы."
 msgid "Map Difficulty"
 msgstr "Складанасць мапы:"
 
-#, fuzzy
-msgid "Map Description"
-msgstr "Апісанне"
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4760,11 +4802,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -4990,6 +5027,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5409,6 +5449,14 @@ msgstr "Звычайная гульня"
 msgid "hotkey|toggle passability"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Зводка аб каралеўстве"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Зводка аб каралеўстве"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -5481,6 +5529,9 @@ msgid "hotkey|next hero"
 msgstr ""
 
 msgid "hotkey|change to hero under cursor"
+msgstr ""
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
 msgstr ""
 
 #, fuzzy
@@ -11430,6 +11481,13 @@ msgstr "Ён сказаў ёй: Бэ бэ бэ... а потым яна сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Адраджаецца невядомая сіла..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Увага"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Апісанне абранай мапы."
 
 #~ msgid "Castle Options"
 #~ msgstr "Налады замка"

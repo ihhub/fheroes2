@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2812,26 +2812,6 @@ msgstr ""
 "нямаш място за нея. Опитай се да дадеш един от твойте артефакти на друг "
 "герой."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Кликни, за да покажеш следващия град."
-
-msgid "Show next town"
-msgstr "Покажи следващия град"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Кликни, за да покажеш предишния град."
-
-msgid "Show previous town"
-msgstr "Покажи предишния град"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Този град не може да бъде надграден до замък."
-
-msgid "Town"
-msgstr "Град"
-
 msgid "Exit Castle"
 msgstr "Изход от Замъка"
 
@@ -2841,8 +2821,28 @@ msgstr "Изход от Града"
 msgid "Show Income"
 msgstr "Покажи приходи"
 
+msgid "Show previous town"
+msgstr "Покажи предишния град"
+
+msgid "Show next town"
+msgstr "Покажи следващия град"
+
 msgid "View Hero"
 msgstr "Виж герой"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Кликни, за да покажеш предишния град."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Този град не може да бъде надграден до замък."
+
+msgid "Town"
+msgstr "Град"
 
 msgid "The above spells are available here."
 msgstr "Гореизложените магии са налични тук."
@@ -3243,6 +3243,13 @@ msgid ""
 msgstr ""
 "Условия за\n"
 "Загуба"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Местоположение: "
 
 msgid "First select recipients!"
 msgstr "Първо избери получатели!"
@@ -3672,6 +3679,22 @@ msgstr "Режим терен"
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Преглед на магиите"
+
 msgid "Select Skill:"
 msgstr "Избери умение:"
 
@@ -3968,11 +3991,9 @@ msgstr ""
 "или по-силни врагове, по-малко ресурси или други специални условия, които "
 "правят нещата по-трудни за играча."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Избрано описание"
-
-msgid "The description of the currently selected map."
-msgstr "Описание на избраната в момента карта."
 
 msgid "Jump"
 msgstr "Скок"
@@ -4381,6 +4402,9 @@ msgstr "Това заклинание не може да се направи н�
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Чудовищата не могат да се поставят върху вода."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4520,6 +4544,16 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Брой на играчи"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4828,6 +4862,13 @@ msgstr ""
 "Виж системните опции на редактора, които ти позволяват да персонализираш "
 "редактора."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Кликни, за да се върнеш към главното меню."
@@ -4851,8 +4892,17 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Кликни, за да се върнеш към главното меню."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Създай карта с ширина %{size} квадрата и височина %{size} квадрата."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Създай карта с ширина %{size} квадрата и височина %{size} квадрата."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Кликни, за да се върнеш към главното меню."
 
 msgid "No maps available!"
 msgstr "Няма налични карти!"
@@ -4990,13 +5040,6 @@ msgstr ""
 "Трудност\n"
 "на Карта"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Местоположение: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -5007,11 +5050,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5250,6 +5288,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5685,6 +5726,14 @@ msgstr "ново меню на карта"
 msgid "hotkey|toggle passability"
 msgstr "превключи състояние"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "нова случайна игра"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "нова случайна игра"
+
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
 
@@ -5759,6 +5808,9 @@ msgstr "следващия герой"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "следващия герой"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 msgid "hotkey|start hero movement"
 msgstr "започни движението на героя"
@@ -12705,6 +12757,13 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Внимание"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Описание на избраната в момента карта."
 
 #~ msgid "Castle Options"
 #~ msgstr "Опции на замъка"

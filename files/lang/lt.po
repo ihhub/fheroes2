@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2595,26 +2595,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Click to show the next town."
-msgstr "Rodyti kitą miestą"
-
-msgid "Show next town"
-msgstr "Rodyti kitą miestą"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Rodyti ankstesnį miestą"
-
-msgid "Show previous town"
-msgstr "Rodyti ankstesnį miestą"
-
-msgid "This town may not be upgraded to a castle."
-msgstr ""
-
-msgid "Town"
-msgstr "Miestelis"
-
-#, fuzzy
 msgid "Exit Castle"
 msgstr "Išeiti iš pilies"
 
@@ -2625,8 +2605,28 @@ msgstr "Išeiti iš miesto"
 msgid "Show Income"
 msgstr ""
 
+msgid "Show previous town"
+msgstr "Rodyti ankstesnį miestą"
+
+msgid "Show next town"
+msgstr "Rodyti kitą miestą"
+
 msgid "View Hero"
 msgstr ""
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Rodyti ankstesnį miestą"
+
+msgid "This town may not be upgraded to a castle."
+msgstr ""
+
+msgid "Town"
+msgstr "Miestelis"
 
 #, fuzzy
 msgid "The above spells are available here."
@@ -3004,6 +3004,9 @@ msgstr ""
 msgid ""
 "Loss\n"
 "Conditions"
+msgstr ""
+
+msgid "Map Description"
 msgstr ""
 
 msgid "First select recipients!"
@@ -3415,6 +3418,22 @@ msgid "Accept the choice made."
 msgstr ""
 
 #, fuzzy
+msgid "Click to enable all items."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Atsitiktinis miestas"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Atsitiktinis miestas"
+
+#, fuzzy
 msgid "Select Skill:"
 msgstr "Gynybos įgūdis"
 
@@ -3689,10 +3708,7 @@ msgid ""
 "things tougher for the human player."
 msgstr ""
 
-msgid "Selected Description"
-msgstr ""
-
-msgid "The description of the currently selected map."
+msgid "Selected Map Description"
 msgstr ""
 
 msgid "Jump"
@@ -4082,6 +4098,9 @@ msgstr ""
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4222,6 +4241,15 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+msgid "Pick player count"
+msgstr ""
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4495,6 +4523,13 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Grįžti į mūšį."
@@ -4519,8 +4554,16 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Grįžti į mūšį."
 
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Grįžti į mūšį."
 
 msgid "No maps available!"
 msgstr ""
@@ -4646,9 +4689,6 @@ msgstr ""
 "Žemėlapis\n"
 "Sudėtingumas"
 
-msgid "Map Description"
-msgstr ""
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4659,11 +4699,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -4883,6 +4918,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5304,6 +5342,14 @@ msgstr "Rodyti kitą miestą"
 msgid "hotkey|toggle passability"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Rodyti kitą miestą"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -5382,6 +5428,9 @@ msgstr "Rodyti kitą miestą"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "Rodyti kitą miestą"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|start hero movement"

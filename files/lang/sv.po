@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-10-26 11:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2762,24 +2762,6 @@ msgstr ""
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
 
-msgid "Click to show the next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Show next town"
-msgstr "Visa nästa stad"
-
-msgid "Click to show the previous town."
-msgstr "Klicka för att visa föregående stad."
-
-msgid "Show previous town"
-msgstr "Visa föregående stad"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Denna stad kan inte uppgraderas till en borg."
-
-msgid "Town"
-msgstr "Stad"
-
 msgid "Exit Castle"
 msgstr "Lämna Borgen"
 
@@ -2789,8 +2771,26 @@ msgstr "Lämna Staden"
 msgid "Show Income"
 msgstr "Visa Inkomst"
 
+msgid "Show previous town"
+msgstr "Visa föregående stad"
+
+msgid "Show next town"
+msgstr "Visa nästa stad"
+
 msgid "View Hero"
 msgstr "Visa Hjälte"
+
+msgid "Click to show the next town."
+msgstr "Klicka för att visa nästa stad."
+
+msgid "Click to show the previous town."
+msgstr "Klicka för att visa föregående stad."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Denna stad kan inte uppgraderas till en borg."
+
+msgid "Town"
+msgstr "Stad"
 
 msgid "The above spells are available here."
 msgstr "Ovanstående besvärjelser är tillgängliga här."
@@ -3182,6 +3182,9 @@ msgid ""
 msgstr ""
 "Förlust-\n"
 "villkor"
+
+msgid "Map Description"
+msgstr "Kartbeskrivning"
 
 msgid "First select recipients!"
 msgstr "Först välj mottagare!"
@@ -3602,6 +3605,22 @@ msgstr "Terrängföremål"
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klicka här för att aktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Aktivera Alla Besvärjelser"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klicka här för att inaktivera alla besvärjelser."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Inaktivera Alla Besvärjelser"
+
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
 
@@ -3863,11 +3882,9 @@ msgstr ""
 "kreatör. Svårare kartor kan innehåller fler och/eller starkare fienden, "
 "färre resurser eller andra specialvillkor som gör det svårare för spelaren."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Vald beskrivning"
-
-msgid "The description of the currently selected map."
-msgstr "Den valda kartans beskrivning."
 
 msgid "Jump"
 msgstr "Hoppa"
@@ -4245,6 +4262,9 @@ msgstr "Händelseföremål måste placeras på fria rutor."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4383,6 +4403,16 @@ msgstr "Endast en Slumpad Främsta Artefakt kan placeras på kartan."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Maximalt %{count} obelisker kan placeras på kartan."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Spelarikon"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Kartan är korrupt."
@@ -4661,6 +4691,13 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Stäng Kartredigeraren och återvänd till spelets huvudmeny."
 
@@ -4682,8 +4719,17 @@ msgstr "Tillbaka"
 msgid "Return to the Editor's main menu options."
 msgstr "Återgå till Kartredigerarens huvudmeny."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Återgå till Kartredigerarens huvudmeny."
 
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
@@ -4794,9 +4840,6 @@ msgstr "Klicka för att ändra Hjälten vars besegring innebär förlust."
 msgid "Map Difficulty"
 msgstr "Kartsvårighet"
 
-msgid "Map Description"
-msgstr "Kartbeskrivning"
-
 msgid "RUMORS"
 msgstr "RYKTEN"
 
@@ -4808,13 +4851,6 @@ msgstr "SPRÅK"
 
 msgid "ABOUT"
 msgstr "OM"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Kartans beskrivning överstiger högsta tillåtna 5 rader. Beskrivningen kommer "
-"att nedkortas för att få plats i beskrivningsfältet."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5029,6 +5065,10 @@ msgstr "Radera Svar"
 
 msgid "Delete an existing answer for the question."
 msgstr "Radera ett redan existerande svar till frågan."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Gåta:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakt kommer att ges som belöning."
@@ -5454,6 +5494,14 @@ msgstr "öppna spelets huvudmeny"
 msgid "hotkey|toggle passability"
 msgstr "Aktivera framkomlighet"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Ny slumpad karta"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Ny slumpad karta"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
 
@@ -5525,6 +5573,9 @@ msgstr "Nästa hjälte"
 
 msgid "hotkey|change to hero under cursor"
 msgstr "Byt till hjälte under muspekaren"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 msgid "hotkey|start hero movement"
 msgstr "Påbörja hjälteförflyttning"
@@ -12366,6 +12417,20 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Varning"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Den valda kartans beskrivning."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "Kartans beskrivning överstiger högsta tillåtna 5 rader. Beskrivningen "
+#~ "kommer att nedkortas för att få plats i beskrivningsfältet."
 
 #~ msgid "Castle Options"
 #~ msgstr "Borgalternativ"

@@ -249,6 +249,8 @@ namespace fheroes2
 
         void fitToOneRow( const int32_t maxWidth ) override;
 
+        void fitToArea( const int32_t maxWidth, const int32_t maxHeight );
+
         std::string text() const override
         {
             return _text;

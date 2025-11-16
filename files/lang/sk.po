@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2799,26 +2799,6 @@ msgstr ""
 "nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
 "hrdinovi."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Kliknutím zobraz ďalšie mesto."
-
-msgid "Show next town"
-msgstr "Ukáž ďalšie mesto"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Kliknutím zobraz predošlé mesto."
-
-msgid "Show previous town"
-msgstr "Ukáž predošlé mesto"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Toto mesto nemôže byť povýšené na hrad."
-
-msgid "Town"
-msgstr "Mesto"
-
 msgid "Exit Castle"
 msgstr "Preč z hradu"
 
@@ -2828,8 +2808,28 @@ msgstr "Preč z mesta"
 msgid "Show Income"
 msgstr "Ukáž príjem"
 
+msgid "Show previous town"
+msgstr "Ukáž predošlé mesto"
+
+msgid "Show next town"
+msgstr "Ukáž ďalšie mesto"
+
 msgid "View Hero"
 msgstr "Ukáž hrdinu"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Kliknutím zobraz predošlé mesto."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Toto mesto nemôže byť povýšené na hrad."
+
+msgid "Town"
+msgstr "Mesto"
 
 msgid "The above spells are available here."
 msgstr "Vyššie uvedené kúzla sú tu dostupné."
@@ -3228,6 +3228,13 @@ msgid ""
 msgstr ""
 "Podmienky\n"
 "prehry"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Umiestnenie: "
 
 msgid "First select recipients!"
 msgstr "Najprv zvoľ príjemcov!"
@@ -3651,6 +3658,22 @@ msgstr "Režim terénu"
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Náhodná"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Zobraz kúzla"
+
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
 
@@ -3943,11 +3966,9 @@ msgstr ""
 "zdrojov alebo iné špeciálne podmienky, ktoré sťažujú situáciu pre ľudského "
 "hráča."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Zvolený opis"
-
-msgid "The description of the currently selected map."
-msgstr "Opis aktuálne zvolenej mapy."
 
 msgid "Jump"
 msgstr "Skok"
@@ -4356,6 +4377,9 @@ msgstr "Toto kúzlo nemožno použiť na lodi."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4497,6 +4521,16 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Ikona hráča"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4790,6 +4824,13 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Zobraziť systémové možnosti editora, ktoré umožňujú prispôsobiť editor."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
@@ -4813,9 +4854,19 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Vytvoriť mapu, ktorá má šírku %{size} štvorcov a výšku %{size} štvorcov."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Vytvoriť mapu, ktorá má šírku %{size} štvorcov a výšku %{size} štvorcov."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 
 msgid "No maps available!"
 msgstr "Žiadne dostupné mapy!"
@@ -4953,13 +5004,6 @@ msgstr ""
 "Obtiažnosť\n"
 "mapy"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Umiestnenie: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4970,11 +5014,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5211,6 +5250,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5646,6 +5688,14 @@ msgstr "nová mapa"
 msgid "hotkey|toggle passability"
 msgstr "prepni status"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "nová mapa, náhodná"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "nová mapa, náhodná"
+
 msgid "hotkey|roland campaign"
 msgstr "kampaň roland"
 
@@ -5720,6 +5770,9 @@ msgstr "ďalší hrdina"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "ďalší hrdina"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|start hero movement"
@@ -12605,6 +12658,13 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Pozor"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Opis aktuálne zvolenej mapy."
 
 #~ msgid "Castle Options"
 #~ msgstr "Možnosti hradu"

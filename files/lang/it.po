@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2626,26 +2626,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Clicca per andare alla città succ."
-
-msgid "Show next town"
-msgstr "Va alla città pross."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Clicca per andare alla città prec."
-
-msgid "Show previous town"
-msgstr "Vai alla città prec."
-
-msgid "This town may not be upgraded to a castle."
-msgstr ""
-
-msgid "Town"
-msgstr "Castello"
-
 msgid "Exit Castle"
 msgstr "Esci dal Castello"
 
@@ -2655,8 +2635,28 @@ msgstr "Esci dalla Città"
 msgid "Show Income"
 msgstr "Mostra Rendita"
 
+msgid "Show previous town"
+msgstr "Vai alla città prec."
+
+msgid "Show next town"
+msgstr "Va alla città pross."
+
 msgid "View Hero"
 msgstr "Mostra Eroe"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Clicca per andare alla città prec."
+
+msgid "This town may not be upgraded to a castle."
+msgstr ""
+
+msgid "Town"
+msgstr "Castello"
 
 msgid "The above spells are available here."
 msgstr "Qua sono disponibili queste magie."
@@ -3061,6 +3061,13 @@ msgid ""
 msgstr ""
 "Condizioni\n"
 "Sconfitta"
+
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Percorso: "
 
 msgid "First select recipients!"
 msgstr "Prima scegli destinatari!"
@@ -3484,6 +3491,22 @@ msgstr "Nessun oggetto"
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Casuale"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Mostra Magie"
+
 msgid "Select Skill:"
 msgstr "Scegli dote:"
 
@@ -3776,11 +3799,9 @@ msgstr ""
 "meno risorse oppure altre condizioni speciali che rendono la partita più "
 "dura all'umano."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Descrizione scelta"
-
-msgid "The description of the currently selected map."
-msgstr "La descrizione della mappa scelta attualmente."
 
 msgid "Jump"
 msgstr "Salta"
@@ -4177,6 +4198,9 @@ msgstr "Opzioni Avventura"
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Opzioni Avventura"
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4321,6 +4345,16 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Icona dei Giocatori"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -4605,6 +4639,13 @@ msgstr ""
 "Mostra il menù di opzioni per il sistema per modificare l'esperienza del "
 "gioco."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Torna al combattimento."
@@ -4629,8 +4670,16 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Torna al combattimento."
 
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Torna al combattimento."
 
 msgid "No maps available!"
 msgstr ""
@@ -4761,13 +4810,6 @@ msgstr ""
 "Difficoltà\n"
 "Mappa"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Percorso: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4778,11 +4820,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
 msgstr ""
 
 msgid ""
@@ -5018,6 +5055,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5448,6 +5488,14 @@ msgstr "Mostra eroe successivo"
 msgid "hotkey|toggle passability"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Sommario Regno"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Sommario Regno"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -5524,6 +5572,9 @@ msgstr "Mostra eroe successivo"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "Mostra eroe successivo"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|start hero movement"
@@ -11680,6 +11731,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "La descrizione della mappa scelta attualmente."
 
 #~ msgid "Castle Options"
 #~ msgstr "Opzioni Castello"

@@ -332,7 +332,7 @@ namespace Editor
                 std::string temp = eventMetadata.message;
 
                 const fheroes2::Text body{ _( "Message:" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, temp, 200, true, language ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, temp, Maps::Map_Format::messageCharLimit, true, language ) ) {
                     eventMetadata.message = std::move( temp );
 
                     messageRoiRestorer.restore();

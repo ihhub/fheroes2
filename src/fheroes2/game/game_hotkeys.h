@@ -81,6 +81,13 @@ namespace Game
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
 
+#if defined( WITH_DEBUG )
+        // These hotkeys are temporary and going to be removed once random map generator is good enough.
+        // TODO: remove these hotkeys when the time is right.
+        EDITOR_RANDOM_MAP_REGENERATE,
+        EDITOR_RANDOM_MAP_RECONFIGURE,
+#endif
+
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
         CAMPAIGN_PRICE_OF_LOYALTY,
@@ -108,6 +115,7 @@ namespace Game
         WORLD_QUICK_SAVE,
         WORLD_NEXT_HERO,
         WORLD_QUICK_SELECT_HERO,
+        WORLD_MOVE_HERO_PORTRAIT_UP_MODIFIER,
         WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,

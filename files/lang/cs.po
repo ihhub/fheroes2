@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-28 04:13+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -2747,24 +2747,6 @@ msgstr ""
 "Pro vstup do věže si musíš zakoupit knihu kouzel, teď ale nemáš pro ni "
 "místo. Zkus podarovat jeden ze svých artefaktů jinému hrdinovi."
 
-msgid "Click to show the next town."
-msgstr "Klikni pro zobrazení následujícího města."
-
-msgid "Show next town"
-msgstr "Zobrazit následující město"
-
-msgid "Click to show the previous town."
-msgstr "Klikni pro zobrazení předchozího města."
-
-msgid "Show previous town"
-msgstr "Zobrazit předchozí město"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Toto město nemůže být povýšeno na hrad."
-
-msgid "Town"
-msgstr "Město"
-
 msgid "Exit Castle"
 msgstr "Opustit hrad"
 
@@ -2774,8 +2756,26 @@ msgstr "Opustit město"
 msgid "Show Income"
 msgstr "Zobrazit příjmy"
 
+msgid "Show previous town"
+msgstr "Zobrazit předchozí město"
+
+msgid "Show next town"
+msgstr "Zobrazit následující město"
+
 msgid "View Hero"
 msgstr "Zobrazit hrdinu"
+
+msgid "Click to show the next town."
+msgstr "Klikni pro zobrazení následujícího města."
+
+msgid "Click to show the previous town."
+msgstr "Klikni pro zobrazení předchozího města."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+msgid "Town"
+msgstr "Město"
 
 msgid "The above spells are available here."
 msgstr "Nacházejí se zde výše uvedená kouzla."
@@ -3172,6 +3172,9 @@ msgid ""
 msgstr ""
 "Podmínky\n"
 "prohry"
+
+msgid "Map Description"
+msgstr "Popis mapy"
 
 msgid "First select recipients!"
 msgstr "Nejprve vyber příjemce!"
@@ -3594,6 +3597,22 @@ msgstr "Terén"
 msgid "Accept the choice made."
 msgstr "Přijmout vybranou volbu."
 
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klikněte pro povolení režimu hlídkování hrdiny."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Náhodné kouzlo"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klikněte pro úpravu denních událostí."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Zobrazit kouzla"
+
 msgid "Select Skill:"
 msgstr "Vybrat dovednost:"
 
@@ -3860,11 +3879,9 @@ msgstr ""
 "scénáře. Náročnější mapy mohou zahrnovat více nebo silnější nepřátele, méně "
 "surovin či jiné speciální podmínky, které ztěžují hráči hru."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Vybraný popis"
-
-msgid "The description of the currently selected map."
-msgstr "Popis aktuálně vybrané mapy."
 
 msgid "Jump"
 msgstr "Skok"
@@ -4244,6 +4261,9 @@ msgstr "Akční objekty musí být umístěny na prázdných polích."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
 
+msgid "Not able to generate a map with given parameters."
+msgstr ""
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
@@ -4380,6 +4400,16 @@ msgstr "Na mapě může být umístěn pouze jeden náhodný Ultimátní artefak
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
+
+#, fuzzy
+msgid "Pick player count"
+msgstr "Ikona hráče"
+
+msgid "Set water percentage"
+msgstr ""
+
+msgid "Set map seed (set 0 to make the seed random)"
+msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Mapa je poškozena."
@@ -4659,6 +4689,13 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Zobrazí systémové menu, s volbami pro úpravu chování hry."
 
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Vrátit se do hlavního menu hry."
@@ -4682,9 +4719,19 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Vrátit se do hlavního menu hry."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Vytvořte mapu, která je %{size} čtverců široká a %{size} čtverců vysoká."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Vytvořte mapu, která je %{size} čtverců široká a %{size} čtverců vysoká."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Vrátit se do hlavního menu hry."
 
 msgid "No maps available!"
 msgstr "Žádné mapy k dispozici!"
@@ -4799,9 +4846,6 @@ msgstr "Klikněte zde pro změnu hrdiny, jehož ztráta by znamenala porážku."
 msgid "Map Difficulty"
 msgstr "Obtížnost mapy"
 
-msgid "Map Description"
-msgstr "Popis mapy"
-
 msgid "RUMORS"
 msgstr "POVĚSTI"
 
@@ -4813,13 +4857,6 @@ msgstr "JAZYK"
 
 msgid "ABOUT"
 msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Zadaný popis mapy překračuje maximálně povolených 5 řádků. Bude zkrácen tak, "
-"aby se vešel do pole pro popis mapy."
 
 msgid ""
 "You are about to change the map's language from %{oldLanguage} to "
@@ -5037,6 +5074,10 @@ msgstr "Odstranit odpověď"
 
 msgid "Delete an existing answer for the question."
 msgstr "Smazat stávající odpověď na tuto otázku."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Hádanka:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Žádný artefakt nebude udělen jako odměna."
@@ -5462,6 +5503,14 @@ msgstr "Otevřít hlavní menu hry"
 msgid "hotkey|toggle passability"
 msgstr "Přepnout průchodnost"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Nová náhodná mapa"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Nová náhodná mapa"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolandova kampaň"
 
@@ -5534,6 +5583,9 @@ msgstr "Následující hrdina"
 
 msgid "hotkey|change to hero under cursor"
 msgstr "Přejít na hrdinu pod kurzorem"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 msgid "hotkey|start hero movement"
 msgstr "Zahájit pohyb hrdiny"
@@ -12307,6 +12359,20 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#, fuzzy
+#~ msgid "Warning!"
+#~ msgstr "Varování"
+
+#~ msgid "The description of the currently selected map."
+#~ msgstr "Popis aktuálně vybrané mapy."
+
+#~ msgid ""
+#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
+#~ "be shortened to fit the map description field."
+#~ msgstr ""
+#~ "Zadaný popis mapy překračuje maximálně povolených 5 řádků. Bude zkrácen "
+#~ "tak, aby se vešel do pole pro popis mapy."
 
 #~ msgid "Castle Options"
 #~ msgstr "Možnosti hradu"
