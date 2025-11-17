@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -416,10 +416,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     }
 }
-
-Interface::BorderWindow::BorderWindow( const fheroes2::Rect & rt )
-    : area( rt )
-{}
 
 const fheroes2::Rect & Interface::BorderWindow::GetRect() const
 {
