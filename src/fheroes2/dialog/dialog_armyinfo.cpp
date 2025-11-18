@@ -158,7 +158,7 @@ namespace
         text.set( ":", font );
         text.draw( middlePartPosX, textPos.y, display );
 
-        text.set(  _( "Defense Skill" ), font );
+        text.set( _( "Defense Skill" ), font );
         textPos.x = std::max( rightSidePosX - text.width(), minX );
         text.fitToOneRow( leftSideLength );
         text.draw( textPos.x, textPos.y, display );
