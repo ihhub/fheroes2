@@ -107,7 +107,7 @@ namespace
         return groundTiles / canFit;
     }
 
-    MP2::MapObjectType _getFakeMP2MineType( const int resource )
+    MP2::MapObjectType getFakeMP2MineType( const int resource )
     {
         switch ( resource ) {
         case Resource::WOOD:
@@ -419,7 +419,7 @@ namespace Maps::Random_Generator
                         mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tileIndex );
 
-                        const int32_t mineValue = getObjectGoldValue( _getFakeMP2MineType( resource ) );
+                        const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
                         placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( mineValue ) );
                         return true;
                     }
@@ -427,16 +427,16 @@ namespace Maps::Random_Generator
                 return false;
             };
 
+            if ( tileRings.size() < 4 ) {
+                continue;
+            }
+
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
                     if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
                         break;
                     }
                 }
-            }
-
-            if ( tileRings.size() < 4 ) {
-                continue;
             }
 
             for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {

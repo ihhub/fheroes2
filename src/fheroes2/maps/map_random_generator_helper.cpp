@@ -33,7 +33,6 @@
 #include "color.h"
 #include "direction.h"
 #include "ground.h"
-#include "heroes.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
@@ -180,29 +179,24 @@ namespace
     {
         static std::map<MP2::MapObjectType, std::pair<Maps::ObjectGroup, int32_t>> lookup;
 
+        if ( lookup.empty() ) {
+            static const std::vector<Maps::ObjectGroup> limitedGroupList{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_DWELLINGS,
+                                                                          Maps::ObjectGroup::ADVENTURE_MINES,     Maps::ObjectGroup::ADVENTURE_POWER_UPS,
+                                                                          Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::MONSTERS };
+
+            for ( const auto & group : limitedGroupList ) {
+                const auto & groupObjects = Maps::getObjectsByGroup( group );
+                for ( size_t index = 0; index < groupObjects.size(); ++index ) {
+                    lookup.try_emplace( mp2Type, std::make_pair( group, static_cast<int32_t>( index ) ) );
+                }
+            }
+        }
+
         const auto it = lookup.find( mp2Type );
         if ( it != lookup.end() ) {
             return it->second;
         }
 
-        // No need to support every type of object
-        static const std::vector<Maps::ObjectGroup> limitedGroupList{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_DWELLINGS,
-                                                                      Maps::ObjectGroup::ADVENTURE_MINES,     Maps::ObjectGroup::ADVENTURE_POWER_UPS,
-                                                                      Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::MONSTERS };
-
-        for ( const auto & group : limitedGroupList ) {
-            const auto & groupObjects = Maps::getObjectsByGroup( group );
-            for ( size_t index = 0; index < groupObjects.size(); ++index ) {
-                if ( groupObjects[index].objectType == mp2Type ) {
-                    const std::pair<Maps::ObjectGroup, int32_t> pair{ group, static_cast<int32_t>( index ) };
-                    lookup.emplace( mp2Type, pair );
-                    return pair;
-                }
-            }
-        }
-
-        // New object group? Add it!
-        assert( 0 );
         return {};
     }
 
@@ -575,23 +569,6 @@ namespace Maps::Random_Generator
         markObjectPlacement( data, basementInfo, tilePos );
         markObjectPlacement( data, castleInfo, tilePos );
 
-        if ( color != PlayerColor::NONE ) {
-            Tile & heroTile = world.getTile( bottomIndex );
-            const int32_t spriteIndex = Color::GetIndex( color ) * randomHeroIndex + ( randomHeroIndex - 1 );
-            putObjectOnMap( mapFormat, heroTile, ObjectGroup::KINGDOM_HEROES, spriteIndex );
-            Heroes * hero = world.GetHeroForHire( Race::IndexToRace( randomHeroIndex ) );
-            if ( hero ) {
-                hero->SetCenter( heroTile.GetCenter() );
-                hero->SetColor( color );
-                heroTile.setHero( hero );
-            }
-            else {
-                // How is it possible that the action was successful but no hero?
-                assert( 0 );
-            }
-            Maps::updateMapPlayers( mapFormat );
-        }
-
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
@@ -632,7 +609,7 @@ namespace Maps::Random_Generator
 
     void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster )
     {
-        if ( !Maps::isValidAbsIndex( index ) || monster.objectIndex == -1 ) {
+        if ( monster.objectIndex == -1 || !Maps::isValidAbsIndex( index ) ) {
             return;
         }
 
@@ -691,13 +668,16 @@ namespace Maps::Random_Generator
                 const int32_t groupValueLimit = std::min( region.treasureLimit, maximumTreasureGroupValue );
                 int32_t groupValue = 0;
                 for ( const auto & treasure : prefab.valuables ) {
-                    std::pair<ObjectGroup, int32_t> selection{ treasure.groupType, treasure.objectIndex };
+                    ObjectGroup groupType = treasure.groupType;
+                    int32_t objectIndex = treasure.objectIndex;
                     if ( treasure.groupType != ObjectGroup::ADVENTURE_POWER_UPS ) {
                         const int32_t valueLimit = std::max( minimalTreasureValue, groupValueLimit - groupValue );
-                        selection = getRandomTreasure( valueLimit, randomGenerator );
+                        const auto & selection = getRandomTreasure( valueLimit, randomGenerator );
+                        groupType = selection.first;
+                        objectIndex = selection.second;
                     }
-                    placeSimpleObject( mapFormat, data, node, { treasure.offset, selection.first, selection.second } );
-                    groupValue += getObjectGoldValue( selection.first, selection.second );
+                    placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex } );
+                    groupValue += getObjectGoldValue( groupType, objectIndex );
                 }
                 // It is possible to go into the negatives; intentional
                 region.treasureLimit -= groupValue;
