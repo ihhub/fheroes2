@@ -5572,7 +5572,7 @@ msgid "hotkey|change to hero under cursor"
 msgstr "Byt till hjälte under muspekaren"
 
 msgid "hotkey|hold and left click to move hero portrait to top of list"
-msgstr "Vänsterklicka och håll in för att flytta hjälten till toppen av listan"
+msgstr "Vänsterklicka och håll in för att flytta hjälteporträttet till toppen av hjältelistan"
 
 msgid "hotkey|start hero movement"
 msgstr "Påbörja hjälteförflyttning"
