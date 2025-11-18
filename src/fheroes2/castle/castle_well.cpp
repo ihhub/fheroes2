@@ -354,13 +354,15 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
     }
 
     std::string textString = _( "Available" );
-    textString += ": ";
+    textString += ':';
 
     fheroes2::Text text( std::move( textString ), fheroes2::FontType::smallWhite() );
-    text.draw( offset.x + 24, offset.y + 2, background );
+    const int32_t availableTextLength{ text.width() };
+    const int32_t availableTextOffset{ offset.x + std::min( ( 137 - availableTextLength ) / 2, 24 ) };
+    text.draw( availableTextOffset, offset.y + 2, background );
 
     text.set( std::to_string( population ), fheroes2::FontType::normalYellow() );
-    text.draw( offset.x + 109 - text.width() / 2, offset.y, background );
+    text.draw( std::max( availableTextOffset + availableTextLength + 5, offset.x + 109 - text.width() / 2 ), offset.y, background );
 }
 
 void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
