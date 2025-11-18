@@ -35,6 +35,17 @@ Please follow the instructions below to be able to build the project from source
   to build the project using Android Studio.
 * Launch Android Studio, open the project in the `android` directory and run the build.
 
+### iOS
+
+* Get Xcode on your macos device and open `fheroes2.xcodeproj`. Make sure to download iOS SDK. 
+* Download SDL2 and SDL_mixer source codes from their github repositories (add links).
+* Paste the SDL2 and SDL_mixer folders in the same parent directory as your fheroes2 source folder.
+* Remove any version number from the name of the SDL2 and SDL_mixer folder so that their names are respectively `SDL` and `SDL_mixer`
+* In Xcode SDL and SDL_mixer should now be recognized. Open on `SDL_mixer` in the navigation pane.
+* Open the `Build Settings` pane, make sure to have `All` options available and scroll down to `Search Paths`.
+* Open up the `User Header Search Paths` and add `$(SRCROOT)/../../SDL/include` to the list.
+* Select any iOS device and build and run the project. If asked to download the Metal Toolchain then you need to agree and download this.
+
 ### PlayStation Vita
 
 If you would like to build and run this project on PlayStation Vita please follow the instructions on [**this page**](README_PSV.md).
