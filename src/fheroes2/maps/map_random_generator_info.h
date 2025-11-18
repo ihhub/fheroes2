@@ -132,6 +132,21 @@ namespace Maps::Random_Generator
             return _data[index];
         }
 
+        const Node & getNode( const int32_t index ) const
+        {
+            if ( index < 0 || index >= _mapSize * _mapSize ) {
+                // We shouldn't try to get a tile with an invalid index.
+                assert( 0 );
+
+                assert( _outOfBounds.type == NodeType::BORDER );
+                assert( _outOfBounds.index == -1 );
+
+                return _outOfBounds;
+            }
+
+            return _data[index];
+        }
+
     private:
         const int32_t _mapSize{ 0 };
         Node _outOfBounds{ -1, 0, NodeType::BORDER };

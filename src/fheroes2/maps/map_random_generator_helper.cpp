@@ -33,6 +33,7 @@
 #include "color.h"
 #include "direction.h"
 #include "ground.h"
+#include "logging.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
@@ -50,6 +51,133 @@
 
 namespace
 {
+
+    struct RoadBuilderNode final
+    {
+        int32_t _from{ -1 };
+        uint32_t _cost{ 0 };
+    };
+
+    class RoadBuilder final
+    {
+    public:
+        RoadBuilder() = delete;
+        RoadBuilder( const RoadBuilder & ) = delete;
+        virtual ~RoadBuilder() = default;
+        RoadBuilder & operator=( const RoadBuilder & ) = delete;
+
+        RoadBuilder( int32_t mapWidth )
+            : _mapWidth( mapWidth )
+            , _cache( static_cast<size_t>( mapWidth ) * mapWidth )
+        {}
+
+        std::vector<int32_t> bfsToNearestPath( const int32_t start, uint32_t regionId, Maps::Random_Generator::NodeCache & nodes )
+        {
+            if ( regionId != _regionId ) {
+                resetCache( regionId );
+            }
+
+            std::vector<int32_t> result;
+
+            if ( start < 0 || start >= static_cast<int32_t>( _cache.size() ) ) {
+                return result;
+            }
+
+            // If start node itself is PATH in this region, trivial "path"
+            const Maps::Random_Generator::Node & startNode = nodes.getNode( start );
+            if ( startNode.region != _regionId ) {
+                return result;
+            }
+
+            if ( startNode.type == Maps::Random_Generator::NodeType::PATH ) {
+                result.push_back( start );
+                return result;
+            }
+
+            // Initialize BFS from start
+            std::vector<int32_t> nodesToExplore;
+            nodesToExplore.push_back( start );
+            _cache[static_cast<size_t>( start )]._from = start;
+            _cache[static_cast<size_t>( start )]._cost = 0;
+
+            int32_t foundIndex = -1;
+            for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+                const int32_t currentNodeIdx = nodesToExplore[lastProcessedNode];
+                const RoadBuilderNode & currentNode = _cache[currentNodeIdx];
+
+                if ( nodes.getNode( currentNodeIdx ).type == Maps::Random_Generator::NodeType::PATH ) {
+                    foundIndex = currentNodeIdx;
+                    break;
+                }
+
+                const Directions & directions = Direction::All();
+                for ( size_t i = 0; i < directions.size(); ++i ) {
+                    if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+                        continue;
+                    }
+
+                    const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, directions[i] );
+                    if ( newIndex == start ) {
+                        continue;
+                    }
+
+                    const uint32_t movementPenalty = ( Direction::isDiagonal( directions[i] ) ) ? 200 : 100;
+                    const uint32_t movementCost = currentNode._cost + movementPenalty;
+                    Maps::Random_Generator::Node & other = nodes.getNode( newIndex );
+
+                    if ( other.region != _regionId || ( other.type != Maps::Random_Generator::NodeType::OPEN && other.type != Maps::Random_Generator::NodeType::PATH ) ) {
+                        continue;
+                    }
+
+                    RoadBuilderNode & newNode = _cache[newIndex];
+
+                    if ( newNode._from == -1 || newNode._cost > movementCost ) {
+                        newNode._from = currentNodeIdx;
+                        newNode._cost = movementCost;
+
+                        nodesToExplore.push_back( newIndex );
+                    }
+                }
+            }
+
+            if ( foundIndex == -1 ) {
+                return result;
+            }
+
+            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "=== Found path to " << foundIndex );
+
+            // Reconstruct path from foundIndex back to start
+            for ( int32_t cur = foundIndex;; ) {
+                result.push_back( cur );
+                const RoadBuilderNode & rbNode = _cache[static_cast<size_t>( cur )];
+
+                if ( cur == rbNode._from ) {
+                    break;
+                }
+
+                cur = rbNode._from;
+                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "===== via " << cur );
+            }
+
+            std::reverse( result.begin(), result.end() );
+            return result;
+        }
+
+    private:
+        void resetCache( uint32_t regionId )
+        {
+            _regionId = regionId;
+
+            for ( RoadBuilderNode & node : _cache ) {
+                node = {};
+            }
+        }
+
+        std::vector<RoadBuilderNode> _cache;
+        int32_t _mapWidth{ -1 };
+        uint32_t _regionId{ 0 };
+    };
+
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int maxPlacementAttempts{ 30 };
@@ -255,6 +383,12 @@ namespace Maps::Random_Generator
         return objectIndex;
     }
 
+    std::vector<int32_t> findRouteFromIndex( int32_t start, uint32_t regionId, Maps::Random_Generator::NodeCache & nodes, int32_t width )
+    {
+        RoadBuilder builder{ width };
+        return builder.bfsToNearestPath( start, regionId, nodes );
+    }
+
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator )
     {
         if ( region.centerIndex < 0 || region.nodes.empty() || mapWidth <= 0 ) {
@@ -396,12 +530,12 @@ namespace Maps::Random_Generator
 
         const int32_t pathOffset = ( isCastle ) ? 2 : 1;
         for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-            markNodeAsType( data, mainTilePos + fheroes2::Point{ x, objectRect.height + pathOffset }, NodeType::PATH );
+            // markNodeAsType( data, mainTilePos + fheroes2::Point{ x, objectRect.height + pathOffset }, NodeType::PATH );
         }
 
         // Mark extra nodes as path to avoid objects clumping together
-        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.x - pathOffset, 0 }, NodeType::PATH );
-        markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.width + pathOffset, 0 }, NodeType::PATH );
+        // markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.x - pathOffset, 0 }, NodeType::PATH );
+        // markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.width + pathOffset, 0 }, NodeType::PATH );
 
         markNodeAsType( data, mainTilePos, NodeType::ACTION );
     }
@@ -518,6 +652,7 @@ namespace Maps::Random_Generator
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
+            data.getNode( bottomIndex ).type = NodeType::PATH;
             Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
             Maps::updateRoadOnTile( mapFormat, nextIndex, true );
         }

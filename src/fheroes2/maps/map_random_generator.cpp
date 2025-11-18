@@ -317,14 +317,21 @@ namespace Maps::Random_Generator
 
         MapEconomy mapEconomy;
 
+        auto roadBuilder = [&mapFormat, &data, width]( const int32_t tileIndex, const uint32_t regionId ) {
+            const auto & otherPath = findRouteFromIndex( tileIndex, regionId, data, width );
+            for ( const auto & step : otherPath ) {
+                data.getNode( step ).type = NodeType::PATH;
+                forceTempRoadOnTile( mapFormat, step );
+            }
+        };
+
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 // Skip the first region as we have nothing to do here for now.
                 continue;
             }
 
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
-                       "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
+            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
             std::set<int32_t> extraNodes;
             for ( const Node & node : region.nodes ) {
@@ -385,7 +392,9 @@ namespace Maps::Random_Generator
 
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) != -1 ) {
+                    int x = tryToPlaceMine( tileRings[ringIndex], resource );
+                    if ( x != -1 ) {
+                        roadBuilder( x, region.id );
                         break;
                     }
                 }
@@ -400,6 +409,7 @@ namespace Maps::Random_Generator
                 for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
                     const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
                     if ( mineIndex != -1 ) {
+                        roadBuilder( mineIndex, region.id );
                         putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), ObjectGroup::MONSTERS, randomMonsterIndex );
                         break;
                     }
@@ -449,16 +459,13 @@ namespace Maps::Random_Generator
                 if ( node.index == region.centerIndex ) {
                     continue;
                 }
-                Maps::removeRoadsFromTileInfo( mapFormat.tiles[node.index], node.index );
+                // Maps::removeRoadsFromTileInfo( mapFormat.tiles[node.index], node.index );
             }
 
-            pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
+            // pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                const auto & path = pathfinder.buildPath( tileIndex );
-                for ( const auto & step : path ) {
-                    data.getNode( step.GetIndex() ).type = NodeType::PATH;
-                    forceTempRoadOnTile( mapFormat, step.GetIndex() );
-                }
+                // const auto & path = pathfinder.buildPath( tileIndex );
+                // roadBuilder( tileIndex, region.id );
             }
         }
 
