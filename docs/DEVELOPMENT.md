@@ -37,7 +37,7 @@ Please follow the instructions below to be able to build the project from source
 
 ### iOS
 
-* Get Xcode on your macos device and open `fheroes2.xcodeproj`. Make sure to download iOS SDK. 
+* Get Xcode on your macos device and open `fheroes2.xcodeproj`. Make sure to download iOS SDK.
 * Download SDL2 and SDL_mixer source codes from their github repositories (add links).
 * Paste the SDL2 and SDL_mixer folders in the same parent directory as your fheroes2 source folder.
 * Remove any version number from the name of the SDL2 and SDL_mixer folder so that their names are respectively `SDL` and `SDL_mixer`
