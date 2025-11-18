@@ -3884,7 +3884,7 @@ msgstr ""
 "färre resurser eller andra specialvillkor som gör det svårare för spelaren."
 
 msgid "Selected Map Description"
-msgstr "Vald kartas beskrivning"
+msgstr "Vald Kartas Beskrivning"
 
 msgid "Jump"
 msgstr "Hoppa"
@@ -4696,7 +4696,7 @@ msgstr "Misslyckades att skapa en slumpad karta med givna parametrar"
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
-"Skapa en ny karta, antingen från en blank karta eller genom den "
+"Skapa en ny karta, antingen från en blank karta eller genom "
 "slumpkartgeneratorn."
 
 msgid "Exit the Editor and return to the game's Main Menu."
@@ -5572,7 +5572,7 @@ msgid "hotkey|change to hero under cursor"
 msgstr "Byt till hjälte under muspekaren"
 
 msgid "hotkey|hold and left click to move hero portrait to top of list"
-msgstr "Vänsterklicka för att flytta hjälten till toppen av listan"
+msgstr "Vänsterklicka och håll in för att flytta hjälten till toppen av listan"
 
 msgid "hotkey|start hero movement"
 msgstr "Påbörja hjälteförflyttning"
