@@ -132,7 +132,6 @@ namespace
         const int32_t leftSideLength{ 123 };
         const int32_t rightSideLength{ 120 - offsetX };
         const int32_t minX{ dst.x - leftSideLength };
-        const int32_t maxX{ dst.x + rightSideLength };
         const int32_t rightSidePosX{ dst.x - 3 };
         const int32_t leftSidePosX{ dst.x + offsetX };
         const int32_t middlePartPosX{ dst.x - 3 };
