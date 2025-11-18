@@ -3611,7 +3611,7 @@ msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
 msgid "Click to enable all items."
-msgstr "Klicka för att aktivera alla Förem,ål"
+msgstr "Klicka för att aktivera alla Föremål"
 
 msgid "Enable All Items"
 msgstr "Aktivera Alla Föremål"
