@@ -52,7 +52,6 @@ namespace
 {
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
-    constexpr int randomHeroIndex{ 7 };
     constexpr int maxPlacementAttempts{ 30 };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
