@@ -140,7 +140,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
   how you installed fheroes2:
 
   | Installation Method | Script |
-  |--------|--------|
+  | --- | --- |
   | If you used a package manager (MacPorts or Homebrew) | `fheroes2-extract-resources` |
   | If you built from source using the [**macOS native app**](#macos-native-app) method | `script/homm2/extract_homm2_resources_for_app_bundle.sh` |
   | All other cases | `script/homm2/extract_homm2_resources.sh` |
