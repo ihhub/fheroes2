@@ -186,7 +186,8 @@ namespace
             for ( const auto & group : limitedGroupList ) {
                 const auto & groupObjects = Maps::getObjectsByGroup( group );
                 for ( size_t index = 0; index < groupObjects.size(); ++index ) {
-                    lookup.try_emplace( mp2Type, std::make_pair( group, static_cast<int32_t>( index ) ) );
+                    const MP2::MapObjectType type = groupObjects[index].objectType;
+                    lookup.try_emplace( type, std::make_pair( group, static_cast<int32_t>( index ) ) );
                 }
             }
         }
