@@ -47,7 +47,7 @@ namespace Rand
 
 namespace Maps::Random_Generator
 {
-    inline int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
+    inline const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     enum class NodeType : uint8_t
@@ -214,7 +214,7 @@ namespace Maps::Random_Generator
 
     struct MonsterSelection final
     {
-        int32_t objectIndex{ -1 };
+        int32_t monsterId{ -1 };
         std::vector<int> allowedMonsters;
     };
 }

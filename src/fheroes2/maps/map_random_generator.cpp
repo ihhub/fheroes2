@@ -233,6 +233,8 @@ namespace Maps::Random_Generator
 
     int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth )
     {
+        assert( playerCount > 0 && mapWidth > 0 );
+
         const int32_t minimumRegionCount = playerCount + 1;
         const int32_t tileCount = mapWidth * mapWidth;
         const int32_t waterTiles = ( tileCount ) - ( smallestStartingRegionSize * minimumRegionCount );

@@ -179,9 +179,9 @@ namespace
         static std::map<MP2::MapObjectType, std::pair<Maps::ObjectGroup, int32_t>> lookup;
 
         if ( lookup.empty() ) {
-            static const std::vector<Maps::ObjectGroup> limitedGroupList{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_DWELLINGS,
-                                                                          Maps::ObjectGroup::ADVENTURE_MINES,     Maps::ObjectGroup::ADVENTURE_POWER_UPS,
-                                                                          Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::MONSTERS };
+            const std::vector<Maps::ObjectGroup> limitedGroupList{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_DWELLINGS,
+                                                                   Maps::ObjectGroup::ADVENTURE_MINES,     Maps::ObjectGroup::ADVENTURE_POWER_UPS,
+                                                                   Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::MONSTERS };
 
             for ( const auto & group : limitedGroupList ) {
                 const auto & groupObjects = Maps::getObjectsByGroup( group );
@@ -248,37 +248,37 @@ namespace Maps::Random_Generator
     {
         if ( protectedObjectValue > 8500 ) {
             // 171 -> 504 monster strength
-            return { Monster::RANDOM_MONSTER_LEVEL_4 - 1,
+            return { Monster::RANDOM_MONSTER_LEVEL_4,
                      { Monster::GIANT, Monster::GENIE, Monster::PHOENIX, Monster::BONE_DRAGON, Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::TITAN,
                        Monster::BLACK_DRAGON } };
         }
         if ( protectedObjectValue > 6000 ) {
             // 49 -> 137 monster strength
-            return { Monster::RANDOM_MONSTER - 1,
+            return { Monster::RANDOM_MONSTER,
                      { Monster::TROLL, Monster::CHAMPION, Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD,
                        Monster::ARCHMAGE, Monster::POWER_LICH, Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS, Monster::GENIE } };
         }
         if ( protectedObjectValue > 4500 ) {
             // 27 -> 48 monster strength
-            return { Monster::RANDOM_MONSTER_LEVEL_3 - 1,
+            return { Monster::RANDOM_MONSTER_LEVEL_3,
                      { Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT, Monster::DRUID,
                        Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
                        Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } };
         }
         if ( protectedObjectValue > 3000 ) {
             // 17 -> 31 monster strength
-            return { Monster::RANDOM_MONSTER - 1,
+            return { Monster::RANDOM_MONSTER,
                      { Monster::VETERAN_PIKEMAN, Monster::MUMMY, Monster::NOMAD, Monster::IRON_GOLEM, Monster::ELF, Monster::ROYAL_MUMMY, Monster::WOLF,
                        Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN, Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT,
                        Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } };
         }
         if ( protectedObjectValue > 1500 ) {
             // 11 -> 18 monster strength
-            return { Monster::RANDOM_MONSTER_LEVEL_2 - 1, {} };
+            return { Monster::RANDOM_MONSTER_LEVEL_2, {} };
         }
         if ( protectedObjectValue > 750 ) {
             // 0.92 -> 9 monster strength
-            return { Monster::RANDOM_MONSTER_LEVEL_1 - 1, {} };
+            return { Monster::RANDOM_MONSTER_LEVEL_1, {} };
         }
 
         return {};
@@ -609,11 +609,11 @@ namespace Maps::Random_Generator
 
     void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster )
     {
-        if ( monster.objectIndex == -1 || !Maps::isValidAbsIndex( index ) ) {
+        if ( monster.monsterId == -1 || !Maps::isValidAbsIndex( index ) ) {
             return;
         }
 
-        putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, monster.objectIndex );
+        putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, Monster( monster.monsterId ).GetSpriteIndex() );
 
         if ( monster.allowedMonsters.empty() ) {
             return;
