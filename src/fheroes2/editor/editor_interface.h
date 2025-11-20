@@ -107,7 +107,7 @@ namespace Interface
 
         void openMapSpecificationsDialog();
 
-        bool updateRandomMapConfiguration();
+        bool updateRandomMapConfiguration( const int32_t mapWidth );
 
     private:
         class WarningMessage

@@ -1025,7 +1025,7 @@ namespace Interface
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE ) ) {
-                    if ( updateRandomMapConfiguration() ) {
+                    if ( updateRandomMapConfiguration( _mapFormat.width ) ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         if ( generateRandomMap( _mapFormat.width ) ) {
@@ -2178,7 +2178,7 @@ namespace Interface
         return false;
     }
 
-    bool EditorInterface::updateRandomMapConfiguration()
+    bool EditorInterface::updateRandomMapConfiguration( const int32_t mapWidth )
     {
         Maps::Random_Generator::Configuration temp{ _randomMapConfig };
 
@@ -2186,7 +2186,9 @@ namespace Interface
             return false;
         }
 
-        if ( !Dialog::SelectCount( _( "Set water percentage" ), 0, 99, temp.waterPercentage ) ) {
+        const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( temp.playerCount, mapWidth );
+        temp.waterPercentage = std::min( temp.waterPercentage, waterLimit );
+        if ( waterLimit > 0 && !Dialog::SelectCount( _( "Set water percentage" ), 0, waterLimit, temp.waterPercentage ) ) {
             return false;
         }
 
