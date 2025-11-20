@@ -613,7 +613,7 @@ namespace Maps::Random_Generator
             return;
         }
 
-        putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, Monster( monster.monsterId ).GetSpriteIndex() );
+        putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, static_cast<int32_t>( Monster( monster.monsterId ).GetSpriteIndex() ) );
 
         if ( monster.allowedMonsters.empty() ) {
             return;
