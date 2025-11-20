@@ -163,7 +163,7 @@ public:
     uint32_t minMovePoints() const;
 
     // Returns the value of the spell using the provided context
-    double getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const;
+    double getStrategicValue( const double armyStrength, const uint32_t currentSpellPoints, const int spellPower ) const;
 
     int Level() const;
     uint32_t Damage() const;
