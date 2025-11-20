@@ -96,7 +96,7 @@ namespace AI
 
         bool isPositionLocatedInDefendedArea( const Battle::Unit & currentUnit, const Battle::Position & pos ) const;
 
-        SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
+        SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, const bool retreating ) const;
 
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & friendly,
                                            const Battle::Units & enemies, bool retreating ) const;
@@ -104,13 +104,15 @@ namespace AI
         SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const;
         SpellcastOutcome spellDragonSlayerValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
-        SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
+        SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets, const Battle::Units & enemies ) const;
 
-        double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const;
+        double spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast, const bool forDispel ) const;
         double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
         int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
+
+        bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Battle::Units & enemies, const Spell & spell ) const;
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto combat should be interrupted (one way or another)
