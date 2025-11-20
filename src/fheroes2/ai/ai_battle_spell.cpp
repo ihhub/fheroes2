@@ -335,7 +335,8 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     return ratio;
 }
 
-double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast, const bool forDispel ) const
+double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast,
+                                            const bool forDispel ) const
 {
     const int spellID = spell.GetID();
 
