@@ -1515,7 +1515,8 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     return actions;
 }
 
-double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget ) const
+double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies,
+                                               BattleTargetPair & bestTarget ) const
 {
     const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
@@ -1538,7 +1539,7 @@ double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Batt
             bestTarget.unit = enemy;
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                           "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue << ", position value: " << outcome.positionValue )
+                       "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue << ", position value: " << outcome.positionValue )
         }
     }
 
