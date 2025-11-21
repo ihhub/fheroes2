@@ -1515,12 +1515,10 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     return actions;
 }
 
-double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies,
-                                               BattleTargetPair & bestTarget ) const
+double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget )
 {
     const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
-    BattleTargetPair target;
     MeleeAttackOutcome bestOutcome;
 
     for ( const Battle::Unit * enemy : enemies ) {
