@@ -92,7 +92,7 @@ namespace Battle
         TR_MOVED = 0x00000002,
         TR_SKIP = 0x00000004,
 
-        // UNUSED = 0x00000008,
+        TELEPORT_ABILITY = 0x00000008,
 
         LUCK_GOOD = 0x00000100,
         LUCK_BAD = 0x00000200,

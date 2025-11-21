@@ -49,12 +49,15 @@ namespace AI
         int spellID{ -1 };
         int32_t cell{ -1 };
         double value{ 0.0 };
+
+        int32_t destinationCell{ -1 };
     };
 
     struct SpellcastOutcome
     {
         int32_t cell{ -1 };
         double value{ 0.0 };
+        int32_t destinationCell{ -1 };
 
         void updateOutcome( const double potentialValue, const int32_t targetCell, const bool isMassEffect = false )
         {
@@ -94,6 +97,8 @@ namespace AI
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
+        double getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget ) const;
+
         bool isPositionLocatedInDefendedArea( const Battle::Unit & currentUnit, const Battle::Position & pos ) const;
 
         SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
@@ -104,6 +109,7 @@ namespace AI
         SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const;
         SpellcastOutcome spellDragonSlayerValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellTeleportValue( Battle::Arena & arena, const Spell & spell, const Battle::Unit & currentUnit, const Battle::Units & enemies ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
 
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const;
