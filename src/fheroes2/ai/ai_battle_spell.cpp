@@ -759,7 +759,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
 
     // The current unit cannot be modified. So, we need to get a non-const pointer to the same unit
     // to set temporary teleport ability.
-    Battle::Units friendly( arena.getForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
+    const Battle::Units friendly( arena.getForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
     Battle::Unit * tempUnit = nullptr;
 
     for ( Battle::Unit * unit : friendly ) {
