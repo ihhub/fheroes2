@@ -53,6 +53,7 @@
 #include "resource.h"
 #include "route.h"
 #include "skill.h"
+#include "translations.h"
 #include "world.h"
 #include "world_pathfinding.h"
 
@@ -230,6 +231,63 @@ namespace Maps::Random_Generator
                    // Entrance check.
                    { { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } } },
     };
+
+    std::string layoutToString( const Layout layout )
+    {
+        switch ( layout ) {
+        case Layout::MIRRORED:
+            return _( "Mirrored" );
+        case Layout::BALANCED:
+            return _( "Balanced" );
+        case Layout::ISLANDS:
+            return _( "Islands" );
+        case Layout::PYRAMID:
+            return _( "Pyramid" );
+        case Layout::QUEST:
+            return _( "Quest" );
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    std::string resourceDensityToString( const ResourceDensity resources )
+    {
+        switch ( resources ) {
+        case ResourceDensity::SCARCE:
+            return _( "Scarce" );
+        case ResourceDensity::NORMAL:
+            return _( "Normal" );
+        case ResourceDensity::ABUNDANT:
+            return _( "Abundant" );
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    std::string monsterStrengthToString( const MonsterStrength monsters )
+    {
+        switch ( monsters ) {
+        case MonsterStrength::WEAK:
+            return _( "Weak" );
+        case MonsterStrength::NORMAL:
+            return _( "Normal" );
+        case MonsterStrength::STRONG:
+            return _( "Strong" );
+        case MonsterStrength::DEADLY:
+            return _( "Deadly" );
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
 
     int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth )
     {
