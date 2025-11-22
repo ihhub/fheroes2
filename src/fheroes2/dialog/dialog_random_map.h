@@ -22,11 +22,6 @@
 
 #include <cstdint>
 
-namespace Maps::Map_Format
-{
-    struct MapFormat;
-}
-
 namespace Maps::Random_Generator
 {
     struct Configuration;
@@ -34,5 +29,5 @@ namespace Maps::Random_Generator
 
 namespace fheroes2
 {
-    bool randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::Random_Generator::Configuration & configuration );
+    bool randomMapDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth );
 }

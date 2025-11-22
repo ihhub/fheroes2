@@ -2183,19 +2183,7 @@ namespace Interface
     {
         Maps::Random_Generator::Configuration temp{ _randomMapConfig };
 
-        fheroes2::randomMapDialog( _mapFormat, temp );
-
-        if ( !Dialog::SelectCount( _( "Pick player count" ), 2, 6, temp.playerCount ) ) {
-            return false;
-        }
-
-        const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( temp.playerCount, mapWidth );
-        temp.waterPercentage = std::min( temp.waterPercentage, waterLimit );
-        if ( waterLimit > 0 && !Dialog::SelectCount( _( "Set water percentage" ), 0, waterLimit, temp.waterPercentage ) ) {
-            return false;
-        }
-
-        if ( !Dialog::SelectCount( _( "Set map seed (set 0 to make the seed random)" ), 0, 999999, temp.seed ) ) {
+        if ( !fheroes2::randomMapDialog( temp, mapWidth ) ) {
             return false;
         }
 

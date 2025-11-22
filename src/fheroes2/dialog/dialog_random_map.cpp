@@ -74,6 +74,11 @@ namespace
             return _scrollbar.currentIndex();
         }
 
+        void setRange( const int minIndex, const int maxIndex )
+        {
+            _scrollbar.setRange( minIndex, maxIndex );
+        }
+
         void redraw( fheroes2::Image & output = fheroes2::Display::instance() ) const
         {
             _buttonLeft.draw( output );
@@ -109,7 +114,7 @@ namespace
     };
 }
 
-bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::Random_Generator::Configuration & configuration )
+bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -133,20 +138,23 @@ bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::R
     fheroes2::Copy( titleBox, 0, 0, display, titleBoxRoi );
     fheroes2::addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
 
-    fheroes2::Text text( _( "Random Map Generator" ), fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+    fheroes2::Text text( _( "Random Map Generator" ), fheroes2::FontType::normalWhite() );
     text.fitToOneRow( titleTextRoi.width );
     text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
     const int32_t positionX = activeArea.x + 12;
     const int32_t settingDescriptionWidth = activeArea.width / 3;
-    const int32_t valueOffsetX = positionX + settingDescriptionWidth;
-    const int32_t ySpacing = 40;
+    const int32_t inputPositionX = positionX + settingDescriptionWidth;
+    const int32_t valuePositionX = inputPositionX + 210;
+    const int32_t ySpacing = 45;
     int32_t positionY = 140;
 
     // Player count.
     text.set( _( "Player count" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider playerCountSlider{ { valueOffsetX, positionY }, 2, 6, 2 };
+    HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, 2 };
+    text.set( std::to_string( configuration.playerCount ), fheroes2::FontType::normalYellow() );
+    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     positionY += ySpacing;
 
@@ -159,14 +167,14 @@ bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::R
     const int32_t layoutBackgroundWidth = 200;
     const int32_t layoutBackgroundHeight = itemBackground.height();
 
-    fheroes2::Copy( itemBackground, 0, 0, display, valueOffsetX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight );
+    fheroes2::Copy( itemBackground, 0, 0, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight );
     text.set( _( "Mirrored" ), fheroes2::FontType::normalWhite() );
-    text.draw( valueOffsetX + 12, positionY, display );
+    text.draw( inputPositionX + 12, positionY, display );
 
     const fheroes2::Sprite & dropListButtonSprite = fheroes2::AGG::GetICN( dropListIcn, 1 );
     const fheroes2::Sprite & dropListButtonPressedSprite = fheroes2::AGG::GetICN( dropListIcn, 2 );
 
-    fheroes2::ButtonSprite layoutDroplistButton( valueOffsetX + layoutBackgroundWidth + 6, positionY - 5, dropListButtonSprite, dropListButtonPressedSprite );
+    fheroes2::ButtonSprite layoutDroplistButton( inputPositionX + layoutBackgroundWidth + 6, positionY - 5, dropListButtonSprite, dropListButtonPressedSprite );
     layoutDroplistButton.disable();
     layoutDroplistButton.draw();
 
@@ -174,32 +182,45 @@ bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::R
 
     text.set( _( "Water percentage" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider waterSlider{ { valueOffsetX, positionY }, 0, 100, 0 };
+
+    const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
+    int32_t waterPercentage = std::min( configuration.waterPercentage, waterLimit );
+
+    HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, 100, waterPercentage };
+
+    text.set( std::to_string( configuration.waterPercentage ), fheroes2::FontType::normalYellow() );
+    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     positionY += ySpacing;
 
     text.set( _( "Monster strength" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider monsterSlider{ { valueOffsetX, positionY }, 0, 3, 1 };
+    HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, 1 };
+
+    text.set( _( "Deadly" ), fheroes2::FontType::normalYellow() );
+    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     positionY += ySpacing;
 
     text.set( _( "Resource availability" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider resourceSlider{ { valueOffsetX, positionY }, 0, 2, 1 };
+    HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, 1 };
 
-    positionY += ySpacing;
+    text.set( _( "Abundant" ), fheroes2::FontType::normalYellow() );
+    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+
+    positionY += ySpacing + 10;
 
     text.set( _( "Map seed" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     fheroes2::Button buttonCancel;
     const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-    background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
+    background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 30, 10 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
     fheroes2::Button buttonOk;
     const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-    background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancel.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+    background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 30, 10 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -219,6 +240,11 @@ bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::R
 
         if ( playerCountSlider.processEvent( le ) ) {
             configuration.playerCount = playerCountSlider.getCurrentValue();
+
+            const int32_t newLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
+            configuration.waterPercentage = std::min( configuration.waterPercentage, newLimit );
+            waterSlider.setRange( 0, newLimit );
+
             playerCountSlider.redraw( display );
             display.render( background.totalArea() );
         }
