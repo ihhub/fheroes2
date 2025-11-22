@@ -2413,12 +2413,29 @@ void Battle::Interface::_redrawCoverStatic()
         return;
     }
 
-    const Board & board = *Arena::GetBoard();
+    Board & board = *Arena::GetBoard();
 
     std::array<bool, Board::sizeInCells> processedCells{ false };
     assert( board.size() == processedCells.size() );
 
     if ( _highlightUnitMovementArea != nullptr ) {
+        Unit * foundUnit = nullptr;
+        for ( Cell & cell : board ) {
+            Unit * unit = cell.GetUnit();
+            if ( unit != nullptr && unit == _highlightUnitMovementArea ) {
+                foundUnit = unit;
+                break;
+            }
+        }
+
+        // If we hit this assertion then the unit doesn't even exist.
+        assert( foundUnit != nullptr );
+
+        // The highlighted unit might have moved. We want to display the real movement area.
+        const bool isMoved = foundUnit->Modes( Battle::TR_MOVED );
+
+        foundUnit->ResetModes( Battle::TR_MOVED );
+
         // To avoid pathfinder re-evaluation we need to run the same loop separately for the selected unit and then for the current unit.
         // In this case we do re-evaluation only once.
         for ( const Cell & cell : board ) {
@@ -2433,6 +2450,10 @@ void Battle::Interface::_redrawCoverStatic()
 
                 processedCells[cell.GetIndex()] = true;
             }
+        }
+
+        if ( isMoved ) {
+            foundUnit->SetModes( Battle::TR_MOVED );
         }
     }
 
