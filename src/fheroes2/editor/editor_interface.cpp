@@ -90,6 +90,7 @@
 #include "view_world.h"
 #include "world.h"
 #include "world_object_uid.h"
+#include <dialog_random_map.h>
 
 namespace fheroes2
 {
@@ -2181,6 +2182,8 @@ namespace Interface
     bool EditorInterface::updateRandomMapConfiguration()
     {
         Maps::Random_Generator::Configuration temp{ _randomMapConfig };
+
+        fheroes2::randomMapDialog( _mapFormat, temp );
 
         if ( !Dialog::SelectCount( _( "Pick player count" ), 2, 6, temp.playerCount ) ) {
             return false;

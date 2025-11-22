@@ -20,10 +20,211 @@
 
 #include "dialog_random_map.h"
 
+#include "agg_image.h"
+#include "cursor.h"
+#include "game_hotkeys.h"
+#include "icn.h"
+#include "localevent.h"
 #include "map_format_info.h"
 #include "map_random_generator.h"
+#include "settings.h"
+#include "translations.h"
+#include "ui_button.h"
+#include "ui_scrollbar.h"
+#include "ui_window.h"
 
-bool Editor::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::Random_Generator::Configuration & configuration )
+namespace
 {
+    class HorizontalSlider
+    {
+    public:
+        HorizontalSlider() = default;
+        HorizontalSlider( const HorizontalSlider & ) = delete;
+        HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
+
+        HorizontalSlider( fheroes2::Point position, const int minIndex, const int maxIndex, const int startIndex )
+        {
+            const int tradpostIcnId = ICN::TRADPOST;
+            const int32_t sliderLength = 187;
+            const int32_t buttonWidth = 15;
+
+            fheroes2::Display & display = fheroes2::Display::instance();
+            const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpostIcnId, 1 );
+            fheroes2::Blit( bar, display, position.x, position.y );
+
+            _buttonLeft.setPosition( position.x + 6, position.y + 1 );
+            _buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
+            _buttonRight.setPosition( position.x + bar.width() - buttonWidth, position.y + 1 );
+            _buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
+
+            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
+            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, sliderLength, 1, static_cast<int32_t>( maxIndex + 1 ),
+                                                                                       { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
+            _scrollbar.setImage( scrollbarSlider );
+            _scrollbar.setArea( { position.x + buttonWidth + 9, position.y + 3, sliderLength, 11 } );
+            _scrollbar.setRange( minIndex, maxIndex );
+            _scrollbar.moveToIndex( startIndex );
+
+            _scrollbar.show();
+            redraw( display );
+        }
+
+        int getCurrentValue() const
+        {
+            return _scrollbar.currentIndex();
+        }
+
+        void redraw( fheroes2::Image & output = fheroes2::Display::instance() ) const
+        {
+            _buttonLeft.draw( output );
+            _buttonRight.draw( output );
+        }
+
+        bool processEvent( LocalEvent & le )
+        {
+            if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) ) {
+                const fheroes2::Point & mousePos = le.getMouseCursorPos();
+                _scrollbar.moveToPos( mousePos );
+                return true;
+            }
+            else if ( _scrollbar.updatePosition() ) {
+                return true;
+            }
+
+            if ( le.MouseClickLeft( _buttonLeft.area() ) || le.isMouseWheelDownInArea( _scrollbar.getArea() ) ) {
+                _scrollbar.backward();
+                return true;
+            }
+            if ( le.MouseClickLeft( _buttonRight.area() ) || le.isMouseWheelUpInArea( _scrollbar.getArea() ) ) {
+                _scrollbar.forward();
+                return true;
+            }
+            return false;
+        }
+
+    private:
+        fheroes2::Scrollbar _scrollbar;
+        fheroes2::Button _buttonLeft;
+        fheroes2::Button _buttonRight;
+    };
+}
+
+bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::Random_Generator::Configuration & configuration )
+{
+    mapFormat;
+    configuration;
+
+    // const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    const bool isDefaultScreenSize = display.isDefaultSize();
+
+    fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, !isDefaultScreenSize );
+    const fheroes2::Rect activeArea( background.activeArea() );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    if ( isDefaultScreenSize ) {
+        const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+        fheroes2::Copy( backgroundImage, 0, 0, display, activeArea );
+    }
+
+    // Dialog title.
+    const fheroes2::Sprite & titleBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+    const fheroes2::Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
+    const fheroes2::Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
+
+    fheroes2::Copy( titleBox, 0, 0, display, titleBoxRoi );
+    fheroes2::addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
+
+    fheroes2::Text text( _( "Random Map Generator" ), fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+    text.fitToOneRow( titleTextRoi.width );
+    text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
+
+    const int32_t positionX = activeArea.x + 12;
+    const int32_t settingDescriptionWidth = activeArea.width / 3;
+    const int32_t ySpacing = 40;
+    int32_t positionY = 140;
+
+    // Player count.
+    text.set( _( "Player count" ), fheroes2::FontType::normalWhite() );
+    text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    HorizontalSlider playerCountSlider{ { positionX + settingDescriptionWidth, positionY }, 2, 6, 2 };
+
+    positionY += ySpacing;
+
+    text.set( _( "Map layout" ), fheroes2::FontType::normalWhite() );
+    text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+
+    positionY += ySpacing;
+
+    text.set( _( "Water percentage" ), fheroes2::FontType::normalWhite() );
+    text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    HorizontalSlider waterSlider{ { positionX + settingDescriptionWidth, positionY }, 0, 100, 0 };
+
+    positionY += ySpacing;
+
+    text.set( _( "Monster strength" ), fheroes2::FontType::normalWhite() );
+    text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    HorizontalSlider monsterSlider{ { positionX + settingDescriptionWidth, positionY }, 0, 3, 1 };
+
+    positionY += ySpacing;
+
+    text.set( _( "Resource availability" ), fheroes2::FontType::normalWhite() );
+    text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    HorizontalSlider resourceSlider{ { positionX + settingDescriptionWidth, positionY }, 0, 2, 1 };
+
+    positionY += ySpacing;
+
+    text.set( _( "Map seed" ), fheroes2::FontType::normalWhite() );
+    text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+
+    fheroes2::Button buttonCancel;
+    const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+    background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 20, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
+
+    fheroes2::Button buttonOk;
+    const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+    background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 20 + buttonCancel.area().width + 10, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+
+    LocalEvent & le = LocalEvent::Get();
+
+    display.render( background.totalArea() );
+
+    while ( le.HandleEvents() ) {
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+            return false;
+        }
+
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+            break;
+        }
+
+        if ( playerCountSlider.processEvent( le ) ) {
+            configuration.playerCount = playerCountSlider.getCurrentValue();
+            playerCountSlider.redraw( display );
+            display.render( background.totalArea() );
+        }
+        if ( waterSlider.processEvent( le ) ) {
+            configuration.waterPercentage = waterSlider.getCurrentValue();
+            waterSlider.redraw( display );
+            display.render( background.totalArea() );
+        }
+        if ( monsterSlider.processEvent( le ) ) {
+            configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
+            monsterSlider.redraw( display );
+            display.render( background.totalArea() );
+        }
+        if ( resourceSlider.processEvent( le ) ) {
+            configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
+            resourceSlider.redraw( display );
+            display.render( background.totalArea() );
+        }
+    }
+
     return false;
 }

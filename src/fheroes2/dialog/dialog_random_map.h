@@ -32,7 +32,7 @@ namespace Maps::Random_Generator
     struct Configuration;
 }
 
-namespace Editor
+namespace fheroes2
 {
     bool randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::Random_Generator::Configuration & configuration );
 }
