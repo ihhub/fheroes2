@@ -33,7 +33,6 @@
 #include <numeric>
 #include <ostream>
 #include <type_traits>
-#include <utility>
 
 #include "ai_battle.h"
 #include "army.h"
