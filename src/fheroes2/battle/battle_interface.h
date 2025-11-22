@@ -459,7 +459,7 @@ namespace Battle
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         bool MousePressRightBoardAction( const Cell & cell ) const;
 
-        int GetBattleCursor( std::string & statusMsg ) const;
+        int GetBattleCursor( std::string & statusMsg, const bool displayEnemyUnitMovementArea );
         int GetBattleSpellCursor( std::string & statusMsg ) const;
 
         void _startAutoCombat( const Unit & unit, Actions & actions );
@@ -476,6 +476,7 @@ namespace Battle
         fheroes2::Image _hexagonShadow;
         fheroes2::Image _hexagonGridShadow;
         fheroes2::Image _hexagonCursorShadow;
+        fheroes2::Image _hexagonEnemyShadow;
 
         int _battleGroundIcn{ ICN::UNKNOWN };
         int _borderObjectsIcn{ ICN::UNKNOWN };
@@ -509,6 +510,7 @@ namespace Battle
         const Unit * _movingUnit{ nullptr };
         const Unit * _flyingUnit{ nullptr };
         const Unit * _unitToHighlight{ nullptr };
+        const Unit * _selectedEnemyUnit{ nullptr };
         const fheroes2::Sprite * _spriteInsteadCurrentUnit{ nullptr };
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;

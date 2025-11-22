@@ -1431,6 +1431,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _hexagonShadow = DrawHexagonShadow( 4, 2 );
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
+    _hexagonEnemyShadow = DrawHexagonShadow( 2, 2 );
 
     _buttonAuto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     _buttonSettings.setICNInfo( ICN::TEXTBAR, 6, 7 );
@@ -2392,20 +2393,57 @@ void Battle::Interface::_redrawCoverStatic()
 {
     fheroes2::Copy( _battleGround, _mainSurface );
 
+    if ( _movingUnit != nullptr ) {
+        // Do not show movement area while units are in action.
+        return;
+    }
+
     const Settings & conf = Settings::Get();
+    if ( !conf.BattleShowMoveShadow() ) {
+        // Display movement area only if the associated option is enabled.
+        return;
+    }
 
-    // Movement shadow.
-    if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
-        const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
-        const Board & board = *Arena::GetBoard();
+    if ( _currentUnit == nullptr || ( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
+        // No current unit is selected or this unit is controlled by AI.
+        return;
+    }
 
+    const Board & board = *Arena::GetBoard();
+
+    std::array<bool, Board::sizeInCells> processedCells{ false };
+    assert( board.size() == processedCells.size() );
+
+    if ( _selectedEnemyUnit != nullptr ) {
+        // To avoid pathfinder re-evaluation we need to run the same loop separately for the selected enemy unit and then for the current unit.
+        // In this case we do re-evaluation only once.
         for ( const Cell & cell : board ) {
-            const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
-            if ( pos.GetHead() != nullptr ) {
-                assert( pos.isValidForUnit( _currentUnit ) );
+            const Position pos = Position::GetReachable( *_selectedEnemyUnit, cell.GetIndex() );
 
-                fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+            if ( pos.GetHead() != nullptr ) {
+                assert( pos.isValidForUnit( _selectedEnemyUnit ) );
+
+                // To separate enemy movement from the current unit we apply the shadow twice.
+                fheroes2::Blit( _hexagonEnemyShadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+                fheroes2::Blit( _hexagonEnemyShadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+
+                processedCells[cell.GetIndex()] = true;
             }
+        }
+    }
+
+    const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
+
+    for ( const Cell & cell : board ) {
+        if ( processedCells[cell.GetIndex()] ) {
+            continue;
+        }
+
+        const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
+        if ( pos.GetHead() != nullptr ) {
+            assert( pos.isValidForUnit( _currentUnit ) );
+
+            fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
         }
     }
 }
@@ -2689,7 +2727,7 @@ void Battle::Interface::RedrawKilled()
     }
 }
 
-int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
+int Battle::Interface::GetBattleCursor( std::string & statusMsg, const bool displayEnemyUnitMovementArea )
 {
     statusMsg.clear();
 
@@ -2727,6 +2765,10 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
             }
         }
         else {
+            if ( displayEnemyUnitMovementArea ) {
+                _selectedEnemyUnit = unit;
+            }
+
             if ( _currentUnit->GetCurrentColor() == unit->GetColor() ) {
                 statusMsg = formatViewInfoMsg( unit );
 
@@ -2978,6 +3020,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
 
+    // Make sure to reset currently selected enemy unit every time we do rendering.
+    _selectedEnemyUnit = nullptr;
+
     _buttonAuto.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonAuto.area() ) );
     _buttonSettings.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSettings.area() ) );
     _buttonSkip.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSkip.area() ) );
@@ -3193,7 +3238,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
     }
     else if ( le.isMouseCursorPosInArea( battleFieldRect ) ) {
-        int themes = GetBattleCursor( msg );
+        int themes = GetBattleCursor( msg, Game::HotKeyHoldEvent( Game::HotKeyEvent::BATTLE_SHOW_ENEMY_AREA_MODIFIER ) );
 
         if ( _swipeAttack.isValid() ) {
             // The swipe attack motion is either in progress or has finished.
