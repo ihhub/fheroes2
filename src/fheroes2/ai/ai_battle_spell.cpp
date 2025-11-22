@@ -108,6 +108,7 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
             bestSpell.spellID = spell.GetID();
             bestSpell.cell = outcome.cell;
             bestSpell.value = spellPointValue;
+            bestSpell.destinationCell = outcome.destinationCell;
         }
     };
 
@@ -130,6 +131,9 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
         }
         else if ( spell == Spell::DRAGONSLAYER ) {
             checkSelectBestSpell( spell, spellDragonSlayerValue( spell, friendly, enemies ) );
+        }
+        else if ( spell == Spell::TELEPORT ) {
+            checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, enemies ) );
         }
         else if ( spell.isApplyToFriends() ) {
             checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly, enemies ) );
@@ -662,6 +666,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     return bestOutcome;
 }
 
+
 bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, const Battle::Units & enemies, const Spell & spell ) const
 {
     const int spellID = spell.GetID();
@@ -743,4 +748,71 @@ bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, co
     }
 
     return false;
+}
+
+AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & arena, const Spell & spell, const Battle::Unit & currentUnit,
+                                                            const Battle::Units & enemies ) const
+{
+    // Teleport spell is useful in many cases. The current implementation focuses only on offensive movements for melee units.
+
+    if ( _defensiveTactics ) {
+        // TODO: implement Teleport usage for defense.
+        return {};
+    }
+
+    if ( isSpellcastUselessForUnit( currentUnit, spell ) ) {
+        return {};
+    }
+
+    if ( currentUnit.isFlying() ) {
+        // The unit can move to any cell. Teleport spell is useless here.
+        return {};
+    }
+
+    if ( currentUnit.isArchers() ) {
+        // TODO: implement Teleport usage for shooters.
+        return {};
+    }
+
+    Battle::Position currentPos = currentUnit.GetPosition();
+
+    BattleTargetPair currentBestTarget;
+    const double currentDamage = getMeleeBestOutcome( arena, currentUnit, enemies, currentBestTarget );
+    if ( currentDamage > 0.1 ) {
+        // The current monster can reach some enemies.
+        return {};
+    }
+
+    // The current unit cannot be modified. So, we need to get a non-const pointer to the same unit
+    // to set temporary teleport ability.
+    const Battle::Units friendly( arena.getForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
+    Battle::Unit * tempUnit = nullptr;
+
+    for ( Battle::Unit * unit : friendly ) {
+        if ( unit == &currentUnit ) {
+            tempUnit = unit;
+            break;
+        }
+    }
+
+    if ( tempUnit == nullptr ) {
+        // This must not happen! The monster should belong to friendly units.
+        assert( 0 );
+        return {};
+    }
+
+    // Temporary grant teleport ability so the unit can reach any cell.
+    tempUnit->SetModes( Battle::TELEPORT_ABILITY );
+
+    BattleTargetPair bestTarget;
+    const double bestDamage = getMeleeBestOutcome( arena, currentUnit, enemies, bestTarget );
+
+    tempUnit->ResetModes( Battle::TELEPORT_ABILITY );
+
+    if ( bestDamage < 0.1 ) {
+        // None of enemies are reachable.
+        return {};
+    }
+
+    return { currentPos.GetHead()->GetIndex(), currentUnit.GetStrength() * bloodLustRatio, bestTarget.cell };
 }

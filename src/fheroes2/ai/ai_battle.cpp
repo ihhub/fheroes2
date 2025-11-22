@@ -833,7 +833,12 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
                 return;
             }
 
-            actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            if ( bestSpell.destinationCell >= 0 ) {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell, bestSpell.destinationCell );
+            }
+            else {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            }
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                        arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
@@ -869,7 +874,12 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
         const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, false );
 
         if ( bestSpell.spellID != -1 ) {
-            actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            if ( bestSpell.destinationCell >= 0 ) {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell, bestSpell.destinationCell );
+            }
+            else {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            }
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                        arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
@@ -1505,38 +1515,45 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     return actions;
 }
 
-AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const
+double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget )
 {
-    BattleTargetPair target;
-
     const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
+    MeleeAttackOutcome bestOutcome;
+
+    for ( const Battle::Unit * enemy : enemies ) {
+        assert( enemy != nullptr );
+
+        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+
+        if ( !outcome.canAttackImmediately ) {
+            continue;
+        }
+
+        if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
+            bestOutcome = outcome;
+
+            bestTarget.cell = outcome.fromIndex;
+            bestTarget.unit = enemy;
+
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                       "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue << ", position value: " << outcome.positionValue )
+        }
+    }
+
+    return bestOutcome.attackValue;
+}
+
+AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const
+{
     // Current unit can be under the influence of the Hypnotize spell
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
+    BattleTargetPair target;
+
     // 1. Choose the best target within reach, if any
     {
-        MeleeAttackOutcome bestOutcome;
-
-        for ( const Battle::Unit * enemy : enemies ) {
-            assert( enemy != nullptr );
-
-            const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
-
-            if ( !outcome.canAttackImmediately ) {
-                continue;
-            }
-
-            if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
-                bestOutcome = outcome;
-
-                target.cell = outcome.fromIndex;
-                target.unit = enemy;
-
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                           "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue << ", position value: " << outcome.positionValue )
-            }
-        }
+        getMeleeBestOutcome( arena, currentUnit, enemies, target );
 
         if ( target.unit ) {
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )

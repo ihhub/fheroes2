@@ -267,7 +267,8 @@ namespace
                 fheroes2::ApplyPalette( display, _area.x + 6, _area.y + 59, display, _area.x + 6, _area.y + 59, 125, 12, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             }
 
-            const fheroes2::Text buildingName( Castle::GetStringBuilding( _getBuildindTypeForRender(), _race ), fheroes2::FontType::smallWhite() );
+            fheroes2::Text buildingName( Castle::GetStringBuilding( _getBuildindTypeForRender(), _race ), fheroes2::FontType::smallWhite() );
+            buildingName.fitToOneRow( 125 );
             buildingName.draw( _area.x + 68 - buildingName.width() / 2, _area.y + 61, display );
         }
 
