@@ -410,6 +410,10 @@ namespace
                 if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
                     redrawBuildingConnection( castle, offset, currentBuild.id, fadingInBuildingId );
                 }
+
+                for ( const auto & area : currentBuild.areas ) {
+                    fheroes2::DrawRect( display, area, 191 );
+                }
             }
 
             return;
@@ -467,7 +471,12 @@ CastleDialog::BuildingsRenderQueue::BuildingsRenderQueue( const Castle & castle,
     const std::vector<BuildingType> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castleRace, Settings::Get().getCurrentMapInfo().version );
 
     for ( const BuildingType buildingId : ordersBuildings ) {
-        emplace_back( buildingId, fheroes2::getCastleBuildingArea( castleRace, buildingId ) + top );
+        auto areas = fheroes2::getCastleBuildingArea( castleRace, buildingId );
+        for ( auto & area : areas ) {
+            area = area + top;
+        }
+
+        emplace_back( buildingId, std::move( areas ) );
     }
 }
 

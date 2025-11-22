@@ -30,7 +30,7 @@ enum class GameVersion : int;
 
 namespace fheroes2
 {
-    Rect getCastleBuildingArea( const int race, const BuildingType buildingId );
+    std::vector<Rect> getCastleBuildingArea( const int race, const BuildingType buildingId );
 
     const char * getBuildingName( const int race, const BuildingType buildingId );
 
