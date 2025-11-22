@@ -44,7 +44,7 @@ namespace
 
         HorizontalSlider( fheroes2::Point position, const int minIndex, const int maxIndex, const int startIndex )
         {
-            const int tradpostIcnId = ICN::TRADPOST;
+            const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
             const int32_t sliderLength = 187;
             const int32_t buttonWidth = 15;
 
@@ -111,11 +111,6 @@ namespace
 
 bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::Random_Generator::Configuration & configuration )
 {
-    mapFormat;
-    configuration;
-
-    // const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const bool isDefaultScreenSize = display.isDefaultSize();
@@ -144,36 +139,54 @@ bool fheroes2::randomMapDialog( Maps::Map_Format::MapFormat & mapFormat, Maps::R
 
     const int32_t positionX = activeArea.x + 12;
     const int32_t settingDescriptionWidth = activeArea.width / 3;
+    const int32_t valueOffsetX = positionX + settingDescriptionWidth;
     const int32_t ySpacing = 40;
     int32_t positionY = 140;
 
     // Player count.
     text.set( _( "Player count" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider playerCountSlider{ { positionX + settingDescriptionWidth, positionY }, 2, 6, 2 };
+    HorizontalSlider playerCountSlider{ { valueOffsetX, positionY }, 2, 6, 2 };
 
     positionY += ySpacing;
 
     text.set( _( "Map layout" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
+    // Dropdown with map layout selection.
+    const int dropListIcn = isEvilInterface ? ICN::DROPLISL_EVIL : ICN::DROPLISL;
+    const fheroes2::Sprite & itemBackground = fheroes2::AGG::GetICN( dropListIcn, 0 );
+    const int32_t layoutBackgroundWidth = 200;
+    const int32_t layoutBackgroundHeight = itemBackground.height();
+
+    fheroes2::Copy( itemBackground, 0, 0, display, valueOffsetX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight );
+    text.set( _( "Mirrored" ), fheroes2::FontType::normalWhite() );
+    text.draw( valueOffsetX + 12, positionY, display );
+
+    const fheroes2::Sprite & dropListButtonSprite = fheroes2::AGG::GetICN( dropListIcn, 1 );
+    const fheroes2::Sprite & dropListButtonPressedSprite = fheroes2::AGG::GetICN( dropListIcn, 2 );
+
+    fheroes2::ButtonSprite layoutDroplistButton( valueOffsetX + layoutBackgroundWidth + 6, positionY - 5, dropListButtonSprite, dropListButtonPressedSprite );
+    layoutDroplistButton.disable();
+    layoutDroplistButton.draw();
+
     positionY += ySpacing;
 
     text.set( _( "Water percentage" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider waterSlider{ { positionX + settingDescriptionWidth, positionY }, 0, 100, 0 };
+    HorizontalSlider waterSlider{ { valueOffsetX, positionY }, 0, 100, 0 };
 
     positionY += ySpacing;
 
     text.set( _( "Monster strength" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider monsterSlider{ { positionX + settingDescriptionWidth, positionY }, 0, 3, 1 };
+    HorizontalSlider monsterSlider{ { valueOffsetX, positionY }, 0, 3, 1 };
 
     positionY += ySpacing;
 
     text.set( _( "Resource availability" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider resourceSlider{ { positionX + settingDescriptionWidth, positionY }, 0, 2, 1 };
+    HorizontalSlider resourceSlider{ { valueOffsetX, positionY }, 0, 2, 1 };
 
     positionY += ySpacing;
 
