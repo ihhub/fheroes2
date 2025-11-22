@@ -20,18 +20,23 @@
 
 #include "dialog_random_map.h"
 
+#include <algorithm>
+#include <string>
+
 #include "agg_image.h"
-#include "cursor.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
-#include "map_format_info.h"
 #include "map_random_generator.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
+#include "ui_text.h"
 #include "ui_window.h"
 
 namespace
@@ -40,6 +45,7 @@ namespace
     {
     public:
         HorizontalSlider() = default;
+        virtual ~HorizontalSlider() = default;
         HorizontalSlider( const HorizontalSlider & ) = delete;
         HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
@@ -96,7 +102,7 @@ namespace
                 _scrollbar.moveToPos( mousePos );
                 return true;
             }
-            else if ( _scrollbar.updatePosition() ) {
+            if ( _scrollbar.updatePosition() ) {
                 return true;
             }
 
@@ -207,7 +213,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
-    int32_t waterPercentage = std::min( configuration.waterPercentage, waterLimit );
+    const int32_t waterPercentage = std::min( configuration.waterPercentage, waterLimit );
 
     HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, 100, waterPercentage };
     ConfigValueText waterValue{ display, valuePositionX, positionY };
