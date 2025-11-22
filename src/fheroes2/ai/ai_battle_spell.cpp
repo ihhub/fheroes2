@@ -666,7 +666,6 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     return bestOutcome;
 }
 
-
 bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, const Battle::Units & enemies, const Spell & spell ) const
 {
     const int spellID = spell.GetID();
