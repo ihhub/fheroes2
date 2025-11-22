@@ -30,6 +30,7 @@
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_window.h"
 
@@ -233,6 +234,9 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     text.set( _( "Map seed" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
+    fheroes2::ValueSelectionDialogElement mapSeedSelection{ 0, 999999, configuration.seed, 1, { positionX + settingDescriptionWidth + 4, positionY - 5 } };
+    mapSeedSelection.draw( display );
+
     fheroes2::Button buttonCancel;
     const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
     background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 30, 10 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
@@ -285,6 +289,12 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
             resourceSlider.redraw( display );
             resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ) );
+            display.render( background.totalArea() );
+        }
+        if ( mapSeedSelection.processEvents() ) {
+            mapSeedSelection.draw( display );
+
+            configuration.seed = mapSeedSelection.getValue();
             display.render( background.totalArea() );
         }
     }
