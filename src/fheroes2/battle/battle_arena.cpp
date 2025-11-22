@@ -1295,8 +1295,15 @@ int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStruct
 
 std::vector<Battle::CastleDefenseStructure> Battle::Arena::getEarthQuakeSpellTargets()
 {
-    return { CastleDefenseStructure::WALL1, CastleDefenseStructure::WALL2, CastleDefenseStructure::WALL3, CastleDefenseStructure::WALL4, CastleDefenseStructure::TOWER1,
-            CastleDefenseStructure::TOWER2, CastleDefenseStructure::BRIDGE, CastleDefenseStructure::TOP_BRIDGE_TOWER, CastleDefenseStructure::BOTTOM_BRIDGE_TOWER };
+    return { CastleDefenseStructure::WALL1,
+             CastleDefenseStructure::WALL2,
+             CastleDefenseStructure::WALL3,
+             CastleDefenseStructure::WALL4,
+             CastleDefenseStructure::TOWER1,
+             CastleDefenseStructure::TOWER2,
+             CastleDefenseStructure::BRIDGE,
+             CastleDefenseStructure::TOP_BRIDGE_TOWER,
+             CastleDefenseStructure::BOTTOM_BRIDGE_TOWER };
 }
 
 std::pair<uint32_t, uint32_t> Battle::Arena::getEarthquakeDamageRange( const HeroBase * commander )
