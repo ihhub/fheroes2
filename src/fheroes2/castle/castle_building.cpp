@@ -410,10 +410,6 @@ namespace
                 if ( isBuildingConnectionNeeded( castle, currentBuild.id ) ) {
                     redrawBuildingConnection( castle, offset, currentBuild.id, fadingInBuildingId );
                 }
-
-                for ( const auto & area : currentBuild.areas ) {
-                    fheroes2::DrawRect( display, area, 191 );
-                }
             }
 
             return;
