@@ -5839,6 +5839,21 @@ namespace
         fheroes2::Flip( released[176], 0, 0, released[191], 0, 0, released[176].width(), released[176].height(), true, false );
         fheroes2::DrawLine( released[191], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[191], { offset + 3, offset + 6 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+
+        // Cyrillic Capital Lje
+        released[106].resize( released[171].width() + released[188].width() - 8, released[171].height() );
+        released[106].reset();
+        fheroes2::Copy( released[171], 0, 0, released[106], 0, 0, released[171].width(), released[171].height() );
+        fheroes2::Copy( released[188], 2, 0, released[106], released[171].width() - 6, 0, released[188].width() - 2, released[188].height() );
+        fheroes2::FillTransform( released[106], 7, 3, 1, 1, 1 );
+        released[106].setPosition( released[171].x(), released[171].y() );
+
+        // Cyrillic Capital Nje
+        released[108].resize( released[173].width() + released[188].width() - 7, released[173].height() );
+        released[108].reset();
+        fheroes2::Copy( released[173], 0, 0, released[108], 0, 0, released[173].width(), released[173].height() );
+        fheroes2::Copy( released[188], 3, 0, released[108], released[173].width() - 4, 0, released[188].width() - 4, released[188].height() );
+        released[108].setPosition( released[173].x(), released[173].y() );
     }
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
