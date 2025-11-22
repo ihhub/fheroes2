@@ -217,10 +217,14 @@ uint32_t Spell::spellPoints( const HeroBase * hero ) const
     return static_cast<uint32_t>( spellCost );
 }
 
-double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const
+double Spell::getStrategicValue( const double armyStrength, const uint32_t currentSpellPoints, const int spellPower ) const
 {
     const uint32_t spellCost = spellPoints();
     const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
+    if ( casts == 0 ) {
+        // The spell cannot be casted.
+        return 0;
+    }
 
     // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
     const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
