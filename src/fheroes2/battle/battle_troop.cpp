@@ -330,7 +330,7 @@ void Battle::Unit::SetRandomLuck( Rand::PCG32 & randomGenerator )
 
 bool Battle::Unit::isFlying() const
 {
-    return ArmyTroop::isFlying() && !Modes( SP_SLOW );
+    return ( ArmyTroop::isFlying() && !Modes( SP_SLOW ) ) || Modes( TELEPORT_ABILITY );
 }
 
 bool Battle::Unit::isOutOfCastleWalls() const

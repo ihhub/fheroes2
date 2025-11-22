@@ -311,7 +311,6 @@ namespace
         case Spell::EARTHQUAKE:
         case Spell::HAUNT:
         case Spell::IDENTIFYHERO:
-        case Spell::TELEPORT:
         case Spell::VIEWARTIFACTS:
         case Spell::VIEWHEROES:
         case Spell::VIEWMINES:

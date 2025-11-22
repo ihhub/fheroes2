@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <ostream>
 #include <utility>
 
@@ -66,7 +67,7 @@ namespace Maps::Random_Generator
         return *it;
     }
 
-    void Region::checkAdjacentTiles( NodeCache & rawData, Rand::PCG32 & randomGenerator )
+    void Region::checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator )
     {
         Node & previousNode = nodes[lastProcessedNode];
         const int nodeIndex = previousNode.index;
@@ -77,12 +78,6 @@ namespace Maps::Random_Generator
                 break;
             }
 
-            // Check diagonal direction only 50% of the time to get more circular distribution.
-            // It gives randomness for uneven edges.
-            if ( direction > 3 && Rand::GetWithGen( 0, 1, randomGenerator ) ) {
-                continue;
-            }
-
             // TODO: use node index and pre-calculate offsets in advance.
             //       This will speed up the below calculations.
             const fheroes2::Point newPosition = Maps::GetPoint( nodeIndex ) + directionOffsets[direction];
@@ -91,6 +86,18 @@ namespace Maps::Random_Generator
             }
 
             Node & newTile = rawData.getNode( newPosition );
+
+            if ( Maps::GetApproximateDistance( centerIndex, newTile.index ) > distanceLimit ) {
+                previousNode.type = NodeType::BORDER;
+                continue;
+            }
+
+            // Check diagonal direction only 50% of the time to get more circular distribution.
+            // It gives randomness for uneven edges.
+            if ( direction > 3 && Rand::GetWithGen( 0, 1, randomGenerator ) ) {
+                continue;
+            }
+
             if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
                 newTile.region = id;
                 nodes.emplace_back( newTile );
@@ -106,9 +113,10 @@ namespace Maps::Random_Generator
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added.
         const size_t nodesEnd = nodes.size();
+        const double distanceLimit = sqrt( static_cast<double>( sizeLimit ) / M_PI ) * 1.85;
 
         while ( lastProcessedNode < nodesEnd ) {
-            checkAdjacentTiles( rawData, randomGenerator );
+            checkAdjacentTiles( rawData, distanceLimit, randomGenerator );
             ++lastProcessedNode;
         }
         return lastProcessedNode != nodes.size();
