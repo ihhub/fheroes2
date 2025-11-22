@@ -796,7 +796,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
     return { currentPos.GetHead()->GetIndex(), currentUnit.GetStrength() * bloodLustRatio, bestTarget.cell };
 }
 
-AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const
+AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( const Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const
 {
     assert( spell == Spell::EARTHQUAKE );
 
@@ -806,7 +806,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( Battle::Arena & ar
     }
 
     // If everyone is flier or archer we also don't care about castle's walls as we don't need to rush to attack enemy units in melee.
-    size_t meleeUnits{ 0 };
+    int32_t meleeUnits{ 0 };
     double meleeStrength = 0;
     for ( const Battle::Unit * unit : friendly ) {
         if ( !unit->isFlying() && !unit->isArchers() ) {
@@ -820,8 +820,8 @@ AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( Battle::Arena & ar
     }
 
     // Then we need to know the state of walls and towers.
-    size_t totalTargets{ 0 };
-    size_t targetsToDestroy{ 0 };
+    int32_t totalTargets{ 0 };
+    int32_t targetsToDestroy{ 0 };
     for ( const Battle::CastleDefenseStructure target : Battle::Arena::getEarthQuakeSpellTargets() ) {
         if ( target == Battle::CastleDefenseStructure::TOP_BRIDGE_TOWER || target == Battle::CastleDefenseStructure::BOTTOM_BRIDGE_TOWER ) {
             // These are only cosmetic buildings. They have no value for us.
@@ -838,7 +838,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( Battle::Arena & ar
 
     const auto [minDamage, maxDamage] = Battle::Arena::getEarthquakeDamageRange( _commander );
 
-    const double enemyShooterRatio = _enemyShootersStrength / _enemyShootersStrength;
+    const double enemyShooterRatio = _enemyShootersStrength / _enemyArmyStrength;
     const double targetRatio = targetsToDestroy * 1.0 / totalTargets;
     const double averageDamage = ( maxDamage - minDamage ) / 2.0;
     const double meleeRatio = meleeStrength / _myArmyStrength;
