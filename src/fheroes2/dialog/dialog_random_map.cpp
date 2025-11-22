@@ -76,6 +76,9 @@ namespace
 
         void setRange( const int minIndex, const int maxIndex )
         {
+            if ( _scrollbar.currentIndex() > maxIndex ) {
+                _scrollbar.moveToIndex( maxIndex );
+            }
             _scrollbar.setRange( minIndex, maxIndex );
         }
 
@@ -112,6 +115,25 @@ namespace
         fheroes2::Button _buttonLeft;
         fheroes2::Button _buttonRight;
     };
+
+    class ConfigValueText final
+    {
+    public:
+        ConfigValueText( fheroes2::Image & output, const int32_t positionX, const int32_t positionY )
+            : _restorer( output, positionX, positionY, 150, 40 )
+        {}
+
+        void render( fheroes2::Text & text, const std::string & content, fheroes2::Image & output = fheroes2::Display::instance() )
+        {
+            const fheroes2::Rect & roi = _restorer.rect();
+            _restorer.restore();
+            text.set( content, fheroes2::FontType::normalYellow() );
+            text.drawInRoi( roi.x, roi.y + 2, roi.width, output, roi );
+        }
+
+    private:
+        fheroes2::ImageRestorer _restorer;
+    };
 }
 
 bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth )
@@ -145,16 +167,16 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     const int32_t positionX = activeArea.x + 12;
     const int32_t settingDescriptionWidth = activeArea.width / 3;
     const int32_t inputPositionX = positionX + settingDescriptionWidth;
-    const int32_t valuePositionX = inputPositionX + 210;
+    const int32_t valuePositionX = inputPositionX + 230;
     const int32_t ySpacing = 45;
     int32_t positionY = 140;
 
-    // Player count.
+    // Map configuration options.
     text.set( _( "Player count" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, 2 };
-    text.set( std::to_string( configuration.playerCount ), fheroes2::FontType::normalYellow() );
-    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    ConfigValueText playerCountValue{ display, valuePositionX, positionY };
+    playerCountValue.render( text, std::to_string( configuration.playerCount ) );
 
     positionY += ySpacing;
 
@@ -187,27 +209,24 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     int32_t waterPercentage = std::min( configuration.waterPercentage, waterLimit );
 
     HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, 100, waterPercentage };
-
-    text.set( std::to_string( configuration.waterPercentage ), fheroes2::FontType::normalYellow() );
-    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    ConfigValueText waterValue{ display, valuePositionX, positionY };
+    waterValue.render( text, std::to_string( configuration.waterPercentage ) );
 
     positionY += ySpacing;
 
     text.set( _( "Monster strength" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, 1 };
-
-    text.set( _( "Deadly" ), fheroes2::FontType::normalYellow() );
-    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    ConfigValueText monsterValue{ display, valuePositionX, positionY };
+    monsterValue.render( text, std::to_string( configuration.waterPercentage ) );
 
     positionY += ySpacing;
 
     text.set( _( "Resource availability" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, 1 };
-
-    text.set( _( "Abundant" ), fheroes2::FontType::normalYellow() );
-    text.draw( valuePositionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
+    ConfigValueText resourceValue{ display, valuePositionX, positionY };
+    resourceValue.render( text, std::to_string( configuration.waterPercentage ) );
 
     positionY += ySpacing + 10;
 
@@ -246,21 +265,26 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
             waterSlider.setRange( 0, newLimit );
 
             playerCountSlider.redraw( display );
+            playerCountValue.render( text, std::to_string( configuration.playerCount ) );
+            waterValue.render( text, std::to_string( configuration.waterPercentage ) );
             display.render( background.totalArea() );
         }
         if ( waterSlider.processEvent( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
             waterSlider.redraw( display );
+            waterValue.render( text, std::to_string( configuration.waterPercentage ) );
             display.render( background.totalArea() );
         }
         if ( monsterSlider.processEvent( le ) ) {
             configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
             monsterSlider.redraw( display );
+            monsterValue.render( text, std::to_string( monsterSlider.getCurrentValue() ) );
             display.render( background.totalArea() );
         }
         if ( resourceSlider.processEvent( le ) ) {
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
             resourceSlider.redraw( display );
+            resourceValue.render( text, std::to_string( resourceSlider.getCurrentValue() ) );
             display.render( background.totalArea() );
         }
     }
