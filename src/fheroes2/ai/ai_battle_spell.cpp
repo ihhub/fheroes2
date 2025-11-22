@@ -760,7 +760,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
         return {};
     }
 
-    if ( isSpellcastUselessForUnit( currentUnit, spell ) ) {
+    if ( isSpellcastUselessForUnit( currentUnit, enemies, spell ) ) {
         return {};
     }
 
