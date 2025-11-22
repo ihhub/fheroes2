@@ -2316,7 +2316,7 @@ namespace
             updateSmallFontLetterShadow( font[255 - 32] );
 
             // Cyrillic Capital Lje.
-            font[138 - 32].resize( font[203 - 32].width() + font[220 - 32].width() - 3, font[203 - 32].height() );
+            font[138 - 32].resize( font[203 - 32].width() + font[220 - 32].width() - 4, font[203 - 32].height() );
             font[138 - 32].reset();
             fheroes2::Copy( font[203 - 32], 0, 0, font[138 - 32], 0, 0, font[203 - 32].width(), font[203 - 32].height() );
             fheroes2::Copy( font[220 - 32], 2, 0, font[138 - 32], font[203 - 32].width() - 2, 0, font[220 - 32].width() - 2, font[220 - 32].height() );
