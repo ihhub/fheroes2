@@ -174,7 +174,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     // Map configuration options.
     text.set( _( "Player count" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, 2 };
+    HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, configuration.playerCount };
     ConfigValueText playerCountValue{ display, valuePositionX, positionY };
     playerCountValue.render( text, std::to_string( configuration.playerCount ) );
 
@@ -190,7 +190,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     const int32_t layoutBackgroundHeight = itemBackground.height();
 
     fheroes2::Copy( itemBackground, 0, 0, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight );
-    text.set( _( "Mirrored" ), fheroes2::FontType::normalWhite() );
+    text.set( Maps::Random_Generator::layoutToString( configuration.mapLayout ), fheroes2::FontType::normalWhite() );
     text.draw( inputPositionX + 12, positionY, display );
 
     const fheroes2::Sprite & dropListButtonSprite = fheroes2::AGG::GetICN( dropListIcn, 1 );
@@ -216,17 +216,17 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     text.set( _( "Monster strength" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, 1 };
+    HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, static_cast<int>( configuration.monsterStrength ) };
     ConfigValueText monsterValue{ display, valuePositionX, positionY };
-    monsterValue.render( text, std::to_string( configuration.waterPercentage ) );
+    monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ) );
 
     positionY += ySpacing;
 
     text.set( _( "Resource availability" ), fheroes2::FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
-    HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, 1 };
+    HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, static_cast<int>( configuration.resourceDensity ) };
     ConfigValueText resourceValue{ display, valuePositionX, positionY };
-    resourceValue.render( text, std::to_string( configuration.waterPercentage ) );
+    resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ) );
 
     positionY += ySpacing + 10;
 
@@ -278,16 +278,16 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
         if ( monsterSlider.processEvent( le ) ) {
             configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
             monsterSlider.redraw( display );
-            monsterValue.render( text, std::to_string( monsterSlider.getCurrentValue() ) );
+            monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ) );
             display.render( background.totalArea() );
         }
         if ( resourceSlider.processEvent( le ) ) {
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
             resourceSlider.redraw( display );
-            resourceValue.render( text, std::to_string( resourceSlider.getCurrentValue() ) );
+            resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ) );
             display.render( background.totalArea() );
         }
     }
 
-    return false;
+    return true;
 }

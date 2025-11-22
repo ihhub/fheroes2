@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 namespace Maps::Map_Format
 {
@@ -67,6 +68,9 @@ namespace Maps::Random_Generator
         MonsterStrength monsterStrength{ MonsterStrength::NORMAL };
     };
 
-    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height );
+    std::string layoutToString( const Layout layout );
+    std::string resourceDensityToString( const ResourceDensity resources );
+    std::string monsterStrengthToString( const MonsterStrength monsters );
     int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth );
+    bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height );
 }
