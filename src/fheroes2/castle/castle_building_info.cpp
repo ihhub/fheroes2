@@ -41,7 +41,7 @@ namespace
         case BUILD_WELL:
             return { { 188, 214, 39, 42 } };
         case BUILD_STATUE:
-            return { { 478, 193, 46, 63 } };
+            return { { 478, 204, 46, 52 }, { 493, 193, 14, 11 } };
         case BUILD_MARKETPLACE:
             return { { 219, 138, 120, 30 } };
         case BUILD_WEL2:
@@ -75,16 +75,17 @@ namespace
         case DWELLING_UPGRADE3:
             return { { 240, 166, 91, 66 } };
         case DWELLING_MONSTER4:
-            return { { 323, 174, 74, 74 }, { 397, 182, 29, 66 } };
+            return { { 323, 174, 74, 74 }, { 397, 185, 28, 63 } };
         case DWELLING_UPGRADE4:
-            return { { 323, 174, 74, 74 }, { 397, 182, 58, 66 } };
+            return { { 323, 174, 74, 74 }, { 397, 185, 58, 71 } };
         case DWELLING_MONSTER5:
+            return { { 0, 198, 152, 58 }, { 44, 176, 29, 22 } };
         case DWELLING_UPGRADE5:
-            return { { 0, 176, 152, 79 } };
+            return { { 0, 198, 152, 58 }, { 44, 176, 91, 22 } };
         case DWELLING_MONSTER6:
         case DWELLING_UPGRADE6:
         case DWELLING_UPGRADE7:
-            return { { 445, 50, 194, 157 } };
+            return { { 445, 50, 195, 157 } };
         case BUILD_LEFTTURRET:
             return { { 7, 33, 0, 0 } };
         case BUILD_RIGHTTURRET:
