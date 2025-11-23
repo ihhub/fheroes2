@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2025-11-12 16:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3773,19 +3773,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Іконка розміру"
 
-msgid "Map Type"
-msgstr "Тип мапи"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Вказує, чи створена мапа для версії гри \"Війни за спадщину\", \"Ціна "
-"вірності\" або \"Воскресіння\"."
-
-msgid "Map Type:\n"
-msgstr "Тип мапи:\n"
-
 msgid "The Succession Wars"
 msgstr "Війни за Спадщину"
 
@@ -3794,6 +3781,15 @@ msgstr "Ціна Вірності"
 
 msgid "Resurrection"
 msgstr "Воскресіння"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Тип мапи"
+
+msgid "Map Type:\n"
+msgstr "Тип мапи:\n"
 
 msgid ""
 "\n"
@@ -12458,6 +12454,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Вказує, чи створена мапа для версії гри \"Війни за спадщину\", \"Ціна "
+#~ "вірності\" або \"Воскресіння\"."
 
 #~ msgid "Limit region size"
 #~ msgstr "Обмежте розмір регіону"
