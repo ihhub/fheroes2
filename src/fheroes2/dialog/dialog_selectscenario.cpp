@@ -127,25 +127,32 @@ namespace
         ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
     }
 
-    void MapTypeToolTip( const Maps::FileInfo * info )
+    std::string getMapTypeName( enum class GameVersion version )
     {
-        assert( info != nullptr );
-
-        switch ( info->version ) {
+        switch ( version ) {
         case GameVersion::SUCCESSION_WARS:
-            ShowToolTip( _( "Map Type" ), _( "This map is made for \"The Succession Wars\" version of the game." ) );
-            break;
+            return _( "The Succession Wars" );
         case GameVersion::PRICE_OF_LOYALTY:
-            ShowToolTip( _( "Map Type" ), _( "This map is made for \"The Price of Loyalty\" version of the game." ) );
-            break;
+            return _( "The Price of Loyalty" );
         case GameVersion::RESURRECTION:
-            ShowToolTip( _( "Map Type" ), _( "This map is made for \"Resurrection\" version of the game." ) );
-            break;
+            return _( "Resurrection" );
         default:
             // Did you add a new version?
             assert( 0 );
             break;
         }
+
+        return {};
+    }
+
+    void MapTypeToolTip( const Maps::FileInfo * info )
+    {
+        assert( info != nullptr );
+
+        std::string description{ _( "This map is made for \"%{game-version}\" version of the game." ) };
+        StringReplace( description, "%{game-version}", getMapTypeName( info->version ) );
+
+        ShowToolTip( _( "Map Type" ), description );
     }
 
     void mapInfo( const Maps::FileInfo * info )
@@ -157,21 +164,7 @@ namespace
         fheroes2::MultiFontText body;
 
         body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
-        switch ( info->version ) {
-        case GameVersion::SUCCESSION_WARS:
-            body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
-            break;
-        case GameVersion::PRICE_OF_LOYALTY:
-            body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
-            break;
-        case GameVersion::RESURRECTION:
-            body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
-            break;
-        default:
-            // Did you add a new map version? Add the logic above!
-            assert( 0 );
-            break;
-        }
+        body.add( { getMapTypeName( info->version ), fheroes2::FontType::normalWhite() } );
 
         if ( info->version == GameVersion::RESURRECTION ) {
             body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
