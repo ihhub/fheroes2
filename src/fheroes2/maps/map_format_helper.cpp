@@ -904,14 +904,6 @@ namespace
         return ( type == MP2::OBJ_CASTLE ) || ( type == MP2::OBJ_RANDOM_TOWN ) || ( type == MP2::OBJ_RANDOM_CASTLE );
     }
 
-    void removeRoads( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
-    {
-        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
-                            tile.objects.end() );
-
-        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
-    }
-
     bool doesContainCastleEntrance( const Maps::Map_Format::TileInfo & tile )
     {
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
@@ -1132,50 +1124,12 @@ namespace
         return 255U;
     }
 
-    void updateRoadSpritesInArea( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance,
-                                  const bool updateNonRoadTilesFromEdgesToCenter )
-    {
-        // We should update road sprites step by step starting from the tiles close connected to the center tile.
-        const int32_t centerX = centerTileIndex % map.width;
-        const int32_t centerY = centerTileIndex / map.width;
-
-        // We avoid getting out of map boundaries.
-        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
-        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
-
-        const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
-
-        for ( int32_t distance = 1; distance < distanceMax; ++distance ) {
-            const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
-
-            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
-                const int32_t indexOffsetY = tileY * map.width;
-                const int32_t distanceY = std::abs( tileY - centerY );
-
-                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
-                    if ( std::abs( tileX - centerX ) + distanceY != correctedDistance ) {
-                        continue;
-                    }
-
-                    const auto & tile = map.tiles[indexOffsetY + tileX];
-                    if ( updateNonRoadTilesFromEdgesToCenter && Maps::doesContainRoads( tile ) ) {
-                        continue;
-                    }
-
-                    Maps::updateRoadSpriteOnTile( map, indexOffsetY + tileX, false );
-                }
-            }
-        }
-    }
-
     void updateRoadSpritesAround( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex )
     {
-        updateRoadSpritesInArea( map, centerTileIndex, 2, false );
+        Maps::updateRoadSpritesInArea( map, centerTileIndex, 2, false );
         // To properly update the around sprites we call the update function the second time
         // for tiles not marked as road in reverse order and for 1 tile more distance from the center.
-        updateRoadSpritesInArea( map, centerTileIndex, 3, true );
+        Maps::updateRoadSpritesInArea( map, centerTileIndex, 3, true );
     }
 }
 
@@ -2050,7 +2004,7 @@ namespace Maps
             }
         }
         else {
-            removeRoads( tile, tileIndex );
+            removeRoadsFromTileInfo( tile, tileIndex );
 
             updateRoadSpritesAround( map, tileIndex );
 
@@ -2071,12 +2025,25 @@ namespace Maps
             // After the check this tile should not contain a road sprite.
             if ( !forceRoadOnTile && !doesContainRoads( tile ) ) {
                 // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
-                removeRoads( tile, tileIndex );
+                removeRoadsFromTileInfo( tile, tileIndex );
             }
 
             return;
         }
 
+        writeRoadSpriteToTileInfo( tile, tileIndex, imageIndex );
+    }
+
+    void removeRoadsFromTileInfo( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
+    {
+        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
+                            tile.objects.end() );
+
+        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
+    }
+
+    void writeRoadSpriteToTileInfo( Map_Format::TileInfo & tile, const int32_t tileIndex, const uint8_t imageIndex )
+    {
         auto roadObjectIter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } );
         if ( roadObjectIter != tile.objects.end() ) {
             // Since the tile has a road object, update it.
@@ -2095,6 +2062,44 @@ namespace Maps
             readTileObject( world.getTile( tileIndex ), info );
 
             tile.objects.emplace_back( std::move( info ) );
+        }
+    }
+
+    void updateRoadSpritesInArea( Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance,
+                                  const bool updateNonRoadTilesFromEdgesToCenter )
+    {
+        // We should update road sprites step by step starting from the tiles close connected to the center tile.
+        const int32_t centerX = centerTileIndex % map.width;
+        const int32_t centerY = centerTileIndex / map.width;
+
+        // We avoid getting out of map boundaries.
+        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
+
+        const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
+
+        for ( int32_t distance = 1; distance < distanceMax; ++distance ) {
+            const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
+
+            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+                const int32_t indexOffsetY = tileY * map.width;
+                const int32_t distanceY = std::abs( tileY - centerY );
+
+                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
+                    if ( std::abs( tileX - centerX ) + distanceY != correctedDistance ) {
+                        continue;
+                    }
+
+                    const auto & tile = map.tiles[indexOffsetY + tileX];
+                    if ( updateNonRoadTilesFromEdgesToCenter && Maps::doesContainRoads( tile ) ) {
+                        continue;
+                    }
+
+                    Maps::updateRoadSpriteOnTile( map, indexOffsetY + tileX, false );
+                }
+            }
         }
     }
 
