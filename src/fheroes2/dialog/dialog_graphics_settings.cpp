@@ -204,7 +204,7 @@ namespace
             else if ( le.isMouseRightButtonPressedInArea( windowScreenScalingTypeRoi ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Screen Scaling Type" ),
-                    _( "Toggle the type of screen scaling you want to use. Linear scaling makes resized screen image blurry while nearest scaling preserves sharpness of  original game. The nearest scaling looks best on integer scales, for example 2.0x or 3.0x." ),
+                    _( "Toggle the type of screen scaling you want to use. Linear scaling makes the resized screen image blurry while nearest scaling preserves the sharpness of the original game. The nearest scaling looks best on integer scales, for example 2.0x or 3.0x." ),
                     0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( windowVSyncRoi ) ) {
