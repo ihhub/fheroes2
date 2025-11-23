@@ -1511,7 +1511,6 @@ namespace fheroes2
                 temp = getBoundaryRect( temp, cursorROI );
             }
 
-            // Previous position of cursor must be updated as well to avoid ghost effect.
             _renderFrame( temp );
 
             if ( _postprocessing ) {
@@ -1555,6 +1554,7 @@ namespace fheroes2
         }
 
         if ( updateImage ) {
+            // Make sure that we update the previously rendered area to avoid any ghost effect artefacts.
             _engine->render( *this, getBoundaryRect( roi, _prevRoi ) );
         }
     }
