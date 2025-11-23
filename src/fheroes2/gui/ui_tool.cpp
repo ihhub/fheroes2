@@ -256,7 +256,8 @@ namespace fheroes2
     void SystemInfoRenderer::preRender()
     {
         const int32_t offsetX = 26;
-        const int32_t offsetY = fheroes2::Display::instance().height() - 30;
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const int32_t offsetY = display.height() - 30;
 
         const tm tmi = System::GetTM( std::time( nullptr ) );
 
@@ -292,8 +293,16 @@ namespace fheroes2
             info += std::to_string( static_cast<int32_t>( ( averageFps - integerFps ) * 10 ) );
         }
 
-        _text.update( std::make_unique<fheroes2::Text>( std::move( info ), fheroes2::FontType::normalWhite() ) );
+        auto text = std::make_unique<fheroes2::Text>( std::move( info ), fheroes2::FontType::normalWhite() );
+
+        fheroes2::Rect fpsRoi( text->area() );
+        fpsRoi.x += offsetX;
+        fpsRoi.y += offsetY;
+
+        _text.update( std::move( text ) );
         _text.draw( offsetX, offsetY );
+
+        display.updateNextRenderRoi( fpsRoi );
     }
 
     void TimedEventValidator::senderUpdate( const ActionObject * sender )
