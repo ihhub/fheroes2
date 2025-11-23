@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3811,21 +3811,6 @@ msgid "Size Icon"
 msgstr "Icono del tamaño"
 
 #, fuzzy
-msgid "Map Type"
-msgstr "Tamaño del Mapa"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Indica si el mapa está hecho para la versión \"Las Guerras de Sucesión\", "
-"\"El Precio de la Lealtad\" o \"Resurrección\" del juego."
-
-#, fuzzy
-msgid "Map Type:\n"
-msgstr "Tamaño del Mapa"
-
-#, fuzzy
 msgid "The Succession Wars"
 msgstr "El Otro Lado"
 
@@ -3835,6 +3820,17 @@ msgstr "El Precio de la Lealtad"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Resurrección"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Tamaño del Mapa"
+
+#, fuzzy
+msgid "Map Type:\n"
+msgstr "Tamaño del Mapa"
 
 #, fuzzy
 msgid ""
@@ -12476,6 +12472,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Indica si el mapa está hecho para la versión \"Las Guerras de Sucesión\", "
+#~ "\"El Precio de la Lealtad\" o \"Resurrección\" del juego."
 
 #, fuzzy
 #~ msgid "Warning!"

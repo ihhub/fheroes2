@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 06:14+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3820,21 +3820,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Значок \"Памер\""
 
-msgid "Map Type"
-msgstr "Тып мапы"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Абазначае, для якой версіі гульні зроблена мапа -\n"
-"для \"Войны за Спадчыну\",\n"
-"\"Цана вернасці\"\n"
-"або праекта \"Resurrection\"."
-
-msgid "Map Type:\n"
-msgstr "Тып мапы:\n"
-
 msgid "The Succession Wars"
 msgstr "Войны за Спадчыну"
 
@@ -3843,6 +3828,15 @@ msgstr "Цана вернасці"
 
 msgid "Resurrection"
 msgstr "Праект Resurrection"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Тып мапы"
+
+msgid "Map Type:\n"
+msgstr "Тып мапы:\n"
 
 msgid ""
 "\n"
@@ -12537,3 +12531,12 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Абазначае, для якой версіі гульні зроблена мапа -\n"
+#~ "для \"Войны за Спадчыну\",\n"
+#~ "\"Цана вернасці\"\n"
+#~ "або праекта \"Resurrection\"."
