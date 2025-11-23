@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -3382,17 +3382,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid "Map Type"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-msgid "Map Type:\n"
-msgstr ""
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3400,6 +3389,15 @@ msgid "The Price of Loyalty"
 msgstr ""
 
 msgid "Resurrection"
+msgstr ""
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid "Map Type:\n"
 msgstr ""
 
 msgid ""

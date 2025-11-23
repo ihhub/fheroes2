@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-19 00:06+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2025-11-18 14:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3755,19 +3755,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikonstorlek"
 
-msgid "Map Type"
-msgstr "Karttyp"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Visar om kartan är gjord för \"The Succession Wars-\", \"The Price of "
-"Loyalty-\" eller \"Resurrection\"-versionen av spelet."
-
-msgid "Map Type:\n"
-msgstr "Karttyp:\n"
-
 msgid "The Succession Wars"
 msgstr "Successionskrigen"
 
@@ -3776,6 +3763,15 @@ msgstr "Lojalitetens Pris"
 
 msgid "Resurrection"
 msgstr "Resurrection"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Karttyp"
+
+msgid "Map Type:\n"
+msgstr "Karttyp:\n"
 
 msgid ""
 "\n"
@@ -12416,6 +12412,13 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Visar om kartan är gjord för \"The Succession Wars-\", \"The Price of "
+#~ "Loyalty-\" eller \"Resurrection\"-versionen av spelet."
 
 #, fuzzy
 #~ msgid "Warning!"

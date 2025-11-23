@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3897,19 +3897,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
-msgid "Map Type"
-msgstr "Kart-type"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Viser om kartet er laget for spillutgaven \"Tronekrigene\" eller \"Prisen "
-"for lojalitet\"."
-
-msgid "Map Type:\n"
-msgstr "Kart-type:\n"
-
 msgid "The Succession Wars"
 msgstr "Tronekrigene"
 
@@ -3921,6 +3908,15 @@ msgid "Resurrection"
 msgstr ""
 "Gjen-\n"
 "opplivning"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Kart-type"
+
+msgid "Map Type:\n"
+msgstr "Kart-type:\n"
 
 #, fuzzy
 msgid ""
@@ -12967,6 +12963,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Viser om kartet er laget for spillutgaven \"Tronekrigene\" eller \"Prisen "
+#~ "for lojalitet\"."
 
 #, fuzzy
 #~ msgid "Warning!"

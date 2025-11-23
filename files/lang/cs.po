@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3750,19 +3750,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Velikost ikon"
 
-msgid "Map Type"
-msgstr "Typ mapy"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Udává, zda je mapa vytvořena pro verzi hry \"Války o následnictví\", \"Cena "
-"za věrnost\" nebo \"Vzkříšení\"."
-
-msgid "Map Type:\n"
-msgstr "Typ mapy\n"
-
 msgid "The Succession Wars"
 msgstr "Války o následnictví"
 
@@ -3771,6 +3758,15 @@ msgstr "Cena za věrnost"
 
 msgid "Resurrection"
 msgstr "Resurrection"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+msgid "Map Type:\n"
+msgstr "Typ mapy\n"
 
 msgid ""
 "\n"
@@ -12359,6 +12355,13 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Udává, zda je mapa vytvořena pro verzi hry \"Války o následnictví\", "
+#~ "\"Cena za věrnost\" nebo \"Vzkříšení\"."
 
 #, fuzzy
 #~ msgid "Warning!"
