@@ -5020,7 +5020,7 @@ namespace
 
             linearCreature.setPosition( creature.x() * 2, creature.y() * 2 );
 
-            fheroes2::Blit( linearCreature, 0, 0, linearScaling, 14, 10, linearCreature.width(), linearCreature.height() );
+            fheroes2::Blit( linearCreature, 0, 0, linearScaling, 14, 10, linearCreature.width(), 48 );
             fheroes2::Blit( monocle, 0, 0, linearScaling, 1, 8, monocle.width(), monocle.height() );
 
             fheroes2::Sprite & nearestScaling = _icnVsSprite[id][3];
@@ -5028,11 +5028,11 @@ namespace
 
             fheroes2::Copy( background, nearestScaling );
             fheroes2::Sprite nearestCreature( linearCreature.width(), linearCreature.height() );
-            nearestCreature.setPosition( creature.x() * 2, creature.y() * 2 );
+            nearestCreature.setPosition( linearCreature.x(), linearCreature.y() );
 
             Resize( creature, nearestCreature );
 
-            fheroes2::Blit( nearestCreature, 0, 0, nearestScaling, 14, 10, linearCreature.width(), linearCreature.height() );
+            fheroes2::Blit( nearestCreature, 0, 0, nearestScaling, 14, 10, linearCreature.width(), 48 );
             fheroes2::Blit( monocle, 0, 0, nearestScaling, 1, 8, monocle.width(), monocle.height() );
 
             break;
