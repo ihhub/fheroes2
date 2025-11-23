@@ -111,9 +111,9 @@ namespace
         COUT( "No maps exist for the chosen type. Returning to the previous menu." )
     }
 
-    void ShowToolTip( const std::string & header, const std::string & body )
+    void ShowToolTip( std::string header, std::string body )
     {
-        fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
+        fheroes2::showStandardTextMessage( std::move( header ), std::move( body ), Dialog::ZERO );
     }
 
     void PlayersToolTip( const Maps::FileInfo * /* info */ = nullptr )
@@ -152,7 +152,7 @@ namespace
         std::string description{ _( "This map is made for \"%{game-version}\" version of the game." ) };
         StringReplace( description, "%{game-version}", getMapTypeName( info->version ) );
 
-        ShowToolTip( _( "Map Type" ), description );
+        ShowToolTip( _( "Map Type" ), std::move( description ) );
     }
 
     void mapInfo( const Maps::FileInfo * info )
@@ -200,7 +200,7 @@ namespace
             return;
         }
 
-        ShowToolTip( _( "Loss Condition" ), msg );
+        ShowToolTip( _( "Loss Condition" ), std::move( msg ) );
     }
 
     void VictoryConditionInfo( const Maps::FileInfo * info )
@@ -231,7 +231,7 @@ namespace
             assert( 0 );
             return;
         }
-        ShowToolTip( _( "Victory Condition" ), msg );
+        ShowToolTip( _( "Victory Condition" ), std::move( msg ) );
     }
 
     size_t GetInitialMapId( const MapsFileInfoList & lists )
