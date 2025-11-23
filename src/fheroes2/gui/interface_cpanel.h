@@ -41,7 +41,7 @@ namespace Interface
     class ControlPanel final : protected fheroes2::Rect
     {
     public:
-        explicit ControlPanel( AdventureMap & );
+        explicit ControlPanel( AdventureMap & interface );
         ControlPanel( const ControlPanel & ) = delete;
 
         ~ControlPanel() = default;
@@ -52,14 +52,17 @@ namespace Interface
         void ResetTheme();
         fheroes2::GameMode QueueEventProcessing() const;
 
-        const fheroes2::Rect & GetArea() const;
+        const fheroes2::Rect & GetArea() const
+        {
+            return *this;
+        }
 
         // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw() const;
 
     private:
-        AdventureMap & interface;
+        AdventureMap & _interface;
 
         // We do not want to make a copy of images but to store just references to them.
         struct Buttons
@@ -71,7 +74,9 @@ namespace Interface
                 , buttons( buttons_ )
                 , status( status_ )
                 , end( end_ )
-            {}
+            {
+                // Do nothing.
+            }
 
             const fheroes2::Sprite & radar;
             const fheroes2::Sprite & icons;

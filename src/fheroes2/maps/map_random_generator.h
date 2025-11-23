@@ -68,4 +68,5 @@ namespace Maps::Random_Generator
     };
 
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height );
+    int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth );
 }

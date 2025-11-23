@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
-"PO-Revision-Date: 2025-10-26 11:47+0100\n"
+"POT-Creation-Date: 2025-11-19 00:06+0000\n"
+"PO-Revision-Date: 2025-11-18 14:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -354,11 +354,12 @@ msgstr "Utforskare"
 msgid "None"
 msgstr "Inga"
 
-#, fuzzy
 msgid ""
 "%{monster}\n"
 "%{range}"
-msgstr "Flyg %{monster} hit"
+msgstr ""
+"%{monster}\n"
+"%{range}"
 
 msgid ""
 "A few\n"
@@ -2762,24 +2763,6 @@ msgstr ""
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
 
-msgid "Click to show the next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Show next town"
-msgstr "Visa nästa stad"
-
-msgid "Click to show the previous town."
-msgstr "Klicka för att visa föregående stad."
-
-msgid "Show previous town"
-msgstr "Visa föregående stad"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Denna stad kan inte uppgraderas till en borg."
-
-msgid "Town"
-msgstr "Stad"
-
 msgid "Exit Castle"
 msgstr "Lämna Borgen"
 
@@ -2789,8 +2772,26 @@ msgstr "Lämna Staden"
 msgid "Show Income"
 msgstr "Visa Inkomst"
 
+msgid "Show previous town"
+msgstr "Visa föregående stad"
+
+msgid "Show next town"
+msgstr "Visa nästa stad"
+
 msgid "View Hero"
 msgstr "Visa Hjälte"
+
+msgid "Click to show the next town."
+msgstr "Klicka för att visa nästa stad."
+
+msgid "Click to show the previous town."
+msgstr "Klicka för att visa föregående stad."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Denna stad kan inte uppgraderas till en borg."
+
+msgid "Town"
+msgstr "Stad"
 
 msgid "The above spells are available here."
 msgstr "Ovanstående besvärjelser är tillgängliga här."
@@ -3266,15 +3267,14 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
-#, fuzzy
 msgid "Army Estimation"
-msgstr "Animering"
+msgstr "Armébedömning"
 
 msgid "Canonical"
-msgstr ""
+msgstr "Antalsmått"
 
 msgid "Numeric"
-msgstr ""
+msgstr "Numeriskt"
 
 msgid "Interface Type"
 msgstr "Gränssnittsstil"
@@ -3301,6 +3301,11 @@ msgid ""
 "\n"
 "Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
 msgstr ""
+"Ange hur arméstorlekar visas vid högerklick på äventyrskartan.\n"
+"\n"
+"Antalsmått: Arméstorlekar visas med beskrivande text (t.ex \"Några\".\n"
+"\n"
+"Numeriskt: Arméstorlekar visas med numeriska spännvidder (t.ex \"1-4\")."
 
 msgid "Select Game Language:"
 msgstr "Välj spelspråk:"
@@ -3605,21 +3610,17 @@ msgstr "Terrängföremål"
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
-#, fuzzy
 msgid "Click to enable all items."
-msgstr "Klicka här för att aktivera alla besvärjelser."
+msgstr "Klicka för att aktivera alla föremål"
 
-#, fuzzy
 msgid "Enable All Items"
-msgstr "Aktivera Alla Besvärjelser"
+msgstr "Aktivera Alla Föremål"
 
-#, fuzzy
 msgid "Click to disable all items."
-msgstr "Klicka här för att inaktivera alla besvärjelser."
+msgstr "Klicka för att inaktivera alla föremål."
 
-#, fuzzy
 msgid "Disable All Items"
-msgstr "Inaktivera Alla Besvärjelser"
+msgstr "Inaktivera Alla Föremål"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
@@ -3882,9 +3883,8 @@ msgstr ""
 "kreatör. Svårare kartor kan innehåller fler och/eller starkare fienden, "
 "färre resurser eller andra specialvillkor som gör det svårare för spelaren."
 
-#, fuzzy
 msgid "Selected Map Description"
-msgstr "Vald beskrivning"
+msgstr "Vald Kartas Beskrivning"
 
 msgid "Jump"
 msgstr "Hoppa"
@@ -4263,7 +4263,7 @@ msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
 
 msgid "Not able to generate a map with given parameters."
-msgstr ""
+msgstr "Kan inte skapa karta med de givna parametrarna."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4404,15 +4404,14 @@ msgstr "Endast en Slumpad Främsta Artefakt kan placeras på kartan."
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Maximalt %{count} obelisker kan placeras på kartan."
 
-#, fuzzy
 msgid "Pick player count"
-msgstr "Spelarikon"
+msgstr "Ange spelarantal"
 
 msgid "Set water percentage"
-msgstr ""
+msgstr "Ange havsprocent"
 
 msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
+msgstr "Ange kart-seed (ange 0 för att slumpa seeden)"
 
 msgid "The map is corrupted."
 msgstr "Kartan är korrupt."
@@ -4692,11 +4691,13 @@ msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
+msgstr "Misslyckades att skapa en slumpad karta med givna parametrar"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
+"Skapa en ny karta, antingen från en blank karta eller genom "
+"slumpkartgeneratorn."
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Stäng Kartredigeraren och återvänd till spelets huvudmeny."
@@ -4719,17 +4720,16 @@ msgstr "Tillbaka"
 msgid "Return to the Editor's main menu options."
 msgstr "Återgå till Kartredigerarens huvudmeny."
 
-#, fuzzy
 msgid ""
 "Generate a random map that is %{size} squares wide and %{size} squares high."
-msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
+msgstr ""
+"Skapa en slumpad karta som är %{size} rutor bred och %{size} rutor hög."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
 
-#, fuzzy
 msgid "Return to the previous menu options."
-msgstr "Återgå till Kartredigerarens huvudmeny."
+msgstr "Återgå till föregående menyalternativ."
 
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
@@ -5066,9 +5066,8 @@ msgstr "Radera Svar"
 msgid "Delete an existing answer for the question."
 msgstr "Radera ett redan existerande svar till frågan."
 
-#, fuzzy
 msgid "Riddle"
-msgstr "Gåta:"
+msgstr "Gåta"
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakt kommer att ges som belöning."
@@ -5494,13 +5493,11 @@ msgstr "öppna spelets huvudmeny"
 msgid "hotkey|toggle passability"
 msgstr "Aktivera framkomlighet"
 
-#, fuzzy
 msgid "hotkey|re-generate random map"
-msgstr "Ny slumpad karta"
+msgstr "Återgenerera slumpad karta"
 
-#, fuzzy
 msgid "hotkey|re-configure random map"
-msgstr "Ny slumpad karta"
+msgstr "Återkonfigurera slumpad karta"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -5576,6 +5573,8 @@ msgstr "Byt till hjälte under muspekaren"
 
 msgid "hotkey|hold and left click to move hero portrait to top of list"
 msgstr ""
+"Vänsterklicka och håll in för att flytta hjälteporträttet till toppen av "
+"hjältelistan"
 
 msgid "hotkey|start hero movement"
 msgstr "Påbörja hjälteförflyttning"

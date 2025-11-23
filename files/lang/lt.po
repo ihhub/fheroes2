@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2595,26 +2595,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Click to show the next town."
-msgstr "Rodyti kitą miestą"
-
-msgid "Show next town"
-msgstr "Rodyti kitą miestą"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Rodyti ankstesnį miestą"
-
-msgid "Show previous town"
-msgstr "Rodyti ankstesnį miestą"
-
-msgid "This town may not be upgraded to a castle."
-msgstr ""
-
-msgid "Town"
-msgstr "Miestelis"
-
-#, fuzzy
 msgid "Exit Castle"
 msgstr "Išeiti iš pilies"
 
@@ -2625,8 +2605,28 @@ msgstr "Išeiti iš miesto"
 msgid "Show Income"
 msgstr ""
 
+msgid "Show previous town"
+msgstr "Rodyti ankstesnį miestą"
+
+msgid "Show next town"
+msgstr "Rodyti kitą miestą"
+
 msgid "View Hero"
 msgstr ""
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Rodyti ankstesnį miestą"
+
+msgid "This town may not be upgraded to a castle."
+msgstr ""
+
+msgid "Town"
+msgstr "Miestelis"
 
 #, fuzzy
 msgid "The above spells are available here."

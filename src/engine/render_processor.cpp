@@ -47,13 +47,20 @@ namespace fheroes2
             _preRenderer();
         }
 
-        const uint64_t cylingTime = _previousCyclingInterval + _cyclingTimer.getMs();
-        if ( cylingTime < ( _cyclingInterval * 2 - _frameHalfInterval ) ) {
+        const uint64_t cyclingTime = _previousCyclingInterval + _cyclingTimer.getMs();
+        if ( cyclingTime < ( _cyclingInterval * 2 - _frameHalfInterval ) ) {
             // If the current timer is less than cycling internal minus half of the frame generation then nothing is needed.
             return false;
         }
 
-        _previousCyclingInterval = cylingTime - _cyclingInterval;
+        _previousCyclingInterval = cyclingTime - _cyclingInterval;
+
+        if ( _previousCyclingInterval > _cyclingInterval + _frameHalfInterval * 2 ) {
+            // The cycling delay was more than assumed frame synchronization interval.
+            // It can be because of some small engine hang after doing some massive computations.
+            // So let's reset the synchronization then.
+            _previousCyclingInterval = _cyclingInterval;
+        }
 
         // TODO: here we need to deduct possible time difference from the current time to have consistent FPS.
         _cyclingTimer.reset();

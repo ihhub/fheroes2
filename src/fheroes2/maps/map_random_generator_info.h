@@ -47,7 +47,7 @@ namespace Rand
 
 namespace Maps::Random_Generator
 {
-    inline int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
+    inline const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
     constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     enum class NodeType : uint8_t
@@ -149,16 +149,19 @@ namespace Maps::Random_Generator
         size_t lastProcessedNode{ 0 };
         int colorIndex{ neutralColorIndex };
         int groundType{ Ground::GRASS };
+        int32_t treasureLimit{ 0 };
         bool isInner{ false };
 
         Region() = default;
 
-        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const bool inner )
+        Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const int32_t treasure,
+                const bool inner )
             : id( regionIndex )
             , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
+            , treasureLimit( treasure )
             , isInner( inner )
         {
             assert( expectedSize > 0 );
@@ -168,7 +171,7 @@ namespace Maps::Random_Generator
             nodes.emplace_back( centerNode );
         }
 
-        void checkAdjacentTiles( NodeCache & rawData, Rand::PCG32 & randomGenerator );
+        void checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
         bool regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator );
         bool checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node );
         fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat );
@@ -192,6 +195,7 @@ namespace Maps::Random_Generator
         uint8_t objectCount{ 0 };
         uint8_t powerUpsCount{ 0 };
         uint8_t treasureCount{ 0 };
+        int32_t treasureValueLimit{ 0 };
     };
 
     struct ObjectPlacement final
@@ -205,13 +209,12 @@ namespace Maps::Random_Generator
     {
         std::vector<ObjectPlacement> obstacles;
         std::vector<ObjectPlacement> valuables;
-        std::vector<ObjectPlacement> monsters;
         std::vector<fheroes2::Point> entranceCheck;
     };
 
     struct MonsterSelection final
     {
-        int32_t objectIndex{ -1 };
+        int32_t monsterId{ -1 };
         std::vector<int> allowedMonsters;
     };
 }
