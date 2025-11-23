@@ -25,6 +25,7 @@
 
 #include "map_format_helper.h"
 #include "map_format_info.h"
+#include "serialize.h"
 #include "world_object_uid.h"
 
 namespace
