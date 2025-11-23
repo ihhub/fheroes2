@@ -367,7 +367,8 @@ namespace
                 // Use the "No cycle" palette.
                 const uint8_t * correctorX = transformTable + 256 * 15;
 
-                for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
+                // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
+                for ( uint32_t i = 10; i < 246; ++i, ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
                     const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
