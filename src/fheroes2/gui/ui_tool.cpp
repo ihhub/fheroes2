@@ -178,14 +178,6 @@ namespace fheroes2
         }
     }
 
-    void MovableSprite::hide()
-    {
-        if ( !_isHidden ) {
-            _restorer.restore();
-            _isHidden = true;
-        }
-    }
-
     void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
     {
         hide();
@@ -304,25 +296,11 @@ namespace fheroes2
         _text.draw( offsetX, offsetY );
     }
 
-    TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
-        : _verification( std::move( verification ) )
-        , _delayBetweenUpdateMs( delayBetweenUpdateMs )
-        , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
-    {}
-
-    bool TimedEventValidator::isDelayPassed()
-    {
-        if ( _delayBeforeFirstUpdateMs.isPassed() && _delayBetweenUpdateMs.isPassed() && _verification() ) {
-            _delayBetweenUpdateMs.reset();
-            return true;
-        }
-        return false;
-    }
-
     void TimedEventValidator::senderUpdate( const ActionObject * sender )
     {
-        if ( sender == nullptr )
+        if ( sender == nullptr ) {
             return;
+        }
         _delayBeforeFirstUpdateMs.reset();
         _delayBetweenUpdateMs.reset();
     }

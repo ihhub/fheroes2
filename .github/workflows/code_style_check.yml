@@ -33,7 +33,7 @@ jobs:
          echo "The date specified in the LegalCopyright entry is valid.") || \
         (echo "Please update the date in the LegalCopyright entry!" && false)
     - name: Check format of markdown files
-      uses: DavidAnson/markdownlint-cli2-action@v20
+      uses: DavidAnson/markdownlint-cli2-action@v21
     - name: Check format of HTML and CSS files
       uses: creyD/prettier_action@v4.6
       with:

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2812,26 +2812,6 @@ msgstr ""
 "нямаш място за нея. Опитай се да дадеш един от твойте артефакти на друг "
 "герой."
 
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Кликни, за да покажеш следващия град."
-
-msgid "Show next town"
-msgstr "Покажи следващия град"
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Кликни, за да покажеш предишния град."
-
-msgid "Show previous town"
-msgstr "Покажи предишния град"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Този град не може да бъде надграден до замък."
-
-msgid "Town"
-msgstr "Град"
-
 msgid "Exit Castle"
 msgstr "Изход от Замъка"
 
@@ -2841,8 +2821,28 @@ msgstr "Изход от Града"
 msgid "Show Income"
 msgstr "Покажи приходи"
 
+msgid "Show previous town"
+msgstr "Покажи предишния град"
+
+msgid "Show next town"
+msgstr "Покажи следващия град"
+
 msgid "View Hero"
 msgstr "Виж герой"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Кликни, за да покажеш предишния град."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Този град не може да бъде надграден до замък."
+
+msgid "Town"
+msgstr "Град"
 
 msgid "The above spells are available here."
 msgstr "Гореизложените магии са налични тук."

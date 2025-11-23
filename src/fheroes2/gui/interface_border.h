@@ -35,7 +35,12 @@ namespace Interface
     class BorderWindow
     {
     public:
-        explicit BorderWindow( const fheroes2::Rect & rt );
+        explicit BorderWindow( const fheroes2::Rect & rt )
+            : area( rt )
+        {
+            // Do nothing.
+        }
+
         BorderWindow( const BorderWindow & ) = delete;
 
         virtual ~BorderWindow() = default;

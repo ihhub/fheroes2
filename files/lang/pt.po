@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2775,24 +2775,6 @@ msgstr ""
 "Você deve comprar um grimório para usar a guilda dos magos, mas atualmente "
 "você não tem espaço para ele. Tente dar um de seus artefatos a outro herói."
 
-msgid "Click to show the next town."
-msgstr "Clique para mostrar a próxima cidade."
-
-msgid "Show next town"
-msgstr "Mostrar a cidade seguinte"
-
-msgid "Click to show the previous town."
-msgstr "Clique para mostrar a cidade anterior."
-
-msgid "Show previous town"
-msgstr "Mostrar cidade anterior"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Esta cidade não pode ser transformada em castelo."
-
-msgid "Town"
-msgstr "Cidade"
-
 msgid "Exit Castle"
 msgstr "Sair do Castelo"
 
@@ -2802,8 +2784,26 @@ msgstr "Sair da Cidade"
 msgid "Show Income"
 msgstr "Mostrar Renda"
 
+msgid "Show previous town"
+msgstr "Mostrar cidade anterior"
+
+msgid "Show next town"
+msgstr "Mostrar a cidade seguinte"
+
 msgid "View Hero"
 msgstr "Ver Herói"
+
+msgid "Click to show the next town."
+msgstr "Clique para mostrar a próxima cidade."
+
+msgid "Click to show the previous town."
+msgstr "Clique para mostrar a cidade anterior."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+msgid "Town"
+msgstr "Cidade"
 
 msgid "The above spells are available here."
 msgstr "Os feitiços acima estão disponíveis aqui."

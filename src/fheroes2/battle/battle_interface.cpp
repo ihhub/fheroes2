@@ -1317,6 +1317,11 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
             _restorer = std::make_unique<fheroes2::ImageRestorer>( display, _renderingRoi.x, _renderingRoi.y, _renderingRoi.width, _renderingRoi.height );
         }
     }
+    else if ( !_restorer && !_isInsideBattleField ) {
+        // This can happen when the option is being toggled on and off.
+        // We need to create the restorer.
+        _restorer = std::make_unique<fheroes2::ImageRestorer>( display, _renderingRoi.x, _renderingRoi.y, _renderingRoi.width, _renderingRoi.height );
+    }
 
     int32_t unitRectIndex = 0;
     int32_t unitsProcessed = 0;
@@ -1611,6 +1616,11 @@ void Battle::Interface::redrawPreRender()
         }
         _turnOrder.redraw( _currentUnit, _contourColor, unit, _mainSurface, border.GetRect() );
     }
+    else {
+        // If the option is being turned off we need to restore the background and clear the restorer to avoid repeating the same image operation.
+        _turnOrder.restore();
+        _turnOrder.clear();
+    }
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
@@ -1876,7 +1886,8 @@ void Battle::Interface::RedrawArmies()
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
                     const int unitAnimState = unitOnCell->GetAnimationState();
                     const bool isStaticUnit = unitAnimState == Monster_Info::STATIC || unitAnimState == Monster_Info::IDLE;
-                    if ( isStaticUnit ) {
+                    // Either the unit is not moving or the unit is not being summoned.
+                    if ( isStaticUnit && ( !unitOnCell->Modes( CAP_SUMMONELEM ) || unitOnCell->GetCustomAlpha() == 255 ) ) {
                         troopCounter.emplace_back( unitOnCell );
                     }
 

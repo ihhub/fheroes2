@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 06:58+0000\n"
+"POT-Creation-Date: 2025-11-15 14:21+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -2756,24 +2756,6 @@ msgstr ""
 "varázskönyvre, de nincs szabad hely a könyv számára. Próbálj meg egy "
 "varázstárgyat átadni egy másik hősnek."
 
-msgid "Click to show the next town."
-msgstr "Kattints a következő város mutatásához."
-
-msgid "Show next town"
-msgstr "Következő város mutatása"
-
-msgid "Click to show the previous town."
-msgstr "Kattints az előző város mutatásához."
-
-msgid "Show previous town"
-msgstr "Előző város mutatása"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Ezt a várost nem lehet várrá fejleszteni."
-
-msgid "Town"
-msgstr "Város"
-
 msgid "Exit Castle"
 msgstr "Kilépés a várból"
 
@@ -2783,8 +2765,26 @@ msgstr "Kilépés a városból"
 msgid "Show Income"
 msgstr "Jövedelem mutatása"
 
+msgid "Show previous town"
+msgstr "Előző város mutatása"
+
+msgid "Show next town"
+msgstr "Következő város mutatása"
+
 msgid "View Hero"
 msgstr "Hős mutatása"
+
+msgid "Click to show the next town."
+msgstr "Kattints a következő város mutatásához."
+
+msgid "Click to show the previous town."
+msgstr "Kattints az előző város mutatásához."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Ezt a várost nem lehet várrá fejleszteni."
+
+msgid "Town"
+msgstr "Város"
 
 msgid "The above spells are available here."
 msgstr "A fenti varázslatok érhetők el itt."

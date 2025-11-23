@@ -1375,11 +1375,6 @@ namespace fheroes2
         return width;
     }
 
-    bool FontCharHandler::_isValid( const uint8_t character ) const
-    {
-        return character >= 0x21 && character <= _charLimit;
-    }
-
     int32_t FontCharHandler::_getSpaceCharWidth() const
     {
         switch ( _fontType.size ) {

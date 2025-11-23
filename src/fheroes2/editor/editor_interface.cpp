@@ -1025,7 +1025,7 @@ namespace Interface
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE ) ) {
-                    if ( updateRandomMapConfiguration() ) {
+                    if ( updateRandomMapConfiguration( _mapFormat.width ) ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         if ( generateRandomMap( _mapFormat.width ) ) {
@@ -1040,28 +1040,28 @@ namespace Interface
                 }
 #endif
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_RIGHT );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_TOP );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_BOTTOM );
 
                         isCursorOverGameArea = le.isMouseCursorPosInArea( _gameArea.GetROI() );
@@ -2178,7 +2178,7 @@ namespace Interface
         return false;
     }
 
-    bool EditorInterface::updateRandomMapConfiguration()
+    bool EditorInterface::updateRandomMapConfiguration( const int32_t mapWidth )
     {
         Maps::Random_Generator::Configuration temp{ _randomMapConfig };
 
@@ -2186,7 +2186,9 @@ namespace Interface
             return false;
         }
 
-        if ( !Dialog::SelectCount( _( "Set water percentage" ), 0, 99, temp.waterPercentage ) ) {
+        const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( temp.playerCount, mapWidth );
+        temp.waterPercentage = std::min( temp.waterPercentage, waterLimit );
+        if ( waterLimit > 0 && !Dialog::SelectCount( _( "Set water percentage" ), 0, waterLimit, temp.waterPercentage ) ) {
             return false;
         }
 
