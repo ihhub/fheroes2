@@ -28,7 +28,6 @@
 #include <cassert>
 #include <iterator>
 #include <sstream>
-#include <utility>
 
 #include "agg_image.h"
 #include "ai_planner.h"

@@ -414,10 +414,24 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
         // In this case we must revert the queue and finding the first suitable building.
         for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-            if ( isBuild( it->id ) && le.isMouseCursorPosInArea( it->coord ) ) {
-                statusMessage = buildingStatusMessage( _race, it->id );
-                break;
+            if ( !isBuild( it->id ) ) {
+                continue;
             }
+
+            bool isMouseInArea{ false };
+            for ( const auto & area : it->areas ) {
+                if ( le.isMouseCursorPosInArea( area ) ) {
+                    isMouseInArea = true;
+                    break;
+                }
+            }
+
+            if ( !isMouseInArea ) {
+                continue;
+            }
+
+            statusMessage = buildingStatusMessage( _race, it->id );
+            break;
         }
 
         if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
@@ -608,7 +622,15 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 const uint32_t monsterDwelling = GetActualDwelling( it->id );
                 const bool isMonsterDwelling = ( monsterDwelling != BUILD_NOTHING );
 
-                if ( le.isMouseRightButtonPressedInArea( it->coord ) ) {
+                bool isRightButtonInArea{ false };
+                for ( const auto & area : it->areas ) {
+                    if ( le.isMouseRightButtonPressedInArea( area ) ) {
+                        isRightButtonInArea = true;
+                        break;
+                    }
+                }
+
+                if ( isRightButtonInArea ) {
                     // Check mouse right click.
                     if ( isMonsterDwelling ) {
                         Dialog::DwellingInfo( Monster( _race, it->id ), getMonstersInDwelling( it->id ) );
@@ -623,7 +645,17 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
 
-                if ( le.MouseClickLeft( it->coord ) || hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) ) {
+                bool isBuildingClicked = ( hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) );
+                if ( !isBuildingClicked ) {
+                    for ( const auto & area : it->areas ) {
+                        if ( le.MouseClickLeft( area ) ) {
+                            isBuildingClicked = true;
+                            break;
+                        }
+                    }
+                }
+
+                if ( isBuildingClicked ) {
                     if ( topArmyBar.isSelected() ) {
                         topArmyBar.ResetSelected();
                     }
