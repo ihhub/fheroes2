@@ -127,7 +127,7 @@ namespace
         ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
     }
 
-    std::string getMapTypeName( enum class GameVersion version )
+    std::string getMapTypeName( const GameVersion version )
     {
         switch ( version ) {
         case GameVersion::SUCCESSION_WARS:
