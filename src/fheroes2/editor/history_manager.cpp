@@ -69,6 +69,8 @@ namespace
                 return false;
             }
 
+            _afterMapFormat.seek( 0 );
+
             if ( !Maps::readMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
@@ -86,6 +88,8 @@ namespace
                 assert( 0 );
                 return false;
             }
+
+            _beforeMapFormat.seek( 0 );
 
             if ( !Maps::readMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
