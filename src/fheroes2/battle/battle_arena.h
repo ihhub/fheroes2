@@ -28,6 +28,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "battle.h"
@@ -265,14 +266,18 @@ namespace Battle
             CASTLE_BOTTOM_GATE_TOWER_POS = 62
         };
 
+        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
+        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
+
+        static std::vector<CastleDefenseStructure> getEarthQuakeSpellTargets();
+
+        static std::pair<uint32_t, uint32_t> getEarthquakeDamageRange( const HeroBase * commander );
+
     private:
         void UnitTurn( const Units & orderHistory );
 
         void TowerAction( const Tower & );
         void CatapultAction();
-
-        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
-        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
 
         // Applies the specified damage to the given castle defense structure. It's the caller's responsibility to make sure that this defense
         // structure still has enough hitpoints.
