@@ -125,7 +125,7 @@ namespace Interface
 
         static fheroes2::GameMode EventExit();
 
-        virtual bool useMouseDragMovement()
+        virtual bool useMouseDragMovement() const
         {
             return true;
         }

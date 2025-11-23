@@ -104,7 +104,7 @@ namespace
     // However, we have no such limitation but to be reasonable we still have a limit.
     const int32_t maxMapNameLength = 50;
 
-    class HideInterfaceModeDisabler
+    class HideInterfaceModeDisabler final
     {
     public:
         HideInterfaceModeDisabler()
@@ -200,7 +200,7 @@ namespace
         fheroes2::Rect _textArea;
         fheroes2::Rect _buttonArea;
 
-        fheroes2::Text _text;
+        const fheroes2::Text _text;
         mutable fheroes2::Button _buttonSelection;
     };
 
@@ -1200,6 +1200,53 @@ namespace Interface
                             _redraw |= REDRAW_GAMEAREA;
                         }
                     }
+
+                    if ( _editorPanel.isTerrainEdit() ) {
+                        const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                        assert( brushSize.width == brushSize.height );
+
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( brushSize.width > 0 && _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                const int groundId = _editorPanel.selectedGroundType();
+                                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+
+                                Maps::setTerrainWithTransition( _mapFormat, indices.x, indices.y, groundId );
+                                _validateObjectsOnTerrainUpdate();
+
+                                action.commit();
+
+                                _redraw |= mapUpdateFlags;
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
+                    else if ( _editorPanel.isEraseMode() ) {
+                        const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                        assert( brushSize.width == brushSize.height );
+
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( brushSize.width > 0 && _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+                                if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() ) ) {
+                                    action.commit();
+                                    _redraw |= mapUpdateFlags;
+                                }
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
@@ -1235,6 +1282,8 @@ namespace Interface
                         _validateObjectsOnTerrainUpdate();
 
                         action.commit();
+
+                        _brushTiles.clear();
 
                         _redraw |= mapUpdateFlags;
                     }
@@ -1801,6 +1850,8 @@ namespace Interface
                 _areaSelectionStartTileId = -1;
             }
 
+            _brushTiles.clear();
+
             _validateObjectsOnTerrainUpdate();
 
             _redraw |= mapUpdateFlags;
@@ -1855,6 +1906,8 @@ namespace Interface
                 // This is a case when area was not selected but a single tile was clicked.
                 _areaSelectionStartTileId = -1;
             }
+
+            _brushTiles.clear();
         }
         else if ( _editorPanel.isObjectMode() ) {
             _handleObjectMouseLeftClick( tile );
