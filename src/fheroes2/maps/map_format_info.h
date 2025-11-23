@@ -34,6 +34,9 @@
 #include "map_object_info.h"
 #include "resource.h"
 
+class IStreamBase;
+class OStreamBase;
+
 namespace Maps::Map_Format
 {
     struct TileObjectInfo
@@ -386,4 +389,7 @@ namespace Maps::Map_Format
     bool loadMap( const std::string & path, MapFormat & map );
 
     bool saveMap( const std::string & path, const MapFormat & map );
+
+    bool saveMap( OStreamBase & stream, const MapFormat & map );
+    bool loadMap( IStreamBase & stream, MapFormat & map );
 }

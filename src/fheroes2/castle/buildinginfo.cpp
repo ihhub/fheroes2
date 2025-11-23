@@ -421,7 +421,8 @@ void BuildingInfo::Redraw() const
         fheroes2::Copy( textBackground, 0, 0, display, area.x, area.y + 58, textBackground.width(), textBackground.height() );
     }
 
-    const fheroes2::Text buildingName( Castle::GetStringBuilding( _buildingType, castle.GetRace() ), fheroes2::FontType::smallWhite() );
+    fheroes2::Text buildingName( Castle::GetStringBuilding( _buildingType, castle.GetRace() ), fheroes2::FontType::smallWhite() );
+    buildingName.fitToOneRow( 125 );
     buildingName.draw( area.x + 68 - buildingName.width() / 2, area.y + 61, display );
 }
 
@@ -506,7 +507,8 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
 
-    const fheroes2::Text buildingName( GetName(), fheroes2::FontType::smallWhite() );
+    fheroes2::Text buildingName( GetName(), fheroes2::FontType::smallWhite() );
+    buildingName.fitToOneRow( 125 );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingName.width() ) / 2;
     pos.y += 58;
     buildingName.draw( pos.x, pos.y + 2, display );

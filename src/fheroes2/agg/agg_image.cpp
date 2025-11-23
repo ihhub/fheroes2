@@ -2667,8 +2667,8 @@ namespace
                                 released.height() - removedShadowOffsetHeight );
                 fheroes2::Copy( pressed, removedShadowOffsetWidth, 0, tempPressed, 0, 0, pressed.width() - removedShadowOffsetWidth,
                                 pressed.height() - removedShadowOffsetHeight );
-                released = tempReleased;
-                pressed = tempPressed;
+                released = std::move( tempReleased );
+                pressed = std::move( tempPressed );
 
                 setButtonCornersTransparent( released );
             }

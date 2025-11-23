@@ -308,10 +308,8 @@ namespace
     {
         // TODO: All these spells are not used by AI at the moment.
         switch ( spellId ) {
-        case Spell::EARTHQUAKE:
         case Spell::HAUNT:
         case Spell::IDENTIFYHERO:
-        case Spell::TELEPORT:
         case Spell::VIEWARTIFACTS:
         case Spell::VIEWHEROES:
         case Spell::VIEWMINES:

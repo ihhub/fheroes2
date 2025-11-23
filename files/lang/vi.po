@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3835,20 +3835,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Cỡ Biểu tượng"
 
-msgid "Map Type"
-msgstr "Kiểu Bản đồ"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Cho biết bản đồ được tạo cho phiên bản \"Cuộc chiến kế vị\" hay \"Cái giá "
-"của lòng trung thành\" của trò chơi."
-
-msgid "Map Type:\n"
-msgstr "Kiểu Bản đồ:\n"
-
 msgid "The Succession Wars"
 msgstr "Cuộc chiến Kế vị"
 
@@ -3857,6 +3843,15 @@ msgstr "Giá của Lòng Trung Thành"
 
 msgid "Resurrection"
 msgstr "Hồi sinh"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Kiểu Bản đồ"
+
+msgid "Map Type:\n"
+msgstr "Kiểu Bản đồ:\n"
 
 #, fuzzy
 msgid ""
@@ -12788,6 +12783,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Cho biết bản đồ được tạo cho phiên bản \"Cuộc chiến kế vị\" hay \"Cái giá "
+#~ "của lòng trung thành\" của trò chơi."
 
 #, fuzzy
 #~ msgid "Warning!"

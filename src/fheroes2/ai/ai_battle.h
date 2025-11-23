@@ -49,12 +49,14 @@ namespace AI
         int spellID{ -1 };
         int32_t cell{ -1 };
         double value{ 0.0 };
+        int32_t destinationCell{ -1 };
     };
 
     struct SpellcastOutcome
     {
         int32_t cell{ -1 };
         double value{ 0.0 };
+        int32_t destinationCell{ -1 };
 
         void updateOutcome( const double potentialValue, const int32_t targetCell, const bool isMassEffect = false )
         {
@@ -104,6 +106,8 @@ namespace AI
         SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const;
         SpellcastOutcome spellDragonSlayerValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellTeleportValue( Battle::Arena & arena, const Spell & spell, const Battle::Unit & currentUnit, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellEarthquakeValue( const Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
 
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const;
@@ -111,6 +115,8 @@ namespace AI
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
         int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
+
+        static double getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget );
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto combat should be interrupted (one way or another)

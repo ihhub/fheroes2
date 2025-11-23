@@ -36,6 +36,7 @@
 #include <vector>
 
 #include "color.h"
+#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
@@ -47,6 +48,7 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
@@ -58,18 +60,15 @@ namespace
 {
     constexpr int32_t smallestStartingRegionSize{ 200 };
     constexpr int32_t emptySpacePercentage{ 40 };
-    constexpr int randomMonsterIndex{ 68 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
     constexpr std::array<Maps::Random_Generator::RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
-        { 1, 2, 1, 1, 2 }, // ResourceDensity::SCARCE
-        { 1, 6, 2, 1, 3 }, // ResourceDensity::NORMAL
-        { 1, 7, 2, 2, 5 } // ResourceDensity::ABUNDANT
+        { 1, 2, 1, 1, 2, 8500 }, // ResourceDensity::SCARCE
+        { 1, 6, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
+        { 1, 7, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
     } };
-
-    const std::vector<Maps::Random_Generator::ObjectPlacement> randomMonsterSet{ { { 0, 0 }, Maps::ObjectGroup::MONSTERS, randomMonsterIndex } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
@@ -107,6 +106,27 @@ namespace
 
         return groundTiles / canFit;
     }
+
+    MP2::MapObjectType getFakeMP2MineType( const int resource )
+    {
+        switch ( resource ) {
+        case Resource::WOOD:
+        case Resource::ORE:
+            return MP2::OBJ_SAWMILL;
+        case Resource::SULFUR:
+        case Resource::CRYSTAL:
+        case Resource::GEMS:
+        case Resource::MERCURY:
+            return MP2::OBJ_MINE;
+        case Resource::GOLD:
+            return MP2::OBJ_ABANDONED_MINE;
+        default:
+            // Have you added a new resource type?!
+            assert( 0 );
+            break;
+        }
+        return MP2::OBJ_NONE;
+    }
 }
 
 namespace Maps::Random_Generator
@@ -120,8 +140,6 @@ namespace Maps::Random_Generator
                                                                 { { 2, -1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
                                                    ObjectSet{ // Obstacles.
@@ -133,34 +151,30 @@ namespace Maps::Random_Generator
                                                                 { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { 0, -1 }, { 1, -1 }, { 1, 0 } } },
                                                    ObjectSet{ // Obstacles.
                                                               { { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                                                                { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
                                                                 { { 1, 2 }, ObjectGroup::LANDSCAPE_TREES, 5 },
-                                                                { { 3, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                                                                { { 0, 2 }, ObjectGroup::LANDSCAPE_TREES, 4 } },
                                                               // Valuables.
                                                               { { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { 2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 } } },
                                                    ObjectSet{ // Obstacles.
                                                               { { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
                                                                 { { -1, 2 }, ObjectGroup::LANDSCAPE_TREES, 4 },
-                                                                { { -3, 2 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
+                                                                { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                                                                { { 0, 2 }, ObjectGroup::LANDSCAPE_TREES, 5 } },
                                                               // Valuables.
                                                               { { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -1, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                                                                 { { -2, 1 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 } } },
                                                    ObjectSet{ // Obstacles.
@@ -169,8 +183,6 @@ namespace Maps::Random_Generator
                                                                 { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 2 } },
                                                               // Valuables.
                                                               { { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 }, { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                                                              // Monsters.
-                                                              randomMonsterSet,
                                                               // Entrance check.
                                                               { { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 1 } } } };
 
@@ -178,24 +190,56 @@ namespace Maps::Random_Generator
         ObjectSet{ // Obstacles.
                    { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
                    // Valuables.
-                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 },
+                   { { { 2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 10 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                   // Monsters.
-                   randomMonsterSet,
                    // Entrance check.
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
         ObjectSet{ // Obstacles.
                    { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
                    // Valuables.
-                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 },
+                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 18 },
                      { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
                      { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
-                   // Monsters.
-                   randomMonsterSet,
                    // Entrance check.
                    { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+        ObjectSet{ // Obstacles.
+                   { { { 1, -2 }, ObjectGroup::LANDSCAPE_TREES, 1 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                   // Valuables.
+                   { { { 2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 12 },
+                     { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Entrance check.
+                   { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+        ObjectSet{ // Obstacles.
+                   { { { 0, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 }, { { 3, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 }, { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 3 } },
+                   // Valuables.
+                   { { { 1, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 13 },
+                     { { 1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { 2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Entrance check.
+                   { { -1, 0 }, { -1, 1 }, { 0, 1 } } },
+        ObjectSet{ // Obstacles.
+                   { { { -3, -1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
+                     { { -1, -1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 4 },
+                     { { -3, 0 }, ObjectGroup::LANDSCAPE_TREES, 0 } },
+                   // Valuables.
+                   { { { -2, -1 }, ObjectGroup::ADVENTURE_POWER_UPS, 16 },
+                     { { -1, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 },
+                     { { -2, 0 }, ObjectGroup::ADVENTURE_TREASURES, 9 } },
+                   // Entrance check.
+                   { { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } } },
     };
+
+    int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth )
+    {
+        assert( playerCount > 0 && mapWidth > 0 );
+
+        const int32_t minimumRegionCount = playerCount + 1;
+        const int32_t tileCount = mapWidth * mapWidth;
+        const int32_t waterTiles = ( tileCount ) - ( smallestStartingRegionSize * minimumRegionCount );
+        return std::max( 0, waterTiles * 100 / tileCount );
+    }
 
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
     {
@@ -214,9 +258,6 @@ namespace Maps::Random_Generator
         }
 
         const int32_t regionSizeLimit = calculateRegionSizeLimit( config, width, height );
-        if ( regionSizeLimit < smallestStartingRegionSize ) {
-            return false;
-        }
 
         const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( 999999 );
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Generating a map with seed " << generatorSeed );
@@ -236,17 +277,19 @@ namespace Maps::Random_Generator
         // TODO: Add support for layouts other than MIRRORED
         const int32_t groundTiles = ( width * height ) * ( 100 - config.waterPercentage ) / 100;
         const int expectedRegionCount = groundTiles / regionSizeLimit;
+        const RegionalObjects & regionConfiguration = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, false } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, false } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
         const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), config.playerCount );
+        const double distanceModifier = ( config.waterPercentage > 20 ) ? 0.8 : 0.9;
 
         const double radius = sqrt( ( innerLayer + outerLayer ) * regionSizeLimit / M_PI );
-        const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * 0.85;
+        const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * distanceModifier;
         const double innerRadius = ( innerLayer == 1 ) ? 0 : outerRadius / 3;
 
         const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
@@ -269,10 +312,11 @@ namespace Maps::Random_Generator
 
                 const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
+                const int32_t treasureLimit = isPlayerRegion ? regionConfiguration.treasureValueLimit : regionConfiguration.treasureValueLimit * 2;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit, isInnerRegion );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, isInnerRegion );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
@@ -319,7 +363,6 @@ namespace Maps::Random_Generator
 
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
-                // Skip the first region as we have nothing to do here for now.
                 continue;
             }
 
@@ -377,30 +420,31 @@ namespace Maps::Random_Generator
                     if ( placeMine( mapFormat, data, node, resource ) ) {
                         mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tileIndex );
-                        return tileIndex;
-                    }
-                }
-                return -1;
-            };
 
-            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) != -1 ) {
-                        break;
+                        const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
+                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( mineValue ) );
+                        return true;
                     }
                 }
-            }
+                return false;
+            };
 
             if ( tileRings.size() < 4 ) {
                 continue;
             }
 
+            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
+                        break;
+                    }
+                }
+            }
+
             for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
-                for ( size_t ringIndex = tileRings.size() - 3; ringIndex > 0; --ringIndex ) {
-                    const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
-                    if ( mineIndex != -1 ) {
-                        putObjectOnMap( mapFormat, world.getTile( mineIndex + mapFormat.width ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
                         break;
                     }
                 }
@@ -420,7 +464,7 @@ namespace Maps::Random_Generator
         for ( const Region & region : mapRegions ) {
             for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
-                    placeObstacle( mapFormat, data, node, randomGenerator );
+                    placeRandomObstacle( mapFormat, data, node, randomGenerator );
                 }
             }
         }
@@ -454,8 +498,7 @@ namespace Maps::Random_Generator
         }
 
         // Step 8: Place powerups and treasure clusters while avoiding the paths.
-        const auto & regionConfiguration = regionObjectSetup[static_cast<size_t>( config.resourceDensity )];
-        for ( const Region & region : mapRegions ) {
+        for ( Region & region : mapRegions ) {
             placeObjectSet( mapFormat, data, region, powerupObjectSets, regionConfiguration.powerUpsCount, randomGenerator );
             placeObjectSet( mapFormat, data, region, prefabObjectSets, regionConfiguration.treasureCount, randomGenerator );
         }
@@ -463,15 +506,15 @@ namespace Maps::Random_Generator
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
         // Step 10: Place missing monsters.
-        const auto & monsterSelection = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
+        const auto & weakGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 );
+        const auto & strongGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.isInner && mapRegions[regionId].isInner ) {
-                    placeMonster( mapFormat, tileIndex, monsterSelection );
-                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, monsterSelection.objectIndex );
+                    placeMonster( mapFormat, tileIndex, strongGuard );
                 }
                 else {
-                    putObjectOnMap( mapFormat, world.getTile( tileIndex ), ObjectGroup::MONSTERS, randomMonsterIndex );
+                    placeMonster( mapFormat, tileIndex, weakGuard );
                 }
             }
         }

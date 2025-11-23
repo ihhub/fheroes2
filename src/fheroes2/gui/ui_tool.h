@@ -61,7 +61,14 @@ namespace fheroes2
         MovableSprite & operator=( const Sprite & sprite );
 
         void show();
-        void hide();
+
+        void hide()
+        {
+            if ( !_isHidden ) {
+                _restorer.restore();
+                _isHidden = true;
+            }
+        }
 
         // In case if Display has changed.
         void redraw()
@@ -215,10 +222,16 @@ namespace fheroes2
         std::deque<double> _delays;
     };
 
-    class TimedEventValidator : public ActionObject
+    class TimedEventValidator final : public ActionObject
     {
     public:
-        explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 );
+        explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 )
+            : _verification( std::move( verification ) )
+            , _delayBetweenUpdateMs( delayBetweenUpdateMs )
+            , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
+        {
+            // Do nothing.
+        }
 
         TimedEventValidator( const TimedEventValidator & ) = delete;
 
@@ -226,12 +239,18 @@ namespace fheroes2
 
         TimedEventValidator & operator=( const TimedEventValidator & ) = delete;
 
-        bool isDelayPassed();
-
-    protected:
-        void senderUpdate( const ActionObject * sender ) override;
+        bool isDelayPassed()
+        {
+            if ( _delayBeforeFirstUpdateMs.isPassed() && _delayBetweenUpdateMs.isPassed() && _verification() ) {
+                _delayBetweenUpdateMs.reset();
+                return true;
+            }
+            return false;
+        }
 
     private:
+        void senderUpdate( const ActionObject * sender ) override;
+
         std::function<bool()> _verification;
         fheroes2::TimeDelay _delayBetweenUpdateMs;
         fheroes2::TimeDelay _delayBeforeFirstUpdateMs;

@@ -1886,7 +1886,8 @@ void Battle::Interface::RedrawArmies()
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
                     const int unitAnimState = unitOnCell->GetAnimationState();
                     const bool isStaticUnit = unitAnimState == Monster_Info::STATIC || unitAnimState == Monster_Info::IDLE;
-                    if ( isStaticUnit ) {
+                    // Either the unit is not moving or the unit is not being summoned.
+                    if ( isStaticUnit && ( !unitOnCell->Modes( CAP_SUMMONELEM ) || unitOnCell->GetCustomAlpha() == 255 ) ) {
                         troopCounter.emplace_back( unitOnCell );
                     }
 

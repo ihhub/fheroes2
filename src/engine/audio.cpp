@@ -934,7 +934,9 @@ void Mixer::Stop( const int channelId /* = -1 */ )
         return;
     }
 
-    Mix_HaltChannel( channelId );
+    if ( Mix_HaltChannel( channelId ) != 0 ) {
+        ERROR_LOG( "Failed to halt channel " << channelId << ". The error: " << Mix_GetError() )
+    }
 }
 
 bool Mixer::isPlaying( const int channelId )

@@ -31,6 +31,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
@@ -495,11 +496,11 @@ namespace CastleDialog
         bool _isOnlyBoat{ false };
     };
 
-    struct BuildingRenderInfo
+    struct BuildingRenderInfo final
     {
-        BuildingRenderInfo( const BuildingType buildingType, const fheroes2::Rect & buildingRect )
+        BuildingRenderInfo( const BuildingType buildingType, std::vector<fheroes2::Rect> buildingAreas )
             : id( buildingType )
-            , coord( buildingRect )
+            , areas( std::move( buildingAreas ) )
         {
             // Do nothing.
         }
@@ -509,8 +510,8 @@ namespace CastleDialog
             return buildingType == static_cast<uint32_t>( id );
         }
 
-        BuildingType id;
-        fheroes2::Rect coord;
+        BuildingType id{ BUILD_NOTHING };
+        std::vector<fheroes2::Rect> areas;
     };
 
     struct BuildingsRenderQueue : std::vector<BuildingRenderInfo>

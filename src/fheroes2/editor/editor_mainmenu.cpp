@@ -117,7 +117,7 @@ namespace
         Game::setDisplayFadeIn();
 
         Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
-        if ( !editorInterface.updateRandomMapConfiguration() ) {
+        if ( !editorInterface.updateRandomMapConfiguration( mapSize ) ) {
             return fheroes2::GameMode::EDITOR_NEW_MAP;
         }
 

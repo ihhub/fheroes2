@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-23 11:21+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3788,19 +3788,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Значок размера"
 
-msgid "Map Type"
-msgstr "Тип карты"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Указывает, создана ли карта для версии игры \"Война за престол\", \"Цена "
-"верности\" или \"Возрождение\"."
-
-msgid "Map Type:\n"
-msgstr "Тип карты:\n"
-
 msgid "The Succession Wars"
 msgstr "Война за престол"
 
@@ -3809,6 +3796,15 @@ msgstr "Цена верности"
 
 msgid "Resurrection"
 msgstr "Возрождение"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Тип карты"
+
+msgid "Map Type:\n"
+msgstr "Тип карты:\n"
 
 msgid ""
 "\n"
@@ -12465,6 +12461,13 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Указывает, создана ли карта для версии игры \"Война за престол\", \"Цена "
+#~ "верности\" или \"Возрождение\"."
 
 #, fuzzy
 #~ msgid "Warning!"

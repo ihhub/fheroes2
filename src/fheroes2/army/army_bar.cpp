@@ -223,11 +223,6 @@ void ArmyBar::SetArmy( Army * ptr )
     SetContentItems();
 }
 
-bool ArmyBar::isValid() const
-{
-    return _army != nullptr;
-}
-
 void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor )
 {
     if ( !use_mini_sprite ) {
