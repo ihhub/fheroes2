@@ -3096,24 +3096,74 @@ namespace fheroes2
                     const uint8_t * imageInX = imageInY + offsetIn;
                     const uint8_t * transformInX = transformInY + offsetIn;
 
-                    if ( posX < widthIn - 1 && posY < heightRoiIn - 1 && *transformInX == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0
-                         && *( transformInX + widthRoiIn + 1 ) == 0 ) {
-                        const double coeffX = posX - startX;
-                        const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                        const double coeff2 = coeffX * ( 1 - coeffY );
-                        const double coeff3 = ( 1 - coeffX ) * coeffY;
-                        const double coeff4 = coeffX * coeffY;
+                    if ( posX < widthRoiIn - 1 && posY < heightRoiIn - 1 && *transformInX == 0
+                         && ( *( transformInX + 1 ) == 0 || *( transformInX + widthRoiIn ) == 0 ) ) {
+                        if ( *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
+                            const double coeffX = posX - startX;
+                            const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
+                            const double coeff2 = coeffX * ( 1 - coeffY );
+                            const double coeff3 = ( 1 - coeffX ) * coeffY;
+                            const double coeff4 = coeffX * coeffY;
 
-                        const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                        const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
-                        const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
-                        const uint8_t * id4 = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
+                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                            const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+                            const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+                            const uint8_t * id4 = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
 
-                        const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
-                        const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
-                        const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
+                            const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
+                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
+                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
 
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                        }
+                        else if ( *( transformInX + 1 ) != 0 && *( transformInX + widthRoiIn ) == 0 ) {
+                            // The pixel to the right is transparent, do only vertical interpolation.
+                            const double coeff1 = 1 - coeffY;
+
+                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                            const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+
+                            const double red = *id1 * coeff1 + *id3 * coeffY + 0.5;
+                            const double green = *( id1 + 1 ) * coeff1 + *( id3 + 1 ) * coeffY + 0.5;
+                            const double blue = *( id1 + 2 ) * coeff1 + *( id3 + 2 ) * coeffY + 0.5;
+
+                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                        }
+                        else if ( *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) != 0 ) {
+                            // The pixel to the bottom is transparent, do only horizontal interpolation.
+                            const double coeff2 = posX - startX;
+                            const double coeff1 = 1 - coeff2;
+
+                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                            const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+
+                            const double red = *id1 * coeff1 + *id2 * coeff2 + 0.5;
+                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + 0.5;
+                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + 0.5;
+
+                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                        }
+                        else if ( *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) != 0 ) {
+                            // Interpolation by three pixels: current, the right one and the bootom one.
+                            const double coeffX = posX - startX;
+                            double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
+                            double coeff2 = coeffX * ( 1 - coeffY );
+                            double coeff3 = ( 1 - coeffX ) * coeffY;
+                            const double coeffSumm = coeff1 + coeff2 + coeff3;
+                            coeff1 /= coeffSumm;
+                            coeff2 /= coeffSumm;
+                            coeff3 /= coeffSumm;
+
+                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                            const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+                            const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+
+                            const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + 0.5;
+                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + 0.5;
+                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + 0.5;
+
+                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                        }
                     }
                     else {
                         if ( isOutNotSingleLayer || *transformInX == 0 ) {
