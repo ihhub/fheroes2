@@ -537,6 +537,7 @@ namespace Maps::Random_Generator
         }
 
         Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, false );
+        Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, true );
 
         // Step 11: Validate that map is playable.
         for ( const int32_t start : startingLocations ) {
