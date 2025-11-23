@@ -3145,7 +3145,7 @@ namespace fheroes2
                             *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                         }
                         else if ( *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) != 0 ) {
-                            // Interpolation by three pixels: current, the right one and the bootom one.
+                            // Interpolation by three pixels: current, the right one and the bottom one.
                             const double coeffX = posX - startX;
                             double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
                             double coeff2 = coeffX * ( 1 - coeffY );
