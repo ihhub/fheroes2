@@ -430,10 +430,10 @@ namespace Maps::Random_Generator
 
                         const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
                         placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( mineValue ) );
-                        return true;
+                        return tileIndex;
                     }
                 }
-                return false;
+                return -1;
             };
 
             if ( tileRings.size() < 4 ) {
@@ -477,9 +477,6 @@ namespace Maps::Random_Generator
                 if ( node.type == NodeType::BORDER ) {
                     placeRandomObstacle( mapFormat, data, node, randomGenerator );
                 }
-                else if ( node.type == NodeType::PATH ) {
-                    forceTempRoadOnTile( mapFormat, node.index );
-                }
             }
         }
 
@@ -507,10 +504,8 @@ namespace Maps::Random_Generator
                 // Maps::removeRoadsFromTileInfo( mapFormat.tiles[node.index], node.index );
             }
 
-            // pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                // const auto & path = pathfinder.buildPath( tileIndex );
-                // roadBuilder( tileIndex, region.id );
+                roadBuilder( tileIndex, region.id );
             }
         }
 

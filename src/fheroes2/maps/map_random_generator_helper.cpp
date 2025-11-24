@@ -83,17 +83,6 @@ namespace
                 return result;
             }
 
-            // If start node itself is PATH in this region, trivial "path"
-            const Maps::Random_Generator::Node & startNode = nodes.getNode( start );
-            if ( startNode.region != _regionId ) {
-                return result;
-            }
-
-            if ( startNode.type == Maps::Random_Generator::NodeType::PATH ) {
-                result.push_back( start );
-                return result;
-            }
-
             // Initialize BFS from start
             std::vector<int32_t> nodesToExplore;
             nodesToExplore.push_back( start );
@@ -105,7 +94,7 @@ namespace
                 const int32_t currentNodeIdx = nodesToExplore[lastProcessedNode];
                 const RoadBuilderNode & currentNode = _cache[currentNodeIdx];
 
-                if ( nodes.getNode( currentNodeIdx ).type == Maps::Random_Generator::NodeType::PATH ) {
+                if ( world.getTile(currentNodeIdx).isRoad() && currentNodeIdx != start ) {
                     foundIndex = currentNodeIdx;
                     break;
                 }
@@ -121,7 +110,8 @@ namespace
                         continue;
                     }
 
-                    const uint32_t movementPenalty = ( Direction::isDiagonal( directions[i] ) ) ? 200 : 100;
+                    // TODO: bias cost to force particular road connectors
+                    const uint32_t movementPenalty = ( Direction::isDiagonal( directions[i] ) ) ? 150 : 100;
                     const uint32_t movementCost = currentNode._cost + movementPenalty;
                     Maps::Random_Generator::Node & other = nodes.getNode( newIndex );
 
