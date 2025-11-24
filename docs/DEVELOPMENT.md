@@ -40,7 +40,7 @@ Please follow the instructions below to be able to build the project from source
 * To build this build you need to have the necessary Data, Anim, Maps and Music folders for the engine present in the fheroes2 project's folder.
 * Download and install Xcode on your macos device. Download the iOS SDK during installation.
 * Open `fheroes2.xcodeproj` in the "iOS" folder".
-* Download SDL2 and SDL_mixer source codes from their github repositories's release pages. Make sure you get SDL2 and not SDL3.
+* Download SDL2 and SDL_mixer source codes from their GitHub repositories's release pages. Make sure you get SDL2 and not SDL3.
 * Paste the SDL2 and SDL_mixer folders in the same parent directory as your fheroes2 source folder. This means that next to the folder containing
 your fheroes2 local clone, you will have the two SDL folders.
 * Remove any version number from the name of the SDL2 and SDL_mixer folder so that their names are respectively `SDL` and `SDL_mixer`.
