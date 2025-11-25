@@ -39,6 +39,7 @@
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "monster.h"
 #include "mp2.h"
 #include "resource.h"
@@ -195,6 +196,42 @@ namespace
 
             // This is an invalid object!
             assert( 0 );
+            break;
+        }
+        case MP2::OBJ_BARRIER: {
+            const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+
+            const auto & tileInfo = mapFormat.tiles[tile.GetIndex()];
+            for ( const auto & objectInfo : tileInfo.objects ) {
+                if ( objectInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    assert( objectInfo.index < objects.size() );
+                    const auto & object = objects[objectInfo.index];
+                    if ( object.objectType == type ) {
+                        std::string str = _( "%{color} Barrier" );
+                        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( object.metadata[0] ) );
+                        return str;
+                    }
+                }
+            }
+
+            break;
+        }
+        case MP2::OBJ_TRAVELLER_TENT: {
+            const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+
+            const auto & tileInfo = mapFormat.tiles[tile.GetIndex()];
+            for ( const auto & objectInfo : tileInfo.objects ) {
+                if ( objectInfo.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    assert( objectInfo.index < objects.size() );
+                    const auto & object = objects[objectInfo.index];
+                    if ( object.objectType == type ) {
+                        std::string str = _( "%{color} Tent" );
+                        StringReplace( str, "%{color}", fheroes2::getTentColorName( object.metadata[0] ) );
+                        return str;
+                    }
+                }
+            }
+
             break;
         }
         default:
