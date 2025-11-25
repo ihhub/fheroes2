@@ -208,7 +208,7 @@ namespace
                     const auto & object = objects[objectInfo.index];
                     if ( object.objectType == type ) {
                         std::string str = _( "%{color} Barrier" );
-                        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( object.metadata[0] ) );
+                        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( static_cast<int>( object.metadata[0] ) ) );
                         return str;
                     }
                 }
@@ -226,7 +226,7 @@ namespace
                     const auto & object = objects[objectInfo.index];
                     if ( object.objectType == type ) {
                         std::string str = _( "%{color} Tent" );
-                        StringReplace( str, "%{color}", fheroes2::getTentColorName( object.metadata[0] ) );
+                        StringReplace( str, "%{color}", fheroes2::getTentColorName( static_cast<int>( object.metadata[0] ) ) );
                         return str;
                     }
                 }
