@@ -279,25 +279,25 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
             waterValue.render( text, std::to_string( configuration.waterPercentage ) );
             display.render( background.totalArea() );
         }
-        if ( waterSlider.processEvent( le ) ) {
+        else if ( waterSlider.processEvent( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
             waterSlider.redraw( display );
             waterValue.render( text, std::to_string( configuration.waterPercentage ) );
             display.render( background.totalArea() );
         }
-        if ( monsterSlider.processEvent( le ) ) {
+        else if ( monsterSlider.processEvent( le ) ) {
             configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
             monsterSlider.redraw( display );
             monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ) );
             display.render( background.totalArea() );
         }
-        if ( resourceSlider.processEvent( le ) ) {
+        else if ( resourceSlider.processEvent( le ) ) {
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
             resourceSlider.redraw( display );
             resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ) );
             display.render( background.totalArea() );
         }
-        if ( mapSeedSelection.processEvents() ) {
+        else if ( mapSeedSelection.processEvents() ) {
             mapSeedSelection.draw( display );
 
             configuration.seed = mapSeedSelection.getValue();

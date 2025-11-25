@@ -236,15 +236,15 @@ namespace Maps::Random_Generator
     {
         switch ( layout ) {
         case Layout::MIRRORED:
-            return _( "Mirrored" );
+            return _( "map_layout|Mirrored" );
         case Layout::BALANCED:
-            return _( "Balanced" );
+            return _( "map_layout|Balanced" );
         case Layout::ISLANDS:
-            return _( "Islands" );
+            return _( "map_layout|Islands" );
         case Layout::PYRAMID:
-            return _( "Pyramid" );
+            return _( "map_layout|Pyramid" );
         case Layout::QUEST:
-            return _( "Quest" );
+            return _( "map_layout|Quest" );
         default:
             assert( 0 );
             break;
@@ -257,11 +257,11 @@ namespace Maps::Random_Generator
     {
         switch ( resources ) {
         case ResourceDensity::SCARCE:
-            return _( "Scarce" );
+            return _( "resource_density|Scarce" );
         case ResourceDensity::NORMAL:
-            return _( "Normal" );
+            return _( "resource_density|Normal" );
         case ResourceDensity::ABUNDANT:
-            return _( "Abundant" );
+            return _( "resource_density|Abundant" );
         default:
             assert( 0 );
             break;
@@ -274,13 +274,13 @@ namespace Maps::Random_Generator
     {
         switch ( monsters ) {
         case MonsterStrength::WEAK:
-            return _( "Weak" );
+            return _( "monster_strength|Weak" );
         case MonsterStrength::NORMAL:
-            return _( "Normal" );
+            return _( "monster_strength|Normal" );
         case MonsterStrength::STRONG:
-            return _( "Strong" );
+            return _( "monster_strength|Strong" );
         case MonsterStrength::DEADLY:
-            return _( "Deadly" );
+            return _( "monster_strength|Deadly" );
         default:
             assert( 0 );
             break;
