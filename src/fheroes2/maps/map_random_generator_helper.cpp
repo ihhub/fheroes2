@@ -94,7 +94,7 @@ namespace
                 const int32_t currentNodeIdx = nodesToExplore[lastProcessedNode];
                 const RoadBuilderNode & currentNode = _cache[currentNodeIdx];
 
-                if ( world.getTile(currentNodeIdx).isRoad() && currentNodeIdx != start ) {
+                if ( world.getTile( currentNodeIdx ).isRoad() && currentNodeIdx != start ) {
                     foundIndex = currentNodeIdx;
                     break;
                 }
@@ -105,14 +105,29 @@ namespace
                         continue;
                     }
 
+                    if ( currentNodeIdx == start && Direction::isDiagonal( directions[i] ) ) {
+                        continue;
+                    }
+
                     const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, directions[i] );
                     if ( newIndex == start ) {
                         continue;
                     }
 
+                    if ( world.getTile( newIndex ).isRoad() && Direction::isDiagonal( directions[i] ) ) {
+                        //continue;
+                    }
+
                     // TODO: bias cost to force particular road connectors
-                    const uint32_t movementPenalty = ( Direction::isDiagonal( directions[i] ) ) ? 150 : 100;
-                    const uint32_t movementCost = currentNode._cost + movementPenalty;
+                    //
+                    // Castle: mark two tiles left/right as obstacle
+                    // Mines: Y junction
+                    // Three diagonal meeting
+                    // Y junction sideways  X 0 0
+                    //                      0 X X
+                    //                      X 0 0
+                    // Left diagonal into two rights: X 0 0
+                    //                                0 X X
                     Maps::Random_Generator::Node & other = nodes.getNode( newIndex );
 
                     if ( other.region != _regionId || ( other.type != Maps::Random_Generator::NodeType::OPEN && other.type != Maps::Random_Generator::NodeType::PATH ) ) {
@@ -120,6 +135,8 @@ namespace
                     }
 
                     RoadBuilderNode & newNode = _cache[newIndex];
+                    const uint32_t movementPenalty = ( Direction::isDiagonal( directions[i] ) ) ? 150 : 100;
+                    const uint32_t movementCost = currentNode._cost + movementPenalty;
 
                     if ( newNode._from == -1 || newNode._cost > movementCost ) {
                         newNode._from = currentNodeIdx;

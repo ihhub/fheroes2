@@ -418,6 +418,9 @@ namespace Maps::Random_Generator
                 const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
                 placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
             }
+            else {
+                forceTempRoadOnTile( mapFormat, region.centerIndex );
+            }
 
             const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
