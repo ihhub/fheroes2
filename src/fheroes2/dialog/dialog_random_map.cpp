@@ -52,6 +52,9 @@ namespace
 
         HorizontalSlider( const fheroes2::Point position, const int minIndex, const int maxIndex, const int startIndex )
         {
+            assert( minIndex < maxIndex );
+            assert( startIndex >= minIndex && startIndex <= maxIndex );
+
             const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
             const int32_t sliderLength = 187;
             const int32_t buttonWidth = 15;
