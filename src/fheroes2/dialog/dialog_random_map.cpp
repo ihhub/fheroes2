@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "game_hotkeys.h"
