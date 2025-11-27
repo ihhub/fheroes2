@@ -46,7 +46,7 @@ namespace
     {
     public:
         HorizontalSlider() = default;
-        virtual ~HorizontalSlider() = default;
+        ~HorizontalSlider() override = default;
         HorizontalSlider( const HorizontalSlider & ) = delete;
         HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
