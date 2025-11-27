@@ -103,8 +103,7 @@ namespace
         bool processEvent( LocalEvent & le )
         {
             if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) ) {
-                const fheroes2::Point & mousePos = le.getMouseCursorPos();
-                _scrollbar.moveToPos( mousePos );
+                _scrollbar.moveToPos( le.getMouseCursorPos() );
                 return true;
             }
             if ( _scrollbar.updatePosition() ) {
