@@ -128,13 +128,15 @@ namespace
     public:
         ConfigValueText( fheroes2::Image & output, const int32_t positionX, const int32_t positionY )
             : _restorer( output, positionX, positionY, 150, 40 )
-        {}
+        {
+            // Do nothing.
+        }
 
-        void render( fheroes2::Text & text, const std::string & content, fheroes2::Image & output = fheroes2::Display::instance() )
+        void render( fheroes2::Text & text, std::string content, fheroes2::Image & output )
         {
             const fheroes2::Rect & roi = _restorer.rect();
             _restorer.restore();
-            text.set( content, fheroes2::FontType::normalYellow() );
+            text.set( std::move( content ), fheroes2::FontType::normalYellow() );
             text.drawInRoi( roi.x, roi.y + 2, roi.width, output, roi );
         }
 
@@ -183,7 +185,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, configuration.playerCount };
     ConfigValueText playerCountValue{ display, valuePositionX, positionY };
-    playerCountValue.render( text, std::to_string( configuration.playerCount ) );
+    playerCountValue.render( text, std::to_string( configuration.playerCount ), display );
 
     positionY += ySpacing;
 
@@ -217,7 +219,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, 100, waterPercentage };
     ConfigValueText waterValue{ display, valuePositionX, positionY };
-    waterValue.render( text, std::to_string( configuration.waterPercentage ) );
+    waterValue.render( text, std::to_string( configuration.waterPercentage ), display );
 
     positionY += ySpacing;
 
@@ -225,7 +227,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, static_cast<int>( configuration.monsterStrength ) };
     ConfigValueText monsterValue{ display, valuePositionX, positionY };
-    monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ) );
+    monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ), display );
 
     positionY += ySpacing;
 
@@ -233,7 +235,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, static_cast<int>( configuration.resourceDensity ) };
     ConfigValueText resourceValue{ display, valuePositionX, positionY };
-    resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ) );
+    resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ), display );
 
     positionY += ySpacing + 10;
 
@@ -275,26 +277,26 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
             waterSlider.setRange( 0, newLimit );
 
             playerCountSlider.redraw( display );
-            playerCountValue.render( text, std::to_string( configuration.playerCount ) );
-            waterValue.render( text, std::to_string( configuration.waterPercentage ) );
+            playerCountValue.render( text, std::to_string( configuration.playerCount ), display );
+            waterValue.render( text, std::to_string( configuration.waterPercentage ), display );
             display.render( background.totalArea() );
         }
         else if ( waterSlider.processEvent( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
             waterSlider.redraw( display );
-            waterValue.render( text, std::to_string( configuration.waterPercentage ) );
+            waterValue.render( text, std::to_string( configuration.waterPercentage ), display );
             display.render( background.totalArea() );
         }
         else if ( monsterSlider.processEvent( le ) ) {
             configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
             monsterSlider.redraw( display );
-            monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ) );
+            monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ), display );
             display.render( background.totalArea() );
         }
         else if ( resourceSlider.processEvent( le ) ) {
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
             resourceSlider.redraw( display );
-            resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ) );
+            resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ), display );
             display.render( background.totalArea() );
         }
         else if ( mapSeedSelection.processEvents() ) {
