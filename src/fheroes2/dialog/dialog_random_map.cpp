@@ -41,7 +41,7 @@
 
 namespace
 {
-    class HorizontalSlider
+    class HorizontalSlider final
     {
     public:
         HorizontalSlider() = default;
