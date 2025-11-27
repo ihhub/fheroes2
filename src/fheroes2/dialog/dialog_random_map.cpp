@@ -93,7 +93,7 @@ namespace
             _scrollbar.setRange( minIndex, maxIndex );
         }
 
-        void redraw( fheroes2::Image & output = fheroes2::Display::instance() ) const
+        void redraw( fheroes2::Image & output ) const
         {
             _buttonLeft.draw( output );
             _buttonRight.draw( output );
