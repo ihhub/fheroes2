@@ -21,6 +21,7 @@
 #include "dialog_random_map.h"
 
 #include <algorithm>
+#include <cassert>
 #include <string>
 #include <utility>
 
