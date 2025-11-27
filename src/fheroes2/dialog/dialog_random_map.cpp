@@ -49,7 +49,7 @@ namespace
         HorizontalSlider( const HorizontalSlider & ) = delete;
         HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
-        HorizontalSlider( fheroes2::Point position, const int minIndex, const int maxIndex, const int startIndex )
+        HorizontalSlider( const fheroes2::Point position, const int minIndex, const int maxIndex, const int startIndex )
         {
             const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
             const int32_t sliderLength = 187;
