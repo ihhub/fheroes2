@@ -107,6 +107,7 @@ namespace AI
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const PlayerColor heroColor ) const;
         SpellcastOutcome spellDragonSlayerValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellTeleportValue( Battle::Arena & arena, const Spell & spell, const Battle::Unit & currentUnit, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellEarthquakeValue( const Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets, const Battle::Units & enemies ) const;
 
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast, const bool forDispel ) const;

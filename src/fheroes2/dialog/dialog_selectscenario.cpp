@@ -29,6 +29,7 @@
 #include <optional>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -43,6 +44,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
@@ -111,9 +113,9 @@ namespace
         COUT( "No maps exist for the chosen type. Returning to the previous menu." )
     }
 
-    void ShowToolTip( const std::string & header, const std::string & body )
+    void ShowToolTip( std::string header, std::string body )
     {
-        fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
+        fheroes2::showStandardTextMessage( std::move( header ), std::move( body ), Dialog::ZERO );
     }
 
     void PlayersToolTip( const Maps::FileInfo * /* info */ = nullptr )
@@ -127,10 +129,32 @@ namespace
         ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
     }
 
-    void MapTypeToolTip( const Maps::FileInfo * /* info */ = nullptr )
+    const char * getMapTypeName( const GameVersion version )
     {
-        ShowToolTip( _( "Map Type" ),
-                     _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
+        switch ( version ) {
+        case GameVersion::SUCCESSION_WARS:
+            return _( "The Succession Wars" );
+        case GameVersion::PRICE_OF_LOYALTY:
+            return _( "The Price of Loyalty" );
+        case GameVersion::RESURRECTION:
+            return _( "Resurrection" );
+        default:
+            // Did you add a new version?
+            assert( 0 );
+            break;
+        }
+
+        return "";
+    }
+
+    void MapTypeToolTip( const Maps::FileInfo * info )
+    {
+        assert( info != nullptr );
+
+        std::string description{ _( "This map is made for \"%{game-version}\" version of the game." ) };
+        StringReplace( description, "%{game-version}", getMapTypeName( info->version ) );
+
+        ShowToolTip( _( "Map Type" ), std::move( description ) );
     }
 
     void mapInfo( const Maps::FileInfo * info )
@@ -142,21 +166,7 @@ namespace
         fheroes2::MultiFontText body;
 
         body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
-        switch ( info->version ) {
-        case GameVersion::SUCCESSION_WARS:
-            body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
-            break;
-        case GameVersion::PRICE_OF_LOYALTY:
-            body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
-            break;
-        case GameVersion::RESURRECTION:
-            body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
-            break;
-        default:
-            // Did you add a new map version? Add the logic above!
-            assert( 0 );
-            break;
-        }
+        body.add( { getMapTypeName( info->version ), fheroes2::FontType::normalWhite() } );
 
         if ( info->version == GameVersion::RESURRECTION ) {
             body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
@@ -192,7 +202,7 @@ namespace
             return;
         }
 
-        ShowToolTip( _( "Loss Condition" ), msg );
+        ShowToolTip( _( "Loss Condition" ), std::move( msg ) );
     }
 
     void VictoryConditionInfo( const Maps::FileInfo * info )
@@ -223,7 +233,7 @@ namespace
             assert( 0 );
             return;
         }
-        ShowToolTip( _( "Victory Condition" ), msg );
+        ShowToolTip( _( "Victory Condition" ), std::move( msg ) );
     }
 
     size_t GetInitialMapId( const MapsFileInfoList & lists )
@@ -767,7 +777,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
             ShowIfFound( scenarioList, le.getMouseCursorPos(), MapTypeToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapType ) ) {
-            MapTypeToolTip();
+            MapTypeToolTip( &( scenarioList.GetCurrent() ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
             ShowIfFound( scenarioList, le.getMouseCursorPos(), mapInfo );

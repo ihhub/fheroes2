@@ -135,6 +135,9 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
         else if ( spell == Spell::TELEPORT ) {
             checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, enemies ) );
         }
+        else if ( spell == Spell::EARTHQUAKE ) {
+            checkSelectBestSpell( spell, spellEarthquakeValue( arena, spell, friendly ) );
+        }
         else if ( spell.isApplyToFriends() ) {
             checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly, enemies ) );
         }
@@ -752,6 +755,8 @@ bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, co
 AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & arena, const Spell & spell, const Battle::Unit & currentUnit,
                                                             const Battle::Units & enemies ) const
 {
+    assert( spell == Spell::TELEPORT );
+
     // Teleport spell is useful in many cases. The current implementation focuses only on offensive movements for melee units.
 
     if ( _defensiveTactics ) {
@@ -814,4 +819,54 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
     }
 
     return { currentPos.GetHead()->GetIndex(), currentUnit.GetStrength() * bloodLustRatio, bestTarget.cell };
+}
+
+AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( const Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const
+{
+    assert( spell == Spell::EARTHQUAKE );
+
+    // If we are not attacking a castle, then this spell is useless.
+    if ( !_attackingCastle ) {
+        return {};
+    }
+
+    // If everyone is flier or archer we also don't care about castle's walls as we don't need to rush to attack enemy units in melee.
+    int32_t meleeUnits{ 0 };
+    double meleeStrength = 0;
+    for ( const Battle::Unit * unit : friendly ) {
+        if ( !unit->isFlying() && !unit->isArchers() ) {
+            ++meleeUnits;
+            meleeStrength += unit->GetStrength();
+        }
+    }
+
+    if ( meleeUnits == 0 ) {
+        return {};
+    }
+
+    // Then we need to know the state of walls and towers.
+    int32_t totalTargets{ 0 };
+    int32_t targetsToDestroy{ 0 };
+    for ( const Battle::CastleDefenseStructure target : Battle::Arena::getEarthQuakeSpellTargets() ) {
+        if ( target == Battle::CastleDefenseStructure::TOP_BRIDGE_TOWER || target == Battle::CastleDefenseStructure::BOTTOM_BRIDGE_TOWER ) {
+            // These are only cosmetic buildings. They have no value for us.
+            continue;
+        }
+
+        const int targetValue = arena.getCastleDefenseStructureCondition( target, Battle::SiegeWeaponType::EarthquakeSpell );
+        ++totalTargets;
+
+        if ( targetValue > 0 ) {
+            ++targetsToDestroy;
+        }
+    }
+
+    const auto [minDamage, maxDamage] = Battle::Arena::getEarthquakeDamageRange( _commander );
+
+    const double enemyShooterRatio = _enemyShootersStrength / _enemyArmyStrength;
+    const double targetRatio = targetsToDestroy * 1.0 / totalTargets;
+    const double averageDamage = ( maxDamage - minDamage ) / 2.0;
+    const double meleeRatio = meleeStrength / _myArmyStrength;
+
+    return { 0, meleeUnits * meleeStrength * meleeRatio * targetRatio * averageDamage * enemyShooterRatio * 0.2 };
 }
