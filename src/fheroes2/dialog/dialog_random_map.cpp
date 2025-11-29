@@ -202,7 +202,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     const int32_t inputPositionX = positionX + settingDescriptionWidth;
     const int32_t valuePositionX = inputPositionX + 230;
     const int32_t ySpacing = 45;
-    int32_t positionY = 140;
+    int32_t positionY = activeArea.y + 70;
 
     // Map configuration options.
     text.set( _( "Player count" ), fheroes2::FontType::normalWhite() );
