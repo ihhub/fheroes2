@@ -42,6 +42,7 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
+#include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
 #include <SDL_mouse.h>
@@ -157,7 +158,7 @@ namespace
         }
     }
 
-    class DisplayInitializer
+    class DisplayInitializer final
     {
     public:
         DisplayInitializer()
@@ -227,7 +228,7 @@ namespace
         std::unique_ptr<fheroes2::SystemInfoRenderer> _systemInfoRenderer;
     };
 
-    class DataInitializer
+    class DataInitializer final
     {
     public:
         DataInitializer()
@@ -321,9 +322,11 @@ int main( int argc, char ** argv )
         const DataInitializer dataInitializer;
 
         ListFiles midiSoundFonts;
-
-        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf2", false ) );
-        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf3", false ) );
+        {
+            const std::string path = System::concatPath( "files", "soundfonts" );
+            midiSoundFonts.Append( Settings::FindFiles( path, ".sf2", false ) );
+            midiSoundFonts.Append( Settings::FindFiles( path, ".sf3", false ) );
+        }
 
 #ifdef WITH_DEBUG
         for ( const std::string & file : midiSoundFonts ) {
