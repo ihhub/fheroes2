@@ -606,7 +606,9 @@ namespace Maps::Random_Generator
         // Set random map name and description to be unique.
         mapFormat.name = "Random map " + std::to_string( generatorSeed );
         mapFormat.description = "Randomly generated map of " + std::to_string( width ) + "x" + std::to_string( height ) + " with seed " + std::to_string( generatorSeed )
-                                + ", " + std::to_string( config.playerCount ) + " players and up to " + std::to_string( config.waterPercentage ) + "% of water.";
+                                + ", " + std::to_string( config.playerCount ) + " players, up to " + std::to_string( config.waterPercentage ) + "% of water, "
+                                + layoutToString( config.mapLayout ) + " layout, " + resourceDensityToString( config.resourceDensity ) + " resource density and "
+                                + monsterStrengthToString( config.monsterStrength ) + " monster strength.";
 
         return true;
     }
