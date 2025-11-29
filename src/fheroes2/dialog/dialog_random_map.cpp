@@ -160,7 +160,7 @@ namespace
         {
             const fheroes2::Rect & roi = _restorer.rect();
             _restorer.restore();
-            fheroes2::Text text{ std::move( content ), fheroes2::FontType::normalYellow() };
+            const fheroes2::Text text{ std::move( content ), fheroes2::FontType::normalYellow() };
             text.drawInRoi( roi.x, roi.y + 2, roi.width, output, roi );
         }
 
