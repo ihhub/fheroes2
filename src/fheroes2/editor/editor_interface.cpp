@@ -1894,6 +1894,13 @@ namespace Interface
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
+            if ( brushSize.width > 0 ) {
+                // The erase is done in `startEdit()` loop. Nothing to do here.
+                return;
+            }
+
+            // This is a case when area was not selected but a single tile was clicked.
+
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
@@ -1902,10 +1909,7 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
             }
 
-            if ( brushSize.width == 0 ) {
-                // This is a case when area was not selected but a single tile was clicked.
-                _areaSelectionStartTileId = -1;
-            }
+            _areaSelectionStartTileId = -1;
 
             _brushTiles.clear();
         }
