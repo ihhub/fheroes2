@@ -52,6 +52,7 @@
 #include "math_base.h"
 #include "pal.h"
 #include "race.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
