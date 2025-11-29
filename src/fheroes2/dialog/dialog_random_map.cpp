@@ -283,10 +283,9 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
     background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 30, 10 }, StandardWindow::Padding::BOTTOM_LEFT );
 
-    LocalEvent & le = LocalEvent::Get();
-
     display.render( background.totalArea() );
 
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
