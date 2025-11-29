@@ -61,14 +61,12 @@ namespace
             assert( minIndex < maxIndex );
             assert( startIndex >= minIndex && startIndex <= maxIndex );
 
-            const int32_t sliderLength = 187;
-            const int32_t buttonWidth = 15;
-
             fheroes2::Display & display = fheroes2::Display::instance();
             const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
             const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpostIcnId, 1 );
             fheroes2::Blit( bar, display, position.x, position.y );
 
+            const int32_t buttonWidth = 15;
             _buttonLeft.setPosition( position.x + 6, position.y + 1 );
             _buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
             _buttonLeft.subscribe( &_timedButtonLeft );
@@ -78,6 +76,7 @@ namespace
             _buttonRight.subscribe( &_timedButtonRight );
             _buttonRight.draw( display );
 
+            const int32_t sliderLength = 187;
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
             const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, sliderLength, 1, static_cast<int32_t>( maxIndex + 1 ),
                                                                                        { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
