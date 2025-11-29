@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -298,7 +299,13 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
             break;
         }
 
-        if ( playerCountSlider.processEvent( le ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+            showStandardTextMessage( _( "Okay"), _( "Click to generate a new map." ), Dialog::ZERO );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+            showStandardTextMessage( _( "Cancel"), _( "Return to the previous menu." ), Dialog::ZERO );
+        }
+        else if ( playerCountSlider.processEvent( le ) ) {
             configuration.playerCount = playerCountSlider.getCurrentValue();
 
             const int32_t newLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
