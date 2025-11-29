@@ -54,12 +54,12 @@ namespace
         HorizontalSlider( const HorizontalSlider & ) = delete;
         HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
-        HorizontalSlider( const fheroes2::Point position, const int minIndex, const int maxIndex, const int startIndex )
+        HorizontalSlider( const fheroes2::Point position, const int minIndex, const int maxIndex, const int currentIndex )
             : _timedButtonLeft( [this]() { return _buttonLeft.isPressed(); } )
             , _timedButtonRight( [this]() { return _buttonRight.isPressed(); } )
         {
             assert( minIndex <= maxIndex );
-            assert( startIndex >= minIndex && startIndex <= maxIndex );
+            assert( currentIndex >= minIndex && currentIndex <= maxIndex );
 
             fheroes2::Display & display = fheroes2::Display::instance();
             const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
@@ -83,7 +83,7 @@ namespace
             _scrollbar.setImage( scrollbarSlider );
             _scrollbar.setArea( { position.x + buttonWidth + 9, position.y + 3, sliderLength, 11 } );
             _scrollbar.setRange( minIndex, maxIndex );
-            _scrollbar.moveToIndex( startIndex );
+            _scrollbar.moveToIndex( currentIndex );
 
             _scrollbar.show();
         }
