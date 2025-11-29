@@ -233,12 +233,11 @@ bool Heroes::openEditorDialog( const fheroes2::SupportedLanguage language )
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     auto background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     const fheroes2::Rect dialogRoi = background->activeArea();
     const fheroes2::Rect dialogWithShadowRoi = background->totalArea();
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     renderDialogDecorations( dialogRoi.getPosition(), display );
 
     // Hero portrait.
