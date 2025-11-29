@@ -190,7 +190,7 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
     Display & display = Display::instance();
     const bool isDefaultScreenSize = display.isDefaultSize();
 
-    StandardWindow window( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT, !isDefaultScreenSize );
+    StandardWindow window( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT, !isDefaultScreenSize, display );
     const Rect activeArea( window.activeArea() );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
