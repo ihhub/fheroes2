@@ -47,7 +47,6 @@ namespace
     class HorizontalSlider final
     {
     public:
-        HorizontalSlider() = default;
         ~HorizontalSlider() = default;
         HorizontalSlider( const HorizontalSlider & ) = delete;
         HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
