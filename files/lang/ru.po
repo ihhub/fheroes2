@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 08:36+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3503,6 +3503,39 @@ msgstr "Запас хода:"
 msgid "Uncharted Territory"
 msgstr "Неизведанная территория"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Случайное существо"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Значок игроков"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Водный элементаль"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Случайное сильное существо"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Вернуться в главное меню редактора карт."
+
 msgid "Cost per troop:"
 msgstr "Цена за существо:"
 
@@ -4441,16 +4474,6 @@ msgstr "На одной карте можно разместить только 
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На карте можно разместить не более %{count} обелисков."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Значок игроков"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Карта повреждена."
@@ -9323,6 +9346,43 @@ msgstr "Трава"
 
 msgid "Ocean"
 msgstr "Океан"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Нормальная"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Маленькая"

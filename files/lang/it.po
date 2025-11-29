@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 08:36+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3364,6 +3364,39 @@ msgstr "Pt. Movim."
 msgid "Uncharted Territory"
 msgstr "Terra Ignota"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Mostro casuale"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Icona dei Giocatori"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Creatura dell'Acqua"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Mostro casuale - forte"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Torna al combattimento."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -4348,16 +4381,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Icona dei Giocatori"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -8831,6 +8854,43 @@ msgstr "Prato"
 
 msgid "Ocean"
 msgstr "Oceano"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normale"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Piccola"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 08:36+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3493,6 +3493,39 @@ msgstr "Movimiento:"
 msgid "Uncharted Territory"
 msgstr "Territorio inexplorado"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Icono de los jugadores"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Elemental del Agua"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Cualquier castillo"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Haz clic para volver al menú principal."
+
 msgid "Cost per troop:"
 msgstr "Coste por tropa:"
 
@@ -4519,16 +4552,6 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Se pueden colocar un máximo de %{count} obeliscos en el mapa."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Icono de los jugadores"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 #, fuzzy
 msgid "The map is corrupted."
@@ -9482,6 +9505,43 @@ msgstr "Pastos"
 
 msgid "Ocean"
 msgstr "Océano"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normal"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Pequeño"

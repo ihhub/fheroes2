@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 08:36+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3296,6 +3296,37 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Atsitiktinė pilis"
+
+msgid "rmg|Player count"
+msgstr ""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+msgid "rmg|Water percentage"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Atsitiktinė pilis"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Grįžti į mūšį."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -4247,15 +4278,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -8614,6 +8636,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"

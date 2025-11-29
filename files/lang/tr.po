@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 08:36+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3383,6 +3383,35 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+msgid "Random Map Generator"
+msgstr ""
+
+msgid "rmg|Player count"
+msgstr ""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+msgid "rmg|Water percentage"
+msgstr ""
+
+msgid "rmg|Monster strength"
+msgstr ""
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Savaşa geri dön."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -4288,15 +4317,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -8550,6 +8570,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
