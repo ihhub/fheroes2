@@ -72,6 +72,13 @@ namespace
 {
     const int32_t spellPointsMaxValue{ 999 };
 
+    void renderDialogDecorations( const fheroes2::Point offset, fheroes2::Image & output)
+    {
+        const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
+        fheroes2::Blit( backgroundImage, output, offset.x, offset.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), output, offset.x, offset.y );
+    }
+
     void redrawRace( const fheroes2::Rect & raceRect, const fheroes2::Rect & crestRect, fheroes2::Image & output, const int race )
     {
         const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( race, true ) );
@@ -232,12 +239,7 @@ bool Heroes::openEditorDialog( const fheroes2::SupportedLanguage language )
     const fheroes2::Rect dialogRoi = background->activeArea();
     const fheroes2::Rect dialogWithShadowRoi = background->totalArea();
 
-    // Fade-out game screen only for 640x480 resolution and if 'renderBackgroundDialog' is false (we are replacing image in already opened dialog).
-    const bool isDefaultScreenSize = display.isDefaultSize();
-
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
-    fheroes2::Blit( backgroundImage, display, dialogRoi.x, dialogRoi.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dialogRoi.x, dialogRoi.y );
+    renderDialogDecorations( dialogRoi.getPosition(), display );
 
     // Hero portrait.
     const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
@@ -259,8 +261,9 @@ bool Heroes::openEditorDialog( const fheroes2::SupportedLanguage language )
     const fheroes2::Rect titleRoi( dialogRoi.x + 60, dialogRoi.y + 1, 519, 17 );
 
     auto drawTitleText
-        = [&display, &titleRoi, &dialogRoi, &backgroundImage, language, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
+        = [&display, &titleRoi, &dialogRoi, language, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
               if ( restoreBackground ) {
+                  const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
                   fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
               }
 
@@ -417,9 +420,7 @@ bool Heroes::openEditorDialog( const fheroes2::SupportedLanguage language )
     const fheroes2::Sprite & exitReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 0 );
     fheroes2::ButtonSprite buttonExit( dst_pt.x, dst_pt.y - exitReleased.height() / 2, exitReleased, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 1 ) );
 
-    LocalEvent & le = LocalEvent::Get();
-
-    // In the Editor there is not way to switch between heroes.
+    // In the Editor there is no way to switch between heroes.
     buttonNextHero.disable();
     buttonPrevHero.disable();
 
@@ -432,7 +433,7 @@ bool Heroes::openEditorDialog( const fheroes2::SupportedLanguage language )
     bool needRedraw{ false };
     std::string message;
 
-    // dialog menu loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Exit the dialog handling loop to close it.
@@ -684,7 +685,7 @@ bool Heroes::openEditorDialog( const fheroes2::SupportedLanguage language )
     buttonExit.drawOnPress();
 
     // Fade-out hero dialog.
-    fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
+    fheroes2::fadeOutDisplay( dialogRoi, !display.isDefaultSize() );
 
     if ( useDefaultExperience ) {
         // Tell Editor that default experience value is set.
@@ -726,17 +727,14 @@ Heroes::DialogResult Heroes::OpenDialog( const DialogOptions & options, const fh
         fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
     }
 
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
-    fheroes2::Blit( backgroundImage, display, dialogRoi.x, dialogRoi.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dialogRoi.x, dialogRoi.y );
+    renderDialogDecorations( dialogRoi.getPosition(), display );
 
     // Hero portrait.
     const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
     PortraitRedraw( portPos.x, portPos.y, PORT_BIG, display );
 
     // Dialog title.
-    const fheroes2::Rect titleRoi( dialogRoi.x + 60, dialogRoi.y + 1, 519, 17 );
-    renderHeroTitle( _name, _race, GetLevel(), language, titleRoi, display );
+    renderHeroTitle( _name, _race, GetLevel(), language, { dialogRoi.x + 60, dialogRoi.y + 1, 519, 17 }, display );
 
     fheroes2::Point dst_pt( dialogRoi.x + 156, dialogRoi.y + 31 );
 
@@ -793,7 +791,6 @@ Heroes::DialogResult Heroes::OpenDialog( const DialogOptions & options, const fh
     spellPointsInfo.SetPos( dst_pt );
     spellPointsInfo.Redraw();
 
-    // Color icon or race change icon for jailed hero details edit.
     const fheroes2::Rect crestRect( portPos.x, portPos.y + 99, portPos.width, portPos.height );
 
     // Color "crest" icon.
@@ -846,7 +843,7 @@ Heroes::DialogResult Heroes::OpenDialog( const DialogOptions & options, const fh
     fheroes2::TimedEventValidator timedButtonNextHero( [&buttonNextHero]() { return buttonNextHero.isPressed(); } );
     buttonNextHero.subscribe( &timedButtonNextHero );
 
-    // Hero dismiss button.
+    // Hero dismiss or recruit button.
     dst_pt.x = dialogRoi.x + 9;
     dst_pt.y = dialogRoi.y + 378;
 
@@ -865,8 +862,6 @@ Heroes::DialogResult Heroes::OpenDialog( const DialogOptions & options, const fh
     dst_pt.x = dialogRoi.x + 602;
     const fheroes2::Sprite & exitReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 0 );
     fheroes2::ButtonSprite buttonExit( dst_pt.x, dst_pt.y - exitReleased.height() / 2, exitReleased, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 1 ) );
-
-    LocalEvent & le = LocalEvent::Get();
 
     if ( ( options.mode != DialogOptions::Mode::Normal ) || 2 > GetKingdom().GetHeroes().size() ) {
         buttonNextHero.disable();
@@ -894,7 +889,7 @@ Heroes::DialogResult Heroes::OpenDialog( const DialogOptions & options, const fh
     bool needRedraw{ false };
     std::string message;
 
-    // dialog menu loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Exit the dialog handling loop to close it.
