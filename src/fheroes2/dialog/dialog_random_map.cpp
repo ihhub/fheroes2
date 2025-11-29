@@ -61,11 +61,11 @@ namespace
             assert( minIndex < maxIndex );
             assert( startIndex >= minIndex && startIndex <= maxIndex );
 
-            const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
             const int32_t sliderLength = 187;
             const int32_t buttonWidth = 15;
 
             fheroes2::Display & display = fheroes2::Display::instance();
+            const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
             const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpostIcnId, 1 );
             fheroes2::Blit( bar, display, position.x, position.y );
 
