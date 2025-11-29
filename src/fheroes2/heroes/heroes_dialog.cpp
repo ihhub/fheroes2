@@ -794,7 +794,6 @@ Heroes::DialogResult Heroes::OpenDialog( const DialogOptions & options, const fh
 
     // Color icon or race change icon for jailed hero details edit.
     const fheroes2::Rect crestRect( portPos.x, portPos.y + 99, portPos.width, portPos.height );
-    fheroes2::Rect raceRect;
 
     // Color "crest" icon.
     const PlayerColor color = GetColor();
