@@ -32,6 +32,7 @@
 #include "localevent.h"
 #include "map_random_generator.h"
 #include "math_base.h"
+#include "pal.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
@@ -52,6 +53,8 @@ namespace
         HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
         HorizontalSlider( const fheroes2::Point position, const int minIndex, const int maxIndex, const int startIndex )
+            : _timedButtonLeft( [this]() { return _buttonLeft.isPressed(); } )
+            , _timedButtonRight( [this]() { return _buttonRight.isPressed(); } )
         {
             assert( minIndex < maxIndex );
             assert( startIndex >= minIndex && startIndex <= maxIndex );
@@ -66,8 +69,12 @@ namespace
 
             _buttonLeft.setPosition( position.x + 6, position.y + 1 );
             _buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
+            _buttonLeft.subscribe( &_timedButtonLeft );
+            _buttonLeft.draw( display );
             _buttonRight.setPosition( position.x + bar.width() - buttonWidth, position.y + 1 );
             _buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
+            _buttonRight.subscribe( &_timedButtonRight );
+            _buttonRight.draw( display );
 
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
             const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, sliderLength, 1, static_cast<int32_t>( maxIndex + 1 ),
@@ -78,7 +85,6 @@ namespace
             _scrollbar.moveToIndex( startIndex );
 
             _scrollbar.show();
-            redraw( display );
         }
 
         int getCurrentValue() const
@@ -88,33 +94,43 @@ namespace
 
         void setRange( const int minIndex, const int maxIndex )
         {
-            if ( _scrollbar.currentIndex() > maxIndex ) {
-                _scrollbar.moveToIndex( maxIndex );
-            }
-            _scrollbar.setRange( minIndex, maxIndex );
-        }
+            _scrollbar.setImage( fheroes2::generateScrollbarSlider( _scrollbar, true, _scrollbar.getArea().width, 1, maxIndex + 1, { 0, 0, 2, _scrollbar.height() },
+                                                                    { 2, 0, 8, _scrollbar.height() } ) );
 
-        void redraw( fheroes2::Image & output ) const
-        {
-            _buttonLeft.draw( output );
-            _buttonRight.draw( output );
+            const int currentIndex = std::min( _scrollbar.currentIndex(), maxIndex );
+            _scrollbar.setRange( minIndex, maxIndex );
+            _scrollbar.moveToIndex( currentIndex );
         }
 
         bool processEvent( LocalEvent & le )
         {
+            _buttonLeft.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonLeft.area() ) );
+            _buttonRight.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonRight.area() ) );
+
             if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) ) {
+                const int prevPosX = _scrollbar.x();
                 _scrollbar.moveToPos( le.getMouseCursorPos() );
-                return true;
+
+                // Return true only if the slider position has changed.
+                return prevPosX != _scrollbar.x();
             }
             if ( _scrollbar.updatePosition() ) {
                 return true;
             }
 
-            if ( le.MouseClickLeft( _buttonLeft.area() ) || le.isMouseWheelDownInArea( _scrollbar.getArea() ) ) {
+            if ( le.MouseClickLeft( _buttonLeft.area() ) || le.isMouseWheelDownInArea( _scrollbar.getArea() ) || _timedButtonLeft.isDelayPassed() ) {
+                if ( _scrollbar.currentIndex() == _scrollbar.minIndex() ) {
+                    return false;
+                }
+
                 _scrollbar.backward();
                 return true;
             }
-            if ( le.MouseClickLeft( _buttonRight.area() ) || le.isMouseWheelUpInArea( _scrollbar.getArea() ) ) {
+            if ( le.MouseClickLeft( _buttonRight.area() ) || le.isMouseWheelUpInArea( _scrollbar.getArea() ) || _timedButtonRight.isDelayPassed() ) {
+                if ( _scrollbar.currentIndex() == _scrollbar.maxIndex() ) {
+                    return false;
+                }
+
                 _scrollbar.forward();
                 return true;
             }
@@ -125,6 +141,9 @@ namespace
         fheroes2::Scrollbar _scrollbar;
         fheroes2::Button _buttonLeft;
         fheroes2::Button _buttonRight;
+
+        fheroes2::TimedEventValidator _timedButtonLeft;
+        fheroes2::TimedEventValidator _timedButtonRight;
     };
 
     class ConfigValueText final
@@ -206,10 +225,15 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     text.set( Maps::Random_Generator::layoutToString( configuration.mapLayout ), fheroes2::FontType::normalWhite() );
     text.draw( inputPositionX + 12, positionY, display );
 
+    // TODO: remove the next line when the dropdown is operational.
+    fheroes2::ApplyPalette( display, inputPositionX + 6, positionY - 5, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight,
+                            PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
     const fheroes2::Sprite & dropListButtonSprite = fheroes2::AGG::GetICN( dropListIcn, 1 );
     const fheroes2::Sprite & dropListButtonPressedSprite = fheroes2::AGG::GetICN( dropListIcn, 2 );
 
     fheroes2::ButtonSprite layoutDroplistButton( inputPositionX + layoutBackgroundWidth + 6, positionY - 5, dropListButtonSprite, dropListButtonPressedSprite );
+    // TODO: remove the next line when the dropdown is operational.
     layoutDroplistButton.disable();
     layoutDroplistButton.draw();
 
@@ -280,34 +304,30 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
             configuration.waterPercentage = std::min( configuration.waterPercentage, newLimit );
             waterSlider.setRange( 0, newLimit );
 
-            playerCountSlider.redraw( display );
             playerCountValue.render( text, std::to_string( configuration.playerCount ), display );
             waterValue.render( text, std::to_string( configuration.waterPercentage ), display );
-            display.render( background.totalArea() );
+            display.render( background.activeArea() );
         }
         else if ( waterSlider.processEvent( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
-            waterSlider.redraw( display );
             waterValue.render( text, std::to_string( configuration.waterPercentage ), display );
-            display.render( background.totalArea() );
+            display.render( background.activeArea() );
         }
         else if ( monsterSlider.processEvent( le ) ) {
             configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
-            monsterSlider.redraw( display );
             monsterValue.render( text, Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ), display );
-            display.render( background.totalArea() );
+            display.render( background.activeArea() );
         }
         else if ( resourceSlider.processEvent( le ) ) {
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
-            resourceSlider.redraw( display );
             resourceValue.render( text, Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ), display );
-            display.render( background.totalArea() );
+            display.render( background.activeArea() );
         }
         else if ( mapSeedSelection.processEvents() ) {
             mapSeedSelection.draw( display );
 
             configuration.seed = mapSeedSelection.getValue();
-            display.render( background.totalArea() );
+            display.render( background.activeArea() );
         }
     }
 
