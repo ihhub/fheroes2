@@ -72,7 +72,7 @@ namespace
 {
     const int32_t spellPointsMaxValue{ 999 };
 
-    void renderDialogDecorations( const fheroes2::Point offset, fheroes2::Image & output)
+    void renderDialogDecorations( const fheroes2::Point offset, fheroes2::Image & output )
     {
         const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
         fheroes2::Blit( backgroundImage, output, offset.x, offset.y );
@@ -260,20 +260,19 @@ bool Heroes::openEditorDialog( const fheroes2::SupportedLanguage language )
     // Dialog title.
     const fheroes2::Rect titleRoi( dialogRoi.x + 60, dialogRoi.y + 1, 519, 17 );
 
-    auto drawTitleText
-        = [&display, &titleRoi, &dialogRoi, language, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
-              if ( restoreBackground ) {
-                  const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
-                  fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
-              }
+    auto drawTitleText = [&display, &titleRoi, &dialogRoi, language, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
+        if ( restoreBackground ) {
+            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
+            fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
+        }
 
-              if ( heroName.empty() ) {
-                  renderRandomHeroTitle( heroRace, GetLevel(), titleRoi, display );
-              }
-              else {
-                  renderHeroTitle( heroName, heroRace, GetLevel(), language, titleRoi, display );
-              }
-          };
+        if ( heroName.empty() ) {
+            renderRandomHeroTitle( heroRace, GetLevel(), titleRoi, display );
+        }
+        else {
+            renderHeroTitle( heroName, heroRace, GetLevel(), language, titleRoi, display );
+        }
+    };
 
     drawTitleText( _name, _race, false );
 
