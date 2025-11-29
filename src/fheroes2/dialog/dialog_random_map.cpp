@@ -103,7 +103,7 @@ namespace
             _scrollbar.moveToIndex( currentIndex );
         }
 
-        bool processEvent( LocalEvent & le )
+        bool processEvents( LocalEvent & le )
         {
             _buttonLeft.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonLeft.area() ) );
             _buttonRight.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonRight.area() ) );
@@ -312,7 +312,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
         else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             showStandardTextMessage( _( "Cancel" ), _( "Return to the previous menu." ), Dialog::ZERO );
         }
-        else if ( playerCountSlider.processEvent( le ) ) {
+        else if ( playerCountSlider.processEvents( le ) ) {
             configuration.playerCount = playerCountSlider.getCurrentValue();
 
             const int32_t newLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
@@ -323,17 +323,17 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
             waterValue.render( std::to_string( configuration.waterPercentage ), display );
             display.render( background.activeArea() );
         }
-        else if ( waterSlider.processEvent( le ) ) {
+        else if ( waterSlider.processEvents( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
             waterValue.render( std::to_string( configuration.waterPercentage ), display );
             display.render( background.activeArea() );
         }
-        else if ( monsterSlider.processEvent( le ) ) {
+        else if ( monsterSlider.processEvents( le ) ) {
             configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
             monsterValue.render( Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ), display );
             display.render( background.activeArea() );
         }
-        else if ( resourceSlider.processEvent( le ) ) {
+        else if ( resourceSlider.processEvents( le ) ) {
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
             resourceValue.render( Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ), display );
             display.render( background.activeArea() );
