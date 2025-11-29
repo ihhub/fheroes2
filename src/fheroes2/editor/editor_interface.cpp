@@ -27,7 +27,6 @@
 #include <map>
 #include <memory>
 #include <optional>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -104,7 +103,7 @@ namespace
     // However, we have no such limitation but to be reasonable we still have a limit.
     const int32_t maxMapNameLength = 50;
 
-    class HideInterfaceModeDisabler
+    class HideInterfaceModeDisabler final
     {
     public:
         HideInterfaceModeDisabler()
@@ -200,7 +199,7 @@ namespace
         fheroes2::Rect _textArea;
         fheroes2::Rect _buttonArea;
 
-        fheroes2::Text _text;
+        const fheroes2::Text _text;
         mutable fheroes2::Button _buttonSelection;
     };
 
@@ -1200,6 +1199,57 @@ namespace Interface
                             _redraw |= REDRAW_GAMEAREA;
                         }
                     }
+
+                    if ( _editorPanel.isTerrainEdit() ) {
+                        const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                        assert( brushSize.width == brushSize.height );
+
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( brushSize.width > 0 && _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                const int groundId = _editorPanel.selectedGroundType();
+                                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+
+                                Maps::setTerrainWithTransition( _mapFormat, indices.x, indices.y, groundId );
+                                _validateObjectsOnTerrainUpdate();
+
+                                // The 1x1 brush do not always update the ground. Check it.
+                                if ( brushSize.width != 1 || brushSize.height != 1
+                                     || Maps::Ground::getGroundByImageIndex( _mapFormat.tiles[_tileUnderCursor].terrainIndex ) == groundId ) {
+                                    // Commit only if the terrain has changed to the selected by user.
+                                    action.commit();
+                                    _redraw |= mapUpdateFlags;
+                                }
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
+                    else if ( _editorPanel.isEraseMode() ) {
+                        const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                        assert( brushSize.width == brushSize.height );
+
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( brushSize.width > 0 && _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+                                if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() ) ) {
+                                    action.commit();
+                                    _redraw |= mapUpdateFlags;
+                                }
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
@@ -1235,6 +1285,8 @@ namespace Interface
                         _validateObjectsOnTerrainUpdate();
 
                         action.commit();
+
+                        _brushTiles.clear();
 
                         _redraw |= mapUpdateFlags;
                     }
@@ -1783,23 +1835,22 @@ namespace Interface
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
+            if ( brushSize.width > 0 ) {
+                // The terrain sa placed in `startEdit()` loop. Nothing to do here.
+                return;
+            }
+
+            // This is a case when area was not selected but a single tile was clicked.
+
             const int groundId = _editorPanel.selectedGroundType();
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( brushSize.width > 0 ) {
-                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+            Maps::setTerrainWithTransition( _mapFormat, tileIndex, tileIndex, groundId );
 
-                Maps::setTerrainWithTransition( _mapFormat, indices.x, indices.y, groundId );
-            }
-            else {
-                assert( brushSize.width == 0 );
+            _areaSelectionStartTileId = -1;
 
-                // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainWithTransition( _mapFormat, tileIndex, tileIndex, groundId );
-
-                _areaSelectionStartTileId = -1;
-            }
+            _brushTiles.clear();
 
             _validateObjectsOnTerrainUpdate();
 
@@ -1843,6 +1894,13 @@ namespace Interface
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
+            if ( brushSize.width > 0 ) {
+                // The erase is done in `startEdit()` loop. Nothing to do here.
+                return;
+            }
+
+            // This is a case when area was not selected but a single tile was clicked.
+
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
@@ -1851,10 +1909,9 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
             }
 
-            if ( brushSize.width == 0 ) {
-                // This is a case when area was not selected but a single tile was clicked.
-                _areaSelectionStartTileId = -1;
-            }
+            _areaSelectionStartTileId = -1;
+
+            _brushTiles.clear();
         }
         else if ( _editorPanel.isObjectMode() ) {
             _handleObjectMouseLeftClick( tile );

@@ -96,7 +96,7 @@ namespace Interface
 
         bool useMouseDragMovement() const
         {
-            return !( ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) && _selectedBrushSize == BrushSize::AREA );
+            return ( _selectedInstrument != Instrument::TERRAIN && _selectedInstrument != Instrument::ERASE );
         }
 
         // Set Editor panel positions on screen.
