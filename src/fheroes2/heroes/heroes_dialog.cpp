@@ -104,8 +104,7 @@ namespace
         return button;
     }
 
-    std::unique_ptr<fheroes2::ButtonSprite> getPatrolButton( const fheroes2::Point & offset, const int32_t shadowOffsetX, fheroes2::Image & output,
-                                                             const bool isPressed )
+    std::unique_ptr<fheroes2::ButtonSprite> getPatrolButton( const fheroes2::Point & offset, const int32_t shadowOffsetX, fheroes2::Image & output, const bool isPressed )
     {
         const fheroes2::Sprite & patrolReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 );
         auto button = std::make_unique<fheroes2::ButtonSprite>( offset.x, offset.y - patrolReleased.height() / 2, patrolReleased,
