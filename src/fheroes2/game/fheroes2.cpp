@@ -183,7 +183,11 @@ namespace
 
             fheroes2::engine().setTitle( GetCaption() );
 
-            SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
+            // Hide system cursor.
+            const int returnValue = SDL_ShowCursor( SDL_DISABLE );
+            if ( returnValue < 0 ) {
+                ERROR_LOG( "Failed to hide system cursor. Error description: " << SDL_GetError() )
+            }
 
             fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
 
