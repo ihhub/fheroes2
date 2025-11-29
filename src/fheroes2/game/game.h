@@ -105,7 +105,7 @@ namespace Game
 
     void PlayPickupSound();
 
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog, const bool disableDismiss = false );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true, const bool renderBackgroundDialog = true );
 
     void LoadPlayers( const std::string & mapFileName, Players & players );

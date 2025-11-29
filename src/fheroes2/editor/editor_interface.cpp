@@ -1496,7 +1496,7 @@ namespace Interface
                     hero.SetColor( color );
                     hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], objectType == MP2::OBJ_JAIL, true );
 
-                    hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage );
+                    hero.openEditorDialog( _mapFormat.mainLanguage );
                     Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
                     if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
