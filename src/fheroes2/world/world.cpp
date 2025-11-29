@@ -1354,13 +1354,17 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
         }
     }
 
-    if ( !updateUidCounterToMaximum && Maps::getLastObjectUID() < maxUid ) {
+    if ( updateUidCounterToMaximum ) {
+        // And set the UID counter value with the found maximum.
+        Maps::setLastObjectUID( maxUid );
+    }
+    else if ( Maps::getLastObjectUID() < maxUid ) {
         // Some maps (even official original campaign maps) can have incorrect UID.
         // No idea what's the reason but assumed that they were edited by the corrupted Editor.
-        ERROR_LOG( "Last Object UID is not valid. Expected: " << Maps::getLastObjectUID() << ", received: " << maxUid )
-    }
+        ERROR_LOG( "Last object UID is not valid. Expected: " << Maps::getLastObjectUID() << ", received: " << maxUid )
 
-    Maps::setLastObjectUID( maxUid );
+        Maps::setLastObjectUID( maxUid );
+    }
 }
 
 uint32_t World::GetWeekSeed() const
