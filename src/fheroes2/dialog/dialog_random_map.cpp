@@ -217,7 +217,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     int32_t positionY = activeArea.y + 70;
 
     // Map configuration options.
-    text.set( _( "Player count" ), FontType::normalWhite() );
+    text.set( _( "random_map|Player count" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, configuration.playerCount };
     ConfigValueText playerCountValue{ display, valuePositionX, positionY };
@@ -225,7 +225,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "Map layout" ), FontType::normalWhite() );
+    text.set( _( "random_map|Map layout" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     // Dropdown with map layout selection.
@@ -252,7 +252,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "Water percentage" ), FontType::normalWhite() );
+    text.set( _( "random_map|Water percentage" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, originalWaterPercentageLimit, configuration.waterPercentage };
@@ -261,7 +261,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "Monster strength" ), FontType::normalWhite() );
+    text.set( _( "random_map|Monster strength" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, static_cast<int>( configuration.monsterStrength ) };
     ConfigValueText monsterValue{ display, valuePositionX, positionY };
@@ -269,7 +269,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "Resource availability" ), FontType::normalWhite() );
+    text.set( _( "random_map|Resource availability" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, static_cast<int>( configuration.resourceDensity ) };
     ConfigValueText resourceValue{ display, valuePositionX, positionY };
@@ -277,7 +277,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing + 10;
 
-    text.set( _( "Map seed" ), FontType::normalWhite() );
+    text.set( _( "random_map|Map seed" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     ValueSelectionDialogElement mapSeedSelection{ 0, 999999, configuration.seed, 1, { positionX + settingDescriptionWidth + 4, positionY - 5 } };
