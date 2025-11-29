@@ -172,7 +172,7 @@ namespace
     };
 }
 
-bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth )
+bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth )
 {
     if ( mapWidth < 1 ) {
         // What are you trying to achieve?!

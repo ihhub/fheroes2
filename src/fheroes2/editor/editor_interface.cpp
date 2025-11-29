@@ -2183,7 +2183,7 @@ namespace Interface
     {
         Maps::Random_Generator::Configuration temp{ _randomMapConfig };
 
-        if ( !fheroes2::randomMapDialog( temp, mapWidth ) ) {
+        if ( !fheroes2::randomMapGeneratorDialog( temp, mapWidth ) ) {
             return false;
         }
 

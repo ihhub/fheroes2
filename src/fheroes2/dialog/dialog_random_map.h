@@ -29,5 +29,5 @@ namespace Maps::Random_Generator
 
 namespace fheroes2
 {
-    bool randomMapDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth );
+    bool randomMapGeneratorDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth );
 }
