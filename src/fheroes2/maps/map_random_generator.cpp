@@ -316,6 +316,10 @@ namespace Maps::Random_Generator
         }
 
         const int32_t regionSizeLimit = calculateRegionSizeLimit( config, width, height );
+        if ( regionSizeLimit <= 0 ) {
+            DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Region size limit is " << regionSizeLimit )
+            return false;
+        }
 
         const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( 999999 );
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Generating a map with seed " << generatorSeed );
