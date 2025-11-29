@@ -58,7 +58,7 @@ namespace
             : _timedButtonLeft( [this]() { return _buttonLeft.isPressed(); } )
             , _timedButtonRight( [this]() { return _buttonRight.isPressed(); } )
         {
-            assert( minIndex < maxIndex );
+            assert( minIndex <= maxIndex );
             assert( startIndex >= minIndex && startIndex <= maxIndex );
 
             fheroes2::Display & display = fheroes2::Display::instance();
@@ -171,8 +171,20 @@ namespace
 
 bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth )
 {
-    Display & display = Display::instance();
+    if ( mapWidth < 1 ) {
+        // What are you trying to achieve?!
+        assert( 0 );
+        return false;
+    }
 
+    // Verify the configuration parameters.
+    configuration.playerCount = std::max( 1, configuration.playerCount );
+    configuration.playerCount = std::min( 6, configuration.playerCount );
+
+    const int32_t originalWaterPercentageLimit{ Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth ) };
+    configuration.waterPercentage = std::min( configuration.waterPercentage, originalWaterPercentageLimit );
+
+    Display & display = Display::instance();
     const bool isDefaultScreenSize = display.isDefaultSize();
 
     StandardWindow background( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT, !isDefaultScreenSize );
@@ -243,10 +255,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     text.set( _( "Water percentage" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
-    const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
-    const int32_t waterPercentage = std::min( configuration.waterPercentage, waterLimit );
-
-    HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, 100, waterPercentage };
+    HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, originalWaterPercentageLimit, configuration.waterPercentage };
     ConfigValueText waterValue{ display, valuePositionX, positionY };
     waterValue.render( text, std::to_string( configuration.waterPercentage ), display );
 
