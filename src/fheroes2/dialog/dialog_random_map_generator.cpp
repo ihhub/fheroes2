@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_random_map.h"
+#include "dialog_random_map_generator.h"
 
 #include <algorithm>
 #include <cassert>

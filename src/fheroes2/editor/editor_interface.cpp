@@ -37,7 +37,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_random_map.h"
+#include "dialog_random_map_generator.h"
 #include "dialog_selectitems.h"
 #include "direction.h"
 #include "editor_castle_details_window.h"
