@@ -1216,9 +1216,13 @@ namespace Interface
                                 Maps::setTerrainWithTransition( _mapFormat, indices.x, indices.y, groundId );
                                 _validateObjectsOnTerrainUpdate();
 
-                                action.commit();
-
-                                _redraw |= mapUpdateFlags;
+                                // The 1x1 brush do not always update the ground. Check it.
+                                if ( brushSize.width != 1 || brushSize.height != 1
+                                     || Maps::Ground::getGroundByImageIndex( _mapFormat.tiles[_tileUnderCursor].terrainIndex ) == groundId ) {
+                                    // Commit only if the terrain has changed to the selected by user.
+                                    action.commit();
+                                    _redraw |= mapUpdateFlags;
+                                }
                             }
                         }
                         else {
