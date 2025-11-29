@@ -43,12 +43,12 @@ namespace fheroes2
 
 namespace Battle
 {
-    struct ControlInfo
+    struct ControlInfo final
     {
-        ControlInfo( const fheroes2::Point & pt, int ctrl )
+        ControlInfo( const fheroes2::Point & pt, const int ctrl )
             : result( ctrl )
-            , rtLocal( pt.x, pt.y, 24, 24 )
-            , rtAI( pt.x + 75, pt.y, 24, 24 )
+            , humanPlayerRoi( pt.x, pt.y, 24, 24 )
+            , computerPlayerRoi( pt.x + 75, pt.y, 24, 24 )
         {
             // Do nothing.
         }
@@ -57,12 +57,10 @@ namespace Battle
 
         ControlInfo & operator=( const ControlInfo & ) = delete;
 
-        void Redraw() const;
-
         int result{ 0 };
 
-        const fheroes2::Rect rtLocal;
-        const fheroes2::Rect rtAI;
+        const fheroes2::Rect humanPlayerRoi;
+        const fheroes2::Rect computerPlayerRoi;
     };
 
     class Only
