@@ -172,29 +172,29 @@ namespace
 
 bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    Display & display = Display::instance();
 
     const bool isDefaultScreenSize = display.isDefaultSize();
 
-    fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, !isDefaultScreenSize );
-    const fheroes2::Rect activeArea( background.activeArea() );
+    StandardWindow background( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT, !isDefaultScreenSize );
+    const Rect activeArea( background.activeArea() );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     if ( isDefaultScreenSize ) {
-        const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
-        fheroes2::Copy( backgroundImage, 0, 0, display, activeArea );
+        const Sprite & backgroundImage = AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+        Copy( backgroundImage, 0, 0, display, activeArea );
     }
 
     // Dialog title.
-    const fheroes2::Sprite & titleBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
-    const fheroes2::Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
-    const fheroes2::Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
+    const Sprite & titleBox = AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+    const Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
+    const Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
 
-    fheroes2::Copy( titleBox, 0, 0, display, titleBoxRoi );
-    fheroes2::addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
+    Copy( titleBox, 0, 0, display, titleBoxRoi );
+    addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
 
-    fheroes2::Text text( _( "Random Map Generator" ), fheroes2::FontType::normalWhite() );
+    Text text( _( "Random Map Generator" ), FontType::normalWhite() );
     text.fitToOneRow( titleTextRoi.width );
     text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
@@ -206,7 +206,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     int32_t positionY = activeArea.y + 70;
 
     // Map configuration options.
-    text.set( _( "Player count" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Player count" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, configuration.playerCount };
     ConfigValueText playerCountValue{ display, valuePositionX, positionY };
@@ -214,34 +214,34 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "Map layout" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Map layout" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     // Dropdown with map layout selection.
     const int dropListIcn = isEvilInterface ? ICN::DROPLISL_EVIL : ICN::DROPLISL;
-    const fheroes2::Sprite & itemBackground = fheroes2::AGG::GetICN( dropListIcn, 0 );
+    const Sprite & itemBackground = AGG::GetICN( dropListIcn, 0 );
     const int32_t layoutBackgroundWidth = 200;
     const int32_t layoutBackgroundHeight = itemBackground.height();
 
-    fheroes2::Copy( itemBackground, 0, 0, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight );
-    text.set( Maps::Random_Generator::layoutToString( configuration.mapLayout ), fheroes2::FontType::normalWhite() );
+    Copy( itemBackground, 0, 0, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight );
+    text.set( Maps::Random_Generator::layoutToString( configuration.mapLayout ), FontType::normalWhite() );
     text.draw( inputPositionX + 12, positionY, display );
 
     // TODO: remove the next line when the dropdown is operational.
-    fheroes2::ApplyPalette( display, inputPositionX + 6, positionY - 5, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight,
-                            PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+    ApplyPalette( display, inputPositionX + 6, positionY - 5, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight,
+                  PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-    const fheroes2::Sprite & dropListButtonSprite = fheroes2::AGG::GetICN( dropListIcn, 1 );
-    const fheroes2::Sprite & dropListButtonPressedSprite = fheroes2::AGG::GetICN( dropListIcn, 2 );
+    const Sprite & dropListButtonSprite = AGG::GetICN( dropListIcn, 1 );
+    const Sprite & dropListButtonPressedSprite = AGG::GetICN( dropListIcn, 2 );
 
-    fheroes2::ButtonSprite layoutDroplistButton( inputPositionX + layoutBackgroundWidth + 6, positionY - 5, dropListButtonSprite, dropListButtonPressedSprite );
+    ButtonSprite layoutDroplistButton( inputPositionX + layoutBackgroundWidth + 6, positionY - 5, dropListButtonSprite, dropListButtonPressedSprite );
     // TODO: remove the next line when the dropdown is operational.
     layoutDroplistButton.disable();
     layoutDroplistButton.draw();
 
     positionY += ySpacing;
 
-    text.set( _( "Water percentage" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Water percentage" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     const int32_t waterLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
@@ -253,7 +253,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "Monster strength" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Monster strength" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, static_cast<int>( configuration.monsterStrength ) };
     ConfigValueText monsterValue{ display, valuePositionX, positionY };
@@ -261,7 +261,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "Resource availability" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Resource availability" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, static_cast<int>( configuration.resourceDensity ) };
     ConfigValueText resourceValue{ display, valuePositionX, positionY };
@@ -269,19 +269,19 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing + 10;
 
-    text.set( _( "Map seed" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Map seed" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
-    fheroes2::ValueSelectionDialogElement mapSeedSelection{ 0, 999999, configuration.seed, 1, { positionX + settingDescriptionWidth + 4, positionY - 5 } };
+    ValueSelectionDialogElement mapSeedSelection{ 0, 999999, configuration.seed, 1, { positionX + settingDescriptionWidth + 4, positionY - 5 } };
     mapSeedSelection.draw( display );
 
-    fheroes2::Button buttonCancel;
+    Button buttonCancel;
     const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-    background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 30, 10 }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
+    background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 30, 10 }, StandardWindow::Padding::BOTTOM_RIGHT );
 
-    fheroes2::Button buttonOk;
+    Button buttonOk;
     const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-    background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 30, 10 }, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+    background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 30, 10 }, StandardWindow::Padding::BOTTOM_LEFT );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -300,10 +300,10 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
         }
 
         if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-            showStandardTextMessage( _( "Okay"), _( "Click to generate a new map." ), Dialog::ZERO );
+            showStandardTextMessage( _( "Okay" ), _( "Click to generate a new map." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-            showStandardTextMessage( _( "Cancel"), _( "Return to the previous menu." ), Dialog::ZERO );
+            showStandardTextMessage( _( "Cancel" ), _( "Return to the previous menu." ), Dialog::ZERO );
         }
         else if ( playerCountSlider.processEvent( le ) ) {
             configuration.playerCount = playerCountSlider.getCurrentValue();
