@@ -74,7 +74,7 @@ namespace
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
         // Water percentage cannot be 100 or more, or negative.
-        assert( config.waterPercentage >= 0 && config.waterPercentage < 100 );
+        assert( config.waterPercentage >= 0 && config.waterPercentage <= 100 );
 
         int32_t requiredSpace = 0;
 
