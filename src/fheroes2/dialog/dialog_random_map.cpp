@@ -190,8 +190,8 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     Display & display = Display::instance();
     const bool isDefaultScreenSize = display.isDefaultSize();
 
-    StandardWindow background( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT, !isDefaultScreenSize );
-    const Rect activeArea( background.activeArea() );
+    StandardWindow window( Display::DEFAULT_WIDTH, Display::DEFAULT_HEIGHT, !isDefaultScreenSize );
+    const Rect activeArea( window.activeArea() );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -220,7 +220,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     int32_t positionY = activeArea.y + 70;
 
     // Map configuration options.
-    text.set( _( "random_map|Player count" ), FontType::normalWhite() );
+    text.set( _( "rmg|Player count" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider playerCountSlider{ { inputPositionX, positionY }, 2, 6, configuration.playerCount };
     TextRestorer playerCountValue{ display, valuePositionX, positionY };
@@ -228,7 +228,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "random_map|Map layout" ), FontType::normalWhite() );
+    text.set( _( "rmg|Map layout" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     // Dropdown with map layout selection.
@@ -255,7 +255,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "random_map|Water percentage" ), FontType::normalWhite() );
+    text.set( _( "rmg|Water percentage" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, originalWaterPercentageLimit, configuration.waterPercentage };
@@ -264,7 +264,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "random_map|Monster strength" ), FontType::normalWhite() );
+    text.set( _( "rmg|Monster strength" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider monsterSlider{ { inputPositionX, positionY }, 0, 3, static_cast<int>( configuration.monsterStrength ) };
     TextRestorer monsterValue{ display, valuePositionX, positionY };
@@ -272,7 +272,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing;
 
-    text.set( _( "random_map|Resource availability" ), FontType::normalWhite() );
+    text.set( _( "rmg|Resource availability" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
     HorizontalSlider resourceSlider{ { inputPositionX, positionY }, 0, 2, static_cast<int>( configuration.resourceDensity ) };
     TextRestorer resourceValue{ display, valuePositionX, positionY };
@@ -280,7 +280,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     positionY += ySpacing + 10;
 
-    text.set( _( "random_map|Map seed" ), FontType::normalWhite() );
+    text.set( _( "rmg|Map seed" ), FontType::normalWhite() );
     text.draw( positionX + ( settingDescriptionWidth - text.width() ) / 2, positionY, display );
 
     ValueSelectionDialogElement mapSeedSelection{ 0, 999999, configuration.seed, 1, { positionX + settingDescriptionWidth + 4, positionY - 5 } };
@@ -288,13 +288,13 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
     Button buttonCancel;
     const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-    background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 30, 10 }, StandardWindow::Padding::BOTTOM_RIGHT );
+    window.renderButton( buttonCancel, buttonCancelIcn, 0, 1, { 30, 10 }, StandardWindow::Padding::BOTTOM_RIGHT );
 
     Button buttonOk;
     const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-    background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 30, 10 }, StandardWindow::Padding::BOTTOM_LEFT );
+    window.renderButton( buttonOk, buttonOkIcn, 0, 1, { 30, 10 }, StandardWindow::Padding::BOTTOM_LEFT );
 
-    display.render( background.totalArea() );
+    display.render( window.totalArea() );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
@@ -324,28 +324,28 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
 
             playerCountValue.render( std::to_string( configuration.playerCount ), display );
             waterValue.render( std::to_string( configuration.waterPercentage ), display );
-            display.render( background.activeArea() );
+            display.render( window.activeArea() );
         }
         else if ( waterSlider.processEvents( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
             waterValue.render( std::to_string( configuration.waterPercentage ), display );
-            display.render( background.activeArea() );
+            display.render( window.activeArea() );
         }
         else if ( monsterSlider.processEvents( le ) ) {
             configuration.monsterStrength = static_cast<Maps::Random_Generator::MonsterStrength>( monsterSlider.getCurrentValue() );
             monsterValue.render( Maps::Random_Generator::monsterStrengthToString( configuration.monsterStrength ), display );
-            display.render( background.activeArea() );
+            display.render( window.activeArea() );
         }
         else if ( resourceSlider.processEvents( le ) ) {
             configuration.resourceDensity = static_cast<Maps::Random_Generator::ResourceDensity>( resourceSlider.getCurrentValue() );
             resourceValue.render( Maps::Random_Generator::resourceDensityToString( configuration.resourceDensity ), display );
-            display.render( background.activeArea() );
+            display.render( window.activeArea() );
         }
         else if ( mapSeedSelection.processEvents() ) {
             mapSeedSelection.draw( display );
 
             configuration.seed = mapSeedSelection.getValue();
-            display.render( background.activeArea() );
+            display.render( window.activeArea() );
         }
     }
 
