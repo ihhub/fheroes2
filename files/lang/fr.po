@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-11-29 08:36+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1130,6 +1130,14 @@ msgstr "Réinitialiser les paramètres par défaut."
 
 msgid "Please select another hero."
 msgstr "Veuillez choisir un autre héros."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Cliquez ici pour sélectionner cette couleur."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Cliquez ici pour sélectionner cette couleur."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs. %{race2} %{name2}"
