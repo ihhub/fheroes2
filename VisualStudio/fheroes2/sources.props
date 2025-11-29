@@ -98,6 +98,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_random_map_generator.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_recruit.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_resolution.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp" />
@@ -318,6 +319,7 @@
     <ClInclude Include="src\fheroes2\dialog\dialog_hotkeys.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_interface_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_random_map_generator.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
