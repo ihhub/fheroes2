@@ -178,7 +178,7 @@ bool fheroes2::randomMapDialog( Maps::Random_Generator::Configuration & configur
     }
 
     // Verify the configuration parameters.
-    configuration.playerCount = std::max( 1, configuration.playerCount );
+    configuration.playerCount = std::max( 2, configuration.playerCount );
     configuration.playerCount = std::min( 6, configuration.playerCount );
 
     const int32_t originalWaterPercentageLimit{ Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth ) };
