@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-11-29 08:36+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -983,6 +983,12 @@ msgid "Reset to default settings."
 msgstr ""
 
 msgid "Please select another hero."
+msgstr ""
+
+msgid "Click to set this hero to be human-controlled."
+msgstr ""
+
+msgid "Click to set this hero to be AI-controlled."
 msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
