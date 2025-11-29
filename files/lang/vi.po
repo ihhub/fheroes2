@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 08:36+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3538,6 +3538,39 @@ msgstr "Điểm Di chuyển:"
 msgid "Uncharted Territory"
 msgstr "Lãnh thổ Chưa khám phá"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Ngẫu nhiên Quái vật"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Biểu tượng Người chơi"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Nguyên tố Nước"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Ngẫu nhiên Quái vật - mạnh"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Nhấp để quay lại màn hình chính."
+
 msgid "Cost per troop:"
 msgstr "Giá mỗi quân:"
 
@@ -4521,16 +4554,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Bảo vật không thể đặt trên nước."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Biểu tượng Người chơi"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -9536,6 +9559,43 @@ msgstr "Cỏ"
 
 msgid "Ocean"
 msgstr "Đại dương"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Bình thường"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Nhỏ"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 08:36+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2025-11-12 16:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3496,6 +3496,39 @@ msgstr "Очки Руху:"
 msgid "Uncharted Territory"
 msgstr "Незвідана територія"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Випадковий Монстр"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Виберіть кількість гравців"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Встановити відсоток води"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Випадковий Монстр - сильний"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Тицьніть, щоб увімкнути всі елементи."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Повернутися до попереднього меню налаштувань."
+
 msgid "Cost per troop:"
 msgstr "Вартість істоти:"
 
@@ -4422,16 +4455,6 @@ msgstr "На мапі можна розмістити лише один випа
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
-
-msgid "Pick player count"
-msgstr "Виберіть кількість гравців"
-
-msgid "Set water percentage"
-msgstr "Встановити відсоток води"
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
-"Встановити початкове значення мапи (встановіть 0 для випадкового значення)"
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -9311,6 +9334,43 @@ msgstr "Трава"
 msgid "Ocean"
 msgstr "Океан"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Звичайна"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Мала"
 
@@ -12462,6 +12522,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Set map seed (set 0 to make the seed random)"
+#~ msgstr ""
+#~ "Встановити початкове значення мапи (встановіть 0 для випадкового значення)"
 
 #~ msgid ""
 #~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
