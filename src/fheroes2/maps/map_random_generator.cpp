@@ -246,6 +246,7 @@ namespace Maps::Random_Generator
         case Layout::QUEST:
             return _( "map_layout|Quest" );
         default:
+            // Did you add a new layout type? Add the logic above!
             assert( 0 );
             break;
         }
@@ -263,6 +264,7 @@ namespace Maps::Random_Generator
         case ResourceDensity::ABUNDANT:
             return _( "resource_density|Abundant" );
         default:
+            // Did you add a new resource density type? Add the logic above!
             assert( 0 );
             break;
         }
@@ -282,6 +284,7 @@ namespace Maps::Random_Generator
         case MonsterStrength::DEADLY:
             return _( "monster_strength|Deadly" );
         default:
+            // Did you add a new monster strength type? Add the logic above!
             assert( 0 );
             break;
         }
