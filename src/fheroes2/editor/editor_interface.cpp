@@ -1835,23 +1835,20 @@ namespace Interface
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
+            if ( brushSize.width > 0 ) {
+                // The terrain sa placed in `startEdit()` loop. Nothing to do here.
+                return;
+            }
+
+            // This is a case when area was not selected but a single tile was clicked.
+
             const int groundId = _editorPanel.selectedGroundType();
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( brushSize.width > 0 ) {
-                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+            Maps::setTerrainWithTransition( _mapFormat, tileIndex, tileIndex, groundId );
 
-                Maps::setTerrainWithTransition( _mapFormat, indices.x, indices.y, groundId );
-            }
-            else {
-                assert( brushSize.width == 0 );
-
-                // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainWithTransition( _mapFormat, tileIndex, tileIndex, groundId );
-
-                _areaSelectionStartTileId = -1;
-            }
+            _areaSelectionStartTileId = -1;
 
             _brushTiles.clear();
 
