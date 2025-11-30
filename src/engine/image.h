@@ -77,7 +77,7 @@ namespace fheroes2
             // Why do you want to get transform layer from the single-layer image?
             assert( !_singleLayer );
 
-            return _singleLayer ? nullptr : _data.get() + _width * _height;
+            return _singleLayer ? nullptr : _data.get() + width() * height();
         }
 
         const uint8_t * transform() const
@@ -85,7 +85,7 @@ namespace fheroes2
             // Why do you want to get transform layer from the single-layer image?
             assert( !_singleLayer );
 
-            return _singleLayer ? nullptr : _data.get() + _width * _height;
+            return _singleLayer ? nullptr : _data.get() + width() * height();
         }
 
         bool empty() const
