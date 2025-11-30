@@ -63,10 +63,17 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 
 namespace
 {
-    const int32_t buttonYStep = 66;
+    const size_t playerCountOptions = 5;
+    const std::array<fheroes2::Key, playerCountOptions> playerCountHotkeys
+        = { fheroes2::Key::KEY_2, fheroes2::Key::KEY_3, fheroes2::Key::KEY_4, fheroes2::Key::KEY_5, fheroes2::Key::KEY_6 };
+    const std::array<fheroes2::GameMode, playerCountOptions> playerCountModes
+        = { fheroes2::GameMode::SELECT_SCENARIO_TWO_HUMAN_PLAYERS, fheroes2::GameMode::SELECT_SCENARIO_THREE_HUMAN_PLAYERS,
+            fheroes2::GameMode::SELECT_SCENARIO_FOUR_HUMAN_PLAYERS, fheroes2::GameMode::SELECT_SCENARIO_FIVE_HUMAN_PLAYERS,
+            fheroes2::GameMode::SELECT_SCENARIO_SIX_HUMAN_PLAYERS };
 
     std::unique_ptr<SMKVideoSequence> getVideo( const std::string & fileName )
     {
@@ -92,6 +99,7 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_STANDARD ) << " to choose Standard Game." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CAMPAIGN ) << " to choose Campaign Game." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MULTI ) << " to choose Multiplayer Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_BATTLEONLY ) << " to choose Battle Only Game." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to come back to Main Menu." )
     }
@@ -141,8 +149,9 @@ namespace
 fheroes2::GameMode Game::NewStandard()
 {
     Settings & conf = Settings::Get();
-    if ( conf.isCampaignGameType() )
+    if ( conf.isCampaignGameType() ) {
         conf.setCurrentMapInfo( {} );
+    }
     conf.SetGameType( Game::TYPE_STANDARD );
     return fheroes2::GameMode::SELECT_SCENARIO_ONE_HUMAN_PLAYER;
 }
@@ -151,94 +160,20 @@ fheroes2::GameMode Game::NewBattleOnly()
 {
     Settings & conf = Settings::Get();
     conf.SetGameType( Game::TYPE_BATTLEONLY );
-
-    return fheroes2::GameMode::NEW_MULTI;
-}
-
-fheroes2::GameMode Game::NewHotSeat()
-{
-    Settings & conf = Settings::Get();
-    if ( conf.isCampaignGameType() )
-        conf.setCurrentMapInfo( {} );
-
-    if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
-        // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.
-        fheroes2::drawMainMenuScreen();
-
-        return StartBattleOnly();
-    }
-    else {
-        conf.SetGameType( Game::TYPE_HOTSEAT );
-        const uint8_t humanPlayerCount = SelectCountPlayers();
-
-        switch ( humanPlayerCount ) {
-        case 2:
-            return fheroes2::GameMode::SELECT_SCENARIO_TWO_HUMAN_PLAYERS;
-        case 3:
-            return fheroes2::GameMode::SELECT_SCENARIO_THREE_HUMAN_PLAYERS;
-        case 4:
-            return fheroes2::GameMode::SELECT_SCENARIO_FOUR_HUMAN_PLAYERS;
-        case 5:
-            return fheroes2::GameMode::SELECT_SCENARIO_FIVE_HUMAN_PLAYERS;
-        case 6:
-            return fheroes2::GameMode::SELECT_SCENARIO_SIX_HUMAN_PLAYERS;
-        default:
-            break;
-        }
-    }
-    return fheroes2::GameMode::MAIN_MENU;
-}
-
-fheroes2::GameMode Game::CampaignSelection()
-{
-    if ( !isPriceOfLoyaltyCampaignPresent() ) {
-        return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-    }
-
-    outputNewCampaignSelectionInTextSupportMode();
-
+    // Redraw the empty main menu screen to show it after the battle using screen restorer.
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
+    return fheroes2::GameMode::START_BATTLE_ONLY_MODE;
+}
 
-    fheroes2::Button buttonSuccessionWars( buttonPos.x, buttonPos.y, ICN::BUTTON_ORIGINAL_CAMPAIGN, 0, 1 );
-    fheroes2::Button buttonPriceOfLoyalty( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_EXPANSION_CAMPAIGN, 0, 1 );
-    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
-
-    buttonSuccessionWars.draw();
-    buttonPriceOfLoyalty.draw();
-    buttonCancel.draw();
-
-    fheroes2::Display::instance().render();
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() ) {
-        buttonSuccessionWars.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSuccessionWars.area() ) );
-        buttonPriceOfLoyalty.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPriceOfLoyalty.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
-
-        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) ) {
-            return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-        }
-        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) ) {
-            return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
-        }
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            return fheroes2::GameMode::MAIN_MENU;
-        }
-
-        if ( le.isMouseRightButtonPressedInArea( buttonSuccessionWars.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ),
-                                               Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonPriceOfLoyalty.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Expansion Campaign" ), _( "One of the four new campaigns from the Price of Loyalty expansion set." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
-        }
+fheroes2::GameMode Game::NewHotSeat( const size_t playerCountOptionIndex )
+{
+    assert( playerCountOptionIndex < playerCountModes.size() );
+    Settings & conf = Settings::Get();
+    if ( conf.isCampaignGameType() ) {
+        conf.setCurrentMapInfo( {} );
     }
-
-    return fheroes2::GameMode::QUIT_GAME;
+    conf.SetGameType( Game::TYPE_HOTSEAT );
+    return playerCountModes[playerCountOptionIndex];
 }
 
 fheroes2::GameMode Game::NewSuccessionWarsCampaign()
@@ -258,7 +193,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     loadingScreen.draw( display.width() / 2 - loadingScreen.width() / 2, display.height() / 2 - loadingScreen.height() / 2 + 2, display );
     display.render();
 
-    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+    Video::ShowVideo( { { "INTRO.SMK", Video::VideoControl::PLAY_CUTSCENE } } );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
@@ -273,12 +208,17 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     const std::array<fheroes2::Rect, 2> campaignRoi{ fheroes2::Rect( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 ),
                                                      fheroes2::Rect( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 ) };
 
-    const uint64_t customDelay = static_cast<uint64_t>( std::lround( 1000.0 / video->fps() ) );
+    const uint64_t customDelay = static_cast<uint64_t>( std::lround( video->microsecondsPerFrame() / 1000 ) );
 
     outputNewSuccessionWarsCampaignInTextSupportMode();
 
     AudioManager::ResetAudio();
-    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
+    std::unique_ptr<SMKVideoSequence> audio = getVideo( "CHOOSEW.SMK" );
+    if ( audio ) {
+        for ( auto channel : audio->getAudioChannels() ) {
+            Mixer::Play( channel.data(), static_cast<uint32_t>( channel.size() ), false );
+        }
+    }
 
     const fheroes2::ScreenPaletteRestorer screenRestorer;
 
@@ -325,7 +265,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
             display.render( frameRoi );
 
-            if ( video->frameCount() <= video->getCurrentFrame() ) {
+            if ( video->frameCount() <= video->getCurrentFrameId() ) {
                 video->resetFrame();
             }
         }
@@ -395,7 +335,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     size_t highlightCampaignId = videos.size();
 
-    fheroes2::GameMode gameChoice = fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
+    fheroes2::GameMode gameChoice = fheroes2::GameMode::NEW_GAME;
     uint64_t customDelay = 0;
 
     // Immediately indicate that the delay has passed to render first frame immediately.
@@ -433,7 +373,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         for ( size_t i = 0; i < activeCampaignArea.size(); ++i ) {
             if ( le.isMouseCursorPosInArea( activeCampaignArea[i] ) && videos[i] ) {
                 highlightCampaignId = i;
-                customDelay = static_cast<uint64_t>( std::lround( 1000.0 / videos[highlightCampaignId]->fps() ) );
+                customDelay = static_cast<uint64_t>( std::lround( videos[highlightCampaignId]->microsecondsPerFrame() / 1000 ) );
                 break;
             }
         }
@@ -455,7 +395,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
             display.render( frameRoi );
 
-            if ( videos[highlightCampaignId]->frameCount() <= videos[highlightCampaignId]->getCurrentFrame() ) {
+            if ( videos[highlightCampaignId]->frameCount() <= videos[highlightCampaignId]->getCurrentFrameId() ) {
                 videos[highlightCampaignId]->resetFrame();
             }
         }
@@ -471,54 +411,6 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     return gameChoice;
 }
 
-fheroes2::GameMode Game::NewNetwork()
-{
-    Settings & conf = Settings::Get();
-    conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-
-    fheroes2::Button buttonHost( buttonPos.x, buttonPos.y, ICN::BTNNET, 0, 1 );
-    fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNNET, 2, 3 );
-    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
-
-    buttonHost.draw();
-    buttonGuest.draw();
-    buttonCancel.draw();
-
-    fheroes2::Display::instance().render();
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() ) {
-        buttonHost.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHost.area() ) );
-        buttonGuest.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonGuest.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
-
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            return fheroes2::GameMode::MAIN_MENU;
-        }
-
-        // right info
-        if ( le.isMouseRightButtonPressedInArea( buttonHost.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Host" ), _( "The host sets up the game options. There can only be one host per network game." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonGuest.area() ) ) {
-            fheroes2::showStandardTextMessage(
-                _( "Guest" ), _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
-                Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
-        }
-    }
-
-    return fheroes2::GameMode::MAIN_MENU;
-}
-
 fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 {
     outputNewMenuInTextSupportMode();
@@ -528,32 +420,78 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    // reset last save name
+    // Reset last save name
     Game::SetLastSaveName( "" );
 
-    // setup cursor
+    // Setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-    fheroes2::Button buttonStandardGame( buttonPos.x, buttonPos.y, ICN::BUTTON_STANDARD_GAME, 0, 1 );
-    fheroes2::Button buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
-    fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
-    fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BUTTON_BATTLE_ONLY, 0, 1 );
-    fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BUTTON_LARGE_CONFIG, 0, 1 );
-    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+    // Setup dialog from buttons.
+    const int menuButtonsIcnIndex = Settings::Get().isEvilInterfaceEnabled() ? ICN::BUTTONS_NEW_GAME_MENU_EVIL : ICN::BUTTONS_NEW_GAME_MENU_GOOD;
+    fheroes2::ButtonGroup mainModeButtons;
+    // Only add the buttons needed for the initial state of the dialog.
+    for ( int32_t i = 0; i < 5; ++i ) {
+        mainModeButtons.createButton( 0, 0, menuButtonsIcnIndex, i * 2, i * 2 + 1, i );
+    }
+
+    const fheroes2::ButtonBase & buttonStandardGame = mainModeButtons.button( 0 );
+    fheroes2::ButtonBase & buttonCampaignGame = mainModeButtons.button( 1 );
+    const fheroes2::ButtonBase & buttonMultiGame = mainModeButtons.button( 2 );
+    const fheroes2::ButtonBase & buttonBattleGame = mainModeButtons.button( 3 );
+    const fheroes2::ButtonBase & buttonSettings = mainModeButtons.button( 4 );
+
+    // Generate dialog background with extra space added for the cancel button.
+    const int32_t spaceBetweenButtons = 10;
+    fheroes2::StandardWindow background( mainModeButtons, true, buttonStandardGame.area().height + spaceBetweenButtons );
+
+    // Make corners like in the original game.
+    background.applyGemDecoratedCorners();
+
+    // We don't need to restore the cancel button area because every state of the dialog has this button.
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::ImageRestorer emptyDialog( display, background.activeArea().x, background.activeArea().y, background.activeArea().width,
+                                         background.activeArea().height - buttonStandardGame.area().height - spaceBetweenButtons * 2 - 2 );
 
     if ( !isSuccessionWarsCampaignPresent() ) {
         buttonCampaignGame.disable();
     }
 
-    buttonStandardGame.draw();
-    buttonCampaignGame.draw();
-    buttonMultiGame.draw();
-    buttonBattleGame.draw();
-    buttonSettings.draw();
+    background.renderSymmetricButtons( mainModeButtons, 0, true );
+
+    // Add the cancel button at the bottom of the dialog.
+    fheroes2::Button buttonCancel( buttonStandardGame.area().x,
+                                   background.activeArea().y * 2 + background.activeArea().height - buttonStandardGame.area().y - buttonStandardGame.area().height,
+                                   menuButtonsIcnIndex, 10, 11 );
     buttonCancel.draw();
+    buttonCancel.drawShadow( display );
+
+    // Add extra buttons in disabled state.
+    fheroes2::Button buttonHotSeat( buttonStandardGame.area().x, buttonStandardGame.area().y, menuButtonsIcnIndex, 12, 13 );
+    buttonHotSeat.disable();
+
+    fheroes2::ButtonGroup playerCountButtons;
+
+    for ( int32_t i = 0; i < 5; ++i ) {
+        playerCountButtons.createButton( buttonStandardGame.area().x, buttonStandardGame.area().y + i * ( buttonStandardGame.area().height + spaceBetweenButtons ),
+                                         menuButtonsIcnIndex, ( i + 7 ) * 2, ( i + 7 ) * 2 + 1, i );
+        playerCountButtons.button( i ).disable();
+    }
+
+    fheroes2::Button buttonSuccessionWars;
+    fheroes2::Button buttonPriceOfLoyalty;
+    buttonSuccessionWars.disable();
+    buttonPriceOfLoyalty.disable();
+
+    const bool isPriceOfLoyaltyPresent = isPriceOfLoyaltyCampaignPresent();
+
+    if ( isPriceOfLoyaltyPresent ) {
+        buttonSuccessionWars.setICNInfo( menuButtonsIcnIndex, 24, 25 );
+        buttonPriceOfLoyalty.setICNInfo( menuButtonsIcnIndex, 26, 27 );
+        buttonSuccessionWars.setPosition( mainModeButtons.button( 0 ).area().x, mainModeButtons.button( 0 ).area().y );
+        buttonPriceOfLoyalty.setPosition( mainModeButtons.button( 1 ).area().x, mainModeButtons.button( 1 ).area().y );
+    }
 
     fheroes2::validateFadeInAndRender();
 
@@ -568,185 +506,141 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
     }
 
     while ( le.HandleEvents() ) {
-        buttonStandardGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonStandardGame.area() ) );
-        if ( buttonCampaignGame.isEnabled() ) {
-            buttonCampaignGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCampaignGame.area() ) );
+        if ( buttonStandardGame.isEnabled() ) {
+            mainModeButtons.drawOnState( le );
+
+            if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) || le.MouseClickLeft( buttonStandardGame.area() ) ) {
+                return fheroes2::GameMode::NEW_STANDARD;
+            }
+            if ( buttonCampaignGame.isEnabled() && ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) || le.MouseClickLeft( buttonCampaignGame.area() ) ) ) {
+                if ( !isPriceOfLoyaltyCampaignPresent() ) {
+                    return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
+                }
+                mainModeButtons.disable();
+                emptyDialog.restore();
+                buttonSuccessionWars.enable();
+                buttonPriceOfLoyalty.enable();
+                buttonSuccessionWars.draw();
+                buttonPriceOfLoyalty.draw();
+                buttonSuccessionWars.drawShadow( display );
+                buttonPriceOfLoyalty.drawShadow( display );
+
+                outputNewCampaignSelectionInTextSupportMode();
+
+                display.render( emptyDialog.rect() );
+            }
+            if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
+                fheroes2::openGameSettings();
+                return fheroes2::GameMode::MAIN_MENU;
+            }
+            if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_BATTLEONLY ) || le.MouseClickLeft( buttonBattleGame.area() ) ) {
+                return fheroes2::GameMode::NEW_BATTLE_ONLY;
+            }
+            if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) ) {
+                mainModeButtons.disable();
+                emptyDialog.restore();
+                buttonHotSeat.enable();
+                buttonHotSeat.draw();
+                buttonHotSeat.drawShadow( display );
+                display.render( emptyDialog.rect() );
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonStandardGame.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Standard Game" ), _( "A single player game playing out a single map." ), Dialog::ZERO );
+            }
+            else if ( buttonCampaignGame.isEnabled() && le.isMouseRightButtonPressedInArea( buttonCampaignGame.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonMultiGame.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
+                                                   _( "A multi-player game, with several human players competing against each other on a single map." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonBattleGame.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonSettings.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
+            }
         }
-        buttonMultiGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMultiGame.area() ) );
-        buttonBattleGame.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonBattleGame.area() ) );
-        buttonSettings.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSettings.area() ) );
+        else if ( playerCountButtons.button( 0 ).isEnabled() ) {
+            playerCountButtons.drawOnState( le );
+
+            // Loop through all player count buttons.
+            for ( size_t i = 0; i < playerCountOptions; ++i ) {
+                assert( i < playerCountHotkeys.size() );
+
+                if ( le.MouseClickLeft( playerCountButtons.button( i ).area() ) || le.isKeyPressed( playerCountHotkeys[i] ) ) {
+                    return NewHotSeat( i );
+                }
+            }
+            if ( le.isMouseRightButtonPressedInArea( playerCountButtons.button( 0 ).area() ) ) {
+                fheroes2::showStandardTextMessage( _( "2 Players" ), _( "Play with 2 human players, and optionally, up to 4 additional computer players." ),
+                                                   Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( playerCountButtons.button( 1 ).area() ) ) {
+                fheroes2::showStandardTextMessage( _( "3 Players" ), _( "Play with 3 human players, and optionally, up to 3 additional computer players." ),
+                                                   Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( playerCountButtons.button( 2 ).area() ) ) {
+                fheroes2::showStandardTextMessage( _( "4 Players" ), _( "Play with 4 human players, and optionally, up to 2 additional computer players." ),
+                                                   Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( playerCountButtons.button( 3 ).area() ) ) {
+                fheroes2::showStandardTextMessage( _( "5 Players" ), _( "Play with 5 human players, and optionally, up to 1 additional computer player." ),
+                                                   Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( playerCountButtons.button( 4 ).area() ) ) {
+                fheroes2::showStandardTextMessage( _( "6 Players" ), _( "Play with 6 human players." ), Dialog::ZERO );
+            }
+        }
+        else if ( buttonSuccessionWars.isEnabled() ) {
+            buttonSuccessionWars.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonSuccessionWars.area() ) );
+            buttonPriceOfLoyalty.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonPriceOfLoyalty.area() ) );
+
+            if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) ) {
+                return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
+            }
+            if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) ) {
+                return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonSuccessionWars.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Original Campaign" ),
+                                                   _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonPriceOfLoyalty.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Expansion Campaign" ), _( "One of the four new campaigns from the Price of Loyalty expansion set." ),
+                                                   Dialog::ZERO );
+            }
+        }
+        else {
+            buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHotSeat.area() ) );
+            if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
+                buttonHotSeat.disable();
+                emptyDialog.restore();
+                playerCountButtons.enable();
+                playerCountButtons.draw();
+                playerCountButtons.drawShadows( display );
+                display.render( emptyDialog.rect() );
+                continue;
+            }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonHotSeat.area() ) ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 6 players play on the same device, switching into the 'Hot Seat' when it is their turn." ),
+                    Dialog::ZERO );
+            }
+        }
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) || le.MouseClickLeft( buttonStandardGame.area() ) ) {
-            return fheroes2::GameMode::NEW_STANDARD;
-        }
-        if ( buttonCampaignGame.isEnabled() && ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) || le.MouseClickLeft( buttonCampaignGame.area() ) ) ) {
-            return fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
-        }
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) ) {
-            return fheroes2::GameMode::NEW_MULTI;
-        }
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
-            fheroes2::openGameSettings();
-            return fheroes2::GameMode::MAIN_MENU;
-        }
         if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_BATTLEONLY ) || le.MouseClickLeft( buttonBattleGame.area() ) ) {
-            return fheroes2::GameMode::NEW_BATTLE_ONLY;
-        }
 
-        if ( le.isMouseRightButtonPressedInArea( buttonStandardGame.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Standard Game" ), _( "A single player game playing out a single map." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCampaignGame.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonMultiGame.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
-                                               _( "A multi-player game, with several human players competing against each other on a single map." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonBattleGame.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonSettings.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+        if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }
 
     return fheroes2::GameMode::QUIT_GAME;
-}
-
-fheroes2::GameMode Game::NewMulti()
-{
-    Settings & conf = Settings::Get();
-
-    if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
-        conf.SetGameType( Game::TYPE_STANDARD );
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-
-    fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
-    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
-
-    buttonHotSeat.draw();
-    buttonCancel.draw();
-    buttonNetwork.disable();
-
-    fheroes2::Display::instance().render();
-
-    LocalEvent & le = LocalEvent::Get();
-    // new game loop
-    while ( le.HandleEvents() ) {
-        buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHotSeat.area() ) );
-        if ( buttonNetwork.isEnabled() ) {
-            buttonNetwork.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNetwork.area() ) );
-        }
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
-
-        if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
-            return fheroes2::GameMode::NEW_HOT_SEAT;
-        }
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            return fheroes2::GameMode::MAIN_MENU;
-        }
-
-        // right info
-        if ( le.isMouseRightButtonPressedInArea( buttonHotSeat.area() ) ) {
-            fheroes2::
-                showStandardTextMessage( _( "Hot Seat" ),
-                                         _( "Play a Hot Seat game, where 2 to 6 players play on the same device, switching into the 'Hot Seat' when it is their turn." ),
-                                         Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
-        }
-    }
-
-    return fheroes2::GameMode::QUIT_GAME;
-}
-
-uint8_t Game::SelectCountPlayers()
-{
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
-
-    fheroes2::Button button2Players( buttonPos.x, buttonPos.y, ICN::BUTTON_2_PLAYERS, 0, 1 );
-    fheroes2::Button button3Players( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_3_PLAYERS, 0, 1 );
-    fheroes2::Button button4Players( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BUTTON_4_PLAYERS, 0, 1 );
-    fheroes2::Button button5Players( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BUTTON_5_PLAYERS, 0, 1 );
-    fheroes2::Button button6Players( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BUTTON_6_PLAYERS, 0, 1 );
-    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
-
-    button2Players.draw();
-    button3Players.draw();
-    button4Players.draw();
-    button5Players.draw();
-    button6Players.draw();
-    buttonCancel.draw();
-
-    fheroes2::Display::instance().render();
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() ) {
-        button2Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button2Players.area() ) );
-        button3Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button3Players.area() ) );
-        button4Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button4Players.area() ) );
-        button5Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button5Players.area() ) );
-        button6Players.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( button6Players.area() ) );
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
-
-        if ( le.MouseClickLeft( button2Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_2 ) ) {
-            return 2;
-        }
-        if ( le.MouseClickLeft( button3Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_3 ) ) {
-            return 3;
-        }
-        if ( le.MouseClickLeft( button4Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_4 ) ) {
-            return 4;
-        }
-        if ( le.MouseClickLeft( button5Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_5 ) ) {
-            return 5;
-        }
-        if ( le.MouseClickLeft( button6Players.area() ) || le.isKeyPressed( fheroes2::Key::KEY_6 ) ) {
-            return 6;
-        }
-        if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            return 0;
-        }
-
-        // right info
-        if ( le.isMouseRightButtonPressedInArea( button2Players.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "2 Players" ), _( "Play with 2 human players, and optionally, up to 4 additional computer players." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( button3Players.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "3 Players" ), _( "Play with 3 human players, and optionally, up to 3 additional computer players." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( button4Players.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "4 Players" ), _( "Play with 4 human players, and optionally, up to 2 additional computer players." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( button5Players.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "5 Players" ), _( "Play with 5 human players, and optionally, up to 1 additional computer player." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( button6Players.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "6 Players" ), _( "Play with 6 human players." ), Dialog::ZERO );
-        }
-        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
-        }
-    }
-
-    return 0;
 }

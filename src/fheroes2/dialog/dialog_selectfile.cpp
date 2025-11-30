@@ -44,6 +44,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "logging.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "screen.h"
@@ -53,7 +54,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
-#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -156,11 +156,6 @@ namespace
             fheroes2::showMessage( header, body, Dialog::ZERO );
         }
 
-        int getCurrentId() const
-        {
-            return _currentId;
-        }
-
         void initListBackgroundRestorer( fheroes2::Rect roi )
         {
             _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
@@ -169,15 +164,6 @@ namespace
         bool isDoubleClicked() const
         {
             return _isDoubleClicked;
-        }
-
-        void updateScrollBarImage()
-        {
-            const int32_t scrollBarWidth = _scrollbar.width();
-
-            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
-            _scrollbar.moveToIndex( _topId );
         }
 
     private:
@@ -228,6 +214,18 @@ namespace
         // Do nothing.
     }
 
+    void sortMapInfos( MapsFileInfoList & mapInfos )
+    {
+        const SaveFileSortingMethod sortType = Settings::Get().getSaveFileSortingMethod();
+        if ( sortType == SaveFileSortingMethod::FILENAME ) {
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::CompareByFileName{} );
+        }
+        else {
+            assert( sortType == SaveFileSortingMethod::TIMESTAMP );
+            std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::CompareByTimestamp{} );
+        }
+    }
+
     MapsFileInfoList getSortedMapsFileInfoList()
     {
         ListFiles files;
@@ -244,9 +242,82 @@ namespace
             }
         }
 
-        std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+        sortMapInfos( mapInfos );
 
         return mapInfos;
+    }
+
+    MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
+                                                     const std::string & lastChoice )
+    {
+        return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+    }
+
+    MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
+                                                     const std::string & lastChoice, const uint32_t lastChoiceTimestamp, const SaveFileSortingMethod sortingMethod )
+    {
+        switch ( sortingMethod ) {
+        case SaveFileSortingMethod::FILENAME: {
+#ifdef WITH_DEBUG
+            assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
+#endif
+
+            // With case-insensitive sorting, there may be several "identical" file names on the case-sensitive file system
+            const auto [beginSameFileName, endSameFileName] = std::equal_range( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
+
+            if ( const MapsFileInfoList::const_iterator iter = findInMapInfos( beginSameFileName, endSameFileName, lastChoice ); iter != endSameFileName ) {
+                return iter;
+            }
+
+            break;
+        }
+        case SaveFileSortingMethod::TIMESTAMP: {
+#ifdef WITH_DEBUG
+            assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByTimestamp{} ) );
+#endif
+
+            const auto [beginSameTimestamp, endSameTimestamp] = std::equal_range( begin, end, lastChoiceTimestamp, Maps::FileInfo::CompareByTimestamp{} );
+
+            if ( const MapsFileInfoList::const_iterator iter = findInMapInfos( beginSameTimestamp, endSameTimestamp, lastChoice ); iter != endSameTimestamp ) {
+                return iter;
+            }
+
+            break;
+        }
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return end;
+    }
+
+    MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
+                                                     const std::string & lastChoice, const SaveFileSortingMethod sortingMethod )
+    {
+        switch ( sortingMethod ) {
+        case SaveFileSortingMethod::FILENAME: {
+#ifdef WITH_DEBUG
+            assert( std::is_sorted( begin, end, Maps::FileInfo::CompareByFileName{} ) );
+#endif
+
+            // With case-insensitive sorting, there may be several "identical" file names on the case-sensitive file system
+            const auto [beginSameFileName, endSameFileName] = std::equal_range( begin, end, lastChoice, Maps::FileInfo::CompareByFileName{} );
+
+            if ( const MapsFileInfoList::const_iterator iter = findInMapInfos( beginSameFileName, endSameFileName, lastChoice ); iter != endSameFileName ) {
+                return iter;
+            }
+
+            break;
+        }
+        case SaveFileSortingMethod::TIMESTAMP:
+            return findInMapInfos( begin, end, lastChoice );
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return end;
     }
 
     std::string selectFileListSimple( const std::string & header, const std::string & lastfile, const bool isEditing )
@@ -256,7 +327,7 @@ namespace
 
         MapsFileInfoList lists = getSortedMapsFileInfoList();
 
-        const int32_t listHeightDeduction = 112;
+        const int32_t listHeightDeduction = 120;
         const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
 
@@ -272,20 +343,24 @@ namespace
         fheroes2::StandardWindow background( maxFileNameWidth + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
         const fheroes2::Rect dialogArea( background.activeArea() );
-        const fheroes2::Rect listRoi( dialogArea.x + 24, dialogArea.y + 37, dialogArea.width - 75, dialogArea.height - listHeightDeduction );
-        const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
-        const int32_t dateTimeoffsetX = textInputRoi.x + textInputRoi.width;
+        const fheroes2::Rect listRoi( dialogArea.x + 24, dialogArea.y + 57, dialogArea.width - 75, dialogArea.height - listHeightDeduction );
+        const fheroes2::Rect nameHeaderRoi( listRoi.x, listRoi.y - 28, maxFileNameWidth + 8, 28 );
+        const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 3, maxFileNameWidth + 8, 23 );
+        const int32_t dateTimeOffsetX = textInputRoi.x + textInputRoi.width;
         const int32_t dateTimeWidth = listRoi.width - textInputRoi.width;
+        const fheroes2::Rect dateHeaderRoi( dateTimeOffsetX, nameHeaderRoi.y, dateTimeWidth, nameHeaderRoi.height );
 
         // We divide the save-files list: file name and file date/time.
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, textInputRoi.width, listRoi.height } );
         background.applyTextBackgroundShading( { listRoi.x + textInputRoi.width, listRoi.y, dateTimeWidth, listRoi.height } );
+        background.applyTextBackgroundShading( nameHeaderRoi );
+        background.applyTextBackgroundShading( dateHeaderRoi );
         background.applyTextBackgroundShading( textInputRoi );
         // Make background for the selected file date and time.
-        background.applyTextBackgroundShading( { dateTimeoffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height } );
+        background.applyTextBackgroundShading( { dateTimeOffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height } );
 
         fheroes2::ImageRestorer textInputBackground( display, textInputRoi.x, textInputRoi.y, textInputRoi.width, textInputRoi.height );
-        fheroes2::ImageRestorer dateBackground( display, dateTimeoffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height );
+        fheroes2::ImageRestorer dateBackground( display, dateTimeOffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height );
         const fheroes2::Rect textInputAndDateROI( textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height );
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
@@ -304,7 +379,9 @@ namespace
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        Settings & settings = Settings::Get();
+        const bool isEvilInterface = settings.isEvilInterfaceEnabled();
+        const SaveFileSortingMethod fileSortingMethod = settings.getSaveFileSortingMethod();
 
         int32_t scrollbarOffsetX = dialogArea.x + dialogArea.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -327,16 +404,10 @@ namespace
         if ( !lastfile.empty() ) {
             filename = System::GetStem( lastfile );
             charInsertPos = filename.size();
+            const MapsFileInfoList::const_iterator it = findInMapInfos( lists.cbegin(), lists.cend(), lastfile, fileSortingMethod );
 
-            MapsFileInfoList::iterator it = lists.begin();
-            for ( ; it != lists.end(); ++it ) {
-                if ( ( *it ).filename == lastfile ) {
-                    break;
-                }
-            }
-
-            if ( it != lists.end() ) {
-                listbox.SetCurrent( std::distance( lists.begin(), it ) );
+            if ( it != lists.cend() ) {
+                listbox.SetCurrent( std::distance( lists.cbegin(), it ) );
             }
             else {
                 if ( !isEditing ) {
@@ -366,16 +437,78 @@ namespace
         listbox.Redraw();
 
         // Virtual keyboard button, text input and blinking cursor are used only in save game mode (when 'isEditing' is true ).
-        std::unique_ptr<fheroes2::ButtonSprite> buttonVirtualKB;
+        std::unique_ptr<fheroes2::Button> buttonVirtualKB;
         std::unique_ptr<fheroes2::TextInputField> textInput;
 
         const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
-        title.drawInRoi( dialogArea.x + ( dialogArea.width - title.width() ) / 2, dialogArea.y + 16, display, dialogArea );
+        title.drawInRoi( dialogArea.x + ( dialogArea.width - title.width() ) / 2, dialogArea.y + 9, display, dialogArea );
+
+        const fheroes2::Text nameHeader( _( "saveLoadDialog|Name" ), fheroes2::FontType::normalYellow() );
+        nameHeader.drawInRoi( nameHeaderRoi.x, nameHeaderRoi.y + ( nameHeaderRoi.height - nameHeader.height() ) / 2 + 3, nameHeaderRoi.width, display, nameHeaderRoi );
+
+        const fheroes2::Text dateHeader( _( "saveLoadDialog|Date" ), fheroes2::FontType::normalYellow() );
+        dateHeader.drawInRoi( dateHeaderRoi.x, dateHeaderRoi.y + ( dateHeaderRoi.height - dateHeader.height() ) / 2 + 3, dateHeaderRoi.width, display, dateHeaderRoi );
+
+        // Draw radio buttons for toggling between sorting methods.
+        const int sortMarkIcnID = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
+        const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( sortMarkIcnID, 4 );
+
+        const fheroes2::Rect markBackgroundNameRoi( nameHeaderRoi.x + 5, nameHeaderRoi.y + 6, markBackground.width(), markBackground.height() );
+        const fheroes2::Rect markBackgroundDateRoi( dateTimeOffsetX + 5, nameHeaderRoi.y + 6, markBackground.width(), markBackground.height() );
+        fheroes2::Blit( markBackground, display, markBackgroundNameRoi );
+        fheroes2::Blit( markBackground, display, markBackgroundDateRoi );
+
+        const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( sortMarkIcnID, 5 );
+
+        if ( fileSortingMethod == SaveFileSortingMethod::FILENAME ) {
+            fheroes2::Blit( mark, display, { markBackgroundNameRoi.x + 3, markBackgroundNameRoi.y + 3, mark.width(), mark.height() } );
+        }
+        else {
+            fheroes2::Blit( mark, display, { markBackgroundDateRoi.x + 3, markBackgroundDateRoi.y + 3, mark.width(), mark.height() } );
+        }
+
+        // Redraw sort radio buttons, sort file list in new method, and return whether to redraw the list.
+        auto switchFileSorting
+            = [&markBackgroundNameRoi, &markBackgroundDateRoi, &markBackground, &mark, &display, &listbox, &lists, &settings]( const bool doSortByDate ) {
+                  const fheroes2::Rect roiMarkBackground = doSortByDate ? markBackgroundNameRoi : markBackgroundDateRoi;
+                  const fheroes2::Rect roiMark = doSortByDate ? markBackgroundDateRoi : markBackgroundNameRoi;
+                  fheroes2::Blit( markBackground, display, roiMarkBackground );
+                  fheroes2::Blit( mark, display, { roiMark.x + 3, roiMark.y + 3, roiMark.width, roiMark.height } );
+
+                  const int currentId = listbox.getCurrentId();
+                  std::string lastChoice{};
+                  uint32_t lastChoiceTimestamp{};
+                  if ( currentId >= 0 && static_cast<size_t>( currentId ) < lists.size() ) {
+                      lastChoice = lists[currentId].filename;
+                      lastChoiceTimestamp = lists[currentId].timestamp;
+                  }
+
+                  settings.setSaveFileSortingMethod( doSortByDate ? SaveFileSortingMethod::TIMESTAMP : SaveFileSortingMethod::FILENAME );
+                  sortMapInfos( lists );
+
+                  bool redrawNeeded = false;
+
+                  // Re-select the last selected file if any, unless we're typing in the list box
+                  if ( !lastChoice.empty() ) {
+                      const MapsFileInfoList::const_iterator it
+                          = findInMapInfos( lists.cbegin(), lists.cend(), lastChoice, lastChoiceTimestamp, settings.getSaveFileSortingMethod() );
+
+                      if ( it != lists.cend() ) {
+                          const int newId = static_cast<int>( std::distance( lists.cbegin(), it ) );
+                          if ( newId != currentId ) {
+                              listbox.SetCurrent( newId );
+                              redrawNeeded = true;
+                          }
+                      }
+                  }
+                  return redrawNeeded;
+              };
 
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
-            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
-            background.renderCustomButtonSprite( *buttonVirtualKB, "...", { 48, 25 }, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+            buttonVirtualKB = std::make_unique<fheroes2::Button>();
+            const int buttonVirtualKBIcnID = isEvilInterface ? ICN::BUTTON_VIRTUAL_KEYBOARD_EVIL : ICN::BUTTON_VIRTUAL_KEYBOARD_GOOD;
+            background.renderButton( *buttonVirtualKB, buttonVirtualKBIcnID, 0, 1, { 0, 7 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             // Prepare the text input and set it to always fit the file name input field width.
             textInput = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ textInputRoi.x + 4, textInputRoi.y + 2, maxFileNameWidth, textInputRoi.height - 2 },
@@ -383,14 +516,14 @@ namespace
 
             if ( !listbox.isSelected() ) {
                 textInput->draw( filename, static_cast<int32_t>( charInsertPos ) );
-                redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
+                redrawDateTime( display, std::time( nullptr ), dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
             }
         }
 
         if ( listbox.isSelected() ) {
             // Render the saved file name, date and time.
             redrawTextInputField( filename, textInputRoi, display );
-            redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
+            redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
         }
 
         display.render( background.totalArea() );
@@ -412,7 +545,7 @@ namespace
             }
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                return {};
+                break;
             }
 
             const int listId = listbox.getCurrentId();
@@ -422,6 +555,7 @@ namespace
             bool isListboxSelected = listbox.isSelected();
 
             bool needRedraw = ( listId != listbox.getCurrentId() );
+            bool listUpdated = false;
 
             if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
@@ -432,7 +566,10 @@ namespace
                 msg.append( System::GetFileName( listbox.GetCurrent().filename ) );
 
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning" ), msg, Dialog::YES | Dialog::NO ) ) {
-                    System::Unlink( listbox.GetCurrent().filename );
+                    if ( !System::Unlink( listbox.GetCurrent().filename ) ) {
+                        ERROR_LOG( "Unable to delete file " << listbox.GetCurrent().filename )
+                    }
+
                     listbox.RemoveSelected();
 
                     if ( lists.empty() ) {
@@ -460,6 +597,14 @@ namespace
                 else if ( !filename.empty() ) {
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
+            }
+            else if ( le.MouseClickLeft( nameHeaderRoi ) && settings.getSaveFileSortingMethod() != SaveFileSortingMethod::FILENAME ) {
+                listUpdated = true;
+                needRedraw = switchFileSorting( false );
+            }
+            else if ( le.MouseClickLeft( dateHeaderRoi ) && settings.getSaveFileSortingMethod() != SaveFileSortingMethod::TIMESTAMP ) {
+                listUpdated = true;
+                needRedraw = switchFileSorting( true );
             }
             else if ( isEditing ) {
                 assert( textInput != nullptr );
@@ -521,8 +666,15 @@ namespace
             else if ( isEditing && le.isMouseRightButtonPressedInArea( buttonVirtualKB->area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( nameHeaderRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Sort by Name" ), _( "Click here if you wish to sort save files by their name." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( dateHeaderRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Sort by Date" ), _( "Click here if you you wish to sort save files by their last modified date." ), Dialog::ZERO );
+            }
 
-            const bool needRedrawListbox = listbox.IsNeedRedraw();
+            // TODO: ListBox::SetCurrent() call should update needRedraw variable as it changes the internal UI view of the class.
+            const bool needRedrawListbox = listUpdated || listbox.IsNeedRedraw();
 
             if ( isEditing && !needRedraw && !isListboxSelected && textInput->eventProcessing() ) {
                 // Text input blinking cursor render is done in Save Game dialog when no file is selected
@@ -549,7 +701,7 @@ namespace
                     dateBackground.restore();
 
                     redrawTextInputField( filename, textInputRoi, display );
-                    redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
+                    redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
                 }
                 else if ( isEditing ) {
                     // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.
@@ -558,7 +710,7 @@ namespace
 
                     dateBackground.restore();
                     textInput->draw( filename, static_cast<int32_t>( charInsertPos ) );
-                    redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
+                    redrawDateTime( display, std::time( nullptr ), dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
             }
 
@@ -569,6 +721,12 @@ namespace
             else {
                 display.render( textInputAndDateROI );
             }
+        }
+
+        const SaveFileSortingMethod lastFileSortingMethod = settings.getSaveFileSortingMethod();
+
+        if ( lastFileSortingMethod != fileSortingMethod ) {
+            settings.Save( Settings::configFileName );
         }
 
         return result;

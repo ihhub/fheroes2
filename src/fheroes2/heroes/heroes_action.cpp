@@ -205,7 +205,7 @@ namespace
 
     void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker )
     {
-        const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
+        const uint32_t reason = attacker ? res.getAttackerResult() : res.getDefenderResult();
 
         AudioManager::PlaySound( M82::KILLFADE );
 
@@ -444,8 +444,8 @@ namespace
             // Hero' spell points and army could have changed. Update heroes icons and status area.
             I.renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
-            if ( res.AttackerWins() ) {
-                hero.IncreaseExperience( res.GetExperienceAttacker() );
+            if ( res.isAttackerWin() ) {
+                hero.IncreaseExperience( res.getAttackerExperience() );
 
                 destroy = true;
             }
@@ -560,30 +560,30 @@ namespace
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
-            castle->ActionAfterBattle( res.AttackerWins() );
+            castle->ActionAfterBattle( res.isAttackerWin() );
 
             // Hero' spell points and army could have changed. Update heroes icons and status area.
             Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
             // The defender was defeated
-            if ( !res.DefenderWins() && defender ) {
+            if ( !res.isDefenderWin() && defender ) {
                 BattleLose( *defender, res, false );
             }
 
             // The attacker was defeated
-            if ( !res.AttackerWins() ) {
+            if ( !res.isAttackerWin() ) {
                 BattleLose( hero, res, true );
             }
 
             // The attacker won
-            if ( res.AttackerWins() ) {
+            if ( res.isAttackerWin() ) {
                 captureCastle();
 
-                hero.IncreaseExperience( res.GetExperienceAttacker() );
+                hero.IncreaseExperience( res.getAttackerExperience() );
             }
             // The defender won
-            else if ( res.DefenderWins() && defender ) {
-                defender->IncreaseExperience( res.GetExperienceDefender() );
+            else if ( res.isDefenderWin() && defender ) {
+                defender->IncreaseExperience( res.getDefenderExperience() );
             }
 
             return;
@@ -643,22 +643,22 @@ namespace
         // TODO: make fading animation of both heroes together.
 
         // The defender was defeated
-        if ( !res.DefenderWins() ) {
+        if ( !res.isDefenderWin() ) {
             BattleLose( *otherHero, res, false );
         }
 
         // The attacker was defeated
-        if ( !res.AttackerWins() ) {
+        if ( !res.isAttackerWin() ) {
             BattleLose( hero, res, true );
         }
 
         // The attacker won
-        if ( res.AttackerWins() ) {
-            hero.IncreaseExperience( res.GetExperienceAttacker() );
+        if ( res.isAttackerWin() ) {
+            hero.IncreaseExperience( res.getAttackerExperience() );
         }
         // The defender won
-        else if ( res.DefenderWins() ) {
-            otherHero->IncreaseExperience( res.GetExperienceDefender() );
+        else if ( res.isDefenderWin() ) {
+            otherHero->IncreaseExperience( res.getDefenderExperience() );
         }
     }
 
@@ -666,9 +666,7 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        if ( hero.isShipMaster() ) {
-            return;
-        }
+        assert( !hero.isShipMaster() );
 
         hero.setLastGroundRegion( world.getTile( hero.GetIndex() ).GetRegion() );
 
@@ -717,9 +715,7 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        if ( !hero.isShipMaster() ) {
-            return;
-        }
+        assert( hero.isShipMaster() );
 
         const int fromIndex = hero.GetIndex();
         Maps::Tile & from = world.getTile( fromIndex );
@@ -1186,8 +1182,8 @@ namespace
                 // Hero' spell points and army could have changed. Update heroes icons and status area.
                 Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
-                if ( res.AttackerWins() ) {
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
+                if ( res.isAttackerWin() ) {
+                    hero.IncreaseExperience( res.getAttackerExperience() );
                     bool valid = false;
 
                     std::string msg = _( "Upon defeating the monsters, you decipher an ancient glyph on the wall, telling the secret of the spell - '" );
@@ -1403,8 +1399,8 @@ namespace
             // Hero' spell points could have changed. Update heroes icons.
             Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS );
 
-            if ( res.AttackerWins() ) {
-                hero.IncreaseExperience( res.GetExperienceAttacker() );
+            if ( res.isAttackerWin() ) {
+                hero.IncreaseExperience( res.getAttackerExperience() );
 
                 complete = true;
 
@@ -1744,8 +1740,8 @@ namespace
                 // Hero' spell points and army could have changed. Update heroes icons and status area.
                 Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
-                if ( res.AttackerWins() ) {
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
+                if ( res.isAttackerWin() ) {
+                    hero.IncreaseExperience( res.getAttackerExperience() );
                     result = true;
                     msg = _( "Victorious, you take your prize, the %{art}." );
                     StringReplace( msg, "%{art}", art.GetName() );
@@ -1814,6 +1810,10 @@ namespace
 
             if ( tile.isWater() ) {
                 if ( gold == 0 ) {
+                    fheroes2::showStandardTextMessage( std::move( hdr ),
+                                                       _( "After spending hours trying to fish the chest out of the sea, you open it, only to find it empty." ),
+                                                       Dialog::OK );
+
                     return {};
                 }
 
@@ -2150,8 +2150,8 @@ namespace
                 // Hero' spell points and army could have changed. Update heroes icons and status area.
                 Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
-                if ( result.AttackerWins() ) {
-                    hero.IncreaseExperience( result.GetExperienceAttacker() );
+                if ( result.isAttackerWin() ) {
+                    hero.IncreaseExperience( result.getAttackerExperience() );
 
                     captureObject();
                 }
@@ -2203,8 +2203,8 @@ namespace
             // Hero' spell points and army could have changed. Update heroes icons and status area.
             Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
-            if ( result.AttackerWins() ) {
-                hero.IncreaseExperience( result.GetExperienceAttacker() );
+            if ( result.isAttackerWin() ) {
+                hero.IncreaseExperience( result.getAttackerExperience() );
 
                 Maps::restoreAbandonedMine( tile, Resource::GOLD );
                 hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
@@ -2487,8 +2487,8 @@ namespace
             // Hero' spell points and army could have changed. Update heroes icons and status area.
             Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
-            if ( res.AttackerWins() ) {
-                hero.IncreaseExperience( res.GetExperienceAttacker() );
+            if ( res.isAttackerWin() ) {
+                hero.IncreaseExperience( res.getAttackerExperience() );
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
                 setColorOnTile( tile, PlayerColor::UNUSED );
@@ -2810,7 +2810,12 @@ namespace
 
         MapEvent * mapEvent = world.GetMapEvent( Maps::GetPoint( tileIndex ) );
         if ( mapEvent == nullptr ) {
+            // No data found for this event type. This may happen in the case of hacked maps.
             DEBUG_LOG( DBG_AI, DBG_INFO, "Adventure Map event at index " << tileIndex << " is missing!" )
+
+            // Remove the event object type because of the missing data.
+            hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
+
             return;
         }
 
@@ -3180,8 +3185,8 @@ namespace
                     // Hero' spell points and army could have changed. Update heroes icons and status area.
                     Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
 
-                    if ( res.AttackerWins() ) {
-                        hero.IncreaseExperience( res.GetExperienceAttacker() );
+                    if ( res.isAttackerWin() ) {
+                        hero.IncreaseExperience( res.getAttackerExperience() );
 
                         // Daemon Cave always gives 2500 Gold after a battle.
                         const uint32_t gold = 2500;
@@ -3226,7 +3231,7 @@ namespace
                 }
                 case Outcome::Death: {
                     Battle::Result res;
-                    res.army1 = Battle::RESULT_LOSS;
+                    res.attacker = Battle::RESULT_LOSS;
 
                     BattleLose( hero, res, true );
 
@@ -3626,7 +3631,7 @@ namespace
         }
         case Outcome::IncorrectAnswer: {
             Battle::Result result;
-            result.army1 = Battle::RESULT_LOSS;
+            result.attacker = Battle::RESULT_LOSS;
 
             BattleLose( hero, result, true );
 
@@ -3741,7 +3746,7 @@ void Heroes::ScoutRadar() const
     I.setRedraw( Interface::REDRAW_RADAR );
 }
 
-void Heroes::Action( int tileIndex )
+void Heroes::Action( const int tileIndex )
 {
     // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
     struct FocusUpdater
@@ -3798,13 +3803,18 @@ void Heroes::Action( int tileIndex )
         AudioManager::PlayMusicAsync( MUS::FromGround( world.getTile( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    const MP2::MapObjectType objectType = world.getTile( tileIndex ).getMainObjectType( tileIndex != heroPosIndex );
-    if ( MP2::isInGameActionObject( objectType, isShipMaster() ) ) {
+    const Maps::Tile & tile = world.getTile( tileIndex );
+    const MP2::MapObjectType objectType = tile.getMainObjectType( tileIndex != heroPosIndex );
+
+    const bool isHeroDisembarking = isShipMaster() && tile.isSuitableForDisembarkation();
+    const bool isHeroActing = isHeroDisembarking || MP2::isInGameActionObject( objectType, isShipMaster() );
+
+    if ( isHeroActing ) {
         SetModes( ACTION );
     }
 
     // Most likely there will be some action or event, immediately center the map on the hero to avoid subsequent minor screen movements
-    if ( Modes( ACTION ) || objectType == MP2::OBJ_EVENT ) {
+    if ( isHeroActing || objectType == MP2::OBJ_EVENT ) {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.getGameArea().SetCenter( GetCenter() );
@@ -3829,10 +3839,6 @@ void Heroes::Action( int tileIndex )
 
     case MP2::OBJ_BOAT:
         ActionToBoat( *this, tileIndex );
-        break;
-
-    case MP2::OBJ_COAST:
-        ActionToCoast( *this, tileIndex );
         break;
 
     case MP2::OBJ_WINDMILL:
@@ -4076,6 +4082,12 @@ void Heroes::Action( int tileIndex )
         break;
 
     default:
+        if ( isHeroDisembarking ) {
+            ActionToCoast( *this, tileIndex );
+            break;
+        }
+
+        assert( !isHeroActing );
         break;
     }
 }

@@ -797,8 +797,8 @@ namespace
         if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
             AudioManager::ResetAudio();
 
-            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
-                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            for ( const auto & item : completedScenario.getEndScenarioVideoPlayback() ) {
+                Video::ShowVideo( item );
             }
 
             AudioManager::ResetAudio();
@@ -820,8 +820,8 @@ namespace
         if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
             AudioManager::ResetAudio();
 
-            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
-                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            for ( const auto & item : scenario.getStartScenarioVideoPlayback() ) {
+                Video::ShowVideo( item );
             }
 
             AudioManager::ResetAudio();
@@ -1261,7 +1261,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, { 475, 110 }, 140 );
 
         AudioManager::ResetAudio();
-        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { std::move( ratingSubtitle ) }, true );
+        Video::ShowVideo( { { "WIN.SMK", Video::VideoControl::PLAY_CUTSCENE_WAIT } }, { std::move( ratingSubtitle ) }, true );
 
         // fheroes2::PlayMusic is run here in order to start playing before displaying the high score.
         AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
@@ -1403,7 +1403,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
     }
 
-    optionButtonGroup.draw();
+    optionButtonGroup.draw( display );
 
     buttonViewIntro.draw();
     buttonDifficulty.draw();
@@ -1440,6 +1440,25 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     textDaysSpent.draw( top.x + 582 - textDaysSpent.width() / 2, top.y + 33, display );
 
     DrawCampaignScenarioDescription( scenario, top );
+
+    fheroes2::Rect scenarioTitleArea;
+    switch ( chosenCampaignID ) {
+    case Campaign::ARCHIBALD_CAMPAIGN:
+    case Campaign::ROLAND_CAMPAIGN:
+        scenarioTitleArea = { top.x + 198, top.y + 84, 200, 25 };
+        break;
+    case Campaign::DESCENDANTS_CAMPAIGN:
+    case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+    case Campaign::VOYAGE_HOME_CAMPAIGN:
+    case Campaign::WIZARDS_ISLE_CAMPAIGN:
+        scenarioTitleArea = { top.x + 198, top.y + 84, 200, 22 };
+        break;
+    default:
+        // Implementing a new campaign? Add a new case!
+        assert( 0 );
+        break;
+    }
+
     drawObtainedCampaignAwards( campaignSaveData, top );
 
     std::vector<Campaign::ScenarioInfoId> selectableScenarios;
@@ -1499,7 +1518,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             if ( le.isMouseLeftButtonPressedInArea( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
                 scenarioBonusId = fheroes2::checkedCast<int32_t>( i );
                 buttonChoices.button( i ).press();
-                optionButtonGroup.draw();
+                optionButtonGroup.draw( display );
                 display.render();
 
                 break;
@@ -1663,6 +1682,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.isMouseRightButtonPressedInArea( areaDaysSpent ) ) {
             fheroes2::showStandardTextMessage( _( "Days spent" ), _( "The number of days spent on this campaign." ), Dialog::ZERO );
+            updateDisplay = true;
+        }
+        else if ( le.isMouseRightButtonPressedInArea( scenarioTitleArea ) ) {
+            fheroes2::showStandardTextMessage( _( "Scenario Title" ), scenario.getScenarioName(), Dialog::ZERO );
             updateDisplay = true;
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {

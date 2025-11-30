@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <exception>
 #include <functional>
+#include <initializer_list>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -72,6 +73,7 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
@@ -176,6 +178,7 @@ namespace
                 }
             }
 
+            display.setWindowPos( conf.getSavedWindowPos() );
             display.setResolution( bestResolution );
 
             fheroes2::engine().setTitle( GetCaption() );
@@ -343,25 +346,34 @@ int main( int argc, char ** argv )
 
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL", false ) );
-        fheroes2::Display::instance().changePalette( nullptr, true );
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        display.changePalette( nullptr, true );
 
-        // init game data
-        Game::Init();
-
+        // Update the fonts according to the game language set in the configuration.
+        // NOTICE: it must be done before initializing the engine to properly load all
+        // language-specific font characters for the selected language because during
+        // initialization the English language is forced to properly read the configuration files.
         conf.setGameLanguage( conf.getGameLanguage() );
+
+        // Initialize game data.
+        Game::Init();
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
-
-            Video::ShowVideo( "NWCLOGO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
-            Video::ShowVideo( "CYLOGO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            for ( const auto & logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
+                Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
+            }
         }
 
         try {
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
+            const fheroes2::Point pos = conf.getSavedWindowPos();
             Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
+            const fheroes2::Point currentPos = display.getWindowPos();
+            if ( pos != currentPos ) {
+                conf.setStartWindowPos( currentPos );
+                conf.Save( Settings::configFileName );
+            }
         }
         catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )

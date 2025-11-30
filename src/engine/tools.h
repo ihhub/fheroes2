@@ -27,9 +27,9 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <functional>
 #include <iomanip>
 #include <limits>
+#include <locale>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -82,13 +82,6 @@ namespace fheroes2
 {
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 
-    template <class T>
-    void hashCombine( uint32_t & seed, const T & v )
-    {
-        std::hash<T> hasher;
-        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
-    }
-
     template <size_t N>
     std::bitset<N> makeBitsetFromVector( const std::vector<int> & vector )
     {
@@ -105,6 +98,35 @@ namespace fheroes2
 
     // Appends the given modifier to the end of the given string (e.g. "Coliseum +2")
     void appendModifierToString( std::string & str, const int mod );
+
+    // Performs case-insensitive string comparison, suitable for string sorting purposes. Returns true if the first parameter is
+    // "less than" the second, otherwise returns false.
+    template <typename CharType>
+    bool compareStringsCaseInsensitively( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
+    {
+        typename std::basic_string<CharType>::const_iterator li = lhs.begin();
+        typename std::basic_string<CharType>::const_iterator ri = rhs.begin();
+
+        const std::locale currentGlobalLocale;
+
+        while ( li != lhs.end() && ri != rhs.end() ) {
+            const CharType lc = std::tolower( *li, currentGlobalLocale );
+            const CharType rc = std::tolower( *ri, currentGlobalLocale );
+
+            if ( lc < rc ) {
+                return true;
+            }
+            if ( lc > rc ) {
+                return false;
+            }
+            // The characters are "equal", so proceed to checking the next pair
+            ++li;
+            ++ri;
+        }
+
+        // We have reached the end of one (or both) of the strings, the first parameter is considered "less than" the second if it is shorter
+        return li == lhs.end() && ri != rhs.end();
+    }
 
     // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
     // the source value does not fit into the target type.

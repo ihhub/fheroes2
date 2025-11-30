@@ -355,7 +355,7 @@ void World::ComputeStaticAnalysis()
     bool stillRoomToExpand = true;
     while ( stillRoomToExpand ) {
         stillRoomToExpand = false;
-        for ( size_t regionID = REGION_NODE_FOUND; regionID < regionCenters.size(); ++regionID ) {
+        for ( size_t regionID = REGION_NODE_FOUND; regionID < _regions.size(); ++regionID ) {
             MapRegion & region = _regions[regionID];
             RegionExpansion( data, extendedWidth, region, offsets );
             if ( region._lastProcessedNode != region._nodes.size() )

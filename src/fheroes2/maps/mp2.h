@@ -518,6 +518,10 @@ namespace MP2
     // Use it only during actual gameplay. Event object is not considered as an action object.
     bool isWaterActionObject( const MapObjectType objectType );
 
+    // Returns true if the object is an action object and can be revisited by a hero already standing on this object, otherwise
+    // returns false. Use it only during actual gameplay.
+    bool isRevisitAllowedForObject( const MapObjectType objectType, const bool accessedFromWater );
+
     // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
     MapObjectType getBaseActionObjectType( const MapObjectType objectType );
 

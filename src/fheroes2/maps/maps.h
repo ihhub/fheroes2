@@ -86,6 +86,8 @@ namespace Maps
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
+    // Used by AI to check if area can be accessed
+    bool isTileProtectionStrongerThan( const int32_t tileIndex, const double armyStrength );
     // Returns a list of indexes of tiles with monsters guarding the specified tile. If the 'checkObjectOnTile' parameter
     // is set to true, then an additional check is performed to see if it is possible to interact with an object on this
     // tile without triggering a monster attack.

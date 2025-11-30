@@ -28,9 +28,11 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
+#include "game_string.h"
 #include "image.h"
 #include "math_base.h"
 #include "timing.h"
@@ -59,7 +61,14 @@ namespace fheroes2
         MovableSprite & operator=( const Sprite & sprite );
 
         void show();
-        void hide();
+
+        void hide()
+        {
+            if ( !_isHidden ) {
+                _restorer.restore();
+                _isHidden = true;
+            }
+        }
 
         // In case if Display has changed.
         void redraw()
@@ -167,6 +176,18 @@ namespace fheroes2
             return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
         }
 
+        size_t getCursorPositionInAdjacentLine( const size_t currentPos, const bool moveUp )
+        {
+            return _text.getCursorPositionInAdjacentLine( currentPos, _textInputArea.width, moveUp );
+        }
+
+        int32_t height( const std::string & text ) const
+        {
+            TextInput tmp{ _text };
+            tmp.set( text, 0 );
+            return tmp.height( _textInputArea.width );
+        }
+
     private:
         Image & _output;
         TextInput _text;
@@ -198,13 +219,19 @@ namespace fheroes2
     private:
         std::chrono::time_point<std::chrono::steady_clock> _startTime;
         fheroes2::MovableText _text;
-        std::deque<double> _fps;
+        std::deque<double> _delays;
     };
 
-    class TimedEventValidator : public ActionObject
+    class TimedEventValidator final : public ActionObject
     {
     public:
-        explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 );
+        explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 )
+            : _verification( std::move( verification ) )
+            , _delayBetweenUpdateMs( delayBetweenUpdateMs )
+            , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
+        {
+            // Do nothing.
+        }
 
         TimedEventValidator( const TimedEventValidator & ) = delete;
 
@@ -212,12 +239,18 @@ namespace fheroes2
 
         TimedEventValidator & operator=( const TimedEventValidator & ) = delete;
 
-        bool isDelayPassed();
-
-    protected:
-        void senderUpdate( const ActionObject * sender ) override;
+        bool isDelayPassed()
+        {
+            if ( _delayBeforeFirstUpdateMs.isPassed() && _delayBetweenUpdateMs.isPassed() && _verification() ) {
+                _delayBetweenUpdateMs.reset();
+                return true;
+            }
+            return false;
+        }
 
     private:
+        void senderUpdate( const ActionObject * sender ) override;
+
         std::function<bool()> _verification;
         fheroes2::TimeDelay _delayBetweenUpdateMs;
         fheroes2::TimeDelay _delayBeforeFirstUpdateMs;
@@ -288,4 +321,11 @@ namespace fheroes2
 
     // Render "hero on a horse" portrait dependent from hero race. Used in Editor.
     void renderHeroRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output );
+
+    std::vector<LocalizedString> getLocalizedStrings( std::string text, const SupportedLanguage currentLanguage, const std::string_view toReplace,
+                                                      std::string_view replacement, const SupportedLanguage replacementLanguage );
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<LocalizedString> texts, const FontType font );
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<std::pair<LocalizedString, FontType>> texts );
 }

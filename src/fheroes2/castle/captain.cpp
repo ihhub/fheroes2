@@ -123,7 +123,7 @@ int Captain::GetMorale() const
     result += GetMoraleModificator( nullptr );
 
     // A special artifact ability presence must be the last check.
-    const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+    const Artifact maxMoraleArtifact = _bagArtifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
     if ( maxMoraleArtifact.isValid() ) {
         result = Morale::BLOOD;
     }
@@ -139,7 +139,7 @@ int Captain::GetLuck() const
     result += GetLuckModificator( nullptr );
 
     // A special artifact ability presence must be the last check.
-    const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
+    const Artifact maxLuckArtifact = _bagArtifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
     if ( maxLuckArtifact.isValid() ) {
         result = Luck::IRISH;
     }
@@ -189,7 +189,7 @@ void Captain::ActionAfterBattle()
 
 void Captain::ActionPreBattle()
 {
-    spell_book.resetState();
+    _spellBook.resetState();
 }
 
 const Castle * Captain::inCastle() const
@@ -202,8 +202,9 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
     switch ( type ) {
     case PORT_BIG: {
         const int portraitIcnId = GetPortraitIcnId( GetRace() );
-        if ( portraitIcnId < 0 )
-            return fheroes2::Image();
+        if ( portraitIcnId < 0 ) {
+            return {};
+        }
 
         fheroes2::Sprite portrait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
         const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::getFlagIcnId( GetColor() ), 0 );
@@ -251,7 +252,7 @@ void Captain::PortraitRedraw( const int32_t px, const int32_t py, const Portrait
         return;
     }
 
-    const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
+    const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, getManaIndexSprite() );
 
     const int iconWidth = Interface::IconsBar::getItemWidth();
     const int iconHeight = Interface::IconsBar::getItemHeight();
@@ -270,12 +271,4 @@ void Captain::PortraitRedraw( const int32_t px, const int32_t py, const Portrait
     // spell points
     fheroes2::Fill( dstsf, px + barWidth + port.width() + 2, py, barWidth, iconHeight, blueColor );
     fheroes2::Blit( mana, dstsf, px + barWidth + port.width() + 2, py + mana.y() );
-}
-
-int Captain::GetManaIndexSprite() const
-{
-    // valid range (0 - 25)
-    const int r = GetMaxSpellPoints() / 5;
-
-    return 25 >= r ? r : 25;
 }

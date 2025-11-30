@@ -24,13 +24,20 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
+#include <optional>
+#include <vector>
 
 #include "color.h"
 #include "game_mode.h"
+#include "game_string.h"
 
 class IStreamBase;
 class OStreamBase;
+
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace GameOver
 {
@@ -61,7 +68,7 @@ namespace GameOver
     };
 
     const char * GetString( uint32_t cond );
-    std::string GetActualDescription( uint32_t cond );
+    std::vector<fheroes2::LocalizedString> GetActualDescription( const uint32_t conditions, const std::optional<fheroes2::SupportedLanguage> mapLanguage );
 
     class Result
     {

@@ -24,6 +24,7 @@
 #pragma once
 
 #include <cstdint>
+#include <set>
 #include <vector>
 
 class IStreamBase;
@@ -129,6 +130,11 @@ public:
         return id < s.id;
     }
 
+    bool operator>( const Spell & s ) const
+    {
+        return id > s.id;
+    }
+
     bool operator==( const Spell & s ) const
     {
         return s.id == id;
@@ -157,7 +163,7 @@ public:
     uint32_t minMovePoints() const;
 
     // Returns the value of the spell using the provided context
-    double getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const;
+    double getStrategicValue( const double armyStrength, const uint32_t currentSpellPoints, const int spellPower ) const;
 
     int Level() const;
     uint32_t Damage() const;
@@ -255,7 +261,7 @@ public:
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
-    static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1 );
+    static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1, const std::set<int32_t> & spellsToExclude = {} );
 
     static int32_t CalculateDimensionDoorDistance();
 

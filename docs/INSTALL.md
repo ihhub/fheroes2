@@ -73,7 +73,7 @@ If you see complaints about missing DLLs when running fheroes2, then you may nee
 You can download it using the following URLs:
 
 | Windows Version | C++ Package |
-|--------|--------|
+| --- | --- |
 | For 64-bit x64 fheroes2 builds | [**https://aka.ms/vs/17/release/vc_redist.x64.exe**](https://aka.ms/vs/17/release/vc_redist.x64.exe) |
 | for 32-bit x86 fheroes2 builds | [**https://aka.ms/vs/17/release/vc_redist.x86.exe**](https://aka.ms/vs/17/release/vc_redist.x86.exe) |
 
@@ -140,7 +140,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
   how you installed fheroes2:
 
   | Installation Method | Script |
-  |--------|--------|
+  | --- | --- |
   | If you used a package manager (MacPorts or Homebrew) | `fheroes2-extract-resources` |
   | If you built from source using the [**macOS native app**](#macos-native-app) method | `script/homm2/extract_homm2_resources_for_app_bundle.sh` |
   | All other cases | `script/homm2/extract_homm2_resources.sh` |
@@ -148,7 +148,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
   Alternatively, you may manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may be missing depending on the version of the original game)
 
   | Installation Method | Destination |
-  |--------|--------|
+  | --- | --- |
   | built from source using the [**macOS native app**](#macos-native-app) | `~/Library/Application Support/fheroes2` |
   | All other cases | `~/.fheroes2` |
 
@@ -156,7 +156,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
   by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
 
   | Installation Method | Script |
-  |--------|--------|
+  | --- | --- |
   | If you used a package manager (MacPorts or Homebrew) | `fheroes2-install-demo` |
   | If you built from source using the [**macOS native app**](#macos-native-app) method | `script/demo/download_demo_version_for_app_bundle.sh` |
   | All other cases | `script/demo/download_demo_version.sh` |

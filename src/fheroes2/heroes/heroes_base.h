@@ -72,7 +72,7 @@ class HeroBase : public Skill::Primary, public MapPosition, public BitModes, pub
 {
 public:
     HeroBase( const int type, const int race );
-    HeroBase();
+    HeroBase() = default;
 
     ~HeroBase() override = default;
 
@@ -117,8 +117,11 @@ public:
 
     uint32_t GetSpellPoints() const
     {
-        return magic_point;
+        return _spellPoints;
     }
+
+    // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
+    uint32_t getManaIndexSprite() const;
 
     bool HaveSpellPoints( const Spell & spell ) const;
     bool haveMovePoints( const Spell & spell ) const;
@@ -127,7 +130,7 @@ public:
     void SpellCasted( const Spell & spell );
     void SetSpellPoints( const uint32_t points )
     {
-        magic_point = points;
+        _spellPoints = points;
     }
 
     bool isPotentSpellcaster() const;
@@ -137,7 +140,7 @@ public:
 
     const SpellStorage & getMagicBookSpells() const
     {
-        return spell_book;
+        return _spellBook;
     }
 
     void EditSpellBook();
@@ -149,9 +152,9 @@ public:
         return hasArtifact( Artifact::MAGIC_BOOK );
     }
 
-    bool HaveSpell( const Spell & spell, const bool skip_bag = false ) const;
-    void AppendSpellToBook( const Spell &, const bool without_wisdom = false );
-    void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
+    bool HaveSpell( const Spell & spell, const bool skipBag = false ) const;
+    void AppendSpellToBook( const Spell &, const bool withoutWisdom = false );
+    void AppendSpellsToBook( const SpellStorage &, const bool withoutWisdom = false );
 
     // Adds the spell book to the artifact bag if it is not already there. Returns true if the spell book was actually added to the artifact bag, otherwise returns false.
     bool SpellBookActivate();
@@ -160,12 +163,12 @@ public:
 
     BagArtifacts & GetBagArtifacts()
     {
-        return bag_artifacts;
+        return _bagArtifacts;
     }
 
     const BagArtifacts & GetBagArtifacts() const
     {
-        return bag_artifacts;
+        return _bagArtifacts;
     }
 
     bool hasArtifact( const Artifact & art ) const;
@@ -176,11 +179,11 @@ protected:
     friend OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );
     friend IStreamBase & operator>>( IStreamBase & stream, HeroBase & hero );
 
-    uint32_t magic_point;
-    uint32_t move_point;
+    uint32_t _spellPoints{ 0 };
+    uint32_t _movePoints{ 0 };
 
-    SpellBook spell_book;
-    BagArtifacts bag_artifacts;
+    SpellBook _spellBook;
+    BagArtifacts _bagArtifacts;
 };
 
 OStreamBase & operator<<( OStreamBase & stream, const HeroBase & hero );

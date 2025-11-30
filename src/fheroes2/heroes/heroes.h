@@ -25,6 +25,7 @@
 
 #include <cassert> // IWYU pragma: keep
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <list>
@@ -41,6 +42,7 @@
 #include "math_base.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "race.h"
 #include "route.h"
 #include "skill.h"
 #include "spell.h"
@@ -281,9 +283,13 @@ public:
 
     static const int heroFrameCountPerTile{ 9 };
 
-    Heroes();
-    Heroes( int heroid, int rc );
-    Heroes( const int heroID, const int race, const uint32_t additionalExperience );
+    Heroes() = default;
+    Heroes( const int heroId, const int race );
+    Heroes( const int heroId, const int race, const uint32_t additionalExperience )
+        : Heroes( heroId, race )
+    {
+        IncreaseExperience( additionalExperience, true );
+    }
 
     Heroes( const Heroes & ) = delete;
 
@@ -300,7 +306,7 @@ public:
     // kingdom), otherwise returns false
     bool isAvailableForHire() const;
     // Dismisses the hero (makes him available for hire) because of a 'reason'. See the implementation for details.
-    void Dismiss( int reason );
+    void Dismiss( const int reason );
 
     bool isLosingGame() const;
     const Castle * inCastle() const override;
@@ -326,7 +332,7 @@ public:
         return _id;
     }
 
-    double getMeetingValue( const Heroes & otherHero ) const;
+    double getMeetingValue( const Heroes & receivingHero ) const;
     double getRecruitValue() const;
     int getStatsValue() const;
 
@@ -379,21 +385,21 @@ public:
     int GetPower() const override;
     int GetKnowledge() const override;
 
-    int GetAttack( std::string * ) const;
-    int GetDefense( std::string * ) const;
-    int GetPower( std::string * ) const;
-    int GetKnowledge( std::string * ) const;
+    int GetAttack( std::string * text ) const;
+    int GetDefense( std::string * text ) const;
+    int GetPower( std::string * text ) const;
+    int GetKnowledge( std::string * text ) const;
 
-    void IncreasePrimarySkill( int skill );
+    void IncreasePrimarySkill( const int skill );
 
     int GetMorale() const override;
     int GetLuck() const override;
-    int getMoraleWithModifiers( std::string * str = nullptr ) const;
-    int getLuckWithModifiers( std::string * str = nullptr ) const;
+    int getMoraleWithModifiers( std::string * text ) const;
+    int getLuckWithModifiers( std::string * text ) const;
 
     int GetLevel() const
     {
-        return GetLevelFromExperience( experience );
+        return GetLevelFromExperience( _experience );
     }
 
     MP2::MapObjectType getObjectTypeUnderHero() const
@@ -424,59 +430,60 @@ public:
     uint32_t GetMaxSpellPoints() const override;
 
     // Returns the maximum number of hero movement points, depending on the surface type on which the hero is currently located
-    uint32_t GetMaxMovePoints() const;
+    uint32_t GetMaxMovePoints() const
+    {
+        return GetMaxMovePoints( isShipMaster() );
+    }
+
     // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
     uint32_t GetMaxMovePoints( const bool onWater ) const;
 
     uint32_t GetMovePoints() const
     {
-        return move_point;
+        return _movePoints;
     }
 
     void IncreaseMovePoints( const uint32_t point )
     {
-        move_point += point;
+        _movePoints += point;
     }
 
     bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
 
     void ResetMovePoints()
     {
-        move_point = 0;
+        _movePoints = 0;
     }
 
-    bool HasSecondarySkill( int ) const;
+    bool HasSecondarySkill( const int skill ) const;
     bool HasMaxSecondarySkill() const;
-    int GetLevelSkill( int ) const override;
-    uint32_t GetSecondarySkillValue( int skill ) const override;
-    void LearnSkill( const Skill::Secondary & );
+    int GetLevelSkill( const int skill ) const override;
+    uint32_t GetSecondarySkillValue( const int skill ) const override;
+    void LearnSkill( const Skill::Secondary & skill );
 
     Skill::SecSkills & GetSecondarySkills()
     {
-        return secondary_skills;
+        return _secondarySkills;
     }
 
     bool PickupArtifact( const Artifact & art );
 
     bool HasUltimateArtifact() const
     {
-        return bag_artifacts.ContainUltimateArtifact();
+        return _bagArtifacts.ContainUltimateArtifact();
     }
 
     uint32_t GetCountArtifacts() const
     {
-        return bag_artifacts.CountArtifacts();
+        return _bagArtifacts.CountArtifacts();
     }
 
     bool IsFullBagArtifacts() const
     {
-        return bag_artifacts.isFull();
+        return _bagArtifacts.isFull();
     }
 
-    int GetMobilityIndexSprite() const;
-
-    // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
-    int GetManaIndexSprite() const;
+    uint32_t GetMobilityIndexSprite() const;
 
     int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
                     const fheroes2::SupportedLanguage language );
@@ -494,22 +501,22 @@ public:
 
     const Route::Path & GetPath() const
     {
-        return path;
+        return _path;
     }
 
     Route::Path & GetPath()
     {
-        return path;
+        return _path;
     }
 
     // Returns the number of travel days to the tile with the dstIdx index using the pathfinder from the World global
     // object, or zero if the destination tile is unreachable. The number of days returned is limited, see the source
     // of this method.
-    int getNumOfTravelDays( int32_t dstIdx ) const;
+    int getNumOfTravelDays( const int32_t dstIdx ) const;
 
     void ShowPath( const bool show )
     {
-        show ? path.Show() : path.Hide();
+        show ? _path.Show() : _path.Hide();
     }
 
     // Calculates the hero's path to the tile with the dstIdx index using the pathfinder from the World global object.
@@ -519,13 +526,13 @@ public:
 
     int GetDirection() const
     {
-        return direction;
+        return _direction;
     }
 
     void setDirection( const int directionToSet )
     {
         if ( directionToSet != Direction::UNKNOWN ) {
-            direction = directionToSet;
+            _direction = directionToSet;
         }
     }
 
@@ -535,28 +542,36 @@ public:
     // Set the global visited state for the tile with the given index both for this hero's kingdom and its allies
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    bool isObjectTypeVisited( const MP2::MapObjectType object, Visit::Type = Visit::LOCAL ) const;
-    bool isVisited( const Maps::Tile &, Visit::Type = Visit::LOCAL ) const;
+    bool isObjectTypeVisited( const MP2::MapObjectType object, const Visit::Type = Visit::LOCAL ) const;
+    bool isVisited( const Maps::Tile & tile, const Visit::Type = Visit::LOCAL ) const;
 
     std::set<MP2::MapObjectType> getAllVisitedObjectTypes() const;
 
     // These methods are used only for AI.
-    bool hasMetWithHero( int heroID ) const;
-    void markHeroMeeting( int heroID );
+    bool hasMetWithHero( const int heroId ) const;
+    void markHeroMeeting( const int heroId );
 
     // Do not call this method directly. It is used by AIHeroMeetingUpdater class.
     void unmarkHeroMeeting();
 
     bool Move( const bool jumpToNextTile = false );
-    void Move2Dest( const int32_t destination );
+    void Move2Dest( const int32_t destinationIndex );
     bool isMoveEnabled() const;
     bool CanMove() const;
     void SetMove( const bool enable );
-    bool isAction() const;
-    void ResetAction();
-    void Action( int tileIndex );
+
+    bool isAction() const
+    {
+        return Modes( ACTION );
+    }
+
+    void ResetAction()
+    {
+        ResetModes( ACTION );
+    }
+
+    void Action( const int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
-    void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
 
     // Update map in the scout area around the Hero on radar (mini-map).
@@ -568,13 +583,13 @@ public:
 
     int GetSpriteIndex() const
     {
-        return sprite_index;
+        return _spriteIndex;
     }
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
     void SetSpriteIndex( const int index )
     {
-        sprite_index = index;
+        _spriteIndex = index;
     }
 
     void SetOffset( const fheroes2::Point & offset )
@@ -585,19 +600,19 @@ public:
     fheroes2::Point getCurrentPixelOffset() const;
 
     // Performs a hero fade-out animation with the given speed multiplier and an optional offset
-    void FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+    void FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset = {} ) const;
 
     // Performs a hero fade-in animation with the given speed multiplier and an optional offset
-    void FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+    void FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset = {} ) const;
 
     // Performs a hero fade-out animation with an optional offset at the lowest possible speed
-    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const
+    void FadeOut( const fheroes2::Point & offset = {} ) const
     {
         FadeOut( 1, offset );
     }
 
     // Performs a hero fade-in animation with an optional offset at the lowest possible speed
-    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const
+    void FadeIn( const fheroes2::Point & offset = {} ) const
     {
         FadeIn( 1, offset );
     }
@@ -608,10 +623,14 @@ public:
     // Returns the area in map tiles around hero's position in his scout range.
     fheroes2::Rect GetScoutRoi() const;
 
-    uint32_t GetVisionsDistance() const;
+    static uint32_t GetVisionsDistance();
 
-    bool isShipMaster() const;
-    void SetShipMaster( bool );
+    bool isShipMaster() const
+    {
+        return Modes( SHIPMASTER );
+    }
+
+    void SetShipMaster( const bool isShipMaster );
 
     void setLastGroundRegion( const uint32_t regionID )
     {
@@ -620,7 +639,7 @@ public:
 
     uint32_t GetExperience() const
     {
-        return experience;
+        return _experience;
     }
 
     void IncreaseExperience( const uint32_t amount, const bool autoselect = false );
@@ -629,17 +648,17 @@ public:
 
     const fheroes2::Sprite & GetPortrait( const int type ) const
     {
-        return Heroes::GetPortrait( portrait, type );
+        return Heroes::GetPortrait( _portrait, type );
     }
 
     int getPortraitId() const
     {
-        return portrait;
+        return _portrait;
     }
 
     bool isPoLPortrait() const
     {
-        return ( portrait >= SOLMYR && portrait <= JARKONAS );
+        return ( _portrait >= SOLMYR && _portrait <= JARKONAS );
     }
 
     fheroes2::Point MovementDirection() const;
@@ -649,9 +668,9 @@ public:
         return _attackedMonsterTileIndex;
     }
 
-    void SetAttackedMonsterTileIndex( const int idx )
+    void SetAttackedMonsterTileIndex( const int tileIndex )
     {
-        _attackedMonsterTileIndex = idx;
+        _attackedMonsterTileIndex = tileIndex;
     }
 
     void setAIRole( const Role role )
@@ -685,17 +704,17 @@ public:
 
     bool isInDeepOcean() const;
 
-    static int GetLevelFromExperience( uint32_t exp );
-    static uint32_t GetExperienceFromLevel( int lvl );
+    static int GetLevelFromExperience( const uint32_t experience );
+    static uint32_t GetExperienceFromLevel( const int level );
 
     static uint32_t getExperienceMaxValue();
 
-    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
-    static const char * GetName( int heroid );
+    static const fheroes2::Sprite & GetPortrait( const int heroId, const int portraitType );
+    static const char * getDefaultName( const int heroId );
 
-    static bool isValidId( const int32_t id )
+    static bool isValidId( const int32_t heroId )
     {
-        return id > UNKNOWN && id < HEROES_COUNT;
+        return heroId > UNKNOWN && heroId < HEROES_COUNT;
     }
 
     void resetHeroSprite();
@@ -721,65 +740,71 @@ private:
         uint32_t seedSecondarySkillRandomChoose{ 0 };
     };
 
-    HeroSeedsForLevelUp GetSeedsForLevelUp() const;
-    void LevelUp( bool skipsecondary, bool autoselect = false );
-    void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
-    void AngleStep( int );
-    bool MoveStep( const bool jumpToNextTile );
-    bool isInVisibleMapArea() const;
+    HeroSeedsForLevelUp _getSeedsForLevelUp() const;
+    void _levelUp( const bool skipSecondary, const bool autoselect = false );
+    void _levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect = false );
+    void _angleStep( const int targetDirection );
+    void _applyMovementPenalty( const uint32_t penalty );
+    bool _moveStep( const bool jumpToNextTile );
+    bool _isInVisibleMapArea() const;
 
     // This function is useful only in a situation when AI hero moves out of the fog
     // we don't update his direction during movement under the fog so there is a situation
     // when initial hero's sprite is set incorrectly. This function fixes it
-    void SetValidDirectionSprite();
+    void _setValidDirectionSprite();
 
-    uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
+    uint32_t _updateMovementPoints( const uint32_t movePoints, const int skill ) const;
 
     // Daily replenishment of spell points
-    void ReplenishSpellPoints();
+    void _replenishSpellPoints();
 
-    static uint32_t GetStartingXp();
+    static uint32_t _getStartingXp();
 
-    std::string name;
-    uint32_t experience;
+    uint32_t _experience{ 0 };
+    std::string _name;
 
-    Skill::SecSkills secondary_skills;
+    Skill::SecSkills _secondarySkills;
 
-    Army army;
+    Army _army{ this };
 
     // Hero ID
-    int _id;
+    int _id{ UNKNOWN };
     // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
     // ID of this hero, unless a custom portrait is applied.
-    int portrait;
-    int _race;
+    int _portrait{ UNKNOWN };
+    int _race{ Race::NONE };
 
-    MP2::MapObjectType _objectTypeUnderHero;
+    MP2::MapObjectType _objectTypeUnderHero{ MP2::OBJ_NONE };
 
-    Route::Path path;
+    Route::Path _path{ *this };
 
-    int direction;
-    int sprite_index;
-    fheroes2::Point _offset; // used only during hero's movement
+    std::list<IndexObject> _visitedObjects;
+
+    // Hero's direction on adventure map.
+    int _direction{ Direction::RIGHT };
+    // Hero's sprite index on adventure map.
+    int _spriteIndex{ 18 };
+    // Hero's sprite offset on adventure map, used only during hero's movement.
+    fheroes2::Point _offset;
 
     fheroes2::Point _patrolCenter;
-    uint32_t _patrolDistance;
+    uint32_t _patrolDistance{ 0 };
 
-    std::list<IndexObject> visit_object;
-    uint32_t _lastGroundRegion = 0;
+    uint32_t _lastGroundRegion{ 0 };
 
     // Tracking how many spells this hero used this turn
-    uint32_t _dimensionDoorsUsed = 0;
+    uint32_t _dimensionDoorsUsed{ 0 };
 
-    mutable int _alphaValue;
+    mutable int _alphaValue{ 255 };
 
-    int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
+    // Used only when hero attacks a group of wandering monsters.
+    int _attackedMonsterTileIndex{ -1 };
 
     // This value should NOT be saved in save file as it's dynamically set during AI turn.
-    Role _aiRole;
+    Role _aiRole{ Role::HUNTER };
 };
 
-struct VecHeroes : public std::vector<Heroes *>
+struct VecHeroes final : public std::vector<Heroes *>
 {
     VecHeroes() = default;
 };
@@ -811,7 +836,15 @@ public:
         _heroes.clear();
     }
 
-    Heroes * Get( const int hid ) const;
+    // Return the maximum allowed heroes on map limited by the count of hero portraits
+    // and by the count of her default names.
+    static constexpr size_t getMaximumAllowedHeroes()
+    {
+        // We exclude the "UNKNOWN" hero, the "debug" hero, all 17 heroes from campaign.
+        return Heroes::HEROES_COUNT - 2 - 17;
+    }
+
+    Heroes * Get( const int heroId ) const;
     Heroes * Get( const fheroes2::Point & center ) const;
 
     void Scout( const PlayerColorsSet colors ) const;
@@ -822,14 +855,16 @@ public:
     void NewWeek() const;
 
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
-    Heroes * FromJail( int32_t index ) const;
+    Heroes * FromJail( const int32_t tileIndex ) const;
 
     template <typename BaseIterator>
     struct Iterator : public BaseIterator
     {
         explicit Iterator( BaseIterator && other ) noexcept
             : BaseIterator( std::move( other ) )
-        {}
+        {
+            // Do nothing.
+        }
 
         auto * operator*() const noexcept
         {

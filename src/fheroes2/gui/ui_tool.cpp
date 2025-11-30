@@ -44,6 +44,7 @@
 #include "system.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -177,14 +178,6 @@ namespace fheroes2
         }
     }
 
-    void MovableSprite::hide()
-    {
-        if ( !_isHidden ) {
-            _restorer.restore();
-            _isHidden = true;
-        }
-    }
-
     void MovableText::drawInRoi( const int32_t x, const int32_t y, const Rect & roi )
     {
         hide();
@@ -263,7 +256,8 @@ namespace fheroes2
     void SystemInfoRenderer::preRender()
     {
         const int32_t offsetX = 26;
-        const int32_t offsetY = fheroes2::Display::instance().height() - 30;
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const int32_t offsetY = display.height() - 30;
 
         const tm tmi = System::GetTM( std::time( nullptr ) );
 
@@ -276,52 +270,46 @@ namespace fheroes2
         const std::chrono::duration<double> time = endTime - _startTime;
         _startTime = endTime;
 
-        const double totalTime = time.count() * 1000.0;
-        const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
+        const double totalTime = time.count();
 
-        _fps.push_front( fps );
-        while ( _fps.size() > 10 ) {
-            _fps.pop_back();
+        _delays.push_front( totalTime );
+
+        double allTime = 0;
+        for ( size_t i = 0; i < _delays.size(); ++i ) {
+            allTime += _delays[i];
+            if ( allTime > 1.0 ) {
+                // Remove all delays that exceed to one second time period.
+                _delays.resize( i + 1 );
+            }
         }
 
-        double averageFps = 0;
-        for ( const double value : _fps ) {
-            averageFps += value;
-        }
-
-        averageFps /= static_cast<double>( _fps.size() );
-        const int32_t currentFps = static_cast<int32_t>( averageFps );
+        const double averageFps = static_cast<double>( _delays.size() ) / allTime + 0.05;
+        const int32_t integerFps = static_cast<int32_t>( averageFps );
 
         info += _( ", FPS: " );
-        info += std::to_string( currentFps );
-        if ( averageFps < 10 ) {
+        info += std::to_string( integerFps );
+        if ( integerFps < 10 ) {
             info += '.';
-            info += std::to_string( static_cast<int32_t>( ( averageFps - currentFps ) * 10 ) );
+            info += std::to_string( static_cast<int32_t>( ( averageFps - integerFps ) * 10 ) );
         }
 
-        _text.update( std::make_unique<fheroes2::Text>( std::move( info ), fheroes2::FontType::normalWhite() ) );
+        auto text = std::make_unique<fheroes2::Text>( std::move( info ), fheroes2::FontType::normalWhite() );
+
+        fheroes2::Rect fpsRoi( text->area() );
+        fpsRoi.x += offsetX;
+        fpsRoi.y += offsetY;
+
+        _text.update( std::move( text ) );
         _text.draw( offsetX, offsetY );
-    }
 
-    TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
-        : _verification( std::move( verification ) )
-        , _delayBetweenUpdateMs( delayBetweenUpdateMs )
-        , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
-    {}
-
-    bool TimedEventValidator::isDelayPassed()
-    {
-        if ( _delayBeforeFirstUpdateMs.isPassed() && _delayBetweenUpdateMs.isPassed() && _verification() ) {
-            _delayBetweenUpdateMs.reset();
-            return true;
-        }
-        return false;
+        display.updateNextRenderRoi( fpsRoi );
     }
 
     void TimedEventValidator::senderUpdate( const ActionObject * sender )
     {
-        if ( sender == nullptr )
+        if ( sender == nullptr ) {
             return;
+        }
         _delayBeforeFirstUpdateMs.reset();
         _delayBetweenUpdateMs.reset();
     }
@@ -858,5 +846,65 @@ namespace fheroes2
             break;
         }
         fheroes2::Copy( racePortrait, 0, 0, output, portPos );
+    }
+
+    std::vector<LocalizedString> getLocalizedStrings( std::string text, const SupportedLanguage currentLanguage, const std::string_view toReplace,
+                                                      std::string_view replacement, const SupportedLanguage replacementLanguage )
+    {
+        if ( currentLanguage == replacementLanguage ) {
+            StringReplace( text, toReplace.data(), replacement );
+            return { { std::move( text ), currentLanguage } };
+        }
+
+        // Check whether the replacement text even exists.
+        const std::string::size_type pos = text.find( toReplace );
+        if ( pos == std::string::npos ) {
+            return { { std::move( text ), currentLanguage } };
+        }
+
+        std::vector<LocalizedString> strings;
+
+        strings.emplace_back( text.substr( 0, pos ), currentLanguage );
+        strings.emplace_back( std::string( replacement ), replacementLanguage );
+        strings.emplace_back( text.substr( pos + toReplace.size() ), currentLanguage );
+
+        return strings;
+    }
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<LocalizedString> texts, const FontType font )
+    {
+        if ( texts.empty() ) {
+            return {};
+        }
+
+        if ( texts.size() == 1 ) {
+            return std::make_unique<Text>( std::move( texts.front().text ), font, texts.front().language );
+        }
+
+        auto multiFontText = std::make_unique<MultiFontText>();
+        for ( auto & text : texts ) {
+            multiFontText->add( Text( std::move( text.text ), font, text.language ) );
+        }
+
+        return multiFontText;
+    }
+
+    std::unique_ptr<TextBase> getLocalizedText( std::vector<std::pair<LocalizedString, FontType>> texts )
+    {
+        if ( texts.empty() ) {
+            return {};
+        }
+
+        if ( texts.size() == 1 ) {
+            auto & [text, font] = texts.front();
+            return std::make_unique<Text>( std::move( text.text ), font, text.language );
+        }
+
+        auto multiFontText = std::make_unique<MultiFontText>();
+        for ( auto & [text, font] : texts ) {
+            multiFontText->add( Text( std::move( text.text ), font, text.language ) );
+        }
+
+        return multiFontText;
     }
 }

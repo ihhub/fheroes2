@@ -53,6 +53,7 @@
 #include "localevent.h"
 #include "m82.h"
 #include "math_base.h"
+#include "math_tools.h"
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
@@ -216,7 +217,8 @@ namespace
     }
 }
 
-Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
+Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool openMageGuildWindow, const bool fade,
+                                                    const bool renderBackgroundDialog )
 {
     // Set the cursor image. This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
@@ -263,9 +265,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         switch ( result ) {
         case ConstructionDialogResult::NextConstructionWindow:
-            return CastleDialogReturnValue::NextCostructionWindow;
+            return CastleDialogReturnValue::NextConstructionWindow;
         case ConstructionDialogResult::PrevConstructionWindow:
-            return CastleDialogReturnValue::PreviousCostructionWindow;
+            return CastleDialogReturnValue::PreviousConstructionWindow;
         case ConstructionDialogResult::RecruitHero:
             hero = world.GetHero( *this );
             generateHeroImage( surfaceHero, hero );
@@ -292,10 +294,31 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         return CastleDialogReturnValue::DoNothing;
     };
 
+    auto mageGuildDialogHandler = [this]( const Heroes * visitingHero ) {
+        const auto result = _openMageGuild( visitingHero );
+        switch ( result ) {
+        case MageGuildDialogResult::NextMageGuildWindow:
+            return CastleDialogReturnValue::NextMageGuildWindow;
+        case MageGuildDialogResult::PrevMageGuildWindow:
+            return CastleDialogReturnValue::PreviousMageGuildWindow;
+        default:
+            assert( result == MageGuildDialogResult::DoNothing );
+            break;
+        }
+
+        return CastleDialogReturnValue::DoNothing;
+    };
+
     if ( openConstructionWindow && isBuild( BUILD_CASTLE ) ) {
         const CastleDialogReturnValue constructionResult = constructionDialogHandler();
         if ( constructionResult != CastleDialogReturnValue::DoNothing ) {
             return constructionResult;
+        }
+    }
+    else if ( openMageGuildWindow && isBuild( BUILD_MAGEGUILD ) ) {
+        const auto result = mageGuildDialogHandler( hero );
+        if ( result != CastleDialogReturnValue::DoNothing ) {
+            return result;
         }
     }
 
@@ -374,6 +397,78 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     buttonNextCastle.draw();
     buttonExit.draw();
 
+    std::string statusMessage;
+    LocalEvent & le = LocalEvent::Get();
+    auto updateStatusBar = [&]() {
+        bool isRedrawNeeded{ false };
+
+        // Army bar events processing.
+        if ( ( bottomArmyBar.isValid()
+               && ( ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
+                    || ( le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
+             || ( !bottomArmyBar.isValid() && le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
+            isRedrawNeeded = true;
+        }
+
+        // Update status bar. It doesn't depend on animation status.
+        // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
+        // In this case we must revert the queue and finding the first suitable building.
+        for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
+            if ( !isBuild( it->id ) ) {
+                continue;
+            }
+
+            bool isMouseInArea{ false };
+            for ( const auto & area : it->areas ) {
+                if ( le.isMouseCursorPosInArea( area ) ) {
+                    isMouseInArea = true;
+                    break;
+                }
+            }
+
+            if ( !isMouseInArea ) {
+                continue;
+            }
+
+            statusMessage = buildingStatusMessage( _race, it->id );
+            break;
+        }
+
+        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
+            statusMessage = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
+        }
+        else if ( le.isMouseCursorPosInArea( resActiveArea ) ) {
+            statusMessage = _( "Show Income" );
+        }
+        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
+            statusMessage = _( "Show previous town" );
+        }
+        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
+            statusMessage = _( "Show next town" );
+        }
+        else if ( hero && le.isMouseCursorPosInArea( rectSign2 ) ) {
+            statusMessage = _( "View Hero" );
+        }
+
+        fheroes2::Rect area;
+
+        if ( statusMessage.empty() ) {
+            area = statusBar.updateMessage( currentDate );
+        }
+        else {
+            area = statusBar.updateMessage( statusMessage );
+            statusMessage.clear();
+        }
+
+        if ( area != fheroes2::Rect{} ) {
+            display.updateNextRenderRoi( area );
+        }
+
+        return isRedrawNeeded || area != fheroes2::Rect{};
+    };
+
+    updateStatusBar();
+
     // Fade-in castle dialog.
     if ( fade ) {
         if ( renderBackgroundDialog && !isDefaultScreenSize ) {
@@ -391,12 +486,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
 
     // This variable must be declared out of the loop for performance reasons.
-    std::string statusMessage;
     uint32_t castleAnimationIndex = 1;
 
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
 
-    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() && result == CastleDialogReturnValue::DoNothing ) {
         bool needRedraw = false;
         bool needFadeIn = false;
@@ -446,10 +539,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show the next town." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
             }
             else if ( isBuild( BUILD_CAPTAIN ) && le.isMouseRightButtonPressedInArea( rectSign1 ) ) {
                 Dialog::QuickInfo( GetCaptain() );
@@ -457,14 +550,19 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
             }
+            else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
+                hero->GetArmy().SwapTroops( _army );
 
-            // Army bar events processing.
-            if ( ( bottomArmyBar.isValid()
-                   && ( ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
-                        || ( le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
-                 || ( !bottomArmyBar.isValid() && le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
-                needRedraw = true;
+                topArmyBar.ResetSelected();
+                bottomArmyBar.ResetSelected();
+
+                topArmyBar.Redraw( display );
+                bottomArmyBar.Redraw( display );
+
+                display.render( fheroes2::getBoundaryRect( topArmyBar.GetArea(), bottomArmyBar.GetArea() ) );
             }
+
+            needRedraw = needRedraw || updateStatusBar();
 
             // Actions with hero army.
             if ( hero ) {
@@ -524,7 +622,15 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 const uint32_t monsterDwelling = GetActualDwelling( it->id );
                 const bool isMonsterDwelling = ( monsterDwelling != BUILD_NOTHING );
 
-                if ( le.isMouseRightButtonPressedInArea( it->coord ) ) {
+                bool isRightButtonInArea{ false };
+                for ( const auto & area : it->areas ) {
+                    if ( le.isMouseRightButtonPressedInArea( area ) ) {
+                        isRightButtonInArea = true;
+                        break;
+                    }
+                }
+
+                if ( isRightButtonInArea ) {
                     // Check mouse right click.
                     if ( isMonsterDwelling ) {
                         Dialog::DwellingInfo( Monster( _race, it->id ), getMonstersInDwelling( it->id ) );
@@ -539,7 +645,17 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
 
-                if ( le.MouseClickLeft( it->coord ) || hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) ) {
+                bool isBuildingClicked = ( hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) );
+                if ( !isBuildingClicked ) {
+                    for ( const auto & area : it->areas ) {
+                        if ( le.MouseClickLeft( area ) ) {
+                            isBuildingClicked = true;
+                            break;
+                        }
+                    }
+                }
+
+                if ( isBuildingClicked ) {
                     if ( topArmyBar.isSelected() ) {
                         topArmyBar.ResetSelected();
                     }
@@ -555,7 +671,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             needRedraw = true;
                         }
 
-                        _openMageGuild( hero );
+                        const auto mageGuildResult = mageGuildDialogHandler( hero );
+                        if ( mageGuildResult != CastleDialogReturnValue::DoNothing ) {
+                            return mageGuildResult;
+                        }
                     }
                     else if ( isMonsterDwelling ) {
                         const fheroes2::ButtonRestorer exitRestorer( buttonExit );
@@ -695,40 +814,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else {
                 display.render( dialogRoi );
             }
-        }
-
-        // Update status bar. It doesn't depend on animation status.
-        // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
-        // In this case we must revert the queue and finding the first suitable building.
-        for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-            if ( isBuild( it->id ) && le.isMouseCursorPosInArea( it->coord ) ) {
-                statusMessage = buildingStatusMessage( _race, it->id );
-                break;
-            }
-        }
-
-        if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
-            statusMessage = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
-        }
-        else if ( le.isMouseCursorPosInArea( resActiveArea ) ) {
-            statusMessage = _( "Show Income" );
-        }
-        else if ( buttonPrevCastle.isEnabled() && le.isMouseCursorPosInArea( buttonPrevCastle.area() ) ) {
-            statusMessage = _( "Show previous town" );
-        }
-        else if ( buttonNextCastle.isEnabled() && le.isMouseCursorPosInArea( buttonNextCastle.area() ) ) {
-            statusMessage = _( "Show next town" );
-        }
-        else if ( hero && le.isMouseCursorPosInArea( rectSign2 ) ) {
-            statusMessage = _( "View Hero" );
-        }
-
-        if ( statusMessage.empty() ) {
-            statusBar.ShowMessage( currentDate );
-        }
-        else {
-            statusBar.ShowMessage( statusMessage );
-            statusMessage.clear();
         }
 
         needRedraw = fadeBuilding.updateFadeAlpha();

@@ -80,7 +80,8 @@ namespace
         GAME_BATTLE_AUTO_RESOLVE = 0x04000000,
         GAME_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        GAME_NUMERIC_ARMY_ESTIMATION_VIEW = 0x40000000,
     };
 
     enum EditorOptions : uint32_t
@@ -100,7 +101,9 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    , _windowPos( -1, -1 )
     , _gameDifficulty( Difficulty::NORMAL )
+    , _saveFileSortType( SaveFileSortingMethod::FILENAME )
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
@@ -255,6 +258,11 @@ bool Settings::Read( const std::string & filePath )
         }
     }
 
+    // Numeric/verbal army size estimate
+    if ( config.Exists( "army estimation view type" ) ) {
+        setNumericArmyEstimationView( config.StrParams( "army estimation view type" ) == "numeric" );
+    }
+
     if ( config.Exists( "hide interface" ) ) {
         setHideInterface( config.StrParams( "hide interface" ) == "on" );
     }
@@ -277,6 +285,10 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "videomode" ) ) {
         _resolutionInfo = config.ResolutionParams( "videomode", { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
+    }
+
+    if ( config.Exists( "game window position" ) ) {
+        _windowPos = config.PointParams( "game window position", { -1, -1 } );
     }
 
     if ( config.Exists( "fullscreen" ) ) {
@@ -355,6 +367,15 @@ bool Settings::Read( const std::string & filePath )
         setEditorPassability( config.StrParams( "editor passability" ) == "on" );
     }
 
+    if ( config.Exists( "save file sorting" ) ) {
+        if ( config.StrParams( "save file sorting" ) == "date" ) {
+            _saveFileSortType = SaveFileSortingMethod::TIMESTAMP;
+        }
+        else {
+            _saveFileSortType = SaveFileSortingMethod::FILENAME;
+        }
+    }
+
     return true;
 }
 
@@ -392,61 +413,68 @@ std::string Settings::String() const
     }
 
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
+    os << std::endl
+       << "# !!! WARNING !!!" << std::endl
+       << "# Only modify this file if you are absolutely sure of what you are doing!" << std::endl
+       << "# !!! WARNING !!!" << std::endl;
 
     const fheroes2::Display & display = fheroes2::Display::instance();
 
-    os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
+    os << std::endl << "# Resolution: in-game width x height : on-screen width x height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
-    os << std::endl << "# music: original, expansion, external" << std::endl;
+    os << std::endl << "# Position of the game's window" << std::endl;
+    os << "game window position = [ " << _windowPos.x << ", " << _windowPos.y << " ]" << std::endl;
+
+    os << std::endl << "# Music type: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
 
-    os << std::endl << "# sound volume: 0 - 10" << std::endl;
+    os << std::endl << "# Sound volume: 0 - 10" << std::endl;
     os << "sound volume = " << sound_volume << std::endl;
 
-    os << std::endl << "# music volume: 0 - 10" << std::endl;
+    os << std::endl << "# Music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
 
-    os << std::endl << "# run in fullscreen mode: on/off" << std::endl;
+    os << std::endl << "# Toggle fullscreen mode: on/off" << std::endl;
     os << "fullscreen = " << ( _gameOptions.Modes( GAME_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
+    os << std::endl << "# Print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << Logging::getDebugLevel() << std::endl;
 
-    os << std::endl << "# heroes movement speed: 1 - 10" << std::endl;
+    os << std::endl << "# Hero movement speed: 1 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
 
     os << std::endl << "# AI movement speed: 0 - 10" << std::endl;
     os << "ai speed = " << ai_speed << std::endl;
 
-    os << std::endl << "# battle speed: 1 - 10" << std::endl;
+    os << std::endl << "# Battle animation speed: 1 - 10" << std::endl;
     os << "battle speed = " << battle_speed << std::endl;
 
     os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
-    os << std::endl << "# show battle grid: on/off" << std::endl;
+    os << std::endl << "# Toggle battle grid: on/off" << std::endl;
     os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show battle shadow movement: on/off" << std::endl;
+    os << std::endl << "# Show battle shadow movement: on/off" << std::endl;
     os << "battle shadow movement = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show battle shadow cursor: on/off" << std::endl;
+    os << std::endl << "# Show battle shadow cursor: on/off" << std::endl;
     os << "battle shadow cursor = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show battle damage information: on/off" << std::endl;
+    os << std::endl << "# Show battle damage information: on/off" << std::endl;
     os << "battle show damage = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# auto resolve battles: on/off" << std::endl;
+    os << std::endl << "# Enable auto resolve battles: on/off" << std::endl;
     os << "auto resolve battles = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# auto combat spell casting: on/off" << std::endl;
+    os << std::endl << "# Enable auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show turn order during battle: on/off" << std::endl;
+    os << std::endl << "# Show turn order during battle: on/off" << std::endl;
     os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# interface type: good/evil/dynamic" << std::endl;
+    os << std::endl << "# Interface type: good/evil/dynamic" << std::endl;
     switch ( _interfaceType ) {
     case InterfaceType::GOOD:
         os << "interface type = good" << std::endl;
@@ -462,62 +490,68 @@ std::string Settings::String() const
         break;
     }
 
-    os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
+    os << std::endl << "# Hide interface elements on the adventure map: on/off" << std::endl;
     os << "hide interface = " << ( _gameOptions.Modes( GAME_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# position of the radar window on the adventure map when interface elements are hidden" << std::endl;
+    os << std::endl << "# Position of the radar window on the adventure map when interface elements are hidden" << std::endl;
     os << "radar window position = [ " << pos_radr.x << ", " << pos_radr.y << " ]" << std::endl;
 
-    os << std::endl << "# position of the buttons window on the adventure map when interface elements are hidden" << std::endl;
+    os << std::endl << "# Position of the buttons window on the adventure map when interface elements are hidden" << std::endl;
     os << "buttons window position = [ " << pos_bttn.x << ", " << pos_bttn.y << " ]" << std::endl;
 
-    os << std::endl << "# position of the icons window on the adventure map when interface elements are hidden" << std::endl;
+    os << std::endl << "# Position of the icons window on the adventure map when interface elements are hidden" << std::endl;
     os << "icons window position = [ " << pos_icon.x << ", " << pos_icon.y << " ]" << std::endl;
 
-    os << std::endl << "# position of the status window on the adventure map when interface elements are hidden" << std::endl;
+    os << std::endl << "# Position of the status window on the adventure map when interface elements are hidden" << std::endl;
     os << "status window position = [ " << pos_stat.x << ", " << pos_stat.y << " ]" << std::endl;
 
-    os << std::endl << "# game language (an empty value means English)" << std::endl;
+    os << std::endl << "# Game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
 
-    os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
+    os << std::endl << "# Controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
-    os << std::endl << "# first time game run (show additional hints): on/off" << std::endl;
+    os << std::endl << "# First time game run (show additional hints): on/off" << std::endl;
     os << "first time game run = " << ( _gameOptions.Modes( GAME_FIRST_RUN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
+    os << std::endl << "# Show game intro (splash screen and video): on/off" << std::endl;
     os << "show game intro = " << ( _gameOptions.Modes( GAME_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
+    os << std::endl << "# Enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
     os << "v-sync = " << ( _gameOptions.Modes( GAME_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable text support mode to output extra information in console window: on/off" << std::endl;
+    os << std::endl << "# Enable text support mode that outputs extra information in console window: on/off" << std::endl;
     os << "text support mode = " << ( _gameOptions.Modes( GAME_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable monochrome (black and white) cursors in the game: on/off" << std::endl;
+    os << std::endl << "# Toggle monochrome (black and white) cursors in the game: on/off" << std::endl;
     os << "monochrome cursor = " << ( _gameOptions.Modes( GAME_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable 3D audio for objects on Adventure Map: on/off" << std::endl;
+    os << std::endl << "# Enable 3D audio for objects on Adventure Map: on/off" << std::endl;
     os << "3d audio = " << ( _gameOptions.Modes( GAME_3D_AUDIO ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# display system information: on/off" << std::endl;
+    os << std::endl << "# Display system information: on/off" << std::endl;
     os << "system info = " << ( _gameOptions.Modes( GAME_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
+    os << std::endl << "# Perform auto save at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
     os << "auto save at the beginning of the turn = " << ( _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable cursor software rendering: on/off" << std::endl;
+    os << std::endl << "# Enable cursor software rendering: on/off" << std::endl;
     os << "cursor soft rendering = " << ( _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
+    os << std::endl << "# Screen scaling type: nearest or linear" << std::endl;
     os << "screen scaling type = " << ( _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
 
-    os << std::endl << "# show object animation in the Editor: on/off" << std::endl;
+    os << std::endl << "# Show object animation in the Editor: on/off" << std::endl;
     os << "editor animation = " << ( _editorOptions.Modes( EDITOR_ANIMATION ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# display object passability in the Editor: on/off" << std::endl;
+    os << std::endl << "# Display object passability in the Editor: on/off" << std::endl;
     os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# Save files sorting method: name/date" << std::endl;
+    os << "save file sorting = " << ( _saveFileSortType == SaveFileSortingMethod::TIMESTAMP ? "date" : "name" ) << std::endl;
+
+    os << std::endl << "# Show army size estimates: in 'canonical' (few, several, lots, ...) or 'numeric' (1-4, 5-9, 10-19, ...) way" << std::endl;
+    os << "army estimation view type = " << ( _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW ) ? "numeric" : "canonical" ) << std::endl;
 
     return os.str();
 }
@@ -597,6 +631,11 @@ const std::vector<std::string> & Settings::GetRootDirs()
 #ifdef FHEROES2_DATA
         // Macro-defined path.
         result.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
+#endif
+
+#if defined( __IPHONEOS__ )
+        // IOS application should have all resources within the application folder.
+        result.emplace_back( "." );
 #endif
 
         // Environment variable.
@@ -843,6 +882,16 @@ void Settings::setHideInterface( const bool enable )
     }
 }
 
+void Settings::setNumericArmyEstimationView( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
+    }
+}
+
 void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
@@ -898,6 +947,11 @@ bool Settings::isBattleShowDamageInfoEnabled() const
 bool Settings::isHideInterfaceEnabled() const
 {
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
+}
+
+bool Settings::isArmyEstimationViewNumeric() const
+{
+    return _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
 }
 
 bool Settings::isEvilInterfaceEnabled() const
