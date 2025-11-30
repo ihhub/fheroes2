@@ -119,7 +119,7 @@ namespace Logging
 #if defined( TARGET_NINTENDO_SWITCH )
         const std::scoped_lock<std::mutex> lock( logMutex );
 
-        logFile.open( "fheroes2.log", std::ofstream::out );
+        logFile.open( "fheroes2.log", std::ofstream::app );
 #elif defined( _WIN32 )
         const std::scoped_lock<std::mutex> lock( logMutex );
 
@@ -127,7 +127,7 @@ namespace Logging
 
         System::MakeDirectory( configDir );
 
-        logFile.open( System::concatPath( configDir, "fheroes2.log" ), std::ofstream::out );
+        logFile.open( System::concatPath( configDir, "fheroes2.log" ), std::ofstream::app );
 #elif defined( MACOS_APP_BUNDLE )
         openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
 
