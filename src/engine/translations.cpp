@@ -47,6 +47,25 @@ namespace
 {
     const char contextSeparator = '|';
 
+    constexpr std::array<uint32_t, 256> getCRC32Table()
+    {
+        std::array<uint32_t, 256> table{ 0 };
+
+        for ( uint32_t i = 0; i < 256; ++i ) {
+            uint32_t crc = i;
+
+            for ( int bit = 0; bit < 8; ++bit ) {
+                crc = ( crc & 1 ) ? ( ( crc >> 1 ) ^ 0xEDB88320 ) : ( crc >> 1 );
+            }
+
+            table[i] = crc;
+        }
+
+        return table;
+    }
+
+    const std::array<uint32_t, 256> crc32Table = getCRC32Table();
+
     // Character lookup table for custom tolower
     // Compatible with ASCII, custom French encoding, CP1250 and CP1251
     const std::array<unsigned char, 256> tolowerLUT
@@ -279,12 +298,7 @@ namespace
         uint32_t crc = 0xFFFFFFFF;
 
         for ( const char ch : str ) {
-            crc ^= static_cast<uint32_t>( ch );
-
-            for ( int bit = 0; bit < 8; ++bit ) {
-                const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
-                crc = ( crc >> 1 ) ^ poly;
-            }
+            crc = ( crc >> 8 ) ^ crc32Table[( crc ^ static_cast<uint32_t>( ch ) ) & 0xFF];
         }
 
         return ~crc;
@@ -607,9 +621,9 @@ const char * Translation::gettext( const char * str )
     return current ? current->ngettext( str, 0 ) : stripContext( str );
 }
 
-const char * Translation::ngettext( const char * str, const char * plural, size_t n )
+const char * Translation::ngettext( const char * str, const char * plural, const size_t n )
 {
-    if ( current )
+    if ( current ) {
         switch ( current->getLocale() ) {
         case LocaleType::LOCALE_AF:
         case LocaleType::LOCALE_BG:
@@ -661,6 +675,7 @@ const char * Translation::ngettext( const char * str, const char * plural, size_
         default:
             break;
         }
+    }
 
     return stripContext( n == 1 ? str : plural );
 }

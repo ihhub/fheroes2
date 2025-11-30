@@ -48,7 +48,7 @@ namespace Translation
 
     const char * gettext( const char * str );
     const char * gettext( const std::string & str );
-    const char * ngettext( const char * str, const char * plural, size_t num );
+    const char * ngettext( const char * str, const char * plural, const size_t n );
 
     // Converts the given string to lowercase in a locale aware way
     std::string StringLower( std::string str );
