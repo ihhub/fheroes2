@@ -487,7 +487,7 @@ namespace Maps::Random_Generator
                         actionLocations.insert( tileIndex );
 
                         const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( mineValue ) );
+                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
                         return true;
                     }
                 }
@@ -564,15 +564,15 @@ namespace Maps::Random_Generator
 
         // Step 8: Place powerups and treasure clusters while avoiding the paths.
         for ( Region & region : mapRegions ) {
-            placeObjectSet( mapFormat, data, region, powerupObjectSets, regionConfiguration.powerUpsCount, randomGenerator );
-            placeObjectSet( mapFormat, data, region, prefabObjectSets, regionConfiguration.treasureCount, randomGenerator );
+            placeObjectSet( mapFormat, data, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
+            placeObjectSet( mapFormat, data, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
         }
 
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
         // Step 10: Place missing monsters.
-        const auto & weakGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 );
-        const auto & strongGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
+        const auto & weakGuard = getMonstersByValue( config.monsterStrength, 4500 );
+        const auto & strongGuard = getMonstersByValue( config.monsterStrength, 7500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.isInner && mapRegions[regionId].isInner ) {
