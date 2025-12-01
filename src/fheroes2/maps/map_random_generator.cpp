@@ -361,11 +361,13 @@ namespace Maps::Random_Generator
 
         MapEconomy mapEconomy;
 
-        auto roadBuilder = [&mapFormat, &data, width]( const int32_t tileIndex, const uint32_t regionId ) {
+        auto roadBuilder = [&mapFormat, &data, width]( const int32_t tileIndex, const uint32_t regionId, const bool placeRoad ) {
             const auto & otherPath = findRouteFromIndex( tileIndex, regionId, data, width );
             for ( const auto & step : otherPath ) {
                 data.getNode( step ).type = NodeType::PATH;
-                forceTempRoadOnTile( mapFormat, step );
+                if ( placeRoad ) {
+                    forceTempRoadOnTile( mapFormat, step );
+                }
             }
         };
 
@@ -447,7 +449,7 @@ namespace Maps::Random_Generator
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
                     int x = tryToPlaceMine( tileRings[ringIndex], resource );
                     if ( x != -1 ) {
-                        roadBuilder( x, region.id );
+                        roadBuilder( x, region.id, true );
                         break;
                     }
                 }
@@ -458,7 +460,7 @@ namespace Maps::Random_Generator
                 for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
                     const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
                     if ( mineIndex != -1 ) {
-                        roadBuilder( mineIndex, region.id );
+                        roadBuilder( mineIndex, region.id, false );
                         break;
                     }
                 }
@@ -484,31 +486,12 @@ namespace Maps::Random_Generator
         }
 
         // Step 7. Set up pathfinder and generate road network.
-        AIWorldPathfinder pathfinder;
-        pathfinder.reset();
-        const PlayerColor testPlayer = PlayerColor::BLUE;
-
-        // Have to remove fog first otherwise pathfinder won't work
-        for ( int idx = 0; idx < width * height; ++idx ) {
-            world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
-        }
-        world.resetPathfinder();
-        world.updatePassabilities();
-
-        // Set explicit paths
         for ( const Region & region : mapRegions ) {
             if ( region.groundType == Ground::WATER ) {
                 continue;
             }
-            for ( const Node & node : region.nodes ) {
-                if ( node.index == region.centerIndex ) {
-                    continue;
-                }
-                // Maps::removeRoadsFromTileInfo( mapFormat.tiles[node.index], node.index );
-            }
-
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                roadBuilder( tileIndex, region.id );
+                roadBuilder( tileIndex, region.id, true );
             }
         }
 
@@ -538,6 +521,17 @@ namespace Maps::Random_Generator
         Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, true );
 
         // Step 11: Validate that map is playable.
+        AIWorldPathfinder pathfinder;
+        pathfinder.reset();
+        const PlayerColor testPlayer = PlayerColor::BLUE;
+
+        // Have to remove fog first otherwise pathfinder won't work
+        for ( int idx = 0; idx < width * height; ++idx ) {
+            world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
+        }
+        world.resetPathfinder();
+        world.updatePassabilities();
+
         for ( const int32_t start : startingLocations ) {
             pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const int action : actionLocations ) {

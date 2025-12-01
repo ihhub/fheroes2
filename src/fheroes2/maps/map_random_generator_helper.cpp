@@ -56,6 +56,7 @@ namespace
     {
         int32_t _from{ -1 };
         uint32_t _cost{ 0 };
+        int _direction{ Direction::UNKNOWN };
     };
 
     class RoadBuilder final
@@ -89,24 +90,39 @@ namespace
             _cache[static_cast<size_t>( start )]._from = start;
             _cache[static_cast<size_t>( start )]._cost = 0;
 
+            const bool fromActionTile = nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION;
+            const Directions & directions = Direction::All();
             int32_t foundIndex = -1;
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                 const int32_t currentNodeIdx = nodesToExplore[lastProcessedNode];
                 const RoadBuilderNode & currentNode = _cache[currentNodeIdx];
 
-                if ( world.getTile( currentNodeIdx ).isRoad() && currentNodeIdx != start ) {
+                const bool comeFrom = !Direction::isDiagonal( Maps::GetDirection( currentNode._from, currentNodeIdx ) );
+
+                if ( world.getTile( currentNodeIdx ).isRoad() && currentNodeIdx != start && comeFrom ) {
                     foundIndex = currentNodeIdx;
                     break;
                 }
 
-                const Directions & directions = Direction::All();
                 for ( size_t i = 0; i < directions.size(); ++i ) {
                     if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
                         continue;
                     }
 
-                    if ( currentNodeIdx == start && Direction::isDiagonal( directions[i] ) ) {
+                    const bool isDiagonal = Direction::isDiagonal( directions[i] );
+                    // Edge case: fix mine connections
+                    if ( isDiagonal && fromActionTile && currentNodeIdx == start ) {
                         continue;
+                    }
+
+                    // Edge case: avoid tight turns
+                    if ( isDiagonal && currentNode._from != -1 && ( currentNode._direction == Direction::LEFT || currentNode._direction == Direction::RIGHT )
+                         && _cache[currentNode._from]._direction == Direction::BOTTOM ) {
+                        continue;
+                    }
+
+                    if ( isDiagonal && currentNode._from != -1 && Direction::isDiagonal( _cache[currentNode._from]._direction ) ) {
+                        // continue;
                     }
 
                     const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, directions[i] );
@@ -114,8 +130,9 @@ namespace
                         continue;
                     }
 
-                    if ( world.getTile( newIndex ).isRoad() && Direction::isDiagonal( directions[i] ) ) {
-                        //continue;
+                    const bool foundRoad = world.getTile( newIndex ).isRoad();
+                    if ( foundRoad && isDiagonal ) {
+                        // continue;
                     }
 
                     // TODO: bias cost to force particular road connectors
@@ -128,6 +145,7 @@ namespace
                     //                      X 0 0
                     // Left diagonal into two rights: X 0 0
                     //                                0 X X
+                    // Road options: None, Some (connections), All
                     Maps::Random_Generator::Node & other = nodes.getNode( newIndex );
 
                     if ( other.region != _regionId || ( other.type != Maps::Random_Generator::NodeType::OPEN && other.type != Maps::Random_Generator::NodeType::PATH ) ) {
@@ -135,12 +153,33 @@ namespace
                     }
 
                     RoadBuilderNode & newNode = _cache[newIndex];
-                    const uint32_t movementPenalty = ( Direction::isDiagonal( directions[i] ) ) ? 150 : 100;
-                    const uint32_t movementCost = currentNode._cost + movementPenalty;
+                    const uint32_t movementPenalty = isDiagonal ? 150 : 100;
+                    uint32_t movementCost = currentNode._cost + movementPenalty;
+
+                    if ( isDiagonal && fromActionTile ) {
+                        const bool isConnector = [&newIndex, &directions]() {
+                            for ( size_t k = 0; k < directions.size(); ++k ) {
+                                if ( !Maps::isValidDirection( newIndex, directions[k] ) ) {
+                                    continue;
+                                }
+
+                                const int lookup = Maps::GetDirectionIndex( newIndex, directions[k] );
+                                if ( world.getTile( lookup ).isRoad() ) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }();
+
+                        if ( isConnector ) {
+                            movementCost += 0;
+                        }
+                    }
 
                     if ( newNode._from == -1 || newNode._cost > movementCost ) {
                         newNode._from = currentNodeIdx;
                         newNode._cost = movementCost;
+                        newNode._direction = directions[i];
 
                         nodesToExplore.push_back( newIndex );
                     }
@@ -153,10 +192,22 @@ namespace
 
             DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "=== Found path to " << foundIndex );
 
-            // Reconstruct path from foundIndex back to start
+            int count = 0;
             for ( int32_t cur = foundIndex;; ) {
-                result.push_back( cur );
+                ++count;
                 const RoadBuilderNode & rbNode = _cache[static_cast<size_t>( cur )];
+
+                int32_t fromIndex = rbNode._from;
+                // Adding additional 0 cost road step to fix road transitions to compensate for missing sprites
+                if ( count == 2 ) {
+                    if ( rbNode._direction == Direction::BOTTOM_RIGHT ) {
+                        const int32_t additionalStep = Maps::GetDirectionIndex( cur, Direction::LEFT );
+                        result.emplace_back( additionalStep );
+                        fromIndex = additionalStep;
+                    }
+                }
+
+                result.emplace_back( cur );
 
                 if ( cur == rbNode._from ) {
                     break;
@@ -166,7 +217,6 @@ namespace
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "===== via " << cur );
             }
 
-            std::reverse( result.begin(), result.end() );
             return result;
         }
 
@@ -832,6 +882,12 @@ namespace Maps::Random_Generator
                 region.treasureLimit -= groupValue;
 
                 placeMonster( mapFormat, node.index, getMonstersByValue( groupValue ) );
+
+                const auto & routeToGroup = findRouteFromIndex( node.index, region.id, data, mapFormat.width );
+                for ( const auto & step : routeToGroup ) {
+                    data.getNode( step ).type = NodeType::PATH;
+                    forceTempRoadOnTile( mapFormat, step );
+                }
 
                 ++objectsPlaced;
                 break;
