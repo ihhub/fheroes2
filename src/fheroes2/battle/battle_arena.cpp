@@ -33,7 +33,6 @@
 #include <numeric>
 #include <ostream>
 #include <type_traits>
-#include <utility>
 
 #include "ai_battle.h"
 #include "army.h"
@@ -1291,6 +1290,41 @@ int Battle::Arena::getCastleDefenseStructureCondition( const CastleDefenseStruct
     }
 
     return 0;
+}
+
+std::vector<Battle::CastleDefenseStructure> Battle::Arena::getEarthQuakeSpellTargets()
+{
+    return { CastleDefenseStructure::WALL1,
+             CastleDefenseStructure::WALL2,
+             CastleDefenseStructure::WALL3,
+             CastleDefenseStructure::WALL4,
+             CastleDefenseStructure::TOWER1,
+             CastleDefenseStructure::TOWER2,
+             CastleDefenseStructure::BRIDGE,
+             CastleDefenseStructure::TOP_BRIDGE_TOWER,
+             CastleDefenseStructure::BOTTOM_BRIDGE_TOWER };
+}
+
+std::pair<uint32_t, uint32_t> Battle::Arena::getEarthquakeDamageRange( const HeroBase * commander )
+{
+    assert( commander != nullptr );
+
+    const int spellPower = commander->GetPower();
+    if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
+        return { 0, 1 };
+    }
+    if ( ( spellPower >= 3 ) && ( spellPower < 6 ) ) {
+        return { 0, 2 };
+    }
+    if ( ( spellPower >= 6 ) && ( spellPower < 10 ) ) {
+        return { 0, 3 };
+    }
+    if ( spellPower >= 10 ) {
+        return { 1, 3 };
+    }
+
+    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unexpected spellPower value: " << spellPower << " for commander " << commander )
+    return { 0, 0 };
 }
 
 const HeroBase * Battle::Arena::getCommander( const PlayerColor color ) const

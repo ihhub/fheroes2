@@ -68,25 +68,28 @@ namespace
     const std::array<int32_t, 2> secondarySkillOffsetX{ 22, 353 };
     const std::array<int32_t, 2> artifactOffsetX{ 23, 367 };
     const std::array<int32_t, 2> armyOffsetX{ 36, 381 };
-}
 
-void Battle::ControlInfo::Redraw() const
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+    void renderControlInfo( const Battle::ControlInfo & info )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
-    fheroes2::Blit( cell, display, rtLocal.x, rtLocal.y );
-    if ( result & CONTROL_HUMAN )
-        fheroes2::Blit( mark, display, rtLocal.x + 3, rtLocal.y + 2 );
-    fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
-    text.draw( rtLocal.x + cell.width() + 5, rtLocal.y + 5, display );
+        fheroes2::Blit( cell, display, info.humanPlayerRoi.x, info.humanPlayerRoi.y );
+        if ( info.result & CONTROL_HUMAN ) {
+            fheroes2::Blit( mark, display, info.humanPlayerRoi.x + 3, info.humanPlayerRoi.y + 2 );
+        }
 
-    fheroes2::Blit( cell, display, rtAI.x, rtAI.y );
-    if ( result & CONTROL_AI )
-        fheroes2::Blit( mark, display, rtAI.x + 3, rtAI.y + 2 );
-    text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
-    text.draw( rtAI.x + cell.width() + 5, rtAI.y + 5, display );
+        fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
+        text.draw( info.humanPlayerRoi.x + cell.width() + 5, info.humanPlayerRoi.y + 5, display );
+
+        fheroes2::Blit( cell, display, info.computerPlayerRoi.x, info.computerPlayerRoi.y );
+        if ( info.result & CONTROL_AI ) {
+            fheroes2::Blit( mark, display, info.computerPlayerRoi.x + 3, info.computerPlayerRoi.y + 2 );
+        }
+        text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
+        text.draw( info.computerPlayerRoi.x + cell.width() + 5, info.computerPlayerRoi.y + 5, display );
+    }
 }
 
 Battle::Only::Only()
@@ -181,7 +184,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     }
 
     if ( attackedArmyControlInfo ) {
-        attackedArmyControlInfo->Redraw();
+        renderControlInfo( *attackedArmyControlInfo );
     }
 
     // hide the swap army/artifact arrows
@@ -342,17 +345,23 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         if ( attackedArmyControlInfo ) {
             assert( armyInfo[1].hero );
 
-            if ( le.MouseClickLeft( attackedArmyControlInfo->rtLocal ) && armyInfo[1].player.isControlAI() ) {
+            if ( le.MouseClickLeft( attackedArmyControlInfo->humanPlayerRoi ) && armyInfo[1].player.isControlAI() ) {
                 attackedArmyControlInfo->result = CONTROL_HUMAN;
                 armyInfo[1].player.SetControl( CONTROL_HUMAN );
 
                 needRedrawControlInfo = true;
             }
-            else if ( le.MouseClickLeft( attackedArmyControlInfo->rtAI ) && armyInfo[1].player.isControlHuman() ) {
+            else if ( le.MouseClickLeft( attackedArmyControlInfo->computerPlayerRoi ) && armyInfo[1].player.isControlHuman() ) {
                 attackedArmyControlInfo->result = CONTROL_AI;
                 armyInfo[1].player.SetControl( CONTROL_AI );
 
                 needRedrawControlInfo = true;
+            }
+            else if ( le.isMouseRightButtonPressedInArea( attackedArmyControlInfo->humanPlayerRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Human" ), _( "Click to set this hero to be human-controlled." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( attackedArmyControlInfo->computerPlayerRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "AI" ), _( "Click to set this hero to be AI-controlled." ), 0 );
             }
         }
 
@@ -383,7 +392,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
         if ( needRedrawControlInfo ) {
             assert( attackedArmyControlInfo != nullptr );
-            attackedArmyControlInfo->Redraw();
+            renderControlInfo( *attackedArmyControlInfo );
 
             needRender = true;
         }

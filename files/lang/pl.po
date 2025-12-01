@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2024-07-20 23:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1117,6 +1117,14 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Wybierz innego bohatera."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3531,6 +3539,39 @@ msgstr "Pkt. ruchu:"
 msgid "Uncharted Territory"
 msgstr "Niezbadane terytorium"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Losowy potwór"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Ikona graczy"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Żywiołak Wody"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Losowy potwór - silny"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Kliknij, aby wrócić do głównego menu."
+
 msgid "Cost per troop:"
 msgstr "Koszt jednostki:"
 
@@ -3847,18 +3888,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikona wielkości"
 
-msgid "Map Type"
-msgstr "Typ mapy"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr "Wskazuje czy mapa jest z Wojny o Sukcesję czy z Ceny Lojalności."
-
-msgid "Map Type:\n"
-msgstr "Typ Mapy:\n"
-
 msgid "The Succession Wars"
 msgstr "Wojna o Sukcesję"
 
@@ -3868,6 +3897,15 @@ msgstr "Cena Lojalności"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Wskrzeszenie"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+msgid "Map Type:\n"
+msgstr "Typ Mapy:\n"
 
 #, fuzzy
 msgid ""
@@ -4532,16 +4570,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Ikona graczy"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -9530,6 +9558,43 @@ msgstr "Trawa"
 msgid "Ocean"
 msgstr "Ocean"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Zwykłe"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Małe"
 
@@ -12783,6 +12848,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#, fuzzy
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr "Wskazuje czy mapa jest z Wojny o Sukcesję czy z Ceny Lojalności."
 
 #, fuzzy
 #~ msgid "Warning!"

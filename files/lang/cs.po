@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -1121,6 +1121,14 @@ msgstr "Obnovit výchozí nastavení."
 
 msgid "Please select another hero."
 msgstr "Vyber jiného hrdinu."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Kliknout pro výběr barvy."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Kliknout pro výběr barvy."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3456,6 +3464,39 @@ msgstr "Body pohybu:"
 msgid "Uncharted Territory"
 msgstr "Neprobádaná oblast"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Náhodná jednotka"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Ikona hráče"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vodní Elementál"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Náhodná jednotka - silná"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klikněte pro povolení režimu hlídkování hrdiny."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Vrátit se do hlavního menu hry."
+
 msgid "Cost per troop:"
 msgstr "Cena za jedince:"
 
@@ -3750,19 +3791,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Velikost ikon"
 
-msgid "Map Type"
-msgstr "Typ mapy"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Udává, zda je mapa vytvořena pro verzi hry \"Války o následnictví\", \"Cena "
-"za věrnost\" nebo \"Vzkříšení\"."
-
-msgid "Map Type:\n"
-msgstr "Typ mapy\n"
-
 msgid "The Succession Wars"
 msgstr "Války o následnictví"
 
@@ -3771,6 +3799,15 @@ msgstr "Cena za věrnost"
 
 msgid "Resurrection"
 msgstr "Resurrection"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+msgid "Map Type:\n"
+msgstr "Typ mapy\n"
 
 msgid ""
 "\n"
@@ -4400,16 +4437,6 @@ msgstr "Na mapě může být umístěn pouze jeden náhodný Ultimátní artefak
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Ikona hráče"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Mapa je poškozena."
@@ -9240,6 +9267,43 @@ msgstr "Tráva"
 msgid "Ocean"
 msgstr "Oceán"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normální"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Malá"
 
@@ -12359,6 +12423,13 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Udává, zda je mapa vytvořena pro verzi hry \"Války o následnictví\", "
+#~ "\"Cena za věrnost\" nebo \"Vzkříšení\"."
 
 #, fuzzy
 #~ msgid "Warning!"

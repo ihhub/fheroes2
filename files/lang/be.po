@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 06:14+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1163,6 +1163,14 @@ msgstr "Скінуць да перадвызначаных значэнняў."
 
 msgid "Please select another hero."
 msgstr "Выберыце іншага героя."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Націсніце сюды, каб выбраць гэты колер."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Націсніце сюды, каб выбраць гэты колер."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} - %{race2} %{name2}"
@@ -3531,6 +3539,39 @@ msgstr "Адз. руху:"
 msgid "Uncharted Territory"
 msgstr "Тэра інкогніта"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Выпадковая істота"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Значок \"Колькасць гульцоў\""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Элементаль вады"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Выпадковая істота - моцная"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Націсніце, каб захаваць бягучую мапу."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Вярнуцца ў галоўнае меню гульні."
+
 msgid "Cost per troop:"
 msgstr "Цана за 1:"
 
@@ -3820,21 +3861,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Значок \"Памер\""
 
-msgid "Map Type"
-msgstr "Тып мапы"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Абазначае, для якой версіі гульні зроблена мапа -\n"
-"для \"Войны за Спадчыну\",\n"
-"\"Цана вернасці\"\n"
-"або праекта \"Resurrection\"."
-
-msgid "Map Type:\n"
-msgstr "Тып мапы:\n"
-
 msgid "The Succession Wars"
 msgstr "Войны за Спадчыну"
 
@@ -3843,6 +3869,15 @@ msgstr "Цана вернасці"
 
 msgid "Resurrection"
 msgstr "Праект Resurrection"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Тып мапы"
+
+msgid "Map Type:\n"
+msgstr "Тып мапы:\n"
 
 msgid ""
 "\n"
@@ -4439,15 +4474,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -9312,6 +9338,43 @@ msgstr "Трава-мурава"
 msgid "Ocean"
 msgstr "Мора-акіян"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Нармальны"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Малая"
 
@@ -12537,3 +12600,12 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Абазначае, для якой версіі гульні зроблена мапа -\n"
+#~ "для \"Войны за Спадчыну\",\n"
+#~ "\"Цана вернасці\"\n"
+#~ "або праекта \"Resurrection\"."

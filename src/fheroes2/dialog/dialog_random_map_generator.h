@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2025                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,30 +20,14 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include <cstdint>
 
-#include "castle.h"
-#include "math_base.h"
-
-enum class GameVersion : int;
+namespace Maps::Random_Generator
+{
+    struct Configuration;
+}
 
 namespace fheroes2
 {
-    std::vector<Rect> getCastleBuildingArea( const int race, const BuildingType buildingId );
-
-    const char * getBuildingName( const int race, const BuildingType buildingId );
-
-    const char * getBuildingDescription( const int race, const BuildingType buildingId );
-
-    // Returns the upgraded building ID for the given one or the input building if no upgrade is available.
-    BuildingType getUpgradeForBuilding( const int race, const BuildingType buildingId );
-
-    BuildingType getBuildingRequirement( const int race, const BuildingType building );
-
-    std::string getBuildingRequirementString( const int race, const BuildingType building );
-
-    int getIndexBuildingSprite( const BuildingType build );
-
-    std::vector<BuildingType> getBuildingDrawingPriorities( const int race, const GameVersion version );
+    bool randomMapGeneratorDialog( Maps::Random_Generator::Configuration & configuration, const int32_t mapWidth );
 }

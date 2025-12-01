@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2025-08-26 00:09+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -1110,6 +1110,14 @@ msgstr "Alapbeállítások visszaállítása."
 
 msgid "Please select another hero."
 msgstr "Kérlek válassz másik hőst."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Kattints a szín kiválasztásához."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Kattints a szín kiválasztásához."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
@@ -3474,6 +3482,39 @@ msgstr "Mozgáspontok:"
 msgid "Uncharted Territory"
 msgstr "Felderítetlen terület"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Véletlenszerű lény"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Játékos ikon"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vízelementál"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Véletlenszerű lény - erős"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Visszatérés a szerkesztő főmenüjébe."
+
 msgid "Cost per troop:"
 msgstr "Költség egységenként:"
 
@@ -3764,19 +3805,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikon méret"
 
-msgid "Map Type"
-msgstr "Térkép típusa"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Azt jelzi, hogy a térkép az \"Örökösödési háborúk\" vagy a \"Hűség ára\" "
-"vagy pedig a \"Feltámadás\" verzióhoz készült-e."
-
-msgid "Map Type:\n"
-msgstr "Térképtípus:\n"
-
 msgid "The Succession Wars"
 msgstr "Örökösödési háborúk"
 
@@ -3785,6 +3813,15 @@ msgstr "A hűség ára"
 
 msgid "Resurrection"
 msgstr "Feltámasztás"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Térkép típusa"
+
+msgid "Map Type:\n"
+msgstr "Térképtípus:\n"
 
 msgid ""
 "\n"
@@ -4407,16 +4444,6 @@ msgstr "Csak egy véletlenszerű Szent Varázstárgy helyezhető el a térképen
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Játékos ikon"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "A térkép fájl sérült."
@@ -9274,6 +9301,43 @@ msgstr "Fű"
 msgid "Ocean"
 msgstr "Óceán"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normál"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Kicsi"
 
@@ -12416,6 +12480,13 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Azt jelzi, hogy a térkép az \"Örökösödési háborúk\" vagy a \"Hűség ára\" "
+#~ "vagy pedig a \"Feltámadás\" verzióhoz készült-e."
 
 #, fuzzy
 #~ msgid "Warning!"

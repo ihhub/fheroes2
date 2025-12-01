@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2025-11-29 13:12+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1122,6 +1122,14 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Моля, избери друг герой."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3539,6 +3547,39 @@ msgstr "Ход:"
 msgid "Uncharted Territory"
 msgstr "Неизследвана територия"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Случайно чудовище"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Брой на играчи"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Воден елементал"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Случайно чудовище - силно"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Кликни, за да се върнеш към главното меню."
+
 msgid "Cost per troop:"
 msgstr "Цена на единица:"
 
@@ -3859,20 +3900,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Размер на карта"
 
-msgid "Map Type"
-msgstr "Тип на карта"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Показва дали картата е направена за версията на играта \"Наследените войни\" "
-"или за \"Цената на лоялността\"."
-
-msgid "Map Type:\n"
-msgstr "Тип на карта:\n"
-
 msgid "The Succession Wars"
 msgstr "Войните за наследство"
 
@@ -3882,6 +3909,15 @@ msgstr "Цената на лоялността"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Възкресяване"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Тип на карта"
+
+msgid "Map Type:\n"
+msgstr "Тип на карта:\n"
 
 #, fuzzy
 msgid ""
@@ -4544,16 +4580,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Брой на играчи"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -9553,6 +9579,43 @@ msgstr "Трева"
 msgid "Ocean"
 msgstr "Океан"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Нормален"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Малка"
 
@@ -12757,6 +12820,14 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
+#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
+#~ msgstr ""
+#~ "Показва дали картата е направена за версията на играта \"Наследените "
+#~ "войни\" или за \"Цената на лоялността\"."
 
 #, fuzzy
 #~ msgid "Warning!"
