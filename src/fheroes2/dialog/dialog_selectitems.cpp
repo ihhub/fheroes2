@@ -674,7 +674,7 @@ namespace
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "There is nothing to select from." ), Dialog::OK );
             return -1;
         }
-        
+
         std::vector<int> objects( objectCount, 0 );
         std::iota( objects.begin(), objects.end(), 0 );
         objectSelection.SetListContent( objects );
@@ -997,9 +997,9 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
         }
     }
 
-        if ( skills.empty() ) {
+    if ( skills.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no secondary skills to select from." ), Dialog::OK );
-            return {};
+        return {};
     }
 
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Skill:" ) );
@@ -1038,7 +1038,7 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, co
 
     if ( spells.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no spells to select." ), Dialog::OK );
-        return Spell( Spell::NONE );
+        return { Spell::NONE };
     }
 
     SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Spell:" ) );
@@ -1050,7 +1050,7 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, co
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK && listbox.IsValid() ) ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Spell::NONE };
 }
 
 Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryConditions )
@@ -1090,9 +1090,9 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
         artifacts.emplace_back( id );
     }
 
-        if ( artifacts.empty() ) {
+    if ( artifacts.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no artifacts to select from." ), Dialog::OK );
-        return -1;
+        return { Artifact::UNKNOWN };
     }
 
     SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifact:" ) );
@@ -1104,7 +1104,7 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK && listbox.IsValid() ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Artifact::UNKNOWN };
 }
 
 Monster Dialog::selectMonster( const int monsterId )
@@ -1117,7 +1117,7 @@ Monster Dialog::selectMonster( const int monsterId )
 
     if ( monsters.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no monsters to select from." ), Dialog::OK );
-        return -1;
+        return { Monster::UNKNOWN };
     }
 
     SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
@@ -1129,7 +1129,7 @@ Monster Dialog::selectMonster( const int monsterId )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK && listbox.IsValid() ) ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Monster::UNKNOWN };
 }
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
@@ -1141,7 +1141,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     if ( heroes.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no heroes to select from." ), Dialog::OK );
-        return -1;
+        return Heroes::UNKNOWN;
     }
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
