@@ -33,6 +33,8 @@
 #include "screen.h"
 #include "ui_base.h"
 
+class LocalEvent;
+
 namespace fheroes2
 {
     enum class FontColor : uint8_t;
@@ -88,15 +90,59 @@ namespace fheroes2
             return !_isVisible;
         }
 
-        bool press();
-        bool release();
-        void enable();
+        bool press()
+        {
+            if ( !isEnabled() ) {
+                return false;
+            }
+
+            _isPressed = true;
+            notifySubscriber();
+            return true;
+        }
+
+        bool release()
+        {
+            if ( !isEnabled() ) {
+                return false;
+            }
+
+            _isPressed = false;
+            notifySubscriber();
+            return true;
+        }
+
+        void enable()
+        {
+            _isEnabled = true;
+            notifySubscriber();
+
+            _updateReleasedArea();
+        }
+
         // Button becomes disabled and released
-        void disable();
+        void disable()
+        {
+            _isEnabled = false;
+            _isPressed = false; // button can't be disabled and pressed
+            notifySubscriber();
+
+            _updateReleasedArea();
+        }
+
         // This method doesn't call draw()
-        void show();
+        void show()
+        {
+            _isVisible = true;
+            notifySubscriber();
+        }
+
         // This method doesn't call draw()
-        void hide();
+        void hide()
+        {
+            _isVisible = false;
+            notifySubscriber();
+        }
 
         void setPosition( const int32_t offsetX, const int32_t offsetY )
         {
@@ -268,7 +314,7 @@ namespace fheroes2
         Sprite _disabled;
     };
 
-    class ButtonGroup
+    class ButtonGroup final
     {
     public:
         // Please refer to dialog.h enumeration for states
@@ -289,10 +335,38 @@ namespace fheroes2
         void addButton( ButtonSprite && button, const int returnValue );
 
         // Will draw on screen by default
-        void draw( Image & output = Display::instance() ) const;
+        void draw( Image & output = Display::instance() ) const
+        {
+            for ( const auto & button : _button ) {
+                button->draw( output );
+            }
+        }
 
         // Draws shadows for all the buttons in the group according to their coordinates.
-        void drawShadows( Image & output ) const;
+        void drawShadows( Image & output ) const
+        {
+            for ( const auto & button : _button ) {
+                button->drawShadow( output );
+            }
+        }
+
+        // Disable all the buttons in the button group.
+        void disable() const
+        {
+            for ( const auto & button : _button ) {
+                button->disable();
+            }
+        }
+
+        // Enable all the buttons in the button group.
+        void enable() const
+        {
+            for ( const auto & button : _button ) {
+                button->enable();
+            }
+        }
+
+        void drawOnState( const LocalEvent & le ) const;
 
         size_t getButtonsCount() const
         {
@@ -321,7 +395,7 @@ namespace fheroes2
 
     // This class is used for a situations when we need to disable a button for certain action
     // and restore it within the scope of code. The changed button is immediately rendered on display.
-    class ButtonRestorer
+    class ButtonRestorer final
     {
     public:
         explicit ButtonRestorer( ButtonBase & button );
@@ -333,7 +407,7 @@ namespace fheroes2
 
     private:
         ButtonBase & _button;
-        bool _isEnabled;
+        const bool _isEnabled;
     };
 
     class OptionButtonGroup final : public ActionObject
@@ -341,8 +415,12 @@ namespace fheroes2
     public:
         void addButton( ButtonBase * button );
 
-        // Will draw on screen by default
-        void draw( Image & output = Display::instance() ) const;
+        void draw( Image & output ) const
+        {
+            for ( const ButtonBase * button : _button ) {
+                button->draw( output );
+            }
+        }
 
     protected:
         void senderUpdate( const ActionObject * sender ) override;
@@ -383,7 +461,8 @@ namespace fheroes2
 
     // Generates multiple button backgrounds that have the same dimensions according to the widest and tallest texts provided.
     // backgroundSprites will be resized according to the number of button texts.
-    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts, const int32_t minWidth );
+    void makeSymmetricBackgroundSprites( std::vector<Sprite> & backgroundSprites, const std::vector<const char *> & buttonTexts, const bool isEvilInterface,
+                                         const int32_t minWidth );
 
     void renderTextOnButton( Image & releasedState, Image & pressedState, const std::string & text, const Point & releasedTextOffset, const Point & pressedTextOffset,
                              const Size & buttonSize, const FontColor fontColor );

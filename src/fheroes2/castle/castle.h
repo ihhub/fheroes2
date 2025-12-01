@@ -31,6 +31,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
@@ -140,12 +141,19 @@ public:
         Close, // Close the dialog.
         NextCastle, // Open main dialog of the next castle.
         PreviousCastle, // Open main dialog of the previous castle.
-        NextCostructionWindow, // Open construction dialog of the next castle.
-        PreviousCostructionWindow // Open construction dialog of the previous castle.
+        NextConstructionWindow, // Open construction dialog of the next castle.
+        PreviousConstructionWindow, // Open construction dialog of the previous castle.
+        NextMageGuildWindow, // Open Mage Guild dialog of the next castle.
+        PreviousMageGuildWindow, // Open Mage Guild dialog of the previous castle.
     };
 
     Castle() = default;
-    Castle( const int32_t posX, const int32_t posY, int race );
+    Castle( const int32_t posX, const int32_t posY, const int race )
+        : MapPosition( { posX, posY } )
+        , _race( race )
+    {
+        // Do nothing.
+    }
 
     Castle( const Castle & ) = delete;
 
@@ -217,14 +225,14 @@ public:
         return _race == Race::WZRD;
     }
 
-    bool isLibraryBuild() const
+    bool isLibraryBuilt() const
     {
         return _race == Race::WZRD && isBuild( BUILD_SPEC );
     }
 
     void trainHeroInMageGuild( HeroBase & hero ) const
     {
-        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuild() );
+        _mageGuild.trainHero( hero, GetLevelMageGuild(), isLibraryBuilt() );
     }
 
     bool isFortificationBuilt() const
@@ -272,7 +280,7 @@ public:
     double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
-    void ChangeColor( const int newColor );
+    void ChangeColor( const PlayerColor newColor );
 
     void ActionNewDay();
     void ActionNewWeek();
@@ -282,7 +290,7 @@ public:
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
-    CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog );
+    CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool openMageGuildWindow, const bool fade, const bool renderBackgroundDialog );
 
     int GetAttackModificator( const std::string * /* unused */ ) const
     {
@@ -370,6 +378,10 @@ public:
         return ( _disabledBuildings & buildingType ) != 0;
     }
 
+    // Update French language-specific characters to match CP1252.
+    // Call this method only when loading maps made with original French editor.
+    void fixFrenchCharactersInName();
+
 private:
     enum class ConstructionDialogResult : int
     {
@@ -378,6 +390,13 @@ private:
         PrevConstructionWindow, // Open construction dialog for the previous castle.
         Build, // Build something.
         RecruitHero // Recruit a hero.
+    };
+
+    enum class MageGuildDialogResult : uint8_t
+    {
+        DoNothing,
+        NextMageGuildWindow, // Open Mage Guild dialog for the next castle.
+        PrevMageGuildWindow, // Open Mage Guild dialog for the previous castle.
     };
 
     // Checks whether this particular building is currently built in the castle (unlike
@@ -391,7 +410,7 @@ private:
 
     void _openTavern() const;
     void _openWell();
-    void _openMageGuild( const Heroes * hero ) const;
+    MageGuildDialogResult _openMageGuild( const Heroes * hero ) const;
     void _joinRNDArmy();
     void _postLoad();
 
@@ -477,11 +496,11 @@ namespace CastleDialog
         bool _isOnlyBoat{ false };
     };
 
-    struct BuildingRenderInfo
+    struct BuildingRenderInfo final
     {
-        BuildingRenderInfo( const BuildingType buildingType, const fheroes2::Rect & buildingRect )
+        BuildingRenderInfo( const BuildingType buildingType, std::vector<fheroes2::Rect> buildingAreas )
             : id( buildingType )
-            , coord( buildingRect )
+            , areas( std::move( buildingAreas ) )
         {
             // Do nothing.
         }
@@ -491,8 +510,8 @@ namespace CastleDialog
             return buildingType == static_cast<uint32_t>( id );
         }
 
-        BuildingType id;
-        fheroes2::Rect coord;
+        BuildingType id{ BUILD_NOTHING };
+        std::vector<fheroes2::Rect> areas;
     };
 
     struct BuildingsRenderQueue : std::vector<BuildingRenderInfo>
@@ -547,11 +566,16 @@ public:
         return _castles.size();
     }
 
+    // Return the maximum allowed castles and towns on map limited by the count of castle default names.
+    static size_t getMaximumAllowedCastles();
+
     void AddCastle( std::unique_ptr<Castle> && castle );
 
     Castle * Get( const fheroes2::Point & position ) const;
 
-    void Scout( const int colors ) const;
+    void removeCastle( const fheroes2::Point & position );
+
+    void Scout( const PlayerColorsSet colors ) const;
 
     void NewDay() const;
     void NewWeek() const;

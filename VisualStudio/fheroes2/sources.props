@@ -98,6 +98,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_random_map_generator.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_recruit.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_resolution.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_keyboard.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_kingdom.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_mage_guild.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_map_interface.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_map_object.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_monster.cpp" />
@@ -207,6 +209,9 @@
     <ClCompile Include="src\fheroes2\maps\map_format_helper.cpp" />
     <ClCompile Include="src\fheroes2\maps\map_format_info.cpp" />
     <ClCompile Include="src\fheroes2\maps\map_object_info.cpp" />
+    <ClCompile Include="src\fheroes2\maps\map_random_generator.cpp" />
+    <ClCompile Include="src\fheroes2\maps\map_random_generator_helper.cpp" />
+    <ClCompile Include="src\fheroes2\maps\map_random_generator_info.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_fileinfo.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_objects.cpp" />
@@ -314,6 +319,7 @@
     <ClInclude Include="src\fheroes2\dialog\dialog_hotkeys.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_interface_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_random_map_generator.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
@@ -376,6 +382,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_keyboard.h" />
     <ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_mage_guild.h" />
     <ClInclude Include="src\fheroes2\gui\ui_map_interface.h" />
     <ClInclude Include="src\fheroes2\gui\ui_map_object.h" />
     <ClInclude Include="src\fheroes2\gui\ui_monster.h" />
@@ -412,6 +419,9 @@
     <ClInclude Include="src\fheroes2\maps\map_format_helper.h" />
     <ClInclude Include="src\fheroes2\maps\map_format_info.h" />
     <ClInclude Include="src\fheroes2\maps\map_object_info.h" />
+    <ClInclude Include="src\fheroes2\maps\map_random_generator.h" />
+    <ClInclude Include="src\fheroes2\maps\map_random_generator_helper.h" />
+    <ClInclude Include="src\fheroes2\maps\map_random_generator_info.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />
     <ClInclude Include="src\fheroes2\maps\maps_fileinfo.h" />
     <ClInclude Include="src\fheroes2\maps\maps_objects.h" />

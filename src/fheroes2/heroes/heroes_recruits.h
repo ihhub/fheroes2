@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,7 +36,11 @@ class Recruit
 public:
     Recruit();
     Recruit( const Heroes & hero, const uint32_t surrenderDay );
-    explicit Recruit( const Heroes & hero );
+    explicit Recruit( const Heroes & hero )
+        : Recruit( hero, 0 )
+    {
+        // Do nothing.
+    }
 
     int getID() const
     {
@@ -56,15 +60,20 @@ private:
     friend IStreamBase & operator>>( IStreamBase & stream, Recruit & recruit );
 };
 
-class Recruits : public std::pair<Recruit, Recruit>
+class Recruits final : public std::pair<Recruit, Recruit>
 {
 public:
-    Recruits();
-
     void Reset();
 
-    int GetID1() const;
-    int GetID2() const;
+    int GetID1() const
+    {
+        return first.getID();
+    }
+
+    int GetID2() const
+    {
+        return second.getID();
+    }
 
     Heroes * GetHero1() const;
     Heroes * GetHero2() const;

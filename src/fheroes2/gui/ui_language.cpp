@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <optional>
 #include <set>
 #include <utility>
 
@@ -65,9 +66,10 @@ namespace
             { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian },
             { "nl", fheroes2::SupportedLanguage::Dutch },      { "dutch", fheroes2::SupportedLanguage::Dutch },
             { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian },
-            { "dk", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish },
+            { "da", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish },
             { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
-            { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese } };
+            { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese },
+            { "el", fheroes2::SupportedLanguage::Greek },      { "greek", fheroes2::SupportedLanguage::Greek } };
 }
 
 namespace fheroes2
@@ -85,42 +87,51 @@ namespace fheroes2
 
     SupportedLanguage getResourceLanguage()
     {
+        static std::optional<SupportedLanguage> language;
+        if ( language.has_value() ) {
+            return *language;
+        }
+
         const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::FONT ), false );
         if ( data.empty() ) {
             // How is it possible to run the game without a font?
             assert( 0 );
-            return SupportedLanguage::English;
+            language = SupportedLanguage::English;
+            return *language;
         }
 
         const uint32_t crc32 = calculateCRC32( data.data(), data.size() );
         auto iter = languageCRC32.find( crc32 );
         if ( iter == languageCRC32.end() ) {
-            return SupportedLanguage::English;
+            language = SupportedLanguage::English;
+            return *language;
         }
 
-        return iter->second;
+        language = iter->second;
+        return *language;
     }
 
     std::vector<SupportedLanguage> getSupportedLanguages()
     {
-        std::vector<SupportedLanguage> languages;
+        // We need to group languages by code pages to avoid recreating font related resources while switching languages.
+        std::map<CodePage, std::vector<SupportedLanguage>> supportedLanguges;
 
         const SupportedLanguage resourceLanguage = getResourceLanguage();
         if ( resourceLanguage != SupportedLanguage::English ) {
-            languages.emplace_back( resourceLanguage );
+            supportedLanguges[getCodePage( resourceLanguage )].emplace_back( resourceLanguage );
         }
 
-        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
-                                                             SupportedLanguage::Russian,    SupportedLanguage::Italian,   SupportedLanguage::Norwegian,
-                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
-                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
-                                                             SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch,
-                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech,     SupportedLanguage::Danish,
-                                                             SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese };
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,     SupportedLanguage::German,
+                                                             SupportedLanguage::Russian,    SupportedLanguage::Italian,    SupportedLanguage::Norwegian,
+                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian,  SupportedLanguage::Ukrainian,
+                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish,    SupportedLanguage::Portuguese,
+                                                             SupportedLanguage::Swedish,    SupportedLanguage::Turkish,    SupportedLanguage::Dutch,
+                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech,      SupportedLanguage::Danish,
+                                                             SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese, SupportedLanguage::Greek };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
-                languages.emplace_back( language );
+                supportedLanguges[getCodePage( language )].emplace_back( language );
             }
         }
 
@@ -130,9 +141,13 @@ namespace fheroes2
 
         std::vector<fheroes2::SupportedLanguage> validSupportedLanguages{ fheroes2::SupportedLanguage::English };
 
-        for ( fheroes2::SupportedLanguage language : languages ) {
-            if ( conf.setGameLanguage( fheroes2::getLanguageAbbreviation( language ) ) ) {
-                validSupportedLanguages.emplace_back( language );
+        for ( const auto & [codePage, languages] : supportedLanguges ) {
+            for ( const auto language : languages ) {
+                // TODO: we shouldn't load all language resources just for the sake of verifying whether their translations exist.
+                //       Find another way to avoid this heavy operation.
+                if ( conf.setGameLanguage( fheroes2::getLanguageAbbreviation( language ) ) ) {
+                    validSupportedLanguages.emplace_back( language );
+                }
             }
         }
 
@@ -188,6 +203,8 @@ namespace fheroes2
             return _( "Slovak" );
         case SupportedLanguage::Vietnamese:
             return _( "Vietnamese" );
+        case SupportedLanguage::Greek:
+            return _( "Greek" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -235,11 +252,13 @@ namespace fheroes2
         case SupportedLanguage::Hungarian:
             return "hu";
         case SupportedLanguage::Danish:
-            return "dk";
+            return "da";
         case SupportedLanguage::Slovak:
             return "sk";
         case SupportedLanguage::Vietnamese:
             return "vi";
+        case SupportedLanguage::Greek:
+            return "el";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -268,14 +287,68 @@ namespace fheroes2
     {
         const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
         const SupportedLanguage resourceLanguage = getResourceLanguage();
-        const bool isOriginalResourceLanguage
-            = ( language == SupportedLanguage::English ) || ( language == resourceLanguage && SupportedLanguage::French != resourceLanguage );
 
-        AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+        // The original French assets replaces several ASCII special characters with language-specific characters.
+        // In the engine we use CP1252 for these characters.
+        if ( ( language == SupportedLanguage::English ) && ( resourceLanguage == SupportedLanguage::French ) ) {
+            // Force generate CP1252 alphabet when English language is selected for French assets.
+            AGG::updateLanguageDependentResources( SupportedLanguage::French, false );
+        }
+        else {
+            // To generate CP1252 alphabet for French assets we must assume that these assets are not original.
+            // Also we force generation of Cyrillic symbols for Russian assets - it is done for consistency of fonts with different assets.
+            const bool isOriginalResourceLanguage
+                = ( language == SupportedLanguage::English )
+                  || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French && resourceLanguage != SupportedLanguage::Russian );
+
+            AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+        }
     }
 
     SupportedLanguage getCurrentLanguage()
     {
         return fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+    }
+
+    CodePage getCodePage( const SupportedLanguage language )
+    {
+        switch ( language ) {
+        case SupportedLanguage::English:
+            return CodePage::ASCII;
+        case SupportedLanguage::Czech:
+        case SupportedLanguage::Hungarian:
+        case SupportedLanguage::Polish:
+        case SupportedLanguage::Slovak:
+            return CodePage::CP1250;
+        case SupportedLanguage::Belarusian:
+        case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Russian:
+        case SupportedLanguage::Ukrainian:
+            return CodePage::CP1251;
+        case SupportedLanguage::Danish:
+        case SupportedLanguage::Dutch:
+        case SupportedLanguage::French:
+        case SupportedLanguage::German:
+        case SupportedLanguage::Italian:
+        case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Portuguese:
+        case SupportedLanguage::Spanish:
+        case SupportedLanguage::Swedish:
+            return CodePage::CP1252;
+        case SupportedLanguage::Greek:
+            return CodePage::CP1253;
+        case SupportedLanguage::Turkish:
+            return CodePage::CP1254;
+        case SupportedLanguage::Vietnamese:
+            return CodePage::CP1258;
+        case SupportedLanguage::Romanian:
+            return CodePage::ISO8859_16;
+        default:
+            // Add new language handling code!
+            assert( 0 );
+            break;
+        }
+
+        return CodePage::ASCII;
     }
 }

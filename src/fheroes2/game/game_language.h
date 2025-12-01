@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,7 @@ namespace fheroes2
         Bulgarian,
         Danish,
         Dutch,
+        Greek,
         Hungarian,
         Norwegian,
         Portuguese,
@@ -49,5 +50,18 @@ namespace fheroes2
         Turkish,
         Ukrainian,
         Vietnamese
+    };
+
+    enum class CodePage : uint8_t
+    {
+        NONE,
+        ASCII,
+        CP1250,
+        CP1251,
+        CP1252,
+        CP1253,
+        CP1254,
+        CP1258,
+        ISO8859_16,
     };
 }

@@ -32,6 +32,7 @@
 
 #include "bitmodes.h"
 #include "castle.h"
+#include "color.h"
 #include "heroes.h"
 #include "heroes_recruits.h"
 #include "monster.h"
@@ -76,7 +77,7 @@ public:
         INCOME_ALL = 0xFF
     };
 
-    Kingdom();
+    Kingdom() = default;
 
     Kingdom( const Kingdom & ) = delete;
     Kingdom( Kingdom && ) = default;
@@ -86,13 +87,18 @@ public:
     Kingdom & operator=( const Kingdom & ) = delete;
     Kingdom & operator=( Kingdom && ) = default;
 
-    void Init( const int clr );
+    void Init( const PlayerColor color );
     void clear();
 
     void openOverviewDialog();
 
     bool isPlay() const;
-    bool isLoss() const;
+
+    bool isLoss() const
+    {
+        return castles.empty() && heroes.empty();
+    }
+
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
@@ -117,7 +123,12 @@ public:
     Monster GetStrongestMonster() const;
 
     int GetControl() const override;
-    int GetColor() const;
+
+    PlayerColor GetColor() const
+    {
+        return _color;
+    }
+
     int GetRace() const;
 
     const Funds & GetFunds() const
@@ -140,7 +151,12 @@ public:
     uint32_t GetCountCastle() const;
     uint32_t GetCountTown() const;
     uint32_t GetCountMarketplace() const;
-    uint32_t GetLostTownDays() const;
+
+    uint32_t GetLostTownDays() const
+    {
+        return lost_town_days;
+    }
+
     uint32_t GetCountNecromancyShrineBuild() const;
     uint32_t GetCountBuilding( uint32_t ) const;
     uint32_t GetCountThievesGuild() const;
@@ -150,9 +166,13 @@ public:
     // Returns a reference to the pair of heroes available for recruitment,
     // updating it on the fly if necessary
     const Recruits & GetRecruits();
+
     // Returns a reference to the pair of heroes available for recruitment
     // without making any changes in it
-    Recruits & GetCurrentRecruits();
+    Recruits & GetCurrentRecruits()
+    {
+        return recruits;
+    }
 
     const VecHeroes & GetHeroes() const
     {
@@ -197,10 +217,13 @@ public:
 
     bool HeroesMayStillMove() const;
 
-    Puzzle & PuzzleMaps();
+    Puzzle & PuzzleMaps()
+    {
+        return puzzle_maps;
+    }
 
-    void SetVisitTravelersTent( int color );
-    bool IsVisitTravelersTent( int ) const;
+    void SetVisitTravelersTent( const int barrierColor );
+    bool IsVisitTravelersTent( const int barrierColor ) const;
 
     void LossPostActions();
 
@@ -216,10 +239,10 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom );
     friend IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom );
 
-    int color;
+    PlayerColor _color{ 0 };
     Funds resource;
 
-    uint32_t lost_town_days;
+    uint32_t lost_town_days{ 0 };
 
     VecCastles castles;
     VecHeroes heroes;
@@ -229,11 +252,11 @@ private:
     std::list<IndexObject> visit_object;
 
     Puzzle puzzle_maps;
-    uint32_t visited_tents_colors;
+    int _visitedTentsColors{ 0 };
 
     // Used to remember which item was selected in Kingdom View dialog.
-    int _topCastleInKingdomView;
-    int _topHeroInKingdomView;
+    int _topCastleInKingdomView{ -1 };
+    int _topHeroInKingdomView{ -1 };
 };
 
 class Kingdoms
@@ -249,11 +272,11 @@ public:
     void NewDay();
     void NewWeek();
 
-    Kingdom & GetKingdom( const int color );
-    const Kingdom & GetKingdom( const int color ) const;
+    Kingdom & GetKingdom( const PlayerColor color );
+    const Kingdom & GetKingdom( const PlayerColor color ) const;
 
-    int GetNotLossColors() const;
-    int FindWins( const int cond ) const;
+    PlayerColorsSet GetNotLossColors() const;
+    PlayerColor FindWins( const uint32_t cond ) const;
 
     void AddHeroes( const AllHeroes & heroes );
     void AddCastles( const AllCastles & castles );

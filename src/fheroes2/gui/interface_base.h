@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -125,7 +125,7 @@ namespace Interface
 
         static fheroes2::GameMode EventExit();
 
-        virtual bool useMouseDragMovement()
+        virtual bool useMouseDragMovement() const
         {
             return true;
         }

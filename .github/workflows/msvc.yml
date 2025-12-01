@@ -30,19 +30,19 @@ jobs:
           release_name: Windows x64 build with SDL2 (latest commit)
           release_tag: fheroes2-windows-x64-SDL2
     name: MSVC (${{ matrix.name }})
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 30
     defaults:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Install dependencies
       run: |
         script/windows/install_packages.bat
     - name: Install MSYS2 tools
       run: |
-        C:\msys64\usr\bin\pacman.exe -S --noconfirm --noprogressbar gettext-devel
+        C:\msys64\usr\bin\pacman.exe -S --noconfirm --noprogressbar gettext-devel make
       shell: cmd
     - name: Download MSVC Redistributable package
       run: |
@@ -57,7 +57,7 @@ jobs:
         "%SIGNTOOL_DIR%\signtool.exe" verify /v /d /all /pa /r "Microsoft Root Certificate Authority" .vcredist\vcredist.exe
       shell: cmd
       env:
-        SIGNTOOL_DIR: C:\Program Files (x86)\Windows Kits\10\bin\x64
+        SIGNTOOL_DIR: C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64
     - name: Generate version information
       run: |
         echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
@@ -98,7 +98,8 @@ jobs:
                                .\\docs\\README.txt \
                                files\\data\\*.h2d \
                                files\\lang\\*.mo \
-                               files\\soundfonts\\* \
+                               files\\timidity\\* \
+                               maps\\*.fh2m \
                                .\\script\\demo\\*.bat \
                                .\\script\\demo\\*.ps1 \
                                .\\script\\homm2\\*.bat \

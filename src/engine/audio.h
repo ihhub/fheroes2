@@ -105,7 +105,8 @@ namespace Music
 
     bool isPlaying();
 
-    void SetMidiSoundFonts( const ListFiles & files );
+    void setMidiSoundFonts( const ListFiles & files );
+    void setMidiTimidityCfg( const std::string & path );
 
     std::vector<uint8_t> Xmi2Mid( const std::vector<uint8_t> & buf );
 }

@@ -121,7 +121,7 @@ uint32_t GameStatic::GetLostOnWhirlpoolPercent()
     return 50;
 }
 
-uint32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
+int32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
 {
     switch ( type ) {
     case FogDiscoveryType::CASTLE:
@@ -129,7 +129,7 @@ uint32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
     case FogDiscoveryType::HEROES:
         return 4;
     case FogDiscoveryType::OBSERVATION_TOWER:
-        return 20;
+        return 19;
     case FogDiscoveryType::MAGI_EYES:
         return 9;
     default:
@@ -182,6 +182,7 @@ int32_t GameStatic::getObjectLuckEffect( const MP2::MapObjectType objectType )
     case MP2::OBJ_IDOL:
     case MP2::OBJ_MERMAID:
         return 1;
+    case MP2::OBJ_BLACK_CAT:
     case MP2::OBJ_PYRAMID:
         return -2;
     default:
@@ -200,6 +201,8 @@ int32_t GameStatic::getObjectMoraleEffect( const MP2::MapObjectType objectType )
         return 1;
     case MP2::OBJ_TEMPLE:
         return 2;
+    case MP2::OBJ_BLACK_CAT:
+        return 3;
     case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_SHIPWRECK:

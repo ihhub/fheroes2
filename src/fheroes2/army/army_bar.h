@@ -53,7 +53,10 @@ public:
         _troopWindowOffsetY = offsetY;
     }
 
-    bool isValid() const;
+    bool isValid() const
+    {
+        return _army != nullptr;
+    }
 
     void ResetSelected();
     void Redraw( fheroes2::Image & dstsf );
@@ -81,8 +84,8 @@ private:
 
     Army * _army{ nullptr };
     fheroes2::Image backsf;
-    bool use_mini_sprite;
-    bool read_only;
+    bool use_mini_sprite{ false };
+    bool read_only{ false };
     bool can_change{ false };
     bool _saveLastTroop{ true };
     std::string msg;

@@ -38,6 +38,8 @@
 class IStreamBase;
 class OStreamBase;
 
+enum class PlayerColor : uint8_t;
+
 inline constexpr int defaultBattleSpeed{ 4 };
 
 enum AdventureMapScrollSpeed : int
@@ -69,6 +71,12 @@ enum class InterfaceType : uint8_t
     GOOD = 0,
     EVIL = 1,
     DYNAMIC = 2
+};
+
+enum class SaveFileSortingMethod : uint8_t
+{
+    FILENAME,
+    TIMESTAMP,
 };
 
 class Settings
@@ -196,6 +204,7 @@ public:
     bool isAutoSaveAtBeginningOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
+    bool isArmyEstimationViewNumeric() const;
     bool isEvilInterfaceEnabled() const;
 
     void setInterfaceType( InterfaceType type )
@@ -235,6 +244,16 @@ public:
         return _resolutionInfo;
     }
 
+    fheroes2::Point getSavedWindowPos() const
+    {
+        return _windowPos;
+    }
+
+    void setStartWindowPos( const fheroes2::Point pos )
+    {
+        _windowPos = pos;
+    }
+
     void EnablePriceOfLoyaltySupport( const bool set );
 
     void SetGameDifficulty( const int difficulty )
@@ -269,6 +288,7 @@ public:
     void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
+    void setNumericArmyEstimationView( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
@@ -326,13 +346,13 @@ public:
         return players;
     }
 
-    int CurrentColor() const
+    PlayerColor CurrentColor() const
     {
         return players.getCurrentColor();
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void SetCurrentColor( const int color )
+    void SetCurrentColor( const PlayerColor color )
     {
         players.setCurrentColor( color );
     }
@@ -350,6 +370,16 @@ public:
     void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
     {
         _viewWorldZoomLevel = zoomLevel;
+    }
+
+    SaveFileSortingMethod getSaveFileSortingMethod() const
+    {
+        return _saveFileSortType;
+    }
+
+    void setSaveFileSortingMethod( const SaveFileSortingMethod sortType )
+    {
+        _saveFileSortType = sortType;
     }
 
     void SetProgramPath( const char * path );
@@ -377,6 +407,8 @@ private:
     BitModes _editorOptions;
 
     fheroes2::ResolutionInfo _resolutionInfo;
+    fheroes2::Point _windowPos;
+
     int _gameDifficulty;
 
     std::string _programPath;
@@ -386,6 +418,8 @@ private:
     std::string _loadedFileLanguage;
 
     Maps::FileInfo _currentMapInfo;
+
+    SaveFileSortingMethod _saveFileSortType;
 
     int sound_volume;
     int music_volume;

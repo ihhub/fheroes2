@@ -27,6 +27,7 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
+            maps/*.fh2m
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl2.sh
@@ -71,6 +72,7 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
+            maps/*.fh2m
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl2.sh
@@ -101,9 +103,13 @@ jobs:
             FHEROES2_WITH_TSAN: ON
         - name: macOS SDL2
           on: [ 'pull_request', 'push' ]
-          os: macos-13
+          os: macos-14
+          arch: x86_64
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
+            CFLAGS: --target=x86_64-apple-macos10.15
+            CXXFLAGS: --target=x86_64-apple-macos10.15
+            LDFLAGS: --target=x86_64-apple-macos10.15
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
@@ -115,6 +121,7 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
+            maps/*.fh2m
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/macos/Brewfile
@@ -148,7 +155,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       if: ${{ contains( matrix.on, github.event_name ) }}
     - name: Install dependencies (Linux)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
@@ -158,6 +165,11 @@ jobs:
     - name: Install dependencies (macOS)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
+        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
+            arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            # Homebrew uses /opt/homebrew for Apple Silicon packages and /usr/local for x86_64 packages
+            export PATH=/usr/local/bin:$PATH
+        fi
         brew install ${{ matrix.dependencies }}
       env:
         # Do not update outdated dependencies of installed packages
@@ -170,6 +182,10 @@ jobs:
     - name: Build (MacOS)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
+        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
+            # Homebrew uses /opt/homebrew for Apple Silicon packages and /usr/local for x86_64 packages
+            export PATH=/usr/local/bin:$PATH
+        fi
         make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.env }}
     - name: Create packages
@@ -209,7 +225,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -253,7 +269,7 @@ jobs:
         fi
     - name: Create package
       run: |
-        # Translations and H2D files are already included in fheroes2.vpk
+        # Translations, H2D files and FH2M maps are already bundled into fheroes2.vpk
         7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
     - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
@@ -282,9 +298,12 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Install dependencies
       run: |
+        # TODO: remove this temporary workaround
+        sudo rm -f /etc/apt/sources.list.d/bullseye-backports.list
+        #
         sudo apt-get -y update
         sudo apt-get -y install gettext p7zip-full
     - name: Build
@@ -299,7 +318,7 @@ jobs:
         make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
-        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
     - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -323,16 +342,18 @@ jobs:
       matrix:
         include:
         - name: Emscripten
-          on: [ 'pull_request' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
           package_name: fheroes2_emscripten.zip
+          release_name: Emscripten build (latest commit)
+          release_tag: fheroes2-emscripten-sdl2_dev
         - name: Emscripten Multithreaded
-          on: [ 'pull_request' ]
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_THREADS: ON
           package_name: fheroes2_emscripten_mt.zip
+          release_name: Emscripten Multithreaded build (latest commit)
+          release_tag: fheroes2-emscripten-sdl2-mt_dev
     name: Make (${{ matrix.name }})
     runs-on: ubuntu-latest
     container: emscripten/emsdk:latest
@@ -341,26 +362,34 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v4
-      if: ${{ contains( matrix.on, github.event_name ) }}
+    - uses: actions/checkout@v6
     - name: Install dependencies
-      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
         sudo apt-get -y update
         sudo apt-get -y install gettext p7zip-full
     - name: Build
-      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
         emmake make -f Makefile.emscripten -j "$(nproc)"
       env: ${{ matrix.env }}
     - name: Create package
-      if: ${{ contains( matrix.on, github.event_name ) }}
       run: |
-        # Translations and H2D files are already included in fheroes2.data
+        # Translations, H2D files and FH2M maps are already bundled into fheroes2.data
         7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
     - uses: actions/upload-artifact@v4
-      if: ${{ contains( matrix.on, github.event_name ) }}
+      if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.package_name }}
         path: ${{ matrix.package_name }}
         if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: ${{ matrix.package_name }}
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.release_name }}
+        tag: ${{ matrix.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true

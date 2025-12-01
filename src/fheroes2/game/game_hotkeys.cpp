@@ -170,6 +170,13 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
 
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-generate random map" ), fheroes2::Key::KEY_F5 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-configure random map" ), fheroes2::Key::KEY_F6 };
+#endif
+
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ARCHIBALD )]
@@ -213,10 +220,14 @@ namespace
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|world map down right" ), fheroes2::Key::KEY_KP_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SAVE_GAME )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|save game" ), fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_QUICK_SAVE )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|quick save" ), fheroes2::Key::KEY_F2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next hero" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|change to hero under cursor" ), fheroes2::Key::KEY_LEFT_SHIFT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_PORTRAIT_UP_MODIFIER )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|hold and left click to move hero portrait to top of list" ), fheroes2::Key::KEY_LEFT_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|start hero movement" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CAST_SPELL )]
@@ -285,6 +296,8 @@ namespace
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|skip turn in battle" ), fheroes2::Key::KEY_SPACE };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_CAST_SPELL )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|cast battle spell" ), fheroes2::Key::KEY_C };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER_DISPLAY )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle display of battle turn order" ), fheroes2::Key::KEY_T };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|dwelling level 1" ), fheroes2::Key::KEY_1 };

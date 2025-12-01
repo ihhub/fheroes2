@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,16 +25,14 @@
 
 #include "map_format_helper.h"
 #include "map_format_info.h"
+#include "serialize.h"
 #include "world_object_uid.h"
 
 namespace
 {
-    // This class holds 2 copies of MapFormat objects:
+    // This class holds 2 copies of MapFormat objects in a compressed format:
     // - one copy before the action
     // - one copy after the action
-    // Ideally, we need to store only difference between before and after an action
-    // but for simplification purposes we chose this way.
-    // TODO: optimize this class (if possible) to store less data.
     class MapAction final : public fheroes2::Action
     {
     public:
@@ -42,23 +40,22 @@ namespace
             : _mapFormat( mapFormat )
             , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
+            if ( !Maps::Map_Format::saveMap( _beforeMapFormat, _mapFormat ) ) {
                 assert( 0 );
             }
-
-            _beforeMapFormat = _mapFormat;
         }
+
+        // Disable the copy and move (implicitly) constructors and assignment operators.
+        MapAction( const MapAction & ) = delete;
+        MapAction & operator=( const MapAction & ) = delete;
+        ~MapAction() override = default;
 
         bool prepare()
         {
-            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
-                // If this assertion blows up then something is really wrong with the Editor.
+            if ( !Maps::Map_Format::saveMap( _afterMapFormat, _mapFormat ) ) {
                 assert( 0 );
                 return false;
             }
-
-            _afterMapFormat = _mapFormat;
 
             _latestObjectUIDAfter = Maps::getLastObjectUID();
 
@@ -67,7 +64,13 @@ namespace
 
         bool redo() override
         {
-            _mapFormat = _afterMapFormat;
+            if ( !Maps::Map_Format::loadMap( _afterMapFormat, _mapFormat ) ) {
+                assert( 0 );
+                return false;
+            }
+
+            _afterMapFormat.seek( 0 );
+
             if ( !Maps::readMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
@@ -81,7 +84,13 @@ namespace
 
         bool undo() override
         {
-            _mapFormat = _beforeMapFormat;
+            if ( !Maps::Map_Format::loadMap( _beforeMapFormat, _mapFormat ) ) {
+                assert( 0 );
+                return false;
+            }
+
+            _beforeMapFormat.seek( 0 );
+
             if ( !Maps::readMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
@@ -96,8 +105,8 @@ namespace
     private:
         Maps::Map_Format::MapFormat & _mapFormat;
 
-        Maps::Map_Format::MapFormat _beforeMapFormat;
-        Maps::Map_Format::MapFormat _afterMapFormat;
+        RWStreamBuf _beforeMapFormat;
+        RWStreamBuf _afterMapFormat;
 
         const uint32_t _latestObjectUIDBefore{ 0 };
         uint32_t _latestObjectUIDAfter{ 0 };

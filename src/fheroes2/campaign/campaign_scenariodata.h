@@ -24,15 +24,11 @@
 #include <string>
 #include <vector>
 
+#include "game_video.h"
 #include "maps_fileinfo.h"
 
 class IStreamBase;
 class OStreamBase;
-
-namespace Video
-{
-    enum class VideoAction : int;
-}
 
 namespace Campaign
 {
@@ -104,10 +100,10 @@ namespace Campaign
             STARTING_RACE_AND_ARMY
         };
 
-        int32_t _type;
-        int32_t _subType;
-        int32_t _amount;
-        int32_t _artifactSpellId; // Spell ID of a spell scroll
+        int32_t _type{ 0 };
+        int32_t _subType{ 0 };
+        int32_t _amount{ 0 };
+        int32_t _artifactSpellId{ 0 }; // Spell ID of a spell scroll
 
         ScenarioBonusData();
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );
@@ -120,13 +116,7 @@ namespace Campaign
         static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const ScenarioInfoId & scenarioInfo );
     };
 
-    struct ScenarioIntroVideoInfo
-    {
-        std::string fileName;
-        Video::VideoAction action;
-    };
-
-    using VideoSequence = std::vector<ScenarioIntroVideoInfo>;
+    using VideoSequence = std::vector<std::vector<Video::VideoInfo>>;
 
     class ScenarioData
     {
@@ -176,12 +166,12 @@ namespace Campaign
             return _lossCondition;
         }
 
-        const std::vector<ScenarioIntroVideoInfo> & getStartScenarioVideoPlayback() const
+        const VideoSequence & getStartScenarioVideoPlayback() const
         {
             return _startScenarioVideoPlayback;
         }
 
-        const std::vector<ScenarioIntroVideoInfo> & getEndScenarioVideoPlayback() const
+        const VideoSequence & getEndScenarioVideoPlayback() const
         {
             return _endScenarioVideoPlayback;
         }

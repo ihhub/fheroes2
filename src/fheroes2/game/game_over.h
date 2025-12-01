@@ -24,12 +24,20 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
+#include <optional>
+#include <vector>
 
+#include "color.h"
 #include "game_mode.h"
+#include "game_string.h"
 
 class IStreamBase;
 class OStreamBase;
+
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
 
 namespace GameOver
 {
@@ -52,14 +60,15 @@ namespace GameOver
         LOSS_TIME = 0x00000800,
         // These loss conditions apply if the enemy player won because of the corresponding win condition
         LOSS_ENEMY_WINS_TOWN = 0x00010000,
-        LOSS_ENEMY_WINS_GOLD = 0x00020000,
+        LOSS_ENEMY_WINS_ARTIFACT = 0x00020000,
+        LOSS_ENEMY_WINS_GOLD = 0x00040000,
 
-        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD,
-        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD
+        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD,
+        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
     };
 
     const char * GetString( uint32_t cond );
-    std::string GetActualDescription( uint32_t cond );
+    std::vector<fheroes2::LocalizedString> GetActualDescription( const uint32_t conditions, const std::optional<fheroes2::SupportedLanguage> mapLanguage );
 
     class Result
     {
@@ -85,10 +94,10 @@ namespace GameOver
         friend OStreamBase & operator<<( OStreamBase & stream, const Result & res );
         friend IStreamBase & operator>>( IStreamBase & stream, Result & res );
 
-        Result();
+        Result() = default;
 
-        int colors;
-        uint32_t result;
+        PlayerColorsSet _colors{ 0 };
+        uint32_t result{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const Result & res );

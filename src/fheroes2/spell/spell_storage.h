@@ -28,20 +28,16 @@
 
 #include "spell.h"
 
-class Artifact;
 class BagArtifacts;
 
 class SpellStorage : public std::vector<Spell>
 {
 public:
-    SpellStorage();
-
-    SpellStorage GetSpells( int lvl = -1 ) const;
-    void Append( const SpellStorage & );
-    void Append( const Spell & );
-    void Append( const BagArtifacts & );
-    void Append( const Artifact & );
+    SpellStorage GetSpells( const int level = -1 ) const;
+    void Append( const SpellStorage & storage );
+    void Append( const Spell & spell );
+    void Append( const BagArtifacts & bag );
     bool removeSpell( const Spell & spell );
-    bool isPresentSpell( const Spell & ) const;
+    bool isPresentSpell( const Spell & spell ) const;
     std::string String() const;
 };

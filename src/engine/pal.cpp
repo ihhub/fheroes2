@@ -74,7 +74,7 @@ namespace
             145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173,
             174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202,
             203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 188, 188, 188, 188, 118, 118, 118, 118, 222, 223, 224, 225, 226, 227, 228, 229, 230, 69,
-            69,  69,  69,  69,  69,  69,  69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255 };
+            69,  69,  69,  69,  236, 237, 69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255 };
 
     const std::vector<uint8_t> grayTable
         = { 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
@@ -170,23 +170,27 @@ namespace
 
 std::vector<uint8_t> PAL::GetCyclingPalette( const uint32_t stepId )
 {
-    std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
+    std::vector<uint8_t> palette = GetPalette( PaletteType::STANDARD );
 
     static const std::array<CyclingColorSet, 4> cycleSet{ CyclingColorSet{ 214, 4, false }, CyclingColorSet{ 218, 4, false }, CyclingColorSet{ 231, 5, true },
                                                           CyclingColorSet{ 238, 4, false } };
 
     for ( const CyclingColorSet & colorSet : cycleSet ) {
-        for ( uint32_t id = 0; id < colorSet.length; ++id ) {
-            uint32_t newColorID;
-            if ( colorSet.forward ) {
-                newColorID = colorSet.start + ( ( id + stepId ) % colorSet.length );
+        if ( colorSet.forward ) {
+            for ( uint32_t id = 0; id < colorSet.length; ++id ) {
+                const uint32_t newColorID = colorSet.start + ( ( id + stepId ) % colorSet.length );
+                palette[colorSet.start + id] = static_cast<uint8_t>( newColorID );
             }
-            else {
-                const uint32_t lastColorID = colorSet.length - 1;
-                newColorID = colorSet.start + lastColorID - ( ( lastColorID + stepId - id ) % colorSet.length );
-            }
+        }
+        else {
+            const uint32_t lastColorID = colorSet.length - 1;
+            const uint32_t lastColor = colorSet.start + lastColorID;
+            const uint32_t colorOffset = stepId + lastColorID;
 
-            palette[colorSet.start + id] = static_cast<uint8_t>( newColorID );
+            for ( uint32_t id = 0; id < colorSet.length; ++id ) {
+                const uint32_t newColorID = lastColor - ( ( colorOffset - id ) % colorSet.length );
+                palette[colorSet.start + id] = static_cast<uint8_t>( newColorID );
+            }
         }
     }
 

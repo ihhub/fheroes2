@@ -28,6 +28,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "battle.h"
@@ -36,6 +37,7 @@
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
+#include "color.h"
 #include "icn.h"
 #include "spell.h"
 #include "spell_storage.h"
@@ -47,7 +49,7 @@ class HeroBase;
 
 namespace Rand
 {
-    class DeterministicRandomGenerator;
+    class PCG32;
 }
 
 namespace Battle
@@ -92,7 +94,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & attackingArmy, Army & defendingArmy, const int32_t tileIndex, const bool isShowInterface, Rand::PCG32 & randomGenerator );
         Arena( const Arena & ) = delete;
         Arena( Arena && ) = delete;
 
@@ -113,27 +115,38 @@ namespace Battle
             return _turnNumber;
         }
 
-        Result & GetResult();
+        Result & GetResult()
+        {
+            return _battleResult;
+        }
 
-        HeroBase * GetCommander1() const;
-        HeroBase * GetCommander2() const;
+        HeroBase * getAttackingArmyCommander() const;
+        HeroBase * getDefendingArmyCommander() const;
 
-        const HeroBase * getCommander( const int color ) const;
-        const HeroBase * getEnemyCommander( const int color ) const;
+        const HeroBase * getCommander( const PlayerColor color ) const;
+        const HeroBase * getEnemyCommander( const PlayerColor color ) const;
         const HeroBase * GetCurrentCommander() const;
 
-        Force & GetForce1() const;
-        Force & GetForce2() const;
-        Force & getForce( const int color ) const;
-        Force & getEnemyForce( const int color ) const;
+        Force & getAttackingForce() const
+        {
+            return *_attackingArmy;
+        }
+
+        Force & getDefendingForce() const
+        {
+            return *_defendingArmy;
+        }
+
+        Force & getForce( const PlayerColor color ) const;
+        Force & getEnemyForce( const PlayerColor color ) const;
         Force & GetCurrentForce() const;
 
-        int GetArmy1Color() const;
-        int GetArmy2Color() const;
-        int GetCurrentColor() const;
+        PlayerColor getAttackingArmyColor() const;
+        PlayerColor getDefendingArmyColor() const;
+        PlayerColor GetCurrentColor() const;
         // Returns the color of the army opposite to the army of the given color. If there is no army of the given color,
         // returns the color of the attacking army.
-        int GetOppositeColor( const int col ) const;
+        PlayerColor GetOppositeColor( const PlayerColor col ) const;
 
         Unit * GetTroopBoard( int32_t );
         const Unit * GetTroopBoard( int32_t ) const;
@@ -218,8 +231,8 @@ namespace Battle
         // during the current turn, or nullptr if there is no such unit.
         Unit * getLastResurrectableUnitFromGraveyard( const int32_t index, const Spell & spell ) const;
 
-        bool CanSurrenderOpponent( int color ) const;
-        bool CanRetreatOpponent( int color ) const;
+        bool CanSurrenderOpponent( const PlayerColor color ) const;
+        bool CanRetreatOpponent( const PlayerColor color ) const;
 
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
 
@@ -228,7 +241,7 @@ namespace Battle
             return _covrIcnId;
         }
 
-        int32_t GetFreePositionNearHero( const int heroColor ) const;
+        int32_t GetFreePositionNearHero( const PlayerColor heroColor ) const;
 
         static Board * GetBoard();
         static Tower * GetTower( const TowerType type );
@@ -253,20 +266,24 @@ namespace Battle
             CASTLE_BOTTOM_GATE_TOWER_POS = 62
         };
 
+        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
+        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
+
+        static std::vector<CastleDefenseStructure> getEarthQuakeSpellTargets();
+
+        static std::pair<uint32_t, uint32_t> getEarthquakeDamageRange( const HeroBase * commander );
+
     private:
         void UnitTurn( const Units & orderHistory );
 
         void TowerAction( const Tower & );
         void CatapultAction();
 
-        // Returns the remaining number of hitpoints of the given castle defense structure from the point of view of the given siege weapon.
-        int getCastleDefenseStructureCondition( const CastleDefenseStructure target, const SiegeWeaponType siegeWeapon ) const;
-
         // Applies the specified damage to the given castle defense structure. It's the caller's responsibility to make sure that this defense
         // structure still has enough hitpoints.
         void applyDamageToCastleDefenseStructure( const CastleDefenseStructure target, const int damage );
 
-        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
+        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const Battle::CellDirection dir ) const;
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
@@ -287,11 +304,11 @@ namespace Battle
         void ApplyActionToggleAutoCombat( Command & cmd );
         void ApplyActionQuickCombat( const Command & cmd );
 
-        void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
-        void ApplyActionSpellMirrorImage( Command & cmd );
-        void ApplyActionSpellTeleport( Command & cmd );
-        void ApplyActionSpellEarthquake( const Command & cmd );
-        void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
+        void _applyActionSpellSummonElemental( const Spell & spell );
+        void _applyActionSpellMirrorImage( Command & cmd );
+        void _applyActionSpellTeleport( Command & cmd );
+        void _applyActionSpellEarthquake();
+        void _applyActionSpellDefaults( Command & cmd, const Spell & spell );
 
         // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
         // then this method does nothing. Otherwise, it's the caller's responsibility to make sure that this position
@@ -313,8 +330,8 @@ namespace Battle
         // position, which should be updated separately.
         Unit * CreateMirrorImage( Unit & unit );
 
-        std::unique_ptr<Force> _army1;
-        std::unique_ptr<Force> _army2;
+        std::unique_ptr<Force> _attackingArmy;
+        std::unique_ptr<Force> _defendingArmy;
         std::shared_ptr<Units> _orderOfUnits;
 
         // The unit that is currently active. Please note that some battle actions (e.g. catapult or castle tower shots) can be performed without an active unit.
@@ -322,7 +339,7 @@ namespace Battle
 
         // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
         // bad morale is not considered as such).
-        int _lastActiveUnitArmyColor{ -1 };
+        PlayerColor _lastActiveUnitArmyColor{ PlayerColor::UNUSED };
 
         const Castle * castle;
         // Is the battle taking place in a town or a castle
@@ -333,7 +350,7 @@ namespace Battle
         std::unique_ptr<Bridge> _bridge;
 
         std::unique_ptr<Interface> _interface;
-        Result result_game;
+        Result _battleResult;
 
         Graveyard _graveyard;
         SpellStorage _usedSpells;
@@ -344,14 +361,14 @@ namespace Battle
 
         uint32_t _turnNumber{ 0 };
         // A set of colors of players for whom the auto combat mode is enabled
-        int _autoCombatColors{ 0 };
+        PlayerColorsSet _autoCombatColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other
         // places (for example, in code that performs situation assessment or AI decision-making) because in this
         // case the battles performed by AI will not be reproducible by a human player when performing exactly the
         // same actions.
-        Rand::DeterministicRandomGenerator & _randomGenerator;
+        Rand::PCG32 & _randomGenerator;
 
         TroopsUidGenerator _uidGenerator;
 

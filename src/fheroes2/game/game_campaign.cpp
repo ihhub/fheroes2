@@ -47,6 +47,7 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_language.h"
 #include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
@@ -74,6 +75,8 @@
 #include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
+#include "ui_font.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -701,11 +704,11 @@ namespace
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
-        const int humanColor = Players::HumanColors();
+        const PlayerColorsSet humanColor = Players::HumanColors();
         assert( Color::Count( humanColor ) == 1 );
 
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        const Kingdom & humanKingdom = world.GetKingdom( humanColor );
+        const Kingdom & humanKingdom = world.GetKingdom( static_cast<PlayerColor>( humanColor ) );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
@@ -794,8 +797,8 @@ namespace
         if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
             AudioManager::ResetAudio();
 
-            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
-                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            for ( const auto & item : completedScenario.getEndScenarioVideoPlayback() ) {
+                Video::ShowVideo( item );
             }
 
             AudioManager::ResetAudio();
@@ -817,8 +820,8 @@ namespace
         if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
             AudioManager::ResetAudio();
 
-            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
-                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            for ( const auto & item : scenario.getStartScenarioVideoPlayback() ) {
+                Video::ShowVideo( item );
             }
 
             AudioManager::ResetAudio();
@@ -1011,7 +1014,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
-            buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
             if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -1173,10 +1176,10 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            const int humanColor = Players::HumanColors();
+            const PlayerColorsSet humanColor = Players::HumanColors();
             assert( Color::Count( humanColor ) == 1 );
 
-            const VecHeroes & humanKingdomHeroes = world.GetKingdom( humanColor ).GetHeroes();
+            const VecHeroes & humanKingdomHeroes = world.GetKingdom( static_cast<PlayerColor>( humanColor ) ).GetHeroes();
 
             // In the original game, carry-over troops are taken from a hero who was hired least recently and who is still in the kingdom (I.E. still "alive"). A starting
             // hero will count as first if they are still alive since the beginning, but if they are rehired then they take a new place in the queue of heroes.
@@ -1258,7 +1261,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, { 475, 110 }, 140 );
 
         AudioManager::ResetAudio();
-        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { std::move( ratingSubtitle ) }, true );
+        Video::ShowVideo( { { "WIN.SMK", Video::VideoControl::PLAY_CUTSCENE_WAIT } }, { std::move( ratingSubtitle ) }, true );
 
         // fheroes2::PlayMusic is run here in order to start playing before displaying the high score.
         AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
@@ -1400,7 +1403,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
     }
 
-    optionButtonGroup.draw();
+    optionButtonGroup.draw( display );
 
     buttonViewIntro.draw();
     buttonDifficulty.draw();
@@ -1437,6 +1440,25 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     textDaysSpent.draw( top.x + 582 - textDaysSpent.width() / 2, top.y + 33, display );
 
     DrawCampaignScenarioDescription( scenario, top );
+
+    fheroes2::Rect scenarioTitleArea;
+    switch ( chosenCampaignID ) {
+    case Campaign::ARCHIBALD_CAMPAIGN:
+    case Campaign::ROLAND_CAMPAIGN:
+        scenarioTitleArea = { top.x + 198, top.y + 84, 200, 25 };
+        break;
+    case Campaign::DESCENDANTS_CAMPAIGN:
+    case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+    case Campaign::VOYAGE_HOME_CAMPAIGN:
+    case Campaign::WIZARDS_ISLE_CAMPAIGN:
+        scenarioTitleArea = { top.x + 198, top.y + 84, 200, 22 };
+        break;
+    default:
+        // Implementing a new campaign? Add a new case!
+        assert( 0 );
+        break;
+    }
+
     drawObtainedCampaignAwards( campaignSaveData, top );
 
     std::vector<Campaign::ScenarioInfoId> selectableScenarios;
@@ -1486,17 +1508,17 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     bool updateDisplay = false;
 
     while ( le.HandleEvents() ) {
-        buttonCancel.drawOnState( le.isMouseLeftButtonPressedInArea( buttonCancel.area() ) );
-        buttonOk.drawOnState( le.isMouseLeftButtonPressedInArea( buttonOk.area() ) );
-        buttonViewIntro.drawOnState( le.isMouseLeftButtonPressedInArea( buttonViewIntro.area() ) );
-        buttonDifficulty.drawOnState( le.isMouseLeftButtonPressedInArea( buttonDifficulty.area() ) );
-        buttonRestart.drawOnState( le.isMouseLeftButtonPressedInArea( buttonRestart.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
+        buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonViewIntro.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonViewIntro.area() ) );
+        buttonDifficulty.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDifficulty.area() ) );
+        buttonRestart.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonRestart.area() ) );
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.isMouseLeftButtonPressedInArea( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
                 scenarioBonusId = fheroes2::checkedCast<int32_t>( i );
                 buttonChoices.button( i ).press();
-                optionButtonGroup.draw();
+                optionButtonGroup.draw( display );
                 display.render();
 
                 break;
@@ -1573,6 +1595,14 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             }
 
             Maps::FileInfo mapInfo = scenario.loadMap();
+
+            // Update French language-specific characters to match CP1252 only for French assets when French language is selected.
+            if ( mapInfo.version != GameVersion::RESURRECTION && fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French
+                 && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+                fheroes2::fixFrenchCharactersForMP2Map( mapInfo.name );
+                fheroes2::fixFrenchCharactersForMP2Map( mapInfo.description );
+            }
+
             Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
 
             conf.setCurrentMapInfo( mapInfo );
@@ -1652,6 +1682,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.isMouseRightButtonPressedInArea( areaDaysSpent ) ) {
             fheroes2::showStandardTextMessage( _( "Days spent" ), _( "The number of days spent on this campaign." ), Dialog::ZERO );
+            updateDisplay = true;
+        }
+        else if ( le.isMouseRightButtonPressedInArea( scenarioTitleArea ) ) {
+            fheroes2::showStandardTextMessage( _( "Scenario Title" ), scenario.getScenarioName(), Dialog::ZERO );
             updateDisplay = true;
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {

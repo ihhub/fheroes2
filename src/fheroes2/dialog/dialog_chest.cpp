@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -116,8 +116,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     // message loop
     while ( le.HandleEvents() ) {
-        buttonYes.drawOnState( le.isMouseLeftButtonPressedInArea( buttonYes.area() ) );
-        buttonNo.drawOnState( le.isMouseLeftButtonPressedInArea( buttonNo.area() ) );
+        buttonYes.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonYes.area() ) );
+        buttonNo.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNo.area() ) );
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonYes.area() ) ) {
             result = true;

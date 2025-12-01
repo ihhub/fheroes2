@@ -140,23 +140,23 @@ namespace
     }
 
     // Convert the color to 'ICN::VWFLAG*' or 'ICN::MISC*' index, returns 'unknownIndex' for unknown color.
-    uint32_t colorToOffsetICN( const int32_t color )
+    uint32_t colorToOffsetICN( const PlayerColor color )
     {
         switch ( color ) {
-        case Color::BLUE:
+        case PlayerColor::BLUE:
             return 0;
-        case Color::GREEN:
+        case PlayerColor::GREEN:
             return 1;
-        case Color::RED:
+        case PlayerColor::RED:
             return 2;
-        case Color::YELLOW:
+        case PlayerColor::YELLOW:
             return 3;
-        case Color::ORANGE:
+        case PlayerColor::ORANGE:
             return 4;
-        case Color::PURPLE:
+        case PlayerColor::PURPLE:
             return 5;
-        case Color::NONE:
-        case Color::UNUSED:
+        case PlayerColor::NONE:
+        case PlayerColor::UNUSED:
             return 6;
         default:
             return unknownIndex;
@@ -314,7 +314,7 @@ namespace
         }
     }
 
-    void DrawObjectsIcons( const int32_t color, const ViewWorldMode mode, CacheForMapWithResources & cache )
+    void DrawObjectsIcons( const PlayerColor color, const ViewWorldMode mode, CacheForMapWithResources & cache )
     {
         const bool revealAll = mode == ViewWorldMode::ViewAll;
         const bool revealMines = revealAll || ( mode == ViewWorldMode::ViewMines );
@@ -586,7 +586,7 @@ fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
     return result;
 }
 
-void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::BaseInterface & interface )
+void ViewWorld::ViewWorldWindow( const PlayerColor color, const ViewWorldMode mode, Interface::BaseInterface & interface )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -715,8 +715,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // message loop
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
-        buttonExit.drawOnState( le.isMouseLeftButtonPressedInArea( buttonExit.area() ) );
-        buttonZoom.drawOnState( le.isMouseLeftButtonPressedInArea( buttonZoom.area() ) );
+        buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
+        buttonZoom.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonZoom.area() ) );
 
         bool changed = false;
 

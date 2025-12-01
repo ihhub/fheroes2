@@ -172,10 +172,7 @@ namespace
 
             return !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
         }
-        if ( hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_COAST ) {
-            return true;
-        }
-        if ( !hero.isShipMaster() && next.getMainObjectType() == MP2::OBJ_SHIPWRECK ) {
+        if ( hero.isShipMaster() && next.isSuitableForDisembarkation() ) {
             return true;
         }
 
@@ -183,7 +180,7 @@ namespace
     }
 }
 
-bool Heroes::isInVisibleMapArea() const
+bool Heroes::_isInVisibleMapArea() const
 {
     // TODO: this is not entirely correct. Consider a hero being outside the visible area but his shadow is still inside. The visible tile ROI should be extended by
     // TODO: at least 1 tile in each direction.
@@ -193,9 +190,9 @@ bool Heroes::isInVisibleMapArea() const
 bool Heroes::isInDeepOcean() const
 {
     // Maximum number of hero's steps per cell is 9 so we check if the hero moved more than half of them.
-    const bool isHeroMovedHalfOfCell = ( sprite_index < 45 && ( sprite_index % heroFrameCountPerTile ) > 4 );
+    const bool isHeroMovedHalfOfCell = ( _spriteIndex < 45 && ( _spriteIndex % heroFrameCountPerTile ) > 4 );
     const int32_t tileIndex
-        = ( isHeroMovedHalfOfCell && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
+        = ( isHeroMovedHalfOfCell && Maps::isValidDirection( GetIndex(), _direction ) ) ? Maps::GetDirectionIndex( GetIndex(), _direction ) : GetIndex();
     for ( const int32_t nearbyIndex : Maps::getAroundIndexes( tileIndex ) ) {
         if ( !world.getTile( nearbyIndex ).isWater() ) {
             return false;
@@ -205,20 +202,20 @@ bool Heroes::isInDeepOcean() const
     return true;
 }
 
-bool Heroes::MoveStep( const bool jumpToNextTile )
+bool Heroes::_moveStep( const bool jumpToNextTile )
 {
     const int32_t heroIndex = GetIndex();
-    const int32_t nextStepIndex = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
+    const int32_t nextStepIndex = Maps::GetDirectionIndex( heroIndex, _path.GetFrontDirection() );
 
     const auto makeStep = [this, nextStepIndex]( const bool performMovement ) {
-        ApplyPenaltyMovement( path.GetFrontPenalty() );
+        _applyMovementPenalty( _path.GetFrontPenalty() );
 
         if ( !performMovement ) {
             // If we are accessing an object located on a tile that we cannot step on, then this should be the last step of the path
-            assert( nextStepIndex == path.GetDestinationIndex() );
+            assert( nextStepIndex == _path.GetDestinationIndex() );
 
-            path.PopFront();
-            assert( path.empty() );
+            _path.PopFront();
+            assert( _path.empty() );
 
             Action( nextStepIndex );
 
@@ -234,7 +231,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
 
         ActionNewPosition( true );
 
-        path.PopFront();
+        _path.PopFront();
 
         // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
         if ( isActive() ) {
@@ -256,7 +253,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         return true;
     }
 
-    const int currentHeroFrameIndex = ( sprite_index % heroFrameCountPerTile );
+    const int currentHeroFrameIndex = ( _spriteIndex % heroFrameCountPerTile );
     if ( currentHeroFrameIndex == 0 ) {
         if ( isNeedStayFrontObject( *this, world.getTile( nextStepIndex ) ) ) {
             makeStep( false );
@@ -275,56 +272,56 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         Scout( nextStepIndex );
     }
     else if ( currentHeroFrameIndex == 8 ) {
-        sprite_index -= 8;
+        _spriteIndex -= 8;
 
         makeStep( true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
-        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.getTile( path.GetFrontIndex() ) ) ) {
+        if ( isMoveEnabled() && GetDirection() == _path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.getTile( _path.GetFrontIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() ) {
                 playHeroWalkingSound( world.getTile( heroIndex ).GetGround() );
             }
-            ++sprite_index;
+            ++_spriteIndex;
         }
 
         return true;
     }
 
-    ++sprite_index;
+    ++_spriteIndex;
 
     return false;
 }
 
-void Heroes::AngleStep( int to_direct )
+void Heroes::_angleStep( const int targetDirection )
 {
-    bool clockwise = Direction::ShortDistanceClockWise( direction, to_direct );
+    const bool clockwise = Direction::ShortDistanceClockWise( _direction, targetDirection );
 
     // start index
-    if ( 45 > sprite_index && ( sprite_index % heroFrameCountPerTile ) == 0 ) {
-        switch ( direction ) {
+    if ( 45 > _spriteIndex && ( _spriteIndex % heroFrameCountPerTile ) == 0 ) {
+        switch ( _direction ) {
         case Direction::TOP:
-            sprite_index = 45;
+            _spriteIndex = 45;
             break;
         case Direction::TOP_RIGHT:
-            sprite_index = clockwise ? 47 : 46;
+            _spriteIndex = clockwise ? 47 : 46;
             break;
         case Direction::TOP_LEFT:
-            sprite_index = clockwise ? 46 : 47;
+            _spriteIndex = clockwise ? 46 : 47;
             break;
         case Direction::RIGHT:
-            sprite_index = clockwise ? 49 : 48;
+            _spriteIndex = clockwise ? 49 : 48;
             break;
         case Direction::LEFT:
-            sprite_index = clockwise ? 48 : 49;
+            _spriteIndex = clockwise ? 48 : 49;
             break;
         case Direction::BOTTOM_RIGHT:
-            sprite_index = clockwise ? 51 : 50;
+            _spriteIndex = clockwise ? 51 : 50;
             break;
         case Direction::BOTTOM_LEFT:
-            sprite_index = clockwise ? 50 : 51;
+            _spriteIndex = clockwise ? 50 : 51;
             break;
         case Direction::BOTTOM:
-            sprite_index = clockwise ? 52 : 53;
+            _spriteIndex = clockwise ? 52 : 53;
             break;
 
         default:
@@ -333,25 +330,25 @@ void Heroes::AngleStep( int to_direct )
     }
     // animation process
     else {
-        switch ( direction ) {
+        switch ( _direction ) {
         case Direction::TOP_RIGHT:
         case Direction::RIGHT:
         case Direction::BOTTOM_RIGHT:
-            clockwise ? ++sprite_index : --sprite_index;
+            clockwise ? ++_spriteIndex : --_spriteIndex;
             break;
 
         case Direction::TOP:
-            ++sprite_index;
+            ++_spriteIndex;
             break;
 
         case Direction::TOP_LEFT:
         case Direction::LEFT:
         case Direction::BOTTOM_LEFT:
-            clockwise ? --sprite_index : ++sprite_index;
+            clockwise ? --_spriteIndex : ++_spriteIndex;
             break;
 
         case Direction::BOTTOM:
-            --sprite_index;
+            --_spriteIndex;
             break;
 
         default:
@@ -361,7 +358,7 @@ void Heroes::AngleStep( int to_direct )
         bool end = false;
         int next = Direction::UNKNOWN;
 
-        switch ( direction ) {
+        switch ( _direction ) {
         case Direction::TOP:
             next = clockwise ? Direction::TOP_RIGHT : Direction::TOP_LEFT;
             break;
@@ -393,28 +390,28 @@ void Heroes::AngleStep( int to_direct )
 
         switch ( next ) {
         case Direction::TOP:
-            end = ( sprite_index == 44 );
+            end = ( _spriteIndex == 44 );
             break;
         case Direction::TOP_RIGHT:
-            end = ( sprite_index == ( clockwise ? 47 : 46 ) );
+            end = ( _spriteIndex == ( clockwise ? 47 : 46 ) );
             break;
         case Direction::TOP_LEFT:
-            end = ( sprite_index == ( clockwise ? 46 : 47 ) );
+            end = ( _spriteIndex == ( clockwise ? 46 : 47 ) );
             break;
         case Direction::RIGHT:
-            end = ( sprite_index == ( clockwise ? 49 : 48 ) );
+            end = ( _spriteIndex == ( clockwise ? 49 : 48 ) );
             break;
         case Direction::LEFT:
-            end = ( sprite_index == ( clockwise ? 48 : 49 ) );
+            end = ( _spriteIndex == ( clockwise ? 48 : 49 ) );
             break;
         case Direction::BOTTOM_RIGHT:
-            end = ( sprite_index == ( clockwise ? 51 : 50 ) );
+            end = ( _spriteIndex == ( clockwise ? 51 : 50 ) );
             break;
         case Direction::BOTTOM_LEFT:
-            end = ( sprite_index == ( clockwise ? 50 : 51 ) );
+            end = ( _spriteIndex == ( clockwise ? 50 : 51 ) );
             break;
         case Direction::BOTTOM:
-            end = ( sprite_index == 53 );
+            end = ( _spriteIndex == 53 );
             break;
 
         default:
@@ -424,40 +421,51 @@ void Heroes::AngleStep( int to_direct )
         if ( end ) {
             switch ( next ) {
             case Direction::TOP:
-                sprite_index = 0;
+                _spriteIndex = 0;
                 break;
             case Direction::BOTTOM:
-                sprite_index = 36;
+                _spriteIndex = 36;
                 break;
             case Direction::TOP_RIGHT:
             case Direction::TOP_LEFT:
-                sprite_index = 9;
+                _spriteIndex = 9;
                 break;
             case Direction::BOTTOM_RIGHT:
             case Direction::BOTTOM_LEFT:
-                sprite_index = 27;
+                _spriteIndex = 27;
                 break;
             case Direction::RIGHT:
             case Direction::LEFT:
-                sprite_index = 18;
+                _spriteIndex = 18;
                 break;
 
             default:
                 break;
             }
 
-            direction = next;
+            _direction = next;
         }
     }
 }
 
+void Heroes::_applyMovementPenalty( const uint32_t penalty )
+{
+    if ( penalty > _movePoints ) {
+        _movePoints = 0;
+
+        return;
+    }
+
+    _movePoints -= penalty;
+}
+
 fheroes2::Point Heroes::getCurrentPixelOffset() const
 {
-    if ( sprite_index >= 45 ) {
+    if ( _spriteIndex >= 45 ) {
         return {};
     }
 
-    int frame = ( sprite_index % heroFrameCountPerTile );
+    int frame = ( _spriteIndex % heroFrameCountPerTile );
     if ( frame > 0 )
         --frame;
 
@@ -467,28 +475,28 @@ fheroes2::Point Heroes::getCurrentPixelOffset() const
 
     fheroes2::Point realOffset{ _offset };
 
-    if ( direction & DIRECTION_LEFT_COL ) {
+    if ( _direction & DIRECTION_LEFT_COL ) {
         realOffset.x -= heroMoveStep * frame;
     }
-    else if ( direction & DIRECTION_RIGHT_COL ) {
+    else if ( _direction & DIRECTION_RIGHT_COL ) {
         realOffset.x += heroMoveStep * frame;
     }
 
-    if ( direction & DIRECTION_TOP_ROW ) {
+    if ( _direction & DIRECTION_TOP_ROW ) {
         realOffset.y -= heroMoveStep * frame;
     }
-    else if ( direction & DIRECTION_BOTTOM_ROW ) {
+    else if ( _direction & DIRECTION_BOTTOM_ROW ) {
         realOffset.y += heroMoveStep * frame;
     }
 
     return realOffset;
 }
 
-void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset /* = fheroes2::Point() */ ) const
+void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset /* = {} */ ) const
 {
     assert( animSpeedMultiplier > 0 );
 
-    if ( !isInVisibleMapArea() ) {
+    if ( !_isInVisibleMapArea() ) {
         return;
     }
 
@@ -527,11 +535,11 @@ void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & off
     _alphaValue = 255;
 }
 
-void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset /* = fheroes2::Point() */ ) const
+void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset /* = {} */ ) const
 {
     assert( animSpeedMultiplier > 0 );
 
-    if ( !isInVisibleMapArea() ) {
+    if ( !_isInVisibleMapArea() ) {
         return;
     }
 
@@ -574,27 +582,27 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
     ResetModes( ACTION );
 
-    if ( path.isValidForMovement() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
+    if ( _path.isValidForMovement() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
         // Jump to the next position.
         if ( jumpToNextTile ) {
-            direction = path.GetFrontDirection();
+            _direction = _path.GetFrontDirection();
 
-            if ( !MoveStep( jumpToNextTile ) ) {
+            if ( !_moveStep( jumpToNextTile ) ) {
                 assert( 0 );
             }
 
             return isActive();
         }
 
-        if ( const int frontDirection = path.GetFrontDirection(); GetDirection() != frontDirection ) {
+        if ( const int frontDirection = _path.GetFrontDirection(); GetDirection() != frontDirection ) {
             // The hero is changing the direction of movement.
-            AngleStep( frontDirection );
+            _angleStep( frontDirection );
         }
         else {
             // Set valid direction sprite in case of AI hero appearing from fog.
-            SetValidDirectionSprite();
+            _setValidDirectionSprite();
 
-            if ( MoveStep( jumpToNextTile ) ) {
+            if ( _moveStep( jumpToNextTile ) ) {
                 return isActive();
             }
         }
@@ -613,33 +621,33 @@ fheroes2::Point Heroes::MovementDirection() const
         return {};
     }
 
-    const int32_t to = Maps::GetDirectionIndex( from, path.GetFrontDirection() );
+    const int32_t to = Maps::GetDirectionIndex( from, _path.GetFrontDirection() );
     if ( to == -1 ) {
         return {};
     }
 
-    if ( direction == Direction::TOP ) {
-        if ( sprite_index > 1 && sprite_index < 9 ) {
+    if ( _direction == Direction::TOP ) {
+        if ( _spriteIndex > 1 && _spriteIndex < 9 ) {
             return { 0, -1 };
         }
     }
-    else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
-        if ( sprite_index > 9 + 1 && sprite_index < 18 ) {
-            return { direction == Direction::TOP_RIGHT ? 1 : -1, -1 };
+    else if ( _direction == Direction::TOP_RIGHT || _direction == Direction::TOP_LEFT ) {
+        if ( _spriteIndex > 9 + 1 && _spriteIndex < 18 ) {
+            return { _direction == Direction::TOP_RIGHT ? 1 : -1, -1 };
         }
     }
-    else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
-        if ( sprite_index > 18 + 1 && sprite_index < 27 ) {
-            return { direction == Direction::RIGHT ? 1 : -1, 0 };
+    else if ( _direction == Direction::RIGHT || _direction == Direction::LEFT ) {
+        if ( _spriteIndex > 18 + 1 && _spriteIndex < 27 ) {
+            return { _direction == Direction::RIGHT ? 1 : -1, 0 };
         }
     }
-    else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
-        if ( sprite_index > 27 + 1 && sprite_index < 36 ) {
-            return { direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 };
+    else if ( _direction == Direction::BOTTOM_RIGHT || _direction == Direction::BOTTOM_LEFT ) {
+        if ( _spriteIndex > 27 + 1 && _spriteIndex < 36 ) {
+            return { _direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 };
         }
     }
-    else if ( direction == Direction::BOTTOM ) {
-        if ( sprite_index > 36 + 1 && sprite_index < 45 ) {
+    else if ( _direction == Direction::BOTTOM ) {
+        if ( _spriteIndex > 36 + 1 && _spriteIndex < 45 ) {
             return { 0, 1 };
         }
     }
@@ -647,36 +655,36 @@ fheroes2::Point Heroes::MovementDirection() const
     return {};
 }
 
-void Heroes::SetValidDirectionSprite()
+void Heroes::_setValidDirectionSprite()
 {
     const int32_t from = GetIndex();
-    const int32_t to = Maps::GetDirectionIndex( from, path.GetFrontDirection() );
+    const int32_t to = Maps::GetDirectionIndex( from, _path.GetFrontDirection() );
     if ( from == -1 || to == -1 )
         return;
 
-    if ( direction == Direction::TOP ) {
-        if ( sprite_index < 0 || sprite_index >= 9 ) {
-            sprite_index = 0;
+    if ( _direction == Direction::TOP ) {
+        if ( _spriteIndex < 0 || _spriteIndex >= 9 ) {
+            _spriteIndex = 0;
         }
     }
-    else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
-        if ( sprite_index < 9 || sprite_index >= 18 ) {
-            sprite_index = 9;
+    else if ( _direction == Direction::TOP_RIGHT || _direction == Direction::TOP_LEFT ) {
+        if ( _spriteIndex < 9 || _spriteIndex >= 18 ) {
+            _spriteIndex = 9;
         }
     }
-    else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
-        if ( sprite_index < 18 || sprite_index >= 27 ) {
-            sprite_index = 18;
+    else if ( _direction == Direction::RIGHT || _direction == Direction::LEFT ) {
+        if ( _spriteIndex < 18 || _spriteIndex >= 27 ) {
+            _spriteIndex = 18;
         }
     }
-    else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
-        if ( sprite_index < 27 || sprite_index >= 36 ) {
-            sprite_index = 27;
+    else if ( _direction == Direction::BOTTOM_RIGHT || _direction == Direction::BOTTOM_LEFT ) {
+        if ( _spriteIndex < 27 || _spriteIndex >= 36 ) {
+            _spriteIndex = 27;
         }
     }
-    else if ( direction == Direction::BOTTOM ) {
-        if ( sprite_index < 36 || sprite_index >= 45 ) {
-            sprite_index = 36;
+    else if ( _direction == Direction::BOTTOM ) {
+        if ( _spriteIndex < 36 || _spriteIndex >= 45 ) {
+            _spriteIndex = 36;
         }
     }
 }

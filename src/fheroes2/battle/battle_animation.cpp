@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,12 +28,6 @@
 #include "monster_anim.h"
 #include "rand.h"
 
-RandomizedDelay::RandomizedDelay( const uint32_t delay )
-    : fheroes2::TimeDelay( delay )
-    , halfDelay( delay / 2 )
-    , timerIsSet( false )
-{}
-
 bool RandomizedDelay::checkDelay()
 {
     if ( !timerIsSet ) {
@@ -41,18 +35,15 @@ bool RandomizedDelay::checkDelay()
         setDelay( Rand::Get( 0, halfDelay ) + halfDelay * 3 / 2 );
         timerIsSet = true;
     }
+
     const bool res = isPassed();
     if ( res ) {
         reset();
         timerIsSet = false;
     }
+
     return res;
 }
-
-AnimationSequence::AnimationSequence( const std::vector<int> & seq )
-    : _seq( seq )
-    , _currentFrame( 0 )
-{}
 
 AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
 {
@@ -62,18 +53,21 @@ AnimationSequence & AnimationSequence::operator=( const std::vector<int> & rhs )
     return *this;
 }
 
-int AnimationSequence::playAnimation( bool loop )
+int AnimationSequence::playAnimation( const bool loop /* = false */ )
 {
-    if ( !isValid() )
+    if ( !isValid() ) {
         return 0;
+    }
 
     if ( isLastFrame() ) {
-        if ( loop )
+        if ( loop ) {
             restartAnimation();
+        }
     }
     else {
         ++_currentFrame;
     }
+
     return _seq[_currentFrame];
 }
 
@@ -81,21 +75,6 @@ int AnimationSequence::restartAnimation()
 {
     _currentFrame = 0;
     return getFrame();
-}
-
-int AnimationSequence::getFrame() const
-{
-    return isValid() ? _seq[_currentFrame] : 0;
-}
-
-size_t AnimationSequence::animationLength() const
-{
-    return _seq.size();
-}
-
-int AnimationSequence::firstFrame() const
-{
-    return isValid() ? _seq.front() : 0;
 }
 
 double AnimationSequence::movementProgress() const
@@ -111,21 +90,12 @@ double AnimationSequence::movementProgress() const
     return ( static_cast<double>( _currentFrame ) + 0.5 ) / static_cast<double>( animationLength() );
 }
 
-bool AnimationSequence::isLastFrame() const
-{
-    return _currentFrame == _seq.size() - 1;
-}
-
-bool AnimationSequence::isValid() const
-{
-    return !_seq.empty();
-}
-
-AnimationReference::AnimationReference( int monsterID )
+AnimationReference::AnimationReference( const int monsterID )
     : _monsterID( monsterID )
 {
-    if ( monsterID < Monster::PEASANT || monsterID > Monster::WATER_ELEMENT )
+    if ( monsterID < Monster::PEASANT || monsterID > Monster::WATER_ELEMENT ) {
         return;
+    }
 
     _monsterInfo = Bin_Info::GetMonsterInfo( monsterID );
 
@@ -219,16 +189,17 @@ AnimationReference::AnimationReference( int monsterID )
     }
 }
 
-bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
+bool AnimationReference::appendFrames( std::vector<int> & target, const size_t animID )
 {
     if ( _monsterInfo.hasAnim( animID ) ) {
-        target.insert( target.end(), _monsterInfo.animationFrames.at( animID ).begin(), _monsterInfo.animationFrames.at( animID ).end() );
+        target.insert( target.end(), _monsterInfo.animationFrames[animID].begin(), _monsterInfo.animationFrames[animID].end() );
         return true;
     }
+
     return false;
 }
 
-const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
+const std::vector<int> & AnimationReference::getAnimationVector( const int animState ) const
 {
     switch ( animState ) {
     case Monster_Info::STAND_STILL:
@@ -297,7 +268,7 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
     return _static;
 }
 
-std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
+std::vector<int> AnimationReference::getAnimationOffset( const int animState ) const
 {
     std::vector<int> offset;
     switch ( animState ) {
@@ -385,71 +356,49 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
     default:
         break;
     }
+
     return offset;
 }
 
-uint32_t AnimationReference::getMoveSpeed() const
-{
-    return _monsterInfo.moveSpeed;
-}
-
-uint32_t AnimationReference::getFlightSpeed() const
-{
-    return _monsterInfo.flightSpeed;
-}
-
-uint32_t AnimationReference::getShootingSpeed() const
-{
-    return _monsterInfo.shootSpeed;
-}
-
-fheroes2::Point AnimationReference::getBlindOffset() const
-{
-    return _monsterInfo.eyePosition;
-}
-
-int AnimationReference::getTroopCountOffset( bool isReflect ) const
-{
-    return isReflect ? _monsterInfo.troopCountOffsetRight : _monsterInfo.troopCountOffsetLeft;
-}
-
-fheroes2::Point AnimationReference::getProjectileOffset( size_t direction ) const
+fheroes2::Point AnimationReference::getProjectileOffset( const size_t direction ) const
 {
     if ( _monsterInfo.projectileOffset.size() > direction ) {
         return _monsterInfo.projectileOffset[direction];
     }
-    return fheroes2::Point();
+
+    return {};
 }
 
-uint32_t AnimationReference::getIdleDelay() const
-{
-    return _monsterInfo.idleAnimationDelay;
-}
-
-AnimationState::AnimationState( int monsterID )
+AnimationState::AnimationState( const int monsterID )
     : AnimationReference( monsterID )
     , _animState( Monster_Info::STATIC )
     , _currentSequence( _static )
-{}
-
-bool AnimationState::switchAnimation( int animState, bool reverse )
 {
-    std::vector<int> seq = getAnimationVector( animState );
-    if ( !seq.empty() ) {
-        _animState = animState;
-        if ( reverse )
-            std::reverse( seq.begin(), seq.end() );
-        _currentSequence = seq;
-        _currentSequence.restartAnimation();
-        return true;
-    }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animState << " length " << _currentSequence.animationLength() )
-    }
-    return false;
+    // Do nothing.
 }
 
-bool AnimationState::switchAnimation( const std::vector<int> & animationList, bool reverse )
+bool AnimationState::switchAnimation( const int animState, bool reverse /* = false */ )
+{
+    std::vector<int> seq = getAnimationVector( animState );
+    if ( seq.empty() ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animState << " length " << _currentSequence.animationLength() )
+
+        return false;
+    }
+
+    _animState = animState;
+
+    if ( reverse ) {
+        std::reverse( seq.begin(), seq.end() );
+    }
+
+    _currentSequence = seq;
+    _currentSequence.restartAnimation();
+
+    return true;
+}
+
+bool AnimationState::switchAnimation( const std::vector<int> & animationList, const bool reverse /* = false */ )
 {
     std::vector<int> combinedAnimation;
 
@@ -461,48 +410,20 @@ bool AnimationState::switchAnimation( const std::vector<int> & animationList, bo
         }
     }
 
-    if ( !combinedAnimation.empty() ) {
-        if ( reverse )
-            std::reverse( combinedAnimation.begin(), combinedAnimation.end() );
-
-        _currentSequence = combinedAnimation;
-        _currentSequence.restartAnimation();
-        return true;
-    }
-    else {
+    if ( combinedAnimation.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim list of length " << animationList.size() )
+
+        return false;
     }
-    return false;
-}
 
-int AnimationState::getCurrentState() const
-{
-    return _animState;
-}
+    if ( reverse ) {
+        std::reverse( combinedAnimation.begin(), combinedAnimation.end() );
+    }
 
-int AnimationState::playAnimation( bool loop )
-{
-    return _currentSequence.playAnimation( loop );
-}
+    _currentSequence = combinedAnimation;
+    _currentSequence.restartAnimation();
 
-int AnimationState::restartAnimation()
-{
-    return _currentSequence.restartAnimation();
-}
-
-int AnimationState::getFrame() const
-{
-    return _currentSequence.getFrame();
-}
-
-size_t AnimationState::animationLength() const
-{
-    return _currentSequence.animationLength();
-}
-
-int AnimationState::firstFrame() const
-{
-    return _currentSequence.firstFrame();
+    return true;
 }
 
 int32_t AnimationState::getCurrentFrameXOffset() const
@@ -549,20 +470,6 @@ int32_t AnimationState::getCurrentFrameXOffset() const
 
     // If there is no horizontal offset data for currentFrame, return 0 as offset.
     DEBUG_LOG( DBG_GAME, DBG_WARN, "Frame " << currentFrame << " is outside _offsetX [0 - " << subequenceStart << "] for animation state " << _animState )
+
     return 0;
-}
-
-double AnimationState::movementProgress() const
-{
-    return _currentSequence.movementProgress();
-}
-
-bool AnimationState::isLastFrame() const
-{
-    return _currentSequence.isLastFrame();
-}
-
-bool AnimationState::isValid() const
-{
-    return _currentSequence.isValid();
 }

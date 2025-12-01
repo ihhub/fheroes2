@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,8 +33,8 @@
 #include "screen.h"
 #include "settings.h"
 
-Interface::ControlPanel::ControlPanel( AdventureMap & basic )
-    : interface( basic )
+Interface::ControlPanel::ControlPanel( AdventureMap & interface )
+    : _interface( interface )
 {
     width = 180;
     height = 36;
@@ -59,11 +59,6 @@ void Interface::ControlPanel::ResetTheme()
 
     _buttons.reset( new Buttons( fheroes2::AGG::GetICN( icn, 4 ), fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 12 ), fheroes2::AGG::GetICN( icn, 10 ),
                                  fheroes2::AGG::GetICN( icn, 8 ) ) );
-}
-
-const fheroes2::Rect & Interface::ControlPanel::GetArea() const
-{
-    return *this;
 }
 
 void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
@@ -103,19 +98,19 @@ fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing() const
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( rt_radar ) ) {
-        interface.EventSwitchShowRadar();
+        _interface.EventSwitchShowRadar();
     }
     else if ( le.MouseClickLeft( rt_icons ) ) {
-        interface.EventSwitchShowIcons();
+        _interface.EventSwitchShowIcons();
     }
     else if ( le.MouseClickLeft( rt_buttons ) ) {
-        interface.EventSwitchShowButtons();
+        _interface.EventSwitchShowButtons();
     }
     else if ( le.MouseClickLeft( rt_status ) ) {
-        interface.EventSwitchShowStatus();
+        _interface.EventSwitchShowStatus();
     }
     else if ( le.MouseClickLeft( rt_end ) ) {
-        return interface.EventEndTurn();
+        return _interface.EventEndTurn();
     }
 
     return fheroes2::GameMode::CANCEL;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -61,6 +61,8 @@
 namespace
 {
     std::string lastMapFileName;
+
+    // A vector to store player including their parameters to restore them in scenario info dialog when starting a new game.
     std::vector<Player> savedPlayers;
 
     bool updateSoundsOnFocusUpdate = true;
@@ -100,6 +102,7 @@ int Game::getDifficulty()
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 {
     if ( lastMapFileName != mapFileName || savedPlayers.size() != players.size() ) {
+        // The map or human players count is changed - ignore previously set players parameters.
         return;
     }
 
@@ -141,15 +144,13 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
     for ( const Player * p : players ) {
         assert( p != nullptr );
 
-        Player player( p->GetColor() );
+        Player & player = savedPlayers.emplace_back( p->GetColor() );
 
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
         player.SetName( p->GetName() );
         player.setHandicapStatus( p->getHandicapStatus() );
-
-        savedPlayers.push_back( player );
     }
 }
 
@@ -192,13 +193,13 @@ bool Game::validateDisplayFadeIn()
 void Game::Init()
 {
     // set global events
-    LocalEvent & le = LocalEvent::Get();
-    le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
-    le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
+    LocalEvent & eventHandler = LocalEvent::Get();
+    eventHandler.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
+    eventHandler.setGlobalKeyDownEventHook( globalKeyDownEvent );
 
-    Game::AnimateDelaysInitialize();
+    AnimateDelaysInitialize();
 
-    Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
+    HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
 uint32_t Game::getAdventureMapAnimationIndex()
@@ -468,12 +469,12 @@ uint32_t Game::GetWhirlpoolPercent()
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
 
-int Game::GetKingdomColors()
+PlayerColorsSet Game::GetKingdomColors()
 {
     return Settings::Get().GetPlayers().GetColors();
 }
 
-int Game::GetActualKingdomColors()
+PlayerColorsSet Game::GetActualKingdomColors()
 {
     return Settings::Get().GetPlayers().GetActualColors();
 }

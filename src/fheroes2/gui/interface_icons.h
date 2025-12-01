@@ -123,14 +123,18 @@ namespace Interface
         using Interface::ListBox<HEROES>::ActionListDoubleClick;
         using Interface::ListBox<HEROES>::ActionListSingleClick;
         using Interface::ListBox<HEROES>::ActionListPressRight;
+        using Interface::ListBox<HEROES>::ActionListLongPress;
 
         void ActionCurrentUp() override;
         void ActionCurrentDn() override;
         void ActionListDoubleClick( HEROES & item ) override;
         void ActionListSingleClick( HEROES & item ) override;
         void ActionListPressRight( HEROES & item ) override;
+        void ActionListLongPress( HEROES & item ) override;
         void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
+
+        static void rotateHeroPortraits( Heroes * currentHero );
 
         fheroes2::Point _topLeftCorner;
     };

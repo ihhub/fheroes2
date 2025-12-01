@@ -28,6 +28,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -95,14 +96,14 @@ namespace
 
     // Get colors value of players to use in fog directions update.
     // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
-    int32_t hotSeatAIFogColors( const Player * player )
+    PlayerColorsSet hotSeatAIFogColors( const Player * player )
     {
         assert( player != nullptr );
 
         // This function should be called when AI makes a move.
         assert( world.GetKingdom( player->GetColor() ).GetControl() == CONTROL_AI );
 
-        const int32_t humanColors = Players::HumanColors();
+        const PlayerColorsSet humanColors = Players::HumanColors();
         // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
         // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
         const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
@@ -119,9 +120,9 @@ namespace
         // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
         // discovered fog.
 
-        int32_t friendColors = 0;
+        PlayerColorsSet friendColors = 0;
 
-        for ( const int32_t color : Colors( humanColors ) ) {
+        for ( const PlayerColor color : PlayerColorsVector( humanColors ) ) {
             const Player * humanPlayer = Players::Get( color );
             if ( humanPlayer ) {
                 friendColors |= humanPlayer->GetFriends();
@@ -133,43 +134,63 @@ namespace
 
     void ShowNewWeekDialog()
     {
-        // restore the original music on exit
+        // Restore the original music on exit
         const AudioManager::MusicRestorer musicRestorer;
 
         const bool isNewMonth = world.BeginMonth();
 
         AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
+        auto [headerText, messageText] = [isNewMonth]() -> std::pair<std::string, std::string> {
+            if ( isNewMonth ) {
+                return { _( "New Month!" ), _( "Astrologers proclaim the Month of the %{name}." ) };
+            }
+
+            return { _( "New Week!" ), _( "Astrologers proclaim the Week of the %{name}." ) };
+        }();
+
         const Week & week = world.GetWeekType();
 
-        // head
-        std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
-        StringReplace( message, "%{name}", week.GetName() );
-        message += "\n\n";
+        StringReplace( messageText, "%{name}", week.GetName() );
+        messageText += "\n\n";
 
-        if ( week.GetType() == WeekName::MONSTERS ) {
+        std::unique_ptr<const fheroes2::MonsterDialogElement> monsterDialogElement;
+
+        switch ( week.GetType() ) {
+        case WeekName::MONSTERS: {
             const Monster monster( week.GetMonster() );
-            const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+            assert( monster.isValid() );
 
-            if ( monster.isValid() && count ) {
-                if ( isNewMonth )
-                    message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
-                                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
-                                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
-                else
-                    message += _( "%{monster} growth +%{count}." );
-                StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
-                StringReplace( message, "%{count}", count );
-                message += "\n\n";
+            const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+            assert( count > 0 );
+
+            if ( isNewMonth ) {
+                messageText += ( count == 100 ) ? _( "After regular growth, the population of %{monster} is doubled!" )
+                                                : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
+                                                      "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             }
+            else {
+                messageText += _( "%{monster} growth +%{count}." );
+            }
+
+            StringReplaceWithLowercase( messageText, "%{monster}", monster.GetMultiName() );
+            StringReplace( messageText, "%{count}", count );
+
+            monsterDialogElement = std::make_unique<const fheroes2::MonsterDialogElement>( monster );
+
+            break;
+        }
+        case WeekName::PLAGUE:
+            messageText += _( "All populations are halved." );
+            break;
+        default:
+            messageText += _( "All dwellings increase population." );
+            break;
         }
 
-        if ( week.GetType() == WeekName::PLAGUE )
-            message += _( " All populations are halved." );
-        else
-            message += _( " All dwellings increase population." );
-
-        fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
+        fheroes2::showStandardTextMessage( std::move( headerText ), std::move( messageText ), Dialog::OK,
+                                           monsterDialogElement ? std::vector<const fheroes2::DialogElement *>{ monsterDialogElement.get() }
+                                                                : std::vector<const fheroes2::DialogElement *>{} );
     }
 
     void ShowWarningLostTownsDialog()
@@ -228,7 +249,7 @@ fheroes2::GameMode Game::StartGame()
     return Interface::AdventureMap::Get().StartGame();
 }
 
-void Game::DialogPlayers( int color, std::string title, std::string message )
+void Game::DialogPlayers( const PlayerColor color, std::string title, std::string message )
 {
     const Player * player = Players::Get( color );
     StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
@@ -237,22 +258,22 @@ void Game::DialogPlayers( int color, std::string title, std::string message )
     fheroes2::Sprite sign = border;
 
     switch ( color ) {
-    case Color::BLUE:
+    case PlayerColor::BLUE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 0 ), sign, 4, 4 );
         break;
-    case Color::GREEN:
+    case PlayerColor::GREEN:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 1 ), sign, 4, 4 );
         break;
-    case Color::RED:
+    case PlayerColor::RED:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 2 ), sign, 4, 4 );
         break;
-    case Color::YELLOW:
+    case PlayerColor::YELLOW:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 3 ), sign, 4, 4 );
         break;
-    case Color::ORANGE:
+    case PlayerColor::ORANGE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 4 ), sign, 4, 4 );
         break;
-    case Color::PURPLE:
+    case PlayerColor::PURPLE:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
@@ -282,28 +303,41 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     assert( it != myCastles.end() );
 
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
+    bool openConstructionWindow{ false };
+    bool openMageGuildWindow{ false };
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, true, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
-        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+        switch ( result ) {
+        case Castle::CastleDialogReturnValue::PreviousCastle:
+        case Castle::CastleDialogReturnValue::PreviousConstructionWindow:
+        case Castle::CastleDialogReturnValue::PreviousMageGuildWindow:
             if ( it == myCastles.begin() ) {
                 it = myCastles.end();
             }
             --it;
-        }
-        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+            break;
+        case Castle::CastleDialogReturnValue::NextCastle:
+        case Castle::CastleDialogReturnValue::NextConstructionWindow:
+        case Castle::CastleDialogReturnValue::NextMageGuildWindow:
             ++it;
             if ( it == myCastles.end() ) {
                 it = myCastles.begin();
             }
+            break;
+        default:
+            break;
         }
 
         assert( it != myCastles.end() );
 
-        const bool openConstructionWindow
-            = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+        openConstructionWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousConstructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextConstructionWindow );
 
-        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
+        openMageGuildWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) || ( result == Castle::CastleDialogReturnValue::NextMageGuildWindow );
+
+        result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, false, renderBackgroundDialog );
     }
 
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
@@ -522,9 +556,6 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
     case MP2::OBJ_MONSTER:
         return isWater ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
 
-    case MP2::OBJ_COAST:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
-
     default:
         if ( isWater ) {
             if ( MP2::isWaterActionObject( tile.getMainObjectType() ) ) {
@@ -534,6 +565,9 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
             if ( tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
+        }
+        else {
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
 
         break;
@@ -703,7 +737,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
         // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
-        conf.SetCurrentColor( Players::HumanColors() );
+        conf.SetCurrentColor( static_cast<PlayerColor>( Players::HumanColors() ) );
     }
 
     reset();
@@ -772,7 +806,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             // Player with a color equal to conf.CurrentColor() has been found, there is no need for further skips
             skipTurns = false;
 
-            const int playerColor = player->GetColor();
+            const PlayerColor playerColor = player->GetColor();
             Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( kingdom.isPlay() ) {
@@ -789,6 +823,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     conf.SetCurrentColor( playerColor );
 
                     if ( isHotSeatGame ) {
+                        // Move the area to the center of the map to avoid showing map borders.
+                        _gameArea.SetCenter( fheroes2::Point{ world.w() / 2, world.h() / 2 } );
+
                         if ( conf.getInterfaceType() == InterfaceType::DYNAMIC && _isCurrentInterfaceEvil != conf.isEvilInterfaceEnabled() ) {
                             reset();
                         }
@@ -798,7 +835,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
-                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
+                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, 0 );
 
                         redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
@@ -868,7 +905,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    AI::Planner::Get().KingdomTurn( kingdom );
+                    res = AI::Planner::Get().KingdomTurn( kingdom );
+                    // This function must return only game state related values.
+                    assert( res != fheroes2::GameMode::CANCEL );
 
 #if defined( WITH_DEBUG )
                     if ( !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -914,7 +953,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         }
 
         // Don't carry the current player color to the next turn.
-        conf.SetCurrentColor( Color::NONE );
+        conf.SetCurrentColor( PlayerColor::NONE );
     }
 
     // If we are here, the res value should never be fheroes2::GameMode::END_TURN
@@ -1084,6 +1123,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                     EventSaveGame();
                 }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_QUICK_SAVE ) ) {
+                    if ( !Game::QuickSave() ) {
+                        fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
+                    }
+                }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = EventLoadGame();
                 }
@@ -1162,16 +1206,24 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 }
                 // Adventure map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
-                    _gameArea.SetScroll( SCROLL_LEFT );
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                        _gameArea.SetScroll( SCROLL_LEFT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
-                    _gameArea.SetScroll( SCROLL_RIGHT );
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                        _gameArea.SetScroll( SCROLL_RIGHT );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
-                    _gameArea.SetScroll( SCROLL_TOP );
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                        _gameArea.SetScroll( SCROLL_TOP );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
-                    _gameArea.SetScroll( SCROLL_BOTTOM );
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                        _gameArea.SetScroll( SCROLL_BOTTOM );
+                    }
                 }
                 // Default action
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) ) {

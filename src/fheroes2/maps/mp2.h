@@ -409,6 +409,8 @@ namespace MP2
         // Otherwise, name it with prefix OBJ_.
         OBJ_SWAMPY_LAKE = 257,
         OBJ_FROZEN_LAKE = 258,
+        OBJ_NON_ACTION_BLACK_CAT = 259,
+        OBJ_NON_ACTION_BARREL = 260,
 
         // This section defines all types of action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_.
@@ -416,6 +418,8 @@ namespace MP2
         // The value of the object must be: non-action object value + OBJ_ACTION_OBJECT_TYPE.
         OBJ_ACTION_SWAMPY_LAKE = OBJ_SWAMPY_LAKE + OBJ_ACTION_OBJECT_TYPE,
         OBJ_ACTION_FROZEN_LAKE = OBJ_FROZEN_LAKE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BLACK_CAT = OBJ_NON_ACTION_BLACK_CAT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BARREL = OBJ_NON_ACTION_BARREL + OBJ_ACTION_OBJECT_TYPE,
     };
 
     enum ObjectIcnType : uint8_t
@@ -513,6 +517,10 @@ namespace MP2
     // The method checks if the object is an action object if it is accessed from water.
     // Use it only during actual gameplay. Event object is not considered as an action object.
     bool isWaterActionObject( const MapObjectType objectType );
+
+    // Returns true if the object is an action object and can be revisited by a hero already standing on this object, otherwise
+    // returns false. Use it only during actual gameplay.
+    bool isRevisitAllowedForObject( const MapObjectType objectType, const bool accessedFromWater );
 
     // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
     MapObjectType getBaseActionObjectType( const MapObjectType objectType );
