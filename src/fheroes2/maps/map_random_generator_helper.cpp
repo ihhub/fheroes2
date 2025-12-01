@@ -123,17 +123,12 @@ namespace
                     }
 
                     if ( isDiagonal && currentNode._from != -1 && Direction::isDiagonal( _cache[currentNode._from]._direction ) ) {
-                        // continue;
+                        continue;
                     }
 
                     const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, directions[i] );
                     if ( newIndex == start ) {
                         continue;
-                    }
-
-                    const bool foundRoad = world.getTile( newIndex ).isRoad();
-                    if ( foundRoad && isDiagonal ) {
-                        // continue;
                     }
 
                     // TODO: bias cost to force particular road connectors
@@ -156,26 +151,6 @@ namespace
                     RoadBuilderNode & newNode = _cache[newIndex];
                     const uint32_t movementPenalty = isDiagonal ? 150 : 100;
                     uint32_t movementCost = currentNode._cost + movementPenalty;
-
-                    if ( isDiagonal && fromActionTile ) {
-                        const bool isConnector = [&newIndex, &directions]() {
-                            for ( size_t k = 0; k < directions.size(); ++k ) {
-                                if ( !Maps::isValidDirection( newIndex, directions[k] ) ) {
-                                    continue;
-                                }
-
-                                const int lookup = Maps::GetDirectionIndex( newIndex, directions[k] );
-                                if ( world.getTile( lookup ).isRoad() ) {
-                                    return true;
-                                }
-                            }
-                            return false;
-                        }();
-
-                        if ( isConnector ) {
-                            movementCost += 0;
-                        }
-                    }
 
                     if ( newNode._from == -1 || newNode._cost > movementCost ) {
                         newNode._from = currentNodeIdx;
@@ -641,30 +616,13 @@ namespace Maps::Random_Generator
 
     void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isCastle )
     {
-        fheroes2::Rect objectRect;
-
-        auto updateObjectArea = [&data, &mainTilePos, &objectRect]( const auto & partInfo ) {
-            Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
-            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
-
-            node.type = NodeType::OBSTACLE;
-        };
+        auto updateObjectArea = [&data, &mainTilePos]( const auto & partInfo ) { markNodeAsType( data, mainTilePos + partInfo.tileOffset, NodeType::OBSTACLE ); };
 
         iterateOverObjectParts( info, updateObjectArea );
 
         if ( !MP2::isOffGameActionObject( info.objectType ) ) {
             return;
         }
-
-        const int32_t pathOffset = ( isCastle ) ? 2 : 1;
-        for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-            // markNodeAsType( data, mainTilePos + fheroes2::Point{ x, objectRect.height + pathOffset }, NodeType::PATH );
-        }
-
-        // Mark extra nodes as path to avoid objects clumping together
-        // markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.x - pathOffset, 0 }, NodeType::PATH );
-        // markNodeAsType( data, mainTilePos + fheroes2::Point{ objectRect.width + pathOffset, 0 }, NodeType::PATH );
 
         markNodeAsType( data, mainTilePos, NodeType::ACTION );
     }
