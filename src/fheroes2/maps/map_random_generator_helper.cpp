@@ -245,15 +245,15 @@ namespace Maps::Random_Generator
         return getObjectGoldValue( Maps::getObjectInfo( group, objectIndex ).objectType );
     }
 
-    MonsterSelection getMonstersByValue( const Maps::Random_Generator::MonsterStrength monsterConfig, int32_t protectedObjectValue )
+    MonsterSelection getMonstersByValue( const Maps::Random_Generator::MonsterStrength monsterStrength, int32_t protectedObjectValue )
     {
-        if ( monsterConfig == MonsterStrength::DEADLY ) {
+        if ( monsterStrength == MonsterStrength::DEADLY ) {
             protectedObjectValue += 2500;
         }
-        else if ( monsterConfig == MonsterStrength::STRONG ) {
+        else if ( monsterStrength == MonsterStrength::STRONG ) {
             protectedObjectValue += 1500;
         }
-        else if ( monsterConfig == MonsterStrength::WEAK ) {
+        else if ( monsterStrength == MonsterStrength::WEAK ) {
             protectedObjectValue -= 1500;
         }
 
@@ -693,7 +693,7 @@ namespace Maps::Random_Generator
                 // It is possible to go into the negatives; intentional
                 region.treasureLimit -= groupValue;
 
-                placeMonster( mapFormat, node.index, getMonstersByValue( monsterConfig, groupValue ) );
+                placeMonster( mapFormat, node.index, getMonstersByValue( monsterStrength, groupValue ) );
 
                 ++objectsPlaced;
                 break;
