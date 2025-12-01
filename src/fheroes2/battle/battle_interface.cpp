@@ -7032,8 +7032,7 @@ void Battle::PopupDamageInfo::setSpellAttackInfo( const HeroBase * hero, const U
 {
     assert( hero != nullptr );
 
-    // TODO: Currently, this functionality only supports damage spell cases with mouse hover-over a single _defender
-    // We should refactor this to apply to cases where multiple targets is within area of effect (ex. Cold Ring)
+    // TODO: any multi-unit damage spells show only damage of the first unit or one of the units on whom the spell is being applied (ex. Cold Ring)
     if ( !spell.isDamage() ) {
         return;
     }
