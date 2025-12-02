@@ -60,160 +60,10 @@ namespace
         int _direction{ Direction::UNKNOWN };
     };
 
-    class RoadBuilder final
-    {
-    public:
-        RoadBuilder() = delete;
-        RoadBuilder( const RoadBuilder & ) = delete;
-        virtual ~RoadBuilder() = default;
-        RoadBuilder & operator=( const RoadBuilder & ) = delete;
-
-        RoadBuilder( int32_t mapWidth )
-            : _mapWidth( mapWidth )
-            , _cache( static_cast<size_t>( mapWidth ) * mapWidth )
-        {}
-
-        std::vector<int32_t> bfsToNearestPath( const int32_t start, uint32_t regionId, Maps::Random_Generator::NodeCache & nodes )
-        {
-            if ( regionId != _regionId ) {
-                resetCache( regionId );
-            }
-
-            std::vector<int32_t> result;
-
-            if ( start < 0 || start >= static_cast<int32_t>( _cache.size() ) ) {
-                return result;
-            }
-
-            // Initialize BFS from start
-            std::vector<int32_t> nodesToExplore;
-            nodesToExplore.push_back( start );
-            _cache[static_cast<size_t>( start )]._from = start;
-            _cache[static_cast<size_t>( start )]._cost = 0;
-
-            const bool fromActionTile = nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION;
-            const Directions & directions = Direction::All();
-            int32_t foundIndex = -1;
-            for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-                const int32_t currentNodeIdx = nodesToExplore[lastProcessedNode];
-                const RoadBuilderNode & currentNode = _cache[currentNodeIdx];
-
-                const bool comeFrom = !Direction::isDiagonal( Maps::GetDirection( currentNode._from, currentNodeIdx ) );
-
-                if ( world.getTile( currentNodeIdx ).isRoad() && currentNodeIdx != start && comeFrom ) {
-                    foundIndex = currentNodeIdx;
-                    break;
-                }
-
-                for ( size_t i = 0; i < directions.size(); ++i ) {
-                    if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-                        continue;
-                    }
-
-                    const bool isDiagonal = Direction::isDiagonal( directions[i] );
-                    // Edge case: fix mine connections
-                    if ( isDiagonal && fromActionTile && currentNodeIdx == start ) {
-                        continue;
-                    }
-
-                    // Edge case: avoid tight turns
-                    if ( isDiagonal && currentNode._from != -1 && ( currentNode._direction == Direction::LEFT || currentNode._direction == Direction::RIGHT )
-                         && _cache[currentNode._from]._direction == Direction::BOTTOM ) {
-                        continue;
-                    }
-
-                    if ( isDiagonal && currentNode._from != -1 && Direction::isDiagonal( _cache[currentNode._from]._direction ) ) {
-                        continue;
-                    }
-
-                    const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, directions[i] );
-                    if ( newIndex == start ) {
-                        continue;
-                    }
-
-                    // TODO: bias cost to force particular road connectors
-                    //
-                    // Castle: mark two tiles left/right as obstacle
-                    // Mines: Y junction
-                    // Three diagonal meeting
-                    // Y junction sideways  X 0 0
-                    //                      0 X X
-                    //                      X 0 0
-                    // Left diagonal into two rights: X 0 0
-                    //                                0 X X
-                    // Road options: None, Some (connections), All
-                    Maps::Random_Generator::Node & other = nodes.getNode( newIndex );
-
-                    if ( other.region != _regionId || ( other.type != Maps::Random_Generator::NodeType::OPEN && other.type != Maps::Random_Generator::NodeType::PATH ) ) {
-                        continue;
-                    }
-
-                    RoadBuilderNode & newNode = _cache[newIndex];
-                    const uint32_t movementPenalty = isDiagonal ? 150 : 100;
-                    uint32_t movementCost = currentNode._cost + movementPenalty;
-
-                    if ( newNode._from == -1 || newNode._cost > movementCost ) {
-                        newNode._from = currentNodeIdx;
-                        newNode._cost = movementCost;
-                        newNode._direction = directions[i];
-
-                        nodesToExplore.push_back( newIndex );
-                    }
-                }
-            }
-
-            if ( foundIndex == -1 ) {
-                return result;
-            }
-
-            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "=== Found path to " << foundIndex );
-
-            int count = 0;
-            for ( int32_t cur = foundIndex;; ) {
-                ++count;
-                const RoadBuilderNode & rbNode = _cache[static_cast<size_t>( cur )];
-
-                int32_t fromIndex = rbNode._from;
-                // Adding additional 0 cost road step to fix road transitions to compensate for missing sprites
-                if ( count == 2 ) {
-                    if ( rbNode._direction == Direction::BOTTOM_RIGHT ) {
-                        const int32_t additionalStep = Maps::GetDirectionIndex( cur, Direction::LEFT );
-                        result.emplace_back( additionalStep );
-                        fromIndex = additionalStep;
-                    }
-                }
-
-                result.emplace_back( cur );
-
-                if ( cur == rbNode._from ) {
-                    break;
-                }
-
-                cur = rbNode._from;
-                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "===== via " << cur );
-            }
-
-            return result;
-        }
-
-    private:
-        void resetCache( uint32_t regionId )
-        {
-            _regionId = regionId;
-
-            for ( RoadBuilderNode & node : _cache ) {
-                node = {};
-            }
-        }
-
-        std::vector<RoadBuilderNode> _cache;
-        int32_t _mapWidth{ -1 };
-        uint32_t _regionId{ 0 };
-    };
-
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int maxPlacementAttempts{ 30 };
+    constexpr uint32_t roadBuilderMargin{ Maps::Ground::defaultGroundPenalty * 3 };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
         { Maps::Ground::DESERT, { 24, 25, 26, 27, 28, 29 } },    { Maps::Ground::SNOW, { 30, 31, 32, 33, 34, 35 } },  { Maps::Ground::SWAMP, { 18, 19, 20, 21, 22, 23 } },
@@ -487,10 +337,125 @@ namespace Maps::Random_Generator
         return objectIndex;
     }
 
-    std::vector<int32_t> findRouteFromIndex( int32_t start, uint32_t regionId, Maps::Random_Generator::NodeCache & nodes, int32_t width )
+    std::vector<int32_t> findRoadFromIndex( const Maps::Random_Generator::NodeCache & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start )
     {
-        RoadBuilder builder{ width };
-        return builder.bfsToNearestPath( start, regionId, nodes );
+        assert( start > 0 );
+        assert( mapWidth > 0 );
+
+        std::vector<RoadBuilderNode> cache( mapWidth * mapWidth );
+        assert( start < static_cast<int32_t>( cache.size() ) );
+
+        std::vector<int32_t> result;
+        std::vector<int32_t> nodesToExplore;
+        nodesToExplore.push_back( start );
+        cache[static_cast<size_t>( start )]._from = start;
+        cache[static_cast<size_t>( start )]._cost = 0;
+
+        const bool fromActionTile = nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION;
+        const Directions & directions = Direction::All();
+
+        int32_t bestRoadIndex = -1;
+        uint32_t bestRoadCost = std::numeric_limits<uint32_t>::max();
+        for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+            const int32_t currentNodeIdx = nodesToExplore[lastProcessedNode];
+            const RoadBuilderNode & currentNode = cache[currentNodeIdx];
+
+            // Continue to search until margin is hit to find a potential optimal route
+            if ( bestRoadIndex != -1 && currentNode._cost > bestRoadCost + roadBuilderMargin ) {
+                break;
+            }
+
+            const bool comeFromStraight = !Direction::isDiagonal( Maps::GetDirection( currentNode._from, currentNodeIdx ) );
+
+            if ( comeFromStraight && currentNodeIdx != start && currentNode._cost < bestRoadCost && world.getTile( currentNodeIdx ).isRoad() ) {
+                bestRoadIndex = currentNodeIdx;
+                bestRoadCost = currentNode._cost;
+            }
+
+            for ( size_t i = 0; i < directions.size(); ++i ) {
+                if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+                    continue;
+                }
+
+                const bool isDiagonal = Direction::isDiagonal( directions[i] );
+                // Edge case: fix mine connections
+                if ( isDiagonal && fromActionTile && currentNodeIdx == start ) {
+                    continue;
+                }
+
+                // Edge case: avoid tight turns
+                if ( isDiagonal && currentNode._from != -1 && ( currentNode._direction == Direction::LEFT || currentNode._direction == Direction::RIGHT )
+                     && cache[currentNode._from]._direction == Direction::BOTTOM ) {
+                    continue;
+                }
+
+                if ( isDiagonal && currentNode._from != -1 && Direction::isDiagonal( cache[currentNode._from]._direction ) ) {
+                    continue;
+                }
+
+                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, directions[i] );
+                if ( newIndex == start ) {
+                    continue;
+                }
+
+                const Maps::Random_Generator::Node & other = nodes.getNode( newIndex );
+
+                if ( other.region != regionId || ( other.type != Maps::Random_Generator::NodeType::OPEN && other.type != Maps::Random_Generator::NodeType::PATH ) ) {
+                    continue;
+                }
+
+                RoadBuilderNode & newNode = cache[newIndex];
+                constexpr uint32_t diagonalMovePenalty = Ground::defaultGroundPenalty * 3 / 2;
+                const uint32_t movementPenalty = isDiagonal ? diagonalMovePenalty : Ground::defaultGroundPenalty;
+                uint32_t movementCost = currentNode._cost + movementPenalty;
+
+                if ( newNode._from == -1 || newNode._cost > movementCost ) {
+                    newNode._from = currentNodeIdx;
+                    newNode._cost = movementCost;
+                    newNode._direction = directions[i];
+
+                    nodesToExplore.push_back( newIndex );
+                }
+            }
+        }
+
+        if ( bestRoadIndex == -1 ) {
+            return result;
+        }
+
+        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "=== Found path to " << bestRoadIndex );
+
+        int count = 0;
+        for ( int32_t cur = bestRoadIndex;; ) {
+            ++count;
+            const RoadBuilderNode & rbNode = cache[static_cast<size_t>( cur )];
+
+            int32_t fromIndex = rbNode._from;
+            // Adding additional 0 cost road step to fix road transitions to compensate for missing sprites
+            if ( count == 2 ) {
+                if ( rbNode._direction == Direction::BOTTOM_RIGHT ) {
+                    const int32_t additionalStep = Maps::GetDirectionIndex( cur, Direction::LEFT );
+                    result.emplace_back( additionalStep );
+                    fromIndex = additionalStep;
+                }
+                else if ( rbNode._direction == Direction::BOTTOM_LEFT ) {
+                    const int32_t additionalStep = Maps::GetDirectionIndex( cur, Direction::RIGHT );
+                    result.emplace_back( additionalStep );
+                    fromIndex = additionalStep;
+                }
+            }
+
+            result.emplace_back( cur );
+
+            if ( cur == rbNode._from ) {
+                break;
+            }
+
+            cur = rbNode._from;
+            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "===== via " << cur );
+        }
+
+        return result;
     }
 
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator )
@@ -544,7 +509,7 @@ namespace Maps::Random_Generator
                 invalid = true;
                 return;
             }
-            if ( node.type != NodeType::OPEN && ( skipBorders || node.type != NodeType::BORDER ) ) {
+            if ( node.type != NodeType::OPEN && ( skipBorders || ( node.type != NodeType::BORDER && node.type != NodeType::OBSTACLE ) ) ) {
                 invalid = true;
                 return;
             }
@@ -614,7 +579,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool isCastle )
+    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
         auto updateObjectArea = [&data, &mainTilePos]( const auto & partInfo ) { markNodeAsType( data, mainTilePos + partInfo.tileOffset, NodeType::OBSTACLE ); };
 
@@ -661,7 +626,7 @@ namespace Maps::Random_Generator
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
         if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
-            markObjectPlacement( data, objectInfo, tilePos, false );
+            markObjectPlacement( data, objectInfo, tilePos );
             return true;
         }
 
@@ -733,8 +698,8 @@ namespace Maps::Random_Generator
 
         world.addCastle( tile.GetIndex(), race, color );
 
-        markObjectPlacement( data, basementInfo, tilePos, true );
-        markObjectPlacement( data, castleInfo, tilePos, true );
+        markObjectPlacement( data, basementInfo, tilePos );
+        markObjectPlacement( data, castleInfo, tilePos );
 
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
@@ -754,7 +719,7 @@ namespace Maps::Random_Generator
         return placeActionObject( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
-    bool placeRandomObstacle( Map_Format::MapFormat & mapFormat, const NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
+    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
     {
         Tile & tile = world.getTile( node.index );
         const auto it = obstaclesPerGround.find( tile.GetGround() );
@@ -769,6 +734,7 @@ namespace Maps::Random_Generator
         for ( const auto & obstacleId : obstacleList ) {
             const auto & objectInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TREES, obstacleId );
             if ( canFitObject( data, objectInfo, tilePos, false ) && putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
+                markObjectPlacement( data, objectInfo, tilePos );
                 return true;
             }
         }
@@ -806,7 +772,7 @@ namespace Maps::Random_Generator
         const int32_t objectIndex = selectTerrainVariantForObject( placement.groupType, placement.objectIndex, tile.GetGround() );
         const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
         if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
-            markObjectPlacement( data, objectInfo, position, false );
+            markObjectPlacement( data, objectInfo, position );
             return true;
         }
         return false;
@@ -852,7 +818,7 @@ namespace Maps::Random_Generator
 
                 placeMonster( mapFormat, node.index, getMonstersByValue( monsterStrength, groupValue ) );
 
-                const auto & routeToGroup = findRouteFromIndex( node.index, region.id, data, mapFormat.width );
+                const auto & routeToGroup = findRoadFromIndex( data, mapFormat.width, region.id, node.index );
                 for ( const auto & step : routeToGroup ) {
                     data.getNode( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );

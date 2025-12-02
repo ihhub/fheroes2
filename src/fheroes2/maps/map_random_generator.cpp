@@ -427,13 +427,18 @@ namespace Maps::Random_Generator
         MapEconomy mapEconomy;
 
         auto roadBuilder = [&mapFormat, &data, width]( const int32_t tileIndex, const uint32_t regionId, const bool placeRoad ) {
-            const auto & otherPath = findRouteFromIndex( tileIndex, regionId, data, width );
+            const auto & otherPath = findRoadFromIndex( data, width, regionId, tileIndex );
+
+            if ( otherPath.empty() ) {
+                return false;
+            }
             for ( const auto & step : otherPath ) {
                 data.getNode( step ).type = NodeType::PATH;
                 if ( placeRoad ) {
                     forceTempRoadOnTile( mapFormat, step );
                 }
             }
+            return true;
         };
 
         for ( Region & region : mapRegions ) {
@@ -513,8 +518,7 @@ namespace Maps::Random_Generator
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
                     const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
-                    if ( mineIndex != -1 ) {
-                        roadBuilder( mineIndex, region.id, true );
+                    if ( mineIndex != -1 && roadBuilder( mineIndex, region.id, true ) ) {
                         break;
                     }
                 }
@@ -545,7 +549,7 @@ namespace Maps::Random_Generator
         for ( const Region & region : mapRegions ) {
             for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
-                    placeRandomObstacle( mapFormat, data, node, randomGenerator );
+                    placeBorderObstacle( mapFormat, data, node, randomGenerator );
                 }
             }
         }
