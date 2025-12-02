@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3453,6 +3453,12 @@ msgstr "Failas įkėlimui:"
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3472,20 +3478,35 @@ msgstr "Rodyti kitą miestą"
 msgid "Disable All Items"
 msgstr "Atsitiktinis miestas"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Gynybos įgūdis"
 
+msgid "There are no spells to select."
+msgstr ""
+
 msgid "Select Spell:"
+msgstr ""
+
+msgid "There are no artifacts to select from."
 msgstr ""
 
 #, fuzzy
 msgid "Select Artifact:"
 msgstr "Magiškas artefaktas"
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 #, fuzzy
 msgid "Select Monster:"
 msgstr "Pasirinkti %{name}"
+
+msgid "There are no heroes to select from."
+msgstr ""
 
 #, fuzzy
 msgid "Select Hero:"

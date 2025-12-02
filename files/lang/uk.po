@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-11-12 16:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3665,6 +3665,13 @@ msgstr "Завантажити файли:"
 msgid "Terrain object"
 msgstr "Об'єкт місцевості"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Назва обраної мапи."
+
 msgid "Accept the choice made."
 msgstr "Підтвердити ваш вибір."
 
@@ -3680,17 +3687,35 @@ msgstr "Тицьніть, щоб вимкнути усі елементи."
 msgid "Disable All Items"
 msgstr "Вимкнути Усі елементи"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Оберіть навичку:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Нема чар для використання."
 
 msgid "Select Spell:"
 msgstr "Оберіть закляття:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Оберіть артефакт:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Назва обраної мапи."
+
 msgid "Select Monster:"
 msgstr "Оберіть монстра:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Назва обраної мапи."
 
 msgid "Select Hero:"
 msgstr "Оберіть героя:"

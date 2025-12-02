@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3635,6 +3635,13 @@ msgstr "Soubor k načtení:"
 msgid "Terrain object"
 msgstr "Terén"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Název aktuálně vybrané mapy."
+
 msgid "Accept the choice made."
 msgstr "Přijmout vybranou volbu."
 
@@ -3654,17 +3661,35 @@ msgstr "Klikněte pro úpravu denních událostí."
 msgid "Disable All Items"
 msgstr "Zobrazit kouzla"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Vybrat dovednost:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Nic ke kouzlení."
 
 msgid "Select Spell:"
 msgstr "Seslat kouzlo:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Vybrat arkefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Název aktuálně vybrané mapy."
+
 msgid "Select Monster:"
 msgstr "Vybrat jednotku:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Název aktuálně vybrané mapy."
 
 msgid "Select Hero:"
 msgstr "Vybrat hrdinu:"

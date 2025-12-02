@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3713,6 +3713,13 @@ msgstr "Fil som skal indlæses:"
 msgid "Terrain object"
 msgstr "Terræn-objekt"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
 
@@ -3732,17 +3739,35 @@ msgstr "Klik for kun at vise niveau %{level} besværgelser."
 msgid "Disable All Items"
 msgstr "Vis besværgelser"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Vælg evne:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Ingen magi at kaste."
 
 msgid "Select Spell:"
 msgstr "Vælg magi:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Vælg artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Select Monster:"
 msgstr "Vælg væsen:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Navnet på det valgte kort."
 
 msgid "Select Hero:"
 msgstr "Vælg helt:"
