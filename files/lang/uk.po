@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-11-12 16:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1142,6 +1142,14 @@ msgstr "Скинути до усталених налаштувань."
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Тицьніть щоб обрати цей колір."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Тицьніть щоб обрати цей колір."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} проти %{race2} %{name2}"
@@ -3488,6 +3496,39 @@ msgstr "Очки Руху:"
 msgid "Uncharted Territory"
 msgstr "Незвідана територія"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Випадковий Монстр"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Виберіть кількість гравців"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Встановити відсоток води"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Випадковий Монстр - сильний"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Тицьніть, щоб увімкнути всі елементи."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Повернутися до попереднього меню налаштувань."
+
 msgid "Cost per troop:"
 msgstr "Вартість істоти:"
 
@@ -3624,6 +3665,13 @@ msgstr "Завантажити файли:"
 msgid "Terrain object"
 msgstr "Об'єкт місцевості"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Назва обраної мапи."
+
 msgid "Accept the choice made."
 msgstr "Підтвердити ваш вибір."
 
@@ -3639,17 +3687,35 @@ msgstr "Тицьніть, щоб вимкнути усі елементи."
 msgid "Disable All Items"
 msgstr "Вимкнути Усі елементи"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Оберіть навичку:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Нема чар для використання."
 
 msgid "Select Spell:"
 msgstr "Оберіть закляття:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Оберіть артефакт:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Назва обраної мапи."
+
 msgid "Select Monster:"
 msgstr "Оберіть монстра:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Назва обраної мапи."
 
 msgid "Select Hero:"
 msgstr "Оберіть героя:"
@@ -4414,16 +4480,6 @@ msgstr "На мапі можна розмістити лише один випа
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
-
-msgid "Pick player count"
-msgstr "Виберіть кількість гравців"
-
-msgid "Set water percentage"
-msgstr "Встановити відсоток води"
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
-"Встановити початкове значення мапи (встановіть 0 для випадкового значення)"
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -9303,6 +9359,43 @@ msgstr "Трава"
 msgid "Ocean"
 msgstr "Океан"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Звичайна"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Мала"
 
@@ -12454,6 +12547,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Set map seed (set 0 to make the seed random)"
+#~ msgstr ""
+#~ "Встановити початкове значення мапи (встановіть 0 для випадкового значення)"
 
 #~ msgid ""
 #~ "Indicates whether the map is made for \"The Succession Wars\", \"The "

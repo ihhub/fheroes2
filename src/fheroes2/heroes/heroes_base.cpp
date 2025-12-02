@@ -357,8 +357,13 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 
 double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 {
-    const SpellStorage spells = getAllSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
+    if ( currentSpellPoints == 0 ) {
+        // The enemy's hero has no spell points so they can't cast anything.
+        return 0;
+    }
+
+    const SpellStorage spells = getAllSpells();
     const int spellPower = GetPower();
 
     double bestValue = 0;

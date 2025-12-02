@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1132,6 +1132,14 @@ msgstr "Сбросить до значений по умолчанию."
 
 msgid "Please select another hero."
 msgstr "Пожалуйста, выберите другого героя."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Нажмите сюда чтобы выбрать этот цвет."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Нажмите сюда чтобы выбрать этот цвет."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} против %{race2} %{name2}"
@@ -3495,6 +3503,39 @@ msgstr "Запас хода:"
 msgid "Uncharted Territory"
 msgstr "Неизведанная территория"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Случайное существо"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Значок игроков"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Водный элементаль"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Случайное сильное существо"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Вернуться в главное меню редактора карт."
+
 msgid "Cost per troop:"
 msgstr "Цена за существо:"
 
@@ -3633,6 +3674,13 @@ msgstr "Загрузить файл:"
 msgid "Terrain object"
 msgstr "Объект ландшафта"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Название выбранной карты."
+
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
 
@@ -3652,17 +3700,35 @@ msgstr "Нажмите, чтобы показать заклинания тол�
 msgid "Disable All Items"
 msgstr "Просмотреть заклинания"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Выберите навык:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Нет заклинаний."
 
 msgid "Select Spell:"
 msgstr "Выберите заклинание:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Выберите артефакт:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Название выбранной карты."
+
 msgid "Select Monster:"
 msgstr "Выберите существо:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Название выбранной карты."
 
 msgid "Select Hero:"
 msgstr "Выберите героя:"
@@ -4433,16 +4499,6 @@ msgstr "На одной карте можно разместить только 
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На карте можно разместить не более %{count} обелисков."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Значок игроков"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Карта повреждена."
@@ -9315,6 +9371,43 @@ msgstr "Трава"
 
 msgid "Ocean"
 msgstr "Океан"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Нормальная"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Маленькая"

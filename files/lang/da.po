@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -1123,6 +1123,14 @@ msgstr "Nulstil til standardindstillinger"
 
 msgid "Please select another hero."
 msgstr "Vælg venligst en anden helt."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Klik for at vælge denne farve."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Klik for at vælge denne farve."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3537,6 +3545,39 @@ msgstr "Skridtpoint:"
 msgid "Uncharted Territory"
 msgstr "Ukendt område"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Tilfældigt væsen"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Spiller-ikon"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vand-elemental"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Tilfældigt væsen - stærk"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
+
 msgid "Cost per troop:"
 msgstr "Pris per trop:"
 
@@ -3672,6 +3713,13 @@ msgstr "Fil som skal indlæses:"
 msgid "Terrain object"
 msgstr "Terræn-objekt"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
 
@@ -3691,17 +3739,35 @@ msgstr "Klik for kun at vise niveau %{level} besværgelser."
 msgid "Disable All Items"
 msgstr "Vis besværgelser"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Vælg evne:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Ingen magi at kaste."
 
 msgid "Select Spell:"
 msgstr "Vælg magi:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Vælg artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Select Monster:"
 msgstr "Vælg væsen:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Navnet på det valgte kort."
 
 msgid "Select Hero:"
 msgstr "Vælg helt:"
@@ -4472,16 +4538,6 @@ msgstr "Kun et tilfældigt artefakt kan placeres på kortet."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Spiller-ikon"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Kortet er beskadiget."
@@ -9369,6 +9425,43 @@ msgstr "Græs"
 
 msgid "Ocean"
 msgstr "Hav"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Jævn"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Lille"

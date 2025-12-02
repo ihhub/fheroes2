@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -1120,6 +1120,14 @@ msgstr "Restaurar as configurações padrões."
 
 msgid "Please select another hero."
 msgstr "Por favor, selecione outro herói."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Clique para selecionar esta cor."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Clique para selecionar esta cor."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3497,6 +3505,39 @@ msgstr "Movimento:"
 msgid "Uncharted Territory"
 msgstr "Território Desconhecido"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Monstro Aleatório"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Ícone dos Jogadores"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Elemental da Água"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Monstro Aleatório - Forte"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Clique para ativar o modo de patrulha do herói."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Retornar às opções do menu principal do Editor."
+
 msgid "Cost per troop:"
 msgstr "Custo por tropa:"
 
@@ -3635,6 +3676,13 @@ msgstr "Arquivo à ser carregado:"
 msgid "Terrain object"
 msgstr "Objeto do terreno"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "O nome do mapa atualmente selecionado."
+
 msgid "Accept the choice made."
 msgstr "Aceitar a escolha feita."
 
@@ -3654,17 +3702,35 @@ msgstr "Clique para editar eventos diários."
 msgid "Disable All Items"
 msgstr "Ver Feitiços"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Selecionar Habilidade:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Sem feitiços para lançar."
 
 msgid "Select Spell:"
 msgstr "Selecionar Feitiço:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Selecionar Artefato:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "O nome do mapa atualmente selecionado."
+
 msgid "Select Monster:"
 msgstr "Selecionar Monstro:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "O nome do mapa atualmente selecionado."
 
 msgid "Select Hero:"
 msgstr "Selecionar Herói:"
@@ -4440,16 +4506,6 @@ msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Ícone dos Jogadores"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "O mapa está corrompido."
@@ -9380,6 +9436,43 @@ msgstr "Grama"
 
 msgid "Ocean"
 msgstr "Oceano"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Neutra"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Pequeno"

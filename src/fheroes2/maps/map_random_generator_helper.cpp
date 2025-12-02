@@ -36,6 +36,7 @@
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
+#include "map_random_generator.h"
 #include "map_random_generator_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -70,48 +71,48 @@ namespace
     // Artifacts: treasure is 1 attribute, minor is 2, major is 4 with a bonus for rarity
     const std::map<MP2::MapObjectType, int32_t> objectGoldValue = {
         // Mines.
-        { MP2::OBJ_ABANDONED_MINE, 6000 },
-        { MP2::OBJ_ALCHEMIST_LAB, 2000 },
-        { MP2::OBJ_MINE, 2000 },
-        { MP2::OBJ_SAWMILL, 750 },
+        { MP2::OBJ_ABANDONED_MINE, 7500 },
+        { MP2::OBJ_ALCHEMIST_LAB, 3500 },
+        { MP2::OBJ_MINE, 3500 },
+        { MP2::OBJ_SAWMILL, 1000 },
         // Pickups.
         { MP2::OBJ_CAMPFIRE, 1000 },
-        { MP2::OBJ_GENIE_LAMP, 6000 },
+        { MP2::OBJ_GENIE_LAMP, 7000 },
         { MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 10000 },
-        { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 4500 },
+        { MP2::OBJ_RANDOM_ARTIFACT_MINOR, 5000 },
         { MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 2000 },
         { MP2::OBJ_RANDOM_RESOURCE, minimalTreasureValue },
         { MP2::OBJ_RESOURCE, minimalTreasureValue },
         { MP2::OBJ_TREASURE_CHEST, 1500 },
         // Powerups.
-        { MP2::OBJ_FORT, 2000 },
-        { MP2::OBJ_GAZEBO, 1500 },
-        { MP2::OBJ_MERCENARY_CAMP, 2000 },
+        { MP2::OBJ_FORT, 3000 },
+        { MP2::OBJ_GAZEBO, 2000 },
+        { MP2::OBJ_MERCENARY_CAMP, 3000 },
         { MP2::OBJ_SHRINE_FIRST_CIRCLE, 1000 },
-        { MP2::OBJ_SHRINE_SECOND_CIRCLE, 2000 },
-        { MP2::OBJ_SHRINE_THIRD_CIRCLE, 3000 },
-        { MP2::OBJ_STANDING_STONES, 2000 },
-        { MP2::OBJ_TREE_OF_KNOWLEDGE, 3000 },
-        { MP2::OBJ_WITCH_DOCTORS_HUT, 2000 },
-        { MP2::OBJ_XANADU, 8000 },
+        { MP2::OBJ_SHRINE_SECOND_CIRCLE, 2500 },
+        { MP2::OBJ_SHRINE_THIRD_CIRCLE, 4000 },
+        { MP2::OBJ_STANDING_STONES, 3000 },
+        { MP2::OBJ_TREE_OF_KNOWLEDGE, 5000 },
+        { MP2::OBJ_WITCH_DOCTORS_HUT, 3000 },
+        { MP2::OBJ_XANADU, 10000 },
         // Dwellings.
-        { MP2::OBJ_AIR_ALTAR, 4000 },
+        { MP2::OBJ_AIR_ALTAR, 5000 },
         { MP2::OBJ_ARCHER_HOUSE, 2000 },
         { MP2::OBJ_CAVE, 1500 },
         { MP2::OBJ_DESERT_TENT, 3000 },
         { MP2::OBJ_DWARF_COTTAGE, 2000 },
-        { MP2::OBJ_EARTH_ALTAR, 4000 },
+        { MP2::OBJ_EARTH_ALTAR, 5000 },
         { MP2::OBJ_EXCAVATION, 1500 },
-        { MP2::OBJ_FIRE_ALTAR, 4000 },
+        { MP2::OBJ_FIRE_ALTAR, 5000 },
         { MP2::OBJ_GOBLIN_HUT, 1500 },
         { MP2::OBJ_HALFLING_HOLE, 1500 },
         { MP2::OBJ_PEASANT_HUT, minimalTreasureValue },
-        { MP2::OBJ_RUINS, 4000 },
+        { MP2::OBJ_RUINS, 5000 },
         { MP2::OBJ_TREE_CITY, 1500 },
         { MP2::OBJ_TREE_HOUSE, 1500 },
         { MP2::OBJ_WAGON_CAMP, 2000 },
         { MP2::OBJ_WATCH_TOWER, 2000 },
-        { MP2::OBJ_WATER_ALTAR, 4000 },
+        { MP2::OBJ_WATER_ALTAR, 5000 },
     };
 
     constexpr int32_t treeTypeFromGroundType( const int groundType )
@@ -244,39 +245,49 @@ namespace Maps::Random_Generator
         return getObjectGoldValue( Maps::getObjectInfo( group, objectIndex ).objectType );
     }
 
-    MonsterSelection getMonstersByValue( const int32_t protectedObjectValue )
+    MonsterSelection getMonstersByValue( const Maps::Random_Generator::MonsterStrength monsterStrength, int32_t protectedObjectValue )
     {
-        if ( protectedObjectValue > 8500 ) {
+        if ( monsterStrength == MonsterStrength::DEADLY ) {
+            protectedObjectValue += 2500;
+        }
+        else if ( monsterStrength == MonsterStrength::STRONG ) {
+            protectedObjectValue += 1500;
+        }
+        else if ( monsterStrength == MonsterStrength::WEAK ) {
+            protectedObjectValue -= 1500;
+        }
+
+        if ( protectedObjectValue >= 13000 ) {
             // 171 -> 504 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_4,
                      { Monster::GIANT, Monster::GENIE, Monster::PHOENIX, Monster::BONE_DRAGON, Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::TITAN,
                        Monster::BLACK_DRAGON } };
         }
-        if ( protectedObjectValue > 6000 ) {
+        if ( protectedObjectValue >= 9000 ) {
             // 49 -> 137 monster strength
             return { Monster::RANDOM_MONSTER,
                      { Monster::TROLL, Monster::CHAMPION, Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD,
-                       Monster::ARCHMAGE, Monster::POWER_LICH, Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS, Monster::GENIE } };
+                       Monster::ARCHMAGE, Monster::POWER_LICH, Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS } };
         }
-        if ( protectedObjectValue > 4500 ) {
+        if ( protectedObjectValue >= 7000 ) {
             // 27 -> 48 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_3,
                      { Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT, Monster::DRUID,
                        Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::CAVALRY, Monster::OGRE_LORD, Monster::ROC, Monster::VAMPIRE, Monster::MEDUSA,
                        Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION } };
         }
-        if ( protectedObjectValue > 3000 ) {
+        if ( protectedObjectValue >= 5500 ) {
             // 17 -> 31 monster strength
             return { Monster::RANDOM_MONSTER,
                      { Monster::VETERAN_PIKEMAN, Monster::MUMMY, Monster::NOMAD, Monster::IRON_GOLEM, Monster::ELF, Monster::ROYAL_MUMMY, Monster::WOLF,
                        Monster::GRAND_ELF, Monster::SWORDSMAN, Monster::OGRE, Monster::STEEL_GOLEM, Monster::GRIFFIN, Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT,
                        Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT } };
         }
-        if ( protectedObjectValue > 1500 ) {
+        if ( protectedObjectValue >= 3500 ) {
             // 11 -> 18 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_2, {} };
         }
-        if ( protectedObjectValue > 750 ) {
+        if ( protectedObjectValue >= 2000 ) {
             // 0.92 -> 9 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_1, {} };
         }
@@ -644,8 +655,8 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, std::vector<ObjectSet> objects, const uint8_t expectedCount,
-                         Rand::PCG32 & randomGenerator )
+    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, std::vector<ObjectSet> objects, const MonsterStrength monsterStrength,
+                         const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
         for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
@@ -682,7 +693,7 @@ namespace Maps::Random_Generator
                 // It is possible to go into the negatives; intentional
                 region.treasureLimit -= groupValue;
 
-                placeMonster( mapFormat, node.index, getMonstersByValue( groupValue ) );
+                placeMonster( mapFormat, node.index, getMonstersByValue( monsterStrength, groupValue ) );
 
                 ++objectsPlaced;
                 break;

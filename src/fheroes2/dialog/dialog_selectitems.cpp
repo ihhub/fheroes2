@@ -670,6 +670,11 @@ namespace
 
     int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection )
     {
+        if ( objectCount == 0 ) {
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "There is nothing to select from." ), Dialog::OK );
+            return -1;
+        }
+
         std::vector<int> objects( objectCount, 0 );
         std::iota( objects.begin(), objects.end(), 0 );
         objectSelection.SetListContent( objects );
@@ -677,7 +682,7 @@ namespace
         objectSelection.SetCurrent( std::max( objectType, 0 ) );
 
         const int32_t result = objectSelection.selectItemsEventProcessing();
-        return result == Dialog::OK ? objectSelection.GetCurrent() : -1;
+        return result == Dialog::OK && objectSelection.IsValid() ? objectSelection.GetCurrent() : -1;
     }
 
     class MineTypeList final : public Interface::ListBox<Maps::ObjectInfo>
@@ -775,6 +780,11 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
         castles.push_back( castle->GetIndex() );
     }
 
+    if ( castles.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no castles to select from." ), Dialog::OK );
+        return -1;
+    }
+
     const int32_t maxHeight = std::min( 100 + SelectKingdomCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - dialogHeightDeduction );
     const int32_t itemsHeight = std::max( 100 + SelectKingdomCastle::itemsOffsetY * static_cast<int32_t>( castles.size() ), 100 + SelectKingdomCastle::itemsOffsetY * 5 );
     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
@@ -788,7 +798,7 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? listbox.GetCurrent() : -1;
+    return ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : -1;
 }
 
 namespace Dialog
@@ -987,6 +997,11 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
         }
     }
 
+    if ( skills.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no secondary skills to select from." ), Dialog::OK );
+        return {};
+    }
+
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Skill:" ) );
 
     listbox.SetListContent( skills );
@@ -996,7 +1011,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    if ( result == Dialog::OK ) {
+    if ( result == Dialog::OK && listbox.IsValid() ) {
         const int skillIndex = listbox.GetCurrent();
         return { SelectEnumSecSkill::getSkillFromListIndex( skillIndex ), SelectEnumSecSkill::getLevelFromListIndex( skillIndex ) };
     }
@@ -1021,6 +1036,11 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, co
         }
     }
 
+    if ( spells.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no spells to select." ), Dialog::OK );
+        return { Spell::NONE };
+    }
+
     SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Spell:" ) );
 
     listbox.SetListContent( spells );
@@ -1030,7 +1050,7 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, co
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Spell::NONE };
 }
 
 Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryConditions )
@@ -1070,6 +1090,11 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
         artifacts.emplace_back( id );
     }
 
+    if ( artifacts.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no artifacts to select from." ), Dialog::OK );
+        return { Artifact::UNKNOWN };
+    }
+
     SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifact:" ) );
 
     listbox.SetListContent( artifacts );
@@ -1079,7 +1104,7 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Artifact::UNKNOWN };
 }
 
 Monster Dialog::selectMonster( const int monsterId )
@@ -1090,6 +1115,11 @@ Monster Dialog::selectMonster( const int monsterId )
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
+    if ( monsters.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no monsters to select from." ), Dialog::OK );
+        return { Monster::UNKNOWN };
+    }
+
     SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
 
     listbox.SetListContent( monsters );
@@ -1099,7 +1129,7 @@ Monster Dialog::selectMonster( const int monsterId )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Monster::UNKNOWN };
 }
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
@@ -1108,6 +1138,11 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
     const bool isPoLHeroesAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
 
     std::vector<int> heroes( static_cast<int>( isPoLHeroesAllowed ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
+
+    if ( heroes.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no heroes to select from." ), Dialog::OK );
+        return Heroes::UNKNOWN;
+    }
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
@@ -1120,7 +1155,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? listbox.GetCurrent() : Heroes::UNKNOWN;
+    return ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Heroes::UNKNOWN;
 }
 
 void Dialog::multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected )

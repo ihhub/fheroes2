@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <ostream>
 #include <vector>
@@ -58,74 +59,15 @@ namespace
         return result;
     }
 
-    bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Spell & spell )
+    int32_t getSpellPower( const HeroBase * hero )
     {
-        const int spellID = spell.GetID();
+        assert( hero != nullptr );
 
-        if ( unit.isImmovable() && spellID != Spell::ANTIMAGIC ) {
-            return true;
-        }
-
-        switch ( spellID ) {
-        case Spell::BLESS:
-        case Spell::MASSBLESS:
-            return unit.Modes( Battle::SP_BLESS );
-
-        case Spell::BLOODLUST:
-            return unit.Modes( Battle::SP_BLOODLUST );
-
-        case Spell::CURSE:
-        case Spell::MASSCURSE:
-            return unit.Modes( Battle::SP_CURSE );
-
-        case Spell::HASTE:
-        case Spell::MASSHASTE:
-            return unit.Modes( Battle::SP_HASTE );
-
-        case Spell::SHIELD:
-        case Spell::MASSSHIELD:
-            return unit.Modes( Battle::SP_SHIELD );
-
-        case Spell::SLOW:
-        case Spell::MASSSLOW:
-            return unit.Modes( Battle::SP_SLOW );
-
-        case Spell::STONESKIN:
-        case Spell::STEELSKIN:
-            return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
-
-        case Spell::BLIND:
-        case Spell::PARALYZE:
-        case Spell::PETRIFY:
-            return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
-
-        case Spell::DRAGONSLAYER:
-            return unit.Modes( Battle::SP_DRAGONSLAYER );
-
-        case Spell::ANTIMAGIC:
-            return unit.Modes( Battle::SP_ANTIMAGIC );
-
-        case Spell::BERSERKER:
-            return unit.Modes( Battle::SP_BERSERKER );
-
-        case Spell::HYPNOTIZE:
-            return unit.Modes( Battle::SP_HYPNOTIZE );
-
-        case Spell::MIRRORIMAGE:
-            return unit.Modes( Battle::CAP_MIRROROWNER );
-
-        case Spell::DISRUPTINGRAY:
-            return unit.GetDefense() <= 1;
-
-        default:
-            break;
-        }
-
-        return false;
+        return hero->GetPower() + hero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
     }
 }
 
-AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
+AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, const bool retreating ) const
 {
     SpellSelection bestSpell;
 
@@ -197,10 +139,10 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
             checkSelectBestSpell( spell, spellEarthquakeValue( arena, spell, friendly ) );
         }
         else if ( spell.isApplyToFriends() ) {
-            checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly ) );
+            checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly, enemies ) );
         }
         else if ( spell.isApplyToEnemies() ) {
-            checkSelectBestSpell( spell, spellEffectValue( spell, trueEnemies ) );
+            checkSelectBestSpell( spell, spellEffectValue( spell, trueEnemies, enemies ) );
         }
     }
 
@@ -324,8 +266,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
 
 int32_t AI::BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
 {
-    const int32_t duration
-        = _commander->GetPower() + _commander->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
+    const int32_t duration = getSpellPower( _commander );
 
     if ( duration < 2 && target.Modes( Battle::TR_MOVED ) ) {
         return 0;
@@ -402,12 +343,13 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     return ratio;
 }
 
-double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const
+double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast,
+                                            const bool forDispel ) const
 {
     const int spellID = spell.GetID();
 
     // Make sure that this spell makes sense to apply (skip this check to evaluate the effect of dispelling)
-    if ( !forDispel && ( isSpellcastUselessForUnit( target, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
+    if ( !forDispel && ( isSpellcastUselessForUnit( target, enemies, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
         return 0.0;
     }
 
@@ -535,7 +477,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     return target.GetStrength() * ratio * spellDurationMultiplier( target );
 }
 
-AI::SpellcastOutcome AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Units & targets ) const
+AI::SpellcastOutcome AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Units & targets, const Battle::Units & enemies ) const
 {
     const bool isSingleTargetLeft = targets.size() == 1;
     const bool isMassSpell = spell.isMassActions();
@@ -543,7 +485,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellEffectValue( const Spell & spell, c
     SpellcastOutcome bestOutcome;
 
     for ( const Battle::Unit * unit : targets ) {
-        bestOutcome.updateOutcome( spellEffectValue( spell, *unit, isSingleTargetLeft, false ), unit->GetHeadIndex(), isMassSpell );
+        bestOutcome.updateOutcome( spellEffectValue( spell, *unit, enemies, isSingleTargetLeft, false ), unit->GetHeadIndex(), isMassSpell );
     }
 
     return bestOutcome;
@@ -565,7 +507,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDispelValue( const Spell & spell, c
         double unitValue = 0;
         const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
         for ( const Spell & spellOnFriend : spellList ) {
-            const double effectValue = spellEffectValue( spellOnFriend, *unit, false, true );
+            const double effectValue = spellEffectValue( spellOnFriend, *unit, enemies, false, true );
             if ( spellOnFriend.isApplyToEnemies() ) {
                 unitValue += effectValue;
             }
@@ -587,7 +529,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDispelValue( const Spell & spell, c
             double unitValue = 0;
             const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
             for ( const Spell & spellOnEnemy : spellList ) {
-                const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemyLastUnit, true );
+                const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemies, enemyLastUnit, true );
                 unitValue += spellOnEnemy.isApplyToFriends() ? effectValue : -effectValue;
             }
 
@@ -716,7 +658,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     SpellcastOutcome bestOutcome;
 
     for ( const Battle::Unit * unit : friendly ) {
-        if ( isSpellcastUselessForUnit( *unit, spell ) ) {
+        if ( isSpellcastUselessForUnit( *unit, enemies, spell ) ) {
             continue;
         }
 
@@ -725,6 +667,89 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     }
 
     return bestOutcome;
+}
+
+bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, const Battle::Units & enemies, const Spell & spell ) const
+{
+    const int spellID = spell.GetID();
+
+    if ( unit.isImmovable() && spellID != Spell::ANTIMAGIC ) {
+        return true;
+    }
+
+    switch ( spellID ) {
+    case Spell::BLESS:
+    case Spell::MASSBLESS:
+        return unit.Modes( Battle::SP_BLESS );
+
+    case Spell::BLOODLUST:
+        return unit.Modes( Battle::SP_BLOODLUST );
+
+    case Spell::CURSE:
+    case Spell::MASSCURSE:
+        return unit.Modes( Battle::SP_CURSE );
+
+    case Spell::HASTE:
+    case Spell::MASSHASTE:
+        return unit.Modes( Battle::SP_HASTE );
+
+    case Spell::SHIELD:
+    case Spell::MASSSHIELD:
+        // If a spell duration is just 1 round and all shooters already completed their turn
+        // then this spell is useless.
+        if ( getSpellPower( _commander ) == 1 ) {
+            size_t activeShooters{ 0 };
+
+            for ( const auto * enemy : enemies ) {
+                if ( enemy->isArchers() && !enemy->isImmovable() && !enemy->Modes( Battle::TR_MOVED ) ) {
+                    ++activeShooters;
+                }
+            }
+
+            if ( activeShooters == 0 ) {
+                // No shooters are going to make their move.
+                return true;
+            }
+        }
+
+        return unit.Modes( Battle::SP_SHIELD );
+
+    case Spell::SLOW:
+    case Spell::MASSSLOW:
+        return unit.Modes( Battle::SP_SLOW );
+
+    case Spell::STONESKIN:
+    case Spell::STEELSKIN:
+        return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
+
+    case Spell::BLIND:
+    case Spell::PARALYZE:
+    case Spell::PETRIFY:
+        return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
+
+    case Spell::DRAGONSLAYER:
+        return unit.Modes( Battle::SP_DRAGONSLAYER );
+
+    case Spell::ANTIMAGIC:
+        return unit.Modes( Battle::SP_ANTIMAGIC );
+
+    case Spell::BERSERKER:
+        return unit.Modes( Battle::SP_BERSERKER );
+
+    case Spell::HYPNOTIZE:
+        return unit.Modes( Battle::SP_HYPNOTIZE );
+
+    case Spell::MIRRORIMAGE:
+        return unit.Modes( Battle::CAP_MIRROROWNER );
+
+    case Spell::DISRUPTINGRAY:
+        return unit.GetDefense() <= 1;
+
+    default:
+        break;
+    }
+
+    return false;
 }
 
 AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & arena, const Spell & spell, const Battle::Unit & currentUnit,
@@ -739,7 +764,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
         return {};
     }
 
-    if ( isSpellcastUselessForUnit( currentUnit, spell ) ) {
+    if ( isSpellcastUselessForUnit( currentUnit, enemies, spell ) ) {
         return {};
     }
 

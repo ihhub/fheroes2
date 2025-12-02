@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -48,7 +48,7 @@ namespace Translation
 
     const char * gettext( const char * str );
     const char * gettext( const std::string & str );
-    const char * ngettext( const char * str, const char * plural, size_t num );
+    const char * ngettext( const char * str, const char * plural, const size_t n );
 
     // Converts the given string to lowercase in a locale aware way
     std::string StringLower( std::string str );

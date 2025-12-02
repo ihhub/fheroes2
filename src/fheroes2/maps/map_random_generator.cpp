@@ -53,6 +53,7 @@
 #include "resource.h"
 #include "route.h"
 #include "skill.h"
+#include "translations.h"
 #include "world.h"
 #include "world_pathfinding.h"
 
@@ -73,7 +74,7 @@ namespace
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
     {
         // Water percentage cannot be 100 or more, or negative.
-        assert( config.waterPercentage >= 0 && config.waterPercentage < 100 );
+        assert( config.waterPercentage >= 0 && config.waterPercentage <= 100 );
 
         int32_t requiredSpace = 0;
 
@@ -231,6 +232,66 @@ namespace Maps::Random_Generator
                    { { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } } },
     };
 
+    std::string layoutToString( const Layout layout )
+    {
+        switch ( layout ) {
+        case Layout::MIRRORED:
+            return _( "map_layout|Mirrored" );
+        case Layout::BALANCED:
+            return _( "map_layout|Balanced" );
+        case Layout::ISLANDS:
+            return _( "map_layout|Islands" );
+        case Layout::PYRAMID:
+            return _( "map_layout|Pyramid" );
+        case Layout::QUEST:
+            return _( "map_layout|Quest" );
+        default:
+            // Did you add a new layout type? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    std::string resourceDensityToString( const ResourceDensity resources )
+    {
+        switch ( resources ) {
+        case ResourceDensity::SCARCE:
+            return _( "resource_density|Scarce" );
+        case ResourceDensity::NORMAL:
+            return _( "resource_density|Normal" );
+        case ResourceDensity::ABUNDANT:
+            return _( "resource_density|Abundant" );
+        default:
+            // Did you add a new resource density type? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    std::string monsterStrengthToString( const MonsterStrength monsters )
+    {
+        switch ( monsters ) {
+        case MonsterStrength::WEAK:
+            return _( "monster_strength|Weak" );
+        case MonsterStrength::NORMAL:
+            return _( "monster_strength|Normal" );
+        case MonsterStrength::STRONG:
+            return _( "monster_strength|Strong" );
+        case MonsterStrength::DEADLY:
+            return _( "monster_strength|Deadly" );
+        default:
+            // Did you add a new monster strength type? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
     int32_t calculateMaximumWaterPercentage( const int32_t playerCount, const int32_t mapWidth )
     {
         assert( playerCount > 0 && mapWidth > 0 );
@@ -258,6 +319,10 @@ namespace Maps::Random_Generator
         }
 
         const int32_t regionSizeLimit = calculateRegionSizeLimit( config, width, height );
+        if ( regionSizeLimit <= 0 ) {
+            DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Region size limit is " << regionSizeLimit )
+            return false;
+        }
 
         const uint32_t generatorSeed = ( config.seed > 0 ) ? config.seed : Rand::Get( 999999 );
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Generating a map with seed " << generatorSeed );
@@ -422,7 +487,7 @@ namespace Maps::Random_Generator
                         actionLocations.insert( tileIndex );
 
                         const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( mineValue ) );
+                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
                         return true;
                     }
                 }
@@ -499,15 +564,15 @@ namespace Maps::Random_Generator
 
         // Step 8: Place powerups and treasure clusters while avoiding the paths.
         for ( Region & region : mapRegions ) {
-            placeObjectSet( mapFormat, data, region, powerupObjectSets, regionConfiguration.powerUpsCount, randomGenerator );
-            placeObjectSet( mapFormat, data, region, prefabObjectSets, regionConfiguration.treasureCount, randomGenerator );
+            placeObjectSet( mapFormat, data, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
+            placeObjectSet( mapFormat, data, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
         }
 
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
         // Step 10: Place missing monsters.
-        const auto & weakGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 );
-        const auto & strongGuard = getMonstersByValue( static_cast<int32_t>( config.monsterStrength ) * 3000 + 1500 );
+        const auto & weakGuard = getMonstersByValue( config.monsterStrength, 4500 );
+        const auto & strongGuard = getMonstersByValue( config.monsterStrength, 7500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.isInner && mapRegions[regionId].isInner ) {
@@ -541,7 +606,9 @@ namespace Maps::Random_Generator
         // Set random map name and description to be unique.
         mapFormat.name = "Random map " + std::to_string( generatorSeed );
         mapFormat.description = "Randomly generated map of " + std::to_string( width ) + "x" + std::to_string( height ) + " with seed " + std::to_string( generatorSeed )
-                                + ", " + std::to_string( config.playerCount ) + " players and " + std::to_string( config.waterPercentage ) + "% of water.";
+                                + ", " + std::to_string( config.playerCount ) + " players, up to " + std::to_string( config.waterPercentage ) + "% of water, "
+                                + layoutToString( config.mapLayout ) + " layout, " + resourceDensityToString( config.resourceDensity ) + " resource density and "
+                                + monsterStrengthToString( config.monsterStrength ) + " monster strength.";
 
         return true;
     }

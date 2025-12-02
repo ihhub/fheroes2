@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1125,6 +1125,14 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3518,6 +3526,39 @@ msgstr "Body pohybu:"
 msgid "Uncharted Territory"
 msgstr "Nepreskúmané územie"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Náhodný tvor"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Ikona hráča"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vodný elementál"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Náhodný tvor - silný"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
 msgid "Cost per troop:"
 msgstr "Cena za jednotku:"
 
@@ -3655,6 +3696,13 @@ msgstr "Nahrať súbor:"
 msgid "Terrain object"
 msgstr "Režim terénu"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
 
@@ -3674,17 +3722,35 @@ msgstr "Klikni pre výber zvoleného rozlíšenia."
 msgid "Disable All Items"
 msgstr "Zobraz kúzla"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Žiadne kúzla na čarovanie."
 
 msgid "Select Spell:"
 msgstr "Zvoľ kúzlo:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Zvoľ artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Select Monster:"
 msgstr "Zvoľ bojovníka:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Názov momentálne zvolenej mapy."
 
 msgid "Select Hero:"
 msgstr "Zvoľ hrdinu:"
@@ -4516,16 +4582,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Ikona hráča"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -9473,6 +9529,43 @@ msgstr "Tráva"
 
 msgid "Ocean"
 msgstr "Oceán"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normálna"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Malá"

@@ -1358,9 +1358,12 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
         // And set the UID counter value with the found maximum.
         Maps::setLastObjectUID( maxUid );
     }
-    else {
-        // Check that 'getNewObjectUID()' will return values that will not match the existing ones on the started map.
-        assert( Maps::getLastObjectUID() >= maxUid );
+    else if ( Maps::getLastObjectUID() < maxUid ) {
+        // Some maps (even official original campaign maps) can have incorrect UID.
+        // No idea what's the reason but assumed that they were edited by the corrupted Editor.
+        ERROR_LOG( "Last object UID is not valid. Expected: " << Maps::getLastObjectUID() << ", received: " << maxUid )
+
+        Maps::setLastObjectUID( maxUid );
     }
 }
 

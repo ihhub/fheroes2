@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 11:21+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -983,6 +983,12 @@ msgid "Reset to default settings."
 msgstr ""
 
 msgid "Please select another hero."
+msgstr ""
+
+msgid "Click to set this hero to be human-controlled."
+msgstr ""
+
+msgid "Click to set this hero to be AI-controlled."
 msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3117,6 +3123,33 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+msgid "Random Map Generator"
+msgstr ""
+
+msgid "rmg|Player count"
+msgstr ""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+msgid "rmg|Water percentage"
+msgstr ""
+
+msgid "rmg|Monster strength"
+msgstr ""
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+msgid "Click to generate a new map."
+msgstr ""
+
+msgid "Return to the previous menu."
+msgstr ""
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3239,6 +3272,12 @@ msgstr ""
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3254,16 +3293,31 @@ msgstr ""
 msgid "Disable All Items"
 msgstr ""
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
+msgstr ""
+
+msgid "There are no spells to select."
 msgstr ""
 
 msgid "Select Spell:"
 msgstr ""
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr ""
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 msgid "Select Monster:"
+msgstr ""
+
+msgid "There are no heroes to select from."
 msgstr ""
 
 msgid "Select Hero:"
@@ -3984,15 +4038,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -8175,6 +8220,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
