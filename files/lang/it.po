@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3529,6 +3529,13 @@ msgstr "File da Caricare:"
 msgid "Terrain object"
 msgstr "Nessun oggetto"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Il nome della mappa scelta attualmente."
+
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
@@ -3548,17 +3555,35 @@ msgstr "Clicca per salvare la partita in corso."
 msgid "Disable All Items"
 msgstr "Mostra Magie"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Scegli dote:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Nessuna magia da lanciare."
 
 msgid "Select Spell:"
 msgstr "Scegli magia:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Scegli artefatto:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Il nome della mappa scelta attualmente."
+
 msgid "Select Monster:"
 msgstr "Scegli mostro:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Il nome della mappa scelta attualmente."
 
 msgid "Select Hero:"
 msgstr "Scegli eroe:"

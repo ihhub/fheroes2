@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-11-18 14:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3648,6 +3648,13 @@ msgstr "Fil att Ladda:"
 msgid "Terrain object"
 msgstr "Terrängföremål"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Den valda kartans namn."
+
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
@@ -3663,17 +3670,35 @@ msgstr "Klicka för att inaktivera alla föremål."
 msgid "Disable All Items"
 msgstr "Inaktivera Alla Föremål"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Inga besvärjelser att kasta."
 
 msgid "Select Spell:"
 msgstr "Välj Besvärjelse"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Välj Artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Den valda kartans namn."
+
 msgid "Select Monster:"
 msgstr "Välj Varelse:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Den valda kartans namn."
 
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
