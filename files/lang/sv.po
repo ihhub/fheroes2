@@ -3819,7 +3819,7 @@ msgid "Resurrection"
 msgstr "Resurrection"
 
 msgid "This map is made for \"%{game-version}\" version of the game."
-msgstr "Denna karta är skapad för\"%{game-version}\"-versionen av spelet."
+msgstr "Denna karta är skapad för \"%{game-version}\"-versionen av spelet."
 
 msgid "Map Type"
 msgstr "Karttyp"
