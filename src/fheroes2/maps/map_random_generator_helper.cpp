@@ -27,7 +27,9 @@
 #include <cstddef>
 #include <functional>
 #include <initializer_list>
+#include <limits>
 #include <map>
+#include <ostream>
 #include <utility>
 
 #include "color.h"
@@ -342,7 +344,7 @@ namespace Maps::Random_Generator
         assert( start > 0 );
         assert( mapWidth > 0 );
 
-        std::vector<RoadBuilderNode> cache( mapWidth * mapWidth );
+        std::vector<RoadBuilderNode> cache( static_cast<size_t>( mapWidth ) * mapWidth );
         assert( start < static_cast<int32_t>( cache.size() ) );
 
         std::vector<int32_t> result;
@@ -372,12 +374,12 @@ namespace Maps::Random_Generator
                 bestRoadCost = currentNode._cost;
             }
 
-            for ( size_t i = 0; i < directions.size(); ++i ) {
-                if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
+            for ( const int direction : directions ) {
+                if ( !Maps::isValidDirection( currentNodeIdx, direction ) ) {
                     continue;
                 }
 
-                const bool isDiagonal = Direction::isDiagonal( directions[i] );
+                const bool isDiagonal = Direction::isDiagonal( direction );
                 // Edge case: fix mine connections
                 if ( isDiagonal && fromActionTile && currentNodeIdx == start ) {
                     continue;
@@ -393,7 +395,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
-                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, directions[i] );
+                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, direction );
                 if ( newIndex == start ) {
                     continue;
                 }
@@ -407,12 +409,12 @@ namespace Maps::Random_Generator
                 RoadBuilderNode & newNode = cache[newIndex];
                 constexpr uint32_t diagonalMovePenalty = Ground::defaultGroundPenalty * 3 / 2;
                 const uint32_t movementPenalty = isDiagonal ? diagonalMovePenalty : Ground::defaultGroundPenalty;
-                uint32_t movementCost = currentNode._cost + movementPenalty;
+                const uint32_t movementCost = currentNode._cost + movementPenalty;
 
                 if ( newNode._from == -1 || newNode._cost > movementCost ) {
                     newNode._from = currentNodeIdx;
                     newNode._cost = movementCost;
-                    newNode._direction = directions[i];
+                    newNode._direction = direction;
 
                     nodesToExplore.push_back( newIndex );
                 }
@@ -423,36 +425,30 @@ namespace Maps::Random_Generator
             return result;
         }
 
-        DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "=== Found path to " << bestRoadIndex );
-
         int count = 0;
-        for ( int32_t cur = bestRoadIndex;; ) {
+        for ( int32_t currentStep = bestRoadIndex;; ) {
             ++count;
-            const RoadBuilderNode & rbNode = cache[static_cast<size_t>( cur )];
+            const RoadBuilderNode & rbNode = cache[static_cast<size_t>( currentStep )];
 
-            int32_t fromIndex = rbNode._from;
             // Adding additional 0 cost road step to fix road transitions to compensate for missing sprites
             if ( count == 2 ) {
                 if ( rbNode._direction == Direction::BOTTOM_RIGHT ) {
-                    const int32_t additionalStep = Maps::GetDirectionIndex( cur, Direction::LEFT );
+                    const int32_t additionalStep = Maps::GetDirectionIndex( currentStep, Direction::LEFT );
                     result.emplace_back( additionalStep );
-                    fromIndex = additionalStep;
                 }
                 else if ( rbNode._direction == Direction::BOTTOM_LEFT ) {
-                    const int32_t additionalStep = Maps::GetDirectionIndex( cur, Direction::RIGHT );
+                    const int32_t additionalStep = Maps::GetDirectionIndex( currentStep, Direction::RIGHT );
                     result.emplace_back( additionalStep );
-                    fromIndex = additionalStep;
                 }
             }
 
-            result.emplace_back( cur );
+            result.emplace_back( currentStep );
 
-            if ( cur == rbNode._from ) {
+            if ( currentStep == rbNode._from ) {
                 break;
             }
 
-            cur = rbNode._from;
-            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "===== via " << cur );
+            currentStep = rbNode._from;
         }
 
         return result;

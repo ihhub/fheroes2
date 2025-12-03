@@ -27,7 +27,6 @@
 #include <cstddef>
 #include <functional>
 #include <initializer_list>
-#include <list>
 #include <map>
 #include <ostream>
 #include <set>
@@ -51,8 +50,6 @@
 #include "mp2.h"
 #include "rand.h"
 #include "resource.h"
-#include "route.h"
-#include "skill.h"
 #include "translations.h"
 #include "world.h"
 
