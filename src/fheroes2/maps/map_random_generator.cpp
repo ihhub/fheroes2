@@ -55,7 +55,6 @@
 #include "skill.h"
 #include "translations.h"
 #include "world.h"
-#include "world_pathfinding.h"
 
 namespace
 {
@@ -505,10 +504,10 @@ namespace Maps::Random_Generator
 
                         const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
                         placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
-                        return tileIndex;
+                        return true;
                     }
                 }
-                return -1;
+                return false;
             };
 
             if ( tileRings.size() < 4 ) {
@@ -517,8 +516,7 @@ namespace Maps::Random_Generator
 
             for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                 for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
-                    if ( mineIndex != -1 && roadBuilder( mineIndex, region.id, true ) ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
                         break;
                     }
                 }
@@ -527,9 +525,7 @@ namespace Maps::Random_Generator
             for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
                 for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
-                    const int mineIndex = tryToPlaceMine( tileRings[ringIndex], resource );
-                    if ( mineIndex != -1 ) {
-                        roadBuilder( mineIndex, region.id, false );
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
                         break;
                     }
                 }
@@ -588,28 +584,6 @@ namespace Maps::Random_Generator
 
         Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, false );
         Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, true );
-
-        // Step 11: Validate that map is playable.
-        AIWorldPathfinder pathfinder;
-        pathfinder.reset();
-        const PlayerColor testPlayer = PlayerColor::BLUE;
-
-        // Have to remove fog first otherwise pathfinder won't work
-        for ( int idx = 0; idx < width * height; ++idx ) {
-            world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
-        }
-        world.resetPathfinder();
-        world.updatePassabilities();
-
-        for ( const int32_t start : startingLocations ) {
-            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const int action : actionLocations ) {
-                if ( pathfinder.getDistance( action ) == 0 ) {
-                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
-                    return false;
-                }
-            }
-        }
 
         // Visual debug
         for ( const Region & region : mapRegions ) {

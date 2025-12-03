@@ -626,9 +626,25 @@ namespace Maps::Random_Generator
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
 
-        if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
+        if ( canFitObject( data, objectInfo, tilePos, true ) ) {
+            data.startTransaction();
             markObjectPlacement( data, objectInfo, tilePos );
-            return true;
+
+            const int32_t tileIndex = tile.GetIndex();
+            const auto & roadToObject = findRoadFromIndex( data, mapFormat.width, data.getNode( tileIndex ).region, tileIndex );
+            if ( roadToObject.empty() ) {
+                data.rollbackTransaction();
+                return false;
+            }
+
+            if ( putObjectOnMap( mapFormat, tile, groupType, type ) ) {
+                for ( const auto & step : roadToObject ) {
+                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                    forceTempRoadOnTile( mapFormat, step );
+                }
+                data.commitTransaction();
+                return true;
+            }
         }
 
         return false;
@@ -779,7 +795,7 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, std::vector<ObjectSet> objects, const MonsterStrength monsterStrength,
+    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, std::vector<ObjectSet> objectSets, const MonsterStrength monsterStrength,
                          const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
@@ -790,11 +806,30 @@ namespace Maps::Random_Generator
 
             const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
 
-            Rand::ShuffleWithGen( objects, randomGenerator );
-            for ( const auto & prefab : objects ) {
+            Rand::ShuffleWithGen( objectSets, randomGenerator );
+            for ( const auto & prefab : objectSets ) {
                 if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
                     continue;
                 }
+
+                data.startTransaction();
+                for ( const auto & obstacle : prefab.obstacles ) {
+                    const fheroes2::Point position = Maps::GetPoint( node.index ) + obstacle.offset;
+                    const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );
+                    markObjectPlacement( data, objectInfo, position );
+                }
+
+                const auto & routeToGroup = findRoadFromIndex( data, mapFormat.width, region.id, node.index );
+                if ( routeToGroup.empty() ) {
+                    data.rollbackTransaction();
+                    continue;
+                }
+
+                for ( const auto & step : routeToGroup ) {
+                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                    forceTempRoadOnTile( mapFormat, step );
+                }
+                data.commitTransaction();
 
                 for ( const auto & obstacle : prefab.obstacles ) {
                     placeSimpleObject( mapFormat, data, node, obstacle );
@@ -818,12 +853,6 @@ namespace Maps::Random_Generator
                 region.treasureLimit -= groupValue;
 
                 placeMonster( mapFormat, node.index, getMonstersByValue( monsterStrength, groupValue ) );
-
-                const auto & routeToGroup = findRoadFromIndex( data, mapFormat.width, region.id, node.index );
-                for ( const auto & step : routeToGroup ) {
-                    data.getNodeToUpdate( step ).type = NodeType::PATH;
-                    forceTempRoadOnTile( mapFormat, step );
-                }
 
                 ++objectsPlaced;
                 break;
