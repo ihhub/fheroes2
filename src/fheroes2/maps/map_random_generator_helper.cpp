@@ -29,13 +29,11 @@
 #include <initializer_list>
 #include <limits>
 #include <map>
-#include <ostream>
 #include <utility>
 
 #include "color.h"
 #include "direction.h"
 #include "ground.h"
-#include "logging.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
