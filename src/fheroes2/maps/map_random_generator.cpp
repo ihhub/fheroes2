@@ -346,7 +346,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, false } };
+        std::vector<Region> mapRegions = { { 0, data.getNodeToUpdate( 0 ), neutralColorIndex, Ground::WATER, 1, 0, false } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -380,7 +380,7 @@ namespace Maps::Random_Generator
                 const int32_t treasureLimit = isPlayerRegion ? regionConfiguration.treasureValueLimit : regionConfiguration.treasureValueLimit * 2;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                Node & centerNode = data.getNode( centerTile );
+                Node & centerNode = data.getNodeToUpdate( centerTile );
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, isInnerRegion );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
@@ -433,7 +433,7 @@ namespace Maps::Random_Generator
                 return false;
             }
             for ( const auto & step : otherPath ) {
-                data.getNode( step ).type = NodeType::PATH;
+                data.getNodeToUpdate( step ).type = NodeType::PATH;
                 if ( placeRoad ) {
                     forceTempRoadOnTile( mapFormat, step );
                 }
@@ -468,7 +468,7 @@ namespace Maps::Random_Generator
             }
 
             for ( const int32_t extraNodeIndex : extraNodes ) {
-                Node & extra = data.getNode( extraNodeIndex );
+                Node & extra = data.getNodeToUpdate( extraNodeIndex );
                 region.nodes.emplace_back( extra );
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Extra ground tile at " << extra.index << " attaching to region " << region.id )
                 extra.region = region.id;

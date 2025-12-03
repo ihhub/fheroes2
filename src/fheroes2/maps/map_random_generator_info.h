@@ -89,7 +89,11 @@ namespace Maps::Random_Generator
     public:
         NodeCache( const int32_t width, const int32_t height );
 
-        Node & getNode( const fheroes2::Point position )
+        void startTransaction();
+        void commitTransaction();
+        void rollbackTransaction();
+
+        Node & getNodeToUpdate( const fheroes2::Point position )
         {
             if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
@@ -100,7 +104,12 @@ namespace Maps::Random_Generator
                 return _outOfBounds;
             }
 
-            return _data[position.y * _mapSize + position.x];
+            const int32_t index = position.y * _mapSize + position.x;
+            if ( !_transactionRecords.empty() ) {
+                recordStateChange( index, _data[index] );
+            }
+
+            return _data[index];
         }
 
         const Node & getNode( const fheroes2::Point position ) const
@@ -117,7 +126,7 @@ namespace Maps::Random_Generator
             return _data[position.y * _mapSize + position.x];
         }
 
-        Node & getNode( const int32_t index )
+        Node & getNodeToUpdate( const int32_t index )
         {
             if ( index < 0 || index >= _mapSize * _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
@@ -127,6 +136,10 @@ namespace Maps::Random_Generator
                 assert( _outOfBounds.index == -1 );
 
                 return _outOfBounds;
+            }
+
+            if ( !_transactionRecords.empty() ) {
+                recordStateChange( index, _data[index] );
             }
 
             return _data[index];
@@ -148,9 +161,28 @@ namespace Maps::Random_Generator
         }
 
     private:
+        struct StateChange final
+        {
+            int32_t index{ -1 };
+            Node state;
+
+            StateChange() = default;
+            explicit StateChange( const int32_t index_, const Node & current )
+                : index( index_ )
+                , state( current )
+            {
+                // Do nothing
+            }
+        };
+
+        void recordStateChange( const int32_t index, const Node & current );
+
         const int32_t _mapSize{ 0 };
         Node _outOfBounds{ -1, 0, NodeType::BORDER };
         std::vector<Node> _data;
+
+        std::vector<StateChange> _history;
+        std::vector<size_t> _transactionRecords;
     };
 
     struct Region final

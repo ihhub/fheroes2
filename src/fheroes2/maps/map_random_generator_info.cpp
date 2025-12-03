@@ -51,6 +51,45 @@ namespace Maps::Random_Generator
         }
     }
 
+    void NodeCache::startTransaction()
+    {
+        _transactionRecords.push_back( _history.size() );
+    }
+
+    void NodeCache::commitTransaction()
+    {
+        assert( !_transactionRecords.empty() );
+        const size_t record = _transactionRecords.back();
+        _transactionRecords.pop_back();
+
+        if ( _transactionRecords.empty() ) {
+            _history.clear();
+        }
+    }
+
+    void NodeCache::rollbackTransaction()
+    {
+        assert( !_transactionRecords.empty() );
+        const size_t record = _transactionRecords.back();
+        _transactionRecords.pop_back();
+
+        for ( size_t index = _history.size() - 1; index > record; --index ) {
+            const StateChange & change = _history[index];
+            _data[static_cast<size_t>( change.index )] = change.state;
+        }
+
+        _history.resize( record );
+
+        if ( _transactionRecords.empty() ) {
+            _history.clear();
+        }
+    }
+
+    void NodeCache::recordStateChange( const int32_t index, const Node & current )
+    {
+        _history.emplace_back( index, current );
+    }
+
     void MapEconomy::increaseMineCount( const int resourceType )
     {
         const auto it = _minesCount.find( resourceType );
@@ -85,7 +124,7 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            Node & newTile = rawData.getNode( newPosition );
+            Node & newTile = rawData.getNodeToUpdate( newPosition );
 
             if ( Maps::GetApproximateDistance( centerIndex, newTile.index ) > distanceLimit ) {
                 previousNode.type = NodeType::BORDER;
@@ -150,7 +189,7 @@ namespace Maps::Random_Generator
         }
 
         for ( uint8_t direction = 0; direction < 4; ++direction ) {
-            Node & adjacent = data.getNode( position + directionOffsets[direction] );
+            Node & adjacent = data.getNodeToUpdate( position + directionOffsets[direction] );
 
             if ( adjacent.index == -1 || adjacent.region == id ) {
                 continue;
@@ -161,7 +200,7 @@ namespace Maps::Random_Generator
                 break;
             }
 
-            Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );
+            Node & twoAway = data.getNodeToUpdate( position + directionOffsets[direction] + directionOffsets[direction] );
             if ( twoAway.index == -1 || twoAway.type != NodeType::OPEN ) {
                 continue;
             }
@@ -174,7 +213,7 @@ namespace Maps::Random_Generator
                 adjacent.type = NodeType::PATH;
                 twoAway.type = NodeType::PATH;
 
-                Node & stepBack = data.getNode( position - directionOffsets[direction] );
+                Node & stepBack = data.getNodeToUpdate( position - directionOffsets[direction] );
                 if ( stepBack.index != -1 ) {
                     stepBack.type = NodeType::PATH;
                 }

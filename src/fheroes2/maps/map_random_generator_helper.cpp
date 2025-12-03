@@ -230,7 +230,7 @@ namespace
     void markNodeAsType( Maps::Random_Generator::NodeCache & data, const fheroes2::Point position, const Maps::Random_Generator::NodeType type )
     {
         if ( Maps::isValidAbsPoint( position.x, position.y ) ) {
-            data.getNode( position ).type = type;
+            data.getNodeToUpdate( position ).type = type;
         }
     }
 }
@@ -625,6 +625,7 @@ namespace Maps::Random_Generator
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
+
         if ( canFitObject( data, objectInfo, tilePos, true ) && putObjectOnMap( mapFormat, tile, groupType, type ) ) {
             markObjectPlacement( data, objectInfo, tilePos );
             return true;
@@ -704,7 +705,7 @@ namespace Maps::Random_Generator
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
-            data.getNode( bottomIndex ).type = NodeType::PATH;
+            data.getNodeToUpdate( bottomIndex ).type = NodeType::PATH;
             Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
             Maps::updateRoadOnTile( mapFormat, nextIndex, true );
         }
@@ -820,7 +821,7 @@ namespace Maps::Random_Generator
 
                 const auto & routeToGroup = findRoadFromIndex( data, mapFormat.width, region.id, node.index );
                 for ( const auto & step : routeToGroup ) {
-                    data.getNode( step ).type = NodeType::PATH;
+                    data.getNodeToUpdate( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );
                 }
 
