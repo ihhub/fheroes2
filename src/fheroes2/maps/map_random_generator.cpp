@@ -373,7 +373,6 @@ namespace Maps::Random_Generator
 
                 const int factor = regionCount / config.playerCount;
                 const bool isPlayerRegion = ( layer == 1 ) && ( ( i % factor ) == 0 );
-                const bool isInnerRegion = ( layer == 0 );
 
                 const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
                 const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
@@ -381,7 +380,8 @@ namespace Maps::Random_Generator
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                const RegionType type = isPlayerRegion ? RegionType::STARTING : ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
+                const RegionType innerType = ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
+                const RegionType type = isPlayerRegion ? RegionType::STARTING : innerType;
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,

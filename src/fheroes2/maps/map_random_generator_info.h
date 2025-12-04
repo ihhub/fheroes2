@@ -165,11 +165,11 @@ namespace Maps::Random_Generator
                 const RegionType regionType )
             : id( regionIndex )
             , centerIndex( centerNode.index )
+            , type( regionType )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
             , treasureLimit( treasure )
-            , type( regionType )
         {
             assert( expectedSize > 0 );
 
