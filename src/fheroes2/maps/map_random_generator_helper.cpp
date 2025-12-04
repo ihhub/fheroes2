@@ -365,7 +365,7 @@ namespace Maps::Random_Generator
                 break;
             }
 
-            const bool comeFromStraight = !Direction::isDiagonal( Maps::GetDirection( currentNode._from, currentNodeIdx ) );
+            const bool comeFromStraight = !Direction::isDiagonal( currentNode._direction );
 
             if ( comeFromStraight && currentNodeIdx != start && currentNode._cost < bestRoadCost && world.getTile( currentNodeIdx ).isRoad() ) {
                 bestRoadIndex = currentNodeIdx;
@@ -379,18 +379,20 @@ namespace Maps::Random_Generator
 
                 const bool isDiagonal = Direction::isDiagonal( direction );
                 // Edge case: fix mine connections
-                if ( isDiagonal && fromActionTile && currentNodeIdx == start ) {
+                if ( fromActionTile && currentNodeIdx == start && isDiagonal ) {
                     continue;
                 }
 
                 // Edge case: avoid tight turns
-                if ( isDiagonal && currentNode._from != -1 && ( currentNode._direction == Direction::LEFT || currentNode._direction == Direction::RIGHT )
-                     && cache[currentNode._from]._direction == Direction::BOTTOM ) {
-                    continue;
-                }
+                if ( isDiagonal && currentNode._from != -1 ) {
+                    const int previousDirection = cache[currentNode._from]._direction;
 
-                if ( isDiagonal && currentNode._from != -1 && Direction::isDiagonal( cache[currentNode._from]._direction ) ) {
-                    continue;
+                    if ( Direction::isDiagonal( previousDirection ) ) {
+                        continue;
+                    }
+                    if ( previousDirection == Direction::BOTTOM && ( currentNode._direction == Direction::LEFT || currentNode._direction == Direction::RIGHT ) ) {
+                        continue;
+                    }
                 }
 
                 const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, direction );
@@ -398,7 +400,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
-                const Maps::Random_Generator::Node & other = nodes.getNode( newIndex );
+                const Node & other = nodes.getNode( newIndex );
 
                 if ( other.region != regionId || ( other.type != Maps::Random_Generator::NodeType::OPEN && other.type != Maps::Random_Generator::NodeType::PATH ) ) {
                     continue;
@@ -423,20 +425,16 @@ namespace Maps::Random_Generator
             return result;
         }
 
-        int count = 0;
         for ( int32_t currentStep = bestRoadIndex;; ) {
-            ++count;
             const RoadBuilderNode & rbNode = cache[static_cast<size_t>( currentStep )];
 
             // Adding additional 0 cost road step to fix road transitions to compensate for missing sprites
-            if ( count == 2 ) {
+            if ( result.size() == 1 ) {
                 if ( rbNode._direction == Direction::BOTTOM_RIGHT ) {
-                    const int32_t additionalStep = Maps::GetDirectionIndex( currentStep, Direction::LEFT );
-                    result.emplace_back( additionalStep );
+                    result.emplace_back( Maps::GetDirectionIndex( currentStep, Direction::LEFT ) );
                 }
                 else if ( rbNode._direction == Direction::BOTTOM_LEFT ) {
-                    const int32_t additionalStep = Maps::GetDirectionIndex( currentStep, Direction::RIGHT );
-                    result.emplace_back( additionalStep );
+                    result.emplace_back( Maps::GetDirectionIndex( currentStep, Direction::RIGHT ) );
                 }
             }
 
@@ -575,9 +573,7 @@ namespace Maps::Random_Generator
 
     void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
-        auto updateObjectArea = [&data, &mainTilePos]( const auto & partInfo ) { markNodeAsType( data, mainTilePos + partInfo.tileOffset, NodeType::OBSTACLE ); };
-
-        iterateOverObjectParts( info, updateObjectArea );
+        iterateOverObjectParts( info, [&data, &mainTilePos]( const auto & partInfo ) { markNodeAsType( data, mainTilePos + partInfo.tileOffset, NodeType::OBSTACLE ); } );
 
         if ( !MP2::isOffGameActionObject( info.objectType ) ) {
             return;
