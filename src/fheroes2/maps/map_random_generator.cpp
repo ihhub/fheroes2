@@ -603,6 +603,8 @@ namespace Maps::Random_Generator
             }
         }
 
+        Maps::updateMapPlayers( mapFormat );
+
         // Set random map name and description to be unique.
         mapFormat.name = "Random map " + std::to_string( generatorSeed );
         mapFormat.description = "Randomly generated map of " + std::to_string( width ) + "x" + std::to_string( height ) + " with seed " + std::to_string( generatorSeed )
