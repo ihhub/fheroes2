@@ -359,6 +359,7 @@ namespace Maps::Random_Generator
 
         const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
 
+        int placedPlayers = 0;
         for ( size_t layer = 0; layer < mapLayers.size(); ++layer ) {
             const int regionCount = mapLayers[layer].first;
             const double startingAngle = Rand::GetWithGen( 0, 360, randomGenerator );
@@ -371,23 +372,29 @@ namespace Maps::Random_Generator
                 const int y = height / 2 + static_cast<int>( sin( radians ) * distance );
                 const int centerTile = mapBoundsCheck( x, y );
 
-                const int factor = regionCount / config.playerCount;
-                const bool isPlayerRegion = ( layer == 1 ) && ( ( i % factor ) == 0 );
+                const int factor = regionCount * placedPlayers / config.playerCount;
+                const bool isPlayerRegion = ( layer == 1 && factor == i );
                 const bool isInnerRegion = ( layer == 0 );
 
                 const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
-                const int regionColor = isPlayerRegion ? i / factor : neutralColorIndex;
+                const int regionColor = isPlayerRegion ? placedPlayers : neutralColorIndex;
                 const int32_t treasureLimit = isPlayerRegion ? regionConfiguration.treasureValueLimit : regionConfiguration.treasureValueLimit * 2;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, isInnerRegion );
 
+                if ( isPlayerRegion ) {
+                    ++placedPlayers;
+                }
+
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
                                      << Color::String( Color::IndexToColor( regionColor ) ) )
             }
         }
+
+        assert( placedPlayers == config.playerCount );
 
         // Step 3. Grow all regions one step at the time so they would compete for space.
         bool stillRoomToExpand = true;
@@ -431,8 +438,7 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
-                       "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
+            DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Region #" << region.id << " of size " << region.nodes.size() << " tiles has " << region.neighbours.size() << " neighbours" )
 
             std::set<int32_t> extraNodes;
             for ( const Node & node : region.nodes ) {
@@ -456,7 +462,6 @@ namespace Maps::Random_Generator
             for ( const int32_t extraNodeIndex : extraNodes ) {
                 Node & extra = data.getNode( extraNodeIndex );
                 region.nodes.emplace_back( extra );
-                DEBUG_LOG( DBG_DEVEL, DBG_TRACE, "Extra ground tile at " << extra.index << " attaching to region " << region.id )
                 extra.region = region.id;
                 extra.type = NodeType::BORDER;
             }
