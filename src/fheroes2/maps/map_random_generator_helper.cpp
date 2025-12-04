@@ -572,11 +572,6 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        const ObjectInfo & townObjectInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
-        const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
-
-        world.addCastle( tile.GetIndex(), race, color );
-
         markObjectPlacement( data, basementInfo, tilePos );
         markObjectPlacement( data, castleInfo, tilePos );
 

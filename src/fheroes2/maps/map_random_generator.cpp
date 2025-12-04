@@ -603,6 +603,7 @@ namespace Maps::Random_Generator
             }
         }
 
+        Maps::updatePlayerRelatedObjects( mapFormat );
         Maps::updateMapPlayers( mapFormat );
 
         // Set random map name and description to be unique.
