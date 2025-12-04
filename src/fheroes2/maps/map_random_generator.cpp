@@ -346,7 +346,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, false } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -381,7 +381,8 @@ namespace Maps::Random_Generator
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, isInnerRegion );
+                const RegionType type = isPlayerRegion ? RegionType::STARTING : ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
 
                 DEBUG_LOG( DBG_DEVEL, DBG_TRACE,
                            "Region " << regionID << " defined. Location " << centerTile << ", " << Ground::String( groundType ) << " terrain, owner "
@@ -575,7 +576,7 @@ namespace Maps::Random_Generator
         const auto & strongGuard = getMonstersByValue( config.monsterStrength, 7500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                if ( region.isInner && mapRegions[regionId].isInner ) {
+                if ( region.type == mapRegions[regionId].type ) {
                     placeMonster( mapFormat, tileIndex, strongGuard );
                 }
                 else {
