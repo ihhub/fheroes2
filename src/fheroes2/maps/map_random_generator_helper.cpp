@@ -21,7 +21,6 @@
 #include "map_random_generator_helper.h"
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -43,7 +42,6 @@
 #include "maps_tiles_helper.h"
 #include "monster.h"
 #include "mp2.h"
-#include "race.h"
 #include "rand.h"
 #include "ui_map_object.h"
 #include "world.h"
