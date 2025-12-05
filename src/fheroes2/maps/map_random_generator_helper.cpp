@@ -387,7 +387,7 @@ namespace Maps::Random_Generator
                 if ( isDiagonal && currentNode._from != -1 ) {
                     const int previousDirection = cache[currentNode._from]._direction;
 
-                    if ( Direction::isDiagonal( previousDirection ) ) {
+                    if ( previousDirection != direction && Direction::isDiagonal( previousDirection ) ) {
                         continue;
                     }
                     if ( previousDirection == Direction::BOTTOM && ( currentNode._direction == Direction::LEFT || currentNode._direction == Direction::RIGHT ) ) {
