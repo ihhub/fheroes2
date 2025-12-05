@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3707,6 +3707,13 @@ msgstr "Tệp để Tải:"
 msgid "Terrain object"
 msgstr "Đối tượng địa hình"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Tên của bản đồ hiện được chọn."
+
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
@@ -3726,17 +3733,35 @@ msgstr "Nhấp để áp dụng độ phân giải đã chọn."
 msgid "Disable All Items"
 msgstr "Xem Phép"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Chọn Kỹ năng:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Không có phép thuật để niệm chú."
 
 msgid "Select Spell:"
 msgstr "Chọn Phép:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Chọn Bảo vật:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Tên của bản đồ hiện được chọn."
+
 msgid "Select Monster:"
 msgstr "Chọn Quái vật:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Tên của bản đồ hiện được chọn."
 
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"

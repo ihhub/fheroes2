@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3717,6 +3717,13 @@ msgstr "Файл за зареждане:"
 msgid "Terrain object"
 msgstr "Режим терен"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Името на текущо избраната карта."
+
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
@@ -3736,17 +3743,35 @@ msgstr "Кликни, за да приложиш избраната резолю
 msgid "Disable All Items"
 msgstr "Преглед на магиите"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Избери умение:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Няма магии за правене."
 
 msgid "Select Spell:"
 msgstr "Избери заклинание:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Избери артефакт:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Името на текущо избраната карта."
+
 msgid "Select Monster:"
 msgstr "Избери чудовище:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Името на текущо избраната карта."
 
 msgid "Select Hero:"
 msgstr "Избери герой:"

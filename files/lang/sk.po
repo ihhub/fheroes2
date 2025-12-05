@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3696,6 +3696,13 @@ msgstr "Nahrať súbor:"
 msgid "Terrain object"
 msgstr "Režim terénu"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
 
@@ -3715,17 +3722,35 @@ msgstr "Klikni pre výber zvoleného rozlíšenia."
 msgid "Disable All Items"
 msgstr "Zobraz kúzla"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Žiadne kúzla na čarovanie."
 
 msgid "Select Spell:"
 msgstr "Zvoľ kúzlo:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Zvoľ artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Select Monster:"
 msgstr "Zvoľ bojovníka:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Názov momentálne zvolenej mapy."
 
 msgid "Select Hero:"
 msgstr "Zvoľ hrdinu:"

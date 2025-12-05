@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3673,6 +3673,13 @@ msgstr "Datei zum Laden:"
 msgid "Terrain object"
 msgstr "Geländeobjekt"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Der Name der aktuell ausgewählten Karte."
+
 msgid "Accept the choice made."
 msgstr "Die getroffene Wahl bestätigen."
 
@@ -3692,17 +3699,35 @@ msgstr "Klicken um die ausgewählte Auflösung anzuwenden."
 msgid "Disable All Items"
 msgstr "Zaubersprüche anzeigen"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Fertigkeit auswählen:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Keine Zaubersprüche zur Verfügung."
 
 msgid "Select Spell:"
 msgstr "Zauberspruch auswählen:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Artefakt auswählen:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Der Name der aktuell ausgewählten Karte."
+
 msgid "Select Monster:"
 msgstr "Monster auswählen:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Der Name der aktuell ausgewählten Karte."
 
 msgid "Select Hero:"
 msgstr "Held auswählen:"

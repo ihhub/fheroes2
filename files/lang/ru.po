@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-09-10 15:29+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3674,6 +3674,13 @@ msgstr "Загрузить файл:"
 msgid "Terrain object"
 msgstr "Объект ландшафта"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Название выбранной карты."
+
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
 
@@ -3693,17 +3700,35 @@ msgstr "Нажмите, чтобы показать заклинания тол�
 msgid "Disable All Items"
 msgstr "Просмотреть заклинания"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Выберите навык:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Нет заклинаний."
 
 msgid "Select Spell:"
 msgstr "Выберите заклинание:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Выберите артефакт:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Название выбранной карты."
+
 msgid "Select Monster:"
 msgstr "Выберите существо:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Название выбранной карты."
 
 msgid "Select Hero:"
 msgstr "Выберите героя:"

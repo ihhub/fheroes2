@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
-"PO-Revision-Date: 2025-11-18 14:47+0100\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
+"PO-Revision-Date: 2025-12-03 17:37+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -1119,13 +1119,11 @@ msgstr "Återställ till standardinställningar."
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
 
-#, fuzzy
 msgid "Click to set this hero to be human-controlled."
-msgstr "Klicka här för att välja denna färgen."
+msgstr "Klicka för att ange denna hjälte som spelarkontrollerad."
 
-#, fuzzy
 msgid "Click to set this hero to be AI-controlled."
-msgstr "Klicka här för att välja denna färgen."
+msgstr "Klicka för att ange denna hjälte som AI-kontrollerad."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} mot %{race2} %{name2}"
@@ -3481,38 +3479,32 @@ msgstr "Steg:"
 msgid "Uncharted Territory"
 msgstr "Outforskat Område"
 
-#, fuzzy
 msgid "Random Map Generator"
-msgstr "Slumpad Varelse"
+msgstr "Slumpkartgenerator"
 
-#, fuzzy
 msgid "rmg|Player count"
-msgstr "Ange spelarantal"
+msgstr "Spelarantal"
 
 msgid "rmg|Map layout"
-msgstr ""
+msgstr "Kartplan"
 
-#, fuzzy
 msgid "rmg|Water percentage"
-msgstr "Ange havsprocent"
+msgstr "Havsprocent"
 
-#, fuzzy
 msgid "rmg|Monster strength"
-msgstr "Slumpad Varelse - starkt"
+msgstr "Varelsestyrka"
 
 msgid "rmg|Resource availability"
-msgstr ""
+msgstr "Resurstillgänglighet"
 
 msgid "rmg|Map seed"
-msgstr ""
+msgstr "Kartseed"
 
-#, fuzzy
 msgid "Click to generate a new map."
-msgstr "Klicka för att aktivera alla föremål"
+msgstr "Klicka för generera en ny karta."
 
-#, fuzzy
 msgid "Return to the previous menu."
-msgstr "Återgå till föregående menyalternativ."
+msgstr "Återgå till föregående meny."
 
 msgid "Cost per troop:"
 msgstr "Kostnad per trupp:"
@@ -3648,6 +3640,12 @@ msgstr "Fil att Ladda:"
 msgid "Terrain object"
 msgstr "Terrängföremål"
 
+msgid "There is nothing to select from."
+msgstr "Det finns inget att välja."
+
+msgid "There are no castles to select from."
+msgstr "Det finns inga slott att välja."
+
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
@@ -3663,17 +3661,32 @@ msgstr "Klicka för att inaktivera alla föremål."
 msgid "Disable All Items"
 msgstr "Inaktivera Alla Föremål"
 
+msgid "There are no secondary skills to select from."
+msgstr "Det finns inga sekundära förmågor att välja."
+
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
+
+msgid "There are no spells to select."
+msgstr "Det finns inga besvärjelser att välja."
 
 msgid "Select Spell:"
 msgstr "Välj Besvärjelse"
 
+msgid "There are no artifacts to select from."
+msgstr "Det finns inga artefakter att välja."
+
 msgid "Select Artifact:"
 msgstr "Välj Artefakt:"
 
+msgid "There are no monsters to select from."
+msgstr "Det finns inga varelser att välja."
+
 msgid "Select Monster:"
 msgstr "Välj Varelse:"
+
+msgid "There are no heroes to select from."
+msgstr "Det finns inga hjältar att välja."
 
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
@@ -3806,7 +3819,7 @@ msgid "Resurrection"
 msgstr "Resurrection"
 
 msgid "This map is made for \"%{game-version}\" version of the game."
-msgstr ""
+msgstr "Denna karta är skapad för \"%{game-version}\"-versionen av spelet."
 
 msgid "Map Type"
 msgstr "Karttyp"
@@ -9291,41 +9304,40 @@ msgid "Ocean"
 msgstr "Hav"
 
 msgid "map_layout|Mirrored"
-msgstr ""
+msgstr "Speglad"
 
 msgid "map_layout|Balanced"
-msgstr ""
+msgstr "Balanserad"
 
 msgid "map_layout|Islands"
-msgstr ""
+msgstr "Skärgård"
 
 msgid "map_layout|Pyramid"
-msgstr ""
+msgstr "Pyramid"
 
 msgid "map_layout|Quest"
 msgstr ""
 
 msgid "resource_density|Scarce"
-msgstr ""
+msgstr "Glest"
 
 msgid "resource_density|Normal"
-msgstr ""
+msgstr "Normalt"
 
 msgid "resource_density|Abundant"
-msgstr ""
+msgstr "Mycket"
 
 msgid "monster_strength|Weak"
-msgstr ""
+msgstr "Svag"
 
-#, fuzzy
 msgid "monster_strength|Normal"
 msgstr "Normal"
 
 msgid "monster_strength|Strong"
-msgstr ""
+msgstr "Stark"
 
 msgid "monster_strength|Deadly"
-msgstr ""
+msgstr "Dödlig"
 
 msgid "maps|Small"
 msgstr "Liten"

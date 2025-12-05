@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 13:12+0000\n"
+"POT-Creation-Date: 2025-12-02 07:11+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3757,6 +3757,13 @@ msgstr "Lastingsfil:"
 msgid "Terrain object"
 msgstr "Terrengmodus"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Navnet til det utvalgte kartet."
+
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."
 
@@ -3776,17 +3783,35 @@ msgstr "Trykk for å bruke den valgte oppløsningen."
 msgid "Disable All Items"
 msgstr "Vis trolldommer"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Ingen trolldommer tilgjengelige."
 
 msgid "Select Spell:"
 msgstr "Velg trolldom:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Velg en skatt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Navnet til det utvalgte kartet."
+
 msgid "Select Monster:"
 msgstr "Velg monster:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Navnet til det utvalgte kartet."
 
 msgid "Select Hero:"
 msgstr "Velg helt:"
