@@ -59,7 +59,10 @@ namespace Maps::Random_Generator
     void NodeCache::commitTransaction()
     {
         assert( !_transactionRecords.empty() );
+        const size_t record = _transactionRecords.back();
         _transactionRecords.pop_back();
+
+        _history.resize( record );
 
         if ( _transactionRecords.empty() ) {
             _history.clear();
