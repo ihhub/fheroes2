@@ -394,6 +394,7 @@ namespace Maps::Random_Generator
             }
         }
 
+        // If this assertion blows up it means that the code above wasn't capable to place all players on the map.
         assert( placedPlayers == config.playerCount );
 
         // Step 3. Grow all regions one step at the time so they would compete for space.
