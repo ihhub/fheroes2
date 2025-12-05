@@ -346,7 +346,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, false } };
+        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -374,7 +374,6 @@ namespace Maps::Random_Generator
 
                 const int factor = regionCount * placedPlayers / config.playerCount;
                 const bool isPlayerRegion = ( layer == 1 && factor == i );
-                const bool isInnerRegion = ( layer == 0 );
 
                 const int groundType = isPlayerRegion ? Rand::GetWithGen( playerStartingTerrain, randomGenerator ) : Rand::GetWithGen( neutralTerrain, randomGenerator );
                 const int regionColor = isPlayerRegion ? placedPlayers : neutralColorIndex;
@@ -382,7 +381,9 @@ namespace Maps::Random_Generator
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = data.getNode( centerTile );
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, isInnerRegion );
+                const RegionType innerType = ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
+                const RegionType type = isPlayerRegion ? RegionType::STARTING : innerType;
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
 
                 if ( isPlayerRegion ) {
                     ++placedPlayers;
@@ -581,7 +582,7 @@ namespace Maps::Random_Generator
         const auto & strongGuard = getMonstersByValue( config.monsterStrength, 7500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                if ( region.isInner && mapRegions[regionId].isInner ) {
+                if ( region.type == mapRegions[regionId].type ) {
                     placeMonster( mapFormat, tileIndex, strongGuard );
                 }
                 else {

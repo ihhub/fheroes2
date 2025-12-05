@@ -138,6 +138,13 @@ namespace Maps::Random_Generator
         std::vector<Node> _data;
     };
 
+    enum class RegionType : uint8_t
+    {
+        STARTING,
+        EXPANSION,
+        NEUTRAL
+    };
+
     struct Region final
     {
         uint32_t id{ 0 };
@@ -150,19 +157,19 @@ namespace Maps::Random_Generator
         int colorIndex{ neutralColorIndex };
         int groundType{ Ground::GRASS };
         int32_t treasureLimit{ 0 };
-        bool isInner{ false };
+        RegionType type{ RegionType::NEUTRAL };
 
         Region() = default;
 
         Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const int32_t treasure,
-                const bool inner )
+                const RegionType regionType )
             : id( regionIndex )
             , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
             , treasureLimit( treasure )
-            , isInner( inner )
+            , type( regionType )
         {
             assert( expectedSize > 0 );
 
