@@ -1527,6 +1527,7 @@ namespace Maps
                     if ( hero ) {
                         hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
                         hero->SetColor( color );
+                        world.getTile( static_cast<int32_t>( tileId ) ).setHero( hero );
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {

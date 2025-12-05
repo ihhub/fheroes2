@@ -53,6 +53,7 @@ namespace
 {
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
+    constexpr int randomHeroIndex{ 7 };
     constexpr int maxPlacementAttempts{ 30 };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
@@ -545,13 +546,6 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
-
-        if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( mapFormat.tiles[bottomIndex] ) ) {
-            // Update road if there is one in front of the town/castle entrance.
-            Maps::updateRoadSpriteOnTile( mapFormat, bottomIndex, false );
-        }
-
         // By default use random (default) army for the neutral race town/castle.
         const PlayerColor color = Color::IndexToColor( region.colorIndex );
         if ( color == PlayerColor::NONE ) {
@@ -570,6 +564,13 @@ namespace Maps::Random_Generator
 
         if ( !putObjectOnMap( mapFormat, world.getTile( tile.GetIndex() + 1 ), ObjectGroup::LANDSCAPE_FLAGS, Color::GetIndex( color ) * 2 + 1 ) ) {
             return false;
+        }
+
+        const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
+
+        if ( color != PlayerColor::NONE ) {
+            const int32_t spriteIndex = Color::GetIndex( color ) * randomHeroIndex + ( randomHeroIndex - 1 );
+            putObjectOnMap( mapFormat, world.getTile( bottomIndex ), ObjectGroup::KINGDOM_HEROES, spriteIndex );
         }
 
         markObjectPlacement( data, basementInfo, tilePos );

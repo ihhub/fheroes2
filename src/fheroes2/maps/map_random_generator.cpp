@@ -515,6 +515,7 @@ namespace Maps::Random_Generator
                 }
             }
         }
+        Maps::updatePlayerRelatedObjects( mapFormat );
 
         // Step 6. Set up region connectors based on frequency settings and border length.
         for ( Region & region : mapRegions ) {
@@ -603,7 +604,6 @@ namespace Maps::Random_Generator
             }
         }
 
-        Maps::updatePlayerRelatedObjects( mapFormat );
         Maps::updateMapPlayers( mapFormat );
 
         // Set random map name and description to be unique.
