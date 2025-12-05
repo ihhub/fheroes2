@@ -149,7 +149,6 @@ namespace Maps::Random_Generator
     {
         uint32_t id{ 0 };
         int32_t centerIndex{ -1 };
-        RegionType type{ RegionType::NEUTRAL };
         std::set<uint32_t> neighbours;
         std::vector<std::reference_wrapper<Node>> nodes;
         std::map<uint32_t, int32_t> connections;
@@ -158,6 +157,7 @@ namespace Maps::Random_Generator
         int colorIndex{ neutralColorIndex };
         int groundType{ Ground::GRASS };
         int32_t treasureLimit{ 0 };
+        RegionType type{ RegionType::NEUTRAL };
 
         Region() = default;
 
