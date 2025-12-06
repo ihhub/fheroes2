@@ -23,7 +23,6 @@ jobs:
       run: |
         mkdir anim
         mkdir data
-        mkdir maps
         mkdir music
     - name: build
       run: |
