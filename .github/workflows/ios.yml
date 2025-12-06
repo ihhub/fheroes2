@@ -18,7 +18,8 @@ jobs:
         /usr/bin/xcodebuild -version
     - name: build
       run: |
-        xcodebuild -project ios/fheroes2.xcodeproj \
+        cd ios
+        xcodebuild -project fheroes2.xcodeproj \
           -scheme fheroes2 \
           -destination 'platform=iOS Simulator,name=iPhone 16' \
           build
