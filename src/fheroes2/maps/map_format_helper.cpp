@@ -99,54 +99,6 @@ namespace
         }
     }
 
-    // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
-    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
-    {
-        assert( map.width == world.w() && map.width == world.h() );
-
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
-
-        // Capturable objects exist in Miscellaneous and Mines groups.
-        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
-        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-
-        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
-            for ( const auto & object : map.tiles[tileId].objects ) {
-                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
-                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
-
-                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
-                }
-                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
-                    const auto & metadata = heroObjects[object.index].metadata;
-                    const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
-
-                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
-                    if ( hero ) {
-                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
-                        hero->SetColor( color );
-                    }
-                }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                    assert( object.index < miscObjects.size() );
-
-                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
-
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
-                }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
-                    assert( object.index < minesObjects.size() );
-
-                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
-
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
-                }
-            }
-        }
-    }
-
     // This function only checks for Streams and ignores River Deltas.
     bool isStreamPresent( const Maps::Map_Format::TileInfo & mapTile )
     {
@@ -1546,6 +1498,54 @@ namespace Maps
     bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex )
     {
         return getRiverDeltaDirectionByIndex( group, objectIndex ) != Direction::UNKNOWN;
+    }
+
+    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
+    {
+        assert( map.width == world.w() && map.width == world.h() );
+
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+        // Capturable objects exist in Miscellaneous and Mines groups.
+        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+
+        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+            for ( const auto & object : map.tiles[tileId].objects ) {
+                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
+                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+
+                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
+                }
+                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    const auto & metadata = heroObjects[object.index].metadata;
+                    const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+
+                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
+                    if ( hero ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
+                        hero->SetColor( color );
+                        world.getTile( static_cast<int32_t>( tileId ) ).setHero( hero );
+                    }
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    assert( object.index < miscObjects.size() );
+
+                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    assert( object.index < minesObjects.size() );
+
+                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+            }
+        }
     }
 
     bool updateMapPlayers( Map_Format::MapFormat & map )

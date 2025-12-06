@@ -71,6 +71,9 @@ namespace Maps
 
     bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex );
 
+    // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
+    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map );
+
     bool updateMapPlayers( Map_Format::MapFormat & map );
 
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
