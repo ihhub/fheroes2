@@ -431,21 +431,6 @@ namespace Maps::Random_Generator
 
         MapEconomy mapEconomy;
 
-        auto roadBuilder = [&mapFormat, &data, width]( const int32_t tileIndex, const uint32_t regionId, const bool placeRoad ) {
-            const auto & otherPath = findRoadFromIndex( data, width, regionId, tileIndex );
-
-            if ( otherPath.empty() ) {
-                return false;
-            }
-            for ( const auto & step : otherPath ) {
-                data.getNodeToUpdate( step ).type = NodeType::PATH;
-                if ( placeRoad ) {
-                    forceTempRoadOnTile( mapFormat, step );
-                }
-            }
-            return true;
-        };
-
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 continue;
@@ -561,7 +546,10 @@ namespace Maps::Random_Generator
                 continue;
             }
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                roadBuilder( tileIndex, region.id, true );
+                for ( const auto & step : findPathToNearestRoad( data, width, region.id, tileIndex ) ) {
+                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                    forceTempRoadOnTile( mapFormat, step );
+                }
             }
         }
 
@@ -587,8 +575,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, false );
-        Maps::updateRoadSpritesInArea( mapFormat, Maps::GetIndexFromAbsPoint( width / 2, height / 2 ), width, true );
+        Maps::updateAllRoads( mapFormat );
 
         // Visual debug
         for ( const Region & region : mapRegions ) {

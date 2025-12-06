@@ -337,7 +337,7 @@ namespace Maps::Random_Generator
         return objectIndex;
     }
 
-    std::vector<int32_t> findRoadFromIndex( const Maps::Random_Generator::NodeCache & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start )
+    std::vector<int32_t> findPathToNearestRoad( const Maps::Random_Generator::NodeCache & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start )
     {
         assert( start > 0 );
         assert( mapWidth > 0 );
@@ -378,12 +378,12 @@ namespace Maps::Random_Generator
                 }
 
                 const bool isDiagonal = Direction::isDiagonal( direction );
-                // Edge case: fix mine connections
+                // Edge case: force straight roads out of action tiles (e.g. mines)
                 if ( fromActionTile && currentNodeIdx == start && isDiagonal ) {
                     continue;
                 }
 
-                // Edge case: avoid tight turns
+                // Edge case: avoid tight road turns for a better visuals
                 if ( isDiagonal && currentNode._from != -1 ) {
                     const int previousDirection = cache[currentNode._from]._direction;
 
@@ -585,7 +585,7 @@ namespace Maps::Random_Generator
     // Wouldn't render correctly but will speed up placement
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
-        Maps::writeRoadSpriteToTileInfo( mapFormat.tiles[tileIndex], tileIndex, 0 );
+        Maps::writeRoadSpriteToTile( mapFormat.tiles[tileIndex], tileIndex, 0 );
     }
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
@@ -621,7 +621,7 @@ namespace Maps::Random_Generator
             markObjectPlacement( data, objectInfo, tilePos );
 
             const int32_t tileIndex = tile.GetIndex();
-            const auto & roadToObject = findRoadFromIndex( data, mapFormat.width, data.getNode( tileIndex ).region, tileIndex );
+            const auto & roadToObject = findPathToNearestRoad( data, mapFormat.width, data.getNode( tileIndex ).region, tileIndex );
             if ( roadToObject.empty() ) {
                 data.rollbackTransaction();
                 return false;
@@ -809,7 +809,7 @@ namespace Maps::Random_Generator
                     markObjectPlacement( data, objectInfo, position );
                 }
 
-                const auto & routeToGroup = findRoadFromIndex( data, mapFormat.width, region.id, node.index );
+                const auto & routeToGroup = findPathToNearestRoad( data, mapFormat.width, region.id, node.index );
                 if ( routeToGroup.empty() ) {
                     data.rollbackTransaction();
                     continue;

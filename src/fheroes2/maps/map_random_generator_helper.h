@@ -66,7 +66,7 @@ namespace Maps::Random_Generator
     MonsterSelection getMonstersByValue( const MonsterStrength monsterStrength, int32_t protectedObjectValue );
     std::pair<ObjectGroup, int32_t> getRandomTreasure( const int32_t goldValueLimit, Rand::PCG32 & randomGenerator );
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType );
-    std::vector<int32_t> findRoadFromIndex( const Maps::Random_Generator::NodeCache & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start );
+    std::vector<int32_t> findPathToNearestRoad( const Maps::Random_Generator::NodeCache & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start );
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator );
 
     bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders );
