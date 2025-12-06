@@ -1,0 +1,28 @@
+name: iOS
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+
+jobs:
+  ios:
+    name: iOS
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v6
+    - name: check Xcode version
+      run: |
+        /usr/bin/xcodebuild -version
+    - name: Install dependencies
+      run: |
+        script/android/install_packages.sh
+    - name: build
+      run: |
+        cd ios
+        xcodebuild -project fheroes2.xcodeproj \
+          -scheme fheroes2 \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          build
