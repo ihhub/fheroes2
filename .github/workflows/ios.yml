@@ -15,10 +15,11 @@ jobs:
     steps:
     - uses: actions/checkout@v6
     - name: check Xcode version
-        run: /usr/bin/xcodebuild -version
+      run: |
+        /usr/bin/xcodebuild -version
     - name: build
-        run: |
-          xcodebuild -project ios/fheroes2.xcodeproj \
-            -scheme fheroes2 \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
-            build
+      run: |
+        xcodebuild -project ios/fheroes2.xcodeproj \
+          -scheme fheroes2 \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          build
