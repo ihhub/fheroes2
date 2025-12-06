@@ -19,6 +19,12 @@ jobs:
     - name: Install dependencies
       run: |
         ./script/ios/install_packages.sh
+    - name: Prepare build
+      run: |
+        mkdir anim
+        mkdir data
+        mkdir maps
+        mkdir music
     - name: build
       run: |
         cd ios
