@@ -485,10 +485,6 @@ public:
 
     uint32_t GetMobilityIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
-                    const fheroes2::SupportedLanguage language );
-    void MeetingDialog( Heroes & );
-
     bool Recruit( const PlayerColor col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );
 
@@ -722,6 +718,51 @@ public:
     // Update French language-specific characters to match CP1252.
     // Call this method only when loading maps made with original French editor.
     void fixFrenchCharactersInName();
+
+    // The below code is related to UI.
+    // It was moved here to have visual separation from the rest of the code.
+    enum class DialogResult : uint8_t
+    {
+        NextHero,
+        PreviousHero,
+        Dismiss,
+        Exit,
+        Recruit,
+    };
+
+    struct DialogOptions final
+    {
+        enum class Mode : uint8_t
+        {
+            // Normal mode when a player can do adjustments.
+            Normal,
+            // Limited mode allow to make changes in hero but cannot dismiss him.
+            Limited,
+            // View only mode is used in battles.
+            ViewOnly,
+            // Recruit mode is used to show a hero for hire.
+            ForRecruit,
+            // Recruit mode but without ability to hire.
+            RecruitToView,
+        };
+
+        Mode mode{ Mode::ViewOnly };
+
+        // Dialog related settings.
+        bool animateDialogFading{ false };
+        bool renderBackgroundDialog{ false };
+
+        bool isEditingMode() const
+        {
+            return ( mode == Mode::Normal ) || ( mode == Mode::Limited );
+        }
+    };
+
+    DialogResult OpenDialog( const DialogOptions & options, const fheroes2::SupportedLanguage language );
+    void MeetingDialog( Heroes & otherHero );
+
+    // Returns true if changes are made.
+    bool openEditorDialog( const fheroes2::SupportedLanguage language );
 
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Heroes & hero );

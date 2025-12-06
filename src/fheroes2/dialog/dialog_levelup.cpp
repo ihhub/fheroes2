@@ -170,7 +170,13 @@ namespace
 
             if ( le.MouseClickLeft( buttonHero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
                 le.reset();
-                hero.OpenDialog( false, true, true, true, true, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+
+                Heroes::DialogOptions options;
+                options.mode = Heroes::DialogOptions::Mode::Limited;
+                options.renderBackgroundDialog = true;
+                options.animateDialogFading = true;
+
+                hero.OpenDialog( options, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
                 display.render();
             }
 
