@@ -1,4 +1,4 @@
-name: Make
+name: iOS
 
 on:
   workflow_call:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  xcode:
+  ios:
     name: iOS
     on: [ 'pull_request', 'push' ]
     runs-on: macos-latest
