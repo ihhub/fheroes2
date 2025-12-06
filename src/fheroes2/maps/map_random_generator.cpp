@@ -27,7 +27,6 @@
 #include <cstddef>
 #include <functional>
 #include <initializer_list>
-#include <list>
 #include <map>
 #include <ostream>
 #include <set>
@@ -51,11 +50,8 @@
 #include "mp2.h"
 #include "rand.h"
 #include "resource.h"
-#include "route.h"
-#include "skill.h"
 #include "translations.h"
 #include "world.h"
-#include "world_pathfinding.h"
 
 namespace
 {
@@ -346,7 +342,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
+        std::vector<Region> mapRegions = { { 0, data.getNodeToUpdate( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -380,7 +376,7 @@ namespace Maps::Random_Generator
                 const int32_t treasureLimit = isPlayerRegion ? regionConfiguration.treasureValueLimit : regionConfiguration.treasureValueLimit * 2;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                Node & centerNode = data.getNode( centerTile );
+                Node & centerNode = data.getNodeToUpdate( centerTile );
                 const RegionType innerType = ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
                 const RegionType type = isPlayerRegion ? RegionType::STARTING : innerType;
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
@@ -462,7 +458,7 @@ namespace Maps::Random_Generator
             }
 
             for ( const int32_t extraNodeIndex : extraNodes ) {
-                Node & extra = data.getNode( extraNodeIndex );
+                Node & extra = data.getNodeToUpdate( extraNodeIndex );
                 region.nodes.emplace_back( extra );
                 extra.region = region.id;
                 extra.type = NodeType::BORDER;
@@ -482,6 +478,9 @@ namespace Maps::Random_Generator
                 const bool useNeutralCastles = ( config.resourceDensity == ResourceDensity::ABUNDANT );
                 const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
                 placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
+            }
+            else {
+                forceTempRoadOnTile( mapFormat, region.centerIndex );
             }
 
             const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
@@ -536,35 +535,20 @@ namespace Maps::Random_Generator
         for ( const Region & region : mapRegions ) {
             for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
-                    placeRandomObstacle( mapFormat, data, node, randomGenerator );
+                    placeBorderObstacle( mapFormat, data, node, randomGenerator );
                 }
             }
         }
 
         // Step 7. Set up pathfinder and generate road network.
-        AIWorldPathfinder pathfinder;
-        pathfinder.reset();
-        const PlayerColor testPlayer = PlayerColor::BLUE;
-
-        // Have to remove fog first otherwise pathfinder won't work
-        for ( int idx = 0; idx < width * height; ++idx ) {
-            world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
-        }
-        world.resetPathfinder();
-        world.updatePassabilities();
-
-        // Set explicit paths
         for ( const Region & region : mapRegions ) {
             if ( region.groundType == Ground::WATER ) {
                 continue;
             }
-
-            pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                const auto & path = pathfinder.buildPath( tileIndex );
-                for ( const auto & step : path ) {
-                    data.getNode( step.GetIndex() ).type = NodeType::PATH;
-                    Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
+                for ( const auto & step : findPathToNearestRoad( data, width, region.id, tileIndex ) ) {
+                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                    forceTempRoadOnTile( mapFormat, step );
                 }
             }
         }
@@ -591,16 +575,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 11: Validate that map is playable.
-        for ( const int32_t start : startingLocations ) {
-            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const int action : actionLocations ) {
-                if ( pathfinder.getDistance( action ) == 0 ) {
-                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
-                    return false;
-                }
-            }
-        }
+        Maps::updateAllRoads( mapFormat );
 
         // Visual debug
         for ( const Region & region : mapRegions ) {
