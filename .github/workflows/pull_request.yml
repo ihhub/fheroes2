@@ -98,3 +98,8 @@ jobs:
     needs:
     - msvc
     uses: ./.github/workflows/make.yml
+  xcode:
+    name: Xcode
+    needs:
+    - msvc
+    uses: ./.github/workflows/xcode.yml

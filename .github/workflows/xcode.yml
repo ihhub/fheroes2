@@ -1,0 +1,24 @@
+name: Make
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+
+jobs:
+  xcode:
+    name: iOS
+    on: [ 'pull_request', 'push' ]
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v6
+    - name: check Xcode version
+        run: /usr/bin/xcodebuild -version
+    - name: build
+        run: |
+          xcodebuild -project ios/fheroes2.xcodeproj \
+            -scheme fheroes2 \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            build
