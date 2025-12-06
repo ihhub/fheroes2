@@ -9,7 +9,6 @@ permissions:
 jobs:
   ios:
     name: iOS
-    on: [ 'pull_request', 'push' ]
     runs-on: macos-latest
     timeout-minutes: 30
     steps:
