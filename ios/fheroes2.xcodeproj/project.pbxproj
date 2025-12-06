@@ -157,9 +157,9 @@
 		EA54669E29FE02FF00A9D8B2 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		EA5466A329FE02FF00A9D8B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EA5466A629FE02FF00A9D8B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		EA67D2A229FE04380004F40F /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = ../../SDL/Xcode/SDL/SDL.xcodeproj; sourceTree = "<group>"; };
+		EA67D2A229FE04380004F40F /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = SDL2/Xcode/SDL/SDL.xcodeproj; sourceTree = "<group>"; };
 		EA67D2CB29FE05030004F40F /* SDL_uikit_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_uikit_main.c; sourceTree = "<group>"; };
-		EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = ../../SDL_mixer/Xcode/SDL_mixer.xcodeproj; sourceTree = "<group>"; };
+		EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = SDL2_mixer/Xcode/SDL_mixer.xcodeproj; sourceTree = "<group>"; };
 		EA67D5F229FE0C8C0004F40F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		EA67D60129FE186F0004F40F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -669,9 +669,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = ShaderTypes.h;
 				SWIFT_VERSION = 5.0;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../SDL/include\"",
+					"\"$(SRCROOT)/SDL2/include\"",
 					"\"$(SRCROOT)/../src\"/**",
-					"\"$(SRCROOT)/../../SDL_mixer/include\"/**",
+					"\"$(SRCROOT)/SDL2_mixer/include\"/**",
 				);
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -705,9 +705,9 @@
 				SWIFT_OBJC_BRIDGING_HEADER = ShaderTypes.h;
 				SWIFT_VERSION = 5.0;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../SDL/include\"",
+					"\"$(SRCROOT)/SDL2/include\"",
 					"\"$(SRCROOT)/../src\"/**",
-					"\"$(SRCROOT)/../../SDL_mixer/include\"/**",
+					"\"$(SRCROOT)/SDL2_mixer/include\"/**",
 				);
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
