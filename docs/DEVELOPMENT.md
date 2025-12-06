@@ -41,13 +41,12 @@ Please follow the instructions below to be able to build the project from source
 * Download and install Xcode on your macos device. Download the iOS SDK during installation.
 * Open `fheroes2.xcodeproj` in the "iOS" folder".
 * Download SDL2 and SDL_mixer source codes from their GitHub repositories's release pages. Make sure you get SDL2 and not SDL3.
-* Paste the SDL2 and SDL_mixer folders in the same parent directory as your fheroes2 source folder. This means that next to the folder containing
-your fheroes2 local clone, you will have the two SDL folders.
-* Remove any version number from the name of the SDL2 and SDL_mixer folder so that their names are respectively `SDL` and `SDL_mixer`.
+* Paste the SDL2 and SDL_mixer folders in `ios` directory of your fheroes2 source folder.
+* Rename newly created folders of SDL2 and SDL_mixer projects into `SDL2` and `SDL2_mixer` respectively.
 * In Xcode SDL and SDL_mixer should now be recognized in the Navigator area, recognized by them not having read names. Open on `SDL_mixer` in the Navigator on the left side.
 * Click "fheroes2" in the Navigator area on the left side of Xcode.
 * In the right side Editor area select "fheroes2" under "Project". Open the `Build Settings` tab. Make sure to set `All` options and scroll down to `Search Paths`.
-* Open up the `User Header Search Paths` and add `$(SRCROOT)/../../SDL/include` to the list of paths.
+* Open up the `User Header Search Paths` and add `$(SRCROOT)/../../SDL2/include` to the list of paths.
 * In the Editor area select "fheroes2" under the "Targets" menu instead of "Projects". Open the "Signing & Capabilities" tab. Under "Signing", add your AppleID in
 the "Team" field.
 * Connect your iOS device to your mac device with the necessary cable. Select the device in the devices in Xcode's upper Toolbar.
