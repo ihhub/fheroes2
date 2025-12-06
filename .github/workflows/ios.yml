@@ -18,7 +18,7 @@ jobs:
         /usr/bin/xcodebuild -version
     - name: Install dependencies
       run: |
-        script/android/install_packages.sh
+        bash script/android/install_packages.sh
     - name: build
       run: |
         cd ios
