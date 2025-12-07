@@ -360,6 +360,7 @@ namespace Maps::Random_Generator
             const int regionCount = mapLayers[layer].first;
             const double startingAngle = Rand::GetWithGen( 0, 360, randomGenerator );
             const double offsetAngle = 360.0 / regionCount;
+            const bool regionCountIsEven = ( regionCount % config.playerCount ) == 0;
             for ( int i = 0; i < regionCount; ++i ) {
                 const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
                 const double distance = mapLayers[layer].second;
@@ -377,8 +378,8 @@ namespace Maps::Random_Generator
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
                 Node & centerNode = mapState.getNodeToUpdate( centerTile );
-                const RegionType innerType = ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
-                const RegionType type = isPlayerRegion ? RegionType::STARTING : innerType;
+                const RegionType neutralType = ( layer == 1 && regionCountIsEven ) ? RegionType::EXPANSION : RegionType::NEUTRAL;
+                const RegionType type = isPlayerRegion ? RegionType::STARTING : neutralType;
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
 
                 if ( isPlayerRegion ) {
@@ -425,10 +426,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 5. Castles and mines placement
-        std::set<int32_t> startingLocations;
-        std::set<int32_t> actionLocations;
-
+        // Step 5. Fix terrain transitions and place Castles
         MapEconomy mapEconomy;
 
         for ( Region & region : mapRegions ) {
@@ -471,7 +469,6 @@ namespace Maps::Random_Generator
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                startingLocations.insert( region.centerIndex );
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
@@ -481,44 +478,6 @@ namespace Maps::Random_Generator
             }
             else {
                 forceTempRoadOnTile( mapFormat, region.centerIndex );
-            }
-
-            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
-
-            const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
-                for ( const int32_t tileIndex : ring ) {
-                    const auto & node = mapState.getNode( tileIndex );
-                    if ( placeMine( mapFormat, mapState, node, resource ) ) {
-                        mapEconomy.increaseMineCount( resource );
-                        actionLocations.insert( tileIndex );
-
-                        const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
-                        return true;
-                    }
-                }
-                return false;
-            };
-
-            if ( tileRings.size() < 4 ) {
-                continue;
-            }
-
-            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
-                        break;
-                    }
-                }
-            }
-
-            for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
-                const int resource = mapEconomy.pickNextMineResource();
-                for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
-                        break;
-                    }
-                }
             }
         }
 
@@ -540,7 +499,21 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 7. Set up pathfinder and generate road network.
+        // Step 7. Place mines.
+        const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
+            for ( const int32_t tileIndex : ring ) {
+                const auto & node = mapState.getNode( tileIndex );
+                if ( placeMine( mapFormat, mapState, node, resource ) ) {
+                    mapEconomy.increaseMineCount( resource );
+
+                    const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
+                    placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
+                    return true;
+                }
+            }
+            return false;
+        };
+
         for ( const Region & region : mapRegions ) {
             if ( region.groundType == Ground::WATER ) {
                 continue;
@@ -549,6 +522,29 @@ namespace Maps::Random_Generator
                 for ( const auto & step : findPathToNearestRoad( mapState, width, region.id, tileIndex ) ) {
                     mapState.getNodeToUpdate( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );
+                }
+            }
+
+            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
+
+            if ( tileRings.size() < 4 ) {
+                continue;
+            }
+
+            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
+                        break;
+                    }
+                }
+            }
+
+            for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
+                const int resource = mapEconomy.pickNextMineResource();
+                for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
+                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
+                        break;
+                    }
                 }
             }
         }
