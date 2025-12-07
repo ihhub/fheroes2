@@ -77,15 +77,20 @@ namespace Maps::Random_Generator
         assert( _transactionRecords.back() == record );
         _transactionRecords.pop_back();
 
+        if ( _history.empty() ) {
+            return;
+        }
+
         for ( size_t index = _history.size() - 1; index > record; --index ) {
             const StateChange & change = _history[index];
             _data[static_cast<size_t>( change.index )] = change.state;
         }
 
-        _history.resize( record );
-
         if ( _transactionRecords.empty() ) {
             _history.clear();
+        }
+        else {
+            _history.resize( record );
         }
     }
 
