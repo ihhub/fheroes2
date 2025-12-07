@@ -229,7 +229,11 @@ namespace
     void markNodeAsType( Maps::Random_Generator::MapStateManager & data, const fheroes2::Point position, const Maps::Random_Generator::NodeType type )
     {
         if ( Maps::isValidAbsPoint( position.x, position.y ) ) {
-            data.getNodeToUpdate( position ).type = type;
+            auto & node = data.getNodeToUpdate( position );
+            // Never override border types (no assert needed; can happen when placing overlapping obstacles)
+            if ( node.type != Maps::Random_Generator::NodeType::BORDER ) {
+                node.type = type;
+            }
         }
     }
 }

@@ -197,7 +197,7 @@ namespace Maps::Random_Generator
             }
         };
 
-        inline void recordStateChange( const int32_t index, const Node & current )
+        void recordStateChange( const int32_t index, const Node & current )
         {
             _history.emplace_back( index, current );
         }
