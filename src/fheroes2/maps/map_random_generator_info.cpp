@@ -68,9 +68,6 @@ namespace Maps::Random_Generator
         if ( _transactionRecords.empty() ) {
             _history.clear();
         }
-        else {
-            _history.resize( record );
-        }
     }
 
     void MapStateManager::rollbackTransaction( const size_t record )
@@ -87,12 +84,10 @@ namespace Maps::Random_Generator
             const StateChange & change = _history[index];
             _data[static_cast<size_t>( change.index )] = change.state;
         }
+        _history.resize( record );
 
         if ( _transactionRecords.empty() ) {
             _history.clear();
-        }
-        else {
-            _history.resize( record );
         }
     }
 
