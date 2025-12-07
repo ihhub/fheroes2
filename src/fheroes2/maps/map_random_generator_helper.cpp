@@ -878,16 +878,20 @@ namespace Maps::Random_Generator
     }
 
     std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, std::vector<int32_t> nodes,
-                                               Rand::PCG32 & randomGenerator )
+                                               const ObjectInfo & objectInfo )
     {
         // Automatically rollback at the end of planning stage
         MapStateTransaction transaction = data.startTransaction();
 
         std::vector<int32_t> options;
 
-        const auto & objectInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, 0 );
-        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-            const int32_t & nodeIndex = Rand::GetWithGen( nodes, randomGenerator );
+        int attempt = 0;
+        for ( const int32_t & nodeIndex : nodes ) {
+            if ( attempt >= maxPlacementAttempts ) {
+                break;
+            }
+            ++attempt;
+
             const fheroes2::Point mapPoint = Maps::GetPoint( nodeIndex );
 
             if ( !canFitObject( data, objectInfo, mapPoint, true ) ) {
@@ -913,8 +917,8 @@ namespace Maps::Random_Generator
         return options;
     }
 
-    std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, Region & region, std::vector<ObjectSet> objectSets,
-                                                                    Rand::PCG32 & randomGenerator )
+    std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, const Region & region,
+                                                                    std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator )
     {
         // Automatically rollback at the end of planning stage
         MapStateTransaction transaction = data.startTransaction();
@@ -924,13 +928,17 @@ namespace Maps::Random_Generator
         int32_t treasureLimit = region.treasureLimit;
         std::vector<std::pair<int32_t, ObjectSet>> objectSetsPlanned;
 
-        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-            if ( treasureLimit <= 0 ) {
+        std::vector<int32_t> options = findOpenTiles( region );
+        Rand::ShuffleWithGen( options, randomGenerator );
+
+        int attempt = 0;
+        for ( const int32_t nodeIndex : options ) {
+            if ( attempt >= maxPlacementAttempts || treasureLimit <= 0 ) {
                 break;
             }
+            ++attempt;
 
-            const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
-            const fheroes2::Point mapPoint = Maps::GetPoint( node.index );
+            const fheroes2::Point mapPoint = Maps::GetPoint( nodeIndex );
 
             for ( const auto & prefab : objectSets ) {
                 if ( !canFitObjectSet( data, prefab, mapPoint ) ) {
@@ -944,7 +952,7 @@ namespace Maps::Random_Generator
                     markObjectPlacement( data, objectInfo, position );
                 }
 
-                const auto & routeToGroup = findPathToNearestRoad( data, mapWidth, region.id, node.index );
+                const auto & routeToGroup = findPathToNearestRoad( data, mapWidth, region.id, nodeIndex );
                 if ( routeToGroup.empty() ) {
                     continue;
                 }
@@ -954,7 +962,7 @@ namespace Maps::Random_Generator
                 }
 
                 for ( const auto & treasure : prefab.valuables ) {
-                    const fheroes2::Point position = Maps::GetPoint( node.index ) + treasure.offset;
+                    const fheroes2::Point position = Maps::GetPoint( nodeIndex ) + treasure.offset;
                     const auto & objectInfo = Maps::getObjectInfo( treasure.groupType, treasure.objectIndex );
                     markObjectPlacement( data, objectInfo, position );
 
@@ -962,7 +970,7 @@ namespace Maps::Random_Generator
                 }
                 secondaryTx.commit();
 
-                objectSetsPlanned.emplace_back( node.index, prefab );
+                objectSetsPlanned.emplace_back( nodeIndex, prefab );
                 break;
             }
         }

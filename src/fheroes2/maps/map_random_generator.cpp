@@ -51,6 +51,7 @@
 #include "rand.h"
 #include "resource.h"
 #include "translations.h"
+#include "ui_map_object.h"
 #include "world.h"
 
 namespace
@@ -503,8 +504,8 @@ namespace Maps::Random_Generator
         }
 
         // Step 7. Place mines.
-        const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
-            for ( const int32_t tileIndex : ring ) {
+        const auto tryToPlaceMine = [&]( const std::vector<int32_t> & options, const int resource ) {
+            for ( const int32_t tileIndex : options ) {
                 const auto & node = mapState.getNode( tileIndex );
                 if ( placeMine( mapFormat, mapState, node, resource ) ) {
                     mapEconomy.increaseMineCount( resource );
@@ -530,14 +531,21 @@ namespace Maps::Random_Generator
 
             const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
 
-            if ( tileRings.size() < 4 ) {
-                continue;
-            }
+            std::vector<int32_t> primaryMineTiles;
+            primaryMineTiles.reserve( region.nodes.size() / 3 );
 
-            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
-                        break;
+            const size_t primaryDistanceLimit = std::min( tileRings.size(), static_cast<size_t>( 20 ) );
+            for ( size_t ringIndex = 0; ringIndex < primaryDistanceLimit; ++ringIndex ) {
+                primaryMineTiles.insert( primaryMineTiles.end(), tileRings[ringIndex].begin(), tileRings[ringIndex].end() );
+            }
+            const auto & sawmillInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::WOOD, Ground::GRASS ) );
+            std::vector<int32_t> options = findPlacementOptions( mapState, width, region.id, primaryMineTiles, sawmillInfo );
+
+            if ( !options.empty() ) {
+                for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                    const int32_t avoidance = Maps::GetIndexFromAbsPoint( Maps::GetPoint( region.centerIndex ) + fheroes2::Point( 0, -4 ) );
+                    if ( !tryToPlaceMine( pickEvenlySpacedPoints( options, 2, { avoidance } ), resource ) ) {
+                        assert( 0 );
                     }
                 }
             }

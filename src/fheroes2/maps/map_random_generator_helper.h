@@ -86,9 +86,9 @@ namespace Maps::Random_Generator
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement );
 
     std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, std::vector<int32_t> nodes,
-                                               Rand::PCG32 & randomGenerator );
-    std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, Region & region, std::vector<ObjectSet> objectSets,
-                                                                    Rand::PCG32 & randomGenerator );
+                                               const ObjectInfo & objectInfo );
+    std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, const Region & region,
+                                                                    std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator );
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator );
 
