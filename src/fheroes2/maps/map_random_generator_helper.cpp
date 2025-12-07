@@ -505,6 +505,17 @@ namespace Maps::Random_Generator
         return buckets;
     }
 
+    std::vector<int32_t> findOpenTiles( const Region & region )
+    {
+        std::vector<int32_t> result;
+        for ( const Node & node : region.nodes ) {
+            if ( node.type == NodeType::OPEN ) {
+                result.push_back( node.index );
+            }
+        }
+        return result;
+    }
+
     std::vector<int32_t> pickEvenlySpacedPoints( const std::vector<int32_t> & candidates, const size_t count, const std::vector<int32_t> & avoidance )
     {
         assert( !candidates.empty() );
@@ -866,6 +877,42 @@ namespace Maps::Random_Generator
         return false;
     }
 
+    std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, std::vector<int32_t> nodes,
+                                               Rand::PCG32 & randomGenerator )
+    {
+        // Automatically rollback at the end of planning stage
+        MapStateTransaction transaction = data.startTransaction();
+
+        std::vector<int32_t> options;
+
+        const auto & objectInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, 0 );
+        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+            const int32_t & nodeIndex = Rand::GetWithGen( nodes, randomGenerator );
+            const fheroes2::Point mapPoint = Maps::GetPoint( nodeIndex );
+
+            if ( !canFitObject( data, objectInfo, mapPoint, true ) ) {
+                continue;
+            }
+
+            MapStateTransaction secondaryTx = data.startTransaction();
+            markObjectPlacement( data, objectInfo, mapPoint );
+
+            const auto & routeToObject = findPathToNearestRoad( data, mapWidth, regionId, nodeIndex );
+            if ( routeToObject.empty() ) {
+                continue;
+            }
+
+            for ( const auto & step : routeToObject ) {
+                data.getNodeToUpdate( step ).type = NodeType::PATH;
+            }
+            secondaryTx.commit();
+
+            options.push_back( nodeIndex );
+        }
+
+        return options;
+    }
+
     std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, Region & region, std::vector<ObjectSet> objectSets,
                                                                     Rand::PCG32 & randomGenerator )
     {
@@ -890,6 +937,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
+                MapStateTransaction secondaryTx = data.startTransaction();
                 for ( const auto & obstacle : prefab.obstacles ) {
                     const fheroes2::Point position = mapPoint + obstacle.offset;
                     const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );
@@ -912,6 +960,7 @@ namespace Maps::Random_Generator
 
                     treasureLimit -= getObjectGoldValue( treasure.groupType, treasure.objectIndex );
                 }
+                secondaryTx.commit();
 
                 objectSetsPlanned.emplace_back( node.index, prefab );
                 break;
