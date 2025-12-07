@@ -80,8 +80,8 @@ namespace Maps::Random_Generator
             return;
         }
 
-        for ( size_t index = _history.size() - 1; index > record; --index ) {
-            const StateChange & change = _history[index];
+        for ( size_t index = _history.size(); index > record; --index ) {
+            const StateChange & change = _history[index - 1];
             _data[static_cast<size_t>( change.index )] = change.state;
         }
         _history.resize( record );
