@@ -382,7 +382,7 @@ std::string System::GetDataDirectory( const std::string_view appName )
         }
 
         return {};
-#elif defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ ) 
+#elif defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ )
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
             return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
         }
