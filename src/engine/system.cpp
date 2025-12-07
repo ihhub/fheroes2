@@ -95,7 +95,7 @@ namespace
         {
             const char * homeEnvPath = getenv( "HOME" );
 
-#if defined( MACOS_APP_BUNDLE )
+#if defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ ) 
             if ( homeEnvPath != nullptr ) {
                 return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), appName );
             }
@@ -382,7 +382,7 @@ std::string System::GetDataDirectory( const std::string_view appName )
         }
 
         return {};
-#elif defined( MACOS_APP_BUNDLE )
+#elif defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ ) 
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
             return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
         }
