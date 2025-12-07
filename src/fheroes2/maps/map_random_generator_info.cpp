@@ -39,7 +39,7 @@ namespace
 
 namespace Maps::Random_Generator
 {
-    NodeCache::NodeCache( const int32_t width, const int32_t height )
+    MapStateManager::MapStateManager( const int32_t width, const int32_t height )
         : _mapSize( width )
         , _data( static_cast<size_t>( width ) * height )
     {
@@ -51,17 +51,19 @@ namespace Maps::Random_Generator
         }
     }
 
-    void NodeCache::startTransaction()
+    MapStateTransaction MapStateManager::startTransaction()
     {
-        _transactionRecords.push_back( _history.size() );
+        const size_t record = _history.size();
+        _transactionRecords.push_back( record );
+        return MapStateTransaction( *this, record );
     }
 
-    void NodeCache::commitTransaction()
+    void MapStateManager::commitTransaction( const size_t record )
     {
         assert( !_transactionRecords.empty() );
-        const size_t record = _transactionRecords.back();
-        _transactionRecords.pop_back();
+        assert( _transactionRecords.back() == record );
 
+        _transactionRecords.pop_back();
         _history.resize( record );
 
         if ( _transactionRecords.empty() ) {
@@ -69,10 +71,10 @@ namespace Maps::Random_Generator
         }
     }
 
-    void NodeCache::rollbackTransaction()
+    void MapStateManager::rollbackTransaction( const size_t record )
     {
         assert( !_transactionRecords.empty() );
-        const size_t record = _transactionRecords.back();
+        assert( _transactionRecords.back() == record );
         _transactionRecords.pop_back();
 
         for ( size_t index = _history.size() - 1; index > record; --index ) {
@@ -85,11 +87,6 @@ namespace Maps::Random_Generator
         if ( _transactionRecords.empty() ) {
             _history.clear();
         }
-    }
-
-    void NodeCache::recordStateChange( const int32_t index, const Node & current )
-    {
-        _history.emplace_back( index, current );
     }
 
     void MapEconomy::increaseMineCount( const int resourceType )
@@ -108,7 +105,7 @@ namespace Maps::Random_Generator
         return *it;
     }
 
-    void Region::checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator )
+    void Region::checkAdjacentTiles( MapStateManager & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator )
     {
         Node & previousNode = nodes[lastProcessedNode];
         const int nodeIndex = previousNode.index;
@@ -150,7 +147,7 @@ namespace Maps::Random_Generator
         }
     }
 
-    bool Region::regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator )
+    bool Region::regionExpansion( MapStateManager & rawData, Rand::PCG32 & randomGenerator )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added.
         const size_t nodesEnd = nodes.size();
@@ -163,7 +160,7 @@ namespace Maps::Random_Generator
         return lastProcessedNode != nodes.size();
     }
 
-    bool Region::checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node )
+    bool Region::checkNodeForConnections( MapStateManager & data, std::vector<Region> & mapRegions, Node & node )
     {
         if ( node.type != NodeType::BORDER ) {
             return false;
@@ -234,5 +231,18 @@ namespace Maps::Random_Generator
         const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
         centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
         return { castleX, castleY };
+    }
+
+    MapStateTransaction::~MapStateTransaction()
+    {
+        if ( !_committed ) {
+            _mapState.rollbackTransaction( _mark );
+        }
+    }
+
+    void MapStateTransaction::commit()
+    {
+        _mapState.commitTransaction( _mark );
+        _committed = true;
     }
 }

@@ -326,7 +326,7 @@ namespace Maps::Random_Generator
 
         Rand::PCG32 randomGenerator( generatorSeed );
 
-        NodeCache data( width, height );
+        MapStateManager mapState( width, height );
 
         auto mapBoundsCheck = [width, height]( int x, int y ) {
             x = std::clamp( x, 0, width - 1 );
@@ -342,7 +342,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNodeToUpdate( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
+        std::vector<Region> mapRegions = { { 0, mapState.getNodeToUpdate( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -376,7 +376,7 @@ namespace Maps::Random_Generator
                 const int32_t treasureLimit = isPlayerRegion ? regionConfiguration.treasureValueLimit : regionConfiguration.treasureValueLimit * 2;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                Node & centerNode = data.getNodeToUpdate( centerTile );
+                Node & centerNode = mapState.getNodeToUpdate( centerTile );
                 const RegionType innerType = ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
                 const RegionType type = isPlayerRegion ? RegionType::STARTING : innerType;
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
@@ -400,7 +400,7 @@ namespace Maps::Random_Generator
             stillRoomToExpand = false;
             // Skip the first region which is the border region.
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
-                if ( mapRegions[regionID].regionExpansion( data, randomGenerator ) ) {
+                if ( mapRegions[regionID].regionExpansion( mapState, randomGenerator ) ) {
                     stillRoomToExpand = true;
                 }
             }
@@ -449,7 +449,7 @@ namespace Maps::Random_Generator
                             continue;
                         }
 
-                        const Node & adjacentNode = data.getNode( adjacentIndex );
+                        const Node & adjacentNode = mapState.getNode( adjacentIndex );
                         if ( adjacentNode.region == 0 && adjacentNode.index == adjacentIndex ) {
                             extraNodes.insert( adjacentIndex );
                         }
@@ -458,7 +458,7 @@ namespace Maps::Random_Generator
             }
 
             for ( const int32_t extraNodeIndex : extraNodes ) {
-                Node & extra = data.getNodeToUpdate( extraNodeIndex );
+                Node & extra = mapState.getNodeToUpdate( extraNodeIndex );
                 region.nodes.emplace_back( extra );
                 extra.region = region.id;
                 extra.type = NodeType::BORDER;
@@ -466,7 +466,7 @@ namespace Maps::Random_Generator
 
             if ( region.colorIndex != neutralColorIndex ) {
                 const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
-                if ( !placeCastle( mapFormat, data, region, castlePos, true ) ) {
+                if ( !placeCastle( mapFormat, mapState, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
@@ -477,7 +477,7 @@ namespace Maps::Random_Generator
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = ( config.resourceDensity == ResourceDensity::ABUNDANT );
                 const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
-                placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
+                placeCastle( mapFormat, mapState, region, castlePos, useNeutralCastles );
             }
             else {
                 forceTempRoadOnTile( mapFormat, region.centerIndex );
@@ -487,8 +487,8 @@ namespace Maps::Random_Generator
 
             const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
                 for ( const int32_t tileIndex : ring ) {
-                    const auto & node = data.getNode( tileIndex );
-                    if ( placeMine( mapFormat, data, node, resource ) ) {
+                    const auto & node = mapState.getNode( tileIndex );
+                    if ( placeMine( mapFormat, mapState, node, resource ) ) {
                         mapEconomy.increaseMineCount( resource );
                         actionLocations.insert( tileIndex );
 
@@ -528,14 +528,14 @@ namespace Maps::Random_Generator
                 continue;
             }
             for ( Node & node : region.nodes ) {
-                region.checkNodeForConnections( data, mapRegions, node );
+                region.checkNodeForConnections( mapState, mapRegions, node );
             }
         }
 
         for ( const Region & region : mapRegions ) {
             for ( const Node & node : region.nodes ) {
                 if ( node.type == NodeType::BORDER ) {
-                    placeBorderObstacle( mapFormat, data, node, randomGenerator );
+                    placeBorderObstacle( mapFormat, mapState, node, randomGenerator );
                 }
             }
         }
@@ -546,8 +546,8 @@ namespace Maps::Random_Generator
                 continue;
             }
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                for ( const auto & step : findPathToNearestRoad( data, width, region.id, tileIndex ) ) {
-                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                for ( const auto & step : findPathToNearestRoad( mapState, width, region.id, tileIndex ) ) {
+                    mapState.getNodeToUpdate( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );
                 }
             }
@@ -555,8 +555,8 @@ namespace Maps::Random_Generator
 
         // Step 8: Place powerups and treasure clusters while avoiding the paths.
         for ( Region & region : mapRegions ) {
-            placeObjectSet( mapFormat, data, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
-            placeObjectSet( mapFormat, data, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
+            placeObjectSet( mapFormat, mapState, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
+            placeObjectSet( mapFormat, mapState, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
         }
 
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.

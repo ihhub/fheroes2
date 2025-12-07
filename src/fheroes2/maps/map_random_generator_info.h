@@ -84,14 +84,34 @@ namespace Maps::Random_Generator
         }
     };
 
-    class NodeCache final
+    class MapStateManager;
+
+    class MapStateTransaction final
     {
     public:
-        NodeCache( const int32_t width, const int32_t height );
+        explicit MapStateTransaction( MapStateManager & state, const size_t mark )
+            : _mapState( state )
+            , _mark( mark )
+        {}
+        MapStateTransaction( const MapStateTransaction & ) = delete;
+        MapStateTransaction & operator=( const MapStateTransaction & ) = delete;
 
-        void startTransaction();
-        void commitTransaction();
-        void rollbackTransaction();
+        ~MapStateTransaction();
+
+        void commit();
+
+    private:
+        MapStateManager & _mapState;
+        size_t _mark{ 0 };
+        bool _committed{ false };
+    };
+
+    class MapStateManager final
+    {
+    public:
+        MapStateManager( const int32_t width, const int32_t height );
+
+        MapStateTransaction startTransaction();
 
         Node & getNodeToUpdate( const fheroes2::Point position )
         {
@@ -161,6 +181,8 @@ namespace Maps::Random_Generator
         }
 
     private:
+        friend class MapStateTransaction;
+
         struct StateChange final
         {
             int32_t index{ -1 };
@@ -175,7 +197,13 @@ namespace Maps::Random_Generator
             }
         };
 
-        void recordStateChange( const int32_t index, const Node & current );
+        inline void recordStateChange( const int32_t index, const Node & current )
+        {
+            _history.emplace_back( index, current );
+        }
+
+        void commitTransaction( const size_t record );
+        void rollbackTransaction( const size_t record );
 
         const int32_t _mapSize{ 0 };
         Node _outOfBounds{ -1, 0, NodeType::BORDER };
@@ -225,9 +253,9 @@ namespace Maps::Random_Generator
             nodes.emplace_back( centerNode );
         }
 
-        void checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
-        bool regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator );
-        bool checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node );
+        void checkAdjacentTiles( MapStateManager & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
+        bool regionExpansion( MapStateManager & rawData, Rand::PCG32 & randomGenerator );
+        bool checkNodeForConnections( MapStateManager & data, std::vector<Region> & mapRegions, Node & node );
         fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat );
     };
 

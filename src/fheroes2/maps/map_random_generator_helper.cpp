@@ -227,7 +227,7 @@ namespace
         return true;
     }
 
-    void markNodeAsType( Maps::Random_Generator::NodeCache & data, const fheroes2::Point position, const Maps::Random_Generator::NodeType type )
+    void markNodeAsType( Maps::Random_Generator::MapStateManager & data, const fheroes2::Point position, const Maps::Random_Generator::NodeType type )
     {
         if ( Maps::isValidAbsPoint( position.x, position.y ) ) {
             data.getNodeToUpdate( position ).type = type;
@@ -337,10 +337,12 @@ namespace Maps::Random_Generator
         return objectIndex;
     }
 
-    std::vector<int32_t> findPathToNearestRoad( const Maps::Random_Generator::NodeCache & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start )
+    std::vector<int32_t> findPathToNearestRoad( const Maps::Random_Generator::MapStateManager & nodes, const int32_t mapWidth, const uint32_t regionId,
+                                                const int32_t start )
     {
         assert( start > 0 );
         assert( mapWidth > 0 );
+        assert( start < mapWidth * mapWidth );
 
         std::vector<RoadBuilderNode> cache( static_cast<size_t>( mapWidth ) * mapWidth );
         assert( start < static_cast<int32_t>( cache.size() ) );
@@ -489,7 +491,7 @@ namespace Maps::Random_Generator
         return buckets;
     }
 
-    bool canFitObject( const NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders )
+    bool canFitObject( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders )
     {
         bool invalid = false;
         fheroes2::Rect objectRect;
@@ -531,7 +533,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool canFitObjectSet( const NodeCache & data, const ObjectSet & set, const fheroes2::Point & mainTilePos )
+    bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & mainTilePos )
     {
         for ( const fheroes2::Point offset : set.entranceCheck ) {
             const Node & node = data.getNode( mainTilePos + offset );
@@ -571,7 +573,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    void markObjectPlacement( NodeCache & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
         iterateOverObjectParts( info, [&data, &mainTilePos]( const auto & partInfo ) { markNodeAsType( data, mainTilePos + partInfo.tileOffset, NodeType::OBSTACLE ); } );
 
@@ -611,19 +613,18 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool placeActionObject( Map_Format::MapFormat & mapFormat, NodeCache & data, Tile & tile, const ObjectGroup groupType, const int32_t type )
+    bool placeActionObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, Tile & tile, const ObjectGroup groupType, const int32_t type )
     {
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
 
         if ( canFitObject( data, objectInfo, tilePos, true ) ) {
-            data.startTransaction();
+            MapStateTransaction transaction = data.startTransaction();
             markObjectPlacement( data, objectInfo, tilePos );
 
             const int32_t tileIndex = tile.GetIndex();
             const auto & roadToObject = findPathToNearestRoad( data, mapFormat.width, data.getNode( tileIndex ).region, tileIndex );
             if ( roadToObject.empty() ) {
-                data.rollbackTransaction();
                 return false;
             }
 
@@ -632,7 +633,7 @@ namespace Maps::Random_Generator
                     data.getNodeToUpdate( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );
                 }
-                data.commitTransaction();
+                transaction.commit();
                 return true;
             }
         }
@@ -640,7 +641,7 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    bool placeCastle( Map_Format::MapFormat & mapFormat, NodeCache & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
+    bool placeCastle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle )
     {
         auto & tile = world.getTile( tilePos.x, tilePos.y );
         if ( tile.isWater() ) {
@@ -719,14 +720,14 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool placeMine( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, const int resource )
+    bool placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, const int resource )
     {
         Tile & mineTile = world.getTile( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
         return placeActionObject( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
-    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & node, Rand::PCG32 & randomGenerator )
+    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, Rand::PCG32 & randomGenerator )
     {
         Tile & tile = world.getTile( node.index );
         const auto it = obstaclesPerGround.find( tile.GetGround() );
@@ -768,7 +769,7 @@ namespace Maps::Random_Generator
         }
     }
 
-    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, NodeCache & data, const Node & centerNode, const ObjectPlacement & placement )
+    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement )
     {
         const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
         if ( !Maps::isValidAbsPoint( position.x, position.y ) ) {
@@ -785,8 +786,8 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeObjectSet( Map_Format::MapFormat & mapFormat, NodeCache & data, Region & region, std::vector<ObjectSet> objectSets, const MonsterStrength monsterStrength,
-                         const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
+    void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
+                         const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
         for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
@@ -802,7 +803,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
-                data.startTransaction();
+                MapStateTransaction transaction = data.startTransaction();
                 for ( const auto & obstacle : prefab.obstacles ) {
                     const fheroes2::Point position = Maps::GetPoint( node.index ) + obstacle.offset;
                     const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );
@@ -811,7 +812,6 @@ namespace Maps::Random_Generator
 
                 const auto & routeToGroup = findPathToNearestRoad( data, mapFormat.width, region.id, node.index );
                 if ( routeToGroup.empty() ) {
-                    data.rollbackTransaction();
                     continue;
                 }
 
@@ -819,7 +819,7 @@ namespace Maps::Random_Generator
                     data.getNodeToUpdate( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );
                 }
-                data.commitTransaction();
+                transaction.commit();
 
                 for ( const auto & obstacle : prefab.obstacles ) {
                     placeSimpleObject( mapFormat, data, node, obstacle );
