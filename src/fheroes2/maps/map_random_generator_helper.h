@@ -69,6 +69,7 @@ namespace Maps::Random_Generator
     std::vector<int32_t> findPathToNearestRoad( const Maps::Random_Generator::MapStateManager & nodes, const int32_t mapWidth, const uint32_t regionId,
                                                 const int32_t start );
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator );
+    std::vector<int32_t> pickEvenlySpacedPoints( const std::vector<int32_t> & candidates, const size_t count, const std::vector<int32_t> & avoidance );
 
     bool canFitObject( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders );
     bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & mainTilePos );
@@ -84,6 +85,9 @@ namespace Maps::Random_Generator
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement );
     std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, Region & region, std::vector<ObjectSet> objectSets,
                                                                     Rand::PCG32 & randomGenerator );
+    void placeTreasures( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const ObjectSet & objectSet, const int32_t tileIndex,
+                         const MonsterStrength monsterStrength,
+                         Rand::PCG32 & randomGenerator );
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator );
 }

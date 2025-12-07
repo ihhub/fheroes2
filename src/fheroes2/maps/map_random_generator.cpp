@@ -380,6 +380,8 @@ namespace Maps::Random_Generator
                 Node & centerNode = mapState.getNodeToUpdate( centerTile );
                 const RegionType neutralType = ( layer == 1 && regionCountIsEven ) ? RegionType::EXPANSION : RegionType::NEUTRAL;
                 const RegionType type = isPlayerRegion ? RegionType::STARTING : neutralType;
+                const int32_t regionSize
+                    = ( type == RegionType::STARTING && config.resourceDensity == ResourceDensity::SCARCE ) ? regionSizeLimit : regionSizeLimit * 6 / 5;
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
 
                 if ( isPlayerRegion ) {
@@ -552,8 +554,30 @@ namespace Maps::Random_Generator
 
         // Step 8: Place powerups and treasure clusters while avoiding the paths.
         for ( Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
             placeObjectSet( mapFormat, mapState, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
-            placeObjectSet( mapFormat, mapState, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
+
+            const auto & plan = planObjectPlacement( mapState, width, region, prefabObjectSets, randomGenerator );
+            if ( plan.empty() ) {
+                continue;
+            }
+
+            int treasureCount = 0;
+            std::vector<int32_t> candidates;
+            for ( const auto & [nodeIndex, placement] : plan ) {
+                candidates.push_back( nodeIndex );
+                treasureCount += static_cast<int>( placement.valuables.size() );
+            }
+
+            for ( const int32_t tileIndex : pickEvenlySpacedPoints( candidates, regionConfiguration.treasureCount, { region.centerIndex } ) ) {
+                for ( const auto & [nodeIndex, placement] : plan ) {
+                    if ( nodeIndex == tileIndex ) {
+                        placeTreasures( mapFormat, mapState, region, placement, tileIndex, config.monsterStrength, randomGenerator );
+                    }
+                }
+            }
         }
 
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.

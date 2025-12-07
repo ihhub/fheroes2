@@ -64,10 +64,12 @@ namespace Maps::Random_Generator
         assert( _transactionRecords.back() == record );
 
         _transactionRecords.pop_back();
-        _history.resize( record );
 
         if ( _transactionRecords.empty() ) {
             _history.clear();
+        }
+        else {
+            _history.resize( record );
         }
     }
 

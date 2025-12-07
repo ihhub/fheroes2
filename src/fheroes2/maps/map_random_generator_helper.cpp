@@ -505,6 +505,77 @@ namespace Maps::Random_Generator
         return buckets;
     }
 
+    std::vector<int32_t> pickEvenlySpacedPoints( const std::vector<int32_t> & candidates, const size_t count, const std::vector<int32_t> & avoidance )
+    {
+        assert( !candidates.empty() );
+        assert( count > 0 );
+
+        const size_t candidatesCount = candidates.size();
+        const size_t targetCount = ( count > candidatesCount ) ? candidatesCount : count;
+
+        std::vector<int32_t> result;
+        result.reserve( targetCount );
+
+        std::vector<std::pair<uint32_t, bool>> cache;
+        cache.reserve( candidatesCount );
+
+        for ( size_t idx = 0; idx < candidates.size(); ++idx ) {
+            uint32_t minDistance = std::numeric_limits<uint32_t>::max();
+            for ( const int32_t & avoid : avoidance ) {
+                const uint32_t distance = Maps::GetApproximateDistance( candidates[idx], avoid );
+                if ( distance < minDistance ) {
+                    minDistance = distance;
+                }
+            }
+            cache.emplace_back( minDistance, false );
+        }
+
+        auto selectNextIndex = [&]() -> int32_t {
+            int32_t bestCandidateIndex = -1;
+            uint32_t bestDistance = 0;
+
+            // We're searching for the largest distance that hasn't been used yet
+            for ( size_t idx = 0; idx < cache.size(); ++idx ) {
+                if ( cache[idx].second ) {
+                    continue;
+                }
+
+                if ( cache[idx].first > bestDistance ) {
+                    bestDistance = cache[idx].first;
+                    bestCandidateIndex = static_cast<int32_t>( idx );
+                }
+            }
+
+            return bestCandidateIndex;
+        };
+
+        for ( size_t placed = 0; placed < targetCount; ++placed ) {
+            const int32_t pointIndex = selectNextIndex();
+            if ( pointIndex < 0 ) {
+                break;
+            }
+
+            const int32_t & chosenPoint = candidates[pointIndex];
+
+            cache[pointIndex].second = true;
+            result.push_back( chosenPoint );
+
+            // Update distance for remaining candidates using newly chosen point
+            for ( size_t idx = 0; idx < cache.size(); ++idx ) {
+                if ( cache[idx].second ) {
+                    continue;
+                }
+
+                const uint32_t distance = Maps::GetApproximateDistance( candidates[idx], chosenPoint );
+                if ( distance < cache[idx].first ) {
+                    cache[idx].first = distance;
+                }
+            }
+        }
+
+        return result;
+    }
+
     bool canFitObject( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders )
     {
         bool invalid = false;
@@ -807,7 +878,7 @@ namespace Maps::Random_Generator
         std::vector<std::pair<int32_t, ObjectSet>> objectSetsPlanned;
 
         for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-            if ( treasureLimit < 0 ) {
+            if ( treasureLimit <= 0 ) {
                 break;
             }
 
@@ -849,12 +920,44 @@ namespace Maps::Random_Generator
         return objectSetsPlanned;
     }
 
+    void placeTreasures( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const ObjectSet & objectSet, const int32_t tileIndex,
+                         const MonsterStrength monsterStrength, Rand::PCG32 & randomGenerator )
+    {
+        const Node & node = data.getNode( tileIndex );
+
+        for ( const auto & obstacle : objectSet.obstacles ) {
+            if ( !placeSimpleObject( mapFormat, data, node, obstacle ) ) {
+                // Validate that object set can be placed before calling this!
+                assert( 0 );
+            }
+        }
+
+        const int32_t groupValueLimit = std::min( region.treasureLimit, maximumTreasureGroupValue );
+        int32_t groupValue = 0;
+        for ( const auto & treasure : objectSet.valuables ) {
+            ObjectGroup groupType = treasure.groupType;
+            int32_t objectIndex = treasure.objectIndex;
+            if ( treasure.groupType != ObjectGroup::ADVENTURE_POWER_UPS ) {
+                const int32_t valueLimit = std::max( minimalTreasureValue, groupValueLimit - groupValue );
+                const auto & selection = getRandomTreasure( valueLimit, randomGenerator );
+                groupType = selection.first;
+                objectIndex = selection.second;
+            }
+            placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex } );
+            groupValue += getObjectGoldValue( groupType, objectIndex );
+        }
+        // It is possible to go into the negatives; intentional
+        region.treasureLimit -= groupValue;
+
+        placeMonster( mapFormat, node.index, getMonstersByValue( monsterStrength, groupValue ) );
+    }
+
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
         for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
-            if ( objectsPlaced == expectedCount || region.treasureLimit < 0 ) {
+            if ( objectsPlaced == expectedCount || region.treasureLimit <= 0 ) {
                 break;
             }
 
