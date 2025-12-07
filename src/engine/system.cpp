@@ -95,7 +95,7 @@ namespace
         {
             const char * homeEnvPath = getenv( "HOME" );
 
-#if defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ ) 
+#if defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ )
             if ( homeEnvPath != nullptr ) {
                 return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), appName );
             }
