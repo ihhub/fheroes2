@@ -267,7 +267,7 @@ namespace
 
 bool System::isHandheldDevice()
 {
-#if defined( ANDROID )
+#if defined( ANDROID ) || defined( __IPHONEOS__ )
     return true;
 #else
     return false;
