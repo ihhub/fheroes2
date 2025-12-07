@@ -21,7 +21,6 @@
 #include "map_random_generator_helper.h"
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -44,7 +43,6 @@
 #include "maps_tiles_helper.h"
 #include "monster.h"
 #include "mp2.h"
-#include "race.h"
 #include "rand.h"
 #include "ui_map_object.h"
 #include "world.h"
@@ -62,6 +60,7 @@ namespace
 
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
+    constexpr int randomHeroIndex{ 7 };
     constexpr int maxPlacementAttempts{ 30 };
     constexpr uint32_t roadBuilderMargin{ Maps::Ground::defaultGroundPenalty * 3 };
 
@@ -674,13 +673,6 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
-
-        if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( mapFormat.tiles[bottomIndex] ) ) {
-            // Update road if there is one in front of the town/castle entrance.
-            Maps::updateRoadSpriteOnTile( mapFormat, bottomIndex, false );
-        }
-
         // By default use random (default) army for the neutral race town/castle.
         const PlayerColor color = Color::IndexToColor( region.colorIndex );
         if ( color == PlayerColor::NONE ) {
@@ -701,10 +693,12 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        const ObjectInfo & townObjectInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
-        const uint8_t race = Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) );
+        const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
 
-        world.addCastle( tile.GetIndex(), race, color );
+        if ( color != PlayerColor::NONE ) {
+            const int32_t spriteIndex = Color::GetIndex( color ) * randomHeroIndex + ( randomHeroIndex - 1 );
+            putObjectOnMap( mapFormat, world.getTile( bottomIndex ), ObjectGroup::KINGDOM_HEROES, spriteIndex );
+        }
 
         markObjectPlacement( data, basementInfo, tilePos );
         markObjectPlacement( data, castleInfo, tilePos );
