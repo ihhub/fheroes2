@@ -564,17 +564,15 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            int treasureCount = 0;
             std::vector<int32_t> candidates;
             for ( const auto & [nodeIndex, placement] : plan ) {
                 candidates.push_back( nodeIndex );
-                treasureCount += static_cast<int>( placement.valuables.size() );
             }
 
             for ( const int32_t tileIndex : pickEvenlySpacedPoints( candidates, regionConfiguration.treasureCount, { region.centerIndex } ) ) {
                 for ( const auto & [nodeIndex, placement] : plan ) {
                     if ( nodeIndex == tileIndex ) {
-                        placeTreasures( mapFormat, mapState, region, placement, tileIndex, config.monsterStrength, randomGenerator );
+                        placeValidTreasures( mapFormat, mapState, region, placement, tileIndex, config.monsterStrength, randomGenerator );
                     }
                 }
             }

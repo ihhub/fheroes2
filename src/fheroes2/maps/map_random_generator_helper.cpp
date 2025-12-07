@@ -920,8 +920,8 @@ namespace Maps::Random_Generator
         return objectSetsPlanned;
     }
 
-    void placeTreasures( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const ObjectSet & objectSet, const int32_t tileIndex,
-                         const MonsterStrength monsterStrength, Rand::PCG32 & randomGenerator )
+    void placeValidTreasures( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const ObjectSet & objectSet, const int32_t tileIndex,
+                              const MonsterStrength monsterStrength, Rand::PCG32 & randomGenerator )
     {
         const Node & node = data.getNode( tileIndex );
 
