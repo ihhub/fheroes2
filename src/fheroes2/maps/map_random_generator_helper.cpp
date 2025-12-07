@@ -61,7 +61,7 @@ namespace
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int randomHeroIndex{ 7 };
-    constexpr int maxPlacementAttempts{ 30 };
+    constexpr int maxPlacementAttempts{ 99 };
     constexpr uint32_t roadBuilderMargin{ Maps::Ground::defaultGroundPenalty * 3 };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
@@ -288,16 +288,16 @@ namespace Maps::Random_Generator
                        Monster::GHOST, Monster::PALADIN, Monster::CRUSADER, Monster::CYCLOPS, Monster::GENIE } };
         }
         if ( protectedObjectValue >= 8500 ) {
-            // 42 -> 72 monster strength
-            return { Monster::RANDOM_MONSTER,
-                     { Monster::CAVALRY, Monster::VAMPIRE, Monster::MEDUSA, Monster::MINOTAUR_KING, Monster::TROLL, Monster::CHAMPION, Monster::LICH, Monster::WAR_TROLL,
-                       Monster::MAGE, Monster::UNICORN, Monster::HYDRA, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::POWER_LICH, Monster::GHOST } };
+            // 39 -> 72 monster strength
+            return { Monster::RANDOM_MONSTER_LEVEL_3,
+                     { Monster::GREATER_DRUID, Monster::OGRE_LORD, Monster::ROC, Monster::CAVALRY, Monster::VAMPIRE, Monster::MEDUSA, Monster::MINOTAUR_KING,
+                       Monster::TROLL, Monster::CHAMPION, Monster::LICH, Monster::WAR_TROLL, Monster::MAGE, Monster::VAMPIRE_LORD, Monster::ARCHMAGE, Monster::GHOST } };
         }
         if ( protectedObjectValue >= 7000 ) {
             // 27 -> 47 monster strength
             return { Monster::RANDOM_MONSTER_LEVEL_3,
-                     { Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT, Monster::DRUID,
-                       Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::OGRE_LORD, Monster::ROC, Monster::CAVALRY, Monster::VAMPIRE, Monster::MEDUSA,
+                     { Monster::GRIFFIN, Monster::MASTER_SWORDSMAN, Monster::EARTH_ELEMENT, Monster::AIR_ELEMENT, Monster::WATER_ELEMENT, Monster::FIRE_ELEMENT,
+                       Monster::DRUID, Monster::GREATER_DRUID, Monster::MINOTAUR, Monster::OGRE_LORD, Monster::ROC, Monster::CAVALRY, Monster::VAMPIRE, Monster::MEDUSA,
                        Monster::MINOTAUR_KING } };
         }
         if ( protectedObjectValue >= 5500 ) {
@@ -793,6 +793,60 @@ namespace Maps::Random_Generator
             return true;
         }
         return false;
+    }
+
+    std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, Region & region, std::vector<ObjectSet> objectSets,
+                                                                    Rand::PCG32 & randomGenerator )
+    {
+        // Automatically rollback at the end of planning stage
+        MapStateTransaction transaction = data.startTransaction();
+
+        Rand::ShuffleWithGen( objectSets, randomGenerator );
+
+        int32_t treasureLimit = region.treasureLimit;
+        std::vector<std::pair<int32_t, ObjectSet>> objectSetsPlanned;
+
+        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+            if ( treasureLimit < 0 ) {
+                break;
+            }
+
+            const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
+            const fheroes2::Point mapPoint = Maps::GetPoint( node.index );
+
+            for ( const auto & prefab : objectSets ) {
+                if ( !canFitObjectSet( data, prefab, mapPoint ) ) {
+                    continue;
+                }
+
+                for ( const auto & obstacle : prefab.obstacles ) {
+                    const fheroes2::Point position = mapPoint + obstacle.offset;
+                    const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );
+                    markObjectPlacement( data, objectInfo, position );
+                }
+
+                const auto & routeToGroup = findPathToNearestRoad( data, mapWidth, region.id, node.index );
+                if ( routeToGroup.empty() ) {
+                    continue;
+                }
+
+                for ( const auto & step : routeToGroup ) {
+                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                }
+
+                for ( const auto & treasure : prefab.valuables ) {
+                    const fheroes2::Point position = Maps::GetPoint( node.index ) + treasure.offset;
+                    const auto & objectInfo = Maps::getObjectInfo( treasure.groupType, treasure.objectIndex );
+                    markObjectPlacement( data, objectInfo, position );
+
+                    treasureLimit -= getObjectGoldValue( treasure.groupType, treasure.objectIndex );
+                }
+
+                objectSetsPlanned.emplace_back( node.index, prefab );
+                break;
+            }
+        }
+        return objectSetsPlanned;
     }
 
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
