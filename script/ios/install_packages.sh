@@ -22,7 +22,8 @@
 
 set -e -o pipefail
 
-
+# We might need to move packages into https://github.com/fheroes2/fheroes2-prebuilt-deps
+# repository as we did for other packages.
 PKG_NAME="release-2.32.10"
 PKG_FILE="$PKG_NAME.zip"
 PKG_FILE_SHA256="7a3c207b8509edc487d658df357ad764cd852d68fe248d307b25c0741d52fdf0"
@@ -75,5 +76,7 @@ unzip -d "$(dirname "$0")/../../ios" "$TMP_DIR/$PKG_FILE"
 mv "$(dirname "$0")/../../ios/SDL_Mixer-$PKG_NAME" "$(dirname "$0")/../../ios/SDL2_Mixer"
 
 # Patch SDL_Mixer project.
+# It is needed since we are trying to build SDL Mixer using the latest SDL2 version.
+# Also, SDL Mixer doesn't support iPhone Simulator so we have to change this code or another one.
 sed -i '' 's#$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers#$(SRCROOT)/../../SDL2/include#' \
     ios/SDL2_Mixer/Xcode/SDL_mixer.xcodeproj/project.pbxproj
