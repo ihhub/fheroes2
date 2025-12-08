@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <utility>
 #include <vector>
@@ -84,7 +85,7 @@ namespace Maps::Random_Generator
     void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster );
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement );
 
-    std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, std::vector<int32_t> nodes,
+    std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,
                                                const ObjectInfo & objectInfo );
     std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, const Region & region,
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator );

@@ -533,10 +533,10 @@ namespace Maps::Random_Generator
         std::vector<std::pair<uint32_t, bool>> cache;
         cache.reserve( candidatesCount );
 
-        for ( size_t idx = 0; idx < candidates.size(); ++idx ) {
+        for ( const int32_t candidate : candidates ) {
             uint32_t minDistance = std::numeric_limits<uint32_t>::max();
             for ( const int32_t & avoid : avoidance ) {
-                const uint32_t distance = Maps::GetApproximateDistance( candidates[idx], avoid );
+                const uint32_t distance = Maps::GetApproximateDistance( candidate, avoid );
                 if ( distance < minDistance ) {
                     minDistance = distance;
                 }
@@ -868,11 +868,11 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, std::vector<int32_t> nodes,
+    std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,
                                                const ObjectInfo & objectInfo )
     {
         // Automatically rollback at the end of planning stage
-        MapStateTransaction transaction = data.startTransaction();
+        const MapStateTransaction transaction = data.startTransaction();
 
         std::vector<int32_t> options;
 
@@ -910,7 +910,7 @@ namespace Maps::Random_Generator
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator )
     {
         // Automatically rollback at the end of planning stage
-        MapStateTransaction transaction = data.startTransaction();
+        const MapStateTransaction transaction = data.startTransaction();
 
         Rand::ShuffleWithGen( objectSets, randomGenerator );
 

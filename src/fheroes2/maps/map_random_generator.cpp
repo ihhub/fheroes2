@@ -384,7 +384,7 @@ namespace Maps::Random_Generator
                 const RegionType type = isPlayerRegion ? RegionType::STARTING : neutralType;
                 const int32_t regionSize
                     = ( type == RegionType::STARTING && config.resourceDensity == ResourceDensity::SCARCE ) ? regionSizeLimit : regionSizeLimit * 6 / 5;
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSize, treasureLimit, type );
 
                 if ( isPlayerRegion ) {
                     ++placedPlayers;
@@ -580,6 +580,7 @@ namespace Maps::Random_Generator
             }
 
             std::vector<int32_t> candidates;
+            candidates.reserve( plan.size() );
             for ( const auto & [nodeIndex, placement] : plan ) {
                 candidates.push_back( nodeIndex );
             }
