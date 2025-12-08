@@ -211,12 +211,12 @@ namespace Maps::Random_Generator
                 connections.emplace( adjacent.region, node.index );
                 mapRegions[adjacent.region].connections.emplace( id, node.index );
                 node.type = NodeType::CONNECTOR;
-                adjacent.type = NodeType::PATH;
-                twoAway.type = NodeType::PATH;
+                adjacent.type = NodeType::CONNECTOR;
+                twoAway.type = NodeType::CONNECTOR;
 
                 Node & stepBack = data.getNodeToUpdate( position - directionOffsets[direction] );
                 if ( stepBack.index != -1 ) {
-                    stepBack.type = NodeType::PATH;
+                    stepBack.type = NodeType::CONNECTOR;
                 }
 
                 break;

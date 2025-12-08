@@ -351,8 +351,7 @@ namespace Maps::Random_Generator
         return objectIndex;
     }
 
-    std::vector<int32_t> findPathToNearestRoad( const Maps::Random_Generator::MapStateManager & nodes, const int32_t mapWidth, const uint32_t regionId,
-                                                const int32_t start )
+    std::vector<int32_t> findPathToNearestRoad( const MapStateManager & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start )
     {
         assert( start > 0 );
         assert( mapWidth > 0 );
@@ -367,7 +366,7 @@ namespace Maps::Random_Generator
         cache[static_cast<size_t>( start )]._from = start;
         cache[static_cast<size_t>( start )]._cost = 0;
 
-        const bool fromActionTile = nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION;
+        const bool fromActionTile = nodes.getNode( start ).type == NodeType::ACTION;
         const Directions & directions = Direction::All();
 
         int32_t bestRoadIndex = -1;
@@ -383,7 +382,7 @@ namespace Maps::Random_Generator
 
             const bool comeFromStraight = !Direction::isDiagonal( currentNode._direction );
 
-            if ( comeFromStraight && currentNodeIdx != start && currentNode._cost < bestRoadCost && world.getTile( currentNodeIdx ).isRoad() ) {
+            if ( comeFromStraight && currentNodeIdx != start && currentNode._cost < bestRoadCost && nodes.getNode( currentNodeIdx ).type == NodeType::PATH ) {
                 bestRoadIndex = currentNodeIdx;
                 bestRoadCost = currentNode._cost;
             }
@@ -418,7 +417,11 @@ namespace Maps::Random_Generator
 
                 const Node & other = nodes.getNode( newIndex );
 
-                if ( other.region != regionId || ( other.type != Maps::Random_Generator::NodeType::OPEN && other.type != Maps::Random_Generator::NodeType::PATH ) ) {
+                if ( other.region != regionId ) {
+                    continue;
+                }
+
+                if ( other.type != NodeType::OPEN && other.type != NodeType::PATH && other.type != NodeType::CONNECTOR ) {
                     continue;
                 }
 
@@ -614,18 +617,6 @@ namespace Maps::Random_Generator
             return false;
         }
 
-        if ( MP2::isOffGameActionObject( info.objectType ) ) {
-            for ( int x = objectRect.x - 1; x <= objectRect.width + 1; ++x ) {
-                const Node & pathNode = data.getNode( mainTilePos + fheroes2::Point{ x, 1 } );
-                if ( pathNode.index == -1 || pathNode.type == NodeType::OBSTACLE ) {
-                    return false;
-                }
-                if ( pathNode.type == NodeType::BORDER ) {
-                    return false;
-                }
-            }
-        }
-
         return true;
     }
 
@@ -803,7 +794,7 @@ namespace Maps::Random_Generator
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
-            data.getNodeToUpdate( bottomIndex ).type = NodeType::PATH;
+            data.getNodeToUpdate( tile.GetIndex() ).type = NodeType::PATH;
             Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
             Maps::updateRoadOnTile( mapFormat, nextIndex, true );
         }
@@ -885,13 +876,7 @@ namespace Maps::Random_Generator
 
         std::vector<int32_t> options;
 
-        int attempt = 0;
         for ( const int32_t & nodeIndex : nodes ) {
-            if ( attempt >= maxPlacementAttempts ) {
-                break;
-            }
-            ++attempt;
-
             const fheroes2::Point mapPoint = Maps::GetPoint( nodeIndex );
 
             if ( !canFitObject( data, objectInfo, mapPoint, true ) ) {
@@ -912,6 +897,10 @@ namespace Maps::Random_Generator
             secondaryTx.commit();
 
             options.push_back( nodeIndex );
+
+            if ( options.size() > maxPlacementAttempts ) {
+                break;
+            }
         }
 
         return options;

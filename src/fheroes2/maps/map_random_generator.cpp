@@ -58,6 +58,7 @@ namespace
 {
     constexpr int32_t smallestStartingRegionSize{ 200 };
     constexpr int32_t emptySpacePercentage{ 40 };
+    constexpr size_t primaryMineDistanceLimit{ 14 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
@@ -480,7 +481,7 @@ namespace Maps::Random_Generator
                 placeCastle( mapFormat, mapState, region, castlePos, useNeutralCastles );
             }
             else {
-                forceTempRoadOnTile( mapFormat, region.centerIndex );
+                mapState.getNodeToUpdate( region.centerIndex ).type = NodeType::PATH;
             }
         }
         Maps::updatePlayerRelatedObjects( mapFormat );
@@ -522,8 +523,11 @@ namespace Maps::Random_Generator
             if ( region.groundType == Ground::WATER ) {
                 continue;
             }
+
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                for ( const auto & step : findPathToNearestRoad( mapState, width, region.id, tileIndex ) ) {
+                mapState.getNodeToUpdate( tileIndex ).type = NodeType::PATH;
+                const auto & path = findPathToNearestRoad( mapState, width, region.id, tileIndex );
+                for ( const auto & step : path ) {
                     mapState.getNodeToUpdate( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );
                 }
@@ -534,19 +538,22 @@ namespace Maps::Random_Generator
             std::vector<int32_t> primaryMineTiles;
             primaryMineTiles.reserve( region.nodes.size() / 3 );
 
-            const size_t primaryDistanceLimit = std::min( tileRings.size(), static_cast<size_t>( 20 ) );
-            for ( size_t ringIndex = 0; ringIndex < primaryDistanceLimit; ++ringIndex ) {
-                primaryMineTiles.insert( primaryMineTiles.end(), tileRings[ringIndex].begin(), tileRings[ringIndex].end() );
+            const size_t distanceLimit = std::min( tileRings.size(), primaryMineDistanceLimit );
+            for ( size_t ringIndex = distanceLimit; ringIndex > 0; --ringIndex ) {
+                primaryMineTiles.insert( primaryMineTiles.end(), tileRings[ringIndex - 1].begin(), tileRings[ringIndex - 1].end() );
             }
             const auto & sawmillInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::WOOD, Ground::GRASS ) );
             std::vector<int32_t> options = findPlacementOptions( mapState, width, region.id, primaryMineTiles, sawmillInfo );
+            if ( options.empty() ) {
+                continue;
+            }
+
+            const int32_t avoidance = Maps::GetIndexFromAbsPoint( Maps::GetPoint( region.centerIndex ) + fheroes2::Point( 0, -4 ) );
+            options = pickEvenlySpacedPoints( options, 4, { avoidance } );
 
             if ( !options.empty() ) {
                 for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                    const int32_t avoidance = Maps::GetIndexFromAbsPoint( Maps::GetPoint( region.centerIndex ) + fheroes2::Point( 0, -4 ) );
-                    if ( !tryToPlaceMine( pickEvenlySpacedPoints( options, 2, { avoidance } ), resource ) ) {
-                        assert( 0 );
-                    }
+                    tryToPlaceMine( options, resource );
                 }
             }
 
