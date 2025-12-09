@@ -72,7 +72,7 @@ namespace Maps::Random_Generator
     std::vector<int32_t> findOpenTiles( const Region & region );
     std::vector<int32_t> pickEvenlySpacedPoints( const std::vector<int32_t> & candidates, const size_t count, const std::vector<int32_t> & avoidance );
 
-    bool canFitObject( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders );
+    bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos );
     bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & mainTilePos );
     void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos );
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex );

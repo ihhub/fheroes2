@@ -220,21 +220,63 @@ namespace
 
             lambda( objectPart );
         }
-        for ( const auto & objectPart : info.topLevelParts ) {
-            lambda( objectPart );
-        }
         return true;
+    }
+
+    void markNodeIndexAsType( Maps::Random_Generator::MapStateManager & data, const int32_t index, const Maps::Random_Generator::NodeType type )
+    {
+        auto & node = data.getNodeToUpdate( index );
+        // Never override border types (no assert needed; can happen when placing overlapping obstacles)
+        if ( node.type != Maps::Random_Generator::NodeType::BORDER && node.type != Maps::Random_Generator::NodeType::ACTION ) {
+            node.type = type;
+        }
     }
 
     void markNodeAsType( Maps::Random_Generator::MapStateManager & data, const fheroes2::Point position, const Maps::Random_Generator::NodeType type )
     {
         if ( Maps::isValidAbsPoint( position.x, position.y ) ) {
-            auto & node = data.getNodeToUpdate( position );
-            // Never override border types (no assert needed; can happen when placing overlapping obstacles)
-            if ( node.type != Maps::Random_Generator::NodeType::BORDER ) {
-                node.type = type;
+            markNodeIndexAsType( data, Maps::GetIndexFromAbsPoint( position ), type );
+        }
+    }
+
+    bool canPlaceObject( const Maps::Random_Generator::MapStateManager & data, const Maps::ObjectInfo & info, const fheroes2::Point position )
+    {
+        const bool isAction = MP2::isInGameActionObject( info.objectType );
+        bool validPlacement = true;
+
+        auto isValidObjectPart = [&data, &position, isAction, &validPlacement]( const auto & partInfo ) {
+            const Maps::Random_Generator::Node & node = data.getNode( position + partInfo.tileOffset );
+
+            if ( node.index == -1 || node.region == 0 ) {
+                validPlacement = false;
+                return;
+            }
+            if ( node.type != Maps::Random_Generator::NodeType::OPEN && ( isAction || node.type != Maps::Random_Generator::NodeType::BORDER ) ) {
+                validPlacement = false;
+                return;
+            }
+        };
+
+        iterateOverObjectParts( info, isValidObjectPart );
+
+        for ( const auto & objectPart : info.topLevelParts ) {
+            const Maps::Random_Generator::Node & node = data.getNode( position + objectPart.tileOffset );
+            if ( node.index == -1 || node.region == 0 ) {
+                return false;
             }
         }
+
+        if ( isAction ) {
+            const Maps::Random_Generator::Node & node = data.getNode( position + fheroes2::Point( 0, 1 ) );
+            if ( node.index == -1 || node.region == 0 ) {
+                return false;
+            }
+            if ( node.type != Maps::Random_Generator::NodeType::OPEN && node.type != Maps::Random_Generator::NodeType::PATH ) {
+                return false;
+            }
+        }
+
+        return validPlacement;
     }
 }
 
@@ -394,7 +436,7 @@ namespace Maps::Random_Generator
 
                 const bool isDiagonal = Direction::isDiagonal( direction );
                 // Edge case: force straight roads out of action tiles (e.g. mines)
-                if ( fromActionTile && currentNodeIdx == start && isDiagonal ) {
+                if ( fromActionTile && currentNodeIdx == start && ( isDiagonal || direction == Direction::TOP ) ) {
                     continue;
                 }
 
@@ -590,28 +632,31 @@ namespace Maps::Random_Generator
         return result;
     }
 
-    bool canFitObject( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos, const bool skipBorders )
+    bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
         bool invalid = false;
-        fheroes2::Rect objectRect;
 
-        auto updateObjectArea = [&data, &mainTilePos, &objectRect, skipBorders, &invalid]( const auto & partInfo ) {
+        auto updateObjectArea = [&data, &mainTilePos, &invalid]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 || node.region == 0 ) {
                 invalid = true;
                 return;
             }
-            if ( node.type != NodeType::OPEN && ( skipBorders || ( node.type != NodeType::BORDER && node.type != NodeType::OBSTACLE ) ) ) {
+            if ( node.type != NodeType::OPEN && node.type != NodeType::BORDER && node.type != NodeType::OBSTACLE ) {
                 invalid = true;
                 return;
             }
-
-            objectRect.x = std::min( objectRect.x, partInfo.tileOffset.x );
-            objectRect.width = std::max( objectRect.width, partInfo.tileOffset.x );
         };
 
         iterateOverObjectParts( info, updateObjectArea );
+
+        for ( const auto & objectPart : info.topLevelParts ) {
+            const Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
+            if ( node.index == -1 || node.region == 0 ) {
+                return false;
+            }
+        }
 
         if ( invalid ) {
             return false;
@@ -632,26 +677,8 @@ namespace Maps::Random_Generator
         for ( const auto * placements : { &set.obstacles, &set.valuables, &randomMonsterSet } ) {
             for ( const auto & placement : *placements ) {
                 const auto & info = Maps::getObjectInfo( placement.groupType, placement.objectIndex );
-                const bool isAction = MP2::isInGameActionObject( info.objectType );
-                const fheroes2::Point position = mainTilePos + placement.offset;
-                bool invalid = false;
 
-                auto isValidObjectPart = [&data, &position, isAction, &invalid]( const auto & partInfo ) {
-                    const Node & node = data.getNode( position + partInfo.tileOffset );
-
-                    if ( node.index == -1 || node.region == 0 ) {
-                        invalid = true;
-                        return;
-                    }
-                    if ( node.type != NodeType::OPEN && ( isAction || node.type != NodeType::BORDER ) ) {
-                        invalid = true;
-                        return;
-                    }
-                };
-
-                iterateOverObjectParts( info, isValidObjectPart );
-
-                if ( invalid ) {
+                if ( !canPlaceObject( data, info, mainTilePos + placement.offset ) ) {
                     return false;
                 }
             }
@@ -705,7 +732,7 @@ namespace Maps::Random_Generator
         const fheroes2::Point tilePos = tile.GetCenter();
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
 
-        if ( canFitObject( data, objectInfo, tilePos, true ) ) {
+        if ( canPlaceObject( data, objectInfo, tilePos ) ) {
             MapStateTransaction transaction = data.startTransaction();
             markObjectPlacement( data, objectInfo, tilePos );
 
@@ -717,7 +744,7 @@ namespace Maps::Random_Generator
 
             if ( putObjectOnMap( mapFormat, tile, groupType, type ) ) {
                 for ( const auto & step : roadToObject ) {
-                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                    markNodeIndexAsType( data, step, NodeType::PATH );
                     forceTempRoadOnTile( mapFormat, step );
                 }
                 transaction.commit();
@@ -741,7 +768,7 @@ namespace Maps::Random_Generator
         const auto & basementInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
         const auto & castleInfo = Maps::getObjectInfo( ObjectGroup::KINGDOM_TOWNS, castleObjectId );
 
-        if ( !canFitObject( data, basementInfo, tilePos, true ) || !canFitObject( data, castleInfo, tilePos, true ) ) {
+        if ( !canPlaceObject( data, basementInfo, tilePos ) || !canPlaceObject( data, castleInfo, tilePos ) ) {
             return false;
         }
 
@@ -794,7 +821,7 @@ namespace Maps::Random_Generator
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
-            data.getNodeToUpdate( tile.GetIndex() ).type = NodeType::PATH;
+            markNodeIndexAsType( data, bottomIndex, NodeType::PATH );
             Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
             Maps::updateRoadOnTile( mapFormat, nextIndex, true );
         }
@@ -823,7 +850,7 @@ namespace Maps::Random_Generator
         const fheroes2::Point tilePos = tile.GetCenter();
         for ( const auto & obstacleId : obstacleList ) {
             const auto & objectInfo = Maps::getObjectInfo( ObjectGroup::LANDSCAPE_TREES, obstacleId );
-            if ( canFitObject( data, objectInfo, tilePos, false ) && putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
+            if ( canPlaceBorderObstacle( data, objectInfo, tilePos ) && putObjectOnMap( mapFormat, tile, ObjectGroup::LANDSCAPE_TREES, obstacleId ) ) {
                 markObjectPlacement( data, objectInfo, tilePos );
                 return true;
             }
@@ -879,7 +906,7 @@ namespace Maps::Random_Generator
         for ( const int32_t & nodeIndex : nodes ) {
             const fheroes2::Point mapPoint = Maps::GetPoint( nodeIndex );
 
-            if ( !canFitObject( data, objectInfo, mapPoint, true ) ) {
+            if ( !canPlaceObject( data, objectInfo, mapPoint ) ) {
                 continue;
             }
 
@@ -892,7 +919,7 @@ namespace Maps::Random_Generator
             }
 
             for ( const auto & step : routeToObject ) {
-                data.getNodeToUpdate( step ).type = NodeType::PATH;
+                markNodeIndexAsType( data, step, NodeType::PATH );
             }
             secondaryTx.commit();
 
@@ -947,7 +974,7 @@ namespace Maps::Random_Generator
                 }
 
                 for ( const auto & step : routeToGroup ) {
-                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                    markNodeIndexAsType( data, step, NodeType::PATH );
                 }
 
                 for ( const auto & treasure : prefab.valuables ) {
@@ -1028,7 +1055,7 @@ namespace Maps::Random_Generator
                 }
 
                 for ( const auto & step : routeToGroup ) {
-                    data.getNodeToUpdate( step ).type = NodeType::PATH;
+                    markNodeIndexAsType( data, step, NodeType::PATH );
                     forceTempRoadOnTile( mapFormat, step );
                 }
                 transaction.commit();
