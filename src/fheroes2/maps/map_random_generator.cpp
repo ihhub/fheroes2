@@ -105,27 +105,6 @@ namespace
 
         return groundTiles / canFit;
     }
-
-    MP2::MapObjectType getFakeMP2MineType( const int resource )
-    {
-        switch ( resource ) {
-        case Resource::WOOD:
-        case Resource::ORE:
-            return MP2::OBJ_SAWMILL;
-        case Resource::SULFUR:
-        case Resource::CRYSTAL:
-        case Resource::GEMS:
-        case Resource::MERCURY:
-            return MP2::OBJ_MINE;
-        case Resource::GOLD:
-            return MP2::OBJ_ABANDONED_MINE;
-        default:
-            // Have you added a new resource type?!
-            assert( 0 );
-            break;
-        }
-        return MP2::OBJ_NONE;
-    }
 }
 
 namespace Maps::Random_Generator
@@ -505,20 +484,6 @@ namespace Maps::Random_Generator
         }
 
         // Step 7. Place mines.
-        const auto tryToPlaceMine = [&]( const std::vector<int32_t> & options, const int resource ) {
-            for ( const int32_t tileIndex : options ) {
-                const auto & node = mapState.getNode( tileIndex );
-                if ( placeMine( mapFormat, mapState, node, resource ) ) {
-                    mapEconomy.increaseMineCount( resource );
-
-                    const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-                    placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
-                    return true;
-                }
-            }
-            return false;
-        };
-
         for ( const Region & region : mapRegions ) {
             if ( region.groundType == Ground::WATER ) {
                 continue;
@@ -553,14 +518,25 @@ namespace Maps::Random_Generator
 
             if ( !options.empty() ) {
                 for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                    tryToPlaceMine( options, resource );
+                    for ( const int32_t tileIndex : options ) {
+                        if ( placeMine( mapFormat, mapState, mapEconomy, tileIndex, resource, config.monsterStrength ) ) {
+                            break;
+                        }
+                    }
                 }
             }
 
             for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
                 for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
+                    bool placed = false;
+                    for ( const int32_t tileIndex : tileRings[ringIndex] ) {
+                        if ( placeMine( mapFormat, mapState, mapEconomy, tileIndex, resource, config.monsterStrength ) ) {
+                            placed = true;
+                            break;
+                        }
+                    }
+                    if ( placed ) {
                         break;
                     }
                 }
