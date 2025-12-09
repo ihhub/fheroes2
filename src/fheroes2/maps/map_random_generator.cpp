@@ -65,8 +65,8 @@ namespace
 
     constexpr std::array<Maps::Random_Generator::RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
         { 1, 2, 1, 1, 2, 8500 }, // ResourceDensity::SCARCE
-        { 1, 6, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
-        { 1, 7, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
+        { 1, 4, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
+        { 1, 4, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
     } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
@@ -526,7 +526,7 @@ namespace Maps::Random_Generator
                 }
             }
 
-            for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
+            for ( size_t idx = 0; idx < regionConfiguration.mineCount; ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
                 for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
                     bool placed = false;
