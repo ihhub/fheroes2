@@ -25,7 +25,7 @@ jobs:
         mkdir anim
         mkdir data
         mkdir music
-    - name: build
+    - name: Build
       # TODO: compile for a proper target, not for simulator.
       run: |
         cd ios
