@@ -39,7 +39,7 @@ Please follow the instructions below to be able to build the project from source
 
 * To build this build you need to have the necessary Data, Anim, Maps and Music folders for the engine present in the fheroes2 project's folder.
 * Download and install Xcode on your macos device. Download the iOS SDK during installation.
-* Go to the directory `script/ios` and run the file `install_packages.sh`. This script will install all the required packages to build the project using Android Studio.
+* Go to the directory `script/ios` and run the file `install_packages.sh`. This script will install all the required packages to build the project using Xcode.
 * Open `fheroes2.xcodeproj` in the "iOS" folder".
 * In the Editor area select "fheroes2" under the "Targets" menu instead of "Projects". Open the "Signing & Capabilities" tab. Under "Signing", add your AppleID in
 the "Team" field.
