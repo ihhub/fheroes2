@@ -201,9 +201,9 @@ namespace Maps::Random_Generator
     class MapStateTransaction final
     {
     public:
-        explicit MapStateTransaction( MapStateManager & state )
-            : _mapState( state )
-            , _record( state.startTransaction() )
+        explicit MapStateTransaction( MapStateManager & manager )
+            : _manager( manager )
+            , _record( _manager.startTransaction() )
         {
             // Do nothing.
         }
@@ -214,7 +214,7 @@ namespace Maps::Random_Generator
         ~MapStateTransaction()
         {
             if ( !_committed ) {
-                _mapState.rollbackTransaction( _record );
+                _manager.rollbackTransaction( _record );
             }
         }
 
@@ -222,12 +222,12 @@ namespace Maps::Random_Generator
         {
             assert( !_committed );
 
-            _mapState.commitTransaction( _record );
+            _manager.commitTransaction( _record );
             _committed = true;
         }
 
     private:
-        MapStateManager & _mapState;
+        MapStateManager & _manager;
         size_t _record{ 0 };
         bool _committed{ false };
     };
