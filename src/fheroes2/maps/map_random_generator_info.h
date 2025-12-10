@@ -289,6 +289,7 @@ namespace Maps::Random_Generator
     {
         uint8_t castleCount{ 0 };
         uint8_t mineCount{ 0 };
+        uint8_t goldMineCount{ 0 };
         uint8_t objectCount{ 0 };
         uint8_t powerUpsCount{ 0 };
         uint8_t treasureCount{ 0 };

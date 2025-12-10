@@ -62,9 +62,9 @@ namespace
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
     constexpr std::array<Maps::Random_Generator::RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
-        { 1, 2, 1, 1, 2, 8500 }, // ResourceDensity::SCARCE
-        { 1, 4, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
-        { 1, 4, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
+        { 1, 2, 0, 1, 1, 2, 8500 }, // ResourceDensity::SCARCE
+        { 1, 4, 0, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
+        { 1, 4, 1, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
     } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
@@ -461,11 +461,16 @@ namespace Maps::Random_Generator
                 mapState.getNodeToUpdate( region.centerIndex ).type = NodeType::PATH;
             }
 
-            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
-            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    if ( placeMine( mapFormat, mapState, mapEconomy, tileRings[ringIndex], resource, config.monsterStrength ) ) {
-                        break;
+            if ( region.type == RegionType::STARTING ) {
+                const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
+
+                assert( tileRings.size() > 4 );
+
+                for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                    for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
+                        if ( placeMine( mapFormat, mapState, mapEconomy, tileRings[ringIndex], resource, config.monsterStrength ) ) {
+                            break;
+                        }
                     }
                 }
             }
@@ -512,11 +517,19 @@ namespace Maps::Random_Generator
             }
 
             const int32_t avoidance = Maps::GetIndexFromAbsPoint( Maps::GetPoint( region.centerIndex ) + fheroes2::Point( 0, -4 ) );
-            options = pickEvenlySpacedPoints( options, 10, { avoidance } );
 
-            for ( size_t idx = 0; idx < regionConfiguration.mineCount; ++idx ) {
+            const uint8_t secondaryMineCount = ( regionSizeLimit > 250 || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
+            options = pickEvenlySpacedPoints( options, secondaryMineCount * 3, { avoidance } );
+
+            for ( size_t idx = 0; idx < secondaryMineCount; ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
                 placeMine( mapFormat, mapState, mapEconomy, options, resource, config.monsterStrength );
+            }
+
+            if ( regionSizeLimit > 350 ) {
+                for ( size_t idx = 0; idx < regionConfiguration.goldMineCount; ++idx ) {
+                    placeMine( mapFormat, mapState, mapEconomy, options, Resource::GOLD, config.monsterStrength );
+                }
             }
         }
 
