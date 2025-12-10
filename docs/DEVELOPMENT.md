@@ -39,15 +39,8 @@ Please follow the instructions below to be able to build the project from source
 
 * To build this build you need to have the necessary Data, Anim, Maps and Music folders for the engine present in the fheroes2 project's folder.
 * Download and install Xcode on your macos device. Download the iOS SDK during installation.
+* Go to the directory `script/ios` and run the file `install_packages.sh`. This script will install all the required packages to build the project using Xcode.
 * Open `fheroes2.xcodeproj` in the "iOS" folder".
-* Download SDL2 and SDL_mixer source codes from their GitHub repositories's release pages. Make sure you get SDL2 and not SDL3.
-* Paste the SDL2 and SDL_mixer folders in the same parent directory as your fheroes2 source folder. This means that next to the folder containing
-your fheroes2 local clone, you will have the two SDL folders.
-* Remove any version number from the name of the SDL2 and SDL_mixer folder so that their names are respectively `SDL` and `SDL_mixer`.
-* In Xcode SDL and SDL_mixer should now be recognized in the Navigator area, recognized by them not having read names. Open on `SDL_mixer` in the Navigator on the left side.
-* Click "fheroes2" in the Navigator area on the left side of Xcode.
-* In the right side Editor area select "fheroes2" under "Project". Open the `Build Settings` tab. Make sure to set `All` options and scroll down to `Search Paths`.
-* Open up the `User Header Search Paths` and add `$(SRCROOT)/../../SDL/include` to the list of paths.
 * In the Editor area select "fheroes2" under the "Targets" menu instead of "Projects". Open the "Signing & Capabilities" tab. Under "Signing", add your AppleID in
 the "Team" field.
 * Connect your iOS device to your mac device with the necessary cable. Select the device in the devices in Xcode's upper Toolbar.

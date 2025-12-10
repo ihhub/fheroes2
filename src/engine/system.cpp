@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -95,7 +95,7 @@ namespace
         {
             const char * homeEnvPath = getenv( "HOME" );
 
-#if defined( MACOS_APP_BUNDLE )
+#if defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ )
             if ( homeEnvPath != nullptr ) {
                 return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), appName );
             }
@@ -267,7 +267,7 @@ namespace
 
 bool System::isHandheldDevice()
 {
-#if defined( ANDROID )
+#if defined( ANDROID ) || defined( __IPHONEOS__ )
     return true;
 #else
     return false;
@@ -281,7 +281,7 @@ bool System::isTouchInputAvailable()
 
 bool System::isVirtualKeyboardSupported()
 {
-#if defined( ANDROID ) || defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( ANDROID ) || defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( __IPHONEOS__ )
     return true;
 #else
     return false;
@@ -382,7 +382,7 @@ std::string System::GetDataDirectory( const std::string_view appName )
         }
 
         return {};
-#elif defined( MACOS_APP_BUNDLE )
+#elif defined( MACOS_APP_BUNDLE ) || defined( __IPHONEOS__ )
         if ( const char * homeEnv = getenv( "HOME" ); homeEnv != nullptr ) {
             return concatPath( concatPath( homeEnv, "Library/Application Support" ), appName );
         }

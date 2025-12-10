@@ -301,8 +301,14 @@ void Interface::AdventureMap::EventSystemDialog() const
 
 fheroes2::GameMode Interface::BaseInterface::EventExit()
 {
-    if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
+#if defined( __IPHONEOS__ )
+    // iOS discourages to exit a running application.
+    fheroes2::showStandardTextMessage( _( "Quit" ), _( "To exit fheroes2, press the Home button or swipe up." ), Dialog::OK );
+#else
+    if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) ) {
         return fheroes2::GameMode::QUIT_GAME;
+    }
+#endif
 
     return fheroes2::GameMode::CANCEL;
 }
