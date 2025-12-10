@@ -84,8 +84,6 @@ namespace Maps::Random_Generator
         }
     };
 
-    class MapStateTransaction;
-
     class MapStateManager final
     {
     public:
