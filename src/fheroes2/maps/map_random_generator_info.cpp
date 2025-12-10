@@ -75,11 +75,13 @@ namespace Maps::Random_Generator
             return;
         }
 
+        assert( record < _history.size() );
+
         for ( size_t index = _history.size(); index > record; --index ) {
             const StateChange & change = _history[index - 1];
             _data[static_cast<size_t>( change.index )] = change.state;
+            _history.pop_back();
         }
-        _history.resize( record );
 
         if ( _transactionRecords.empty() ) {
             _history.clear();
