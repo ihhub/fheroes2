@@ -36,7 +36,7 @@ namespace
 {
     constexpr uint8_t directionCount{ 8 };
     const std::array<fheroes2::Point, directionCount> directionOffsets{ { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } } };
-    constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
+    constexpr std::array<int, 6> allResources = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 }
 
 namespace Maps::Random_Generator
@@ -97,9 +97,9 @@ namespace Maps::Random_Generator
 
     int MapEconomy::pickNextMineResource()
     {
-        const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
+        const auto it = std::min_element( allResources.begin(), allResources.end(),
                                           [this]( const auto & a, const auto & b ) { return _minesCount.at( a ) < _minesCount.at( b ); } );
-        assert( it != secondaryResources.end() );
+        assert( it != allResources.end() );
 
         return *it;
     }
