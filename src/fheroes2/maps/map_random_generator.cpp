@@ -410,6 +410,7 @@ namespace Maps::Random_Generator
         // Step 5. Fix terrain transitions and place Castles
         MapEconomy mapEconomy;
 
+        std::vector<int32_t> primaryMineLocations;
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 continue;
@@ -468,7 +469,9 @@ namespace Maps::Random_Generator
 
                 for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
                     for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                        if ( placeMine( mapFormat, mapState, mapEconomy, tileRings[ringIndex], resource, config.monsterStrength ) ) {
+                        const int32_t mineIndex = placeMine( mapFormat, mapState, mapEconomy, tileRings[ringIndex], resource, config.monsterStrength );
+                        if ( mineIndex != -1 ) {
+                            primaryMineLocations.push_back( mineIndex );
                             break;
                         }
                     }
@@ -516,10 +519,8 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            const int32_t avoidance = Maps::GetIndexFromAbsPoint( Maps::GetPoint( region.centerIndex ) + fheroes2::Point( 0, -4 ) );
-
             const uint8_t secondaryMineCount = ( regionSizeLimit > 250 || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
-            options = pickEvenlySpacedPoints( options, secondaryMineCount * 3, { avoidance } );
+            options = pickEvenlySpacedPoints( options, secondaryMineCount * 3, primaryMineLocations );
 
             for ( size_t idx = 0; idx < secondaryMineCount; ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();

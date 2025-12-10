@@ -845,7 +845,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> tileOptions, const int resource,
+    int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> tileOptions, const int resource,
                     const MonsterStrength monsterStrength )
     {
         for ( const int32_t nodeIndex : tileOptions ) {
@@ -856,10 +856,10 @@ namespace Maps::Random_Generator
 
                 const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
                 placeMonster( mapFormat, Maps::GetDirectionIndex( nodeIndex, Direction::BOTTOM ), getMonstersByValue( monsterStrength, mineValue ) );
-                return true;
+                return nodeIndex;
             }
         }
-        return false;
+        return -1;
     }
 
     bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, Rand::PCG32 & randomGenerator )
