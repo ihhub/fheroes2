@@ -845,17 +845,19 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    bool placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const int32_t nodeIndex, const int resource,
+    bool placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> tileOptions, const int resource,
                     const MonsterStrength monsterStrength )
     {
-        Tile & mineTile = world.getTile( nodeIndex );
-        const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-        if ( placeActionObject( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType ) ) {
-            economy.increaseMineCount( resource );
+        for ( const int32_t nodeIndex : tileOptions ) {
+            Tile & mineTile = world.getTile( nodeIndex );
+            const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
+            if ( placeActionObject( mapFormat, data, mineTile, ObjectGroup::ADVENTURE_MINES, mineType ) ) {
+                economy.increaseMineCount( resource );
 
-            const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-            placeMonster( mapFormat, Maps::GetDirectionIndex( nodeIndex, Direction::BOTTOM ), getMonstersByValue( monsterStrength, mineValue ) );
-            return true;
+                const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
+                placeMonster( mapFormat, Maps::GetDirectionIndex( nodeIndex, Direction::BOTTOM ), getMonstersByValue( monsterStrength, mineValue ) );
+                return true;
+            }
         }
         return false;
     }

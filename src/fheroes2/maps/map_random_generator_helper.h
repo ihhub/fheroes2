@@ -81,7 +81,7 @@ namespace Maps::Random_Generator
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex );
     bool placeActionObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, Tile & tile, const ObjectGroup groupType, const int32_t type );
     bool placeCastle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle );
-    bool placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const int32_t nodeIndex, const int resource,
+    bool placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> tileOptions, const int resource,
                     const MonsterStrength monsterStrength );
     bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, Rand::PCG32 & randomGenerator );
     void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster );

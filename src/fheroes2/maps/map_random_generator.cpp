@@ -460,6 +460,15 @@ namespace Maps::Random_Generator
             else {
                 mapState.getNodeToUpdate( region.centerIndex ).type = NodeType::PATH;
             }
+
+            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
+            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
+                    if ( placeMine( mapFormat, mapState, mapEconomy, tileRings[ringIndex], resource, config.monsterStrength ) ) {
+                        break;
+                    }
+                }
+            }
         }
         Maps::updatePlayerRelatedObjects( mapFormat );
 
@@ -496,48 +505,18 @@ namespace Maps::Random_Generator
                 }
             }
 
-            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
-
-            std::vector<int32_t> primaryMineTiles;
-            primaryMineTiles.reserve( region.nodes.size() / 3 );
-
-            const size_t distanceLimit = std::min( tileRings.size(), primaryMineDistanceLimit );
-            for ( size_t ringIndex = distanceLimit; ringIndex > 0; --ringIndex ) {
-                primaryMineTiles.insert( primaryMineTiles.end(), tileRings[ringIndex - 1].begin(), tileRings[ringIndex - 1].end() );
-            }
-            const auto & sawmillInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::WOOD, Ground::GRASS ) );
-            std::vector<int32_t> options = findPlacementOptions( mapState, width, region.id, primaryMineTiles, sawmillInfo );
+            const auto & mineInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::GOLD, Ground::GRASS ) );
+            std::vector<int32_t> options = findPlacementOptions( mapState, width, region.id, findOpenTiles( region ), mineInfo );
             if ( options.empty() ) {
                 continue;
             }
 
             const int32_t avoidance = Maps::GetIndexFromAbsPoint( Maps::GetPoint( region.centerIndex ) + fheroes2::Point( 0, -4 ) );
-            options = pickEvenlySpacedPoints( options, 4, { avoidance } );
-
-            if ( !options.empty() ) {
-                for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                    for ( const int32_t tileIndex : options ) {
-                        if ( placeMine( mapFormat, mapState, mapEconomy, tileIndex, resource, config.monsterStrength ) ) {
-                            break;
-                        }
-                    }
-                }
-            }
+            options = pickEvenlySpacedPoints( options, 10, { avoidance } );
 
             for ( size_t idx = 0; idx < regionConfiguration.mineCount; ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();
-                for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
-                    bool placed = false;
-                    for ( const int32_t tileIndex : tileRings[ringIndex] ) {
-                        if ( placeMine( mapFormat, mapState, mapEconomy, tileIndex, resource, config.monsterStrength ) ) {
-                            placed = true;
-                            break;
-                        }
-                    }
-                    if ( placed ) {
-                        break;
-                    }
-                }
+                placeMine( mapFormat, mapState, mapEconomy, options, resource, config.monsterStrength );
             }
         }
 
