@@ -50,7 +50,6 @@
 
 namespace
 {
-
     struct RoadBuilderNode final
     {
         int32_t _from{ -1 };
