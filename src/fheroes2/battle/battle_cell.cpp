@@ -173,6 +173,12 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             return {};
         };
 
+        Position headPos = tryHead();
+
+        if ( headPos.GetHead() != nullptr && headPos.GetTail() != nullptr ) {
+            return headPos;
+        }
+
         const auto tryTail = [&unit, dst, &checkCells]() -> Position {
             const CellDirection headDirection = unit.isReflect() ? CellDirection::LEFT : CellDirection::RIGHT;
 
@@ -185,12 +191,6 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
 
             return {};
         };
-
-        Position headPos = tryHead();
-
-        if ( headPos.GetHead() != nullptr && headPos.GetTail() != nullptr ) {
-            return headPos;
-        }
 
         return tryTail();
     }
