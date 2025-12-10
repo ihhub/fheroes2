@@ -44,6 +44,7 @@
 #include "monster.h"
 #include "mp2.h"
 #include "rand.h"
+#include "resource.h"
 #include "ui_map_object.h"
 #include "world.h"
 #include "world_object_uid.h"
