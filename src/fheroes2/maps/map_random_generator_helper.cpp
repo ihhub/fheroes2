@@ -355,7 +355,7 @@ namespace Maps::Random_Generator
         cache[static_cast<size_t>( start )]._from = start;
         cache[static_cast<size_t>( start )]._cost = 0;
 
-        const bool fromActionTile = nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION;
+        const bool fromActionTile = ( nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION );
         const Directions & directions = Direction::All();
 
         int32_t bestRoadIndex = -1;
