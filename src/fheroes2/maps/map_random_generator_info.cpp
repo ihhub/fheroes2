@@ -52,13 +52,6 @@ namespace Maps::Random_Generator
         }
     }
 
-    MapStateTransaction MapStateManager::startTransaction()
-    {
-        const size_t record = _history.size();
-        _transactionRecords.push_back( record );
-        return MapStateTransaction( *this, record );
-    }
-
     void MapStateManager::commitTransaction( const size_t record )
     {
         assert( !_transactionRecords.empty() );
@@ -234,18 +227,5 @@ namespace Maps::Random_Generator
         const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
         centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
         return { castleX, castleY };
-    }
-
-    MapStateTransaction::~MapStateTransaction()
-    {
-        if ( !_committed ) {
-            _mapState.rollbackTransaction( _mark );
-        }
-    }
-
-    void MapStateTransaction::commit()
-    {
-        _mapState.commitTransaction( _mark );
-        _committed = true;
     }
 }

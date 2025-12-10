@@ -83,34 +83,10 @@ namespace Maps::Random_Generator
         }
     };
 
-    class MapStateManager;
-
-    class MapStateTransaction final
-    {
-    public:
-        explicit MapStateTransaction( MapStateManager & state, const size_t mark )
-            : _mapState( state )
-            , _mark( mark )
-        {}
-        MapStateTransaction( const MapStateTransaction & ) = delete;
-        MapStateTransaction & operator=( const MapStateTransaction & ) = delete;
-
-        ~MapStateTransaction();
-
-        void commit();
-
-    private:
-        MapStateManager & _mapState;
-        size_t _mark{ 0 };
-        bool _committed{ false };
-    };
-
     class MapStateManager final
     {
     public:
         MapStateManager( const int32_t width, const int32_t height );
-
-        MapStateTransaction startTransaction();
 
         Node & getNodeToUpdate( const fheroes2::Point position )
         {
@@ -201,6 +177,13 @@ namespace Maps::Random_Generator
             _history.emplace_back( index, current );
         }
 
+        size_t startTransaction()
+        {
+            const size_t record = _history.size();
+            _transactionRecords.push_back( record );
+            return record;
+        }
+
         void commitTransaction( const size_t record );
         void rollbackTransaction( const size_t record );
 
@@ -210,6 +193,40 @@ namespace Maps::Random_Generator
 
         std::vector<StateChange> _history;
         std::vector<size_t> _transactionRecords;
+    };
+
+    class MapStateTransaction final
+    {
+    public:
+        explicit MapStateTransaction( MapStateManager & manager )
+            : _manager( manager )
+            , _record( _manager.startTransaction() )
+        {
+            // Do nothing.
+        }
+
+        MapStateTransaction( const MapStateTransaction & ) = delete;
+        MapStateTransaction & operator=( const MapStateTransaction & ) = delete;
+
+        ~MapStateTransaction()
+        {
+            if ( !_committed ) {
+                _manager.rollbackTransaction( _record );
+            }
+        }
+
+        void commit()
+        {
+            assert( !_committed );
+
+            _manager.commitTransaction( _record );
+            _committed = true;
+        }
+
+    private:
+        MapStateManager & _manager;
+        size_t _record{ 0 };
+        bool _committed{ false };
     };
 
     enum class RegionType : uint8_t

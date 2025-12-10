@@ -50,7 +50,6 @@
 
 namespace
 {
-
     struct RoadBuilderNode final
     {
         int32_t _from{ -1 };
@@ -429,7 +428,7 @@ namespace Maps::Random_Generator
         cache[static_cast<size_t>( start )]._from = start;
         cache[static_cast<size_t>( start )]._cost = 0;
 
-        const bool fromActionTile = nodes.getNode( start ).type == NodeType::ACTION;
+        const bool fromActionTile = ( nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION );
         const Directions & directions = Direction::All();
 
         int32_t bestRoadIndex = -1;
@@ -754,7 +753,7 @@ namespace Maps::Random_Generator
         const auto & objectInfo = Maps::getObjectInfo( groupType, type );
 
         if ( canPlaceObject( data, objectInfo, tilePos ) ) {
-            MapStateTransaction transaction = data.startTransaction();
+            MapStateTransaction transaction( data );
             markObjectPlacement( data, objectInfo, tilePos );
 
             const int32_t tileIndex = tile.GetIndex();
@@ -1071,7 +1070,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
-                MapStateTransaction transaction = data.startTransaction();
+                MapStateTransaction transaction( data );
                 for ( const auto & obstacle : prefab.obstacles ) {
                     const fheroes2::Point position = Maps::GetPoint( node.index ) + obstacle.offset;
                     const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );

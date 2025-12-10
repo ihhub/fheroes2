@@ -587,6 +587,7 @@ namespace Maps::Random_Generator
         }
 
         Maps::updateAllRoads( mapFormat );
+        Maps::updatePlayerRelatedObjects( mapFormat );
 
         // Visual debug
         for ( const Region & region : mapRegions ) {
