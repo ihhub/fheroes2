@@ -49,6 +49,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "screen.h"
+#include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
 #include "tools.h"
@@ -56,6 +57,7 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -628,7 +630,19 @@ void Heroes::MeetingDialog( Heroes & otherHero )
                 fheroes2::fadeOutDisplay( fadeRoi, true );
             }
 
-            Game::OpenHeroesDialog( isHero1LeftClicked ? *this : otherHero, false, true, true );
+            Heroes::DialogOptions options;
+            options.mode = Heroes::DialogOptions::Mode::Limited;
+            options.renderBackgroundDialog = false;
+            options.animateDialogFading = true;
+
+            const auto language = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+
+            if ( isHero1LeftClicked ) {
+                OpenDialog( options, language );
+            }
+            else {
+                otherHero.OpenDialog( options, language );
+            }
 
             if ( !isDefaultScreenSize ) {
                 dialogRestorer.restore();
