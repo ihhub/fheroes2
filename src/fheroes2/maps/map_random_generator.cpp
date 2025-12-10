@@ -58,7 +58,6 @@ namespace
     constexpr int32_t regionSizeForSecondaryMines{ 250 };
     constexpr int32_t regionSizeForGoldMine{ 350 };
     constexpr int32_t emptySpacePercentage{ 40 };
-    constexpr size_t primaryMineDistanceLimit{ 14 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
@@ -523,7 +522,7 @@ namespace Maps::Random_Generator
 
             const uint8_t secondaryMineCount
                 = ( regionSizeLimit > regionSizeForSecondaryMines || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
-            options = pickEvenlySpacedPoints( options, secondaryMineCount * 3, primaryMineLocations );
+            options = pickEvenlySpacedPoints( options, static_cast<size_t>( secondaryMineCount ) * 3, primaryMineLocations );
 
             for ( size_t idx = 0; idx < secondaryMineCount; ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();

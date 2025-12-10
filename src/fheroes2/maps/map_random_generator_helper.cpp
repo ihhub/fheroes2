@@ -845,7 +845,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> tileOptions, const int resource,
+    int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> & tileOptions, const int resource,
                        const MonsterStrength monsterStrength )
     {
         for ( const int32_t nodeIndex : tileOptions ) {
