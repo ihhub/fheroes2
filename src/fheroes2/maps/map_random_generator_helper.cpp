@@ -230,7 +230,7 @@ namespace
         return {};
     }
 
-    bool iterateOverObjectParts( const Maps::ObjectInfo & info, const std::function<void( const Maps::ObjectPartInfo & )> & lambda )
+    void iterateOverObjectParts( const Maps::ObjectInfo & info, const std::function<void( const Maps::ObjectPartInfo & )> & lambda )
     {
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
@@ -240,7 +240,6 @@ namespace
 
             lambda( objectPart );
         }
-        return true;
     }
 
     void markNodeIndexAsType( Maps::Random_Generator::MapStateManager & data, const int32_t index, const Maps::Random_Generator::NodeType type )
@@ -654,17 +653,17 @@ namespace Maps::Random_Generator
 
     bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
-        bool invalid = false;
+        bool validPlacement = true;
 
-        auto updateObjectArea = [&data, &mainTilePos, &invalid]( const auto & partInfo ) {
+        auto updateObjectArea = [&data, &mainTilePos, &validPlacement]( const auto & partInfo ) {
             const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
 
             if ( node.index == -1 || node.region == 0 ) {
-                invalid = true;
+                validPlacement = false;
                 return;
             }
             if ( node.type != NodeType::OPEN && node.type != NodeType::BORDER && node.type != NodeType::OBSTACLE ) {
-                invalid = true;
+                validPlacement = false;
                 return;
             }
         };
@@ -678,11 +677,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        if ( invalid ) {
-            return false;
-        }
-
-        return true;
+        return validPlacement;
     }
 
     bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & mainTilePos )
@@ -927,7 +922,7 @@ namespace Maps::Random_Generator
                                                const ObjectInfo & objectInfo )
     {
         // Automatically rollback at the end of planning stage
-        const MapStateTransaction transaction = data.startTransaction();
+        const MapStateTransaction transaction( data );
 
         std::vector<int32_t> options;
 
@@ -938,7 +933,7 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            MapStateTransaction secondaryTx = data.startTransaction();
+            MapStateTransaction secondaryTx( data );
             markObjectPlacement( data, objectInfo, mapPoint );
 
             const auto & routeToObject = findPathToNearestRoad( data, mapWidth, regionId, nodeIndex );
@@ -965,7 +960,7 @@ namespace Maps::Random_Generator
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator )
     {
         // Automatically rollback at the end of planning stage
-        const MapStateTransaction transaction = data.startTransaction();
+        const MapStateTransaction transaction( data );
 
         Rand::ShuffleWithGen( objectSets, randomGenerator );
 
@@ -989,7 +984,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
-                MapStateTransaction secondaryTx = data.startTransaction();
+                MapStateTransaction secondaryTx( data );
                 for ( const auto & obstacle : prefab.obstacles ) {
                     const fheroes2::Point position = mapPoint + obstacle.offset;
                     const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );
