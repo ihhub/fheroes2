@@ -84,12 +84,12 @@ namespace Maps::Random_Generator
         }
     };
 
-    class NodeCache final
+    class MapStateManager final
     {
     public:
-        NodeCache( const int32_t width, const int32_t height );
+        MapStateManager( const int32_t width, const int32_t height );
 
-        Node & getNode( const fheroes2::Point position )
+        Node & getNodeToUpdate( const fheroes2::Point position )
         {
             if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
@@ -100,7 +100,12 @@ namespace Maps::Random_Generator
                 return _outOfBounds;
             }
 
-            return _data[position.y * _mapSize + position.x];
+            const int32_t index = position.y * _mapSize + position.x;
+            if ( !_transactionRecords.empty() ) {
+                recordStateChange( index, _data[index] );
+            }
+
+            return _data[index];
         }
 
         const Node & getNode( const fheroes2::Point position ) const
@@ -117,7 +122,26 @@ namespace Maps::Random_Generator
             return _data[position.y * _mapSize + position.x];
         }
 
-        Node & getNode( const int32_t index )
+        Node & getNodeToUpdate( const int32_t index )
+        {
+            if ( index < 0 || index >= _mapSize * _mapSize ) {
+                // We shouldn't try to get a tile with an invalid index.
+                assert( 0 );
+
+                assert( _outOfBounds.type == NodeType::BORDER );
+                assert( _outOfBounds.index == -1 );
+
+                return _outOfBounds;
+            }
+
+            if ( !_transactionRecords.empty() ) {
+                recordStateChange( index, _data[index] );
+            }
+
+            return _data[index];
+        }
+
+        const Node & getNode( const int32_t index ) const
         {
             if ( index < 0 || index >= _mapSize * _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
@@ -133,9 +157,77 @@ namespace Maps::Random_Generator
         }
 
     private:
+        friend class MapStateTransaction;
+
+        struct StateChange final
+        {
+            int32_t index{ -1 };
+            Node state;
+
+            StateChange() = default;
+            explicit StateChange( const int32_t index_, const Node & current )
+                : index( index_ )
+                , state( current )
+            {
+                // Do nothing
+            }
+        };
+
+        void recordStateChange( const int32_t index, const Node & current )
+        {
+            _history.emplace_back( index, current );
+        }
+
+        size_t startTransaction()
+        {
+            const size_t record = _history.size();
+            _transactionRecords.push_back( record );
+            return record;
+        }
+
+        void commitTransaction( const size_t record );
+        void rollbackTransaction( const size_t record );
+
         const int32_t _mapSize{ 0 };
         Node _outOfBounds{ -1, 0, NodeType::BORDER };
         std::vector<Node> _data;
+
+        std::vector<StateChange> _history;
+        std::vector<size_t> _transactionRecords;
+    };
+
+    class MapStateTransaction final
+    {
+    public:
+        explicit MapStateTransaction( MapStateManager & manager )
+            : _manager( manager )
+            , _record( _manager.startTransaction() )
+        {
+            // Do nothing.
+        }
+
+        MapStateTransaction( const MapStateTransaction & ) = delete;
+        MapStateTransaction & operator=( const MapStateTransaction & ) = delete;
+
+        ~MapStateTransaction()
+        {
+            if ( !_committed ) {
+                _manager.rollbackTransaction( _record );
+            }
+        }
+
+        void commit()
+        {
+            assert( !_committed );
+
+            _manager.commitTransaction( _record );
+            _committed = true;
+        }
+
+    private:
+        MapStateManager & _manager;
+        size_t _record{ 0 };
+        bool _committed{ false };
     };
 
     enum class RegionType : uint8_t
@@ -178,9 +270,9 @@ namespace Maps::Random_Generator
             nodes.emplace_back( centerNode );
         }
 
-        void checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
-        bool regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator );
-        bool checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node );
+        void checkAdjacentTiles( MapStateManager & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
+        bool regionExpansion( MapStateManager & rawData, Rand::PCG32 & randomGenerator );
+        bool checkNodeForConnections( MapStateManager & data, std::vector<Region> & mapRegions, Node & node );
         fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat );
     };
 

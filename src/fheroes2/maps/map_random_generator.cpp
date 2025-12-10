@@ -27,7 +27,6 @@
 #include <cstddef>
 #include <functional>
 #include <initializer_list>
-#include <list>
 #include <map>
 #include <ostream>
 #include <set>
@@ -51,11 +50,8 @@
 #include "mp2.h"
 #include "rand.h"
 #include "resource.h"
-#include "route.h"
-#include "skill.h"
 #include "translations.h"
 #include "world.h"
-#include "world_pathfinding.h"
 
 namespace
 {
@@ -330,7 +326,7 @@ namespace Maps::Random_Generator
 
         Rand::PCG32 randomGenerator( generatorSeed );
 
-        NodeCache data( width, height );
+        MapStateManager mapState( width, height );
 
         auto mapBoundsCheck = [width, height]( int x, int y ) {
             x = std::clamp( x, 0, width - 1 );
@@ -346,7 +342,7 @@ namespace Maps::Random_Generator
 
         // Step 2. Determine region layout and placement.
         //         Insert empty region that represents water and map edges
-        std::vector<Region> mapRegions = { { 0, data.getNode( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
+        std::vector<Region> mapRegions = { { 0, mapState.getNodeToUpdate( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
         const int innerLayer = std::min( neutralRegionCount, config.playerCount );
@@ -364,6 +360,7 @@ namespace Maps::Random_Generator
             const int regionCount = mapLayers[layer].first;
             const double startingAngle = Rand::GetWithGen( 0, 360, randomGenerator );
             const double offsetAngle = 360.0 / regionCount;
+            const bool regionCountIsEven = ( regionCount % config.playerCount ) == 0;
             for ( int i = 0; i < regionCount; ++i ) {
                 const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
                 const double distance = mapLayers[layer].second;
@@ -380,9 +377,9 @@ namespace Maps::Random_Generator
                 const int32_t treasureLimit = isPlayerRegion ? regionConfiguration.treasureValueLimit : regionConfiguration.treasureValueLimit * 2;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                Node & centerNode = data.getNode( centerTile );
-                const RegionType innerType = ( layer == 0 ) ? RegionType::NEUTRAL : RegionType::EXPANSION;
-                const RegionType type = isPlayerRegion ? RegionType::STARTING : innerType;
+                Node & centerNode = mapState.getNodeToUpdate( centerTile );
+                const RegionType neutralType = ( layer == 1 && regionCountIsEven ) ? RegionType::EXPANSION : RegionType::NEUTRAL;
+                const RegionType type = isPlayerRegion ? RegionType::STARTING : neutralType;
                 mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
 
                 if ( isPlayerRegion ) {
@@ -404,7 +401,7 @@ namespace Maps::Random_Generator
             stillRoomToExpand = false;
             // Skip the first region which is the border region.
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
-                if ( mapRegions[regionID].regionExpansion( data, randomGenerator ) ) {
+                if ( mapRegions[regionID].regionExpansion( mapState, randomGenerator ) ) {
                     stillRoomToExpand = true;
                 }
             }
@@ -429,10 +426,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 5. Castles and mines placement
-        std::set<int32_t> startingLocations;
-        std::set<int32_t> actionLocations;
-
+        // Step 5. Fix terrain transitions and place Castles
         MapEconomy mapEconomy;
 
         for ( Region & region : mapRegions ) {
@@ -453,7 +447,7 @@ namespace Maps::Random_Generator
                             continue;
                         }
 
-                        const Node & adjacentNode = data.getNode( adjacentIndex );
+                        const Node & adjacentNode = mapState.getNode( adjacentIndex );
                         if ( adjacentNode.region == 0 && adjacentNode.index == adjacentIndex ) {
                             extraNodes.insert( adjacentIndex );
                         }
@@ -462,7 +456,7 @@ namespace Maps::Random_Generator
             }
 
             for ( const int32_t extraNodeIndex : extraNodes ) {
-                Node & extra = data.getNode( extraNodeIndex );
+                Node & extra = mapState.getNodeToUpdate( extraNodeIndex );
                 region.nodes.emplace_back( extra );
                 extra.region = region.id;
                 extra.type = NodeType::BORDER;
@@ -470,36 +464,69 @@ namespace Maps::Random_Generator
 
             if ( region.colorIndex != neutralColorIndex ) {
                 const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
-                if ( !placeCastle( mapFormat, data, region, castlePos, true ) ) {
+                if ( !placeCastle( mapFormat, mapState, region, castlePos, true ) ) {
                     // Return early if we can't place a starting player castle.
                     DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to place a starting player castle on tile " << castlePos.x << ", " << castlePos.y )
                     return false;
                 }
-                startingLocations.insert( region.centerIndex );
             }
             else if ( static_cast<int32_t>( region.nodes.size() ) > regionSizeLimit ) {
                 // Place non-mandatory castles in bigger neutral regions.
                 const bool useNeutralCastles = ( config.resourceDensity == ResourceDensity::ABUNDANT );
                 const fheroes2::Point castlePos = region.adjustRegionToFitCastle( mapFormat );
-                placeCastle( mapFormat, data, region, castlePos, useNeutralCastles );
+                placeCastle( mapFormat, mapState, region, castlePos, useNeutralCastles );
+            }
+            else {
+                forceTempRoadOnTile( mapFormat, region.centerIndex );
+            }
+        }
+        Maps::updatePlayerRelatedObjects( mapFormat );
+
+        // Step 6. Set up region connectors based on frequency settings and border length.
+        for ( Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
+            for ( Node & node : region.nodes ) {
+                region.checkNodeForConnections( mapState, mapRegions, node );
+            }
+        }
+
+        for ( const Region & region : mapRegions ) {
+            for ( const Node & node : region.nodes ) {
+                if ( node.type == NodeType::BORDER ) {
+                    placeBorderObstacle( mapFormat, mapState, node, randomGenerator );
+                }
+            }
+        }
+
+        // Step 7. Place mines.
+        const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
+            for ( const int32_t tileIndex : ring ) {
+                const auto & node = mapState.getNode( tileIndex );
+                if ( placeMine( mapFormat, mapState, node, resource ) ) {
+                    mapEconomy.increaseMineCount( resource );
+
+                    const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
+                    placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        for ( const Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
+                for ( const auto & step : findPathToNearestRoad( mapState, width, region.id, tileIndex ) ) {
+                    mapState.getNodeToUpdate( step ).type = NodeType::PATH;
+                    forceTempRoadOnTile( mapFormat, step );
+                }
             }
 
             const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
-
-            const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
-                for ( const int32_t tileIndex : ring ) {
-                    const auto & node = data.getNode( tileIndex );
-                    if ( placeMine( mapFormat, data, node, resource ) ) {
-                        mapEconomy.increaseMineCount( resource );
-                        actionLocations.insert( tileIndex );
-
-                        const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-                        placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
-                        return true;
-                    }
-                }
-                return false;
-            };
 
             if ( tileRings.size() < 4 ) {
                 continue;
@@ -522,58 +549,11 @@ namespace Maps::Random_Generator
                 }
             }
         }
-        Maps::updatePlayerRelatedObjects( mapFormat );
-
-        // Step 6. Set up region connectors based on frequency settings and border length.
-        for ( Region & region : mapRegions ) {
-            if ( region.groundType == Ground::WATER ) {
-                continue;
-            }
-            for ( Node & node : region.nodes ) {
-                region.checkNodeForConnections( data, mapRegions, node );
-            }
-        }
-
-        for ( const Region & region : mapRegions ) {
-            for ( const Node & node : region.nodes ) {
-                if ( node.type == NodeType::BORDER ) {
-                    placeRandomObstacle( mapFormat, data, node, randomGenerator );
-                }
-            }
-        }
-
-        // Step 7. Set up pathfinder and generate road network.
-        AIWorldPathfinder pathfinder;
-        pathfinder.reset();
-        const PlayerColor testPlayer = PlayerColor::BLUE;
-
-        // Have to remove fog first otherwise pathfinder won't work
-        for ( int idx = 0; idx < width * height; ++idx ) {
-            world.getTile( idx ).removeFogForPlayers( static_cast<PlayerColorsSet>( testPlayer ) );
-        }
-        world.resetPathfinder();
-        world.updatePassabilities();
-
-        // Set explicit paths
-        for ( const Region & region : mapRegions ) {
-            if ( region.groundType == Ground::WATER ) {
-                continue;
-            }
-
-            pathfinder.reEvaluateIfNeeded( region.centerIndex, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const auto & [regionId, tileIndex] : region.connections ) {
-                const auto & path = pathfinder.buildPath( tileIndex );
-                for ( const auto & step : path ) {
-                    data.getNode( step.GetIndex() ).type = NodeType::PATH;
-                    Maps::updateRoadOnTile( mapFormat, step.GetIndex(), true );
-                }
-            }
-        }
 
         // Step 8: Place powerups and treasure clusters while avoiding the paths.
         for ( Region & region : mapRegions ) {
-            placeObjectSet( mapFormat, data, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
-            placeObjectSet( mapFormat, data, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
+            placeObjectSet( mapFormat, mapState, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
+            placeObjectSet( mapFormat, mapState, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
         }
 
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
@@ -592,16 +572,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 11: Validate that map is playable.
-        for ( const int32_t start : startingLocations ) {
-            pathfinder.reEvaluateIfNeeded( start, testPlayer, 999999.9, Skill::Level::EXPERT );
-            for ( const int action : actionLocations ) {
-                if ( pathfinder.getDistance( action ) == 0 ) {
-                    DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Not able to find path from " << start << " to " << action )
-                    return false;
-                }
-            }
-        }
+        Maps::updateAllRoads( mapFormat );
 
         // Visual debug
         for ( const Region & region : mapRegions ) {

@@ -39,7 +39,7 @@ namespace
 
 namespace Maps::Random_Generator
 {
-    NodeCache::NodeCache( const int32_t width, const int32_t height )
+    MapStateManager::MapStateManager( const int32_t width, const int32_t height )
         : _mapSize( width )
         , _data( static_cast<size_t>( width ) * height )
     {
@@ -48,6 +48,44 @@ namespace Maps::Random_Generator
 
         for ( size_t i = 0; i < _data.size(); ++i ) {
             _data[i].index = static_cast<int>( i );
+        }
+    }
+
+    void MapStateManager::commitTransaction( const size_t record )
+    {
+        assert( !_transactionRecords.empty() );
+        assert( _transactionRecords.back() == record );
+
+        _transactionRecords.pop_back();
+
+        if ( _transactionRecords.empty() ) {
+            _history.clear();
+        }
+        else {
+            _history.resize( record );
+        }
+    }
+
+    void MapStateManager::rollbackTransaction( const size_t record )
+    {
+        assert( !_transactionRecords.empty() );
+        assert( _transactionRecords.back() == record );
+        _transactionRecords.pop_back();
+
+        if ( _history.empty() ) {
+            return;
+        }
+
+        for ( size_t index = _history.size() - 1; index > record; --index ) {
+            const StateChange & change = _history[index];
+            _data[static_cast<size_t>( change.index )] = change.state;
+        }
+
+        if ( _transactionRecords.empty() ) {
+            _history.clear();
+        }
+        else {
+            _history.resize( record );
         }
     }
 
@@ -67,7 +105,7 @@ namespace Maps::Random_Generator
         return *it;
     }
 
-    void Region::checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator )
+    void Region::checkAdjacentTiles( MapStateManager & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator )
     {
         Node & previousNode = nodes[lastProcessedNode];
         const int nodeIndex = previousNode.index;
@@ -85,7 +123,7 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            Node & newTile = rawData.getNode( newPosition );
+            Node & newTile = rawData.getNodeToUpdate( newPosition );
 
             if ( Maps::GetApproximateDistance( centerIndex, newTile.index ) > distanceLimit ) {
                 previousNode.type = NodeType::BORDER;
@@ -109,7 +147,7 @@ namespace Maps::Random_Generator
         }
     }
 
-    bool Region::regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator )
+    bool Region::regionExpansion( MapStateManager & rawData, Rand::PCG32 & randomGenerator )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added.
         const size_t nodesEnd = nodes.size();
@@ -122,7 +160,7 @@ namespace Maps::Random_Generator
         return lastProcessedNode != nodes.size();
     }
 
-    bool Region::checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node )
+    bool Region::checkNodeForConnections( MapStateManager & data, std::vector<Region> & mapRegions, Node & node )
     {
         if ( node.type != NodeType::BORDER ) {
             return false;
@@ -150,7 +188,7 @@ namespace Maps::Random_Generator
         }
 
         for ( uint8_t direction = 0; direction < 4; ++direction ) {
-            Node & adjacent = data.getNode( position + directionOffsets[direction] );
+            Node & adjacent = data.getNodeToUpdate( position + directionOffsets[direction] );
 
             if ( adjacent.index == -1 || adjacent.region == id ) {
                 continue;
@@ -161,7 +199,7 @@ namespace Maps::Random_Generator
                 break;
             }
 
-            Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );
+            Node & twoAway = data.getNodeToUpdate( position + directionOffsets[direction] + directionOffsets[direction] );
             if ( twoAway.index == -1 || twoAway.type != NodeType::OPEN ) {
                 continue;
             }
@@ -174,7 +212,7 @@ namespace Maps::Random_Generator
                 adjacent.type = NodeType::PATH;
                 twoAway.type = NodeType::PATH;
 
-                Node & stepBack = data.getNode( position - directionOffsets[direction] );
+                Node & stepBack = data.getNodeToUpdate( position - directionOffsets[direction] );
                 if ( stepBack.index != -1 ) {
                     stepBack.type = NodeType::PATH;
                 }

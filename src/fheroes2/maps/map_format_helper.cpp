@@ -856,14 +856,6 @@ namespace
         return ( type == MP2::OBJ_CASTLE ) || ( type == MP2::OBJ_RANDOM_TOWN ) || ( type == MP2::OBJ_RANDOM_CASTLE );
     }
 
-    void removeRoads( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
-    {
-        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
-                            tile.objects.end() );
-
-        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
-    }
-
     bool doesContainCastleEntrance( const Maps::Map_Format::TileInfo & tile )
     {
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
@@ -2050,7 +2042,7 @@ namespace Maps
             }
         }
         else {
-            removeRoads( tile, tileIndex );
+            removeRoadsFromTile( tile, tileIndex );
 
             updateRoadSpritesAround( map, tileIndex );
 
@@ -2071,12 +2063,25 @@ namespace Maps
             // After the check this tile should not contain a road sprite.
             if ( !forceRoadOnTile && !doesContainRoads( tile ) ) {
                 // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
-                removeRoads( tile, tileIndex );
+                removeRoadsFromTile( tile, tileIndex );
             }
 
             return;
         }
 
+        writeRoadSpriteToTile( tile, tileIndex, imageIndex );
+    }
+
+    void removeRoadsFromTile( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
+    {
+        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
+                            tile.objects.end() );
+
+        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
+    }
+
+    void writeRoadSpriteToTile( Map_Format::TileInfo & tile, const int32_t tileIndex, const uint8_t imageIndex )
+    {
         auto roadObjectIter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } );
         if ( roadObjectIter != tile.objects.end() ) {
             // Since the tile has a road object, update it.
@@ -2096,6 +2101,13 @@ namespace Maps
 
             tile.objects.emplace_back( std::move( info ) );
         }
+    }
+
+    void updateAllRoads( Map_Format::MapFormat & map )
+    {
+        const int32_t centerTileIndex = Maps::GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
+        updateRoadSpritesInArea( map, centerTileIndex, map.width, false );
+        updateRoadSpritesInArea( map, centerTileIndex, map.width, true );
     }
 
     bool doesContainRoads( const Map_Format::TileInfo & tile )
