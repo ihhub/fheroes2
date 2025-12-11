@@ -327,13 +327,11 @@ namespace Maps::Random_Generator
 
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
     {
-        if ( groupType == ObjectGroup::LANDSCAPE_TREES ) {
-            assert( objectIndex < 6 );
+        if ( groupType == ObjectGroup::LANDSCAPE_TREES && objectIndex < 6 ) {
             return treeTypeFromGroundType( groundType ) + objectIndex;
         }
 
-        if ( groupType == ObjectGroup::LANDSCAPE_MOUNTAINS ) {
-            assert( objectIndex < 8 );
+        if ( groupType == ObjectGroup::LANDSCAPE_MOUNTAINS && objectIndex < 8 ) {
             return mountainTypeFromGroundType( groundType ) + objectIndex;
         }
         return objectIndex;
@@ -843,6 +841,34 @@ namespace Maps::Random_Generator
 
                 ++objectsPlaced;
                 break;
+            }
+        }
+    }
+
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<DecorationSet> sets, Rand::PCG32 & randomGenerator )
+    {
+        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+            const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
+            const fheroes2::Point position = Maps::GetPoint( node.index );
+
+            Rand::ShuffleWithGen( sets, randomGenerator );
+
+            for ( const auto & prefab : sets ) {
+                bool valid = true;
+                for ( const auto & obstacle : prefab.obstacles ) {
+                    const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );
+                    if ( !canFitObject( data, objectInfo, position + obstacle.offset, true ) ) {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if ( valid ) {
+                    for ( const auto & obstacle : prefab.obstacles ) {
+                        placeSimpleObject( mapFormat, data, node, obstacle );
+                    }
+                    break;
+                }
             }
         }
     }

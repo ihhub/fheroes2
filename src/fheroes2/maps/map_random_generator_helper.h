@@ -39,6 +39,7 @@ namespace Maps::Random_Generator
     struct Node;
     struct ObjectPlacement;
     struct ObjectSet;
+    struct DecorationSet;
     struct Region;
     struct MonsterSelection;
     enum class MonsterStrength : uint8_t;
@@ -84,4 +85,5 @@ namespace Maps::Random_Generator
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement );
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objects,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator );
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<DecorationSet> sets, Rand::PCG32 & randomGenerator );
 }

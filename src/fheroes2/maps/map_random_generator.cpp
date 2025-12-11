@@ -228,6 +228,124 @@ namespace Maps::Random_Generator
                    { { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } } },
     };
 
+    const std::map<int, std::vector<DecorationSet>> decorationsPerGround{
+        { Maps::Ground::ALL,
+          {
+              {
+                  // Obstacles.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 1 },
+                      { { -2, 2 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 1 },
+                      { { -3, 0 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 4 },
+                      { { 1, 2 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 2 },
+                  },
+                  // Optional.
+                  {},
+              },
+              {
+                  // Obstacles.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 0 },
+                      { { -3, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 1 },
+                      { { -2, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                  },
+                  // Optional.
+                  {},
+              },
+              {
+                  // Obstacles.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 2 },
+                      { { 1, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 3 },
+                      { { -1, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
+                  },
+                  // Optional.
+                  {},
+              },
+              {
+                  // Obstacles.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 4 },
+                      { { -1, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
+                      { { 0, 1 }, ObjectGroup::LANDSCAPE_TREES, 4 },
+                  },
+                  // Optional.
+                  {},
+              },
+              {
+                  // Obstacles.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                      { { -1, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                  },
+                  // Optional.
+                  {},
+              },
+          } },
+        { Maps::Ground::GRASS,
+          {
+              {
+                  // Obstacles.
+                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 4 },
+                    { { -2, -1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
+                    { { 0, -2 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
+                    { { 1, -3 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                    { { 3, -2 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                    { { 4, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                    { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                    { { 2, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 14 },
+                    { { -2, 0 }, ObjectGroup::LANDSCAPE_ROCKS, 19 } },
+                  // Optional.
+                  {},
+              },
+              {
+                  // Obstacles.
+                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 5 },
+                    { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                    { { 1, -1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                    { { -1, -2 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                    { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 14 },
+                    { { 0, 0 }, ObjectGroup::LANDSCAPE_TREES, 4 } },
+                  // Optional.
+                  {},
+              },
+          } },
+        { Maps::Ground::SNOW,
+          {
+              {
+                  // Obstacles.
+                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 37 },
+                    { { -1, 0 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                    { { 1, 1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                    { { -2, 2 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                    { { 0, 3 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                    { { 1, 0 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                    { { 2, 0 }, ObjectGroup::LANDSCAPE_ROCKS, 12 } },
+                  // Optional.
+                  {},
+              },
+              {
+                  // Obstacles.
+                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 37 },
+                    { { -1, -1 }, ObjectGroup::LANDSCAPE_TREES, 41 },
+                    { { 2, 0 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                    { { -1, 0 }, ObjectGroup::LANDSCAPE_TREES, 39 } },
+                  // Optional.
+                  {},
+              },
+              {
+                  // Obstacles.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 38 },
+                      { { 2, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                      { { 1, 1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 33 },
+                  },
+                  // Optional.
+                  {},
+              },
+          } },
+    };
+
     std::string layoutToString( const Layout layout )
     {
         switch ( layout ) {
@@ -557,6 +675,13 @@ namespace Maps::Random_Generator
         }
 
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
+        for ( Region & region : mapRegions ) {
+            const auto it = decorationsPerGround.find( region.groundType );
+            if ( it != decorationsPerGround.end() ) {
+                placeDecorations( mapFormat, mapState, region, it->second, randomGenerator );
+            }
+            placeDecorations( mapFormat, mapState, region, decorationsPerGround.at( Ground::ALL ), randomGenerator );
+        }
 
         // Step 10: Place missing monsters.
         const auto & weakGuard = getMonstersByValue( config.monsterStrength, 4500 );
