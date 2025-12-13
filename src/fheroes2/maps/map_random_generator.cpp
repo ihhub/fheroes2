@@ -523,7 +523,7 @@ namespace Maps::Random_Generator
 
             const uint8_t secondaryMineCount
                 = ( regionSizeLimit > regionSizeForSecondaryMines || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
-            std::vector<int32_t> avoidance( primaryMineLocations.begin(), primaryMineLocations.end() );
+            const std::vector<int32_t> avoidance( primaryMineLocations.begin(), primaryMineLocations.end() );
             options = pickEvenlySpacedPoints( options, static_cast<size_t>( secondaryMineCount ) * 3, avoidance );
 
             assert( !options.empty() );

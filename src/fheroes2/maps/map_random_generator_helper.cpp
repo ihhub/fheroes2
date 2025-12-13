@@ -922,7 +922,7 @@ namespace Maps::Random_Generator
     }
 
     std::vector<int32_t> findTilesForPlacement( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,
-                                               const ObjectInfo & objectInfo )
+                                                const ObjectInfo & objectInfo )
     {
         // Automatically rollback at the end of planning stage
         const MapStateTransaction transaction( data );
