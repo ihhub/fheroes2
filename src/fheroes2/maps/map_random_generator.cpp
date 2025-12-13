@@ -567,9 +567,9 @@ namespace Maps::Random_Generator
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
 
         // Step 10: Place missing monsters.
-        const bool smallMap = ( mapFormat.width == Maps::SMALL );
-        const auto & weakGuard = getMonstersByValue( config.monsterStrength, smallMap ? 3500 : 4500 );
-        const auto & strongGuard = getMonstersByValue( config.monsterStrength, smallMap ? 6000 : 7500 );
+        const bool isSmallMap = ( mapFormat.width == Maps::SMALL );
+        const auto & weakGuard = getMonstersByValue( config.monsterStrength, isSmallMap ? 3500 : 4500 );
+        const auto & strongGuard = getMonstersByValue( config.monsterStrength, isSmallMap ? 6000 : 7500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.type == mapRegions[regionId].type ) {
