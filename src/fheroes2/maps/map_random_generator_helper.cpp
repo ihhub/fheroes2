@@ -597,7 +597,7 @@ namespace Maps::Random_Generator
 
         for ( const int32_t candidate : candidates ) {
             uint32_t minDistance = std::numeric_limits<uint32_t>::max();
-            for ( const int32_t & avoid : avoidance ) {
+            for ( const int32_t avoid : avoidance ) {
                 const uint32_t distance = Maps::GetApproximateDistance( candidate, avoid );
                 if ( distance < minDistance ) {
                     minDistance = distance;
