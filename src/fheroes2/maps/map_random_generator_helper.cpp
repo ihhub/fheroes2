@@ -581,13 +581,13 @@ namespace Maps::Random_Generator
         return result;
     }
 
-    std::vector<int32_t> pickEvenlySpacedPoints( const std::vector<int32_t> & candidates, const size_t count, const std::vector<int32_t> & avoidance )
+    std::vector<int32_t> pickEvenlySpacedTiles( const std::vector<int32_t> & candidates, const size_t pickCount, const std::vector<int32_t> & avoidance )
     {
         assert( !candidates.empty() );
-        assert( count > 0 );
+        assert( pickCount > 0 );
 
         const size_t candidatesCount = candidates.size();
-        const size_t targetCount = ( count > candidatesCount ) ? candidatesCount : count;
+        const size_t targetCount = ( pickCount > candidatesCount ) ? candidatesCount : pickCount;
 
         std::vector<int32_t> result;
         result.reserve( targetCount );
@@ -1039,18 +1039,18 @@ namespace Maps::Random_Generator
         const int32_t groupValueLimit = std::min( region.treasureLimit, maximumTreasureGroupValue );
         int32_t groupValue = 0;
         for ( const auto & treasure : objectSet.valuables ) {
-            ObjectGroup groupType = treasure.groupType;
-            int32_t objectIndex = treasure.objectIndex;
-
-            // Power ups don't have to be randomized
-            if ( treasure.groupType != ObjectGroup::ADVENTURE_POWER_UPS ) {
-                const int32_t valueLimit = std::max( minimalTreasureValue, groupValueLimit - groupValue );
-                const auto & selection = getRandomTreasure( valueLimit, randomGenerator );
-                groupType = selection.first;
-                objectIndex = selection.second;
+            if ( treasure.groupType == ObjectGroup::ADVENTURE_POWER_UPS ) {
+                placeSimpleObject( mapFormat, data, node, treasure );
+                groupValue += getObjectGoldValue( treasure.groupType, treasure.objectIndex );
             }
-            placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex } );
-            groupValue += getObjectGoldValue( groupType, objectIndex );
+            else {
+                const int32_t valueLimit = std::max( minimalTreasureValue, groupValueLimit - groupValue );
+
+                // Randomize what treasure to pick
+                const auto & [groupType, objectIndex] = getRandomTreasure( valueLimit, randomGenerator );
+                placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex } );
+                groupValue += getObjectGoldValue( groupType, objectIndex );
+            }
         }
         // It is possible to go into the negatives; intentional
         region.treasureLimit -= groupValue;

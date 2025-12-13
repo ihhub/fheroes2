@@ -71,7 +71,7 @@ namespace Maps::Random_Generator
     std::vector<int32_t> findPathToNearestRoad( const MapStateManager & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start );
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator );
     std::vector<int32_t> findOpenTiles( const Region & region );
-    std::vector<int32_t> pickEvenlySpacedPoints( const std::vector<int32_t> & candidates, const size_t count, const std::vector<int32_t> & avoidance );
+    std::vector<int32_t> pickEvenlySpacedTiles( const std::vector<int32_t> & candidates, const size_t pickCount, const std::vector<int32_t> & avoidance );
 
     bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos );
     bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & mainTilePos );

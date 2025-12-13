@@ -524,7 +524,7 @@ namespace Maps::Random_Generator
             const uint8_t secondaryMineCount
                 = ( regionSizeLimit > regionSizeForSecondaryMines || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
             const std::vector<int32_t> avoidance( primaryMineLocations.begin(), primaryMineLocations.end() );
-            options = pickEvenlySpacedPoints( options, static_cast<size_t>( secondaryMineCount ) * 3, avoidance );
+            options = pickEvenlySpacedTiles( options, static_cast<size_t>( secondaryMineCount ) * 3, avoidance );
 
             assert( !options.empty() );
 
@@ -558,7 +558,7 @@ namespace Maps::Random_Generator
                 candidates.push_back( nodeIndex );
             }
 
-            for ( const int32_t tileIndex : pickEvenlySpacedPoints( candidates, regionConfiguration.treasureCount, { region.centerIndex } ) ) {
+            for ( const int32_t tileIndex : pickEvenlySpacedTiles( candidates, regionConfiguration.treasureCount, { region.centerIndex } ) ) {
                 for ( const auto & [nodeIndex, placement] : plan ) {
                     if ( nodeIndex == tileIndex ) {
                         placeValidTreasures( mapFormat, mapState, region, placement, tileIndex, config.monsterStrength, randomGenerator );
