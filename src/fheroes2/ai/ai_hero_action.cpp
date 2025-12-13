@@ -276,6 +276,7 @@ namespace
         case Heroes::Role::COURIER:
             // A hero who usually delivers army. Might have some army to battle with but he is not a fighter and can be easily defeated.
             spellMultiplier = std::min( 1, spellMultiplier / 3 );
+            break;
         case Heroes::Role::HUNTER:
             // A normal hero with normal stuff to do. Not so strong and not so weak.
             spellMultiplier = std::min( 1, spellMultiplier / 2 );
