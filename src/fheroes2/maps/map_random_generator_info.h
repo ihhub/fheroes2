@@ -32,6 +32,7 @@
 #include "ground.h"
 #include "map_object_info.h"
 #include "math_base.h"
+#include "monster.h"
 #include "resource.h"
 
 namespace Maps::Map_Format
