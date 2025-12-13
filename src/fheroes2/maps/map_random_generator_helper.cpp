@@ -886,7 +886,7 @@ namespace Maps::Random_Generator
 
     void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster )
     {
-        if ( monster.monsterId == -1 || !Maps::isValidAbsIndex( index ) ) {
+        if ( monster.monsterId == Monster::UNKNOWN || !Maps::isValidAbsIndex( index ) ) {
             return;
         }
 
@@ -921,7 +921,7 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    std::vector<int32_t> findPlacementOptions( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,
+    std::vector<int32_t> findTilesForPlacement( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,
                                                const ObjectInfo & objectInfo )
     {
         // Automatically rollback at the end of planning stage
@@ -962,6 +962,10 @@ namespace Maps::Random_Generator
     std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, const Region & region,
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator )
     {
+        if ( region.treasureLimit < 0 ) {
+            return {};
+        }
+
         // Automatically rollback at the end of planning stage
         const MapStateTransaction transaction( data );
 
@@ -970,11 +974,11 @@ namespace Maps::Random_Generator
         int32_t treasureLimit = region.treasureLimit;
         std::vector<std::pair<int32_t, ObjectSet>> objectSetsPlanned;
 
-        std::vector<int32_t> options = findOpenTiles( region );
-        Rand::ShuffleWithGen( options, randomGenerator );
+        std::vector<int32_t> openTiles = findOpenTiles( region );
+        Rand::ShuffleWithGen( openTiles, randomGenerator );
 
         int attempt = 0;
-        for ( const int32_t nodeIndex : options ) {
+        for ( const int32_t nodeIndex : openTiles ) {
             if ( attempt >= maxPlacementAttempts || treasureLimit <= 0 ) {
                 break;
             }
@@ -987,6 +991,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
+                // Start transaction so we can revert a single object set if no path will be found
                 MapStateTransaction secondaryTx( data );
                 for ( const auto & obstacle : prefab.obstacles ) {
                     const fheroes2::Point position = mapPoint + obstacle.offset;
@@ -1036,6 +1041,8 @@ namespace Maps::Random_Generator
         for ( const auto & treasure : objectSet.valuables ) {
             ObjectGroup groupType = treasure.groupType;
             int32_t objectIndex = treasure.objectIndex;
+
+            // Power ups don't have to be randomized
             if ( treasure.groupType != ObjectGroup::ADVENTURE_POWER_UPS ) {
                 const int32_t valueLimit = std::max( minimalTreasureValue, groupValueLimit - groupValue );
                 const auto & selection = getRandomTreasure( valueLimit, randomGenerator );

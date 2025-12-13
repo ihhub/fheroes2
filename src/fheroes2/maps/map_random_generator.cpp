@@ -411,7 +411,7 @@ namespace Maps::Random_Generator
         // Step 5. Fix terrain transitions and place Castles
         MapEconomy mapEconomy;
 
-        std::vector<int32_t> primaryMineLocations;
+        std::set<int32_t> primaryMineLocations;
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 continue;
@@ -472,7 +472,7 @@ namespace Maps::Random_Generator
                     for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
                         const int32_t mineIndex = placeMine( mapFormat, mapState, mapEconomy, tileRings[ringIndex], resource, config.monsterStrength );
                         if ( mineIndex != -1 ) {
-                            primaryMineLocations.push_back( mineIndex );
+                            primaryMineLocations.insert( mineIndex );
                             break;
                         }
                     }
@@ -516,14 +516,17 @@ namespace Maps::Random_Generator
             }
 
             const auto & mineInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::GOLD, Ground::GRASS ) );
-            std::vector<int32_t> options = findPlacementOptions( mapState, width, region.id, findOpenTiles( region ), mineInfo );
+            std::vector<int32_t> options = findTilesForPlacement( mapState, width, region.id, findOpenTiles( region ), mineInfo );
             if ( options.empty() ) {
                 continue;
             }
 
             const uint8_t secondaryMineCount
                 = ( regionSizeLimit > regionSizeForSecondaryMines || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
-            options = pickEvenlySpacedPoints( options, static_cast<size_t>( secondaryMineCount ) * 3, primaryMineLocations );
+            std::vector<int32_t> avoidance( primaryMineLocations.begin(), primaryMineLocations.end() );
+            options = pickEvenlySpacedPoints( options, static_cast<size_t>( secondaryMineCount ) * 3, avoidance );
+
+            assert( !options.empty() );
 
             for ( size_t idx = 0; idx < secondaryMineCount; ++idx ) {
                 const int resource = mapEconomy.pickNextMineResource();

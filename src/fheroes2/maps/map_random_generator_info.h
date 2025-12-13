@@ -312,7 +312,7 @@ namespace Maps::Random_Generator
 
     struct MonsterSelection final
     {
-        int32_t monsterId{ -1 };
+        int32_t monsterId{ Monster::UNKNOWN };
         std::vector<int> allowedMonsters;
     };
 }
