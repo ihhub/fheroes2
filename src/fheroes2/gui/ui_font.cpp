@@ -1817,6 +1817,38 @@ namespace
             fheroes2::Copy( font[69], 2, 5, font[255 - 32], 1, 2, 6, 2 );
             fheroes2::Copy( font[255 - 32], 6, 4, font[255 - 32], 6, 3, 1, 1 );
             updateNormalFontLetterShadow( font[255 - 32] );
+
+            // Cyrillic Capital Lje.
+            font[138 - 32].resize( font[203 - 32].width() + font[220 - 32].width() - 6, font[203 - 32].height() );
+            font[138 - 32].reset();
+            fheroes2::Copy( font[203 - 32], 0, 0, font[138 - 32], 0, 0, font[203 - 32].width(), font[203 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 4, 0, font[138 - 32], font[203 - 32].width() - 2, 0, font[220 - 32].width() - 4, font[220 - 32].height() );
+            font[138 - 32].setPosition( font[203 - 32].x(), font[203 - 32].y() );
+            updateNormalFontLetterShadow( font[138 - 32] );
+
+            // Cyrillic Capital Nje.
+            font[140 - 32].resize( font[205 - 32].width() + font[220 - 32].width() - 7, font[205 - 32].height() );
+            font[140 - 32].reset();
+            fheroes2::Copy( font[205 - 32], 0, 0, font[140 - 32], 0, 0, font[205 - 32].width(), font[205 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 4, 0, font[140 - 32], font[205 - 32].width() - 3, 0, font[220 - 32].width() - 4, font[220 - 32].height() );
+            font[140 - 32].setPosition( font[205 - 32].x(), font[205 - 32].y() );
+            updateNormalFontLetterShadow( font[140 - 32] );
+
+            // Cyrillic Lowercase Lje.
+            font[154 - 32].resize( font[235 - 32].width() + font[252 - 32].width() - 5, font[235 - 32].height() );
+            font[154 - 32].reset();
+            fheroes2::Copy( font[235 - 32], 0, 0, font[154 - 32], 0, 0, font[235 - 32].width(), font[235 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[154 - 32], font[235 - 32].width() - 3, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[154 - 32].setPosition( font[235 - 32].x(), font[235 - 32].y() );
+            updateNormalFontLetterShadow( font[154 - 32] );
+
+            // Cyrillic Lowercase Nje.
+            font[156 - 32].resize( font[237 - 32].width() + font[252 - 32].width() - 5, font[237 - 32].height() );
+            font[156 - 32].reset();
+            fheroes2::Copy( font[237 - 32], 0, 0, font[156 - 32], 0, 0, font[237 - 32].width(), font[237 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[156 - 32], font[237 - 32].width() - 3, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[156 - 32].setPosition( font[237 - 32].x(), font[237 - 32].y() );
+            updateNormalFontLetterShadow( font[156 - 32] );
         }
 
         // Small font.
@@ -2282,6 +2314,38 @@ namespace
             fheroes2::Copy( font[33], 1, 5, font[255 - 32], 1, 3, 3, 2 );
             font[255 - 32].setPosition( font[65].x(), font[65].y() );
             updateSmallFontLetterShadow( font[255 - 32] );
+
+            // Cyrillic Capital Lje.
+            font[138 - 32].resize( font[203 - 32].width() + font[220 - 32].width() - 4, font[203 - 32].height() );
+            font[138 - 32].reset();
+            fheroes2::Copy( font[203 - 32], 0, 0, font[138 - 32], 0, 0, font[203 - 32].width(), font[203 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 2, 0, font[138 - 32], font[203 - 32].width() - 2, 0, font[220 - 32].width() - 2, font[220 - 32].height() );
+            font[138 - 32].setPosition( font[203 - 32].x(), font[203 - 32].y() );
+            updateSmallFontLetterShadow( font[138 - 32] );
+
+            // Cyrillic Capital Nje.
+            font[140 - 32].resize( font[205 - 32].width() + font[220 - 32].width() - 4, font[205 - 32].height() );
+            font[140 - 32].reset();
+            fheroes2::Copy( font[205 - 32], 0, 0, font[140 - 32], 0, 0, font[205 - 32].width(), font[205 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 2, 0, font[140 - 32], font[205 - 32].width() - 2, 0, font[220 - 32].width() - 2, font[220 - 32].height() );
+            font[140 - 32].setPosition( font[205 - 32].x(), font[205 - 32].y() );
+            updateSmallFontLetterShadow( font[140 - 32] );
+
+            // Cyrillic Lowercase Lje.
+            font[154 - 32].resize( font[235 - 32].width() + font[252 - 32].width() - 3, font[235 - 32].height() );
+            font[154 - 32].reset();
+            fheroes2::Copy( font[235 - 32], 0, 0, font[154 - 32], 0, 0, font[235 - 32].width(), font[235 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[154 - 32], font[235 - 32].width() - 1, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[154 - 32].setPosition( font[235 - 32].x(), font[235 - 32].y() );
+            updateSmallFontLetterShadow( font[154 - 32] );
+
+            // Cyrillic Lowercase Nje.
+            font[156 - 32].resize( font[237 - 32].width() + font[252 - 32].width() - 3, font[237 - 32].height() );
+            font[156 - 32].reset();
+            fheroes2::Copy( font[237 - 32], 0, 0, font[156 - 32], 0, 0, font[237 - 32].width(), font[237 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[156 - 32], font[237 - 32].width() - 1, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[156 - 32].setPosition( font[237 - 32].x(), font[237 - 32].y() );
+            updateSmallFontLetterShadow( font[156 - 32] );
         }
     }
 
@@ -5775,6 +5839,21 @@ namespace
         fheroes2::Flip( released[176], 0, 0, released[191], 0, 0, released[176].width(), released[176].height(), true, false );
         fheroes2::DrawLine( released[191], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[191], { offset + 3, offset + 6 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+
+        // Cyrillic Capital Lje
+        released[106].resize( released[171].width() + released[188].width() - 8, released[171].height() );
+        released[106].reset();
+        fheroes2::Copy( released[171], 0, 0, released[106], 0, 0, released[171].width(), released[171].height() );
+        fheroes2::Copy( released[188], 2, 0, released[106], released[171].width() - 6, 0, released[188].width() - 2, released[188].height() );
+        fheroes2::FillTransform( released[106], 7, 3, 1, 1, 1 );
+        released[106].setPosition( released[171].x(), released[171].y() );
+
+        // Cyrillic Capital Nje
+        released[108].resize( released[173].width() + released[188].width() - 7, released[173].height() );
+        released[108].reset();
+        fheroes2::Copy( released[173], 0, 0, released[108], 0, 0, released[173].width(), released[173].height() );
+        fheroes2::Copy( released[188], 3, 0, released[108], released[173].width() - 4, 0, released[188].width() - 4, released[188].height() );
+        released[108].setPosition( released[173].x(), released[173].y() );
     }
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
