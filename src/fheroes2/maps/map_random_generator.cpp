@@ -537,7 +537,7 @@ namespace Maps::Random_Generator
             }
         }
 
-        // Step 8: Place powerups and treasure clusters while avoiding the paths.
+        // Step 8: Place power-ups and treasure clusters while avoiding the paths.
         for ( Region & region : mapRegions ) {
             if ( region.groundType == Ground::WATER ) {
                 continue;

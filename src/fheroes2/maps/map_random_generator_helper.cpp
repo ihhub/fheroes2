@@ -93,7 +93,7 @@ namespace
         { MP2::OBJ_RANDOM_RESOURCE, minimalTreasureValue },
         { MP2::OBJ_RESOURCE, minimalTreasureValue },
         { MP2::OBJ_TREASURE_CHEST, 1500 },
-        // Powerups.
+        // Power-ups.
         { MP2::OBJ_FORT, 3000 },
         { MP2::OBJ_GAZEBO, 2000 },
         { MP2::OBJ_MERCENARY_CAMP, 3000 },
