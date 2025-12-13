@@ -631,7 +631,7 @@ namespace Maps::Random_Generator
                 break;
             }
 
-            const int32_t & chosenPoint = candidates[pointIndex];
+            const int32_t chosenPoint = candidates[pointIndex];
 
             cache[pointIndex].second = true;
             result.push_back( chosenPoint );
