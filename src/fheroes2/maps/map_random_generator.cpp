@@ -344,6 +344,55 @@ namespace Maps::Random_Generator
                   {},
               },
           } },
+        { Maps::Ground::WASTELAND,
+          {
+              {
+                  // Obstacles.
+                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 138 },
+                    { { 1, -1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 2 },
+                    { { -3, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 6 },
+                    { { 1, -2 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 6 },
+                    { { -2, -1 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                    { { -4, 1 }, ObjectGroup::LANDSCAPE_TREES, 5 },
+                    { { -2, 1 }, ObjectGroup::LANDSCAPE_ROCKS, 29 } },
+                  // Optional.
+                  {
+                      { { 2, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                      { { 0, 3 }, ObjectGroup::LANDSCAPE_TREES, 3 },
+                      { { -1, -2 }, ObjectGroup::LANDSCAPE_ROCKS, 26 },
+                      { { -4, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                  },
+              },
+              {
+                  // Obstacles.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 134 },
+                      { { 2, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 139 },
+                      { { 0, -1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 141 },
+                  },
+                  // Optional.
+                  {
+                      { { -2, 1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 139 },
+                      { { 0, 1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 140 },
+                      { { -2, 0 }, ObjectGroup::LANDSCAPE_ROCKS, 39 },
+                      { { 2, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 132 },
+                  },
+              },
+              {
+                  // Obstacles.
+                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 138 },
+                    { { 0, -1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 139 },
+                    { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                    { { 2, 0 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                    { { -1, 1 }, ObjectGroup::LANDSCAPE_TREES, 4 }, },
+                  // Optional.
+                  {
+                      { { 1, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                      { { -3, 1 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                      { { -4, 1 }, ObjectGroup::LANDSCAPE_ROCKS, 30 },
+                  },
+              },
+          } },
     };
 
     std::string layoutToString( const Layout layout )

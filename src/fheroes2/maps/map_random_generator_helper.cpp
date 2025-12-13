@@ -867,6 +867,11 @@ namespace Maps::Random_Generator
                     for ( const auto & obstacle : prefab.obstacles ) {
                         placeSimpleObject( mapFormat, data, node, obstacle );
                     }
+                    for ( const auto & obstacle : prefab.optional ) {
+                        if ( Rand::GetWithGen( 0, 1, randomGenerator ) ) {
+                            placeSimpleObject( mapFormat, data, node, obstacle );
+                        }
+                    }
                     break;
                 }
             }
