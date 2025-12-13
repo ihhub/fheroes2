@@ -248,15 +248,15 @@ int32_t Difficulty::getGuardianSpellMultiplier( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return 20;
+        return 16;
     case Difficulty::NORMAL:
-        return 18;
-    case Difficulty::HARD:
         return 14;
-    case Difficulty::EXPERT:
+    case Difficulty::HARD:
         return 12;
-    case Difficulty::IMPOSSIBLE:
+    case Difficulty::EXPERT:
         return 10;
+    case Difficulty::IMPOSSIBLE:
+        return 8;
     default:
         // Did you add a new difficulty level? Add the logic above!
         assert( 0 );

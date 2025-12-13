@@ -265,14 +265,33 @@ namespace
         // Shuffle spells as all of them seem to be equal in power.
         Rand::Shuffle( spells );
 
-        const int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+        int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+
+        // Adjust spell multiplier based on hero's AI role.
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            // A hero with almost no army risking his life and most likely going to be killed.
+            spellMultiplier = std::min( 1, spellMultiplier / 4 );
+            break;
+        case Heroes::Role::COURIER:
+            // A hero who usually delivers army. Might have some army to battle with but he is not a fighter and can be easily defeated.
+            spellMultiplier = std::min( 1, spellMultiplier / 3 );
+        case Heroes::Role::HUNTER:
+            // A normal hero with normal stuff to do. Not so strong and not so weak.
+            spellMultiplier = std::min( 1, spellMultiplier / 2 );
+            break;
+        default:
+            // The rest of heroes are fighters and should keep their spell points for battles.
+            break;
+        }
 
         for ( const Spell spell : spells ) {
             if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultiplier * spell.spellPoints( &hero ) ) {
                 // Looks like this hero knows the spell and casting it won't take too many spell points.
                 // So, let's do it!
-                hero.ActionSpellCast( spell );
-                return;
+                if ( hero.ActionSpellCast( spell ) ) {
+                    return;
+                }
             }
         }
     }

@@ -158,10 +158,8 @@ namespace fheroes2
         return resurrectionPoints;
     }
 
-    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
+    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower )
     {
-        (void)hero;
-
         assert( spellPower > 0 );
 
         return spell.ExtraValue() * spellPower;
@@ -272,7 +270,7 @@ namespace fheroes2
                 return spell.GetDescription();
             }
 
-            const uint32_t guardianCount = getGuardianMonsterCount( spell, hero->GetPower(), hero );
+            const uint32_t guardianCount = getGuardianMonsterCount( spell, hero->GetPower() );
 
             description += "\n\n";
             description += _( "This spell summons %{count} %{monster} to guard the mine." );
