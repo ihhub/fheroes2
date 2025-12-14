@@ -61,7 +61,7 @@ namespace
     constexpr int randomCastleIndex{ 12 };
     constexpr int randomTownIndex{ 13 };
     constexpr int randomHeroIndex{ 7 };
-    constexpr int maxPlacementAttempts{ 99 };
+    constexpr size_t maxPlacementAttempts{ 99 };
     constexpr uint32_t roadBuilderMargin{ Maps::Ground::defaultGroundPenalty * 3 };
 
     const std::map<int, std::vector<int>> obstaclesPerGround = {
@@ -610,7 +610,7 @@ namespace Maps::Random_Generator
             int32_t bestCandidateIndex = -1;
             uint32_t bestDistance = 0;
 
-            // We're searching for the largest distance that hasn't been used yet
+            // We're searching for the largest distance that hasn't been used yet.
             for ( size_t idx = 0; idx < cache.size(); ++idx ) {
                 if ( cache[idx].second ) {
                     continue;
@@ -636,7 +636,7 @@ namespace Maps::Random_Generator
             cache[pointIndex].second = true;
             result.push_back( chosenPoint );
 
-            // Update distance for remaining candidates using newly chosen point
+            // Update distance for remaining candidates using the newly chosen point.
             for ( size_t idx = 0; idx < cache.size(); ++idx ) {
                 if ( cache[idx].second ) {
                     continue;
@@ -924,7 +924,8 @@ namespace Maps::Random_Generator
     std::vector<int32_t> findTilesForPlacement( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,
                                                 const ObjectInfo & objectInfo )
     {
-        // Automatically rollback at the end of planning stage
+        // Use the below object to revert all changes made for MapStateManager
+        // as this function shouldn't do any changes yet.
         const MapStateTransaction transaction( data );
 
         std::vector<int32_t> options;
@@ -962,11 +963,12 @@ namespace Maps::Random_Generator
     std::vector<std::pair<int32_t, ObjectSet>> planObjectPlacement( MapStateManager & data, const int32_t mapWidth, const Region & region,
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator )
     {
-        if ( region.treasureLimit < 0 ) {
+        if ( region.treasureLimit <= 0 ) {
             return {};
         }
 
-        // Automatically rollback at the end of planning stage
+        // Use the below object to revert all changes made for MapStateManager
+        // as this function shouldn't do any changes yet.
         const MapStateTransaction transaction( data );
 
         Rand::ShuffleWithGen( objectSets, randomGenerator );
@@ -977,7 +979,7 @@ namespace Maps::Random_Generator
         std::vector<int32_t> openTiles = findOpenTiles( region );
         Rand::ShuffleWithGen( openTiles, randomGenerator );
 
-        int attempt = 0;
+        size_t attempt = 0;
         for ( const int32_t nodeIndex : openTiles ) {
             if ( attempt >= maxPlacementAttempts || treasureLimit <= 0 ) {
                 break;
@@ -991,7 +993,7 @@ namespace Maps::Random_Generator
                     continue;
                 }
 
-                // Start transaction so we can revert a single object set if no path will be found
+                // Start transaction so we can revert a single object set if no path will be found.
                 MapStateTransaction secondaryTx( data );
                 for ( const auto & obstacle : prefab.obstacles ) {
                     const fheroes2::Point position = mapPoint + obstacle.offset;
@@ -1062,7 +1064,7 @@ namespace Maps::Random_Generator
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
     {
         int objectsPlaced = 0;
-        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+        for ( size_t attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
             if ( objectsPlaced == expectedCount || region.treasureLimit <= 0 ) {
                 break;
             }
