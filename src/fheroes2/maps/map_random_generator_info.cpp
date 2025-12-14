@@ -21,6 +21,7 @@
 #include "map_random_generator_info.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <ostream>
@@ -61,9 +62,6 @@ namespace Maps::Random_Generator
         if ( _transactionRecords.empty() ) {
             _history.clear();
         }
-        else {
-            _history.resize( record );
-        }
     }
 
     void MapStateManager::rollbackTransaction( const size_t record )
@@ -76,16 +74,16 @@ namespace Maps::Random_Generator
             return;
         }
 
-        for ( size_t index = _history.size() - 1; index > record; --index ) {
-            const StateChange & change = _history[index];
+        assert( record < _history.size() );
+
+        for ( size_t index = _history.size(); index > record; --index ) {
+            const StateChange & change = _history[index - 1];
             _data[static_cast<size_t>( change.index )] = change.state;
+            _history.pop_back();
         }
 
         if ( _transactionRecords.empty() ) {
             _history.clear();
-        }
-        else {
-            _history.resize( record );
         }
     }
 
@@ -98,9 +96,10 @@ namespace Maps::Random_Generator
 
     int MapEconomy::pickNextMineResource()
     {
-        const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
+        constexpr std::array<int, 6> allResources = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
+        const auto it = std::min_element( allResources.begin(), allResources.end(),
                                           [this]( const auto & a, const auto & b ) { return _minesCount.at( a ) < _minesCount.at( b ); } );
-        assert( it != secondaryResources.end() );
+        assert( it != allResources.end() );
 
         return *it;
     }
@@ -209,12 +208,12 @@ namespace Maps::Random_Generator
                 connections.emplace( adjacent.region, node.index );
                 mapRegions[adjacent.region].connections.emplace( id, node.index );
                 node.type = NodeType::CONNECTOR;
-                adjacent.type = NodeType::PATH;
-                twoAway.type = NodeType::PATH;
+                adjacent.type = NodeType::CONNECTOR;
+                twoAway.type = NodeType::CONNECTOR;
 
                 Node & stepBack = data.getNodeToUpdate( position - directionOffsets[direction] );
                 if ( stepBack.index != -1 ) {
-                    stepBack.type = NodeType::PATH;
+                    stepBack.type = NodeType::CONNECTOR;
                 }
 
                 break;

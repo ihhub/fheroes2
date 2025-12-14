@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -33,6 +32,7 @@
 #include "ground.h"
 #include "map_object_info.h"
 #include "math_base.h"
+#include "monster.h"
 #include "resource.h"
 
 namespace Maps::Map_Format
@@ -48,7 +48,6 @@ namespace Rand
 namespace Maps::Random_Generator
 {
     inline const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
-    constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     enum class NodeType : uint8_t
     {
@@ -291,6 +290,7 @@ namespace Maps::Random_Generator
     {
         uint8_t castleCount{ 0 };
         uint8_t mineCount{ 0 };
+        uint8_t goldMineCount{ 0 };
         uint8_t objectCount{ 0 };
         uint8_t powerUpsCount{ 0 };
         uint8_t treasureCount{ 0 };
@@ -313,7 +313,7 @@ namespace Maps::Random_Generator
 
     struct MonsterSelection final
     {
-        int32_t monsterId{ -1 };
+        int32_t monsterId{ Monster::UNKNOWN };
         std::vector<int> allowedMonsters;
     };
 }
