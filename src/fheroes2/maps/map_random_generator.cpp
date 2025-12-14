@@ -35,7 +35,6 @@
 #include <vector>
 
 #include "color.h"
-#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
@@ -47,24 +46,26 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "rand.h"
 #include "resource.h"
 #include "translations.h"
+#include "ui_map_object.h"
 #include "world.h"
 
 namespace
 {
     constexpr int32_t smallestStartingRegionSize{ 200 };
+    constexpr int32_t regionSizeForSecondaryMines{ 250 };
+    constexpr int32_t regionSizeForGoldMine{ 350 };
     constexpr int32_t emptySpacePercentage{ 40 };
     const std::vector<int> playerStartingTerrain = { Maps::Ground::GRASS, Maps::Ground::DIRT, Maps::Ground::SNOW, Maps::Ground::LAVA, Maps::Ground::WASTELAND };
     const std::vector<int> neutralTerrain = { Maps::Ground::GRASS,     Maps::Ground::DIRT,  Maps::Ground::SNOW,  Maps::Ground::LAVA,
                                               Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::SWAMP, Maps::Ground::DESERT };
 
     constexpr std::array<Maps::Random_Generator::RegionalObjects, static_cast<size_t>( Maps::Random_Generator::ResourceDensity::ITEM_COUNT )> regionObjectSetup = { {
-        { 1, 2, 1, 1, 2, 8500 }, // ResourceDensity::SCARCE
-        { 1, 6, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
-        { 1, 7, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
+        { 1, 2, 0, 1, 1, 2, 8500 }, // ResourceDensity::SCARCE
+        { 1, 4, 0, 2, 1, 3, 15000 }, // ResourceDensity::NORMAL
+        { 1, 4, 1, 2, 2, 5, 25000 } // ResourceDensity::ABUNDANT
     } };
 
     int32_t calculateRegionSizeLimit( const Maps::Random_Generator::Configuration & config, const int32_t width, const int32_t height )
@@ -102,27 +103,6 @@ namespace
         const int32_t canFit = std::min( std::max( config.playerCount + 1, average ), upperLimit );
 
         return groundTiles / canFit;
-    }
-
-    MP2::MapObjectType getFakeMP2MineType( const int resource )
-    {
-        switch ( resource ) {
-        case Resource::WOOD:
-        case Resource::ORE:
-            return MP2::OBJ_SAWMILL;
-        case Resource::SULFUR:
-        case Resource::CRYSTAL:
-        case Resource::GEMS:
-        case Resource::MERCURY:
-            return MP2::OBJ_MINE;
-        case Resource::GOLD:
-            return MP2::OBJ_ABANDONED_MINE;
-        default:
-            // Have you added a new resource type?!
-            assert( 0 );
-            break;
-        }
-        return MP2::OBJ_NONE;
     }
 }
 
@@ -547,7 +527,9 @@ namespace Maps::Random_Generator
                 Node & centerNode = mapState.getNodeToUpdate( centerTile );
                 const RegionType neutralType = ( layer == 1 && regionCountIsEven ) ? RegionType::EXPANSION : RegionType::NEUTRAL;
                 const RegionType type = isPlayerRegion ? RegionType::STARTING : neutralType;
-                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSizeLimit * 6 / 5, treasureLimit, type );
+                const int32_t regionSize
+                    = ( type == RegionType::STARTING && config.resourceDensity == ResourceDensity::SCARCE ) ? regionSizeLimit : regionSizeLimit * 6 / 5;
+                mapRegions.emplace_back( regionID, centerNode, regionColor, groundType, regionSize, treasureLimit, type );
 
                 if ( isPlayerRegion ) {
                     ++placedPlayers;
@@ -596,6 +578,7 @@ namespace Maps::Random_Generator
         // Step 5. Fix terrain transitions and place Castles
         MapEconomy mapEconomy;
 
+        std::set<int32_t> primaryMineLocations;
         for ( Region & region : mapRegions ) {
             if ( region.id == 0 ) {
                 continue;
@@ -644,9 +627,26 @@ namespace Maps::Random_Generator
                 placeCastle( mapFormat, mapState, region, castlePos, useNeutralCastles );
             }
             else {
-                forceTempRoadOnTile( mapFormat, region.centerIndex );
+                mapState.getNodeToUpdate( region.centerIndex ).type = NodeType::PATH;
+            }
+
+            if ( region.type == RegionType::STARTING ) {
+                const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
+
+                assert( tileRings.size() > 4 );
+
+                for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
+                    for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
+                        const int32_t mineIndex = placeMine( mapFormat, mapState, mapEconomy, tileRings[ringIndex], resource, config.monsterStrength );
+                        if ( mineIndex != -1 ) {
+                            primaryMineLocations.insert( mineIndex );
+                            break;
+                        }
+                    }
+                }
             }
         }
+
         Maps::updatePlayerRelatedObjects( mapFormat );
 
         // Step 6. Set up region connectors based on frequency settings and border length.
@@ -668,59 +668,70 @@ namespace Maps::Random_Generator
         }
 
         // Step 7. Place mines.
-        const auto tryToPlaceMine = [&]( const std::vector<int32_t> & ring, const int resource ) {
-            for ( const int32_t tileIndex : ring ) {
-                const auto & node = mapState.getNode( tileIndex );
-                if ( placeMine( mapFormat, mapState, node, resource ) ) {
-                    mapEconomy.increaseMineCount( resource );
-
-                    const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-                    placeMonster( mapFormat, Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ), getMonstersByValue( config.monsterStrength, mineValue ) );
-                    return true;
-                }
-            }
-            return false;
-        };
-
         for ( const Region & region : mapRegions ) {
             if ( region.groundType == Ground::WATER ) {
                 continue;
             }
+
             for ( const auto & [regionId, tileIndex] : region.connections ) {
-                for ( const auto & step : findPathToNearestRoad( mapState, width, region.id, tileIndex ) ) {
+                mapState.getNodeToUpdate( tileIndex ).type = NodeType::PATH;
+                const auto & path = findPathToNearestRoad( mapState, width, region.id, tileIndex );
+                for ( const auto & step : path ) {
                     mapState.getNodeToUpdate( step ).type = NodeType::PATH;
                     forceTempRoadOnTile( mapFormat, step );
                 }
             }
 
-            const std::vector<std::vector<int32_t>> tileRings = findOpenTilesSortedJittered( region, width, randomGenerator );
-
-            if ( tileRings.size() < 4 ) {
+            const auto & mineInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::GOLD, Ground::GRASS ) );
+            std::vector<int32_t> options = findTilesForPlacement( mapState, width, region.id, findOpenTiles( region ), mineInfo );
+            if ( options.empty() ) {
                 continue;
             }
 
-            for ( const int resource : { Resource::WOOD, Resource::ORE } ) {
-                for ( size_t ringIndex = 4; ringIndex < tileRings.size(); ++ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
-                        break;
-                    }
-                }
+            const uint8_t secondaryMineCount
+                = ( regionSizeLimit > regionSizeForSecondaryMines || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
+            const std::vector<int32_t> avoidance( primaryMineLocations.begin(), primaryMineLocations.end() );
+            options = pickEvenlySpacedTiles( options, static_cast<size_t>( secondaryMineCount ) * 3, avoidance );
+            // It is expected that the container is not empty due to the check above.
+            assert( !options.empty() );
+
+            for ( size_t idx = 0; idx < secondaryMineCount; ++idx ) {
+                const int resource = mapEconomy.pickNextMineResource();
+                placeMine( mapFormat, mapState, mapEconomy, options, resource, config.monsterStrength );
             }
 
-            for ( size_t idx = 0; idx < secondaryResources.size(); ++idx ) {
-                const int resource = mapEconomy.pickNextMineResource();
-                for ( size_t ringIndex = tileRings.size() - 2; ringIndex > 0; --ringIndex ) {
-                    if ( tryToPlaceMine( tileRings[ringIndex], resource ) ) {
-                        break;
-                    }
+            if ( regionSizeLimit > regionSizeForGoldMine ) {
+                for ( size_t idx = 0; idx < regionConfiguration.goldMineCount; ++idx ) {
+                    placeMine( mapFormat, mapState, mapEconomy, options, Resource::GOLD, config.monsterStrength );
                 }
             }
         }
 
-        // Step 8: Place powerups and treasure clusters while avoiding the paths.
+        // Step 8: Place power-ups and treasure clusters while avoiding the paths.
         for ( Region & region : mapRegions ) {
+            if ( region.groundType == Ground::WATER ) {
+                continue;
+            }
             placeObjectSet( mapFormat, mapState, region, powerupObjectSets, config.monsterStrength, regionConfiguration.powerUpsCount, randomGenerator );
-            placeObjectSet( mapFormat, mapState, region, prefabObjectSets, config.monsterStrength, regionConfiguration.treasureCount, randomGenerator );
+
+            const auto & plan = planObjectPlacement( mapState, width, region, prefabObjectSets, randomGenerator );
+            if ( plan.empty() ) {
+                continue;
+            }
+
+            std::vector<int32_t> candidates;
+            candidates.reserve( plan.size() );
+            for ( const auto & [nodeIndex, placement] : plan ) {
+                candidates.push_back( nodeIndex );
+            }
+
+            for ( const int32_t tileIndex : pickEvenlySpacedTiles( candidates, regionConfiguration.treasureCount, { region.centerIndex } ) ) {
+                for ( const auto & [nodeIndex, placement] : plan ) {
+                    if ( nodeIndex == tileIndex ) {
+                        placeValidTreasures( mapFormat, mapState, region, placement, tileIndex, config.monsterStrength, randomGenerator );
+                    }
+                }
+            }
         }
 
         // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
@@ -733,8 +744,9 @@ namespace Maps::Random_Generator
         }
 
         // Step 10: Place missing monsters.
-        const auto & weakGuard = getMonstersByValue( config.monsterStrength, 4500 );
-        const auto & strongGuard = getMonstersByValue( config.monsterStrength, 7500 );
+        const bool isSmallMap = ( mapFormat.width == Maps::SMALL );
+        const auto & weakGuard = getMonstersByValue( config.monsterStrength, isSmallMap ? 3500 : 4500 );
+        const auto & strongGuard = getMonstersByValue( config.monsterStrength, isSmallMap ? 6000 : 7500 );
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.type == mapRegions[regionId].type ) {
@@ -747,6 +759,7 @@ namespace Maps::Random_Generator
         }
 
         Maps::updateAllRoads( mapFormat );
+        Maps::updatePlayerRelatedObjects( mapFormat );
 
         // Visual debug
         for ( const Region & region : mapRegions ) {
