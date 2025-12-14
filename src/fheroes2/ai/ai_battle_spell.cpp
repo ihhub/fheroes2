@@ -268,6 +268,7 @@ int32_t AI::BattlePlanner::spellDurationMultiplier( const Battle::Unit & target 
 {
     const int32_t duration = getSpellPower( _commander );
 
+    // TODO: this logic might not be accurate for cases when certain spells are applied to reduce the retaliation damage, like Blind or Paralyze.
     if ( duration < 2 && target.Modes( Battle::TR_MOVED ) ) {
         return 0;
     }
@@ -343,7 +344,7 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     return ratio;
 }
 
-double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast,
+double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, const bool targetIsLast,
                                             const bool forDispel ) const
 {
     const int spellID = spell.GetID();
@@ -360,9 +361,30 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         ratio = getSpellSlowRatio( target );
         break;
     case Spell::BLIND: {
-        if ( targetIsLast )
-            return 0.0;
-        ratio = 0.8;
+        if ( targetIsLast ) {
+            // TODO: add more complex logic to calculate the usefulness of this spell for a single target as blinded creature retaliates with 50% damage.
+            //       It might be less useful against monsters with unlimited retaliation when you have more than one monster.
+            //
+            // As of now, we assume that the spell is going to be applicable for a monster that has no unlimited retaliation,
+            // we are going to hit it immediately and the monster hasn't retaliated.
+            if ( target.isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+                // Not so much useful.
+                return 0;
+            }
+
+            if ( !target.isRetaliationAllowed() ) {
+                // The monster has retaliated. Apply the spell might not be that good.
+                // TODO: check whether we are going to attack the monster right now or the next turn.
+                //       Plus Blind spell is useful if the monster is faster than other troops.
+                return 0;
+            }
+
+            // The final ratio is smaller than the original one but not that much.
+            ratio = 0.4;
+        }
+        else {
+            ratio = 0.8;
+        }
         break;
     }
     case Spell::CURSE:
@@ -373,11 +395,50 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         }
         ratio = 0.15;
         break;
-    case Spell::BERSERKER:
-    case Spell::PARALYZE: {
-        if ( targetIsLast )
-            return 0.0;
+    case Spell::BERSERKER: {
+        if ( targetIsLast ) {
+            // No use of this spell if the last enemy creature is left for the battle.
+            // However, there are some cases when it is going to be useful:
+            // - to avoid the enemy hero cast spells as they won't have control of any of their monsters
+            // - to lure the monster to our another monster, for example to attack Dragons rather than Mages.
+            //
+            // TODO: add the logic for the above cases.
+            return 0;
+        }
         ratio = 0.85;
+        break;
+    }
+    case Spell::PARALYZE: {
+        if ( targetIsLast ) {
+            // TODO: add proper evaluation of the spell as a paralyzed creature has no retaliation damage.
+            //       It might be less useful against monsters with unlimited retaliation when you have more than one monster.
+            //
+            // As of now, we assume that the spell is going to be applicable for a monster that has no unlimited retaliation,
+            // we are going to hit it immediately and the monster hasn't retaliated.
+            if ( target.isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+                // Not so much useful.
+                return 0;
+            }
+
+            if ( !target.isRetaliationAllowed() ) {
+                // The monster has retaliated. Apply the spell might not be that good.
+                // TODO: check whether we are going to attack the monster right now or the next turn.
+                //       Plus Paralyze spell is useful if the monster is faster than other troops.
+                return 0;
+            }
+
+            const int32_t spellDuration = spellDurationMultiplier( target );
+            if ( spellDuration < 1 ) {
+                // This spell might not be useful at all.
+                return 0;
+            }
+
+            // The final ratio is smaller than the original one but not that much.
+            ratio = 0.5;
+        }
+        else {
+            ratio = 0.85;
+        }
         break;
     }
     case Spell::HYPNOTIZE: {
@@ -398,7 +459,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     case Spell::MASSBLESS: {
         if ( target.GetDamageMax() == target.GetDamageMin() ) {
             // It is useless to apply Bless spell as the monster already has maximum damage.
-            return 0.0;
+            return 0;
         }
         ratio = 0.15;
         break;

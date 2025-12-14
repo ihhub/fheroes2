@@ -110,7 +110,7 @@ namespace AI
         SpellcastOutcome spellEarthquakeValue( const Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets, const Battle::Units & enemies ) const;
 
-        double spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast, const bool forDispel ) const;
+        double spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, const bool targetIsLast, const bool forDispel ) const;
         double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
