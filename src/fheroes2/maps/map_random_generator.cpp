@@ -525,7 +525,7 @@ namespace Maps::Random_Generator
                 = ( regionSizeLimit > regionSizeForSecondaryMines || region.type == RegionType::NEUTRAL ) ? regionConfiguration.mineCount : 1;
             const std::vector<int32_t> avoidance( primaryMineLocations.begin(), primaryMineLocations.end() );
             options = pickEvenlySpacedTiles( options, static_cast<size_t>( secondaryMineCount ) * 3, avoidance );
-
+            // It is expected that the container is not empty due to the check above.
             assert( !options.empty() );
 
             for ( size_t idx = 0; idx < secondaryMineCount; ++idx ) {
