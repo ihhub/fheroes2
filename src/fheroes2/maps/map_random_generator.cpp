@@ -360,11 +360,13 @@ namespace Maps::Random_Generator
               },
               {
                   // Obstacles.
-                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 138 },
-                    { { 0, -1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 139 },
-                    { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
-                    { { 2, 0 }, ObjectGroup::LANDSCAPE_TREES, 2 },
-                    { { -1, 1 }, ObjectGroup::LANDSCAPE_TREES, 4 }, },
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 138 },
+                      { { 0, -1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 139 },
+                      { { -3, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                      { { 2, 0 }, ObjectGroup::LANDSCAPE_TREES, 2 },
+                      { { -1, 1 }, ObjectGroup::LANDSCAPE_TREES, 4 },
+                  },
                   // Optional.
                   {
                       { { 1, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
@@ -734,13 +736,15 @@ namespace Maps::Random_Generator
             }
         }
 
-        // TODO: Step 9: Detect and fill empty areas with decorative/flavour objects.
+        // Step 9: Detect and fill empty areas with decorative/flavour objects.
         for ( Region & region : mapRegions ) {
             const auto it = decorationsPerGround.find( region.groundType );
             if ( it != decorationsPerGround.end() ) {
                 placeDecorations( mapFormat, mapState, region, it->second, randomGenerator );
             }
-            placeDecorations( mapFormat, mapState, region, decorationsPerGround.at( Ground::ALL ), randomGenerator );
+            if ( region.groundType != Ground::WATER ) {
+                placeDecorations( mapFormat, mapState, region, decorationsPerGround.at( Ground::ALL ), randomGenerator );
+            }
         }
 
         // Step 10: Place missing monsters.

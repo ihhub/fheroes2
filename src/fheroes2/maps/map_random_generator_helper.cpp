@@ -271,6 +271,10 @@ namespace
                 validPlacement = false;
                 return;
             }
+            if ( node.type == Maps::Random_Generator::NodeType::ACTION || node.type == Maps::Random_Generator::NodeType::PATH ) {
+                validPlacement = false;
+                return;
+            }
             if ( node.type != Maps::Random_Generator::NodeType::OPEN && ( isAction || node.type != Maps::Random_Generator::NodeType::BORDER ) ) {
                 validPlacement = false;
                 return;
@@ -1133,7 +1137,8 @@ namespace Maps::Random_Generator
             for ( const auto & prefab : sets ) {
                 bool valid = true;
                 for ( const auto & obstacle : prefab.obstacles ) {
-                    const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, obstacle.objectIndex );
+                    const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, region.groundType );
+                    const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
                     if ( !canPlaceObject( data, objectInfo, position + obstacle.offset ) ) {
                         valid = false;
                         break;
@@ -1145,7 +1150,9 @@ namespace Maps::Random_Generator
                         placeSimpleObject( mapFormat, data, node, obstacle );
                     }
                     for ( const auto & obstacle : prefab.optional ) {
-                        if ( Rand::GetWithGen( 0, 1, randomGenerator ) ) {
+                        const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, region.groundType );
+                        const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
+                        if ( Rand::GetWithGen( 0, 1, randomGenerator ) && canPlaceObject( data, objectInfo, position + obstacle.offset ) ) {
                             placeSimpleObject( mapFormat, data, node, obstacle );
                         }
                     }
