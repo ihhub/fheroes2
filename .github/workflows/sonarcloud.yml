@@ -43,7 +43,7 @@ jobs:
         bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
-    - uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
+    - uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v7
       env:
         SONAR_HOST_URL: https://sonarcloud.io
     - name: Prepare SonarCloud cfamily cache
@@ -68,7 +68,7 @@ jobs:
         ln -s "$ANDROID_HOME" .sonar-android-sdk
         ln -s ~/.sonar-cfamily-cache .sonar-cfamily-cache
         ln -s ~/.gradle .sonar-gradle
-    - uses: SonarSource/sonarqube-scan-action@v6
+    - uses: SonarSource/sonarqube-scan-action@v7
       with:
         args: >-
           -Dsonar.cfamily.compile-commands=build/compile_commands.json
