@@ -353,12 +353,12 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
 double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, const bool targetIsLast,
                                             const bool forDispel ) const
 {
-    const int spellID = spell.GetID();
-
     // Make sure that this spell makes sense to apply (skip this check to evaluate the effect of dispelling)
     if ( !forDispel && ( isSpellcastUselessForUnit( target, enemies, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
         return 0.0;
     }
+
+    const int spellID = spell.GetID();
 
     double ratio = 0.0;
     switch ( spellID ) {
