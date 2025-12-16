@@ -471,7 +471,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     case Spell::STEELSKIN:
         ratio = 0.2;
         break;
-    // Following spell usefulness is conditional; ratio will be determined later
+    // Following spell usefulness is conditional. Ratio will be determined below.
     case Spell::ANTIMAGIC:
     case Spell::MIRRORIMAGE:
     case Spell::SHIELD:
@@ -753,7 +753,7 @@ bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, co
 
     case Spell::HASTE:
     case Spell::MASSHASTE:
-        return unit.Modes( Battle::SP_HASTE );
+        return unit.Modes( Battle::SP_HASTE ) || ( unit.GetSpeed() == Speed::INSTANT );
 
     case Spell::SHIELD:
     case Spell::MASSSHIELD:
@@ -778,15 +778,18 @@ bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, co
 
     case Spell::SLOW:
     case Spell::MASSSLOW:
-        return unit.Modes( Battle::SP_SLOW );
+        return unit.Modes( Battle::SP_SLOW ) || ( unit.GetSpeed() == Speed::CRAWLING );
 
     case Spell::STONESKIN:
     case Spell::STEELSKIN:
+        // TODO: this is not always true. Steel Skin gives higher defense so applying it makes sense.
         return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
 
     case Spell::BLIND:
     case Spell::PARALYZE:
     case Spell::PETRIFY:
+        // TODO: these 3 modes serve different purposes and
+        //       there are cases when applying Paralyze just at the end of Blind spell duration makes sense.
         return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
 
     case Spell::DRAGONSLAYER:
