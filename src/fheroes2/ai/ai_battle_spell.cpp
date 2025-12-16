@@ -283,12 +283,14 @@ double AI::BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & targe
 {
     const double targetDefense = target.GetDefense();
 
-    if ( targetDefense <= 1 ) { // target is already at minimum defense: not useful to cast Disrupting Ray
+    if ( targetDefense <= 1 ) {
+        // The target has minimum defense value. This spell is useless.
         return 0.0;
     }
 
     double ratio = 0.2;
-    if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) { // disrupting ray can't have full effect
+    if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) {
+        // The spell is not applicable fully.
         const double actualDefenseChange = targetDefense - 1.0;
         ratio *= actualDefenseChange / Spell( Spell::DISRUPTINGRAY ).ExtraValue();
     }
@@ -333,7 +335,8 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     const uint32_t gainedSpeed = newSpeed - currentSpeed; // usually 2
     double ratio = 0.05 * gainedSpeed;
 
-    if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
+    if ( currentSpeed < _enemyAverageSpeed ) {
+        // Haste is very useful if target is slower than army.
         ratio *= 2;
     }
     if ( target.Modes( Battle::SP_SLOW ) ) {
