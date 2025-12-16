@@ -292,7 +292,13 @@ double AI::BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & targe
     if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) {
         // The spell is not applicable fully.
         const double actualDefenseChange = targetDefense - 1.0;
-        ratio *= actualDefenseChange / Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        const uint32_t spellValue = Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        if ( spellValue == 0 ) {
+            assert( spellValue > 0 );
+            return 0;
+        }
+
+        ratio *= actualDefenseChange / spellValue;
     }
 
     const double targetStrength = target.GetStrength();
@@ -308,7 +314,10 @@ double AI::BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & targe
 double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
 {
     if ( target.isArchers() || _attackingCastle ) {
-        // Slow is useless against archers or troops defending castle
+        // Slow is useless against archers or troops defending castle.
+        //
+        // The above is not always true. A stack of enemy archers can be killed by a slower flying creature if they are slowed down.
+        // TODO: add a check for the last case.
         return 0.01;
     }
     const uint32_t currentSpeed = target.GetSpeed( false, true );
@@ -316,7 +325,8 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
     const uint32_t lostSpeed = currentSpeed - newSpeed; // usually 2
     double ratio = 0.1 * lostSpeed;
 
-    if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
+    if ( currentSpeed < _myArmyAverageSpeed ) {
+        // Slow isn't useful if target is already slower than our army.
         ratio /= 2;
     }
     if ( target.Modes( Battle::SP_HASTE ) ) {
