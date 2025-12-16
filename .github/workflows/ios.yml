@@ -31,6 +31,6 @@ jobs:
         cd ios
         xcodebuild -project fheroes2.xcodeproj \
           -scheme fheroes2 \
-          -destination 'platform=iOS Simulator,name=Any iOS Simulator Device' \
+          -destination 'platform=iOS Simulator,OS:18.6,name:iPhone 16' \
           build
     # TODO: add signing stage.
