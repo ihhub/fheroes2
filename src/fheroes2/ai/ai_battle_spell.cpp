@@ -39,6 +39,7 @@
 #include "heroes_base.h"
 #include "logging.h"
 #include "monster.h"
+#include "monster_info.h"
 #include "speed.h"
 #include "spell.h"
 #include "spell_info.h"
