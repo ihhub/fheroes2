@@ -177,7 +177,9 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
             return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
         }
 
-        // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack
+        // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack.
+        // TODO: we also need to take into an account additional stack of Mirror Image if the creatures have one.
+        //       Killing the original monsters will destroy the Mirror Image stack as well.
         const uint32_t hitpoints = unit->Modes( Battle::CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
         if ( damage >= hitpoints ) {
             const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
