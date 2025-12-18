@@ -39,6 +39,7 @@
 #include "heroes_base.h"
 #include "logging.h"
 #include "monster.h"
+#include "monster_info.h"
 #include "speed.h"
 #include "spell.h"
 #include "spell_info.h"
@@ -176,7 +177,9 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
             return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
         }
 
-        // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack
+        // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack.
+        // TODO: we also need to take into an account additional stack of Mirror Image if the creatures have one.
+        //       Killing the original monsters will destroy the Mirror Image stack as well.
         const uint32_t hitpoints = unit->Modes( Battle::CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
         if ( damage >= hitpoints ) {
             const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
@@ -268,6 +271,7 @@ int32_t AI::BattlePlanner::spellDurationMultiplier( const Battle::Unit & target 
 {
     const int32_t duration = getSpellPower( _commander );
 
+    // TODO: this logic might not be accurate for cases when certain spells are applied to reduce the retaliation damage, like Blind or Paralyze.
     if ( duration < 2 && target.Modes( Battle::TR_MOVED ) ) {
         return 0;
     }
@@ -279,14 +283,22 @@ double AI::BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & targe
 {
     const double targetDefense = target.GetDefense();
 
-    if ( targetDefense <= 1 ) { // target is already at minimum defense: not useful to cast Disrupting Ray
+    if ( targetDefense <= 1 ) {
+        // The target has minimum defense value. This spell is useless.
         return 0.0;
     }
 
     double ratio = 0.2;
-    if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) { // disrupting ray can't have full effect
+    if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) {
+        // The spell is not applicable fully.
         const double actualDefenseChange = targetDefense - 1.0;
-        ratio *= actualDefenseChange / Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        const uint32_t spellValue = Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        if ( spellValue == 0 ) {
+            assert( spellValue > 0 );
+            return 0;
+        }
+
+        ratio *= actualDefenseChange / spellValue;
     }
 
     const double targetStrength = target.GetStrength();
@@ -302,7 +314,10 @@ double AI::BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & targe
 double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
 {
     if ( target.isArchers() || _attackingCastle ) {
-        // Slow is useless against archers or troops defending castle
+        // Slow is useless against archers or troops defending castle.
+        //
+        // The above is not always true. A stack of enemy archers can be killed by a slower flying creature if they are slowed down.
+        // TODO: add a check for the last case.
         return 0.01;
     }
     const uint32_t currentSpeed = target.GetSpeed( false, true );
@@ -310,7 +325,8 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
     const uint32_t lostSpeed = currentSpeed - newSpeed; // usually 2
     double ratio = 0.1 * lostSpeed;
 
-    if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
+    if ( currentSpeed < _myArmyAverageSpeed ) {
+        // Slow isn't useful if target is already slower than our army.
         ratio /= 2;
     }
     if ( target.Modes( Battle::SP_HASTE ) ) {
@@ -329,7 +345,8 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     const uint32_t gainedSpeed = newSpeed - currentSpeed; // usually 2
     double ratio = 0.05 * gainedSpeed;
 
-    if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
+    if ( currentSpeed < _enemyAverageSpeed ) {
+        // Haste is very useful if target is slower than army.
         ratio *= 2;
     }
     if ( target.Modes( Battle::SP_SLOW ) ) {
@@ -343,15 +360,15 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     return ratio;
 }
 
-double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, bool targetIsLast,
+double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, const bool targetIsLast,
                                             const bool forDispel ) const
 {
-    const int spellID = spell.GetID();
-
     // Make sure that this spell makes sense to apply (skip this check to evaluate the effect of dispelling)
     if ( !forDispel && ( isSpellcastUselessForUnit( target, enemies, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
         return 0.0;
     }
+
+    const int spellID = spell.GetID();
 
     double ratio = 0.0;
     switch ( spellID ) {
@@ -360,9 +377,30 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         ratio = getSpellSlowRatio( target );
         break;
     case Spell::BLIND: {
-        if ( targetIsLast )
-            return 0.0;
-        ratio = 0.8;
+        if ( targetIsLast ) {
+            // TODO: add more complex logic to calculate the usefulness of this spell for a single target as blinded creature retaliates with 50% damage.
+            //       It might be less useful against monsters with unlimited retaliation when you have more than one monster.
+            //
+            // As of now, we assume that the spell is going to be applicable for a monster that has no unlimited retaliation,
+            // we are going to hit it immediately and the monster hasn't retaliated.
+            if ( target.isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+                // Not so much useful.
+                return 0;
+            }
+
+            if ( !target.isRetaliationAllowed() ) {
+                // The monster has retaliated. Apply the spell might not be that good.
+                // TODO: check whether we are going to attack the monster right now or the next turn.
+                //       Plus Blind spell is useful if the monster is faster than other troops.
+                return 0;
+            }
+
+            // The final ratio is smaller than the original one but not that much.
+            ratio = 0.4;
+        }
+        else {
+            ratio = 0.8;
+        }
         break;
     }
     case Spell::CURSE:
@@ -373,11 +411,50 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         }
         ratio = 0.15;
         break;
-    case Spell::BERSERKER:
-    case Spell::PARALYZE: {
-        if ( targetIsLast )
-            return 0.0;
+    case Spell::BERSERKER: {
+        if ( targetIsLast ) {
+            // No use of this spell if the last enemy creature is left for the battle.
+            // However, there are some cases when it is going to be useful:
+            // - to avoid the enemy hero cast spells as they won't have control of any of their monsters
+            // - to lure the monster to our another monster, for example to attack Dragons rather than Mages.
+            //
+            // TODO: add the logic for the above cases.
+            return 0;
+        }
         ratio = 0.85;
+        break;
+    }
+    case Spell::PARALYZE: {
+        if ( targetIsLast ) {
+            // TODO: add proper evaluation of the spell as a paralyzed creature has no retaliation damage.
+            //       It might be less useful against monsters with unlimited retaliation when you have more than one monster.
+            //
+            // As of now, we assume that the spell is going to be applicable for a monster that has no unlimited retaliation,
+            // we are going to hit it immediately and the monster hasn't retaliated.
+            if ( target.isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+                // Not so much useful.
+                return 0;
+            }
+
+            if ( !target.isRetaliationAllowed() ) {
+                // The monster has retaliated. Apply the spell might not be that good.
+                // TODO: check whether we are going to attack the monster right now or the next turn.
+                //       Plus Paralyze spell is useful if the monster is faster than other troops.
+                return 0;
+            }
+
+            const int32_t spellDuration = spellDurationMultiplier( target );
+            if ( spellDuration < 1 ) {
+                // This spell might not be useful at all.
+                return 0;
+            }
+
+            // The final ratio is smaller than the original one but not that much.
+            ratio = 0.5;
+        }
+        else {
+            ratio = 0.85;
+        }
         break;
     }
     case Spell::HYPNOTIZE: {
@@ -398,7 +475,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     case Spell::MASSBLESS: {
         if ( target.GetDamageMax() == target.GetDamageMin() ) {
             // It is useless to apply Bless spell as the monster already has maximum damage.
-            return 0.0;
+            return 0;
         }
         ratio = 0.15;
         break;
@@ -409,7 +486,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     case Spell::STEELSKIN:
         ratio = 0.2;
         break;
-    // Following spell usefulness is conditional; ratio will be determined later
+    // Following spell usefulness is conditional. Ratio will be determined below.
     case Spell::ANTIMAGIC:
     case Spell::MIRRORIMAGE:
     case Spell::SHIELD:
@@ -691,7 +768,7 @@ bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, co
 
     case Spell::HASTE:
     case Spell::MASSHASTE:
-        return unit.Modes( Battle::SP_HASTE );
+        return unit.Modes( Battle::SP_HASTE ) || ( unit.GetSpeed() == Speed::INSTANT );
 
     case Spell::SHIELD:
     case Spell::MASSSHIELD:
@@ -716,15 +793,18 @@ bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, co
 
     case Spell::SLOW:
     case Spell::MASSSLOW:
-        return unit.Modes( Battle::SP_SLOW );
+        return unit.Modes( Battle::SP_SLOW ) || ( unit.GetSpeed() == Speed::CRAWLING );
 
     case Spell::STONESKIN:
     case Spell::STEELSKIN:
+        // TODO: this is not always true. Steel Skin gives higher defense so applying it makes sense.
         return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
 
     case Spell::BLIND:
     case Spell::PARALYZE:
     case Spell::PETRIFY:
+        // TODO: these 3 modes serve different purposes and
+        //       there are cases when applying Paralyze just at the end of Blind spell duration makes sense.
         return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
 
     case Spell::DRAGONSLAYER:
