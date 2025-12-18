@@ -287,7 +287,7 @@ namespace
         }
 
         for ( const Spell spell : spells ) {
-            if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultiplier * spell.spellPoints( &hero ) ) {
+            if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() >= spellMultiplier * spell.spellPoints( &hero ) ) {
                 // Looks like this hero knows the spell and casting it won't take too many spell points.
                 // So, let's do it!
                 if ( hero.ActionSpellCast( spell ) ) {
