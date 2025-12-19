@@ -1,14 +1,14 @@
 version 1.1.13 (21 December 2025)
-- add several missing letters for CP-1251 code page
-- improve usefulness of certain battle spells by AI
-- fix several iOS relates issues and bring it to a playable state
-- improve road network and verify object placement immediately for random map generator
+- add several missing letters for the CP-1251 code page
+- improve the usefulness of certain battle spells by AI
+- fix several iOS-related issues and bring the iOS build into a playable state
+- improve road network and verify object placement immediately for the random map generator
 - set starting hero and player information for RMG maps
 - update the Hungarian translation
-- show dialog when there are no items to select to avoid crash after pressing OK in the empty list
+- show a dialog when there are no items to select to avoid a crash after pressing OK in the empty list
 - reduce overall RAM usage by the engine
-- speed up CRC32 algorithm to improve translation file loading times
-- fix an assertion on original corrupted maps
+- speed up the CRC32 algorithm to improve translation file loading times
+- fix an assertion on the original corrupted maps
 - add UI screen to configure random map generator
 - make Terrain and Erase brushes to support drag-to-draw functionality
 - add missing popups for the second hero control in Battle Only mode
@@ -16,27 +16,27 @@ version 1.1.13 (21 December 2025)
 - avoid using Shield spell by AI when no effect is applied
 - add compilation steps documentation for iOS
 - significantly reduce RAM usage by the Editor when doing actions
-- show map type explicitly as icons are too small to differentiate for some players
-- make interactive area for each building in Castle to consist of multiple rectangles
+- show map type explicitly, as icons are too small to differentiate for some players
+- make an interactive area for each building in the Castle window to consist of multiple rectangles
 - fully render the FPS text on the screen on every frame render call
-- make AI to use Earthquake spell in battles
+- make AI to use the Earthquake spell in battles
 - speed up several button generation
-- truncate text within Monster Info dialog to avoid incorrect rendering
-- truncate building name for building image within Castle to avoid incorrect rendering
+- truncate text within the Monster Info dialog to avoid incorrect rendering
+- truncate building names for building image within the Castle window to avoid incorrect rendering
 - do not show troop counter for being summoned elemental
 - implement Teleport spell usage by AI
 - improve random map generator consistency and treasure distribution
 - update the Swedish translation
-- speed up AI pathfinder algorithm
+- speed up the AI pathfinder algorithm
 - update the Belarusian translation
-- fix "E" with 2 dots letter for small font of CP-1520 code page
-- do not react on world scroll keys when scrolling is disabled
+- fix "E" with 2 dots letter for CP-1250 small font
+- do not react to world scroll keys when scrolling is disabled
 - fix status bar flickering in the main Castle Window when switching castles
 - move Adventure Map view area to the center of a map in hot-seat mode
-- fix rendering while toggling Turn Order option during battles
-- fix a case when AI was not using Disrupting Ray spell when enemy defense value is equal 2
+- fix rendering while toggling the Turn Order option during battles
+- fix a case when AI was not using the Disrupting Ray spell when the enemy defense value is equal to 2
 - update FPS counter and color cycling synchronization logic
-- implement custom monster levels for random map generation
+- implement custom monster levels for the random map generation
 - update the Ukrainian translation
 - fix an assertion when opening map info for maps with defeat hero condition or capture/lose castle condition
 
