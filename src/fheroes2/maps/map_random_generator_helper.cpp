@@ -864,10 +864,10 @@ namespace Maps::Random_Generator
         return -1;
     }
 
-    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, Rand::PCG32 & randomGenerator )
+    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, const int ground, Rand::PCG32 & randomGenerator )
     {
         Tile & tile = world.getTile( node.index );
-        const auto it = obstaclesPerGround.find( tile.GetGround() );
+        const auto it = obstaclesPerGround.find( ground );
         if ( it == obstaclesPerGround.end() || it->second.empty() ) {
             return false;
         }
@@ -1152,7 +1152,7 @@ namespace Maps::Random_Generator
                     for ( const auto & obstacle : prefab.optional ) {
                         const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, region.groundType );
                         const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
-                        if ( Rand::GetWithGen( 0, 1, randomGenerator ) && canPlaceObject( data, objectInfo, position + obstacle.offset ) ) {
+                        if ( Rand::GetWithGen( 0, 1, randomGenerator ) && canPlaceBorderObstacle( data, objectInfo, position + obstacle.offset ) ) {
                             placeSimpleObject( mapFormat, data, node, obstacle );
                         }
                     }
