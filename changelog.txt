@@ -1,7 +1,7 @@
 version 1.1.13 (21 December 2025)
 - update the Russian translation
 - add several missing letters for the CP-1251 code page
-- improve the usefulness of certain battle spells by AI
+- improve the use of certain battle spells by the AI
 - fix several iOS-related issues and bring the iOS build into a playable state
 - improve road network and verify object placement immediately for the random map generator
 - set starting hero and player information for RMG maps
