@@ -29,7 +29,7 @@ version 1.1.13 (21 December 2025)
 - update the Swedish translation
 - speed up the AI pathfinder algorithm
 - update the Belarusian translation
-- fix "E" with 2 dots letter for CP-1250 small font
+- fix "E with 2 dots on top" letter for CP-1251 small font
 - do not react to world scroll keys when scrolling is disabled
 - fix status bar flickering in the main Castle Window when switching castles
 - move Adventure Map view area to the center of a map in hot-seat mode
