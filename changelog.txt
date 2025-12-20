@@ -32,7 +32,7 @@ version 1.1.13 (21 December 2025)
 - fix "E with 2 dots on top" letter for CP-1251 small font
 - do not react to world scroll keys when scrolling is disabled
 - fix status bar flickering in the main Castle Window when switching castles
-- move Adventure Map view area to the center of a map in hot-seat mode
+- move the Adventure Map view area to the center of the map in hot-seat mode
 - fix rendering while toggling the Turn Order option during battles
 - fix a case when AI was not using the Disrupting Ray spell when the enemy defense value is equal to 2
 - update FPS counter and color cycling synchronization logic
