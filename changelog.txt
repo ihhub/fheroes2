@@ -18,7 +18,7 @@ version 1.1.13 (21 December 2025)
 - document compilation steps for iOS
 - significantly reduce RAM usage by the Editor when doing actions
 - show map type explicitly, as icons are too small to differentiate for some players
-- make an interactive area for each building in the Castle window to consist of multiple rectangles
+- make the interactive area for each building in the Castle window consist of multiple rectangles
 - fully render the FPS text on the screen on every frame render call
 - make AI to use the Earthquake spell in battles
 - speed up several buttons generation
