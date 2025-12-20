@@ -20,7 +20,7 @@ version 1.1.13 (21 December 2025)
 - make an interactive area for each building in the Castle window to consist of multiple rectangles
 - fully render the FPS text on the screen on every frame render call
 - make AI to use the Earthquake spell in battles
-- speed up several button generation
+- speed up several buttons generation
 - truncate text within the Monster Info dialog to avoid incorrect rendering
 - truncate building names for building image within the Castle window to avoid incorrect rendering
 - do not show troop counter for being summoned elemental
