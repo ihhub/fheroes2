@@ -11,7 +11,7 @@ version 1.1.13 (21 December 2025)
 - speed up the CRC32 algorithm to improve translation file loading times
 - fix an assertion issue with original corrupted maps
 - add a UI screen to configure the random map generator
-- make Terrain and Erase brushes to support drag-to-draw functionality
+- add drag-to-draw functionality to the Terrain and Erase brushes
 - add missing popups for the second hero control in Battle Only mode
 - display Traveller's Tent and Barrier colors in popups in the Editor
 - avoid using Shield spell by AI when no effect is applied
