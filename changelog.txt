@@ -14,7 +14,7 @@ version 1.1.13 (21 December 2025)
 - add drag-to-draw functionality to the Terrain and Erase brushes
 - add missing popups for the second hero control in Battle Only mode
 - display Traveller's Tent and Barrier colors in popups in the Editor
-- avoid using Shield spell by AI when no effect is applied
+- avoid using Shield spell by AI when it has no effect
 - add compilation steps documentation for iOS
 - significantly reduce RAM usage by the Editor when doing actions
 - show map type explicitly, as icons are too small to differentiate for some players
