@@ -184,8 +184,9 @@ namespace Game
         NO_EVENT,
     };
 
-    enum class HotKeyCategory : uint8_t
+    enum class HotKeyCategory : int
     {
+        ALL = -1,
         DEFAULT,
         GLOBAL,
         MAIN_MENU,
