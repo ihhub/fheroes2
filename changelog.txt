@@ -25,7 +25,7 @@ version 1.1.13 (21 December 2025)
 - truncate text within the Monster Info dialog to avoid incorrect rendering
 - truncate building names for building image within the Castle window to avoid incorrect rendering
 - do not show troop counter during elementals' summoning animation
-- implement Teleport spell usage by AI
+- teach the AI how to use the Teleport spell
 - improve random map generator consistency and treasure distribution
 - update the Swedish translation
 - speed up the AI pathfinder algorithm
