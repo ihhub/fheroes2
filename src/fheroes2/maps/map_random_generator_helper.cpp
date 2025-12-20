@@ -906,7 +906,7 @@ namespace Maps::Random_Generator
         }
     }
 
-    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement )
+    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement, const int ground )
     {
         const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
         if ( !Maps::isValidAbsPoint( position.x, position.y ) ) {
@@ -914,7 +914,7 @@ namespace Maps::Random_Generator
         }
 
         Tile & tile = world.getTile( position.x, position.y );
-        const int32_t objectIndex = selectTerrainVariantForObject( placement.groupType, placement.objectIndex, tile.GetGround() );
+        const int32_t objectIndex = selectTerrainVariantForObject( placement.groupType, placement.objectIndex, ground );
         const auto & objectInfo = Maps::getObjectInfo( placement.groupType, objectIndex );
         if ( putObjectOnMap( mapFormat, tile, placement.groupType, objectIndex ) ) {
             markObjectPlacement( data, objectInfo, position );
@@ -1034,7 +1034,7 @@ namespace Maps::Random_Generator
         const Node & node = data.getNode( tileIndex );
 
         for ( const auto & obstacle : objectSet.obstacles ) {
-            if ( !placeSimpleObject( mapFormat, data, node, obstacle ) ) {
+            if ( !placeSimpleObject( mapFormat, data, node, obstacle, region.groundType ) ) {
                 // Validate that object set can be placed before calling this!
                 assert( 0 );
             }
@@ -1044,7 +1044,7 @@ namespace Maps::Random_Generator
         int32_t groupValue = 0;
         for ( const auto & treasure : objectSet.valuables ) {
             if ( treasure.groupType == ObjectGroup::ADVENTURE_POWER_UPS ) {
-                placeSimpleObject( mapFormat, data, node, treasure );
+                placeSimpleObject( mapFormat, data, node, treasure, region.groundType );
                 groupValue += getObjectGoldValue( treasure.groupType, treasure.objectIndex );
             }
             else {
@@ -1052,7 +1052,7 @@ namespace Maps::Random_Generator
 
                 // Randomize what treasure to pick
                 const auto & [groupType, objectIndex] = getRandomTreasure( valueLimit, randomGenerator );
-                placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex } );
+                placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex }, region.groundType );
                 groupValue += getObjectGoldValue( groupType, objectIndex );
             }
         }
@@ -1098,7 +1098,7 @@ namespace Maps::Random_Generator
                 transaction.commit();
 
                 for ( const auto & obstacle : prefab.obstacles ) {
-                    placeSimpleObject( mapFormat, data, node, obstacle );
+                    placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );
                 }
 
                 const int32_t groupValueLimit = std::min( region.treasureLimit, maximumTreasureGroupValue );
@@ -1112,7 +1112,7 @@ namespace Maps::Random_Generator
                         groupType = selection.first;
                         objectIndex = selection.second;
                     }
-                    placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex } );
+                    placeSimpleObject( mapFormat, data, node, { treasure.offset, groupType, objectIndex }, region.groundType );
                     groupValue += getObjectGoldValue( groupType, objectIndex );
                 }
                 // It is possible to go into the negatives; intentional
@@ -1147,13 +1147,13 @@ namespace Maps::Random_Generator
 
                 if ( valid ) {
                     for ( const auto & obstacle : prefab.obstacles ) {
-                        placeSimpleObject( mapFormat, data, node, obstacle );
+                        placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );
                     }
                     for ( const auto & obstacle : prefab.optional ) {
                         const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, region.groundType );
                         const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
                         if ( Rand::GetWithGen( 0, 1, randomGenerator ) && canPlaceBorderObstacle( data, objectInfo, position + obstacle.offset ) ) {
-                            placeSimpleObject( mapFormat, data, node, obstacle );
+                            placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );
                         }
                     }
                     break;
