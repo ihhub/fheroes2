@@ -20,7 +20,7 @@ version 1.1.13 (21 December 2025)
 - show map type explicitly, as icons are too small to differentiate for some players
 - make the interactive area for each building in the Castle window consist of multiple rectangles
 - fully render the FPS text on the screen on every frame render call
-- make AI to use the Earthquake spell in battles
+- make AI use the Earthquake spell in battles
 - speed up several buttons generation
 - truncate text within the Monster Info dialog to avoid incorrect rendering
 - truncate building names for building image within the Castle window to avoid incorrect rendering
