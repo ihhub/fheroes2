@@ -24,7 +24,7 @@ version 1.1.13 (21 December 2025)
 - speed up several instances of button generation
 - truncate text within the Monster Info dialog to avoid incorrect rendering
 - truncate building names for building image within the Castle window to avoid incorrect rendering
-- do not show troop counter for being summoned elemental
+- do not show troop counter during elementals' summoning animation
 - implement Teleport spell usage by AI
 - improve random map generator consistency and treasure distribution
 - update the Swedish translation
