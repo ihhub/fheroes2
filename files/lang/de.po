@@ -5411,8 +5411,8 @@ msgstr "Projektkoordination und Kernentwicklung"
 msgid "Development"
 msgstr "Entwicklung"
 
-msgid "Visit us at "
-msgstr "Besucht uns bei "
+msgid "Visit us at"
+msgstr "Besucht uns bei"
 
 msgid "QA and Support"
 msgstr "QA und Unterstützung"
@@ -12857,65 +12857,3 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Zeigt an, ob die Karte für die Version \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" oder die \"Resurrection\" Version des Spiels erstellt "
-#~ "wurde."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Achtung"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Die Beschreibung der aktuell ausgewählten Karte."
-
-#~ msgid "Castle Options"
-#~ msgstr "Burg Optionen"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klickt, um die nächste Stadt anzuzeigen."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klickt, um die vorherige Stadt anzuzeigen."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Bringt den Zaubernden in jene Stadt oder Burg zurück, die er gerade "
-#~ "besitzt."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vergeltet immer"
-
-#~ msgid "CONFIG"
-#~ msgstr "KONFIG."
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Abbrechen, zurück zum Neue Karte Menü."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Abbrechen und zurück zum Hauptmenü des Karteneditors."
-
-#~ msgid "Host"
-#~ msgstr "Gastgeber"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Der Gastgeber legt die Spieloptionen fest. Es kann nur einen Gastgeber "
-#~ "pro Netzwerkspiel geben."
-
-#~ msgid "Guest"
-#~ msgstr "Gast"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Der Gast wartet darauf, dass der Gastgeber das Spiel einrichtet, und wird "
-#~ "dann automatisch hinzugefügt. Bei TCP/IP-Spielen kann es mehrere Gäste "
-#~ "geben."

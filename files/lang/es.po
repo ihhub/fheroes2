@@ -5444,7 +5444,7 @@ msgstr "Coordinación del proyecto y desarrollo central"
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -12568,78 +12568,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Indica si el mapa está hecho para la versión \"Las Guerras de Sucesión\", "
-#~ "\"El Precio de la Lealtad\" o \"Resurrección\" del juego."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Advertencia"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "La descripción del mapa actualmente elegido."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opciones del Castillo"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Haga clic para ver la siguiente ciudad."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Haga clic para ver la ciudad anterior."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "LLeva al Héroe a cualquier ciudad o castillo que posea."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Siempre contraataca"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Se pueden colocar un máximo de %{count} obeliscos en el mapa."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Haz clic para cambiar el nombre del castillo. Haz clic derecho para "
-#~ "restablecer al valor predeterminado."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr ""
-#~ "Establece un ejército personalizado del castillo. Haz clic derecho para "
-#~ "restablecer la unidad."
-
-#~ msgid "CONFIG"
-#~ msgstr "AJUSTES"
-
-#, fuzzy
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Cancelar y volver al menú principal."
-
-#, fuzzy
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Cancelar y volver al menú principal."
-
-#~ msgid "Host"
-#~ msgstr "Anfitrión"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "El anfitrión establece las opciones de la partida. Solo puede haber un "
-#~ "anfitrión por partida en red."
-
-#~ msgid "Guest"
-#~ msgstr "Invitado"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "El invitado espera a que el anfitrión  monte una partida, entonces es "
-#~ "añadido automáticamente en ella. Pueden haber varios invitados en las "
-#~ "partidas TCP/IP."

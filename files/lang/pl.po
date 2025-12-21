@@ -5456,8 +5456,8 @@ msgstr "Koordynacja projektu i development"
 msgid "Development"
 msgstr "Development"
 
-msgid "Visit us at "
-msgstr "Odwiedź nas "
+msgid "Visit us at"
+msgstr "Odwiedź nas"
 
 msgid "QA and Support"
 msgstr "QA i wsparcie"
@@ -12876,62 +12876,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
-
-#, fuzzy
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr "Wskazuje czy mapa jest z Wojny o Sukcesję czy z Ceny Lojalności."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Uwaga"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Opis aktualnie wybranej mapy."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opcje zamku"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Kliknij aby przejść do następnego miasta."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Kliknij aby przejść do poprzedniego miasta."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Pozwala bohaterowi rzucającemu zaklęcie przenieść się do najbliższego "
-#~ "własnego miasta lub zamku."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Zawsze kontratakuje"
-
-#~ msgid "CONFIG"
-#~ msgstr "KONFIGURACJA"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Anuluj, aby wrócić do menu Nowa Mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Anuluj, aby wrócić do głównego menu."
-
-#~ msgid "Host"
-#~ msgstr "Gospodarz"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Gospodarz ustala opcje gry. W grze sieciowej może być tylko jeden "
-#~ "gospodarz."
-
-#~ msgid "Guest"
-#~ msgstr "Gość"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gość czeka, aż gospodarz rozpocznie grę, a następnie włącza się do niej "
-#~ "automatycznie. W grze opartej na połączeniach TCP/IP może być wielu gości."

@@ -5331,8 +5331,8 @@ msgstr "Coordenação do Projeto e Núcleo de Desenvolvimento"
 msgid "Development"
 msgstr "Desenvolvimento"
 
-msgid "Visit us at "
-msgstr "Nos visite em "
+msgid "Visit us at"
+msgstr "Nos visite em"
 
 msgid "QA and Support"
 msgstr "Controle de Qualidade e Suporte"
@@ -12660,82 +12660,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Indica se o mapa é feito para a versão \"As Guerras de Sucessão\", \"O "
-#~ "Preço da Lealdade\" ou  \"Ressurreição\" do jogo."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Aviso"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "A descrição do mapa atualmente selecionado."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "A descrição do mapa inserida excede o máximo permitido de 5 linhas. Ela "
-#~ "será reduzida para caber no campo de descrição do mapa."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opções do Castelo"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Clique para mostrar a próxima cidade."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Clique para mostrar a cidade anterior."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Devolve o conjurador para qualquer cidade ou castelo que atualmente "
-#~ "possui."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Sempre retaliar"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Clique para alterar o nome do castelo. Botão direito restaura o padrão."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Definir Exército personalizado. Botão direito para redefinir."
-
-#~ msgid "CONFIG"
-#~ msgstr "AJUSTES"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Cancelar e voltar para o menu Novo Mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Cancelar e voltar para o menu principal do Editor de Mapa."
-
-#~ msgid "Host"
-#~ msgstr "Anfitrião"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "O anfitrião configura as opções de jogo. Só pode haver um anfitrião por "
-#~ "jogo em rede."
-
-#~ msgid "Guest"
-#~ msgstr "Convidado"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "O convidado espera pelo anfitrião configurar o jogo, em seguida, é "
-#~ "adicionado automaticamente dentro. Pode haver vários convidados para "
-#~ "Jogos TCP/IP."

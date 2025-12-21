@@ -5455,8 +5455,8 @@ msgstr "Điều phối Dự án và Phát triển Lõi"
 msgid "Development"
 msgstr "Phát triển"
 
-msgid "Visit us at "
-msgstr "Tới thăm chúng tôi tại "
+msgid "Visit us at"
+msgstr "Tới thăm chúng tôi tại"
 
 msgid "QA and Support"
 msgstr "QA và Hỗ trợ"
@@ -12879,63 +12879,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Cho biết bản đồ được tạo cho phiên bản \"Cuộc chiến kế vị\" hay \"Cái giá "
-#~ "của lòng trung thành\" của trò chơi."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Cảnh báo"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Mô tả của bản đồ hiện được chọn."
-
-#~ msgid "Castle Options"
-#~ msgstr "Lựa chọn Lâu đài"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Nhấp để xem thị trấn sau."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Nhấp để xem thị trấn trước."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Trả người điều khiển về bất kỳ thị trấn hoặc lâu đài nào hiện đang sở hữu."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Luôn phản đòn"
-
-#~ msgid "CONFIG"
-#~ msgstr "ĐIỀU CHỈNH"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Hủy quay lại menu Bản đồ Mới."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Hủy quay lại menu chính của Biên tập Bản đồ."
-
-#~ msgid "Host"
-#~ msgstr "Chủ nhà"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Chủ nhà thiết lập các lựa chọn trò chơi. Chỉ có thể có một máy chủ cho "
-#~ "mỗi trò chơi mạng."
-
-#~ msgid "Guest"
-#~ msgstr "Khách"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Khách đợi chủ nhà thiết lập trò chơi, sau đó sẽ tự động được thêm vào. Có "
-#~ "thể có nhiều khách cho trò chơi TCP/IP."

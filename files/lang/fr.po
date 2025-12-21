@@ -5418,8 +5418,8 @@ msgstr "Coordination du projet et développement"
 msgid "Development"
 msgstr "Développement"
 
-msgid "Visit us at "
-msgstr "Rendez-vous sur "
+msgid "Visit us at"
+msgstr "Rendez-vous sur"
 
 msgid "QA and Support"
 msgstr "AQ et support"
@@ -12801,71 +12801,3 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Indique si la carte est faite pour la version du jeu \"The Succession "
-#~ "Wars\", \"The Price of Loyalty\" ou \"Resurrection\"."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Attention"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "La description de la carte actuellement sélectionnée."
-
-#~ msgid "Castle Options"
-#~ msgstr "Options du château"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Cliquez pour afficher le village suivant."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Cliquez pour afficher le village précédent."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Ramène le lanceur du sort dans n'importe quelle village ou château qu'il "
-#~ "possède actuellement."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Riposte toujours"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr ""
-#~ "Un maximum de %{count} héros de la même couleur peuvent être placés sur "
-#~ "la carte."
-
-#~ msgid "CONFIG"
-#~ msgstr ""
-#~ "PARA-\n"
-#~ "MÈTRES"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Annuler et revenir au menu de création de carte."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Annuler et revenir au menu principal de l'éditeur."
-
-#~ msgid "Host"
-#~ msgstr "Hôte"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "L'hôte configure les options de jeu. Il ne peut y avoir qu'un seul hôte "
-#~ "par jeu en réseau."
-
-#~ msgid "Guest"
-#~ msgstr "Invité"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "L'invité attend que l'hôte configure le jeu, puis est automatiquement "
-#~ "ajouté. Il peut y avoir plusieurs invités pour les jeux TCP/IP."

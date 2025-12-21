@@ -5452,8 +5452,8 @@ msgstr "Koordinácia projektu a hlavný vývoj"
 msgid "Development"
 msgstr "Vývoj"
 
-msgid "Visit us at "
-msgstr "Navštív nás na "
+msgid "Visit us at"
+msgstr "Navštív nás na"
 
 msgid "QA and Support"
 msgstr "Zabezpečenie kvality a podpora"
@@ -12749,64 +12749,3 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo "
-#~ "\"The Price of Loyalty\"."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Pozor"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Opis aktuálne zvolenej mapy."
-
-#~ msgid "Castle Options"
-#~ msgstr "Možnosti hradu"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Kliknutím zobraz ďalšie mesto."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Kliknutím zobraz predošlé mesto."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Vráti zosielateľa do ktoréhokoľvek mesta alebo hradu, ktorý práve "
-#~ "vlastníš."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vždy vracia úder"
-
-#~ msgid "CONFIG"
-#~ msgstr "NASTAV"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Zrušenie a návrat do ponuky Nová mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
-
-#~ msgid "Host"
-#~ msgstr "Hostiteľ"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Hostiteľ nastaví možnosti hry. V jednej sieťovej hre môže byť len jeden "
-#~ "hostiteľ."
-
-#~ msgid "Guest"
-#~ msgstr "Hosť"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Hosť počká, kým hostiteľ nastaví hru, a potom sa automaticky pridá do "
-#~ "hry. Pri hrách cez TCP/IP môže byť viacero hostí."

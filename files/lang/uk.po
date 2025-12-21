@@ -5289,7 +5289,7 @@ msgstr "Координація проекту та основна розробк
 msgid "Development"
 msgstr "Розробка"
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr "Відвідайте нас на"
 
 msgid "QA and Support"
@@ -12550,91 +12550,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
-
-#~ msgid "Set map seed (set 0 to make the seed random)"
-#~ msgstr ""
-#~ "Встановити початкове значення мапи (встановіть 0 для випадкового значення)"
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Вказує, чи створена мапа для версії гри \"Війни за спадщину\", \"Ціна "
-#~ "вірності\" або \"Воскресіння\"."
-
-#~ msgid "Limit region size"
-#~ msgstr "Обмежте розмір регіону"
-
-#~ msgid "Warning!"
-#~ msgstr "Попередження!"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Опис обраної вами мапи."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Введений опис мапи перевищує максимально дозволені 5 рядків. Його буде "
-#~ "скорочено до розміру поля опису мапи."
-
-#~ msgid "Castle Options"
-#~ msgstr "Налаштування замку"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Натисніть щоб побачити наступне місто."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Натисніть щоб побачити попереднє місто."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Завжди наносить контрудар"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "На мапі можна розмістити максимум %{count} обелісків."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Тицьніть, щоб змінити назву замку. Тицьніть правою кнопкою миші, щоб "
-#~ "відновити значення за налаштуванням."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr ""
-#~ "Встановити власну замкову армію. Тицьніть правою кнопкою миші, щоб "
-#~ "скинути кількість."
-
-#~ msgid "EditorMainMenu|BACK"
-#~ msgstr "НАЗАД"
-
-#~ msgid "CONFIG"
-#~ msgstr "ПАРАМЕТРИ"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Повернутися до меню Нова Мапа."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Повернутися до головного меню Редактора мап."
-
-#~ msgid "Host"
-#~ msgstr "Господар"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Господар встановлює параметри гри. У кожній мережевій грі може бути лише "
-#~ "один ведучий."
-
-#~ msgid "Guest"
-#~ msgstr "Гість"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Гість чекає, поки господар налаштує гру, після чого автоматично "
-#~ "приєднується до неї. У TCP/IP-іграх може бути кілька гостей."

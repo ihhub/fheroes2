@@ -5352,8 +5352,8 @@ msgstr "Projektkoordination og kerneudvikling"
 msgid "Development"
 msgstr "Udvikling"
 
-msgid "Visit us at "
-msgstr "Besøg os på "
+msgid "Visit us at"
+msgstr "Besøg os på"
 
 msgid "QA and Support"
 msgstr "QA og support"
@@ -12661,78 +12661,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Angiver om kortet er lavet til \"Arvefølgekrigene\", \"Prisen for "
-#~ "Loyalitet\" eller \"Opstandelse\" version af spillet."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Advarsel"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Beskrivelsen til det valgte kort."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Den indtastede kortbeskrivelse overskrider de maksimalt tilladte 5 "
-#~ "rækker. Den vil blive forkortet, så den passer til kortbeskrivelsesfeltet."
-
-#~ msgid "Castle Options"
-#~ msgstr "Borg-vindue"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klik for at se næste by."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klik for at se forrige by."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Returnerer kasteren til enhver af spillerens byer eller borge."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Slår altid igen"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
-
-#~ msgid "CONFIG"
-#~ msgstr "INDSTIL"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
-
-#~ msgid "Host"
-#~ msgstr "Vært"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Værten opsætter spilmulighederne. Der kan kun være én vært per "
-#~ "netværksspil."
-
-#~ msgid "Guest"
-#~ msgstr "Gæst"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gæsten venter på, at værten sætter spillet op, og tilføjes derefter "
-#~ "automatisk. Der kan være flere gæster til TCP/IP-spil."

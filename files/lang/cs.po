@@ -5276,8 +5276,8 @@ msgstr "Koordinace projektu a hlavní vývoj"
 msgid "Development"
 msgstr "Vývoj"
 
-msgid "Visit us at "
-msgstr "Navštivte nás na "
+msgid "Visit us at"
+msgstr "Navštivte nás na"
 
 msgid "QA and Support"
 msgstr "Zajištění kvality a podpora"
@@ -12451,82 +12451,3 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Udává, zda je mapa vytvořena pro verzi hry \"Války o následnictví\", "
-#~ "\"Cena za věrnost\" nebo \"Vzkříšení\"."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Varování"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Popis aktuálně vybrané mapy."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Zadaný popis mapy překračuje maximálně povolených 5 řádků. Bude zkrácen "
-#~ "tak, aby se vešel do pole pro popis mapy."
-
-#~ msgid "Castle Options"
-#~ msgstr "Možnosti hradu"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klikni pro zobrazení následujícího města."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klikni pro zobrazení předchozího města."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Přenese hrdinu do jakéhokoli města nebo hradu, který vlastníš."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vždy vrací útok"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Klikněte pro změnu názvu hradu. Pravým tlačítkem myši obnovte výchozí "
-#~ "nastavení."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr ""
-#~ "Nastavte vlastní armádu hradu. Klikněte pravým tlačítkem pro obnovení "
-#~ "jednotky."
-
-#~ msgid "CONFIG"
-#~ msgstr "CONFIG"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Zrušit a vrátit se do nabídky Nová mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Zrušit a vrátit se do hlavního menu editoru map."
-
-#~ msgid "Host"
-#~ msgstr "Hostitel"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Hostitel nastavuje herní možnosti. Může být pouze jeden hostitel na každé "
-#~ "síťové hře."
-
-#~ msgid "Guest"
-#~ msgstr "Host"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Host čeká, až hostitel nastaví hru, poté je automaticky přidán. Pro hry "
-#~ "TCP/IP může být více hostů."

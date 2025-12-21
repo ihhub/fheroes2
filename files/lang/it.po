@@ -5243,7 +5243,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -11822,31 +11822,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Indica se la mappa è stata creata per la versione del gioco Guerre di "
-#~ "Successione o The Price of Loyalty."
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "La descrizione della mappa scelta attualmente."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opzioni Castello"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Clicca per andare alla città succ."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Clicca per andare alla città prec."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Trasporta subito chi la lancia ad un qualsiasi castello o città al "
-#~ "momento posseduto/a."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Contrattacca sempre"

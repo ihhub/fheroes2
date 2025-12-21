@@ -5261,8 +5261,8 @@ msgstr "Projekt-koordináció és fő fejlesztés"
 msgid "Development"
 msgstr "Fejlesztés"
 
-msgid "Visit us at "
-msgstr "Látogass meg minket itt: "
+msgid "Visit us at"
+msgstr "Látogass meg minket itt:"
 
 msgid "QA and Support"
 msgstr "Minőségbiztosítás és támogatás"
@@ -12477,85 +12477,3 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Azt jelzi, hogy a térkép az \"Örökösödési háborúk\" vagy a \"Hűség ára\" "
-#~ "vagy pedig a \"Feltámadás\" verzióhoz készült-e."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Figyelmeztetés"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "A kiválasztott térkép leírása."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "A megadott térképleírás hosszabb, mint a maximálisan elfogadott 5 sor. A "
-#~ "térképleírás lerövidítésre kerül, hogy beleférjen a rendelkezésre álló "
-#~ "mezőbe."
-
-#~ msgid "Castle Options"
-#~ msgstr "Vár beállítások"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Kattints a következő város mutatásához."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Kattints az előző város mutatásához."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "A varázslat megidézőjét visszarepíti bármelyik saját városba vagy várba."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Mindig visszatámad"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Maximum %{count} obeliszk helyezhető el a térképen."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Kattints a vár nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
-#~ "áll."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr ""
-#~ "Várvédők egyéni beállítása. Jobb kattintásra az egységek alaphelyzetbe "
-#~ "állnak."
-
-#~ msgid "CONFIG"
-#~ msgstr "OPCIÓK"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Vissza az új térkép menübe."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Vissza a térképszerkesztő főmenüjébe."
-
-#~ msgid "Host"
-#~ msgstr "Kiszolgáló"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "A kiszolgáló határozza meg a játék beállításait. Csak egy kiszolgáló "
-#~ "lehet egy hálózati játékban."
-
-#~ msgid "Guest"
-#~ msgstr "Vendég"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "A vendég várja a kiszolgálót, hogy állítson be egy játékot, ami aztán "
-#~ "automatikusan látható lesz. Több vendég is lehet egyszerre egy hálózati "
-#~ "játszmában."
