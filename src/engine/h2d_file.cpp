@@ -189,14 +189,14 @@ namespace fheroes2
         }
 
         const size_t size = static_cast<size_t>( width * height );
+        if ( isSingleLayer ) {
+            image._disableTransformLayer();
+        }
+
         image.resize( width, height );
         memcpy( image.image(), data.data() + imageInfoLength, size );
 
-        if ( isSingleLayer ) {
-            memset( image.transform(), 0, size );
-            image._disableTransformLayer();
-        }
-        else {
+        if ( !isSingleLayer ) {
             memcpy( image.transform(), data.data() + imageInfoLength + size, size );
         }
 

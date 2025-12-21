@@ -191,12 +191,12 @@ namespace fheroes2
             height = std::max( minimumSliderLength, std::max( height + middleLength, startSliderArea.height * 2 ) );
         }
 
-        Image output( width, height );
-
+        Image output;
         if ( originalSlider.singleLayer() ) {
             output._disableTransformLayer();
         }
 
+        output.resize( width, height );
         output.reset();
 
         // Copy the start slider part.

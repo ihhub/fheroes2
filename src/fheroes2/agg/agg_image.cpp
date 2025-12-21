@@ -3174,8 +3174,8 @@ namespace
                 _icnVsSprite[id].resize( 18 );
 
                 // Make empty buttons for object types.
-                _icnVsSprite[id][6].resize( 27, 27 );
                 _icnVsSprite[id][6]._disableTransformLayer();
+                _icnVsSprite[id][6].resize( 27, 27 );
                 _icnVsSprite[id][6].reset();
                 Fill( _icnVsSprite[id][6], 1, 1, 24, 24, 65U );
                 for ( size_t i = 7; i < _icnVsSprite[id].size(); ++i ) {
@@ -4161,9 +4161,10 @@ namespace
                 // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
                 for ( const int32_t index : { 88, 99 } ) {
                     fheroes2::Sprite & originalImage = _icnVsSprite[id][index];
-                    fheroes2::Sprite temp( originalImage.width(), originalImage.height() );
-                    temp.setPosition( originalImage.x(), originalImage.y() );
+                    fheroes2::Sprite temp;
                     temp._disableTransformLayer();
+                    temp.resize( originalImage.width(), originalImage.height() );
+                    temp.setPosition( originalImage.x(), originalImage.y() );
                     temp.fill( 0 );
                     Blit( originalImage, temp );
                     originalImage = std::move( temp );
@@ -4986,9 +4987,9 @@ namespace
             _icnVsSprite[id].resize( 1 );
 
             fheroes2::Sprite & background = _icnVsSprite[id][0];
+            background._disableTransformLayer();
             background.resize( 65, 65 );
             fheroes2::Copy( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), 69, 47, background, 0, 0, 65, 65 );
-            background._disableTransformLayer();
 
             break;
         }

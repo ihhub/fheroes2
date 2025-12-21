@@ -40,9 +40,10 @@ namespace
 {
     fheroes2::Image GetBarBackgroundSprite()
     {
-        fheroes2::Image icon( 34, 34 );
+        fheroes2::Image icon;
         // Sprite ( ICN::HSICONS, 0 ) has no transparency so we can say that 'icon' will also have no transparency.
         icon._disableTransformLayer();
+        icon.resize( 34, 34 );
         icon.reset();
         fheroes2::DrawBorder( icon, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
         fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HSICONS, 0 ), 26, 21, icon, 1, 1, 32, 32 );
