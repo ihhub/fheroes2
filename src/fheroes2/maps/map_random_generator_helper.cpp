@@ -654,12 +654,12 @@ namespace Maps::Random_Generator
         return result;
     }
 
-    bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position )
     {
         bool validPlacement = true;
 
-        auto updateObjectArea = [&data, &mainTilePos, &validPlacement]( const auto & partInfo ) {
-            const Node & node = data.getNode( mainTilePos + partInfo.tileOffset );
+        auto updateObjectArea = [&data, &position, &validPlacement]( const auto & partInfo ) {
+            const Node & node = data.getNode( position + partInfo.tileOffset );
 
             if ( node.index == -1 || node.region == 0 ) {
                 validPlacement = false;
@@ -674,7 +674,7 @@ namespace Maps::Random_Generator
         iterateOverObjectParts( info, updateObjectArea );
 
         for ( const auto & objectPart : info.topLevelParts ) {
-            const Node & node = data.getNode( mainTilePos + objectPart.tileOffset );
+            const Node & node = data.getNode( position + objectPart.tileOffset );
             if ( node.index == -1 || node.region == 0 ) {
                 return false;
             }
@@ -683,37 +683,46 @@ namespace Maps::Random_Generator
         return validPlacement;
     }
 
-    bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & mainTilePos )
+    bool canPlaceAllObjects( const MapStateManager & data, std::vector<ObjectPlacement> objects, const fheroes2::Point & position, const int ground )
     {
-        for ( const fheroes2::Point offset : set.entranceCheck ) {
-            const Node & node = data.getNode( mainTilePos + offset );
-            if ( node.index == -1 || node.type != NodeType::OPEN ) {
+        for ( const auto & obstacle : objects ) {
+            const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, ground );
+            const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
+            if ( !canPlaceObject( data, objectInfo, position + obstacle.offset ) ) {
                 return false;
-            }
-        }
-
-        for ( const auto * placements : { &set.obstacles, &set.valuables, &randomMonsterSet } ) {
-            for ( const auto & placement : *placements ) {
-                const auto & info = Maps::getObjectInfo( placement.groupType, placement.objectIndex );
-
-                if ( !canPlaceObject( data, info, mainTilePos + placement.offset ) ) {
-                    return false;
-                }
             }
         }
 
         return true;
     }
 
-    void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & position, const int ground )
     {
-        iterateOverObjectParts( info, [&data, &mainTilePos]( const auto & partInfo ) { markNodeAsType( data, mainTilePos + partInfo.tileOffset, NodeType::OBSTACLE ); } );
+        for ( const fheroes2::Point offset : set.entranceCheck ) {
+            const Node & node = data.getNode( position + offset );
+            if ( node.index == -1 || node.type != NodeType::OPEN ) {
+                return false;
+            }
+        }
+
+        for ( const auto * placements : { &set.obstacles, &set.valuables, &randomMonsterSet } ) {
+            if ( !canPlaceAllObjects( data, *placements, position, ground ) ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position )
+    {
+        iterateOverObjectParts( info, [&data, &position]( const auto & partInfo ) { markNodeAsType( data, position + partInfo.tileOffset, NodeType::OBSTACLE ); } );
 
         if ( !MP2::isOffGameActionObject( info.objectType ) ) {
             return;
         }
 
-        markNodeAsType( data, mainTilePos, NodeType::ACTION );
+        markNodeAsType( data, position, NodeType::ACTION );
     }
 
     // Wouldn't render correctly but will speed up placement
@@ -991,7 +1000,7 @@ namespace Maps::Random_Generator
             const fheroes2::Point mapPoint = Maps::GetPoint( nodeIndex );
 
             for ( const auto & prefab : objectSets ) {
-                if ( !canFitObjectSet( data, prefab, mapPoint ) ) {
+                if ( !canFitObjectSet( data, prefab, mapPoint, region.groundType ) ) {
                     continue;
                 }
 
@@ -1075,7 +1084,7 @@ namespace Maps::Random_Generator
 
             Rand::ShuffleWithGen( objectSets, randomGenerator );
             for ( const auto & prefab : objectSets ) {
-                if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ) ) ) {
+                if ( !canFitObjectSet( data, prefab, Maps::GetPoint( node.index ), region.groundType ) ) {
                     continue;
                 }
 
@@ -1128,36 +1137,43 @@ namespace Maps::Random_Generator
 
     void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<DecorationSet> sets, Rand::PCG32 & randomGenerator )
     {
-        for ( int attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
+        if ( sets.empty() ) {
+            return;
+        }
+
+        Rand::ShuffleWithGen( sets, randomGenerator );
+
+        const auto & openTiles = findOpenTiles( region );
+        const int limit = std::max( 1, static_cast<int>( openTiles.size() ) / 300 );
+        std::vector<int> objectCount( sets.size(), limit );
+
+        for ( size_t attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
             const Node & node = Rand::GetWithGen( region.nodes, randomGenerator );
             const fheroes2::Point position = Maps::GetPoint( node.index );
 
-            Rand::ShuffleWithGen( sets, randomGenerator );
+            for ( size_t setIndex = 0; setIndex < sets.size(); ++setIndex ) {
+                if ( objectCount[setIndex] <= 0 ) {
+                    continue;
+                }
+                const auto & objectSet = sets[setIndex];
 
-            for ( const auto & prefab : sets ) {
-                bool valid = true;
-                for ( const auto & obstacle : prefab.obstacles ) {
+                if ( !canPlaceAllObjects( data, objectSet.obstacles, position, region.groundType ) ) {
+                    continue;
+                }
+
+                for ( const auto & obstacle : objectSet.obstacles ) {
+                    placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );
+                }
+                for ( const auto & obstacle : objectSet.optional ) {
                     const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, region.groundType );
                     const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
-                    if ( !canPlaceObject( data, objectInfo, position + obstacle.offset ) ) {
-                        valid = false;
-                        break;
+                    if ( Rand::GetWithGen( 0, 1, randomGenerator ) && canPlaceBorderObstacle( data, objectInfo, position + obstacle.offset ) ) {
+                        placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );
                     }
                 }
 
-                if ( valid ) {
-                    for ( const auto & obstacle : prefab.obstacles ) {
-                        placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );
-                    }
-                    for ( const auto & obstacle : prefab.optional ) {
-                        const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, region.groundType );
-                        const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
-                        if ( Rand::GetWithGen( 0, 1, randomGenerator ) && canPlaceBorderObstacle( data, objectInfo, position + obstacle.offset ) ) {
-                            placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );
-                        }
-                    }
-                    break;
-                }
+                --objectCount[setIndex];
+                break;
             }
         }
     }
