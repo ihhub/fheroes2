@@ -683,17 +683,12 @@ namespace Maps::Random_Generator
         return validPlacement;
     }
 
-    bool canPlaceAllObjects( const MapStateManager & data, std::vector<ObjectPlacement> objects, const fheroes2::Point & position, const int ground )
+    bool canPlaceAllObjects( const MapStateManager & data, const std::vector<ObjectPlacement> & objects, const fheroes2::Point & position, const int ground )
     {
-        for ( const auto & obstacle : objects ) {
-            const int32_t objectIndex = selectTerrainVariantForObject( obstacle.groupType, obstacle.objectIndex, ground );
-            const auto & objectInfo = Maps::getObjectInfo( obstacle.groupType, objectIndex );
-            if ( !canPlaceObject( data, objectInfo, position + obstacle.offset ) ) {
-                return false;
-            }
-        }
-
-        return true;
+        return std::all_of( objects.begin(), objects.end(), [&ground, &data, &position]( const ObjectPlacement & object ) {
+            const int32_t objectIndex = selectTerrainVariantForObject( object.groupType, object.objectIndex, ground );
+            return canPlaceObject( data, Maps::getObjectInfo( object.groupType, objectIndex ), position + object.offset );
+        } );
     }
 
     bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & position, const int ground )
@@ -866,7 +861,7 @@ namespace Maps::Random_Generator
                 economy.increaseMineCount( resource );
 
                 const int32_t mineValue = getObjectGoldValue( getFakeMP2MineType( resource ) );
-                placeMonster( mapFormat, Maps::GetDirectionIndex( nodeIndex, Direction::BOTTOM ), getMonstersByValue( monsterStrength, mineValue ) );
+                placeMonster( mapFormat, data, Maps::GetDirectionIndex( nodeIndex, Direction::BOTTOM ), getMonstersByValue( monsterStrength, mineValue ) );
                 return nodeIndex;
             }
         }
@@ -895,13 +890,15 @@ namespace Maps::Random_Generator
         return false;
     }
 
-    void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster )
+    void placeMonster( Map_Format::MapFormat & mapFormat, MapStateManager & data, const int32_t index, const MonsterSelection & monster )
     {
         if ( monster.monsterId == Monster::UNKNOWN || !Maps::isValidAbsIndex( index ) ) {
             return;
         }
 
-        putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, static_cast<int32_t>( Monster( monster.monsterId ).GetSpriteIndex() ) );
+        if ( putObjectOnMap( mapFormat, world.getTile( index ), ObjectGroup::MONSTERS, static_cast<int32_t>( Monster( monster.monsterId ).GetSpriteIndex() ) ) ) {
+            markNodeIndexAsType( data, index, NodeType::ACTION );
+        }
 
         if ( monster.allowedMonsters.empty() ) {
             return;
@@ -1068,7 +1065,7 @@ namespace Maps::Random_Generator
         // It is possible to go into the negatives; intentional
         region.treasureLimit -= groupValue;
 
-        placeMonster( mapFormat, node.index, getMonstersByValue( monsterStrength, groupValue ) );
+        placeMonster( mapFormat, data, node.index, getMonstersByValue( monsterStrength, groupValue ) );
     }
 
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
@@ -1127,7 +1124,7 @@ namespace Maps::Random_Generator
                 // It is possible to go into the negatives; intentional
                 region.treasureLimit -= groupValue;
 
-                placeMonster( mapFormat, node.index, getMonstersByValue( monsterStrength, groupValue ) );
+                placeMonster( mapFormat, data, node.index, getMonstersByValue( monsterStrength, groupValue ) );
 
                 ++objectsPlaced;
                 break;

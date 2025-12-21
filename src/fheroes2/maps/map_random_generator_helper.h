@@ -75,7 +75,7 @@ namespace Maps::Random_Generator
     std::vector<int32_t> pickEvenlySpacedTiles( const std::vector<int32_t> & candidates, const size_t pickCount, const std::vector<int32_t> & avoidance );
 
     bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position );
-    bool canPlaceAllObjects( const MapStateManager & data, std::vector<ObjectPlacement> objects, const fheroes2::Point & position, const int ground );
+    bool canPlaceAllObjects( const MapStateManager & data, const std::vector<ObjectPlacement> & objects, const fheroes2::Point & position, const int ground );
     bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & position, const int ground );
     void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position );
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex );
@@ -86,7 +86,7 @@ namespace Maps::Random_Generator
     int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> & tileOptions, const int resource,
                        const MonsterStrength monsterStrength );
     bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, const int ground, Rand::PCG32 & randomGenerator );
-    void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster );
+    void placeMonster( Map_Format::MapFormat & mapFormat, MapStateManager & data, const int32_t index, const MonsterSelection & monster );
     bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement, const int ground );
 
     std::vector<int32_t> findTilesForPlacement( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,

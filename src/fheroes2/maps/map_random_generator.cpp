@@ -334,22 +334,24 @@ namespace Maps::Random_Generator
         { Maps::Ground::SWAMP,
           {
               {
-                  // Obstacles.
-                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 43 },
-                    { { 1, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
-                    { { -2, 1 }, ObjectGroup::LANDSCAPE_TREES, 50 },
-                    { { 0, 1 }, ObjectGroup::LANDSCAPE_TREES, 4 },
+                  // Swampy lake.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 43 },
+                      { { 1, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                      { { -2, 1 }, ObjectGroup::LANDSCAPE_TREES, 50 },
+                      { { 0, 1 }, ObjectGroup::LANDSCAPE_TREES, 4 },
                   },
                   // Optional.
                   {},
               },
               {
-                  // Obstacles.
-                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 44 },
-                    { { 1, -4 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 45 },
-                    { { -1, -3 }, ObjectGroup::LANDSCAPE_TREES, 0 },
-                    { { 0, -2 }, ObjectGroup::LANDSCAPE_TREES, 0 },
-                    { { -2, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                  // Smaller lakes.
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 44 },
+                      { { 1, -4 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 45 },
+                      { { -1, -3 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                      { { 0, -2 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                      { { -2, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
                   },
                   // Optional.
                   {},
@@ -492,17 +494,17 @@ namespace Maps::Random_Generator
           {
               {
                   // Large dirt water lake.
-                  { { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 103 },
-                    { { 0, 1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 56 },
-                    { { -4, -1 }, ObjectGroup::LANDSCAPE_ROCKS, 22 },
-                    { { 1, -2 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
-                    { { 2, -2 }, ObjectGroup::LANDSCAPE_TREES, 1 },
-                    { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
-                    { { -4, 0 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                  {
+                      { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 103 },
+                      { { 0, 1 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 56 },
+                      { { -4, -1 }, ObjectGroup::LANDSCAPE_ROCKS, 22 },
+                      { { 1, -2 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
+                      { { 2, -2 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                      { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                      { { -4, 0 }, ObjectGroup::LANDSCAPE_TREES, 0 },
                   },
                   // Optional.
-                  {
-                  },
+                  {},
               },
               {
                   // Small grass water lake.
@@ -900,10 +902,10 @@ namespace Maps::Random_Generator
         for ( const Region & region : mapRegions ) {
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 if ( region.type == mapRegions[regionId].type ) {
-                    placeMonster( mapFormat, tileIndex, strongGuard );
+                    placeMonster( mapFormat, mapState, tileIndex, strongGuard );
                 }
                 else {
-                    placeMonster( mapFormat, tileIndex, weakGuard );
+                    placeMonster( mapFormat, mapState, tileIndex, weakGuard );
                 }
             }
         }
