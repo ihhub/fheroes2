@@ -37,6 +37,55 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2025-12-21" version="v1.1.13">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.13</url>
+      <description>
+        <p>Changes in v1.1.13 (21 December 2025):</p>
+        <ul>
+          <li>update the Russian translation</li>
+          <li>add several missing letters for the CP-1251 code page</li>
+          <li>improve the use of certain battle spells by the AI</li>
+          <li>fix several iOS-related issues and bring the iOS build into a playable state</li>
+          <li>improve road network and verify object placement immediately for the random map generator</li>
+          <li>set starting hero and player information for RMG maps</li>
+          <li>update the Hungarian translation</li>
+          <li>show a dialog when there are no items to select to avoid a crash after pressing OK in the empty list</li>
+          <li>reduce overall RAM usage by the engine</li>
+          <li>speed up the CRC32 algorithm to improve translation file loading times</li>
+          <li>fix an assertion issue with original corrupted maps</li>
+          <li>add a UI screen to configure the random map generator</li>
+          <li>add drag-to-draw functionality to the Terrain and Erase brushes</li>
+          <li>add missing popups for the second hero control in Battle Only mode</li>
+          <li>display Traveller's Tent and Barrier colors in popups in the Editor</li>
+          <li>avoid using Shield spell by AI when it has no effect</li>
+          <li>document compilation steps for iOS</li>
+          <li>significantly reduce RAM usage by the Editor when doing actions</li>
+          <li>show map type explicitly, as icons are too small to differentiate for some players</li>
+          <li>make the interactive area for each building in the Castle window consist of multiple rectangles</li>
+          <li>fully render the FPS text on the screen on every frame render call</li>
+          <li>make AI use the Earthquake spell in battles</li>
+          <li>speed up several instances of button generation</li>
+          <li>truncate text within the Monster Info dialog to avoid incorrect rendering</li>
+          <li>truncate building names for building image within the Castle window to avoid incorrect rendering</li>
+          <li>do not show troop counter during elementals' summoning animation</li>
+          <li>teach the AI how to use the Teleport spell</li>
+          <li>improve random map generator consistency and treasure distribution</li>
+          <li>update the Swedish translation</li>
+          <li>speed up the AI pathfinder algorithm</li>
+          <li>update the Belarusian translation</li>
+          <li>fix "E with 2 dots on top" letter for CP-1251 small font</li>
+          <li>do not react to world scroll keys when scrolling is disabled</li>
+          <li>fix status bar flickering in the main Castle Window when switching castles</li>
+          <li>move the Adventure Map view area to the center of the map in hot-seat mode</li>
+          <li>fix rendering while toggling the Turn Order option during battles</li>
+          <li>fix a case when AI was not using the Disrupting Ray spell when the enemy defense value is equal to 2</li>
+          <li>update FPS counter and color cycling synchronization logic</li>
+          <li>implement custom monster levels for the random map generation</li>
+          <li>update the Ukrainian translation</li>
+          <li>fix an assertion when opening map info for maps with defeat hero condition or capture/lose castle condition</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-11-09" version="v1.1.12">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.12</url>
       <description>
