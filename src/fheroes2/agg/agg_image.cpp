@@ -3385,6 +3385,17 @@ namespace
                 }
             }
             break;
+        case ICN::PORT0013:
+            // Jezebel has two bad pixels.
+            if ( !_icnVsSprite[id].empty() ) {
+                fheroes2::Sprite & original = _icnVsSprite[id][0];
+                if ( original.width() == 101 && original.height() == 93 ) {
+                    uint8_t * imageData = original.image();
+                    imageData[6118] = 11;
+                    imageData[6219] = 11;
+                }
+            }
+            break;
         case ICN::PORT0091:
             // Barbarian captain has one bad pixel.
             if ( !_icnVsSprite[id].empty() ) {
