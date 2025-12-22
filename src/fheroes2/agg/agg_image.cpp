@@ -3390,6 +3390,7 @@ namespace
             if ( !_icnVsSprite[id].empty() ) {
                 fheroes2::Sprite & original = _icnVsSprite[id][0];
                 if ( original.width() == 101 && original.height() == 93 ) {
+                    original._disableTransformLayer();
                     uint8_t * imageData = original.image();
                     imageData[6118] = 11;
                     imageData[6219] = 11;
