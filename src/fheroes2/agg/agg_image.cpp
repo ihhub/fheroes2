@@ -3801,9 +3801,8 @@ namespace
                 }
 
                 fheroes2::Sprite & humanOrAiImage = images[i + 82];
-                if ( images[i + 3].singleLayer() ) {
-                    humanOrAiImage._disableTransformLayer();
-                }
+                // This image will have no transparency - disable the transform layer.
+                humanOrAiImage._disableTransformLayer();
 
                 Copy( images[i + 3], humanOrAiImage );
 
