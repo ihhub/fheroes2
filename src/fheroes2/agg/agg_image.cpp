@@ -3800,19 +3800,23 @@ namespace
                     continue;
                 }
 
-                fheroes2::Sprite & humonOrAiImage = images[i + 82];
-                Copy( images[i + 3], humonOrAiImage );
+                fheroes2::Sprite & humanOrAiImage = images[i + 82];
+                if ( images[i + 3].singleLayer() ) {
+                    humanOrAiImage._disableTransformLayer();
+                }
+
+                Copy( images[i + 3], humanOrAiImage );
 
                 // Fill the icon with the player's color.
-                Fill( humonOrAiImage, 15, 8, 32, 30, images[i + 82].image()[252] );
+                Fill( humanOrAiImage, 15, 8, 32, 30, images[i + 82].image()[252] );
 
                 // Make a temporary image to cut human icon's background.
                 fheroes2::Image temp( 33, 35 );
                 Copy( images[i + 9], 15, 5, temp, 0, 0, 33, 35 );
                 ReplaceColorIdByTransformId( temp, images[i + 82].image()[252], 1U );
 
-                Copy( images[i + 3], 15, 8, humonOrAiImage, 27, 8, 31, 30 );
-                Blit( temp, humonOrAiImage, 4, 5 );
+                Copy( images[i + 3], 15, 8, humanOrAiImage, 27, 8, 31, 30 );
+                Blit( temp, humanOrAiImage, 4, 5 );
             }
 
             break;
@@ -4018,6 +4022,11 @@ namespace
                 updateShadow( buttonImage, { 2, -2 }, 4, true );
 
                 const fheroes2::Sprite & emptyButtonPressed = fheroes2::AGG::GetICN( emptyButtonId, 1 );
+                if ( emptyButtonPressed.singleLayer() ) {
+                    _icnVsSprite[id][17]._disableTransformLayer();
+                    _icnVsSprite[id][19]._disableTransformLayer();
+                }
+
                 Copy( emptyButtonPressed, _icnVsSprite[id][17] );
                 Blit( buttonImage, _icnVsSprite[id][17], 4, 4 );
 
@@ -4032,6 +4041,11 @@ namespace
                 ReplaceColorId( buttonImage, mainPressedColor, mainReleasedColor );
 
                 const fheroes2::Sprite & emptyButtonReleased = fheroes2::AGG::GetICN( emptyButtonId, 0 );
+                if ( emptyButtonPressed.singleLayer() ) {
+                    _icnVsSprite[id][16]._disableTransformLayer();
+                    _icnVsSprite[id][18]._disableTransformLayer();
+                }
+
                 Copy( emptyButtonReleased, _icnVsSprite[id][16] );
                 Blit( buttonImage, _icnVsSprite[id][16], 5, 3 );
 
@@ -4888,6 +4902,13 @@ namespace
             const int originalId = ( id == ICN::EMPTY_INTERFACE_BUTTON_GOOD ) ? ICN::ADVBTNS : ICN::ADVEBTNS;
             loadICN( originalId );
             _icnVsSprite[id].resize( 2 );
+
+            if ( _icnVsSprite[originalId][2].singleLayer() ) {
+                _icnVsSprite[id][0]._disableTransformLayer();
+            }
+            if ( _icnVsSprite[originalId][3].singleLayer() ) {
+                _icnVsSprite[id][1]._disableTransformLayer();
+            }
 
             Copy( _icnVsSprite[originalId][2], _icnVsSprite[id][0] );
             Copy( _icnVsSprite[originalId][3], _icnVsSprite[id][1] );
