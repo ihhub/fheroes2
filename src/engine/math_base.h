@@ -116,35 +116,6 @@ namespace fheroes2
             return !( *this == size );
         }
 
-        constexpr bool operator<( const SizeBase2D & size ) const
-        {
-            return width < size.width || ( width == size.width && height < size.height );
-        }
-
-        constexpr SizeBase2D & operator+=( const SizeBase2D & size )
-        {
-            width += size.width;
-            height += size.height;
-            return *this;
-        }
-
-        constexpr SizeBase2D & operator-=( const SizeBase2D & size )
-        {
-            width -= size.width;
-            height -= size.height;
-            return *this;
-        }
-
-        constexpr SizeBase2D operator+( const SizeBase2D & size ) const
-        {
-            return SizeBase2D( width + size.width, height + size.height );
-        }
-
-        constexpr SizeBase2D operator-( const SizeBase2D & size ) const
-        {
-            return SizeBase2D( width - size.width, height - size.height );
-        }
-
         _Type width;
         _Type height;
     };
