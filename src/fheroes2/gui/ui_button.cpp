@@ -740,18 +740,25 @@ namespace fheroes2
     {
         const Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
 
-        Sprite releasedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Sprite releasedWithBackground;
+        Sprite pressedWithBackground;
+        Sprite disabledWithBackground;
+
+        if ( croppedBackground.singleLayer() ) {
+            releasedWithBackground._disableTransformLayer();
+            pressedWithBackground._disableTransformLayer();
+            disabledWithBackground._disableTransformLayer();
+        }
+
         Copy( croppedBackground, releasedWithBackground );
         Blit( released, releasedWithBackground, released.x(), released.y() );
 
-        Sprite pressedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, pressedWithBackground );
         Blit( pressed, pressedWithBackground, pressed.x(), pressed.y() );
 
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, disabledWithBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x(), disabled.y() );
@@ -767,18 +774,25 @@ namespace fheroes2
         Sprite croppedBackground = Crop( background, offsetX + shadow.x(), offsetY + shadow.y(), shadow.width(), shadow.height() );
         Blit( shadow, croppedBackground );
 
-        Sprite releasedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Sprite releasedWithBackground;
+        Sprite pressedWithBackground;
+        Sprite disabledWithBackground;
+
+        if ( croppedBackground.singleLayer() ) {
+            releasedWithBackground._disableTransformLayer();
+            pressedWithBackground._disableTransformLayer();
+            disabledWithBackground._disableTransformLayer();
+        }
+
         Copy( croppedBackground, releasedWithBackground );
         Blit( released, releasedWithBackground, released.x() - shadow.x(), released.y() - shadow.y() );
 
-        Sprite pressedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, pressedWithBackground );
         Blit( pressed, pressedWithBackground, pressed.x() - shadow.x(), pressed.y() - shadow.y() );
 
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, disabledWithBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );

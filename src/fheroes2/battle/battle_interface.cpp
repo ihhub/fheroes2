@@ -269,14 +269,15 @@ namespace
         const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
 
         // Get a single rainbow line from the center of the luckSprite.
-        fheroes2::Image croppedRainbow( 1, rainbowThickness );
+        fheroes2::Image croppedRainbow;
         croppedRainbow._disableTransformLayer();
+        croppedRainbow.resize( 1, rainbowThickness );
         fheroes2::Copy( luckSprite, luckSprite.width() / 2, 0, croppedRainbow, 0, 0, 1, rainbowThickness );
         fheroes2::Image rainbowLine;
 
         if ( isVertical ) {
-            rainbowLine = fheroes2::Image( croppedRainbow.height(), croppedRainbow.width() );
             rainbowLine._disableTransformLayer();
+            rainbowLine.resize( croppedRainbow.height(), croppedRainbow.width() );
 
             // For a vertical rainbow orientation the line needs to be transposed.
             fheroes2::Transpose( croppedRainbow, rainbowLine );

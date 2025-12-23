@@ -514,9 +514,14 @@ namespace fheroes2
             return;
         }
 
-        const size_t size = static_cast<size_t>( width_ ) * height_ * 2;
+        const size_t size = static_cast<size_t>( width_ ) * height_;
 
-        _data.reset( new uint8_t[size] );
+        if ( _singleLayer ) {
+            _data.reset( new uint8_t[size] );
+        }
+        else {
+            _data.reset( new uint8_t[size * 2] );
+        }
 
         _width = width_;
         _height = height_;
@@ -548,7 +553,12 @@ namespace fheroes2
         _singleLayer = image._singleLayer;
 
         if ( image._width != _width || image._height != _height ) {
-            _data.reset( new uint8_t[imageSize * 2] );
+            if ( _singleLayer ) {
+                _data.reset( new uint8_t[imageSize] );
+            }
+            else {
+                _data.reset( new uint8_t[imageSize * 2] );
+            }
 
             _width = image._width;
             _height = image._height;
