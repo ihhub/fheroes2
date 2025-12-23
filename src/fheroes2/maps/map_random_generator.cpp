@@ -274,7 +274,7 @@ namespace Maps::Random_Generator
 
         const int32_t minimumRegionCount = playerCount + 1;
         const int32_t tileCount = mapWidth * mapWidth;
-        const int32_t waterTiles = ( tileCount ) - ( smallestStartingRegionSize * minimumRegionCount );
+        const int32_t waterTiles = tileCount - ( smallestStartingRegionSize * minimumRegionCount );
         return std::max( 0, waterTiles * 100 / tileCount );
     }
 
