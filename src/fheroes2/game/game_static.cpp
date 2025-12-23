@@ -33,7 +33,7 @@
 
 namespace
 {
-    const std::array<Skill::FactionProperties, 7> factionProperties = { { { "knight",
+    const std::array<Skill::FactionProperties, 6> factionProperties = { { { "knight",
                                                                             { 1, 1, 1, 1 },
                                                                             { 2, 2, 1, 1 },
                                                                             0,
@@ -86,34 +86,22 @@ namespace
                                                                             10,
                                                                             { 15, 15, 35, 35 },
                                                                             { 25, 25, 25, 25 },
-                                                                            { 1, 3, 2, 3, 2, 0, 2, 1, 3, 2, 5, 3, 1, 4 } },
-                                                                          { nullptr,
-                                                                            { 0, 0, 0, 0 },
-                                                                            { 0, 0, 0, 0 },
-                                                                            0,
-                                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                                            10,
-                                                                            { 0, 0, 0, 0 },
-                                                                            { 0, 0, 0, 0 },
-                                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } };
+                                                                            { 1, 3, 2, 3, 2, 0, 2, 1, 3, 2, 5, 3, 1, 4 } } } };
 
-    const std::array<Skill::SecondarySkillValuesPerLevel, 15> secondarySkillValuesPerLevel = { {
-        { "pathfinding", { 25, 50, 100 } },
-        { "archery", { 10, 25, 50 } },
-        { "logistics", { 10, 20, 30 } },
-        { "scouting", { 1, 2, 3 } },
-        { "diplomacy", { 25, 50, 100 } },
-        { "navigation", { 33, 66, 100 } },
-        { "leadership", { 1, 2, 3 } },
-        { "wisdom", { 3, 4, 5 } },
-        { "mysticism", { 1, 2, 3 } },
-        { "luck", { 1, 2, 3 } },
-        { "ballistics", { 0, 0, 0 } },
-        { "eagleeye", { 20, 30, 40 } },
-        { "necromancy", { 10, 20, 30 } },
-        { "estates", { 100, 250, 500 } },
-        { nullptr, { 0, 0, 0 } },
-    } };
+    const std::array<Skill::SecondarySkillValuesPerLevel, 14> secondarySkillValuesPerLevel = { { { "pathfinding", { 25, 50, 100 } },
+                                                                                                 { "archery", { 10, 25, 50 } },
+                                                                                                 { "logistics", { 10, 20, 30 } },
+                                                                                                 { "scouting", { 1, 2, 3 } },
+                                                                                                 { "diplomacy", { 25, 50, 100 } },
+                                                                                                 { "navigation", { 33, 66, 100 } },
+                                                                                                 { "leadership", { 1, 2, 3 } },
+                                                                                                 { "wisdom", { 3, 4, 5 } },
+                                                                                                 { "mysticism", { 1, 2, 3 } },
+                                                                                                 { "luck", { 1, 2, 3 } },
+                                                                                                 { "ballistics", { 0, 0, 0 } },
+                                                                                                 { "eagleeye", { 20, 30, 40 } },
+                                                                                                 { "necromancy", { 10, 20, 30 } },
+                                                                                                 { "estates", { 100, 250, 500 } } } };
 }
 
 uint32_t GameStatic::GetLostOnWhirlpoolPercent()
