@@ -606,7 +606,7 @@ namespace Maps::Random_Generator
             cache.emplace_back( minDistance, false );
         }
 
-        auto selectNextIndex = [&]() -> int32_t {
+        auto selectNextIndex = [&]() {
             int32_t bestCandidateIndex = -1;
             uint32_t bestDistance = 0;
 
