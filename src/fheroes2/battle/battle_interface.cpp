@@ -7083,9 +7083,8 @@ void Battle::PopupDamageInfo::setSpellAttackInfo( const HeroBase * hero, const U
 {
     assert( hero != nullptr );
 
-    // TODO: Currently, this functionality only supports a simple single-target spell case
-    // We should refactor this to apply to all cases
-    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
+    // TODO: any multi-unit damage spells show only damage of the first unit or one of the units on whom the spell is being applied (ex. Cold Ring)
+    if ( !spell.isDamage() ) {
         return;
     }
 
