@@ -2607,54 +2607,6 @@ namespace fheroes2
         return GetPALColorId( red / 4, green / 4, blue / 4 );
     }
 
-    std::vector<uint8_t> getTransformTable( const Image & in, const Image & out, int32_t x, int32_t y, int32_t width, int32_t height )
-    {
-        std::vector<uint8_t> table( 256 );
-        for ( size_t i = 0; i < table.size(); ++i ) {
-            table[i] = static_cast<uint8_t>( i );
-        }
-
-        if ( !Verify( in, x, y, width, height ) || in.singleLayer() || out.singleLayer() ) {
-            return table;
-        }
-
-        if ( in.width() != out.width() || in.height() != out.height() ) {
-            return table;
-        }
-
-        const int32_t imageWidth = in.width();
-
-        const int32_t offset = y * imageWidth + x;
-
-        const uint8_t * imageInY = in.image() + offset;
-        const uint8_t * imageInYEnd = imageInY + height * imageWidth;
-        const uint8_t * imageOutY = out.image() + offset;
-        const uint8_t * transformInY = in.transform() + offset;
-        const uint8_t * transformOutY = out.transform() + offset;
-
-        for ( ; imageInY != imageInYEnd; imageInY += imageWidth, transformInY += imageWidth, imageOutY += imageWidth, transformOutY += imageWidth ) {
-            const uint8_t * imageInX = imageInY;
-            const uint8_t * transformInX = transformInY;
-            const uint8_t * imageOutX = imageOutY;
-            const uint8_t * transformOutX = transformOutY;
-            const uint8_t * imageInXEnd = imageInX + width;
-
-            for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX, ++transformOutX ) {
-                if ( *transformInX != *transformOutX ) {
-                    continue;
-                }
-
-                if ( *transformInX != 0 ) {
-                    continue;
-                }
-
-                table[*imageInX] = *imageOutX;
-            }
-        }
-
-        return table;
-    }
-
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
         if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
@@ -2696,32 +2648,6 @@ namespace fheroes2
         }
 
         return out;
-    }
-
-    void MaskTransformLayer( const Image & mask, int32_t maskX, int32_t maskY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
-    {
-        if ( !Verify( mask, maskX, maskY, out, outX, outY, width, height ) || mask.singleLayer() || out.singleLayer() ) {
-            return;
-        }
-
-        const int32_t widthMask = mask.width();
-        const int32_t widthOut = out.width();
-
-        const uint8_t * imageMaskY = mask.transform() + maskY * widthMask + maskX;
-        uint8_t * imageOutY = out.transform() + outY * widthOut + outX;
-        const uint8_t * imageMaskYEnd = imageMaskY + height * widthMask;
-
-        for ( ; imageMaskY != imageMaskYEnd; imageMaskY += widthMask, imageOutY += widthOut ) {
-            const uint8_t * imageMaskX = imageMaskY;
-            uint8_t * imageOutX = imageOutY;
-            const uint8_t * imageMaskXEnd = imageMaskX + width;
-
-            for ( ; imageMaskX != imageMaskXEnd; ++imageMaskX, ++imageOutX ) {
-                if ( *imageMaskX == 0 ) {
-                    *imageOutX = 1;
-                }
-            }
-        }
     }
 
     void ReplaceColorId( Image & image, const uint8_t oldColorId, const uint8_t newColorId )
