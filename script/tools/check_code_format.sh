@@ -34,7 +34,7 @@ FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|
                                             | (grep -v "^ios/ShaderTypes\.h$" || true) \
                                             | (grep -v "^src/thirdparty/.*/.*" || true))
 
-if [ -z "$FILES_TO_CHECK" ]; then
+if [[ -z "$FILES_TO_CHECK" ]]; then
   echo "There is no source code to check the formatting."
   exit 0
 fi
