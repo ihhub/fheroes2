@@ -367,7 +367,7 @@ int main( int argc, char ** argv )
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
-            for ( const auto & logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
+            for ( const char * logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
                 Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
             }
         }
