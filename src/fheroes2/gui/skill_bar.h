@@ -80,7 +80,7 @@ private:
 class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
 {
 public:
-    SecondarySkillsBar( const Heroes & hero, const bool mini = true, const bool change = false, const bool showDefaultSkillsMessage = false );
+    explicit SecondarySkillsBar( const Heroes & hero, const bool mini = true, const bool change = false, const bool showDefaultSkillsMessage = false );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Skill::Secondary &, const fheroes2::Rect &, fheroes2::Image & ) override;
