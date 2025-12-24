@@ -304,6 +304,12 @@ namespace Maps::Random_Generator
         int32_t objectIndex{ 0 };
     };
 
+    struct DecorationSet final
+    {
+        std::vector<ObjectPlacement> obstacles;
+        std::vector<ObjectPlacement> optional;
+    };
+
     struct ObjectSet final
     {
         std::vector<ObjectPlacement> obstacles;
