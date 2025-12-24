@@ -39,7 +39,7 @@ if [[ -z "$FILES_TO_CHECK" ]]; then
   exit 0
 fi
 
-if FORMAT_DIFF=$(git diff -U0 HEAD^ -- $FILES_TO_CHECK | clang-format-diff -p1 -style=file) && [ -z "$FORMAT_DIFF" ]; then
+if FORMAT_DIFF=$(git diff -U0 HEAD^ -- $FILES_TO_CHECK | clang-format-diff -p1 -style=file) && [[ -z "$FORMAT_DIFF" ]]; then
   echo "All the source code in the PR is formatted correctly."
   exit 0
 else
