@@ -5255,8 +5255,8 @@ msgstr "Projektkoordination och huvudutveckling"
 msgid "Development"
 msgstr "Utveckling"
 
-msgid "Visit us at "
-msgstr "Besök oss på "
+msgid "Visit us at"
+msgstr "Besök oss på"
 
 msgid "QA and Support"
 msgstr "Kvalitétssäkring och Support"
@@ -12496,101 +12496,3 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
-
-#~ msgid "Set map seed (set 0 to make the seed random)"
-#~ msgstr "Ange kart-seed (ange 0 för att slumpa seeden)"
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Visar om kartan är gjord för \"The Succession Wars-\", \"The Price of "
-#~ "Loyalty-\" eller \"Resurrection\"-versionen av spelet."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Varning"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Den valda kartans beskrivning."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Kartans beskrivning överstiger högsta tillåtna 5 rader. Beskrivningen "
-#~ "kommer att nedkortas för att få plats i beskrivningsfältet."
-
-#~ msgid "Castle Options"
-#~ msgstr "Borgalternativ"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klicka för att visa nästa stad."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klicka för att visa föregående stad."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "För tillbaka Hjälten till någon stad eller borg som du kontrollerar."
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "2"
-#~ msgstr "2"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vedergäller alltid"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Maximalt %{count} obelisker kan placeras på kartan."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Klicka för att ändra Borgnamn. Högerklicka för att återställa till "
-#~ "standard."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
-
-#~ msgid "CONFIG"
-#~ msgstr ""
-#~ "INSTÄLL-\n"
-#~ "NINGAR"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Avbryt och gå tillbaka till Ny Karta-menyn."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Avbryt och gå tillbaka till kartredigerarens huvudmeny."
-
-#~ msgid "Host"
-#~ msgstr "Värd"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Värden anger spelinställningarna. Det kan endast finnas en värd per "
-#~ "nätverksspel."
-
-#~ msgid "Guest"
-#~ msgstr "Gäst"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gästen väntar på att värden ska sätta igång spelet, sen läggs till "
-#~ "automatiskt. Det kan finnas flera gäster för TCP/IP-spel."

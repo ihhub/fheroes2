@@ -5535,8 +5535,8 @@ msgstr ""
 msgid "Development"
 msgstr "Programvareutvikling"
 
-msgid "Visit us at "
-msgstr "Treff oss på "
+msgid "Visit us at"
+msgstr "Treff oss på"
 
 msgid "QA and Support"
 msgstr "Kvalitetssikring og støtte"
@@ -13059,63 +13059,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Viser om kartet er laget for spillutgaven \"Tronekrigene\" eller \"Prisen "
-#~ "for lojalitet\"."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Advarsel"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Beskrivelse av det utvalgte kartet."
-
-#~ msgid "Castle Options"
-#~ msgstr "Borgvalg"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klikk for å vise neste by."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klikk for å vise forrige by."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Sender helten til en hvilken som helst by eller borg i heltens nåværende "
-#~ "besittelse."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Tar alltid igjen"
-
-#~ msgid "CONFIG"
-#~ msgstr "VALG"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Avbryt og dra tilbake til menyen for nye kart."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Avbryt og dra tilbake til karttegnerens hovedmeny."
-
-#~ msgid "Host"
-#~ msgstr "Vert"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Verten fyller ut spillvalgene. Det kan kun være én vert per "
-#~ "nettverksspill."
-
-#~ msgid "Guest"
-#~ msgstr "Gjest"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gjesten venter på at verten setter opp partiet og blir deretter "
-#~ "automatisk lagt til. Det kan være flere gjester for TCP/IP-parti."

@@ -207,10 +207,11 @@ namespace
 
         offsetY += 40;
 
-        const fheroes2::Text websiteInto( _( "Visit us at " ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text websiteInto( _( "Visit us at" ), fheroes2::FontType::normalWhite() );
         const fheroes2::Text website( "https://github.com/ihhub/fheroes2", fheroes2::FontType::normalYellow() );
 
-        const int32_t websiteIntoWidth = websiteInto.width();
+        // A space at the end of a sentence is not being counted so we need to add width of the space character.
+        const int32_t websiteIntoWidth = websiteInto.width() + fheroes2::FontCharHandler( fheroes2::FontType::normalWhite() ).getSpaceCharWidth();
         const int32_t websiteWidth = website.width();
         const int32_t websiteHeight = website.height();
         const int32_t websiteOffsetX = ( output.width() - websiteIntoWidth - websiteWidth ) / 2;

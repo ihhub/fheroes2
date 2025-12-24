@@ -5293,8 +5293,8 @@ msgstr "Координатор проекта и основной разрабо
 msgid "Development"
 msgstr "Разработка"
 
-msgid "Visit us at "
-msgstr "Посетите нас "
+msgid "Visit us at"
+msgstr "Посетите нас"
 
 msgid "QA and Support"
 msgstr "Контроль качества и поддержка"

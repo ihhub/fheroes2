@@ -5271,8 +5271,8 @@ msgstr "Каардынацыя праекта і асноўная распрац
 msgid "Development"
 msgstr "Распрацоўка"
 
-msgid "Visit us at "
-msgstr "Наведайце наш вэб-сайт: "
+msgid "Visit us at"
+msgstr "Наведайце наш вэб-сайт:"
 
 msgid "QA and Support"
 msgstr "Кантроль якасці і падтрымка"
@@ -12628,12 +12628,3 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Абазначае, для якой версіі гульні зроблена мапа -\n"
-#~ "для \"Войны за Спадчыну\",\n"
-#~ "\"Цана вернасці\"\n"
-#~ "або праекта \"Resurrection\"."

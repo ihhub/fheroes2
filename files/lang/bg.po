@@ -5492,8 +5492,8 @@ msgstr "Координация на проекта и основно разви�
 msgid "Development"
 msgstr "Разработка"
 
-msgid "Visit us at "
-msgstr "Посетете ни на "
+msgid "Visit us at"
+msgstr "Посетете ни на"
 
 msgid "QA and Support"
 msgstr "Гарантиране на качеството и поддръжка"
@@ -12848,64 +12848,3 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Показва дали картата е направена за версията на играта \"Наследените "
-#~ "войни\" или за \"Цената на лоялността\"."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Внимание"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Описание на избраната в момента карта."
-
-#~ msgid "Castle Options"
-#~ msgstr "Опции на замъка"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Кликни, за да покажеш следващия град."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Кликни, за да покажеш предишния град."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Връща заклинателя във всеки град или замък, притежаван в момента."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Винаги отмъщава"
-
-#~ msgid "CONFIG"
-#~ msgstr ""
-#~ "КОНФИ-\n"
-#~ "ГУРАЦИЯ"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Отказ обратно към Меню за нова карта."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Отказ обратно към главното меню на Създателя на карти."
-
-#~ msgid "Host"
-#~ msgstr "Домакин"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Домакинът настройва опциите на играта. Може да има само един хост за "
-#~ "мрежова игра."
-
-#~ msgid "Guest"
-#~ msgstr "Гост"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Гостът чака хостът да настрои играта, след което автоматично се добавя. "
-#~ "Може да има няколко госта за TCP/IP игри."
