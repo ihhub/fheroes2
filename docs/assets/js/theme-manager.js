@@ -33,7 +33,7 @@ class ThemeManager
     {
         // Initialize accessibility manager if not already initialized
         if ( !this.accessibility ) {
-            this.accessibility = window.fheroes2.AccessibilityManager ? new window.fheroes2.AccessibilityManager() : null;
+            this.accessibility = globalThis.fheroes2.AccessibilityManager ? new globalThis.fheroes2.AccessibilityManager() : null;
         }
 
         this.themeToggle = document.getElementById( "theme-toggle" );
@@ -76,7 +76,7 @@ class ThemeManager
         }
         else {
             // Check system preference but don't save it to localStorage
-            const prefersDark = window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
+            const prefersDark = globalThis.matchMedia( "(prefers-color-scheme: dark)" ).matches;
             this.setTheme( prefersDark ? this.darkTheme : this.lightTheme, false );
         }
     }
@@ -92,7 +92,7 @@ class ThemeManager
         }
 
         // Listen for system theme changes
-        window.matchMedia( "(prefers-color-scheme: dark)" ).addEventListener( "change", ( e ) => {
+        globalThis.matchMedia( "(prefers-color-scheme: dark)" ).addEventListener( "change", ( e ) => {
             // Only apply system preference if user hasn't manually set a preference
             if ( !localStorage.getItem( this.themeKey ) ) {
                 this.setTheme( e.matches ? this.darkTheme : this.lightTheme, false );
