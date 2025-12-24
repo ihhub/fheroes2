@@ -68,12 +68,6 @@ namespace Maps::Random_Generator
 
         Node() = default;
 
-        explicit Node( const int index_ )
-            : index( index_ )
-        {
-            // Do nothing
-        }
-
         explicit Node( const int index_, const uint32_t region_, const NodeType type_ )
             : index( index_ )
             , region( region_ )
