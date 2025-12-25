@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-10 04:02+0000\n"
-"PO-Revision-Date: 2025-11-12 16:04+0200\n"
+"PO-Revision-Date: 2025-12-25 19:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -1143,13 +1143,11 @@ msgstr "Скинути до усталених налаштувань."
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
 
-#, fuzzy
 msgid "Click to set this hero to be human-controlled."
-msgstr "Тицьніть щоб обрати цей колір."
+msgstr "Тицьніть, щоб встановити цього героя як керованого людиною."
 
-#, fuzzy
 msgid "Click to set this hero to be AI-controlled."
-msgstr "Тицьніть щоб обрати цей колір."
+msgstr "Тицьніть, щоб встановити цього героя як керованого комп'ютером."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} проти %{race2} %{name2}"
@@ -3496,38 +3494,32 @@ msgstr "Очки Руху:"
 msgid "Uncharted Territory"
 msgstr "Незвідана територія"
 
-#, fuzzy
 msgid "Random Map Generator"
-msgstr "Випадковий Монстр"
+msgstr "Генератор випадкових мап"
 
-#, fuzzy
 msgid "rmg|Player count"
-msgstr "Виберіть кількість гравців"
+msgstr "Кількість гравців"
 
 msgid "rmg|Map layout"
-msgstr ""
+msgstr "Розкладка мапи"
 
-#, fuzzy
 msgid "rmg|Water percentage"
-msgstr "Встановити відсоток води"
+msgstr "Відсоток води"
 
-#, fuzzy
 msgid "rmg|Monster strength"
-msgstr "Випадковий Монстр - сильний"
+msgstr "Сила монстрів"
 
 msgid "rmg|Resource availability"
-msgstr ""
+msgstr "Доступність ресурсів"
 
 msgid "rmg|Map seed"
 msgstr ""
 
-#, fuzzy
 msgid "Click to generate a new map."
-msgstr "Тицьніть, щоб увімкнути всі елементи."
+msgstr "Тицьніть, щоб згенерувати нову мапу."
 
-#, fuzzy
 msgid "Return to the previous menu."
-msgstr "Повернутися до попереднього меню налаштувань."
+msgstr "Повернутися до попереднього меню."
 
 msgid "Cost per troop:"
 msgstr "Вартість істоти:"
@@ -3666,14 +3658,13 @@ msgid "Terrain object"
 msgstr "Об'єкт місцевості"
 
 msgid "There is nothing to select from."
-msgstr ""
+msgstr "Нема з чого вибирати."
 
-#, fuzzy
 msgid "There are no castles to select from."
-msgstr "Назва обраної мапи."
+msgstr "Немає замків для вибору."
 
 msgid "Accept the choice made."
-msgstr "Підтвердити ваш вибір."
+msgstr "Прийняти зроблений вибір."
 
 msgid "Click to enable all items."
 msgstr "Тицьніть, щоб увімкнути всі елементи."
@@ -3688,34 +3679,31 @@ msgid "Disable All Items"
 msgstr "Вимкнути Усі елементи"
 
 msgid "There are no secondary skills to select from."
-msgstr ""
+msgstr "Додаткові навички для вибору відсутні."
 
 msgid "Select Skill:"
 msgstr "Оберіть навичку:"
 
-#, fuzzy
 msgid "There are no spells to select."
-msgstr "Нема чар для використання."
+msgstr "Немає заклинань для вибору."
 
 msgid "Select Spell:"
 msgstr "Оберіть закляття:"
 
 msgid "There are no artifacts to select from."
-msgstr ""
+msgstr "Немає артефактів для вибору."
 
 msgid "Select Artifact:"
 msgstr "Оберіть артефакт:"
 
-#, fuzzy
 msgid "There are no monsters to select from."
-msgstr "Назва обраної мапи."
+msgstr "Немає монстрів для вибору."
 
 msgid "Select Monster:"
 msgstr "Оберіть монстра:"
 
-#, fuzzy
 msgid "There are no heroes to select from."
-msgstr "Назва обраної мапи."
+msgstr "Немає героїв для вибору."
 
 msgid "Select Hero:"
 msgstr "Оберіть героя:"
@@ -3849,7 +3837,7 @@ msgid "Resurrection"
 msgstr "Воскресіння"
 
 msgid "This map is made for \"%{game-version}\" version of the game."
-msgstr ""
+msgstr "Ця мапа створена для версії гри \"%{game-version}\"."
 
 msgid "Map Type"
 msgstr "Тип мапи"
@@ -6473,6 +6461,7 @@ msgstr ""
 
 msgid "To exit fheroes2, press the Home button or swipe up."
 msgstr ""
+"Щоб вийти з fheroes2, натисніть кнопку «Додому» або проведіть пальцем вгору."
 
 msgid "Are you sure you want to quit?"
 msgstr "Ви впевнені, що хочете вийти?"
@@ -9363,41 +9352,40 @@ msgid "Ocean"
 msgstr "Океан"
 
 msgid "map_layout|Mirrored"
-msgstr ""
+msgstr "Дзеркально"
 
 msgid "map_layout|Balanced"
-msgstr ""
+msgstr "Збалансовано"
 
 msgid "map_layout|Islands"
-msgstr ""
+msgstr "Острови"
 
 msgid "map_layout|Pyramid"
-msgstr ""
+msgstr "Піраміда"
 
 msgid "map_layout|Quest"
-msgstr ""
+msgstr "Квест"
 
 msgid "resource_density|Scarce"
-msgstr ""
+msgstr "Дефіцит"
 
 msgid "resource_density|Normal"
-msgstr ""
+msgstr "Нормально"
 
 msgid "resource_density|Abundant"
-msgstr ""
+msgstr "Багато"
 
 msgid "monster_strength|Weak"
-msgstr ""
+msgstr "Слабкі"
 
-#, fuzzy
 msgid "monster_strength|Normal"
-msgstr "Звичайна"
+msgstr "Звичайні"
 
 msgid "monster_strength|Strong"
-msgstr ""
+msgstr "Міцні"
 
 msgid "monster_strength|Deadly"
-msgstr ""
+msgstr "Смертельні"
 
 msgid "maps|Small"
 msgstr "Мала"
