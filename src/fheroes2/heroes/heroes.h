@@ -572,7 +572,9 @@ public:
 
     void Action( const int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
-    void ActionSpellCast( const Spell & spell );
+
+    // Returns true if the spell is casted successfully.
+    bool ActionSpellCast( const Spell & spell );
 
     // Update map in the scout area around the Hero on radar (mini-map).
     void ScoutRadar() const;

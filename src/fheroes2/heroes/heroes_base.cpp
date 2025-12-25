@@ -573,7 +573,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 return false;
             }
             if ( spell != Spell::HAUNT ) {
-                const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
+                const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower() );
                 const uint32_t currentCount = troop.GetCount();
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {
