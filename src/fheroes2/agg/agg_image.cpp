@@ -160,6 +160,7 @@ namespace
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
                                                 ICN::BUTTON_VERTICAL_DISMISS,
+                                                ICN::BUTTON_VERTICAL_RECRUIT,
                                                 ICN::BUTTON_VERTICAL_EXIT,
                                                 ICN::BUTTON_VERTICAL_PATROL,
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
@@ -1257,6 +1258,19 @@ namespace
             const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
+
+            break;
+        }
+        case ICN::BUTTON_VERTICAL_RECRUIT: {
+            _icnVsSprite[id].resize( 2 );
+
+            // We need to temporarily remove the letter-specific X offsets in the font because if not the letters will
+            // be off-centered when we are displaying one letter per line
+            const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+            const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "R\nE\nC\nR\nU\nI\nT" ), fheroes2::FontType::buttonReleasedWhite() );
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::REDBAK_SMALL_VERTICAL );
 
             break;
