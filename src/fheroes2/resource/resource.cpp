@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -217,26 +217,6 @@ Funds Funds::operator-( const Funds & pm ) const
     return res;
 }
 
-Funds Funds::operator/( const int32_t div ) const
-{
-    if ( div == 0 ) {
-        assert( 0 );
-        return {};
-    }
-
-    Funds res;
-
-    res.wood = wood / div;
-    res.mercury = mercury / div;
-    res.ore = ore / div;
-    res.sulfur = sulfur / div;
-    res.crystal = crystal / div;
-    res.gems = gems / div;
-    res.gold = gold / div;
-
-    return res;
-}
-
 Funds & Funds::operator-=( const Funds & pm )
 {
     wood -= pm.wood;
@@ -311,24 +291,6 @@ Funds & Funds::operator*=( uint32_t mul )
     crystal *= mul;
     gems *= mul;
     gold *= mul;
-
-    return *this;
-}
-
-Funds & Funds::operator/=( const int32_t div )
-{
-    if ( div == 0 ) {
-        assert( 0 );
-        return *this;
-    }
-
-    wood /= div;
-    mercury /= div;
-    ore /= div;
-    sulfur /= div;
-    crystal /= div;
-    gems /= div;
-    gold /= div;
 
     return *this;
 }

@@ -76,12 +76,10 @@ int Battle::Catapult::GetDamage( Rand::PCG32 & randomGenerator ) const
     return 1;
 }
 
-const std::vector<Battle::CastleDefenseStructure> & Battle::Catapult::getAllowedTargets()
+std::vector<Battle::CastleDefenseStructure> Battle::Catapult::getAllowedTargets()
 {
-    static const std::vector<CastleDefenseStructure> allowedTargets{ CastleDefenseStructure::WALL1,  CastleDefenseStructure::WALL2,        CastleDefenseStructure::WALL3,
-                                                                     CastleDefenseStructure::WALL4,  CastleDefenseStructure::TOWER1,       CastleDefenseStructure::TOWER2,
-                                                                     CastleDefenseStructure::BRIDGE, CastleDefenseStructure::CENTRAL_TOWER };
-    return allowedTargets;
+    return { CastleDefenseStructure::WALL1,  CastleDefenseStructure::WALL2,  CastleDefenseStructure::WALL3,  CastleDefenseStructure::WALL4,
+             CastleDefenseStructure::TOWER1, CastleDefenseStructure::TOWER2, CastleDefenseStructure::BRIDGE, CastleDefenseStructure::CENTRAL_TOWER };
 }
 
 fheroes2::Point Battle::Catapult::GetTargetPosition( const CastleDefenseStructure target, const bool hit )
