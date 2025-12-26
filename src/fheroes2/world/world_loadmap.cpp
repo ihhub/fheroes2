@@ -1084,7 +1084,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                             return false;
                         }
 
-                        const std::vector<int32_t> & skills = GameStatic::getSecondarySkillsForWitchsHut();
+                        const std::vector<int32_t> skills = GameStatic::getSecondarySkillsForWitchsHut();
 
                         return std::all_of( metadata.selectedItems.begin(), metadata.selectedItems.end(),
                                             [&skills]( const int32_t skillId ) { return std::find( skills.begin(), skills.end(), skillId ) != skills.end(); } );
