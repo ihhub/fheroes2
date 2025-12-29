@@ -97,7 +97,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: fheroes2_android.zip, fheroes2_android_aab.zip
-        body: ${{ github.event.head_commit.message }}
+        body: "$COMMIT_MESSAGE"
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Android build (latest commit)
         tag: fheroes2-android
@@ -105,3 +105,5 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
