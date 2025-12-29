@@ -150,7 +150,7 @@ jobs:
         artifacts: build/${{ matrix.platform }}/${{ matrix.build_config }}/${{ matrix.installer_package_name }},
                    build/${{ matrix.platform }}/${{ matrix.build_config }}/${{ matrix.zip_package_name }},
                    build/${{ matrix.platform }}/${{ matrix.build_config }}/${{ matrix.tools_package_name }}
-        body: ${{ github.event.head_commit.message }}
+        body: "$COMMIT_MESSAGE"
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.release_name }}
         tag: ${{ matrix.release_tag }}
@@ -158,3 +158,5 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
