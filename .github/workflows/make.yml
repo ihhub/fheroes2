@@ -209,7 +209,7 @@ jobs:
       if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'push' }}
       with:
         artifacts: ${{ matrix.package_name }}, ${{ matrix.tools_package_name }}
-        body: ${{ github.event.head_commit.message }}
+        body: "$COMMIT_MESSAGE"
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.release_name }}
         tag: ${{ matrix.release_tag }}
@@ -217,6 +217,8 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
@@ -281,7 +283,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: fheroes2_psv.zip
-        body: ${{ github.event.head_commit.message }}
+        body: "$COMMIT_MESSAGE"
         token: ${{ secrets.GITHUB_TOKEN }}
         name: PS Vita build (latest commit)
         tag: fheroes2-psv-sdl2_dev
@@ -289,6 +291,8 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
@@ -329,7 +333,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: fheroes2_switch.zip
-        body: ${{ github.event.head_commit.message }}
+        body: "$COMMIT_MESSAGE"
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Nintendo Switch build (latest commit)
         tag: fheroes2-switch-sdl2_dev
@@ -337,6 +341,8 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   make-emscripten:
     strategy:
       matrix:
@@ -385,7 +391,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       with:
         artifacts: ${{ matrix.package_name }}
-        body: ${{ github.event.head_commit.message }}
+        body: "$COMMIT_MESSAGE"
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.release_name }}
         tag: ${{ matrix.release_tag }}
@@ -393,3 +399,5 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
