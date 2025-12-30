@@ -38,7 +38,7 @@ namespace fheroes2
 
     uint32_t getResurrectPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 
-    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
+    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower );
 
     uint32_t getHypnotizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero );
 

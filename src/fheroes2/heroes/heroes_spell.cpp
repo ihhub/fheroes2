@@ -326,7 +326,7 @@ namespace
         Maps::Tile & tile = world.getTile( hero.GetIndex() );
         assert( MP2::OBJ_MINE == tile.getMainObjectType( false ) );
 
-        const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
+        const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower() );
 
         if ( count == 0 ) {
             return false;
@@ -334,7 +334,7 @@ namespace
 
         Maps::setMineSpellOnTile( tile, spell.GetID() );
 
-        if ( spell == Spell::HAUNT ) {
+        if ( spell == Spell::HAUNT && hero.isControlHuman() ) {
             world.CaptureObject( tile.GetIndex(), PlayerColor::NONE );
 
             // Update the color of haunted mine on radar.
@@ -351,7 +351,7 @@ namespace
     }
 }
 
-void Heroes::ActionSpellCast( const Spell & spell )
+bool Heroes::ActionSpellCast( const Spell & spell )
 {
     assert( spell.isValid() && !spell.isCombat() && CanCastSpell( spell ) );
 
@@ -406,10 +406,11 @@ void Heroes::ActionSpellCast( const Spell & spell )
     }
 
     if ( !apply ) {
-        return;
+        return false;
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
 
     SpellCasted( spell );
+    return true;
 }
