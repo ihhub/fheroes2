@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2025-12-19 18:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3134,15 +3134,6 @@ msgstr "Язык"
 msgid "Graphics"
 msgstr "Графика"
 
-msgid "Black & White"
-msgstr "Чёрно-белый"
-
-msgid "Mouse Cursor"
-msgstr "Курсор мыши"
-
-msgid "Color"
-msgstr "Цветной"
-
 msgid "Text Support"
 msgstr "Текстовое сопровождение"
 
@@ -3155,8 +3146,17 @@ msgstr "Выберите язык игры:"
 msgid "Change the graphics settings of the game."
 msgstr "Настроить параметры графики."
 
+msgid "Mouse Cursor"
+msgstr "Курсор мыши"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
+
+msgid "Interface Type"
+msgstr "Интерфейс"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Переключить тип интерфейса, который Вы хотите использовать."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3252,6 +3252,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Системная информация"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Изменить разрешение экрана."
 
@@ -3260,6 +3269,13 @@ msgstr "Выбрать разрешение экрана"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Переключение между полноэкранным и оконным режимами."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3302,12 +3318,6 @@ msgstr "Каноническая"
 
 msgid "Numeric"
 msgstr "Числовая"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Переключить тип интерфейса, который Вы хотите использовать."
 
 msgid "Toggle interface visibility."
 msgstr "Показать/скрыть интерфейс."
@@ -6759,6 +6769,12 @@ msgstr "Добрый"
 
 msgid "Evil"
 msgstr "Злой"
+
+msgid "Black & White"
+msgstr "Чёрно-белый"
+
+msgid "Color"
+msgstr "Цветной"
 
 msgid ", FPS: "
 msgstr ", FPS: "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2994,17 +2994,6 @@ msgid "Graphics"
 msgstr ""
 
 #, fuzzy
-msgid "Black & White"
-msgstr "Ponte"
-
-#, fuzzy
-msgid "Mouse Cursor"
-msgstr "Cursore Ombra"
-
-msgid "Color"
-msgstr ""
-
-#, fuzzy
 msgid "Text Support"
 msgstr ""
 "Tele-\n"
@@ -3020,7 +3009,17 @@ msgstr "Scegli lingua del gioco"
 msgid "Change the graphics settings of the game."
 msgstr "Cambia le impostazioni dell'audio del gioco."
 
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Cursore Ombra"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -3121,6 +3120,15 @@ msgstr ""
 msgid "System Info"
 msgstr "Opzioni Sistema"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Cambia la risoluzione del gioco."
 
@@ -3128,6 +3136,13 @@ msgid "Select Game Resolution"
 msgstr "Scegli la risoluzione del gioco"
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3168,12 +3183,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -6670,6 +6679,13 @@ msgstr "Buono"
 
 msgid "Evil"
 msgstr "Cattivo"
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Ponte"
+
+msgid "Color"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""

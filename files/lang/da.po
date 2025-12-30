@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3187,15 +3187,6 @@ msgstr "Sprog"
 msgid "Graphics"
 msgstr "Grafik"
 
-msgid "Black & White"
-msgstr "Sort & Hvid"
-
-msgid "Mouse Cursor"
-msgstr "Musemarkør"
-
-msgid "Color"
-msgstr "Farve"
-
 msgid "Text Support"
 msgstr "Tekstsupport"
 
@@ -3208,8 +3199,17 @@ msgstr "Vælg spillets sprog"
 msgid "Change the graphics settings of the game."
 msgstr "Ændr spillets grafikindstillinger."
 
+msgid "Mouse Cursor"
+msgstr "Musemarkør"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
+
+msgid "Interface Type"
+msgstr "Interface-type"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3303,6 +3303,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "System info"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Skift spilopløsning."
 
@@ -3311,6 +3320,13 @@ msgstr "Vælg spilopløsning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Vælg mellem fuldskærms- og vinduestilstand."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3352,12 +3368,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Interface-type"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid "Toggle interface visibility."
 msgstr "Vælg interfacets synlighed til eller fra."
@@ -6819,6 +6829,12 @@ msgstr "God"
 
 msgid "Evil"
 msgstr "Ond"
+
+msgid "Black & White"
+msgstr "Sort & Hvid"
+
+msgid "Color"
+msgstr "Farve"
 
 msgid ", FPS: "
 msgstr ", FPS:"

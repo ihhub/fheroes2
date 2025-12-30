@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2025-12-05 00:25+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3115,15 +3115,6 @@ msgstr "Nyelv"
 msgid "Graphics"
 msgstr "Grafika"
 
-msgid "Black & White"
-msgstr "Fekete-fehér"
-
-msgid "Mouse Cursor"
-msgstr "Egér kurzor"
-
-msgid "Color"
-msgstr "Szín"
-
 msgid "Text Support"
 msgstr "Szöveg támogatás"
 
@@ -3136,9 +3127,18 @@ msgstr "Játék nyelvének kiválasztása"
 msgid "Change the graphics settings of the game."
 msgstr "Játék grafikai beállításainak módosítása."
 
+msgid "Mouse Cursor"
+msgstr "Egér kurzor"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Színes kurzor be-/kikapcsolása. Ez csak egy esztétikai jellegű választás."
+
+msgid "Interface Type"
+msgstr "Kezelőfelület típusa"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Kezelőfelület kívánt típusának kapcsolója."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3236,6 +3236,15 @@ msgstr ""
 "Rendszer-\n"
 "információk"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "A játék felbontásának megváltoztatása."
 
@@ -3244,6 +3253,13 @@ msgstr "Játék felbontás kiválasztása"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Váltás teljes képernyős és ablakos mód között."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3284,12 +3300,6 @@ msgstr "Szövegesen"
 
 msgid "Numeric"
 msgstr "Számszerűen"
-
-msgid "Interface Type"
-msgstr "Kezelőfelület típusa"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Kezelőfelület kívánt típusának kapcsolója."
 
 msgid "Toggle interface visibility."
 msgstr "Kezelőfelület láthatóságának kapcsolója."
@@ -6718,6 +6728,12 @@ msgstr "Jó"
 
 msgid "Evil"
 msgstr "Gonosz"
+
+msgid "Black & White"
+msgstr "Fekete-fehér"
+
+msgid "Color"
+msgstr "Szín"
 
 msgid ", FPS: "
 msgstr ", FPS: "
