@@ -5026,10 +5026,47 @@ namespace
             break;
         }
         case ICN::GAME_OPTION_ICON: {
-            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id].resize( 4 );
+
+            // TODO: Cut the icons from the embedded background in resurrection.h2d and use the empty background ICN to make the icons instead.
+            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
             fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+            _icnVsSprite[id][0]._disableTransformLayer();
             fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+            _icnVsSprite[id][1]._disableTransformLayer();
+
+            fheroes2::Sprite monocle;
+            fheroes2::h2d::readImage( "monocle.image", monocle );
+
+            fheroes2::Sprite & linearScaling = _icnVsSprite[id][2];
+            linearScaling._disableTransformLayer();
+
+            fheroes2::Copy( background, linearScaling );
+
+            fheroes2::Sprite creature = fheroes2::AGG::GetICN( ICN::MONS32, 38 );
+            // Remove shadows
+            setTransformLayerTransparent( creature );
+            fheroes2::Sprite linearCreature( creature.width() * 2, creature.height() * 2 );
+
+            SubpixelResize( creature, linearCreature );
+
+            linearCreature.setPosition( creature.x() * 2, creature.y() * 2 );
+
+            fheroes2::Blit( linearCreature, 0, 0, linearScaling, 14, 10, linearCreature.width(), 48 );
+            fheroes2::Blit( monocle, 0, 0, linearScaling, 1, 8, monocle.width(), monocle.height() );
+
+            fheroes2::Sprite & nearestScaling = _icnVsSprite[id][3];
+            nearestScaling._disableTransformLayer();
+
+            fheroes2::Copy( background, nearestScaling );
+            fheroes2::Sprite nearestCreature( linearCreature.width(), linearCreature.height() );
+            nearestCreature.setPosition( linearCreature.x(), linearCreature.y() );
+
+            Resize( creature, nearestCreature );
+
+            fheroes2::Blit( nearestCreature, 0, 0, nearestScaling, 14, 10, linearCreature.width(), 48 );
+            fheroes2::Blit( monocle, 0, 0, nearestScaling, 1, 8, monocle.width(), monocle.height() );
 
             break;
         }

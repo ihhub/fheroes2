@@ -205,6 +205,7 @@ public:
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
     bool isArmyEstimationViewNumeric() const;
+    bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
 
     void setInterfaceType( InterfaceType type )
@@ -216,6 +217,8 @@ public:
     {
         return _interfaceType;
     }
+
+    void switchToNextInterfaceType();
 
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
