@@ -265,13 +265,13 @@ namespace
         // Shuffle spells as all of them seem to be equal in power.
         Rand::Shuffle( spells );
 
-        int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+        double spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
 
         // Adjust spell multiplier based on hero's AI role.
         switch ( hero.getAIRole() ) {
         case Heroes::Role::SCOUT:
             // A hero with almost no army risking his life and most likely going to be killed.
-            spellMultiplier = std::min( 1, spellMultiplier / 4 );
+            spellMultiplier = std::min( 1, spellMultiplier / 5 );
             break;
         case Heroes::Role::COURIER:
             // A hero who usually delivers army. Might have some army to battle with but he is not a fighter and can be easily defeated.
