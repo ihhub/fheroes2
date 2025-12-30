@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3172,15 +3172,6 @@ msgstr "Ngôn ngữ"
 msgid "Graphics"
 msgstr "Đồ họa"
 
-msgid "Black & White"
-msgstr "Đen & Trắng"
-
-msgid "Mouse Cursor"
-msgstr "Con trỏ Chuột"
-
-msgid "Color"
-msgstr "Màu"
-
 msgid "Text Support"
 msgstr "Hỗ trợ Văn bản"
 
@@ -3193,9 +3184,18 @@ msgstr "Chọn Ngôn ngữ Trò chơi"
 msgid "Change the graphics settings of the game."
 msgstr "Thay đổi đồ họa của trò chơi."
 
+msgid "Mouse Cursor"
+msgstr "Con trỏ Chuột"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Chuyển đổi con trỏ màu bật hoặc tắt. Đây chỉ là một sự lựa chọn thẩm mỹ."
+
+msgid "Interface Type"
+msgstr "Kiểu Giao diện"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3294,6 +3294,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Thông tin Hệ thống"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Thay đổi độ phân giải của trò chơi."
 
@@ -3302,6 +3311,13 @@ msgstr "Chọn Độ phân giải Trò chơi"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Chuyển đổi giữa chế độ toàn màn hình và cửa sổ."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3343,12 +3359,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Kiểu Giao diện"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
 
 msgid "Toggle interface visibility."
 msgstr "Chuyển đổi khả năng hiển thị giao diện."
@@ -6923,6 +6933,12 @@ msgstr "Tốt"
 
 msgid "Evil"
 msgstr "Xấu"
+
+msgid "Black & White"
+msgstr "Đen & Trắng"
+
+msgid "Color"
+msgstr "Màu"
 
 msgid ", FPS: "
 msgstr ", FPS: "

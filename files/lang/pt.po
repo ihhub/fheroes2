@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3139,15 +3139,6 @@ msgstr "Idioma"
 msgid "Graphics"
 msgstr "Gráficos"
 
-msgid "Black & White"
-msgstr "Preto e Branco"
-
-msgid "Mouse Cursor"
-msgstr "Cursor"
-
-msgid "Color"
-msgstr "Colorido"
-
 msgid "Text Support"
 msgstr "Suporte a Texto"
 
@@ -3160,9 +3151,18 @@ msgstr "Selecionar Idioma do Jogo"
 msgid "Change the graphics settings of the game."
 msgstr "Altera as configurações gráficas do jogo."
 
+msgid "Mouse Cursor"
+msgstr "Cursor"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Ativar ou desativar o cursor colorido. Essa é apenas uma opção estética."
+
+msgid "Interface Type"
+msgstr "Tipo de Interface"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Alterne o tipo de interface que você deseja usar."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3260,6 +3260,15 @@ msgstr "QPS"
 msgid "System Info"
 msgstr "Informações do Sistema"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Altera a resolução do jogo."
 
@@ -3268,6 +3277,13 @@ msgstr "Selecionar Resolução do Jogo"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Alternar entre os modos de tela cheia e janela."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3309,12 +3325,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Tipo de Interface"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Alterne o tipo de interface que você deseja usar."
 
 msgid "Toggle interface visibility."
 msgstr "Alternar a visibilidade da interface."
@@ -6805,6 +6815,12 @@ msgstr "Do Bem"
 
 msgid "Evil"
 msgstr "Do Mal"
+
+msgid "Black & White"
+msgstr "Preto e Branco"
+
+msgid "Color"
+msgstr "Colorido"
 
 msgid ", FPS: "
 msgstr ", QPS: "

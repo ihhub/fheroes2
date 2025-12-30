@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2025-12-03 17:37+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3118,15 +3118,6 @@ msgstr "Språk"
 msgid "Graphics"
 msgstr "Grafik"
 
-msgid "Black & White"
-msgstr "Svart & Vitt"
-
-msgid "Mouse Cursor"
-msgstr "Muspekare"
-
-msgid "Color"
-msgstr "Färg"
-
 msgid "Text Support"
 msgstr "Texthjälp"
 
@@ -3139,9 +3130,18 @@ msgstr "Välj spelspråk"
 msgid "Change the graphics settings of the game."
 msgstr "Ändra spelets grafikinställningar"
 
+msgid "Mouse Cursor"
+msgstr "Muspekare"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Välj färglagd eller svartvit muspekare. Detta är bara ett estetiskt val."
+
+msgid "Interface Type"
+msgstr "Gränssnittsstil"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3235,6 +3235,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Systeminfo."
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Ändra spelets upplösning."
 
@@ -3243,6 +3252,13 @@ msgstr "Välj spelupplösning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Växla mellan fullskärmsläge och fönsterläge."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3281,12 +3297,6 @@ msgstr "Antalsmått"
 
 msgid "Numeric"
 msgstr "Numeriskt"
-
-msgid "Interface Type"
-msgstr "Gränssnittsstil"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
 msgstr "Aktivera gränssnittsynlighet."
@@ -6710,6 +6720,12 @@ msgstr "God"
 
 msgid "Evil"
 msgstr "Ond"
+
+msgid "Black & White"
+msgstr "Svart & Vitt"
+
+msgid "Color"
+msgstr "Färg"
 
 msgid ", FPS: "
 msgstr ", FPS: "

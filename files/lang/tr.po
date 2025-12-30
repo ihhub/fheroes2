@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2025-12-30 05:17+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3032,15 +3032,6 @@ msgstr "Dil"
 msgid "Graphics"
 msgstr "Grafikler"
 
-msgid "Black & White"
-msgstr "Siyah & Beyaz"
-
-msgid "Mouse Cursor"
-msgstr "Fare İmleci"
-
-msgid "Color"
-msgstr "Renkli"
-
 msgid "Text Support"
 msgstr "Yazı Desteği"
 
@@ -3053,8 +3044,17 @@ msgstr "Oyunun dilini seç"
 msgid "Change the graphics settings of the game."
 msgstr "Oyunun grafik ayarlarını değiş."
 
+msgid "Mouse Cursor"
+msgstr "Fare İmleci"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Renkli imleci aç ya da kapat. Bu sadece estetik bir seçimdir."
+
+msgid "Interface Type"
+msgstr "Arayüz Tipi"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3149,6 +3149,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Sistem Bilgisi"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Oyunun çözünürlüğünü değiş."
 
@@ -3157,6 +3166,13 @@ msgstr "Oyunun çözünürlüğünü seç"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Tam ve pencereli ekran arasında geçiş yap."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3195,12 +3211,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Arayüz Tipi"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
 msgstr "Arayüz görünürlüğünü değiştirin."
@@ -6467,6 +6477,12 @@ msgstr "İyi"
 
 msgid "Evil"
 msgstr "Şeytani"
+
+msgid "Black & White"
+msgstr "Siyah & Beyaz"
+
+msgid "Color"
+msgstr "Renkli"
 
 msgid ", FPS: "
 msgstr ""
