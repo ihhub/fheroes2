@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -66,7 +66,7 @@ namespace
 {
     struct AudioSpec
     {
-#if defined( TARGET_PS_VITA )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_3DS )
         // Notice: The PS Vita sound resampler is CPU intensive if the value is not 22050.
         int frequency = 22050;
 #else
@@ -87,6 +87,9 @@ namespace
         // activities performed on the main thread. On the other hand, it shouldn't be too big, because it is possible
         // to stop the audio playback only after the current chunk has been completely played.
         int chunkSize = 8192;
+#elif defined( TARGET_NINTENDO_3DS )
+        // Use larger chunk size for 3DS to reduce CPU overhead
+        int chunkSize = 4096;
 #else
         int chunkSize = 2048;
 #endif

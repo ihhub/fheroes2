@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -739,13 +739,13 @@ namespace fheroes2
         const int32_t outWidth = out.width();
         const int32_t inWidth = in.width();
         const int32_t inHeight = in.height();
-        const int32_t shadowOffsetX = std::min( shadowOffset.x, 0 );
-        const int32_t shadowOffsetY = std::min( shadowOffset.y, 0 );
+        const int32_t shadowOffsetX = std::min<int32_t>( shadowOffset.x, 0 );
+        const int32_t shadowOffsetY = std::min<int32_t>( shadowOffset.y, 0 );
         const int32_t outStartOffset = outPos.x + shadowOffsetX + in.x() + ( outPos.y + shadowOffsetY + in.y() ) * outWidth;
 
         // The shadow should not be outside of 'out' image.
-        assert( outStartOffset >= 0 && outWidth >= ( inWidth + outPos.x + std::max( shadowOffset.x, 0 ) )
-                && out.height() >= ( inHeight + outPos.y + std::max( shadowOffset.y, 0 ) ) );
+        assert( outStartOffset >= 0 && outWidth >= ( inWidth + outPos.x + std::max<int32_t>( shadowOffset.x, 0 ) )
+                && out.height() >= ( inHeight + outPos.y + std::max<int32_t>( shadowOffset.y, 0 ) ) );
 
         const int32_t absOffsetX = std::abs( shadowOffset.x );
         const int32_t absOffsetY = std::abs( shadowOffset.y );
@@ -1538,7 +1538,7 @@ namespace fheroes2
             for ( int32_t x = 0; x < halfWidth; ++x ) {
                 // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
                 // We limit the step power to 30 to not overflow the 32 bit 'stepY'.
-                const int32_t stepPower = std::min( 30, ( halfWidth - x ) / 2 + 1 );
+                const int32_t stepPower = std::min<int32_t>( 30, ( ( halfWidth - x ) / 2 ) + 1 );
                 const int32_t stepY = 1 << stepPower;
 
                 // The point position in dithered pattern.
@@ -1652,7 +1652,7 @@ namespace fheroes2
             for ( int32_t y = 0; y < halfHeight; ++y ) {
                 // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
                 // We limit the step power to 30 to not overflow the 32 bit 'stepX'.
-                const int32_t stepPower = std::min( 30, ( halfHeight - y ) / 2 + 1 );
+                const int32_t stepPower = std::min<int32_t>( 30, ( ( halfHeight - y ) / 2 ) + 1 );
                 const int32_t stepX = 1 << stepPower;
 
                 // The point position in dithered pattern.
@@ -1966,8 +1966,8 @@ namespace fheroes2
 
         const bool isValidRoi = roi.width > 0 && roi.height > 0;
 
-        const int32_t minX = isValidRoi ? std::max( roi.x, 0 ) : 0;
-        const int32_t minY = isValidRoi ? std::max( roi.y, 0 ) : 0;
+        const int32_t minX = isValidRoi ? std::max<int32_t>( roi.x, 0 ) : 0;
+        const int32_t minY = isValidRoi ? std::max<int32_t>( roi.y, 0 ) : 0;
         int32_t maxX = isValidRoi ? roi.x + roi.width : width;
         int32_t maxY = isValidRoi ? roi.y + roi.height : height;
 

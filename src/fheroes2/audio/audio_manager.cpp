@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,6 +33,10 @@
 #include <optional>
 #include <ostream>
 #include <utility>
+
+#if defined( TARGET_NINTENDO_3DS )
+#include <ctr/thread_local.h>
+#endif
 
 #include "agg_file.h"
 #include "audio.h"
@@ -110,7 +114,12 @@ namespace
             return {};
         }
 
+#if defined( TARGET_NINTENDO_3DS )
+        static ThreadLocal<std::map<int, std::string>> musicTrackIdToFilePathStorage( []() { return std::map<int, std::string>{}; } );
+        auto & musicTrackIdToFilePath = musicTrackIdToFilePathStorage.get();
+#else
         thread_local std::map<int, std::string> musicTrackIdToFilePath;
+#endif
 
         const auto iter = musicTrackIdToFilePath.find( musicTrackId );
         if ( iter != musicTrackIdToFilePath.end() ) {
@@ -144,9 +153,17 @@ namespace
         };
 
         // To avoid extra I/O calls to data storage it might be useful to remember the last successful type of music and try to search for it next time.
+#if defined( TARGET_NINTENDO_3DS )
+        static ThreadLocal<std::array<MusicFileType, 3>> musicFileTypesStorage( []() {
+            return std::array<MusicFileType, 3>{ MusicFileType( MUS::ExternalMusicNamingScheme::DOS_VERSION ),
+                                                 MusicFileType( MUS::ExternalMusicNamingScheme::WIN_VERSION ), MusicFileType( MUS::ExternalMusicNamingScheme::MAPPED ) };
+        } );
+        auto & musicFileTypes = musicFileTypesStorage.get();
+#else
         thread_local std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::ExternalMusicNamingScheme::DOS_VERSION ),
                                                                   MusicFileType( MUS::ExternalMusicNamingScheme::WIN_VERSION ),
                                                                   MusicFileType( MUS::ExternalMusicNamingScheme::MAPPED ) };
+#endif
 
         for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
             std::string filePath = tryMusicFileType( musicFileTypes[i] );

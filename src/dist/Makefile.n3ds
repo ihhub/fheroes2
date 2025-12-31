@@ -1,0 +1,55 @@
+###########################################################################
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2026                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
+DEVKITPRO ?= /opt/devkitpro
+
+include $(DEVKITPRO)/devkitARM/3ds_rules
+
+# Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
+
+COMMON_FLAGS := \
+  -march=armv6k \
+  -mcpu=mpcore \
+  -mfpu=vfpv2 \
+  -mfloat-abi=hard \
+  -fno-short-enums \
+  -fPIE \
+  -O2 \
+  -ffloat-store \
+  -fno-fast-math \
+  -DTARGET_NINTENDO_3DS \
+  $(shell $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config --cflags sdl2) \
+  -isystem $(DEVKITPRO)/libctru/include \
+  -I$(CURDIR)/.. \
+  -I$(CURDIR)/../platform
+
+
+CFLAGS   += $(COMMON_FLAGS)
+CXXFLAGS += $(COMMON_FLAGS)
+LDFLAGS  += $(COMMON_FLAGS) -specs=3dsx.specs -L$(DEVKITPRO)/libctru/lib -L$(DEVKITPRO)/portlibs/3ds/lib
+
+# Remove pthread for 3DS (causes atomic linking issues)
+CCFLAGS := $(subst -pthread,,$(CCFLAGS))
+LDFLAGS := $(subst -pthread,,$(LDFLAGS))
+
+LIBS := $(LIBS) -lcitro2d -lcitro3d -lctru -lvorbisidec -lmodplug -lmpg123 -lopusfile -lopus -logg -lgcc
+
+# Use 3DS SDL2 libs with mixer
+SDL_LIBS := -lSDL2_mixer $(shell $(DEVKITPRO)/portlibs/3ds/bin/arm-none-eabi-pkg-config --libs sdl2) -lxmp

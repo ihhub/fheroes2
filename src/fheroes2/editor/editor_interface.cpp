@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1255,8 +1255,7 @@ namespace Interface
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
 
-                    const fheroes2::Point clampedPoint{ std::clamp<int32_t>( tilePos.x, 0, world.w() - 1 ),
-                                                         std::clamp<int32_t>( tilePos.y, 0, world.h() - 1 ) };
+                    const fheroes2::Point clampedPoint{ std::clamp<int32_t>( tilePos.x, 0, world.w() - 1 ), std::clamp<int32_t>( tilePos.y, 0, world.h() - 1 ) };
                     const int32_t tileIndex = clampedPoint.y * world.w() + clampedPoint.x;
                     if ( _tileUnderCursor != tileIndex ) {
                         _tileUnderCursor = tileIndex;

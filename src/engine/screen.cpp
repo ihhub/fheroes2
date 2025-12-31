@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,6 +59,10 @@
 #include <vita2d.h>
 #endif
 
+#if defined( TARGET_NINTENDO_3DS )
+#include <3ds.h>
+#endif
+
 #include "image_palette.h"
 #include "logging.h"
 #include "math_tools.h"
@@ -106,7 +110,7 @@ namespace
         return resolutions[id];
     }
 
-#if !defined( TARGET_PS_VITA )
+#if !defined( TARGET_PS_VITA ) && !defined( TARGET_NINTENDO_3DS )
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
         return value.gameWidth < fheroes2::Display::DEFAULT_WIDTH || value.gameHeight < fheroes2::Display::DEFAULT_HEIGHT;
@@ -590,7 +594,314 @@ namespace
         }
     };
 
-#if defined( TARGET_PS_VITA )
+#if defined( TARGET_NINTENDO_3DS )
+    class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
+    {
+    public:
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
+        {
+            clear();
+        }
+
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        void toggleFullScreen() override
+        {
+            BaseRenderEngine::toggleFullScreen();
+
+            const fheroes2::Display & display = fheroes2::Display::instance();
+            _calculateScreenScaling( display.width(), display.height(), isFullScreen() );
+        }
+
+        static RenderEngine * create()
+        {
+            return new RenderEngine;
+        }
+
+        fheroes2::Rect getActiveWindowROI() const override
+        {
+            return _destRect;
+        }
+
+        fheroes2::Size getCurrentScreenResolution() const override
+        {
+            return { N3DS_TOP_SCREEN_WIDTH, N3DS_SCREEN_HEIGHT };
+        }
+
+        std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
+        {
+            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
+                std::set<fheroes2::ResolutionInfo> resolutionSet;
+                // Like PS Vita, offer 640x480 and an aspect-corrected resolution
+                resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }();
+
+            return filteredResolutions;
+        }
+
+    private:
+        SDL_Window * _window{ nullptr };
+        SDL_Surface * _surface{ nullptr };
+        SDL_Renderer * _renderer{ nullptr };
+        SDL_Texture * _texture{ nullptr };
+        fheroes2::Rect _destRect;
+
+        // Bottom screen
+        SDL_Window * _bottomWindow{ nullptr };
+        SDL_Renderer * _bottomRenderer{ nullptr };
+        SDL_Texture * _bottomTexture{ nullptr };
+
+        RenderEngine() = default;
+
+        enum : int32_t
+        {
+            N3DS_TOP_SCREEN_WIDTH = 400,
+            N3DS_BOTTOM_SCREEN_WIDTH = 320,
+            N3DS_SCREEN_HEIGHT = 240,
+            N3DS_ASPECT_CORRECTED_WIDTH = 800,
+            N3DS_TEXTURE_WIDTH = 400,
+            N3DS_TEXTURE_HEIGHT = 240
+        };
+
+        void clear() override
+        {
+            if ( _window != nullptr ) {
+                SDL_DestroyWindow( _window );
+                _window = nullptr;
+            }
+
+            if ( _surface != nullptr ) {
+                SDL_FreeSurface( _surface );
+                _surface = nullptr;
+            }
+
+            if ( _texture != nullptr ) {
+                SDL_DestroyTexture( _texture );
+                _texture = nullptr;
+            }
+
+            if ( _renderer != nullptr ) {
+                SDL_DestroyRenderer( _renderer );
+                _renderer = nullptr;
+            }
+
+            if ( _bottomTexture != nullptr ) {
+                SDL_DestroyTexture( _bottomTexture );
+                _bottomTexture = nullptr;
+            }
+
+            if ( _bottomRenderer != nullptr ) {
+                SDL_DestroyRenderer( _bottomRenderer );
+                _bottomRenderer = nullptr;
+            }
+
+            if ( _bottomWindow != nullptr ) {
+                SDL_DestroyWindow( _bottomWindow );
+                _bottomWindow = nullptr;
+            }
+        }
+
+        bool allocate( fheroes2::ResolutionInfo & resolutionInfo, bool isFullScreen ) override
+        {
+            clear();
+
+            const std::vector<fheroes2::ResolutionInfo> resolutions = getAvailableResolutions();
+            assert( !resolutions.empty() );
+            if ( !resolutions.empty() ) {
+                resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
+            }
+
+            _window = SDL_CreateWindow( "", 0, 0, N3DS_TOP_SCREEN_WIDTH, N3DS_SCREEN_HEIGHT, 0 );
+            if ( _window == nullptr ) {
+                ERROR_LOG( "Failed to create an application window of " << N3DS_TOP_SCREEN_WIDTH << " x " << N3DS_SCREEN_HEIGHT
+                                                                        << " size. The error: " << SDL_GetError() )
+
+                clear();
+                return false;
+            }
+
+            // Try different byte orders - 3DS might use ABGR instead of RGBA
+            _surface = SDL_CreateRGBSurface( 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff );
+            if ( _surface == nullptr ) {
+                // Fallback to standard RGBA
+                _surface = SDL_CreateRGBSurface( 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+            }
+
+            if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
+                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
+
+                clear();
+                return false;
+            }
+            _renderer = SDL_CreateRenderer( _window, -1, SDL_RENDERER_SOFTWARE );
+            if ( _renderer == nullptr ) {
+                ERROR_LOG( "Failed to create SDL Renderer. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, resolutionInfo.gameWidth, resolutionInfo.gameHeight );
+            if ( _texture == nullptr ) {
+                ERROR_LOG( "Failed to create SDL Texture. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            // Create bottom screen window and renderer
+            _bottomWindow = SDL_CreateWindow( "", 0, N3DS_SCREEN_HEIGHT, N3DS_BOTTOM_SCREEN_WIDTH, N3DS_SCREEN_HEIGHT, 0 );
+            if ( _bottomWindow == nullptr ) {
+                ERROR_LOG( "Failed to create bottom screen window. The error: " << SDL_GetError() )
+                // Continue without bottom screen
+            }
+            else {
+                _bottomRenderer = SDL_CreateRenderer( _bottomWindow, -1, SDL_RENDERER_SOFTWARE );
+                if ( _bottomRenderer == nullptr ) {
+                    ERROR_LOG( "Failed to create bottom screen renderer. The error: " << SDL_GetError() )
+                }
+                else {
+                    _bottomTexture = SDL_CreateTexture( _bottomRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, resolutionInfo.gameWidth,
+                                                        resolutionInfo.gameHeight );
+                    if ( _bottomTexture == nullptr ) {
+                        ERROR_LOG( "Failed to create bottom screen texture. The error: " << SDL_GetError() )
+                    }
+                }
+            }
+
+            _createPalette();
+            _calculateScreenScaling( resolutionInfo.gameWidth, resolutionInfo.gameHeight, isFullScreen );
+
+            return true;
+        }
+
+        void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
+        {
+            (void)roi;
+
+            if ( _surface == nullptr || _renderer == nullptr || _texture == nullptr )
+                return;
+            const fheroes2::Rect fullRoi{ 0, 0, display.width(), display.height() };
+            copyImageToSurface( display, _surface, fullRoi );
+
+            // Update texture from surface
+            const int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            // Render with scaling to fit 3DS screen
+            int rc = SDL_RenderClear( _renderer );
+            if ( rc < 0 ) {
+                ERROR_LOG( "Failed to clear renderer. The error value: " << rc << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            // Use the destination rectangle calculated by _calculateScreenScaling
+            SDL_Rect dstRect;
+            dstRect.x = _destRect.x;
+            dstRect.y = _destRect.y;
+            dstRect.w = _destRect.width;
+            dstRect.h = _destRect.height;
+
+            rc = SDL_RenderCopy( _renderer, _texture, nullptr, &dstRect );
+            if ( rc < 0 ) {
+                ERROR_LOG( "Failed to copy render.The error value: " << rc << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            SDL_RenderPresent( _renderer );
+
+            // Render to bottom screen
+            if ( _bottomRenderer != nullptr && _bottomTexture != nullptr ) {
+                // Update bottom texture with same content
+                const int bottomReturnCode = SDL_UpdateTexture( _bottomTexture, nullptr, _surface->pixels, _surface->pitch );
+                if ( bottomReturnCode < 0 ) {
+                    ERROR_LOG( "Failed to update bottom texture. The error value: " << bottomReturnCode << ", description: " << SDL_GetError() )
+                }
+                else {
+                    SDL_RenderClear( _bottomRenderer );
+
+                    // Scale to fit bottom screen (320x240)
+                    const float scale
+                        = std::min( static_cast<float>( N3DS_BOTTOM_SCREEN_WIDTH ) / display.width(), static_cast<float>( N3DS_SCREEN_HEIGHT ) / display.height() );
+                    const int32_t scaledWidth = static_cast<int32_t>( display.width() * scale );
+                    const int32_t scaledHeight = static_cast<int32_t>( display.height() * scale );
+
+                    SDL_Rect bottomDstRect;
+                    bottomDstRect.x = ( N3DS_BOTTOM_SCREEN_WIDTH - scaledWidth ) / 2;
+                    bottomDstRect.y = ( N3DS_SCREEN_HEIGHT - scaledHeight ) / 2;
+                    bottomDstRect.w = scaledWidth;
+                    bottomDstRect.h = scaledHeight;
+
+                    SDL_RenderCopy( _bottomRenderer, _bottomTexture, nullptr, &bottomDstRect );
+                    SDL_RenderPresent( _bottomRenderer );
+                }
+            }
+        }
+
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        {
+            if ( _surface == nullptr || colorIds.size() != 256 )
+                return;
+
+            generatePalette( colorIds, _surface );
+        }
+
+        bool isMouseCursorActive() const override
+        {
+            return true;
+        }
+
+        void _createPalette()
+        {
+            updatePalette( StandardPaletteIndexes() );
+        }
+
+        void _calculateScreenScaling( const int32_t width_, const int32_t height_, const bool isFullScreen )
+        {
+            _destRect.x = 0;
+            _destRect.y = 0;
+            _destRect.width = N3DS_TOP_SCREEN_WIDTH;
+            _destRect.height = N3DS_SCREEN_HEIGHT;
+
+            if ( !isFullScreen ) {
+                // In windowed mode, scale to fit and center
+                const float scale = std::min( static_cast<float>( N3DS_TOP_SCREEN_WIDTH ) / width_, static_cast<float>( N3DS_SCREEN_HEIGHT ) / height_ );
+                _destRect.width = static_cast<int32_t>( width_ * scale );
+                _destRect.height = static_cast<int32_t>( height_ * scale );
+                _destRect.x = ( N3DS_TOP_SCREEN_WIDTH - _destRect.width ) / 2;
+                _destRect.y = ( N3DS_SCREEN_HEIGHT - _destRect.height ) / 2;
+                return;
+            }
+
+            // In fullscreen, scale to fill screen while maintaining aspect ratio
+            const float screenAspect = static_cast<float>( N3DS_TOP_SCREEN_WIDTH ) / N3DS_SCREEN_HEIGHT;
+            const float gameAspect = static_cast<float>( width_ ) / height_;
+
+            if ( screenAspect >= gameAspect ) {
+                // Screen is wider - fit by height
+                const float scale = static_cast<float>( N3DS_SCREEN_HEIGHT ) / height_;
+                _destRect.height = N3DS_SCREEN_HEIGHT;
+                _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
+                _destRect.x = ( N3DS_TOP_SCREEN_WIDTH - _destRect.width ) / 2;
+                _destRect.y = 0;
+            }
+            else {
+                // Game is wider - fit by width
+                const float scale = static_cast<float>( N3DS_TOP_SCREEN_WIDTH ) / width_;
+                _destRect.width = N3DS_TOP_SCREEN_WIDTH;
+                _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
+                _destRect.x = 0;
+                _destRect.y = ( N3DS_SCREEN_HEIGHT - _destRect.height ) / 2;
+            }
+        }
+    };
+
+#elif defined( TARGET_PS_VITA )
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
@@ -1520,8 +1831,8 @@ namespace fheroes2
             Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
             if ( _cursor->_keepInScreenArea ) {
-                cursorROI.x = std::clamp( cursorROI.x, 0, width() - cursorROI.width );
-                cursorROI.y = std::clamp( cursorROI.y, 0, height() - cursorROI.height );
+                cursorROI.x = std::clamp<int32_t>( cursorROI.x, 0, width() - cursorROI.width );
+                cursorROI.y = std::clamp<int32_t>( cursorROI.y, 0, height() - cursorROI.height );
             }
 
             const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );

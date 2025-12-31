@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -455,7 +455,7 @@ int32_t Artifact::Rand( ArtLevel lvl )
         }
     }
 
-    int32_t res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
+    const int32_t res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
     artifactGlobalStatus[res] |= ART_RNDUSED;
 
     return res;

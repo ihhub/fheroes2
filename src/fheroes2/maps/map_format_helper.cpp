@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1084,10 +1084,10 @@ namespace
         const int32_t centerY = centerTileIndex / map.width;
 
         // We avoid getting out of map boundaries.
-        const int32_t minTileX = std::max<int32_t>( centerX - centerToRectBorderDistance, static_cast<int32_t>(0) );
-        const int32_t minTileY = std::max<int32_t>( centerY - centerToRectBorderDistance, static_cast<int32_t>(0) );
-        const int32_t maxTileX = std::min<int32_t>( centerX + centerToRectBorderDistance + 1, static_cast<int32_t>(map.width) );
-        const int32_t maxTileY = std::min<int32_t>( centerY + centerToRectBorderDistance + 1, static_cast<int32_t>(map.width) );
+        const int32_t minTileX = std::max<int32_t>( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max<int32_t>( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min<int32_t>( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min<int32_t>( centerY + centerToRectBorderDistance + 1, map.width );
 
         const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
 

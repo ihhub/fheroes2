@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -45,6 +45,10 @@
 #if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA )
 #include <dirent.h>
 #include <strings.h>
+#endif
+
+#if defined( TARGET_NINTENDO_3DS )
+#include <ctr/thread_local.h>
 #endif
 
 // Managing compiler warnings for SDL headers
@@ -281,7 +285,7 @@ bool System::isTouchInputAvailable()
 
 bool System::isVirtualKeyboardSupported()
 {
-#if defined( ANDROID ) || defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( __IPHONEOS__ )
+#if defined( ANDROID ) || defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( __IPHONEOS__ ) || defined( TARGET_NINTENDO_3DS )
     return true;
 #else
     return false;
@@ -333,7 +337,12 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 std::string System::GetConfigDirectory( const std::string_view appName )
 {
     // Location of the app config directory, in theory, should not change while the app is running and can be cached
+#if defined( TARGET_NINTENDO_3DS )
+    static ThreadLocal<std::map<std::string, std::string, std::less<>>> resultsCacheStorage( []() { return std::map<std::string, std::string, std::less<>>{}; } );
+    auto & resultsCache = resultsCacheStorage.get();
+#else
     thread_local std::map<std::string, std::string, std::less<>> resultsCache;
+#endif
 
     if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
         return iter->second;
@@ -365,7 +374,12 @@ std::string System::GetConfigDirectory( const std::string_view appName )
 std::string System::GetDataDirectory( const std::string_view appName )
 {
     // Location of the app data directory, in theory, should not change while the app is running and can be cached
+#if defined( TARGET_NINTENDO_3DS )
+    static ThreadLocal<std::map<std::string, std::string, std::less<>>> resultsCacheStorage( []() { return std::map<std::string, std::string, std::less<>>{}; } );
+    auto & resultsCache = resultsCacheStorage.get();
+#else
     thread_local std::map<std::string, std::string, std::less<>> resultsCache;
+#endif
 
     if ( const auto iter = resultsCache.find( appName ); iter != resultsCache.end() ) {
         return iter->second;

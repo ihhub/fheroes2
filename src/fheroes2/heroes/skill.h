@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -52,7 +52,7 @@ namespace Skill
 
     namespace Level
     {
-        enum: int32_t
+        enum : int32_t
         {
             NONE = 0,
             BASIC = 1,
@@ -67,7 +67,7 @@ namespace Skill
     class Secondary final : public std::pair<int32_t, int32_t>
     {
     public:
-        enum: int32_t
+        enum : int32_t
         {
             UNKNOWN = 0,
             PATHFINDING = 1,

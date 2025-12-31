@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -190,7 +190,6 @@ public:
 
     Artifact( int32_t art = UNKNOWN )
         : id( art > UNKNOWN && art < ARTIFACT_COUNT ? art : UNKNOWN )
-        , ext( 0 )
     {
         // Do nothing.
     }
@@ -268,7 +267,7 @@ private:
     friend IStreamBase & operator>>( IStreamBase & stream, Artifact & art );
 
     int32_t id;
-    int32_t ext;
+    int32_t ext{ 0 };
 };
 
 uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );

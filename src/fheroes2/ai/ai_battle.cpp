@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1346,7 +1346,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                                                                } );
 
             if ( !isItWorthTryingToRetreat ) {
-                return static_cast<int32_t>( -1 );
+                return -1;
             }
         }
 

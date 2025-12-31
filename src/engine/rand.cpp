@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,6 +25,10 @@
 
 #include <numeric>
 #include <random>
+
+#if defined( TARGET_NINTENDO_3DS )
+#include <ctr/thread_local.h>
+#endif
 
 namespace
 {
@@ -84,10 +88,19 @@ uint32_t Rand::uniformIntDistribution( const uint32_t from, const uint32_t to, P
 
 Rand::PCG32 & Rand::CurrentThreadRandomDevice()
 {
+#if defined( TARGET_NINTENDO_3DS )
+    static ThreadLocal<Rand::PCG32> threadLocalGen( []() {
+        std::random_device rd;
+        return Rand::PCG32( rd );
+    } );
+
+    return threadLocalGen.get();
+#else
     thread_local std::random_device rd;
     thread_local PCG32 gen( rd );
 
     return gen;
+#endif
 }
 
 uint32_t Rand::Get( uint32_t from, uint32_t to /* = 0 */ )

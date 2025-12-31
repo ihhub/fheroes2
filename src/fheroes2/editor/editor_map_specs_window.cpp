@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1245,7 +1245,7 @@ namespace
 
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                         if ( _townToCapture.first == _mapTownInfos[i].tileIndex && _townToCapture.second == _mapTownInfos[i].color ) {
-                            initiallySelectedTownIndex = i;
+                            initiallySelectedTownIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedTownIndex );
                             break;
                         }
@@ -1304,7 +1304,7 @@ namespace
 
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                         if ( _heroToKill.first == _mapHeroInfos[i].tileIndex && _heroToKill.second == _mapHeroInfos[i].color ) {
-                            initiallySelectedHeroIndex = i;
+                            initiallySelectedHeroIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedHeroIndex );
                             break;
                         }
@@ -1772,7 +1772,7 @@ namespace
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                         if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex
                              && static_cast<PlayerColor>( _townToLose[1] ) == _mapTownInfos[i].color ) {
-                            initiallySelectedTownIndex = i;
+                            initiallySelectedTownIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedTownIndex );
                             break;
                         }
@@ -1822,7 +1822,7 @@ namespace
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                         if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex
                              && static_cast<PlayerColor>( _heroToLose[1] ) == _mapHeroInfos[i].color ) {
-                            initiallySelectedHeroIndex = i;
+                            initiallySelectedHeroIndex = static_cast<int>( i );
                             listbox.SetCurrent( initiallySelectedHeroIndex );
                             break;
                         }

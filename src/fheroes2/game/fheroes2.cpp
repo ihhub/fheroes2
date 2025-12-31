@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -50,6 +50,11 @@
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
 #pragma GCC diagnostic pop
+#endif
+
+#if defined( TARGET_NINTENDO_3DS )
+#include <3ds.h>
+#include <ctr/init.h>
 #endif
 
 #if defined( _WIN32 )
@@ -285,6 +290,10 @@ namespace
 
 int main( int argc, char ** argv )
 {
+#if defined( TARGET_NINTENDO_3DS )
+    CTR::ctr_sys_init();
+#endif
+
 // SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
 #if defined( _WIN32 )
     assert( argc == __argc );
@@ -310,7 +319,7 @@ int main( int argc, char ** argv )
         std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
                                                                           fheroes2::SystemInitializationComponent::Video };
 
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( TARGET_NINTENDO_3DS )
         coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
 #endif
 

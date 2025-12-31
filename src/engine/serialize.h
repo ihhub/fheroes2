@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -96,6 +96,13 @@
 #define htole32( x ) ( x )
 #define be32toh( x ) __bswap32( x )
 #define le32toh( x ) ( x )
+
+#elif defined( TARGET_NINTENDO_3DS )
+#include <machine/endian.h>
+#include <sys/endian.h>
+#define LITTLE_ENDIAN _LITTLE_ENDIAN
+#define BIG_ENDIAN _BIG_ENDIAN
+#define BYTE_ORDER _BYTE_ORDER
 
 #else
 // POSIX 1003.1-2024

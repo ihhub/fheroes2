@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -848,8 +848,8 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         // If AI has less than three heroes at the start of the turn we assume
         // that he will buy another one in this turn and allow progress to increase only for 2 points.
-        uint32_t const endProgressValue
-            = ( currentProgressValue == 1 ) ? std::min<uint32_t>( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min<uint32_t>( currentProgressValue + 2U, 9U );
+        uint32_t const endProgressValue = ( currentProgressValue == 1 ) ? std::min<uint32_t>( ( static_cast<uint32_t>( heroes.size() ) * 2U ) + 1U, 8U )
+                                                                        : std::min<uint32_t>( currentProgressValue + 2U, 9U );
 
         bool moreTaskForHeroes = false;
         const fheroes2::GameMode gameState = HeroesTurn( heroes, currentProgressValue, endProgressValue, moreTaskForHeroes );
