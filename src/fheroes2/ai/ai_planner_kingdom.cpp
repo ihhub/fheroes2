@@ -589,7 +589,7 @@ void AI::Planner::removePriorityAttackTarget( const int32_t tileIndex )
         }
 
         // check if a secondary task still present
-        std::set<int> & defenseSecondaries = defenseTask->second.secondaryTaskTileId;
+        std::set<int32_t> & defenseSecondaries = defenseTask->second.secondaryTaskTileId;
         defenseSecondaries.erase( tileIndex );
         if ( defenseSecondaries.empty() ) {
             // if no one else was threatening this then we no longer have to defend
@@ -849,7 +849,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         // If AI has less than three heroes at the start of the turn we assume
         // that he will buy another one in this turn and allow progress to increase only for 2 points.
         uint32_t const endProgressValue
-            = ( currentProgressValue == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( currentProgressValue + 2U, 9U );
+            = ( currentProgressValue == 1 ) ? std::min<uint32_t>( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min<uint32_t>( currentProgressValue + 2U, 9U );
 
         bool moreTaskForHeroes = false;
         const fheroes2::GameMode gameState = HeroesTurn( heroes, currentProgressValue, endProgressValue, moreTaskForHeroes );

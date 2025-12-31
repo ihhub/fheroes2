@@ -71,7 +71,7 @@ namespace Editor
         eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & computerPlayerColors;
 
         // First occurrence day logically has no limits but we still have to check it for some human logical value.
-        eventMetadata.firstOccurrenceDay = std::clamp( eventMetadata.firstOccurrenceDay, 1U, static_cast<uint32_t>( lastDayForEvents ) );
+        eventMetadata.firstOccurrenceDay = std::clamp<uint32_t>( eventMetadata.firstOccurrenceDay, 1U, static_cast<uint32_t>( lastDayForEvents ) );
 
         eventMetadata.repeatPeriodInDays = std::min( eventMetadata.repeatPeriodInDays, static_cast<uint32_t>( daysInYear ) );
 

@@ -1490,7 +1490,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
-            int temp{ MP2::OBJ_NONE };
+            int32_t temp{ MP2::OBJ_NONE };
             stream >> temp;
 
             type = static_cast<MP2::MapObjectType>( temp );
@@ -1786,7 +1786,7 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
         obj.colors = static_cast<PlayerColorsSet>( temp );
     }

@@ -39,7 +39,7 @@
 class IStreamBase;
 class OStreamBase;
 
-enum class GameVersion : int
+enum class GameVersion : int32_t
 {
     SUCCESSION_WARS = 0,
     PRICE_OF_LOYALTY = 1,

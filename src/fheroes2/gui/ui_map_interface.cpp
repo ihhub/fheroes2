@@ -47,8 +47,10 @@ namespace Interface
                                         - ( windowSize.height / 2 ) };
 
         // Clamp area to the edges of the area.
-        windowsPos.x = std::clamp( windowsPos.x, fheroes2::borderWidthPx, ( interfaceArea.width - windowSize.width ) + fheroes2::borderWidthPx );
-        windowsPos.y = std::clamp( windowsPos.y, fheroes2::borderWidthPx, ( interfaceArea.height - windowSize.height ) + fheroes2::borderWidthPx );
+        windowsPos.x = std::clamp<int32_t>( windowsPos.x, fheroes2::borderWidthPx,
+                                               ( interfaceArea.width - windowSize.width ) + fheroes2::borderWidthPx );
+        windowsPos.y = std::clamp<int32_t>( windowsPos.y, fheroes2::borderWidthPx,
+                                               ( interfaceArea.height - windowSize.height ) + fheroes2::borderWidthPx );
 
         return { windowsPos.x, windowsPos.y, windowSize.width, windowSize.height };
     }

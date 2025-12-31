@@ -456,8 +456,8 @@ void Interface::BorderWindow::SetPosition( int32_t x, int32_t y )
     if ( Settings::Get().isHideInterfaceEnabled() ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        x = std::max( 0, std::min( x, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
-        y = std::max( 0, std::min( y, display.height() - ( area.height + border.BorderHeight() * 2 ) ) );
+        x = std::max<int32_t>( 0, std::min<int32_t>( x, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
+        y = std::max<int32_t>( 0, std::min<int32_t>( y, display.height() - ( area.height + border.BorderHeight() * 2 ) ) );
 
         area.x = x + border.BorderWidth();
         area.y = y + border.BorderHeight();

@@ -822,7 +822,7 @@ const char * Monster::getRandomRaceMonstersName( const uint32_t building )
     }
 }
 
-int Monster::ICNMonh() const
+int32_t Monster::ICNMonh() const
 {
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }

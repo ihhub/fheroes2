@@ -226,8 +226,8 @@ namespace Maps::Random_Generator
     fheroes2::Point Region::adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat )
     {
         const fheroes2::Point startingLocation = Maps::GetPoint( centerIndex );
-        const int32_t castleX = std::min( std::max( startingLocation.x, 4 ), mapFormat.width - 4 );
-        const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
+        const int32_t castleX = std::min<int32_t>( std::max<int32_t>( static_cast<int32_t>(startingLocation.x), static_cast<int32_t>(4) ), static_cast<int32_t>(mapFormat.width - 4) );
+        const int32_t castleY = std::min<int32_t>( std::max<int32_t>( static_cast<int32_t>(startingLocation.y), static_cast<int32_t>(4) ), static_cast<int32_t>(mapFormat.width - 4) );
         centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
         return { castleX, castleY };
     }

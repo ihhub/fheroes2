@@ -659,7 +659,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                 scenarioList.RemoveSelected();
 
                 scenarioList.updateScrollBarImage();
-                scenarioList.SetCurrent( std::max( selectedId - 1, 0 ) );
+                scenarioList.SetCurrent( std::max<int32_t>( selectedId - 1, 0 ) );
 
                 // Remove the map from all lists.
                 small.erase( std::remove_if( small.begin(), small.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),

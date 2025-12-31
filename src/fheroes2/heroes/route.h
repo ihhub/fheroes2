@@ -73,7 +73,7 @@ namespace Route
 
         int32_t currentIndex = -1;
         int32_t from = -1;
-        int direction = Direction::CENTER;
+        int32_t direction = Direction::CENTER;
         uint32_t penalty = 0;
     };
 

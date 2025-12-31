@@ -431,13 +431,13 @@ int32_t Artifact::getSpellId() const
     return Spell::NONE;
 }
 
-int Artifact::Rand( ArtLevel lvl )
+int32_t Artifact::Rand( ArtLevel lvl )
 {
-    std::vector<int> v;
+    std::vector<int32_t> v;
     v.reserve( 25 );
 
     // if possibly: make unique on map
-    for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+    for ( int32_t art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
         const Artifact artifact{ art };
 
         if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) ) {
@@ -446,7 +446,7 @@ int Artifact::Rand( ArtLevel lvl )
     }
 
     if ( v.empty() ) {
-        for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+        for ( int32_t art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
             const Artifact artifact{ art };
 
             if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) ) {
@@ -455,7 +455,7 @@ int Artifact::Rand( ArtLevel lvl )
         }
     }
 
-    int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
+    int32_t res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
     artifactGlobalStatus[res] |= ART_RNDUSED;
 
     return res;

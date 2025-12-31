@@ -64,7 +64,7 @@ public:
 
     // All artifact IDs are by value 1 bigger than in the original game.
     // This is done to support new artifact addition and also align with the rest of object types.
-    enum : int
+    enum : int32_t
     {
         UNKNOWN = 0,
 
@@ -188,7 +188,7 @@ public:
         ARTIFACT_COUNT
     };
 
-    Artifact( int art = UNKNOWN )
+    Artifact( int32_t art = UNKNOWN )
         : id( art > UNKNOWN && art < ARTIFACT_COUNT ? art : UNKNOWN )
         , ext( 0 )
     {
@@ -259,7 +259,7 @@ public:
         return fheroes2::getArtifactData( id ).getDescription( ext );
     }
 
-    static int Rand( ArtLevel );
+    static int32_t Rand( ArtLevel );
     static Artifact getArtifactFromMapSpriteIndex( const uint32_t index );
     static const char * getDiscoveryDescription( const Artifact & );
 
@@ -267,8 +267,8 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Artifact & art );
     friend IStreamBase & operator>>( IStreamBase & stream, Artifact & art );
 
-    int id;
-    int ext;
+    int32_t id;
+    int32_t ext;
 };
 
 uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );

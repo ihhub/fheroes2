@@ -261,7 +261,7 @@ public:
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
-    static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1, const std::set<int32_t> & spellsToExclude = {} );
+    static std::vector<int32_t> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1, const std::set<int32_t> & spellsToExclude = {} );
 
     static int32_t CalculateDimensionDoorDistance();
 
@@ -269,5 +269,5 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Spell & spell );
     friend IStreamBase & operator>>( IStreamBase & stream, Spell & spell );
 
-    int id;
+    int32_t id;
 };

@@ -80,9 +80,9 @@ namespace Campaign
         friend OStreamBase & operator<<( OStreamBase & stream, const ScenarioInfoId & data );
         friend IStreamBase & operator>>( IStreamBase & stream, ScenarioInfoId & data );
 
-        int campaignId{ -1 };
+        int32_t campaignId{ -1 };
 
-        int scenarioId{ -1 };
+        int32_t scenarioId{ -1 };
     };
 
     struct ScenarioBonusData

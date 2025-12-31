@@ -493,8 +493,8 @@ private:
     uint32_t week = 0;
     uint32_t month = 0;
 
-    int heroIdAsWinCondition = Heroes::UNKNOWN;
-    int heroIdAsLossCondition = Heroes::UNKNOWN;
+    int32_t heroIdAsWinCondition = Heroes::UNKNOWN;
+    int32_t heroIdAsLossCondition = Heroes::UNKNOWN;
 
     MapObjects map_objects;
 

@@ -456,7 +456,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const int32_t redistributeMin = std::min( 1, redistributeMax );
+    const int32_t redistributeMin = std::min<int32_t>( 1, redistributeMax );
     const int spacer = 10;
     const fheroes2::Text header( troopName, fheroes2::FontType::normalYellow() );
     const int32_t headerHeight = header.height() + 6;

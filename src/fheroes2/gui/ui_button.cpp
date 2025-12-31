@@ -939,7 +939,7 @@ namespace fheroes2
         // Add extra vertical margin depending on how many lines of text there are.
         if ( maxHeight > getFontHeight( buttonFontType.size ) ) {
             const int32_t maxAllowedHeight = 200;
-            maxHeight = std::clamp( maxHeight, 56, maxAllowedHeight );
+            maxHeight = std::clamp<int32_t>( maxHeight, 56, maxAllowedHeight );
         }
         else {
             maxHeight += 10;

@@ -938,7 +938,7 @@ namespace fheroes2
                                                               const Point & offset )
         : _minimum( std::min( maximum, minimum ) )
         , _maximum( std::max( maximum, minimum ) )
-        , _step( std::max( step, 1 ) )
+        , _step( std::max<int32_t>( step, 1 ) )
         , _value( current )
         , _timedButtonUp( [this]() { return _buttonUp.isPressed(); } )
         , _timedButtonDown( [this]() { return _buttonDown.isPressed(); } )

@@ -1227,7 +1227,7 @@ IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
     }
 

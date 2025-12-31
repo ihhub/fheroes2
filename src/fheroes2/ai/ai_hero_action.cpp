@@ -749,7 +749,7 @@ namespace
                         // If AI is extremely low on gold consider taking it
                         if ( kingdomGold < 3000 ) {
                             // Safeguard the calculation since we're working with unsigned values
-                            return ( std::max( exp, 500U ) - 500 ) / 15;
+                            return ( std::max<uint32_t>( exp, 500U ) - 500 ) / 15;
                         }
 
                         // Otherwise Champion always picks experience
@@ -760,7 +760,7 @@ namespace
                         return ( role == Heroes::Role::FIGHTER && exp >= 1500 ) ? 10 : 0;
                     }
 
-                    uint32_t value = std::max( exp, 500U ) - 500;
+                    uint32_t value = std::max<uint32_t>( exp, 500U ) - 500;
                     if ( role == Heroes::Role::FIGHTER ) {
                         value += 500;
                     }

@@ -210,7 +210,8 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         const int32_t w = std::min( fheroes2::tileWidthPx * ( distance + 1 ), gameAreaROI.width );
         const int32_t h = std::min( fheroes2::tileWidthPx * ( distance + 1 ), gameAreaROI.height );
 
-        return { isHideInterface ? x : std::max( x, fheroes2::borderWidthPx ), isHideInterface ? y : std::max( y, fheroes2::borderWidthPx ), w, h };
+        return { isHideInterface ? x : std::max<int32_t>( x, fheroes2::borderWidthPx ),
+                 isHideInterface ? y : std::max<int32_t>( y, fheroes2::borderWidthPx ), w, h };
     }();
 
     if ( isHideInterface ) {

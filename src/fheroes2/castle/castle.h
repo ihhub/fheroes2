@@ -426,7 +426,7 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
     friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
 
-    int _race{ Race::NONE };
+    int32_t _race{ Race::NONE };
     uint32_t _constructedBuildings{ 0 };
     uint32_t _disabledBuildings{ 0 };
 

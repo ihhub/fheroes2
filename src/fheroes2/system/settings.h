@@ -412,7 +412,7 @@ private:
     fheroes2::ResolutionInfo _resolutionInfo;
     fheroes2::Point _windowPos;
 
-    int _gameDifficulty;
+    int32_t _gameDifficulty;
 
     std::string _programPath;
 
@@ -433,7 +433,7 @@ private:
     int scroll_speed;
     int battle_speed;
 
-    int game_type;
+    int32_t game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
 

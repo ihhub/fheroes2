@@ -94,7 +94,7 @@ namespace
             }
 
             const int32_t maxCount = static_cast<int32_t>( saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount() );
-            int32_t redistributeCount = isSameTroopType ? std::min( 1, maxCount ) : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
+            int32_t redistributeCount = isSameTroopType ? std::min<int32_t>( 1, maxCount ) : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
 
             bool useFastSplit = !isSameTroopType;
             const int32_t slots = Dialog::ArmySplitTroop( ( freeSlots > static_cast<int32_t>( overallCount ) ? static_cast<int32_t>( overallCount ) : freeSlots ),

@@ -160,7 +160,7 @@ public:
         return id != m.id;
     }
 
-    int GetID() const
+    int32_t GetID() const
     {
         return id;
     }
@@ -296,7 +296,7 @@ public:
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
 
-    int ICNMonh() const;
+    int32_t ICNMonh() const;
 
     uint32_t GetSpriteIndex() const
     {
@@ -327,5 +327,5 @@ protected:
 
     static Monster FromDwelling( int race, uint32_t dw );
 
-    int id;
+    int32_t id;
 };

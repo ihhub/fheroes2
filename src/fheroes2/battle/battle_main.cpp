@@ -240,7 +240,7 @@ namespace
 
         const uint32_t necromancyPercent = GetNecromancyPercent( hero );
 
-        uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U );
+        uint32_t raiseCount = std::max<uint32_t>( enemyTroopsKilled * necromancyPercent / 100, 1U );
         army.JoinTroop( Monster::SKELETON, raiseCount, false );
 
         if ( isControlHuman ) {

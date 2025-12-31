@@ -114,13 +114,13 @@ namespace Campaign
 
         void setCurrentScenarioInfo( const ScenarioInfoId & scenarioInfoId, const int32_t bonusId = -1 );
         void addCurrentMapToFinished();
-        void addCampaignAward( const int awardID );
+        void addCampaignAward( const int32_t awardID );
         void setCarryOverTroops( const Troops & troops );
         void reset();
         void addDaysPassed( const uint32_t days );
-        void removeCampaignAward( const int awardID );
+        void removeCampaignAward( const int32_t awardID );
 
-        void setEnemyDefeatedAward( const int heroId );
+        void setEnemyDefeatedAward( const int32_t heroId );
 
         void removeAllAwards()
         {
@@ -138,7 +138,7 @@ namespace Campaign
         std::vector<ScenarioInfoId> _finishedMaps;
         std::vector<uint32_t> _daysPassed;
         std::vector<int32_t> _bonusesForFinishedMaps;
-        std::vector<int> _obtainedCampaignAwards;
+        std::vector<int32_t> _obtainedCampaignAwards;
         std::vector<Troop> _carryOverTroops;
 
         ScenarioInfoId _currentScenarioInfoId;

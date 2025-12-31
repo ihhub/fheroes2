@@ -107,7 +107,7 @@ inline IStreamBase & operator>>( IStreamBase & stream, ObjectColor & objectColor
                    "Remove this operator completely. It will be automatically replaced by IStreamBase & operator>>( std::pair<> & )" );
 
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
 
         objectColor.second = static_cast<PlayerColor>( temp );

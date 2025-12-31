@@ -145,7 +145,7 @@ uint32_t HeroBase::getManaIndexSprite() const
     const uint32_t value = _spellPoints / 5U + 1U;
 
     // Valid sprite index range is (0 - 25).
-    return std::min( value, 25U );
+    return std::min<uint32_t>( value, 25U );
 }
 
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const

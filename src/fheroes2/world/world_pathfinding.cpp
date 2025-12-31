@@ -584,7 +584,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     // need to reserve SP can be neglected.
     const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor );
 
-    const int32_t townGateCastleIndex = [this, &hero]() {
+    const int32_t townGateCastleIndex = [this, &hero]() -> int32_t {
         static const Spell townGate( Spell::TOWNGATE );
 
         if ( !hero.CanCastSpell( townGate ) ) {

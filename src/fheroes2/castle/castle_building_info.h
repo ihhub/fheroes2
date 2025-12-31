@@ -26,7 +26,7 @@
 #include "castle.h"
 #include "math_base.h"
 
-enum class GameVersion : int;
+enum class GameVersion : int32_t;
 
 namespace fheroes2
 {

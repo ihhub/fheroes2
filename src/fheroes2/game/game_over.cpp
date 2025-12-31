@@ -685,7 +685,7 @@ IStreamBase & GameOver::operator>>( IStreamBase & stream, Result & res )
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
         res._colors = static_cast<PlayerColorsSet>( temp );
     }

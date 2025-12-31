@@ -53,7 +53,7 @@ public:
     }
 
 private:
-    int _id;
+    int32_t _id;
     uint32_t _surrenderDay;
 
     friend OStreamBase & operator<<( OStreamBase & stream, const Recruit & recruit );

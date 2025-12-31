@@ -493,7 +493,7 @@ namespace
                     bannedSpellsContainer[level - 1].push_back( spellId );
                 }
 
-                auto getMageGuildTitle = []( const int level ) {
+                auto getMageGuildTitle = []( const int32_t level ) {
                     switch ( level ) {
                     case 1:
                         return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD1 );

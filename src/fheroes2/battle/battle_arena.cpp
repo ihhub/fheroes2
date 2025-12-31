@@ -117,9 +117,9 @@ namespace
         return *iter;
     }
 
-    int GetCovr( int ground, Rand::PCG32 & gen )
+    int32_t GetCovr( int ground, Rand::PCG32 & gen )
     {
-        std::vector<int> covrs;
+        std::vector<int32_t> covrs;
         covrs.reserve( 6 );
 
         switch ( ground ) {

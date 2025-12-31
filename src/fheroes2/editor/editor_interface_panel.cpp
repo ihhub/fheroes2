@@ -377,7 +377,7 @@ namespace Interface
 
         // Brush size buttons position. Shown on the terrain and erasure instrument panels.
         offsetX = displayX + 14;
-        int32_t offsetY = displayY + std::min( instrumentPanelHeight - 27, 135 );
+        int32_t offsetY = displayY + std::min<int32_t>( instrumentPanelHeight - 27, 135 );
         for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
             _brushSizeButtons[i].setPosition( offsetX, offsetY );
             _brushSizeButtonsRect[i] = _brushSizeButtons[i].area();
