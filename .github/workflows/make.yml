@@ -337,6 +337,111 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
+  make-n3ds:
+    name: Make (Nintendo 3DS)
+    runs-on: ubuntu-latest
+    container: devkitpro/devkitarm:latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v6
+    - name: Cache SDL (3DS)
+      id: cache-sdl
+      uses: actions/cache@v5
+      with:
+        path: /opt/devkitpro/portlibs/3ds
+        key: sdl-3ds-sdl2-2.32.10-mixer-2.8.1
+    - name: Install dependencies
+      run: |
+        # TODO: remove this temporary workaround
+        sudo rm -f /etc/apt/sources.list.d/bullseye-backports.list
+        #
+        sudo apt-get -y update
+        sudo apt-get -y install gettext p7zip-full
+    - name: Prepare SDL2 for 3DS
+      if: steps.cache-sdl.outputs.cache-hit != 'true'
+      run: |
+        set -eux
+
+        git clone \
+          --branch release-2.32.10 \
+          --depth 1 \
+          https://github.com/libsdl-org/SDL.git
+
+        cd SDL
+        mkdir build
+        cd build
+
+        cmake .. -G "Unix Makefiles" \
+          -DCMAKE_TOOLCHAIN_FILE=/opt/devkitpro/cmake/3DS.cmake \
+          -DCMAKE_INSTALL_PREFIX=/opt/devkitpro/portlibs/3ds \
+          -DSDL_SHARED=OFF \
+          -DSDL_STATIC=ON
+
+        make -j"$(nproc)"
+        make install
+
+        cd ../../
+
+        git clone \
+          --branch release-2.8.1 \
+          --depth 1 \
+          https://github.com/libsdl-org/SDL_mixer.git
+
+        cd SDL_mixer
+        mkdir build
+        cd build
+
+        cmake .. -G "Unix Makefiles" \
+          -DCMAKE_TOOLCHAIN_FILE=/opt/devkitpro/cmake/3DS.cmake \
+          -DCMAKE_INSTALL_PREFIX=/opt/devkitpro/portlibs/3ds \
+          -DBUILD_SHARED_LIBS=OFF \
+          -DSDL2MIXER_SAMPLES=OFF \
+          -DSDL2MIXER_FLAC=OFF \
+          -DSDL2MIXER_OPUS_SHARED=OFF \
+          -DSDL2MIXER_XMP_SHARED=OFF \
+          -DSDL2MIXER_MOD=OFF \
+          -DSDL2MIXER_MIDI=ON \
+          -DSDL2MIXER_MIDI_TIMIDITY=ON \
+          -DSDL2MIXER_MIDI_FLUIDSYNTH=OFF \
+          -DSDL2MIXER_WAVPACK=OFF
+        
+        make -j"$(nproc)"
+        make install
+
+    - name: Build
+      run: |
+        export PATH=$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/3ds/bin:$DEVKITPRO/devkitarm/bin:$PATH
+        make -f Makefile.n3ds -j "$(nproc)"
+      env:
+        FHEROES2_STRICT_COMPILATION: ON
+        DEVKITPRO: /opt/devkitpro
+    - name: Generate translations
+      run: |
+        make -C files/lang -j "$(nproc)"
+    - name: Create package
+      run: |
+        7z a -bb1 -tzip -- fheroes2_n3ds.zip LICENSE changelog.txt fheroes2.3dsx ./docs/README.txt files/data/*.h2d files/lang/*.mo maps/*.fh2m
+    - uses: actions/upload-artifact@v6
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_n3ds.zip
+        path: fheroes2_n3ds.zip
+        if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: fheroes2_n3ds.zip
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Nintendo 3DS build (latest commit)
+        tag: fheroes2-3ds-sdl2_dev
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
   make-emscripten:
     strategy:
       matrix:
