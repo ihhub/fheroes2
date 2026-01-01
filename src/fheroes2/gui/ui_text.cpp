@@ -1182,7 +1182,7 @@ namespace fheroes2
             else {
                 area.height = std::max( area.height, textArea.y - area.y + textArea.height );
             }
-
+            
             area.width += textArea.x + textArea.width;
         }
 
