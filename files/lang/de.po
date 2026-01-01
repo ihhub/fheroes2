@@ -151,6 +151,14 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 
 msgid ""
 "NEW\n"
@@ -166,11 +174,12 @@ msgstr ""
 "SPIEL\n"
 "LADEN"
 
-#, fuzzy
 msgid ""
 "RESTART\n"
 "GAME"
-msgstr "NEUSTART"
+msgstr ""
+"NEU\n"
+"STARTEN"
 
 msgid ""
 "SAVE\n"
@@ -183,20 +192,25 @@ msgid ""
 "QUICK\n"
 "SAVE"
 msgstr ""
+"SCHNELL-\n"
+"SPEICHERN"
 
 msgid "QUIT"
 msgstr "BEENDEN"
 
-#, fuzzy
 msgid ""
 "START\n"
 "MAP"
-msgstr "START"
+msgstr ""
+"KARTE\n"
+"STARTEN"
 
 msgid ""
 "MAIN\n"
 "MENU"
 msgstr ""
+"HAUPT-\n"
+"MENÜ"
 
 msgid ""
 "NEW\n"
@@ -231,6 +245,8 @@ msgstr ""
 
 msgid "SETTINGS"
 msgstr ""
+"EINSTEL-\n"
+"LUNGEN"
 
 msgid ""
 "STANDARD\n"
@@ -307,7 +323,7 @@ msgid "VIEW INTRO"
 msgstr "INTRO ANZEIGEN"
 
 msgid "RESET"
-msgstr ""
+msgstr "ZURÜCKS."
 
 msgid "START"
 msgstr "START"
@@ -3090,9 +3106,8 @@ msgstr "Insgesamt: "
 msgid "Need: "
 msgstr "Bedarf: "
 
-#, fuzzy
 msgid "Restart Game"
-msgstr "Neustart"
+msgstr "Spiel neu starten"
 
 msgid "There was an issue during saving."
 msgstr "Es gab ein Problem beim Speichern."
@@ -3109,7 +3124,6 @@ msgstr "Spiel laden"
 msgid "Load a previously saved game."
 msgstr "Zuvor gespeichertes Spiel laden."
 
-#, fuzzy
 msgid "Restart the scenario."
 msgstr "Neustart des aktuellen Szenarios."
 
@@ -3119,9 +3133,8 @@ msgstr "Spiel speichern"
 msgid "Save the current game."
 msgstr "Das aktuelle Spiel speichern."
 
-#, fuzzy
 msgid "Quick Save"
-msgstr "Quick Silver"
+msgstr "Schnellspeichern"
 
 #, fuzzy
 msgid "Save the current game without name selection."
@@ -3445,9 +3458,8 @@ msgstr "(leer)"
 msgid "already learned"
 msgstr "schon gelernt"
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Baum des Wissens"
+msgstr "frei"
 
 msgid "already claimed"
 msgstr "bereits beansprucht"
@@ -4420,7 +4432,7 @@ msgstr ""
 "gespeicherten Änderungen an der aktuellen Karte gehen verloren)."
 
 msgid "Main Menu"
-msgstr ""
+msgstr "Hauptmenü"
 
 #, fuzzy
 msgid ""
@@ -4448,21 +4460,18 @@ msgid ""
 "be playable."
 msgstr ""
 
-#, fuzzy
 msgid "Start Map"
-msgstr "Neustart"
+msgstr "Karte starten"
 
-#, fuzzy
 msgid ""
 "Do you wish to leave the Editor and start the map? (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Wollt Ihr wirklich eine neue Karte laden? (Nicht gespeicherte Änderungen an "
+"Sind Sie sicher, dass Sie den Karteneditor verlassen und die Karte spielen wollen? (Nicht gespeicherte Änderungen an "
 "der aktuellen Karte gehen verloren)."
 
-#, fuzzy
 msgid "Create a new map from scratch."
-msgstr "Neue Karte von Beginn Menü"
+msgstr "Komplett neue Karte erstellen."
 
 msgid "New Map"
 msgstr "Neue Karte"
@@ -4482,12 +4491,11 @@ msgstr "Speichern der aktuellen Karte."
 msgid "Quit out of the map editor."
 msgstr "Den Karteneditor verlassen."
 
-#, fuzzy
 msgid "Return to the game's Main Menu."
-msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+msgstr "Zum Hauptmenü zurückkehren."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
-msgstr ""
+msgstr "Den Karteneditor verlassen und die Karte im Standard Spielmodus spielen."
 
 msgid "Input %{object} text"
 msgstr ""
@@ -8727,21 +8735,19 @@ msgstr "Den Helden verlieren: %{name}."
 msgid "Click to change class."
 msgstr "Klicken um die nächste Stadt anzuzeigen."
 
-#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
-"Die \"Verstreute\" Kampfformation verteilt die Armeen von oben bis unten "
+"Die \"Verstreute\" Gefechtsformation verteilt Ihre Armeen von oben bis unten "
 "über das Schlachtfeld, mit wenigstens einem Freiraum zwischen jeder Armee."
 
-#, fuzzy
 msgid ""
 "'Grouped' combat formation bunches the hero's army together in the center of "
 "their side of the battlefield."
 msgstr ""
-"Die \"Gruppierte\" Kampfformation bündelt Eure Armee in der Mitte Eurer "
-"Seite des Schlachtfelds."
+"Die \"Gruppierte\" Gefechtsformation bündelt Ihre Armee im Zentrum Ihrer "
+"Seite des Schlachtfelds zusammen."
 
 msgid "Exit Hero Screen"
 msgstr "Heldenbildschirm verlassen"
