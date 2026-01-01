@@ -639,11 +639,14 @@ namespace fheroes2
                             // The '-' symbol has been found. In this case we consider everything after it as a separate word.
                             const int32_t postHyphenCharCount = static_cast<int32_t>( data - hyphenPos ) - 1;
 
-                            lineCharCount -= postHyphenCharCount;
-                            lineWidth -= getLineWidth( data - postHyphenCharCount, postHyphenCharCount, charHandler, true );
+                            // Only split at the hyphen if there are characters after it to move to the next line.
+                            if ( postHyphenCharCount > 0 ) {
+                                lineCharCount -= postHyphenCharCount;
+                                lineWidth -= getLineWidth( data - postHyphenCharCount, postHyphenCharCount, charHandler, true );
 
-                            data = hyphenPos;
-                            ++data;
+                                data = hyphenPos;
+                                ++data;
+                            }
                         }
                         else if ( firstLineOffsetX > 0 && ( textLineInfos.empty() || textLineInfos.back().offsetY == offsetY ) ) {
                             // This word was not the first in the line so we can move it to the next line.
