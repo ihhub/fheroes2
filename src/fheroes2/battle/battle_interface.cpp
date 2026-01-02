@@ -5034,7 +5034,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
             if ( ( borderDistance + rainbowThickness / 2 ) < rainbowAscend ) {
                 isRainbowFromRight = !isRainbowFromRight;
             }
-            rainbowDescend = std::max<int32_t>( 1, static_cast<int32_t>( ( 0.0342 * rainbowLength ) - 4.868 ) );
+            rainbowDescend = std::max<int32_t>( 1, static_cast<int32_t>( 0.0342 * rainbowLength - 4.868 ) );
             rainbowTop = static_cast<int32_t>( 0.8524 * rainbowLength + 17.7 );
             drawOffset
                 = isRainbowFromRight ? ( rainbowDescendPoint.x - rainbowDescend - rainbowThickness / 2 ) : ( rainbowDescendPoint.x - rainbowDescend - rainbowAscend );
@@ -5045,7 +5045,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
             pow2ratio = 0.0;
             pow4ratio = 0.5;
             rainbowLength = borderDistance;
-            rainbowDescend = std::max<int32_t>( 1, static_cast<int32_t>( ( 0.1233 * rainbowLength ) + 0.7555 ) );
+            rainbowDescend = std::max<int32_t>( 1, static_cast<int32_t>( 0.1233 * rainbowLength + 0.7555 ) );
             rainbowTop = static_cast<int32_t>( 0.6498 * rainbowLength + 11.167 );
             drawOffset = std::max<int32_t>( 10, rainbowDescendPoint.y - rainbowDescend );
         }

@@ -1538,7 +1538,7 @@ namespace fheroes2
             for ( int32_t x = 0; x < halfWidth; ++x ) {
                 // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
                 // We limit the step power to 30 to not overflow the 32 bit 'stepY'.
-                const int32_t stepPower = std::min<int32_t>( 30, ( ( halfWidth - x ) / 2 ) + 1 );
+                const int32_t stepPower = std::min<int32_t>( 30, ( halfWidth - x ) / 2 + 1 );
                 const int32_t stepY = 1 << stepPower;
 
                 // The point position in dithered pattern.
@@ -1652,7 +1652,7 @@ namespace fheroes2
             for ( int32_t y = 0; y < halfHeight; ++y ) {
                 // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
                 // We limit the step power to 30 to not overflow the 32 bit 'stepX'.
-                const int32_t stepPower = std::min<int32_t>( 30, ( ( halfHeight - y ) / 2 ) + 1 );
+                const int32_t stepPower = std::min<int32_t>( 30, ( halfHeight - y ) / 2 + 1 );
                 const int32_t stepX = 1 << stepPower;
 
                 // The point position in dithered pattern.
