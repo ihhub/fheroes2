@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1177,7 +1177,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
     // Assess the current threat level and decide whether to retreat to another position
-    const int32_t retreatPositionIndex = [&arena, &currentUnit, &enemies]() {
+    const int32_t retreatPositionIndex = [&arena, &currentUnit, &enemies]() -> int32_t {
         // There is no point in trying to retreat from flying units regardless of their speed
         if ( std::any_of( enemies.begin(), enemies.end(), []( const Battle::Unit * enemy ) {
                  assert( enemy != nullptr );
@@ -1320,7 +1320,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
 
             // If the current position is not in danger, then nothing special should be done
             if ( characteristics.threateningEnemiesIndexes.empty() ) {
-                return -1;
+                return static_cast<int32_t>( -1 );
             }
 
             const uint32_t currentUnitSpeed = currentUnit.GetSpeed();
