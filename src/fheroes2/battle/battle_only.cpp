@@ -141,7 +141,7 @@ namespace
         fheroes2::Copy( terrainSelectionSprite, copyArea.x, copyArea.y, output, offset.x, offset.y, terrainIconSize.width, terrainIconSize.height );
         if ( terrainType == Maps::Ground::UNKNOWN ) {
             fheroes2::ApplyPalette( output, offset.x, offset.y, output, offset.x, offset.y, terrainIconSize.width, terrainIconSize.height,
-                PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+                                    PAL::GetPalette( PAL::PaletteType::PURPLE ) );
         }
     }
 
@@ -159,7 +159,7 @@ namespace
         case Maps::Ground::SWAMP:
             return Maps::Ground::LAVA;
         case Maps::Ground::LAVA:
-           return Maps::Ground::DESERT;
+            return Maps::Ground::DESERT;
         case Maps::Ground::DESERT:
             return Maps::Ground::DIRT;
         case Maps::Ground::DIRT:
