@@ -97,7 +97,7 @@ namespace
 
     void renderTerrain( const fheroes2::Point offset, const int32_t terrainType, fheroes2::Image & output )
     {
-        fheroes2::Text text{ _( "Terrain" ), fheroes2::FontType::smallWhite() };
+        const fheroes2::Text text{ _( "Terrain" ), fheroes2::FontType::smallWhite() };
         text.draw( offset.x + ( terrainIconSize.width - text.width() ) / 2, offset.y - 10, output );
 
         fheroes2::Point copyArea{};

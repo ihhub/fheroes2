@@ -354,8 +354,8 @@ void World::setUniformTerrain( const int32_t groundType )
 {
     const uint16_t terrainImageIndex = Maps::Ground::getTerrainStartImageIndex( groundType );
 
-    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        vec_tiles[i].setTerrain( terrainImageIndex, 0 );
+    for ( auto & tile : vec_tiles ) {
+        tile.setTerrain( terrainImageIndex, 0 );
     }
 }
 
