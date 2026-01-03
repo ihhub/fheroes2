@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-30 05:17+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-12-25 19:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1123,6 +1123,10 @@ msgstr "Людина"
 msgid "AI"
 msgstr "Комп'ютер"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Рельєф"
+
 msgid "Start"
 msgstr "Почати"
 
@@ -1139,6 +1143,16 @@ msgstr "Скинути"
 # Мовознавець Олександр Авраменко надає коректний переклад: "як усталено"
 msgid "Reset to default settings."
 msgstr "Скинути до усталених налаштувань."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."

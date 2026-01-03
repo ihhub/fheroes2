@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-02 12:36+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1096,6 +1096,10 @@ msgstr "Mensch"
 msgid "AI"
 msgstr "KI"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Gelände-Modus"
+
 msgid "Start"
 msgstr "Start"
 
@@ -1110,6 +1114,16 @@ msgstr "Neustart"
 
 msgid "Reset to default settings."
 msgstr "Auf Standardeinstellungen setzen."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Bitte wählt einen anderen Helden aus."

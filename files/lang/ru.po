@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-30 05:17+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-12-19 18:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1117,6 +1117,10 @@ msgstr "Человек"
 msgid "AI"
 msgstr "Компьютер"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Почва"
+
 msgid "Start"
 msgstr "Начать"
 
@@ -1131,6 +1135,16 @@ msgstr "Сбросить"
 
 msgid "Reset to default settings."
 msgstr "Сбросить до значений по умолчанию."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Пожалуйста, выберите другого героя."
