@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -152,7 +152,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
     for ( size_t level = 1; level <= mageGuildLevels.size(); ++level ) {
         const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
 
-        std::vector<int> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value() );
+        std::vector<int32_t> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value() );
 
         while ( freeSlots > 0 ) {
             assert( !allSpellsOfLevel.empty() );
@@ -328,7 +328,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary, const std::ma
     for ( size_t level = 1; level <= mageGuildLevels.size(); ++level ) {
         const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
 
-        std::vector<int> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value(), spellsInUse );
+        std::vector<int32_t> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value(), spellsInUse );
 
         while ( freeSlots > 0 ) {
             assert( !allSpellsOfLevel.empty() );

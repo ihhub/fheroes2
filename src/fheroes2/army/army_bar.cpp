@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -94,7 +94,7 @@ namespace
             }
 
             const int32_t maxCount = static_cast<int32_t>( saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount() );
-            int32_t redistributeCount = isSameTroopType ? std::min( 1, maxCount ) : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
+            int32_t redistributeCount = isSameTroopType ? std::min<int32_t>( 1, maxCount ) : static_cast<int32_t>( troopFrom.GetCount() ) / 2;
 
             bool useFastSplit = !isSameTroopType;
             const int32_t slots = Dialog::ArmySplitTroop( ( freeSlots > static_cast<int32_t>( overallCount ) ? static_cast<int32_t>( overallCount ) : freeSlots ),

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -493,7 +493,7 @@ namespace
                     bannedSpellsContainer[level - 1].push_back( spellId );
                 }
 
-                auto getMageGuildTitle = []( const int level ) {
+                auto getMageGuildTitle = []( const int32_t level ) {
                     switch ( level ) {
                     case 1:
                         return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD1 );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -117,9 +117,9 @@ namespace
         return *iter;
     }
 
-    int GetCovr( int ground, Rand::PCG32 & gen )
+    int32_t GetCovr( int ground, Rand::PCG32 & gen )
     {
-        std::vector<int> covrs;
+        std::vector<int32_t> covrs;
         covrs.reserve( 6 );
 
         switch ( ground ) {

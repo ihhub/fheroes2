@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -938,7 +938,7 @@ namespace fheroes2
                                                               const Point & offset )
         : _minimum( std::min( maximum, minimum ) )
         , _maximum( std::max( maximum, minimum ) )
-        , _step( std::max( step, 1 ) )
+        , _step( std::max<int32_t>( step, 1 ) )
         , _value( current )
         , _timedButtonUp( [this]() { return _buttonUp.isPressed(); } )
         , _timedButtonDown( [this]() { return _buttonDown.isPressed(); } )

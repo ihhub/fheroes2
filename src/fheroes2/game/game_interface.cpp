@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -210,7 +210,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         const int32_t w = std::min( fheroes2::tileWidthPx * ( distance + 1 ), gameAreaROI.width );
         const int32_t h = std::min( fheroes2::tileWidthPx * ( distance + 1 ), gameAreaROI.height );
 
-        return { isHideInterface ? x : std::max( x, fheroes2::borderWidthPx ), isHideInterface ? y : std::max( y, fheroes2::borderWidthPx ), w, h };
+        return { isHideInterface ? x : std::max<int32_t>( x, fheroes2::borderWidthPx ), isHideInterface ? y : std::max<int32_t>( y, fheroes2::borderWidthPx ), w, h };
     }();
 
     if ( isHideInterface ) {

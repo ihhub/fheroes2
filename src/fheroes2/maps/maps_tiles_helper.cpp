@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2099,17 +2099,17 @@ namespace Maps
         const int32_t worldHeight = world.w();
 
         // Do not get over the world borders.
-        const int32_t minX = std::max( minPos.x, 0 );
-        const int32_t minY = std::max( minPos.y, 0 );
+        const int32_t minX = std::max<int32_t>( minPos.x, 0 );
+        const int32_t minY = std::max<int32_t>( minPos.y, 0 );
         // Add extra 1 to reach the given maxPos point.
-        const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
-        const int32_t maxY = std::min( maxPos.y + 1, worldHeight );
+        const int32_t maxX = std::min<int32_t>( maxPos.x + 1, worldWidth );
+        const int32_t maxY = std::min<int32_t>( maxPos.y + 1, worldHeight );
 
         // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
-        const int32_t fogMinX = std::max( minX - 1, 0 );
-        const int32_t fogMinY = std::max( minY - 1, 0 );
-        const int32_t fogMaxX = std::min( maxX + 1, worldWidth );
-        const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
+        const int32_t fogMinX = std::max<int32_t>( minX - 1, 0 );
+        const int32_t fogMinY = std::max<int32_t>( minY - 1, 0 );
+        const int32_t fogMaxX = std::min<int32_t>( maxX + 1, worldWidth );
+        const int32_t fogMaxY = std::min<int32_t>( maxY + 1, worldHeight );
 
         const int32_t fogDataWidth = maxX - minX + 2;
         const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );

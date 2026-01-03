@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -194,13 +194,13 @@ namespace
         // If we don't have many resolutions, we reduce the maximum dialog height,
         // but not less than enough for 11 elements.
         // We also limit the maximum list height to 22 lines.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( resolutions.size() ), 11, 22 )
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp<int32_t>( static_cast<int32_t>( resolutions.size() ), 11, 22 )
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( paddingLeftSide + textAreaWidth + scrollBarAreaWidth + 3, std::min( display.height() - 100, maxDialogHeight ), true,
+        fheroes2::StandardWindow background( paddingLeftSide + textAreaWidth + scrollBarAreaWidth + 3, std::min<int32_t>( display.height() - 100, maxDialogHeight ), true,
                                              display );
 
         const fheroes2::Rect roi( background.activeArea() );

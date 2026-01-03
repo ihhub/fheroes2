@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -6684,7 +6684,7 @@ namespace fheroes2
         uint8_t * imageY = image.image();
         uint8_t * transformY = image.transform();
 
-        const int32_t centerY = std::max( 1, ( height / 2 ) - height % 2 );
+        const int32_t centerY = std::max<int32_t>( 1, ( height / 2 ) - height % 2 );
         const uint8_t dColor = outsideColor - insideColor;
 
         for ( int32_t row = 0; row < height; ++row, imageY += width, transformY += width ) {

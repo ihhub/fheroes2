@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -73,7 +73,7 @@ namespace Route
 
         int32_t currentIndex = -1;
         int32_t from = -1;
-        int direction = Direction::CENTER;
+        int32_t direction = Direction::CENTER;
         uint32_t penalty = 0;
     };
 

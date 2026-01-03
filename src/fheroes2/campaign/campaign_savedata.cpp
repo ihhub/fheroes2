@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,17 +41,17 @@ namespace Campaign
         return instance;
     }
 
-    void CampaignSaveData::addCampaignAward( const int awardID )
+    void CampaignSaveData::addCampaignAward( const int32_t awardID )
     {
         _obtainedCampaignAwards.emplace_back( awardID );
     }
 
-    void CampaignSaveData::removeCampaignAward( const int awardID )
+    void CampaignSaveData::removeCampaignAward( const int32_t awardID )
     {
         _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
     }
 
-    void CampaignSaveData::setEnemyDefeatedAward( const int heroId )
+    void CampaignSaveData::setEnemyDefeatedAward( const int32_t heroId )
     {
         const ScenarioInfoId & currentScenarioInfo = getCurrentScenarioInfoId();
         const std::vector<CampaignAwardData> obtainableAwards = CampaignAwardData::getCampaignAwardData( currentScenarioInfo );

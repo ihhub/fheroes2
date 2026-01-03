@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -46,9 +46,9 @@ namespace Interface
         }
 
     protected:
-        int _currentId{ -1 };
+        int32_t _currentId{ -1 };
 
-        int _topId{ -1 };
+        int32_t _topId{ -1 };
     };
 
     template <class Item>
@@ -174,7 +174,7 @@ namespace Interface
                 _currentId = -1; // no selection
                 _topId = 0;
 
-                const int newMaxValue = std::max( _size() - maxItems, 0 );
+                const int32_t newMaxValue = std::max<int32_t>( _size() - maxItems, 0 );
                 _scrollbar.setRange( 0, newMaxValue );
             }
         }
@@ -294,7 +294,7 @@ namespace Interface
                 return;
             }
 
-            _topId = std::max( 0, std::min( topId, _size() - maxItems ) );
+            _topId = std::max<int32_t>( 0, std::min<int32_t>( topId, _size() - maxItems ) );
 
             UpdateScrollbarRange();
             _scrollbar.moveToIndex( _topId );
@@ -398,7 +398,7 @@ namespace Interface
 
                     UpdateScrollbarRange();
                     _scrollbar.moveToIndex( _topId );
-                    _currentId = std::clamp( _currentId + ( _topId - prevTop ), _topId, _lastVisibleId() );
+                    _currentId = std::clamp<int32_t>( _currentId + ( _topId - prevTop ), _topId, _lastVisibleId() );
                 }
                 // The view is at the bottom of the list, but the selection isn't
                 else if ( _currentId < _size() - 1 ) {
@@ -440,7 +440,7 @@ namespace Interface
             if ( useHotkeys && le.isKeyPressed( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() || _currentId < _lastVisibleId() ) ) {
                 needRedraw = true;
 
-                _topId = std::max( 0, _size() - maxItems );
+                _topId = std::max<int32_t>( 0, _size() - maxItems );
                 _currentId = _size() - 1;
 
                 UpdateScrollbarRange();
@@ -586,19 +586,19 @@ namespace Interface
 
         fheroes2::Scrollbar _scrollbar;
 
-        int VisibleItemCount() const
+        int32_t VisibleItemCount() const
         {
             return maxItems;
         }
 
-        int _size() const
+        int32_t _size() const
         {
-            return content == nullptr ? 0 : static_cast<int>( content->size() );
+            return content == nullptr ? 0 : static_cast<int32_t>( content->size() );
         }
 
     private:
         std::vector<Item> * content{ nullptr };
-        int maxItems{ 0 };
+        int32_t maxItems{ 0 };
 
         fheroes2::Point ptRedraw;
         fheroes2::Point _dragStartPos;
@@ -611,9 +611,9 @@ namespace Interface
         fheroes2::TimedEventValidator _timedButtonPgUp;
         fheroes2::TimedEventValidator _timedButtonPgDn;
 
-        int _lastVisibleId() const
+        int32_t _lastVisibleId() const
         {
-            return std::min( _topId + maxItems, _size() ) - 1;
+            return std::min<int32_t>( _topId + maxItems, _size() ) - 1;
         }
 
         void Verify()
@@ -623,8 +623,8 @@ namespace Interface
                 _topId = -1;
             }
             else {
-                const int listSize = _size();
-                const int maxTopId = std::max( listSize - maxItems, 0 );
+                const int32_t listSize = _size();
+                const int32_t maxTopId = std::max<int32_t>( listSize - maxItems, 0 );
 
                 if ( _currentId >= listSize ) {
                     _currentId = -1;
@@ -638,7 +638,7 @@ namespace Interface
                     }
                     else {
                         // Set top position to show the selected item.
-                        _topId = std::clamp( _currentId - maxItems / 2, 0, maxTopId );
+                        _topId = std::clamp<int32_t>( _currentId - maxItems / 2, 0, maxTopId );
                     }
                 }
 

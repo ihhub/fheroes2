@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -315,7 +315,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _heroInfos.size() );
 
@@ -327,7 +327,7 @@ namespace
                         itemsOffsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _heroInfos.size() );
 
@@ -363,7 +363,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
 
@@ -378,7 +378,7 @@ namespace
                         itemsOffsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
             const auto & townInfo = _townInfos[index];
@@ -1236,12 +1236,12 @@ namespace
 
                     SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture to achieve victory" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
-                    std::vector<int> townIndicies( _mapTownInfos.size() );
+                    std::vector<int32_t> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
 
                     listbox.SetListContent( townIndicies );
 
-                    int initiallySelectedTownIndex = 0;
+                    int32_t initiallySelectedTownIndex = 0;
 
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                         if ( _townToCapture.first == _mapTownInfos[i].tileIndex && _townToCapture.second == _mapTownInfos[i].color ) {
@@ -1295,12 +1295,12 @@ namespace
 
                     SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to defeat to achieve victory" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
-                    std::vector<int> heroIndicies( _mapHeroInfos.size() );
+                    std::vector<int32_t> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
 
                     listbox.SetListContent( heroIndicies );
 
-                    int initiallySelectedHeroIndex = 0;
+                    int32_t initiallySelectedHeroIndex = 0;
 
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                         if ( _heroToKill.first == _mapHeroInfos[i].tileIndex && _heroToKill.second == _mapHeroInfos[i].color ) {
@@ -1762,12 +1762,12 @@ namespace
 
                     SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to lose to suffer defeat" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
-                    std::vector<int> townIndicies( _mapTownInfos.size() );
+                    std::vector<int32_t> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
 
                     listbox.SetListContent( townIndicies );
 
-                    int initiallySelectedTownIndex = 0;
+                    int32_t initiallySelectedTownIndex = 0;
 
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                         if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex
@@ -1812,12 +1812,12 @@ namespace
 
                     SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to lose to suffer defeat" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
-                    std::vector<int> heroIndicies( _mapHeroInfos.size() );
+                    std::vector<int32_t> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
 
                     listbox.SetListContent( heroIndicies );
 
-                    int initiallySelectedHeroIndex = 0;
+                    int32_t initiallySelectedHeroIndex = 0;
 
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                         if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex

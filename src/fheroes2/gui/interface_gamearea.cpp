@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -443,8 +443,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    const int32_t minX = std::max( tileROI.x, 0 );
-    const int32_t minY = std::max( tileROI.y, 0 );
+    const int32_t minX = std::max<int32_t>( tileROI.x, 0 );
+    const int32_t minY = std::max<int32_t>( tileROI.y, 0 );
     maxX = std::min( maxX, worldWidth );
     maxY = std::min( maxY, worldHeight );
 
@@ -482,8 +482,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Run through all visible tiles and find all tile-unfit objects.
     // Also cover extra tiles from right and bottom sides because these objects are usually bigger than 1x1 tiles.
-    const int32_t roiToRenderMinX = std::max( minX - 1, 0 );
-    const int32_t roiToRenderMinY = std::max( minY - 1, 0 );
+    const int32_t roiToRenderMinX = std::max<int32_t>( minX - 1, 0 );
+    const int32_t roiToRenderMinY = std::max<int32_t>( minY - 1, 0 );
     const int32_t roiToRenderMaxX = std::min( maxX + 2, worldWidth );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, worldHeight );
 
@@ -812,8 +812,8 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
     const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    const int32_t limitedLineWidth = std::min( 2, overlappedRoi.width );
-    const int32_t limitedLineHeight = std::min( 2, overlappedRoi.height );
+    const int32_t limitedLineWidth = std::min<int32_t>( 2, overlappedRoi.width );
+    const int32_t limitedLineHeight = std::min<int32_t>( 2, overlappedRoi.height );
 
     const uint8_t color = ( isActionObject ? 115 : 181 );
 
