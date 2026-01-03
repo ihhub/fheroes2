@@ -346,7 +346,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 fheroes2::showStandardTextMessage( _( "Terrain" ), _( "Start the battle on a randomly selected terrain. Click to change it." ), 0 );
             }
             else {
-                std::string message = _( "Start the battle on %{terrain-type}. Click to change it." );
+                std::string message = _( "The battle will take place on %{terrain-type} terrain. Click to change the terrain type." );
                 StringReplace( message, "%{terrain-type}", Maps::Ground::String( _terrainType ) );
                 fheroes2::showStandardTextMessage( _( "Terrain" ), std::move( message ), 0 );
             }
