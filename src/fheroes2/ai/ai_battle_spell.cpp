@@ -903,6 +903,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
 
 AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( const Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const
 {
+    (void)spell;
     assert( spell == Spell::EARTHQUAKE );
 
     // If we are not attacking a castle, then this spell is useless.

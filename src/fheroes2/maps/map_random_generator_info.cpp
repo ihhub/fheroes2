@@ -54,6 +54,7 @@ namespace Maps::Random_Generator
 
     void MapStateManager::commitTransaction( const size_t record )
     {
+        (void)record;
         assert( !_transactionRecords.empty() );
         assert( _transactionRecords.back() == record );
 
