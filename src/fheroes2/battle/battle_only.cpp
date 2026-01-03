@@ -293,7 +293,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     buttonReset.draw();
 
     const fheroes2::Rect terrainArea{ cur_pt.x + 306, cur_pt.y + 275, terrainIconSize.width, terrainIconSize.height };
-    renderTerrain( terrainArea.getPosition(), _groundType, display );
+    renderTerrain( terrainArea.getPosition(), _terrainType, display );
 
     display.render();
 
@@ -342,19 +342,19 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             fheroes2::showStandardTextMessage( _( "Reset" ), _( "Reset to default settings." ), 0 );
         }
         else if ( le.isMouseRightButtonPressedInArea( terrainArea ) ) {
-            if ( _groundType == Maps::Ground::UNKNOWN ) {
+            if ( _terrainType == Maps::Ground::UNKNOWN ) {
                 fheroes2::showStandardTextMessage( _( "Terrain" ), _( "Start the battle on a randomly selected terrain. Click to change it." ), 0 );
             }
             else {
                 std::string message = _( "Start the battle on %{terrain-type}. Click to change it." );
-                StringReplace( message, "%{terrain-type}", Maps::Ground::String( _groundType ) );
+                StringReplace( message, "%{terrain-type}", Maps::Ground::String( _terrainType ) );
                 fheroes2::showStandardTextMessage( _( "Terrain" ), std::move( message ), 0 );
             }
         }
 
         if ( le.MouseClickLeft( terrainArea ) ) {
-            _groundType = getNextTerrain( _groundType );
-            renderTerrain( terrainArea.getPosition(), _groundType, display );
+            _terrainType = getNextTerrain( _terrainType );
+            renderTerrain( terrainArea.getPosition(), _terrainType, display );
             needRender = true;
         }
 
@@ -640,7 +640,7 @@ void Battle::Only::reset()
 
     attackedArmyControlInfo.reset();
 
-    _groundType = Maps::Ground::UNKNOWN;
+    _terrainType = Maps::Ground::UNKNOWN;
 }
 
 void Battle::Only::copyHero( const Heroes & in, Heroes & out )
@@ -696,16 +696,16 @@ void Battle::Only::updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Poi
     ui.army->setInBetweenItemsOffset( { 2, 0 } );
 }
 
-int32_t Battle::Only::groundType() const
+int32_t Battle::Only::terrainType() const
 {
-    if ( _groundType == Maps::Ground::UNKNOWN ) {
+    if ( _terrainType == Maps::Ground::UNKNOWN ) {
         const std::vector<int32_t> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
                                                  Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
 
         return Rand::Get( terrainTypes );
     }
 
-    return _groundType;
+    return _terrainType;
 }
 
 void Battle::Only::ArmyUI::redraw( fheroes2::Image & output ) const

@@ -75,7 +75,7 @@ namespace Battle
         // Returns true if setup is successful.
         bool setup( const bool allowBackup, bool & reset );
 
-        int32_t groundType() const;
+        int32_t terrainType() const;
 
         void StartBattle();
 
@@ -130,7 +130,7 @@ namespace Battle
 
         bool _backupCompleted{ false };
 
-        int32_t _groundType{ Maps::Ground::UNKNOWN };
+        int32_t _terrainType{ Maps::Ground::UNKNOWN };
 
         void redrawOpponents( const fheroes2::Point & top ) const;
 

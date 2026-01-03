@@ -214,7 +214,7 @@ fheroes2::GameMode Game::StartBattleOnly()
 {
     static Battle::Only battleOnlySetup;
 
-    world.generateBattleOnlyMap( battleOnlySetup.groundType() );
+    world.generateBattleOnlyMap( battleOnlySetup.terrainType() );
 
     bool reset = false;
     bool allowBackup = true;
@@ -223,13 +223,13 @@ fheroes2::GameMode Game::StartBattleOnly()
         allowBackup = false;
 
         if ( reset ) {
-            world.generateBattleOnlyMap( battleOnlySetup.groundType() );
+            world.generateBattleOnlyMap( battleOnlySetup.terrainType() );
             battleOnlySetup.reset();
             reset = false;
             continue;
         }
 
-        world.setUniformTerrain( battleOnlySetup.groundType() );
+        world.setUniformTerrain( battleOnlySetup.terrainType() );
         battleOnlySetup.StartBattle();
         break;
     }
