@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,6 +30,7 @@
 #include "army.h"
 #include "army_bar.h"
 #include "artifact.h"
+#include "ground.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "math_base.h"
@@ -71,7 +72,11 @@ namespace Battle
 
         Only & operator=( const Only & ) = delete;
 
+        // Returns true if setup is successful.
         bool setup( const bool allowBackup, bool & reset );
+
+        int32_t terrainType() const;
+
         void StartBattle();
 
         void reset();
@@ -92,7 +97,7 @@ namespace Battle
             void resetForNewHero();
         };
 
-        struct ArmyInfo
+        struct ArmyInfo final
         {
             Heroes * hero{ nullptr };
 
@@ -124,6 +129,8 @@ namespace Battle
         std::unique_ptr<ControlInfo> attackedArmyControlInfo;
 
         bool _backupCompleted{ false };
+
+        int32_t _terrainType{ Maps::Ground::UNKNOWN };
 
         void redrawOpponents( const fheroes2::Point & top ) const;
 
