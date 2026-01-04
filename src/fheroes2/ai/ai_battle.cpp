@@ -1410,9 +1410,9 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                 continue;
             }
 
-            const int32_t archerMeleeDmg = currentUnit.getPotentialDamage( *enemy );
-            const int32_t retaliatoryDmg = enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
-            const int32_t damageDiff = archerMeleeDmg - retaliatoryDmg;
+            const uint32_t archerMeleeDmg = currentUnit.getPotentialDamage( *enemy );
+            const uint32_t retaliatoryDmg = enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
+            const int32_t damageDiff = static_cast<int32_t>( archerMeleeDmg ) - static_cast<int32_t>( retaliatoryDmg );
             if ( bestOutcome < damageDiff ) {
                 bestOutcome = damageDiff;
 
