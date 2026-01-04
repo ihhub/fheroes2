@@ -95,7 +95,8 @@ namespace Maps::Random_Generator
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator );
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator );
-    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<DecorationSet> sets, Rand::PCG32 & randomGenerator );
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const std::vector<DecorationSet> & sets,
+                           Rand::PCG32 & randomGenerator );
 
     // This function expects a valid tileIndex that will fit the set. Plan first before calling
     void placeValidTreasures( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const ObjectSet & objectSet, const int32_t tileIndex,

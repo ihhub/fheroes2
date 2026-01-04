@@ -1135,19 +1135,33 @@ namespace Maps::Random_Generator
         }
     }
 
-    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<DecorationSet> sets, Rand::PCG32 & randomGenerator )
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const std::vector<DecorationSet> & sets,
+                           Rand::PCG32 & randomGenerator )
     {
         if ( sets.empty() ) {
             return;
         }
 
-        Rand::ShuffleWithGen( sets, randomGenerator );
+        std::vector<int32_t> openTiles = findOpenTiles( region );
 
-        const auto & openTiles = findOpenTiles( region );
-        const int32_t limit = std::max( 1, static_cast<int32_t>( openTiles.size() ) / 350 );
-        std::vector<int32_t> objectCount( sets.size(), limit );
+        const auto openSpaceFilter = [&data]( const int32_t idx ) {
+            for ( const int32_t adjacent : Maps::getAroundIndexes( idx ) ) {
+                if ( data.getNode( adjacent ).type != NodeType::OPEN ) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        openTiles.erase( std::remove_if( openTiles.begin(), openTiles.end(), openSpaceFilter ), openTiles.end() );
 
-        const size_t possibilitiesCount = sets.size() * limit * 3;
+        if ( openTiles.empty() ) {
+            return;
+        }
+
+        const int32_t individualObjectCopies = std::max( 1, static_cast<int32_t>( openTiles.size() ) / 300 );
+        std::vector<int32_t> objectCount( sets.size(), individualObjectCopies );
+
+        const size_t possibilitiesCount = sets.size() * individualObjectCopies * 3;
         std::vector<int32_t> tileIndicies = pickEvenlySpacedTiles( openTiles, possibilitiesCount, {} );
 
         for ( const int32_t tileIndex : tileIndicies ) {
