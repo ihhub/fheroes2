@@ -1473,9 +1473,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                         const Battle::Unit * unit = arena.GetTroopBoard( unitIdx );
                         assert( unit != nullptr );
 
-                        const double value = unit->evaluateThreatForUnit( currentUnit );
                         const uint32_t damageHitPoints = std::min( unit->GetHitPoints(), currentUnit.getPotentialDamage( *unit ) );
-
                         if ( currentUnit.GetColor() == unit->GetCurrentColor() ) {
                             friendDamageHitPoints += damageHitPoints;
                         }
@@ -1483,7 +1481,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                             enemyDamageHitPoints += damageHitPoints;
                         }
 
-                        result += value;
+                        result += unit->evaluateThreatForUnit( currentUnit );
                     }
 
                     // If we would kill friendly units by 3 or time times than the enemy, then we shouldn't do this.
