@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1135,6 +1135,10 @@ msgstr "Humano"
 msgid "AI"
 msgstr "IA"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Objeto de terreno"
+
 msgid "Start"
 msgstr "Comenzar"
 
@@ -1149,6 +1153,16 @@ msgstr "Reiniciar"
 
 msgid "Reset to default settings."
 msgstr "Restablecer la configuración predeterminada."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Por favor, selecciona otro héroe."
@@ -3130,15 +3144,6 @@ msgstr "Idioma"
 msgid "Graphics"
 msgstr "Gráficos"
 
-msgid "Black & White"
-msgstr "Blanco y Negro"
-
-msgid "Mouse Cursor"
-msgstr "Cursor Ratón"
-
-msgid "Color"
-msgstr "Color"
-
 msgid "Text Support"
 msgstr "Soporte de Texto"
 
@@ -3151,9 +3156,18 @@ msgstr "Seleccionar Idioma del Juego"
 msgid "Change the graphics settings of the game."
 msgstr "Cambiar los ajustes gráficos del juego."
 
+msgid "Mouse Cursor"
+msgstr "Cursor Ratón"
+
 #, fuzzy
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Activa o desactiva el cursor de color. Elección estética."
+
+msgid "Interface Type"
+msgstr "Tipo de interfaz"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Cambia el tipo de interfaz que deseas utilizar."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3251,6 +3265,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Información del Sistema"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Cambiar la resolución del juego."
 
@@ -3259,6 +3282,13 @@ msgstr "Seleccionar Resolución del Juego"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Alternar entre pantalla completa y modos de ventana."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3300,12 +3330,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Tipo de interfaz"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Cambia el tipo de interfaz que deseas utilizar."
 
 msgid "Toggle interface visibility."
 msgstr "Alterna la visibilidad de la interfaz."
@@ -5444,7 +5468,7 @@ msgstr "Coordinación del proyecto y desarrollo central"
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -6939,6 +6963,12 @@ msgstr "Bien"
 
 msgid "Evil"
 msgstr "Mal"
+
+msgid "Black & White"
+msgstr "Blanco y Negro"
+
+msgid "Color"
+msgstr "Color"
 
 msgid ", FPS: "
 msgstr ""
@@ -12568,78 +12598,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Indica si el mapa está hecho para la versión \"Las Guerras de Sucesión\", "
-#~ "\"El Precio de la Lealtad\" o \"Resurrección\" del juego."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Advertencia"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "La descripción del mapa actualmente elegido."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opciones del Castillo"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Haga clic para ver la siguiente ciudad."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Haga clic para ver la ciudad anterior."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "LLeva al Héroe a cualquier ciudad o castillo que posea."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Siempre contraataca"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Se pueden colocar un máximo de %{count} obeliscos en el mapa."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Haz clic para cambiar el nombre del castillo. Haz clic derecho para "
-#~ "restablecer al valor predeterminado."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr ""
-#~ "Establece un ejército personalizado del castillo. Haz clic derecho para "
-#~ "restablecer la unidad."
-
-#~ msgid "CONFIG"
-#~ msgstr "AJUSTES"
-
-#, fuzzy
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Cancelar y volver al menú principal."
-
-#, fuzzy
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Cancelar y volver al menú principal."
-
-#~ msgid "Host"
-#~ msgstr "Anfitrión"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "El anfitrión establece las opciones de la partida. Solo puede haber un "
-#~ "anfitrión por partida en red."
-
-#~ msgid "Guest"
-#~ msgstr "Invitado"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "El invitado espera a que el anfitrión  monte una partida, entonces es "
-#~ "añadido automáticamente en ella. Pueden haber varios invitados en las "
-#~ "partidas TCP/IP."

@@ -99,7 +99,7 @@ namespace
         const int width = world.w();
         const int x = tileIndex % width;
         const int y = tileIndex / width;
-        Maps::Tile & tile = world.getTile( tileIndex );
+        const Maps::Tile & tile = world.getTile( tileIndex );
 
         const auto isProtectedBy = [tileIndex, &tile]( const int32_t monsterTileIndex ) {
             const Maps::Tile & monsterTile = world.getTile( monsterTileIndex );

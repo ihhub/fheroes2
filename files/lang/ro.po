@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1122,6 +1122,9 @@ msgstr "Om"
 msgid "AI"
 msgstr "AI"
 
+msgid "Terrain"
+msgstr ""
+
 msgid "Start"
 msgstr ""
 
@@ -1136,6 +1139,16 @@ msgid "Reset"
 msgstr ""
 
 msgid "Reset to default settings."
+msgstr ""
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
 msgstr ""
 
 msgid "Please select another hero."
@@ -3012,15 +3025,6 @@ msgstr "Limbă"
 msgid "Graphics"
 msgstr "Grafică"
 
-msgid "Black & White"
-msgstr "Alb & Negru"
-
-msgid "Mouse Cursor"
-msgstr "Cursor Mouse"
-
-msgid "Color"
-msgstr "Colorat"
-
 msgid "Text Support"
 msgstr "Suport Text"
 
@@ -3033,7 +3037,16 @@ msgstr "Selectați Limba"
 msgid "Change the graphics settings of the game."
 msgstr ""
 
+msgid "Mouse Cursor"
+msgstr "Cursor Mouse"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr "Tipul interfeței"
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -3120,6 +3133,15 @@ msgstr ""
 msgid "System Info"
 msgstr "Informații Sistem"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr ""
 
@@ -3127,6 +3149,13 @@ msgid "Select Game Resolution"
 msgstr ""
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3166,12 +3195,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr "Tipul interfeței"
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -5101,8 +5124,8 @@ msgstr "Coordonare de Proiect și Dezvoltare"
 msgid "Development"
 msgstr "Dezvoltare"
 
-msgid "Visit us at "
-msgstr "Vizitați-ne la "
+msgid "Visit us at"
+msgstr "Vizitați-ne la"
 
 msgid "QA and Support"
 msgstr "QA și Suport"
@@ -6464,6 +6487,12 @@ msgstr "Bun"
 
 msgid "Evil"
 msgstr "Rău"
+
+msgid "Black & White"
+msgstr "Alb & Negru"
+
+msgid "Color"
+msgstr "Colorat"
 
 msgid ", FPS: "
 msgstr ""
@@ -11410,10 +11439,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Atenție"
-
-#~ msgid "CONFIG"
-#~ msgstr "CONFIG"

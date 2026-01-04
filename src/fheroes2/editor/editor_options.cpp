@@ -70,22 +70,25 @@ namespace
         Close
     };
 
-    const fheroes2::Size offsetBetweenOptions{ 92, 110 };
-    const fheroes2::Point optionOffset{ 20, 31 };
-    const int32_t optionWindowSize{ 65 };
+    const fheroes2::Rect languageRoi{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect graphicsRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+                                      fheroes2::optionIconSize };
+    const fheroes2::Rect audioRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+                                   fheroes2::optionIconSize };
 
-    const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect graphicsRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect audioRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect hotKeyRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect animationRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect passabilityRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                         optionWindowSize };
-    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize,
-                                        optionWindowSize };
-    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height * 2, optionWindowSize,
-                                         optionWindowSize };
+    const fheroes2::Rect hotKeyRoi{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize,
+                                    fheroes2::optionIconSize };
+    const fheroes2::Rect animationRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
+                                       fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect passabilityRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
+                                         fheroes2::optionIconSize, fheroes2::optionIconSize };
+
+    const fheroes2::Rect interfaceTypeRoi{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2, fheroes2::optionIconSize,
+                                           fheroes2::optionIconSize };
+    const fheroes2::Rect cursorTypeRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
+                                        fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect scrollSpeedRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
+                                         fheroes2::optionIconSize, fheroes2::optionIconSize };
 
     void drawLanguage( const fheroes2::Rect & optionRoi )
     {
@@ -137,7 +140,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289, 382, true, display );
+        fheroes2::StandardWindow background( 289, fheroes2::optionsStepY * 3 + 52, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
@@ -161,8 +164,8 @@ namespace
             drawHotKeyOptions( windowHotKeyRoi );
             drawAnimationOptions( windowAnimationRoi );
             drawPassabilityOptions( windowPassabilityRoi );
-            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType() );
-            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
         };
 

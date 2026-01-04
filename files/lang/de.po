@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -151,6 +151,14 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 
 msgid ""
 "NEW\n"
@@ -166,11 +174,12 @@ msgstr ""
 "SPIEL\n"
 "LADEN"
 
-#, fuzzy
 msgid ""
 "RESTART\n"
 "GAME"
-msgstr "NEUSTART"
+msgstr ""
+"NEU\n"
+"STARTEN"
 
 msgid ""
 "SAVE\n"
@@ -183,20 +192,25 @@ msgid ""
 "QUICK\n"
 "SAVE"
 msgstr ""
+"SCHNELL-\n"
+"SPEICHERN"
 
 msgid "QUIT"
 msgstr "BEENDEN"
 
-#, fuzzy
 msgid ""
 "START\n"
 "MAP"
-msgstr "START"
+msgstr ""
+"KARTE\n"
+"STARTEN"
 
 msgid ""
 "MAIN\n"
 "MENU"
 msgstr ""
+"HAUPT-\n"
+"MENÜ"
 
 msgid ""
 "NEW\n"
@@ -231,6 +245,8 @@ msgstr ""
 
 msgid "SETTINGS"
 msgstr ""
+"EINSTEL-\n"
+"LUNGEN"
 
 msgid ""
 "STANDARD\n"
@@ -307,7 +323,7 @@ msgid "VIEW INTRO"
 msgstr "INTRO ANZEIGEN"
 
 msgid "RESET"
-msgstr ""
+msgstr "ZURÜCKS."
 
 msgid "START"
 msgstr "START"
@@ -1080,6 +1096,10 @@ msgstr "Mensch"
 msgid "AI"
 msgstr "KI"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Gelände-Modus"
+
 msgid "Start"
 msgstr "Start"
 
@@ -1094,6 +1114,16 @@ msgstr "Neustart"
 
 msgid "Reset to default settings."
 msgstr "Auf Standardeinstellungen setzen."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Bitte wählt einen anderen Helden aus."
@@ -3090,9 +3120,8 @@ msgstr "Insgesamt: "
 msgid "Need: "
 msgstr "Bedarf: "
 
-#, fuzzy
 msgid "Restart Game"
-msgstr "Neustart"
+msgstr "Spiel neu starten"
 
 msgid "There was an issue during saving."
 msgstr "Es gab ein Problem beim Speichern."
@@ -3109,7 +3138,6 @@ msgstr "Spiel laden"
 msgid "Load a previously saved game."
 msgstr "Zuvor gespeichertes Spiel laden."
 
-#, fuzzy
 msgid "Restart the scenario."
 msgstr "Neustart des aktuellen Szenarios."
 
@@ -3119,9 +3147,8 @@ msgstr "Spiel speichern"
 msgid "Save the current game."
 msgstr "Das aktuelle Spiel speichern."
 
-#, fuzzy
 msgid "Quick Save"
-msgstr "Quick Silver"
+msgstr "Schnellspeichern"
 
 #, fuzzy
 msgid "Save the current game without name selection."
@@ -3139,15 +3166,6 @@ msgstr "Sprache"
 msgid "Graphics"
 msgstr "Grafik"
 
-msgid "Black & White"
-msgstr "Schwarz & Weiß"
-
-msgid "Mouse Cursor"
-msgstr "Mauszeiger"
-
-msgid "Color"
-msgstr "Farbe"
-
 msgid "Text Support"
 msgstr "Text-Unterst."
 
@@ -3160,10 +3178,19 @@ msgstr "Spielsprache auswählen"
 msgid "Change the graphics settings of the game."
 msgstr "Grafikeinstellungen des Spiels ändern."
 
+msgid "Mouse Cursor"
+msgstr "Mauszeiger"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Farbigen Cursor ein- oder ausschalten. Dies ist nur eine ästhetische "
 "Entscheidung."
+
+msgid "Interface Type"
+msgstr "Interface"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Art der Schnittstelle umschalten, die verwenden soll."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3262,6 +3289,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "System-Information"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Auflösung des Spiels ändern."
 
@@ -3270,6 +3306,13 @@ msgstr "Spielauflösung wählen"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Umschalten zwischen Vollbildmodus und Fenstermodus."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3313,12 +3356,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Interface"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Art der Schnittstelle umschalten, die verwenden soll."
 
 msgid "Toggle interface visibility."
 msgstr "Sichtbarkeit der Interface ändern."
@@ -3435,9 +3472,8 @@ msgstr "(leer)"
 msgid "already learned"
 msgstr "schon gelernt"
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Baum des Wissens"
+msgstr "frei"
 
 msgid "already claimed"
 msgstr "bereits beansprucht"
@@ -4410,7 +4446,7 @@ msgstr ""
 "gespeicherten Änderungen an der aktuellen Karte gehen verloren)."
 
 msgid "Main Menu"
-msgstr ""
+msgstr "Hauptmenü"
 
 #, fuzzy
 msgid ""
@@ -4438,21 +4474,19 @@ msgid ""
 "be playable."
 msgstr ""
 
-#, fuzzy
 msgid "Start Map"
-msgstr "Neustart"
+msgstr "Karte starten"
 
-#, fuzzy
 msgid ""
 "Do you wish to leave the Editor and start the map? (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Wollt Ihr wirklich eine neue Karte laden? (Nicht gespeicherte Änderungen an "
-"der aktuellen Karte gehen verloren)."
+"Sind Sie sicher, dass Sie den Karteneditor verlassen und die Karte spielen "
+"wollen? (Nicht gespeicherte Änderungen an der aktuellen Karte gehen "
+"verloren)."
 
-#, fuzzy
 msgid "Create a new map from scratch."
-msgstr "Neue Karte von Beginn Menü"
+msgstr "Komplett neue Karte erstellen."
 
 msgid "New Map"
 msgstr "Neue Karte"
@@ -4472,12 +4506,12 @@ msgstr "Speichern der aktuellen Karte."
 msgid "Quit out of the map editor."
 msgstr "Den Karteneditor verlassen."
 
-#, fuzzy
 msgid "Return to the game's Main Menu."
-msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+msgstr "Zum Hauptmenü zurückkehren."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
+"Den Karteneditor verlassen und die Karte im Standard Spielmodus spielen."
 
 msgid "Input %{object} text"
 msgstr ""
@@ -5411,8 +5445,8 @@ msgstr "Projektkoordination und Kernentwicklung"
 msgid "Development"
 msgstr "Entwicklung"
 
-msgid "Visit us at "
-msgstr "Besucht uns bei "
+msgid "Visit us at"
+msgstr "Besucht uns bei"
 
 msgid "QA and Support"
 msgstr "QA und Unterstützung"
@@ -6920,6 +6954,12 @@ msgstr "Gut"
 
 msgid "Evil"
 msgstr "Böse"
+
+msgid "Black & White"
+msgstr "Schwarz & Weiß"
+
+msgid "Color"
+msgstr "Farbe"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -8711,21 +8751,19 @@ msgstr "Den Helden verlieren: %{name}."
 msgid "Click to change class."
 msgstr "Klicken um die nächste Stadt anzuzeigen."
 
-#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
-"Die \"Verstreute\" Kampfformation verteilt die Armeen von oben bis unten "
+"Die \"Verstreute\" Gefechtsformation verteilt Ihre Armeen von oben bis unten "
 "über das Schlachtfeld, mit wenigstens einem Freiraum zwischen jeder Armee."
 
-#, fuzzy
 msgid ""
 "'Grouped' combat formation bunches the hero's army together in the center of "
 "their side of the battlefield."
 msgstr ""
-"Die \"Gruppierte\" Kampfformation bündelt Eure Armee in der Mitte Eurer "
-"Seite des Schlachtfelds."
+"Die \"Gruppierte\" Gefechtsformation bündelt Ihre Armee im Zentrum Ihrer "
+"Seite des Schlachtfelds zusammen."
 
 msgid "Exit Hero Screen"
 msgstr "Heldenbildschirm verlassen"
@@ -12857,65 +12895,3 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Zeigt an, ob die Karte für die Version \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" oder die \"Resurrection\" Version des Spiels erstellt "
-#~ "wurde."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Achtung"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Die Beschreibung der aktuell ausgewählten Karte."
-
-#~ msgid "Castle Options"
-#~ msgstr "Burg Optionen"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klickt, um die nächste Stadt anzuzeigen."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klickt, um die vorherige Stadt anzuzeigen."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Bringt den Zaubernden in jene Stadt oder Burg zurück, die er gerade "
-#~ "besitzt."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vergeltet immer"
-
-#~ msgid "CONFIG"
-#~ msgstr "KONFIG."
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Abbrechen, zurück zum Neue Karte Menü."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Abbrechen und zurück zum Hauptmenü des Karteneditors."
-
-#~ msgid "Host"
-#~ msgstr "Gastgeber"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Der Gastgeber legt die Spieloptionen fest. Es kann nur einen Gastgeber "
-#~ "pro Netzwerkspiel geben."
-
-#~ msgid "Guest"
-#~ msgstr "Gast"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Der Gast wartet darauf, dass der Gastgeber das Spiel einrichtet, und wird "
-#~ "dann automatisch hinzugefügt. Bei TCP/IP-Spielen kann es mehrere Gäste "
-#~ "geben."

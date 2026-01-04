@@ -1242,7 +1242,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
             return false;
         }
 
-        const std::vector<CastleDefenseStructure> & allowedTargets = Catapult::getAllowedTargets();
+        const std::vector<CastleDefenseStructure> allowedTargets = Catapult::getAllowedTargets();
 
         if ( std::find( allowedTargets.begin(), allowedTargets.end(), target ) == allowedTargets.end() ) {
             return false;

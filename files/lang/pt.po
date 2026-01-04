@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -1103,6 +1103,10 @@ msgstr "Humano"
 msgid "AI"
 msgstr "IA"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Modo de Terreno"
+
 msgid "Start"
 msgstr "Iniciar"
 
@@ -1117,6 +1121,16 @@ msgstr "Restaurar"
 
 msgid "Reset to default settings."
 msgstr "Restaurar as configurações padrões."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Por favor, selecione outro herói."
@@ -3139,15 +3153,6 @@ msgstr "Idioma"
 msgid "Graphics"
 msgstr "Gráficos"
 
-msgid "Black & White"
-msgstr "Preto e Branco"
-
-msgid "Mouse Cursor"
-msgstr "Cursor"
-
-msgid "Color"
-msgstr "Colorido"
-
 msgid "Text Support"
 msgstr "Suporte a Texto"
 
@@ -3160,9 +3165,18 @@ msgstr "Selecionar Idioma do Jogo"
 msgid "Change the graphics settings of the game."
 msgstr "Altera as configurações gráficas do jogo."
 
+msgid "Mouse Cursor"
+msgstr "Cursor"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Ativar ou desativar o cursor colorido. Essa é apenas uma opção estética."
+
+msgid "Interface Type"
+msgstr "Tipo de Interface"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Alterne o tipo de interface que você deseja usar."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3260,6 +3274,15 @@ msgstr "QPS"
 msgid "System Info"
 msgstr "Informações do Sistema"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Altera a resolução do jogo."
 
@@ -3268,6 +3291,13 @@ msgstr "Selecionar Resolução do Jogo"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Alternar entre os modos de tela cheia e janela."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3309,12 +3339,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Tipo de Interface"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Alterne o tipo de interface que você deseja usar."
 
 msgid "Toggle interface visibility."
 msgstr "Alternar a visibilidade da interface."
@@ -5331,8 +5355,8 @@ msgstr "Coordenação do Projeto e Núcleo de Desenvolvimento"
 msgid "Development"
 msgstr "Desenvolvimento"
 
-msgid "Visit us at "
-msgstr "Nos visite em "
+msgid "Visit us at"
+msgstr "Nos visite em"
 
 msgid "QA and Support"
 msgstr "Controle de Qualidade e Suporte"
@@ -6805,6 +6829,12 @@ msgstr "Do Bem"
 
 msgid "Evil"
 msgstr "Do Mal"
+
+msgid "Black & White"
+msgstr "Preto e Branco"
+
+msgid "Color"
+msgstr "Colorido"
 
 msgid ", FPS: "
 msgstr ", QPS: "
@@ -12660,82 +12690,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Indica se o mapa é feito para a versão \"As Guerras de Sucessão\", \"O "
-#~ "Preço da Lealdade\" ou  \"Ressurreição\" do jogo."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Aviso"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "A descrição do mapa atualmente selecionado."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "A descrição do mapa inserida excede o máximo permitido de 5 linhas. Ela "
-#~ "será reduzida para caber no campo de descrição do mapa."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opções do Castelo"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Clique para mostrar a próxima cidade."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Clique para mostrar a cidade anterior."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Devolve o conjurador para qualquer cidade ou castelo que atualmente "
-#~ "possui."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Sempre retaliar"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Clique para alterar o nome do castelo. Botão direito restaura o padrão."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Definir Exército personalizado. Botão direito para redefinir."
-
-#~ msgid "CONFIG"
-#~ msgstr "AJUSTES"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Cancelar e voltar para o menu Novo Mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Cancelar e voltar para o menu principal do Editor de Mapa."
-
-#~ msgid "Host"
-#~ msgstr "Anfitrião"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "O anfitrião configura as opções de jogo. Só pode haver um anfitrião por "
-#~ "jogo em rede."
-
-#~ msgid "Guest"
-#~ msgstr "Convidado"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "O convidado espera pelo anfitrião configurar o jogo, em seguida, é "
-#~ "adicionado automaticamente dentro. Pode haver vários convidados para "
-#~ "Jogos TCP/IP."

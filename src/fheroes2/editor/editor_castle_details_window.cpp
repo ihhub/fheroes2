@@ -535,7 +535,7 @@ namespace
                                 // Banned spells must be always valid ones.
                                 assert( spellLevel >= 1 && spellLevel <= 5 );
 
-                                auto & spellRow = spellRows[spellLevel - 1];
+                                const auto & spellRow = spellRows[spellLevel - 1];
 
                                 if ( spellRow->checkSpellAndMakeItCurrent( spell ) ) {
                                     spellRow->setCurrentSpell( Spell::RANDOM + spellLevel );

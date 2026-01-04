@@ -67,6 +67,7 @@ namespace
         "main_menu_editor_released_button.image",
         "mass-dispel-contour.image",
         "missing_sphinx_part.image",
+        "monocle.image",
         "observation_tower_desert_bottom_part.image",
         "observation_tower_desert_right_part.image",
         "observation_tower_generic_bottom_part.image",

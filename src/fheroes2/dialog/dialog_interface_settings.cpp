@@ -20,7 +20,6 @@
 
 #include "dialog_interface_settings.h"
 
-#include <cstdint>
 #include <string>
 #include <utility>
 
@@ -51,16 +50,15 @@ namespace
         Exit
     };
 
-    const fheroes2::Size offsetBetweenOptions{ 92, 110 };
-    const fheroes2::Point optionOffset{ 20, 31 };
-    const int32_t optionWindowSize{ 65 };
+    const fheroes2::Size offsetBetweenOptions{ fheroes2::threeOptionsStepX, fheroes2::optionsStepY };
+    const fheroes2::Point optionOffset{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY };
 
-    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect interfacePresenceRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect armyEstimationModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + 43, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect scrollSpeedRoi{ optionOffset.x + 43 + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                         optionWindowSize };
+    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect interfacePresenceRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect armyEstimationModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect cursorTypeRoi{ fheroes2::twoOptionsOffsetX, optionOffset.y + offsetBetweenOptions.height, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect scrollSpeedRoi{ fheroes2::twoOptionsOffsetX + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, fheroes2::optionIconSize,
+                                         fheroes2::optionIconSize };
 
     void drawInterfacePresence( const fheroes2::Rect & optionRoi )
     {
@@ -94,11 +92,10 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289, 272, true, display );
+        fheroes2::StandardWindow background( 289, fheroes2::optionsStepY * 2 + 52, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
-
-        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height - 30 );
 
         const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowInterfacePresenceRoi( interfacePresenceRoi + windowRoi.getPosition() );
@@ -110,9 +107,9 @@ namespace
 
         const auto drawOptions
             = [&conf, &windowInterfaceTypeRoi, &windowInterfacePresenceRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi, &windowArmyEstimationModeRoi]() {
-                  drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType() );
+                  drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
                   drawInterfacePresence( windowInterfacePresenceRoi );
-                  drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled() );
+                  drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
                   drawScrollSpeed( windowScrollSpeedRoi, conf.ScrollSpeed() );
                   drawArmyNumberEstimationOption( windowArmyEstimationModeRoi );
               };
@@ -232,15 +229,7 @@ namespace fheroes2
                 windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
-                if ( conf.getInterfaceType() == InterfaceType::DYNAMIC ) {
-                    conf.setInterfaceType( InterfaceType::GOOD );
-                }
-                else if ( conf.getInterfaceType() == InterfaceType::GOOD ) {
-                    conf.setInterfaceType( InterfaceType::EVIL );
-                }
-                else {
-                    conf.setInterfaceType( InterfaceType::DYNAMIC );
-                }
+                conf.switchToNextInterfaceType();
                 updateUI();
                 saveConfiguration = true;
 

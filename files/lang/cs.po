@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -1104,6 +1104,10 @@ msgstr "Člověk"
 msgid "AI"
 msgstr "AI"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Režim terénu"
+
 msgid "Start"
 msgstr "Start"
 
@@ -1118,6 +1122,16 @@ msgstr "Reset"
 
 msgid "Reset to default settings."
 msgstr "Obnovit výchozí nastavení."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Vyber jiného hrdinu."
@@ -3108,15 +3122,6 @@ msgstr "Jazyk"
 msgid "Graphics"
 msgstr "Grafika"
 
-msgid "Black & White"
-msgstr "Černobílý"
-
-msgid "Mouse Cursor"
-msgstr "Kurzor"
-
-msgid "Color"
-msgstr "Barevný"
-
 msgid "Text Support"
 msgstr "Textová podpora"
 
@@ -3129,8 +3134,17 @@ msgstr "Vybrat jazyk hry"
 msgid "Change the graphics settings of the game."
 msgstr "Změnit grafické nastavení hry."
 
+msgid "Mouse Cursor"
+msgstr "Kurzor"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Přepnout barevný kurzor zap/vyp. Toto je jenom volba vzhledu."
+
+msgid "Interface Type"
+msgstr "Rozhraní"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Přepněte typ rozhraní, které chcete používat."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3226,6 +3240,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Info o systému"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Změnit rozlíšení."
 
@@ -3234,6 +3257,13 @@ msgstr "Vybrat rozlišení"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Přepnout mezi celou obrazovkou a zobr. v okně."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3273,12 +3303,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Rozhraní"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Přepněte typ rozhraní, které chcete používat."
 
 msgid "Toggle interface visibility."
 msgstr "Přepněte viditelnost rozhraní."
@@ -5276,8 +5300,8 @@ msgstr "Koordinace projektu a hlavní vývoj"
 msgid "Development"
 msgstr "Vývoj"
 
-msgid "Visit us at "
-msgstr "Navštivte nás na "
+msgid "Visit us at"
+msgstr "Navštivte nás na"
 
 msgid "QA and Support"
 msgstr "Zajištění kvality a podpora"
@@ -6728,6 +6752,12 @@ msgstr "Dobrý"
 
 msgid "Evil"
 msgstr "Zlý"
+
+msgid "Black & White"
+msgstr "Černobílý"
+
+msgid "Color"
+msgstr "Barevný"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -12451,82 +12481,3 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Udává, zda je mapa vytvořena pro verzi hry \"Války o následnictví\", "
-#~ "\"Cena za věrnost\" nebo \"Vzkříšení\"."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Varování"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Popis aktuálně vybrané mapy."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Zadaný popis mapy překračuje maximálně povolených 5 řádků. Bude zkrácen "
-#~ "tak, aby se vešel do pole pro popis mapy."
-
-#~ msgid "Castle Options"
-#~ msgstr "Možnosti hradu"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klikni pro zobrazení následujícího města."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klikni pro zobrazení předchozího města."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Přenese hrdinu do jakéhokoli města nebo hradu, který vlastníš."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vždy vrací útok"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Klikněte pro změnu názvu hradu. Pravým tlačítkem myši obnovte výchozí "
-#~ "nastavení."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr ""
-#~ "Nastavte vlastní armádu hradu. Klikněte pravým tlačítkem pro obnovení "
-#~ "jednotky."
-
-#~ msgid "CONFIG"
-#~ msgstr "CONFIG"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Zrušit a vrátit se do nabídky Nová mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Zrušit a vrátit se do hlavního menu editoru map."
-
-#~ msgid "Host"
-#~ msgstr "Hostitel"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Hostitel nastavuje herní možnosti. Může být pouze jeden hostitel na každé "
-#~ "síťové hře."
-
-#~ msgid "Guest"
-#~ msgstr "Host"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Host čeká, až hostitel nastaví hru, poté je automaticky přidán. Pro hry "
-#~ "TCP/IP může být více hostů."

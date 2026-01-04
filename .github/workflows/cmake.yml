@@ -63,7 +63,7 @@ jobs:
         git.exe pull origin master
         bootstrap-vcpkg.bat
     - name: Prepare vcpkg cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/AppData/Local/vcpkg/archives
         key: cmake-vcpkg-cache-${{ github.sha }}

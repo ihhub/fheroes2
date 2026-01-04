@@ -1,3 +1,46 @@
+version 1.1.13 (21 December 2025)
+- update the Russian translation
+- add several missing letters for the CP-1251 code page
+- improve the use of certain battle spells by the AI
+- fix several iOS-related issues and bring the iOS build into a playable state
+- improve road network and verify object placement immediately for the random map generator
+- set starting hero and player information for RMG maps
+- update the Hungarian translation
+- show a dialog when there are no items to select to avoid a crash after pressing OK in the empty list
+- reduce overall RAM usage by the engine
+- speed up the CRC32 algorithm to improve translation file loading times
+- fix an assertion issue with original corrupted maps
+- add a UI screen to configure the random map generator
+- add drag-to-draw functionality to the Terrain and Erase brushes
+- add missing popups for the second hero control in Battle Only mode
+- display Traveller's Tent and Barrier colors in popups in the Editor
+- avoid using Shield spell by AI when it has no effect
+- document compilation steps for iOS
+- significantly reduce RAM usage by the Editor when doing actions
+- show map type explicitly, as icons are too small to differentiate for some players
+- make the interactive area for each building in the Castle window consist of multiple rectangles
+- fully render the FPS text on the screen on every frame render call
+- make AI use the Earthquake spell in battles
+- speed up several instances of button generation
+- truncate text within the Monster Info dialog to avoid incorrect rendering
+- truncate building names for building image within the Castle window to avoid incorrect rendering
+- do not show troop counter during elementals' summoning animation
+- teach the AI how to use the Teleport spell
+- improve random map generator consistency and treasure distribution
+- update the Swedish translation
+- speed up the AI pathfinder algorithm
+- update the Belarusian translation
+- fix "E with 2 dots on top" letter for CP-1251 small font
+- do not react to world scroll keys when scrolling is disabled
+- fix status bar flickering in the main Castle Window when switching castles
+- move the Adventure Map view area to the center of the map in hot-seat mode
+- fix rendering while toggling the Turn Order option during battles
+- fix a case when AI was not using the Disrupting Ray spell when the enemy defense value is equal to 2
+- update FPS counter and color cycling synchronization logic
+- implement custom monster levels for the random map generation
+- update the Ukrainian translation
+- fix an assertion when opening map info for maps with defeat hero condition or capture/lose castle condition
+
 version 1.1.12 (09 November 2025)
 - add a hot key modifier to move hero portrait to the top of the heroes list
 - increase the limit for event messages, map description and about section, Sphinx riddle and Sign text to 999

@@ -24,6 +24,7 @@
 #include "buildinginfo.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <utility>
 
@@ -94,136 +95,120 @@ namespace
 
         return nullptr;
     }
+
+    struct BuildingStats final
+    {
+        uint32_t type{ BUILD_NOTHING };
+        uint8_t allowedRaces{ Race::NONE };
+        Cost cost{};
+    };
+
+    const std::array<BuildingStats, 86> buildingStats = { { { BUILD_THIEVESGUILD, Race::ALL, { 750, 5, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_TAVERN, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_SHIPYARD, Race::ALL, { 2000, 20, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_WELL, Race::ALL, { 500, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_STATUE, Race::ALL, { 1250, 0, 0, 5, 0, 0, 0 } },
+                                                            { BUILD_LEFTTURRET, Race::ALL, { 1500, 0, 0, 5, 0, 0, 0 } },
+                                                            { BUILD_RIGHTTURRET, Race::ALL, { 1500, 0, 0, 5, 0, 0, 0 } },
+                                                            { BUILD_MARKETPLACE, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_MOAT, Race::ALL, { 750, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_CASTLE, Race::ALL, { 5000, 20, 0, 20, 0, 0, 0 } },
+                                                            { BUILD_CAPTAIN, Race::ALL, { 500, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_MAGEGUILD1, Race::ALL, { 2000, 5, 0, 5, 0, 0, 0 } },
+                                                            { BUILD_MAGEGUILD2, Race::ALL, { 1000, 5, 4, 5, 4, 4, 4 } },
+                                                            { BUILD_MAGEGUILD3, Race::ALL, { 1000, 5, 6, 5, 6, 6, 6 } },
+                                                            { BUILD_MAGEGUILD4, Race::ALL, { 1000, 5, 8, 5, 8, 8, 8 } },
+                                                            { BUILD_MAGEGUILD5, Race::ALL, { 1000, 5, 10, 5, 10, 10, 10 } },
+
+                                                            { BUILD_WEL2, Race::KNGT, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_WEL2, Race::BARB, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_WEL2, Race::SORC, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_WEL2, Race::WRLK, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_WEL2, Race::WZRD, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_WEL2, Race::NECR, { 1000, 0, 0, 0, 0, 0, 0 } },
+
+                                                            { BUILD_SPEC, Race::KNGT, { 1500, 5, 0, 15, 0, 0, 0 } },
+                                                            { BUILD_SPEC, Race::BARB, { 2000, 10, 0, 10, 0, 0, 0 } },
+                                                            { BUILD_SPEC, Race::SORC, { 1500, 0, 0, 0, 0, 10, 0 } },
+                                                            { BUILD_SPEC, Race::WRLK, { 3000, 5, 0, 10, 0, 0, 0 } },
+                                                            { BUILD_SPEC, Race::WZRD, { 1500, 5, 5, 5, 5, 5, 5 } },
+                                                            { BUILD_SPEC, Race::NECR, { 1000, 0, 10, 0, 10, 0, 0 } },
+
+                                                            { BUILD_SHRINE, Race::NECR, { 4000, 10, 0, 0, 0, 10, 0 } },
+
+                                                            { DWELLING_MONSTER1, Race::KNGT, { 200, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER2, Race::KNGT, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE2, Race::KNGT, { 1500, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER3, Race::KNGT, { 1000, 0, 0, 5, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE3, Race::KNGT, { 1500, 0, 0, 5, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER4, Race::KNGT, { 2000, 10, 0, 10, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE4, Race::KNGT, { 2000, 5, 0, 5, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER5, Race::KNGT, { 3000, 20, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE5, Race::KNGT, { 3000, 10, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER6, Race::KNGT, { 5000, 20, 0, 0, 0, 20, 0 } },
+                                                            { DWELLING_UPGRADE6, Race::KNGT, { 5000, 10, 0, 0, 0, 10, 0 } },
+
+                                                            { DWELLING_MONSTER1, Race::BARB, { 300, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER2, Race::BARB, { 800, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE2, Race::BARB, { 1200, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER3, Race::BARB, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER4, Race::BARB, { 2000, 10, 0, 10, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE4, Race::BARB, { 3000, 5, 0, 5, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER5, Race::BARB, { 4000, 0, 0, 20, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE5, Race::BARB, { 2000, 0, 0, 10, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER6, Race::BARB, { 6000, 0, 0, 20, 0, 20, 0 } },
+
+                                                            { DWELLING_MONSTER1, Race::SORC, { 500, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER2, Race::SORC, { 1000, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE2, Race::SORC, { 1500, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER3, Race::SORC, { 1500, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE3, Race::SORC, { 1500, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER4, Race::SORC, { 2500, 0, 0, 10, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE4, Race::SORC, { 1500, 0, 5, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER5, Race::SORC, { 3000, 10, 0, 0, 0, 0, 10 } },
+                                                            { DWELLING_MONSTER6, Race::SORC, { 10000, 0, 20, 30, 0, 0, 0 } },
+
+                                                            { DWELLING_MONSTER1, Race::WRLK, { 500, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER2, Race::WRLK, { 1000, 0, 0, 10, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER3, Race::WRLK, { 2000, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER4, Race::WRLK, { 3000, 0, 0, 0, 0, 0, 10 } },
+                                                            { DWELLING_UPGRADE4, Race::WRLK, { 2000, 0, 0, 0, 0, 0, 5 } },
+                                                            { DWELLING_MONSTER5, Race::WRLK, { 4000, 0, 0, 0, 10, 0, 0 } },
+                                                            { DWELLING_MONSTER6, Race::WRLK, { 15000, 0, 0, 30, 20, 0, 0 } },
+                                                            { DWELLING_UPGRADE6, Race::WRLK, { 5000, 0, 0, 5, 10, 0, 0 } },
+                                                            { DWELLING_UPGRADE7, Race::WRLK, { 5000, 0, 0, 5, 10, 0, 0 } },
+
+                                                            { DWELLING_MONSTER1, Race::WZRD, { 400, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER2, Race::WZRD, { 800, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER3, Race::WZRD, { 1500, 5, 0, 5, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE3, Race::WZRD, { 1500, 0, 5, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER4, Race::WZRD, { 3000, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER5, Race::WZRD, { 3500, 5, 5, 5, 5, 5, 5 } },
+                                                            { DWELLING_UPGRADE5, Race::WZRD, { 4000, 5, 0, 5, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER6, Race::WZRD, { 12500, 5, 0, 5, 0, 0, 20 } },
+                                                            { DWELLING_UPGRADE6, Race::WZRD, { 12500, 5, 0, 5, 0, 0, 20 } },
+
+                                                            { DWELLING_MONSTER1, Race::NECR, { 400, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER2, Race::NECR, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE2, Race::NECR, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER3, Race::NECR, { 1500, 0, 0, 10, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE3, Race::NECR, { 1500, 0, 0, 5, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER4, Race::NECR, { 3000, 10, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE4, Race::NECR, { 4000, 5, 0, 0, 0, 10, 10 } },
+                                                            { DWELLING_MONSTER5, Race::NECR, { 4000, 10, 0, 0, 10, 0, 0 } },
+                                                            { DWELLING_UPGRADE5, Race::NECR, { 3000, 0, 0, 5, 0, 5, 0 } },
+                                                            { DWELLING_MONSTER6, Race::NECR, { 10000, 10, 5, 10, 5, 5, 5 } } } };
 }
 
-struct BuildingStats
+Funds BuildingInfo::GetCost( const uint32_t buildingType, const int race )
 {
-    uint32_t id2;
-    uint8_t race;
-    Cost cost;
-};
-
-const BuildingStats buildingStats[] = {
-    // id                             gold wood mercury ore sulfur crystal gems
-    { BUILD_THIEVESGUILD, Race::ALL, { 750, 5, 0, 0, 0, 0, 0 } },
-    { BUILD_TAVERN, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
-    { BUILD_SHIPYARD, Race::ALL, { 2000, 20, 0, 0, 0, 0, 0 } },
-    { BUILD_WELL, Race::ALL, { 500, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_STATUE, Race::ALL, { 1250, 0, 0, 5, 0, 0, 0 } },
-    { BUILD_LEFTTURRET, Race::ALL, { 1500, 0, 0, 5, 0, 0, 0 } },
-    { BUILD_RIGHTTURRET, Race::ALL, { 1500, 0, 0, 5, 0, 0, 0 } },
-    { BUILD_MARKETPLACE, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
-    { BUILD_MOAT, Race::ALL, { 750, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_CASTLE, Race::ALL, { 5000, 20, 0, 20, 0, 0, 0 } },
-    { BUILD_CAPTAIN, Race::ALL, { 500, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_MAGEGUILD1, Race::ALL, { 2000, 5, 0, 5, 0, 0, 0 } },
-    { BUILD_MAGEGUILD2, Race::ALL, { 1000, 5, 4, 5, 4, 4, 4 } },
-    { BUILD_MAGEGUILD3, Race::ALL, { 1000, 5, 6, 5, 6, 6, 6 } },
-    { BUILD_MAGEGUILD4, Race::ALL, { 1000, 5, 8, 5, 8, 8, 8 } },
-    { BUILD_MAGEGUILD5, Race::ALL, { 1000, 5, 10, 5, 10, 10, 10 } },
-
-    { BUILD_WEL2, Race::KNGT, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_WEL2, Race::BARB, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_WEL2, Race::SORC, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_WEL2, Race::WRLK, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_WEL2, Race::WZRD, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { BUILD_WEL2, Race::NECR, { 1000, 0, 0, 0, 0, 0, 0 } },
-
-    { BUILD_SPEC, Race::KNGT, { 1500, 5, 0, 15, 0, 0, 0 } },
-    { BUILD_SPEC, Race::BARB, { 2000, 10, 0, 10, 0, 0, 0 } },
-    { BUILD_SPEC, Race::SORC, { 1500, 0, 0, 0, 0, 10, 0 } },
-    { BUILD_SPEC, Race::WRLK, { 3000, 5, 0, 10, 0, 0, 0 } },
-    { BUILD_SPEC, Race::WZRD, { 1500, 5, 5, 5, 5, 5, 5 } },
-    { BUILD_SPEC, Race::NECR, { 1000, 0, 10, 0, 10, 0, 0 } },
-
-    { BUILD_SHRINE, Race::NECR, { 4000, 10, 0, 0, 0, 10, 0 } },
-
-    { DWELLING_MONSTER1, Race::KNGT, { 200, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER2, Race::KNGT, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_UPGRADE2, Race::KNGT, { 1500, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER3, Race::KNGT, { 1000, 0, 0, 5, 0, 0, 0 } },
-    { DWELLING_UPGRADE3, Race::KNGT, { 1500, 0, 0, 5, 0, 0, 0 } },
-    { DWELLING_MONSTER4, Race::KNGT, { 2000, 10, 0, 10, 0, 0, 0 } },
-    { DWELLING_UPGRADE4, Race::KNGT, { 2000, 5, 0, 5, 0, 0, 0 } },
-    { DWELLING_MONSTER5, Race::KNGT, { 3000, 20, 0, 0, 0, 0, 0 } },
-    { DWELLING_UPGRADE5, Race::KNGT, { 3000, 10, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER6, Race::KNGT, { 5000, 20, 0, 0, 0, 20, 0 } },
-    { DWELLING_UPGRADE6, Race::KNGT, { 5000, 10, 0, 0, 0, 10, 0 } },
-
-    { DWELLING_MONSTER1, Race::BARB, { 300, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER2, Race::BARB, { 800, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_UPGRADE2, Race::BARB, { 1200, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER3, Race::BARB, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER4, Race::BARB, { 2000, 10, 0, 10, 0, 0, 0 } },
-    { DWELLING_UPGRADE4, Race::BARB, { 3000, 5, 0, 5, 0, 0, 0 } },
-    { DWELLING_MONSTER5, Race::BARB, { 4000, 0, 0, 20, 0, 0, 0 } },
-    { DWELLING_UPGRADE5, Race::BARB, { 2000, 0, 0, 10, 0, 0, 0 } },
-    { DWELLING_MONSTER6, Race::BARB, { 6000, 0, 0, 20, 0, 20, 0 } },
-
-    { DWELLING_MONSTER1, Race::SORC, { 500, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER2, Race::SORC, { 1000, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_UPGRADE2, Race::SORC, { 1500, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER3, Race::SORC, { 1500, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_UPGRADE3, Race::SORC, { 1500, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER4, Race::SORC, { 2500, 0, 0, 10, 0, 0, 0 } },
-    { DWELLING_UPGRADE4, Race::SORC, { 1500, 0, 5, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER5, Race::SORC, { 3000, 10, 0, 0, 0, 0, 10 } },
-    { DWELLING_MONSTER6, Race::SORC, { 10000, 0, 20, 30, 0, 0, 0 } },
-
-    { DWELLING_MONSTER1, Race::WRLK, { 500, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER2, Race::WRLK, { 1000, 0, 0, 10, 0, 0, 0 } },
-    { DWELLING_MONSTER3, Race::WRLK, { 2000, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER4, Race::WRLK, { 3000, 0, 0, 0, 0, 0, 10 } },
-    { DWELLING_UPGRADE4, Race::WRLK, { 2000, 0, 0, 0, 0, 0, 5 } },
-    { DWELLING_MONSTER5, Race::WRLK, { 4000, 0, 0, 0, 10, 0, 0 } },
-    { DWELLING_MONSTER6, Race::WRLK, { 15000, 0, 0, 30, 20, 0, 0 } },
-    { DWELLING_UPGRADE6, Race::WRLK, { 5000, 0, 0, 5, 10, 0, 0 } },
-    { DWELLING_UPGRADE7, Race::WRLK, { 5000, 0, 0, 5, 10, 0, 0 } },
-
-    { DWELLING_MONSTER1, Race::WZRD, { 400, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER2, Race::WZRD, { 800, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER3, Race::WZRD, { 1500, 5, 0, 5, 0, 0, 0 } },
-    { DWELLING_UPGRADE3, Race::WZRD, { 1500, 0, 5, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER4, Race::WZRD, { 3000, 5, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER5, Race::WZRD, { 3500, 5, 5, 5, 5, 5, 5 } },
-    { DWELLING_UPGRADE5, Race::WZRD, { 4000, 5, 0, 5, 0, 0, 0 } },
-    { DWELLING_MONSTER6, Race::WZRD, { 12500, 5, 0, 5, 0, 0, 20 } },
-    { DWELLING_UPGRADE6, Race::WZRD, { 12500, 5, 0, 5, 0, 0, 20 } },
-
-    { DWELLING_MONSTER1, Race::NECR, { 400, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER2, Race::NECR, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_UPGRADE2, Race::NECR, { 1000, 0, 0, 0, 0, 0, 0 } },
-    { DWELLING_MONSTER3, Race::NECR, { 1500, 0, 0, 10, 0, 0, 0 } },
-    { DWELLING_UPGRADE3, Race::NECR, { 1500, 0, 0, 5, 0, 0, 0 } },
-    { DWELLING_MONSTER4, Race::NECR, { 3000, 10, 0, 0, 0, 0, 0 } },
-    { DWELLING_UPGRADE4, Race::NECR, { 4000, 5, 0, 0, 0, 10, 10 } },
-    { DWELLING_MONSTER5, Race::NECR, { 4000, 10, 0, 0, 10, 0, 0 } },
-    { DWELLING_UPGRADE5, Race::NECR, { 3000, 0, 0, 5, 0, 5, 0 } },
-    { DWELLING_MONSTER6, Race::NECR, { 10000, 10, 5, 10, 5, 5, 5 } },
-
-    // end
-    { BUILD_NOTHING, Race::NONE, { 0, 0, 0, 0, 0, 0, 0 } },
-};
-
-Funds BuildingInfo::GetCost( uint32_t build, int race )
-{
-    Funds payment;
-    const BuildingStats * ptr = &buildingStats[0];
-
-    while ( BUILD_NOTHING != ptr->id2 && !( ptr->id2 == build && ( !race || ( race & ptr->race ) ) ) )
-        ++ptr;
-
-    if ( BUILD_NOTHING != ptr->id2 ) {
-        payment.gold = ptr->cost.gold;
-        payment.wood = ptr->cost.wood;
-        payment.mercury = ptr->cost.mercury;
-        payment.ore = ptr->cost.ore;
-        payment.sulfur = ptr->cost.sulfur;
-        payment.crystal = ptr->cost.crystal;
-        payment.gems = ptr->cost.gems;
+    for ( const auto & info : buildingStats ) {
+        if ( buildingType == info.type && ( ( info.allowedRaces & race ) != 0 ) ) {
+            return Funds{ info.cost };
+        }
     }
 
-    return payment;
+    return {};
 }
 
 BuildingInfo::BuildingInfo( const Castle & c, const BuildingType b )

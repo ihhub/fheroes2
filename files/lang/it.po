@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1028,6 +1028,10 @@ msgstr "Umano"
 msgid "AI"
 msgstr "Computer"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Nessun oggetto"
+
 msgid "Start"
 msgstr ""
 
@@ -1042,6 +1046,16 @@ msgid "Reset"
 msgstr ""
 
 msgid "Reset to default settings."
+msgstr ""
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
 msgstr ""
 
 msgid "Please select another hero."
@@ -2994,17 +3008,6 @@ msgid "Graphics"
 msgstr ""
 
 #, fuzzy
-msgid "Black & White"
-msgstr "Ponte"
-
-#, fuzzy
-msgid "Mouse Cursor"
-msgstr "Cursore Ombra"
-
-msgid "Color"
-msgstr ""
-
-#, fuzzy
 msgid "Text Support"
 msgstr ""
 "Tele-\n"
@@ -3020,7 +3023,17 @@ msgstr "Scegli lingua del gioco"
 msgid "Change the graphics settings of the game."
 msgstr "Cambia le impostazioni dell'audio del gioco."
 
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Cursore Ombra"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -3121,6 +3134,15 @@ msgstr ""
 msgid "System Info"
 msgstr "Opzioni Sistema"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Cambia la risoluzione del gioco."
 
@@ -3128,6 +3150,13 @@ msgid "Select Game Resolution"
 msgstr "Scegli la risoluzione del gioco"
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3168,12 +3197,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -5243,7 +5266,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -6670,6 +6693,13 @@ msgstr "Buono"
 
 msgid "Evil"
 msgstr "Cattivo"
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Ponte"
+
+msgid "Color"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -11822,31 +11852,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Indica se la mappa è stata creata per la versione del gioco Guerre di "
-#~ "Successione o The Price of Loyalty."
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "La descrizione della mappa scelta attualmente."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opzioni Castello"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Clicca per andare alla città succ."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Clicca per andare alla città prec."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Trasporta subito chi la lancia ad un qualsiasi castello o città al "
-#~ "momento posseduto/a."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Contrattacca sempre"

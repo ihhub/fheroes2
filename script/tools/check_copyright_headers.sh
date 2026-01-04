@@ -40,35 +40,35 @@ WINBAT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.bat$" || true
                                                    | (grep -v "^android/gradlew\.bat$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 
-if [ -z "$C_LIKE_FILES_TO_CHECK" ] && [ -z "$SCRIPT_FILES_TO_CHECK" ] && [ -z "$WINBAT_FILES_TO_CHECK" ]; then
+if [[ -z "$C_LIKE_FILES_TO_CHECK" ]] && [[ -z "$SCRIPT_FILES_TO_CHECK" ]] && [[ -z "$WINBAT_FILES_TO_CHECK" ]]; then
   echo "There is no source code to check the correctness of the copyright headers."
   exit 0
 fi
 
-if [ -n "$C_LIKE_FILES_TO_CHECK" ]; then
+if [[ -n "$C_LIKE_FILES_TO_CHECK" ]]; then
   C_LIKE_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$HEADERS_DIR/full_header_c_like.txt" \
                                                                         "$HEADERS_DIR/header_template_c_like.txt" \
                                                                         $C_LIKE_FILES_TO_CHECK)
 fi
-if [ -n "$SCRIPT_FILES_TO_CHECK" ]; then
+if [[ -n "$SCRIPT_FILES_TO_CHECK" ]]; then
   SCRIPT_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" --handle-shebang \
                                                                         "$HEADERS_DIR/full_header_script.txt" \
                                                                         "$HEADERS_DIR/header_template_script.txt" \
                                                                         $SCRIPT_FILES_TO_CHECK)
 fi
-if [ -n "$WINBAT_FILES_TO_CHECK" ]; then
+if [[ -n "$WINBAT_FILES_TO_CHECK" ]]; then
   WINBAT_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$HEADERS_DIR/full_header_winbat.txt" \
                                                                         "$HEADERS_DIR/header_template_winbat.txt" \
                                                                         $WINBAT_FILES_TO_CHECK)
 fi
 
-if [ -z "$C_LIKE_FORMAT_DIFF" ] && [ -z "$SCRIPT_FORMAT_DIFF" ] && [ -z "$WINBAT_FORMAT_DIFF" ]; then
+if [[ -z "$C_LIKE_FORMAT_DIFF" ]] && [[ -z "$SCRIPT_FORMAT_DIFF" ]] && [[ -z "$WINBAT_FORMAT_DIFF" ]]; then
   echo "All the source code in the PR has the correct copyright headers."
   exit 0
 else
   echo "Invalid copyright headers found!"
-  [ -n "$C_LIKE_FORMAT_DIFF" ] && echo "$C_LIKE_FORMAT_DIFF"
-  [ -n "$SCRIPT_FORMAT_DIFF" ] && echo "$SCRIPT_FORMAT_DIFF"
-  [ -n "$WINBAT_FORMAT_DIFF" ] && echo "$WINBAT_FORMAT_DIFF"
+  [[ -n "$C_LIKE_FORMAT_DIFF" ]] && echo "$C_LIKE_FORMAT_DIFF"
+  [[ -n "$SCRIPT_FORMAT_DIFF" ]] && echo "$SCRIPT_FORMAT_DIFF"
+  [[ -n "$WINBAT_FORMAT_DIFF" ]] && echo "$WINBAT_FORMAT_DIFF"
   exit 1
 fi

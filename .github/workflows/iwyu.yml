@@ -31,7 +31,7 @@ jobs:
       run: |
         iwyu_tool -p build -j "$(nproc)" -- -Xiwyu --cxx17ns -Xiwyu --error -Xiwyu --mapping_file="$GITHUB_WORKSPACE/iwyu.map" \
             | (grep -E -v "^$|has correct #includes/fwd-decls" || true) | tee iwyu-result.txt
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: ${{ failure() }}
       with:
         name: iwyu-result

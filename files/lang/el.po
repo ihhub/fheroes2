@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -967,6 +967,9 @@ msgstr ""
 msgid "AI"
 msgstr ""
 
+msgid "Terrain"
+msgstr ""
+
 msgid "Start"
 msgstr ""
 
@@ -980,6 +983,16 @@ msgid "Reset"
 msgstr ""
 
 msgid "Reset to default settings."
+msgstr ""
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
 msgstr ""
 
 msgid "Please select another hero."
@@ -2791,15 +2804,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Black & White"
-msgstr ""
-
-msgid "Mouse Cursor"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
 msgid "Text Support"
 msgstr ""
 
@@ -2812,7 +2816,16 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
+msgid "Mouse Cursor"
+msgstr ""
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2897,6 +2910,15 @@ msgstr ""
 msgid "System Info"
 msgstr ""
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr ""
 
@@ -2904,6 +2926,13 @@ msgid "Select Game Resolution"
 msgstr ""
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -2942,12 +2971,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -4773,7 +4796,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -6104,6 +6127,12 @@ msgid "Good"
 msgstr ""
 
 msgid "Evil"
+msgstr ""
+
+msgid "Black & White"
+msgstr ""
+
+msgid "Color"
 msgstr ""
 
 msgid ", FPS: "

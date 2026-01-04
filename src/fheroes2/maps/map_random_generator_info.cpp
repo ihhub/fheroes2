@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,6 +54,7 @@ namespace Maps::Random_Generator
 
     void MapStateManager::commitTransaction( const size_t record )
     {
+        (void)record;
         assert( !_transactionRecords.empty() );
         assert( _transactionRecords.back() == record );
 

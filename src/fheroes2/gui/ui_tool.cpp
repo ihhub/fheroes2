@@ -69,7 +69,10 @@ namespace
 
         const fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
 
-        fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
+        fheroes2::Image temp;
+        temp._disableTransformLayer();
+        temp.resize( fadeRoi.width, fadeRoi.height );
+
         Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
 
         double alpha = startAlpha;

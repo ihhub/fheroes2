@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1107,6 +1107,10 @@ msgid "AI"
 msgstr "UI"
 
 #, fuzzy
+msgid "Terrain"
+msgstr "Režim terénu"
+
+#, fuzzy
 msgid "Start"
 msgstr "Reštart"
 
@@ -1121,6 +1125,16 @@ msgid "Reset"
 msgstr ""
 
 msgid "Reset to default settings."
+msgstr ""
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
 msgstr ""
 
 msgid "Please select another hero."
@@ -3166,15 +3180,6 @@ msgstr "Jazyk"
 msgid "Graphics"
 msgstr "Grafika"
 
-msgid "Black & White"
-msgstr "Čiernobiely"
-
-msgid "Mouse Cursor"
-msgstr "Kurzor myši"
-
-msgid "Color"
-msgstr "Farebný"
-
 msgid "Text Support"
 msgstr "Podpora textu"
 
@@ -3187,8 +3192,17 @@ msgstr "Vyber jazyk hry"
 msgid "Change the graphics settings of the game."
 msgstr "Zmeň nastavenie grafiky hry."
 
+msgid "Mouse Cursor"
+msgstr "Kurzor myši"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Zapnutie alebo vypnutie farebného kurzora. Ide len o estetickú voľbu."
+
+msgid "Interface Type"
+msgstr "Typ rozhrania"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3287,6 +3301,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Systémové info"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Zmeň rozlíšenie hry."
 
@@ -3295,6 +3318,13 @@ msgstr "Zvoľ rozlíšenie hry"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Prepni medzi módom celej obrazovky a oknom."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3336,12 +3366,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Typ rozhrania"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid "Toggle interface visibility."
 msgstr "Prepni viditeľnosť rozhrania."
@@ -5452,8 +5476,8 @@ msgstr "Koordinácia projektu a hlavný vývoj"
 msgid "Development"
 msgstr "Vývoj"
 
-msgid "Visit us at "
-msgstr "Navštív nás na "
+msgid "Visit us at"
+msgstr "Navštív nás na"
 
 msgid "QA and Support"
 msgstr "Zabezpečenie kvality a podpora"
@@ -6927,6 +6951,12 @@ msgstr "Dobro"
 
 msgid "Evil"
 msgstr "Zlo"
+
+msgid "Black & White"
+msgstr "Čiernobiely"
+
+msgid "Color"
+msgstr "Farebný"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -12749,64 +12779,3 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo "
-#~ "\"The Price of Loyalty\"."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Pozor"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Opis aktuálne zvolenej mapy."
-
-#~ msgid "Castle Options"
-#~ msgstr "Možnosti hradu"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Kliknutím zobraz ďalšie mesto."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Kliknutím zobraz predošlé mesto."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Vráti zosielateľa do ktoréhokoľvek mesta alebo hradu, ktorý práve "
-#~ "vlastníš."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vždy vracia úder"
-
-#~ msgid "CONFIG"
-#~ msgstr "NASTAV"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Zrušenie a návrat do ponuky Nová mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
-
-#~ msgid "Host"
-#~ msgstr "Hostiteľ"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Hostiteľ nastaví možnosti hry. V jednej sieťovej hre môže byť len jeden "
-#~ "hostiteľ."
-
-#~ msgid "Guest"
-#~ msgstr "Hosť"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Hosť počká, kým hostiteľ nastaví hru, a potom sa automaticky pridá do "
-#~ "hry. Pri hrách cez TCP/IP môže byť viacero hostí."

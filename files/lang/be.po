@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1146,6 +1146,10 @@ msgstr "Чалавек"
 msgid "AI"
 msgstr "Камп’ютар"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Зямная паверхня"
+
 msgid "Start"
 msgstr "Пачаць"
 
@@ -1160,6 +1164,16 @@ msgstr "Скінуць"
 
 msgid "Reset to default settings."
 msgstr "Скінуць да перадвызначаных значэнняў."
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Выберыце іншага героя."
@@ -3169,15 +3183,6 @@ msgstr "Мова"
 msgid "Graphics"
 msgstr "Графіка"
 
-msgid "Black & White"
-msgstr "Чорна-белы"
-
-msgid "Mouse Cursor"
-msgstr "Курсор мышы"
-
-msgid "Color"
-msgstr "Каляровы"
-
 msgid "Text Support"
 msgstr "Суправаджэнне тэкстам"
 
@@ -3190,10 +3195,19 @@ msgstr "Выбар мовы гульні"
 msgid "Change the graphics settings of the game."
 msgstr "Змяніць графічныя налады гульні."
 
+msgid "Mouse Cursor"
+msgstr "Курсор мышы"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Вызначыць, якім будзе курсор - каляровым або чорна-белым. Гэта ўплывае "
 "толькі на візуальны выгляд курсора."
+
+msgid "Interface Type"
+msgstr "Тып інтэрфейсу"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Пераключыць тып інтэрфейсу, які хочаце бачыць на экране."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3287,6 +3301,15 @@ msgstr "Кадр/с"
 msgid "System Info"
 msgstr "Сістэмная інфармацыя"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Змяніць раздзяляльнасць экрана."
 
@@ -3295,6 +3318,13 @@ msgstr "Выбар раздзяляльнасці экрана"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Пераключыцца паміж поўнаэкранным і аконным рэжымамі."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3337,12 +3367,6 @@ msgstr "Апісальная"
 
 msgid "Numeric"
 msgstr "Лічбавая"
-
-msgid "Interface Type"
-msgstr "Тып інтэрфейсу"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Пераключыць тып інтэрфейсу, які хочаце бачыць на экране."
 
 msgid "Toggle interface visibility."
 msgstr "Паказваць або не паказваць элементы інтэрфейсу."
@@ -5271,8 +5295,8 @@ msgstr "Каардынацыя праекта і асноўная распрац
 msgid "Development"
 msgstr "Распрацоўка"
 
-msgid "Visit us at "
-msgstr "Наведайце наш вэб-сайт: "
+msgid "Visit us at"
+msgstr "Наведайце наш вэб-сайт:"
 
 msgid "QA and Support"
 msgstr "Кантроль якасці і падтрымка"
@@ -6741,6 +6765,12 @@ msgstr "Добры"
 
 msgid "Evil"
 msgstr "Злы"
+
+msgid "Black & White"
+msgstr "Чорна-белы"
+
+msgid "Color"
+msgstr "Каляровы"
 
 msgid ", FPS: "
 msgstr ", кадр/с: "
@@ -12628,12 +12658,3 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Абазначае, для якой версіі гульні зроблена мапа -\n"
-#~ "для \"Войны за Спадчыну\",\n"
-#~ "\"Цана вернасці\"\n"
-#~ "або праекта \"Resurrection\"."

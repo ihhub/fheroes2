@@ -193,13 +193,13 @@ jobs:
       run: |
         7z a -bb1 -tzip -- ${{ matrix.package_name }} ${{ matrix.package_files }}
         7z a -bb1 -tzip -- ${{ matrix.tools_package_name }} ${{ matrix.tools_package_files }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'pull_request' && matrix.package_name != '' }}
       with:
         name: ${{ matrix.package_name }}
         path: ${{ matrix.package_name }}
         if-no-files-found: error
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'pull_request' && matrix.tools_package_name != '' }}
       with:
         name: ${{ matrix.tools_package_name }}
@@ -231,7 +231,7 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install libgcc1 gettext
     - name: Prepare Vita SDK cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.vitasdk-cache
         key: make-vitasdk-cache-${{ github.sha }}
@@ -271,7 +271,7 @@ jobs:
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.vpk
         7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_psv.zip
@@ -319,7 +319,7 @@ jobs:
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_switch.zip
@@ -375,7 +375,7 @@ jobs:
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.data
         7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.package_name }}

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 04:02+0000\n"
+"POT-Creation-Date: 2026-01-03 12:31+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -1106,6 +1106,10 @@ msgstr "Menneske"
 msgid "AI"
 msgstr "AI"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Terræn-tilstand"
+
 msgid "Start"
 msgstr "Genstart"
 
@@ -1120,6 +1124,16 @@ msgstr "Nulstil"
 
 msgid "Reset to default settings."
 msgstr "Nulstil til standardindstillinger"
+
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Vælg venligst en anden helt."
@@ -3187,15 +3201,6 @@ msgstr "Sprog"
 msgid "Graphics"
 msgstr "Grafik"
 
-msgid "Black & White"
-msgstr "Sort & Hvid"
-
-msgid "Mouse Cursor"
-msgstr "Musemarkør"
-
-msgid "Color"
-msgstr "Farve"
-
 msgid "Text Support"
 msgstr "Tekstsupport"
 
@@ -3208,8 +3213,17 @@ msgstr "Vælg spillets sprog"
 msgid "Change the graphics settings of the game."
 msgstr "Ændr spillets grafikindstillinger."
 
+msgid "Mouse Cursor"
+msgstr "Musemarkør"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
+
+msgid "Interface Type"
+msgstr "Interface-type"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3303,6 +3317,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "System info"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Skift spilopløsning."
 
@@ -3311,6 +3334,13 @@ msgstr "Vælg spilopløsning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Vælg mellem fuldskærms- og vinduestilstand."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3352,12 +3382,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Interface-type"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid "Toggle interface visibility."
 msgstr "Vælg interfacets synlighed til eller fra."
@@ -5352,8 +5376,8 @@ msgstr "Projektkoordination og kerneudvikling"
 msgid "Development"
 msgstr "Udvikling"
 
-msgid "Visit us at "
-msgstr "Besøg os på "
+msgid "Visit us at"
+msgstr "Besøg os på"
 
 msgid "QA and Support"
 msgstr "QA og support"
@@ -6819,6 +6843,12 @@ msgstr "God"
 
 msgid "Evil"
 msgstr "Ond"
+
+msgid "Black & White"
+msgstr "Sort & Hvid"
+
+msgid "Color"
+msgstr "Farve"
 
 msgid ", FPS: "
 msgstr ", FPS:"
@@ -12661,78 +12691,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
-
-#~ msgid ""
-#~ "Indicates whether the map is made for \"The Succession Wars\", \"The "
-#~ "Price of Loyalty\" or \"Resurrection\" version of the game."
-#~ msgstr ""
-#~ "Angiver om kortet er lavet til \"Arvefølgekrigene\", \"Prisen for "
-#~ "Loyalitet\" eller \"Opstandelse\" version af spillet."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Advarsel"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Beskrivelsen til det valgte kort."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Den indtastede kortbeskrivelse overskrider de maksimalt tilladte 5 "
-#~ "rækker. Den vil blive forkortet, så den passer til kortbeskrivelsesfeltet."
-
-#~ msgid "Castle Options"
-#~ msgstr "Borg-vindue"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klik for at se næste by."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klik for at se forrige by."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Returnerer kasteren til enhver af spillerens byer eller borge."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Slår altid igen"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
-
-#~ msgid "CONFIG"
-#~ msgstr "INDSTIL"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
-
-#~ msgid "Host"
-#~ msgstr "Vært"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Værten opsætter spilmulighederne. Der kan kun være én vært per "
-#~ "netværksspil."
-
-#~ msgid "Guest"
-#~ msgstr "Gæst"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gæsten venter på, at værten sætter spillet op, og tilføjes derefter "
-#~ "automatisk. Der kan være flere gæster til TCP/IP-spil."

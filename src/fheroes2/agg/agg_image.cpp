@@ -3174,8 +3174,8 @@ namespace
                 _icnVsSprite[id].resize( 18 );
 
                 // Make empty buttons for object types.
-                _icnVsSprite[id][6].resize( 27, 27 );
                 _icnVsSprite[id][6]._disableTransformLayer();
+                _icnVsSprite[id][6].resize( 27, 27 );
                 _icnVsSprite[id][6].reset();
                 Fill( _icnVsSprite[id][6], 1, 1, 24, 24, 65U );
                 for ( size_t i = 7; i < _icnVsSprite[id].size(); ++i ) {
@@ -3382,6 +3382,18 @@ namespace
                 if ( original.width() == 30 && original.height() == 22 ) {
                     original._disableTransformLayer();
                     original.image()[82] = 244;
+                }
+            }
+            break;
+        case ICN::PORT0013:
+            // Jezebel has two bad pixels.
+            if ( !_icnVsSprite[id].empty() ) {
+                fheroes2::Sprite & original = _icnVsSprite[id][0];
+                if ( original.width() == 101 && original.height() == 93 ) {
+                    original._disableTransformLayer();
+                    uint8_t * imageData = original.image();
+                    imageData[6118] = 11;
+                    imageData[6219] = 11;
                 }
             }
             break;
@@ -3800,19 +3812,22 @@ namespace
                     continue;
                 }
 
-                fheroes2::Sprite & humonOrAiImage = images[i + 82];
-                Copy( images[i + 3], humonOrAiImage );
+                fheroes2::Sprite & humanOrAiImage = images[i + 82];
+                // This image will have no transparency - disable the transform layer.
+                humanOrAiImage._disableTransformLayer();
+
+                Copy( images[i + 3], humanOrAiImage );
 
                 // Fill the icon with the player's color.
-                Fill( humonOrAiImage, 15, 8, 32, 30, images[i + 82].image()[252] );
+                Fill( humanOrAiImage, 15, 8, 32, 30, images[i + 82].image()[252] );
 
                 // Make a temporary image to cut human icon's background.
                 fheroes2::Image temp( 33, 35 );
                 Copy( images[i + 9], 15, 5, temp, 0, 0, 33, 35 );
                 ReplaceColorIdByTransformId( temp, images[i + 82].image()[252], 1U );
 
-                Copy( images[i + 3], 15, 8, humonOrAiImage, 27, 8, 31, 30 );
-                Blit( temp, humonOrAiImage, 4, 5 );
+                Copy( images[i + 3], 15, 8, humanOrAiImage, 27, 8, 31, 30 );
+                Blit( temp, humanOrAiImage, 4, 5 );
             }
 
             break;
@@ -4018,6 +4033,11 @@ namespace
                 updateShadow( buttonImage, { 2, -2 }, 4, true );
 
                 const fheroes2::Sprite & emptyButtonPressed = fheroes2::AGG::GetICN( emptyButtonId, 1 );
+                if ( emptyButtonPressed.singleLayer() ) {
+                    _icnVsSprite[id][17]._disableTransformLayer();
+                    _icnVsSprite[id][19]._disableTransformLayer();
+                }
+
                 Copy( emptyButtonPressed, _icnVsSprite[id][17] );
                 Blit( buttonImage, _icnVsSprite[id][17], 4, 4 );
 
@@ -4032,6 +4052,11 @@ namespace
                 ReplaceColorId( buttonImage, mainPressedColor, mainReleasedColor );
 
                 const fheroes2::Sprite & emptyButtonReleased = fheroes2::AGG::GetICN( emptyButtonId, 0 );
+                if ( emptyButtonPressed.singleLayer() ) {
+                    _icnVsSprite[id][16]._disableTransformLayer();
+                    _icnVsSprite[id][18]._disableTransformLayer();
+                }
+
                 Copy( emptyButtonReleased, _icnVsSprite[id][16] );
                 Blit( buttonImage, _icnVsSprite[id][16], 5, 3 );
 
@@ -4161,9 +4186,10 @@ namespace
                 // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
                 for ( const int32_t index : { 88, 99 } ) {
                     fheroes2::Sprite & originalImage = _icnVsSprite[id][index];
-                    fheroes2::Sprite temp( originalImage.width(), originalImage.height() );
-                    temp.setPosition( originalImage.x(), originalImage.y() );
+                    fheroes2::Sprite temp;
                     temp._disableTransformLayer();
+                    temp.resize( originalImage.width(), originalImage.height() );
+                    temp.setPosition( originalImage.x(), originalImage.y() );
                     temp.fill( 0 );
                     Blit( originalImage, temp );
                     originalImage = std::move( temp );
@@ -4888,6 +4914,13 @@ namespace
             loadICN( originalId );
             _icnVsSprite[id].resize( 2 );
 
+            if ( _icnVsSprite[originalId][2].singleLayer() ) {
+                _icnVsSprite[id][0]._disableTransformLayer();
+            }
+            if ( _icnVsSprite[originalId][3].singleLayer() ) {
+                _icnVsSprite[id][1]._disableTransformLayer();
+            }
+
             Copy( _icnVsSprite[originalId][2], _icnVsSprite[id][0] );
             Copy( _icnVsSprite[originalId][3], _icnVsSprite[id][1] );
 
@@ -4986,17 +5019,54 @@ namespace
             _icnVsSprite[id].resize( 1 );
 
             fheroes2::Sprite & background = _icnVsSprite[id][0];
+            background._disableTransformLayer();
             background.resize( 65, 65 );
             fheroes2::Copy( fheroes2::AGG::GetICN( ICN::ESPANBKG, 0 ), 69, 47, background, 0, 0, 65, 65 );
-            background._disableTransformLayer();
 
             break;
         }
         case ICN::GAME_OPTION_ICON: {
-            _icnVsSprite[id].resize( 2 );
+            _icnVsSprite[id].resize( 4 );
+
+            // TODO: Cut the icons from the embedded background in resurrection.h2d and use the empty background ICN to make the icons instead.
+            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
             fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+            _icnVsSprite[id][0]._disableTransformLayer();
             fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+            _icnVsSprite[id][1]._disableTransformLayer();
+
+            fheroes2::Sprite monocle;
+            fheroes2::h2d::readImage( "monocle.image", monocle );
+
+            fheroes2::Sprite & linearScaling = _icnVsSprite[id][2];
+            linearScaling._disableTransformLayer();
+
+            fheroes2::Copy( background, linearScaling );
+
+            fheroes2::Sprite creature = fheroes2::AGG::GetICN( ICN::MONS32, 38 );
+            // Remove shadows
+            setTransformLayerTransparent( creature );
+            fheroes2::Sprite linearCreature( creature.width() * 2, creature.height() * 2 );
+
+            SubpixelResize( creature, linearCreature );
+
+            linearCreature.setPosition( creature.x() * 2, creature.y() * 2 );
+
+            fheroes2::Blit( linearCreature, 0, 0, linearScaling, 14, 10, linearCreature.width(), 48 );
+            fheroes2::Blit( monocle, 0, 0, linearScaling, 1, 8, monocle.width(), monocle.height() );
+
+            fheroes2::Sprite & nearestScaling = _icnVsSprite[id][3];
+            nearestScaling._disableTransformLayer();
+
+            fheroes2::Copy( background, nearestScaling );
+            fheroes2::Sprite nearestCreature( linearCreature.width(), linearCreature.height() );
+            nearestCreature.setPosition( linearCreature.x(), linearCreature.y() );
+
+            Resize( creature, nearestCreature );
+
+            fheroes2::Blit( nearestCreature, 0, 0, nearestScaling, 14, 10, linearCreature.width(), 48 );
+            fheroes2::Blit( monocle, 0, 0, nearestScaling, 1, 8, monocle.width(), monocle.height() );
 
             break;
         }
