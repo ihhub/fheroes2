@@ -1488,6 +1488,9 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                         // If we would kill friendly units by 3 or time times than the enemy, then we shouldn't do this.
                         isDangerousMove = ( friendDamageHitPoints >= 3 * enemyDamageHitPoints );
                     }
+                    else {
+                        isDangerousMove = false;
+                    }
 
                     return result;
                 };
