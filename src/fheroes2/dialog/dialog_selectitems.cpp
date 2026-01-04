@@ -427,11 +427,11 @@ namespace
             // If this assertion blows up then you are setting different number of items.
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
-            showPopupWindow( _objectInfo[objectId] );
+            showPopupWindow( _objectInfo[objectId], objectId );
         }
 
     private:
-        virtual void showPopupWindow( const Maps::ObjectInfo & info ) = 0;
+        virtual void showPopupWindow( const Maps::ObjectInfo & info, const int objectId ) = 0;
 
         virtual std::string getObjectName( const Maps::ObjectInfo & info ) = 0;
 
@@ -459,11 +459,11 @@ namespace
         }
 
     private:
-        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        void showPopupWindow( const Maps::ObjectInfo & info, const int objectId ) override
         {
             const Monster monster( static_cast<int32_t>( info.metadata[0] ) );
             if ( !monster.isValid() ) {
-                fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
+                fheroes2::showStandardTextMessage( monster.GetName(), std::to_string( objectId ), Dialog::ZERO );
                 return;
             }
 
@@ -492,7 +492,7 @@ namespace
         }
 
     private:
-        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        void showPopupWindow( const Maps::ObjectInfo & info, const int objectId ) override
         {
             switch ( info.objectType ) {
             case MP2::OBJ_ARTIFACT:
@@ -503,7 +503,7 @@ namespace
             case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
             case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
             case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
-                fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
+                fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), std::to_string( objectId ), Dialog::ZERO );
                 break;
             default:
                 // Did you expand the list of artifacts? Add the corresponding logic!
@@ -543,7 +543,7 @@ namespace
         }
 
     private:
-        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        void showPopupWindow( const Maps::ObjectInfo & info, const int objectId ) override
         {
             switch ( info.objectType ) {
             case MP2::OBJ_RESOURCE:
@@ -555,7 +555,7 @@ namespace
             case MP2::OBJ_GENIE_LAMP:
             case MP2::OBJ_RANDOM_RESOURCE:
             case MP2::OBJ_TREASURE_CHEST:
-                fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+                fheroes2::showStandardTextMessage( getObjectName( info ), std::to_string( objectId ), Dialog::ZERO );
                 break;
             default:
                 // Did you expand the list of treasures? Add the corresponding logic!
@@ -594,9 +594,9 @@ namespace
         }
 
     private:
-        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        void showPopupWindow( const Maps::ObjectInfo & info, const int objectId ) override
         {
-            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+            fheroes2::showStandardTextMessage( getObjectName( info ), std::to_string( objectId ), Dialog::ZERO );
         }
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
@@ -619,9 +619,9 @@ namespace
         }
 
     private:
-        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        void showPopupWindow( const Maps::ObjectInfo & info, const int objectId ) override
         {
-            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+            fheroes2::showStandardTextMessage( getObjectName( info ), std::to_string( objectId ), Dialog::ZERO );
         }
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
@@ -657,9 +657,9 @@ namespace
         }
 
     private:
-        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        void showPopupWindow( const Maps::ObjectInfo & info, const int objectId ) override
         {
-            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+            fheroes2::showStandardTextMessage( getObjectName( info ), std::to_string( objectId ), Dialog::ZERO );
         }
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
