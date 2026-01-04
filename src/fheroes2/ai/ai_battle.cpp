@@ -1433,6 +1433,8 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
         BattleTargetPair target;
         double highestPriority = std::numeric_limits<double>::lowest();
 
+        const bool isAreaShotAbilityPresent = currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
+
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
 
@@ -1447,7 +1449,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                 }
             };
 
-            if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+            if ( isAreaShotAbilityPresent ) {
                 const auto calculateAreaShotAttackPriority = [&arena, &currentUnit, enemy]( const int32_t targetIdx, bool & isDangerousMove ) {
                     double result = 0.0;
 
@@ -1468,23 +1470,26 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
 
                     double enemyDamageHitPoints{ 0 };
                     double friendDamageHitPoints{ 0 };
+                    const bool isExtraLogicAllowed = Difficulty::isBasicAIBattleLogicApplicable( Game::getDifficulty(), currentUnit.isControlHuman() );
 
                     for ( const int32_t unitIdx : affectedUnitsIndexes ) {
                         const Battle::Unit * unit = arena.GetTroopBoard( unitIdx );
                         assert( unit != nullptr );
 
-                        const uint32_t damageHitPoints = std::min( unit->GetHitPoints(), currentUnit.getPotentialDamage( *unit ) );
-                        if ( currentUnit.GetColor() == unit->GetCurrentColor() ) {
-                            friendDamageHitPoints += damageHitPoints;
-                        }
-                        else {
-                            enemyDamageHitPoints += damageHitPoints;
+                        if ( isExtraLogicAllowed ) {
+                            const uint32_t damageHitPoints = std::min( unit->GetHitPoints(), currentUnit.getPotentialDamage( *unit ) );
+                            if ( currentUnit.GetColor() == unit->GetCurrentColor() ) {
+                                friendDamageHitPoints += damageHitPoints;
+                            }
+                            else {
+                                enemyDamageHitPoints += damageHitPoints;
+                            }
                         }
 
                         result += unit->evaluateThreatForUnit( currentUnit );
                     }
 
-                    if ( Difficulty::isBasicAIBattleLogicApplicable( Game::getDifficulty(), currentUnit.isControlHuman() ) ) {
+                    if ( isExtraLogicAllowed ) {
                         // If we would kill friendly units by 3 or time times than the enemy, then we shouldn't do this.
                         isDangerousMove = ( friendDamageHitPoints >= 3 * enemyDamageHitPoints );
                     }
