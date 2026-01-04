@@ -1484,9 +1484,10 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                         result += unit->evaluateThreatForUnit( currentUnit );
                     }
 
-                    // If we would kill friendly units by 3 or time times than the enemy, then we shouldn't do this.
-                    // This is applicable only for true AI heroes. Humans shouldn't get this in auto-battle mode.
-                    isDangerousMove = !currentUnit.isControlHuman() && ( friendDamageHitPoints >= 3 * enemyDamageHitPoints );
+                    if ( Difficulty::isBasicAIBattleLogicApplicable( Game::getDifficulty(), currentUnit.isControlHuman() ) ) {
+                        // If we would kill friendly units by 3 or time times than the enemy, then we shouldn't do this.
+                        isDangerousMove = ( friendDamageHitPoints >= 3 * enemyDamageHitPoints );
+                    }
 
                     return result;
                 };
