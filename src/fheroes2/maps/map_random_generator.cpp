@@ -439,6 +439,21 @@ namespace Maps::Random_Generator
                   },
               },
           } },
+        { Maps::Ground::DIRT,
+          { {
+              // Large dirt water lake.
+              {
+                  { { 0, 0 }, ObjectGroup::LANDSCAPE_MISCELLANEOUS, 103 },
+                  { { 2, -2 }, ObjectGroup::LANDSCAPE_TREES, 0 },
+                  { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                  { { -4, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+              },
+              // Optional.
+              {
+                  { { 3, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+                  { { 4, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
+              },
+          } } },
         { Maps::Ground::WASTELAND,
           {
               {
