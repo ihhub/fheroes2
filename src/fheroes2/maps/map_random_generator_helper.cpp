@@ -1145,12 +1145,15 @@ namespace Maps::Random_Generator
         std::vector<int32_t> openTiles = findOpenTiles( region );
 
         const auto openSpaceFilter = [&data]( const int32_t idx ) {
-            for ( const int32_t adjacent : Maps::getAroundIndexes( idx ) ) {
-                if ( data.getNode( adjacent ).type != NodeType::OPEN ) {
-                    return true;
+            const auto & directions = Direction::All();
+
+            return std::any_of( directions.begin(), directions.end(), [&]( const auto direction ) {
+                if ( !Maps::isValidDirection( idx, direction ) ) {
+                    return false;
                 }
-            }
-            return false;
+
+                return data.getNode( Maps::GetDirectionIndex( idx, direction ) ).type != NodeType::OPEN;
+            } );
         };
         openTiles.erase( std::remove_if( openTiles.begin(), openTiles.end(), openSpaceFilter ), openTiles.end() );
 
@@ -1162,7 +1165,7 @@ namespace Maps::Random_Generator
         std::vector<int32_t> objectCount( sets.size(), individualObjectCopies );
 
         const size_t possibilitiesCount = sets.size() * individualObjectCopies * 3;
-        std::vector<int32_t> tileIndicies = pickEvenlySpacedTiles( openTiles, possibilitiesCount, {} );
+        const std::vector<int32_t> tileIndicies = pickEvenlySpacedTiles( openTiles, possibilitiesCount, {} );
 
         for ( const int32_t tileIndex : tileIndicies ) {
             const Node & node = data.getNode( tileIndex );
