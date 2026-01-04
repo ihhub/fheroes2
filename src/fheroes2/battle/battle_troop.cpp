@@ -503,15 +503,15 @@ uint32_t Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
 
 uint32_t Battle::Unit::getPotentialDamage( const Unit & enemy ) const
 {
-     if ( Modes( Battle::SP_CURSE ) ) {
-         return CalculateMinDamage( enemy );
-     }
+    if ( Modes( Battle::SP_CURSE ) ) {
+        return CalculateMinDamage( enemy );
+    }
 
-     if ( Modes( Battle::SP_BLESS ) ) {
-         return CalculateMaxDamage( enemy );
-     }
+    if ( Modes( Battle::SP_BLESS ) ) {
+        return CalculateMaxDamage( enemy );
+    }
 
-     return ( CalculateMinDamage( enemy ) + CalculateMaxDamage( enemy ) ) / 2;
+    return ( CalculateMinDamage( enemy ) + CalculateMaxDamage( enemy ) ) / 2;
 }
 
 uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
