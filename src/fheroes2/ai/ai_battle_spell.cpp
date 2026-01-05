@@ -174,6 +174,11 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
 
         // If we retreat, we are not interested in partial damage, but only in the number of units actually killed
         if ( retreating ) {
+            if ( unit->Modes( Battle::CAP_MIRRORIMAGE ) ) {
+                // Since we are retreating there is no use to kill mirrored monster stack as it will disappear after the battle.
+                return 0.0;
+            }
+
             return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
         }
 
