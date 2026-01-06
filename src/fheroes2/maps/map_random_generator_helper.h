@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +41,7 @@ namespace Maps::Random_Generator
     struct Node;
     struct ObjectPlacement;
     struct ObjectSet;
+    struct DecorationSet;
     struct Region;
     struct MonsterSelection;
     enum class MonsterStrength : uint8_t;
@@ -67,25 +68,26 @@ namespace Maps::Random_Generator
     int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex );
     MonsterSelection getMonstersByValue( const MonsterStrength monsterStrength, int32_t protectedObjectValue );
     std::pair<ObjectGroup, int32_t> getRandomTreasure( const int32_t goldValueLimit, Rand::PCG32 & randomGenerator );
-    int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType );
+    int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int32_t groundType );
     std::vector<int32_t> findPathToNearestRoad( const MapStateManager & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start );
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator );
     std::vector<int32_t> findOpenTiles( const Region & region );
     std::vector<int32_t> pickEvenlySpacedTiles( const std::vector<int32_t> & candidates, const size_t pickCount, const std::vector<int32_t> & avoidance );
 
-    bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos );
-    bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & mainTilePos );
-    void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & mainTilePos );
+    bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position );
+    bool canPlaceAllObjects( const MapStateManager & data, const std::vector<ObjectPlacement> & objects, const fheroes2::Point & position, const int32_t ground );
+    bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & position, const int32_t ground );
+    void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position );
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex );
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex );
     bool placeActionObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, Tile & tile, const ObjectGroup groupType, const int32_t type );
     bool placeCastle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Region & region, const fheroes2::Point tilePos, const bool isCastle );
-    int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> & tileOptions, const int resource,
+    int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> & tileOptions, const int32_t resource,
                        const MonsterStrength monsterStrength );
-    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, Rand::PCG32 & randomGenerator );
-    void placeMonster( Map_Format::MapFormat & mapFormat, const int32_t index, const MonsterSelection & monster );
-    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement );
+    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, const int32_t ground, Rand::PCG32 & randomGenerator );
+    void placeMonster( Map_Format::MapFormat & mapFormat, MapStateManager & data, const int32_t index, const MonsterSelection & monster );
+    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement, const int32_t ground );
 
     std::vector<int32_t> findTilesForPlacement( MapStateManager & data, const int32_t mapWidth, const uint32_t regionId, const std::vector<int32_t> & nodes,
                                                 const ObjectInfo & objectInfo );
@@ -93,6 +95,8 @@ namespace Maps::Random_Generator
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator );
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator );
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const std::vector<DecorationSet> & decorations,
+                           Rand::PCG32 & randomGenerator );
 
     // This function expects a valid tileIndex that will fit the set. Plan first before calling
     void placeValidTreasures( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const ObjectSet & objectSet, const int32_t tileIndex,
