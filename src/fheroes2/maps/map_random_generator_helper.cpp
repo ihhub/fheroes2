@@ -55,12 +55,12 @@ namespace
     {
         int32_t _from{ -1 };
         uint32_t _cost{ 0 };
-        int _direction{ Direction::UNKNOWN };
+        int32_t _direction{ Direction::UNKNOWN };
     };
 
-    constexpr int randomCastleIndex{ 12 };
-    constexpr int randomTownIndex{ 13 };
-    constexpr int randomHeroIndex{ 7 };
+    constexpr int32_t randomCastleIndex{ 12 };
+    constexpr int32_t randomTownIndex{ 13 };
+    constexpr int32_t randomHeroIndex{ 7 };
     constexpr size_t maxPlacementAttempts{ 99 };
     constexpr uint32_t roadBuilderMargin{ Maps::Ground::defaultGroundPenalty * 3 };
 
@@ -124,7 +124,7 @@ namespace
         { MP2::OBJ_WATER_ALTAR, 5000 },
     };
 
-    constexpr int32_t treeTypeFromGroundType( const int groundType )
+    constexpr int32_t treeTypeFromGroundType( const int32_t groundType )
     {
         switch ( groundType ) {
         case Maps::Ground::WATER:
@@ -154,7 +154,7 @@ namespace
         return 0;
     }
 
-    constexpr int32_t mountainTypeFromGroundType( const int groundType )
+    constexpr int32_t mountainTypeFromGroundType( const int32_t groundType )
     {
         switch ( groundType ) {
         case Maps::Ground::WATER:
@@ -184,7 +184,7 @@ namespace
         return 0;
     }
 
-    constexpr MP2::MapObjectType getFakeMP2MineType( const int resource )
+    constexpr MP2::MapObjectType getFakeMP2MineType( const int32_t resource )
     {
         switch ( resource ) {
         case Resource::WOOD:
@@ -403,7 +403,7 @@ namespace Maps::Random_Generator
         return convertMP2ToObjectInfo( Rand::GetWithGen( possibilities, randomGenerator ) );
     }
 
-    int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int groundType )
+    int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int32_t groundType )
     {
         if ( groupType == ObjectGroup::LANDSCAPE_TREES && objectIndex < 6 ) {
             return treeTypeFromGroundType( groundType ) + objectIndex;
@@ -451,7 +451,7 @@ namespace Maps::Random_Generator
                 bestRoadCost = currentNode._cost;
             }
 
-            for ( const int direction : directions ) {
+            for ( const int32_t direction : directions ) {
                 if ( !Maps::isValidDirection( currentNodeIdx, direction ) ) {
                     continue;
                 }
@@ -464,7 +464,7 @@ namespace Maps::Random_Generator
 
                 // Edge case: avoid tight road turns for a better visuals
                 if ( isDiagonal && currentNode._from != -1 ) {
-                    const int previousDirection = cache[currentNode._from]._direction;
+                    const int32_t previousDirection = cache[currentNode._from]._direction;
 
                     if ( previousDirection != direction && Direction::isDiagonal( previousDirection ) ) {
                         continue;
@@ -474,7 +474,7 @@ namespace Maps::Random_Generator
                     }
                 }
 
-                const int newIndex = Maps::GetDirectionIndex( currentNodeIdx, direction );
+                const int32_t newIndex = Maps::GetDirectionIndex( currentNodeIdx, direction );
                 if ( newIndex == start ) {
                     continue;
                 }
@@ -543,16 +543,16 @@ namespace Maps::Random_Generator
 
         std::vector<std::vector<int32_t>> buckets;
 
-        const int centerX = region.centerIndex % mapWidth;
-        const int centerY = region.centerIndex / mapWidth;
+        const int32_t centerX = region.centerIndex % mapWidth;
+        const int32_t centerY = region.centerIndex / mapWidth;
 
         for ( const Node & node : region.nodes ) {
             if ( node.type != NodeType::OPEN || node.index < 0 ) {
                 continue;
             }
 
-            const int dx = ( node.index % mapWidth ) - centerX;
-            const int dy = ( node.index / mapWidth ) - centerY;
+            const int32_t dx = ( node.index % mapWidth ) - centerX;
+            const int32_t dy = ( node.index / mapWidth ) - centerY;
 
             const double distance = std::sqrt( static_cast<double>( dx * dx + dy * dy ) );
             const uint32_t noise = static_cast<int>( Rand::GetWithGen( 0, 2, randomGenerator ) );
@@ -685,7 +685,7 @@ namespace Maps::Random_Generator
         return validPlacement;
     }
 
-    bool canPlaceAllObjects( const MapStateManager & data, const std::vector<ObjectPlacement> & objects, const fheroes2::Point & position, const int ground )
+    bool canPlaceAllObjects( const MapStateManager & data, const std::vector<ObjectPlacement> & objects, const fheroes2::Point & position, const int32_t ground )
     {
         return std::all_of( objects.begin(), objects.end(), [&ground, &data, &position]( const ObjectPlacement & object ) {
             const int32_t objectIndex = selectTerrainVariantForObject( object.groupType, object.objectIndex, ground );
@@ -693,7 +693,7 @@ namespace Maps::Random_Generator
         } );
     }
 
-    bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & position, const int ground )
+    bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & position, const int32_t ground )
     {
         for ( const fheroes2::Point offset : set.entranceCheck ) {
             const Node & node = data.getNode( position + offset );
@@ -853,7 +853,7 @@ namespace Maps::Random_Generator
         return true;
     }
 
-    int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> & tileOptions, const int resource,
+    int32_t placeMine( Map_Format::MapFormat & mapFormat, MapStateManager & data, MapEconomy & economy, const std::vector<int32_t> & tileOptions, const int32_t resource,
                        const MonsterStrength monsterStrength )
     {
         for ( const int32_t nodeIndex : tileOptions ) {
@@ -870,7 +870,7 @@ namespace Maps::Random_Generator
         return -1;
     }
 
-    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, const int ground, Rand::PCG32 & randomGenerator )
+    bool placeBorderObstacle( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & node, const int32_t ground, Rand::PCG32 & randomGenerator )
     {
         Tile & tile = world.getTile( node.index );
         const auto it = obstaclesPerGround.find( ground );
@@ -914,7 +914,7 @@ namespace Maps::Random_Generator
         }
     }
 
-    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement, const int ground )
+    bool placeSimpleObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Node & centerNode, const ObjectPlacement & placement, const int32_t ground )
     {
         const fheroes2::Point position = Maps::GetPoint( centerNode.index ) + placement.offset;
         if ( !Maps::isValidAbsPoint( position.x, position.y ) ) {
@@ -1073,7 +1073,7 @@ namespace Maps::Random_Generator
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator )
     {
-        int objectsPlaced = 0;
+        int32_t objectsPlaced = 0;
         for ( size_t attempt = 0; attempt < maxPlacementAttempts; ++attempt ) {
             if ( objectsPlaced == expectedCount || region.treasureLimit <= 0 ) {
                 break;
@@ -1135,10 +1135,10 @@ namespace Maps::Random_Generator
         }
     }
 
-    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const std::vector<DecorationSet> & sets,
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const std::vector<DecorationSet> & decorations,
                            Rand::PCG32 & randomGenerator )
     {
-        if ( sets.empty() ) {
+        if ( decorations.empty() ) {
             return;
         }
 
@@ -1162,24 +1162,24 @@ namespace Maps::Random_Generator
         }
 
         const int32_t individualObjectCopies = std::max( 1, static_cast<int32_t>( openTiles.size() ) / 300 );
-        std::vector<int32_t> objectCount( sets.size(), individualObjectCopies );
+        std::vector<int32_t> objectCount( decorations.size(), individualObjectCopies );
 
-        const size_t possibilitiesCount = sets.size() * individualObjectCopies * 3;
+        const size_t possibilitiesCount = decorations.size() * individualObjectCopies * 3;
         const std::vector<int32_t> tileIndicies = pickEvenlySpacedTiles( openTiles, possibilitiesCount, {} );
 
         for ( const int32_t tileIndex : tileIndicies ) {
-            const Node & node = data.getNode( tileIndex );
-
-            const size_t setIndex = Rand::GetWithGen( 0, static_cast<uint32_t>( sets.size() - 1 ), randomGenerator );
+            const size_t setIndex = Rand::GetWithGen( 0, static_cast<uint32_t>( decorations.size() - 1 ), randomGenerator );
             if ( objectCount[setIndex] <= 0 ) {
                 continue;
             }
-            const auto & objectSet = sets[setIndex];
+            const auto & objectSet = decorations[setIndex];
 
             const fheroes2::Point position = Maps::GetPoint( tileIndex );
             if ( !canPlaceAllObjects( data, objectSet.obstacles, position, region.groundType ) ) {
                 continue;
             }
+
+            const Node & node = data.getNode( tileIndex );
 
             for ( const auto & obstacle : objectSet.obstacles ) {
                 placeSimpleObject( mapFormat, data, node, obstacle, region.groundType );

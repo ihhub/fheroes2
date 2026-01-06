@@ -208,7 +208,7 @@ namespace Maps::Random_Generator
                    { { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } } },
     };
 
-    const std::map<int, std::vector<DecorationSet>> decorationsPerGround{
+    const std::map<int32_t, std::vector<DecorationSet>> decorationsPerGround{
         { Maps::Ground::ALL,
           {
               { // Large mountain cross.
@@ -218,6 +218,7 @@ namespace Maps::Random_Generator
                     { { -3, 0 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 4 },
                     { { 1, 2 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 2 },
                 },
+                // Optional.
                 {} },
               { // Two large mountains.
                 {
@@ -225,6 +226,7 @@ namespace Maps::Random_Generator
                     { { -3, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 1 },
                     { { -2, 2 }, ObjectGroup::LANDSCAPE_TREES, 3 },
                 },
+                // Optional.
                 {} },
               { // Vertical mountain chain.
                 {
@@ -244,6 +246,7 @@ namespace Maps::Random_Generator
                     { { 1, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 3 },
                     { { -1, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
                 },
+                // Optional.
                 {} },
               { // Small mountains.
                 {
@@ -251,6 +254,7 @@ namespace Maps::Random_Generator
                     { { -1, 1 }, ObjectGroup::LANDSCAPE_MOUNTAINS, 5 },
                     { { 0, 1 }, ObjectGroup::LANDSCAPE_TREES, 4 },
                 },
+                // Optional.
                 {} },
               { // Horizontal tree line.
                 {
@@ -259,6 +263,7 @@ namespace Maps::Random_Generator
                     { { 2, -1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
                     { { 4, 0 }, ObjectGroup::LANDSCAPE_TREES, 2 },
                 },
+                // Optional.
                 {
                     { { -2, -1 }, ObjectGroup::LANDSCAPE_TREES, 0 },
                 } },
@@ -267,6 +272,7 @@ namespace Maps::Random_Generator
                     { { 0, 0 }, ObjectGroup::LANDSCAPE_TREES, 0 },
                     { { -1, 1 }, ObjectGroup::LANDSCAPE_TREES, 1 },
                 },
+                // Optional.
                 {} },
           } },
         { Maps::Ground::GRASS,
