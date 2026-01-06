@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -133,7 +133,7 @@ namespace
     class MonsterMultiSelection final : public fheroes2::DialogElement
     {
     public:
-        MonsterMultiSelection( std::vector<int> allowed, std::vector<int> selected, std::string text, const bool isEvilInterface )
+        MonsterMultiSelection( std::vector<int32_t> allowed, std::vector<int32_t> selected, std::string text, const bool isEvilInterface )
             : _allowed( std::move( allowed ) )
             , _selected( std::move( selected ) )
             , _text( std::move( text ), fheroes2::FontType::normalWhite() )
@@ -189,14 +189,14 @@ namespace
             return _buttonSelection.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSelection.area() ) );
         }
 
-        std::vector<int> getSelected() const
+        std::vector<int32_t> getSelected() const
         {
             return _selected;
         }
 
     private:
-        std::vector<int> _allowed;
-        mutable std::vector<int> _selected;
+        std::vector<int32_t> _allowed;
+        mutable std::vector<int32_t> _selected;
         fheroes2::Rect _textArea;
         fheroes2::Rect _buttonArea;
 
@@ -241,10 +241,10 @@ namespace
         fheroes2::Point startPos{ ( startIndex % worldWidth ) + brushSize.x, ( startIndex / worldWidth ) + brushSize.y };
         fheroes2::Point endPos{ startPos.x + brushSize.width - 1, startPos.y + brushSize.height - 1 };
 
-        startPos.x = std::max( startPos.x, 0 );
-        startPos.y = std::max( startPos.y, 0 );
-        endPos.x = std::min( endPos.x, worldWidth - 1 );
-        endPos.y = std::min( endPos.y, worldHeight - 1 );
+        startPos.x = std::max<int32_t>( startPos.x, 0 );
+        startPos.y = std::max<int32_t>( startPos.y, 0 );
+        endPos.x = std::min<int32_t>( endPos.x, worldWidth - 1 );
+        endPos.y = std::min<int32_t>( endPos.y, worldHeight - 1 );
 
         return { startPos.x + startPos.y * worldWidth, endPos.x + endPos.y * worldWidth };
     }
@@ -788,9 +788,9 @@ namespace
         return true;
     }
 
-    std::vector<int> getAllowedMonsters( const Monster & monster, const MP2::MapObjectType objectType )
+    std::vector<int32_t> getAllowedMonsters( const Monster & monster, const MP2::MapObjectType objectType )
     {
-        std::vector<int> allowedMonsters;
+        std::vector<int32_t> allowedMonsters;
 
         switch ( objectType ) {
         case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
@@ -800,7 +800,7 @@ namespace
             assert( monster.isRandomMonster() );
             const auto level = monster.GetRandomUnitLevel();
 
-            for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
+            for ( int32_t monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
                 const Monster temp{ monsterId };
                 if ( temp.isValid() && temp.GetRandomUnitLevel() == level ) {
                     allowedMonsters.emplace_back( monsterId );
@@ -809,7 +809,7 @@ namespace
             break;
         }
         case MP2::OBJ_RANDOM_MONSTER: {
-            for ( int monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
+            for ( int32_t monsterId = Monster::UNKNOWN + 1; monsterId < Monster::MONSTER_COUNT; ++monsterId ) {
                 if ( Monster{ monsterId }.isValid() ) {
                     allowedMonsters.emplace_back( monsterId );
                 }
@@ -1255,7 +1255,7 @@ namespace Interface
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
 
-                    const fheroes2::Point clampedPoint{ std::clamp( tilePos.x, 0, world.w() - 1 ), std::clamp( tilePos.y, 0, world.h() - 1 ) };
+                    const fheroes2::Point clampedPoint{ std::clamp<int32_t>( tilePos.x, 0, world.w() - 1 ), std::clamp<int32_t>( tilePos.y, 0, world.h() - 1 ) };
                     const int32_t tileIndex = clampedPoint.y * world.w() + clampedPoint.x;
                     if ( _tileUnderCursor != tileIndex ) {
                         _tileUnderCursor = tileIndex;
@@ -1605,7 +1605,7 @@ namespace Interface
 
                     auto monsterMetadata = _mapFormat.monsterMetadata.find( object.id );
                     int32_t monsterCount = monsterMetadata->second.count;
-                    const std::vector<int> selectedMonsters = monsterMetadata->second.selected;
+                    const std::vector<int32_t> selectedMonsters = monsterMetadata->second.selected;
 
                     const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
@@ -1618,7 +1618,7 @@ namespace Interface
                         monsterUi = std::make_unique<const fheroes2::MonsterDialogElement>( tempMonster );
                     }
 
-                    std::vector<int> allowedMonsters = getAllowedMonsters( tempMonster, objectType );
+                    std::vector<int32_t> allowedMonsters = getAllowedMonsters( tempMonster, objectType );
 
                     std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
@@ -1735,7 +1735,7 @@ namespace Interface
                     auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
-                    int spellLevel = 0;
+                    int32_t spellLevel = 0;
                     if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE ) {
                         spellLevel = 1;
                     }
@@ -1780,7 +1780,7 @@ namespace Interface
                     auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
-                    int spellLevel = 5;
+                    int32_t spellLevel = 5;
                     if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );

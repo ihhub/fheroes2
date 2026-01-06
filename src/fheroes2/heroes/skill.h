@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -52,7 +52,7 @@ namespace Skill
 
     namespace Level
     {
-        enum
+        enum : int32_t
         {
             NONE = 0,
             BASIC = 1,
@@ -64,10 +64,10 @@ namespace Skill
         std::string StringWithBonus( const Heroes & hero, const Secondary & skill );
     }
 
-    class Secondary final : public std::pair<int, int>
+    class Secondary final : public std::pair<int32_t, int32_t>
     {
     public:
-        enum
+        enum : int32_t
         {
             UNKNOWN = 0,
             PATHFINDING = 1,
@@ -87,25 +87,25 @@ namespace Skill
         };
 
         Secondary();
-        Secondary( int skill, int level );
+        Secondary( int32_t skill, int32_t level );
 
         void Reset();
         void Set( const Secondary & );
-        void SetSkill( int );
-        void SetLevel( int );
+        void SetSkill( int32_t );
+        void SetLevel( int32_t );
         void NextLevel();
 
-        int Level() const
+        int32_t Level() const
         {
             return second;
         }
 
-        int Skill() const
+        int32_t Skill() const
         {
             return first;
         }
 
-        bool isSkill( int skill ) const
+        bool isSkill( int32_t skill ) const
         {
             return skill == first;
         }
@@ -194,10 +194,10 @@ namespace Skill
         friend OStreamBase & operator<<( OStreamBase & stream, const Primary & skill );
         friend IStreamBase & operator>>( IStreamBase & stream, Primary & skill );
 
-        int attack{ 0 };
-        int defense{ 0 };
-        int power{ 0 };
-        int knowledge{ 0 };
+        int32_t attack{ 0 };
+        int32_t defense{ 0 };
+        int32_t power{ 0 };
+        int32_t knowledge{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const SecSkills & ss );

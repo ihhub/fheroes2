@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -275,7 +275,7 @@ namespace Maps::Random_Generator
         const int32_t minimumRegionCount = playerCount + 1;
         const int32_t tileCount = mapWidth * mapWidth;
         const int32_t waterTiles = tileCount - ( smallestStartingRegionSize * minimumRegionCount );
-        return std::max( 0, waterTiles * 100 / tileCount );
+        return std::max<int32_t>( 0, waterTiles * 100 / tileCount );
     }
 
     bool generateMap( Map_Format::MapFormat & mapFormat, const Configuration & config, const int32_t width, const int32_t height )
@@ -308,9 +308,9 @@ namespace Maps::Random_Generator
 
         MapStateManager mapState( width, height );
 
-        auto mapBoundsCheck = [width, height]( int x, int y ) {
-            x = std::clamp( x, 0, width - 1 );
-            y = std::clamp( y, 0, height - 1 );
+        auto mapBoundsCheck = [width, height]( int32_t x, int32_t y ) {
+            x = std::clamp<int32_t>( x, 0, width - 1 );
+            y = std::clamp<int32_t>( y, 0, height - 1 );
             return x * width + y;
         };
 
@@ -324,9 +324,9 @@ namespace Maps::Random_Generator
         //         Insert empty region that represents water and map edges
         std::vector<Region> mapRegions = { { 0, mapState.getNodeToUpdate( 0 ), neutralColorIndex, Ground::WATER, 1, 0, RegionType::NEUTRAL } };
 
-        const int neutralRegionCount = std::max( 1, expectedRegionCount - config.playerCount );
-        const int innerLayer = std::min( neutralRegionCount, config.playerCount );
-        const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), config.playerCount );
+        const int32_t neutralRegionCount = std::max<int32_t>( 1, expectedRegionCount - config.playerCount );
+        const int32_t innerLayer = std::min<int32_t>( neutralRegionCount, config.playerCount );
+        const int32_t outerLayer = std::max<int32_t>( std::min<int32_t>( neutralRegionCount, innerLayer * 2 ), config.playerCount );
         const double distanceModifier = ( config.waterPercentage > 20 ) ? 0.8 : 0.9;
 
         const double radius = sqrt( ( innerLayer + outerLayer ) * regionSizeLimit / M_PI );

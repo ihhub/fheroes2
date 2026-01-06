@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -193,7 +193,7 @@ namespace Editor
         // but not less than enough for 11 elements. We also limit the maximum list height to 22 lines.
         const int32_t listLineHeight = 2 + fheroes2::getFontHeight( fheroes2::FontSize::NORMAL );
         const int32_t estraDialogHeight = listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
-        const int32_t maxDialogHeight = listLineHeight * std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 ) + estraDialogHeight;
+        const int32_t maxDialogHeight = listLineHeight * std::clamp<int32_t>( static_cast<int32_t>( lists.size() ), 11, 22 ) + estraDialogHeight;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 

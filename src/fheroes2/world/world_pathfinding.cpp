@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -584,7 +584,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     // need to reserve SP can be neglected.
     const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor );
 
-    const int32_t townGateCastleIndex = [this, &hero]() {
+    const int32_t townGateCastleIndex = [this, &hero]() -> int32_t {
         static const Spell townGate( Spell::TOWNGATE );
 
         if ( !hero.CanCastSpell( townGate ) ) {

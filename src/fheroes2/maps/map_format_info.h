@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -274,7 +274,7 @@ namespace Maps::Map_Format
         bool isWeeklyGrowthDisabled{ false };
 
         // Only for random monsters.
-        std::vector<int> selected;
+        std::vector<int32_t> selected;
     };
 
     struct ArtifactMetadata
@@ -286,7 +286,7 @@ namespace Maps::Map_Format
         int32_t captureCondition{ 0 };
 
         // Only for random artifacts and Scroll Spell.
-        std::vector<int> selected;
+        std::vector<int32_t> selected;
     };
 
     struct ResourceMetadata

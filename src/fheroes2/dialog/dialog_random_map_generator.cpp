@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -181,8 +181,8 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
     }
 
     // Verify the configuration parameters.
-    configuration.playerCount = std::max( 2, configuration.playerCount );
-    configuration.playerCount = std::min( 6, configuration.playerCount );
+    configuration.playerCount = std::max<int32_t>( 2, configuration.playerCount );
+    configuration.playerCount = std::min<int32_t>( 6, configuration.playerCount );
 
     const int32_t originalWaterPercentageLimit{ Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth ) };
     configuration.waterPercentage = std::min( configuration.waterPercentage, originalWaterPercentageLimit );

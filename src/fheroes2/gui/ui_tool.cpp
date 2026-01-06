@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -536,13 +536,13 @@ namespace fheroes2
         // The spell effect represents as a blurry image. The blur algorithm should blur only horizontally and vertically from current pixel.
         // So the color data is averaged in a "cross" around the current pixel (not a square or circle like other blur algorithms).
         for ( int32_t y = 0; y < height; ++y ) {
-            const int32_t startY = std::max( y - blurRadius, 0 );
+            const int32_t startY = std::max<int32_t>( y - blurRadius, 0 );
             const int32_t rangeY = std::min( y + blurRadius + 1, height ) - startY;
             const uint8_t * imageInXStart = imageIn + static_cast<ptrdiff_t>( y ) * width;
             const uint8_t * imageInYStart = imageIn + static_cast<ptrdiff_t>( startY ) * width;
 
             for ( int32_t x = 0; x < width; ++x, ++imageOutX ) {
-                const int32_t startX = std::max( x - blurRadius, 0 );
+                const int32_t startX = std::max<int32_t>( x - blurRadius, 0 );
                 const int32_t rangeX = std::min( x + blurRadius + 1, width ) - startX;
 
                 uint32_t sumRed = 0;
@@ -737,7 +737,7 @@ namespace fheroes2
             return {};
         }
 
-        const int32_t zeroBufValue = std::clamp( 0, min, max );
+        const int32_t zeroBufValue = std::clamp<int32_t>( 0, min, max );
 
         if ( le.isKeyPressed( fheroes2::Key::KEY_BACKSPACE ) || le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
             valueBuf.clear();
@@ -812,12 +812,12 @@ namespace fheroes2
             if ( applyRandomPalette ) {
                 fheroes2::Sprite tmp = heroSprite;
                 fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
-                fheroes2::Blit( tmp, 0, std::max( 0, tmp.height() - portPos.height ), racePortrait, ( portPos.width - tmp.width() ) / 2,
-                                std::max( 0, portPos.height - tmp.height() ), tmp.width(), portPos.height );
+                fheroes2::Blit( tmp, 0, std::max<int32_t>( 0, tmp.height() - portPos.height ), racePortrait, ( portPos.width - tmp.width() ) / 2,
+                                std::max<int32_t>( 0, portPos.height - tmp.height() ), tmp.width(), portPos.height );
             }
             else {
-                fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
-                                std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
+                fheroes2::Blit( heroSprite, 0, std::max<int32_t>( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
+                                std::max<int32_t>( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
             }
         };
 

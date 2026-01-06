@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -939,7 +939,7 @@ namespace fheroes2
         // Add extra vertical margin depending on how many lines of text there are.
         if ( maxHeight > getFontHeight( buttonFontType.size ) ) {
             const int32_t maxAllowedHeight = 200;
-            maxHeight = std::clamp( maxHeight, 56, maxAllowedHeight );
+            maxHeight = std::clamp<int32_t>( maxHeight, 56, maxAllowedHeight );
         }
         else {
             maxHeight += 10;

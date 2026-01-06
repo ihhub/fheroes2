@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -172,8 +172,8 @@ namespace
         for ( const int direction : Direction::All() ) {
             // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
             fheroes2::Point tilePosition = Maps::getDirectionPoint( centerTile, direction );
-            tilePosition.x = std::min( maxTilePos, std::max( 0, tilePosition.x ) );
-            tilePosition.y = std::min( maxTilePos, std::max( 0, tilePosition.y ) );
+            tilePosition.x = std::min<int32_t>( maxTilePos, std::max<int32_t>( 0, tilePosition.x ) );
+            tilePosition.y = std::min<int32_t>( maxTilePos, std::max<int32_t>( 0, tilePosition.y ) );
 
             if ( Maps::Ground::getGroundByImageIndex( map.tiles[tilePosition.y * map.width + tilePosition.x].terrainIndex ) == groundId ) {
                 groundDirection |= direction;
@@ -1084,10 +1084,10 @@ namespace
         const int32_t centerY = centerTileIndex / map.width;
 
         // We avoid getting out of map boundaries.
-        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
-        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
+        const int32_t minTileX = std::max<int32_t>( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max<int32_t>( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min<int32_t>( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min<int32_t>( centerY + centerToRectBorderDistance + 1, map.width );
 
         const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
 

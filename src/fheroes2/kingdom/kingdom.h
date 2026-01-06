@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -252,11 +252,11 @@ private:
     std::list<IndexObject> visit_object;
 
     Puzzle puzzle_maps;
-    int _visitedTentsColors{ 0 };
+    int32_t _visitedTentsColors{ 0 };
 
     // Used to remember which item was selected in Kingdom View dialog.
-    int _topCastleInKingdomView{ -1 };
-    int _topHeroInKingdomView{ -1 };
+    int32_t _topCastleInKingdomView{ -1 };
+    int32_t _topHeroInKingdomView{ -1 };
 };
 
 class Kingdoms

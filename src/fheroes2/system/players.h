@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -62,10 +62,10 @@ enum
     FOCUS_CASTLE = 2
 };
 
-struct Focus : std::pair<int, void *>
+struct Focus : std::pair<int32_t, void *>
 {
     Focus()
-        : std::pair<int, void *>( FOCUS_UNSEL, nullptr )
+        : std::pair<int32_t, void *>( FOCUS_UNSEL, nullptr )
     {}
 
     void Reset()
@@ -222,8 +222,8 @@ protected:
     std::string _name;
     Focus _focus;
     AI::Personality _aiPersonality{ AI::Personality::NONE };
-    int _control{ CONTROL_NONE };
-    int _race{ Race::NONE };
+    int32_t _control{ CONTROL_NONE };
+    int32_t _race{ Race::NONE };
     PlayerColor _color;
     PlayerColorsSet _friendsColors;
     HandicapStatus _handicapStatus{ HandicapStatus::NONE };
