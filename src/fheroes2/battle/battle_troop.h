@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -234,6 +234,9 @@ namespace Battle
         uint32_t CalculateMaxDamage( const Unit & enemy ) const;
         uint32_t CalculateDamageUnit( const Unit & enemy, double dmg ) const;
 
+        // Returns average estimated damage the current unit can do for the specific enemy unit.
+        uint32_t getPotentialDamage( const Unit & enemy ) const;
+
         // Returns a very rough estimate of the retaliatory damage after this unit receives the damage of the specified value.
         // The returned value is not suitable for accurate calculations, but only for approximate comparison with other units
         // in similar circumstances.
@@ -360,6 +363,8 @@ namespace Battle
         void _replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration );
 
         const uint32_t _uid{ 0 };
+
+        // The total number of hit points of the unit.
         uint32_t _hitPoints{ 0 };
         const uint32_t _initialCount{ 0 };
         uint32_t _maxCount{ 0 };
