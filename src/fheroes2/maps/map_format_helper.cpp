@@ -897,7 +897,7 @@ namespace
                 continue;
             }
 
-            Maps::updateRoadObjectOnTile( map, index );
+            Maps::placeOrUpdateRoadObjectOnTile( map, index );
         }
     }
 
@@ -1811,7 +1811,7 @@ namespace Maps
 
         if ( setRoad ) {
             // Force set road on this tile and update its sprite.
-            updateRoadObjectOnTile( map, tileIndex );
+            placeOrUpdateRoadObjectOnTile( map, tileIndex );
             updateRoadObjectsAround( map, tileIndex );
 
             if ( Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.terrainIndex ) ) {
@@ -1828,7 +1828,7 @@ namespace Maps
         return true;
     }
 
-    void updateRoadObjectOnTile( Map_Format::MapFormat & map, const int32_t tileIndex )
+    void placeOrUpdateRoadObjectOnTile( Map_Format::MapFormat & map, const int32_t tileIndex )
     {
         // To update the road we need to remove the previous one first.
         removeRoadObjectsFromTile( map.tiles[tileIndex], tileIndex );
@@ -1866,7 +1866,7 @@ namespace Maps
     void updateAllRoads( Map_Format::MapFormat & map )
     {
         const int32_t centerTileIndex = Maps::GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
-        updateRoadObjectOnTile( map, centerTileIndex );
+        placeOrUpdateRoadObjectOnTile( map, centerTileIndex );
         updateRoadObjectsInAreaAround( map, centerTileIndex, map.width );
     }
 
