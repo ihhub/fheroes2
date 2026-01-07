@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -101,9 +101,8 @@ namespace Maps
 
     bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad );
 
-    void updateRoadSpriteOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool forceRoadOnTile );
+    void updateRoadObjectOnTile( Map_Format::MapFormat & map, const int32_t tileIndex );
     void removeRoadsFromTile( Map_Format::TileInfo & tile, const int32_t tileIndex );
-    void writeRoadSpriteToTile( Map_Format::TileInfo & tile, const int32_t tileIndex, const uint8_t imageIndex );
     void updateAllRoads( Map_Format::MapFormat & map );
 
     bool doesContainRoads( const Map_Format::TileInfo & tile );

@@ -426,7 +426,7 @@ namespace
                     }
 
                     // The castle entrance is marked as road. Update this tile to remove the mark.
-                    Maps::updateRoadSpriteOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ), false );
+                    Maps::updateRoadObjectOnTile( mapFormat, static_cast<int32_t>( mapTileIndex ) );
 
                     // Remove the castle from `world` castles vector.
                     world.removeCastle( Maps::GetPoint( static_cast<int32_t>( mapTileIndex ) ) );
@@ -2441,7 +2441,7 @@ namespace Interface
 
         if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoads( _mapFormat.tiles[bottomIndex] ) ) {
             // Update road if there is one in front of the town/castle entrance.
-            Maps::updateRoadSpriteOnTile( _mapFormat, bottomIndex, false );
+            Maps::updateRoadObjectOnTile( _mapFormat, bottomIndex );
         }
 
         // By default use random (default) army for the neutral race town/castle.

@@ -725,7 +725,17 @@ namespace Maps::Random_Generator
     // Wouldn't render correctly but will speed up placement
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
-        Maps::writeRoadSpriteToTile( mapFormat.tiles[tileIndex], tileIndex, 0 );
+        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, 2 );
+        if ( objectInfo.empty() ) {
+            assert( 0 );
+            return;
+        }
+
+        if ( !Maps::setObjectOnTile( world.getTile( tileIndex ), objectInfo, false ) ) {
+            assert( 0 );
+            return;
+        }
+        Maps::addObjectToMap( mapFormat, tileIndex, Maps::ObjectGroup::ROADS, 2 );
     }
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
