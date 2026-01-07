@@ -725,16 +725,20 @@ namespace Maps::Random_Generator
     // Wouldn't render correctly but will speed up placement
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
+        if ( Maps::doesContainRoads( mapFormat.tiles[tileIndex] ) ) {
+            return;
+        }
+
         const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, 2 );
         if ( objectInfo.empty() ) {
             assert( 0 );
             return;
         }
 
-        if ( !Maps::setObjectOnTile( world.getTile( tileIndex ), objectInfo, false ) ) {
-            assert( 0 );
-            return;
-        }
+        // We just increase the UID counter to use the last UID in `Maps::addObjectToMap()`.
+        // All road objects will be updated and placed to the `world` tiles only after all of the road parts are placet to the `Map_Format`.
+        Maps::getNewObjectUID();
+
         Maps::addObjectToMap( mapFormat, tileIndex, Maps::ObjectGroup::ROADS, 2 );
     }
 

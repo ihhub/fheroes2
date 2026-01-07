@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <cstdlib>
 #include <initializer_list>
 #include <map>
 #include <ostream>
@@ -890,7 +889,7 @@ namespace
         return roadDirection;
     }
 
-    void updateRoadObjectsInArea( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance )
+    void updateRoadObjectsInAreaAround( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance )
     {
         for ( const int32_t index : Maps::getAroundIndexes( centerTileIndex, centerToRectBorderDistance ) ) {
             const auto & tile = map.tiles[index];
@@ -904,7 +903,7 @@ namespace
 
     void updateRoadObjectsAround( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex )
     {
-        updateRoadObjectsInArea( map, centerTileIndex, 1 );
+        updateRoadObjectsInAreaAround( map, centerTileIndex, 1 );
     }
 }
 
@@ -1821,7 +1820,7 @@ namespace Maps
             }
         }
         else {
-            removeRoadsFromTile( tile, tileIndex );
+            removeRoadObjectsFromTile( tile, tileIndex );
 
             updateRoadObjectsAround( map, tileIndex );
         }
@@ -1832,13 +1831,13 @@ namespace Maps
     void updateRoadObjectOnTile( Map_Format::MapFormat & map, const int32_t tileIndex )
     {
         // To update the road we need to remove the previous one first.
-        removeRoadsFromTile( map.tiles[tileIndex], tileIndex );
+        removeRoadObjectsFromTile( map.tiles[tileIndex], tileIndex );
 
         int roadDirections = 512;
 
         // check if there is no castle entrance - to calculate around roads "directions".
         if ( tileIndex <= world.w() || !doesContainCastleEntrance( map.tiles[tileIndex - world.w()] ) ) {
-            roadDirections = getAroundRoadDirecton( map, tileIndex ) + Rand::Get( 1 ) * 256;
+            roadDirections = getAroundRoadDirecton( map, tileIndex ) + static_cast<int>( Rand::Get( 1 ) ) * 256;
         }
 
         const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, roadDirections );
@@ -1850,13 +1849,17 @@ namespace Maps
         Maps::addObjectToMap( map, tileIndex, Maps::ObjectGroup::ROADS, static_cast<uint32_t>( roadDirections ) );
     }
 
-    void removeRoadsFromTile( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
+    void removeRoadObjectsFromTile( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
     {
-        // Remove the road also from the `world` tiles. It is needed for proper rendering of the map.
-        const auto iter = std::find_if( tile.objects.cbegin(), tile.objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
-        if ( iter != tile.objects.cend() ) {
+        auto iter = tile.objects.begin();
+        while ( iter != tile.objects.end() ) {
+            if ( iter->group != Maps::ObjectGroup::ROADS ) {
+                ++iter;
+                continue;
+            }
+
             Maps::removeObjectFromMapByUID( tileIndex, iter->id );
-            tile.objects.erase( iter );
+            iter = tile.objects.erase( iter );
         }
     }
 
@@ -1864,7 +1867,7 @@ namespace Maps
     {
         const int32_t centerTileIndex = Maps::GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
         updateRoadObjectOnTile( map, centerTileIndex );
-        updateRoadObjectsInArea( map, centerTileIndex, map.width );
+        updateRoadObjectsInAreaAround( map, centerTileIndex, map.width );
     }
 
     bool doesContainRoads( const Map_Format::TileInfo & tile )
