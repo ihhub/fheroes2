@@ -1834,14 +1834,20 @@ namespace Maps
         // To update the road we need to remove the previous one first.
         removeRoadsFromTile( map.tiles[tileIndex], tileIndex );
 
-        const uint32_t roadDirections = static_cast<uint32_t>( getAroundRoadDirecton( map, tileIndex ) ) + Rand::Get( 1 ) * 256;
+        int roadDirections = 512;
+
+        // check if there is no castle entrance - to calculate around roads "directions".
+        if ( tileIndex <= world.w() || !doesContainCastleEntrance( map.tiles[tileIndex - world.w()] ) ) {
+            roadDirections = getAroundRoadDirecton( map, tileIndex ) + Rand::Get( 1 ) * 256;
+        }
+
         const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, roadDirections );
         if ( !Maps::setObjectOnTile( world.getTile( tileIndex ), objectInfo, false ) ) {
             assert( 0 );
             return;
         }
 
-        Maps::addObjectToMap( map, tileIndex, Maps::ObjectGroup::ROADS, roadDirections );
+        Maps::addObjectToMap( map, tileIndex, Maps::ObjectGroup::ROADS, static_cast<uint32_t>( roadDirections ) );
     }
 
     void removeRoadsFromTile( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
