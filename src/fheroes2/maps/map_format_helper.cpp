@@ -1892,9 +1892,11 @@ namespace Maps
 
     void updateAllRoads( Map_Format::MapFormat & map )
     {
-        const int32_t centerTileIndex = GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
-        placeOrUpdateRoadObjectOnTile( map, centerTileIndex );
-        updateRoadObjectsInAreaAround( map, centerTileIndex, map.width );
+        const int32_t centerTileIndex = ( map.width + 1 ) * ( map.width / 2 );
+        if ( Maps::doesContainRoad( map.tiles[centerTileIndex] ) ) {
+            placeOrUpdateRoadObjectOnTile( map, centerTileIndex );
+        }
+        updateRoadObjectsInAreaAround( map, centerTileIndex, map.width / 2 );
     }
 
     bool doesContainRoad( const Map_Format::TileInfo & tile )
