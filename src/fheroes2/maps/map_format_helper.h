@@ -72,7 +72,7 @@ namespace Maps
     bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex );
 
     // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
-    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map );
+    void updatePlayerRelatedObjects( const Map_Format::MapFormat & map );
 
     bool updateMapPlayers( Map_Format::MapFormat & map );
 
@@ -99,11 +99,10 @@ namespace Maps
     bool loadHeroArmy( Army & army, const Map_Format::HeroMetadata & metadata );
     void saveHeroArmy( const Army & army, Map_Format::HeroMetadata & metadata );
 
-    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad );
+    bool setRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex );
+    bool removeRoadFromTile( Map_Format::MapFormat & map, const int32_t tileIndex );
 
-    void placeOrUpdateRoadObjectOnTile( Map_Format::MapFormat & map, const int32_t tileIndex );
-    void removeRoadObjectsFromTile( Map_Format::TileInfo & tile, const int32_t tileIndex );
     void updateAllRoads( Map_Format::MapFormat & map );
 
-    bool doesContainRoads( const Map_Format::TileInfo & tile );
+    bool doesContainRoad( const Map_Format::TileInfo & tile );
 }

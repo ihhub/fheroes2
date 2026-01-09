@@ -725,7 +725,7 @@ namespace Maps::Random_Generator
     // Wouldn't render correctly but will speed up placement
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
-        if ( Maps::doesContainRoads( mapFormat.tiles[tileIndex] ) ) {
+        if ( Maps::doesContainRoad( mapFormat.tiles[tileIndex] ) ) {
             return;
         }
 
@@ -860,8 +860,8 @@ namespace Maps::Random_Generator
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
             markNodeIndexAsType( data, bottomIndex, NodeType::PATH );
-            Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
-            Maps::updateRoadOnTile( mapFormat, nextIndex, true );
+            forceTempRoadOnTile( mapFormat, bottomIndex );
+            forceTempRoadOnTile( mapFormat, nextIndex );
         }
 
         return true;

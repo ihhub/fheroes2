@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -180,6 +180,10 @@ namespace Maps
         {
             return ( direction & _tilePassabilityDirections ) != 0;
         }
+
+        void updateRoadFlag();
+
+        static bool isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex );
 
         bool isRoad() const
         {
@@ -367,8 +371,6 @@ namespace Maps
 
         // Set or remove a flag which belongs to UID of the object.
         void updateFlag( const PlayerColor color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
-
-        void _updateRoadFlag();
 
         bool isAnyTallObjectOnTile() const;
 

@@ -780,8 +780,8 @@ namespace
         objects[256 + 114] = objects[256 + 32];
 
         // Direction: TOP_LEFT, TOP, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT.
-        objects[115] = objects[32];
-        objects[256 + 115] = objects[256 + 32];
+        objects[115] = objects[35];
+        objects[256 + 115] = objects[256 + 35];
 
         // Direction: TOP_RIGHT, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT.
         objects[116] = objects[36];
@@ -1016,8 +1016,8 @@ namespace
         objects[256 + 157] = objects[256 + 136];
 
         // Direction: TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_RIGHT.
-        objects[158] = objects[138];
-        objects[256 + 158] = objects[256 + 138];
+        objects[158] = objects[142];
+        objects[256 + 158] = objects[256 + 142];
 
         // Direction: TOP_LEFT, TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_RIGHT.
         objects[159] = objects[143];

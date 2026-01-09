@@ -195,7 +195,7 @@ namespace
 
         mapTile.terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
-        if ( ( newGround != Maps::Ground::WATER ) && ( Maps::doesContainRoads( mapTile ) || doesContainStreams( mapTile ) )
+        if ( ( newGround != Maps::Ground::WATER ) && ( Maps::doesContainRoad( mapTile ) || doesContainStreams( mapTile ) )
              && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( imageIndex ) ) {
             // There cannot be extra objects under the roads and streams.
             mapTile.terrainIndex = Maps::Ground::getRandomTerrainImageIndex( Maps::Ground::getGroundByImageIndex( imageIndex ), false );
@@ -879,7 +879,7 @@ namespace
         for ( const int32_t tileIndex : around ) {
             assert( tileIndex >= 0 && tileIndex < map.width * map.width );
 
-            if ( Maps::doesContainRoads( map.tiles[tileIndex] ) ) {
+            if ( Maps::doesContainRoad( map.tiles[tileIndex] ) ) {
                 roadDirection |= Maps::GetDirection( mainTileIndex, tileIndex );
             }
         }
@@ -889,15 +889,71 @@ namespace
         return roadDirection;
     }
 
+    bool placeOrUpdateRoadObjectOnTile( Maps::Map_Format::MapFormat & map, const int32_t tileIndex )
+    {
+        assert( static_cast<size_t>( tileIndex ) < map.tiles.size() );
+
+        auto & tile = map.tiles[tileIndex];
+
+        auto iter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
+
+        const bool hasRoad = ( iter != tile.objects.end() );
+
+        uint32_t lastUid{ 0 };
+
+        if ( hasRoad ) {
+            Maps::removeObjectFromMapByUID( tileIndex, iter->id );
+
+            // To replace the road on the `world` map we temporarily change the last object UID to the UID previous to the current road UID.
+            lastUid = Maps::getLastObjectUID();
+            Maps::setLastObjectUID( iter->id - 1 );
+        }
+
+        int roadDirections = 512;
+
+        // check if there is no castle entrance - to calculate around roads "directions".
+        if ( tileIndex <= world.w() || !doesContainCastleEntrance( map.tiles[tileIndex - world.w()] ) ) {
+            roadDirections = getAroundRoadDirecton( map, tileIndex ) + static_cast<int>( Rand::Get( 1 ) ) * 256;
+        }
+
+        if ( hasRoad && ( static_cast<uint32_t>( roadDirections ) == iter->index ) ) {
+            // Restore the last object UID.
+            Maps::setLastObjectUID( lastUid );
+
+            return false;
+        }
+
+        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, roadDirections );
+        if ( !setObjectOnTile( world.getTile( tileIndex ), objectInfo, false ) ) {
+            assert( 0 );
+            return false;
+        }
+
+        if ( hasRoad ) {
+            assert( Maps::getLastObjectUID() == iter->id );
+
+            // Restore the last object UID.
+            Maps::setLastObjectUID( lastUid );
+
+            // Just update the road direction index.
+            iter->index = static_cast<uint32_t>( roadDirections );
+        }
+        else {
+            Maps::addObjectToMap( map, tileIndex, Maps::ObjectGroup::ROADS, static_cast<uint32_t>( roadDirections ) );
+        }
+
+        return true;
+    }
+
     void updateRoadObjectsInAreaAround( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance )
     {
         for ( const int32_t index : Maps::getAroundIndexes( centerTileIndex, centerToRectBorderDistance ) ) {
             const auto & tile = map.tiles[index];
-            if ( !Maps::doesContainRoads( tile ) ) {
+            if ( !Maps::doesContainRoad( tile ) ) {
                 continue;
             }
 
-            Maps::placeOrUpdateRoadObjectOnTile( map, index );
+            placeOrUpdateRoadObjectOnTile( map, index );
         }
     }
 
@@ -1276,26 +1332,26 @@ namespace Maps
         return getRiverDeltaDirectionByIndex( group, objectIndex ) != Direction::UNKNOWN;
     }
 
-    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
+    void updatePlayerRelatedObjects( const Map_Format::MapFormat & map )
     {
         assert( map.width == world.w() && map.width == world.h() );
 
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+        const auto & townObjects = getObjectsByGroup( ObjectGroup::KINGDOM_TOWNS );
+        const auto & heroObjects = getObjectsByGroup( ObjectGroup::KINGDOM_HEROES );
 
         // Capturable objects exist in Miscellaneous and Mines groups.
-        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
-        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+        const auto & miscObjects = getObjectsByGroup( ObjectGroup::ADVENTURE_MISCELLANEOUS );
+        const auto & minesObjects = getObjectsByGroup( ObjectGroup::ADVENTURE_MINES );
 
         for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
             for ( const auto & object : map.tiles[tileId].objects ) {
-                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
+                if ( object.group == ObjectGroup::KINGDOM_TOWNS ) {
+                    const PlayerColor color = Color::IndexToColor( getTownColorIndex( map, tileId, object.id ) );
                     const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
 
                     world.addCastle( static_cast<int32_t>( tileId ), race, color );
                 }
-                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                else if ( object.group == ObjectGroup::KINGDOM_HEROES ) {
                     const auto & metadata = heroObjects[object.index].metadata;
                     const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
 
@@ -1306,19 +1362,19 @@ namespace Maps
                         world.getTile( static_cast<int32_t>( tileId ) ).setHero( hero );
                     }
                 }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                else if ( object.group == ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
                     assert( object.index < miscObjects.size() );
 
                     const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
 
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                    captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
                 }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                else if ( object.group == ObjectGroup::ADVENTURE_MINES ) {
                     assert( object.index < minesObjects.size() );
 
                     const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
 
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                    captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
                 }
             }
         }
@@ -1793,85 +1849,58 @@ namespace Maps
         saveArmyToMetadata( army, metadata.armyMonsterType, metadata.armyMonsterCount );
     }
 
-    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad )
+    bool setRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex )
     {
         assert( static_cast<size_t>( tileIndex ) < map.tiles.size() );
 
-        auto & tile = map.tiles[tileIndex];
-        const int groundType = Ground::getGroundByImageIndex( tile.terrainIndex );
-        if ( setRoad && groundType == Ground::WATER ) {
-            // Roads are not allowed to set on water.
+        if ( !placeOrUpdateRoadObjectOnTile( map, tileIndex ) ) {
             return false;
         }
 
-        if ( doesContainRoads( tile ) == setRoad ) {
-            // Nothing to do here.
-            return false;
-        }
+        updateRoadObjectsAround( map, tileIndex );
 
-        if ( setRoad ) {
-            // Force set road on this tile and update its sprite.
-            placeOrUpdateRoadObjectOnTile( map, tileIndex );
-            updateRoadObjectsAround( map, tileIndex );
+        const auto & tile = map.tiles[tileIndex];
 
-            if ( Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.terrainIndex ) ) {
-                // We need to set terrain image without extra objects under the road.
-                setTerrain( map, tileIndex, Ground::getRandomTerrainImageIndex( groundType, false ), false, false );
-            }
-        }
-        else {
-            removeRoadObjectsFromTile( tile, tileIndex );
-
-            updateRoadObjectsAround( map, tileIndex );
+        if ( Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.terrainIndex ) ) {
+            // We need to set terrain image without extra objects under the road.
+            const int groundType = Ground::getGroundByImageIndex( tile.terrainIndex );
+            setTerrain( map, tileIndex, Ground::getRandomTerrainImageIndex( groundType, false ), false, false );
         }
 
         return true;
     }
 
-    void placeOrUpdateRoadObjectOnTile( Map_Format::MapFormat & map, const int32_t tileIndex )
+    bool removeRoadFromTile( Map_Format::MapFormat & map, const int32_t tileIndex )
     {
-        // To update the road we need to remove the previous one first.
-        removeRoadObjectsFromTile( map.tiles[tileIndex], tileIndex );
+        assert( static_cast<size_t>( tileIndex ) < map.tiles.size() );
 
-        int roadDirections = 512;
+        auto & tile = map.tiles[tileIndex];
 
-        // check if there is no castle entrance - to calculate around roads "directions".
-        if ( tileIndex <= world.w() || !doesContainCastleEntrance( map.tiles[tileIndex - world.w()] ) ) {
-            roadDirections = getAroundRoadDirecton( map, tileIndex ) + static_cast<int>( Rand::Get( 1 ) ) * 256;
+        auto iter = std::find_if( tile.objects.cbegin(), tile.objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
+
+        if ( iter == tile.objects.cend() ) {
+            // Nothing to do here.
+            return false;
         }
 
-        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, roadDirections );
-        if ( !Maps::setObjectOnTile( world.getTile( tileIndex ), objectInfo, false ) ) {
-            assert( 0 );
-            return;
-        }
+        removeObjectFromMapByUID( tileIndex, iter->id );
+        world.getTile( tileIndex ).updateRoadFlag();
+        tile.objects.erase( iter );
 
-        Maps::addObjectToMap( map, tileIndex, Maps::ObjectGroup::ROADS, static_cast<uint32_t>( roadDirections ) );
-    }
+        updateRoadObjectsAround( map, tileIndex );
 
-    void removeRoadObjectsFromTile( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
-    {
-        auto iter = tile.objects.begin();
-        while ( iter != tile.objects.end() ) {
-            if ( iter->group != Maps::ObjectGroup::ROADS ) {
-                ++iter;
-                continue;
-            }
-
-            Maps::removeObjectFromMapByUID( tileIndex, iter->id );
-            iter = tile.objects.erase( iter );
-        }
+        return true;
     }
 
     void updateAllRoads( Map_Format::MapFormat & map )
     {
-        const int32_t centerTileIndex = Maps::GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
+        const int32_t centerTileIndex = GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
         placeOrUpdateRoadObjectOnTile( map, centerTileIndex );
         updateRoadObjectsInAreaAround( map, centerTileIndex, map.width );
     }
 
-    bool doesContainRoads( const Map_Format::TileInfo & tile )
+    bool doesContainRoad( const Map_Format::TileInfo & tile )
     {
-        return std::any_of( tile.objects.cbegin(), tile.objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
+        return std::any_of( tile.objects.cbegin(), tile.objects.cend(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } );
     }
 }
