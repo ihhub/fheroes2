@@ -899,16 +899,6 @@ namespace
 
         const bool hasRoad = ( iter != tile.objects.end() );
 
-        uint32_t lastUid{ 0 };
-
-        if ( hasRoad ) {
-            Maps::removeObjectFromMapByUID( tileIndex, iter->id );
-
-            // To replace the road on the `world` map we temporarily change the last object UID to the UID previous to the current road UID.
-            lastUid = Maps::getLastObjectUID();
-            Maps::setLastObjectUID( iter->id - 1 );
-        }
-
         int roadDirections = 512;
 
         // check if there is no castle entrance - to calculate around roads "directions".
@@ -916,11 +906,19 @@ namespace
             roadDirections = getAroundRoadDirecton( map, tileIndex ) + static_cast<int>( Rand::Get( 1 ) ) * 256;
         }
 
-        if ( hasRoad && ( static_cast<uint32_t>( roadDirections ) == iter->index ) ) {
-            // Restore the last object UID.
-            Maps::setLastObjectUID( lastUid );
+        uint32_t lastUid{ 0 };
 
-            return false;
+        if ( hasRoad ) {
+            if ( iter->index == static_cast<uint32_t>( roadDirections ) ) {
+                // Nothing to update here.
+                return false;
+            }
+
+            Maps::removeObjectFromMapByUID( tileIndex, iter->id );
+
+            // To replace the road on the `world` map we temporarily change the last object UID to the UID previous to the current road UID.
+            lastUid = Maps::getLastObjectUID();
+            Maps::setLastObjectUID( iter->id - 1 );
         }
 
         const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, roadDirections );
