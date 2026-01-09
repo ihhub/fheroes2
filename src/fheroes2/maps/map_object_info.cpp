@@ -49,15 +49,6 @@ namespace
     {
         assert( objects.empty() );
 
-#ifdef UNUSED
-        for ( uint32_t i = 0; i < 32; ++i ) {
-            Maps::ObjectInfo object{ MP2::OBJ_NONE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-#endif
-
         // Road objects are made to correspond the outer road objects direction to properly connect with them.
         // There are object duplicates after 255 because some road sprites have 2 variants.
 
