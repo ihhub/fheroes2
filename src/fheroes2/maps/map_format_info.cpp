@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,8 +27,10 @@
 #include <utility>
 
 #include "artifact.h"
+#include "map_format_helper.h"
 #include "mp2.h"
 #include "serialize.h"
+#include "world.h"
 #include "zzlib.h"
 
 namespace Maps::Map_Format
@@ -94,7 +96,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 10 };
+    constexpr uint16_t currentSupportedVersion{ 11 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -288,6 +290,31 @@ namespace
         }
     }
 
+    void convertFromV10ToV11( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 10, "Remove this function." );
+
+        if ( map.version > 10 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( auto iter = tileInfo.objects.begin(); iter != tileInfo.objects.end(); ) {
+                if ( iter->group == Maps::ObjectGroup::ROADS && !Maps::Tile::isSpriteRoad( MP2::OBJ_ICN_TYPE_ROAD, static_cast<uint8_t>( iter->index ) ) ) {
+                    // Remove the road object.
+                    iter = tileInfo.objects.erase( iter );
+                    continue;
+                }
+
+                ++iter;
+            }
+        }
+
+        // Initialize the `world`'s width and height because they are used in `updateAllRoads()` logic.
+        world.generateUninitializedMap( map.width );
+        Maps::updateAllRoads( map );
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
@@ -414,6 +441,8 @@ namespace
         else {
             convertFromV9ToV10( map, std::move( standardMetadata ) );
         }
+
+        convertFromV10ToV11( map );
 
         return !stream.fail();
     }
