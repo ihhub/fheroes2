@@ -28,6 +28,7 @@
 
 #include "artifact.h"
 #include "map_format_helper.h"
+#include "maps_tiles.h"
 #include "mp2.h"
 #include "serialize.h"
 #include "world.h"
