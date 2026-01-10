@@ -850,29 +850,15 @@ namespace
         }
     }
 
-    bool isCastleObject( const MP2::MapObjectType type )
-    {
-        return ( type == MP2::OBJ_CASTLE ) || ( type == MP2::OBJ_RANDOM_TOWN ) || ( type == MP2::OBJ_RANDOM_CASTLE );
-    }
-
     bool doesContainCastleEntrance( const Maps::Map_Format::TileInfo & tile )
     {
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-
-        for ( const auto & object : tile.objects ) {
-            if ( ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) && isCastleObject( townObjects[object.index].objectType ) ) {
-                // A castle has an entrance with a road.
-                return true;
-            }
-        }
-
-        return false;
+        return std::any_of( tile.objects.cbegin(), tile.objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::KINGDOM_TOWNS; } );
     }
 
     int getRoadObjectIndex( const Maps::Map_Format::MapFormat & map, const int32_t mainTileIndex )
     {
-        if ( mainTileIndex > world.w() && doesContainCastleEntrance( map.tiles[mainTileIndex - world.w()] ) ) {
-            // 512 is for castle entrance road.
+        if ( mainTileIndex > map.width && doesContainCastleEntrance( map.tiles[mainTileIndex - map.width] ) ) {
+            // 512 is the index of castle entrance road object.
             return 512;
         }
 

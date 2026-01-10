@@ -20,18 +20,19 @@
 
 #include "map_format_info.h"
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <set>
 #include <utility>
 
 #include "artifact.h"
-#include "map_format_helper.h"
-#include "maps_tiles.h"
+#include "direction.h"
 #include "mp2.h"
+#include "rand.h"
 #include "serialize.h"
-#include "world.h"
 #include "zzlib.h"
 
 namespace Maps::Map_Format
@@ -299,9 +300,12 @@ namespace
             return;
         }
 
+        const std::set<uint32_t> consideredAsRoadIndecies{ 0, 2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29, 30, 31 };
+
+        // Remove road objects that are not considered as roads.
         for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
             for ( auto iter = tileInfo.objects.begin(); iter != tileInfo.objects.end(); ) {
-                if ( iter->group == Maps::ObjectGroup::ROADS && !Maps::Tile::isSpriteRoad( MP2::OBJ_ICN_TYPE_ROAD, static_cast<uint8_t>( iter->index ) ) ) {
+                if ( iter->group == Maps::ObjectGroup::ROADS && consideredAsRoadIndecies.count( iter->index ) == 0 ) {
                     // Remove the road object.
                     iter = tileInfo.objects.erase( iter );
                     continue;
@@ -311,9 +315,87 @@ namespace
             }
         }
 
-        // Initialize the `world`'s width and height because they are used in `updateAllRoads()` logic.
-        world.generateUninitializedMap( map.width );
-        Maps::updateAllRoads( map );
+        // Update road objects to correspond their relative positions.
+        const int32_t size = map.width * map.width;
+        for ( int32_t tileIndex = 0; tileIndex < size; ++tileIndex ) {
+            auto & tileObjects = map.tiles[tileIndex].objects;
+            auto roadObjectIter = std::find_if( tileObjects.begin(), tileObjects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
+
+            if ( roadObjectIter == tileObjects.end() ) {
+                continue;
+            }
+
+            auto & roadObjectIndex = roadObjectIter->index;
+
+            if ( tileIndex > map.width ) {
+                const auto & aboveObjects = map.tiles[tileIndex - map.width].objects;
+
+                if ( std::any_of( aboveObjects.cbegin(), aboveObjects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::KINGDOM_TOWNS; } ) ) {
+                    // 512 is the index of castle entrance road object.
+                    roadObjectIndex = 512;
+
+                    continue;
+                }
+            }
+
+            roadObjectIndex = 0;
+
+            const int32_t centerX = tileIndex % map.width;
+            const int32_t centerY = tileIndex / map.width;
+
+            // Avoid getting out of map boundaries.
+            const int32_t minTileX = std::max<int32_t>( centerX - 1, 0 );
+            const int32_t minTileY = std::max<int32_t>( centerY - 1, 0 );
+            const int32_t maxTileX = std::min<int32_t>( centerX + 1 + 1, map.width );
+            const int32_t maxTileY = std::min<int32_t>( centerY + 1 + 1, map.width );
+
+            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+                const int32_t indexOffsetY = tileY * map.width;
+
+                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
+                    const int32_t otherTileIndex = indexOffsetY + tileX;
+
+                    if ( otherTileIndex == tileIndex ) {
+                        // Skip the center tile.
+                        continue;
+                    }
+
+                    const auto & objects = map.tiles[otherTileIndex].objects;
+
+                    if ( std::any_of( objects.cbegin(), objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ) ) {
+                        const int32_t diff = otherTileIndex - tileIndex;
+
+                        if ( diff == ( -map.width - 1 ) ) {
+                            roadObjectIndex |= Direction::TOP_LEFT;
+                        }
+                        else if ( diff == -map.width ) {
+                            roadObjectIndex |= Direction::TOP;
+                        }
+                        else if ( diff == ( -map.width + 1 ) ) {
+                            roadObjectIndex |= Direction::TOP_RIGHT;
+                        }
+                        else if ( diff == -1 ) {
+                            roadObjectIndex |= Direction::LEFT;
+                        }
+                        else if ( diff == 1 ) {
+                            roadObjectIndex |= Direction::RIGHT;
+                        }
+                        else if ( diff == map.width - 1 ) {
+                            roadObjectIndex |= Direction::BOTTOM_LEFT;
+                        }
+                        else if ( diff == map.width ) {
+                            roadObjectIndex |= Direction::BOTTOM;
+                        }
+                        else if ( diff == map.width + 1 ) {
+                            roadObjectIndex |= Direction::BOTTOM_RIGHT;
+                        }
+                    }
+                }
+            }
+
+            // Road sprites have 2 variants in assets.
+            roadObjectIndex += Rand::Get( 1 ) * 256;
+        }
     }
 
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2026                                             *
+ *   Copyright (C) 2019 - 2025                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -710,14 +710,14 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
 bool World::loadResurrectionMap( const std::string & filename )
 {
+    Reset();
+    Defaults();
+
     Maps::Map_Format::MapFormat map;
     if ( !Maps::Map_Format::loadMap( filename, map ) ) {
         ERROR_LOG( "Map file '" << filename << "' is corrupted or missing." )
         return false;
     }
-
-    Reset();
-    Defaults();
 
     width = map.width;
     height = map.width;
