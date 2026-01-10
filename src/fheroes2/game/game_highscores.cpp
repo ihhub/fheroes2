@@ -361,6 +361,15 @@ namespace
         fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN : ICN::BUTTON_HSCORES_VERTICAL_STANDARD, 0, 1 );
         fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::BUTTON_HSCORES_VERTICAL_EXIT, 0, 1 );
 
+        if ( !isInternalUpdate && !isCampaign ) {
+            const bool isSuccessionWarsCampaignPresent{ Game::isSuccessionWarsCampaignPresent() };
+            const bool isPriceOfLoyaltyCampaignPresent{ !Settings::Get().isPriceOfLoyaltySupported() || Game::isPriceOfLoyaltyCampaignPresent() };
+
+            if ( !isSuccessionWarsCampaignPresent || !isPriceOfLoyaltyCampaignPresent ) {
+                buttonOtherHighScore.disable();
+            }
+        }
+
         buttonOtherHighScore.draw();
         buttonExit.draw();
 
@@ -393,11 +402,14 @@ namespace
                 return fheroes2::GameMode::MAIN_MENU;
             }
 
-            if ( le.MouseClickLeft( buttonOtherHighScore.area() ) ) {
+            if ( buttonOtherHighScore.isEnabled() && le.MouseClickLeft( buttonOtherHighScore.area() ) ) {
                 return isCampaign ? fheroes2::GameMode::HIGHSCORES_STANDARD : fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
             }
 
-            buttonOtherHighScore.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOtherHighScore.area() ) );
+            if ( buttonOtherHighScore.isEnabled() ) {
+                buttonOtherHighScore.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOtherHighScore.area() ) );
+            }
+
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
