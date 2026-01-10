@@ -167,9 +167,9 @@ namespace
         const fheroes2::Point centerTile( centerTileIndex % map.width, centerTileIndex / map.width );
         const int32_t maxTilePos = map.width - 1;
 
-        int groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
+        int32_t groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
 
-        for ( const int direction : Direction::All() ) {
+        for ( const int32_t direction : Direction::allNeighboringDirections ) {
             // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
             fheroes2::Point tilePosition = Maps::getDirectionPoint( centerTile, direction );
             tilePosition.x = std::min<int32_t>( maxTilePos, std::max<int32_t>( 0, tilePosition.x ) );
