@@ -21,6 +21,7 @@
 #include "world_pathfinding.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
