@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -3089,7 +3089,7 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                 }
 
                 if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolCenter() == hero->GetCenter() ) ) {
-                    // Heroes on patrol are restricted for movement so it is assumed that they aren't blocking the way.
+                    // Heroes on patrol are restricted in movement so it is assumed that they aren't blocking the way.
                     // They actually could block the way but this is done deliberately by the map maker.
                     continue;
                 }
