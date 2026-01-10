@@ -256,8 +256,6 @@ namespace
         }
 #endif
 
-        
-
         // Try to load High Scores only once. If a player switches between modes we shouldn't reload the game file again and again.
         if ( !isInternalUpdate ) {
             const std::string highScoreDataPath = System::concatPath( Game::GetSaveDir(), highScoreFileName );
