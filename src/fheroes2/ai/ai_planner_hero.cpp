@@ -3088,6 +3088,12 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                     continue;
                 }
 
+                if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolCenter() == hero->GetCenter() ) ) {
+                    // Heroes on patrol are restricted for movement so it is assumed that they aren't blocking the way.
+                    // They actually could block the way but this is done deliberately by the map maker.
+                    continue;
+                }
+
                 const int targetIndex = _pathfinder.getNearestTileToMove( *hero );
                 if ( targetIndex != -1 ) {
                     bestTargetIndex = targetIndex;
