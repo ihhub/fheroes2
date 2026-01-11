@@ -971,9 +971,9 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 
     const int start = hero.GetIndex();
 
-    Directions directions{ Direction::allNeighboringDirections.begin(), Direction::allNeighboringDirections.end() };
+    auto directions{ Direction::allNeighboringDirections };
     // We have to shuffle directions to avoid cases when heroes repeat the same steps again and again.
-    Rand::Shuffle( directions );
+    Rand::shuffle( directions.begin(), directions.end(), Rand::CurrentThreadRandomDevice() );
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( !Maps::isValidDirection( start, directions[i] ) ) {
