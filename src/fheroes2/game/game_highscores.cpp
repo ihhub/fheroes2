@@ -361,13 +361,9 @@ namespace
         fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN : ICN::BUTTON_HSCORES_VERTICAL_STANDARD, 0, 1 );
         fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::BUTTON_HSCORES_VERTICAL_EXIT, 0, 1 );
 
-        if ( !isInternalUpdate && !isCampaign ) {
-            const bool isSuccessionWarsCampaignPresent{ Game::isSuccessionWarsCampaignPresent() };
-            const bool isPriceOfLoyaltyCampaignPresent{ !Settings::Get().isPriceOfLoyaltySupported() || Game::isPriceOfLoyaltyCampaignPresent() };
-
-            if ( !isSuccessionWarsCampaignPresent || !isPriceOfLoyaltyCampaignPresent ) {
-                buttonOtherHighScore.disable();
-            }
+        if ( !Game::isSuccessionWarsCampaignPresent() ) {
+            // Disable the game mode switch button if The Succession Wars campaign files are not present.
+            buttonOtherHighScore.disable();
         }
 
         buttonOtherHighScore.draw();
