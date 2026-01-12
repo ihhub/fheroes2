@@ -54,6 +54,7 @@
 #include "skill.h"
 #include "skill_bar.h"
 #include "spell_book.h"
+#include "til.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -71,7 +72,7 @@ namespace
     const std::array<int32_t, 2> artifactOffsetX{ 23, 367 };
     const std::array<int32_t, 2> armyOffsetX{ 36, 381 };
 
-    constexpr fheroes2::Size terrainIconSize{ 27, 27 };
+    constexpr fheroes2::Size terrainIconSize{ 32, 32 };
 
     void renderControlInfo( const Battle::ControlInfo & info )
     {
@@ -98,49 +99,23 @@ namespace
     void renderTerrain( const fheroes2::Point offset, const int32_t terrainType, fheroes2::Image & output )
     {
         const fheroes2::Text text{ _( "Terrain" ), fheroes2::FontType::smallWhite() };
-        text.draw( offset.x + ( terrainIconSize.width - text.width() ) / 2, offset.y - 10, output );
+        text.draw( offset.x + ( terrainIconSize.width + 2 - text.width() ) / 2, offset.y - 10, output );
 
-        fheroes2::Point copyArea{};
-
-        switch ( terrainType ) {
-        case Maps::Ground::WATER:
-            copyArea = { 30, 11 };
-            break;
-        case Maps::Ground::GRASS:
-            copyArea = { 59, 11 };
-            break;
-        case Maps::Ground::SNOW:
-            copyArea = { 88, 11 };
-            break;
-        case Maps::Ground::SWAMP:
-        case Maps::Ground::UNKNOWN:
-            copyArea = { 30, 40 };
-            break;
-        case Maps::Ground::LAVA:
-            copyArea = { 59, 40 };
-            break;
-        case Maps::Ground::DESERT:
-            copyArea = { 88, 40 };
-            break;
-        case Maps::Ground::DIRT:
-            copyArea = { 30, 69 };
-            break;
-        case Maps::Ground::WASTELAND:
-            copyArea = { 59, 69 };
-            break;
-        case Maps::Ground::BEACH:
-            copyArea = { 88, 69 };
-            break;
-        default:
-            // How did you end up here? Did you add a new terrain type?
-            assert( 0 );
-            break;
+        uint32_t imageIndex{ 0 };
+        if ( terrainType == Maps::Ground::UNKNOWN ) {
+            imageIndex = Maps::Ground::getRandomTerrainImageIndex( Maps::Ground::SWAMP, false );
+        }
+        else {
+            imageIndex = Maps::Ground::getRandomTerrainImageIndex( terrainType, false );
         }
 
-        const auto & terrainSelectionSprite = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
-        fheroes2::Copy( terrainSelectionSprite, copyArea.x, copyArea.y, output, offset.x, offset.y, terrainIconSize.width, terrainIconSize.height );
+        fheroes2::DrawRect( output, { offset.x, offset.y, terrainIconSize.width + 2, terrainIconSize.height + 2 }, 113 );
+
+        const auto & terrainSelectionSprite = fheroes2::AGG::GetTIL( TIL::GROUND32, imageIndex, 0 );
+
+        fheroes2::Copy( terrainSelectionSprite, 0, 0, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height );
         if ( terrainType == Maps::Ground::UNKNOWN ) {
-            fheroes2::ApplyPalette( output, offset.x, offset.y, output, offset.x, offset.y, terrainIconSize.width, terrainIconSize.height,
+            fheroes2::ApplyPalette( output, offset.x + 1, offset.y + 1, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height,
                                     PAL::GetPalette( PAL::PaletteType::PURPLE ) );
         }
     }
@@ -292,7 +267,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     buttonExit.draw();
     buttonReset.draw();
 
-    const fheroes2::Rect terrainArea{ cur_pt.x + 306, cur_pt.y + 275, terrainIconSize.width, terrainIconSize.height };
+    const fheroes2::Rect terrainArea{ cur_pt.x + 306, cur_pt.y + 272, terrainIconSize.width, terrainIconSize.height };
     renderTerrain( terrainArea.getPosition(), _terrainType, display );
 
     display.render();
