@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <array>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -30,7 +32,7 @@ using Directions = std::vector<int>;
 
 namespace Direction
 {
-    enum
+    enum : int32_t
     {
         UNKNOWN = 0x0000,
         TOP_LEFT = 0x0001,
@@ -50,7 +52,8 @@ namespace Direction
     int Reflect( int direct );
 
     bool ShortDistanceClockWise( int direct1, int direct2 );
-    const Directions & All();
+
+    static constexpr std::array<int32_t, 8> allNeighboringDirections{ TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT };
 }
 
 #define DIRECTION_TOP_ROW ( Direction::TOP_LEFT | Direction::TOP | Direction::TOP_RIGHT )

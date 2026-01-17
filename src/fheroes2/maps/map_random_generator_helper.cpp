@@ -21,6 +21,7 @@
 #include "map_random_generator_helper.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -430,7 +431,6 @@ namespace Maps::Random_Generator
         cache[static_cast<size_t>( start )]._cost = 0;
 
         const bool fromActionTile = ( nodes.getNode( start ).type == Maps::Random_Generator::NodeType::ACTION );
-        const Directions & directions = Direction::All();
 
         int32_t bestRoadIndex = -1;
         uint32_t bestRoadCost = std::numeric_limits<uint32_t>::max();
@@ -450,7 +450,7 @@ namespace Maps::Random_Generator
                 bestRoadCost = currentNode._cost;
             }
 
-            for ( const int32_t direction : directions ) {
+            for ( const int32_t direction : Direction::allNeighboringDirections ) {
                 if ( !Maps::isValidDirection( currentNodeIdx, direction ) ) {
                     continue;
                 }
@@ -1144,9 +1144,7 @@ namespace Maps::Random_Generator
         std::vector<int32_t> openTiles = findTilesByType( region, NodeType::OPEN );
 
         const auto openSpaceFilter = [&data]( const int32_t idx ) {
-            const auto & directions = Direction::All();
-
-            return std::any_of( directions.begin(), directions.end(), [&]( const auto direction ) {
+            return std::any_of( Direction::allNeighboringDirections.begin(), Direction::allNeighboringDirections.end(), [&]( const auto direction ) {
                 if ( !Maps::isValidDirection( idx, direction ) ) {
                     return false;
                 }

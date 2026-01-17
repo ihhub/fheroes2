@@ -234,7 +234,7 @@ namespace
         }
     }
 
-    fheroes2::GameMode openHighScores( const bool isCampaign, const bool isInternalUpdate )
+    fheroes2::GameMode openHighScores( const bool isCampaign, const bool isInternalUpdate, const fheroes2::StandardWindow & window )
     {
         GameOver::Result & gameResult = GameOver::Result::Get();
 
@@ -256,13 +256,15 @@ namespace
         }
 #endif
 
-        const std::string highScoreDataPath = System::concatPath( Game::GetSaveDir(), highScoreFileName );
-
-        if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
-            // Unable to load the file. Let's populate with the default values.
-            highScoreDataContainer.clear();
-            highScoreDataContainer.populateStandardDefaultHighScores();
-            highScoreDataContainer.populateCampaignDefaultHighScores();
+        // Try to load High Scores only once. If a player switches between modes we shouldn't reload the game file again and again.
+        if ( !isInternalUpdate ) {
+            const std::string highScoreDataPath = System::concatPath( Game::GetSaveDir(), highScoreFileName );
+            if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
+                // Unable to load the file. Let's populate with the default values.
+                highScoreDataContainer.clear();
+                highScoreDataContainer.populateStandardDefaultHighScores();
+                highScoreDataContainer.populateCampaignDefaultHighScores();
+            }
         }
 
         int32_t selectedEntryIndex = -1;
@@ -272,6 +274,8 @@ namespace
         const bool isDefaultScreenSize = display.isDefaultSize();
 
         if ( isAfterGameCompletion ) {
+            assert( !isInternalUpdate );
+
             const auto inputPlayerName = []( std::string & playerName ) {
                 Dialog::inputString( fheroes2::Text{}, fheroes2::Text{ _( "Your Name" ), fheroes2::FontType::normalWhite() }, playerName, 15, false, {} );
                 if ( playerName.empty() ) {
@@ -323,6 +327,7 @@ namespace
                     { std::move( lang ), playerName, Settings::Get().getCurrentMapInfo().name, completionTime, daysPassed, rating, world.GetMapSeed() } );
             }
 
+            const std::string highScoreDataPath = System::concatPath( Game::GetSaveDir(), highScoreFileName );
             highScoreDataContainer.save( highScoreDataPath );
 
             gameResult.ResetResult();
@@ -334,13 +339,11 @@ namespace
             fheroes2::fadeOutDisplay();
         }
 
-        // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
         const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
-        const fheroes2::StandardWindow border( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
 
         uint32_t monsterAnimationFrameId = 0;
         if ( isCampaign ) {
@@ -361,6 +364,11 @@ namespace
         fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN : ICN::BUTTON_HSCORES_VERTICAL_STANDARD, 0, 1 );
         fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::BUTTON_HSCORES_VERTICAL_EXIT, 0, 1 );
 
+        if ( !Game::isSuccessionWarsCampaignPresent() ) {
+            // Disable the game mode switch button if The Succession Wars campaign files are not present.
+            buttonOtherHighScore.disable();
+        }
+
         buttonOtherHighScore.draw();
         buttonExit.draw();
 
@@ -371,11 +379,11 @@ namespace
         else {
             if ( !isDefaultScreenSize ) {
                 // We need to expand the ROI for the next render to properly render window borders and shadow.
-                display.updateNextRenderRoi( border.totalArea() );
+                display.updateNextRenderRoi( window.totalArea() );
             }
 
             if ( !isInternalUpdate ) {
-                fheroes2::fadeInDisplay( border.activeArea(), !isDefaultScreenSize );
+                fheroes2::fadeInDisplay( window.activeArea(), !isDefaultScreenSize );
             }
         }
 
@@ -387,17 +395,20 @@ namespace
                     Game::setDisplayFadeIn();
                 }
                 else {
-                    fheroes2::fadeOutDisplay( border.activeArea(), true );
+                    fheroes2::fadeOutDisplay( window.activeArea(), true );
                 }
 
                 return fheroes2::GameMode::MAIN_MENU;
             }
 
-            if ( le.MouseClickLeft( buttonOtherHighScore.area() ) ) {
+            if ( buttonOtherHighScore.isEnabled() && le.MouseClickLeft( buttonOtherHighScore.area() ) ) {
                 return isCampaign ? fheroes2::GameMode::HIGHSCORES_STANDARD : fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
             }
 
-            buttonOtherHighScore.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOtherHighScore.area() ) );
+            if ( buttonOtherHighScore.isEnabled() ) {
+                buttonOtherHighScore.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOtherHighScore.area() ) );
+            }
+
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             if ( le.isMouseRightButtonPressedInArea( buttonExit.area() ) ) {
@@ -433,8 +444,10 @@ fheroes2::GameMode Game::DisplayHighScores( bool isCampaign )
     fheroes2::GameMode returnValue{ fheroes2::GameMode::HIGHSCORES_STANDARD };
     bool isInternalUpdate{ false };
 
+    const fheroes2::StandardWindow window( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+
     while ( returnValue == fheroes2::GameMode::HIGHSCORES_STANDARD || returnValue == fheroes2::GameMode::HIGHSCORES_CAMPAIGN ) {
-        returnValue = openHighScores( isCampaign, isInternalUpdate );
+        returnValue = openHighScores( isCampaign, isInternalUpdate, window );
         isInternalUpdate = true;
         isCampaign = ( returnValue == fheroes2::GameMode::HIGHSCORES_CAMPAIGN );
     }
