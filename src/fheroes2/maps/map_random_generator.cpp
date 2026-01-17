@@ -854,7 +854,7 @@ namespace Maps::Random_Generator
             }
 
             const auto & mineInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::GOLD, Ground::GRASS ) );
-            std::vector<int32_t> options = findTilesForPlacement( mapState, width, region.id, findOpenTiles( region ), mineInfo );
+            std::vector<int32_t> options = findTilesForPlacement( mapState, width, region.id, findTilesByType( region, NodeType::OPEN ), mineInfo );
             if ( options.empty() ) {
                 continue;
             }
@@ -927,6 +927,22 @@ namespace Maps::Random_Generator
                 }
                 else {
                     placeMonster( mapFormat, mapState, tileIndex, weakGuard );
+                }
+            }
+        }
+
+        // Step 11. Place free pickup objects
+        const auto & randomResourceInfo = convertMP2ToObjectInfo( MP2::OBJ_RANDOM_RESOURCE );
+        for ( const Region & region : mapRegions ) {
+            const auto & pathTiles = findTilesByType( region, NodeType::PATH );
+            if ( pathTiles.empty() ) {
+                continue;
+            }
+
+            for ( int count = 0; count < regionConfiguration.treasureCount * 2; ++count ) {
+                const int32_t tileIndex = Rand::GetWithGen( pathTiles, randomGenerator );
+                if ( putObjectOnMap( mapFormat, world.getTile( tileIndex ), randomResourceInfo.first, randomResourceInfo.second ) ) {
+                    mapState.getNodeToUpdate( tileIndex ).type = NodeType::ACTION;
                 }
             }
         }
