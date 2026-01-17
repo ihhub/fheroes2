@@ -24,6 +24,7 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
@@ -207,6 +208,15 @@ namespace Rand
 
         const uint32_t id = GetWithGen( 0, static_cast<uint32_t>( vec.size() - 1 ), gen );
         return vec[id];
+    }
+
+    template <typename T, size_t N>
+    const T & GetWithGen( const std::array<T, N> & arr, PCG32 & gen )
+    {
+        assert( N > 0 );
+
+        const uint32_t id = GetWithGen( 0, static_cast<uint32_t>( N - 1 ), gen );
+        return arr[id];
     }
 
     using ValueWeight = std::pair<int32_t, uint32_t>;

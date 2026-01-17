@@ -940,7 +940,14 @@ namespace Maps::Random_Generator
             }
 
             for ( int count = 0; count < regionConfiguration.treasureCount * 2; ++count ) {
-                const int32_t tileIndex = Rand::GetWithGen( pathTiles, randomGenerator );
+                int32_t tileIndex = Rand::GetWithGen( pathTiles, randomGenerator );
+
+                const int32_t direction = Rand::GetWithGen( Direction::allNeighboringDirections, randomGenerator );
+                const int32_t adjancent = Maps::GetDirectionIndex( tileIndex, direction );
+                if ( Maps::isValidDirection( tileIndex, direction ) && mapState.getNode( adjancent ).type == NodeType::OPEN ) {
+                    tileIndex = adjancent;
+                }
+
                 if ( putObjectOnMap( mapFormat, world.getTile( tileIndex ), randomResourceInfo.first, randomResourceInfo.second ) ) {
                     mapState.getNodeToUpdate( tileIndex ).type = NodeType::ACTION;
                 }
