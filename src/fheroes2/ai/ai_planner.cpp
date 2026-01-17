@@ -36,7 +36,6 @@
 #include "resource.h"
 #include "route.h"
 #include "world.h"
-#include "world_pathfinding.h"
 
 AI::Planner & AI::Planner::Get()
 {
