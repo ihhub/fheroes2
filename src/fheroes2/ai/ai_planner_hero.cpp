@@ -640,7 +640,7 @@ namespace
                 return false;
             }
 
-            const int daysActive = numOfDaysPerWeek - world.GetDay() + 1;
+            const uint32_t daysActive = numOfDaysPerWeek - world.GetDay() + 1;
             const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
 
             return movementBonus > 0;
@@ -1612,7 +1612,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         return 100;
     }
     case MP2::OBJ_STABLES: {
-        const int daysActive = numOfDaysPerWeek - world.GetDay() + 1;
+        const uint32_t daysActive = numOfDaysPerWeek - world.GetDay() + 1;
         double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
 
         const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );

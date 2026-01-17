@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1631,7 +1631,7 @@ void World::setUltimateArtifact()
         if ( !pool.empty() ) {
             const int32_t pos = Rand::Get( pool );
 
-            ultimate_artifact.Set( pos, getUltimateArtifact() );
+            _ultimateArtifact.Set( pos, getUltimateArtifact() );
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact has been placed at tile " << pos )
         }
@@ -1667,7 +1667,7 @@ void World::setUltimateArtifact()
         }
     }
 
-    ultimate_artifact.Set( pos, getUltimateArtifact() );
+    _ultimateArtifact.Set( pos, getUltimateArtifact() );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
 }
