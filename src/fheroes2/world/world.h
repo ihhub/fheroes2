@@ -142,7 +142,7 @@ struct CapturedObject
     }
 };
 
-struct CapturedObjects : std::map<int32_t, CapturedObject>
+struct CapturedObjects final : std::map<int32_t, CapturedObject>
 {
     CapturedObjects() = default;
 
@@ -194,7 +194,7 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj );
 
 using EventsDate = std::list<EventDate>;
 
-class World : protected fheroes2::Size
+class World final : protected fheroes2::Size
 {
 public:
     World( const World & other ) = delete;
