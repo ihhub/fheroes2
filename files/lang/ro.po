@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-03 12:31+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6227,6 +6227,15 @@ msgid ""
 msgstr ""
 
 msgid "Bring up the system options menu, allowing you to customize your game."
+msgstr ""
+
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Mișcare a umbrelor"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
 msgstr ""
 
 msgid ""
