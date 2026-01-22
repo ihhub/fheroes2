@@ -149,6 +149,14 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
         _offset = { -20, -5 };
         break;
 
+    case Cursor::SWORD_TOP:
+        _offset = { -defaultOffset.x, -5 };
+        break;
+
+    case Cursor::SWORD_BOTTOM:
+        _offset = { -defaultOffset.x, -25 };
+        break;
+
     case Cursor::SWORD_LEFT:
         _offset = { -5, -7 };
         break;
