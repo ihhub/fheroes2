@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -188,8 +188,8 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
             return EventDefaultAction();
         }
         else if ( hero->GetPath().isValidForMovement() ) {
-            fheroes2::showStandardTextMessage( "Hero Movement Points",
-                                               "The hero's army cannot move anymore today. The movement points will be refilled tomorrow after you end your turn.",
+            fheroes2::showStandardTextMessage( _( "Hero Movement Points" ),
+                                               _( "The hero's army cannot move anymore today. The movement points will be refilled tomorrow after you end your turn." ),
                                                Dialog::OK );
         }
     }
