@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -173,7 +173,10 @@ namespace AI
 
         void HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
 
-        void resetPathfinder();
+        void resetPathfinder()
+        {
+            _pathfinder.reset();
+        }
 
         void revealFog( const Maps::Tile & tile, const Kingdom & kingdom );
 
