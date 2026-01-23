@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -102,7 +102,7 @@ void Cursor::Move( int32_t x, int32_t y ) const
     fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y );
 }
 
-void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
+void Cursor::SetOffset( const int name, const fheroes2::Point & defaultOffset )
 {
     switch ( name ) {
     case Cursor::POINTER:
@@ -147,6 +147,14 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
 
     case Cursor::SWORD_TOPRIGHT:
         _offset = { -20, -5 };
+        break;
+
+    case Cursor::SWORD_TOP:
+        _offset = { -defaultOffset.x, -5 };
+        break;
+
+    case Cursor::SWORD_BOTTOM:
+        _offset = { -defaultOffset.x, -25 };
         break;
 
     case Cursor::SWORD_LEFT:
