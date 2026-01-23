@@ -102,7 +102,7 @@ void Cursor::Move( int32_t x, int32_t y ) const
     fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y );
 }
 
-void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
+void Cursor::SetOffset( const int name, const fheroes2::Point & defaultOffset )
 {
     switch ( name ) {
     case Cursor::POINTER:

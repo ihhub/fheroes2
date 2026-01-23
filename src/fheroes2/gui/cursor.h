@@ -210,7 +210,7 @@ private:
     Cursor() = default;
     ~Cursor() = default;
 
-    void SetOffset( int name, const fheroes2::Point & defaultOffset );
+    void SetOffset( const int name, const fheroes2::Point & defaultOffset );
     void Move( int32_t x, int32_t y ) const;
 
     int _theme{ Cursor::CursorType::NONE };
