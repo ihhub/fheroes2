@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -46,12 +46,15 @@
 #include "image.h"
 #include "localevent.h"
 #include "monster.h"
+#include "pal.h"
 #include "race.h"
+#include "rand.h"
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
 #include "spell_book.h"
+#include "til.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -68,25 +71,86 @@ namespace
     const std::array<int32_t, 2> secondarySkillOffsetX{ 22, 353 };
     const std::array<int32_t, 2> artifactOffsetX{ 23, 367 };
     const std::array<int32_t, 2> armyOffsetX{ 36, 381 };
-}
 
-void Battle::ControlInfo::Redraw() const
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+    constexpr fheroes2::Size terrainIconSize{ 32, 32 };
 
-    fheroes2::Blit( cell, display, rtLocal.x, rtLocal.y );
-    if ( result & CONTROL_HUMAN )
-        fheroes2::Blit( mark, display, rtLocal.x + 3, rtLocal.y + 2 );
-    fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
-    text.draw( rtLocal.x + cell.width() + 5, rtLocal.y + 5, display );
+    void renderControlInfo( const Battle::ControlInfo & info )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
-    fheroes2::Blit( cell, display, rtAI.x, rtAI.y );
-    if ( result & CONTROL_AI )
-        fheroes2::Blit( mark, display, rtAI.x + 3, rtAI.y + 2 );
-    text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
-    text.draw( rtAI.x + cell.width() + 5, rtAI.y + 5, display );
+        fheroes2::Blit( cell, display, info.humanPlayerRoi.x, info.humanPlayerRoi.y );
+        if ( info.result & CONTROL_HUMAN ) {
+            fheroes2::Blit( mark, display, info.humanPlayerRoi.x + 3, info.humanPlayerRoi.y + 2 );
+        }
+
+        fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
+        text.draw( info.humanPlayerRoi.x + cell.width() + 5, info.humanPlayerRoi.y + 5, display );
+
+        fheroes2::Blit( cell, display, info.computerPlayerRoi.x, info.computerPlayerRoi.y );
+        if ( info.result & CONTROL_AI ) {
+            fheroes2::Blit( mark, display, info.computerPlayerRoi.x + 3, info.computerPlayerRoi.y + 2 );
+        }
+        text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
+        text.draw( info.computerPlayerRoi.x + cell.width() + 5, info.computerPlayerRoi.y + 5, display );
+    }
+
+    void renderTerrain( const fheroes2::Point offset, const int32_t terrainType, fheroes2::Image & output )
+    {
+        const fheroes2::Text text{ _( "Terrain" ), fheroes2::FontType::smallWhite() };
+        text.draw( offset.x + ( terrainIconSize.width + 2 - text.width() ) / 2, offset.y - 10, output );
+
+        uint32_t imageIndex{ 0 };
+        if ( terrainType == Maps::Ground::UNKNOWN ) {
+            imageIndex = Maps::Ground::getRandomTerrainImageIndex( Maps::Ground::SWAMP, false );
+        }
+        else {
+            imageIndex = Maps::Ground::getRandomTerrainImageIndex( terrainType, false );
+        }
+
+        fheroes2::DrawRect( output, { offset.x, offset.y, terrainIconSize.width + 2, terrainIconSize.height + 2 }, 113 );
+
+        const auto & terrainSelectionSprite = fheroes2::AGG::GetTIL( TIL::GROUND32, imageIndex, 0 );
+
+        fheroes2::Copy( terrainSelectionSprite, 0, 0, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height );
+        if ( terrainType == Maps::Ground::UNKNOWN ) {
+            fheroes2::ApplyPalette( output, offset.x + 1, offset.y + 1, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height,
+                                    PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+        }
+    }
+
+    int32_t getNextTerrain( const int32_t terrainType )
+    {
+        switch ( terrainType ) {
+        case Maps::Ground::UNKNOWN:
+            return Maps::Ground::WATER;
+        case Maps::Ground::WATER:
+            return Maps::Ground::GRASS;
+        case Maps::Ground::GRASS:
+            return Maps::Ground::SNOW;
+        case Maps::Ground::SNOW:
+            return Maps::Ground::SWAMP;
+        case Maps::Ground::SWAMP:
+            return Maps::Ground::LAVA;
+        case Maps::Ground::LAVA:
+            return Maps::Ground::DESERT;
+        case Maps::Ground::DESERT:
+            return Maps::Ground::DIRT;
+        case Maps::Ground::DIRT:
+            return Maps::Ground::WASTELAND;
+        case Maps::Ground::WASTELAND:
+            return Maps::Ground::BEACH;
+        case Maps::Ground::BEACH:
+            return Maps::Ground::UNKNOWN;
+        default:
+            // How did you end up here? Did you add a new terrain type?
+            assert( 0 );
+            break;
+        }
+
+        return Maps::Ground::UNKNOWN;
+    }
 }
 
 Battle::Only::Only()
@@ -110,9 +174,6 @@ Battle::Only::Only()
 bool Battle::Only::setup( const bool allowBackup, bool & reset )
 {
     reset = false;
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -152,6 +213,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         armyInfo[0].isHeroPresent = true;
     }
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     fheroes2::Copy( background, 0, 0, display, cur_pt.x, cur_pt.y, background.width(), background.height() );
 
@@ -181,7 +243,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     }
 
     if ( attackedArmyControlInfo ) {
-        attackedArmyControlInfo->Redraw();
+        renderControlInfo( *attackedArmyControlInfo );
     }
 
     // hide the swap army/artifact arrows
@@ -205,10 +267,14 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     buttonExit.draw();
     buttonReset.draw();
 
+    const fheroes2::Rect terrainArea{ cur_pt.x + 306, cur_pt.y + 272, terrainIconSize.width, terrainIconSize.height };
+    renderTerrain( terrainArea.getPosition(), _terrainType, display );
+
     display.render();
 
     bool result = false;
 
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         bool updateSpellPoints = false;
         bool needRender = false;
@@ -249,6 +315,23 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonReset.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Reset" ), _( "Reset to default settings." ), 0 );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( terrainArea ) ) {
+            if ( _terrainType == Maps::Ground::UNKNOWN ) {
+                fheroes2::showStandardTextMessage( _( "Terrain" ), _( "The battle will take place on a randomly selected terrain. Click to change the terrain type." ),
+                                                   0 );
+            }
+            else {
+                std::string message = _( "The battle will take place on %{terrain-type} terrain. Click to change the terrain type." );
+                StringReplace( message, "%{terrain-type}", StringLower( Maps::Ground::String( _terrainType ) ) );
+                fheroes2::showStandardTextMessage( _( "Terrain" ), std::move( message ), 0 );
+            }
+        }
+
+        if ( le.MouseClickLeft( terrainArea ) ) {
+            _terrainType = getNextTerrain( _terrainType );
+            renderTerrain( terrainArea.getPosition(), _terrainType, display );
+            needRender = true;
         }
 
         for ( const auto & [firstId, secondId] : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
@@ -303,6 +386,18 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 }
 
                 armyInfo[firstId].needRedraw = true;
+
+                const bool isArmyValid = ( armyInfo[firstId].monster.isValid() && armyInfo[secondId].monster.isValid() );
+                if ( isArmyValid && !buttonStart.isEnabled() ) {
+                    buttonStart.enable();
+                    buttonStart.draw();
+                    needRender = true;
+                }
+                else if ( !isArmyValid && buttonStart.isEnabled() ) {
+                    buttonStart.disable();
+                    buttonStart.draw();
+                    needRender = true;
+                }
             }
             else if ( firstUI.artifact != nullptr && le.isMouseCursorPosInArea( firstUI.artifact->GetArea() ) && firstUI.artifact->QueueEventProcessing() ) {
                 if ( firstUI.army != nullptr && firstUI.army->isSelected() ) {
@@ -342,17 +437,23 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         if ( attackedArmyControlInfo ) {
             assert( armyInfo[1].hero );
 
-            if ( le.MouseClickLeft( attackedArmyControlInfo->rtLocal ) && armyInfo[1].player.isControlAI() ) {
+            if ( le.MouseClickLeft( attackedArmyControlInfo->humanPlayerRoi ) && armyInfo[1].player.isControlAI() ) {
                 attackedArmyControlInfo->result = CONTROL_HUMAN;
                 armyInfo[1].player.SetControl( CONTROL_HUMAN );
 
                 needRedrawControlInfo = true;
             }
-            else if ( le.MouseClickLeft( attackedArmyControlInfo->rtAI ) && armyInfo[1].player.isControlHuman() ) {
+            else if ( le.MouseClickLeft( attackedArmyControlInfo->computerPlayerRoi ) && armyInfo[1].player.isControlHuman() ) {
                 attackedArmyControlInfo->result = CONTROL_AI;
                 armyInfo[1].player.SetControl( CONTROL_AI );
 
                 needRedrawControlInfo = true;
+            }
+            else if ( le.isMouseRightButtonPressedInArea( attackedArmyControlInfo->humanPlayerRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Human" ), _( "Click to set this hero to be human-controlled." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( attackedArmyControlInfo->computerPlayerRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "AI" ), _( "Click to set this hero to be AI-controlled." ), 0 );
             }
         }
 
@@ -383,7 +484,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
         if ( needRedrawControlInfo ) {
             assert( attackedArmyControlInfo != nullptr );
-            attackedArmyControlInfo->Redraw();
+            renderControlInfo( *attackedArmyControlInfo );
 
             needRender = true;
         }
@@ -514,6 +615,8 @@ void Battle::Only::reset()
     armyInfo[1].reset();
 
     attackedArmyControlInfo.reset();
+
+    _terrainType = Maps::Ground::UNKNOWN;
 }
 
 void Battle::Only::copyHero( const Heroes & in, Heroes & out )
@@ -567,6 +670,18 @@ void Battle::Only::updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Poi
     ui.army->setTableSize( { 5, 1 } );
     ui.army->setRenderingOffset( { offset.x + armyOffsetX[armyId], offset.y + 267 } );
     ui.army->setInBetweenItemsOffset( { 2, 0 } );
+}
+
+int32_t Battle::Only::terrainType() const
+{
+    if ( _terrainType == Maps::Ground::UNKNOWN ) {
+        const std::vector<int32_t> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
+                                                 Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
+
+        return Rand::Get( terrainTypes );
+    }
+
+    return _terrainType;
 }
 
 void Battle::Only::ArmyUI::redraw( fheroes2::Image & output ) const

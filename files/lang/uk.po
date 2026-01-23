@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
-"PO-Revision-Date: 2025-11-12 16:04+0200\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"PO-Revision-Date: 2025-12-25 19:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -1123,6 +1123,10 @@ msgstr "Людина"
 msgid "AI"
 msgstr "Комп'ютер"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Рельєф"
+
 msgid "Start"
 msgstr "Почати"
 
@@ -1140,8 +1144,24 @@ msgstr "Скинути"
 msgid "Reset to default settings."
 msgstr "Скинути до усталених налаштувань."
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
+
+msgid "Click to set this hero to be human-controlled."
+msgstr "Тицьніть, щоб встановити цього героя як керованого людиною."
+
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Тицьніть, щоб встановити цього героя як керованого комп'ютером."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} проти %{race2} %{name2}"
@@ -3133,15 +3153,6 @@ msgstr "Мова"
 msgid "Graphics"
 msgstr "Графіка"
 
-msgid "Black & White"
-msgstr "Чорно-білий"
-
-msgid "Mouse Cursor"
-msgstr "Вказівник миші"
-
-msgid "Color"
-msgstr "Кольоровий"
-
 msgid "Text Support"
 msgstr "Текстовий опис"
 
@@ -3154,8 +3165,17 @@ msgstr "Обрати мову гри"
 msgid "Change the graphics settings of the game."
 msgstr "Змінити графічні налаштування гри."
 
+msgid "Mouse Cursor"
+msgstr "Вказівник миші"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Перемикає кольоровий/монохромний курсор. Має лише естетичний ефект."
+
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Перемкнути тип інтерфейсу, який хочете використовувати."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3245,6 +3265,15 @@ msgstr "Кадри за секунду"
 msgid "System Info"
 msgstr "Системні Параметри"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Змінити розділову здатність гри."
 
@@ -3253,6 +3282,13 @@ msgstr "Вибрати роздільну здатність"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Змінює режим повноекранний чи віконний."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3291,12 +3327,6 @@ msgstr "Канонічний"
 
 msgid "Numeric"
 msgstr "Числовий"
-
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Перемкнути тип інтерфейсу, який хочете використовувати."
 
 msgid "Toggle interface visibility."
 msgstr "Перемкнути видимість інтерфейсу."
@@ -3488,6 +3518,33 @@ msgstr "Очки Руху:"
 msgid "Uncharted Territory"
 msgstr "Незвідана територія"
 
+msgid "Random Map Generator"
+msgstr "Генератор випадкових мап"
+
+msgid "rmg|Player count"
+msgstr "Кількість гравців"
+
+msgid "rmg|Map layout"
+msgstr "Розкладка мапи"
+
+msgid "rmg|Water percentage"
+msgstr "Відсоток води"
+
+msgid "rmg|Monster strength"
+msgstr "Сила монстрів"
+
+msgid "rmg|Resource availability"
+msgstr "Доступність ресурсів"
+
+msgid "rmg|Map seed"
+msgstr ""
+
+msgid "Click to generate a new map."
+msgstr "Тицьніть, щоб згенерувати нову мапу."
+
+msgid "Return to the previous menu."
+msgstr "Повернутися до попереднього меню."
+
 msgid "Cost per troop:"
 msgstr "Вартість істоти:"
 
@@ -3624,8 +3681,14 @@ msgstr "Завантажити файли:"
 msgid "Terrain object"
 msgstr "Об'єкт місцевості"
 
+msgid "There is nothing to select from."
+msgstr "Нема з чого вибирати."
+
+msgid "There are no castles to select from."
+msgstr "Немає замків для вибору."
+
 msgid "Accept the choice made."
-msgstr "Підтвердити ваш вибір."
+msgstr "Прийняти зроблений вибір."
 
 msgid "Click to enable all items."
 msgstr "Тицьніть, щоб увімкнути всі елементи."
@@ -3639,17 +3702,32 @@ msgstr "Тицьніть, щоб вимкнути усі елементи."
 msgid "Disable All Items"
 msgstr "Вимкнути Усі елементи"
 
+msgid "There are no secondary skills to select from."
+msgstr "Додаткові навички для вибору відсутні."
+
 msgid "Select Skill:"
 msgstr "Оберіть навичку:"
+
+msgid "There are no spells to select."
+msgstr "Немає заклинань для вибору."
 
 msgid "Select Spell:"
 msgstr "Оберіть закляття:"
 
+msgid "There are no artifacts to select from."
+msgstr "Немає артефактів для вибору."
+
 msgid "Select Artifact:"
 msgstr "Оберіть артефакт:"
 
+msgid "There are no monsters to select from."
+msgstr "Немає монстрів для вибору."
+
 msgid "Select Monster:"
 msgstr "Оберіть монстра:"
+
+msgid "There are no heroes to select from."
+msgstr "Немає героїв для вибору."
 
 msgid "Select Hero:"
 msgstr "Оберіть героя:"
@@ -3773,19 +3851,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Іконка розміру"
 
-msgid "Map Type"
-msgstr "Тип мапи"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Вказує, чи створена мапа для версії гри \"Війни за спадщину\", \"Ціна "
-"вірності\" або \"Воскресіння\"."
-
-msgid "Map Type:\n"
-msgstr "Тип мапи:\n"
-
 msgid "The Succession Wars"
 msgstr "Війни за Спадщину"
 
@@ -3794,6 +3859,15 @@ msgstr "Ціна Вірності"
 
 msgid "Resurrection"
 msgstr "Воскресіння"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr "Ця мапа створена для версії гри \"%{game-version}\"."
+
+msgid "Map Type"
+msgstr "Тип мапи"
+
+msgid "Map Type:\n"
+msgstr "Тип мапи:\n"
 
 msgid ""
 "\n"
@@ -4418,16 +4492,6 @@ msgstr "На мапі можна розмістити лише один випа
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
-
-msgid "Pick player count"
-msgstr "Виберіть кількість гравців"
-
-msgid "Set water percentage"
-msgstr "Встановити відсоток води"
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
-"Встановити початкове значення мапи (встановіть 0 для випадкового значення)"
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -5237,7 +5301,7 @@ msgstr "Координація проекту та основна розробк
 msgid "Development"
 msgstr "Розробка"
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr "Відвідайте нас на"
 
 msgid "QA and Support"
@@ -6413,11 +6477,24 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Відкрити меню системних параметрів, що дозволяє вам налаштувати гру."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Рух Героя"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Один або кілька героїв все ще можуть рухатися. Ви впевнені, що хочете "
 "завершити свій хід?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+"Щоб вийти з fheroes2, натисніть кнопку «Додому» або проведіть пальцем вгору."
 
 msgid "Are you sure you want to quit?"
 msgstr "Ви впевнені, що хочете вийти?"
@@ -6706,6 +6783,12 @@ msgstr "Добро"
 
 msgid "Evil"
 msgstr "Зло"
+
+msgid "Black & White"
+msgstr "Чорно-білий"
+
+msgid "Color"
+msgstr "Кольоровий"
 
 msgid ", FPS: "
 msgstr ", кдр/с:"
@@ -9306,6 +9389,42 @@ msgstr "Трава"
 
 msgid "Ocean"
 msgstr "Океан"
+
+msgid "map_layout|Mirrored"
+msgstr "Дзеркально"
+
+msgid "map_layout|Balanced"
+msgstr "Збалансовано"
+
+msgid "map_layout|Islands"
+msgstr "Острови"
+
+msgid "map_layout|Pyramid"
+msgstr "Піраміда"
+
+msgid "map_layout|Quest"
+msgstr "Квест"
+
+msgid "resource_density|Scarce"
+msgstr "Дефіцит"
+
+msgid "resource_density|Normal"
+msgstr "Нормально"
+
+msgid "resource_density|Abundant"
+msgstr "Багато"
+
+msgid "monster_strength|Weak"
+msgstr "Слабкі"
+
+msgid "monster_strength|Normal"
+msgstr "Звичайні"
+
+msgid "monster_strength|Strong"
+msgstr "Міцні"
+
+msgid "monster_strength|Deadly"
+msgstr "Смертельні"
 
 msgid "maps|Small"
 msgstr "Мала"
@@ -12458,80 +12577,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
-
-#~ msgid "Limit region size"
-#~ msgstr "Обмежте розмір регіону"
-
-#~ msgid "Warning!"
-#~ msgstr "Попередження!"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Опис обраної вами мапи."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Введений опис мапи перевищує максимально дозволені 5 рядків. Його буде "
-#~ "скорочено до розміру поля опису мапи."
-
-#~ msgid "Castle Options"
-#~ msgstr "Налаштування замку"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Натисніть щоб побачити наступне місто."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Натисніть щоб побачити попереднє місто."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Завжди наносить контрудар"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "На мапі можна розмістити максимум %{count} обелісків."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Тицьніть, щоб змінити назву замку. Тицьніть правою кнопкою миші, щоб "
-#~ "відновити значення за налаштуванням."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr ""
-#~ "Встановити власну замкову армію. Тицьніть правою кнопкою миші, щоб "
-#~ "скинути кількість."
-
-#~ msgid "EditorMainMenu|BACK"
-#~ msgstr "НАЗАД"
-
-#~ msgid "CONFIG"
-#~ msgstr "ПАРАМЕТРИ"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Повернутися до меню Нова Мапа."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Повернутися до головного меню Редактора мап."
-
-#~ msgid "Host"
-#~ msgstr "Господар"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Господар встановлює параметри гри. У кожній мережевій грі може бути лише "
-#~ "один ведучий."
-
-#~ msgid "Guest"
-#~ msgstr "Гість"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Гість чекає, поки господар налаштує гру, після чого автоматично "
-#~ "приєднується до неї. У TCP/IP-іграх може бути кілька гостей."

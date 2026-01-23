@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1107,6 +1107,10 @@ msgid "AI"
 msgstr "UI"
 
 #, fuzzy
+msgid "Terrain"
+msgstr "Režim terénu"
+
+#, fuzzy
 msgid "Start"
 msgstr "Reštart"
 
@@ -1123,8 +1127,26 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3158,15 +3180,6 @@ msgstr "Jazyk"
 msgid "Graphics"
 msgstr "Grafika"
 
-msgid "Black & White"
-msgstr "Čiernobiely"
-
-msgid "Mouse Cursor"
-msgstr "Kurzor myši"
-
-msgid "Color"
-msgstr "Farebný"
-
 msgid "Text Support"
 msgstr "Podpora textu"
 
@@ -3179,8 +3192,17 @@ msgstr "Vyber jazyk hry"
 msgid "Change the graphics settings of the game."
 msgstr "Zmeň nastavenie grafiky hry."
 
+msgid "Mouse Cursor"
+msgstr "Kurzor myši"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Zapnutie alebo vypnutie farebného kurzora. Ide len o estetickú voľbu."
+
+msgid "Interface Type"
+msgstr "Typ rozhrania"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3279,6 +3301,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Systémové info"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Zmeň rozlíšenie hry."
 
@@ -3287,6 +3318,13 @@ msgstr "Zvoľ rozlíšenie hry"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Prepni medzi módom celej obrazovky a oknom."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3328,12 +3366,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Typ rozhrania"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid "Toggle interface visibility."
 msgstr "Prepni viditeľnosť rozhrania."
@@ -3518,6 +3550,39 @@ msgstr "Body pohybu:"
 msgid "Uncharted Territory"
 msgstr "Nepreskúmané územie"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Náhodný tvor"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Ikona hráča"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vodný elementál"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Náhodný tvor - silný"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
 msgid "Cost per troop:"
 msgstr "Cena za jednotku:"
 
@@ -3655,6 +3720,13 @@ msgstr "Nahrať súbor:"
 msgid "Terrain object"
 msgstr "Režim terénu"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
 
@@ -3674,17 +3746,35 @@ msgstr "Klikni pre výber zvoleného rozlíšenia."
 msgid "Disable All Items"
 msgstr "Zobraz kúzla"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Žiadne kúzla na čarovanie."
 
 msgid "Select Spell:"
 msgstr "Zvoľ kúzlo:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Zvoľ artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Select Monster:"
 msgstr "Zvoľ bojovníka:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Názov momentálne zvolenej mapy."
 
 msgid "Select Hero:"
 msgstr "Zvoľ hrdinu:"
@@ -3834,20 +3924,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikona veľkosti"
 
-msgid "Map Type"
-msgstr "Typ mapy"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
-"Price of Loyalty\"."
-
-msgid "Map Type:\n"
-msgstr "Typ mapy:\n"
-
 msgid "The Succession Wars"
 msgstr "Vojna o dedičstvo"
 
@@ -3857,6 +3933,15 @@ msgstr "Cena vernosti"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Vzkriesenie"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+msgid "Map Type:\n"
+msgstr "Typ mapy:\n"
 
 #, fuzzy
 msgid ""
@@ -4521,16 +4606,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Ikona hráča"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -5401,8 +5476,8 @@ msgstr "Koordinácia projektu a hlavný vývoj"
 msgid "Development"
 msgstr "Vývoj"
 
-msgid "Visit us at "
-msgstr "Navštív nás na "
+msgid "Visit us at"
+msgstr "Navštív nás na"
 
 msgid "QA and Support"
 msgstr "Zabezpečenie kvality a podpora"
@@ -6588,10 +6663,22 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Zobraziť ponuku systémových možností, ktorá umožňuje prispôsobiť si hru."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Tieň pohybu"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Jeden alebo viac hrdinov sa ešte môže pohnúť, naozaj chceš ukončiť svoj ťah?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Určite chceš skončiť?"
@@ -6873,6 +6960,12 @@ msgstr "Dobro"
 
 msgid "Evil"
 msgstr "Zlo"
+
+msgid "Black & White"
+msgstr "Čiernobiely"
+
+msgid "Color"
+msgstr "Farebný"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -9478,6 +9571,43 @@ msgstr "Tráva"
 
 msgid "Ocean"
 msgstr "Oceán"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normálna"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Malá"
@@ -12658,56 +12788,3 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Pozor"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Opis aktuálne zvolenej mapy."
-
-#~ msgid "Castle Options"
-#~ msgstr "Možnosti hradu"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Kliknutím zobraz ďalšie mesto."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Kliknutím zobraz predošlé mesto."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Vráti zosielateľa do ktoréhokoľvek mesta alebo hradu, ktorý práve "
-#~ "vlastníš."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vždy vracia úder"
-
-#~ msgid "CONFIG"
-#~ msgstr "NASTAV"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Zrušenie a návrat do ponuky Nová mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
-
-#~ msgid "Host"
-#~ msgstr "Hostiteľ"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Hostiteľ nastaví možnosti hry. V jednej sieťovej hre môže byť len jeden "
-#~ "hostiteľ."
-
-#~ msgid "Guest"
-#~ msgstr "Hosť"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Hosť počká, kým hostiteľ nastaví hru, a potom sa automaticky pridá do "
-#~ "hry. Pri hrách cez TCP/IP môže byť viacero hostí."

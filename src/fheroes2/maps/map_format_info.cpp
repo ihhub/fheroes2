@@ -643,4 +643,14 @@ namespace Maps::Map_Format
 
         return saveToStream( fileStream, map );
     }
+
+    bool saveMap( OStreamBase & stream, const MapFormat & map )
+    {
+        return saveToStream( stream, map );
+    }
+
+    bool loadMap( IStreamBase & stream, MapFormat & map )
+    {
+        return loadFromStream( stream, map );
+    }
 }

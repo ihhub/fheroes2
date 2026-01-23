@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -501,6 +501,19 @@ uint32_t Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMax() );
 }
 
+uint32_t Battle::Unit::getPotentialDamage( const Unit & enemy ) const
+{
+    if ( Modes( Battle::SP_CURSE ) ) {
+        return CalculateMinDamage( enemy );
+    }
+
+    if ( Modes( Battle::SP_BLESS ) ) {
+        return CalculateMaxDamage( enemy );
+    }
+
+    return ( CalculateMinDamage( enemy ) + CalculateMaxDamage( enemy ) ) / 2;
+}
+
 uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
 {
     if ( isArchers() ) {
@@ -571,7 +584,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     // Attack bonus is 20% to 300%
     dmg *= 1 + ( 0 < r ? 0.1 * std::min( r, 20 ) : 0.05 * std::max( r, -16 ) );
 
-    return std::max( fheroes2::checkedCast<uint32_t>( dmg ).value(), 1U );
+    return std::max<uint32_t>( fheroes2::checkedCast<uint32_t>( dmg ).value(), 1U );
 }
 
 uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::PCG32 & randomGenerator ) const
@@ -595,7 +608,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::PCG32 & randomGenera
         res /= 2;
     }
 
-    return std::max( res, 1U );
+    return std::max<uint32_t>( res, 1U );
 }
 
 uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
@@ -995,18 +1008,7 @@ double Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 {
     const Unit & attacker = *this;
 
-    const uint32_t attackerDamageToDefender = [&defender, &attacker]() {
-        if ( attacker.Modes( SP_CURSE ) ) {
-            return attacker.CalculateMinDamage( defender );
-        }
-
-        if ( attacker.Modes( SP_BLESS ) ) {
-            return attacker.CalculateMaxDamage( defender );
-        }
-
-        return ( attacker.CalculateMinDamage( defender ) + attacker.CalculateMaxDamage( defender ) ) / 2;
-    }();
-
+    const uint32_t attackerDamageToDefender = attacker.getPotentialDamage( defender );
     double attackerThreat = attackerDamageToDefender;
 
     {

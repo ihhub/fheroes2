@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -214,7 +214,7 @@ fheroes2::GameMode Game::StartBattleOnly()
 {
     static Battle::Only battleOnlySetup;
 
-    world.generateBattleOnlyMap();
+    world.generateBattleOnlyMap( battleOnlySetup.terrainType() );
 
     bool reset = false;
     bool allowBackup = true;
@@ -223,12 +223,13 @@ fheroes2::GameMode Game::StartBattleOnly()
         allowBackup = false;
 
         if ( reset ) {
-            world.generateBattleOnlyMap();
+            world.generateBattleOnlyMap( battleOnlySetup.terrainType() );
             battleOnlySetup.reset();
             reset = false;
             continue;
         }
 
+        world.setUniformTerrain( battleOnlySetup.terrainType() );
         battleOnlySetup.StartBattle();
         break;
     }

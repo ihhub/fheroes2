@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -1089,6 +1089,9 @@ msgstr "İnsan"
 msgid "AI"
 msgstr "Bilgisayar"
 
+msgid "Terrain"
+msgstr ""
+
 msgid "Start"
 msgstr "Başla"
 
@@ -1104,8 +1107,25 @@ msgstr "Sıfırla"
 msgid "Reset to default settings."
 msgstr "Varsayılan ayarlara sıfırla."
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
+
+msgid "Click to set this hero to be human-controlled."
+msgstr ""
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3025,15 +3045,6 @@ msgstr "Dil"
 msgid "Graphics"
 msgstr "Grafikler"
 
-msgid "Black & White"
-msgstr "Siyah & Beyaz"
-
-msgid "Mouse Cursor"
-msgstr "Fare İmleci"
-
-msgid "Color"
-msgstr "Renkli"
-
 msgid "Text Support"
 msgstr "Yazı Desteği"
 
@@ -3046,8 +3057,17 @@ msgstr "Oyunun dilini seç"
 msgid "Change the graphics settings of the game."
 msgstr "Oyunun grafik ayarlarını değiş."
 
+msgid "Mouse Cursor"
+msgstr "Fare İmleci"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Renkli imleci aç ya da kapat. Bu sadece estetik bir seçimdir."
+
+msgid "Interface Type"
+msgstr "Arayüz Tipi"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3142,6 +3162,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Sistem Bilgisi"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Oyunun çözünürlüğünü değiş."
 
@@ -3150,6 +3179,13 @@ msgstr "Oyunun çözünürlüğünü seç"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Tam ve pencereli ekran arasında geçiş yap."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3188,12 +3224,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Arayüz Tipi"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
 msgstr "Arayüz görünürlüğünü değiştirin."
@@ -3376,6 +3406,35 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+msgid "Random Map Generator"
+msgstr ""
+
+msgid "rmg|Player count"
+msgstr ""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+msgid "rmg|Water percentage"
+msgstr ""
+
+msgid "rmg|Monster strength"
+msgstr ""
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Savaşa geri dön."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3501,6 +3560,12 @@ msgstr ""
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3520,16 +3585,32 @@ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 msgid "Disable All Items"
 msgstr "Yapılan Büyü"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Yapılacak büyü yok."
+
 msgid "Select Spell:"
+msgstr ""
+
+msgid "There are no artifacts to select from."
 msgstr ""
 
 msgid "Select Artifact:"
 msgstr ""
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 msgid "Select Monster:"
+msgstr ""
+
+msgid "There are no heroes to select from."
 msgstr ""
 
 msgid "Select Hero:"
@@ -3658,17 +3739,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid "Map Type"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-msgid "Map Type:\n"
-msgstr ""
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3676,6 +3746,15 @@ msgid "The Price of Loyalty"
 msgstr ""
 
 msgid "Resurrection"
+msgstr ""
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid "Map Type:\n"
 msgstr ""
 
 msgid ""
@@ -4283,15 +4362,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -5070,7 +5140,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -6165,8 +6235,20 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Gölge Hareketi"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
+msgstr ""
+
+msgid "To exit fheroes2, press the Home button or swipe up."
 msgstr ""
 
 msgid "Are you sure you want to quit?"
@@ -6417,6 +6499,12 @@ msgstr "İyi"
 
 msgid "Evil"
 msgstr "Şeytani"
+
+msgid "Black & White"
+msgstr "Siyah & Beyaz"
+
+msgid "Color"
+msgstr "Renkli"
 
 msgid ", FPS: "
 msgstr ""
@@ -8545,6 +8633,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
@@ -11310,10 +11434,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Uyarı"
-
-#~ msgid "CONFIG"
-#~ msgstr "AYARLAR"

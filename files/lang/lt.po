@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -1008,6 +1008,9 @@ msgstr ""
 msgid "AI"
 msgstr ""
 
+msgid "Terrain"
+msgstr ""
+
 msgid "Start"
 msgstr ""
 
@@ -1025,8 +1028,26 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr ""
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Rodyti kitą miestą"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2938,16 +2959,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-#, fuzzy
-msgid "Black & White"
-msgstr "Tiltas"
-
-msgid "Mouse Cursor"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
 msgid "Text Support"
 msgstr ""
 
@@ -2960,7 +2971,16 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
+msgid "Mouse Cursor"
+msgstr ""
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -3053,6 +3073,15 @@ msgstr ""
 msgid "System Info"
 msgstr ""
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr ""
 
@@ -3060,6 +3089,13 @@ msgid "Select Game Resolution"
 msgstr ""
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3098,12 +3134,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -3288,6 +3318,37 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Atsitiktinė pilis"
+
+msgid "rmg|Player count"
+msgstr ""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+msgid "rmg|Water percentage"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Atsitiktinė pilis"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Grįžti į mūšį."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3414,6 +3475,12 @@ msgstr "Failas įkėlimui:"
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3433,20 +3500,35 @@ msgstr "Rodyti kitą miestą"
 msgid "Disable All Items"
 msgstr "Atsitiktinis miestas"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Gynybos įgūdis"
 
+msgid "There are no spells to select."
+msgstr ""
+
 msgid "Select Spell:"
+msgstr ""
+
+msgid "There are no artifacts to select from."
 msgstr ""
 
 #, fuzzy
 msgid "Select Artifact:"
 msgstr "Magiškas artefaktas"
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 #, fuzzy
 msgid "Select Monster:"
 msgstr "Pasirinkti %{name}"
+
+msgid "There are no heroes to select from."
+msgstr ""
 
 #, fuzzy
 msgid "Select Hero:"
@@ -3581,19 +3663,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-#, fuzzy
-msgid "Map Type"
-msgstr "Pasaulio dydis"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-#, fuzzy
-msgid "Map Type:\n"
-msgstr "Pasaulio dydis"
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3602,6 +3671,17 @@ msgstr ""
 
 msgid "Resurrection"
 msgstr ""
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Pasaulio dydis"
+
+#, fuzzy
+msgid "Map Type:\n"
+msgstr "Pasaulio dydis"
 
 msgid ""
 "\n"
@@ -4241,15 +4321,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -5055,7 +5126,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -6177,8 +6248,20 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Greitis"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
+msgstr ""
+
+msgid "To exit fheroes2, press the Home button or swipe up."
 msgstr ""
 
 msgid "Are you sure you want to quit?"
@@ -6439,6 +6522,13 @@ msgid "Good"
 msgstr ""
 
 msgid "Evil"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Tiltas"
+
+msgid "Color"
 msgstr ""
 
 msgid ", FPS: "
@@ -8608,6 +8698,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
@@ -11431,11 +11557,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Click to show next town."
-#~ msgstr "Rodyti kitą miestą"
-
-#, fuzzy
-#~ msgid "Click to show previous town."
-#~ msgstr "Rodyti ankstesnį miestą"

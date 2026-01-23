@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -344,7 +344,8 @@ namespace
             // Make Image with shadow for button to Blit it during render.
             buttonShadow.resize( released.width() + std::abs( buttonShadowOffset.x ), released.height() + std::abs( buttonShadowOffset.y ) );
             buttonShadow.reset();
-            fheroes2::addGradientShadow( released, buttonShadow, { -std::min( 0, buttonShadowOffset.x ), -std::min( 0, buttonShadowOffset.y ) }, buttonShadowOffset );
+            fheroes2::addGradientShadow( released, buttonShadow, { -std::min<int32_t>( 0, buttonShadowOffset.x ), -std::min<int32_t>( 0, buttonShadowOffset.y ) },
+                                         buttonShadowOffset );
         }
 
         KeyboardButton( std::string input, const fheroes2::Size & buttonSize, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
@@ -774,8 +775,8 @@ namespace
         const int32_t yOffset = offset.y + static_cast<int32_t>( buttonRows * defaultButtonHeight + ( buttonRows - 1 ) * buttonOffset * 2 );
 
         // Take button shadow offset into account.
-        roi.x += std::min( 0, buttonShadowOffset.x );
-        roi.y += std::min( 0, buttonShadowOffset.y );
+        roi.x += std::min<int32_t>( 0, buttonShadowOffset.x );
+        roi.y += std::min<int32_t>( 0, buttonShadowOffset.y );
         roi.width += std::abs( buttonShadowOffset.x );
         roi.height = yOffset - roi.y + std::abs( buttonShadowOffset.y );
 

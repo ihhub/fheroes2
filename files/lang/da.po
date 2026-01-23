@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -1106,6 +1106,10 @@ msgstr "Menneske"
 msgid "AI"
 msgstr "AI"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Terræn-tilstand"
+
 msgid "Start"
 msgstr "Genstart"
 
@@ -1121,8 +1125,26 @@ msgstr "Nulstil"
 msgid "Reset to default settings."
 msgstr "Nulstil til standardindstillinger"
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Vælg venligst en anden helt."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Klik for at vælge denne farve."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Klik for at vælge denne farve."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3179,15 +3201,6 @@ msgstr "Sprog"
 msgid "Graphics"
 msgstr "Grafik"
 
-msgid "Black & White"
-msgstr "Sort & Hvid"
-
-msgid "Mouse Cursor"
-msgstr "Musemarkør"
-
-msgid "Color"
-msgstr "Farve"
-
 msgid "Text Support"
 msgstr "Tekstsupport"
 
@@ -3200,8 +3213,17 @@ msgstr "Vælg spillets sprog"
 msgid "Change the graphics settings of the game."
 msgstr "Ændr spillets grafikindstillinger."
 
+msgid "Mouse Cursor"
+msgstr "Musemarkør"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
+
+msgid "Interface Type"
+msgstr "Interface-type"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3295,6 +3317,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "System info"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Skift spilopløsning."
 
@@ -3303,6 +3334,13 @@ msgstr "Vælg spilopløsning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Vælg mellem fuldskærms- og vinduestilstand."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3344,12 +3382,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Interface-type"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid "Toggle interface visibility."
 msgstr "Vælg interfacets synlighed til eller fra."
@@ -3537,6 +3569,39 @@ msgstr "Skridtpoint:"
 msgid "Uncharted Territory"
 msgstr "Ukendt område"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Tilfældigt væsen"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Spiller-ikon"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vand-elemental"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Tilfældigt væsen - stærk"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
+
 msgid "Cost per troop:"
 msgstr "Pris per trop:"
 
@@ -3672,6 +3737,13 @@ msgstr "Fil som skal indlæses:"
 msgid "Terrain object"
 msgstr "Terræn-objekt"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
 
@@ -3691,17 +3763,35 @@ msgstr "Klik for kun at vise niveau %{level} besværgelser."
 msgid "Disable All Items"
 msgstr "Vis besværgelser"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Vælg evne:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Ingen magi at kaste."
 
 msgid "Select Spell:"
 msgstr "Vælg magi:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Vælg artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Select Monster:"
 msgstr "Vælg væsen:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Navnet på det valgte kort."
 
 msgid "Select Hero:"
 msgstr "Vælg helt:"
@@ -3828,19 +3918,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
-msgid "Map Type"
-msgstr "Korttype"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Angiver om kortet er lavet til \"Arvefølgekrigene\", \"Prisen for "
-"Loyalitet\" eller \"Opstandelse\" version af spillet."
-
-msgid "Map Type:\n"
-msgstr "Korttype:\n"
-
 msgid "The Succession Wars"
 msgstr "Arvefølgekrigene"
 
@@ -3849,6 +3926,15 @@ msgstr "Prisen for Loyalitet"
 
 msgid "Resurrection"
 msgstr "Opstandelse"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Korttype"
+
+msgid "Map Type:\n"
+msgstr "Korttype:\n"
 
 msgid ""
 "\n"
@@ -4476,16 +4562,6 @@ msgstr "Kun et tilfældigt artefakt kan placeres på kortet."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Spiller-ikon"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "Kortet er beskadiget."
@@ -5300,8 +5376,8 @@ msgstr "Projektkoordination og kerneudvikling"
 msgid "Development"
 msgstr "Udvikling"
 
-msgid "Visit us at "
-msgstr "Besøg os på "
+msgid "Visit us at"
+msgstr "Besøg os på"
 
 msgid "QA and Support"
 msgstr "QA og support"
@@ -6478,10 +6554,22 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Frembring menuen for systemindstillingerne, så du kan tilpasse dit spil."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Heltebevægelse"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "En eller flere helte kan stadig ride. Er du sikker på at du vil ende din tur?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Er du sikker på om du vil afslutte?"
@@ -6764,6 +6852,12 @@ msgstr "God"
 
 msgid "Evil"
 msgstr "Ond"
+
+msgid "Black & White"
+msgstr "Sort & Hvid"
+
+msgid "Color"
+msgstr "Farve"
 
 msgid ", FPS: "
 msgstr ", FPS:"
@@ -9373,6 +9467,43 @@ msgstr "Græs"
 
 msgid "Ocean"
 msgstr "Hav"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Jævn"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Lille"
@@ -12569,71 +12700,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Advarsel"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Beskrivelsen til det valgte kort."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "Den indtastede kortbeskrivelse overskrider de maksimalt tilladte 5 "
-#~ "rækker. Den vil blive forkortet, så den passer til kortbeskrivelsesfeltet."
-
-#~ msgid "Castle Options"
-#~ msgstr "Borg-vindue"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klik for at se næste by."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klik for at se forrige by."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Returnerer kasteren til enhver af spillerens byer eller borge."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Slår altid igen"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
-
-#~ msgid "CONFIG"
-#~ msgstr "INDSTIL"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
-
-#~ msgid "Host"
-#~ msgstr "Vært"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Værten opsætter spilmulighederne. Der kan kun være én vært per "
-#~ "netværksspil."
-
-#~ msgid "Guest"
-#~ msgstr "Gæst"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gæsten venter på, at værten sætter spillet op, og tilføjes derefter "
-#~ "automatisk. Der kan være flere gæster til TCP/IP-spil."

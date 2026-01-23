@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -896,11 +896,13 @@ void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
         _gameOptions.SetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( true );
     }
     else {
         _gameOptions.ResetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( false );
+    }
+
+    if ( enable != fheroes2::engine().isNearestScaling() ) {
+        fheroes2::engine().setNearestScaling( enable );
     }
 }
 
@@ -954,6 +956,11 @@ bool Settings::isArmyEstimationViewNumeric() const
     return _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
 }
 
+bool Settings::isScreenScalingTypeNearest() const
+{
+    return _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST );
+}
+
 bool Settings::isEvilInterfaceEnabled() const
 {
     switch ( _interfaceType ) {
@@ -985,6 +992,21 @@ bool Settings::isEvilInterfaceEnabled() const
     }
 
     return false;
+}
+
+void Settings::switchToNextInterfaceType()
+{
+    switch ( _interfaceType ) {
+    case InterfaceType::DYNAMIC:
+        _interfaceType = InterfaceType::GOOD;
+        break;
+    case InterfaceType::GOOD:
+        _interfaceType = InterfaceType::EVIL;
+        break;
+    default:
+        _interfaceType = InterfaceType::DYNAMIC;
+        break;
+    }
 }
 
 bool Settings::isEditorAnimationEnabled() const
@@ -1205,7 +1227,7 @@ IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
     }
 

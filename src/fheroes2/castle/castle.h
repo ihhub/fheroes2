@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,6 +31,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
@@ -425,7 +426,7 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Castle & castle );
     friend IStreamBase & operator>>( IStreamBase & stream, Castle & castle );
 
-    int _race{ Race::NONE };
+    int32_t _race{ Race::NONE };
     uint32_t _constructedBuildings{ 0 };
     uint32_t _disabledBuildings{ 0 };
 
@@ -495,11 +496,11 @@ namespace CastleDialog
         bool _isOnlyBoat{ false };
     };
 
-    struct BuildingRenderInfo
+    struct BuildingRenderInfo final
     {
-        BuildingRenderInfo( const BuildingType buildingType, const fheroes2::Rect & buildingRect )
+        BuildingRenderInfo( const BuildingType buildingType, std::vector<fheroes2::Rect> buildingAreas )
             : id( buildingType )
-            , coord( buildingRect )
+            , areas( std::move( buildingAreas ) )
         {
             // Do nothing.
         }
@@ -509,8 +510,8 @@ namespace CastleDialog
             return buildingType == static_cast<uint32_t>( id );
         }
 
-        BuildingType id;
-        fheroes2::Rect coord;
+        BuildingType id{ BUILD_NOTHING };
+        std::vector<fheroes2::Rect> areas;
     };
 
     struct BuildingsRenderQueue : std::vector<BuildingRenderInfo>

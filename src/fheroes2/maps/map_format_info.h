@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,6 +33,9 @@
 #include "game_language.h"
 #include "map_object_info.h"
 #include "resource.h"
+
+class IStreamBase;
+class OStreamBase;
 
 namespace Maps::Map_Format
 {
@@ -271,7 +274,7 @@ namespace Maps::Map_Format
         bool isWeeklyGrowthDisabled{ false };
 
         // Only for random monsters.
-        std::vector<int> selected;
+        std::vector<int32_t> selected;
     };
 
     struct ArtifactMetadata
@@ -283,7 +286,7 @@ namespace Maps::Map_Format
         int32_t captureCondition{ 0 };
 
         // Only for random artifacts and Scroll Spell.
-        std::vector<int> selected;
+        std::vector<int32_t> selected;
     };
 
     struct ResourceMetadata
@@ -386,4 +389,7 @@ namespace Maps::Map_Format
     bool loadMap( const std::string & path, MapFormat & map );
 
     bool saveMap( const std::string & path, const MapFormat & map );
+
+    bool saveMap( OStreamBase & stream, const MapFormat & map );
+    bool loadMap( IStreamBase & stream, MapFormat & map );
 }

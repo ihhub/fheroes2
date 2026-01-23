@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -205,6 +205,7 @@ public:
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
     bool isArmyEstimationViewNumeric() const;
+    bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
 
     void setInterfaceType( InterfaceType type )
@@ -216,6 +217,8 @@ public:
     {
         return _interfaceType;
     }
+
+    void switchToNextInterfaceType();
 
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
@@ -409,7 +412,7 @@ private:
     fheroes2::ResolutionInfo _resolutionInfo;
     fheroes2::Point _windowPos;
 
-    int _gameDifficulty;
+    int32_t _gameDifficulty;
 
     std::string _programPath;
 
@@ -430,7 +433,7 @@ private:
     int scroll_speed;
     int battle_speed;
 
-    int game_type;
+    int32_t game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
 

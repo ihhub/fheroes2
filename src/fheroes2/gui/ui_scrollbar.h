@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2024                                             *
+ *   Copyright (C) 2020 - 2025                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,6 +44,10 @@ namespace fheroes2
         // The original resources do not support proper scrollbar slider scaling. Use generateScrollbarSlider() function to generate needed image.
         void setImage( const Image & image )
         {
+            if ( image.singleLayer() ) {
+                _disableTransformLayer();
+            }
+
             Copy( image, *this );
         }
 

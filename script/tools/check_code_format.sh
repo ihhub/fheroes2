@@ -34,12 +34,12 @@ FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|
                                             | (grep -v "^ios/ShaderTypes\.h$" || true) \
                                             | (grep -v "^src/thirdparty/.*/.*" || true))
 
-if [ -z "$FILES_TO_CHECK" ]; then
+if [[ -z "$FILES_TO_CHECK" ]]; then
   echo "There is no source code to check the formatting."
   exit 0
 fi
 
-if FORMAT_DIFF=$(git diff -U0 HEAD^ -- $FILES_TO_CHECK | clang-format-diff -p1 -style=file) && [ -z "$FORMAT_DIFF" ]; then
+if FORMAT_DIFF=$(git diff -U0 HEAD^ -- $FILES_TO_CHECK | clang-format-diff -p1 -style=file) && [[ -z "$FORMAT_DIFF" ]]; then
   echo "All the source code in the PR is formatted correctly."
   exit 0
 else

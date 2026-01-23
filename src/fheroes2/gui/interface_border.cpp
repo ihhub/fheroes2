@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -456,8 +456,8 @@ void Interface::BorderWindow::SetPosition( int32_t x, int32_t y )
     if ( Settings::Get().isHideInterfaceEnabled() ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        x = std::max( 0, std::min( x, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
-        y = std::max( 0, std::min( y, display.height() - ( area.height + border.BorderHeight() * 2 ) ) );
+        x = std::max<int32_t>( 0, std::min<int32_t>( x, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
+        y = std::max<int32_t>( 0, std::min<int32_t>( y, display.height() - ( area.height + border.BorderHeight() * 2 ) ) );
 
         area.x = x + border.BorderWidth();
         area.y = y + border.BorderHeight();

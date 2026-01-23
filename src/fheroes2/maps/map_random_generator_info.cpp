@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include "map_random_generator_info.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <ostream>
@@ -39,7 +40,7 @@ namespace
 
 namespace Maps::Random_Generator
 {
-    NodeCache::NodeCache( const int32_t width, const int32_t height )
+    MapStateManager::MapStateManager( const int32_t width, const int32_t height )
         : _mapSize( width )
         , _data( static_cast<size_t>( width ) * height )
     {
@@ -48,6 +49,42 @@ namespace Maps::Random_Generator
 
         for ( size_t i = 0; i < _data.size(); ++i ) {
             _data[i].index = static_cast<int>( i );
+        }
+    }
+
+    void MapStateManager::commitTransaction( const size_t record )
+    {
+        (void)record;
+        assert( !_transactionRecords.empty() );
+        assert( _transactionRecords.back() == record );
+
+        _transactionRecords.pop_back();
+
+        if ( _transactionRecords.empty() ) {
+            _history.clear();
+        }
+    }
+
+    void MapStateManager::rollbackTransaction( const size_t record )
+    {
+        assert( !_transactionRecords.empty() );
+        assert( _transactionRecords.back() == record );
+        _transactionRecords.pop_back();
+
+        if ( _history.empty() ) {
+            return;
+        }
+
+        assert( record < _history.size() );
+
+        for ( size_t index = _history.size(); index > record; --index ) {
+            const StateChange & change = _history[index - 1];
+            _data[static_cast<size_t>( change.index )] = change.state;
+            _history.pop_back();
+        }
+
+        if ( _transactionRecords.empty() ) {
+            _history.clear();
         }
     }
 
@@ -60,14 +97,15 @@ namespace Maps::Random_Generator
 
     int MapEconomy::pickNextMineResource()
     {
-        const auto it = std::min_element( secondaryResources.begin(), secondaryResources.end(),
+        constexpr std::array<int, 6> allResources = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
+        const auto it = std::min_element( allResources.begin(), allResources.end(),
                                           [this]( const auto & a, const auto & b ) { return _minesCount.at( a ) < _minesCount.at( b ); } );
-        assert( it != secondaryResources.end() );
+        assert( it != allResources.end() );
 
         return *it;
     }
 
-    void Region::checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator )
+    void Region::checkAdjacentTiles( MapStateManager & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator )
     {
         Node & previousNode = nodes[lastProcessedNode];
         const int nodeIndex = previousNode.index;
@@ -85,7 +123,7 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            Node & newTile = rawData.getNode( newPosition );
+            Node & newTile = rawData.getNodeToUpdate( newPosition );
 
             if ( Maps::GetApproximateDistance( centerIndex, newTile.index ) > distanceLimit ) {
                 previousNode.type = NodeType::BORDER;
@@ -109,7 +147,7 @@ namespace Maps::Random_Generator
         }
     }
 
-    bool Region::regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator )
+    bool Region::regionExpansion( MapStateManager & rawData, Rand::PCG32 & randomGenerator )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added.
         const size_t nodesEnd = nodes.size();
@@ -122,7 +160,7 @@ namespace Maps::Random_Generator
         return lastProcessedNode != nodes.size();
     }
 
-    bool Region::checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node )
+    bool Region::checkNodeForConnections( MapStateManager & data, std::vector<Region> & mapRegions, Node & node )
     {
         if ( node.type != NodeType::BORDER ) {
             return false;
@@ -150,7 +188,7 @@ namespace Maps::Random_Generator
         }
 
         for ( uint8_t direction = 0; direction < 4; ++direction ) {
-            Node & adjacent = data.getNode( position + directionOffsets[direction] );
+            Node & adjacent = data.getNodeToUpdate( position + directionOffsets[direction] );
 
             if ( adjacent.index == -1 || adjacent.region == id ) {
                 continue;
@@ -161,7 +199,7 @@ namespace Maps::Random_Generator
                 break;
             }
 
-            Node & twoAway = data.getNode( position + directionOffsets[direction] + directionOffsets[direction] );
+            Node & twoAway = data.getNodeToUpdate( position + directionOffsets[direction] + directionOffsets[direction] );
             if ( twoAway.index == -1 || twoAway.type != NodeType::OPEN ) {
                 continue;
             }
@@ -171,12 +209,12 @@ namespace Maps::Random_Generator
                 connections.emplace( adjacent.region, node.index );
                 mapRegions[adjacent.region].connections.emplace( id, node.index );
                 node.type = NodeType::CONNECTOR;
-                adjacent.type = NodeType::PATH;
-                twoAway.type = NodeType::PATH;
+                adjacent.type = NodeType::CONNECTOR;
+                twoAway.type = NodeType::CONNECTOR;
 
-                Node & stepBack = data.getNode( position - directionOffsets[direction] );
+                Node & stepBack = data.getNodeToUpdate( position - directionOffsets[direction] );
                 if ( stepBack.index != -1 ) {
-                    stepBack.type = NodeType::PATH;
+                    stepBack.type = NodeType::CONNECTOR;
                 }
 
                 break;
@@ -189,8 +227,10 @@ namespace Maps::Random_Generator
     fheroes2::Point Region::adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat )
     {
         const fheroes2::Point startingLocation = Maps::GetPoint( centerIndex );
-        const int32_t castleX = std::min( std::max( startingLocation.x, 4 ), mapFormat.width - 4 );
-        const int32_t castleY = std::min( std::max( startingLocation.y, 4 ), mapFormat.width - 4 );
+        const int32_t castleX
+            = std::min( std::max( static_cast<int32_t>( startingLocation.x ), static_cast<int32_t>( 4 ) ), static_cast<int32_t>( mapFormat.width - 4 ) );
+        const int32_t castleY
+            = std::min( std::max( static_cast<int32_t>( startingLocation.y ), static_cast<int32_t>( 4 ) ), static_cast<int32_t>( mapFormat.width - 4 ) );
         centerIndex = Maps::GetIndexFromAbsPoint( castleX, castleY + 2 );
         return { castleX, castleY };
     }

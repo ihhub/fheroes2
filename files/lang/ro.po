@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1122,6 +1122,9 @@ msgstr "Om"
 msgid "AI"
 msgstr "AI"
 
+msgid "Terrain"
+msgstr ""
+
 msgid "Start"
 msgstr ""
 
@@ -1138,8 +1141,25 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Te rog selectează un alt erou."
+
+msgid "Click to set this hero to be human-controlled."
+msgstr ""
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3005,15 +3025,6 @@ msgstr "Limbă"
 msgid "Graphics"
 msgstr "Grafică"
 
-msgid "Black & White"
-msgstr "Alb & Negru"
-
-msgid "Mouse Cursor"
-msgstr "Cursor Mouse"
-
-msgid "Color"
-msgstr "Colorat"
-
 msgid "Text Support"
 msgstr "Suport Text"
 
@@ -3026,7 +3037,16 @@ msgstr "Selectați Limba"
 msgid "Change the graphics settings of the game."
 msgstr ""
 
+msgid "Mouse Cursor"
+msgstr "Cursor Mouse"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr "Tipul interfeței"
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -3113,6 +3133,15 @@ msgstr ""
 msgid "System Info"
 msgstr "Informații Sistem"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr ""
 
@@ -3120,6 +3149,13 @@ msgid "Select Game Resolution"
 msgstr ""
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3159,12 +3195,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr "Tipul interfeței"
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -3342,6 +3372,35 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+msgid "Random Map Generator"
+msgstr ""
+
+msgid "rmg|Player count"
+msgstr ""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+msgid "rmg|Water percentage"
+msgstr ""
+
+msgid "rmg|Monster strength"
+msgstr ""
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Întoarce-te la luptă."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3468,6 +3527,12 @@ msgstr "Încarcă fișierul:"
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3487,16 +3552,32 @@ msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 msgid "Disable All Items"
 msgstr "Vrajă aleatorie"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Nicio vrajă disponibilă."
+
 msgid "Select Spell:"
+msgstr ""
+
+msgid "There are no artifacts to select from."
 msgstr ""
 
 msgid "Select Artifact:"
 msgstr ""
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 msgid "Select Monster:"
+msgstr ""
+
+msgid "There are no heroes to select from."
 msgstr ""
 
 msgid "Select Hero:"
@@ -3630,17 +3711,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid "Map Type"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-msgid "Map Type:\n"
-msgstr ""
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3648,6 +3718,15 @@ msgid "The Price of Loyalty"
 msgstr ""
 
 msgid "Resurrection"
+msgstr ""
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid "Map Type:\n"
 msgstr ""
 
 #, fuzzy
@@ -4261,15 +4340,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -5054,8 +5124,8 @@ msgstr "Coordonare de Proiect și Dezvoltare"
 msgid "Development"
 msgstr "Dezvoltare"
 
-msgid "Visit us at "
-msgstr "Vizitați-ne la "
+msgid "Visit us at"
+msgstr "Vizitați-ne la"
 
 msgid "QA and Support"
 msgstr "QA și Suport"
@@ -6159,11 +6229,23 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Mișcare a umbrelor"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Unul sau mai mulți dintre eroi se mai poate mișca, sigur doriți să vă "
 "terminați tura?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Sigur vreți să închideți?"
@@ -6414,6 +6496,12 @@ msgstr "Bun"
 
 msgid "Evil"
 msgstr "Rău"
+
+msgid "Black & White"
+msgstr "Alb & Negru"
+
+msgid "Color"
+msgstr "Colorat"
 
 msgid ", FPS: "
 msgstr ""
@@ -8556,6 +8644,43 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normal"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
@@ -11323,10 +11448,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Atenție"
-
-#~ msgid "CONFIG"
-#~ msgstr "CONFIG"

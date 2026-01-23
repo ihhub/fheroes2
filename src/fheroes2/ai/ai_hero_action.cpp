@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -265,14 +265,34 @@ namespace
         // Shuffle spells as all of them seem to be equal in power.
         Rand::Shuffle( spells );
 
-        const int32_t spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+        double spellMultiplier = Difficulty::getGuardianSpellMultiplier( Game::getDifficulty() );
+
+        // Adjust spell multiplier based on hero's AI role.
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            // A hero with almost no army risking his life and most likely going to be killed.
+            spellMultiplier = std::min( 1.0, spellMultiplier / 5 );
+            break;
+        case Heroes::Role::COURIER:
+            // A hero who usually delivers army. Might have some army to battle with but he is not a fighter and can be easily defeated.
+            spellMultiplier = std::min( 1.0, spellMultiplier / 3 );
+            break;
+        case Heroes::Role::HUNTER:
+            // A normal hero with normal stuff to do. Not so strong and not so weak.
+            spellMultiplier = std::min( 1.0, spellMultiplier / 2 );
+            break;
+        default:
+            // The rest of heroes are fighters and should keep their spell points for battles.
+            break;
+        }
 
         for ( const Spell spell : spells ) {
             if ( hero.CanCastSpell( spell ) && hero.GetSpellPoints() > spellMultiplier * spell.spellPoints( &hero ) ) {
                 // Looks like this hero knows the spell and casting it won't take too many spell points.
                 // So, let's do it!
-                hero.ActionSpellCast( spell );
-                return;
+                if ( hero.ActionSpellCast( spell ) ) {
+                    return;
+                }
             }
         }
     }
@@ -729,7 +749,7 @@ namespace
                         // If AI is extremely low on gold consider taking it
                         if ( kingdomGold < 3000 ) {
                             // Safeguard the calculation since we're working with unsigned values
-                            return ( std::max( exp, 500U ) - 500 ) / 15;
+                            return ( std::max<uint32_t>( exp, 500U ) - 500 ) / 15;
                         }
 
                         // Otherwise Champion always picks experience
@@ -740,7 +760,7 @@ namespace
                         return ( role == Heroes::Role::FIGHTER && exp >= 1500 ) ? 10 : 0;
                     }
 
-                    uint32_t value = std::max( exp, 500U ) - 500;
+                    uint32_t value = std::max<uint32_t>( exp, 500U ) - 500;
                     if ( role == Heroes::Role::FIGHTER ) {
                         value += 500;
                     }

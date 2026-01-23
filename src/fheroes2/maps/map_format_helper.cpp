@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -99,54 +99,6 @@ namespace
         }
     }
 
-    // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
-    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
-    {
-        assert( map.width == world.w() && map.width == world.h() );
-
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
-
-        // Capturable objects exist in Miscellaneous and Mines groups.
-        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
-        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-
-        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
-            for ( const auto & object : map.tiles[tileId].objects ) {
-                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
-                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
-
-                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
-                }
-                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
-                    const auto & metadata = heroObjects[object.index].metadata;
-                    const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
-
-                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
-                    if ( hero ) {
-                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
-                        hero->SetColor( color );
-                    }
-                }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                    assert( object.index < miscObjects.size() );
-
-                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
-
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
-                }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
-                    assert( object.index < minesObjects.size() );
-
-                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
-
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
-                }
-            }
-        }
-    }
-
     // This function only checks for Streams and ignores River Deltas.
     bool isStreamPresent( const Maps::Map_Format::TileInfo & mapTile )
     {
@@ -215,13 +167,13 @@ namespace
         const fheroes2::Point centerTile( centerTileIndex % map.width, centerTileIndex / map.width );
         const int32_t maxTilePos = map.width - 1;
 
-        int groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
+        int32_t groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
 
-        for ( const int direction : Direction::All() ) {
+        for ( const int32_t direction : Direction::allNeighboringDirections ) {
             // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
             fheroes2::Point tilePosition = Maps::getDirectionPoint( centerTile, direction );
-            tilePosition.x = std::min( maxTilePos, std::max( 0, tilePosition.x ) );
-            tilePosition.y = std::min( maxTilePos, std::max( 0, tilePosition.y ) );
+            tilePosition.x = std::min<int32_t>( maxTilePos, std::max<int32_t>( 0, tilePosition.x ) );
+            tilePosition.y = std::min<int32_t>( maxTilePos, std::max<int32_t>( 0, tilePosition.y ) );
 
             if ( Maps::Ground::getGroundByImageIndex( map.tiles[tilePosition.y * map.width + tilePosition.x].terrainIndex ) == groundId ) {
                 groundDirection |= direction;
@@ -904,14 +856,6 @@ namespace
         return ( type == MP2::OBJ_CASTLE ) || ( type == MP2::OBJ_RANDOM_TOWN ) || ( type == MP2::OBJ_RANDOM_CASTLE );
     }
 
-    void removeRoads( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
-    {
-        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
-                            tile.objects.end() );
-
-        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
-    }
-
     bool doesContainCastleEntrance( const Maps::Map_Format::TileInfo & tile )
     {
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
@@ -1140,10 +1084,10 @@ namespace
         const int32_t centerY = centerTileIndex / map.width;
 
         // We avoid getting out of map boundaries.
-        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
-        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
+        const int32_t minTileX = std::max<int32_t>( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max<int32_t>( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min<int32_t>( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min<int32_t>( centerY + centerToRectBorderDistance + 1, map.width );
 
         const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
 
@@ -1546,6 +1490,54 @@ namespace Maps
     bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex )
     {
         return getRiverDeltaDirectionByIndex( group, objectIndex ) != Direction::UNKNOWN;
+    }
+
+    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
+    {
+        assert( map.width == world.w() && map.width == world.h() );
+
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+        // Capturable objects exist in Miscellaneous and Mines groups.
+        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+
+        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+            for ( const auto & object : map.tiles[tileId].objects ) {
+                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
+                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+
+                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
+                }
+                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    const auto & metadata = heroObjects[object.index].metadata;
+                    const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+
+                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
+                    if ( hero ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
+                        hero->SetColor( color );
+                        world.getTile( static_cast<int32_t>( tileId ) ).setHero( hero );
+                    }
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    assert( object.index < miscObjects.size() );
+
+                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    assert( object.index < minesObjects.size() );
+
+                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+            }
+        }
     }
 
     bool updateMapPlayers( Map_Format::MapFormat & map )
@@ -2050,7 +2042,7 @@ namespace Maps
             }
         }
         else {
-            removeRoads( tile, tileIndex );
+            removeRoadsFromTile( tile, tileIndex );
 
             updateRoadSpritesAround( map, tileIndex );
 
@@ -2071,12 +2063,25 @@ namespace Maps
             // After the check this tile should not contain a road sprite.
             if ( !forceRoadOnTile && !doesContainRoads( tile ) ) {
                 // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
-                removeRoads( tile, tileIndex );
+                removeRoadsFromTile( tile, tileIndex );
             }
 
             return;
         }
 
+        writeRoadSpriteToTile( tile, tileIndex, imageIndex );
+    }
+
+    void removeRoadsFromTile( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
+    {
+        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
+                            tile.objects.end() );
+
+        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
+    }
+
+    void writeRoadSpriteToTile( Map_Format::TileInfo & tile, const int32_t tileIndex, const uint8_t imageIndex )
+    {
         auto roadObjectIter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } );
         if ( roadObjectIter != tile.objects.end() ) {
             // Since the tile has a road object, update it.
@@ -2096,6 +2101,13 @@ namespace Maps
 
             tile.objects.emplace_back( std::move( info ) );
         }
+    }
+
+    void updateAllRoads( Map_Format::MapFormat & map )
+    {
+        const int32_t centerTileIndex = Maps::GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
+        updateRoadSpritesInArea( map, centerTileIndex, map.width, false );
+        updateRoadSpritesInArea( map, centerTileIndex, map.width, true );
     }
 
     bool doesContainRoads( const Map_Format::TileInfo & tile )

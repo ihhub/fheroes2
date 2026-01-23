@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -160,7 +160,9 @@ namespace Maps
 
         bool isWater() const
         {
-            return Ground::getGroundByImageIndex( _terrainImageIndex ) == Ground::WATER;
+            // Even though it seems like a dangerous way of detecting the water terrain,
+            // terrain images are fixed in resources and never going to be changed.
+            return _terrainImageIndex < Ground::GRASS_START_IMAGE_INDEX;
         }
 
         // Returns true if tile's main and ground layer object parts do not contain any objects: layer type is SHADOW or TERRAIN.
@@ -304,14 +306,6 @@ namespace Maps
         }
 
         void ClearFog( const PlayerColorsSet colors );
-
-        // WARNING!
-        // Use this method only for map generation!
-        // This method does not reset pathfinding state.
-        void removeFogForPlayers( const PlayerColorsSet colors )
-        {
-            _fogColors &= ~colors;
-        }
 
         const std::array<uint32_t, 3> & metadata() const
         {

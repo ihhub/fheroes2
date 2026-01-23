@@ -535,8 +535,9 @@ namespace
 
         void enableSoftwareEmulation( const bool enable ) override
         {
-            if ( enable == _emulation )
+            if ( enable == _emulation ) {
                 return;
+            }
 
             if ( enable ) {
                 clear();
@@ -557,8 +558,9 @@ namespace
                 _emulation = false;
             }
 
-            if ( _cursorUpdater != nullptr )
+            if ( _cursorUpdater != nullptr ) {
                 _cursorUpdater();
+            }
         }
 
         static RenderCursor * create()
@@ -852,7 +854,8 @@ namespace
             }
             else {
 #if defined( _WIN32 )
-                if ( shouldUseFullscreenDesktopMode() ) {
+                // We force fullscreen at desktop resolution for nearest scaling to disable hardware scaling of game resolution by the monitor.
+                if ( isNearestScaling() || fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
@@ -1180,7 +1183,8 @@ namespace
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
-                if ( shouldUseFullscreenDesktopMode() ) {
+                // We force fullscreen at desktop resolution for nearest scaling to disable hardware scaling of game resolution by the monitor.
+                if ( isNearestScaling() || fheroes2::cursor().isSoftwareEmulation() ) {
                     flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
                 else {
@@ -1476,6 +1480,23 @@ namespace fheroes2
         _screenSize = { info.screenWidth, info.screenHeight };
     }
 
+    void Display::resetRenderer()
+    {
+        const bool isFullScreen = _engine->isFullScreen();
+
+        // deallocate engine resources
+        _engine->clear();
+
+        _prevRoi = {};
+
+        ResolutionInfo res( width(), height(), _screenSize.width, _screenSize.height );
+
+        // allocate engine resources
+        if ( !_engine->allocate( res, isFullScreen ) ) {
+            clear();
+        }
+    }
+
     void Display::setWindowPos( const Point point )
     {
         _engine->setWindowPos( point );
@@ -1511,8 +1532,7 @@ namespace fheroes2
                 temp = getBoundaryRect( temp, cursorROI );
             }
 
-            // Previous position of cursor must be updated as well to avoid ghost effect.
-            _renderFrame( getBoundaryRect( temp, _prevRoi ) );
+            _renderFrame( temp );
 
             if ( _postprocessing ) {
                 _postprocessing();
@@ -1521,7 +1541,7 @@ namespace fheroes2
             Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
-            _renderFrame( getBoundaryRect( temp, _prevRoi ) );
+            _renderFrame( temp );
 
             if ( _postprocessing ) {
                 _postprocessing();
@@ -1555,7 +1575,8 @@ namespace fheroes2
         }
 
         if ( updateImage ) {
-            _engine->render( *this, roi );
+            // Make sure that we update the previously rendered area to avoid any ghost effect artefacts.
+            _engine->render( *this, getBoundaryRect( roi, _prevRoi ) );
         }
     }
 

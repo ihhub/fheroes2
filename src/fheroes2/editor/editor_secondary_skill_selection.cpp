@@ -204,7 +204,7 @@ namespace Editor
             return false;
         }
 
-        const std::vector<int32_t> & existingSkills = GameStatic::getSecondarySkillsForWitchsHut();
+        const std::vector<int32_t> existingSkills = GameStatic::getSecondarySkillsForWitchsHut();
 
         // Create a container of active and disabled skills.
         std::vector<std::pair<Skill::Secondary, bool>> skills;

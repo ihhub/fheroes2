@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1028,6 +1028,10 @@ msgstr "Umano"
 msgid "AI"
 msgstr "Computer"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Nessun oggetto"
+
 msgid "Start"
 msgstr ""
 
@@ -1044,8 +1048,26 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Per favore, scegli un altro eroe."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Clicca per andare alla città succ."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2986,17 +3008,6 @@ msgid "Graphics"
 msgstr ""
 
 #, fuzzy
-msgid "Black & White"
-msgstr "Ponte"
-
-#, fuzzy
-msgid "Mouse Cursor"
-msgstr "Cursore Ombra"
-
-msgid "Color"
-msgstr ""
-
-#, fuzzy
 msgid "Text Support"
 msgstr ""
 "Tele-\n"
@@ -3012,7 +3023,17 @@ msgstr "Scegli lingua del gioco"
 msgid "Change the graphics settings of the game."
 msgstr "Cambia le impostazioni dell'audio del gioco."
 
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Cursore Ombra"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -3113,6 +3134,15 @@ msgstr ""
 msgid "System Info"
 msgstr "Opzioni Sistema"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Cambia la risoluzione del gioco."
 
@@ -3120,6 +3150,13 @@ msgid "Select Game Resolution"
 msgstr "Scegli la risoluzione del gioco"
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3160,12 +3197,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -3356,6 +3387,39 @@ msgstr "Pt. Movim."
 msgid "Uncharted Territory"
 msgstr "Terra Ignota"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Mostro casuale"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Icona dei Giocatori"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Creatura dell'Acqua"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Mostro casuale - forte"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Torna al combattimento."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3488,6 +3552,13 @@ msgstr "File da Caricare:"
 msgid "Terrain object"
 msgstr "Nessun oggetto"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Il nome della mappa scelta attualmente."
+
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
@@ -3507,17 +3578,35 @@ msgstr "Clicca per salvare la partita in corso."
 msgid "Disable All Items"
 msgstr "Mostra Magie"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Scegli dote:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Nessuna magia da lanciare."
 
 msgid "Select Spell:"
 msgstr "Scegli magia:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Scegli artefatto:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Il nome della mappa scelta attualmente."
+
 msgid "Select Monster:"
 msgstr "Scegli mostro:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Il nome della mappa scelta attualmente."
 
 msgid "Select Hero:"
 msgstr "Scegli eroe:"
@@ -3665,21 +3754,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Icona del Dimensione"
 
-msgid "Map Type"
-msgstr "Tipo di mappa"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Indica se la mappa è stata creata per la versione del gioco Guerre di "
-"Successione o The Price of Loyalty."
-
-#, fuzzy
-msgid "Map Type:\n"
-msgstr "Tipo di mappa"
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3689,6 +3763,16 @@ msgstr ""
 #, fuzzy
 msgid "Resurrection"
 msgstr "Risorgi"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Tipo di mappa"
+
+#, fuzzy
+msgid "Map Type:\n"
+msgstr "Tipo di mappa"
 
 #, fuzzy
 msgid ""
@@ -4345,16 +4429,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Icona dei Giocatori"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -5192,7 +5266,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -6344,11 +6418,23 @@ msgstr ""
 "Mostra il menù di opzioni per il sistema per modificare l'esperienza del "
 "gioco."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Movimento Ombra"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Sei sicuro di voler concludere il tuo turno? Alcuni eroi si possono ancora "
 "spostare."
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Sei sicuro di voler chiudere il gioco?"
@@ -6616,6 +6702,13 @@ msgstr "Buono"
 
 msgid "Evil"
 msgstr "Cattivo"
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Ponte"
+
+msgid "Color"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -8828,6 +8921,43 @@ msgstr "Prato"
 
 msgid "Ocean"
 msgstr "Oceano"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normale"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Piccola"
@@ -11731,23 +11861,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "La descrizione della mappa scelta attualmente."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opzioni Castello"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Clicca per andare alla città succ."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Clicca per andare alla città prec."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Trasporta subito chi la lancia ad un qualsiasi castello o città al "
-#~ "momento posseduto/a."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Contrattacca sempre"

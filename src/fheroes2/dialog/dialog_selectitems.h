@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -51,12 +51,12 @@ namespace fheroes2
 
 namespace Dialog
 {
-    class ItemSelectionWindow : public Interface::ListBox<int>
+    class ItemSelectionWindow : public Interface::ListBox<int32_t>
     {
     public:
-        using Interface::ListBox<int>::ActionListDoubleClick;
-        using Interface::ListBox<int>::ActionListSingleClick;
-        using Interface::ListBox<int>::ActionListPressRight;
+        using Interface::ListBox<int32_t>::ActionListDoubleClick;
+        using Interface::ListBox<int32_t>::ActionListSingleClick;
+        using Interface::ListBox<int32_t>::ActionListPressRight;
 
         ItemSelectionWindow() = delete;
 
@@ -67,12 +67,12 @@ namespace Dialog
             _backgroundRestorer->restore();
         }
 
-        void ActionListDoubleClick( int & /* unused */ ) override
+        void ActionListDoubleClick( int32_t & /* unused */ ) override
         {
             _isDoubleClicked = true;
         }
 
-        void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
+        void RedrawItem( const int32_t & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
         {
             // Do nothing.
         }
@@ -87,12 +87,12 @@ namespace Dialog
             // Do nothing.
         }
 
-        void ActionListSingleClick( int & /* unused */ ) override
+        void ActionListSingleClick( int32_t & /* unused */ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( int & /* unused */ ) override
+        void ActionListPressRight( int32_t & /* unused */ ) override
         {
             // Do nothing.
         }
@@ -154,20 +154,20 @@ namespace Dialog
         void renderText( fheroes2::TextBase & text, const fheroes2::Point & destination, const int32_t textOffsetX, const int32_t itemOffsetY ) const;
     };
 
-    Monster selectMonster( const int monsterId );
+    Monster selectMonster( const int32_t monsterId );
 
-    int selectHeroes( const int heroId = Heroes::UNKNOWN );
+    int selectHeroes( const int32_t heroId = Heroes::UNKNOWN );
 
-    Artifact selectArtifact( const int artifactId, const bool isForVictoryConditions );
+    Artifact selectArtifact( const int32_t artifactId, const bool isForVictoryConditions );
 
-    Spell selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList = {}, const int32_t spellsLevel = -1 );
+    Spell selectSpell( const int32_t spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList = {}, const int32_t spellsLevel = -1 );
 
     int32_t selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, std::string title, std::string description = {},
                                  int32_t castlePositionIndex = -1 );
 
-    Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
+    Skill::Secondary selectSecondarySkill( const Heroes & hero, const int32_t skillId = Skill::Secondary::UNKNOWN );
 
-    void multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected );
+    void multiSelectMonsters( std::vector<int32_t> allowed, std::vector<int32_t> & selected );
 
     // These functions should be called only from the Editor as they rely on Maps::ObjectInfo structures that are not the same as in-game items.
     int selectHeroType( const int heroType );
@@ -182,7 +182,7 @@ namespace Dialog
 
     int selectLandscapeOceanObjectType( const int objectType );
 
-    void selectTownType( int & type, int & color );
+    void selectTownType( int32_t & type, int32_t & color );
 
     int selectDwellingType( const int dwellingType );
 

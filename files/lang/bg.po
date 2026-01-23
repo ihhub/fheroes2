@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1104,6 +1104,10 @@ msgid "AI"
 msgstr "ИИ"
 
 #, fuzzy
+msgid "Terrain"
+msgstr "Режим терен"
+
+#, fuzzy
 msgid "Start"
 msgstr "Рестарт"
 
@@ -1120,8 +1124,26 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Моля, избери друг герой."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3173,15 +3195,6 @@ msgstr "Език"
 msgid "Graphics"
 msgstr "Графика"
 
-msgid "Black & White"
-msgstr "Черно-бял"
-
-msgid "Mouse Cursor"
-msgstr "Показалец"
-
-msgid "Color"
-msgstr "Цветен"
-
 msgid "Text Support"
 msgstr "Доп. информация"
 
@@ -3194,8 +3207,17 @@ msgstr "Език на играта"
 msgid "Change the graphics settings of the game."
 msgstr "Промени графичните настройки на играта."
 
+msgid "Mouse Cursor"
+msgstr "Показалец"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Включи или изключи цветния курсор. Това е само естетически избор."
+
+msgid "Interface Type"
+msgstr "Интерфейс"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3294,6 +3316,15 @@ msgstr ""
 msgid "System Info"
 msgstr "Системна информация"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Промяна на резолюцията на играта."
 
@@ -3302,6 +3333,13 @@ msgstr "Избери резолюция на играта"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Превключи между цял екран и прозорец."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3344,12 +3382,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
 msgid "Toggle interface visibility."
 msgstr "Превключва видимостта на интерфейса."
@@ -3539,6 +3571,39 @@ msgstr "Ход:"
 msgid "Uncharted Territory"
 msgstr "Неизследвана територия"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Случайно чудовище"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Брой на играчи"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Воден елементал"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Случайно чудовище - силно"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Кликни, за да се върнеш към главното меню."
+
 msgid "Cost per troop:"
 msgstr "Цена на единица:"
 
@@ -3676,6 +3741,13 @@ msgstr "Файл за зареждане:"
 msgid "Terrain object"
 msgstr "Режим терен"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Името на текущо избраната карта."
+
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
@@ -3695,17 +3767,35 @@ msgstr "Кликни, за да приложиш избраната резолю
 msgid "Disable All Items"
 msgstr "Преглед на магиите"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Избери умение:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Няма магии за правене."
 
 msgid "Select Spell:"
 msgstr "Избери заклинание:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Избери артефакт:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Името на текущо избраната карта."
+
 msgid "Select Monster:"
 msgstr "Избери чудовище:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Името на текущо избраната карта."
 
 msgid "Select Hero:"
 msgstr "Избери герой:"
@@ -3859,20 +3949,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Размер на карта"
 
-msgid "Map Type"
-msgstr "Тип на карта"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Показва дали картата е направена за версията на играта \"Наследените войни\" "
-"или за \"Цената на лоялността\"."
-
-msgid "Map Type:\n"
-msgstr "Тип на карта:\n"
-
 msgid "The Succession Wars"
 msgstr "Войните за наследство"
 
@@ -3882,6 +3958,15 @@ msgstr "Цената на лоялността"
 #, fuzzy
 msgid "Resurrection"
 msgstr "Възкресяване"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Тип на карта"
+
+msgid "Map Type:\n"
+msgstr "Тип на карта:\n"
 
 #, fuzzy
 msgid ""
@@ -4544,16 +4629,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Брой на играчи"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 #, fuzzy
@@ -5441,8 +5516,8 @@ msgstr "Координация на проекта и основно разви�
 msgid "Development"
 msgstr "Разработка"
 
-msgid "Visit us at "
-msgstr "Посетете ни на "
+msgid "Visit us at"
+msgstr "Посетете ни на"
 
 msgid "QA and Support"
 msgstr "Гарантиране на качеството и поддръжка"
@@ -6628,11 +6703,23 @@ msgstr ""
 "Покажи менюто със системни опции, което ти позволява да персонализираш "
 "играта си."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Движение на героя"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Един или повече герои все още имат ход. Сигурен ли си, че искаш да приключиш "
 "своя ход?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Сигурен ли си че искаш да напуснеш играта?"
@@ -6919,6 +7006,12 @@ msgstr "Добър"
 
 msgid "Evil"
 msgstr "Зъл"
+
+msgid "Black & White"
+msgstr "Черно-бял"
+
+msgid "Color"
+msgstr "Цветен"
 
 msgid ", FPS: "
 msgstr ""
@@ -9552,6 +9645,43 @@ msgstr "Трева"
 
 msgid "Ocean"
 msgstr "Океан"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Нормален"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Малка"
@@ -12757,56 +12887,3 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Внимание"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Описание на избраната в момента карта."
-
-#~ msgid "Castle Options"
-#~ msgstr "Опции на замъка"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Кликни, за да покажеш следващия град."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Кликни, за да покажеш предишния град."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr "Връща заклинателя във всеки град или замък, притежаван в момента."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Винаги отмъщава"
-
-#~ msgid "CONFIG"
-#~ msgstr ""
-#~ "КОНФИ-\n"
-#~ "ГУРАЦИЯ"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Отказ обратно към Меню за нова карта."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Отказ обратно към главното меню на Създателя на карти."
-
-#~ msgid "Host"
-#~ msgstr "Домакин"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Домакинът настройва опциите на играта. Може да има само един хост за "
-#~ "мрежова игра."
-
-#~ msgid "Guest"
-#~ msgstr "Гост"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Гостът чака хостът да настрои играта, след което автоматично се добавя. "
-#~ "Може да има няколко госта за TCP/IP игри."

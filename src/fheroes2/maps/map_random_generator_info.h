@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -33,6 +32,7 @@
 #include "ground.h"
 #include "map_object_info.h"
 #include "math_base.h"
+#include "monster.h"
 #include "resource.h"
 
 namespace Maps::Map_Format
@@ -48,7 +48,6 @@ namespace Rand
 namespace Maps::Random_Generator
 {
     inline const int neutralColorIndex{ Color::GetIndex( PlayerColor::UNUSED ) };
-    constexpr std::array<int, 4> secondaryResources = { Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY };
 
     enum class NodeType : uint8_t
     {
@@ -69,12 +68,6 @@ namespace Maps::Random_Generator
 
         Node() = default;
 
-        explicit Node( const int index_ )
-            : index( index_ )
-        {
-            // Do nothing
-        }
-
         explicit Node( const int index_, const uint32_t region_, const NodeType type_ )
             : index( index_ )
             , region( region_ )
@@ -84,12 +77,12 @@ namespace Maps::Random_Generator
         }
     };
 
-    class NodeCache final
+    class MapStateManager final
     {
     public:
-        NodeCache( const int32_t width, const int32_t height );
+        MapStateManager( const int32_t width, const int32_t height );
 
-        Node & getNode( const fheroes2::Point position )
+        Node & getNodeToUpdate( const fheroes2::Point position )
         {
             if ( position.x < 0 || position.x >= _mapSize || position.y < 0 || position.y >= _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
@@ -100,7 +93,12 @@ namespace Maps::Random_Generator
                 return _outOfBounds;
             }
 
-            return _data[position.y * _mapSize + position.x];
+            const int32_t index = position.y * _mapSize + position.x;
+            if ( !_transactionRecords.empty() ) {
+                recordStateChange( index, _data[index] );
+            }
+
+            return _data[index];
         }
 
         const Node & getNode( const fheroes2::Point position ) const
@@ -117,7 +115,26 @@ namespace Maps::Random_Generator
             return _data[position.y * _mapSize + position.x];
         }
 
-        Node & getNode( const int32_t index )
+        Node & getNodeToUpdate( const int32_t index )
+        {
+            if ( index < 0 || index >= _mapSize * _mapSize ) {
+                // We shouldn't try to get a tile with an invalid index.
+                assert( 0 );
+
+                assert( _outOfBounds.type == NodeType::BORDER );
+                assert( _outOfBounds.index == -1 );
+
+                return _outOfBounds;
+            }
+
+            if ( !_transactionRecords.empty() ) {
+                recordStateChange( index, _data[index] );
+            }
+
+            return _data[index];
+        }
+
+        const Node & getNode( const int32_t index ) const
         {
             if ( index < 0 || index >= _mapSize * _mapSize ) {
                 // We shouldn't try to get a tile with an invalid index.
@@ -133,9 +150,84 @@ namespace Maps::Random_Generator
         }
 
     private:
+        friend class MapStateTransaction;
+
+        struct StateChange final
+        {
+            int32_t index{ -1 };
+            Node state;
+
+            StateChange() = default;
+            explicit StateChange( const int32_t index_, const Node & current )
+                : index( index_ )
+                , state( current )
+            {
+                // Do nothing
+            }
+        };
+
+        void recordStateChange( const int32_t index, const Node & current )
+        {
+            _history.emplace_back( index, current );
+        }
+
+        size_t startTransaction()
+        {
+            const size_t record = _history.size();
+            _transactionRecords.push_back( record );
+            return record;
+        }
+
+        void commitTransaction( const size_t record );
+        void rollbackTransaction( const size_t record );
+
         const int32_t _mapSize{ 0 };
         Node _outOfBounds{ -1, 0, NodeType::BORDER };
         std::vector<Node> _data;
+
+        std::vector<StateChange> _history;
+        std::vector<size_t> _transactionRecords;
+    };
+
+    class MapStateTransaction final
+    {
+    public:
+        explicit MapStateTransaction( MapStateManager & manager )
+            : _manager( manager )
+            , _record( _manager.startTransaction() )
+        {
+            // Do nothing.
+        }
+
+        MapStateTransaction( const MapStateTransaction & ) = delete;
+        MapStateTransaction & operator=( const MapStateTransaction & ) = delete;
+
+        ~MapStateTransaction()
+        {
+            if ( !_committed ) {
+                _manager.rollbackTransaction( _record );
+            }
+        }
+
+        void commit()
+        {
+            assert( !_committed );
+
+            _manager.commitTransaction( _record );
+            _committed = true;
+        }
+
+    private:
+        MapStateManager & _manager;
+        size_t _record{ 0 };
+        bool _committed{ false };
+    };
+
+    enum class RegionType : uint8_t
+    {
+        STARTING,
+        EXPANSION,
+        NEUTRAL
     };
 
     struct Region final
@@ -150,19 +242,19 @@ namespace Maps::Random_Generator
         int colorIndex{ neutralColorIndex };
         int groundType{ Ground::GRASS };
         int32_t treasureLimit{ 0 };
-        bool isInner{ false };
+        RegionType type{ RegionType::NEUTRAL };
 
         Region() = default;
 
         Region( const uint32_t regionIndex, Node & centerNode, const int playerColor, const int ground, const size_t expectedSize, const int32_t treasure,
-                const bool inner )
+                const RegionType regionType )
             : id( regionIndex )
             , centerIndex( centerNode.index )
             , sizeLimit( expectedSize )
             , colorIndex( playerColor )
             , groundType( ground )
             , treasureLimit( treasure )
-            , isInner( inner )
+            , type( regionType )
         {
             assert( expectedSize > 0 );
 
@@ -171,9 +263,9 @@ namespace Maps::Random_Generator
             nodes.emplace_back( centerNode );
         }
 
-        void checkAdjacentTiles( NodeCache & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
-        bool regionExpansion( NodeCache & rawData, Rand::PCG32 & randomGenerator );
-        bool checkNodeForConnections( NodeCache & data, std::vector<Region> & mapRegions, Node & node );
+        void checkAdjacentTiles( MapStateManager & rawData, const double distanceLimit, Rand::PCG32 & randomGenerator );
+        bool regionExpansion( MapStateManager & rawData, Rand::PCG32 & randomGenerator );
+        bool checkNodeForConnections( MapStateManager & data, std::vector<Region> & mapRegions, Node & node );
         fheroes2::Point adjustRegionToFitCastle( const Map_Format::MapFormat & mapFormat );
     };
 
@@ -192,6 +284,7 @@ namespace Maps::Random_Generator
     {
         uint8_t castleCount{ 0 };
         uint8_t mineCount{ 0 };
+        uint8_t goldMineCount{ 0 };
         uint8_t objectCount{ 0 };
         uint8_t powerUpsCount{ 0 };
         uint8_t treasureCount{ 0 };
@@ -205,6 +298,12 @@ namespace Maps::Random_Generator
         int32_t objectIndex{ 0 };
     };
 
+    struct DecorationSet final
+    {
+        std::vector<ObjectPlacement> obstacles;
+        std::vector<ObjectPlacement> optional;
+    };
+
     struct ObjectSet final
     {
         std::vector<ObjectPlacement> obstacles;
@@ -214,7 +313,7 @@ namespace Maps::Random_Generator
 
     struct MonsterSelection final
     {
-        int32_t monsterId{ -1 };
-        std::vector<int> allowedMonsters;
+        int32_t monsterId{ Monster::UNKNOWN };
+        std::vector<int32_t> allowedMonsters;
     };
 }

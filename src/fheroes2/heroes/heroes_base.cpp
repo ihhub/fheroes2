@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -145,7 +145,7 @@ uint32_t HeroBase::getManaIndexSprite() const
     const uint32_t value = _spellPoints / 5U + 1U;
 
     // Valid sprite index range is (0 - 25).
-    return std::min( value, 25U );
+    return std::min<uint32_t>( value, 25U );
 }
 
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const
@@ -357,8 +357,13 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 
 double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 {
-    const SpellStorage spells = getAllSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
+    if ( currentSpellPoints == 0 ) {
+        // The enemy's hero has no spell points so they can't cast anything.
+        return 0;
+    }
+
+    const SpellStorage spells = getAllSpells();
     const int spellPower = GetPower();
 
     double bestValue = 0;
@@ -568,7 +573,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 return false;
             }
             if ( spell != Spell::HAUNT ) {
-                const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
+                const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower() );
                 const uint32_t currentCount = troop.GetCount();
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 06:14+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1146,6 +1146,10 @@ msgstr "Чалавек"
 msgid "AI"
 msgstr "Камп’ютар"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Зямная паверхня"
+
 msgid "Start"
 msgstr "Пачаць"
 
@@ -1161,8 +1165,26 @@ msgstr "Скінуць"
 msgid "Reset to default settings."
 msgstr "Скінуць да перадвызначаных значэнняў."
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Выберыце іншага героя."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Націсніце сюды, каб выбраць гэты колер."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Націсніце сюды, каб выбраць гэты колер."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} - %{race2} %{name2}"
@@ -3161,15 +3183,6 @@ msgstr "Мова"
 msgid "Graphics"
 msgstr "Графіка"
 
-msgid "Black & White"
-msgstr "Чорна-белы"
-
-msgid "Mouse Cursor"
-msgstr "Курсор мышы"
-
-msgid "Color"
-msgstr "Каляровы"
-
 msgid "Text Support"
 msgstr "Суправаджэнне тэкстам"
 
@@ -3182,10 +3195,19 @@ msgstr "Выбар мовы гульні"
 msgid "Change the graphics settings of the game."
 msgstr "Змяніць графічныя налады гульні."
 
+msgid "Mouse Cursor"
+msgstr "Курсор мышы"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Вызначыць, якім будзе курсор - каляровым або чорна-белым. Гэта ўплывае "
 "толькі на візуальны выгляд курсора."
+
+msgid "Interface Type"
+msgstr "Тып інтэрфейсу"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Пераключыць тып інтэрфейсу, які хочаце бачыць на экране."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3279,6 +3301,15 @@ msgstr "Кадр/с"
 msgid "System Info"
 msgstr "Сістэмная інфармацыя"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Змяніць раздзяляльнасць экрана."
 
@@ -3287,6 +3318,13 @@ msgstr "Выбар раздзяляльнасці экрана"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Пераключыцца паміж поўнаэкранным і аконным рэжымамі."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3329,12 +3367,6 @@ msgstr "Апісальная"
 
 msgid "Numeric"
 msgstr "Лічбавая"
-
-msgid "Interface Type"
-msgstr "Тып інтэрфейсу"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Пераключыць тып інтэрфейсу, які хочаце бачыць на экране."
 
 msgid "Toggle interface visibility."
 msgstr "Паказваць або не паказваць элементы інтэрфейсу."
@@ -3531,6 +3563,39 @@ msgstr "Адз. руху:"
 msgid "Uncharted Territory"
 msgstr "Тэра інкогніта"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Выпадковая істота"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Значок \"Колькасць гульцоў\""
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Элементаль вады"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Выпадковая істота - моцная"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Націсніце, каб захаваць бягучую мапу."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Вярнуцца ў галоўнае меню гульні."
+
 msgid "Cost per troop:"
 msgstr "Цана за 1:"
 
@@ -3667,6 +3732,13 @@ msgstr "Загрузіць файл:"
 msgid "Terrain object"
 msgstr "Аб’ект паверхні"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Назва выбранай мапы."
+
 msgid "Accept the choice made."
 msgstr "Пацвердзіць зроблены выбар."
 
@@ -3682,17 +3754,35 @@ msgstr ""
 msgid "Disable All Items"
 msgstr ""
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Выберыце ўменне:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Няма чараў, якія можна чараваць."
 
 msgid "Select Spell:"
 msgstr "Выберыце чары:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Выберыце артэфакт:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Назва выбранай мапы."
+
 msgid "Select Monster:"
 msgstr "Выберыце істоту:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Назва выбранай мапы."
 
 msgid "Select Hero:"
 msgstr "Выберыце героя:"
@@ -3820,21 +3910,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Значок \"Памер\""
 
-msgid "Map Type"
-msgstr "Тып мапы"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Абазначае, для якой версіі гульні зроблена мапа -\n"
-"для \"Войны за Спадчыну\",\n"
-"\"Цана вернасці\"\n"
-"або праекта \"Resurrection\"."
-
-msgid "Map Type:\n"
-msgstr "Тып мапы:\n"
-
 msgid "The Succession Wars"
 msgstr "Войны за Спадчыну"
 
@@ -3843,6 +3918,15 @@ msgstr "Цана вернасці"
 
 msgid "Resurrection"
 msgstr "Праект Resurrection"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Тып мапы"
+
+msgid "Map Type:\n"
+msgstr "Тып мапы:\n"
 
 msgid ""
 "\n"
@@ -4439,15 +4523,6 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
-msgstr ""
-
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
 msgstr ""
 
 msgid "The map is corrupted."
@@ -5220,8 +5295,8 @@ msgstr "Каардынацыя праекта і асноўная распрац
 msgid "Development"
 msgstr "Распрацоўка"
 
-msgid "Visit us at "
-msgstr "Наведайце наш вэб-сайт: "
+msgid "Visit us at"
+msgstr "Наведайце наш вэб-сайт:"
 
 msgid "QA and Support"
 msgstr "Кантроль якасці і падтрымка"
@@ -6393,11 +6468,23 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Адкрыць меню сістэмных параметраў, якія дазваляюць наладзіць гульню."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Перамяшчэнне героя"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Адзін або некалькі вашых герояў яшчэ могуць хадзіць. Сапраўды хочаце "
 "завяршыць свой ход?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Сапраўды хочаце завяршыць гульню?"
@@ -6687,6 +6774,12 @@ msgstr "Добры"
 
 msgid "Evil"
 msgstr "Злы"
+
+msgid "Black & White"
+msgstr "Чорна-белы"
+
+msgid "Color"
+msgstr "Каляровы"
 
 msgid ", FPS: "
 msgstr ", кадр/с: "
@@ -9311,6 +9404,43 @@ msgstr "Трава-мурава"
 
 msgid "Ocean"
 msgstr "Мора-акіян"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Нармальны"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Малая"

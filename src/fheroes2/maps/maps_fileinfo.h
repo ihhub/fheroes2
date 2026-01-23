@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -39,7 +39,7 @@
 class IStreamBase;
 class OStreamBase;
 
-enum class GameVersion : int
+enum class GameVersion : int32_t
 {
     SUCCESSION_WARS = 0,
     PRICE_OF_LOYALTY = 1,

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-01-22 08:22+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -1103,6 +1103,10 @@ msgstr "Humano"
 msgid "AI"
 msgstr "IA"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Modo de Terreno"
+
 msgid "Start"
 msgstr "Iniciar"
 
@@ -1118,8 +1122,26 @@ msgstr "Restaurar"
 msgid "Reset to default settings."
 msgstr "Restaurar as configurações padrões."
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Por favor, selecione outro herói."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Clique para selecionar esta cor."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Clique para selecionar esta cor."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3131,15 +3153,6 @@ msgstr "Idioma"
 msgid "Graphics"
 msgstr "Gráficos"
 
-msgid "Black & White"
-msgstr "Preto e Branco"
-
-msgid "Mouse Cursor"
-msgstr "Cursor"
-
-msgid "Color"
-msgstr "Colorido"
-
 msgid "Text Support"
 msgstr "Suporte a Texto"
 
@@ -3152,9 +3165,18 @@ msgstr "Selecionar Idioma do Jogo"
 msgid "Change the graphics settings of the game."
 msgstr "Altera as configurações gráficas do jogo."
 
+msgid "Mouse Cursor"
+msgstr "Cursor"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Ativar ou desativar o cursor colorido. Essa é apenas uma opção estética."
+
+msgid "Interface Type"
+msgstr "Tipo de Interface"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Alterne o tipo de interface que você deseja usar."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3252,6 +3274,15 @@ msgstr "QPS"
 msgid "System Info"
 msgstr "Informações do Sistema"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Altera a resolução do jogo."
 
@@ -3260,6 +3291,13 @@ msgstr "Selecionar Resolução do Jogo"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Alternar entre os modos de tela cheia e janela."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3301,12 +3339,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Tipo de Interface"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Alterne o tipo de interface que você deseja usar."
 
 msgid "Toggle interface visibility."
 msgstr "Alternar a visibilidade da interface."
@@ -3497,6 +3529,39 @@ msgstr "Movimento:"
 msgid "Uncharted Territory"
 msgstr "Território Desconhecido"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Monstro Aleatório"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Ícone dos Jogadores"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Elemental da Água"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Monstro Aleatório - Forte"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Clique para ativar o modo de patrulha do herói."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Retornar às opções do menu principal do Editor."
+
 msgid "Cost per troop:"
 msgstr "Custo por tropa:"
 
@@ -3635,6 +3700,13 @@ msgstr "Arquivo à ser carregado:"
 msgid "Terrain object"
 msgstr "Objeto do terreno"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "O nome do mapa atualmente selecionado."
+
 msgid "Accept the choice made."
 msgstr "Aceitar a escolha feita."
 
@@ -3654,17 +3726,35 @@ msgstr "Clique para editar eventos diários."
 msgid "Disable All Items"
 msgstr "Ver Feitiços"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Selecionar Habilidade:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Sem feitiços para lançar."
 
 msgid "Select Spell:"
 msgstr "Selecionar Feitiço:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Selecionar Artefato:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "O nome do mapa atualmente selecionado."
+
 msgid "Select Monster:"
 msgstr "Selecionar Monstro:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "O nome do mapa atualmente selecionado."
 
 msgid "Select Hero:"
 msgstr "Selecionar Herói:"
@@ -3793,19 +3883,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Tamanho do Ícone"
 
-msgid "Map Type"
-msgstr "Tipo de Mapa"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Indica se o mapa é feito para a versão \"As Guerras de Sucessão\", \"O Preço "
-"da Lealdade\" ou  \"Ressurreição\" do jogo."
-
-msgid "Map Type:\n"
-msgstr "Tipo de Mapa:\n"
-
 msgid "The Succession Wars"
 msgstr "As Guerras de Sucessão"
 
@@ -3814,6 +3891,15 @@ msgstr "O Preço da Lealdade"
 
 msgid "Resurrection"
 msgstr "Ressurreição"
+
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Tipo de Mapa"
+
+msgid "Map Type:\n"
+msgstr "Tipo de Mapa:\n"
 
 msgid ""
 "\n"
@@ -4444,16 +4530,6 @@ msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
-
-#, fuzzy
-msgid "Pick player count"
-msgstr "Ícone dos Jogadores"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
-msgstr ""
 
 msgid "The map is corrupted."
 msgstr "O mapa está corrompido."
@@ -5279,8 +5355,8 @@ msgstr "Coordenação do Projeto e Núcleo de Desenvolvimento"
 msgid "Development"
 msgstr "Desenvolvimento"
 
-msgid "Visit us at "
-msgstr "Nos visite em "
+msgid "Visit us at"
+msgstr "Nos visite em"
 
 msgid "QA and Support"
 msgstr "Controle de Qualidade e Suporte"
@@ -6459,11 +6535,23 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Acessa o menu de opções do sistema, permitindo que você personalize seu jogo."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Movimento do Herói"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Um ou mais heróis ainda podem se mover, você tem certeza de que deseja "
 "encerrar seu turno?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Você tem certeza de que deseja sair?"
@@ -6750,6 +6838,12 @@ msgstr "Do Bem"
 
 msgid "Evil"
 msgstr "Do Mal"
+
+msgid "Black & White"
+msgstr "Preto e Branco"
+
+msgid "Color"
+msgstr "Colorido"
 
 msgid ", FPS: "
 msgstr ", QPS: "
@@ -9384,6 +9478,43 @@ msgstr "Grama"
 
 msgid "Ocean"
 msgstr "Oceano"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Neutra"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Pequeno"
@@ -12568,75 +12699,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
-
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Aviso"
-
-#~ msgid "The description of the currently selected map."
-#~ msgstr "A descrição do mapa atualmente selecionado."
-
-#~ msgid ""
-#~ "The entered map description exceeds the maximum allowed 5 rows. It will "
-#~ "be shortened to fit the map description field."
-#~ msgstr ""
-#~ "A descrição do mapa inserida excede o máximo permitido de 5 linhas. Ela "
-#~ "será reduzida para caber no campo de descrição do mapa."
-
-#~ msgid "Castle Options"
-#~ msgstr "Opções do Castelo"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Clique para mostrar a próxima cidade."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Clique para mostrar a cidade anterior."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Devolve o conjurador para qualquer cidade ou castelo que atualmente "
-#~ "possui."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Sempre retaliar"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Clique para alterar o nome do castelo. Botão direito restaura o padrão."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Definir Exército personalizado. Botão direito para redefinir."
-
-#~ msgid "CONFIG"
-#~ msgstr "AJUSTES"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Cancelar e voltar para o menu Novo Mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Cancelar e voltar para o menu principal do Editor de Mapa."
-
-#~ msgid "Host"
-#~ msgstr "Anfitrião"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "O anfitrião configura as opções de jogo. Só pode haver um anfitrião por "
-#~ "jogo em rede."
-
-#~ msgid "Guest"
-#~ msgstr "Convidado"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "O convidado espera pelo anfitrião configurar o jogo, em seguida, é "
-#~ "adicionado automaticamente dentro. Pode haver vários convidados para "
-#~ "Jogos TCP/IP."

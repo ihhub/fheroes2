@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -272,7 +272,7 @@ Heroes::Heroes( const int heroId, const int race )
         _spellPoints = 120;
 
         // This hero has all the spells in his spell book
-        for ( const int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
+        for ( const int32_t spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
             AppendSpellToBook( Spell( spellId ), true );
         }
     }
@@ -856,7 +856,7 @@ uint32_t Heroes::GetMobilityIndexSprite() const
     const uint32_t value = ( _movePoints + 50U ) / 100U;
 
     // Valid sprite index range is (0 - 25).
-    return std::min( value, 25U );
+    return std::min<uint32_t>( value, 25U );
 }
 
 int Heroes::getStatsValue() const
@@ -2577,7 +2577,7 @@ IStreamBase & operator>>( IStreamBase & stream, Heroes & hero )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1100_RELEASE ) {
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
-            int temp = 0;
+            int32_t temp = 0;
             stream >> temp;
 
             hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );

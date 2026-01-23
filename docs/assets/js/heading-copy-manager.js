@@ -36,7 +36,7 @@ class HeadingCopyManager
     {
         // Initialize accessibility manager if not already initialized
         if ( !this.accessibility ) {
-            this.accessibility = new window.fheroes2.AccessibilityManager();
+            this.accessibility = new globalThis.fheroes2.AccessibilityManager();
         }
 
         // Apply to all headings
@@ -90,7 +90,7 @@ class HeadingCopyManager
         e.preventDefault();
         e.stopPropagation();
 
-        const url = new URL( window.location.href );
+        const url = new URL( globalThis.location.href );
         url.hash = heading.id;
 
         try {

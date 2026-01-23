@@ -157,7 +157,7 @@ namespace fheroes2
 
     private:
         // We shouldn't store too many actions. It is extremely rare when there is a need to revert so many changes.
-        static const size_t maxActions{ 500 };
+        static const size_t maxActions{ 999 };
 
         std::deque<std::unique_ptr<Action>> _actions;
 

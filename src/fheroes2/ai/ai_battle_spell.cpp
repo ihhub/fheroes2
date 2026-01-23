@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <ostream>
 #include <vector>
@@ -38,6 +39,7 @@
 #include "heroes_base.h"
 #include "logging.h"
 #include "monster.h"
+#include "monster_info.h"
 #include "speed.h"
 #include "spell.h"
 #include "spell_info.h"
@@ -58,74 +60,15 @@ namespace
         return result;
     }
 
-    bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Spell & spell )
+    int32_t getSpellPower( const HeroBase * hero )
     {
-        const int spellID = spell.GetID();
+        assert( hero != nullptr );
 
-        if ( unit.isImmovable() && spellID != Spell::ANTIMAGIC ) {
-            return true;
-        }
-
-        switch ( spellID ) {
-        case Spell::BLESS:
-        case Spell::MASSBLESS:
-            return unit.Modes( Battle::SP_BLESS );
-
-        case Spell::BLOODLUST:
-            return unit.Modes( Battle::SP_BLOODLUST );
-
-        case Spell::CURSE:
-        case Spell::MASSCURSE:
-            return unit.Modes( Battle::SP_CURSE );
-
-        case Spell::HASTE:
-        case Spell::MASSHASTE:
-            return unit.Modes( Battle::SP_HASTE );
-
-        case Spell::SHIELD:
-        case Spell::MASSSHIELD:
-            return unit.Modes( Battle::SP_SHIELD );
-
-        case Spell::SLOW:
-        case Spell::MASSSLOW:
-            return unit.Modes( Battle::SP_SLOW );
-
-        case Spell::STONESKIN:
-        case Spell::STEELSKIN:
-            return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
-
-        case Spell::BLIND:
-        case Spell::PARALYZE:
-        case Spell::PETRIFY:
-            return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
-
-        case Spell::DRAGONSLAYER:
-            return unit.Modes( Battle::SP_DRAGONSLAYER );
-
-        case Spell::ANTIMAGIC:
-            return unit.Modes( Battle::SP_ANTIMAGIC );
-
-        case Spell::BERSERKER:
-            return unit.Modes( Battle::SP_BERSERKER );
-
-        case Spell::HYPNOTIZE:
-            return unit.Modes( Battle::SP_HYPNOTIZE );
-
-        case Spell::MIRRORIMAGE:
-            return unit.Modes( Battle::CAP_MIRROROWNER );
-
-        case Spell::DISRUPTINGRAY:
-            return unit.GetDefense() <= 1;
-
-        default:
-            break;
-        }
-
-        return false;
+        return hero->GetPower() + hero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
     }
 }
 
-AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
+AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, const bool retreating ) const
 {
     SpellSelection bestSpell;
 
@@ -193,11 +136,14 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
         else if ( spell == Spell::TELEPORT ) {
             checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, enemies ) );
         }
+        else if ( spell == Spell::EARTHQUAKE ) {
+            checkSelectBestSpell( spell, spellEarthquakeValue( arena, spell, friendly ) );
+        }
         else if ( spell.isApplyToFriends() ) {
-            checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly ) );
+            checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly, enemies ) );
         }
         else if ( spell.isApplyToEnemies() ) {
-            checkSelectBestSpell( spell, spellEffectValue( spell, trueEnemies ) );
+            checkSelectBestSpell( spell, spellEffectValue( spell, trueEnemies, enemies ) );
         }
     }
 
@@ -228,10 +174,17 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
 
         // If we retreat, we are not interested in partial damage, but only in the number of units actually killed
         if ( retreating ) {
+            if ( unit->Modes( Battle::CAP_MIRRORIMAGE ) ) {
+                // Since we are retreating there is no use to kill mirrored monster stack as it will disappear after the battle.
+                return 0.0;
+            }
+
             return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
         }
 
-        // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack
+        // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack.
+        // TODO: we also need to take into an account additional stack of Mirror Image if the creatures have one.
+        //       Killing the original monsters will destroy the Mirror Image stack as well.
         const uint32_t hitpoints = unit->Modes( Battle::CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
         if ( damage >= hitpoints ) {
             const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
@@ -321,9 +274,9 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
 
 int32_t AI::BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
 {
-    const int32_t duration
-        = _commander->GetPower() + _commander->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
+    const int32_t duration = getSpellPower( _commander );
 
+    // TODO: this logic might not be accurate for cases when certain spells are applied to reduce the retaliation damage, like Blind or Paralyze.
     if ( duration < 2 && target.Modes( Battle::TR_MOVED ) ) {
         return 0;
     }
@@ -335,14 +288,22 @@ double AI::BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & targe
 {
     const double targetDefense = target.GetDefense();
 
-    if ( targetDefense <= 1 ) { // target is already at minimum defense: not useful to cast Disrupting Ray
+    if ( targetDefense <= 1 ) {
+        // The target has minimum defense value. This spell is useless.
         return 0.0;
     }
 
     double ratio = 0.2;
-    if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) { // disrupting ray can't have full effect
+    if ( targetDefense <= Spell( Spell::DISRUPTINGRAY ).ExtraValue() ) {
+        // The spell is not applicable fully.
         const double actualDefenseChange = targetDefense - 1.0;
-        ratio *= actualDefenseChange / Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        const uint32_t spellValue = Spell( Spell::DISRUPTINGRAY ).ExtraValue();
+        if ( spellValue == 0 ) {
+            assert( spellValue > 0 );
+            return 0;
+        }
+
+        ratio *= actualDefenseChange / spellValue;
     }
 
     const double targetStrength = target.GetStrength();
@@ -358,7 +319,10 @@ double AI::BattlePlanner::getSpellDisruptingRayRatio( const Battle::Unit & targe
 double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
 {
     if ( target.isArchers() || _attackingCastle ) {
-        // Slow is useless against archers or troops defending castle
+        // Slow is useless against archers or troops defending castle.
+        //
+        // The above is not always true. A stack of enemy archers can be killed by a slower flying creature if they are slowed down.
+        // TODO: add a check for the last case.
         return 0.01;
     }
     const uint32_t currentSpeed = target.GetSpeed( false, true );
@@ -366,7 +330,8 @@ double AI::BattlePlanner::getSpellSlowRatio( const Battle::Unit & target ) const
     const uint32_t lostSpeed = currentSpeed - newSpeed; // usually 2
     double ratio = 0.1 * lostSpeed;
 
-    if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
+    if ( currentSpeed < _myArmyAverageSpeed ) {
+        // Slow isn't useful if target is already slower than our army.
         ratio /= 2;
     }
     if ( target.Modes( Battle::SP_HASTE ) ) {
@@ -385,7 +350,8 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     const uint32_t gainedSpeed = newSpeed - currentSpeed; // usually 2
     double ratio = 0.05 * gainedSpeed;
 
-    if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
+    if ( currentSpeed < _enemyAverageSpeed ) {
+        // Haste is very useful if target is slower than army.
         ratio *= 2;
     }
     if ( target.Modes( Battle::SP_SLOW ) ) {
@@ -399,14 +365,15 @@ double AI::BattlePlanner::getSpellHasteRatio( const Battle::Unit & target ) cons
     return ratio;
 }
 
-double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const
+double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, const Battle::Units & enemies, const bool targetIsLast,
+                                            const bool forDispel ) const
 {
-    const int spellID = spell.GetID();
-
     // Make sure that this spell makes sense to apply (skip this check to evaluate the effect of dispelling)
-    if ( !forDispel && ( isSpellcastUselessForUnit( target, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
+    if ( !forDispel && ( isSpellcastUselessForUnit( target, enemies, spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
         return 0.0;
     }
+
+    const int spellID = spell.GetID();
 
     double ratio = 0.0;
     switch ( spellID ) {
@@ -415,9 +382,30 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         ratio = getSpellSlowRatio( target );
         break;
     case Spell::BLIND: {
-        if ( targetIsLast )
-            return 0.0;
-        ratio = 0.8;
+        if ( targetIsLast ) {
+            // TODO: add more complex logic to calculate the usefulness of this spell for a single target as blinded creature retaliates with 50% damage.
+            //       It might be less useful against monsters with unlimited retaliation when you have more than one monster.
+            //
+            // As of now, we assume that the spell is going to be applicable for a monster that has no unlimited retaliation,
+            // we are going to hit it immediately and the monster hasn't retaliated.
+            if ( target.isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+                // Not so much useful.
+                return 0;
+            }
+
+            if ( !target.isRetaliationAllowed() ) {
+                // The monster has retaliated. Apply the spell might not be that good.
+                // TODO: check whether we are going to attack the monster right now or the next turn.
+                //       Plus Blind spell is useful if the monster is faster than other troops.
+                return 0;
+            }
+
+            // The final ratio is smaller than the original one but not that much.
+            ratio = 0.4;
+        }
+        else {
+            ratio = 0.8;
+        }
         break;
     }
     case Spell::CURSE:
@@ -428,11 +416,50 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
         }
         ratio = 0.15;
         break;
-    case Spell::BERSERKER:
-    case Spell::PARALYZE: {
-        if ( targetIsLast )
-            return 0.0;
+    case Spell::BERSERKER: {
+        if ( targetIsLast ) {
+            // No use of this spell if the last enemy creature is left for the battle.
+            // However, there are some cases when it is going to be useful:
+            // - to avoid the enemy hero cast spells as they won't have control of any of their monsters
+            // - to lure the monster to our another monster, for example to attack Dragons rather than Mages.
+            //
+            // TODO: add the logic for the above cases.
+            return 0;
+        }
         ratio = 0.85;
+        break;
+    }
+    case Spell::PARALYZE: {
+        if ( targetIsLast ) {
+            // TODO: add proper evaluation of the spell as a paralyzed creature has no retaliation damage.
+            //       It might be less useful against monsters with unlimited retaliation when you have more than one monster.
+            //
+            // As of now, we assume that the spell is going to be applicable for a monster that has no unlimited retaliation,
+            // we are going to hit it immediately and the monster hasn't retaliated.
+            if ( target.isAbilityPresent( fheroes2::MonsterAbilityType::UNLIMITED_RETALIATION ) ) {
+                // Not so much useful.
+                return 0;
+            }
+
+            if ( !target.isRetaliationAllowed() ) {
+                // The monster has retaliated. Apply the spell might not be that good.
+                // TODO: check whether we are going to attack the monster right now or the next turn.
+                //       Plus Paralyze spell is useful if the monster is faster than other troops.
+                return 0;
+            }
+
+            const int32_t spellDuration = spellDurationMultiplier( target );
+            if ( spellDuration < 1 ) {
+                // This spell might not be useful at all.
+                return 0;
+            }
+
+            // The final ratio is smaller than the original one but not that much.
+            ratio = 0.5;
+        }
+        else {
+            ratio = 0.85;
+        }
         break;
     }
     case Spell::HYPNOTIZE: {
@@ -453,7 +480,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     case Spell::MASSBLESS: {
         if ( target.GetDamageMax() == target.GetDamageMin() ) {
             // It is useless to apply Bless spell as the monster already has maximum damage.
-            return 0.0;
+            return 0;
         }
         ratio = 0.15;
         break;
@@ -464,7 +491,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     case Spell::STEELSKIN:
         ratio = 0.2;
         break;
-    // Following spell usefulness is conditional; ratio will be determined later
+    // Following spell usefulness is conditional. Ratio will be determined below.
     case Spell::ANTIMAGIC:
     case Spell::MIRRORIMAGE:
     case Spell::SHIELD:
@@ -532,7 +559,7 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
     return target.GetStrength() * ratio * spellDurationMultiplier( target );
 }
 
-AI::SpellcastOutcome AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Units & targets ) const
+AI::SpellcastOutcome AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Units & targets, const Battle::Units & enemies ) const
 {
     const bool isSingleTargetLeft = targets.size() == 1;
     const bool isMassSpell = spell.isMassActions();
@@ -540,7 +567,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellEffectValue( const Spell & spell, c
     SpellcastOutcome bestOutcome;
 
     for ( const Battle::Unit * unit : targets ) {
-        bestOutcome.updateOutcome( spellEffectValue( spell, *unit, isSingleTargetLeft, false ), unit->GetHeadIndex(), isMassSpell );
+        bestOutcome.updateOutcome( spellEffectValue( spell, *unit, enemies, isSingleTargetLeft, false ), unit->GetHeadIndex(), isMassSpell );
     }
 
     return bestOutcome;
@@ -562,7 +589,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDispelValue( const Spell & spell, c
         double unitValue = 0;
         const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
         for ( const Spell & spellOnFriend : spellList ) {
-            const double effectValue = spellEffectValue( spellOnFriend, *unit, false, true );
+            const double effectValue = spellEffectValue( spellOnFriend, *unit, enemies, false, true );
             if ( spellOnFriend.isApplyToEnemies() ) {
                 unitValue += effectValue;
             }
@@ -584,7 +611,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDispelValue( const Spell & spell, c
             double unitValue = 0;
             const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
             for ( const Spell & spellOnEnemy : spellList ) {
-                const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemyLastUnit, true );
+                const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemies, enemyLastUnit, true );
                 unitValue += spellOnEnemy.isApplyToFriends() ? effectValue : -effectValue;
             }
 
@@ -713,7 +740,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     SpellcastOutcome bestOutcome;
 
     for ( const Battle::Unit * unit : friendly ) {
-        if ( isSpellcastUselessForUnit( *unit, spell ) ) {
+        if ( isSpellcastUselessForUnit( *unit, enemies, spell ) ) {
             continue;
         }
 
@@ -724,9 +751,97 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDragonSlayerValue( const Spell & sp
     return bestOutcome;
 }
 
+bool AI::BattlePlanner::isSpellcastUselessForUnit( const Battle::Unit & unit, const Battle::Units & enemies, const Spell & spell ) const
+{
+    const int spellID = spell.GetID();
+
+    if ( unit.isImmovable() && spellID != Spell::ANTIMAGIC ) {
+        return true;
+    }
+
+    switch ( spellID ) {
+    case Spell::BLESS:
+    case Spell::MASSBLESS:
+        return unit.Modes( Battle::SP_BLESS );
+
+    case Spell::BLOODLUST:
+        return unit.Modes( Battle::SP_BLOODLUST );
+
+    case Spell::CURSE:
+    case Spell::MASSCURSE:
+        return unit.Modes( Battle::SP_CURSE );
+
+    case Spell::HASTE:
+    case Spell::MASSHASTE:
+        return unit.Modes( Battle::SP_HASTE ) || ( unit.GetSpeed() == Speed::INSTANT );
+
+    case Spell::SHIELD:
+    case Spell::MASSSHIELD:
+        // If a spell duration is just 1 round and all shooters already completed their turn
+        // then this spell is useless.
+        if ( getSpellPower( _commander ) == 1 ) {
+            size_t activeShooters{ 0 };
+
+            for ( const auto * enemy : enemies ) {
+                if ( enemy->isArchers() && !enemy->isImmovable() && !enemy->Modes( Battle::TR_MOVED ) ) {
+                    ++activeShooters;
+                }
+            }
+
+            if ( activeShooters == 0 ) {
+                // No shooters are going to make their move.
+                return true;
+            }
+        }
+
+        return unit.Modes( Battle::SP_SHIELD );
+
+    case Spell::SLOW:
+    case Spell::MASSSLOW:
+        return unit.Modes( Battle::SP_SLOW ) || ( unit.GetSpeed() == Speed::CRAWLING );
+
+    case Spell::STONESKIN:
+    case Spell::STEELSKIN:
+        // TODO: this is not always true. Steel Skin gives higher defense so applying it makes sense.
+        return unit.Modes( Battle::SP_STONESKIN | Battle::SP_STEELSKIN );
+
+    case Spell::BLIND:
+    case Spell::PARALYZE:
+    case Spell::PETRIFY:
+        // TODO: these 3 modes serve different purposes and
+        //       there are cases when applying Paralyze just at the end of Blind spell duration makes sense.
+        return unit.Modes( Battle::SP_BLIND | Battle::SP_PARALYZE | Battle::SP_STONE );
+
+    case Spell::DRAGONSLAYER:
+        return unit.Modes( Battle::SP_DRAGONSLAYER );
+
+    case Spell::ANTIMAGIC:
+        return unit.Modes( Battle::SP_ANTIMAGIC );
+
+    case Spell::BERSERKER:
+        return unit.Modes( Battle::SP_BERSERKER );
+
+    case Spell::HYPNOTIZE:
+        return unit.Modes( Battle::SP_HYPNOTIZE );
+
+    case Spell::MIRRORIMAGE:
+        return unit.Modes( Battle::CAP_MIRROROWNER );
+
+    case Spell::DISRUPTINGRAY:
+        return unit.GetDefense() <= 1;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & arena, const Spell & spell, const Battle::Unit & currentUnit,
                                                             const Battle::Units & enemies ) const
 {
+    assert( spell == Spell::TELEPORT );
+
     // Teleport spell is useful in many cases. The current implementation focuses only on offensive movements for melee units.
 
     if ( _defensiveTactics ) {
@@ -734,7 +849,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
         return {};
     }
 
-    if ( isSpellcastUselessForUnit( currentUnit, spell ) ) {
+    if ( isSpellcastUselessForUnit( currentUnit, enemies, spell ) ) {
         return {};
     }
 
@@ -789,4 +904,55 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
     }
 
     return { currentPos.GetHead()->GetIndex(), currentUnit.GetStrength() * bloodLustRatio, bestTarget.cell };
+}
+
+AI::SpellcastOutcome AI::BattlePlanner::spellEarthquakeValue( const Battle::Arena & arena, const Spell & spell, const Battle::Units & friendly ) const
+{
+    (void)spell;
+    assert( spell == Spell::EARTHQUAKE );
+
+    // If we are not attacking a castle, then this spell is useless.
+    if ( !_attackingCastle ) {
+        return {};
+    }
+
+    // If everyone is flier or archer we also don't care about castle's walls as we don't need to rush to attack enemy units in melee.
+    int32_t meleeUnits{ 0 };
+    double meleeStrength = 0;
+    for ( const Battle::Unit * unit : friendly ) {
+        if ( !unit->isFlying() && !unit->isArchers() ) {
+            ++meleeUnits;
+            meleeStrength += unit->GetStrength();
+        }
+    }
+
+    if ( meleeUnits == 0 ) {
+        return {};
+    }
+
+    // Then we need to know the state of walls and towers.
+    int32_t totalTargets{ 0 };
+    int32_t targetsToDestroy{ 0 };
+    for ( const Battle::CastleDefenseStructure target : Battle::Arena::getEarthQuakeSpellTargets() ) {
+        if ( target == Battle::CastleDefenseStructure::TOP_BRIDGE_TOWER || target == Battle::CastleDefenseStructure::BOTTOM_BRIDGE_TOWER ) {
+            // These are only cosmetic buildings. They have no value for us.
+            continue;
+        }
+
+        const int targetValue = arena.getCastleDefenseStructureCondition( target, Battle::SiegeWeaponType::EarthquakeSpell );
+        ++totalTargets;
+
+        if ( targetValue > 0 ) {
+            ++targetsToDestroy;
+        }
+    }
+
+    const auto [minDamage, maxDamage] = Battle::Arena::getEarthquakeDamageRange( _commander );
+
+    const double enemyShooterRatio = _enemyShootersStrength / _enemyArmyStrength;
+    const double targetRatio = targetsToDestroy * 1.0 / totalTargets;
+    const double averageDamage = ( maxDamage - minDamage ) / 2.0;
+    const double meleeRatio = meleeStrength / _myArmyStrength;
+
+    return { 0, meleeUnits * meleeStrength * meleeRatio * targetRatio * averageDamage * enemyShooterRatio * 0.2 };
 }
