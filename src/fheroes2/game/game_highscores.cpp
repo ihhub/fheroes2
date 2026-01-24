@@ -370,7 +370,6 @@ namespace
         }
         else {
             buttonOtherIcnId = isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD : ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD;
-            
         }
 
         fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, buttonOtherIcnId, 0, 1 );
