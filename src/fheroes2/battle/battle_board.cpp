@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -257,6 +257,43 @@ Battle::CellDirection Battle::Board::GetReflectDirection( const CellDirection di
         break;
     }
 
+    return CellDirection::UNKNOWN;
+}
+
+Battle::CellDirection Battle::Board::GetDirectionFromDelta( const fheroes2::Point & movementDelta )
+{
+    const int32_t dx = movementDelta.x;
+    const int32_t dy = movementDelta.y;
+
+    if ( dx == 0 && dy == 0 ) {
+        return CellDirection::CENTER;
+    }
+
+    if ( dy < 0 ) {
+        if ( dx < 0 ) {
+            return CellDirection::TOP_LEFT;
+        }
+        if ( dx > 0 ) {
+            return CellDirection::TOP_RIGHT;
+        }
+    }
+    else if ( dy > 0 ) {
+        if ( dx < 0 ) {
+            return CellDirection::BOTTOM_LEFT;
+        }
+        if ( dx > 0 ) {
+            return CellDirection::BOTTOM_RIGHT;
+        }
+    }
+
+    if ( dx < 0 ) {
+        return CellDirection::LEFT;
+    }
+    if ( dx > 0 ) {
+        return CellDirection::RIGHT;
+    }
+
+    assert( 0 );
     return CellDirection::UNKNOWN;
 }
 
@@ -1006,4 +1043,107 @@ std::string Battle::Board::GetMoatInfo()
     StringReplace( msg, "%{count}", GameStatic::GetBattleMoatReduceDefense() );
 
     return msg;
+}
+
+fheroes2::Rect Battle::Board::GetMoatCellMask( const Cell & cell )
+{
+    // Bottom part of the cell, inset horizontally
+    constexpr int32_t waterTopOffset = 34; // from cell top
+    constexpr int32_t waterHeight = 10;
+    constexpr int32_t insetX = 3;
+
+    const auto & pos = cell.GetPos();
+    const auto index = cell.GetIndex();
+
+    fheroes2::Rect mask{
+        pos.x + insetX,
+        pos.y + waterTopOffset,
+        Cell::widthPx - insetX,
+        waterHeight,
+    };
+
+    // Additional, per-tile adjustments
+    switch ( index ) {
+    case 7:
+        mask.height -= 3;
+        mask.y += 3;
+        break;
+
+    case 18:
+    case 28:
+    case 39:
+        mask.x -= 2;
+        break;
+
+    case 49:
+        mask.x += 8;
+        mask.width += 11;
+        break;
+
+    case 61:
+    case 72:
+    case 84:
+        break;
+
+    case 95:
+        mask.width += 4;
+        mask.x += 6;
+        break;
+
+    default:
+        assert( 0 );
+    }
+
+    return mask;
+}
+
+// Check the unit's current and next cells following the movement direction
+// Return pair of Cell pointers if any of the cells are valid moat cells:
+// { nullptr, nullptr } => unit is not on moat tile nor moving to moat tile
+// { Cell * , nullptr } => unit is entering a moat tile
+// { nullptr, Cell *  } => unit is leaving a moat tile
+// { Cell * , Cell *  } => unit is either standing in the moat, or moving from one moat tile to another
+std::pair<const Battle::Cell *, const Battle::Cell *> Battle::Board::GetMoatCellsForUnit( const Unit & unit, const CellDirection movementDirection )
+{
+    const Position & pos = unit.GetPosition();
+    auto resolveForCell = [&]( const Cell * cell ) -> std::pair<const Cell *, const Cell *> {
+        std::pair<const Cell *, const Cell *> pair{ nullptr, nullptr };
+
+        if ( cell == nullptr ) {
+            return pair;
+        }
+
+        const int32_t currentIndex = cell->GetIndex();
+        assert( isValidIndex( currentIndex ) );
+
+        if ( isMoatIndex( currentIndex, unit ) ) {
+            pair.first = cell;
+        }
+
+        const int32_t nextIndex = GetIndexDirection( currentIndex, movementDirection );
+        if ( isValidIndex( nextIndex ) ) {
+            const Cell * nextCell = GetCell( nextIndex );
+            if ( nextCell && isMoatIndex( nextCell->GetIndex(), unit ) ) {
+                pair.second = nextCell;
+            }
+        }
+
+        return pair;
+    };
+
+    // 1. Head first, then try tail
+    std::pair<const Cell *, const Cell *> result = resolveForCell( pos.GetHead() );
+    if ( result.first == nullptr && result.second == nullptr && unit.isWide() ) {
+        result = resolveForCell( pos.GetTail() );
+    }
+
+    // Check if unit is on bridge, and bridge is down
+    if ( result.first || result.second ) {
+        const Bridge * bridge = Arena::GetBridge();
+        if ( bridge && ( ( result.first && result.first->GetIndex() == 49 ) || ( result.second && result.second->GetIndex() == 49 ) ) ) {
+            return { nullptr, nullptr };
+        }
+    }
+
+    return result;
 }

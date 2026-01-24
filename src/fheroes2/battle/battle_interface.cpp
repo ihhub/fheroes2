@@ -2029,6 +2029,8 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
 {
     // Get the sprite rendering offset.
     fheroes2::Point offset = GetTroopPosition( unit, troopSprite );
+    fheroes2::Point movementDelta{ 0, 0 };
+    CellDirection movementDirection = CellDirection::CENTER;
 
     if ( _movingUnit == &unit ) {
         // Monster is moving.
@@ -2042,6 +2044,7 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
             const fheroes2::Rect & unitPosition = unit.GetRectPosition();
             const int32_t moveX = _movingPos.x - unitPosition.x;
             const int32_t moveY = _movingPos.y - unitPosition.y;
+            movementDirection = Board::GetDirectionFromDelta( { moveX, moveY } );
 
             // If it is a slowed flying creature, then it should smoothly move horizontally.
             if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
@@ -2051,8 +2054,11 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
             }
             // If the creature has to move diagonally.
             else if ( moveY != 0 ) {
-                offset.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
-                offset.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * moveY );
+                movementDelta.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
+                movementDelta.y = static_cast<int32_t>( _movingUnit->animation.movementProgress() * moveY );
+
+                offset.x += movementDelta.x;
+                offset.y += movementDelta.y;
             }
         }
     }
@@ -2069,9 +2075,102 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
         offset.y += moveY + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
     }
 
+    if ( _drawTroopSpriteWithMoatMask( unit, troopSprite, offset, movementDelta, movementDirection ) ) {
+        return offset;
+    }
+
     fheroes2::AlphaBlit( troopSprite, _mainSurface, offset.x, offset.y, unit.GetCustomAlpha(), unit.isReflect() );
 
     return offset;
+}
+
+bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset,
+                                                      const fheroes2::Point & movementDelta, const CellDirection movementDirection )
+{
+    if ( _flyingUnit == &unit ) {
+        return false;
+    }
+
+    const Castle * castle = Arena::GetCastle();
+    if ( castle == nullptr || !castle->isBuild( BUILD_MOAT ) ) {
+        return false;
+    }
+
+    const auto moatCells = Board::GetMoatCellsForUnit( unit, movementDirection );
+    if ( moatCells.first == nullptr && moatCells.second == nullptr ) {
+        return false;
+    }
+
+    const bool isDiagonal = movementDirection == CellDirection::TOP_LEFT || movementDirection == CellDirection::TOP_RIGHT
+                            || movementDirection == CellDirection::BOTTOM_LEFT || movementDirection == CellDirection::BOTTOM_RIGHT;
+
+    const bool isEntering = ( moatCells.first == nullptr && moatCells.second != nullptr );
+    const bool isExiting = ( moatCells.first != nullptr && moatCells.second == nullptr );
+    const bool isInside = ( moatCells.first != nullptr && moatCells.second != nullptr );
+
+    // Diagonal movement rules:
+    //
+    // - Diagonal + isEntering = Apply mask, don't move mask
+    // - Diagonal + isEntering + movement:TOP_RIGHT = Don't apply mask (it can clip some sprites)
+    // - Diagonal + isExiting = Don't apply mask (it can clip some sprites)
+    // - Diagonal + isInside  = Apply and move mask
+    //
+
+    if ( ( isDiagonal && isExiting ) || ( isDiagonal && isEntering && movementDirection == CellDirection::TOP_RIGHT ) ) {
+        return false;
+    }
+
+    const Cell * maskCell = moatCells.first;
+    if ( isEntering ) {
+        maskCell = moatCells.second;
+    }
+
+    if ( maskCell == nullptr ) {
+        return false;
+    }
+
+    fheroes2::Rect mask = Board::GetMoatCellMask( *maskCell );
+
+    if ( isInside || !isDiagonal ) {
+        mask.x -= movementDelta.x;
+        mask.y += movementDelta.y;
+    }
+    fheroes2::DrawRect( _mainSurface, mask, 133 );
+
+    const fheroes2::Rect spriteRect{ offset.x, offset.y, sprite.width(), sprite.height() };
+    const fheroes2::Rect intersection = spriteRect ^ mask;
+
+    if ( intersection.width == 0 || intersection.height == 0 ) {
+        return false;
+    }
+
+    // Account for short sprites (e.g. vampire dead sprite)
+    constexpr int32_t minVisibleHeight = 10;
+    if ( sprite.height() - mask.height < minVisibleHeight ) {
+        return false;
+    }
+
+    const uint8_t alpha = unit.GetCustomAlpha();
+    const bool isReflect = unit.isReflect();
+
+    // The mask is a rectangle which means that worst-case is it's in the middle
+    // of the sprite and we will need to make 4 calls to AlphaBlit to render the sprite
+    // around the mask.
+    auto blit = [&]( const fheroes2::Rect & dst ) {
+        if ( dst.width > 0 && dst.height > 0 ) {
+            fheroes2::AlphaBlit( sprite, dst.x - spriteRect.x, dst.y - spriteRect.y, _mainSurface, dst.x, dst.y, dst.width, dst.height, alpha, isReflect );
+        }
+    };
+
+    // Top
+    blit( { spriteRect.x, spriteRect.y, spriteRect.width, intersection.y - spriteRect.y } );
+
+    // Left
+    blit( { spriteRect.x, intersection.y, intersection.x - spriteRect.x, intersection.height } );
+
+    // Right
+    blit( { intersection.x + intersection.width, intersection.y, ( spriteRect.x + spriteRect.width ) - ( intersection.x + intersection.width ), intersection.height } );
+    return true;
 }
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
