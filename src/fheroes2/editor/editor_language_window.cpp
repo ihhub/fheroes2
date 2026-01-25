@@ -51,6 +51,11 @@
 #include "ui_text.h"
 #include "ui_window.h"
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace
 {
     const int32_t elementOffset{ 9 };
