@@ -39,7 +39,6 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_language_selection.h"
 #include "dialog_selectitems.h"
 #include "difficulty.h"
 #include "editor_daily_events_window.h"
