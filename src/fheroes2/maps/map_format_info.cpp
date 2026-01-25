@@ -623,7 +623,7 @@ namespace Maps::Map_Format
     IStreamBase & operator>>( IStreamBase & stream, TranslationFormat & metadata )
     {
         return stream >> metadata.dailyEvents >> metadata.rumors >> metadata.castleMetadata >> metadata.heroMetadata >> metadata.sphinxMetadata >> metadata.signMetadata
-                      >> metadata.adventureMapEventMetadata;
+               >> metadata.adventureMapEventMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
