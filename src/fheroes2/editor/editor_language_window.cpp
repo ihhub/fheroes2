@@ -189,7 +189,6 @@ namespace Editor
 
         const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 13 );
         const int32_t buttonWidth = buttonImage.width();
-        const int32_t buttonOffset = ( languageArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 
         fheroes2::Button buttonAdd( rumorsRoi.x, rumorsRoi.y + rumorsRoi.height + 5, minibuttonIcnId, 13, 14 );
         buttonAdd.draw();
@@ -306,7 +305,5 @@ namespace Editor
                 display.render( windowArea );
             }
         }
-
-        return;
     }
 }
