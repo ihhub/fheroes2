@@ -109,6 +109,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_interface.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_interface_panel.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_language_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_map_specs_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_object_popup_window.cpp" />
@@ -326,6 +327,7 @@
     <ClInclude Include="src\fheroes2\dialog\dialog_system_options.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface_panel.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_language_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_mainmenu.h" />
     <ClInclude Include="src\fheroes2\editor\editor_map_specs_window.h" />
     <ClInclude Include="src\fheroes2\editor\editor_object_popup_window.h" />
