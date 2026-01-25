@@ -218,8 +218,8 @@ namespace Editor
                 break;
             }
 
-            if ( buttonOk.isEnabled() && ( languageList.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() )
-                                           || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
+            if ( buttonOk.isEnabled()
+                 && ( languageList.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
                 assert( !languages.empty() );
 
                 if ( languages == originalSelection && languageList.GetCurrent() == mapFormat.mainLanguage ) {
