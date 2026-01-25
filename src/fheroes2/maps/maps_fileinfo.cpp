@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstring>
 #include <functional>
+#include <initializer_list>
 #include <list>
 #include <map>
 #include <sstream>
