@@ -24,9 +24,11 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <map>
 #include <memory>
-#include <optional>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
