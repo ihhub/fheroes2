@@ -126,6 +126,9 @@ namespace Maps
     // - modify the texts for the new language.
     void changeLanguage( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language );
 
+    // Set the current in-game language for the map. This should be used only for lists of maps displayed for players.
+    // Take a note that this function can create a "fake" entry in translations to keep a proper list of languages
+    // which we display for map information.
     void setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language );
 
     // This function sets translation language for the map. It should be used only for the game mode and not for the Editor as
@@ -133,5 +136,6 @@ namespace Maps
     bool loadTranslation( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language );
     bool loadTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language );
 
+    // This function is used exclusively by the Editor when a map maker wants to remove a translation from the list of supported languages.
     void removeTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language );
 }
