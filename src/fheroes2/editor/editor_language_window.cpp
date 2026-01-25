@@ -64,7 +64,7 @@ namespace
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListSingleClick;
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListPressRight;
 
-        LanguageListBox( const fheroes2::Point & pt )
+        explicit LanguageListBox( const fheroes2::Point & pt )
             : ListBox( pt )
         {
             // Do nothing.
