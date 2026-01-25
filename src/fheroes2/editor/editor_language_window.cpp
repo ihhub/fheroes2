@@ -227,7 +227,7 @@ namespace Editor
                 }
 
                 for ( size_t i = 0; i < languages.size(); ++i ) {
-                    if ( languageList.getCurrentId() != i ) {
+                    if ( languageList.getCurrentId() != static_cast<int32_t>( i ) ) {
                         Maps::changeLanguage( mapFormat, languages[i] );
                     }
                 }
