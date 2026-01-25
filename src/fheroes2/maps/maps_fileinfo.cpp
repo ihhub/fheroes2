@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -39,6 +39,7 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -64,6 +65,8 @@ namespace
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
         std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
+        const auto currentLanguage = fheroes2::getCurrentLanguage();
+
         // Maps made by the original French version Editor or hacked maps could contain
         // special ASCII characters that are not supposed to be there.
         // While reading the original maps we attempt to fix these characters
@@ -81,7 +84,7 @@ namespace
                 }
             }
             else {
-                if ( !fi.readResurrectionMap( mapFile, isForEditor ) ) {
+                if ( !fi.readResurrectionMap( mapFile, isForEditor, currentLanguage ) ) {
                     continue;
                 }
             }
@@ -188,6 +191,8 @@ void Maps::FileInfo::Reset()
     worldMonth = 0;
 
     mainLanguage = fheroes2::SupportedLanguage::English;
+
+    translations = {};
 }
 
 bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
@@ -382,13 +387,18 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     return true;
 }
 
-bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isForEditor )
+bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isForEditor, const fheroes2::SupportedLanguage currentLanguage )
 {
     Reset();
 
     Maps::Map_Format::BaseMapFormat map;
     if ( !Maps::Map_Format::loadBaseMap( filePath, map ) ) {
         return false;
+    }
+
+    if ( !isForEditor ) {
+        // Since we loading this map for the game, we need to set the language of the map.
+        Maps::setInGameLanguage( map, currentLanguage );
     }
 
     if ( !loadResurrectionMap( map, std::move( filePath ) ) ) {
@@ -517,6 +527,11 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     version = GameVersion::RESURRECTION;
 
     mainLanguage = map.mainLanguage;
+
+    translations = {};
+    for ( const auto & languageInfo : map.translations ) {
+        translations.emplace_back( languageInfo.first );
+    }
 
     return true;
 }

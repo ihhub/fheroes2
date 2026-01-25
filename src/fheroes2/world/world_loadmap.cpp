@@ -719,6 +719,8 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
+    Maps::loadTranslation( map, fheroes2::getCurrentLanguage() );
+
     width = map.width;
     height = map.width;
 

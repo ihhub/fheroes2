@@ -2304,7 +2304,7 @@ namespace Editor
                     StringReplace( differentLanguageWarning, "%{newLanguage}", fheroes2::getLanguageName( language ) );
 
                     if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
-                        mapFormat.mainLanguage = language;
+                        Maps::changeLanguage( mapFormat, language );
 
                         renderMapName();
                         renderMapDescription();

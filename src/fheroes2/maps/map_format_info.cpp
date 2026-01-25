@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -81,6 +81,15 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const ResourceMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationSphinxMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationSphinxMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationBaseMapMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationBaseMapMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationFormat & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationFormat & metadata );
 }
 
 namespace
@@ -94,7 +103,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 10 };
+    constexpr uint16_t currentSupportedVersion{ 11 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -293,7 +302,7 @@ namespace
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
                << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.width << map.mainLanguage << map.name << map.description
-               << map.creatorNotes;
+               << map.creatorNotes << map.translations;
 
         return !stream.fail();
     }
@@ -323,6 +332,14 @@ namespace
             stream >> map.creatorNotes;
         }
 
+        if ( map.version < 11 ) {
+            // True translation support was added in version 11.
+            map.translations = {};
+        }
+        else {
+            stream >> map.translations;
+        }
+
         return !stream.fail();
     }
 
@@ -339,7 +356,7 @@ namespace
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
                    << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata << map.monsterMetadata << map.artifactMetadata
-                   << map.resourceMetadata;
+                   << map.resourceMetadata << map.translationInfo;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -413,6 +430,13 @@ namespace
         }
         else {
             convertFromV9ToV10( map, std::move( standardMetadata ) );
+        }
+
+        if ( map.version < 11 ) {
+            map.translationInfo = {};
+        }
+        else {
+            decompressed >> map.translationInfo;
         }
 
         return !stream.fail();
@@ -568,6 +592,38 @@ namespace Maps::Map_Format
     IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata )
     {
         return stream >> metadata.count;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationSphinxMetadata & metadata )
+    {
+        return stream << metadata.riddle << metadata.answers;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationSphinxMetadata & metadata )
+    {
+        return stream >> metadata.riddle >> metadata.answers;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationBaseMapMetadata & metadata )
+    {
+        return stream << metadata.name << metadata.description << metadata.creatorNotes;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationBaseMapMetadata & metadata )
+    {
+        return stream >> metadata.name >> metadata.description >> metadata.creatorNotes;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationFormat & metadata )
+    {
+        return stream << metadata.dailyEvents << metadata.rumors << metadata.castleMetadata << metadata.heroMetadata << metadata.sphinxMetadata << metadata.signMetadata
+                      << metadata.adventureMapEventMetadata;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationFormat & metadata )
+    {
+        return stream >> metadata.dailyEvents >> metadata.rumors >> metadata.castleMetadata >> metadata.heroMetadata >> metadata.sphinxMetadata >> metadata.signMetadata
+                      >> metadata.adventureMapEventMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

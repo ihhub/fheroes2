@@ -2122,4 +2122,185 @@ namespace Maps
 
         return false;
     }
+
+    void changeLanguage( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( language == map.mainLanguage ) {
+            // Nothing to be done as this is the current language.
+            return;
+        }
+
+        // Save the existing language as a translation.
+        auto & translation = map.translations[map.mainLanguage];
+        translation.name = map.name;
+        translation.description = map.description;
+        translation.creatorNotes = map.creatorNotes;
+
+        auto & translationInfo = map.translationInfo[map.mainLanguage];
+        translationInfo = {};
+
+        translationInfo.dailyEvents.reserve( map.dailyEvents.size() );
+        for ( const auto & event : map.dailyEvents ) {
+            translationInfo.dailyEvents.emplace_back( event.message );
+        }
+
+        translationInfo.rumors.reserve( map.rumors.size() );
+        for ( const auto & rumor : map.rumors ) {
+            translationInfo.rumors.emplace_back( rumor );
+        }
+
+        for ( const auto & [tileId, castleInfo] : map.castleMetadata ) {
+            translationInfo.castleMetadata.try_emplace( tileId, castleInfo.customName );
+        }
+
+        for ( const auto & [tileId, heroInfo] : map.heroMetadata ) {
+            translationInfo.heroMetadata.try_emplace( tileId, heroInfo.customName );
+        }
+
+        for ( const auto & [tileId, sphinxInfo] : map.sphinxMetadata ) {
+            auto & info = translationInfo.sphinxMetadata[tileId];
+            info.riddle = sphinxInfo.riddle;
+            info.answers = sphinxInfo.answers;
+        }
+
+        for ( const auto & [tileId, signInfo] : map.signMetadata ) {
+            translationInfo.signMetadata.try_emplace( tileId, signInfo.message );
+        }
+
+        for ( const auto & [tileId, eventInfo] : map.adventureMapEventMetadata ) {
+            translationInfo.adventureMapEventMetadata.try_emplace( tileId, eventInfo.message );
+        }
+
+        loadTranslation( map, language );
+
+        // Remove the language from the translations.
+        removeTranslation( map, language );
+
+        map.mainLanguage = language;
+    }
+
+    void setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( !loadTranslation( map, language ) ) {
+            return;
+        }
+
+        if ( map.mainLanguage != language ) {
+            // Add just an empty entry to show that the main language is also being supported.
+            map.translations.emplace( map.mainLanguage, Maps::Map_Format::TranslationBaseMapMetadata{} );
+        }
+
+        map.mainLanguage = language;
+        map.translations.erase( language );
+    }
+
+    bool loadTranslation( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( language == map.mainLanguage ) {
+            // Nothing to be done as this is the current language.
+            return true;
+        }
+
+        // Check whether the language exists in the list of translations.
+        // If it doesn't then leave all texts intact.
+        auto translationIter = map.translations.find( language );
+        if ( translationIter == map.translations.end() ) {
+            return false;
+        }
+
+        // The translation exists. Restore if possible the information.
+        // Here is the tricky part: we have no idea whether an empty text was left intentional.
+        // Therefore, the assumption we are taking that empty texts are intentional.
+        auto & translation = translationIter->second;
+        map.name = std::move( translation.name );
+        map.description = std::move( translation.description );
+        map.creatorNotes = std::move( translation.creatorNotes );
+
+        return true;
+    }
+
+    bool loadTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( language == map.mainLanguage ) {
+            // Nothing to be done as this is the current language.
+            return true;
+        }
+
+        if ( !loadTranslation( static_cast<Maps::Map_Format::BaseMapFormat &>( map ), language ) ) {
+            return false;
+        }
+
+        auto translationInfoIter = map.translationInfo.find( language );
+        if ( translationInfoIter == map.translationInfo.end() ) {
+            // Object information doesn't exist.
+            // Nothing we need to do here.
+            return true;
+        }
+
+        auto & translationInfo = translationInfoIter->second;
+
+        // Daily events should be in order. However, if some events are deleted or added the order is not preserved.
+        if ( map.dailyEvents.size() == translationInfo.dailyEvents.size() ) {
+            // We assume that these are the same events.
+            for ( size_t i = 0; i < map.dailyEvents.size(); ++i ) {
+                map.dailyEvents[i].message = std::move( translationInfo.dailyEvents[i] );
+            }
+        }
+
+        map.rumors = std::move( translationInfo.rumors );
+
+        // The below objects might not even exist on the map so we need to verify their presence before modifying them.
+        for ( auto & [tileId, castleInfo] : translationInfo.castleMetadata ) {
+            auto iter = map.castleMetadata.find( tileId );
+            if ( iter == map.castleMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.customName = std::move( castleInfo );
+        }
+
+        for ( auto & [tileId, heroInfo] : translationInfo.heroMetadata ) {
+            auto iter = map.heroMetadata.find( tileId );
+            if ( iter == map.heroMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.customName = std::move( heroInfo );
+        }
+
+        for ( auto & [tileId, sphinxInfo] : translationInfo.sphinxMetadata ) {
+            auto iter = map.sphinxMetadata.find( tileId );
+            if ( iter == map.sphinxMetadata.end() ) {
+                continue;
+            }
+            iter->second.riddle = std::move( sphinxInfo.riddle );
+            iter->second.answers = std::move( sphinxInfo.answers );
+        }
+
+        for ( auto & [tileId, signInfo] : translationInfo.signMetadata ) {
+            auto iter = map.signMetadata.find( tileId );
+            if ( iter == map.signMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.message = std::move( signInfo );
+        }
+
+        for ( auto & [tileId, eventInfo] : translationInfo.adventureMapEventMetadata ) {
+            auto iter = map.adventureMapEventMetadata.find( tileId );
+            if ( iter == map.adventureMapEventMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.message = std::move( eventInfo );
+        }
+
+        return true;
+    }
+
+    void removeTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        map.translations.erase( language );
+        map.translationInfo.erase( language );
+    }
 }
