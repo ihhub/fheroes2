@@ -62,15 +62,11 @@ namespace
     class LanguageListBox final : public Interface::ListBox<fheroes2::SupportedLanguage>
     {
     public:
+        using Interface::ListBox<fheroes2::SupportedLanguage>::ListBox;
+
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListDoubleClick;
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListSingleClick;
         using Interface::ListBox<fheroes2::SupportedLanguage>::ActionListPressRight;
-
-        explicit LanguageListBox( const fheroes2::Point & pt )
-            : ListBox( pt )
-        {
-            // Do nothing.
-        }
 
         void RedrawItem( const fheroes2::SupportedLanguage & language, int32_t posX, int32_t posY, bool current ) override
         {
@@ -103,11 +99,6 @@ namespace
         bool isDoubleClicked() const
         {
             return _isDoubleClicked;
-        }
-
-        void resetDoubleClickedState()
-        {
-            _isDoubleClicked = false;
         }
 
         void ActionListSingleClick( fheroes2::SupportedLanguage & /*unused*/ ) override
@@ -175,8 +166,8 @@ namespace Editor
 
         std::vector<fheroes2::SupportedLanguage> languages;
         languages.emplace_back( mapFormat.mainLanguage );
-        for ( const auto & languageInfo : mapFormat.translations ) {
-            languages.emplace_back( languageInfo.first );
+        for ( const auto & [language, info] : mapFormat.translations ) {
+            languages.emplace_back( language );
         }
 
         const std::vector<fheroes2::SupportedLanguage> originalSelection{ languages };

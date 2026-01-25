@@ -2187,7 +2187,7 @@ namespace Maps
 
         if ( map.mainLanguage != language ) {
             // Add just an empty entry to show that the main language is also being supported.
-            map.translations.emplace( map.mainLanguage, Maps::Map_Format::TranslationBaseMapMetadata{} );
+            map.translations.try_emplace( map.mainLanguage, Maps::Map_Format::TranslationBaseMapMetadata{} );
         }
 
         map.mainLanguage = language;

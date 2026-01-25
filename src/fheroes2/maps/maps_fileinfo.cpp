@@ -530,8 +530,8 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     mainLanguage = map.mainLanguage;
 
     translations = {};
-    for ( const auto & languageInfo : map.translations ) {
-        translations.emplace_back( languageInfo.first );
+    for ( const auto & [language, info] : map.translations ) {
+        translations.emplace_back( language );
     }
 
     return true;
