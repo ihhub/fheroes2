@@ -2240,11 +2240,10 @@ namespace Maps
         auto & translationInfo = translationInfoIter->second;
 
         // Daily events should be in order. However, if some events are deleted or added the order is not preserved.
-        if ( map.dailyEvents.size() == translationInfo.dailyEvents.size() ) {
-            // We assume that these are the same events.
-            for ( size_t i = 0; i < map.dailyEvents.size(); ++i ) {
-                map.dailyEvents[i].message = std::move( translationInfo.dailyEvents[i] );
-            }
+        // We assume that the map maker preserves the order.
+        const size_t minDailyEvents = std::min( map.dailyEvents.size(), translationInfo.dailyEvents.size() );
+        for ( size_t i = 0; i < minDailyEvents; ++i ) {
+            map.dailyEvents[i].message = std::move( translationInfo.dailyEvents[i] );
         }
 
         map.rumors = std::move( translationInfo.rumors );
