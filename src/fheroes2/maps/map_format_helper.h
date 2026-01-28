@@ -129,7 +129,9 @@ namespace Maps
     // Set the current in-game language for the map. This should be used only for lists of maps displayed for players.
     // Take a note that this function can create a "fake" entry in translations to keep a proper list of languages
     // which we display for map information.
-    void setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language );
+    //
+    // Return true only if the language was successfully set.
+    bool setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language );
 
     // This function sets translation language for the map. It should be used only for the game mode and not for the Editor as
     // it doesn't save the current language into the list of translations.

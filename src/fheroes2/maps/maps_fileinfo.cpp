@@ -399,7 +399,14 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
 
     if ( !isForEditor ) {
         // Since we loading this map for the game, we need to set the language of the map.
-        Maps::setInGameLanguage( map, currentLanguage );
+        if ( !Maps::setInGameLanguage( map, currentLanguage ) ) {
+            // The currently chosen language is not available in the map.
+            // Try to use the default language then - English.
+            // Even if it fails, the map's first language is going to be used after.
+            if ( currentLanguage != fheroes2::SupportedLanguage::English ) {
+                Maps::setInGameLanguage( map, fheroes2::SupportedLanguage::English );
+            }
+        }
     }
 
     if ( !loadResurrectionMap( map, std::move( filePath ) ) ) {

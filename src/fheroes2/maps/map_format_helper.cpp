@@ -2179,10 +2179,10 @@ namespace Maps
         map.mainLanguage = language;
     }
 
-    void setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language )
+    bool setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language )
     {
         if ( !loadTranslation( map, language ) ) {
-            return;
+            return false;
         }
 
         if ( map.mainLanguage != language ) {
@@ -2192,6 +2192,8 @@ namespace Maps
 
         map.mainLanguage = language;
         map.translations.erase( language );
+
+        return true;
     }
 
     bool loadTranslation( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language )
