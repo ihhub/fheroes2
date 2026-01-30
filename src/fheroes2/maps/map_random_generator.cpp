@@ -941,7 +941,7 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            for ( int count = 0; count < regionConfiguration.treasureCount * 2; ++count ) {
+            for ( int32_t count = 0; count < regionConfiguration.treasureCount * 2; ++count ) {
                 int32_t tileIndex = Rand::GetWithGen( pathTiles, randomGenerator );
 
                 const int32_t direction = Rand::GetWithGen( Direction::allNeighboringDirections, randomGenerator );
