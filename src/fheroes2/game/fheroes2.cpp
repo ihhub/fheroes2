@@ -69,11 +69,9 @@
 #include "game_video.h"
 #include "game_video_type.h"
 #include "h2d.h"
-#include "h2d_file.h"
 #include "icn.h"
 #include "image.h"
 #include "image_palette.h"
-#include "image_tool.h"
 #include "localevent.h"
 #include "logging.h"
 #include "math_base.h"
@@ -366,96 +364,6 @@ int main( int argc, char ** argv )
 
         // Initialize game data.
         Game::Init();
-
-        auto makeSamePixelsTransparent = []( const fheroes2::Sprite & original, fheroes2::Sprite & image ) {
-            assert( original.width() == image.width() && original.height() == image.height() && !original.singleLayer() && !image.singleLayer() );
-
-            const size_t pixelCount = static_cast<size_t>( original.width() ) * original.height();
-            const uint8_t * originalData = original.image();
-            const uint8_t * originalTransform = original.transform();
-            uint8_t * imageData = image.image();
-            uint8_t * imageTransform = image.transform();
-
-            for ( size_t pos = 0; pos < pixelCount; ++pos ) {
-                if ( originalData[pos] == imageData[pos] && originalTransform[pos] == imageTransform[pos] ) {
-                    imageData[pos] = 0;
-                    imageTransform[pos] = 1;
-                }
-            }
-        };
-
-        fheroes2::H2DReader re;
-        re.open( "..\\files\\data\\resurrection.h2d" );
-        fheroes2::H2DWriter wr;
-        wr.add( re );
-
-        const std::string imgPath = "..\\w_hole\\";
-
-        auto splitAndSaveImage = [&imgPath, &wr]( const fheroes2::Sprite & image, const int32_t imageNumber ) {
-            const int32_t imageWidth = image.width();
-
-            const int32_t countX = imageWidth / 32;
-            const int32_t countY = image.height() / 32;
-
-            const uint8_t * transform = image.transform();
-
-            for ( int32_t i = 0; i < countX; ++i ) {
-                for ( int32_t j = 0; j < countY; ++j ) {
-                    int32_t minX = 31;
-                    int32_t maxX = 0;
-                    int32_t minY = 31;
-                    int32_t maxY = 0;
-
-                    int32_t offsetX = i * 32;
-                    int32_t offsetY = j * 32;
-
-                    for ( int32_t x = 0; x < 32; ++x ) {
-                        for ( int32_t y = 0; y < 32; ++y ) {
-                            if ( transform[offsetX + x + imageWidth * ( offsetY + y )] == 0 ) {
-                                minX = std::min( minX, x );
-                                minY = std::min( minY, y );
-                                maxX = std::max( maxX, x );
-                                maxY = std::max( maxY, y );
-                            }
-                        }
-                    }
-
-                    fheroes2::Sprite part = fheroes2::Crop( image, offsetX + minX, offsetY + minY, maxX - minX + 1, maxY - minY + 1 );
-                    part.setPosition( minX, minY );
-
-                    std::string imageName = "waterhole_animation_" + std::to_string( imageNumber - 1 ) + "_x" + std::to_string( i ) + "_y" + std::to_string( j );
-
-                    fheroes2::Save( part, imgPath + imageName + ".bmp" );
-
-                    fheroes2::writeImageToH2D( wr, imageName + ".image", part );
-                }
-            }
-        };
-
-        auto compesateWaterColorCycling = []( fheroes2::Sprite & image, const uint8_t stepId ) {
-            const int32_t imageSize = image.width() * image.height();
-            uint8_t * imageData = image.image();
-            const uint8_t * imageEnd = imageData + imageSize;
-
-            for ( ; imageData != imageEnd; ++imageData ) {
-                if ( *imageData > 230UI8 && *imageData < 236UI8 ) {
-                    *imageData = ( *imageData - 231UI8 + 5UI8 - ( stepId % 5UI8 ) ) % 5UI8 + 231UI8;
-                }
-            }
-        };
-
-        for ( int32_t i = 1; i < 7; ++i ) {
-            fheroes2::Sprite temp;
-            fheroes2::Load( imgPath + "Waterhole frame" + std::to_string( i ) + ".bmp", temp );
-
-            uint8_t transp = 23; // temp.image()[0];
-            fheroes2::ReplaceColorIdByTransformId( temp, transp, 1 );
-            fheroes2::ReplaceColorId( temp, transp, 0 );
-
-            splitAndSaveImage( temp, i );
-        }
-
-        wr.write( imgPath + "resurrection.h2d" );
 
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
