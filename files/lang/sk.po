@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3947,7 +3947,7 @@ msgstr "Typ mapy:\n"
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr "Jazyk"
 
 msgid "Lose all your heroes and towns."
@@ -4899,6 +4899,36 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Zobraziť systémové možnosti editora, ktoré umožňujú prispôsobiť editor."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Prispej na"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Jazyk"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Dodatočné programovanie"
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Zvoľ jazyk hry:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Načítať existujúcu mapu."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
@@ -5091,12 +5121,6 @@ msgstr ""
 msgid "ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
@@ -5226,6 +5250,13 @@ msgstr ""
 #, fuzzy
 msgid "Delete an existing rumor."
 msgstr "Načítať existujúcu mapu."
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Jazyk"
 
 msgid ""
 "\n"

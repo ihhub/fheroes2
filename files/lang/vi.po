@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3947,7 +3947,7 @@ msgstr "Kiểu Bản đồ:\n"
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr "Ngôn ngữ"
 
 msgid "Lose all your heroes and towns."
@@ -4902,6 +4902,36 @@ msgstr ""
 "Xem các tùy chọn hệ thống soạn thảo, cho phép ngươi tùy chỉnh trình chỉnh "
 "sửa."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Hỗ trợ chúng tôi tại"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Ngôn ngữ"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Lập trình Bổ sung"
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Chọn Ngôn ngữ Trò chơi:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Tải một bản đồ đã có."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
@@ -5092,12 +5122,6 @@ msgstr ""
 msgid "ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
@@ -5229,6 +5253,13 @@ msgstr ""
 #, fuzzy
 msgid "Delete an existing rumor."
 msgstr "Tải một bản đồ đã có."
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Ngôn ngữ"
 
 msgid ""
 "\n"

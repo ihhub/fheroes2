@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3972,7 +3972,7 @@ msgstr "Тип на карта:\n"
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr "Език"
 
 msgid "Lose all your heroes and towns."
@@ -4937,6 +4937,36 @@ msgstr ""
 "Виж системните опции на редактора, които ти позволяват да персонализираш "
 "редактора."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Подкрепете ни на"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Език"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Допълнително програмиране"
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Език на играта:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Зареди съществуваща карта."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
@@ -5127,12 +5157,6 @@ msgstr ""
 msgid "ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
@@ -5264,6 +5288,13 @@ msgstr ""
 #, fuzzy
 msgid "Delete an existing rumor."
 msgstr "Зареди съществуваща карта."
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Език"
 
 msgid ""
 "\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-12-19 18:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3884,10 +3884,11 @@ msgstr "Тип карты"
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -4789,6 +4790,37 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Открывает окно системных настроек редактора карт."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Поддержите нас"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Такой слух уже есть в списке."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Нажмите, чтобы изменить фракцию."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Язык"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Добавить дополнительное событие."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Выберите язык:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Удалить выбранное событие."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr "Не удалось сгенерировать случайную карту с указанными параметрами."
 
@@ -4956,15 +4988,6 @@ msgstr "ЯЗЫК"
 msgid "ABOUT"
 msgstr "О КАРТЕ"
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Текущий язык карты - %{oldLanguage}. Вы собираетесь сменить его на "
-"%{newLanguage}, после чего некоторые сообщения могут отображаться "
-"некорректно. Вы хотите продолжить?"
-
 msgid "Change Map Name"
 msgstr "Изменить название карты"
 
@@ -5078,6 +5101,15 @@ msgstr "Удалить слух"
 
 msgid "Delete an existing rumor."
 msgstr "Удалить выбранный слух."
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Язык:\n"
 
 msgid ""
 "\n"
@@ -12570,3 +12602,12 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid ""
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
+#~ msgstr ""
+#~ "Текущий язык карты - %{oldLanguage}. Вы собираетесь сменить его на "
+#~ "%{newLanguage}, после чего некоторые сообщения могут отображаться "
+#~ "некорректно. Вы хотите продолжить?"
