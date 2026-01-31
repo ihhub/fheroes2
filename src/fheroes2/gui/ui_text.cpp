@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -525,6 +525,44 @@ namespace fheroes2
         _text += truncationSymbol;
     }
 
+    void Text::fitToArea( const int32_t maxWidth, const int32_t maxHeight )
+    {
+        assert( maxWidth > 0 && maxHeight > 1 ); // Why is the limit less than 1?
+        if ( maxWidth <= 0 || maxHeight <= 0 ) {
+            return;
+        }
+
+        if ( _text.empty() ) {
+            // Nothing needs to be done.
+            return;
+        }
+
+        const auto languageSwitcher = getLanguageSwitcher( *this );
+        const FontCharHandler charHandler( _fontType );
+
+        if ( height( maxWidth ) <= maxHeight ) {
+            // Nothing we need to do as the text fits to the area.
+            return;
+        }
+
+        while ( !_text.empty() && ( height( maxWidth ) > maxHeight ) ) {
+            _text.pop_back();
+        }
+
+        // We need to add truncation symbol.
+        _text += truncationSymbol;
+        while ( height( maxWidth ) > maxHeight ) {
+            // Remove the truncation symbol and one more character before it.
+            for ( size_t i = 0; i < truncationSymbol.size(); ++i ) {
+                _text.pop_back();
+            }
+
+            _text.pop_back();
+
+            _text += truncationSymbol;
+        }
+    }
+
     void Text::_getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
     {
         assert( !_text.empty() );
@@ -601,11 +639,14 @@ namespace fheroes2
                             // The '-' symbol has been found. In this case we consider everything after it as a separate word.
                             const int32_t postHyphenCharCount = static_cast<int32_t>( data - hyphenPos ) - 1;
 
-                            lineCharCount -= postHyphenCharCount;
-                            lineWidth -= getLineWidth( data - postHyphenCharCount, postHyphenCharCount, charHandler, true );
+                            // Only split at the hyphen if there are characters after it to move to the next line.
+                            if ( postHyphenCharCount > 0 ) {
+                                lineCharCount -= postHyphenCharCount;
+                                lineWidth -= getLineWidth( data - postHyphenCharCount, postHyphenCharCount, charHandler, true );
 
-                            data = hyphenPos;
-                            ++data;
+                                data = hyphenPos;
+                                ++data;
+                            }
                         }
                         else if ( firstLineOffsetX > 0 && ( textLineInfos.empty() || textLineInfos.back().offsetY == offsetY ) ) {
                             // This word was not the first in the line so we can move it to the next line.
@@ -1335,11 +1376,6 @@ namespace fheroes2
             width += getWidth( c );
         }
         return width;
-    }
-
-    bool FontCharHandler::_isValid( const uint8_t character ) const
-    {
-        return character >= 0x21 && character <= _charLimit;
     }
 
     int32_t FontCharHandler::_getSpaceCharWidth() const

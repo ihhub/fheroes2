@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -76,4 +76,6 @@ namespace Difficulty
 
     bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
     bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
+
+    bool isBasicAIBattleLogicApplicable( const int32_t difficulty, const bool isControlledByHuman );
 }

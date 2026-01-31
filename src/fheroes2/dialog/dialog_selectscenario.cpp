@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,8 +26,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <optional>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -42,6 +44,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_constants.h"
@@ -110,9 +113,9 @@ namespace
         COUT( "No maps exist for the chosen type. Returning to the previous menu." )
     }
 
-    void ShowToolTip( const std::string & header, const std::string & body )
+    void ShowToolTip( std::string header, std::string body )
     {
-        fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
+        fheroes2::showStandardTextMessage( std::move( header ), std::move( body ), Dialog::ZERO );
     }
 
     void PlayersToolTip( const Maps::FileInfo * /* info */ = nullptr )
@@ -126,10 +129,32 @@ namespace
         ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
     }
 
-    void MapTypeToolTip( const Maps::FileInfo * /* info */ = nullptr )
+    const char * getMapTypeName( const GameVersion version )
     {
-        ShowToolTip( _( "Map Type" ),
-                     _( "Indicates whether the map is made for \"The Succession Wars\", \"The Price of Loyalty\" or \"Resurrection\" version of the game." ) );
+        switch ( version ) {
+        case GameVersion::SUCCESSION_WARS:
+            return _( "The Succession Wars" );
+        case GameVersion::PRICE_OF_LOYALTY:
+            return _( "The Price of Loyalty" );
+        case GameVersion::RESURRECTION:
+            return _( "Resurrection" );
+        default:
+            // Did you add a new version?
+            assert( 0 );
+            break;
+        }
+
+        return "";
+    }
+
+    void MapTypeToolTip( const Maps::FileInfo * info )
+    {
+        assert( info != nullptr );
+
+        std::string description{ _( "This map is made for \"%{game-version}\" version of the game." ) };
+        StringReplace( description, "%{game-version}", getMapTypeName( info->version ) );
+
+        ShowToolTip( _( "Map Type" ), std::move( description ) );
     }
 
     void mapInfo( const Maps::FileInfo * info )
@@ -141,25 +166,16 @@ namespace
         fheroes2::MultiFontText body;
 
         body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
-        switch ( info->version ) {
-        case GameVersion::SUCCESSION_WARS:
-            body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
-            break;
-        case GameVersion::PRICE_OF_LOYALTY:
-            body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
-            break;
-        case GameVersion::RESURRECTION:
-            body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
-            break;
-        default:
-            // Did you add a new map version? Add the logic above!
-            assert( 0 );
-            break;
-        }
+        body.add( { getMapTypeName( info->version ), fheroes2::FontType::normalWhite() } );
 
         if ( info->version == GameVersion::RESURRECTION ) {
-            body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
+            body.add( { _( "\n\nSupported languages:\n" ), fheroes2::FontType::normalYellow() } );
             body.add( { fheroes2::getLanguageName( info->mainLanguage ), fheroes2::FontType::normalWhite() } );
+
+            for ( const auto language : info->translations ) {
+                body.add( { "\n", fheroes2::FontType::normalYellow() } );
+                body.add( { fheroes2::getLanguageName( language ), fheroes2::FontType::normalWhite() } );
+            }
         }
 
         body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
@@ -191,7 +207,7 @@ namespace
             return;
         }
 
-        ShowToolTip( _( "Loss Condition" ), msg );
+        ShowToolTip( _( "Loss Condition" ), std::move( msg ) );
     }
 
     void VictoryConditionInfo( const Maps::FileInfo * info )
@@ -222,7 +238,7 @@ namespace
             assert( 0 );
             return;
         }
-        ShowToolTip( _( "Victory Condition" ), msg );
+        ShowToolTip( _( "Victory Condition" ), std::move( msg ) );
     }
 
     size_t GetInitialMapId( const MapsFileInfoList & lists )
@@ -327,11 +343,12 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 
     fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite(), info.getSupportedLanguage() );
     descriptionText.setUniformVerticalAlignment( false );
+    descriptionText.fitToArea( SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, SELECTED_SCENARIO_DESCRIPTION_HEIGHT - 3 );
     descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X + 4, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 3,
                           SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, display );
 }
 
-void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
+void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t baseYOffset, fheroes2::Display & display ) const
 {
     fheroes2::Text mapName{ info.name,
                             { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) },
@@ -647,7 +664,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                 scenarioList.RemoveSelected();
 
                 scenarioList.updateScrollBarImage();
-                scenarioList.SetCurrent( std::max( selectedId - 1, 0 ) );
+                scenarioList.SetCurrent( std::max<int32_t>( selectedId - 1, 0 ) );
 
                 // Remove the map from all lists.
                 small.erase( std::remove_if( small.begin(), small.end(), [&removedMapInfo]( const auto & info ) { return info.filename == removedMapInfo.filename; } ),
@@ -765,7 +782,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
             ShowIfFound( scenarioList, le.getMouseCursorPos(), MapTypeToolTip );
         }
         else if ( le.isMouseRightButtonPressedInArea( curMapType ) ) {
-            MapTypeToolTip();
+            MapTypeToolTip( &( scenarioList.GetCurrent() ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( mapNames ) ) {
             ShowIfFound( scenarioList, le.getMouseCursorPos(), mapInfo );
@@ -791,7 +808,9 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                 _( "The map difficulty of the currently selected map. The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
         }
         else if ( le.isMouseRightButtonPressedInArea( curDescription ) ) {
-            ShowToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
+            const fheroes2::Text header( _( "Selected Map Description" ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( scenarioList.GetCurrent().description, fheroes2::FontType::normalWhite(), scenarioList.GetCurrent().mainLanguage );
+            fheroes2::showMessage( header, body, Dialog::ZERO, {} );
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1817,6 +1817,38 @@ namespace
             fheroes2::Copy( font[69], 2, 5, font[255 - 32], 1, 2, 6, 2 );
             fheroes2::Copy( font[255 - 32], 6, 4, font[255 - 32], 6, 3, 1, 1 );
             updateNormalFontLetterShadow( font[255 - 32] );
+
+            // Cyrillic Capital Lje.
+            font[138 - 32].resize( font[203 - 32].width() + font[220 - 32].width() - 6, font[203 - 32].height() );
+            font[138 - 32].reset();
+            fheroes2::Copy( font[203 - 32], 0, 0, font[138 - 32], 0, 0, font[203 - 32].width(), font[203 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 4, 0, font[138 - 32], font[203 - 32].width() - 2, 0, font[220 - 32].width() - 4, font[220 - 32].height() );
+            font[138 - 32].setPosition( font[203 - 32].x(), font[203 - 32].y() );
+            updateNormalFontLetterShadow( font[138 - 32] );
+
+            // Cyrillic Capital Nje.
+            font[140 - 32].resize( font[205 - 32].width() + font[220 - 32].width() - 7, font[205 - 32].height() );
+            font[140 - 32].reset();
+            fheroes2::Copy( font[205 - 32], 0, 0, font[140 - 32], 0, 0, font[205 - 32].width(), font[205 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 4, 0, font[140 - 32], font[205 - 32].width() - 3, 0, font[220 - 32].width() - 4, font[220 - 32].height() );
+            font[140 - 32].setPosition( font[205 - 32].x(), font[205 - 32].y() );
+            updateNormalFontLetterShadow( font[140 - 32] );
+
+            // Cyrillic Lowercase Lje.
+            font[154 - 32].resize( font[235 - 32].width() + font[252 - 32].width() - 5, font[235 - 32].height() );
+            font[154 - 32].reset();
+            fheroes2::Copy( font[235 - 32], 0, 0, font[154 - 32], 0, 0, font[235 - 32].width(), font[235 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[154 - 32], font[235 - 32].width() - 3, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[154 - 32].setPosition( font[235 - 32].x(), font[235 - 32].y() );
+            updateNormalFontLetterShadow( font[154 - 32] );
+
+            // Cyrillic Lowercase Nje.
+            font[156 - 32].resize( font[237 - 32].width() + font[252 - 32].width() - 5, font[237 - 32].height() );
+            font[156 - 32].reset();
+            fheroes2::Copy( font[237 - 32], 0, 0, font[156 - 32], 0, 0, font[237 - 32].width(), font[237 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[156 - 32], font[237 - 32].width() - 3, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[156 - 32].setPosition( font[237 - 32].x(), font[237 - 32].y() );
+            updateNormalFontLetterShadow( font[156 - 32] );
         }
 
         // Small font.
@@ -1835,7 +1867,7 @@ namespace
             fheroes2::Copy( font[37], 0, 0, font[168 - 32], 0, 2, font[37].width(), font[37].height() );
             fheroes2::Copy( font[37], 3, 0, font[168 - 32], 3, 0, 1, 1 );
             fheroes2::Copy( font[37], 3, 0, font[168 - 32], 5, 0, 1, 1 );
-            font[168 - 32].setPosition( font[37].x(), font[37].y() );
+            font[168 - 32].setPosition( font[37].x(), font[37].y() - 2 );
             updateSmallFontLetterShadow( font[168 - 32] );
 
             font[161 - 32].resize( font[57 + offset].width(), font[57 + offset].height() + 2 );
@@ -2282,6 +2314,38 @@ namespace
             fheroes2::Copy( font[33], 1, 5, font[255 - 32], 1, 3, 3, 2 );
             font[255 - 32].setPosition( font[65].x(), font[65].y() );
             updateSmallFontLetterShadow( font[255 - 32] );
+
+            // Cyrillic Capital Lje.
+            font[138 - 32].resize( font[203 - 32].width() + font[220 - 32].width() - 4, font[203 - 32].height() );
+            font[138 - 32].reset();
+            fheroes2::Copy( font[203 - 32], 0, 0, font[138 - 32], 0, 0, font[203 - 32].width(), font[203 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 2, 0, font[138 - 32], font[203 - 32].width() - 2, 0, font[220 - 32].width() - 2, font[220 - 32].height() );
+            font[138 - 32].setPosition( font[203 - 32].x(), font[203 - 32].y() );
+            updateSmallFontLetterShadow( font[138 - 32] );
+
+            // Cyrillic Capital Nje.
+            font[140 - 32].resize( font[205 - 32].width() + font[220 - 32].width() - 4, font[205 - 32].height() );
+            font[140 - 32].reset();
+            fheroes2::Copy( font[205 - 32], 0, 0, font[140 - 32], 0, 0, font[205 - 32].width(), font[205 - 32].height() );
+            fheroes2::Copy( font[220 - 32], 2, 0, font[140 - 32], font[205 - 32].width() - 2, 0, font[220 - 32].width() - 2, font[220 - 32].height() );
+            font[140 - 32].setPosition( font[205 - 32].x(), font[205 - 32].y() );
+            updateSmallFontLetterShadow( font[140 - 32] );
+
+            // Cyrillic Lowercase Lje.
+            font[154 - 32].resize( font[235 - 32].width() + font[252 - 32].width() - 3, font[235 - 32].height() );
+            font[154 - 32].reset();
+            fheroes2::Copy( font[235 - 32], 0, 0, font[154 - 32], 0, 0, font[235 - 32].width(), font[235 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[154 - 32], font[235 - 32].width() - 1, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[154 - 32].setPosition( font[235 - 32].x(), font[235 - 32].y() );
+            updateSmallFontLetterShadow( font[154 - 32] );
+
+            // Cyrillic Lowercase Nje.
+            font[156 - 32].resize( font[237 - 32].width() + font[252 - 32].width() - 3, font[237 - 32].height() );
+            font[156 - 32].reset();
+            fheroes2::Copy( font[237 - 32], 0, 0, font[156 - 32], 0, 0, font[237 - 32].width(), font[237 - 32].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[156 - 32], font[237 - 32].width() - 1, 0, font[252 - 32].width() - 2, font[252 - 32].height() );
+            font[156 - 32].setPosition( font[237 - 32].x(), font[237 - 32].y() );
+            updateSmallFontLetterShadow( font[156 - 32] );
         }
     }
 
@@ -5125,8 +5189,8 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        for ( const int & charCode : { 138, 140, 141, 142, 143, 175, 192, 193, 194, 195, 196, 197, 198, 200, 201, 203,
-                                       204, 205, 206, 207, 209, 210, 211, 212, 213, 214, 216, 218, 219, 220, 221 } ) {
+        for ( const int charCode : { 138, 140, 141, 142, 143, 175, 192, 193, 194, 195, 196, 197, 198, 200, 201, 203,
+                                     204, 205, 206, 207, 209, 210, 211, 212, 213, 214, 216, 218, 219, 220, 221 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
         released[217 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 4 );
@@ -5775,6 +5839,21 @@ namespace
         fheroes2::Flip( released[176], 0, 0, released[191], 0, 0, released[176].width(), released[176].height(), true, false );
         fheroes2::DrawLine( released[191], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[191], { offset + 3, offset + 6 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+
+        // Cyrillic Capital Lje
+        released[106].resize( released[171].width() + released[188].width() - 8, released[171].height() );
+        released[106].reset();
+        fheroes2::Copy( released[171], 0, 0, released[106], 0, 0, released[171].width(), released[171].height() );
+        fheroes2::Copy( released[188], 2, 0, released[106], released[171].width() - 6, 0, released[188].width() - 2, released[188].height() );
+        fheroes2::FillTransform( released[106], 7, 3, 1, 1, 1 );
+        released[106].setPosition( released[171].x(), released[171].y() );
+
+        // Cyrillic Capital Nje
+        released[108].resize( released[173].width() + released[188].width() - 7, released[173].height() );
+        released[108].reset();
+        fheroes2::Copy( released[173], 0, 0, released[108], 0, 0, released[173].width(), released[173].height() );
+        fheroes2::Copy( released[188], 3, 0, released[108], released[173].width() - 4, 0, released[188].width() - 4, released[188].height() );
+        released[108].setPosition( released[173].x(), released[173].y() );
     }
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
@@ -5787,18 +5866,18 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        for ( const int & charCode : { 192, 193, 194, 195, 200, 201, 202, 205, 206, 209, 211, 212, 213, 217, 218, 219 } ) {
+        for ( const int charCode : { 192, 193, 194, 195, 200, 201, 202, 205, 206, 209, 211, 212, 213, 217, 218, 219 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
 
-        for ( const int & charCode : { 196, 197, 203, 207, 214, 220 } ) {
+        for ( const int charCode : { 196, 197, 203, 207, 214, 220 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
         released[216 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 1 );
 
         // Offset A-related letters to have less space to neighboring letters. Keep the y-offset change from earlier.
-        for ( const int & charCode : { 65, 192, 193, 194, 195, 196, 197, 198 } ) {
+        for ( const int charCode : { 65, 192, 193, 194, 195, 196, 197, 198 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x - 2, released[charCode - 32].y() );
         }
 
@@ -6115,7 +6194,7 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        for ( const int & charCode : { 214, 220, 221 } ) {
+        for ( const int charCode : { 214, 220, 221 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
 
@@ -6605,7 +6684,7 @@ namespace fheroes2
         uint8_t * imageY = image.image();
         uint8_t * transformY = image.transform();
 
-        const int32_t centerY = std::max( 1, ( height / 2 ) - height % 2 );
+        const int32_t centerY = std::max<int32_t>( 1, ( height / 2 ) - height % 2 );
         const uint8_t dColor = outsideColor - insideColor;
 
         for ( int32_t row = 0; row < height; ++row, imageY += width, transformY += width ) {

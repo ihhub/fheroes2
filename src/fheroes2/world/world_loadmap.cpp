@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -719,6 +719,16 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
+    const auto currentLanguage = fheroes2::getCurrentLanguage();
+    if ( !Maps::loadTranslation( map, currentLanguage ) ) {
+        // The current game language is not supported by the map.
+        // Try to set the default language - English.
+        // Even if it fails, the first language of the map is going to be used.
+        if ( currentLanguage != fheroes2::SupportedLanguage::English ) {
+            Maps::loadTranslation( map, fheroes2::SupportedLanguage::English );
+        }
+    }
+
     width = map.width;
     height = map.width;
 
@@ -1084,7 +1094,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                             return false;
                         }
 
-                        const std::vector<int32_t> & skills = GameStatic::getSecondarySkillsForWitchsHut();
+                        const std::vector<int32_t> skills = GameStatic::getSecondarySkillsForWitchsHut();
 
                         return std::all_of( metadata.selectedItems.begin(), metadata.selectedItems.end(),
                                             [&skills]( const int32_t skillId ) { return std::find( skills.begin(), skills.end(), skillId ) != skills.end(); } );
@@ -1631,7 +1641,7 @@ void World::setUltimateArtifact()
         if ( !pool.empty() ) {
             const int32_t pos = Rand::Get( pool );
 
-            ultimate_artifact.Set( pos, getUltimateArtifact() );
+            _ultimateArtifact.Set( pos, getUltimateArtifact() );
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact has been placed at tile " << pos )
         }
@@ -1667,7 +1677,7 @@ void World::setUltimateArtifact()
         }
     }
 
-    ultimate_artifact.Set( pos, getUltimateArtifact() );
+    _ultimateArtifact.Set( pos, getUltimateArtifact() );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
 }

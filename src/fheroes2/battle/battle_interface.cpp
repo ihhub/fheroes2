@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -150,7 +150,7 @@ namespace
         int32_t distance = static_cast<int32_t>( std::round( getDistance( src, dst ) ) );
         const double angle = getAngle( src, dst );
 
-        const int32_t iterationCount = std::clamp( ( distance + 50 ) / 100, 3, 5 );
+        const int32_t iterationCount = std::clamp<int32_t>( ( distance + 50 ) / 100, 3, 5 );
 
         std::vector<std::pair<LightningPoint, LightningPoint>> lines;
         lines.emplace_back( LightningPoint( { 0, 0 }, 5 ), LightningPoint( { distance, 0 }, 3 ) );
@@ -165,7 +165,7 @@ namespace
                 middle.y /= 2;
 
                 const bool isPositive = ( Rand::Get( 1, 2 ) == 1 );
-                int32_t offsetY = std::max( 1, static_cast<int32_t>( Rand::Get( 1, 10 ) ) * distance / 100 );
+                int32_t offsetY = std::max<int32_t>( 1, static_cast<int32_t>( Rand::Get( 1, 10 ) ) * distance / 100 );
 
                 middle.y += isPositive ? offsetY : -offsetY;
 
@@ -269,14 +269,15 @@ namespace
         const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
 
         // Get a single rainbow line from the center of the luckSprite.
-        fheroes2::Image croppedRainbow( 1, rainbowThickness );
+        fheroes2::Image croppedRainbow;
         croppedRainbow._disableTransformLayer();
+        croppedRainbow.resize( 1, rainbowThickness );
         fheroes2::Copy( luckSprite, luckSprite.width() / 2, 0, croppedRainbow, 0, 0, 1, rainbowThickness );
         fheroes2::Image rainbowLine;
 
         if ( isVertical ) {
-            rainbowLine = fheroes2::Image( croppedRainbow.height(), croppedRainbow.width() );
             rainbowLine._disableTransformLayer();
+            rainbowLine.resize( croppedRainbow.height(), croppedRainbow.width() );
 
             // For a vertical rainbow orientation the line needs to be transposed.
             fheroes2::Transpose( croppedRainbow, rainbowLine );
@@ -1317,6 +1318,11 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
             _restorer = std::make_unique<fheroes2::ImageRestorer>( display, _renderingRoi.x, _renderingRoi.y, _renderingRoi.width, _renderingRoi.height );
         }
     }
+    else if ( !_restorer && !_isInsideBattleField ) {
+        // This can happen when the option is being toggled on and off.
+        // We need to create the restorer.
+        _restorer = std::make_unique<fheroes2::ImageRestorer>( display, _renderingRoi.x, _renderingRoi.y, _renderingRoi.width, _renderingRoi.height );
+    }
 
     int32_t unitRectIndex = 0;
     int32_t unitsProcessed = 0;
@@ -1611,6 +1617,11 @@ void Battle::Interface::redrawPreRender()
         }
         _turnOrder.redraw( _currentUnit, _contourColor, unit, _mainSurface, border.GetRect() );
     }
+    else {
+        // If the option is being turned off we need to restore the background and clear the restorer to avoid repeating the same image operation.
+        _turnOrder.restore();
+        _turnOrder.clear();
+    }
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
@@ -1876,7 +1887,8 @@ void Battle::Interface::RedrawArmies()
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
                     const int unitAnimState = unitOnCell->GetAnimationState();
                     const bool isStaticUnit = unitAnimState == Monster_Info::STATIC || unitAnimState == Monster_Info::IDLE;
-                    if ( isStaticUnit ) {
+                    // Either the unit is not moving or the unit is not being summoned.
+                    if ( isStaticUnit && ( !unitOnCell->Modes( CAP_SUMMONELEM ) || unitOnCell->GetCustomAlpha() == 255 ) ) {
                         troopCounter.emplace_back( unitOnCell );
                     }
 
@@ -2113,7 +2125,7 @@ void Battle::Interface::RedrawCover()
         if ( humanturn_spell.isValid() ) {
             switch ( humanturn_spell.GetID() ) {
             case Spell::COLDRING: {
-                for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
+                for ( const int32_t around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -2124,7 +2136,7 @@ void Battle::Interface::RedrawCover()
             case Spell::FIREBALL:
             case Spell::METEORSHOWER: {
                 highlightedCells.emplace( cell );
-                for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
+                for ( const int32_t around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -2134,7 +2146,7 @@ void Battle::Interface::RedrawCover()
             }
             case Spell::FIREBLAST: {
                 highlightedCells.emplace( cell );
-                for ( const int32_t & around : Board::GetDistanceIndexes( _currentCellIndex, 2 ) ) {
+                for ( const int32_t around : Board::GetDistanceIndexes( _currentCellIndex, 2 ) ) {
                     const Cell * nearbyCell = Board::GetCell( around );
                     if ( nearbyCell != nullptr ) {
                         highlightedCells.emplace( nearbyCell );
@@ -2182,7 +2194,7 @@ void Battle::Interface::RedrawCover()
         else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
                   && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
             highlightedCells.emplace( cell );
-            for ( const int32_t & around : Board::GetAroundIndexes( _currentCellIndex ) ) {
+            for ( const int32_t around : Board::GetAroundIndexes( _currentCellIndex ) ) {
                 const Cell * nearbyCell = Board::GetCell( around );
                 if ( nearbyCell != nullptr ) {
                     highlightedCells.emplace( nearbyCell );
@@ -2669,7 +2681,7 @@ void Battle::Interface::_redrawHighObjects( const int32_t cellId )
 void Battle::Interface::RedrawKilled()
 {
     // Redraw killed troops.
-    for ( const int32_t & cell : arena.getCellsOccupiedByGraveyard() ) {
+    for ( const int32_t cell : arena.getCellsOccupiedByGraveyard() ) {
         for ( const Unit * unit : arena.getGraveyardUnits( cell ) ) {
             if ( unit && cell != unit->GetTailIndex() ) {
                 RedrawTroopSprite( *unit );
@@ -3766,7 +3778,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     }
 
     // Lich/Power lich has projectile speed of 25
-    const std::vector<fheroes2::Point> points = getLinePoints( startPos, endPos + endPosShift, isMage ? 50 : std::max( missile.width(), 25 ) );
+    const std::vector<fheroes2::Point> points = getLinePoints( startPos, endPos + endPosShift, isMage ? 50 : std::max<int32_t>( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
@@ -5022,7 +5034,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
             if ( ( borderDistance + rainbowThickness / 2 ) < rainbowAscend ) {
                 isRainbowFromRight = !isRainbowFromRight;
             }
-            rainbowDescend = std::max( 1, static_cast<int32_t>( 0.0342 * rainbowLength - 4.868 ) );
+            rainbowDescend = std::max<int32_t>( 1, static_cast<int32_t>( 0.0342 * rainbowLength - 4.868 ) );
             rainbowTop = static_cast<int32_t>( 0.8524 * rainbowLength + 17.7 );
             drawOffset
                 = isRainbowFromRight ? ( rainbowDescendPoint.x - rainbowDescend - rainbowThickness / 2 ) : ( rainbowDescendPoint.x - rainbowDescend - rainbowAscend );
@@ -5033,9 +5045,9 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
             pow2ratio = 0.0;
             pow4ratio = 0.5;
             rainbowLength = borderDistance;
-            rainbowDescend = std::max( 1, static_cast<int32_t>( 0.1233 * rainbowLength + 0.7555 ) );
+            rainbowDescend = std::max<int32_t>( 1, static_cast<int32_t>( 0.1233 * rainbowLength + 0.7555 ) );
             rainbowTop = static_cast<int32_t>( 0.6498 * rainbowLength + 11.167 );
-            drawOffset = std::max( 10, rainbowDescendPoint.y - rainbowDescend );
+            drawOffset = std::max<int32_t>( 10, rainbowDescendPoint.y - rainbowDescend );
         }
 
         const fheroes2::Size rainbowArcBegin( rainbowTop, rainbowDescend + rainbowAscend );
@@ -6306,8 +6318,8 @@ void Battle::Interface::_redrawActionArmageddonSpell()
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 28 ) ) - 14;
             const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 22 ) ) - 11;
 
-            fheroes2::Copy( spriteReddish, std::max( 0, -offsetX ), std::max( 0, -offsetY ), _mainSurface, std::max( 0, offsetX ), std::max( 0, offsetY ),
-                            area.width - std::abs( offsetX ), area.height - std::abs( offsetY ) );
+            fheroes2::Copy( spriteReddish, std::max<int32_t>( 0, -offsetX ), std::max<int32_t>( 0, -offsetY ), _mainSurface, std::max<int32_t>( 0, offsetX ),
+                            std::max<int32_t>( 0, offsetY ), area.width - std::abs( offsetX ), area.height - std::abs( offsetY ) );
 
             RedrawPartialFinish();
         }
@@ -6366,8 +6378,8 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 28 ) ) - 14;
             const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 22 ) ) - 11;
 
-            fheroes2::Copy( battlefieldImage, std::max( 0, -offsetX ), std::max( 0, -offsetY ), _mainSurface, std::max( 0, offsetX ), std::max( 0, offsetY ),
-                            area.width - std::abs( offsetX ), area.height - std::abs( offsetY ) );
+            fheroes2::Copy( battlefieldImage, std::max<int32_t>( 0, -offsetX ), std::max<int32_t>( 0, -offsetY ), _mainSurface, std::max<int32_t>( 0, offsetX ),
+                            std::max<int32_t>( 0, offsetY ), area.width - std::abs( offsetX ), area.height - std::abs( offsetY ) );
 
             RedrawPartialFinish();
 
@@ -6860,6 +6872,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     // Animation of the currently active unit's contour
     if ( Game::validateAnimationDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) ) {
         UpdateContourColor();
+        humanturn_redraw = true;
     }
 
     // Animation of flags and heroes idle.
@@ -7070,9 +7083,8 @@ void Battle::PopupDamageInfo::setSpellAttackInfo( const HeroBase * hero, const U
 {
     assert( hero != nullptr );
 
-    // TODO: Currently, this functionality only supports a simple single-target spell case
-    // We should refactor this to apply to all cases
-    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
+    // TODO: any multi-unit damage spells show only damage of the first unit or one of the units on whom the spell is being applied (ex. Cold Ring)
+    if ( !spell.isDamage() ) {
         return;
     }
 

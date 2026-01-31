@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -70,7 +70,7 @@ namespace
 
         HeaderSAV() = default;
 
-        HeaderSAV( const Maps::FileInfo & fi, const int type, const uint32_t worldDay, const uint32_t worldWeek, const uint32_t worldMonth )
+        HeaderSAV( const Maps::FileInfo & fi, const int32_t type, const uint32_t worldDay, const uint32_t worldWeek, const uint32_t worldMonth )
             : info( fi )
             , gameType( type )
         {
@@ -89,7 +89,7 @@ namespace
 
         uint16_t requirements{ 0 };
         Maps::FileInfo info;
-        int gameType{ 0 };
+        int32_t gameType{ 0 };
     };
 
     OStreamBase & operator<<( OStreamBase & stream, const HeaderSAV & hdr )

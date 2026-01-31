@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include "world_pathfinding.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
@@ -296,18 +297,8 @@ namespace
             return true;
         }
 
-        for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( tileIndex ) ) {
-            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
-            static Army tileArmy;
-            tileArmy.setFromTile( world.getTile( monsterIndex ) );
-
-            // Tiles guarded by too powerful wandering monsters are considered inaccessible
-            if ( tileArmy.GetStrength() * minimalAdvantage > armyStrength ) {
-                return false;
-            }
-        }
-
-        return true;
+        // Tiles guarded by too powerful wandering monsters are considered inaccessible
+        return !Maps::isTileProtectionStrongerThan( tileIndex, armyStrength / minimalAdvantage );
     }
 
     uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints, const uint32_t maxMovePoints )
@@ -382,7 +373,7 @@ void WorldPathfinder::reset()
     if ( const size_t worldSize = world.getSize(); _cache.size() != worldSize ) {
         _cache.resize( worldSize );
 
-        const Directions & directions = Direction::All();
+        const auto & directions = Direction::allNeighboringDirections;
         _mapOffset.resize( directions.size() );
 
         for ( size_t i = 0; i < directions.size(); ++i ) {
@@ -416,7 +407,7 @@ void WorldPathfinder::processWorldMap()
 
 void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, const int currentNodeIdx )
 {
-    const Directions & directions = Direction::All();
+    const auto & directions = Direction::allNeighboringDirections;
     const WorldNode & currentNode = _cache[currentNodeIdx];
     const uint32_t maxMovePoints = getMaxMovePoints( world.getTile( currentNodeIdx ).isWater() );
 
@@ -594,7 +585,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     // need to reserve SP can be neglected.
     const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor );
 
-    const int32_t townGateCastleIndex = [this, &hero]() {
+    const int32_t townGateCastleIndex = [this, &hero]() -> int32_t {
         static const Spell townGate( Spell::TOWNGATE );
 
         if ( !hero.CanCastSpell( townGate ) ) {
@@ -774,38 +765,44 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
         }
     }
 
-    MapsIndexes teleports;
+    const MP2::MapObjectType mainObjectType = world.getTile( currentNodeIdx ).getMainObjectType( false );
 
-    // We shouldn't use teleport at the starting tile
-    if ( !isFirstNode ) {
-        teleports = world.GetTeleportEndPoints( currentNodeIdx );
+    if ( mainObjectType == MP2::OBJ_STONE_LITHS || mainObjectType == MP2::OBJ_WHIRLPOOL ) {
+        MapsIndexes teleports;
 
-        if ( teleports.empty() ) {
-            teleports = world.GetWhirlpoolEndPoints( currentNodeIdx );
+        // We shouldn't use teleport at the starting tile
+        if ( !isFirstNode ) {
+            teleports = world.GetTeleportEndPoints( currentNodeIdx );
+
+            if ( teleports.empty() ) {
+                teleports = world.GetWhirlpoolEndPoints( currentNodeIdx );
+            }
+        }
+
+        // Special case: movement via teleport
+        for ( const int teleportIdx : teleports ) {
+            if ( teleportIdx == _pathStart ) {
+                continue;
+            }
+
+            WorldNode & teleportNode = _cache[teleportIdx];
+
+            // Check if the movement is really faster via teleport
+            if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
+                teleportNode.update( currentNodeIdx, currentNode._cost, currentNode._remainingMovePoints );
+
+                nodesToExplore.push_back( teleportIdx );
+            }
+        }
+
+        // Check adjacent nodes only if we are either not on the teleport tile, or we got here from another endpoint of this teleport.
+        // Do not check them if we came to the tile with a teleport from a neighboring tile (and are going to use it for teleportation).
+        if ( !teleports.empty() && std::find( teleports.begin(), teleports.end(), currentNode._from ) == teleports.end() ) {
+            return;
         }
     }
 
-    // Check adjacent nodes only if we are either not on the teleport tile, or we got here from another endpoint of this teleport.
-    // Do not check them if we came to the tile with a teleport from a neighboring tile (and are going to use it for teleportation).
-    if ( teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
-        checkAdjacentNodes( nodesToExplore, currentNodeIdx );
-    }
-
-    // Special case: movement via teleport
-    for ( const int teleportIdx : teleports ) {
-        if ( teleportIdx == _pathStart ) {
-            continue;
-        }
-
-        WorldNode & teleportNode = _cache[teleportIdx];
-
-        // Check if the movement is really faster via teleport
-        if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
-            teleportNode.update( currentNodeIdx, currentNode._cost, currentNode._remainingMovePoints );
-
-            nodesToExplore.push_back( teleportIdx );
-        }
-    }
+    checkAdjacentNodes( nodesToExplore, currentNodeIdx );
 }
 
 uint32_t AIWorldPathfinder::getMaxMovePoints( const bool onWater ) const
@@ -890,7 +887,7 @@ std::pair<int32_t, bool> AIWorldPathfinder::getFogDiscoveryTile( const Heroes & 
     reEvaluateIfNeeded( hero );
 
     const auto findBestTile = [this, scoutingDistance = hero.GetScoutingDistance()]( const auto nearbyTilePredicate ) {
-        const Directions & directions = Direction::All();
+        const auto & directions = Direction::allNeighboringDirections;
 
         struct TileCharacteristics
         {
@@ -974,9 +971,9 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 
     const int start = hero.GetIndex();
 
-    Directions directions = Direction::All();
+    auto directions{ Direction::allNeighboringDirections };
     // We have to shuffle directions to avoid cases when heroes repeat the same steps again and again.
-    Rand::Shuffle( directions );
+    Rand::shuffle( directions.begin(), directions.end(), Rand::CurrentThreadRandomDevice() );
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( !Maps::isValidDirection( start, directions[i] ) ) {
@@ -1267,7 +1264,7 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
     const bool isHeroOnWater = world.getTile( _pathStart ).isWater();
     const int32_t distanceLimit = Spell::CalculateDimensionDoorDistance() / 2;
     const uint32_t maxCasts = std::min( { remainingSpellPoints / _dimensionDoorSPCost, _remainingMovePoints / dimensionDoorMovementCost, difficultyLimit } );
-    const Directions & directions = Direction::All();
+    const auto & directions = Direction::allNeighboringDirections;
 
     std::list<Route::Step> path;
 

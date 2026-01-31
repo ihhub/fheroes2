@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -327,7 +327,7 @@ public:
     const Army & GetArmy() const override;
     Army & GetArmy() override;
 
-    int GetID() const
+    int32_t GetID() const
     {
         return _id;
     }
@@ -440,19 +440,19 @@ public:
 
     uint32_t GetMovePoints() const
     {
-        return move_point;
+        return _movePoints;
     }
 
     void IncreaseMovePoints( const uint32_t point )
     {
-        move_point += point;
+        _movePoints += point;
     }
 
     bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
 
     void ResetMovePoints()
     {
-        move_point = 0;
+        _movePoints = 0;
     }
 
     bool HasSecondarySkill( const int skill ) const;
@@ -470,23 +470,20 @@ public:
 
     bool HasUltimateArtifact() const
     {
-        return bag_artifacts.ContainUltimateArtifact();
+        return _bagArtifacts.ContainUltimateArtifact();
     }
 
     uint32_t GetCountArtifacts() const
     {
-        return bag_artifacts.CountArtifacts();
+        return _bagArtifacts.CountArtifacts();
     }
 
     bool IsFullBagArtifacts() const
     {
-        return bag_artifacts.isFull();
+        return _bagArtifacts.isFull();
     }
 
     uint32_t GetMobilityIndexSprite() const;
-
-    // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
-    uint32_t GetManaIndexSprite() const;
 
     int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor,
                     const fheroes2::SupportedLanguage language );
@@ -575,7 +572,9 @@ public:
 
     void Action( const int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
-    void ActionSpellCast( const Spell & spell );
+
+    // Returns true if the spell is casted successfully.
+    bool ActionSpellCast( const Spell & spell );
 
     // Update map in the scout area around the Hero on radar (mini-map).
     void ScoutRadar() const;
@@ -771,11 +770,11 @@ private:
     Army _army{ this };
 
     // Hero ID
-    int _id{ UNKNOWN };
+    int32_t _id{ UNKNOWN };
     // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
     // ID of this hero, unless a custom portrait is applied.
-    int _portrait{ UNKNOWN };
-    int _race{ Race::NONE };
+    int32_t _portrait{ UNKNOWN };
+    int32_t _race{ Race::NONE };
 
     MP2::MapObjectType _objectTypeUnderHero{ MP2::OBJ_NONE };
 
@@ -784,9 +783,9 @@ private:
     std::list<IndexObject> _visitedObjects;
 
     // Hero's direction on adventure map.
-    int _direction{ Direction::RIGHT };
+    int32_t _direction{ Direction::RIGHT };
     // Hero's sprite index on adventure map.
-    int _spriteIndex{ 18 };
+    int32_t _spriteIndex{ 18 };
     // Hero's sprite offset on adventure map, used only during hero's movement.
     fheroes2::Point _offset;
 

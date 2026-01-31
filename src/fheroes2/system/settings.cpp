@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,7 +80,8 @@ namespace
         GAME_BATTLE_AUTO_RESOLVE = 0x04000000,
         GAME_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        GAME_NUMERIC_ARMY_ESTIMATION_VIEW = 0x40000000,
     };
 
     enum EditorOptions : uint32_t
@@ -255,6 +256,11 @@ bool Settings::Read( const std::string & filePath )
         else {
             setInterfaceType( InterfaceType::DYNAMIC );
         }
+    }
+
+    // Numeric/verbal army size estimate
+    if ( config.Exists( "army estimation view type" ) ) {
+        setNumericArmyEstimationView( config.StrParams( "army estimation view type" ) == "numeric" );
     }
 
     if ( config.Exists( "hide interface" ) ) {
@@ -543,6 +549,9 @@ std::string Settings::String() const
 
     os << std::endl << "# Save files sorting method: name/date" << std::endl;
     os << "save file sorting = " << ( _saveFileSortType == SaveFileSortingMethod::TIMESTAMP ? "date" : "name" ) << std::endl;
+
+    os << std::endl << "# Show army size estimates: in 'canonical' (few, several, lots, ...) or 'numeric' (1-4, 5-9, 10-19, ...) way" << std::endl;
+    os << "army estimation view type = " << ( _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW ) ? "numeric" : "canonical" ) << std::endl;
 
     return os.str();
 }
@@ -873,15 +882,27 @@ void Settings::setHideInterface( const bool enable )
     }
 }
 
+void Settings::setNumericArmyEstimationView( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
+    }
+}
+
 void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
         _gameOptions.SetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( true );
     }
     else {
         _gameOptions.ResetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( false );
+    }
+
+    if ( enable != fheroes2::engine().isNearestScaling() ) {
+        fheroes2::engine().setNearestScaling( enable );
     }
 }
 
@@ -930,6 +951,16 @@ bool Settings::isHideInterfaceEnabled() const
     return _gameOptions.Modes( GAME_HIDE_INTERFACE );
 }
 
+bool Settings::isArmyEstimationViewNumeric() const
+{
+    return _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
+}
+
+bool Settings::isScreenScalingTypeNearest() const
+{
+    return _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST );
+}
+
 bool Settings::isEvilInterfaceEnabled() const
 {
     switch ( _interfaceType ) {
@@ -961,6 +992,21 @@ bool Settings::isEvilInterfaceEnabled() const
     }
 
     return false;
+}
+
+void Settings::switchToNextInterfaceType()
+{
+    switch ( _interfaceType ) {
+    case InterfaceType::DYNAMIC:
+        _interfaceType = InterfaceType::GOOD;
+        break;
+    case InterfaceType::GOOD:
+        _interfaceType = InterfaceType::EVIL;
+        break;
+    default:
+        _interfaceType = InterfaceType::DYNAMIC;
+        break;
+    }
 }
 
 bool Settings::isEditorAnimationEnabled() const
@@ -1181,7 +1227,7 @@ IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
     }
 

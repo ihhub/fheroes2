@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -99,54 +99,6 @@ namespace
         }
     }
 
-    // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
-    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
-    {
-        assert( map.width == world.w() && map.width == world.h() );
-
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
-
-        // Capturable objects exist in Miscellaneous and Mines groups.
-        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
-        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
-
-        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
-            for ( const auto & object : map.tiles[tileId].objects ) {
-                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
-                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
-
-                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
-                }
-                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
-                    const auto & metadata = heroObjects[object.index].metadata;
-                    const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
-
-                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
-                    if ( hero ) {
-                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
-                        hero->SetColor( color );
-                    }
-                }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                    assert( object.index < miscObjects.size() );
-
-                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
-
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
-                }
-                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
-                    assert( object.index < minesObjects.size() );
-
-                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
-
-                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
-                }
-            }
-        }
-    }
-
     // This function only checks for Streams and ignores River Deltas.
     bool isStreamPresent( const Maps::Map_Format::TileInfo & mapTile )
     {
@@ -215,13 +167,13 @@ namespace
         const fheroes2::Point centerTile( centerTileIndex % map.width, centerTileIndex / map.width );
         const int32_t maxTilePos = map.width - 1;
 
-        int groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
+        int32_t groundDirection = ( Maps::Ground::getGroundByImageIndex( map.tiles[centerTileIndex].terrainIndex ) == groundId ) ? Direction::CENTER : 0;
 
-        for ( const int & direction : Direction::All() ) {
+        for ( const int32_t direction : Direction::allNeighboringDirections ) {
             // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
             fheroes2::Point tilePosition = Maps::getDirectionPoint( centerTile, direction );
-            tilePosition.x = std::min( maxTilePos, std::max( 0, tilePosition.x ) );
-            tilePosition.y = std::min( maxTilePos, std::max( 0, tilePosition.y ) );
+            tilePosition.x = std::min<int32_t>( maxTilePos, std::max<int32_t>( 0, tilePosition.x ) );
+            tilePosition.y = std::min<int32_t>( maxTilePos, std::max<int32_t>( 0, tilePosition.y ) );
 
             if ( Maps::Ground::getGroundByImageIndex( map.tiles[tilePosition.y * map.width + tilePosition.x].terrainIndex ) == groundId ) {
                 groundDirection |= direction;
@@ -904,14 +856,6 @@ namespace
         return ( type == MP2::OBJ_CASTLE ) || ( type == MP2::OBJ_RANDOM_TOWN ) || ( type == MP2::OBJ_RANDOM_CASTLE );
     }
 
-    void removeRoads( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
-    {
-        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
-                            tile.objects.end() );
-
-        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
-    }
-
     bool doesContainCastleEntrance( const Maps::Map_Format::TileInfo & tile )
     {
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
@@ -1140,10 +1084,10 @@ namespace
         const int32_t centerY = centerTileIndex / map.width;
 
         // We avoid getting out of map boundaries.
-        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
-        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
-        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, map.width );
-        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, map.width );
+        const int32_t minTileX = std::max<int32_t>( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max<int32_t>( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min<int32_t>( centerX + centerToRectBorderDistance + 1, map.width );
+        const int32_t maxTileY = std::min<int32_t>( centerY + centerToRectBorderDistance + 1, map.width );
 
         const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
 
@@ -1226,7 +1170,7 @@ namespace Maps
                 sortedObjects.emplace( info );
 
 #if defined( WITH_DEBUG )
-                if ( object.group != Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS && object.group != Maps::ObjectGroup::LANDSCAPE_FLAGS ) {
+                if ( object.group != ObjectGroup::LANDSCAPE_TOWN_BASEMENTS && object.group != ObjectGroup::LANDSCAPE_FLAGS ) {
                     const auto [iter, inserted] = objectsUIDs.try_emplace( object.id, info );
                     if ( !inserted ) {
                         incorrectObjects.emplace( iter->second );
@@ -1311,7 +1255,7 @@ namespace Maps
         return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
-    void setTerrainOnTiles( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
+    void setTerrainWithTransition( Map_Format::MapFormat & map, const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
         assert( map.width == world.w() && map.width == world.h() );
 
@@ -1458,6 +1402,11 @@ namespace Maps
         }
     }
 
+    void setTerrainOnTile( Map_Format::MapFormat & map, const int32_t tileId, const int groundId )
+    {
+        setTerrain( map, tileId, Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
+    }
+
     bool addStream( Map_Format::MapFormat & map, const int32_t tileId )
     {
         assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
@@ -1541,6 +1490,54 @@ namespace Maps
     bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex )
     {
         return getRiverDeltaDirectionByIndex( group, objectIndex ) != Direction::UNKNOWN;
+    }
+
+    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map )
+    {
+        assert( map.width == world.w() && map.width == world.h() );
+
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+        // Capturable objects exist in Miscellaneous and Mines groups.
+        const auto & miscObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+        const auto & minesObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+
+        for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+            for ( const auto & object : map.tiles[tileId].objects ) {
+                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    const PlayerColor color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
+                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+
+                    world.addCastle( static_cast<int32_t>( tileId ), race, color );
+                }
+                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    const auto & metadata = heroObjects[object.index].metadata;
+                    const PlayerColor color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+
+                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
+                    if ( hero ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
+                        hero->SetColor( color );
+                        world.getTile( static_cast<int32_t>( tileId ) ).setHero( hero );
+                    }
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    assert( object.index < miscObjects.size() );
+
+                    const MP2::MapObjectType objectType = miscObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    assert( object.index < minesObjects.size() );
+
+                    const MP2::MapObjectType objectType = minesObjects[object.index].objectType;
+
+                    Maps::captureObject( map, static_cast<int32_t>( tileId ), object.id, objectType );
+                }
+            }
+        }
     }
 
     bool updateMapPlayers( Map_Format::MapFormat & map )
@@ -1948,7 +1945,7 @@ namespace Maps
 
     void captureObject( const Map_Format::MapFormat & map, const int32_t tileIndex, const uint32_t objectId, const MP2::MapObjectType objectType )
     {
-        if ( Maps::isCapturableObject( objectType ) ) {
+        if ( isCapturableObject( objectType ) ) {
             auto ownershipMetadata = map.capturableObjectsMetadata.find( objectId );
             if ( ownershipMetadata != map.capturableObjectsMetadata.end() ) {
                 world.CaptureObject( tileIndex, ownershipMetadata->second.ownerColor );
@@ -2045,7 +2042,7 @@ namespace Maps
             }
         }
         else {
-            removeRoads( tile, tileIndex );
+            removeRoadsFromTile( tile, tileIndex );
 
             updateRoadSpritesAround( map, tileIndex );
 
@@ -2066,19 +2063,32 @@ namespace Maps
             // After the check this tile should not contain a road sprite.
             if ( !forceRoadOnTile && !doesContainRoads( tile ) ) {
                 // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
-                removeRoads( tile, tileIndex );
+                removeRoadsFromTile( tile, tileIndex );
             }
 
             return;
         }
 
+        writeRoadSpriteToTile( tile, tileIndex, imageIndex );
+    }
+
+    void removeRoadsFromTile( Maps::Map_Format::TileInfo & tile, const int32_t tileIndex )
+    {
+        tile.objects.erase( std::remove_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ),
+                            tile.objects.end() );
+
+        world.getTile( tileIndex ).removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
+    }
+
+    void writeRoadSpriteToTile( Map_Format::TileInfo & tile, const int32_t tileIndex, const uint8_t imageIndex )
+    {
         auto roadObjectIter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == ObjectGroup::ROADS; } );
         if ( roadObjectIter != tile.objects.end() ) {
             // Since the tile has a road object, update it.
             roadObjectIter->index = imageIndex;
 
-            Maps::Tile & worldTile = world.getTile( tileIndex );
-            Maps::Tile::updateTileObjectIcnIndex( worldTile, worldTile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD ), imageIndex );
+            Tile & worldTile = world.getTile( tileIndex );
+            Tile::updateTileObjectIcnIndex( worldTile, worldTile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD ), imageIndex );
         }
         else {
             // This tile has no roads. Add one.
@@ -2093,6 +2103,13 @@ namespace Maps
         }
     }
 
+    void updateAllRoads( Map_Format::MapFormat & map )
+    {
+        const int32_t centerTileIndex = Maps::GetIndexFromAbsPoint( map.width / 2, map.width / 2 );
+        updateRoadSpritesInArea( map, centerTileIndex, map.width, false );
+        updateRoadSpritesInArea( map, centerTileIndex, map.width, true );
+    }
+
     bool doesContainRoads( const Map_Format::TileInfo & tile )
     {
         for ( const auto & object : tile.objects ) {
@@ -2104,5 +2121,187 @@ namespace Maps
         }
 
         return false;
+    }
+
+    void changeLanguage( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( language == map.mainLanguage ) {
+            // Nothing to be done as this is the current language.
+            return;
+        }
+
+        // Save the existing language as a translation.
+        auto & translation = map.translations[map.mainLanguage];
+        translation.name = map.name;
+        translation.description = map.description;
+        translation.creatorNotes = map.creatorNotes;
+
+        auto & translationInfo = map.translationInfo[map.mainLanguage];
+        translationInfo = {};
+
+        translationInfo.dailyEvents.reserve( map.dailyEvents.size() );
+        for ( const auto & event : map.dailyEvents ) {
+            translationInfo.dailyEvents.emplace_back( event.message );
+        }
+
+        translationInfo.rumors.reserve( map.rumors.size() );
+        for ( const auto & rumor : map.rumors ) {
+            translationInfo.rumors.emplace_back( rumor );
+        }
+
+        for ( const auto & [tileId, castleInfo] : map.castleMetadata ) {
+            translationInfo.castleMetadata.try_emplace( tileId, castleInfo.customName );
+        }
+
+        for ( const auto & [tileId, heroInfo] : map.heroMetadata ) {
+            translationInfo.heroMetadata.try_emplace( tileId, heroInfo.customName );
+        }
+
+        for ( const auto & [tileId, sphinxInfo] : map.sphinxMetadata ) {
+            auto & info = translationInfo.sphinxMetadata[tileId];
+            info.riddle = sphinxInfo.riddle;
+            info.answers = sphinxInfo.answers;
+        }
+
+        for ( const auto & [tileId, signInfo] : map.signMetadata ) {
+            translationInfo.signMetadata.try_emplace( tileId, signInfo.message );
+        }
+
+        for ( const auto & [tileId, eventInfo] : map.adventureMapEventMetadata ) {
+            translationInfo.adventureMapEventMetadata.try_emplace( tileId, eventInfo.message );
+        }
+
+        loadTranslation( map, language );
+
+        // Remove the language from the translations.
+        removeTranslation( map, language );
+
+        map.mainLanguage = language;
+    }
+
+    bool setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( !loadTranslation( map, language ) ) {
+            return false;
+        }
+
+        if ( map.mainLanguage != language ) {
+            // Add just an empty entry to show that the main language is also being supported.
+            map.translations.try_emplace( map.mainLanguage, Maps::Map_Format::TranslationBaseMapMetadata{} );
+        }
+
+        map.mainLanguage = language;
+        map.translations.erase( language );
+
+        return true;
+    }
+
+    bool loadTranslation( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( language == map.mainLanguage ) {
+            // Nothing to be done as this is the current language.
+            return true;
+        }
+
+        // Check whether the language exists in the list of translations.
+        // If it doesn't then leave all texts intact.
+        auto translationIter = map.translations.find( language );
+        if ( translationIter == map.translations.end() ) {
+            return false;
+        }
+
+        // The translation exists. Restore if possible the information.
+        // Here is the tricky part: we have no idea whether an empty text was left intentionally.
+        // Therefore, we assume that empty texts are intentional.
+        auto & translation = translationIter->second;
+        map.name = std::move( translation.name );
+        map.description = std::move( translation.description );
+        map.creatorNotes = std::move( translation.creatorNotes );
+
+        return true;
+    }
+
+    bool loadTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        if ( language == map.mainLanguage ) {
+            // Nothing to be done as this is the current language.
+            return true;
+        }
+
+        if ( !loadTranslation( static_cast<Maps::Map_Format::BaseMapFormat &>( map ), language ) ) {
+            return false;
+        }
+
+        auto translationInfoIter = map.translationInfo.find( language );
+        if ( translationInfoIter == map.translationInfo.end() ) {
+            // Object information doesn't exist.
+            // Nothing we need to do here.
+            return true;
+        }
+
+        auto & translationInfo = translationInfoIter->second;
+
+        // Daily events should be in order. However, if some events are deleted or added the order is not preserved.
+        // We assume that the map maker preserves the order.
+        const size_t minDailyEvents = std::min( map.dailyEvents.size(), translationInfo.dailyEvents.size() );
+        for ( size_t i = 0; i < minDailyEvents; ++i ) {
+            map.dailyEvents[i].message = std::move( translationInfo.dailyEvents[i] );
+        }
+
+        map.rumors = std::move( translationInfo.rumors );
+
+        // The below objects might not even exist on the map so we need to verify their presence before modifying them.
+        for ( auto & [tileId, castleInfo] : translationInfo.castleMetadata ) {
+            auto iter = map.castleMetadata.find( tileId );
+            if ( iter == map.castleMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.customName = std::move( castleInfo );
+        }
+
+        for ( auto & [tileId, heroInfo] : translationInfo.heroMetadata ) {
+            auto iter = map.heroMetadata.find( tileId );
+            if ( iter == map.heroMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.customName = std::move( heroInfo );
+        }
+
+        for ( auto & [tileId, sphinxInfo] : translationInfo.sphinxMetadata ) {
+            auto iter = map.sphinxMetadata.find( tileId );
+            if ( iter == map.sphinxMetadata.end() ) {
+                continue;
+            }
+            iter->second.riddle = std::move( sphinxInfo.riddle );
+            iter->second.answers = std::move( sphinxInfo.answers );
+        }
+
+        for ( auto & [tileId, signInfo] : translationInfo.signMetadata ) {
+            auto iter = map.signMetadata.find( tileId );
+            if ( iter == map.signMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.message = std::move( signInfo );
+        }
+
+        for ( auto & [tileId, eventInfo] : translationInfo.adventureMapEventMetadata ) {
+            auto iter = map.adventureMapEventMetadata.find( tileId );
+            if ( iter == map.adventureMapEventMetadata.end() ) {
+                continue;
+            }
+
+            iter->second.message = std::move( eventInfo );
+        }
+
+        return true;
+    }
+
+    void removeTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language )
+    {
+        map.translations.erase( language );
+        map.translationInfo.erase( language );
     }
 }

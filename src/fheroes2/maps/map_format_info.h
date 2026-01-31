@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>
@@ -32,6 +33,9 @@
 #include "game_language.h"
 #include "map_object_info.h"
 #include "resource.h"
+
+class IStreamBase;
+class OStreamBase;
 
 namespace Maps::Map_Format
 {
@@ -51,6 +55,9 @@ namespace Maps::Map_Format
 
         std::vector<TileObjectInfo> objects;
     };
+
+    constexpr size_t messageCharLimit{ 999 };
+    constexpr size_t nameCharLimit{ 30 };
 
     struct CastleMetadata
     {
@@ -267,7 +274,7 @@ namespace Maps::Map_Format
         bool isWeeklyGrowthDisabled{ false };
 
         // Only for random monsters.
-        std::vector<int> selected;
+        std::vector<int32_t> selected;
     };
 
     struct ArtifactMetadata
@@ -279,7 +286,7 @@ namespace Maps::Map_Format
         int32_t captureCondition{ 0 };
 
         // Only for random artifacts and Scroll Spell.
-        std::vector<int> selected;
+        std::vector<int32_t> selected;
     };
 
     struct ResourceMetadata
@@ -302,6 +309,37 @@ namespace Maps::Map_Format
 
         // Resources to be given as a reward.
         Funds resources;
+    };
+
+    struct TranslationSphinxMetadata final
+    {
+        std::string riddle;
+
+        std::vector<std::string> answers;
+    };
+
+    struct TranslationBaseMapMetadata final
+    {
+        std::string name;
+        std::string description;
+        std::string creatorNotes;
+    };
+
+    struct TranslationFormat final
+    {
+        std::vector<std::string> dailyEvents;
+
+        std::vector<std::string> rumors;
+
+        std::map<uint32_t, std::string> castleMetadata;
+
+        std::map<uint32_t, std::string> heroMetadata;
+
+        std::map<uint32_t, TranslationSphinxMetadata> sphinxMetadata;
+
+        std::map<uint32_t, std::string> signMetadata;
+
+        std::map<uint32_t, std::string> adventureMapEventMetadata;
     };
 
     struct BaseMapFormat
@@ -343,9 +381,12 @@ namespace Maps::Map_Format
         // This parameter is only visible within the Editor, it doesn't affect the gameplay in any way.
         // The parameter is mandatory to fill out by map makers who want to have their creations bundled with the engine.
         std::string creatorNotes;
+
+        // A map can support multiple languages. A language of the map should be chosen based on game's language.
+        std::map<fheroes2::SupportedLanguage, TranslationBaseMapMetadata> translations;
     };
 
-    struct MapFormat : public BaseMapFormat
+    struct MapFormat final : public BaseMapFormat
     {
         // This is used only for campaign maps.
         std::vector<uint32_t> additionalInfo;
@@ -376,10 +417,15 @@ namespace Maps::Map_Format
         std::map<uint32_t, ArtifactMetadata> artifactMetadata;
 
         std::map<uint32_t, ResourceMetadata> resourceMetadata;
+
+        std::map<fheroes2::SupportedLanguage, TranslationFormat> translationInfo;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );
     bool loadMap( const std::string & path, MapFormat & map );
 
     bool saveMap( const std::string & path, const MapFormat & map );
+
+    bool saveMap( OStreamBase & stream, const MapFormat & map );
+    bool loadMap( IStreamBase & stream, MapFormat & map );
 }

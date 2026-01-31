@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -308,10 +308,8 @@ namespace
     {
         // TODO: All these spells are not used by AI at the moment.
         switch ( spellId ) {
-        case Spell::EARTHQUAKE:
         case Spell::HAUNT:
         case Spell::IDENTIFYHERO:
-        case Spell::TELEPORT:
         case Spell::VIEWARTIFACTS:
         case Spell::VIEWHEROES:
         case Spell::VIEWMINES:
@@ -642,7 +640,7 @@ namespace
                 return false;
             }
 
-            const int daysActive = numOfDaysPerWeek - world.GetDay() + 1;
+            const uint32_t daysActive = numOfDaysPerWeek - world.GetDay() + 1;
             const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
 
             return movementBonus > 0;
@@ -1620,7 +1618,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         return 100;
     }
     case MP2::OBJ_STABLES: {
-        const int daysActive = numOfDaysPerWeek - world.GetDay() + 1;
+        const uint32_t daysActive = numOfDaysPerWeek - world.GetDay() + 1;
         double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
 
         const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
@@ -3093,6 +3091,12 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                 }
 
                 if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *hero ) ) {
+                    continue;
+                }
+
+                if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolCenter() == hero->GetCenter() ) ) {
+                    // Heroes on patrol are restricted in movement so it is assumed that they aren't blocking the way.
+                    // They actually could block the way but this is done deliberately by the map maker.
                     continue;
                 }
 

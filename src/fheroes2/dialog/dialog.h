@@ -165,7 +165,7 @@ namespace Dialog
     class FrameBox : public NonFixedFrameBox
     {
     public:
-        FrameBox( int height, bool buttons = false )
+        explicit FrameBox( int height, bool buttons = false )
             : Dialog::NonFixedFrameBox( height, -1, buttons )
         {
             // Do nothing.

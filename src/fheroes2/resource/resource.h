@@ -94,10 +94,8 @@ struct Funds
     Funds operator+( const Funds & pm ) const;
     Funds operator*( uint32_t mul ) const;
     Funds operator-( const Funds & pm ) const;
-    Funds operator/( const int32_t div ) const;
     Funds & operator+=( const Funds & pm );
     Funds & operator*=( uint32_t mul );
-    Funds & operator/=( const int32_t div );
     Funds & operator-=( const Funds & pm );
     Funds & operator=( const Cost & cost );
 

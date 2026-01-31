@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,6 +30,7 @@
 #include "army.h"
 #include "army_bar.h"
 #include "artifact.h"
+#include "ground.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "math_base.h"
@@ -43,12 +44,12 @@ namespace fheroes2
 
 namespace Battle
 {
-    struct ControlInfo
+    struct ControlInfo final
     {
-        ControlInfo( const fheroes2::Point & pt, int ctrl )
+        ControlInfo( const fheroes2::Point & pt, const int ctrl )
             : result( ctrl )
-            , rtLocal( pt.x, pt.y, 24, 24 )
-            , rtAI( pt.x + 75, pt.y, 24, 24 )
+            , humanPlayerRoi( pt.x, pt.y, 24, 24 )
+            , computerPlayerRoi( pt.x + 75, pt.y, 24, 24 )
         {
             // Do nothing.
         }
@@ -57,12 +58,10 @@ namespace Battle
 
         ControlInfo & operator=( const ControlInfo & ) = delete;
 
-        void Redraw() const;
-
         int result{ 0 };
 
-        const fheroes2::Rect rtLocal;
-        const fheroes2::Rect rtAI;
+        const fheroes2::Rect humanPlayerRoi;
+        const fheroes2::Rect computerPlayerRoi;
     };
 
     class Only
@@ -73,7 +72,11 @@ namespace Battle
 
         Only & operator=( const Only & ) = delete;
 
+        // Returns true if setup is successful.
         bool setup( const bool allowBackup, bool & reset );
+
+        int32_t terrainType() const;
+
         void StartBattle();
 
         void reset();
@@ -94,7 +97,7 @@ namespace Battle
             void resetForNewHero();
         };
 
-        struct ArmyInfo
+        struct ArmyInfo final
         {
             Heroes * hero{ nullptr };
 
@@ -126,6 +129,8 @@ namespace Battle
         std::unique_ptr<ControlInfo> attackedArmyControlInfo;
 
         bool _backupCompleted{ false };
+
+        int32_t _terrainType{ Maps::Ground::UNKNOWN };
 
         void redrawOpponents( const fheroes2::Point & top ) const;
 

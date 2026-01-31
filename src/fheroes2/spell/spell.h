@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -163,7 +163,7 @@ public:
     uint32_t minMovePoints() const;
 
     // Returns the value of the spell using the provided context
-    double getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const;
+    double getStrategicValue( const double armyStrength, const uint32_t currentSpellPoints, const int spellPower ) const;
 
     int Level() const;
     uint32_t Damage() const;
@@ -261,7 +261,7 @@ public:
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
-    static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1, const std::set<int32_t> & spellsToExclude = {} );
+    static std::vector<int32_t> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1, const std::set<int32_t> & spellsToExclude = {} );
 
     static int32_t CalculateDimensionDoorDistance();
 
@@ -269,5 +269,5 @@ private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Spell & spell );
     friend IStreamBase & operator>>( IStreamBase & stream, Spell & spell );
 
-    int id;
+    int32_t id;
 };

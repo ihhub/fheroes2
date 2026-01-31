@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,7 +29,7 @@ enum class PlayerColor : uint8_t;
 
 namespace ICN
 {
-    enum : int
+    enum : int32_t
     {
         UNKNOWN,
         ADVBORDE,
@@ -1096,9 +1096,12 @@ namespace ICN
         BUTTON_VERTICAL_DISMISS,
         BUTTON_VERTICAL_EXIT,
         BUTTON_VERTICAL_PATROL,
-        BUTTON_HSCORES_VERTICAL_CAMPAIGN,
-        BUTTON_HSCORES_VERTICAL_EXIT,
-        BUTTON_HSCORES_VERTICAL_STANDARD,
+        BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD,
+        BUTTON_HSCORES_VERTICAL_CAMPAIGN_EVIL,
+        BUTTON_HSCORES_VERTICAL_EXIT_GOOD,
+        BUTTON_HSCORES_VERTICAL_EXIT_EVIL,
+        BUTTON_HSCORES_VERTICAL_STANDARD_GOOD,
+        BUTTON_HSCORES_VERTICAL_STANDARD_EVIL,
 
         BUTTON_SELECT_GOOD,
         BUTTON_SELECT_EVIL,
@@ -1108,8 +1111,10 @@ namespace ICN
         BUTTON_TOGGLE_ALL_ON_EVIL,
         BUTTON_TOGGLE_ALL_OFF_EVIL,
 
+        EMPTY_OPTION_ICON_BACKGROUND,
         GAME_OPTION_ICON,
         RESOLUTION_ICON,
+        ARMY_ESTIMATION_ICON,
 
         DIFFICULTY_ICON_EASY,
         DIFFICULTY_ICON_NORMAL,

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -373,57 +373,6 @@ namespace
 
 namespace fheroes2
 {
-    bool ButtonBase::press()
-    {
-        if ( !isEnabled() ) {
-            return false;
-        }
-
-        _isPressed = true;
-        notifySubscriber();
-        return true;
-    }
-
-    bool ButtonBase::release()
-    {
-        if ( !isEnabled() ) {
-            return false;
-        }
-
-        _isPressed = false;
-        notifySubscriber();
-        return true;
-    }
-
-    void ButtonBase::enable()
-    {
-        _isEnabled = true;
-        notifySubscriber();
-
-        _updateReleasedArea();
-    }
-
-    void ButtonBase::disable()
-    {
-        _isEnabled = false;
-        _isPressed = false; // button can't be disabled and pressed
-        notifySubscriber();
-
-        _updateReleasedArea();
-    }
-
-    void ButtonBase::show()
-    {
-        _isVisible = true;
-        notifySubscriber();
-    }
-
-    void ButtonBase::hide()
-    {
-        _isVisible = false;
-        notifySubscriber();
-    }
-
     bool ButtonBase::draw( Image & output ) const
     {
         if ( !isVisible() ) {
@@ -639,34 +588,6 @@ namespace fheroes2
         _value.emplace_back( returnValue );
     }
 
-    void ButtonGroup::draw( Image & output /* = Display::instance() */ ) const
-    {
-        for ( const auto & button : _button ) {
-            button->draw( output );
-        }
-    }
-
-    void ButtonGroup::drawShadows( Image & output ) const
-    {
-        for ( const auto & button : _button ) {
-            button->drawShadow( output );
-        }
-    }
-
-    void ButtonGroup::disable() const
-    {
-        for ( const auto & button : _button ) {
-            button->disable();
-        }
-    }
-
-    void ButtonGroup::enable() const
-    {
-        for ( const auto & button : _button ) {
-            button->enable();
-        }
-    }
-
     void ButtonGroup::drawOnState( const LocalEvent & le ) const
     {
         for ( const auto & button : _button ) {
@@ -728,7 +649,7 @@ namespace fheroes2
 
             _button.disable();
             _button.draw( display );
-            display.render( _button.area() );
+            display.updateNextRenderRoi( _button.area() );
         }
     }
 
@@ -739,7 +660,7 @@ namespace fheroes2
 
             _button.enable();
             _button.draw( display );
-            display.render( _button.area() );
+            display.updateNextRenderRoi( _button.area() );
         }
     }
 
@@ -751,13 +672,6 @@ namespace fheroes2
 
         _button.push_back( button );
         button->subscribe( this );
-    }
-
-    void OptionButtonGroup::draw( Image & output /* = Display::instance() */ ) const
-    {
-        for ( const ButtonBase * button : _button ) {
-            button->draw( output );
-        }
     }
 
     void OptionButtonGroup::senderUpdate( const ActionObject * sender )
@@ -826,18 +740,25 @@ namespace fheroes2
     {
         const Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
 
-        Sprite releasedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Sprite releasedWithBackground;
+        Sprite pressedWithBackground;
+        Sprite disabledWithBackground;
+
+        if ( croppedBackground.singleLayer() ) {
+            releasedWithBackground._disableTransformLayer();
+            pressedWithBackground._disableTransformLayer();
+            disabledWithBackground._disableTransformLayer();
+        }
+
         Copy( croppedBackground, releasedWithBackground );
         Blit( released, releasedWithBackground, released.x(), released.y() );
 
-        Sprite pressedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, pressedWithBackground );
         Blit( pressed, pressedWithBackground, pressed.x(), pressed.y() );
 
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, disabledWithBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x(), disabled.y() );
@@ -853,18 +774,25 @@ namespace fheroes2
         Sprite croppedBackground = Crop( background, offsetX + shadow.x(), offsetY + shadow.y(), shadow.width(), shadow.height() );
         Blit( shadow, croppedBackground );
 
-        Sprite releasedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
+        Sprite releasedWithBackground;
+        Sprite pressedWithBackground;
+        Sprite disabledWithBackground;
+
+        if ( croppedBackground.singleLayer() ) {
+            releasedWithBackground._disableTransformLayer();
+            pressedWithBackground._disableTransformLayer();
+            disabledWithBackground._disableTransformLayer();
+        }
+
         Copy( croppedBackground, releasedWithBackground );
         Blit( released, releasedWithBackground, released.x() - shadow.x(), released.y() - shadow.y() );
 
-        Sprite pressedWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, pressedWithBackground );
         Blit( pressed, pressedWithBackground, pressed.x() - shadow.x(), pressed.y() - shadow.y() );
 
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Sprite disabledWithBackground( croppedBackground.width(), croppedBackground.height(), 0, 0 );
         Copy( croppedBackground, disabledWithBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
@@ -1011,7 +939,7 @@ namespace fheroes2
         // Add extra vertical margin depending on how many lines of text there are.
         if ( maxHeight > getFontHeight( buttonFontType.size ) ) {
             const int32_t maxAllowedHeight = 200;
-            maxHeight = std::clamp( maxHeight, 56, maxAllowedHeight );
+            maxHeight = std::clamp<int32_t>( maxHeight, 56, maxAllowedHeight );
         }
         else {
             maxHeight += 10;

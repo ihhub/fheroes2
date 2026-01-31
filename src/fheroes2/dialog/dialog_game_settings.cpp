@@ -21,7 +21,6 @@
 #include "dialog_game_settings.h"
 
 #include <cassert>
-#include <cstdint>
 #include <functional>
 #include <string>
 #include <vector>
@@ -58,23 +57,26 @@ namespace
         AudioSettings,
         HotKeys,
         CursorType,
+        InterfaceType,
         TextSupportMode,
         UpdateSettings,
         Exit
     };
 
-    const fheroes2::Size offsetBetweenOptions{ 92, 110 };
+    const fheroes2::Rect languageRoi{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect graphicsRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+                                      fheroes2::optionIconSize };
+    const fheroes2::Rect audioRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+                                   fheroes2::optionIconSize };
 
-    const fheroes2::Point optionOffset{ 20, 31 };
-    const int32_t optionWindowSize{ 65 };
+    const fheroes2::Rect hotKeyRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect cursorTypeRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
+                                        fheroes2::optionIconSize, fheroes2::optionIconSize };
 
-    const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect graphicsRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect audioRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect hotKeyRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect textSupportModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                             optionWindowSize };
+    const fheroes2::Rect interfaceTypeRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2, fheroes2::optionIconSize,
+                                           fheroes2::optionIconSize };
+    const fheroes2::Rect textSupportModeRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
+                                             fheroes2::optionIconSize, fheroes2::optionIconSize };
 
     void drawLanguage( const fheroes2::Rect & optionRoi )
     {
@@ -99,24 +101,12 @@ namespace
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
     {
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
-    void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
+    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi, const bool isTextSupportModeEnabled )
     {
-        if ( Settings::Get().isMonochromeCursorEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ),
-                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-        else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ),
-                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-    }
-
-    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi )
-    {
-        if ( Settings::Get().isTextSupportModeEnabled() ) {
+        if ( isTextSupportModeEnabled ) {
             fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
@@ -128,7 +118,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289, 272, true, display );
+        fheroes2::StandardWindow background( 289, fheroes2::optionsStepY * 3 + 52, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
@@ -146,15 +136,18 @@ namespace
         const fheroes2::Rect windowAudioRoi( audioRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowHotKeyRoi( hotKeyRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowTextSupportModeRoi]() {
+        const auto drawOptions = [&conf, &windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowInterfaceTypeRoi,
+                                  &windowTextSupportModeRoi]() {
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
             drawAudioOptions( windowAudioRoi );
             drawHotKeyOptions( windowHotKeyRoi );
-            drawCursorTypeOptions( windowCursorTypeRoi );
-            drawTextSupportModeOptions( windowTextSupportModeRoi );
+            drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+            drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+            drawTextSupportModeOptions( windowTextSupportModeRoi, conf.isTextSupportModeEnabled() );
         };
 
         drawOptions();
@@ -185,6 +178,9 @@ namespace
             if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
                 return SelectedWindow::CursorType;
             }
+            if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
+                return SelectedWindow::InterfaceType;
+            }
             if ( le.MouseClickLeft( windowTextSupportModeRoi ) ) {
                 return SelectedWindow::TextSupportMode;
             }
@@ -203,6 +199,9 @@ namespace
             }
             else if ( le.isMouseRightButtonPressedInArea( windowCursorTypeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowInterfaceTypeRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), 0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( windowTextSupportModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Text Support" ), _( "Toggle text support mode to output extra information about windows and events in the game." ),
@@ -232,7 +231,11 @@ namespace fheroes2
     void openGameSettings()
     {
         drawMainMenuScreen();
-        fheroes2::Display::instance().render();
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        // First we need to render the whole screen to update the rendered background image when this dialog is called from the menu.
+        display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
         Settings & conf = Settings::Get();
 
@@ -280,6 +283,10 @@ namespace fheroes2
                 break;
             case SelectedWindow::TextSupportMode:
                 conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
+                windowType = SelectedWindow::UpdateSettings;
+                break;
+            case SelectedWindow::InterfaceType:
+                conf.switchToNextInterfaceType();
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             case SelectedWindow::UpdateSettings:

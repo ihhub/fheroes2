@@ -35,6 +35,20 @@ Please follow the instructions below to be able to build the project from source
   to build the project using Android Studio.
 * Launch Android Studio, open the project in the `android` directory and run the build.
 
+### iOS
+
+* To build this build you need to have the necessary Data, Anim, Maps and Music folders for the engine present in the fheroes2 project's folder.
+* Download and install Xcode on your macos device. Download the iOS SDK during installation.
+* Go to the directory `script/ios` and run the file `install_packages.sh`. This script will install all the required packages to build the project using Xcode.
+* Open `fheroes2.xcodeproj` in the "iOS" folder".
+* In the Editor area select "fheroes2" under the "Targets" menu instead of "Projects". Open the "Signing & Capabilities" tab. Under "Signing", add your AppleID in
+the "Team" field.
+* Connect your iOS device to your mac device with the necessary cable. Select the device in the devices in Xcode's upper Toolbar.
+* Click the play button or command + B to build. If asked if you want to download the Metal toolchain, agree to this as it is necessary for the app. After this
+you will be prompted to enable developer mode on your iOS device. Follow the steps provided on your macOS and iOS devices to enable this.
+* Once you have setup developer mode on your device and added your AppleID to Xcode, you can build and run the project. The first build will likely take a while.
+Once fheroes2 starts on your iOS device a white screen will show for a minute or more.
+
 ### PlayStation Vita
 
 If you would like to build and run this project on PlayStation Vita please follow the instructions on [**this page**](README_PSV.md).

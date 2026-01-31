@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -93,7 +93,7 @@ namespace Battle
                 if ( const auto [iter, inserted] = _cache.try_emplace( { headCellIdx, tailCellIdx } ); inserted ) {
                     // Wide units can occupy overlapping positions, the distance between which is actually zero,
                     // but since the movement takes place, we will consider the distance equal to 1 in this case
-                    const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
+                    const uint32_t distance = std::max<uint32_t>( Board::GetDistance( unit.GetPosition(), pos ), 1U );
 
                     iter->second.update( _pathStart, 1, distance );
                 }
@@ -104,7 +104,7 @@ namespace Battle
 
         // The index of that of the cells of the initial unit's position, which is located
         // in the moat (-1, if there is none)
-        const int32_t pathStartMoatCellIdx = [this, &unit, isMoatBuilt]() {
+        const int32_t pathStartMoatCellIdx = [this, &unit, isMoatBuilt]() -> int32_t {
             if ( !isMoatBuilt ) {
                 return -1;
             }

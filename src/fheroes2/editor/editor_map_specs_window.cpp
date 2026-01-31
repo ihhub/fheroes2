@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,10 +39,10 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_language_selection.h"
 #include "dialog_selectitems.h"
 #include "difficulty.h"
 #include "editor_daily_events_window.h"
+#include "editor_language_window.h"
 #include "editor_rumor_window.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
@@ -315,7 +315,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _heroInfos.size() );
 
@@ -327,7 +327,7 @@ namespace
                         itemsOffsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _heroInfos.size() );
 
@@ -363,7 +363,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
 
@@ -378,7 +378,7 @@ namespace
                         itemsOffsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             assert( index >= 0 && static_cast<size_t>( index ) < _townInfos.size() );
             const auto & townInfo = _townInfos[index];
@@ -1236,12 +1236,12 @@ namespace
 
                     SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to capture to achieve victory" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
-                    std::vector<int> townIndicies( _mapTownInfos.size() );
+                    std::vector<int32_t> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
 
                     listbox.SetListContent( townIndicies );
 
-                    int initiallySelectedTownIndex = 0;
+                    int32_t initiallySelectedTownIndex = 0;
 
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                         if ( _townToCapture.first == _mapTownInfos[i].tileIndex && _townToCapture.second == _mapTownInfos[i].color ) {
@@ -1295,12 +1295,12 @@ namespace
 
                     SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to defeat to achieve victory" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
-                    std::vector<int> heroIndicies( _mapHeroInfos.size() );
+                    std::vector<int32_t> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
 
                     listbox.SetListContent( heroIndicies );
 
-                    int initiallySelectedHeroIndex = 0;
+                    int32_t initiallySelectedHeroIndex = 0;
 
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                         if ( _heroToKill.first == _mapHeroInfos[i].tileIndex && _heroToKill.second == _mapHeroInfos[i].color ) {
@@ -1762,12 +1762,12 @@ namespace
 
                     SelectMapCastle listbox( { 450, totalHeight }, _( "Select a Town to lose to suffer defeat" ), {}, _mapWidth, _mapTownInfos, _isEvilInterface );
 
-                    std::vector<int> townIndicies( _mapTownInfos.size() );
+                    std::vector<int32_t> townIndicies( _mapTownInfos.size() );
                     std::iota( townIndicies.begin(), townIndicies.end(), 0 );
 
                     listbox.SetListContent( townIndicies );
 
-                    int initiallySelectedTownIndex = 0;
+                    int32_t initiallySelectedTownIndex = 0;
 
                     for ( size_t i = 0; i < _mapTownInfos.size(); ++i ) {
                         if ( static_cast<int32_t>( _townToLose[0] ) == _mapTownInfos[i].tileIndex
@@ -1812,12 +1812,12 @@ namespace
 
                     SelectMapHero listbox( { 450, totalHeight }, _( "Select a Hero to lose to suffer defeat" ), {}, _mapWidth, _mapHeroInfos, _isEvilInterface );
 
-                    std::vector<int> heroIndicies( _mapHeroInfos.size() );
+                    std::vector<int32_t> heroIndicies( _mapHeroInfos.size() );
                     std::iota( heroIndicies.begin(), heroIndicies.end(), 0 );
 
                     listbox.SetListContent( heroIndicies );
 
-                    int initiallySelectedHeroIndex = 0;
+                    int32_t initiallySelectedHeroIndex = 0;
 
                     for ( size_t i = 0; i < _mapHeroInfos.size(); ++i ) {
                         if ( static_cast<int32_t>( _heroToLose[0] ) == _mapHeroInfos[i].tileIndex
@@ -2145,6 +2145,7 @@ namespace Editor
         fheroes2::ImageRestorer descriptionBackground( display, descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, descriptionTextRoi.height );
 
         text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
+        text.fitToArea( descriptionTextRoi.width, descriptionTextRoi.height );
         text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
 
         // Victory conditions.
@@ -2241,19 +2242,7 @@ namespace Editor
 
         auto renderMapDescription = [&text, &mapFormat, &display, &descriptionTextRoi, &descriptionBackground]() {
             text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
-
-            // TODO: Remove this temporary fix when direct text edit with text length checks is implemented.
-            if ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                fheroes2::showStandardTextMessage(
-                    _( "Warning" ), _( "The entered map description exceeds the maximum allowed 5 rows. It will be shortened to fit the map description field." ),
-                    Dialog::OK );
-
-                // As a temporary solution we cut the end of the text to fit 5 rows.
-                while ( text.rows( descriptionTextRoi.width ) > 5 ) {
-                    mapFormat.description.pop_back();
-                    text.set( mapFormat.description, fheroes2::FontType::normalWhite(), mapFormat.mainLanguage );
-                }
-            }
+            text.fitToArea( descriptionTextRoi.width, descriptionTextRoi.height );
 
             descriptionBackground.restore();
             text.drawInRoi( descriptionTextRoi.x, descriptionTextRoi.y, descriptionTextRoi.width, display, descriptionTextRoi );
@@ -2306,23 +2295,12 @@ namespace Editor
                 display.render( background.totalArea() );
             }
             else if ( le.MouseClickLeft( buttonLanguage.area() ) ) {
-                const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
-                const fheroes2::SupportedLanguage language = fheroes2::selectLanguage( supportedLanguages, mapFormat.mainLanguage, false );
-                if ( language != mapFormat.mainLanguage ) {
-                    std::string differentLanguageWarning = _( "You are about to change the map's language from %{oldLanguage} to %{newLanguage}. "
-                                                              "Some texts might not be displayed properly after this. Do you want to proceed?" );
-                    StringReplace( differentLanguageWarning, "%{oldLanguage}", fheroes2::getLanguageName( mapFormat.mainLanguage ) );
-                    StringReplace( differentLanguageWarning, "%{newLanguage}", fheroes2::getLanguageName( language ) );
+                openLanguageWindow( mapFormat );
 
-                    if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
-                        mapFormat.mainLanguage = language;
+                renderMapName();
+                renderMapDescription();
 
-                        renderMapName();
-                        renderMapDescription();
-
-                        display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
-                    }
-                }
+                display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.
@@ -2338,13 +2316,10 @@ namespace Editor
                 }
             }
             else if ( le.MouseClickLeft( descriptionTextRoi ) ) {
-                // TODO: Edit texts directly in this dialog.
-                // TODO: Limit description to 5 text lines.
-
                 std::string descripton = mapFormat.description;
 
                 const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, 150, true, mapFormat.mainLanguage ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, descripton, Maps::Map_Format::messageCharLimit, true, mapFormat.mainLanguage ) ) {
                     mapFormat.description = std::move( descripton );
 
                     renderMapDescription();
@@ -2389,7 +2364,7 @@ namespace Editor
                 std::string notes = mapFormat.creatorNotes;
 
                 const fheroes2::Text body{ _( "About" ), fheroes2::FontType::normalWhite() };
-                if ( Dialog::inputString( fheroes2::Text{}, body, notes, 150, true, mapFormat.mainLanguage ) ) {
+                if ( Dialog::inputString( fheroes2::Text{}, body, notes, Maps::Map_Format::messageCharLimit, true, mapFormat.mainLanguage ) ) {
                     mapFormat.creatorNotes = std::move( notes );
                 }
             }

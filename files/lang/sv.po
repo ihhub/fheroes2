@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
-"PO-Revision-Date: 2025-10-08 20:01+0200\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"PO-Revision-Date: 2025-12-03 17:37+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -339,6 +339,9 @@ msgstr ""
 "L\n"
 "L"
 
+msgid "army|Few"
+msgstr "Några"
+
 msgid "Warrior"
 msgstr "Krigare"
 
@@ -350,6 +353,13 @@ msgstr "Utforskare"
 
 msgid "None"
 msgstr "Inga"
+
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr ""
+"%{monster}\n"
+"%{range}"
 
 msgid ""
 "A few\n"
@@ -413,9 +423,6 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Några"
 
 msgid "army|Several"
 msgstr "Flera"
@@ -1094,6 +1101,10 @@ msgstr "Spelare"
 msgid "AI"
 msgstr "AI"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Terrängläge"
+
 msgid "Start"
 msgstr "Starta"
 
@@ -1109,8 +1120,24 @@ msgstr "Återställ"
 msgid "Reset to default settings."
 msgstr "Återställ till standardinställningar."
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
+
+msgid "Click to set this hero to be human-controlled."
+msgstr "Klicka för att ange denna hjälte som spelarkontrollerad."
+
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Klicka för att ange denna hjälte som AI-kontrollerad."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} mot %{race2} %{name2}"
@@ -2756,24 +2783,6 @@ msgstr ""
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
 
-msgid "Click to show next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Show next town"
-msgstr "Visa nästa stad"
-
-msgid "Click to show previous town."
-msgstr "Klicka för att visa föregående stad."
-
-msgid "Show previous town"
-msgstr "Visa föregående stad"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Denna stad kan inte uppgraderas till en borg."
-
-msgid "Town"
-msgstr "Stad"
-
 msgid "Exit Castle"
 msgstr "Lämna Borgen"
 
@@ -2783,14 +2792,35 @@ msgstr "Lämna Staden"
 msgid "Show Income"
 msgstr "Visa Inkomst"
 
+msgid "Show previous town"
+msgstr "Visa föregående stad"
+
+msgid "Show next town"
+msgstr "Visa nästa stad"
+
 msgid "View Hero"
 msgstr "Visa Hjälte"
+
+msgid "Click to show the next town."
+msgstr "Klicka för att visa nästa stad."
+
+msgid "Click to show the previous town."
+msgstr "Klicka för att visa föregående stad."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Denna stad kan inte uppgraderas till en borg."
+
+msgid "Town"
+msgstr "Stad"
 
 msgid "The above spells are available here."
 msgstr "Ovanstående besvärjelser är tillgängliga här."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Besvärjelser som hjälten kan lära sig har lagts till dennes bok."
+
+msgid "Exit Mage Guild"
+msgstr "Lämna Magisamfund"
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Ett generöst tips från bartendern som uppger detta rykte:"
@@ -2827,6 +2857,9 @@ msgstr ""
 "'Grupperad' stridsformation buntar ihop hjältens trupper till mitten av "
 "dennes sida av slagfältet."
 
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Borgalternativ. Månad: %{month}, Vecka: %{week}, Dag: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Utspridd'"
 
@@ -2836,20 +2869,11 @@ msgstr "Ändra granisonstruppernas stridsformation till 'Grupperad'"
 msgid "Exit Castle Options"
 msgstr "Lämna Borgalternativ"
 
-msgid "Castle Options"
-msgstr "Borgalternativ"
-
 msgid "Spread Formation"
 msgstr "Utspridd formation"
 
 msgid "Grouped Formation"
 msgstr "Grupperad formation"
-
-msgid "Click to show the next town."
-msgstr "Klicka för att visa nästa stad."
-
-msgid "Click to show the previous town."
-msgstr "Klicka för att visa föregående stad."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "För lite resurser för att rekrytera varelser."
@@ -3108,15 +3132,6 @@ msgstr "Språk"
 msgid "Graphics"
 msgstr "Grafik"
 
-msgid "Black & White"
-msgstr "Svart & Vitt"
-
-msgid "Mouse Cursor"
-msgstr "Muspekare"
-
-msgid "Color"
-msgstr "Färg"
-
 msgid "Text Support"
 msgstr "Texthjälp"
 
@@ -3129,9 +3144,18 @@ msgstr "Välj spelspråk"
 msgid "Change the graphics settings of the game."
 msgstr "Ändra spelets grafikinställningar"
 
+msgid "Mouse Cursor"
+msgstr "Muspekare"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Välj färglagd eller svartvit muspekare. Detta är bara ett estetiskt val."
+
+msgid "Interface Type"
+msgstr "Gränssnittsstil"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3180,6 +3204,9 @@ msgstr ""
 "Förlust-\n"
 "villkor"
 
+msgid "Map Description"
+msgstr "Kartbeskrivning"
+
 msgid "First select recipients!"
 msgstr "Först välj mottagare!"
 
@@ -3222,6 +3249,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Systeminfo."
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Ändra spelets upplösning."
 
@@ -3230,6 +3266,13 @@ msgstr "Välj spelupplösning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Växla mellan fullskärmsläge och fönsterläge."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3260,11 +3303,14 @@ msgstr "Visa"
 msgid "Interface"
 msgstr "Gränssnitt"
 
-msgid "Interface Type"
-msgstr "Gränssnittsstil"
+msgid "Army Estimation"
+msgstr "Armébedömning"
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Välj vilket gränssnitt du vill använda."
+msgid "Canonical"
+msgstr "Antalsmått"
+
+msgid "Numeric"
+msgstr "Numeriskt"
 
 msgid "Toggle interface visibility."
 msgstr "Aktivera gränssnittsynlighet."
@@ -3276,6 +3322,20 @@ msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Välj skrollhastigheten."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
+"Ange hur arméstorlekar visas vid högerklick på äventyrskartan.\n"
+"\n"
+"Antalsmått: Arméstorlekar visas med beskrivande text (t.ex \"Några\".\n"
+"\n"
+"Numeriskt: Arméstorlekar visas med numeriska spännvidder (t.ex \"1-4\")."
 
 msgid "Select Game Language:"
 msgstr "Välj spelspråk:"
@@ -3443,6 +3503,33 @@ msgstr "Steg:"
 msgid "Uncharted Territory"
 msgstr "Outforskat Område"
 
+msgid "Random Map Generator"
+msgstr "Slumpkartgenerator"
+
+msgid "rmg|Player count"
+msgstr "Spelarantal"
+
+msgid "rmg|Map layout"
+msgstr "Kartplan"
+
+msgid "rmg|Water percentage"
+msgstr "Havsprocent"
+
+msgid "rmg|Monster strength"
+msgstr "Varelsestyrka"
+
+msgid "rmg|Resource availability"
+msgstr "Resurstillgänglighet"
+
+msgid "rmg|Map seed"
+msgstr "Kartseed"
+
+msgid "Click to generate a new map."
+msgstr "Klicka för generera en ny karta."
+
+msgid "Return to the previous menu."
+msgstr "Återgå till föregående meny."
+
 msgid "Cost per troop:"
 msgstr "Kostnad per trupp:"
 
@@ -3577,20 +3664,53 @@ msgstr "Fil att Ladda:"
 msgid "Terrain object"
 msgstr "Terrängföremål"
 
+msgid "There is nothing to select from."
+msgstr "Det finns inget att välja."
+
+msgid "There are no castles to select from."
+msgstr "Det finns inga slott att välja."
+
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
+
+msgid "Click to enable all items."
+msgstr "Klicka för att aktivera alla föremål"
+
+msgid "Enable All Items"
+msgstr "Aktivera Alla Föremål"
+
+msgid "Click to disable all items."
+msgstr "Klicka för att inaktivera alla föremål."
+
+msgid "Disable All Items"
+msgstr "Inaktivera Alla Föremål"
+
+msgid "There are no secondary skills to select from."
+msgstr "Det finns inga sekundära förmågor att välja."
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
 
+msgid "There are no spells to select."
+msgstr "Det finns inga besvärjelser att välja."
+
 msgid "Select Spell:"
 msgstr "Välj Besvärjelse"
+
+msgid "There are no artifacts to select from."
+msgstr "Det finns inga artefakter att välja."
 
 msgid "Select Artifact:"
 msgstr "Välj Artefakt:"
 
+msgid "There are no monsters to select from."
+msgstr "Det finns inga varelser att välja."
+
 msgid "Select Monster:"
 msgstr "Välj Varelse:"
+
+msgid "There are no heroes to select from."
+msgstr "Det finns inga hjältar att välja."
 
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
@@ -3713,19 +3833,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikonstorlek"
 
-msgid "Map Type"
-msgstr "Karttyp"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Visar om kartan är gjord för \"The Succession Wars-\", \"The Price of "
-"Loyalty-\" eller \"Resurrection\"-versionen av spelet."
-
-msgid "Map Type:\n"
-msgstr "Karttyp:\n"
-
 msgid "The Succession Wars"
 msgstr "Successionskrigen"
 
@@ -3735,10 +3842,20 @@ msgstr "Lojalitetens Pris"
 msgid "Resurrection"
 msgstr "Resurrection"
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr "Denna karta är skapad för \"%{game-version}\"-versionen av spelet."
+
+msgid "Map Type"
+msgstr "Karttyp"
+
+msgid "Map Type:\n"
+msgstr "Karttyp:\n"
+
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -3841,11 +3958,8 @@ msgstr ""
 "kreatör. Svårare kartor kan innehåller fler och/eller starkare fienden, "
 "färre resurser eller andra specialvillkor som gör det svårare för spelaren."
 
-msgid "Selected Description"
-msgstr "Vald beskrivning"
-
-msgid "The description of the currently selected map."
-msgstr "Den valda kartans beskrivning."
+msgid "Selected Map Description"
+msgstr "Vald Kartas Beskrivning"
 
 msgid "Jump"
 msgstr "Hoppa"
@@ -4222,6 +4336,9 @@ msgstr "Händelseföremål måste placeras på fria rutor."
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
+
+msgid "Not able to generate a map with given parameters."
+msgstr "Kan inte skapa karta med de givna parametrarna."
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4639,6 +4756,46 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Stöd oss på"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Detta rykte finns redan i listan."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Klicka för byta klass."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Språk"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Lägg till en ytterligare händelse."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Välj språk:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Radera en redan existerande händelse."
+
+msgid "Failed to generate a random map with given parameters."
+msgstr "Misslyckades att skapa en slumpad karta med givna parametrar"
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+"Skapa en ny karta, antingen från en blank karta eller genom "
+"slumpkartgeneratorn."
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Stäng Kartredigeraren och återvänd till spelets huvudmeny."
 
@@ -4660,8 +4817,16 @@ msgstr "Tillbaka"
 msgid "Return to the Editor's main menu options."
 msgstr "Återgå till Kartredigerarens huvudmeny."
 
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Skapa en slumpad karta som är %{size} rutor bred och %{size} rutor hög."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
+
+msgid "Return to the previous menu options."
+msgstr "Återgå till föregående menyalternativ."
 
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
@@ -4772,9 +4937,6 @@ msgstr "Klicka för att ändra Hjälten vars besegring innebär förlust."
 msgid "Map Difficulty"
 msgstr "Kartsvårighet"
 
-msgid "Map Description"
-msgstr "Kartbeskrivning"
-
 msgid "RUMORS"
 msgstr "RYKTEN"
 
@@ -4786,22 +4948,6 @@ msgstr "SPRÅK"
 
 msgid "ABOUT"
 msgstr "OM"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Kartans beskrivning överstiger högsta tillåtna 5 rader. Beskrivningen kommer "
-"att nedkortas för att få plats i beskrivningsfältet."
-
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Du tänker ändra kartans språk från %{oldLanguage} till %{newLanguage}. En "
-"del texter kan eventuellt inte visas korrekt efter detta. Vill du "
-"fortfarande ändra språk?"
 
 msgid "Change Map Name"
 msgstr "Ändra Kartnamn"
@@ -4921,6 +5067,15 @@ msgstr "Radera ett existerande rykte."
 msgid ""
 "\n"
 "\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Språk:\n"
+
+msgid ""
+"\n"
+"\n"
 "Size: "
 msgstr ""
 "\n"
@@ -4942,21 +5097,17 @@ msgstr "Spara Karta:"
 msgid "Click to save the current map."
 msgstr "Klicka för att spara nuvarande karta."
 
-#, fuzzy
 msgid "Click to enable all secondary skills."
-msgstr "Klicka här för att aktivera alla besvärjelser."
+msgstr "Klicka här för att aktivera alla sekundära förmågor."
 
-#, fuzzy
 msgid "Enable All Secondary Skills"
-msgstr "Radera Sekundär Förmåga"
+msgstr "Aktivera Alla Sekundära Förmågor"
 
-#, fuzzy
 msgid "Click to disable all secondary skills."
-msgstr "Klicka här för att inaktivera alla besvärjelser."
+msgstr "Klicka här för att inaktivera alla sekundära förmågor."
 
-#, fuzzy
 msgid "Disable All Secondary Skills"
-msgstr "Radera Sekundär Förmåga"
+msgstr "Inaktivera Alla Sekundära Förmågor"
 
 msgid "Click to show only level %{level} spells."
 msgstr "Klicka för att endast visa nivå %{level}-besvärjelser."
@@ -5011,6 +5162,9 @@ msgstr "Radera Svar"
 
 msgid "Delete an existing answer for the question."
 msgstr "Radera ett redan existerande svar till frågan."
+
+msgid "Riddle"
+msgstr "Gåta"
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakt kommer att ges som belöning."
@@ -5157,8 +5311,8 @@ msgstr "Projektkoordination och huvudutveckling"
 msgid "Development"
 msgstr "Utveckling"
 
-msgid "Visit us at "
-msgstr "Besök oss på "
+msgid "Visit us at"
+msgstr "Besök oss på"
 
 msgid "QA and Support"
 msgstr "Kvalitétssäkring och Support"
@@ -5436,6 +5590,12 @@ msgstr "öppna spelets huvudmeny"
 msgid "hotkey|toggle passability"
 msgstr "Aktivera framkomlighet"
 
+msgid "hotkey|re-generate random map"
+msgstr "Återgenerera slumpad karta"
+
+msgid "hotkey|re-configure random map"
+msgstr "Återkonfigurera slumpad karta"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
 
@@ -5507,6 +5667,11 @@ msgstr "Nästa hjälte"
 
 msgid "hotkey|change to hero under cursor"
 msgstr "Byt till hjälte under muspekaren"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
+"Vänsterklicka och håll in för att flytta hjälteporträttet till toppen av "
+"hjältelistan"
 
 msgid "hotkey|start hero movement"
 msgstr "Påbörja hjälteförflyttning"
@@ -6313,11 +6478,23 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy ditt spelande."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Hjälteförflyttning"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "En eller flera hjältar kan fortfarande flytta sig. Är du säker på att du "
 "vill avsluta din runda?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Är du säker på att du vill avsluta?"
@@ -6598,6 +6775,12 @@ msgstr "God"
 
 msgid "Evil"
 msgstr "Ond"
+
+msgid "Black & White"
+msgstr "Svart & Vitt"
+
+msgid "Color"
+msgstr "Färg"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -9193,6 +9376,42 @@ msgstr "Gräs"
 
 msgid "Ocean"
 msgstr "Hav"
+
+msgid "map_layout|Mirrored"
+msgstr "Speglad"
+
+msgid "map_layout|Balanced"
+msgstr "Balanserad"
+
+msgid "map_layout|Islands"
+msgstr "Skärgård"
+
+msgid "map_layout|Pyramid"
+msgstr "Pyramid"
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr "Glest"
+
+msgid "resource_density|Normal"
+msgstr "Normalt"
+
+msgid "resource_density|Abundant"
+msgstr "Mycket"
+
+msgid "monster_strength|Weak"
+msgstr "Svag"
+
+msgid "monster_strength|Normal"
+msgstr "Normal"
+
+msgid "monster_strength|Strong"
+msgstr "Stark"
+
+msgid "monster_strength|Deadly"
+msgstr "Dödlig"
 
 msgid "maps|Small"
 msgstr "Liten"
@@ -12132,11 +12351,16 @@ msgstr ""
 "Dimensions-\n"
 "portal"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "För tillbaka Hjälten till någon stad eller borg som du kontrollerar."
-
 msgid "Town Gate"
 msgstr "Stadsport"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
+"Förflyttar hjälten till närmsta kontrollerade stad eller borg. Denna "
+"besvärjelse kan inte kastas om hjälten redan befinner sig i en stad eller en "
+"borg."
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12344,63 +12568,11 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
 
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "2"
-#~ msgstr "2"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vedergäller alltid"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Maximalt %{count} obelisker kan placeras på kartan."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr ""
-#~ "Klicka för att ändra Borgnamn. Högerklicka för att återställa till "
-#~ "standard."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Ange anpassad Borgarmé. Högerklicka för att återställa enheten."
-
-#~ msgid "CONFIG"
-#~ msgstr ""
-#~ "INSTÄLL-\n"
-#~ "NINGAR"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Avbryt och gå tillbaka till Ny Karta-menyn."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Avbryt och gå tillbaka till kartredigerarens huvudmeny."
-
-#~ msgid "Host"
-#~ msgstr "Värd"
-
 #~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
 #~ msgstr ""
-#~ "Värden anger spelinställningarna. Det kan endast finnas en värd per "
-#~ "nätverksspel."
-
-#~ msgid "Guest"
-#~ msgstr "Gäst"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gästen väntar på att värden ska sätta igång spelet, sen läggs till "
-#~ "automatiskt. Det kan finnas flera gäster för TCP/IP-spel."
+#~ "Du tänker ändra kartans språk från %{oldLanguage} till %{newLanguage}. En "
+#~ "del texter kan eventuellt inte visas korrekt efter detta. Vill du "
+#~ "fortfarande ändra språk?"

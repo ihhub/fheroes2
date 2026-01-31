@@ -53,7 +53,10 @@ public:
         _troopWindowOffsetY = offsetY;
     }
 
-    bool isValid() const;
+    bool isValid() const
+    {
+        return _army != nullptr;
+    }
 
     void ResetSelected();
     void Redraw( fheroes2::Image & dstsf );

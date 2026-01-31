@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -337,6 +337,9 @@ msgstr ""
 "J\n"
 "E"
 
+msgid "army|Few"
+msgstr "Få"
+
 msgid "Warrior"
 msgstr "Kriger"
 
@@ -348,6 +351,12 @@ msgstr "Udforsker"
 
 msgid "None"
 msgstr "Ingen"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Flyv %{monster} hertil"
 
 msgid ""
 "A few\n"
@@ -411,9 +420,6 @@ msgid ""
 msgstr ""
 "En legion af\n"
 "%{monster}"
-
-msgid "army|Few"
-msgstr "Få"
 
 msgid "army|Several"
 msgstr "Flere"
@@ -1100,6 +1106,10 @@ msgstr "Menneske"
 msgid "AI"
 msgstr "AI"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Terræn-tilstand"
+
 msgid "Start"
 msgstr "Genstart"
 
@@ -1115,8 +1125,26 @@ msgstr "Nulstil"
 msgid "Reset to default settings."
 msgstr "Nulstil til standardindstillinger"
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Vælg venligst en anden helt."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Klik for at vælge denne farve."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Klik for at vælge denne farve."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2809,24 +2837,6 @@ msgstr ""
 "magikerlauget. Men helten har desværre ikke plads til at bære en magibog. "
 "Prøv at afgive én af dine artefakter til en anden helt."
 
-msgid "Click to show next town."
-msgstr "Klik for at se næste by."
-
-msgid "Show next town"
-msgstr "Se næste by"
-
-msgid "Click to show previous town."
-msgstr "Klik for at se forrige by."
-
-msgid "Show previous town"
-msgstr "Se forrige by"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Der kan ikke bygges en borg i denne by."
-
-msgid "Town"
-msgstr "By"
-
 msgid "Exit Castle"
 msgstr "Forlad borg"
 
@@ -2836,14 +2846,35 @@ msgstr "Forlad by"
 msgid "Show Income"
 msgstr "Vis indkomst"
 
+msgid "Show previous town"
+msgstr "Se forrige by"
+
+msgid "Show next town"
+msgstr "Se næste by"
+
 msgid "View Hero"
 msgstr "Vis helt"
+
+msgid "Click to show the next town."
+msgstr "Klik for at se næste by."
+
+msgid "Click to show the previous town."
+msgstr "Klik for at se forrige by."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Der kan ikke bygges en borg i denne by."
+
+msgid "Town"
+msgstr "By"
 
 msgid "The above spells are available here."
 msgstr "Med nok visdom kan alle disse besværgelser læres af dine helte."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "De besværgelser, den besøgende helt kan lære, er nu i magibogen."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "En generøs mængde drikkepenge får krokarlen til at dele dette rygte:"
@@ -2881,6 +2912,10 @@ msgstr ""
 "'Gruppe'-formation samler borgens tropper i midten af borgens side af "
 "slagmarken."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Måned: %{month}, Uge: %{week}, Dag: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
 "Indstil garnisonen til at stå opstille sig i 'spredt' formation under kamp"
@@ -2892,20 +2927,11 @@ msgstr ""
 msgid "Exit Castle Options"
 msgstr "Forlad borg-vindue"
 
-msgid "Castle Options"
-msgstr "Borg-vindue"
-
 msgid "Spread Formation"
 msgstr "Spredt formation"
 
 msgid "Grouped Formation"
 msgstr "Gruppeformation"
-
-msgid "Click to show the next town."
-msgstr "Klik for at se næste by."
-
-msgid "Click to show the previous town."
-msgstr "Klik for at se forrige by."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Der er ikke nok resurser til at rekruttere væsener for."
@@ -3175,15 +3201,6 @@ msgstr "Sprog"
 msgid "Graphics"
 msgstr "Grafik"
 
-msgid "Black & White"
-msgstr "Sort & Hvid"
-
-msgid "Mouse Cursor"
-msgstr "Musemarkør"
-
-msgid "Color"
-msgstr "Farve"
-
 msgid "Text Support"
 msgstr "Tekstsupport"
 
@@ -3196,8 +3213,17 @@ msgstr "Vælg spillets sprog"
 msgid "Change the graphics settings of the game."
 msgstr "Ændr spillets grafikindstillinger."
 
+msgid "Mouse Cursor"
+msgstr "Musemarkør"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
+
+msgid "Interface Type"
+msgstr "Interface-type"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3246,6 +3272,9 @@ msgstr ""
 "Tabs-\n"
 "vilkår"
 
+msgid "Map Description"
+msgstr "Kortbeskrivelse"
+
 msgid "First select recipients!"
 msgstr "Vælg først modtagere!"
 
@@ -3288,6 +3317,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "System info"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Skift spilopløsning."
 
@@ -3296,6 +3334,13 @@ msgstr "Vælg spilopløsning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Vælg mellem fuldskærms- og vinduestilstand."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3328,11 +3373,15 @@ msgstr "Vis"
 msgid "Interface"
 msgstr "Interface"
 
-msgid "Interface Type"
-msgstr "Interface-type"
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Animation"
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Vælg hvilken interface-type du ønsker at bruge."
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
 
 msgid "Toggle interface visibility."
 msgstr "Vælg interfacets synlighed til eller fra."
@@ -3344,6 +3393,15 @@ msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Bestemmer vinduets rullehastighed."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Vælg spilsprog:"
@@ -3511,6 +3569,39 @@ msgstr "Skridtpoint:"
 msgid "Uncharted Territory"
 msgstr "Ukendt område"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Tilfældigt væsen"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Spiller-ikon"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vand-elemental"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Tilfældigt væsen - stærk"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
+
 msgid "Cost per troop:"
 msgstr "Pris per trop:"
 
@@ -3646,20 +3737,61 @@ msgstr "Fil som skal indlæses:"
 msgid "Terrain object"
 msgstr "Terræn-objekt"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Forbudt magi"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klik for kun at vise niveau %{level} besværgelser."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Vis besværgelser"
+
+msgid "There are no secondary skills to select from."
+msgstr ""
 
 msgid "Select Skill:"
 msgstr "Vælg evne:"
 
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Ingen magi at kaste."
+
 msgid "Select Spell:"
 msgstr "Vælg magi:"
+
+msgid "There are no artifacts to select from."
+msgstr ""
 
 msgid "Select Artifact:"
 msgstr "Vælg artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Navnet på det valgte kort."
+
 msgid "Select Monster:"
 msgstr "Vælg væsen:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Navnet på det valgte kort."
 
 msgid "Select Hero:"
 msgstr "Vælg helt:"
@@ -3786,19 +3918,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
-msgid "Map Type"
-msgstr "Korttype"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Angiver om kortet er lavet til \"Arvefølgekrigene\", \"Prisen for "
-"Loyalitet\" eller \"Opstandelse\" version af spillet."
-
-msgid "Map Type:\n"
-msgstr "Korttype:\n"
-
 msgid "The Succession Wars"
 msgstr "Arvefølgekrigene"
 
@@ -3808,10 +3927,20 @@ msgstr "Prisen for Loyalitet"
 msgid "Resurrection"
 msgstr "Opstandelse"
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Korttype"
+
+msgid "Map Type:\n"
+msgstr "Korttype:\n"
+
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -3915,11 +4044,9 @@ msgstr ""
 "flere og stærkere fjender, færre resurser eller andre særlige vilkår, som "
 "gør det sværere for menneskelige spillere."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Valgte beskrivelse"
-
-msgid "The description of the currently selected map."
-msgstr "Beskrivelsen til det valgte kort."
 
 msgid "Jump"
 msgstr "Hop"
@@ -4294,6 +4421,9 @@ msgstr "Handlingsobjekter skal placeres på rene felter."
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} %{objects} på kortet."
+
+msgid "Not able to generate a map with given parameters."
+msgstr ""
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
@@ -4716,6 +4846,44 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Støt os på"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Rygtet findes allerede på listen."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Klik for at skifte klasse."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Sprog"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Tilføj endnu en begivenhed."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Vælg spillets sprog:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Ændr en eksisterende begivenhed."
+
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Afslut Editoren og vend tilbage til hovedmenuen."
 
@@ -4737,8 +4905,17 @@ msgstr "Tilbage"
 msgid "Return to the Editor's main menu options."
 msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
 
 msgid "No maps available!"
 msgstr "Intet kort tilgængelig!"
@@ -4850,9 +5027,6 @@ msgstr "Klik her for at ændre helten, hvis tab ville betyde nederlag."
 msgid "Map Difficulty"
 msgstr "Kort-niveau"
 
-msgid "Map Description"
-msgstr "Kortbeskrivelse"
-
 msgid "RUMORS"
 msgstr "RYGTER"
 
@@ -4864,22 +5038,6 @@ msgstr "SPROG"
 
 msgid "ABOUT"
 msgstr "OM"
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-"Den indtastede kortbeskrivelse overskrider de maksimalt tilladte 5 rækker. "
-"Den vil blive forkortet, så den passer til kortbeskrivelsesfeltet."
-
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Du er ved at ændre kortets sprog fra %{oldLanguage} til %{newLanguage}. "
-"Nogle tekster vil måske ikke blive vist korrekt efter dette. Ønsker du at "
-"fortsætte?"
 
 msgid "Change Map Name"
 msgstr "Skift kortnavn"
@@ -4997,6 +5155,15 @@ msgstr "Fjern et eksisterende rygte."
 msgid ""
 "\n"
 "\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Sprog:\n"
+
+msgid ""
+"\n"
+"\n"
 "Size: "
 msgstr ""
 "\n"
@@ -5091,6 +5258,10 @@ msgstr "Fjern svar"
 
 msgid "Delete an existing answer for the question."
 msgstr "Fjern et eksisterende svar på gåden."
+
+#, fuzzy
+msgid "Riddle"
+msgstr "Gåde:"
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakter vil blive givet som belønning."
@@ -5237,8 +5408,8 @@ msgstr "Projektkoordination og kerneudvikling"
 msgid "Development"
 msgstr "Udvikling"
 
-msgid "Visit us at "
-msgstr "Besøg os på "
+msgid "Visit us at"
+msgstr "Besøg os på"
 
 msgid "QA and Support"
 msgstr "QA og support"
@@ -5516,6 +5687,14 @@ msgstr "Åben spillets hovedmenu"
 msgid "hotkey|toggle passability"
 msgstr "Fremkommelighed (til/fra)"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "Generer nyt kort"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "Generer nyt kort"
+
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
 
@@ -5588,6 +5767,9 @@ msgstr "Næste helt"
 
 msgid "hotkey|change to hero under cursor"
 msgstr "Skift til markeret helt"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 msgid "hotkey|start hero movement"
 msgstr "Fortsæt heltebevægelse"
@@ -6404,10 +6586,22 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Frembring menuen for systemindstillingerne, så du kan tilpasse dit spil."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Heltebevægelse"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "En eller flere helte kan stadig ride. Er du sikker på at du vil ende din tur?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Er du sikker på om du vil afslutte?"
@@ -6690,6 +6884,12 @@ msgstr "God"
 
 msgid "Evil"
 msgstr "Ond"
+
+msgid "Black & White"
+msgstr "Sort & Hvid"
+
+msgid "Color"
+msgstr "Farve"
 
 msgid ", FPS: "
 msgstr ", FPS:"
@@ -9299,6 +9499,43 @@ msgstr "Græs"
 
 msgid "Ocean"
 msgstr "Hav"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Jævn"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Lille"
@@ -12278,11 +12515,13 @@ msgstr ""
 "Dimensions-\n"
 "dør"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr "Returnerer kasteren til enhver af spillerens byer eller borge."
-
 msgid "Town Gate"
 msgstr "Byflugt"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12494,44 +12733,11 @@ msgstr ""
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
 
-#~ msgid "Always retaliates"
-#~ msgstr "Slår altid igen"
-
-#, fuzzy
-#~ msgid "A maximum of 72 %{objects} can be placed on the map."
-#~ msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
-
-#~ msgid "Click to change the Castle name. Right-click to reset to default."
-#~ msgstr "Klik for at ændre borgnavnet. Højreklik: Nulstil til standard."
-
-#~ msgid "Set custom Castle Army. Right-click to reset unit."
-#~ msgstr "Indstil brugerdefinerede borghær. Højreklik: Fjern trop."
-
-#~ msgid "CONFIG"
-#~ msgstr "INDSTIL"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
-
-#~ msgid "Host"
-#~ msgstr "Vært"
-
 #~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
 #~ msgstr ""
-#~ "Værten opsætter spilmulighederne. Der kan kun være én vært per "
-#~ "netværksspil."
-
-#~ msgid "Guest"
-#~ msgstr "Gæst"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gæsten venter på, at værten sætter spillet op, og tilføjes derefter "
-#~ "automatisk. Der kan være flere gæster til TCP/IP-spil."
+#~ "Du er ved at ændre kortets sprog fra %{oldLanguage} til %{newLanguage}. "
+#~ "Nogle tekster vil måske ikke blive vist korrekt efter dette. Ønsker du at "
+#~ "fortsætte?"

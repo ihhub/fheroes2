@@ -590,8 +590,12 @@ void StreamFile::putLE32( uint32_t v )
 
 std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 {
+    if ( !_file ) {
+        return {};
+    }
+
     const size_t chunkSize = size > 0 ? size : sizeg();
-    if ( chunkSize == 0 || !_file ) {
+    if ( chunkSize == 0 ) {
         return {};
     }
 

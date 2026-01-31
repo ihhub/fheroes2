@@ -494,7 +494,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // This dialog currently does not have borders so its ROI is the same as fade ROI.
     fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
 
-    const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+    const int32_t hero1ScoutAreaBonus = _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
     const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
 
     LocalEvent & le = LocalEvent::Get();
@@ -571,8 +571,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
-            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> assembledArtifacts = _bagArtifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero._bagArtifacts.assembleArtifactSetIfPossible();
 
             // MSVC 2017 fails to use the std::set<...>::merge( std::set<...> && ) overload here, so we have to use a temporary variable
             assembledArtifacts.merge( otherHeroAssembledArtifacts );
@@ -849,7 +849,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     restorer.restore();
 
     // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
-    if ( hero1ScoutAreaBonus < bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+    if ( hero1ScoutAreaBonus < _bagArtifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
         Scout( GetIndex() );
         ScoutRadar();
     }

@@ -1403,7 +1403,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
     }
 
-    optionButtonGroup.draw();
+    optionButtonGroup.draw( display );
 
     buttonViewIntro.draw();
     buttonDifficulty.draw();
@@ -1518,7 +1518,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             if ( le.isMouseLeftButtonPressedInArea( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
                 scenarioBonusId = fheroes2::checkedCast<int32_t>( i );
                 buttonChoices.button( i ).press();
-                optionButtonGroup.draw();
+                optionButtonGroup.draw( display );
                 display.render();
 
                 break;

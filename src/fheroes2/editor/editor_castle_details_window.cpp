@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -267,7 +267,8 @@ namespace
                 fheroes2::ApplyPalette( display, _area.x + 6, _area.y + 59, display, _area.x + 6, _area.y + 59, 125, 12, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             }
 
-            const fheroes2::Text buildingName( Castle::GetStringBuilding( _getBuildindTypeForRender(), _race ), fheroes2::FontType::smallWhite() );
+            fheroes2::Text buildingName( Castle::GetStringBuilding( _getBuildindTypeForRender(), _race ), fheroes2::FontType::smallWhite() );
+            buildingName.fitToOneRow( 125 );
             buildingName.draw( _area.x + 68 - buildingName.width() / 2, _area.y + 61, display );
         }
 
@@ -492,7 +493,7 @@ namespace
                     bannedSpellsContainer[level - 1].push_back( spellId );
                 }
 
-                auto getMageGuildTitle = []( const int level ) {
+                auto getMageGuildTitle = []( const int32_t level ) {
                     switch ( level ) {
                     case 1:
                         return fheroes2::getBuildingName( 0, BUILD_MAGEGUILD1 );
@@ -534,7 +535,7 @@ namespace
                                 // Banned spells must be always valid ones.
                                 assert( spellLevel >= 1 && spellLevel <= 5 );
 
-                                auto & spellRow = spellRows[spellLevel - 1];
+                                const auto & spellRow = spellRows[spellLevel - 1];
 
                                 if ( spellRow->checkSpellAndMakeItCurrent( spell ) ) {
                                     spellRow->setCurrentSpell( Spell::RANDOM + spellLevel );
@@ -835,7 +836,7 @@ namespace Editor
                     std::string res = castleMetadata.customName;
 
                     const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
-                    if ( Dialog::inputString( fheroes2::Text{}, body, res, 30, false, language ) && !res.empty() ) {
+                    if ( Dialog::inputString( fheroes2::Text{}, body, res, Maps::Map_Format::nameCharLimit, false, language ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
                     }

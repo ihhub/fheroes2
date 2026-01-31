@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -214,7 +214,7 @@ fheroes2::GameMode Game::StartBattleOnly()
 {
     static Battle::Only battleOnlySetup;
 
-    world.generateBattleOnlyMap();
+    world.generateBattleOnlyMap( battleOnlySetup.terrainType() );
 
     bool reset = false;
     bool allowBackup = true;
@@ -223,12 +223,13 @@ fheroes2::GameMode Game::StartBattleOnly()
         allowBackup = false;
 
         if ( reset ) {
-            world.generateBattleOnlyMap();
+            world.generateBattleOnlyMap( battleOnlySetup.terrainType() );
             battleOnlySetup.reset();
             reset = false;
             continue;
         }
 
+        world.setUniformTerrain( battleOnlySetup.terrainType() );
         battleOnlySetup.StartBattle();
         break;
     }
@@ -303,28 +304,41 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     assert( it != myCastles.end() );
 
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
+    bool openConstructionWindow{ false };
+    bool openMageGuildWindow{ false };
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, true, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
-        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+        switch ( result ) {
+        case Castle::CastleDialogReturnValue::PreviousCastle:
+        case Castle::CastleDialogReturnValue::PreviousConstructionWindow:
+        case Castle::CastleDialogReturnValue::PreviousMageGuildWindow:
             if ( it == myCastles.begin() ) {
                 it = myCastles.end();
             }
             --it;
-        }
-        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+            break;
+        case Castle::CastleDialogReturnValue::NextCastle:
+        case Castle::CastleDialogReturnValue::NextConstructionWindow:
+        case Castle::CastleDialogReturnValue::NextMageGuildWindow:
             ++it;
             if ( it == myCastles.end() ) {
                 it = myCastles.begin();
             }
+            break;
+        default:
+            break;
         }
 
         assert( it != myCastles.end() );
 
-        const bool openConstructionWindow
-            = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+        openConstructionWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousConstructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextConstructionWindow );
 
-        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
+        openMageGuildWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) || ( result == Castle::CastleDialogReturnValue::NextMageGuildWindow );
+
+        result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, false, renderBackgroundDialog );
     }
 
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
@@ -810,6 +824,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     conf.SetCurrentColor( playerColor );
 
                     if ( isHotSeatGame ) {
+                        // Move the area to the center of the map to avoid showing map borders.
+                        _gameArea.SetCenter( fheroes2::Point{ world.w() / 2, world.h() / 2 } );
+
                         if ( conf.getInterfaceType() == InterfaceType::DYNAMIC && _isCurrentInterfaceEvil != conf.isEvilInterfaceEnabled() ) {
                             reset();
                         }
@@ -1190,22 +1207,22 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 }
                 // Adventure map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_RIGHT );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_TOP );
                     }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
-                    if ( !_gameArea.isDragScroll() ) {
+                    if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_BOTTOM );
                     }
                 }

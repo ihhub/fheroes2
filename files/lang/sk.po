@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 22:58+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -331,6 +331,9 @@ msgid ""
 "L"
 msgstr ""
 
+msgid "army|Few"
+msgstr "Málo"
+
 msgid "Warrior"
 msgstr "Bojovník"
 
@@ -342,6 +345,12 @@ msgstr "Prieskumník"
 
 msgid "None"
 msgstr "Žiadny"
+
+#, fuzzy
+msgid ""
+"%{monster}\n"
+"%{range}"
+msgstr "Leť sem s: %{monster}"
 
 msgid ""
 "A few\n"
@@ -405,9 +414,6 @@ msgid ""
 msgstr ""
 "%{monster}\n"
 "(légia)"
-
-msgid "army|Few"
-msgstr "Málo"
 
 msgid "army|Several"
 msgstr "Niekoľko"
@@ -1101,6 +1107,10 @@ msgid "AI"
 msgstr "UI"
 
 #, fuzzy
+msgid "Terrain"
+msgstr "Režim terénu"
+
+#, fuzzy
 msgid "Start"
 msgstr "Reštart"
 
@@ -1117,8 +1127,26 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
+
+#, fuzzy
+msgid "Click to set this hero to be human-controlled."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to set this hero to be AI-controlled."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2793,24 +2821,6 @@ msgstr ""
 "nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
 "hrdinovi."
 
-msgid "Click to show next town."
-msgstr "Kliknutím zobraz ďalšie mesto."
-
-msgid "Show next town"
-msgstr "Ukáž ďalšie mesto"
-
-msgid "Click to show previous town."
-msgstr "Kliknutím zobraz predošlé mesto."
-
-msgid "Show previous town"
-msgstr "Ukáž predošlé mesto"
-
-msgid "This town may not be upgraded to a castle."
-msgstr "Toto mesto nemôže byť povýšené na hrad."
-
-msgid "Town"
-msgstr "Mesto"
-
 msgid "Exit Castle"
 msgstr "Preč z hradu"
 
@@ -2820,14 +2830,37 @@ msgstr "Preč z mesta"
 msgid "Show Income"
 msgstr "Ukáž príjem"
 
+msgid "Show previous town"
+msgstr "Ukáž predošlé mesto"
+
+msgid "Show next town"
+msgstr "Ukáž ďalšie mesto"
+
 msgid "View Hero"
 msgstr "Ukáž hrdinu"
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Kliknutím zobraz predošlé mesto."
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Toto mesto nemôže byť povýšené na hrad."
+
+msgid "Town"
+msgstr "Mesto"
 
 msgid "The above spells are available here."
 msgstr "Vyššie uvedené kúzla sú tu dostupné."
 
 msgid "The spells the hero can learn have been added to their book."
 msgstr "Do knihy boli pridané kúzla, ktoré sa hrdina môže naučiť."
+
+msgid "Exit Mage Guild"
+msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Štedré prepitné pre barmana prináša nasledujúcu fámu:"
@@ -2866,6 +2899,10 @@ msgstr ""
 "'Zoskupená' bojová formácia spája tvoju armádu v strede tvojej strany "
 "bojiska."
 
+#, fuzzy
+msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr "Mesiac: %{month}, Týždeň: %{week}, Deň: %{day}"
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastaviť bojovú formáciu posádky na 'Široká'"
 
@@ -2875,22 +2912,11 @@ msgstr "Nastaviť bojovú formáciu posádky na 'Zoskupená'"
 msgid "Exit Castle Options"
 msgstr "Preč z možností hradu"
 
-msgid "Castle Options"
-msgstr "Možnosti hradu"
-
 msgid "Spread Formation"
 msgstr "Široká formácia"
 
 msgid "Grouped Formation"
 msgstr "Zoskupená formácia"
-
-#, fuzzy
-msgid "Click to show the next town."
-msgstr "Kliknutím zobraz ďalšie mesto."
-
-#, fuzzy
-msgid "Click to show the previous town."
-msgstr "Kliknutím zobraz predošlé mesto."
 
 msgid "Not enough resources to recruit creatures."
 msgstr "Nie je dostatok zdrojov na nábor bojovníkov."
@@ -3154,15 +3180,6 @@ msgstr "Jazyk"
 msgid "Graphics"
 msgstr "Grafika"
 
-msgid "Black & White"
-msgstr "Čiernobiely"
-
-msgid "Mouse Cursor"
-msgstr "Kurzor myši"
-
-msgid "Color"
-msgstr "Farebný"
-
 msgid "Text Support"
 msgstr "Podpora textu"
 
@@ -3175,8 +3192,17 @@ msgstr "Vyber jazyk hry"
 msgid "Change the graphics settings of the game."
 msgstr "Zmeň nastavenie grafiky hry."
 
+msgid "Mouse Cursor"
+msgstr "Kurzor myši"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Zapnutie alebo vypnutie farebného kurzora. Ide len o estetickú voľbu."
+
+msgid "Interface Type"
+msgstr "Typ rozhrania"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3225,6 +3251,13 @@ msgstr ""
 "Podmienky\n"
 "prehry"
 
+#, fuzzy
+msgid "Map Description"
+msgstr ""
+"\n"
+"\n"
+"Umiestnenie: "
+
 msgid "First select recipients!"
 msgstr "Najprv zvoľ príjemcov!"
 
@@ -3268,6 +3301,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Systémové info"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Zmeň rozlíšenie hry."
 
@@ -3276,6 +3318,13 @@ msgstr "Zvoľ rozlíšenie hry"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Prepni medzi módom celej obrazovky a oknom."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3308,11 +3357,15 @@ msgstr "Zobraz"
 msgid "Interface"
 msgstr "Rozhranie"
 
-msgid "Interface Type"
-msgstr "Typ rozhrania"
+#, fuzzy
+msgid "Army Estimation"
+msgstr "Anexia"
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
+msgid "Canonical"
+msgstr ""
+
+msgid "Numeric"
+msgstr ""
 
 msgid "Toggle interface visibility."
 msgstr "Prepni viditeľnosť rozhrania."
@@ -3322,6 +3375,15 @@ msgstr "Rýchlosť posunu"
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
+
+msgid ""
+"Toggle how army sizes are displayed when right-clicking armies on the "
+"adventure map. \n"
+"\n"
+"Canonical: Army sizes are shown as descriptive text (e.g. \"Few\").\n"
+"\n"
+"Numeric: Army sizes are shown as numeric ranges (e.g. \"1-4\")."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Zvoľ jazyk hry:"
@@ -3488,6 +3550,39 @@ msgstr "Body pohybu:"
 msgid "Uncharted Territory"
 msgstr "Nepreskúmané územie"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Náhodný tvor"
+
+#, fuzzy
+msgid "rmg|Player count"
+msgstr "Ikona hráča"
+
+msgid "rmg|Map layout"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Water percentage"
+msgstr "Vodný elementál"
+
+#, fuzzy
+msgid "rmg|Monster strength"
+msgstr "Náhodný tvor - silný"
+
+msgid "rmg|Resource availability"
+msgstr ""
+
+msgid "rmg|Map seed"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
 msgid "Cost per troop:"
 msgstr "Cena za jednotku:"
 
@@ -3625,20 +3720,61 @@ msgstr "Nahrať súbor:"
 msgid "Terrain object"
 msgstr "Režim terénu"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
+
+#, fuzzy
+msgid "Click to enable all items."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Enable All Items"
+msgstr "Náhodná"
+
+#, fuzzy
+msgid "Click to disable all items."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Disable All Items"
+msgstr "Zobraz kúzla"
+
+msgid "There are no secondary skills to select from."
+msgstr ""
 
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
 
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Žiadne kúzla na čarovanie."
+
 msgid "Select Spell:"
 msgstr "Zvoľ kúzlo:"
+
+msgid "There are no artifacts to select from."
+msgstr ""
 
 msgid "Select Artifact:"
 msgstr "Zvoľ artefakt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Názov momentálne zvolenej mapy."
+
 msgid "Select Monster:"
 msgstr "Zvoľ bojovníka:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Názov momentálne zvolenej mapy."
 
 msgid "Select Hero:"
 msgstr "Zvoľ hrdinu:"
@@ -3788,20 +3924,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Ikona veľkosti"
 
-msgid "Map Type"
-msgstr "Typ mapy"
-
-#, fuzzy
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
-"Price of Loyalty\"."
-
-msgid "Map Type:\n"
-msgstr "Typ mapy:\n"
-
 msgid "The Succession Wars"
 msgstr "Vojna o dedičstvo"
 
@@ -3812,11 +3934,20 @@ msgstr "Cena vernosti"
 msgid "Resurrection"
 msgstr "Vzkriesenie"
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Typ mapy"
+
+msgid "Map Type:\n"
+msgstr "Typ mapy:\n"
+
 #, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr "Jazyk"
 
 msgid "Lose all your heroes and towns."
@@ -3920,11 +4051,9 @@ msgstr ""
 "zdrojov alebo iné špeciálne podmienky, ktoré sťažujú situáciu pre ľudského "
 "hráča."
 
-msgid "Selected Description"
+#, fuzzy
+msgid "Selected Map Description"
 msgstr "Zvolený opis"
-
-msgid "The description of the currently selected map."
-msgstr "Opis aktuálne zvolenej mapy."
 
 msgid "Jump"
 msgstr "Skok"
@@ -4332,6 +4461,9 @@ msgstr "Toto kúzlo nemožno použiť na lodi."
 #, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
+
+msgid "Not able to generate a map with given parameters."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -4768,6 +4900,43 @@ msgstr ""
 "Zobraziť systémové možnosti editora, ktoré umožňujú prispôsobiť editor."
 
 #, fuzzy
+msgid "Supported languages"
+msgstr "Prispej na"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Jazyk"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Dodatočné programovanie"
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Zvoľ jazyk hry:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Načítať existujúcu mapu."
+
+msgid "Failed to generate a random map with given parameters."
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 
@@ -4790,9 +4959,19 @@ msgstr ""
 msgid "Return to the Editor's main menu options."
 msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 
+#, fuzzy
+msgid ""
+"Generate a random map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+"Vytvoriť mapu, ktorá má šírku %{size} štvorcov a výšku %{size} štvorcov."
+
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 "Vytvoriť mapu, ktorá má šírku %{size} štvorcov a výšku %{size} štvorcov."
+
+#, fuzzy
+msgid "Return to the previous menu options."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 
 msgid "No maps available!"
 msgstr "Žiadne dostupné mapy!"
@@ -4930,13 +5109,6 @@ msgstr ""
 "Obtiažnosť\n"
 "mapy"
 
-#, fuzzy
-msgid "Map Description"
-msgstr ""
-"\n"
-"\n"
-"Umiestnenie: "
-
 msgid "RUMORS"
 msgstr ""
 
@@ -4947,17 +5119,6 @@ msgid "LANGUAGE"
 msgstr ""
 
 msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"The entered map description exceeds the maximum allowed 5 rows. It will be "
-"shortened to fit the map description field."
-msgstr ""
-
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
 msgstr ""
 
 msgid "Change Map Name"
@@ -5090,6 +5251,13 @@ msgstr ""
 msgid "Delete an existing rumor."
 msgstr "Načítať existujúcu mapu."
 
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Jazyk"
+
 msgid ""
 "\n"
 "\n"
@@ -5188,6 +5356,9 @@ msgid "Delete Answer"
 msgstr ""
 
 msgid "Delete an existing answer for the question."
+msgstr ""
+
+msgid "Riddle"
 msgstr ""
 
 msgid "No artifact will be given as a reward."
@@ -5336,8 +5507,8 @@ msgstr "Koordinácia projektu a hlavný vývoj"
 msgid "Development"
 msgstr "Vývoj"
 
-msgid "Visit us at "
-msgstr "Navštív nás na "
+msgid "Visit us at"
+msgstr "Navštív nás na"
 
 msgid "QA and Support"
 msgstr "Zabezpečenie kvality a podpora"
@@ -5623,6 +5794,14 @@ msgstr "nová mapa"
 msgid "hotkey|toggle passability"
 msgstr "prepni status"
 
+#, fuzzy
+msgid "hotkey|re-generate random map"
+msgstr "nová mapa, náhodná"
+
+#, fuzzy
+msgid "hotkey|re-configure random map"
+msgstr "nová mapa, náhodná"
+
 msgid "hotkey|roland campaign"
 msgstr "kampaň roland"
 
@@ -5697,6 +5876,9 @@ msgstr "ďalší hrdina"
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "ďalší hrdina"
+
+msgid "hotkey|hold and left click to move hero portrait to top of list"
+msgstr ""
 
 #, fuzzy
 msgid "hotkey|start hero movement"
@@ -6512,10 +6694,22 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Zobraziť ponuku systémových možností, ktorá umožňuje prispôsobiť si hru."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Tieň pohybu"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Jeden alebo viac hrdinov sa ešte môže pohnúť, naozaj chceš ukončiť svoj ťah?"
+
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
 
 msgid "Are you sure you want to quit?"
 msgstr "Určite chceš skončiť?"
@@ -6797,6 +6991,12 @@ msgstr "Dobro"
 
 msgid "Evil"
 msgstr "Zlo"
+
+msgid "Black & White"
+msgstr "Čiernobiely"
+
+msgid "Color"
+msgstr "Farebný"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -9402,6 +9602,43 @@ msgstr "Tráva"
 
 msgid "Ocean"
 msgstr "Oceán"
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normálna"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Malá"
@@ -12364,12 +12601,13 @@ msgstr "Umožňuje zaklínačovi magicky sa preniesť na blízke miesto."
 msgid "Dimension Door"
 msgstr "Dimenzionálne dvere"
 
-msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
-"Vráti zosielateľa do ktoréhokoľvek mesta alebo hradu, ktorý práve vlastníš."
-
 msgid "Town Gate"
 msgstr "Mestská brána"
+
+msgid ""
+"Returns the caster to the nearest town or castle currently owned. This spell "
+"cannot be cast if the hero is already in a town or a castle."
+msgstr ""
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -12581,35 +12819,3 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Vždy vracia úder"
-
-#~ msgid "CONFIG"
-#~ msgstr "NASTAV"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Zrušenie a návrat do ponuky Nová mapa."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
-
-#~ msgid "Host"
-#~ msgstr "Hostiteľ"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Hostiteľ nastaví možnosti hry. V jednej sieťovej hre môže byť len jeden "
-#~ "hostiteľ."
-
-#~ msgid "Guest"
-#~ msgstr "Hosť"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Hosť počká, kým hostiteľ nastaví hru, a potom sa automaticky pridá do "
-#~ "hry. Pri hrách cez TCP/IP môže byť viacero hostí."

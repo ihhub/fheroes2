@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -188,8 +188,8 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
             return EventDefaultAction();
         }
         else if ( hero->GetPath().isValidForMovement() ) {
-            fheroes2::showStandardTextMessage( "Hero Movement Points",
-                                               "The hero's army cannot move anymore today. The movement points will be refilled tomorrow after you end your turn.",
+            fheroes2::showStandardTextMessage( _( "Hero Movement Points" ),
+                                               _( "The hero's army cannot move anymore today. The movement points will be refilled tomorrow after you end your turn." ),
                                                Dialog::OK );
         }
     }
@@ -301,8 +301,14 @@ void Interface::AdventureMap::EventSystemDialog() const
 
 fheroes2::GameMode Interface::BaseInterface::EventExit()
 {
-    if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
+#if defined( __IPHONEOS__ )
+    // iOS discourages to exit a running application.
+    fheroes2::showStandardTextMessage( _( "Quit" ), _( "To exit fheroes2, press the Home button or swipe up." ), Dialog::OK );
+#else
+    if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) ) {
         return fheroes2::GameMode::QUIT_GAME;
+    }
+#endif
 
     return fheroes2::GameMode::CANCEL;
 }
@@ -606,6 +612,11 @@ void Interface::AdventureMap::EventKeyArrowPress( const int dir )
     }
 
     if ( _gameArea.isDragScroll() ) {
+        return;
+    }
+
+    if ( Settings::Get().ScrollSpeed() == SCROLL_SPEED_NONE ) {
+        // Scrolling is disabled.
         return;
     }
 

@@ -1,0 +1,36 @@
+name: iOS
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+
+jobs:
+  ios:
+    name: iOS
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v6
+    - name: check Xcode version
+      run: |
+        /usr/bin/xcodebuild -version
+    - name: Install dependencies
+      run: |
+        ./script/ios/install_packages.sh
+    # TODO: remove this step once we figure out how to build without the need of resources.
+    - name: Prepare build
+      run: |
+        mkdir anim
+        mkdir data
+        mkdir music
+    - name: Build
+      # TODO: compile for a proper target, not for simulator.
+      run: |
+        cd ios
+        xcodebuild -project fheroes2.xcodeproj \
+          -scheme fheroes2 \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          build
+    # TODO: add signing stage.

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -167,11 +167,6 @@ std::list<MapBaseObject *> MapObjects::get( const fheroes2::Point & pos ) const
     return result;
 }
 
-void CapturedObjects::SetColor( const int32_t index, const PlayerColor color )
-{
-    Get( index ).SetColor( color );
-}
-
 void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType obj, const PlayerColor color )
 {
     CapturedObject & capturedObj = Get( index );
@@ -327,11 +322,11 @@ void World::Reset()
     map_captureobj.clear();
     map_objects.clear();
 
-    ultimate_artifact.Reset();
+    _ultimateArtifact.Reset();
 
-    day = 0;
-    week = 0;
-    month = 0;
+    _day = 0;
+    _week = 0;
+    _month = 0;
 
     heroIdAsWinCondition = Heroes::UNKNOWN;
     heroIdAsLossCondition = Heroes::UNKNOWN;
@@ -339,18 +334,23 @@ void World::Reset()
     _seed = 0;
 }
 
-void World::generateBattleOnlyMap()
+void World::generateBattleOnlyMap( const int32_t groundType )
 {
-    const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
-                                         Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
-
     generateUninitializedMap( 2 );
-
-    const int groundType = Rand::Get( terrainTypes );
 
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
-        vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), 0 );
+    }
+
+    setUniformTerrain( groundType );
+}
+
+void World::setUniformTerrain( const int32_t groundType )
+{
+    const uint16_t terrainImageIndex = Maps::Ground::getTerrainStartImageIndex( groundType );
+
+    for ( auto & tile : vec_tiles ) {
+        tile.setTerrain( terrainImageIndex, 0 );
     }
 }
 
@@ -406,62 +406,12 @@ bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( getTile( tilePosition.x, tilePosition.y ).getMainObjectType( false ) == MP2::OBJ_CASTLE );
 }
 
-Heroes * World::GetHeroForHire( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
-{
-    return vec_heroes.GetHeroForHire( race, heroIDToIgnore );
-}
-
-Heroes * World::FromJailHeroes( const int32_t tileIndex )
-{
-    return vec_heroes.FromJail( tileIndex );
-}
-
-Heroes * World::GetHero( const Castle & castle ) const
-{
-    return vec_heroes.Get( castle.GetCenter() );
-}
-
-int World::GetDay() const
-{
-    return LastDay() ? numOfDaysPerWeek : day % numOfDaysPerWeek;
-}
-
-int World::GetWeek() const
-{
-    return LastWeek() ? numOfWeeksPerMonth : week % numOfWeeksPerMonth;
-}
-
-bool World::BeginWeek() const
-{
-    return 1 == ( day % numOfDaysPerWeek );
-}
-
-bool World::BeginMonth() const
-{
-    return 1 == ( week % numOfWeeksPerMonth ) && BeginWeek();
-}
-
-bool World::LastDay() const
-{
-    return ( 0 == ( day % numOfDaysPerWeek ) );
-}
-
-bool World::FirstWeek() const
-{
-    return ( 1 == ( week % numOfWeeksPerMonth ) );
-}
-
-bool World::LastWeek() const
-{
-    return ( 0 == ( week % numOfWeeksPerMonth ) );
-}
-
 const Week & World::GetWeekType() const
 {
-    static auto cachedWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+    static auto cachedWeekDependencies = std::make_tuple( _week, GetWeekSeed() );
     static Week cachedWeek = Week::RandomWeek( FirstWeek(), GetWeekSeed() );
 
-    const auto currentWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+    const auto currentWeekDependencies = std::make_tuple( _week, GetWeekSeed() );
 
     if ( cachedWeekDependencies != currentWeekDependencies ) {
         cachedWeekDependencies = currentWeekDependencies;
@@ -473,13 +423,13 @@ const Week & World::GetWeekType() const
 
 void World::NewDay()
 {
-    ++day;
+    ++_day;
 
     if ( BeginWeek() ) {
-        ++week;
+        ++_week;
 
         if ( BeginMonth() ) {
-            ++month;
+            ++_month;
         }
     }
 
@@ -503,15 +453,15 @@ void World::NewDay()
     vec_heroes.NewDay();
 
     // remove deprecated events
-    assert( day > 0 );
+    assert( _day > 0 );
 
-    vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
+    vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( _day - 1 ); } );
 }
 
 void World::NewWeek()
 {
     // update objects
-    if ( week > 1 ) {
+    if ( _week > 1 ) {
         for ( Maps::Tile & tile : vec_tiles ) {
             if ( MP2::isWeekLife( tile.getMainObjectType( false ) ) || tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
                 updateObjectInfoTile( tile, false );
@@ -535,7 +485,7 @@ void World::NewWeek()
 
 void World::NewMonth()
 {
-    if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
+    if ( _month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
         _monthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
     }
 }
@@ -557,7 +507,7 @@ void World::_monthOfMonstersAction( const Monster & mons )
 
     std::set<int32_t> excludeTiles;
 
-    Rand::PCG32 seededGen( _seed + month );
+    Rand::PCG32 seededGen( _seed + _month );
 
     // First we scan for Heroes, Castles and Monsters to exclude these from tiles and nearby tiles.
     // We must do this prior to checking the possibility for a monster to spawn in order to properly perform the check on nearby tiles.
@@ -681,12 +631,12 @@ fheroes2::LocalizedString World::getCurrentRumor() const
     switch ( chosenRumorId ) {
     case 0: {
         std::string rumor( _( "The ultimate artifact is really the %{name}." ) );
-        StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
+        StringReplace( rumor, "%{name}", _ultimateArtifact.GetName() );
         return { rumor, std::nullopt };
     }
     case 1: {
         std::string rumor( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
-        const int32_t artifactIndex = ultimate_artifact.getPosition();
+        const int32_t artifactIndex = _ultimateArtifact.getPosition();
         const fheroes2::Point artifactPos = Maps::GetPoint( artifactIndex );
 
         if ( height / 3 > artifactPos.y ) {
@@ -841,11 +791,6 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-uint32_t World::CountCapturedObject( const MP2::MapObjectType obj, const PlayerColor color ) const
-{
-    return map_captureobj.GetCount( obj, color );
-}
-
 uint32_t World::CountCapturedMines( const int type, const PlayerColor color ) const
 {
     switch ( type ) {
@@ -882,21 +827,6 @@ void World::CaptureObject( const int32_t index, const PlayerColor color )
     getTile( index ).setOwnershipFlag( objectType, color );
 }
 
-PlayerColor World::ColorCapturedObject( const int32_t index ) const
-{
-    return map_captureobj.GetColor( index );
-}
-
-CapturedObject & World::GetCapturedObject( const int32_t index )
-{
-    return map_captureobj.Get( index );
-}
-
-void World::ResetCapturedObjects( const PlayerColor color )
-{
-    map_captureobj.ResetColor( color );
-}
-
 void World::ClearFog( PlayerColor color ) const
 {
     const PlayerColorsSet colors = Players::GetPlayerFriends( color );
@@ -908,11 +838,6 @@ void World::ClearFog( PlayerColor color ) const
     vec_heroes.Scout( colors );
 
     map_captureobj.ClearFog( colors );
-}
-
-const UltimateArtifact & World::GetUltimateArtifact() const
-{
-    return ultimate_artifact;
 }
 
 bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
@@ -932,17 +857,12 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     tile.pushGroundObjectPart( Maps::ObjectPart( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
-    if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
-        ultimate_artifact.markAsFound();
+    if ( _ultimateArtifact.isPosition( tile.GetIndex() ) && !_ultimateArtifact.isFound() ) {
+        _ultimateArtifact.markAsFound();
         return true;
     }
 
     return false;
-}
-
-void World::AddEventDate( const EventDate & event )
-{
-    vec_eventsday.push_back( event );
 }
 
 EventsDate World::GetEventsDate( const PlayerColor color ) const
@@ -950,7 +870,7 @@ EventsDate World::GetEventsDate( const PlayerColor color ) const
     EventsDate res;
 
     for ( const EventDate & event : vec_eventsday ) {
-        if ( event.isAllow( color, day ) ) {
+        if ( event.isAllow( color, _day ) ) {
             res.push_back( event );
         }
     }
@@ -1002,11 +922,6 @@ MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
     }
 
     return dynamic_cast<MapEvent *>( res.front() );
-}
-
-MapBaseObject * World::GetMapObject( uint32_t uid )
-{
-    return uid ? map_objects.get( uid ) : nullptr;
 }
 
 void World::RemoveMapObject( const MapBaseObject * obj )
@@ -1358,9 +1273,12 @@ void World::PostLoad( const bool setTilePassabilities, const bool updateUidCount
         // And set the UID counter value with the found maximum.
         Maps::setLastObjectUID( maxUid );
     }
-    else {
-        // Check that 'getNewObjectUID()' will return values that will not match the existing ones on the started map.
-        assert( Maps::getLastObjectUID() >= maxUid );
+    else if ( Maps::getLastObjectUID() < maxUid ) {
+        // Some maps (even official original campaign maps) can have incorrect UID.
+        // No idea what's the reason but assumed that they were edited by the corrupted Editor.
+        ERROR_LOG( "Last object UID is not valid. Expected: " << Maps::getLastObjectUID() << ", received: " << maxUid )
+
+        Maps::setLastObjectUID( maxUid );
     }
 }
 
@@ -1368,7 +1286,7 @@ uint32_t World::GetWeekSeed() const
 {
     uint32_t weekSeed = _seed;
 
-    Rand::combineSeedWithValueHash( weekSeed, week );
+    Rand::combineSeedWithValueHash( weekSeed, _week );
 
     return weekSeed;
 }
@@ -1487,7 +1405,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
-            int temp{ MP2::OBJ_NONE };
+            int32_t temp{ MP2::OBJ_NONE };
             stream >> temp;
 
             type = static_cast<MP2::MapObjectType>( temp );
@@ -1552,7 +1470,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapObjects & objs )
 OStreamBase & operator<<( OStreamBase & stream, const World & w )
 {
     return stream << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._customRumors << w.vec_eventsday << w.map_captureobj
-                  << w.ultimate_artifact << w.day << w.week << w.month << w.heroIdAsWinCondition << w.heroIdAsLossCondition << w.map_objects << w._seed;
+                  << w._ultimateArtifact << w._day << w._week << w._month << w.heroIdAsWinCondition << w.heroIdAsLossCondition << w.map_objects << w._seed;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, World & w )
@@ -1570,8 +1488,8 @@ IStreamBase & operator>>( IStreamBase & stream, World & w )
         stream >> w.width >> w.height;
     }
 
-    stream >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._customRumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
-        >> w.week >> w.month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
+    stream >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._customRumors >> w.vec_eventsday >> w.map_captureobj >> w._ultimateArtifact >> w._day
+        >> w._week >> w._month >> w.heroIdAsWinCondition >> w.heroIdAsLossCondition;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
@@ -1783,7 +1701,7 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
         obj.colors = static_cast<PlayerColorsSet>( temp );
     }

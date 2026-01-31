@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -240,7 +240,7 @@ namespace
 
         const uint32_t necromancyPercent = GetNecromancyPercent( hero );
 
-        uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U );
+        const uint32_t raiseCount = std::max<uint32_t>( ( enemyTroopsKilled * necromancyPercent ) / 100, 1U );
         army.JoinTroop( Monster::SKELETON, raiseCount, false );
 
         if ( isControlHuman ) {
