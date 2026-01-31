@@ -256,7 +256,7 @@ namespace Maps
         // This entry is not a part of save file as once a map is being loaded it is not possible to change texts.
         // It might be possible in the future but it requires a huge rework of the code.
         //
-        // It is very unlikely that a player suddenly switching a language in the middle of gameplay.
+        // It is very unlikely that a player suddenly decides to switch a language in the middle of a playthrough.
         std::vector<fheroes2::SupportedLanguage> translations;
 
     private:
