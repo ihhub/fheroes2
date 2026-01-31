@@ -719,6 +719,16 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
+    const auto currentLanguage = fheroes2::getCurrentLanguage();
+    if ( !Maps::loadTranslation( map, currentLanguage ) ) {
+        // The current game language is not supported by the map.
+        // Try to set the default language - English.
+        // Even if it fails, the first language of the map is going to be used.
+        if ( currentLanguage != fheroes2::SupportedLanguage::English ) {
+            Maps::loadTranslation( map, fheroes2::SupportedLanguage::English );
+        }
+    }
+
     width = map.width;
     height = map.width;
 

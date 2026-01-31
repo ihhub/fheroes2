@@ -76,7 +76,7 @@ namespace Maps
 
         bool readMP2Map( std::string filePath, const bool isForEditor );
 
-        bool readResurrectionMap( std::string filePath, const bool isForEditor );
+        bool readResurrectionMap( std::string filePath, const bool isForEditor, const fheroes2::SupportedLanguage currentLanguage );
 
         bool loadResurrectionMap( const Map_Format::BaseMapFormat & map, std::string filePath );
 
@@ -251,6 +251,13 @@ namespace Maps
         // All maps made by the original Editor are marked as supporting English only,
         // because it is unknown what language was used for these maps.
         fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
+
+        // A list of supported translations for the map. Only for Resurrection maps.
+        // This entry is not a part of the save file as once a map has been loaded it is not possible to change texts.
+        // It might be possible in the future but it would require a huge rework of the code.
+        //
+        // It is very unlikely that a player suddenly decides to switch a language in the middle of a playthrough.
+        std::vector<fheroes2::SupportedLanguage> translations;
 
     private:
         void FillUnions( const PlayerColorsSet side1Colors, const PlayerColorsSet side2Colors );

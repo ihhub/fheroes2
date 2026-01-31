@@ -169,8 +169,13 @@ namespace
         body.add( { getMapTypeName( info->version ), fheroes2::FontType::normalWhite() } );
 
         if ( info->version == GameVersion::RESURRECTION ) {
-            body.add( { _( "\n\nLanguage:\n" ), fheroes2::FontType::normalYellow() } );
+            body.add( { _( "\n\nSupported languages:\n" ), fheroes2::FontType::normalYellow() } );
             body.add( { fheroes2::getLanguageName( info->mainLanguage ), fheroes2::FontType::normalWhite() } );
+
+            for ( const auto language : info->translations ) {
+                body.add( { "\n", fheroes2::FontType::normalYellow() } );
+                body.add( { fheroes2::getLanguageName( language ), fheroes2::FontType::normalWhite() } );
+            }
         }
 
         body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
