@@ -5240,24 +5240,34 @@ namespace
                 // - 1 new "Waterhole" object that has: 5 main (empty) image + 5 animation images divided to 3 horizontal and 2 vertical tiles.
 
                 constexpr size_t waterholeAnimations = 6;
+                constexpr size_t waterholeCloseAnimations = 7;
                 constexpr size_t waterholePartsX = 3;
                 constexpr size_t waterholePartsY = 2;
 
-                images.resize( images.size() + ( waterholePartsX * waterholePartsY + waterholeAnimations * waterholePartsX * waterholePartsY ) );
-
                 // Waterhole.
-                size_t imageNumber = 24;
-                for ( size_t y = 0; y < waterholePartsY; ++y ) {
-                    for ( size_t x = 0; x < waterholePartsX; ++x ) {
-                        ++imageNumber; //  Object has only animation images but for compatibility we need to have the main image.
+                size_t imageNumber = images.size();
+                // Object has only animation images but for compatibility we need to have the main image (+1).
+                // The "close" animation is played by a special function and does not need the main image.
+                images.resize( images.size() + ( waterholeAnimations + 1 + waterholeCloseAnimations ) * waterholePartsX * waterholePartsY );
 
-                        for ( size_t i = 0; i < waterholeAnimations; ++i ) {
-                            fheroes2::h2d::readImage( "waterhole_animation_" + std::to_string( i ) + "_x" + std::to_string( x ) + "_y" + std::to_string( y ) + ".image",
-                                                      images[imageNumber] );
-                            ++imageNumber;
+                auto loadWaterholeSprites = [&imageNumber, &images, waterholePartsX, waterholePartsY]( std::string const & namePrefix, const size_t animationsCount,
+                                                                                                       const bool skipMainImage ) {
+                    for ( size_t y = 0; y < waterholePartsY; ++y ) {
+                        for ( size_t x = 0; x < waterholePartsX; ++x ) {
+                            if ( skipMainImage ) {
+                                ++imageNumber;
+                            }
+                            for ( size_t i = 0; i < animationsCount; ++i ) {
+                                fheroes2::h2d::readImage( namePrefix + std::to_string( i ) + "_x" + std::to_string( x ) + "_y" + std::to_string( y ) + ".image",
+                                                          images[imageNumber] );
+                                ++imageNumber;
+                            }
                         }
                     }
-                }
+                };
+
+                loadWaterholeSprites( "waterhole_animation_", waterholeAnimations, true );
+                loadWaterholeSprites( "waterhole_close_animation_", waterholeAnimations, false );
             }
 
             break;

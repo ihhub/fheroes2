@@ -259,7 +259,7 @@ namespace
         // If there is a map bug the Object Animation destructor is not able to properly remove this object from the map.
         if ( actualObjectType != objectType && actualObjectType != MP2::OBJ_NONE ) {
             // Remove an object by its actual sprite type.
-            removeObjectFromTileByType( tile, actualObjectType );
+            Maps::removeObjectFromTileByType( tile, actualObjectType );
         }
 
         // Update radar in the place of the removed object.
@@ -3720,6 +3720,41 @@ namespace
             _( "You come upon a great cat, purring as it rubs against your leg. Charmed, you reach down, but it bites you and flees. At least the laughter at your misfortune lifts your troops' spirits." ),
             Dialog::OK, elementUI );
     }
+
+    void actionToWaterhole( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
+
+        // TODO: Add a logic for the Waterhole.
+        fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "As you approach the waterhole, it suddenly closes." ), Dialog::OK );
+
+        const Maps::Tile & tile = world.getTile( dst_index );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        LocalEvent & le = LocalEvent::Get();
+        Interface::AdventureMap & interface = Interface::AdventureMap::Get();
+
+        constexpr int32_t animationFrames = 7;
+        int32_t frame = 0;
+
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                break;
+            }
+
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                ++frame;
+
+                // TODO: place animation function call here.
+
+                Game::updateAdventureMapAnimationIndex();
+                interface.redraw( Interface::REDRAW_GAMEAREA );
+
+                display.render();
+            }
+        }
+
+        Maps::removeObjectFromTileByType( tile, objectType );
+    }
 }
 
 void Heroes::ScoutRadar() const
@@ -3945,8 +3980,7 @@ void Heroes::Action( const int tileIndex )
         break;
 
     case MP2::OBJ_WATERHOLE:
-        // TODO: Add a logic for the Waterhole.
-        fheroes2::showStandardTextMessage( MP2::StringObject( MP2::OBJ_WATERHOLE ), "This object is under construction!", Dialog::OK );
+        actionToWaterhole( *this, objectType, tileIndex );
         break;
 
     case MP2::OBJ_STONE_LITHS:
