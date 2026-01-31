@@ -398,7 +398,7 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
     }
 
     if ( !isForEditor ) {
-        // Since we loading this map for the game, we need to set the language of the map.
+        // Since we are loading this map for the game, we need to set the language of the map.
         if ( !Maps::setInGameLanguage( map, currentLanguage ) ) {
             // The currently chosen language is not available in the map.
             // Try to use the default language then - English.
