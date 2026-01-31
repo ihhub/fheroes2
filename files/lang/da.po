@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3936,10 +3936,11 @@ msgstr "Korttype"
 msgid "Map Type:\n"
 msgstr "Korttype:\n"
 
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -4845,6 +4846,37 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Støt os på"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Rygtet findes allerede på listen."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Klik for at skifte klasse."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Sprog"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Tilføj endnu en begivenhed."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Vælg spillets sprog:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Ændr en eksisterende begivenhed."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
@@ -5007,15 +5039,6 @@ msgstr "SPROG"
 msgid "ABOUT"
 msgstr "OM"
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Du er ved at ændre kortets sprog fra %{oldLanguage} til %{newLanguage}. "
-"Nogle tekster vil måske ikke blive vist korrekt efter dette. Ønsker du at "
-"fortsætte?"
-
 msgid "Change Map Name"
 msgstr "Skift kortnavn"
 
@@ -5128,6 +5151,15 @@ msgstr "Fjern rygte"
 
 msgid "Delete an existing rumor."
 msgstr "Fjern et eksisterende rygte."
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Sprog:\n"
 
 msgid ""
 "\n"
@@ -12700,3 +12732,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid ""
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
+#~ msgstr ""
+#~ "Du er ved at ændre kortets sprog fra %{oldLanguage} til %{newLanguage}. "
+#~ "Nogle tekster vil måske ikke blive vist korrekt efter dette. Ønsker du at "
+#~ "fortsætte?"

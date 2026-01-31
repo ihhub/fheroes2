@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2026-01-04 22:27+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3864,10 +3864,11 @@ msgstr "Térkép típusa"
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
 
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -4763,6 +4764,37 @@ msgstr ""
 "Tekintsd meg a szerkesztő rendszer beállításait, amik lehetővé teszik annak "
 "testreszabását."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Támogass minket itt"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Ez a szóbeszéd már megtalálható a listában."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Kattints az osztály megváltoztatásához."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Nyelv"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "További esemény hozzáadása."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Nyelv kiválasztása:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Meglévő esemény törlése."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 "A véletlenszerű térkép generálása a megadott paraméterekkel nem sikerült."
@@ -4932,15 +4964,6 @@ msgstr "NYELV"
 msgid "ABOUT"
 msgstr "LEÍRÁS"
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"A térkép nyelvét készülsz megváltoztatni. Régi nyelv: %{oldLanguage}, új "
-"nyelv: %{newLanguage}. Néhány szöveg nem biztos, hogy megfelelően jelenik "
-"meg ezután. Így is végre akarod hajtani a műveletet?"
-
 msgid "Change Map Name"
 msgstr "Térkép nevének megváltoztatása"
 
@@ -5053,6 +5076,15 @@ msgstr "Szóbeszéd törlése"
 
 msgid "Delete an existing rumor."
 msgstr "Meglévő szóbeszéd törlése."
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Nyelv:\n"
 
 msgid ""
 "\n"
@@ -12525,3 +12557,12 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid ""
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
+#~ msgstr ""
+#~ "A térkép nyelvét készülsz megváltoztatni. Régi nyelv: %{oldLanguage}, új "
+#~ "nyelv: %{newLanguage}. Néhány szöveg nem biztos, hogy megfelelően jelenik "
+#~ "meg ezután. Így is végre akarod hajtani a műveletet?"
