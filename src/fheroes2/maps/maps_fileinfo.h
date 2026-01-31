@@ -253,7 +253,7 @@ namespace Maps
         fheroes2::SupportedLanguage mainLanguage{ fheroes2::SupportedLanguage::English };
 
         // A list of supported translations for the map. Only for Resurrection maps.
-        // This entry is not a part of save file as once a map is being loaded it is not possible to change texts.
+        // This entry is not a part of the save file as once a map has been loaded it is not possible to change texts.
         // It might be possible in the future but it requires a huge rework of the code.
         //
         // It is very unlikely that a player suddenly decides to switch a language in the middle of a playthrough.
