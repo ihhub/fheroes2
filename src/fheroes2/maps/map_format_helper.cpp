@@ -2212,7 +2212,7 @@ namespace Maps
 
         // The translation exists. Restore if possible the information.
         // Here is the tricky part: we have no idea whether an empty text was left intentionally.
-        // Therefore, the assumption we are taking that empty texts are intentional.
+        // Therefore, we assume that empty texts are intentional.
         auto & translation = translationIter->second;
         map.name = std::move( translation.name );
         map.description = std::move( translation.description );
