@@ -2295,12 +2295,15 @@ namespace Maps
             for ( int32_t x = startX; x <= endX; ++x ) {
                 const Tile & currentTile = world.getTile( x + tileOffset );
 
-                if ( currentTile.getMainObjectPart()._uid != 0 && ( currentTile.getMainObjectPart().layerType != SHADOW_LAYER ) ) {
-                    objectsUids.insert( currentTile.getMainObjectPart()._uid );
+                const ObjectPart & mainObjectPart = currentTile.getMainObjectPart();
+                if ( mainObjectPart._uid != 0 && mainObjectPart.layerType != SHADOW_LAYER
+                     && ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_ROAD || Tile::isSpriteRoad( mainObjectPart.icnType, mainObjectPart.icnIndex ) ) ) {
+                    objectsUids.insert( mainObjectPart._uid );
                 }
 
-                for ( const auto & part : currentTile.getGroundObjectParts() ) {
-                    if ( part._uid != 0 && ( part.layerType != SHADOW_LAYER ) && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
+                for ( const ObjectPart & part : currentTile.getGroundObjectParts() ) {
+                    if ( part._uid != 0 && part.layerType != SHADOW_LAYER && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32
+                         && ( part.icnType != MP2::OBJ_ICN_TYPE_ROAD || Tile::isSpriteRoad( part.icnType, part.icnIndex ) ) ) {
                         objectsUids.insert( part._uid );
                     }
                 }
