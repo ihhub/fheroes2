@@ -303,7 +303,7 @@ namespace
 
     void convertFromV11ToV12( Maps::Map_Format::MapFormat & map )
     {
-        static_assert( minimumSupportedVersion <= 10, "Remove this function." );
+        static_assert( minimumSupportedVersion <= 11, "Remove this function." );
 
         if ( map.version > 11 ) {
             return;
