@@ -5250,8 +5250,7 @@ namespace
                 // The "close" animation is played by a special function and does not need the main image.
                 images.resize( images.size() + ( waterholeAnimations + 1 + waterholeCloseAnimations ) * waterholePartsX * waterholePartsY );
 
-                auto loadWaterholeSprites = [&imageNumber, &images, waterholePartsX, waterholePartsY]( std::string const & namePrefix, const size_t animationsCount,
-                                                                                                       const bool skipMainImage ) {
+                auto loadWaterholeSprites = [&]( std::string const & namePrefix, const size_t animationsCount, const bool skipMainImage ) {
                     for ( size_t y = 0; y < waterholePartsY; ++y ) {
                         for ( size_t x = 0; x < waterholePartsX; ++x ) {
                             if ( skipMainImage ) {
