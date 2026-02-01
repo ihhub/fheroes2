@@ -305,7 +305,7 @@ namespace
     {
         static_assert( minimumSupportedVersion <= 10, "Remove this function." );
 
-        if ( map.version > 10 ) {
+        if ( map.version > 11 ) {
             return;
         }
 
