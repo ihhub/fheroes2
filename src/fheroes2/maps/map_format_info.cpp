@@ -311,11 +311,11 @@ namespace
 
         const std::set<uint32_t> consideredAsRoadIndecies{ 0, 2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29, 30, 31 };
 
-        // Remove road objects that are not considered as roads.
+        // Remove road objects that are not considered as roads on the Adventure Map.
         for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
             for ( auto iter = tileInfo.objects.begin(); iter != tileInfo.objects.end(); ) {
                 if ( iter->group == Maps::ObjectGroup::ROADS && consideredAsRoadIndecies.count( iter->index ) == 0 ) {
-                    // Remove the road object.
+                    // This is a part of the road just as a decoration. Remove it.
                     iter = tileInfo.objects.erase( iter );
                     continue;
                 }
@@ -324,7 +324,7 @@ namespace
             }
         }
 
-        // Update road objects to correspond their relative positions.
+        // Update objects that are marked as road corresponding to their relative positions to other tiles with roads.
         const int32_t size = map.width * map.width;
         for ( int32_t tileIndex = 0; tileIndex < size; ++tileIndex ) {
             auto & tileObjects = map.tiles[tileIndex].objects;
