@@ -66,9 +66,9 @@ namespace Route
 }
 
 // Number of days in the game week
-inline constexpr int numOfDaysPerWeek{ 7 };
+inline constexpr uint32_t numOfDaysPerWeek{ 7 };
 // Number of weeks in the game month
-inline constexpr int numOfWeeksPerMonth{ 4 };
+inline constexpr uint32_t numOfWeeksPerMonth{ 4 };
 
 class MapObjects
 {
@@ -142,12 +142,17 @@ struct CapturedObject
     }
 };
 
-struct CapturedObjects : std::map<int32_t, CapturedObject>
+struct CapturedObjects final : std::map<int32_t, CapturedObject>
 {
     CapturedObjects() = default;
 
     void Set( const int32_t index, const MP2::MapObjectType obj, const PlayerColor color );
-    void SetColor( const int32_t index, const PlayerColor color );
+
+    void SetColor( const int32_t index, const PlayerColor color )
+    {
+        Get( index ).SetColor( color );
+    }
+
     void ResetColor( const PlayerColor color );
 
     void ClearFog( const PlayerColorsSet colors ) const;
@@ -189,7 +194,7 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj );
 
 using EventsDate = std::list<EventDate>;
 
-class World : protected fheroes2::Size
+class World final : protected fheroes2::Size
 {
 public:
     World( const World & other ) = delete;
@@ -332,15 +337,29 @@ public:
         return vec_heroes.Get( center );
     }
 
-    Heroes * FromJailHeroes( const int32_t tileIndex );
-    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
+    Heroes * FromJailHeroes( const int32_t tileIndex )
+    {
+        return vec_heroes.FromJail( tileIndex );
+    }
+
+    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const
+    {
+        return vec_heroes.GetHeroForHire( race, heroIDToIgnore );
+    }
 
     const Heroes * GetHeroesCondWins() const;
     const Heroes * GetHeroesCondLoss() const;
 
-    Heroes * GetHero( const Castle & castle ) const;
+    Heroes * GetHero( const Castle & castle ) const
+    {
+        return vec_heroes.Get( castle.GetCenter() );
+    }
 
-    const UltimateArtifact & GetUltimateArtifact() const;
+    const UltimateArtifact & GetUltimateArtifact() const
+    {
+        return _ultimateArtifact;
+    }
+
     bool DiggingForUltimateArtifact( const fheroes2::Point & center );
 
     // overall number of cells of the world map: width * height
@@ -349,29 +368,56 @@ public:
         return vec_tiles.size();
     }
 
-    int GetDay() const;
-    int GetWeek() const;
+    uint32_t GetDay() const
+    {
+        return LastDay() ? numOfDaysPerWeek : _day % numOfDaysPerWeek;
+    }
+
+    uint32_t GetWeek() const
+    {
+        return LastWeek() ? numOfWeeksPerMonth : _week % numOfWeeksPerMonth;
+    }
 
     uint32_t GetMonth() const
     {
-        return month;
+        return _month;
     }
 
     uint32_t CountDay() const
     {
-        return day;
+        return _day;
     }
 
     uint32_t CountWeek() const
     {
-        return week;
+        return _week;
     }
 
-    bool BeginWeek() const;
-    bool BeginMonth() const;
-    bool LastDay() const;
-    bool FirstWeek() const;
-    bool LastWeek() const;
+    bool BeginWeek() const
+    {
+        return ( ( _day % numOfDaysPerWeek ) == 1 );
+    }
+
+    bool BeginMonth() const
+    {
+        return FirstWeek() && BeginWeek();
+    }
+
+    bool LastDay() const
+    {
+        return ( ( _day % numOfDaysPerWeek ) == 0 );
+    }
+
+    bool FirstWeek() const
+    {
+        return ( ( _week % numOfWeeksPerMonth ) == 1 );
+    }
+
+    bool LastWeek() const
+    {
+        return ( ( _week % numOfWeeksPerMonth ) == 0 );
+    }
+
     const Week & GetWeekType() const;
     std::string DateString() const;
 
@@ -389,14 +435,28 @@ public:
 
     void CaptureObject( const int32_t index, const PlayerColor color );
 
-    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const PlayerColor color ) const;
+    uint32_t CountCapturedObject( const MP2::MapObjectType obj, const PlayerColor color ) const
+    {
+        return map_captureobj.GetCount( obj, color );
+    }
+
     uint32_t CountCapturedMines( const int type, const PlayerColor color ) const;
     uint32_t CountObeliskOnMaps();
 
-    PlayerColor ColorCapturedObject( const int32_t index ) const;
-    void ResetCapturedObjects( const PlayerColor color );
+    PlayerColor ColorCapturedObject( const int32_t index ) const
+    {
+        return map_captureobj.GetColor( index );
+    }
 
-    CapturedObject & GetCapturedObject( const int32_t index );
+    void ResetCapturedObjects( const PlayerColor color )
+    {
+        map_captureobj.ResetColor( color );
+    }
+
+    CapturedObject & GetCapturedObject( const int32_t index )
+    {
+        return map_captureobj.Get( index );
+    }
 
     void ActionForMagellanMaps( const PlayerColor color );
     void ClearFog( PlayerColor color ) const;
@@ -407,11 +467,20 @@ public:
     uint32_t CheckKingdomWins( const Kingdom & kingdom ) const;
     uint32_t CheckKingdomLoss( const Kingdom & kingdom ) const;
 
-    void AddEventDate( const EventDate & event );
+    void AddEventDate( const EventDate & event )
+    {
+        vec_eventsday.push_back( event );
+    }
+
     EventsDate GetEventsDate( const PlayerColor color ) const;
 
     MapEvent * GetMapEvent( const fheroes2::Point & pos );
-    MapBaseObject * GetMapObject( uint32_t uid );
+
+    MapBaseObject * GetMapObject( const uint32_t uid )
+    {
+        return uid ? map_objects.get( uid ) : nullptr;
+    }
+
     void RemoveMapObject( const MapBaseObject * obj );
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
@@ -489,11 +558,11 @@ private:
     // index, object, color
     CapturedObjects map_captureobj;
 
-    UltimateArtifact ultimate_artifact;
+    UltimateArtifact _ultimateArtifact;
 
-    uint32_t day = 0;
-    uint32_t week = 0;
-    uint32_t month = 0;
+    uint32_t _day = 0;
+    uint32_t _week = 0;
+    uint32_t _month = 0;
 
     int32_t heroIdAsWinCondition = Heroes::UNKNOWN;
     int32_t heroIdAsLossCondition = Heroes::UNKNOWN;

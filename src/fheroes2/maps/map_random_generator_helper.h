@@ -45,6 +45,7 @@ namespace Maps::Random_Generator
     struct Region;
     struct MonsterSelection;
     enum class MonsterStrength : uint8_t;
+    enum class NodeType : uint8_t;
 }
 
 namespace Maps::Map_Format
@@ -68,10 +69,11 @@ namespace Maps::Random_Generator
     int32_t getObjectGoldValue( const ObjectGroup group, const int32_t objectIndex );
     MonsterSelection getMonstersByValue( const MonsterStrength monsterStrength, int32_t protectedObjectValue );
     std::pair<ObjectGroup, int32_t> getRandomTreasure( const int32_t goldValueLimit, Rand::PCG32 & randomGenerator );
+    std::pair<ObjectGroup, int32_t> convertMP2ToObjectInfo( const MP2::MapObjectType mp2Type );
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int32_t groundType );
     std::vector<int32_t> findPathToNearestRoad( const MapStateManager & nodes, const int32_t mapWidth, const uint32_t regionId, const int32_t start );
     std::vector<std::vector<int32_t>> findOpenTilesSortedJittered( const Region & region, int32_t mapWidth, Rand::PCG32 & randomGenerator );
-    std::vector<int32_t> findOpenTiles( const Region & region );
+    std::vector<int32_t> findTilesByType( const Region & region, const NodeType type );
     std::vector<int32_t> pickEvenlySpacedTiles( const std::vector<int32_t> & candidates, const size_t pickCount, const std::vector<int32_t> & avoidance );
 
     bool canPlaceBorderObstacle( const MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position );

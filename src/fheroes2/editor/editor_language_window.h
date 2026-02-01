@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2026                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,53 +20,12 @@
 
 #pragma once
 
-#include <cstdint>
-
-#include "artifact.h"
-#include "image.h"
-#include "math_base.h"
-
-class IStreamBase;
-class OStreamBase;
-
-class UltimateArtifact final : public Artifact
+namespace Maps::Map_Format
 {
-public:
-    bool isPosition( const int32_t position ) const
-    {
-        return 0 <= _index && position == _index;
-    }
+    struct MapFormat;
+}
 
-    int32_t getPosition() const
-    {
-        return _index;
-    }
-
-    bool isFound() const
-    {
-        return _isFound;
-    }
-
-    void markAsFound()
-    {
-        _isFound = true;
-    }
-
-    void Set( const int32_t position, const Artifact & artifact );
-    void Reset();
-
-    fheroes2::Image GetPuzzleMapSurface() const;
-
-    const Artifact & GetArtifact() const
-    {
-        return *this;
-    }
-
-private:
-    friend OStreamBase & operator<<( OStreamBase & stream, const UltimateArtifact & ultimate );
-    friend IStreamBase & operator>>( IStreamBase & stream, UltimateArtifact & ultimate );
-
-    fheroes2::Point _offset;
-    int32_t _index{ -1 };
-    bool _isFound{ false };
-};
+namespace Editor
+{
+    void openLanguageWindow( Maps::Map_Format::MapFormat & mapFormat );
+}

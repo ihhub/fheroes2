@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,18 +26,9 @@
 #include "maps.h"
 #include "serialize.h"
 
-MapPosition::MapPosition( const fheroes2::Point & pt )
-    : center( pt )
-{}
-
 int32_t MapPosition::GetIndex() const
 {
     return Maps::GetIndexFromAbsPoint( center );
-}
-
-void MapPosition::SetCenter( const fheroes2::Point & pt )
-{
-    center = pt;
 }
 
 void MapPosition::SetIndex( const int32_t index )

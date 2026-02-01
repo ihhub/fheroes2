@@ -39,10 +39,10 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_language_selection.h"
 #include "dialog_selectitems.h"
 #include "difficulty.h"
 #include "editor_daily_events_window.h"
+#include "editor_language_window.h"
 #include "editor_rumor_window.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
@@ -2295,23 +2295,12 @@ namespace Editor
                 display.render( background.totalArea() );
             }
             else if ( le.MouseClickLeft( buttonLanguage.area() ) ) {
-                const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
-                const fheroes2::SupportedLanguage language = fheroes2::selectLanguage( supportedLanguages, mapFormat.mainLanguage, false );
-                if ( language != mapFormat.mainLanguage ) {
-                    std::string differentLanguageWarning = _( "You are about to change the map's language from %{oldLanguage} to %{newLanguage}. "
-                                                              "Some texts might not be displayed properly after this. Do you want to proceed?" );
-                    StringReplace( differentLanguageWarning, "%{oldLanguage}", fheroes2::getLanguageName( mapFormat.mainLanguage ) );
-                    StringReplace( differentLanguageWarning, "%{newLanguage}", fheroes2::getLanguageName( language ) );
+                openLanguageWindow( mapFormat );
 
-                    if ( fheroes2::showStandardTextMessage( _( "Warning" ), differentLanguageWarning, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
-                        mapFormat.mainLanguage = language;
+                renderMapName();
+                renderMapDescription();
 
-                        renderMapName();
-                        renderMapDescription();
-
-                        display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
-                    }
-                }
+                display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.

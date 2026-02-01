@@ -311,6 +311,37 @@ namespace Maps::Map_Format
         Funds resources;
     };
 
+    struct TranslationSphinxMetadata final
+    {
+        std::string riddle;
+
+        std::vector<std::string> answers;
+    };
+
+    struct TranslationBaseMapMetadata final
+    {
+        std::string name;
+        std::string description;
+        std::string creatorNotes;
+    };
+
+    struct TranslationFormat final
+    {
+        std::vector<std::string> dailyEvents;
+
+        std::vector<std::string> rumors;
+
+        std::map<uint32_t, std::string> castleMetadata;
+
+        std::map<uint32_t, std::string> heroMetadata;
+
+        std::map<uint32_t, TranslationSphinxMetadata> sphinxMetadata;
+
+        std::map<uint32_t, std::string> signMetadata;
+
+        std::map<uint32_t, std::string> adventureMapEventMetadata;
+    };
+
     struct BaseMapFormat
     {
         uint16_t version{ 1 };
@@ -350,9 +381,12 @@ namespace Maps::Map_Format
         // This parameter is only visible within the Editor, it doesn't affect the gameplay in any way.
         // The parameter is mandatory to fill out by map makers who want to have their creations bundled with the engine.
         std::string creatorNotes;
+
+        // A map can support multiple languages. A language of the map should be chosen based on game's language.
+        std::map<fheroes2::SupportedLanguage, TranslationBaseMapMetadata> translations;
     };
 
-    struct MapFormat : public BaseMapFormat
+    struct MapFormat final : public BaseMapFormat
     {
         // This is used only for campaign maps.
         std::vector<uint32_t> additionalInfo;
@@ -383,6 +417,8 @@ namespace Maps::Map_Format
         std::map<uint32_t, ArtifactMetadata> artifactMetadata;
 
         std::map<uint32_t, ResourceMetadata> resourceMetadata;
+
+        std::map<fheroes2::SupportedLanguage, TranslationFormat> translationInfo;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );

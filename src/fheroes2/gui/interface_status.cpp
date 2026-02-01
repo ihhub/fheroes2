@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -262,8 +262,8 @@ void Interface::StatusPanel::_drawDayInfo( const int32_t offsetY ) const
 {
     const fheroes2::Rect & pos = GetArea();
 
-    const int dayOfWeek = world.GetDay();
-    const int weekOfMonth = world.GetWeek();
+    const uint32_t dayOfWeek = world.GetDay();
+    const uint32_t weekOfMonth = world.GetWeek();
     const uint32_t month = world.GetMonth();
     const int icnType = Settings::Get().isEvilInterfaceEnabled() ? ICN::SUNMOONE : ICN::SUNMOON;
 

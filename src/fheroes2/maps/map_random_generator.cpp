@@ -35,6 +35,7 @@
 #include <vector>
 
 #include "color.h"
+#include "direction.h"
 #include "editor_interface.h"
 #include "ground.h"
 #include "logging.h"
@@ -46,6 +47,7 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "rand.h"
 #include "resource.h"
 #include "translations.h"
@@ -854,7 +856,7 @@ namespace Maps::Random_Generator
             }
 
             const auto & mineInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::GOLD, Ground::GRASS ) );
-            std::vector<int32_t> options = findTilesForPlacement( mapState, width, region.id, findOpenTiles( region ), mineInfo );
+            std::vector<int32_t> options = findTilesForPlacement( mapState, width, region.id, findTilesByType( region, NodeType::OPEN ), mineInfo );
             if ( options.empty() ) {
                 continue;
             }
@@ -927,6 +929,29 @@ namespace Maps::Random_Generator
                 }
                 else {
                     placeMonster( mapFormat, mapState, tileIndex, weakGuard );
+                }
+            }
+        }
+
+        // Step 11. Place free pickup objects
+        const auto & randomResourceInfo = convertMP2ToObjectInfo( MP2::OBJ_RANDOM_RESOURCE );
+        for ( const Region & region : mapRegions ) {
+            const auto & pathTiles = findTilesByType( region, NodeType::PATH );
+            if ( pathTiles.empty() ) {
+                continue;
+            }
+
+            for ( int32_t count = 0; count < regionConfiguration.treasureCount * 2; ++count ) {
+                int32_t tileIndex = Rand::GetWithGen( pathTiles, randomGenerator );
+
+                const int32_t direction = Rand::GetWithGen( Direction::allNeighboringDirections, randomGenerator );
+                const int32_t adjancent = Maps::GetDirectionIndex( tileIndex, direction );
+                if ( Maps::isValidDirection( tileIndex, direction ) && mapState.getNode( adjancent ).type == NodeType::OPEN ) {
+                    tileIndex = adjancent;
+                }
+
+                if ( putObjectOnMap( mapFormat, world.getTile( tileIndex ), randomResourceInfo.first, randomResourceInfo.second ) ) {
+                    mapState.getNodeToUpdate( tileIndex ).type = NodeType::ACTION;
                 }
             }
         }

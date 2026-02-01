@@ -160,7 +160,9 @@ namespace Maps
 
         bool isWater() const
         {
-            return Ground::getGroundByImageIndex( _terrainImageIndex ) == Ground::WATER;
+            // Even though it seems like a dangerous way of detecting the water terrain,
+            // terrain images are fixed in resources and never going to be changed.
+            return _terrainImageIndex < Ground::GRASS_START_IMAGE_INDEX;
         }
 
         // Returns true if tile's main and ground layer object parts do not contain any objects: layer type is SHADOW or TERRAIN.

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-03 12:31+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-12-25 19:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3869,10 +3869,11 @@ msgstr "Тип мапи"
 msgid "Map Type:\n"
 msgstr "Тип мапи:\n"
 
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -4772,6 +4773,37 @@ msgstr ""
 "Перегляд системних параметрів редактора, за допомогою яких ви можете "
 "налаштувати редактор."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Підтримайте нас нас "
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Ця чутка вже є у списку."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Тицьніть, щоб змінити клас."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Додати додаткову подію."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Вибрати мову:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Видалити існуючу подію."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr "Не вдалося створити випадкову мапу з заданими параметрами."
 
@@ -4941,14 +4973,6 @@ msgstr "МОВА"
 msgid "ABOUT"
 msgstr "ПРО МАПУ"
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Ви збираєтеся змінити мову мапи з %{oldLanguage} на %{newLanguage}. Після "
-"цього деякі тексти можуть відображатися неправильно. Ви бажаєте продовжити?"
-
 msgid "Change Map Name"
 msgstr "Змінити назву мапи"
 
@@ -5061,6 +5085,15 @@ msgstr "Видалити чутку"
 
 msgid "Delete an existing rumor."
 msgstr "Видалити існуючу чутку."
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Мова:\n"
 
 msgid ""
 "\n"
@@ -6476,6 +6509,15 @@ msgstr ""
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Відкрити меню системних параметрів, що дозволяє вам налаштувати гру."
+
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Рух Героя"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -12568,3 +12610,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid ""
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
+#~ msgstr ""
+#~ "Ви збираєтеся змінити мову мапи з %{oldLanguage} на %{newLanguage}. Після "
+#~ "цього деякі тексти можуть відображатися неправильно. Ви бажаєте "
+#~ "продовжити?"

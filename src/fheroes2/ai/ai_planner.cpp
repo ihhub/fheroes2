@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,17 +36,11 @@
 #include "resource.h"
 #include "route.h"
 #include "world.h"
-#include "world_pathfinding.h"
 
 AI::Planner & AI::Planner::Get()
 {
     static Planner ai;
     return ai;
-}
-
-void AI::Planner::resetPathfinder()
-{
-    _pathfinder.reset();
 }
 
 void AI::Planner::revealFog( const Maps::Tile & tile, const Kingdom & kingdom )

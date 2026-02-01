@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,11 +27,6 @@
 #include "rand.h"
 #include "serialize.h"
 
-UltimateArtifact::UltimateArtifact()
-    : _index( -1 )
-    , _isFound( false )
-{}
-
 void UltimateArtifact::Set( const int32_t position, const Artifact & artifact )
 {
     Artifact & thisArt = *this;
@@ -49,16 +44,6 @@ void UltimateArtifact::Set( const int32_t position, const Artifact & artifact )
 fheroes2::Image UltimateArtifact::GetPuzzleMapSurface() const
 {
     return Interface::GameArea::GenerateUltimateArtifactAreaSurface( _index, _offset );
-}
-
-const Artifact & UltimateArtifact::GetArtifact() const
-{
-    return *this;
-}
-
-bool UltimateArtifact::isPosition( const int32_t position ) const
-{
-    return 0 <= _index && position == _index;
 }
 
 void UltimateArtifact::Reset()

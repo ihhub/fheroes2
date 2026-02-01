@@ -85,6 +85,15 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const ResourceMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationSphinxMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationSphinxMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationBaseMapMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationBaseMapMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationFormat & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationFormat & metadata );
 }
 
 namespace
@@ -98,7 +107,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 11 };
+    constexpr uint16_t currentSupportedVersion{ 12 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -292,7 +301,7 @@ namespace
         }
     }
 
-    void convertFromV10ToV11( Maps::Map_Format::MapFormat & map )
+    void convertFromV11ToV12( Maps::Map_Format::MapFormat & map )
     {
         static_assert( minimumSupportedVersion <= 10, "Remove this function." );
 
@@ -403,7 +412,7 @@ namespace
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
                << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.width << map.mainLanguage << map.name << map.description
-               << map.creatorNotes;
+               << map.creatorNotes << map.translations;
 
         return !stream.fail();
     }
@@ -433,6 +442,14 @@ namespace
             stream >> map.creatorNotes;
         }
 
+        if ( map.version < 11 ) {
+            // True translation support was added in version 11.
+            map.translations = {};
+        }
+        else {
+            stream >> map.translations;
+        }
+
         return !stream.fail();
     }
 
@@ -449,7 +466,7 @@ namespace
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
                    << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata << map.monsterMetadata << map.artifactMetadata
-                   << map.resourceMetadata;
+                   << map.resourceMetadata << map.translationInfo;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -525,7 +542,14 @@ namespace
             convertFromV9ToV10( map, std::move( standardMetadata ) );
         }
 
-        convertFromV10ToV11( map );
+        if ( map.version < 11 ) {
+            map.translationInfo = {};
+        }
+        else {
+            decompressed >> map.translationInfo;
+        }
+
+        convertFromV11ToV12( map );
 
         return !stream.fail();
     }
@@ -680,6 +704,38 @@ namespace Maps::Map_Format
     IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata )
     {
         return stream >> metadata.count;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationSphinxMetadata & metadata )
+    {
+        return stream << metadata.riddle << metadata.answers;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationSphinxMetadata & metadata )
+    {
+        return stream >> metadata.riddle >> metadata.answers;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationBaseMapMetadata & metadata )
+    {
+        return stream << metadata.name << metadata.description << metadata.creatorNotes;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationBaseMapMetadata & metadata )
+    {
+        return stream >> metadata.name >> metadata.description >> metadata.creatorNotes;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationFormat & metadata )
+    {
+        return stream << metadata.dailyEvents << metadata.rumors << metadata.castleMetadata << metadata.heroMetadata << metadata.sphinxMetadata << metadata.signMetadata
+                      << metadata.adventureMapEventMetadata;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationFormat & metadata )
+    {
+        return stream >> metadata.dailyEvents >> metadata.rumors >> metadata.castleMetadata >> metadata.heroMetadata >> metadata.sphinxMetadata >> metadata.signMetadata
+               >> metadata.adventureMapEventMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
