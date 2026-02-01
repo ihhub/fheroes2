@@ -5267,7 +5267,7 @@ namespace
                 };
 
                 loadWaterholeSprites( "waterhole_animation_", waterholeAnimations, true );
-                loadWaterholeSprites( "waterhole_close_animation_", waterholeAnimations, false );
+                loadWaterholeSprites( "waterhole_close_animation_", waterholeCloseAnimations, false );
             }
 
             break;

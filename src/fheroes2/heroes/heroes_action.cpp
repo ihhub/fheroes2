@@ -3725,7 +3725,10 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        // TODO: Add a logic for the Waterhole.
+        (void)hero;
+
+        // TODO: Add a logic for the Waterhole action on player visit.
+
         fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "As you approach the waterhole, it suddenly closes." ), Dialog::OK );
 
         const Maps::Tile & tile = world.getTile( dst_index );
@@ -3733,8 +3736,9 @@ namespace
         LocalEvent & le = LocalEvent::Get();
         Interface::AdventureMap & interface = Interface::AdventureMap::Get();
 
+        const uint32_t waterholeUid = Maps::getObjectUid( tile, objectType );
         constexpr int32_t animationFrames = 7;
-        int32_t frame = 0;
+        uint8_t frame = 0;
 
         while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
             if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
@@ -3742,18 +3746,18 @@ namespace
             }
 
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                ++frame;
+                Maps::setWaterholeCloseFrame( dst_index, waterholeUid, frame );
 
-                // TODO: place animation function call here.
+                ++frame;
 
                 Game::updateAdventureMapAnimationIndex();
                 interface.redraw( Interface::REDRAW_GAMEAREA );
 
-                display.render();
+                display.render( interface.getGameArea().GetROI() );
             }
         }
 
-        Maps::removeObjectFromTileByType( tile, objectType );
+        Maps::removeObjectFromMapByUID( dst_index, waterholeUid );
     }
 }
 
