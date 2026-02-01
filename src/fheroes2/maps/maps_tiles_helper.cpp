@@ -1998,7 +1998,7 @@ namespace Maps
     {
         assert( objectType != MP2::OBJ_NONE );
 
-        uint32_t objectUID = getObjectUid( tile, objectType );
+        uint32_t const objectUID = getObjectUid( tile, objectType );
 
         if ( objectUID == 0 ) {
             // This tile doe not contain an object with given object type.
