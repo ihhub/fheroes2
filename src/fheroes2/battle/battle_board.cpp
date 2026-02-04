@@ -1140,7 +1140,7 @@ std::pair<const Battle::Cell *, const Battle::Cell *> Battle::Board::GetMoatCell
     // Check if unit is on bridge, and bridge is down
     if ( result.first || result.second ) {
         const Bridge * bridge = Arena::GetBridge();
-        if ( bridge && ( ( result.first && result.first->GetIndex() == 49 ) || ( result.second && result.second->GetIndex() == 49 ) ) ) {
+        if ( bridge && bridge->isDown() && ( ( result.first && result.first->GetIndex() == 49 ) || ( result.second && result.second->GetIndex() == 49 ) ) ) {
             return { nullptr, nullptr };
         }
     }

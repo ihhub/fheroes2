@@ -2135,7 +2135,6 @@ bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const f
         mask.x -= movementDelta.x;
         mask.y += movementDelta.y;
     }
-    fheroes2::DrawRect( _mainSurface, mask, 133 );
 
     const fheroes2::Rect spriteRect{ offset.x, offset.y, sprite.width(), sprite.height() };
     const fheroes2::Rect intersection = spriteRect ^ mask;
