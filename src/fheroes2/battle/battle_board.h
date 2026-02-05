@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "battle_cell.h"
@@ -91,6 +92,8 @@ namespace Battle
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo();
+        static fheroes2::Rect GetMoatCellMask( const Cell & cell );
+        static std::pair<const Cell *, const Cell *> GetMoatCellsForUnit( const Unit & unit, const CellDirection movementDirection );
 
         static Cell * GetCell( const int32_t position );
         static Cell * GetCell( const int32_t position, const CellDirection dir );
@@ -113,6 +116,7 @@ namespace Battle
 
         static CellDirection GetReflectDirection( const CellDirection dir );
         static Battle::CellDirection GetDirection( const int32_t index1, const int32_t index2 );
+        static Battle::CellDirection GetDirectionFromDelta( const fheroes2::Point & movementDelta );
 
         // Returns the distance to the cell with the given index from the given edge of the battlefield along the X axis. The
         // distance from the edges of the battlefield to the cells closest to them is counted as one.

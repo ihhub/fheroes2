@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -69,6 +69,7 @@ namespace Battle
     struct TargetsInfo;
 
     enum class CastleDefenseStructure : int;
+    enum class CellDirection;
 
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
@@ -412,6 +413,9 @@ namespace Battle
         fheroes2::Point _drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
 
         void RedrawTroopCount( const Unit & unit );
+
+        bool _drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset, const fheroes2::Point & movementDelta,
+                                           const CellDirection movementDirection );
 
         void _redrawActionArmageddonSpell();
         void _redrawActionArrowSpell( const Unit & target );
