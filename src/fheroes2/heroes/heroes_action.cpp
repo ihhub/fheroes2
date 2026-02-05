@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -259,7 +259,7 @@ namespace
         // If there is a map bug the Object Animation destructor is not able to properly remove this object from the map.
         if ( actualObjectType != objectType && actualObjectType != MP2::OBJ_NONE ) {
             // Remove an object by its actual sprite type.
-            removeObjectFromTileByType( tile, actualObjectType );
+            Maps::removeObjectFromTileByType( tile, actualObjectType );
         }
 
         // Update radar in the place of the removed object.
@@ -3720,6 +3720,45 @@ namespace
             _( "You come upon a great cat, purring as it rubs against your leg. Charmed, you reach down, but it bites you and flees. At least the laughter at your misfortune lifts your troops' spirits." ),
             Dialog::OK, elementUI );
     }
+
+    void actionToWaterhole( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
+
+        (void)hero;
+
+        // TODO: Add a logic for the Waterhole action on player visit.
+
+        fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "As you approach the waterhole, it suddenly closes." ), Dialog::OK );
+
+        const Maps::Tile & tile = world.getTile( dst_index );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        LocalEvent & le = LocalEvent::Get();
+        Interface::AdventureMap & interface = Interface::AdventureMap::Get();
+
+        const uint32_t waterholeUid = Maps::getObjectUid( tile, objectType );
+        constexpr int32_t animationFrames = 7;
+        uint8_t frame = 0;
+
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                break;
+            }
+
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                Maps::setWaterholeCloseFrame( dst_index, waterholeUid, frame );
+
+                ++frame;
+
+                Game::updateAdventureMapAnimationIndex();
+                interface.redraw( Interface::REDRAW_GAMEAREA );
+
+                display.render( interface.getGameArea().GetROI() );
+            }
+        }
+
+        Maps::removeObjectFromMapByUID( dst_index, waterholeUid );
+    }
 }
 
 void Heroes::ScoutRadar() const
@@ -3942,6 +3981,10 @@ void Heroes::Action( const int tileIndex )
 
     case MP2::OBJ_DAEMON_CAVE:
         ActionToDaemonCave( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_WATERHOLE:
+        actionToWaterhole( *this, objectType, tileIndex );
         break;
 
     case MP2::OBJ_STONE_LITHS:

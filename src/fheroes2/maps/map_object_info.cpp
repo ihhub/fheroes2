@@ -5019,6 +5019,25 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // Waterhole. The center point is middle lower tile.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_WATERHOLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 52, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATERHOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 59, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATERHOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 45, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATERHOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 31, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATERHOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 38, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATERHOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 24, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATERHOLE, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateAdventureMiscellaneous( std::vector<Maps::ObjectInfo> & objects )

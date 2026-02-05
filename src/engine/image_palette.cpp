@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,12 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "image_palette.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
-
-#include "image_palette.h"
 
 namespace
 {
@@ -94,6 +94,15 @@ namespace fheroes2
             return;
         }
 
-        std::copy_n( palette.begin(), paletteSize, PaletteHolder::instance().gamePalette.begin() );
+        auto & gamePalette = PaletteHolder::instance().gamePalette;
+
+        std::copy_n( palette.begin(), paletteSize, gamePalette.begin() );
+
+        // Make a copy of cycling colors to use them without cycling.
+        // Water cycling colors. Color 234 has already non-cycling copy: 236. Copy 231, 232, 233 and 235 to 246 - 249.
+        std::copy_n( palette.begin() + 231 * 3, 3 * 3, gamePalette.begin() + 246 * 3 );
+        std::copy_n( palette.begin() + 235 * 3, 1 * 3, gamePalette.begin() + 249 * 3 );
+        // Lava cycling colors. Copy 214 - 217 to 250 - 253.
+        std::copy_n( palette.begin() + 214 * 3, 4 * 3, gamePalette.begin() + 250 * 3 );
     }
 }
