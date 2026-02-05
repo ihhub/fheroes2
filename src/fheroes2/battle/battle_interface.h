@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -243,7 +243,7 @@ namespace Battle
 
         void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi );
 
-        bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset ) const;
+        bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset, const bool highlightUnitMomevementArea ) const;
 
         const fheroes2::Rect & getRenderingRoi() const
         {
@@ -349,6 +349,11 @@ namespace Battle
         void setUnitTobeHighlighted( const Unit * unit )
         {
             _unitToHighlight = unit;
+        }
+
+        void setUnitToShowMovementArea( const Unit * unit )
+        {
+            _highlightUnitMovementArea = unit;
         }
 
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
@@ -459,7 +464,7 @@ namespace Battle
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         bool MousePressRightBoardAction( const Cell & cell ) const;
 
-        int GetBattleCursor( std::string & statusMsg ) const;
+        int GetBattleCursor( std::string & statusMsg, const bool highlightUnitMomevementArea );
         int GetBattleSpellCursor( std::string & statusMsg ) const;
 
         void _startAutoCombat( const Unit & unit, Actions & actions );
@@ -476,6 +481,7 @@ namespace Battle
         fheroes2::Image _hexagonShadow;
         fheroes2::Image _hexagonGridShadow;
         fheroes2::Image _hexagonCursorShadow;
+        fheroes2::Image _hexagonHighlightShadow;
 
         int _battleGroundIcn{ ICN::UNKNOWN };
         int _borderObjectsIcn{ ICN::UNKNOWN };
@@ -509,6 +515,7 @@ namespace Battle
         const Unit * _movingUnit{ nullptr };
         const Unit * _flyingUnit{ nullptr };
         const Unit * _unitToHighlight{ nullptr };
+        const Unit * _highlightUnitMovementArea{ nullptr };
         const fheroes2::Sprite * _spriteInsteadCurrentUnit{ nullptr };
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;

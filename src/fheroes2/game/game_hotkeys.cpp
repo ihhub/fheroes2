@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -298,6 +298,8 @@ namespace
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|cast battle spell" ), fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER_DISPLAY )]
             = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|toggle display of battle turn order" ), fheroes2::Key::KEY_T };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_HIGHLIGHT_UNIT_AREA_MODIFIER )]
+            = { Game::HotKeyCategory::BATTLE, gettext_noop( "hotkey|hold to highlight unit movement area" ), fheroes2::Key::KEY_LEFT_SHIFT };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|dwelling level 1" ), fheroes2::Key::KEY_1 };

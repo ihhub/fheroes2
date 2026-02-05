@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -156,6 +156,7 @@ namespace Game
         BATTLE_SKIP,
         BATTLE_CAST_SPELL,
         BATTLE_TOGGLE_TURN_ORDER_DISPLAY,
+        BATTLE_HIGHLIGHT_UNIT_AREA_MODIFIER,
 
         TOWN_DWELLING_LEVEL_1,
         TOWN_DWELLING_LEVEL_2,
