@@ -749,8 +749,21 @@ namespace Maps::Random_Generator
             return false;
         }
 
+        if ( MP2::isOffGameActionObject( objectInfo.objectType ) ) {
+            const auto & tileObjects = mapFormat.tiles[tile.GetIndex()].objects;
+            const bool tileHasActionObject = std::any_of( tileObjects.cbegin(), tileObjects.cend(), []( const Maps::Map_Format::TileObjectInfo & tileObjectinfo ) {
+                const auto & info = Maps::getObjectInfo( tileObjectinfo.group, static_cast<int32_t>( tileObjectinfo.index ) );
+                return MP2::isOffGameActionObject( info.objectType );
+            } );
+
+            if ( tileHasActionObject ) {
+                // Two action objects cannot be placed on one tile.
+                return false;
+            }
+        }
+
         // Maps::setObjectOnTile isn't idempotent, check if object was already placed
-        if ( MP2::isInGameActionObject( objectInfo.objectType ) && tile.getMainObjectType() == objectInfo.objectType ) {
+        if ( tile.getMainObjectType() == objectInfo.objectType && MP2::isInGameActionObject( objectInfo.objectType ) ) {
             return false;
         }
 
