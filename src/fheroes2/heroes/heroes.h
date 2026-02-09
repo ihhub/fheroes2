@@ -700,6 +700,11 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
+    void setInvisible( const bool isInvisible )
+    {
+        _alphaValue = isInvisible ? 0 : 255;
+    }
+
     double getAIMinimumJoiningArmyStrength() const;
 
     uint32_t getDailyRestoredSpellPoints() const;

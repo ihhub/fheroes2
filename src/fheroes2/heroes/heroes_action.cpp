@@ -46,6 +46,7 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
@@ -3721,32 +3722,99 @@ namespace
             Dialog::OK, elementUI );
     }
 
-    void actionToWaterhole( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    int getObjectDirecton( const int32_t tileIndex, const MP2::MapObjectType objectType )
+    {
+        int32_t directions = 0;
+
+        for ( const int32_t direction : Direction::allNeighboringDirections ) {
+            if ( !Maps::isValidDirection( tileIndex, direction ) ) {
+                continue;
+            }
+
+            const int32_t index = Maps::GetDirectionIndex( tileIndex, direction );
+
+            if ( world.getTile( index ).getMainObjectType() == objectType ) {
+                directions |= direction;
+            }
+        }
+
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT && ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT ) {
+            return Direction::TOP;
+        }
+        if ( ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT && ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::BOTTOM;
+        }
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT && ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT ) {
+            return Direction::LEFT;
+        }
+        if ( ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT && ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::RIGHT;
+        }
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT ) {
+            return Direction::TOP_LEFT;
+        }
+        if ( ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT ) {
+            return Direction::TOP_RIGHT;
+        }
+        if ( ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::BOTTOM_RIGHT;
+        }
+        if ( ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT ) {
+            return Direction::BOTTOM_LEFT;
+        }
+
+        return Direction::CENTER;
+    }
+
+    void actionToWaterhole( Heroes & hero, const MP2::MapObjectType objectType, int32_t dstIndex )
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        (void)hero;
+        fheroes2::Point movementVector;
+        const int centerDirection = getObjectDirecton( dstIndex, objectType );
 
-        // TODO: Add a logic for the Waterhole action on player visit.
+        switch ( centerDirection ) {
+        case Direction::TOP:
+            movementVector = { 0, -3 };
+            break;
+        case Direction::TOP_RIGHT:
+            movementVector = { 6, -3 };
+            break;
+        case Direction::BOTTOM_RIGHT:
+            movementVector = { 6, 3 };
+            break;
+        case Direction::BOTTOM:
+            movementVector = { 0, 3 };
+            break;
+        case Direction::BOTTOM_LEFT:
+            movementVector = { -6, 3 };
+            break;
+        case Direction::TOP_LEFT:
+            movementVector = { -6, -3 };
+            break;
+        default:
+            // This is not a valid direction for the Waterfall.
+            assert( 0 );
+            break;
+        }
 
-        fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "As you approach the waterhole, it suddenly closes." ), Dialog::OK );
-
-        const Maps::Tile & tile = world.getTile( dst_index );
+        const Maps::Tile & tile = world.getTile( dstIndex );
         fheroes2::Display & display = fheroes2::Display::instance();
         LocalEvent & le = LocalEvent::Get();
         Interface::AdventureMap & interface = Interface::AdventureMap::Get();
+        Interface::GameArea & gameArea = interface.getGameArea();
 
-        const uint32_t waterholeUid = Maps::getObjectUid( tile, objectType );
         constexpr int32_t animationFrames = 7;
         uint8_t frame = 0;
 
-        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) ) {
             if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 break;
             }
 
-            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                Maps::setWaterholeCloseFrame( dst_index, waterholeUid, frame );
+            if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
+                hero.SetOffset( { movementVector.x * frame, movementVector.y * frame } );
+                gameArea.ShiftCenter( movementVector );
 
                 ++frame;
 
@@ -3757,7 +3825,37 @@ namespace
             }
         }
 
-        Maps::removeObjectFromMapByUID( dst_index, waterholeUid );
+        // TODO: Add a logic for the Waterhole action on player visit.
+
+        fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "As you approach the waterhole, it suddenly closes." ), Dialog::OK );
+
+        hero.FadeOut( Game::HumanHeroAnimSpeedMultiplier() );
+        hero.setInvisible( true );
+
+        frame = 0;
+        const uint32_t waterholeUid = Maps::getObjectUid( tile, objectType );
+
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                break;
+            }
+
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                Maps::setWaterholeCloseFrame( dstIndex, waterholeUid, frame );
+
+                ++frame;
+
+                Game::updateAdventureMapAnimationIndex();
+                interface.redraw( Interface::REDRAW_GAMEAREA );
+
+                display.render( interface.getGameArea().GetROI() );
+            }
+        }
+
+        Maps::removeObjectFromMapByUID( dstIndex, waterholeUid );
+
+        hero.SetOffset( { 0, 0 } );
+        hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
     }
 }
 
