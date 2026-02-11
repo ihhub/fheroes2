@@ -499,7 +499,7 @@ namespace
                 return false;
             }
 
-            if ( skillType == Skill::Secondary::NAVIGATION && world.getWaterPercentage() < 1 ) {
+            if ( ( skillType == Skill::Secondary::NAVIGATION ) && world.getWaterPercentage() < 1 ) {
                 // If this is the Navigation skill and then amount of water on the map is less than 1% then it is a useless skill.
                 //
                 // For example, on the biggest map of 144 x 144 tiles, 1% of water corresponds to 207 tiles.
