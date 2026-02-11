@@ -847,8 +847,9 @@ void Castle::ActionNewWeek()
             DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5, DWELLING_UPGRADE6, DWELLING_UPGRADE7 };
 
     const bool isNeutral = ( GetColor() == PlayerColor::NONE );
-    const bool isPlagueWeek = ( world.GetWeekType().GetType() == WeekName::PLAGUE );
-    const bool isMonsterWeek = ( world.GetWeekType().GetType() == WeekName::MONSTERS );
+    const WeekName weekType = world.GetWeekType().GetType();
+    const bool isPlagueWeek = ( weekType == WeekName::PLAGUE );
+    const bool isMonsterWeek = ( weekType == WeekName::MONSTERS );
 
     if ( !isPlagueWeek ) {
         static const std::array<uint32_t, 6> basicDwellings
