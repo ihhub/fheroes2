@@ -2044,7 +2044,7 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
             const fheroes2::Rect & unitPosition = unit.GetRectPosition();
             const int32_t moveX = _movingPos.x - unitPosition.x;
             const int32_t moveY = _movingPos.y - unitPosition.y;
-            movementDirection = Board::GetDirectionFromDelta( { moveX, moveY } );
+            movementDirection = Board::GetDirectionFromDelta( moveX, moveY );
 
             // If it is a slowed flying creature, then it should smoothly move horizontally.
             if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
@@ -2088,43 +2088,38 @@ bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const f
                                                       const fheroes2::Point & movementDelta, const CellDirection movementDirection )
 {
     if ( _flyingUnit == &unit ) {
+        // Flying units in motion don't interact with the moat.
         return false;
     }
 
     const Castle * castle = Arena::GetCastle();
     if ( castle == nullptr || !castle->isBuild( BUILD_MOAT ) ) {
+        // Not a castle or a moat was not built.
         return false;
     }
 
     const auto moatCells = Board::GetMoatCellsForUnit( unit, movementDirection );
     if ( moatCells.first == nullptr && moatCells.second == nullptr ) {
+        // None of unit's position (front or back for wide units) is in the moat
         return false;
     }
 
-    const bool isDiagonal = movementDirection == CellDirection::TOP_LEFT || movementDirection == CellDirection::TOP_RIGHT
-                            || movementDirection == CellDirection::BOTTOM_LEFT || movementDirection == CellDirection::BOTTOM_RIGHT;
+    const bool isDiagonal = ( movementDirection == CellDirection::TOP_LEFT ) || ( movementDirection == CellDirection::TOP_RIGHT )
+                            || ( movementDirection == CellDirection::BOTTOM_LEFT ) || ( movementDirection == CellDirection::BOTTOM_RIGHT );
 
-    const bool isEntering = ( moatCells.first == nullptr && moatCells.second != nullptr );
-    const bool isExiting = ( moatCells.first != nullptr && moatCells.second == nullptr );
-    const bool isInside = ( moatCells.first != nullptr && moatCells.second != nullptr );
+    const bool isEntering = moatCells.first == nullptr && moatCells.second != nullptr;
+    const bool isExiting = moatCells.first != nullptr && moatCells.second == nullptr;
+    const bool isInside = moatCells.first != nullptr && moatCells.second != nullptr;
 
-    // Diagonal movement rules:
-    //
     // - Diagonal + isEntering = Apply mask, don't move mask
     // - Diagonal + isEntering + movement:TOP_RIGHT = Don't apply mask (it can clip some sprites)
     // - Diagonal + isExiting = Don't apply mask (it can clip some sprites)
     // - Diagonal + isInside  = Apply and move mask
-    //
-
-    if ( ( isDiagonal && isExiting ) || ( isDiagonal && isEntering && movementDirection == CellDirection::TOP_RIGHT ) ) {
+    if ( isDiagonal && ( isExiting || ( isEntering && movementDirection == CellDirection::TOP_RIGHT ) ) ) {
         return false;
     }
 
-    const Cell * maskCell = moatCells.first;
-    if ( isEntering ) {
-        maskCell = moatCells.second;
-    }
-
+    const Cell * maskCell = isEntering ? moatCells.second : moatCells.first;
     if ( maskCell == nullptr ) {
         return false;
     }
@@ -2155,20 +2150,19 @@ bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const f
     // The mask is a rectangle which means that worst-case is it's in the middle
     // of the sprite and we will need to make 4 calls to AlphaBlit to render the sprite
     // around the mask.
-    auto blit = [&]( const fheroes2::Rect & dst ) {
-        if ( dst.width > 0 && dst.height > 0 ) {
-            fheroes2::AlphaBlit( sprite, dst.x - spriteRect.x, dst.y - spriteRect.y, _mainSurface, dst.x, dst.y, dst.width, dst.height, alpha, isReflect );
-        }
-    };
 
     // Top
-    blit( { spriteRect.x, spriteRect.y, spriteRect.width, intersection.y - spriteRect.y } );
+    fheroes2::AlphaBlit( sprite, spriteRect.x - spriteRect.x, spriteRect.y - spriteRect.y, _mainSurface, spriteRect.x, spriteRect.y, spriteRect.width,
+                         intersection.y - spriteRect.y, alpha, isReflect );
 
     // Left
-    blit( { spriteRect.x, intersection.y, intersection.x - spriteRect.x, intersection.height } );
+    fheroes2::AlphaBlit( sprite, spriteRect.x - spriteRect.x, intersection.y - spriteRect.y, _mainSurface, spriteRect.x, intersection.y, intersection.x - spriteRect.x,
+                         intersection.height, alpha, isReflect );
 
     // Right
-    blit( { intersection.x + intersection.width, intersection.y, ( spriteRect.x + spriteRect.width ) - ( intersection.x + intersection.width ), intersection.height } );
+    fheroes2::AlphaBlit( sprite, ( intersection.x + intersection.width ) - spriteRect.x, intersection.y - spriteRect.y, _mainSurface, intersection.x + intersection.width,
+                         intersection.y, ( spriteRect.x + spriteRect.width ) - ( intersection.x + intersection.width ), intersection.height, alpha, isReflect );
+
     return true;
 }
 

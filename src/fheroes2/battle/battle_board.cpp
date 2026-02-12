@@ -260,39 +260,37 @@ Battle::CellDirection Battle::Board::GetReflectDirection( const CellDirection di
     return CellDirection::UNKNOWN;
 }
 
-Battle::CellDirection Battle::Board::GetDirectionFromDelta( const fheroes2::Point & movementDelta )
+Battle::CellDirection Battle::Board::GetDirectionFromDelta( const int32_t moveX, const int32_t moveY )
 {
-    const int32_t dx = movementDelta.x;
-    const int32_t dy = movementDelta.y;
-
-    if ( dx == 0 && dy == 0 ) {
+    if ( moveX == 0 && moveY == 0 ) {
         return CellDirection::CENTER;
     }
 
-    if ( dy < 0 ) {
-        if ( dx < 0 ) {
+    if ( moveY < 0 ) {
+        if ( moveX < 0 ) {
             return CellDirection::TOP_LEFT;
         }
-        if ( dx > 0 ) {
+        if ( moveX > 0 ) {
             return CellDirection::TOP_RIGHT;
         }
     }
-    else if ( dy > 0 ) {
-        if ( dx < 0 ) {
+    else if ( moveY > 0 ) {
+        if ( moveX < 0 ) {
             return CellDirection::BOTTOM_LEFT;
         }
-        if ( dx > 0 ) {
+        if ( moveX > 0 ) {
             return CellDirection::BOTTOM_RIGHT;
         }
     }
 
-    if ( dx < 0 ) {
+    if ( moveX < 0 ) {
         return CellDirection::LEFT;
     }
-    if ( dx > 0 ) {
+    if ( moveX > 0 ) {
         return CellDirection::RIGHT;
     }
 
+    // Should never happen. The above checks should exhaust all directions.
     assert( 0 );
     return CellDirection::UNKNOWN;
 }
@@ -1053,7 +1051,6 @@ fheroes2::Rect Battle::Board::GetMoatCellMask( const Cell & cell )
     constexpr int32_t insetX = 3;
 
     const auto & pos = cell.GetPos();
-    const auto index = cell.GetIndex();
 
     fheroes2::Rect mask{
         pos.x + insetX,
@@ -1063,7 +1060,7 @@ fheroes2::Rect Battle::Board::GetMoatCellMask( const Cell & cell )
     };
 
     // Additional, per-tile adjustments
-    switch ( index ) {
+    switch ( cell.GetIndex() ) {
     case 7:
         mask.height -= 3;
         mask.y += 3;
@@ -1076,8 +1073,8 @@ fheroes2::Rect Battle::Board::GetMoatCellMask( const Cell & cell )
         break;
 
     case 49:
-        mask.x += 8;
-        mask.width += 11;
+        mask.x += 12;
+        mask.width += 8;
         break;
 
     case 61:
@@ -1091,21 +1088,17 @@ fheroes2::Rect Battle::Board::GetMoatCellMask( const Cell & cell )
         break;
 
     default:
+        // All possible moat cells have been handled above.
+        // Reaching here means cell is not a moat cell.
         assert( 0 );
+        return {};
     }
 
     return mask;
 }
 
-// Check the unit's current and next cells following the movement direction
-// Return pair of Cell pointers if any of the cells are valid moat cells:
-// { nullptr, nullptr } => unit is not on moat tile nor moving to moat tile
-// { Cell * , nullptr } => unit is entering a moat tile
-// { nullptr, Cell *  } => unit is leaving a moat tile
-// { Cell * , Cell *  } => unit is either standing in the moat, or moving from one moat tile to another
 std::pair<const Battle::Cell *, const Battle::Cell *> Battle::Board::GetMoatCellsForUnit( const Unit & unit, const CellDirection movementDirection )
 {
-    const Position & pos = unit.GetPosition();
     auto resolveForCell = [&]( const Cell * cell ) -> std::pair<const Cell *, const Cell *> {
         std::pair<const Cell *, const Cell *> pair{ nullptr, nullptr };
 
@@ -1132,17 +1125,26 @@ std::pair<const Battle::Cell *, const Battle::Cell *> Battle::Board::GetMoatCell
     };
 
     // 1. Head first, then try tail
+    const Position & pos = unit.GetPosition();
     std::pair<const Cell *, const Cell *> result = resolveForCell( pos.GetHead() );
     if ( result.first == nullptr && result.second == nullptr && unit.isWide() ) {
         result = resolveForCell( pos.GetTail() );
     }
 
-    // Check if unit is on bridge, and bridge is down
-    if ( result.first || result.second ) {
-        const Bridge * bridge = Arena::GetBridge();
-        if ( bridge && bridge->isDown() && ( ( result.first && result.first->GetIndex() == 49 ) || ( result.second && result.second->GetIndex() == 49 ) ) ) {
-            return { nullptr, nullptr };
-        }
+    if ( result.first == nullptr && result.second == nullptr ) {
+        return result;
+    }
+
+    // Check if we have a bridge and that it's down
+    const Bridge * bridge = Arena::GetBridge();
+    if ( bridge == nullptr || !bridge->isDown() ) {
+        return result;
+    }
+
+    // Check if unit is on the bridge.
+    // We don't know which part of the unit is valid, so we need to check both
+    if ( ( result.first != nullptr && result.first->GetIndex() == 49 ) || ( result.second != nullptr && result.second->GetIndex() == 49 ) ) {
+        return { nullptr, nullptr };
     }
 
     return result;
