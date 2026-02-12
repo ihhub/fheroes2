@@ -194,7 +194,7 @@ IStreamBase & operator>>( IStreamBase & stream, EventDate & obj );
 
 using EventsDate = std::list<EventDate>;
 
-class World final : protected fheroes2::Size
+class World final
 {
 public:
     World( const World & other ) = delete;
@@ -547,6 +547,9 @@ private:
     friend class Radar;
     friend OStreamBase & operator<<( OStreamBase & stream, const World & w );
     friend IStreamBase & operator>>( IStreamBase & stream, World & w );
+
+    int32_t width{ 0 };
+    int32_t height{ 0 };
 
     std::vector<Maps::Tile> vec_tiles;
     AllHeroes vec_heroes;
