@@ -2152,12 +2152,11 @@ bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const f
     // around the mask.
 
     // Top
-    fheroes2::AlphaBlit( sprite, spriteRect.x - spriteRect.x, spriteRect.y - spriteRect.y, _mainSurface, spriteRect.x, spriteRect.y, spriteRect.width,
-                         intersection.y - spriteRect.y, alpha, isReflect );
+    fheroes2::AlphaBlit( sprite, 0, 0, _mainSurface, spriteRect.x, spriteRect.y, spriteRect.width, intersection.y - spriteRect.y, alpha, isReflect );
 
     // Left
-    fheroes2::AlphaBlit( sprite, spriteRect.x - spriteRect.x, intersection.y - spriteRect.y, _mainSurface, spriteRect.x, intersection.y, intersection.x - spriteRect.x,
-                         intersection.height, alpha, isReflect );
+    fheroes2::AlphaBlit( sprite, 0, intersection.y - spriteRect.y, _mainSurface, spriteRect.x, intersection.y, intersection.x - spriteRect.x, intersection.height, alpha,
+                         isReflect );
 
     // Right
     fheroes2::AlphaBlit( sprite, ( intersection.x + intersection.width ) - spriteRect.x, intersection.y - spriteRect.y, _mainSurface, intersection.x + intersection.width,
