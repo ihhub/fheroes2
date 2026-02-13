@@ -595,7 +595,8 @@ namespace
 
         switch ( layoutType ) {
         case LayoutType::LowerCase:
-            lastButtonRow.emplace_back( "|", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
+            lastButtonRow.emplace_back( "|", fheroes2::Key::KEY_LEFT_SHIFT, defaultSpecialButtonSize, isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonSize, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::AlphaNumeric; } );
@@ -616,7 +617,8 @@ namespace
             } );
             break;
         case LayoutType::UpperCase:
-            lastButtonRow.emplace_back( "|", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
+            lastButtonRow.emplace_back( "|", fheroes2::Key::KEY_LEFT_SHIFT, defaultSpecialButtonSize, isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             lastButtonRow.back().isInvertedRenderingLogic = true;
 
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonSize, isEvilInterface,
