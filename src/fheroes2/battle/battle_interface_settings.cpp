@@ -20,10 +20,13 @@
 
 #include "battle_interface_settings.h"
 
+#include <string>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "math_base.h"
 #include "screen.h"
