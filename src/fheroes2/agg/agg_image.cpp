@@ -506,7 +506,12 @@ namespace
     void drawImageOnButton( const fheroes2::Image & image, const int32_t maxImageWidth, const int32_t maxImageHeight, fheroes2::Image & releasedSprite,
                             fheroes2::Image & pressedSprite )
     {
-        assert( !image.empty() && !releasedSprite.empty() && !pressedSprite.empty() );
+        if ( !image.empty() || !releasedSprite.empty() || !pressedSprite.empty() ) {
+            // The image doesn't exist. It could mean 3 things:
+            // - the image really doesn't exist in case of incomplete resources
+            // - you are passing a wrong image
+            return;
+        }
 
         fheroes2::Image newImage( std::min( maxImageWidth, image.width() + 4 ), std::min( maxImageHeight, image.height() + 4 ) );
         newImage.reset();
