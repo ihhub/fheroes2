@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +26,11 @@
 
 class Army;
 
+namespace fheroes2
+{
+    enum class SupportedLanguage : uint8_t;
+}
+
 namespace MP2
 {
     enum MapObjectType : uint16_t;
@@ -37,6 +42,7 @@ namespace Maps
 
     namespace Map_Format
     {
+        struct BaseMapFormat;
         struct MapFormat;
         struct TileInfo;
         struct TileObjectInfo;
@@ -72,7 +78,7 @@ namespace Maps
     bool isRiverDeltaObject( const ObjectGroup group, const int32_t objectIndex );
 
     // This function updates Castles, Towns, Heroes and Capturable objects using their metadata stored in map.
-    void updatePlayerRelatedObjects( const Maps::Map_Format::MapFormat & map );
+    void updatePlayerRelatedObjects( const Map_Format::MapFormat & map );
 
     bool updateMapPlayers( Map_Format::MapFormat & map );
 
@@ -99,12 +105,37 @@ namespace Maps
     bool loadHeroArmy( Army & army, const Map_Format::HeroMetadata & metadata );
     void saveHeroArmy( const Army & army, Map_Format::HeroMetadata & metadata );
 
-    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool setRoad );
+    bool setRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex );
+    bool removeRoadFromTile( Map_Format::MapFormat & map, const int32_t tileIndex );
 
-    void updateRoadSpriteOnTile( Map_Format::MapFormat & map, const int32_t tileIndex, const bool forceRoadOnTile );
-    void removeRoadsFromTile( Map_Format::TileInfo & tile, const int32_t tileIndex );
-    void writeRoadSpriteToTile( Map_Format::TileInfo & tile, const int32_t tileIndex, const uint8_t imageIndex );
     void updateAllRoads( Map_Format::MapFormat & map );
 
-    bool doesContainRoads( const Map_Format::TileInfo & tile );
+    bool doesContainRoad( const Map_Format::TileInfo & tile );
+
+    // Changing map language is the only time when a translation is going to be updated for the map.
+    // Rather than implementing super complex logic for tracking all object modifications and updating the map format constantly,
+    // we just update it once for the whole translation.
+    // Consider translations as a snapshot of map in time for a specific language rather than a live copy of it.
+    //
+    // The workflow for the map maker should be the following:
+    // - create a complete map for the main language (by default English)
+    // - switch the language to a new one. At this time all texts are going to be copied to English translation
+    //   while the existing texts are going to be preserved.
+    // - modify the texts for the new language.
+    void changeLanguage( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language );
+
+    // Set the current in-game language for the map. This should be used only for lists of maps displayed for players.
+    // Take a note that this function can create a "fake" entry in translations to keep a proper list of languages
+    // which we display for map information.
+    //
+    // Return true only if the language was successfully set.
+    bool setInGameLanguage( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language );
+
+    // This function sets translation language for the map. It should be used only for the game mode and not for the Editor as
+    // it doesn't save the current language into the list of translations.
+    bool loadTranslation( Map_Format::BaseMapFormat & map, const fheroes2::SupportedLanguage language );
+    bool loadTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language );
+
+    // This function is used exclusively by the Editor when a map maker wants to remove a translation from the list of supported languages.
+    void removeTranslation( Map_Format::MapFormat & map, const fheroes2::SupportedLanguage language );
 }

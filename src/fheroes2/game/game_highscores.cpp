@@ -273,6 +273,8 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const bool isDefaultScreenSize = display.isDefaultSize();
 
+        const auto & conf = Settings::Get();
+
         if ( isAfterGameCompletion ) {
             assert( !isInternalUpdate );
 
@@ -324,7 +326,7 @@ namespace
                 inputPlayerName( playerName );
 
                 selectedEntryIndex = highScoreDataContainer.registerScoreStandard(
-                    { std::move( lang ), playerName, Settings::Get().getCurrentMapInfo().name, completionTime, daysPassed, rating, world.GetMapSeed() } );
+                    { std::move( lang ), playerName, conf.getCurrentMapInfo().name, completionTime, daysPassed, rating, world.GetMapSeed() } );
             }
 
             const std::string highScoreDataPath = System::concatPath( Game::GetSaveDir(), highScoreFileName );
@@ -361,8 +363,18 @@ namespace
         // Render first animation frame.
         redrawHighScoreAnimation( top, monsterAnimationFrameId, isCampaign );
 
-        fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN : ICN::BUTTON_HSCORES_VERTICAL_STANDARD, 0, 1 );
-        fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::BUTTON_HSCORES_VERTICAL_EXIT, 0, 1 );
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+        int buttonOtherIcnId = ICN::UNKNOWN;
+        if ( isEvilInterface ) {
+            buttonOtherIcnId = isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_EVIL : ICN::BUTTON_HSCORES_VERTICAL_STANDARD_EVIL;
+        }
+        else {
+            buttonOtherIcnId = isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD : ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD;
+        }
+
+        fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, buttonOtherIcnId, 0, 1 );
+        fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315,
+                                     isEvilInterface ? ICN::BUTTON_HSCORES_VERTICAL_EXIT_EVIL : ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD, 0, 1 );
 
         if ( !Game::isSuccessionWarsCampaignPresent() ) {
             // Disable the game mode switch button if The Succession Wars campaign files are not present.

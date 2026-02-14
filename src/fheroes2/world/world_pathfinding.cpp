@@ -1337,7 +1337,7 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
     return {};
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex ) const
+std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool accountNearestObject ) const
 {
     assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) && Maps::isValidAbsIndex( targetIndex ) );
 
@@ -1360,7 +1360,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex ) con
     while ( currentNode != _pathStart ) {
         assert( currentNode != -1 );
 
-        if ( !isTileAvailableForWalkThrough( currentNode, fromWater ) ) {
+        if ( accountNearestObject && !isTileAvailableForWalkThrough( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
         }
 

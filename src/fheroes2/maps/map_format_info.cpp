@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,14 +20,18 @@
 
 #include "map_format_info.h"
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <set>
 #include <utility>
 
 #include "artifact.h"
+#include "direction.h"
 #include "mp2.h"
+#include "rand.h"
 #include "serialize.h"
 #include "zzlib.h"
 
@@ -81,6 +85,15 @@ namespace Maps::Map_Format
 
     OStreamBase & operator<<( OStreamBase & stream, const ResourceMetadata & metadata );
     IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationSphinxMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationSphinxMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationBaseMapMetadata & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationBaseMapMetadata & metadata );
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationFormat & metadata );
+    IStreamBase & operator>>( IStreamBase & stream, TranslationFormat & metadata );
 }
 
 namespace
@@ -94,7 +107,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 10 };
+    constexpr uint16_t currentSupportedVersion{ 12 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -288,12 +301,118 @@ namespace
         }
     }
 
+    void convertFromV11ToV12( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 11, "Remove this function." );
+
+        if ( map.version > 11 ) {
+            return;
+        }
+
+        const std::set<uint32_t> consideredAsRoadIndecies{ 0, 2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29, 30, 31 };
+
+        // Remove road objects that are not considered as roads on the Adventure Map.
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( auto iter = tileInfo.objects.begin(); iter != tileInfo.objects.end(); ) {
+                if ( iter->group == Maps::ObjectGroup::ROADS && consideredAsRoadIndecies.count( iter->index ) == 0 ) {
+                    // This is a part of the road just as a decoration. Remove it.
+                    iter = tileInfo.objects.erase( iter );
+                    continue;
+                }
+
+                ++iter;
+            }
+        }
+
+        // Update objects that are marked as road corresponding to their relative positions to other tiles with roads.
+        const int32_t size = map.width * map.width;
+        for ( int32_t tileIndex = 0; tileIndex < size; ++tileIndex ) {
+            auto & tileObjects = map.tiles[tileIndex].objects;
+            auto roadObjectIter = std::find_if( tileObjects.begin(), tileObjects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
+
+            if ( roadObjectIter == tileObjects.end() ) {
+                continue;
+            }
+
+            auto & roadObjectIndex = roadObjectIter->index;
+
+            if ( tileIndex > map.width ) {
+                const auto & aboveObjects = map.tiles[tileIndex - map.width].objects;
+
+                if ( std::any_of( aboveObjects.cbegin(), aboveObjects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::KINGDOM_TOWNS; } ) ) {
+                    // 512 is the index of castle entrance road object.
+                    roadObjectIndex = 512;
+
+                    continue;
+                }
+            }
+
+            roadObjectIndex = 0;
+
+            const int32_t centerX = tileIndex % map.width;
+            const int32_t centerY = tileIndex / map.width;
+
+            // Avoid getting out of map boundaries.
+            const int32_t minTileX = std::max<int32_t>( centerX - 1, 0 );
+            const int32_t minTileY = std::max<int32_t>( centerY - 1, 0 );
+            const int32_t maxTileX = std::min<int32_t>( centerX + 1 + 1, map.width );
+            const int32_t maxTileY = std::min<int32_t>( centerY + 1 + 1, map.width );
+
+            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+                const int32_t indexOffsetY = tileY * map.width;
+
+                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
+                    const int32_t otherTileIndex = indexOffsetY + tileX;
+
+                    if ( otherTileIndex == tileIndex ) {
+                        // Skip the center tile.
+                        continue;
+                    }
+
+                    const auto & objects = map.tiles[otherTileIndex].objects;
+
+                    if ( std::any_of( objects.cbegin(), objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } ) ) {
+                        const int32_t diff = otherTileIndex - tileIndex;
+
+                        if ( diff == ( -map.width - 1 ) ) {
+                            roadObjectIndex |= Direction::TOP_LEFT;
+                        }
+                        else if ( diff == -map.width ) {
+                            roadObjectIndex |= Direction::TOP;
+                        }
+                        else if ( diff == ( -map.width + 1 ) ) {
+                            roadObjectIndex |= Direction::TOP_RIGHT;
+                        }
+                        else if ( diff == -1 ) {
+                            roadObjectIndex |= Direction::LEFT;
+                        }
+                        else if ( diff == 1 ) {
+                            roadObjectIndex |= Direction::RIGHT;
+                        }
+                        else if ( diff == map.width - 1 ) {
+                            roadObjectIndex |= Direction::BOTTOM_LEFT;
+                        }
+                        else if ( diff == map.width ) {
+                            roadObjectIndex |= Direction::BOTTOM;
+                        }
+                        else if ( diff == map.width + 1 ) {
+                            roadObjectIndex |= Direction::BOTTOM_RIGHT;
+                        }
+                    }
+                }
+            }
+
+            // Road sprites have 2 variants in assets.
+            roadObjectIndex += Rand::Get( 1 ) * 256;
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
                << map.alliances << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory
                << map.victoryConditionMetadata << map.lossConditionType << map.lossConditionMetadata << map.width << map.mainLanguage << map.name << map.description
-               << map.creatorNotes;
+               << map.creatorNotes << map.translations;
 
         return !stream.fail();
     }
@@ -323,6 +442,14 @@ namespace
             stream >> map.creatorNotes;
         }
 
+        if ( map.version < 11 ) {
+            // True translation support was added in version 11.
+            map.translations = {};
+        }
+        else {
+            stream >> map.translations;
+        }
+
         return !stream.fail();
     }
 
@@ -339,7 +466,7 @@ namespace
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.rumors << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
                    << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata << map.monsterMetadata << map.artifactMetadata
-                   << map.resourceMetadata;
+                   << map.resourceMetadata << map.translationInfo;
 
         const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
 
@@ -414,6 +541,15 @@ namespace
         else {
             convertFromV9ToV10( map, std::move( standardMetadata ) );
         }
+
+        if ( map.version < 11 ) {
+            map.translationInfo = {};
+        }
+        else {
+            decompressed >> map.translationInfo;
+        }
+
+        convertFromV11ToV12( map );
 
         return !stream.fail();
     }
@@ -568,6 +704,38 @@ namespace Maps::Map_Format
     IStreamBase & operator>>( IStreamBase & stream, ResourceMetadata & metadata )
     {
         return stream >> metadata.count;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationSphinxMetadata & metadata )
+    {
+        return stream << metadata.riddle << metadata.answers;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationSphinxMetadata & metadata )
+    {
+        return stream >> metadata.riddle >> metadata.answers;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationBaseMapMetadata & metadata )
+    {
+        return stream << metadata.name << metadata.description << metadata.creatorNotes;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationBaseMapMetadata & metadata )
+    {
+        return stream >> metadata.name >> metadata.description >> metadata.creatorNotes;
+    }
+
+    OStreamBase & operator<<( OStreamBase & stream, const TranslationFormat & metadata )
+    {
+        return stream << metadata.dailyEvents << metadata.rumors << metadata.castleMetadata << metadata.heroMetadata << metadata.sphinxMetadata << metadata.signMetadata
+                      << metadata.adventureMapEventMetadata;
+    }
+
+    IStreamBase & operator>>( IStreamBase & stream, TranslationFormat & metadata )
+    {
+        return stream >> metadata.dailyEvents >> metadata.rumors >> metadata.castleMetadata >> metadata.heroMetadata >> metadata.sphinxMetadata >> metadata.signMetadata
+               >> metadata.adventureMapEventMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

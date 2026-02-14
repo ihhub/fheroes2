@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -3858,10 +3858,11 @@ msgstr "Typ mapy"
 msgid "Map Type:\n"
 msgstr "Typ mapy\n"
 
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -4765,6 +4766,37 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Zobrazí systémové menu, s volbami pro úpravu chování hry."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Podpořte nás na"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Tato pověst již existuje v seznamu."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Klikni pro změnu rasy."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Jazyk"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Přidat další událost."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Vybrat jazyk:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Smazat stávající událost."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
@@ -4934,14 +4966,6 @@ msgstr "JAZYK"
 msgid "ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Chystáte se změnit jazyk mapy z %{oldLanguage} na %{newLanguage}. Některé "
-"texty nemusí být po této změně zobrazeny správně.Chcete pokračovat?"
-
 msgid "Change Map Name"
 msgstr "Změnit název mapy"
 
@@ -5051,6 +5075,15 @@ msgstr "Odstranit pověst"
 
 msgid "Delete an existing rumor."
 msgstr "Odtranit existující pověst."
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Jazyk:\n"
 
 msgid ""
 "\n"
@@ -12490,3 +12523,11 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid ""
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
+#~ msgstr ""
+#~ "Chystáte se změnit jazyk mapy z %{oldLanguage} na %{newLanguage}. Některé "
+#~ "texty nemusí být po této změně zobrazeny správně.Chcete pokračovat?"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3901,10 +3901,11 @@ msgstr "Tipo de Mapa"
 msgid "Map Type:\n"
 msgstr "Tipo de Mapa:\n"
 
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -4812,6 +4813,37 @@ msgstr ""
 "Visualizar as opções do sistema do editor, que permitem personalizar o "
 "editor."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Apoie-nos em"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Esse rumor já existe na lista."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Clique para alterar a classe."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Idioma"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Adiciona um evento adicional."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Selecionar Idioma:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Exclui um evento existente."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
@@ -4982,15 +5014,6 @@ msgstr "IDIOMA"
 msgid "ABOUT"
 msgstr "SOBRE"
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Você está prestes a alterar o idioma do mapa de %{oldLanguage} para "
-"%{newLanguage}. Alguns textos podem não ser exibidos corretamente depois "
-"disso. Deseja prosseguir?"
-
 msgid "Change Map Name"
 msgstr "Alterar o Nome do Mapa"
 
@@ -5103,6 +5126,15 @@ msgstr "Excluir rumor"
 
 msgid "Delete an existing rumor."
 msgstr "Exclui um rumor existente."
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Idioma:\n"
 
 msgid ""
 "\n"
@@ -12699,3 +12731,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid ""
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
+#~ msgstr ""
+#~ "Você está prestes a alterar o idioma do mapa de %{oldLanguage} para "
+#~ "%{newLanguage}. Alguns textos podem não ser exibidos corretamente depois "
+#~ "disso. Deseja prosseguir?"

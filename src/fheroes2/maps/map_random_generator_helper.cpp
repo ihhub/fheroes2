@@ -206,32 +206,6 @@ namespace
         return MP2::OBJ_NONE;
     }
 
-    std::pair<Maps::ObjectGroup, int32_t> convertMP2ToObjectInfo( const MP2::MapObjectType mp2Type )
-    {
-        static std::map<MP2::MapObjectType, std::pair<Maps::ObjectGroup, int32_t>> lookup;
-
-        if ( lookup.empty() ) {
-            const std::vector<Maps::ObjectGroup> limitedGroupList{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_DWELLINGS,
-                                                                   Maps::ObjectGroup::ADVENTURE_MINES,     Maps::ObjectGroup::ADVENTURE_POWER_UPS,
-                                                                   Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::MONSTERS };
-
-            for ( const auto & group : limitedGroupList ) {
-                const auto & groupObjects = Maps::getObjectsByGroup( group );
-                for ( size_t index = 0; index < groupObjects.size(); ++index ) {
-                    const MP2::MapObjectType type = groupObjects[index].objectType;
-                    lookup.try_emplace( type, std::make_pair( group, static_cast<int32_t>( index ) ) );
-                }
-            }
-        }
-
-        const auto it = lookup.find( mp2Type );
-        if ( it != lookup.end() ) {
-            return it->second;
-        }
-
-        return {};
-    }
-
     void iterateOverObjectParts( const Maps::ObjectInfo & info, const std::function<void( const Maps::ObjectPartInfo & )> & lambda )
     {
         for ( const auto & objectPart : info.groundLevelParts ) {
@@ -404,6 +378,31 @@ namespace Maps::Random_Generator
         return convertMP2ToObjectInfo( Rand::GetWithGen( possibilities, randomGenerator ) );
     }
 
+    std::pair<ObjectGroup, int32_t> convertMP2ToObjectInfo( const MP2::MapObjectType mp2Type )
+    {
+        static std::map<MP2::MapObjectType, std::pair<Maps::ObjectGroup, int32_t>> lookup;
+
+        if ( lookup.empty() ) {
+            const std::vector<ObjectGroup> limitedGroupList{ ObjectGroup::ADVENTURE_ARTIFACTS, ObjectGroup::ADVENTURE_DWELLINGS, ObjectGroup::ADVENTURE_MINES,
+                                                             ObjectGroup::ADVENTURE_POWER_UPS, ObjectGroup::ADVENTURE_TREASURES, ObjectGroup::MONSTERS };
+
+            for ( const auto & group : limitedGroupList ) {
+                const auto & groupObjects = Maps::getObjectsByGroup( group );
+                for ( size_t index = 0; index < groupObjects.size(); ++index ) {
+                    const MP2::MapObjectType type = groupObjects[index].objectType;
+                    lookup.try_emplace( type, std::make_pair( group, static_cast<int32_t>( index ) ) );
+                }
+            }
+        }
+
+        const auto it = lookup.find( mp2Type );
+        if ( it != lookup.end() ) {
+            return it->second;
+        }
+
+        return {};
+    }
+
     int32_t selectTerrainVariantForObject( const ObjectGroup groupType, const int32_t objectIndex, const int32_t groundType )
     {
         if ( groupType == ObjectGroup::LANDSCAPE_TREES && objectIndex < 6 ) {
@@ -574,11 +573,11 @@ namespace Maps::Random_Generator
         return buckets;
     }
 
-    std::vector<int32_t> findOpenTiles( const Region & region )
+    std::vector<int32_t> findTilesByType( const Region & region, const NodeType type )
     {
         std::vector<int32_t> result;
         for ( const Node & node : region.nodes ) {
-            if ( node.type == NodeType::OPEN ) {
+            if ( node.type == type ) {
                 result.push_back( node.index );
             }
         }
@@ -725,7 +724,21 @@ namespace Maps::Random_Generator
     // Wouldn't render correctly but will speed up placement
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
-        Maps::writeRoadSpriteToTile( mapFormat.tiles[tileIndex], tileIndex, 0 );
+        if ( Maps::doesContainRoad( mapFormat.tiles[tileIndex] ) ) {
+            return;
+        }
+
+        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, 2 );
+        if ( objectInfo.empty() ) {
+            assert( 0 );
+            return;
+        }
+
+        // We just increase the UID counter to use the last UID in `Maps::addObjectToMap()`.
+        // All road objects will be updated and placed to the `world` tiles only after all of the road parts are placet to the `Map_Format`.
+        Maps::getNewObjectUID();
+
+        Maps::addObjectToMap( mapFormat, tileIndex, Maps::ObjectGroup::ROADS, 2 );
     }
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
@@ -736,8 +749,21 @@ namespace Maps::Random_Generator
             return false;
         }
 
+        if ( MP2::isOffGameActionObject( objectInfo.objectType ) ) {
+            const auto & tileObjects = mapFormat.tiles[tile.GetIndex()].objects;
+            const bool tileHasActionObject = std::any_of( tileObjects.cbegin(), tileObjects.cend(), []( const Maps::Map_Format::TileObjectInfo & tileObjectinfo ) {
+                const auto & info = Maps::getObjectInfo( tileObjectinfo.group, static_cast<int32_t>( tileObjectinfo.index ) );
+                return MP2::isOffGameActionObject( info.objectType );
+            } );
+
+            if ( tileHasActionObject ) {
+                // Two action objects cannot be placed on one tile.
+                return false;
+            }
+        }
+
         // Maps::setObjectOnTile isn't idempotent, check if object was already placed
-        if ( MP2::isInGameActionObject( objectInfo.objectType ) && tile.getMainObjectType() == objectInfo.objectType ) {
+        if ( tile.getMainObjectType() == objectInfo.objectType && MP2::isInGameActionObject( objectInfo.objectType ) ) {
             return false;
         }
 
@@ -846,8 +872,8 @@ namespace Maps::Random_Generator
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
             markNodeIndexAsType( data, bottomIndex, NodeType::PATH );
-            Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
-            Maps::updateRoadOnTile( mapFormat, nextIndex, true );
+            forceTempRoadOnTile( mapFormat, bottomIndex );
+            forceTempRoadOnTile( mapFormat, nextIndex );
         }
 
         return true;
@@ -986,7 +1012,7 @@ namespace Maps::Random_Generator
         int32_t treasureLimit = region.treasureLimit;
         std::vector<std::pair<int32_t, ObjectSet>> objectSetsPlanned;
 
-        std::vector<int32_t> openTiles = findOpenTiles( region );
+        std::vector<int32_t> openTiles = findTilesByType( region, NodeType::OPEN );
         Rand::ShuffleWithGen( openTiles, randomGenerator );
 
         size_t attempt = 0;
@@ -1142,7 +1168,7 @@ namespace Maps::Random_Generator
             return;
         }
 
-        std::vector<int32_t> openTiles = findOpenTiles( region );
+        std::vector<int32_t> openTiles = findTilesByType( region, NodeType::OPEN );
 
         const auto openSpaceFilter = [&data]( const int32_t idx ) {
             return std::any_of( Direction::allNeighboringDirections.begin(), Direction::allNeighboringDirections.end(), [&]( const auto direction ) {

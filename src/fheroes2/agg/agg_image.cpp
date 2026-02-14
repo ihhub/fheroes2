@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -162,9 +162,12 @@ namespace
                                                 ICN::BUTTON_VERTICAL_DISMISS,
                                                 ICN::BUTTON_VERTICAL_EXIT,
                                                 ICN::BUTTON_VERTICAL_PATROL,
-                                                ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
-                                                ICN::BUTTON_HSCORES_VERTICAL_EXIT,
-                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
+                                                ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD,
+                                                ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_EVIL,
+                                                ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD,
+                                                ICN::BUTTON_HSCORES_VERTICAL_EXIT_EVIL,
+                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD,
+                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD_EVIL,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
                                                 ICN::BUTTON_SELECT_GOOD,
                                                 ICN::BUTTON_SELECT_EVIL,
@@ -1292,21 +1295,21 @@ namespace
 
             break;
         }
-        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
-        case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
-        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
+        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD:
+        case ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD:
+        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
             const int originalID = ICN::HISCORE;
             uint32_t originalICNIndex = 0;
-            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD ) {
                 originalICNIndex = 2;
             }
-            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD ) {
                 originalICNIndex = 4;
             }
             else {
-                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD );
             }
 
             if ( useOriginalResources() ) {
@@ -1326,10 +1329,10 @@ namespace
 
             const char * buttonText;
 
-            if ( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN ) {
+            if ( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD ) {
                 buttonText = gettext_noop( "C\nA\nM\nP\nA\nI\nG\nN" );
             }
-            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD ) {
                 buttonText = gettext_noop( "S\nT\nA\nN\nD\nA\nR\nD" );
             }
             else {
@@ -1344,6 +1347,9 @@ namespace
 
             break;
         }
+        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_EVIL:
+        case ICN::BUTTON_HSCORES_VERTICAL_EXIT_EVIL:
+        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD_EVIL:
         case ICN::BUTTON_GIFT_EVIL:
         case ICN::BUTTON_MAP_SELECT_EVIL:
         case ICN::BUTTON_SMALL_ACCEPT_EVIL:
@@ -1360,7 +1366,16 @@ namespace
             // language-specific generations from generateLanguageSpecificImages().
 
             int goodButtonIcnID = ICN::UNKNOWN;
-            if ( id == ICN::BUTTON_MAP_SELECT_EVIL ) {
+            if ( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_EVIL ) {
+                goodButtonIcnID = ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD;
+            }
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT_EVIL ) {
+                goodButtonIcnID = ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD;
+            }
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD_EVIL ) {
+                goodButtonIcnID = ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD;
+            }
+            else if ( id == ICN::BUTTON_MAP_SELECT_EVIL ) {
                 goodButtonIcnID = ICN::BUTTON_MAP_SELECT_GOOD;
             }
             else if ( id == ICN::BUTTON_SMALL_RESTART_EVIL ) {
@@ -1919,20 +1934,20 @@ namespace
             fillTransparentButtonText( released );
             return true;
         }
-        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
-        case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
-        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
+        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD:
+        case ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD:
+        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD: {
             _icnVsSprite[id].resize( 2 );
             const int originalID = ICN::HISCORE;
             uint32_t originalICNIndex = 0;
-            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD ) {
                 originalICNIndex = 2;
             }
-            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD ) {
                 originalICNIndex = 4;
             }
             else {
-                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD );
             }
 
             fheroes2::Sprite & released = _icnVsSprite[id][0];
@@ -2131,20 +2146,20 @@ namespace
             fheroes2::ReplaceColorId( pressed, 178, 39 );
             return true;
         }
-        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
-        case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
-        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
+        case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD:
+        case ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD:
+        case ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD: {
             _icnVsSprite[id].resize( 2 );
             const int originalID = ICN::HISCORE;
             uint32_t originalICNIndex = 0;
-            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+            if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD_GOOD ) {
                 originalICNIndex = 2;
             }
-            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+            else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT_GOOD ) {
                 originalICNIndex = 4;
             }
             else {
-                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+                assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD );
             }
 
             fheroes2::Sprite & released = _icnVsSprite[id][0];

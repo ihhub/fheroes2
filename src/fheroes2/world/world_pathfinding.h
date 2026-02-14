@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -188,10 +188,10 @@ public:
     // resulting path will end with this neighboring tile. If such a path could not be built, then an empty path is returned.
     std::list<Route::Step> buildDimensionDoorPath( const int targetIndex );
 
-    // Builds and returns a path to the tile with the index 'targetIndex'. If there is a need to pass through any objects
-    // on the way to this tile, then a path to the nearest such object is returned. If the destination tile is not reachable
-    // in principle, then an empty path is returned.
-    std::list<Route::Step> buildPath( const int targetIndex ) const;
+    // Builds and returns a path to the tile with the index 'targetIndex'.
+    // If there is a need to pass through any objects on the way to this tile and accountNearestObject is set, then a path to the nearest such object is returned.
+    // If the destination tile is not reachable in principle, then an empty path is returned.
+    std::list<Route::Step> buildPath( const int targetIndex, const bool accountNearestObject ) const;
 
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( const int start, const int targetIndex, const PlayerColor color, const double armyStrength, const uint8_t skill = Skill::Level::EXPERT );

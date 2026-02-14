@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
 "PO-Revision-Date: 2025-12-03 17:37+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3851,10 +3851,11 @@ msgstr "Karttyp"
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 "\n"
 "\n"
@@ -4755,6 +4756,37 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
+#, fuzzy
+msgid "Supported languages"
+msgstr "Stöd oss på"
+
+#, fuzzy
+msgid "This language already exists in the list."
+msgstr "Detta rykte finns redan i listan."
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Klicka för byta klass."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Språk"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Lägg till en ytterligare händelse."
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Välj språk:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Radera en redan existerande händelse."
+
 msgid "Failed to generate a random map with given parameters."
 msgstr "Misslyckades att skapa en slumpad karta med givna parametrar"
 
@@ -4917,15 +4949,6 @@ msgstr "SPRÅK"
 msgid "ABOUT"
 msgstr "OM"
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-"Du tänker ändra kartans språk från %{oldLanguage} till %{newLanguage}. En "
-"del texter kan eventuellt inte visas korrekt efter detta. Vill du "
-"fortfarande ändra språk?"
-
 msgid "Change Map Name"
 msgstr "Ändra Kartnamn"
 
@@ -5040,6 +5063,15 @@ msgstr "Radera Rykte"
 
 msgid "Delete an existing rumor."
 msgstr "Radera ett existerande rykte."
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr ""
+"\n"
+"\n"
+"Språk:\n"
 
 msgid ""
 "\n"
@@ -12535,3 +12567,12 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid ""
+#~ "You are about to change the map's language from %{oldLanguage} to "
+#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
+#~ "you want to proceed?"
+#~ msgstr ""
+#~ "Du tänker ändra kartans språk från %{oldLanguage} till %{newLanguage}. En "
+#~ "del texter kan eventuellt inte visas korrekt efter detta. Vill du "
+#~ "fortfarande ändra språk?"

@@ -114,11 +114,11 @@ namespace
     // Never cache the value of this function as it depends on hero's path and location.
     bool AIIsShowAnimationForHero( const Heroes & hero, const PlayerColorsSet colors )
     {
-        if ( Settings::Get().AIMoveSpeed() == 0 ) {
+        if ( colors == 0 ) {
             return false;
         }
 
-        if ( colors == 0 ) {
+        if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
         }
 
@@ -143,11 +143,11 @@ namespace
 
     bool AIIsShowAnimationForTile( const Maps::Tile & tile, const PlayerColorsSet colors )
     {
-        if ( Settings::Get().AIMoveSpeed() == 0 ) {
+        if ( colors == 0 ) {
             return false;
         }
 
-        if ( colors == 0 ) {
+        if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
         }
 
@@ -318,7 +318,8 @@ namespace
 
         assert( hero.CanCastSpell( spellToUse ) );
 
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        const auto allianceColors = AIGetAllianceColors();
+        if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
         }
@@ -328,7 +329,7 @@ namespace
         hero.SpellCasted( spellToUse );
         hero.GetPath().Reset();
 
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
@@ -984,7 +985,8 @@ namespace
 
         assert( world.getTile( indexTo ).getMainObjectType() != MP2::OBJ_HERO );
 
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        const auto allianceColors = AIGetAllianceColors();
+        if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
@@ -994,7 +996,7 @@ namespace
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
 
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
@@ -1049,7 +1051,8 @@ namespace
             return;
         }
 
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        const auto allianceColors = AIGetAllianceColors();
+        if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             // AI-controlled hero cannot activate Whirlpool from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
@@ -1061,7 +1064,7 @@ namespace
 
         AIWhirlpoolTroopLoseEffect( hero );
 
-        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
@@ -2397,7 +2400,8 @@ void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
         return;
     }
 
-    if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+    const auto allianceColors = AIGetAllianceColors();
+    if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
         Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
         hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
     }
@@ -2408,7 +2412,7 @@ void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
     hero.setDimensionDoorUsage( hero.getDimensionDoorUses() + 1 );
     hero.GetPath().Reset();
 
-    if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
+    if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
         Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
         hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
     }
@@ -2438,7 +2442,8 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
 
     Maps::Tile & tileSource = world.getTile( boatSource );
 
-    if ( AIIsShowAnimationForTile( tileSource, AIGetAllianceColors() ) ) {
+    const auto allianceColors = AIGetAllianceColors();
+    if ( AIIsShowAnimationForTile( tileSource, allianceColors ) ) {
         gameArea.SetCenter( Maps::GetPoint( boatSource ) );
         gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.getMainObjectPart()._uid, boatSource, MP2::OBJ_BOAT ) );
     }
@@ -2452,7 +2457,7 @@ int32_t AI::HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIn
     tileDest.setBoat( Direction::RIGHT, heroColor );
     tileSource.resetBoatOwnerColor();
 
-    if ( AIIsShowAnimationForTile( tileDest, AIGetAllianceColors() ) ) {
+    if ( AIIsShowAnimationForTile( tileDest, allianceColors ) ) {
         gameArea.SetCenter( Maps::GetPoint( boatDestinationIndex ) );
         gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.getMainObjectPart()._uid, boatDestinationIndex, MP2::OBJ_BOAT ) );
     }

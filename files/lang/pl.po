@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 08:22+0000\n"
-"PO-Revision-Date: 2024-07-20 23:19+0200\n"
+"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"PO-Revision-Date: 2026-02-12 15:23+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid "SELECT"
 msgstr "WYBIERZ"
@@ -182,22 +182,22 @@ msgid ""
 "MAIN\n"
 "MENU"
 msgstr ""
+"MENU\n"
+"GŁÓWNE"
 
-#, fuzzy
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
 "NOWA\n"
-"GRA"
+"MAPA"
 
-#, fuzzy
 msgid ""
 "LOAD\n"
 "MAP"
 msgstr ""
 "WCZYTAJ\n"
-"GRĘ"
+"MAPĘ"
 
 #, fuzzy
 msgid ""
@@ -276,15 +276,15 @@ msgstr ""
 "RZENIA"
 
 msgid "editorMainMenu|BACK"
-msgstr ""
+msgstr "ANULUJ"
 
 msgid ""
 "newMap|FROM\n"
 "SCRATCH"
-msgstr ""
+msgstr "OD NOWA"
 
 msgid "newMap|RANDOM"
-msgstr ""
+msgstr "LOSOWA"
 
 msgid "DIFFICULTY"
 msgstr "TRUDNOŚĆ"
@@ -3729,9 +3729,8 @@ msgstr "Zapisz plik:"
 msgid "File to Load:"
 msgstr "Wczytaj plik:"
 
-#, fuzzy
 msgid "Terrain object"
-msgstr "Brak obiektu"
+msgstr "Obiekt terenu"
 
 msgid "There is nothing to select from."
 msgstr ""
@@ -3818,29 +3817,23 @@ msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 msgid "Click to select this color."
 msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Wybierz bohatera:"
+msgstr "Wybierz skarb:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz obiekt wodny:"
 
-#, fuzzy
 msgid "Castle/town placing"
-msgstr "Opcje zamku"
+msgstr "Umieszczanie zamku/miasta"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutralny"
 
 msgid "TOWN"
-msgstr ""
+msgstr "MIASTO"
 
-#, fuzzy
 msgid "CASTLE"
-msgstr ""
-"MIASTA/\n"
-"ZAMKI"
+msgstr "ZAMEK"
 
 #, fuzzy
 msgid "Click to start placing the selected castle/town."
@@ -3861,26 +3854,24 @@ msgstr "%{color} gracz"
 msgid "race|Neutral"
 msgstr "Neutralny"
 
-#, fuzzy
 msgid "Select Dwelling:"
-msgstr "Wybierz zaklęcie:"
+msgstr "Wybierz siedlisko:"
 
-#, fuzzy
 msgid "Select Landscape Object:"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz obiekt terenu:"
 
 msgid "Mine placing"
-msgstr ""
+msgstr "Umieszczanie kopalni"
 
-#, fuzzy
 msgid ""
 "Resource\n"
 "type:"
-msgstr "Surowiec"
+msgstr ""
+"Typ\n"
+"surowca"
 
-#, fuzzy
 msgid "%{mineName} appearance:"
-msgstr "%{name}, %{race}"
+msgstr "%{mineName} - wygląd:"
 
 #, fuzzy
 msgid "Click to select the color."
@@ -3890,25 +3881,20 @@ msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
-#, fuzzy
 msgid "Select Mountain Object:"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz obiekt gór:"
 
-#, fuzzy
 msgid "Select Rock Object:"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz obiekt kamieni:"
 
-#, fuzzy
 msgid "Select Tree Object:"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz obiekt drzew:"
 
-#, fuzzy
 msgid "Select Power Up Object:"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz obiekt wzmacniający:"
 
-#, fuzzy
 msgid "Select Adventure Object:"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz obiekt przygody:"
 
 #, fuzzy
 msgid "Select color"
@@ -3960,7 +3946,7 @@ msgstr "Typ Mapy:\n"
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr "Język"
 
 msgid "Lose all your heroes and towns."
@@ -4594,12 +4580,11 @@ msgstr ""
 msgid "There are no players on the map, so no one can own this object."
 msgstr ""
 
-#, fuzzy
 msgid "Roads"
-msgstr "Droga"
+msgstr "Drogi"
 
 msgid "Streams"
-msgstr ""
+msgstr "Strumienie"
 
 #, fuzzy
 msgid ""
@@ -4650,15 +4635,15 @@ msgstr "Zapisz plik:"
 msgid "Used to place %{object}."
 msgstr "Znajdź najpotężniejszy artefakt."
 
-#, fuzzy
 msgid "Select object type"
-msgstr "Wybierz artefakt:"
+msgstr "Wybierz typ obiektu"
 
-#, fuzzy
 msgid ""
 "Click here to\n"
 "select a monster."
-msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+msgstr ""
+"Kliknij tutaj aby\n"
+"wybrać potwora."
 
 #, fuzzy
 msgid ""
@@ -4670,41 +4655,38 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
+"Szczegóły\n"
+"komórki"
 
 msgid "Erase"
-msgstr ""
+msgstr "Usuwanie"
 
 msgid "Mountains"
 msgstr "Góry"
 
-#, fuzzy
 msgid "Rocks"
-msgstr "Kamień"
+msgstr "Kamienie"
 
 msgid "Trees"
 msgstr "Drzewa"
 
-#, fuzzy
 msgid "Water Objects"
-msgstr "Wyschnięty"
+msgstr "Obiekty wodne"
 
-#, fuzzy
 msgid "Miscellaneous"
-msgstr "Fineous"
+msgstr "Pozostałe"
 
 msgid "Artifacts"
 msgstr "Artefakty"
 
-#, fuzzy
 msgid "Dwellings"
-msgstr "Niziołki"
+msgstr "Siedliska"
 
 msgid "Mines"
-msgstr "Kopalnia"
+msgstr "Kopalnie"
 
-#, fuzzy
 msgid "Power-ups"
-msgstr "Moc"
+msgstr "Wzmocnienia"
 
 msgid "Treasures"
 msgstr "Skarby"
@@ -4735,10 +4717,10 @@ msgid "editorErasure|Heroes"
 msgstr ""
 
 msgid "editorErasure|Roads"
-msgstr ""
+msgstr "Drogi"
 
 msgid "editorErasure|Streams"
-msgstr ""
+msgstr "Strumienie"
 
 msgid ""
 "Draws terrain in\n"
@@ -4903,6 +4885,36 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Pokazuje menu z opcjami systemowymi, pozwalając na zmianę ustawień gry."
+
+#, fuzzy
+msgid "Supported languages"
+msgstr "Wesprzyj nas"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Język"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Programiści"
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Wybierz język gry:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Wczytaj istniejącą mapę."
 
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
@@ -5093,12 +5105,6 @@ msgstr ""
 msgid "ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
@@ -5229,6 +5235,13 @@ msgstr ""
 #, fuzzy
 msgid "Delete an existing rumor."
 msgstr "Wczytaj istniejącą mapę."
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Język"
 
 msgid ""
 "\n"
@@ -9608,7 +9621,7 @@ msgid "Snow"
 msgstr "Śnieg"
 
 msgid "Wasteland"
-msgstr "Wyschnięty"
+msgstr "Pustkowie"
 
 msgid "Beach"
 msgstr "Plaża"
@@ -9617,7 +9630,7 @@ msgid "Lava"
 msgstr "Lawa"
 
 msgid "Dirt"
-msgstr "Pył"
+msgstr "Ziemia"
 
 msgid "Grass"
 msgstr "Trawa"
@@ -9874,7 +9887,7 @@ msgid "Nothing Special"
 msgstr "Nic specjalnego"
 
 msgid "Mossy Rock"
-msgstr "Mchła skała"
+msgstr "Omszona skała"
 
 msgid "Watch Tower"
 msgstr "Wieża strażnicza"
@@ -10062,20 +10075,17 @@ msgstr "Ołtarz Ziemi"
 msgid "Water Summoning Altar"
 msgstr "Ołtarz Wody"
 
-#, fuzzy
 msgid "Swampy Lake"
-msgstr "Bagno"
+msgstr "Bagienne jezioro"
 
 msgid "Frozen Lake"
-msgstr ""
+msgstr "Zamarznięte jezioro"
 
-#, fuzzy
 msgid "Black Cat"
-msgstr "Czarna Perła"
+msgstr "Czarny kot"
 
-#, fuzzy
 msgid "Barrel"
-msgstr "Bariera"
+msgstr "Beczka"
 
 msgid "randomRace|level 1 creatures"
 msgstr ""
