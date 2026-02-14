@@ -2495,7 +2495,8 @@ void Battle::Interface::_redrawCoverStatic()
     }
 
     const Settings & conf = Settings::Get();
-    if ( !conf.BattleShowMoveShadow() ) {
+    const bool showCurrentUnitMoveShadow = conf.BattleShowMoveShadow();
+    if ( !showCurrentUnitMoveShadow && _highlightUnitMovementArea == nullptr ) {
         // Display movement area only if the associated option is enabled.
         return;
     }
@@ -2547,6 +2548,10 @@ void Battle::Interface::_redrawCoverStatic()
         if ( isMoved ) {
             foundUnit->SetModes( Battle::TR_MOVED );
         }
+    }
+
+    if ( !showCurrentUnitMoveShadow ) {
+        return;
     }
 
     const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
