@@ -30,6 +30,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
+#include "ui_language.h"
 #include "ui_text.h"
 
 namespace
@@ -137,5 +138,18 @@ namespace fheroes2
     void drawAudioOptions( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth )
     {
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), textMaxWidth );
+    }
+
+    void drawGraphics( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth )
+    {
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ), textMaxWidth );
+    }
+
+    void drawLanguage( const fheroes2::Rect & optionRoi, const std::string & languageAbbreviation, const int32_t textMaxWidth )
+    {
+        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( languageAbbreviation );
+        const fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
+
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ), textMaxWidth );
     }
 }

@@ -78,21 +78,6 @@ namespace
     const fheroes2::Rect textSupportModeRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
                                              fheroes2::optionIconSize, fheroes2::optionIconSize };
 
-    void drawLanguage( const fheroes2::Rect & optionRoi )
-    {
-        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
-        fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
-
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawGraphics( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
     void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi, const bool isTextSupportModeEnabled )
     {
         if ( isTextSupportModeEnabled ) {
@@ -130,8 +115,8 @@ namespace
 
         const auto drawOptions = [&conf, &windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowInterfaceTypeRoi,
                                   &windowTextSupportModeRoi]() {
-            drawLanguage( windowLanguageRoi );
-            drawGraphics( windowGraphicsRoi );
+            drawLanguage( windowLanguageRoi, conf.getGameLanguage(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawGraphics( windowGraphicsRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawHotKeyOptions( windowHotKeyRoi, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
             drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
