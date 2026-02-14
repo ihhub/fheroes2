@@ -20,6 +20,7 @@
 
 #include "battle_interface_settings.h"
 
+#include <cstdint>
 #include <string>
 
 #include "agg_image.h"
