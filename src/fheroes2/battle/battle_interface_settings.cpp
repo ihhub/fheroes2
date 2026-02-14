@@ -125,8 +125,7 @@ namespace
         if ( isMovementAreaEnabled ) {
             // Render the shadow area.
             const auto shadow = createHexagonShadow();
-            fheroes2::Blit( shadow, 0, 0, image, ( image.width() - shadow.width() ) / 2, ( image.height() - shadow.height() ) / 2, shadow.width(),
-                        shadow.height() );
+            fheroes2::Blit( shadow, 0, 0, image, ( image.width() - shadow.width() ) / 2, ( image.height() - shadow.height() ) / 2, shadow.width(), shadow.height() );
         }
 
         // Draw Hydra.
@@ -138,7 +137,7 @@ namespace
             // Render a cursor.
             const auto & cursor = fheroes2::AGG::GetICN( ICN::ADVMCO, 0 );
             fheroes2::Blit( cursor, 0, 0, image, ( image.width() - cursor.width() ) / 2 + 10, ( image.height() - cursor.height() ) / 2 + 15, cursor.width(),
-                        cursor.height() );
+                            cursor.height() );
         }
 
         fheroes2::drawOption( optionRoi, image, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
