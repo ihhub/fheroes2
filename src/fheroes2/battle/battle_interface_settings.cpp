@@ -234,7 +234,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Shadow Cursor" ), _( "Toggle on or off a shadow showing the current hex location of the mouse cursor." ), 0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( windowMovementAreaRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Movement Area" ), _( "Toggle on or off to show movement area of a highlighted creature." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Movement Area" ), _( "Toggle showing the movement area of a highlighted creature on or off ." ), 0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
