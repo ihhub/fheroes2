@@ -219,8 +219,8 @@ namespace
                                        fheroes2::optionIconSize };
 
     const fheroes2::Rect audioRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize, fheroes2::optionIconSize };
-    const fheroes2::Rect hotKeysRoi{ fheroes2::twoOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
-                                     fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect hotKeysRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize,
+                                     fheroes2::optionIconSize };
 
     void drawSpeed( const fheroes2::Rect & optionRoi )
     {
@@ -288,8 +288,8 @@ namespace
             drawSpeed( windowSpeedRoi );
             drawInterfaceSettings( windowInterfaceRoi );
             drawAutoSpellCasting( windowAutoSpellRoi );
-            drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-            drawHotKeyOptions( windowHotKeysRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+            drawHotKeyOptions( windowHotKeysRoi, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
         };
 
         drawOptions();
