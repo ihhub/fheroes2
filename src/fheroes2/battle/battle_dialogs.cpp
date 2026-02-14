@@ -212,15 +212,14 @@ namespace
         Close
     };
 
-    const fheroes2::Rect speedRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY, fheroes2::optionIconSize, fheroes2::optionIconSize };
-    const fheroes2::Rect interfaceRoi{ fheroes2::twoOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+    const fheroes2::Rect speedRoi{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect interfaceRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+                                       fheroes2::optionIconSize };
+    const fheroes2::Rect autoSpellRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
                                        fheroes2::optionIconSize };
 
-    const fheroes2::Rect autoSpellRoi{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize,
-                                       fheroes2::optionIconSize };
-    const fheroes2::Rect audioRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
-                                   fheroes2::optionIconSize, fheroes2::optionIconSize };
-    const fheroes2::Rect hotKeysRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
+    const fheroes2::Rect audioRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect hotKeysRoi{ fheroes2::twoOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
                                      fheroes2::optionIconSize, fheroes2::optionIconSize };
 
     void drawSpeed( const fheroes2::Rect & optionRoi )
