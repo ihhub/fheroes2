@@ -78,16 +78,6 @@ namespace
     const fheroes2::Rect textSupportModeRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
                                              fheroes2::optionIconSize, fheroes2::optionIconSize };
 
-    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi, const bool isTextSupportModeEnabled )
-    {
-        if ( isTextSupportModeEnabled ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-        else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-    }
-
     SelectedWindow showConfigurationWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -121,7 +111,7 @@ namespace
             drawHotKeyOptions( windowHotKeyRoi, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
             drawCursorType( windowCursorTypeRoi, conf.isMonochromeCursorEnabled(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
             drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-            drawTextSupportModeOptions( windowTextSupportModeRoi, conf.isTextSupportModeEnabled() );
+            drawTextSupportModeOptions( windowTextSupportModeRoi, conf.isTextSupportModeEnabled(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         };
 
         drawOptions();

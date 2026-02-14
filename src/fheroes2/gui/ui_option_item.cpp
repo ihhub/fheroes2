@@ -152,4 +152,14 @@ namespace fheroes2
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ), textMaxWidth );
     }
+
+    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi, const bool isEnabled, const int32_t textMaxWidth )
+    {
+        if ( isEnabled ) {
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), textMaxWidth );
+        }
+        else {
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), textMaxWidth );
+        }
+    }
 }

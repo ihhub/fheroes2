@@ -147,16 +147,6 @@ namespace
         fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi )
-    {
-        if ( Settings::Get().isTextSupportModeEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-        else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-    }
-
     void drawBattles( const fheroes2::Rect & optionRoi )
     {
         const Settings & conf = Settings::Get();
@@ -204,7 +194,7 @@ namespace
             drawEnemySpeed( windowEnemySpeedRoi );
             drawHotKeyOptions( windowHotKeyRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawInterfaceSettings( windowInterfaceRoi );
-            drawTextSupportModeOptions( windowTextSupportModeRoi );
+            drawTextSupportModeOptions( windowTextSupportModeRoi, conf.isTextSupportModeEnabled(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawBattles( windowBattlesRoi );
         };
 

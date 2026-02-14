@@ -73,4 +73,6 @@ namespace fheroes2
     void drawGraphics( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth );
 
     void drawLanguage( const fheroes2::Rect & optionRoi, const std::string & languageAbbreviation, const int32_t textMaxWidth );
+
+    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi, const bool isEnabled, const int32_t textMaxWidth );
 }
