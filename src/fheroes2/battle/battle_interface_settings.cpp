@@ -93,7 +93,7 @@ namespace
 
     void drawMovementArea( const fheroes2::Rect & optionRoi )
     {
-        const bool isMovementAreaEnabled = Settings::Get().isBattleMovementAreaDisplayEnabled();
+        const bool isMovementAreaEnabled = Settings::Get().isBattleMovementAreaHighlightEnabled();
         const fheroes2::Sprite & moveShadowIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isMovementAreaEnabled ? 11 : 10 );
         fheroes2::drawOption( optionRoi, moveShadowIcon, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
@@ -163,7 +163,7 @@ namespace
                 redrawScreen = true;
             }
             else if ( le.MouseClickLeft( windowMovementAreaRoi ) ) {
-                conf.setBattleMovementAreaDisplay( !conf.isBattleMovementAreaDisplayEnabled() );
+                conf.setHighlightBattleMovementArea( !conf.isBattleMovementAreaHighlightEnabled() );
                 redrawScreen = true;
             }
             else if ( le.MouseClickLeft( windowDamageInfoRoi ) ) {

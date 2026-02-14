@@ -3139,7 +3139,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     // Make sure to reset currently selected unit every time we do rendering.
     _highlightUnitMovementArea = nullptr;
-    const bool highlightUnitMovementArea = conf.isBattleMovementAreaDisplayEnabled();
+    const bool highlightUnitMovementArea = conf.isBattleMovementAreaHighlightEnabled();
 
     _buttonAuto.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonAuto.area() ) );
     _buttonSettings.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSettings.area() ) );
