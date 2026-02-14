@@ -23,6 +23,7 @@
 #include <string>
 
 #include "agg_image.h"
+#include "battle_cell.h"
 #include "cursor.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -91,12 +92,56 @@ namespace
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
+    fheroes2::Image createHexagonShadow()
+    {
+        const int32_t l = 13;
+        const int32_t w = Battle::Cell::widthPx;
+        const int32_t h = Battle::Cell::heightPx;
+
+        fheroes2::Image sf( w, h );
+        sf.reset();
+        fheroes2::Rect rt( 1, l - 1, w - 1, 2 * l + 4 );
+        for ( int32_t i = 0; i < w / 2; i += 2 ) {
+            for ( int32_t x = 0; x < rt.width; ++x ) {
+                for ( int32_t y = 0; y < rt.height; ++y ) {
+                    fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, 2 );
+                }
+            }
+            --rt.y;
+            rt.height += 2;
+            rt.x += ( i == 0 ) ? 1 : 2;
+            rt.width -= ( i == 0 ) ? 2 : 4;
+        }
+
+        return sf;
+    }
+
     void drawMovementArea( const fheroes2::Rect & optionRoi )
     {
         const bool isMovementAreaEnabled = Settings::Get().isBattleMovementAreaHighlightEnabled();
-        const fheroes2::Sprite & moveShadowIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isMovementAreaEnabled ? 11 : 10 );
-        fheroes2::drawOption( optionRoi, moveShadowIcon, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+
+        fheroes2::Sprite image = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+
+        if ( isMovementAreaEnabled ) {
+            // Render the shadow area.
+            const auto shadow = createHexagonShadow();
+            fheroes2::Blit( shadow, 0, 0, image, ( image.width() - shadow.width() ) / 2, ( image.height() - shadow.height() ) / 2, shadow.width(),
+                        shadow.height() );
+        }
+
+        // Draw Hydra.
+        const auto & hydraIcon = fheroes2::AGG::GetICN( ICN::MONS32, 34 );
+        fheroes2::Blit( hydraIcon, 0, 0, image, ( image.width() - hydraIcon.width() ) / 2, ( image.height() - hydraIcon.height() ) / 2, hydraIcon.width(),
+                        hydraIcon.height() );
+
+        if ( isMovementAreaEnabled ) {
+            // Render a cursor.
+            const auto & cursor = fheroes2::AGG::GetICN( ICN::ADVMCO, 0 );
+            fheroes2::Blit( cursor, 0, 0, image, ( image.width() - cursor.width() ) / 2 + 10, ( image.height() - cursor.height() ) / 2 + 15, cursor.width(),
+                        cursor.height() );
+        }
+
+        fheroes2::drawOption( optionRoi, image, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void openInterfaceBattleOptionDialog( bool & saveConfiguration )
