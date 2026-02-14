@@ -41,6 +41,8 @@ namespace
 
 namespace fheroes2
 {
+    enum class SupportedLanguage : uint8_t;
+
     void drawOption( const Rect & optionRoi, const Sprite & icon, std::string titleText, std::string valueText, const int32_t textMaxWidth )
     {
         Display & display = Display::instance();

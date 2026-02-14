@@ -25,7 +25,6 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
