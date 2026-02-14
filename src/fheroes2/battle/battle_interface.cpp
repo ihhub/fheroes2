@@ -3057,6 +3057,9 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     // Reset the cursor position to avoid forcing the cursor shadow to be drawn at the last position of the previous turn.
     _currentCellIndex = -1;
 
+    // Reset the highlighted unit.
+    _highlightUnitMovementArea = nullptr;
+
     _currentUnit = &unit;
     humanturn_redraw = false;
     humanturn_exit = false;
