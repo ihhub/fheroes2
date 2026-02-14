@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -102,11 +102,6 @@ namespace
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void drawAudioOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
     void drawHeroSpeed( const fheroes2::Rect & optionRoi )
     {
         const Settings & conf = Settings::Get();
@@ -157,12 +152,6 @@ namespace
         }
 
         fheroes2::drawOption( optionRoi, aiSpeedIcon, _( "Enemy Speed" ), std::move( value ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawInterfaceSettings( const fheroes2::Rect & optionRoi )
@@ -224,10 +213,10 @@ namespace
                                   &windowInterfaceRoi, &windowTextSupportModeRoi, &windowBattlesRoi]() {
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
-            drawAudioOptions( windowAudioRoi );
+            drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawHeroSpeed( windowHeroSpeedRoi );
             drawEnemySpeed( windowEnemySpeedRoi );
-            drawHotKeyOptions( windowHotKeyRoi );
+            drawHotKeyOptions( windowHotKeyRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawInterfaceSettings( windowInterfaceRoi );
             drawTextSupportModeOptions( windowTextSupportModeRoi );
             drawBattles( windowBattlesRoi );

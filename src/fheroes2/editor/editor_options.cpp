@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,17 +105,6 @@ namespace
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void drawAudioOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
     void drawAnimationOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isEditorAnimationEnabled() ) {
@@ -160,8 +149,8 @@ namespace
 
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
-            drawAudioOptions( windowAudioRoi );
-            drawHotKeyOptions( windowHotKeyRoi );
+            drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawHotKeyOptions( windowHotKeyRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawAnimationOptions( windowAnimationRoi );
             drawPassabilityOptions( windowPassabilityRoi );
             drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );

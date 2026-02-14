@@ -128,4 +128,14 @@ namespace fheroes2
             fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ), textMaxWidth );
         }
     }
+
+    void drawHotKeyOptions( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth )
+    {
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ), textMaxWidth );
+    }
+
+    void drawAudioOptions( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth )
+    {
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), textMaxWidth );
+    }
 }

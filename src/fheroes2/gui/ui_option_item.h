@@ -65,4 +65,8 @@ namespace fheroes2
     void drawInterfaceType( const fheroes2::Rect & optionRoi, const InterfaceType interfaceType, const int32_t textMaxWidth );
 
     void drawCursorType( const fheroes2::Rect & optionRoi, const bool isMonochromeCursor, const int32_t textMaxWidth );
+
+    void drawHotKeyOptions( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth );
+
+    void drawAudioOptions( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth );
 }

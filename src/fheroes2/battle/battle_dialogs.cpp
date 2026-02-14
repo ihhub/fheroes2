@@ -287,18 +287,6 @@ namespace
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void drawAudio( const fheroes2::Rect & optionRoi )
-    {
-        const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        fheroes2::drawOption( optionRoi, audioSettingsIcon, _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawHotKeys( const fheroes2::Rect & optionRoi )
-    {
-        const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 );
-        fheroes2::drawOption( optionRoi, hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
     void drawDamageInfo( const fheroes2::Rect & optionRoi )
     {
         const bool isShowBattleDamageInfoEnabled = Settings::Get().isBattleShowDamageInfoEnabled();
@@ -315,7 +303,7 @@ namespace
         // Battlefield event processor will set the appropriate cursor after this dialog is closed.
         Cursor::Get().SetThemes( Cursor::POINTER );
 
-        fheroes2::StandardWindow background( 289, 382, true, display );
+        fheroes2::StandardWindow background( 289, fheroes2::optionsStepY * 3 + 52, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
@@ -346,8 +334,8 @@ namespace
             drawGrid( windowGridRoi );
             drawShadowMovement( windowShadowMovementRoi );
             drawShadowCursor( windowShadowCursorRoi );
-            drawAudio( windowAudioRoi );
-            drawHotKeys( windowHotKeysRoi );
+            drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawHotKeyOptions( windowHotKeysRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawDamageInfo( windowDamageInfoRoi );
         };
 
