@@ -121,6 +121,7 @@ void Game::AnimateDelaysInitialize()
     delays[BATTLE_COLOR_CYCLE_DELAY].setDelay( 220 );
     delays[BATTLE_SELECTED_UNIT_DELAY].setDelay( 160 );
     delays[CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( 10 );
+    delays[BATTLEFIELD_BACKGROUND_ANIMATION_DELAY].setDelay( 110 );
     delays[CURRENT_HERO_DELAY].setDelay( 10 );
     delays[CURRENT_AI_DELAY].setDelay( 10 );
 

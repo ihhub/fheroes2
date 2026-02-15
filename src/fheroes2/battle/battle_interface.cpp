@@ -2500,7 +2500,7 @@ void Battle::Interface::_redrawCoverStatic()
     fheroes2::Copy( _battleGround, _mainSurface );
 
     if ( _applyUnderwaterEffect ) {
-        const fheroes2::Sprite & bubbles = fheroes2::AGG::GetICN( ICN::SHIP_BATTLEFIELD_UNDERWATER_BUBBLES, _flagAnimationFrameIndex % 24 );
+        const fheroes2::Sprite & bubbles = fheroes2::AGG::GetICN( ICN::SHIP_BATTLEFIELD_UNDERWATER_BUBBLES, _backgroundAnimationFrame % 24 );
         fheroes2::Blit( bubbles, 0, 0, _mainSurface, 32, 0, bubbles.width(), bubbles.height() );
     }
 
@@ -3107,7 +3107,11 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     _flagAnimationFrameIndex = 0;
 
     // TODO: update delay types within the loop to avoid rendering slowdown.
-    const std::vector<Game::DelayType> delayTypes{ Game::BATTLE_FLAGS_DELAY };
+    std::vector<Game::DelayType> delayTypes{ Game::BATTLE_FLAGS_DELAY };
+
+    if ( _applyUnderwaterEffect ) {
+        delayTypes.push_back( Game::BATTLEFIELD_BACKGROUND_ANIMATION_DELAY );
+    }
 
     const Board * board = Arena::GetBoard();
     LocalEvent & le = LocalEvent::Get();
@@ -7082,6 +7086,12 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
                 humanturn_redraw = true;
             }
         }
+    }
+
+    // Animation of the battlefield background.
+    if ( _applyUnderwaterEffect && Game::validateAnimationDelay( Game::BATTLEFIELD_BACKGROUND_ANIMATION_DELAY ) ) {
+        ++_backgroundAnimationFrame;
+        humanturn_redraw = true;
     }
 
     // Check if auto combat interruption was requested.
