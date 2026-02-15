@@ -133,6 +133,8 @@ namespace Battle
         OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
         OpponentSprite( const OpponentSprite & ) = delete;
 
+        ~OpponentSprite() = default;
+
         OpponentSprite & operator=( const OpponentSprite & ) = delete;
 
         const fheroes2::Rect & GetArea() const

@@ -565,13 +565,13 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes )
 {
-    Indexes results = getAroundIndexes( center );
+    const Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType, ignoreHeroes );
 }
 
 bool Maps::hasNearbyObject( const int32_t center, const MP2::MapObjectType objectType )
 {
-    Indexes results = getAroundIndexes( center );
+    const Indexes results = getAroundIndexes( center );
     return std::any_of( results.cbegin(), results.cend(), [objectType]( const int32_t index ) { return world.getTile( index ).getMainObjectType() == objectType; } );
 }
 
@@ -583,7 +583,7 @@ bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
 {
-    Indexes results = getAroundIndexes( center );
+    const Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType );
 }
 
