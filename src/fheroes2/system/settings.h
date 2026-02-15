@@ -207,6 +207,7 @@ public:
     bool isArmyEstimationViewNumeric() const;
     bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
+    bool isBattleMovementAreaHighlightEnabled() const;
 
     void setInterfaceType( InterfaceType type )
     {
@@ -293,6 +294,7 @@ public:
     void setHideInterface( const bool enable );
     void setNumericArmyEstimationView( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
+    void setHighlightBattleMovementArea( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

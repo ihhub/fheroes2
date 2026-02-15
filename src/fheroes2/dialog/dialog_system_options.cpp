@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -87,26 +87,6 @@ namespace
     const fheroes2::Rect battlesRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
                                      fheroes2::optionIconSize, fheroes2::optionIconSize };
 
-    void drawLanguage( const fheroes2::Rect & optionRoi )
-    {
-        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
-        fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
-
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawGraphics( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawAudioOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
     void drawHeroSpeed( const fheroes2::Rect & optionRoi )
     {
         const Settings & conf = Settings::Get();
@@ -159,28 +139,12 @@ namespace
         fheroes2::drawOption( optionRoi, aiSpeedIcon, _( "Enemy Speed" ), std::move( value ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
     void drawInterfaceSettings( const fheroes2::Rect & optionRoi )
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
 
         fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi )
-    {
-        if ( Settings::Get().isTextSupportModeEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
-        else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-        }
     }
 
     void drawBattles( const fheroes2::Rect & optionRoi )
@@ -220,22 +184,22 @@ namespace
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowBattlesRoi( battlesRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHeroSpeedRoi, &windowEnemySpeedRoi, &windowHotKeyRoi,
+        Settings & conf = Settings::Get();
+        const auto drawOptions = [&conf, &windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHeroSpeedRoi, &windowEnemySpeedRoi, &windowHotKeyRoi,
                                   &windowInterfaceRoi, &windowTextSupportModeRoi, &windowBattlesRoi]() {
-            drawLanguage( windowLanguageRoi );
-            drawGraphics( windowGraphicsRoi );
-            drawAudioOptions( windowAudioRoi );
+            drawLanguage( windowLanguageRoi, conf.getGameLanguage(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawGraphics( windowGraphicsRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawHeroSpeed( windowHeroSpeedRoi );
             drawEnemySpeed( windowEnemySpeedRoi );
-            drawHotKeyOptions( windowHotKeyRoi );
+            drawHotKeyOptions( windowHotKeyRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawInterfaceSettings( windowInterfaceRoi );
-            drawTextSupportModeOptions( windowTextSupportModeRoi );
+            drawTextSupportModeOptions( windowTextSupportModeRoi, conf.isTextSupportModeEnabled(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawBattles( windowBattlesRoi );
         };
 
         drawOptions();
 
-        Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Button buttonOk;

@@ -59,6 +59,7 @@
     <ClCompile Include="src\fheroes2\battle\battle_dialogs.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_grave.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_interface.cpp" />
+    <ClCompile Include="src\fheroes2\battle\battle_interface_settings.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_main.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_only.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_pathfinding.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="src\fheroes2\battle\battle_command.h" />
     <ClInclude Include="src\fheroes2\battle\battle_grave.h" />
     <ClInclude Include="src\fheroes2\battle\battle_interface.h" />
+    <ClInclude Include="src\fheroes2\battle\battle_interface_settings.h" />
     <ClInclude Include="src\fheroes2\battle\battle_only.h" />
     <ClInclude Include="src\fheroes2\battle\battle_pathfinding.h" />
     <ClInclude Include="src\fheroes2\battle\battle_tower.h" />
