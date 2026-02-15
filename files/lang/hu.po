@@ -2,7 +2,6 @@
 # Copyright (C) 2024-2025 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
-# SPDX-FileCopyrightText: 2026 Berda Jenő <big4billy@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
