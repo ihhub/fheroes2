@@ -2501,7 +2501,7 @@ void Battle::Interface::_redrawCoverStatic()
 
     if ( _applyUnderwaterEffect ) {
         const fheroes2::Sprite & bubbles = fheroes2::AGG::GetICN( ICN::SHIP_BATTLEFIELD_UNDERWATER_BUBBLES, _flagAnimationFrameIndex % 24 );
-        fheroes2::Blit( bubbles, 0, 0, _battleGround, 32, 0, bubbles.width(), bubbles.height() );
+        fheroes2::Blit( bubbles, 0, 0, _mainSurface, 32, 0, bubbles.width(), bubbles.height() );
     }
 
     if ( _movingUnit != nullptr ) {
