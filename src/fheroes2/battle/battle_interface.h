@@ -501,7 +501,7 @@ namespace Battle
         // True if background is bright. It is done to determine current unit contour cycling colors.
         bool _brightLandType{ false };
 
-        uint32_t animation_flags_frame{ 0 };
+        uint32_t _flagAnimationFrameIndex{ 0 };
         int catapult_frame{ 0 };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.

@@ -1983,14 +1983,14 @@ void Battle::Interface::RedrawOpponentsFlags()
 
     if ( _attackingOpponent ) {
         const int icn = getFlagIcn( arena.getAttackingForce().GetColor() );
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, animation_flags_frame ) );
+        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, _flagAnimationFrameIndex ) );
         fheroes2::Blit( flag, _mainSurface, _attackingOpponent->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
                         _attackingOpponent->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
     if ( _defendingOpponent ) {
         const int icn = getFlagIcn( arena.getDefendingForce().GetColor() );
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, animation_flags_frame ) );
+        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, _flagAnimationFrameIndex ) );
         fheroes2::Blit( flag, _mainSurface,
                         _defendingOpponent->Offset().x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
                         _defendingOpponent->Offset().y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
@@ -2399,6 +2399,10 @@ void Battle::Interface::_redrawCoverStatic()
 {
     if ( _applyUnderwaterEffect ) {
         fheroes2::ApplyPalette( _battleGround, _mainSurface, PAL::GetPalette( PAL::PaletteType::BLUISH ) );
+
+        const fheroes2::Sprite & bubbles = fheroes2::AGG::GetICN( ICN::SHIP_BATTLEFIELD_UNDERWATER_BUBBLES, _flagAnimationFrameIndex % 24 );
+
+        fheroes2::Blit( bubbles, _battleGround );
     }
     else {
         fheroes2::Copy( _battleGround, _mainSurface );
@@ -2934,7 +2938,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     Redraw();
 
     std::string msg;
-    animation_flags_frame = 0;
+    _flagAnimationFrameIndex = 0;
 
     // TODO: update delay types within the loop to avoid rendering slowdown.
     const std::vector<Game::DelayType> delayTypes{ Game::BATTLE_FLAGS_DELAY };
@@ -6895,7 +6899,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 
     // Animation of flags and heroes idle.
     if ( Game::validateAnimationDelay( Game::BATTLE_FLAGS_DELAY ) ) {
-        ++animation_flags_frame;
+        ++_flagAnimationFrameIndex;
         humanturn_redraw = true;
 
         // Perform heroes idle animation only if heroes are not performing any other animation (e.g. spell casting).
