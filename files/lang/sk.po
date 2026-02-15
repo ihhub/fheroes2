@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -540,47 +540,29 @@ msgstr "Rýchlosť: %{speed}"
 msgid "Speed"
 msgstr "Rýchlosť"
 
+msgid "Interface"
+msgstr "Rozhranie"
+
+msgid "Settings"
+msgstr "Nastavenie"
+
+msgid "Auto Spell Casting"
+msgstr "Kúzla počas auto boja"
+
 msgid "Off"
 msgstr "Vypnuté"
 
 msgid "On"
 msgstr "Zapnuté"
 
-msgid "Turn Order"
-msgstr "Poradie"
-
-msgid "Auto Spell Casting"
-msgstr "Kúzla počas auto boja"
-
-msgid "Grid"
-msgstr "Mriežka"
-
-msgid "Shadow Movement"
-msgstr "Tieň pohybu"
-
-msgid "Shadow Cursor"
-msgstr "Tieň kurzora"
-
-msgid "Audio"
-msgstr "Zvuk"
-
-msgid "Settings"
-msgstr "Nastavenie"
-
-msgid "Configure"
-msgstr "Nastav"
-
-msgid "Hot Keys"
-msgstr "Skratky"
-
-msgid "Damage Info"
-msgstr "Info škôd"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Nastav rýchlosť bojových akcií a animácií."
 
-msgid "Toggle to display the turn order during the battle."
-msgstr "Prepni zobrazenie poradia armády počas boja."
+msgid "Change the interface settings of the game."
+msgstr "Zmeň nastavenie rozhrania hry."
+
+msgid "Interface Settings"
+msgstr "Nastavenie rozhrania"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -590,22 +572,8 @@ msgstr ""
 "Zmeň možnosť kúzlenia počas automatizovaného boja. (Viď: Toto nemá vplyv na "
 "kúzlenie hráčov ovládaných počítačom ani na rýchly boj.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Zmeň zobrazenie mriežky. Šesťhranná mriežka je vždy základom pohybu, aj keď "
-"je vypnutá. Toto nastavenie má vplyv len na viditeľnosť mriežky."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Zapne alebo vypne tiene ukazujúce kde sa bojovníci smú pohnúť alebo útočiť."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr "Zapne alebo vypne tieň zobrazujúci aktuálnu pozíciu kurzora v mriežke."
+msgid "Audio"
+msgstr "Zvuk"
 
 msgid "Change the audio settings of the game."
 msgstr "Zmeň nastavenie zvuku hry."
@@ -613,8 +581,8 @@ msgstr "Zmeň nastavenie zvuku hry."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Prezri a nastav všetky klávesové skratky hry."
 
-msgid "Toggle to display damage information during the battle."
-msgstr "Zmeň zobrazenie informácie o poškodení počas boja."
+msgid "Hot Keys"
+msgstr "Skratky"
 
 msgid "Exit this menu."
 msgstr "Odíď z menu."
@@ -1094,6 +1062,51 @@ msgstr "Zahynie: %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Zahynie: %{min} - %{max}"
+
+msgid "Turn Order"
+msgstr "Poradie"
+
+msgid "Grid"
+msgstr "Mriežka"
+
+msgid "Damage Info"
+msgstr "Info škôd"
+
+msgid "Shadow Movement"
+msgstr "Tieň pohybu"
+
+msgid "Shadow Cursor"
+msgstr "Tieň kurzora"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Tieň pohybu"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr "Prepni zobrazenie poradia armády počas boja."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Zmeň zobrazenie mriežky. Šesťhranná mriežka je vždy základom pohybu, aj keď "
+"je vypnutá. Toto nastavenie má vplyv len na viditeľnosť mriežky."
+
+msgid "Toggle to display damage information during the battle."
+msgstr "Zmeň zobrazenie informácie o poškodení počas boja."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Zapne alebo vypne tiene ukazujúce kde sa bojovníci smú pohnúť alebo útočiť."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr "Zapne alebo vypne tieň zobrazujúci aktuálnu pozíciu kurzora v mriežke."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3174,15 +3187,6 @@ msgstr "Koniec"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Odíď z Heroes of Might and Magic II."
 
-msgid "Language"
-msgstr "Jazyk"
-
-msgid "Graphics"
-msgstr "Grafika"
-
-msgid "Text Support"
-msgstr "Podpora textu"
-
 msgid "Change the language of the game."
 msgstr "Zmeň jazyk hry."
 
@@ -3191,6 +3195,9 @@ msgstr "Vyber jazyk hry"
 
 msgid "Change the graphics settings of the game."
 msgstr "Zmeň nastavenie grafiky hry."
+
+msgid "Graphics"
+msgstr "Grafika"
 
 msgid "Mouse Cursor"
 msgstr "Kurzor myši"
@@ -3203,6 +3210,9 @@ msgstr "Typ rozhrania"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
+
+msgid "Text Support"
+msgstr "Podpora textu"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3353,9 +3363,6 @@ msgstr "Skry"
 
 msgid "Show"
 msgstr "Zobraz"
-
-msgid "Interface"
-msgstr "Rozhranie"
 
 #, fuzzy
 msgid "Army Estimation"
@@ -4090,12 +4097,6 @@ msgid ""
 msgstr ""
 "Nastaví rýchlosť, akou sa hýbu počítačom riadení hrdinovia. Môžeš tiež "
 "nastaviť, aby sa tento pohyb vôbec nezobrazoval"
-
-msgid "Change the interface settings of the game."
-msgstr "Zmeň nastavenie rozhrania hry."
-
-msgid "Interface Settings"
-msgstr "Nastavenie rozhrania"
 
 msgid "Toggle instant battle mode."
 msgstr "Prepni mód rýchleho boja."
@@ -4902,6 +4903,9 @@ msgstr ""
 #, fuzzy
 msgid "Supported languages"
 msgstr "Prispej na"
+
+msgid "Language"
+msgstr "Jazyk"
 
 msgid "This language already exists in the list."
 msgstr ""
@@ -6997,6 +7001,9 @@ msgstr "Čiernobiely"
 
 msgid "Color"
 msgstr "Farebný"
+
+msgid "Configure"
+msgstr "Nastav"
 
 msgid ", FPS: "
 msgstr ", FPS: "
