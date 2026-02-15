@@ -987,8 +987,8 @@ bool Battle::TargetInfo::isFinishAnimFrame( const TargetInfo & info )
 Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect )
     : _heroBase( hero )
     , _currentAnim( getHeroAnimation( hero, OP_STATIC ) )
-    , _isFlippedHorizontally( isReflect )
     , _offset( area.x, area.y )
+    , _isFlippedHorizontally( isReflect )
 {
     const bool isCaptain = hero->isCaptain();
     switch ( hero->GetRace() ) {
