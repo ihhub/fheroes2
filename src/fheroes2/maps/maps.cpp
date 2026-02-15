@@ -569,6 +569,12 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObject
     return MapsIndexesFilteredObject( results, objectType, ignoreHeroes );
 }
 
+bool Maps::hasNearbyObject( const int32_t center, const MP2::MapObjectType objectType )
+{
+    Indexes results = getAroundIndexes( center );
+    return std::any_of( results.cbegin(), results.cend(), [objectType]( const int32_t index ) { return world.getTile( index ).getMainObjectType() == objectType; } );
+}
+
 bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
 {
     const Maps::Tile & tile = world.getTile( targetIndex );

@@ -1373,7 +1373,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     popup.setBattleUIRect( _interfacePosition );
 
     // cover
-    const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
     const Maps::Tile & tile = world.getTile( tileIndex );
 
     const int groundType = tile.GetGround();
@@ -1388,10 +1387,12 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
         _battleGroundIcn = ICN::CBKGDSRT;
         _borderObjectsIcn = ICN::FRNG0004;
         break;
-    case Maps::Ground::SNOW:
+    case Maps::Ground::SNOW: {
+        const bool trees = Maps::hasNearbyObject( tileIndex, MP2::OBJ_TREES );
         _battleGroundIcn = trees ? ICN::CBKGSNTR : ICN::CBKGSNMT;
         _borderObjectsIcn = trees ? ICN::FRNG0006 : ICN::FRNG0007;
         break;
+    }
     case Maps::Ground::SWAMP:
         _battleGroundIcn = ICN::CBKGSWMP;
         _borderObjectsIcn = ICN::FRNG0008;
@@ -1408,15 +1409,20 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
         _battleGroundIcn = ICN::CBKGLAVA;
         _borderObjectsIcn = ICN::FRNG0005;
         break;
-    case Maps::Ground::DIRT:
+    case Maps::Ground::DIRT: {
+        const bool trees = Maps::hasNearbyObject( tileIndex, MP2::OBJ_TREES );
         _battleGroundIcn = trees ? ICN::CBKGDITR : ICN::CBKGDIMT;
         _borderObjectsIcn = trees ? ICN::FRNG0010 : ICN::FRNG0009;
         break;
-    case Maps::Ground::GRASS:
+    }
+    case Maps::Ground::GRASS: {
+        const bool trees = Maps::hasNearbyObject( tileIndex, MP2::OBJ_TREES );
         _battleGroundIcn = trees ? ICN::CBKGGRTR : ICN::CBKGGRMT;
         _borderObjectsIcn = trees ? ICN::FRNG0011 : ICN::FRNG0012;
         break;
+    }
     case Maps::Ground::WATER:
+        _applyUnderwaterEffect = world.getTile( tileIndex ).getMainObjectType( false ) == MP2::OBJ_WATERHOLE;
         _battleGroundIcn = ICN::CBKGWATR;
         _borderObjectsIcn = ICN::FRNG0013;
         break;
@@ -2387,6 +2393,10 @@ void Battle::Interface::_redrawBattleGround()
         const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuilt() ? 4 : 3 );
         fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
+
+    if ( _applyUnderwaterEffect ) {
+        fheroes2::ApplyPalette( _battleGround, PAL::GetPalette( PAL::PaletteType::BLUISH ) );
+    }
 }
 
 void Battle::Interface::_redrawCoverStatic()
@@ -2675,7 +2685,14 @@ void Battle::Interface::_redrawHighObjects( const int32_t cellId )
 
     const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
     const fheroes2::Rect & pt = cell->GetPos();
-    fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
+
+    if ( _applyUnderwaterEffect ) {
+        fheroes2::ApplyPalette( objectSprite, 0, 0, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset,
+                                objectSprite.width(), objectSprite.height(), PAL::GetPalette( PAL::PaletteType::BLUISH ) );
+    }
+    else {
+        fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
+    }
 }
 
 void Battle::Interface::RedrawKilled()

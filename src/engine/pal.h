@@ -41,6 +41,7 @@ namespace PAL
         GOOD_TO_EVIL_INTERFACE, // a custom palette for converting Good Interface images into Evil Interface images.
         GOOD_TO_EVIL_BUTTON, // for converting Good style buttons into Evil style buttons.
         PURPLE, // For random object images.
+        BLUISH, // For underwater battlefield
         CUSTOM
     };
 

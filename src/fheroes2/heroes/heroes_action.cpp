@@ -3826,10 +3826,23 @@ namespace
             }
         }
 
-        // TODO: Add a logic for the Waterhole action on player visit.
+        Army army( tile );
 
-        fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "As you approach the waterhole, it suddenly closes." ), Dialog::OK );
+        const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
+        // Hero' spell points and army could have changed. Update heroes icons and status area.
+        Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
+
+        if ( !res.isAttackerWin() ) {
+            BattleLose( hero, res, true );
+
+            return;
+        }
+
+        hero.IncreaseExperience( res.getAttackerExperience() );
+
+        AudioManager::PlaySound( M82::WSND00 );
+        hero.ShowPath( false );
         hero.FadeOut( Game::HumanHeroAnimSpeedMultiplier() );
         hero.setInvisible( true );
 
@@ -3856,6 +3869,7 @@ namespace
         Maps::removeObjectFromMapByUID( dstIndex, waterholeUid );
 
         hero.SetOffset( { 0, 0 } );
+        hero.ShowPath( true );
         hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
     }
 }

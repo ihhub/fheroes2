@@ -127,7 +127,7 @@ namespace Battle
         bool isReflectedImage{ false };
     };
 
-    class OpponentSprite
+    class OpponentSprite final
     {
     public:
         OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
@@ -177,13 +177,15 @@ namespace Battle
     private:
         HeroBase * _heroBase{ nullptr };
         AnimationSequence _currentAnim;
-        int _animationType{ OP_STATIC };
         RandomizedDelay _idleTimer{ 8000 };
 
-        int _heroIcnId{ ICN::UNKNOWN };
-        bool _isFlippedHorizontally{ false };
         fheroes2::Rect _area;
         fheroes2::Point _offset;
+
+        int _animationType{ OP_STATIC };
+        int _heroIcnId{ ICN::UNKNOWN };
+
+        bool _isFlippedHorizontally{ false };
     };
 
     class Status final : public fheroes2::Rect
@@ -268,12 +270,12 @@ namespace Battle
         static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t currentUnitColor, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
-        PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _renderingRoi;
         fheroes2::Rect _battleRoi;
         std::vector<UnitPos> _rects;
 
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
+        PlayerColor _opponentColor{ PlayerColor::NONE };
         bool _isInsideBattleField{ false };
     };
 
@@ -313,7 +315,7 @@ namespace Battle
         bool _needDelay{ true };
     };
 
-    class Interface
+    class Interface final
     {
     public:
         Interface( Arena & battleArena, const int32_t tileIndex );
@@ -491,18 +493,22 @@ namespace Battle
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
         bool humanturn_redraw{ true };
+
+        bool _applyUnderwaterEffect{ false };
+
+        // True if background is bright. It is done to determine current unit contour cycling colors.
+        bool _brightLandType{ false };
+
         uint32_t animation_flags_frame{ 0 };
         int catapult_frame{ 0 };
-
-        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
 
         uint8_t _contourColor{ 110 };
 
-        // True if background is bright. It is done to determine current unit contour cycling colors.
-        bool _brightLandType{ false };
+        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
+
         uint32_t _contourCycle{ 0 };
 
         const Unit * _currentUnit{ nullptr };

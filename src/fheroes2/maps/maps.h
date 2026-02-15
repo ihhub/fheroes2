@@ -83,6 +83,8 @@ namespace Maps
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
 
+    bool hasNearbyObject( const int32_t center, const MP2::MapObjectType objectType );
+
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
