@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,32 +90,6 @@ namespace
     const fheroes2::Rect scrollSpeedRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
                                          fheroes2::optionIconSize, fheroes2::optionIconSize };
 
-    void drawLanguage( const fheroes2::Rect & optionRoi )
-    {
-        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
-        const fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
-
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawGraphics( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawAudioOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
-    void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
-    }
-
     void drawAnimationOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isEditorAnimationEnabled() ) {
@@ -154,14 +128,13 @@ namespace
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowScrollSpeedRoi( scrollSpeedRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowAnimationRoi, &windowPassabilityRoi,
+        const Settings & conf = Settings::Get();
+        const auto drawOptions = [&conf, &windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowAnimationRoi, &windowPassabilityRoi,
                                   &windowInterfaceTypeRoi, &windowCursorTypeRoi, &windowScrollSpeedRoi]() {
-            const Settings & conf = Settings::Get();
-
-            drawLanguage( windowLanguageRoi );
-            drawGraphics( windowGraphicsRoi );
-            drawAudioOptions( windowAudioRoi );
-            drawHotKeyOptions( windowHotKeyRoi );
+            drawLanguage( windowLanguageRoi, conf.getGameLanguage(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawGraphics( windowGraphicsRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawAudioOptions( windowAudioRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            drawHotKeyOptions( windowHotKeyRoi, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
             drawAnimationOptions( windowAnimationRoi );
             drawPassabilityOptions( windowPassabilityRoi );
             drawInterfaceType( windowInterfaceTypeRoi, conf.getInterfaceType(), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
@@ -171,7 +144,6 @@ namespace
 
         drawOptions();
 
-        const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Button buttonOk;

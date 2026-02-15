@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -465,46 +465,28 @@ msgstr ""
 msgid "Speed"
 msgstr "Greitis"
 
+msgid "Interface"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Auto Spell Casting"
+msgstr ""
+
 msgid "Off"
 msgstr ""
 
 msgid "On"
 msgstr ""
 
-msgid "Turn Order"
-msgstr ""
-
-msgid "Auto Spell Casting"
-msgstr ""
-
-msgid "Grid"
-msgstr ""
-
-msgid "Shadow Movement"
-msgstr ""
-
-msgid "Shadow Cursor"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
-msgid "Damage Info"
-msgstr ""
-
 msgid "Set the speed of combat actions and animations."
 msgstr ""
 
-msgid "Toggle to display the turn order during the battle."
+msgid "Change the interface settings of the game."
+msgstr ""
+
+msgid "Interface Settings"
 msgstr ""
 
 msgid ""
@@ -513,18 +495,7 @@ msgid ""
 "way, nor does it affect quick combat.)"
 msgstr ""
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
+msgid "Audio"
 msgstr ""
 
 msgid "Change the audio settings of the game."
@@ -533,7 +504,7 @@ msgstr ""
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
-msgid "Toggle to display damage information during the battle."
+msgid "Hot Keys"
 msgstr ""
 
 #, fuzzy
@@ -995,6 +966,48 @@ msgid "Perish: %{max}"
 msgstr ""
 
 msgid "Perish: %{min} - %{max}"
+msgstr ""
+
+msgid "Turn Order"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "Damage Info"
+msgstr ""
+
+msgid "Shadow Movement"
+msgstr ""
+
+msgid "Shadow Cursor"
+msgstr ""
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Greitis"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
 msgstr ""
 
 msgid ""
@@ -2953,15 +2966,6 @@ msgstr ""
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
-msgid "Language"
-msgstr ""
-
-msgid "Graphics"
-msgstr ""
-
-msgid "Text Support"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2969,6 +2973,9 @@ msgid "Select Game Language"
 msgstr ""
 
 msgid "Change the graphics settings of the game."
+msgstr ""
+
+msgid "Graphics"
 msgstr ""
 
 msgid "Mouse Cursor"
@@ -2981,6 +2988,9 @@ msgid "Interface Type"
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Text Support"
 msgstr ""
 
 msgid ""
@@ -3122,9 +3132,6 @@ msgid "Hide"
 msgstr ""
 
 msgid "Show"
-msgstr ""
-
-msgid "Interface"
 msgstr ""
 
 msgid "Army Estimation"
@@ -3823,12 +3830,6 @@ msgstr ""
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
-msgstr ""
-
-msgid "Change the interface settings of the game."
-msgstr ""
-
-msgid "Interface Settings"
 msgstr ""
 
 msgid "Toggle instant battle mode."
@@ -4595,6 +4596,9 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
 msgid "Supported languages"
+msgstr ""
+
+msgid "Language"
 msgstr ""
 
 msgid "This language already exists in the list."
@@ -6556,6 +6560,9 @@ msgid "Black & White"
 msgstr "Tiltas"
 
 msgid "Color"
+msgstr ""
+
+msgid "Configure"
 msgstr ""
 
 msgid ", FPS: "

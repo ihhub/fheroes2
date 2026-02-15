@@ -70,7 +70,7 @@ namespace
         GAME_3D_AUDIO = 0x00010000,
         GAME_SYSTEM_INFO = 0x00020000,
         GAME_CURSOR_SOFT_EMULATION = 0x00040000,
-        UNUSED_GAME_EVIL_INTERFACE = 0x00080000,
+        GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
         GAME_BATTLE_SHOW_TURN_ORDER = 0x00400000,
@@ -221,6 +221,10 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "battle shadow cursor" ) ) {
         SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
+    }
+
+    if ( config.Exists( "highlight movement area" ) ) {
+        setHighlightBattleMovementArea( config.StrParams( "highlight movement area" ) == "on" );
     }
 
     if ( config.Exists( "battle show damage" ) ) {
@@ -461,6 +465,9 @@ std::string Settings::String() const
 
     os << std::endl << "# Show battle shadow cursor: on/off" << std::endl;
     os << "battle shadow cursor = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# Highlight battle movement area: on/off" << std::endl;
+    os << "highlight movement area = " << ( _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Show battle damage information: on/off" << std::endl;
     os << "battle show damage = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
@@ -906,6 +913,16 @@ void Settings::setScreenScalingTypeNearest( const bool enable )
     }
 }
 
+void Settings::setHighlightBattleMovementArea( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
+    }
+}
+
 void Settings::SetScrollSpeed( int speed )
 {
     scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
@@ -992,6 +1009,11 @@ bool Settings::isEvilInterfaceEnabled() const
     }
 
     return false;
+}
+
+bool Settings::isBattleMovementAreaHighlightEnabled() const
+{
+    return _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
 }
 
 void Settings::switchToNextInterfaceType()

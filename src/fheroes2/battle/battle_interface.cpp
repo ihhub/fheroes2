@@ -1183,7 +1183,7 @@ void Battle::Status::clear()
     _lastMessage = "";
 }
 
-bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset ) const
+bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset, const bool highlightUnitMomevementArea ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1196,6 +1196,10 @@ bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string
             StringReplaceWithLowercase( msg, "%{monster}", unit->GetName() );
 
             interface.setUnitTobeHighlighted( unit );
+
+            if ( highlightUnitMomevementArea ) {
+                interface.setUnitToShowMovementArea( unit );
+            }
 
             // Process mouse buttons events.
             if ( le.MouseClickLeft( unitRoi ) ) {
@@ -1438,6 +1442,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _hexagonShadow = DrawHexagonShadow( 4, 2 );
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
+    _hexagonHighlightShadow = DrawHexagonShadow( 2, 2 );
 
     _buttonAuto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     _buttonSettings.setICNInfo( ICN::TEXTBAR, 6, 7 );
@@ -2035,6 +2040,8 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
 {
     // Get the sprite rendering offset.
     fheroes2::Point offset = GetTroopPosition( unit, troopSprite );
+    fheroes2::Point movementDelta{ 0, 0 };
+    CellDirection movementDirection = CellDirection::CENTER;
 
     if ( _movingUnit == &unit ) {
         // Monster is moving.
@@ -2048,6 +2055,7 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
             const fheroes2::Rect & unitPosition = unit.GetRectPosition();
             const int32_t moveX = _movingPos.x - unitPosition.x;
             const int32_t moveY = _movingPos.y - unitPosition.y;
+            movementDirection = Board::GetDirectionFromDelta( moveX, moveY );
 
             // If it is a slowed flying creature, then it should smoothly move horizontally.
             if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
@@ -2057,8 +2065,11 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
             }
             // If the creature has to move diagonally.
             else if ( moveY != 0 ) {
-                offset.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
-                offset.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * moveY );
+                movementDelta.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
+                movementDelta.y = static_cast<int32_t>( _movingUnit->animation.movementProgress() * moveY );
+
+                offset.x += movementDelta.x;
+                offset.y += movementDelta.y;
             }
         }
     }
@@ -2075,9 +2086,94 @@ fheroes2::Point Battle::Interface::_drawTroopSprite( const Unit & unit, const fh
         offset.y += moveY + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
     }
 
+    if ( _drawTroopSpriteWithMoatMask( unit, troopSprite, offset, movementDelta, movementDirection ) ) {
+        return offset;
+    }
+
     fheroes2::AlphaBlit( troopSprite, _mainSurface, offset.x, offset.y, unit.GetCustomAlpha(), unit.isReflect() );
 
     return offset;
+}
+
+bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset,
+                                                      const fheroes2::Point & movementDelta, const CellDirection movementDirection )
+{
+    if ( _flyingUnit == &unit ) {
+        // Flying units in motion don't interact with the moat.
+        return false;
+    }
+
+    const Castle * castle = Arena::GetCastle();
+    if ( castle == nullptr || !castle->isBuild( BUILD_MOAT ) ) {
+        // Not a castle or a moat was not built.
+        return false;
+    }
+
+    const auto moatCells = Board::GetMoatCellsForUnit( unit, movementDirection );
+    if ( moatCells.first == nullptr && moatCells.second == nullptr ) {
+        // None of unit's position (front or back for wide units) is in the moat
+        return false;
+    }
+
+    const bool isDiagonal = ( movementDirection == CellDirection::TOP_LEFT ) || ( movementDirection == CellDirection::TOP_RIGHT )
+                            || ( movementDirection == CellDirection::BOTTOM_LEFT ) || ( movementDirection == CellDirection::BOTTOM_RIGHT );
+
+    const bool isEntering = moatCells.first == nullptr && moatCells.second != nullptr;
+    const bool isExiting = moatCells.first != nullptr && moatCells.second == nullptr;
+    const bool isInside = moatCells.first != nullptr && moatCells.second != nullptr;
+
+    // - Diagonal + isEntering = Apply mask, don't move mask
+    // - Diagonal + isEntering + movement:TOP_RIGHT = Don't apply mask (it can clip some sprites)
+    // - Diagonal + isExiting = Don't apply mask (it can clip some sprites)
+    // - Diagonal + isInside  = Apply and move mask
+    if ( isDiagonal && ( isExiting || ( isEntering && movementDirection == CellDirection::TOP_RIGHT ) ) ) {
+        return false;
+    }
+
+    const Cell * maskCell = isEntering ? moatCells.second : moatCells.first;
+    if ( maskCell == nullptr ) {
+        return false;
+    }
+
+    fheroes2::Rect mask = Board::GetMoatCellMask( *maskCell );
+
+    if ( isInside || !isDiagonal ) {
+        mask.x -= movementDelta.x;
+        mask.y += movementDelta.y;
+    }
+
+    const fheroes2::Rect spriteRect{ offset.x, offset.y, sprite.width(), sprite.height() };
+    const fheroes2::Rect intersection = spriteRect ^ mask;
+
+    if ( intersection.width == 0 || intersection.height == 0 ) {
+        return false;
+    }
+
+    // Account for short sprites (e.g. vampire dead sprite)
+    constexpr int32_t minVisibleHeight = 10;
+    if ( sprite.height() - mask.height < minVisibleHeight ) {
+        return false;
+    }
+
+    const uint8_t alpha = unit.GetCustomAlpha();
+    const bool isReflect = unit.isReflect();
+
+    // The mask is a rectangle which means that worst-case is it's in the middle
+    // of the sprite and we will need to make 4 calls to AlphaBlit to render the sprite
+    // around the mask.
+
+    // Top
+    fheroes2::AlphaBlit( sprite, 0, 0, _mainSurface, spriteRect.x, spriteRect.y, spriteRect.width, intersection.y - spriteRect.y, alpha, isReflect );
+
+    // Left
+    fheroes2::AlphaBlit( sprite, 0, intersection.y - spriteRect.y, _mainSurface, spriteRect.x, intersection.y, intersection.x - spriteRect.x, intersection.height, alpha,
+                         isReflect );
+
+    // Right
+    fheroes2::AlphaBlit( sprite, ( intersection.x + intersection.width ) - spriteRect.x, intersection.y - spriteRect.y, _mainSurface, intersection.x + intersection.width,
+                         intersection.y, ( spriteRect.x + spriteRect.width ) - ( intersection.x + intersection.width ), intersection.height, alpha, isReflect );
+
+    return true;
 }
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
@@ -2408,20 +2504,83 @@ void Battle::Interface::_redrawCoverStatic()
         fheroes2::Copy( _battleGround, _mainSurface );
     }
 
+    if ( _movingUnit != nullptr ) {
+        // Do not show movement area while units are in action.
+        return;
+    }
+
     const Settings & conf = Settings::Get();
+    const bool showCurrentUnitMoveShadow = conf.BattleShowMoveShadow();
+    if ( !showCurrentUnitMoveShadow && _highlightUnitMovementArea == nullptr ) {
+        // Display movement area only if the associated option is enabled.
+        return;
+    }
 
-    // Movement shadow.
-    if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
-        const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
-        const Board & board = *Arena::GetBoard();
+    if ( _currentUnit == nullptr || ( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
+        // No current unit is selected or this unit is controlled by AI.
+        return;
+    }
 
-        for ( const Cell & cell : board ) {
-            const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
-            if ( pos.GetHead() != nullptr ) {
-                assert( pos.isValidForUnit( _currentUnit ) );
+    Board & board = *Arena::GetBoard();
 
-                fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+    std::array<bool, Board::sizeInCells> processedCells{ false };
+    assert( board.size() == processedCells.size() );
+
+    if ( _highlightUnitMovementArea != nullptr ) {
+        Unit * foundUnit = nullptr;
+        for ( Cell & cell : board ) {
+            Unit * unit = cell.GetUnit();
+            if ( unit != nullptr && unit == _highlightUnitMovementArea ) {
+                foundUnit = unit;
+                break;
             }
+        }
+
+        // If we hit this assertion then the unit doesn't even exist.
+        assert( foundUnit != nullptr );
+
+        // The highlighted unit might have moved. We want to display the real movement area.
+        const bool isMoved = foundUnit->Modes( Battle::TR_MOVED );
+
+        foundUnit->ResetModes( Battle::TR_MOVED );
+
+        // To avoid pathfinder re-evaluation we need to run the same loop separately for the selected unit and then for the current unit.
+        // In this case we do re-evaluation only once.
+        for ( const Cell & cell : board ) {
+            const Position pos = Position::GetReachable( *_highlightUnitMovementArea, cell.GetIndex() );
+
+            if ( pos.GetHead() != nullptr ) {
+                assert( pos.isValidForUnit( _highlightUnitMovementArea ) );
+
+                // To separate enemy movement from the current unit we apply the shadow twice.
+                fheroes2::Blit( _hexagonHighlightShadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+                fheroes2::Blit( _hexagonHighlightShadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+
+                processedCells[cell.GetIndex()] = true;
+            }
+        }
+
+        if ( isMoved ) {
+            foundUnit->SetModes( Battle::TR_MOVED );
+        }
+    }
+
+    if ( !showCurrentUnitMoveShadow ) {
+        return;
+    }
+
+    const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
+
+    for ( const Cell & cell : board ) {
+        if ( processedCells[cell.GetIndex()] ) {
+            continue;
+        }
+
+        const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
+        if ( pos.GetHead() != nullptr ) {
+            assert( pos.isValidForUnit( _currentUnit ) );
+
+            fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
         }
     }
 }
@@ -2712,7 +2871,7 @@ void Battle::Interface::RedrawKilled()
     }
 }
 
-int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
+int Battle::Interface::GetBattleCursor( std::string & statusMsg, const bool highlightUnitMomevementArea )
 {
     statusMsg.clear();
 
@@ -2729,6 +2888,10 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         };
 
         const Unit * unit = cell->GetUnit();
+
+        if ( highlightUnitMomevementArea ) {
+            _highlightUnitMovementArea = unit;
+        }
 
         if ( unit == nullptr || _currentUnit == unit ) {
             const Position pos = Position::GetReachable( *_currentUnit, _currentCellIndex );
@@ -2921,6 +3084,9 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     // Reset the cursor position to avoid forcing the cursor shadow to be drawn at the last position of the previous turn.
     _currentCellIndex = -1;
 
+    // Reset the highlighted unit.
+    _highlightUnitMovementArea = nullptr;
+
     _currentUnit = &unit;
     humanturn_redraw = false;
     humanturn_exit = false;
@@ -3000,6 +3166,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     Settings & conf = Settings::Get();
 
     BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.isMouseEventFromTouchpad() );
+
+    // Make sure to reset currently selected unit every time we do rendering.
+    _highlightUnitMovementArea = nullptr;
+    const bool highlightUnitMovementArea = conf.isBattleMovementAreaHighlightEnabled();
 
     _buttonAuto.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonAuto.area() ) );
     _buttonSettings.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonSettings.area() ) );
@@ -3092,7 +3262,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder.getRenderingRoi() ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        if ( _turnOrder.queueEventProcessing( *this, msg, _interfacePosition.getPosition() ) ) {
+        if ( _turnOrder.queueEventProcessing( *this, msg, _interfacePosition.getPosition(), highlightUnitMovementArea ) ) {
             humanturn_redraw = true;
         }
     }
@@ -3216,7 +3386,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
     }
     else if ( le.isMouseCursorPosInArea( battleFieldRect ) ) {
-        int themes = GetBattleCursor( msg );
+        int themes = GetBattleCursor( msg, highlightUnitMovementArea );
 
         if ( _swipeAttack.isValid() ) {
             // The swipe attack motion is either in progress or has finished.

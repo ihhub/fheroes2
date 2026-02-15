@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -525,58 +525,33 @@ msgstr "Hurtighet : %{speed}"
 msgid "Speed"
 msgstr "Hurtighet"
 
-msgid "Off"
-msgstr "Av"
+msgid "Interface"
+msgstr "Grensesnitt"
 
-msgid "On"
-msgstr "På"
-
-#, fuzzy
-msgid "Turn Order"
-msgstr ""
-"Tur-\n"
-"rekkefølge"
+msgid "Settings"
+msgstr "Innstillinger"
 
 msgid "Auto Spell Casting"
 msgstr ""
 "Auto-\n"
 "trylling"
 
-msgid "Grid"
-msgstr "Rutenett"
+msgid "Off"
+msgstr "Av"
 
-msgid "Shadow Movement"
-msgstr ""
-"Uthevd\n"
-"rekkevidde"
-
-msgid "Shadow Cursor"
-msgstr ""
-"Rute-\n"
-"markør"
-
-msgid "Audio"
-msgstr "Lyd"
-
-msgid "Settings"
-msgstr "Innstillinger"
-
-msgid "Configure"
-msgstr "Konfigurer"
-
-msgid "Hot Keys"
-msgstr "Hurtigtaster"
-
-msgid "Damage Info"
-msgstr "Skadeinfo"
+msgid "On"
+msgstr "På"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Juster hastigheten til handlingene og animasjonene i kamp."
 
 #, fuzzy
-msgid "Toggle to display the turn order during the battle."
-msgstr ""
-"Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
+msgid "Change the interface settings of the game."
+msgstr "Endre bildeinnstillingene til spillet."
+
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Spillinnstillinger"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -587,25 +562,8 @@ msgstr ""
 "Dette påvirker ikke magibruken til datamaskinspillere på noen som helst "
 "måte, og det påvirker heller ikke hurtigkamp.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Velg om rutenettet for slagmarken skal være synlig eller ikke. Det er de "
-"samme rutene man kan flytte seg til enten rutenettet vises eller ikke."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Velg om rekkevidden for hvor krigerene dine kan flytte seg skal utheves ved "
-"å gjøres mørkere."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Velg om den ruten du peker på med markøren din skal utheves ved å gjøres "
-"mørkere."
+msgid "Audio"
+msgstr "Lyd"
 
 msgid "Change the audio settings of the game."
 msgstr "Endre lydinnstillingene til spillet."
@@ -613,10 +571,8 @@ msgstr "Endre lydinnstillingene til spillet."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Kontroller og endre alle hurtigtastene i spillet."
 
-msgid "Toggle to display damage information during the battle."
-msgstr ""
-"Skru på dette for å vise et vindu som forklarer hvor mye skade du kommer til "
-"å gjøre."
+msgid "Hot Keys"
+msgstr "Hurtigtaster"
 
 msgid "Exit this menu."
 msgstr "Forlat denne menyen."
@@ -1094,6 +1050,67 @@ msgstr "Dødstall : %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Dødstall : %{min} - %{max}"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr ""
+"Tur-\n"
+"rekkefølge"
+
+msgid "Grid"
+msgstr "Rutenett"
+
+msgid "Damage Info"
+msgstr "Skadeinfo"
+
+msgid "Shadow Movement"
+msgstr ""
+"Uthevd\n"
+"rekkevidde"
+
+msgid "Shadow Cursor"
+msgstr ""
+"Rute-\n"
+"markør"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr ""
+"Uthevd\n"
+"rekkevidde"
+
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
+msgstr ""
+"Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Velg om rutenettet for slagmarken skal være synlig eller ikke. Det er de "
+"samme rutene man kan flytte seg til enten rutenettet vises eller ikke."
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Skru på dette for å vise et vindu som forklarer hvor mye skade du kommer til "
+"å gjøre."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Velg om rekkevidden for hvor krigerene dine kan flytte seg skal utheves ved "
+"å gjøres mørkere."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Velg om den ruten du peker på med markøren din skal utheves ved å gjøres "
+"mørkere."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3226,15 +3243,6 @@ msgstr "Avslutt"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Forlat Heroes of Might and Magic II."
 
-msgid "Language"
-msgstr "Språk"
-
-msgid "Graphics"
-msgstr "Bilde"
-
-msgid "Text Support"
-msgstr "Tekstmodus"
-
 msgid "Change the language of the game."
 msgstr "Endre språket til spillet."
 
@@ -3243,6 +3251,9 @@ msgstr "Velg spillspråk"
 
 msgid "Change the graphics settings of the game."
 msgstr "Endre bildeinnstillingene til spillet."
+
+msgid "Graphics"
+msgstr "Bilde"
 
 msgid "Mouse Cursor"
 msgstr "Markør"
@@ -3255,6 +3266,9 @@ msgstr "Grensesnitt"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Velg den typen grensesnitt du ønsker."
+
+msgid "Text Support"
+msgstr "Tekstmodus"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3412,9 +3426,6 @@ msgstr "Løs"
 
 msgid "Show"
 msgstr "Bundet"
-
-msgid "Interface"
-msgstr "Grensesnitt"
 
 #, fuzzy
 msgid "Army Estimation"
@@ -4156,14 +4167,6 @@ msgid ""
 msgstr ""
 "Justerer hvor fort datamaskinspillere flytter seg rundt på kartet. Du kan "
 "også velge å ikke vise hva de gjør i det hele tatt."
-
-#, fuzzy
-msgid "Change the interface settings of the game."
-msgstr "Endre bildeinnstillingene til spillet."
-
-#, fuzzy
-msgid "Interface Settings"
-msgstr "Spillinnstillinger"
 
 msgid "Toggle instant battle mode."
 msgstr "Skift modus for hurtigkamp."
@@ -4976,6 +4979,9 @@ msgstr "Vis karttegnerens systeminnstillinger der den kan skreddersys."
 #, fuzzy
 msgid "Supported languages"
 msgstr "Støtt oss på"
+
+msgid "Language"
+msgstr "Språk"
 
 msgid "This language already exists in the list."
 msgstr ""
@@ -7099,6 +7105,9 @@ msgstr "Svart-hvit"
 
 msgid "Color"
 msgstr "Farget"
+
+msgid "Configure"
+msgstr "Konfigurer"
 
 msgid ", FPS: "
 msgstr ", FPS: "
