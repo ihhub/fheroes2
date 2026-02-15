@@ -5428,6 +5428,12 @@ namespace
             break;
         }
 
+        case ICN::SHIP_BATTLEFIELD_UNDERWATER_BUBBLES:
+            _icnVsSprite[id].resize( 24 );
+            for ( size_t i = 0; i < 24; ++i ) {
+                fheroes2::h2d::readImage( "underwater_battlefield_bubbles_" + std::to_string( i + 1 ) + ".image", _icnVsSprite[id][i] );
+            }
+            break;
         default:
             break;
         }
