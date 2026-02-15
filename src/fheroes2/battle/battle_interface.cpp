@@ -2393,15 +2393,16 @@ void Battle::Interface::_redrawBattleGround()
         const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuilt() ? 4 : 3 );
         fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
-
-    if ( _applyUnderwaterEffect ) {
-        fheroes2::ApplyPalette( _battleGround, PAL::GetPalette( PAL::PaletteType::BLUISH ) );
-    }
 }
 
 void Battle::Interface::_redrawCoverStatic()
 {
-    fheroes2::Copy( _battleGround, _mainSurface );
+    if ( _applyUnderwaterEffect ) {
+        fheroes2::ApplyPalette( _battleGround, _mainSurface, PAL::GetPalette( PAL::PaletteType::BLUISH ) );
+    }
+    else {
+        fheroes2::Copy( _battleGround, _mainSurface );
+    }
 
     const Settings & conf = Settings::Get();
 
