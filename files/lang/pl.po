@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2026-02-12 15:23+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -521,51 +521,31 @@ msgstr "Szybkość: %{speed}"
 msgid "Speed"
 msgstr "Szybkość"
 
+msgid "Interface"
+msgstr "Interfejs"
+
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "Auto Spell Casting"
+msgstr "Auto. czary"
+
 msgid "Off"
 msgstr "Wyłączone"
 
 msgid "On"
 msgstr "Włączone"
 
-#, fuzzy
-msgid "Turn Order"
-msgstr "Kolejność jednostek"
-
-msgid "Auto Spell Casting"
-msgstr "Auto. czary"
-
-msgid "Grid"
-msgstr "Siatka"
-
-msgid "Shadow Movement"
-msgstr "Cieniowanie pola"
-
-msgid "Shadow Cursor"
-msgstr "Cieniowanie kursora"
-
-msgid "Audio"
-msgstr "Dźwięk"
-
-msgid "Settings"
-msgstr "Ustawienia"
-
-msgid "Configure"
-msgstr "Dostosuj"
-
-msgid "Hot Keys"
-msgstr "Skróty klaw."
-
-msgid "Damage Info"
-msgstr "Obrażenia"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
 #, fuzzy
-msgid "Toggle to display the turn order during the battle."
-msgstr ""
-"Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
-"walki."
+msgid "Change the interface settings of the game."
+msgstr "Zmień ustawienia grafiki gry."
+
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Ustawienia gry"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -576,25 +556,8 @@ msgstr ""
 "walki automatycznej. (Uwaga: nie ma to wpływu na rzucanie zaklęć przez "
 "graczy komputerowych oraz na szybką walkę.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Włączenie/wyłączenie siatki pól. Na siatce zawsze widoczna jest trasa ruchu "
-"jednostki."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Włączenie/wyłączenie cieniowania pól, na które może się ruszyć twoja "
-"jednostka."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Włączenie/wyłączenie systemu cieniowania zaznaczającego pola, nad którymi "
-"znajduje się kursor."
+msgid "Audio"
+msgstr "Dźwięk"
 
 msgid "Change the audio settings of the game."
 msgstr "Zmień ustawienia dźwiękowe gry."
@@ -602,8 +565,8 @@ msgstr "Zmień ustawienia dźwiękowe gry."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Zobacz i skonfiguruj wszystkie skróty klawiszowe gry."
 
-msgid "Toggle to display damage information during the battle."
-msgstr "Włączenie/wyłączenie informacji o zadanych obrażeniach."
+msgid "Hot Keys"
+msgstr "Skróty klaw."
 
 msgid "Exit this menu."
 msgstr "Wyjdź z tego menu."
@@ -1085,6 +1048,58 @@ msgstr "Zabici: %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Zabici: %{min} - %{max}"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Kolejność jednostek"
+
+msgid "Grid"
+msgstr "Siatka"
+
+msgid "Damage Info"
+msgstr "Obrażenia"
+
+msgid "Shadow Movement"
+msgstr "Cieniowanie pola"
+
+msgid "Shadow Cursor"
+msgstr "Cieniowanie kursora"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Cieniowanie pola"
+
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
+msgstr ""
+"Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
+"walki."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Włączenie/wyłączenie siatki pól. Na siatce zawsze widoczna jest trasa ruchu "
+"jednostki."
+
+msgid "Toggle to display damage information during the battle."
+msgstr "Włączenie/wyłączenie informacji o zadanych obrażeniach."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Włączenie/wyłączenie cieniowania pól, na które może się ruszyć twoja "
+"jednostka."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Włączenie/wyłączenie systemu cieniowania zaznaczającego pola, nad którymi "
+"znajduje się kursor."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3186,15 +3201,6 @@ msgstr "Wyjście"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Zakończenie gry Heroes of Might and Magic II."
 
-msgid "Language"
-msgstr "Język"
-
-msgid "Graphics"
-msgstr "Grafika"
-
-msgid "Text Support"
-msgstr "Dodatkowe informacje"
-
 msgid "Change the language of the game."
 msgstr "Zmień język gry."
 
@@ -3203,6 +3209,9 @@ msgstr "Wybierz język gry"
 
 msgid "Change the graphics settings of the game."
 msgstr "Zmień ustawienia grafiki gry."
+
+msgid "Graphics"
+msgstr "Grafika"
 
 msgid "Mouse Cursor"
 msgstr "Kursor myszki"
@@ -3217,6 +3226,9 @@ msgstr "Typ interfejsu"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Zmień typ interfejsu."
+
+msgid "Text Support"
+msgstr "Dodatkowe informacje"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3366,9 +3378,6 @@ msgstr "Ukryj"
 
 msgid "Show"
 msgstr "Pokaż"
-
-msgid "Interface"
-msgstr "Interfejs"
 
 #, fuzzy
 msgid "Army Estimation"
@@ -4089,14 +4098,6 @@ msgid ""
 msgstr ""
 "Zmień szybkość, z jaką poruszają się bohaterowie sterowani przez A.I. Możesz "
 "również wyłączyć podgląd ruchów A.I."
-
-#, fuzzy
-msgid "Change the interface settings of the game."
-msgstr "Zmień ustawienia grafiki gry."
-
-#, fuzzy
-msgid "Interface Settings"
-msgstr "Ustawienia gry"
 
 msgid "Toggle instant battle mode."
 msgstr "Zmień tryb walki."
@@ -4889,6 +4890,9 @@ msgstr ""
 #, fuzzy
 msgid "Supported languages"
 msgstr "Wesprzyj nas"
+
+msgid "Language"
+msgstr "Język"
 
 msgid "This language already exists in the list."
 msgstr ""
@@ -6992,6 +6996,9 @@ msgstr "Czarno-biały"
 
 msgid "Color"
 msgstr "Kolor"
+
+msgid "Configure"
+msgstr "Dostosuj"
 
 msgid ", FPS: "
 msgstr ", FPS: "

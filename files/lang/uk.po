@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2026-01-31 15:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -554,49 +554,29 @@ msgstr "Швидкість: %{speed}"
 msgid "Speed"
 msgstr "Швидкість"
 
+msgid "Interface"
+msgstr "Інтерфейс"
+
+msgid "Settings"
+msgstr "Налаштування"
+
+msgid "Auto Spell Casting"
+msgstr "Автоматичне чаклування"
+
 msgid "Off"
 msgstr "Вимк"
 
 msgid "On"
 msgstr "Увімк"
 
-msgid "Turn Order"
-msgstr "Порядок ходів"
-
-msgid "Auto Spell Casting"
-msgstr "Автоматичне чаклування"
-
-msgid "Grid"
-msgstr "Сітка"
-
-msgid "Shadow Movement"
-msgstr "Затінення сітки"
-
-msgid "Shadow Cursor"
-msgstr "Тінь курсора"
-
-msgid "Audio"
-msgstr "Аудіо"
-
-msgid "Settings"
-msgstr "Налаштування"
-
-msgid "Configure"
-msgstr "Налаштувати"
-
-msgid "Hot Keys"
-msgstr "Гарячі клавіші"
-
-msgid "Damage Info"
-msgstr ""
-"Інформація про\n"
-"пошкодження"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Встановити швидкість бойових дій та анімації."
 
-msgid "Toggle to display the turn order during the battle."
-msgstr "Перемкнути відображення черговості ходів загонів під час битви."
+msgid "Change the interface settings of the game."
+msgstr "Змінити налаштування інтерфейсу гри."
+
+msgid "Interface Settings"
+msgstr "Налаштування інтерфейсу"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -607,24 +587,8 @@ msgstr ""
 "битв. (Примітка: Ця функція жодним чином не впливає на використання магії "
 "комп'ютерними гравцями, а також не впливає на швидкий бій)."
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Перемкнути відображення сітки поля бою. Сітка з шестигранних клітинок завжди "
-"визначає можливості руху, навіть якщо її відображення вимкнене. Перемикач "
-"лише робить її видимою."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Перемкнути відображення зони, в межах якої ваші істоти можуть пересуватися "
-"та атакувати."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr "Перемкнути затінення клітини, на яку наведений курсор миші."
+msgid "Audio"
+msgstr "Аудіо"
 
 msgid "Change the audio settings of the game."
 msgstr "Змінити звукові налаштування гри."
@@ -632,11 +596,8 @@ msgstr "Змінити звукові налаштування гри."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Налаштування всіх гарячих клавіш у грі."
 
-msgid "Toggle to display damage information during the battle."
-msgstr ""
-"Перемкнути відображення інформації про пошкодження під час битви. Якщо "
-"функція працює, наведіть курсором на бажану ціль - через кілька секунд "
-"вирине вікно з розрахунком можливих пошкоджень, що завдасть ваш загін."
+msgid "Hot Keys"
+msgstr "Гарячі клавіші"
 
 msgid "Exit this menu."
 msgstr "Вийти з цього меню."
@@ -1111,6 +1072,58 @@ msgstr "Загине %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Загине %{min} - %{max}"
+
+msgid "Turn Order"
+msgstr "Порядок ходів"
+
+msgid "Grid"
+msgstr "Сітка"
+
+msgid "Damage Info"
+msgstr ""
+"Інформація про\n"
+"пошкодження"
+
+msgid "Shadow Movement"
+msgstr "Затінення сітки"
+
+msgid "Shadow Cursor"
+msgstr "Тінь курсора"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Рух Героя"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr "Перемкнути відображення черговості ходів загонів під час битви."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Перемкнути відображення сітки поля бою. Сітка з шестигранних клітинок завжди "
+"визначає можливості руху, навіть якщо її відображення вимкнене. Перемикач "
+"лише робить її видимою."
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Перемкнути відображення інформації про пошкодження під час битви. Якщо "
+"функція працює, наведіть курсором на бажану ціль - через кілька секунд "
+"вирине вікно з розрахунком можливих пошкоджень, що завдасть ваш загін."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Перемкнути відображення зони, в межах якої ваші істоти можуть пересуватися "
+"та атакувати."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr "Перемкнути затінення клітини, на яку наведений курсор миші."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3150,15 +3163,6 @@ msgstr "Вихід"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Залишити Heroes of Might and Magic II."
 
-msgid "Language"
-msgstr "Мова"
-
-msgid "Graphics"
-msgstr "Графіка"
-
-msgid "Text Support"
-msgstr "Текстовий опис"
-
 msgid "Change the language of the game."
 msgstr "Змінити мову гри."
 
@@ -3167,6 +3171,9 @@ msgstr "Обрати мову гри"
 
 msgid "Change the graphics settings of the game."
 msgstr "Змінити графічні налаштування гри."
+
+msgid "Graphics"
+msgstr "Графіка"
 
 msgid "Mouse Cursor"
 msgstr "Вказівник миші"
@@ -3179,6 +3186,9 @@ msgstr "Тип Інтерфейсу"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Перемкнути тип інтерфейсу, який хочете використовувати."
+
+msgid "Text Support"
+msgstr "Текстовий опис"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3322,9 +3332,6 @@ msgstr "Сховати"
 
 msgid "Show"
 msgstr "Показати"
-
-msgid "Interface"
-msgstr "Інтерфейс"
 
 msgid "Army Estimation"
 msgstr "Оцінка армії"
@@ -4020,12 +4027,6 @@ msgid ""
 msgstr ""
 "Встановлює швидкість, з якою рухаються ворожі герої. Ви також можете "
 "вимкнути перегляд всіх ворожих переміщень."
-
-msgid "Change the interface settings of the game."
-msgstr "Змінити налаштування інтерфейсу гри."
-
-msgid "Interface Settings"
-msgstr "Налаштування інтерфейсу"
 
 msgid "Toggle instant battle mode."
 msgstr "Перемикає режим миттєвої битви."
@@ -4781,6 +4782,9 @@ msgstr ""
 
 msgid "Supported languages"
 msgstr "Підтримувані мови"
+
+msgid "Language"
+msgstr "Мова"
 
 msgid "This language already exists in the list."
 msgstr "Ця мова вже є у списку."
@@ -6822,6 +6826,9 @@ msgstr "Чорно-білий"
 
 msgid "Color"
 msgstr "Кольоровий"
+
+msgid "Configure"
+msgstr "Налаштувати"
 
 msgid ", FPS: "
 msgstr ", кдр/с:"

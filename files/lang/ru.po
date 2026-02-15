@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2025-12-19 18:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -548,47 +548,29 @@ msgstr "Скорость: %{speed}"
 msgid "Speed"
 msgstr "Скорость"
 
+msgid "Interface"
+msgstr "Интерфейс"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Auto Spell Casting"
+msgstr "Магия в автобитве"
+
 msgid "Off"
 msgstr "Выкл."
 
 msgid "On"
 msgstr "Вкл."
 
-msgid "Turn Order"
-msgstr "Порядок действий"
-
-msgid "Auto Spell Casting"
-msgstr "Магия в автобитве"
-
-msgid "Grid"
-msgstr "Сетка"
-
-msgid "Shadow Movement"
-msgstr "Затенение сетки"
-
-msgid "Shadow Cursor"
-msgstr "Курсор с тенью"
-
-msgid "Audio"
-msgstr "Звук"
-
-msgid "Settings"
-msgstr "Настройки"
-
-msgid "Configure"
-msgstr "Настроить"
-
-msgid "Hot Keys"
-msgstr "Горячие клавиши"
-
-msgid "Damage Info"
-msgstr "Информация об уроне"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Установить скорость действий и анимации существ в бою."
 
-msgid "Toggle to display the turn order during the battle."
-msgstr "Включить/выключить показ порядка действий отрядов в бою."
+msgid "Change the interface settings of the game."
+msgstr "Настроить параметры интерфейса игры."
+
+msgid "Interface Settings"
+msgstr "Настройки интерфейса"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -599,24 +581,8 @@ msgstr ""
 "(Эта опция не влияет на использование заклинаний компьютерным игроком и на "
 "режим быстрой битвы.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Отобразить/скрыть сетку поля боя. Все перемещения на поле боя происходят по "
-"гексагональной сетке. Эта опция влияет лишь на внешний вид поля боя."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Включить/выключить выделение области поля боя, доступной для перемещения и "
-"атаки существом."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Включить/выключить отрисовку тени под курсором на гексагональной сетке."
+msgid "Audio"
+msgstr "Звук"
 
 msgid "Change the audio settings of the game."
 msgstr "Настроить параметры аудио."
@@ -624,8 +590,8 @@ msgstr "Настроить параметры аудио."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Проверить и настроить все горячие клавиши, имеющиеся в игре."
 
-msgid "Toggle to display damage information during the battle."
-msgstr "Включить/выключить отображение информации об уроне во время битвы."
+msgid "Hot Keys"
+msgstr "Горячие клавиши"
 
 msgid "Exit this menu."
 msgstr "Выход из меню."
@@ -1104,6 +1070,53 @@ msgstr "Погибнет: %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Погибнет: %{min} - %{max}"
+
+msgid "Turn Order"
+msgstr "Порядок действий"
+
+msgid "Grid"
+msgstr "Сетка"
+
+msgid "Damage Info"
+msgstr "Информация об уроне"
+
+msgid "Shadow Movement"
+msgstr "Затенение сетки"
+
+msgid "Shadow Cursor"
+msgstr "Курсор с тенью"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Передвижение героя"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr "Включить/выключить показ порядка действий отрядов в бою."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Отобразить/скрыть сетку поля боя. Все перемещения на поле боя происходят по "
+"гексагональной сетке. Эта опция влияет лишь на внешний вид поля боя."
+
+msgid "Toggle to display damage information during the battle."
+msgstr "Включить/выключить отображение информации об уроне во время битвы."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Включить/выключить выделение области поля боя, доступной для перемещения и "
+"атаки существом."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Включить/выключить отрисовку тени под курсором на гексагональной сетке."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3142,15 +3155,6 @@ msgstr "Выход"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Выйти из игры Heroes of Might and Magic II."
 
-msgid "Language"
-msgstr "Язык"
-
-msgid "Graphics"
-msgstr "Графика"
-
-msgid "Text Support"
-msgstr "Текстовое сопровождение"
-
 msgid "Change the language of the game."
 msgstr "Изменить язык интерфейса."
 
@@ -3159,6 +3163,9 @@ msgstr "Выберите язык игры:"
 
 msgid "Change the graphics settings of the game."
 msgstr "Настроить параметры графики."
+
+msgid "Graphics"
+msgstr "Графика"
 
 msgid "Mouse Cursor"
 msgstr "Курсор мыши"
@@ -3171,6 +3178,9 @@ msgstr "Интерфейс"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Переключить тип интерфейса, который Вы хотите использовать."
+
+msgid "Text Support"
+msgstr "Текстовое сопровождение"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3320,9 +3330,6 @@ msgstr "Скрыть"
 
 msgid "Show"
 msgstr "Показать"
-
-msgid "Interface"
-msgstr "Интерфейс"
 
 msgid "Army Estimation"
 msgstr "Оценка силы войск"
@@ -4029,12 +4036,6 @@ msgstr ""
 "Устанавливает скорость, с которой двигаются герои под управлением "
 "компьютера. Вы также можете отключить просмотр хода игроков, управляемых "
 "компьютером."
-
-msgid "Change the interface settings of the game."
-msgstr "Настроить параметры интерфейса игры."
-
-msgid "Interface Settings"
-msgstr "Настройки интерфейса"
 
 msgid "Toggle instant battle mode."
 msgstr "Режим мгновенного боя."
@@ -4793,6 +4794,9 @@ msgstr "Открывает окно системных настроек реда
 #, fuzzy
 msgid "Supported languages"
 msgstr "Поддержите нас"
+
+msgid "Language"
+msgstr "Язык"
 
 #, fuzzy
 msgid "This language already exists in the list."
@@ -6830,6 +6834,9 @@ msgstr "Чёрно-белый"
 
 msgid "Color"
 msgstr "Цветной"
+
+msgid "Configure"
+msgstr "Настроить"
 
 msgid ", FPS: "
 msgstr ", FPS: "
