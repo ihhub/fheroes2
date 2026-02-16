@@ -4378,6 +4378,26 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
+        for ( const auto & [type, offset] :
+              { std::make_pair( MP2::OBJ_ICN_TYPE_MTNCRCK, 114U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNDSRT, 84U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNLAVA, 84U ),
+                std::make_pair( MP2::OBJ_ICN_TYPE_MTNMULT, 84U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNSNOW, 84U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNSWMP, 84U ) } ) {
+            Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
+            object.groundLevelParts.emplace_back( type, offset + 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 4U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 0U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 1U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 5U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( type, offset + 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+            object.topLevelParts.emplace_back( type, offset + 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
         // Sawmills for different terrains: Grass/Swamp, Snow, Lava, Desert, Dirt, Wasteland.
         for ( const auto & [type, offset] : { std::make_pair( MP2::OBJ_ICN_TYPE_OBJNMUL2, 210U ), std::make_pair( MP2::OBJ_ICN_TYPE_OBJNSNOW, 195U ),
                                               std::make_pair( MP2::OBJ_ICN_TYPE_OBJNLAVA, 118U ), std::make_pair( MP2::OBJ_ICN_TYPE_OBJNDSRT, 123U ),

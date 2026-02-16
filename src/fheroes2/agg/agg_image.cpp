@@ -261,6 +261,39 @@ namespace
         }
     }
 
+    void createHauntedMine( const std::vector<fheroes2::Sprite> & dirtObjects, std::vector<fheroes2::Sprite> & mountainObjects, const size_t startMineIndex,
+                            const std::string & correctionImagePath )
+    {
+        // All mines have the same number of object parts.
+        constexpr size_t mineSpriteCount{ 10 };
+
+        // Verify that the input parameters are valid.
+        assert( dirtObjects.size() > 8 );
+        assert( !mountainObjects.empty() );
+        assert( startMineIndex < mountainObjects.size() );
+        assert( startMineIndex + mineSpriteCount <= mountainObjects.size() );
+        assert( !correctionImagePath.empty() );
+
+        // Resize the original set of objects to add a new Haunted Mine.
+        const size_t originalSize{ mountainObjects.size() };
+        mountainObjects.resize( originalSize + mineSpriteCount );
+
+        // Copy the existing object parts from a mountain.
+        for ( size_t i = 0; i < mineSpriteCount; ++i ) {
+            mountainObjects[originalSize + i] = mountainObjects[startMineIndex + i];
+        }
+
+        // Load the correction image.
+        fheroes2::Sprite correctionImage;
+        fheroes2::h2d::readImage( correctionImagePath, correctionImage );
+
+        // If this assertion blows up then the game resources are not valid.
+        assert( correctionImage.singleLayer() );
+        assert( correctionImage.height() == 32 && ( correctionImage.width() == 64 || correctionImage.width() == 96 ) );
+
+        const uint8_t * mask = correctionImage.image();
+    }
+
     // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
     class OriginalAlphabetPreserver final
     {
@@ -5389,7 +5422,30 @@ namespace
             }
             break;
         }
-
+        case ICN::MTNCRCK:
+            loadICN( ICN::OBJNDIRT );
+            createHauntedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 104, "haunted_mine_crack.image" );
+            break;
+        case ICN::MTNDSRT:
+            loadICN( ICN::OBJNDIRT );
+            createHauntedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "haunted_mine_desert.image" );
+            break;
+        case ICN::MTNLAVA:
+            loadICN( ICN::OBJNDIRT );
+            createHauntedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "haunted_mine_lava.image" );
+            break;
+        case ICN::MTNMULT:
+            loadICN( ICN::OBJNDIRT );
+            createHauntedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "haunted_mine_rock.image" );
+            break;
+        case ICN::MTNSNOW:
+            loadICN( ICN::OBJNDIRT );
+            createHauntedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "haunted_mine_snow.image" );
+            break;
+        case ICN::MTNSWMP:
+            loadICN( ICN::OBJNDIRT );
+            createHauntedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "haunted_mine_swamp.image" );
+            break;
         default:
             break;
         }
