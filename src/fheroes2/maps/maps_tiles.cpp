@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -344,28 +344,6 @@ namespace
 
         tile.setMainObjectType( objectPart->objectType );
         return true;
-    }
-
-    bool isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
-    {
-        switch ( objectIcnType ) {
-        case MP2::OBJ_ICN_TYPE_ROAD: {
-            static const std::set<uint8_t> allowedIndecies{ 0, 2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29, 30, 31 };
-            return ( allowedIndecies.count( imageIndex ) == 1 );
-        }
-        case MP2::OBJ_ICN_TYPE_OBJNTOWN: {
-            static const std::set<uint8_t> allowedIndecies{ 13, 29, 45, 61, 77, 93, 109, 125, 141, 157, 173, 189 };
-            return ( allowedIndecies.count( imageIndex ) == 1 );
-        }
-        case MP2::OBJ_ICN_TYPE_OBJNTWRD: {
-            static const std::set<uint8_t> allowedIndecies{ 13, 29 };
-            return ( allowedIndecies.count( imageIndex ) == 1 );
-        }
-        default:
-            break;
-        }
-
-        return false;
     }
 
     bool isObjectPartShadow( const Maps::ObjectPart & ta )
@@ -818,6 +796,28 @@ bool Maps::Tile::doesObjectExist( const uint32_t uid ) const
 
     return std::any_of( _groundObjectPart.cbegin(), _groundObjectPart.cend(),
                         [uid]( const auto & part ) { return part._uid == uid && !part.isPassabilityTransparent(); } );
+}
+
+bool Maps::Tile::isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
+{
+    switch ( objectIcnType ) {
+    case MP2::OBJ_ICN_TYPE_ROAD: {
+        static const std::set<uint8_t> allowedIndecies{ 0, 2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29, 30, 31 };
+        return ( allowedIndecies.count( imageIndex ) == 1 );
+    }
+    case MP2::OBJ_ICN_TYPE_OBJNTOWN: {
+        static const std::set<uint8_t> allowedIndecies{ 13, 29, 45, 61, 77, 93, 109, 125, 141, 157, 173, 189 };
+        return ( allowedIndecies.count( imageIndex ) == 1 );
+    }
+    case MP2::OBJ_ICN_TYPE_OBJNTWRD: {
+        static const std::set<uint8_t> allowedIndecies{ 13, 29 };
+        return ( allowedIndecies.count( imageIndex ) == 1 );
+    }
+    default:
+        break;
+    }
+
+    return false;
 }
 
 void Maps::Tile::pushGroundObjectPart( ObjectPart part )
@@ -1301,7 +1301,7 @@ void Maps::Tile::updateFlag( const PlayerColor color, const uint8_t objectSprite
     }
 }
 
-void Maps::Tile::_updateRoadFlag()
+void Maps::Tile::updateRoadFlag()
 {
     _isTileMarkedAsRoad = isSpriteRoad( _mainObjectPart.icnType, _mainObjectPart.icnIndex );
 
@@ -1511,7 +1511,7 @@ void Maps::Tile::removeObjects( const MP2::ObjectIcnType objectIcnType )
         _mainObjectPart = {};
     }
 
-    _updateRoadFlag();
+    updateRoadFlag();
 
     // TODO: update tile's object type after objects' removal.
 }
@@ -1587,7 +1587,7 @@ void Maps::Tile::updateTileObjectIcnIndex( Maps::Tile & tile, const uint32_t uid
         tile._mainObjectPart.icnIndex = newIndex;
     }
 
-    tile._updateRoadFlag();
+    tile.updateRoadFlag();
 }
 
 void Maps::Tile::updateObjectType()

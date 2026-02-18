@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -539,47 +539,29 @@ msgstr "Tốc độ: %{speed}"
 msgid "Speed"
 msgstr "Tốc độ"
 
+msgid "Interface"
+msgstr "Giao diện"
+
+msgid "Settings"
+msgstr "Cài đặt"
+
+msgid "Auto Spell Casting"
+msgstr "Tự động Niệm Phép"
+
 msgid "Off"
 msgstr "Tắt"
 
 msgid "On"
 msgstr "Bật"
 
-msgid "Turn Order"
-msgstr "Thứ tự Xếp hàng"
-
-msgid "Auto Spell Casting"
-msgstr "Tự động Niệm Phép"
-
-msgid "Grid"
-msgstr "Lưới"
-
-msgid "Shadow Movement"
-msgstr "Bóng Di chuyển"
-
-msgid "Shadow Cursor"
-msgstr "Bóng Con trỏ"
-
-msgid "Audio"
-msgstr "Âm thanh"
-
-msgid "Settings"
-msgstr "Cài đặt"
-
-msgid "Configure"
-msgstr "Cấu hình"
-
-msgid "Hot Keys"
-msgstr "Phím tắt"
-
-msgid "Damage Info"
-msgstr "Thông tin Thiệt hại"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Đặt tốc độ của hành động chiến đấu và hình ảnh động."
 
-msgid "Toggle to display the turn order during the battle."
-msgstr "Chuyển đổi để hiển thị thứ tự xếp hàng trong trận chiến."
+msgid "Change the interface settings of the game."
+msgstr "Thay đổi giao diện của trò chơi."
+
+msgid "Interface Settings"
+msgstr "Cài đặt Giao diện"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -591,24 +573,8 @@ msgstr ""
 "phép thuật cho người chơi máy tính theo bất kỳ cách nào, cũng như không ảnh "
 "hưởng đến chiến đấu nhanh.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Bật hoặc tắt lưới lục giác. Lưới lục giác luôn làm cơ sở cho chuyển động, "
-"ngay cả khi bị tắt. Công tắc này chỉ xác định xem lưới có hiển thị hay không."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Bật hoặc tắt bóng hiển thị nơi sinh vật của ngươi có thể di chuyển và tấn "
-"công."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Bật hoặc tắt bóng hiển thị vị trí của con trỏ chuột trên lưới lục giác."
+msgid "Audio"
+msgstr "Âm thanh"
 
 msgid "Change the audio settings of the game."
 msgstr "Thay đổi cài đặt âm thanh của trò chơi."
@@ -616,8 +582,8 @@ msgstr "Thay đổi cài đặt âm thanh của trò chơi."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Kiểm tra và định cấu hình tất cả các phím nóng có trong trò chơi."
 
-msgid "Toggle to display damage information during the battle."
-msgstr "Chuyển đổi để hiển thị thông tin thiệt hại trong trận chiến."
+msgid "Hot Keys"
+msgstr "Phím tắt"
 
 msgid "Exit this menu."
 msgstr "Thoát khỏi trình đơn này."
@@ -1075,6 +1041,53 @@ msgstr "Chết %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Chết: %{min} - %{max}"
+
+msgid "Turn Order"
+msgstr "Thứ tự Xếp hàng"
+
+msgid "Grid"
+msgstr "Lưới"
+
+msgid "Damage Info"
+msgstr "Thông tin Thiệt hại"
+
+msgid "Shadow Movement"
+msgstr "Bóng Di chuyển"
+
+msgid "Shadow Cursor"
+msgstr "Bóng Con trỏ"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Tướng Di chuyển"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr "Chuyển đổi để hiển thị thứ tự xếp hàng trong trận chiến."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Bật hoặc tắt lưới lục giác. Lưới lục giác luôn làm cơ sở cho chuyển động, "
+"ngay cả khi bị tắt. Công tắc này chỉ xác định xem lưới có hiển thị hay không."
+
+msgid "Toggle to display damage information during the battle."
+msgstr "Chuyển đổi để hiển thị thông tin thiệt hại trong trận chiến."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Bật hoặc tắt bóng hiển thị nơi sinh vật của ngươi có thể di chuyển và tấn "
+"công."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Bật hoặc tắt bóng hiển thị vị trí của con trỏ chuột trên lưới lục giác."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3180,15 +3193,6 @@ msgstr "Thoát"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Thoát khỏi Heroes of Might and Magic II."
 
-msgid "Language"
-msgstr "Ngôn ngữ"
-
-msgid "Graphics"
-msgstr "Đồ họa"
-
-msgid "Text Support"
-msgstr "Hỗ trợ Văn bản"
-
 msgid "Change the language of the game."
 msgstr "Thay đổi ngôn ngữ của trò chơi."
 
@@ -3197,6 +3201,9 @@ msgstr "Chọn Ngôn ngữ Trò chơi"
 
 msgid "Change the graphics settings of the game."
 msgstr "Thay đổi đồ họa của trò chơi."
+
+msgid "Graphics"
+msgstr "Đồ họa"
 
 msgid "Mouse Cursor"
 msgstr "Con trỏ Chuột"
@@ -3210,6 +3217,9 @@ msgstr "Kiểu Giao diện"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
+
+msgid "Text Support"
+msgstr "Hỗ trợ Văn bản"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3360,9 +3370,6 @@ msgstr "Ẩn"
 
 msgid "Show"
 msgstr "Hiện"
-
-msgid "Interface"
-msgstr "Giao diện"
 
 #, fuzzy
 msgid "Army Estimation"
@@ -4090,12 +4097,6 @@ msgid ""
 msgstr ""
 "Đặt tốc độ mà tướng A.I. di chuyển. Ngươi cũng có thể chọn không xem tướng A."
 "I. di chuyển."
-
-msgid "Change the interface settings of the game."
-msgstr "Thay đổi giao diện của trò chơi."
-
-msgid "Interface Settings"
-msgstr "Cài đặt Giao diện"
 
 msgid "Toggle instant battle mode."
 msgstr "Chuyển đổi chế độ chiến đấu ngay lập tức."
@@ -4905,6 +4906,9 @@ msgstr ""
 #, fuzzy
 msgid "Supported languages"
 msgstr "Hỗ trợ chúng tôi tại"
+
+msgid "Language"
+msgstr "Ngôn ngữ"
 
 msgid "This language already exists in the list."
 msgstr ""
@@ -6993,6 +6997,9 @@ msgstr "Đen & Trắng"
 
 msgid "Color"
 msgstr "Màu"
+
+msgid "Configure"
+msgstr "Cấu hình"
 
 msgid ", FPS: "
 msgstr ", FPS: "

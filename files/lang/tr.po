@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 01:21+0000\n"
+"POT-Creation-Date: 2026-02-15 02:18+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -541,47 +541,29 @@ msgstr "Hız: %{speed}"
 msgid "Speed"
 msgstr "Hız"
 
+msgid "Interface"
+msgstr "Arayüz"
+
+msgid "Settings"
+msgstr "Ayarlar"
+
+msgid "Auto Spell Casting"
+msgstr "Otomatik Büyü Yapma"
+
 msgid "Off"
 msgstr "Kapalı"
 
 msgid "On"
 msgstr "Açık"
 
-msgid "Turn Order"
-msgstr "Sıra sırası"
-
-msgid "Auto Spell Casting"
-msgstr "Otomatik Büyü Yapma"
-
-msgid "Grid"
-msgstr "Izgara"
-
-msgid "Shadow Movement"
-msgstr "Gölge Hareketi"
-
-msgid "Shadow Cursor"
-msgstr "Gölge İmleci"
-
-msgid "Audio"
-msgstr "Ses"
-
-msgid "Settings"
-msgstr "Ayarlar"
-
-msgid "Configure"
-msgstr "Ayarla"
-
-msgid "Hot Keys"
-msgstr "Kısayollar"
-
-msgid "Damage Info"
-msgstr "Hasar Bilgisi"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Savaş eylemlerinin ve animasyonların hızını ayarlayın."
 
-msgid "Toggle to display the turn order during the battle."
-msgstr "Savaş sırasında sıra sırasını görüntülemek için aktif edin."
+msgid "Change the interface settings of the game."
+msgstr ""
+
+msgid "Interface Settings"
+msgstr ""
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -592,26 +574,8 @@ msgstr ""
 "değiştirin.(Not: Bu, bilgisayar oyuncuları için büyü yapmayı hiçbir şekilde "
 "etkilemez ve hızlı savaşı etkilemez.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Altıgen ızgarayı aç veya kapat.Altıgen ızgara, kapatılsa bile her zaman "
-"hareketin temelini oluşturur. Bu anahtar yalnızca ızgaranın görünür olup "
-"olmadığını belirler."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Yaratıklarınızın nereye hareket edip saldırabileceğini gösteren gölgeleri "
-"açın veya kapatın."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Fare imlecinin mevcut altıgen konumunu gösteren bir gölgeyi açın veya "
-"kapatın."
+msgid "Audio"
+msgstr "Ses"
 
 msgid "Change the audio settings of the game."
 msgstr "Oyunun ses ayarını değiştir."
@@ -619,8 +583,8 @@ msgstr "Oyunun ses ayarını değiştir."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Oyunda bulunan tüm kısayol tuşlarını kontrol edin ve yapılandırın."
 
-msgid "Toggle to display damage information during the battle."
-msgstr "Savaş sırasında hasar bilgisini görüntülemek için akif edin."
+msgid "Hot Keys"
+msgstr "Kısayollar"
 
 msgid "Exit this menu."
 msgstr "Bu menüden çık."
@@ -1076,6 +1040,55 @@ msgstr "Yok oldu: %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Yok oldu: %{min} - %{max}"
+
+msgid "Turn Order"
+msgstr "Sıra sırası"
+
+msgid "Grid"
+msgstr "Izgara"
+
+msgid "Damage Info"
+msgstr "Hasar Bilgisi"
+
+msgid "Shadow Movement"
+msgstr "Gölge Hareketi"
+
+msgid "Shadow Cursor"
+msgstr "Gölge İmleci"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Gölge Hareketi"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr "Savaş sırasında sıra sırasını görüntülemek için aktif edin."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Altıgen ızgarayı aç veya kapat.Altıgen ızgara, kapatılsa bile her zaman "
+"hareketin temelini oluşturur. Bu anahtar yalnızca ızgaranın görünür olup "
+"olmadığını belirler."
+
+msgid "Toggle to display damage information during the battle."
+msgstr "Savaş sırasında hasar bilgisini görüntülemek için akif edin."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Yaratıklarınızın nereye hareket edip saldırabileceğini gösteren gölgeleri "
+"açın veya kapatın."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Fare imlecinin mevcut altıgen konumunu gösteren bir gölgeyi açın veya "
+"kapatın."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3039,15 +3052,6 @@ msgstr "Çıkış"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Heroes of Might and Magic II'den çık."
 
-msgid "Language"
-msgstr "Dil"
-
-msgid "Graphics"
-msgstr "Grafikler"
-
-msgid "Text Support"
-msgstr "Yazı Desteği"
-
 msgid "Change the language of the game."
 msgstr "Oyunun dilini değiştir."
 
@@ -3056,6 +3060,9 @@ msgstr "Oyunun dilini seç"
 
 msgid "Change the graphics settings of the game."
 msgstr "Oyunun grafik ayarlarını değiş."
+
+msgid "Graphics"
+msgstr "Grafikler"
 
 msgid "Mouse Cursor"
 msgstr "Fare İmleci"
@@ -3068,6 +3075,9 @@ msgstr "Arayüz Tipi"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
+
+msgid "Text Support"
+msgstr "Yazı Desteği"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3212,9 +3222,6 @@ msgstr "Gizle"
 
 msgid "Show"
 msgstr "Göster"
-
-msgid "Interface"
-msgstr "Arayüz"
 
 msgid "Army Estimation"
 msgstr ""
@@ -3892,12 +3899,6 @@ msgstr ""
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
-msgstr ""
-
-msgid "Change the interface settings of the game."
-msgstr ""
-
-msgid "Interface Settings"
 msgstr ""
 
 msgid "Toggle instant battle mode."
@@ -4626,6 +4627,9 @@ msgstr ""
 
 msgid "Supported languages"
 msgstr ""
+
+msgid "Language"
+msgstr "Dil"
 
 msgid "This language already exists in the list."
 msgstr ""
@@ -6533,6 +6537,9 @@ msgstr "Siyah & Beyaz"
 
 msgid "Color"
 msgstr "Renkli"
+
+msgid "Configure"
+msgstr "Ayarla"
 
 msgid ", FPS: "
 msgstr ""

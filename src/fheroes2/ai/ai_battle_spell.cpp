@@ -47,9 +47,9 @@
 
 namespace
 {
-    const double antimagicLowLimit = 200.0;
+    constexpr double antimagicLowLimit{ 200.0 };
 
-    const double bloodLustRatio = 0.1;
+    constexpr double bloodLustRatio{ 0.1 };
 
     double ReduceEffectivenessByDistance( const Battle::Unit & unit )
     {

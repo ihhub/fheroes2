@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -69,6 +69,7 @@ namespace Battle
     struct TargetsInfo;
 
     enum class CastleDefenseStructure : int;
+    enum class CellDirection;
 
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
@@ -127,11 +128,13 @@ namespace Battle
         bool isReflectedImage{ false };
     };
 
-    class OpponentSprite
+    class OpponentSprite final
     {
     public:
         OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
         OpponentSprite( const OpponentSprite & ) = delete;
+
+        ~OpponentSprite() = default;
 
         OpponentSprite & operator=( const OpponentSprite & ) = delete;
 
@@ -177,13 +180,15 @@ namespace Battle
     private:
         HeroBase * _heroBase{ nullptr };
         AnimationSequence _currentAnim;
-        int _animationType{ OP_STATIC };
         RandomizedDelay _idleTimer{ 8000 };
 
-        int _heroIcnId{ ICN::UNKNOWN };
-        bool _isFlippedHorizontally{ false };
         fheroes2::Rect _area;
         fheroes2::Point _offset;
+
+        int _animationType{ OP_STATIC };
+        int _heroIcnId{ ICN::UNKNOWN };
+
+        bool _isFlippedHorizontally{ false };
     };
 
     class Status final : public fheroes2::Rect
@@ -243,7 +248,7 @@ namespace Battle
 
         void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi );
 
-        bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset ) const;
+        bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset, const bool highlightUnitMomevementArea ) const;
 
         const fheroes2::Rect & getRenderingRoi() const
         {
@@ -268,12 +273,12 @@ namespace Battle
         static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t currentUnitColor, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
-        PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _renderingRoi;
         fheroes2::Rect _battleRoi;
         std::vector<UnitPos> _rects;
 
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
+        PlayerColor _opponentColor{ PlayerColor::NONE };
         bool _isInsideBattleField{ false };
     };
 
@@ -313,7 +318,7 @@ namespace Battle
         bool _needDelay{ true };
     };
 
-    class Interface
+    class Interface final
     {
     public:
         Interface( Arena & battleArena, const int32_t tileIndex );
@@ -349,6 +354,11 @@ namespace Battle
         void setUnitTobeHighlighted( const Unit * unit )
         {
             _unitToHighlight = unit;
+        }
+
+        void setUnitToShowMovementArea( const Unit * unit )
+        {
+            _highlightUnitMovementArea = unit;
         }
 
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
@@ -413,6 +423,9 @@ namespace Battle
 
         void RedrawTroopCount( const Unit & unit );
 
+        bool _drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset, const fheroes2::Point & movementDelta,
+                                           const CellDirection movementDirection );
+
         void _redrawActionArmageddonSpell();
         void _redrawActionArrowSpell( const Unit & target );
         void _redrawActionBloodLustSpell( const Unit & target );
@@ -459,7 +472,7 @@ namespace Battle
         void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         bool MousePressRightBoardAction( const Cell & cell ) const;
 
-        int GetBattleCursor( std::string & statusMsg ) const;
+        int GetBattleCursor( std::string & statusMsg, const bool highlightUnitMomevementArea );
         int GetBattleSpellCursor( std::string & statusMsg ) const;
 
         void _startAutoCombat( const Unit & unit, Actions & actions );
@@ -476,6 +489,7 @@ namespace Battle
         fheroes2::Image _hexagonShadow;
         fheroes2::Image _hexagonGridShadow;
         fheroes2::Image _hexagonCursorShadow;
+        fheroes2::Image _hexagonHighlightShadow;
 
         int _battleGroundIcn{ ICN::UNKNOWN };
         int _borderObjectsIcn{ ICN::UNKNOWN };
@@ -491,24 +505,30 @@ namespace Battle
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
         bool humanturn_redraw{ true };
-        uint32_t animation_flags_frame{ 0 };
-        int catapult_frame{ 0 };
 
-        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
+        bool _applyUnderwaterEffect{ false };
+
+        // True if background is bright. It is done to determine current unit contour cycling colors.
+        bool _brightLandType{ false };
+
+        uint32_t _flagAnimationFrameIndex{ 0 };
+        int catapult_frame{ 0 };
+        uint32_t _backgroundAnimationFrame{ 0 };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
 
         uint8_t _contourColor{ 110 };
 
-        // True if background is bright. It is done to determine current unit contour cycling colors.
-        bool _brightLandType{ false };
+        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
+
         uint32_t _contourCycle{ 0 };
 
         const Unit * _currentUnit{ nullptr };
         const Unit * _movingUnit{ nullptr };
         const Unit * _flyingUnit{ nullptr };
         const Unit * _unitToHighlight{ nullptr };
+        const Unit * _highlightUnitMovementArea{ nullptr };
         const fheroes2::Sprite * _spriteInsteadCurrentUnit{ nullptr };
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;

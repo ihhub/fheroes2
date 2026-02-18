@@ -724,7 +724,21 @@ namespace Maps::Random_Generator
     // Wouldn't render correctly but will speed up placement
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
-        Maps::writeRoadSpriteToTile( mapFormat.tiles[tileIndex], tileIndex, 0 );
+        if ( Maps::doesContainRoad( mapFormat.tiles[tileIndex] ) ) {
+            return;
+        }
+
+        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, 2 );
+        if ( objectInfo.empty() ) {
+            assert( 0 );
+            return;
+        }
+
+        // We just increase the UID counter to use the last UID in `Maps::addObjectToMap()`.
+        // All road objects will be updated and placed to the `world` tiles only after all of the road parts are placet to the `Map_Format`.
+        Maps::getNewObjectUID();
+
+        Maps::addObjectToMap( mapFormat, tileIndex, Maps::ObjectGroup::ROADS, 2 );
     }
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex )
@@ -735,8 +749,21 @@ namespace Maps::Random_Generator
             return false;
         }
 
+        if ( MP2::isOffGameActionObject( objectInfo.objectType ) ) {
+            const auto & tileObjects = mapFormat.tiles[tile.GetIndex()].objects;
+            const bool tileHasActionObject = std::any_of( tileObjects.cbegin(), tileObjects.cend(), []( const Maps::Map_Format::TileObjectInfo & tileObjectinfo ) {
+                const auto & info = Maps::getObjectInfo( tileObjectinfo.group, static_cast<int32_t>( tileObjectinfo.index ) );
+                return MP2::isOffGameActionObject( info.objectType );
+            } );
+
+            if ( tileHasActionObject ) {
+                // Two action objects cannot be placed on one tile.
+                return false;
+            }
+        }
+
         // Maps::setObjectOnTile isn't idempotent, check if object was already placed
-        if ( MP2::isInGameActionObject( objectInfo.objectType ) && tile.getMainObjectType() == objectInfo.objectType ) {
+        if ( tile.getMainObjectType() == objectInfo.objectType && MP2::isInGameActionObject( objectInfo.objectType ) ) {
             return false;
         }
 
@@ -845,8 +872,8 @@ namespace Maps::Random_Generator
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
             markNodeIndexAsType( data, bottomIndex, NodeType::PATH );
-            Maps::updateRoadOnTile( mapFormat, bottomIndex, true );
-            Maps::updateRoadOnTile( mapFormat, nextIndex, true );
+            forceTempRoadOnTile( mapFormat, bottomIndex );
+            forceTempRoadOnTile( mapFormat, nextIndex );
         }
 
         return true;

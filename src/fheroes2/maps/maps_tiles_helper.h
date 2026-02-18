@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -186,4 +186,9 @@ namespace Maps
     // Returns UIDs in given area for all objects in the OBJECT and TERRAIN layers.
     // This function does not take into account object parts in the top layer.
     std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId );
+
+    // Returns the UID of the object type in the tile. If there is no such object the function returns 0.
+    uint32_t getObjectUid( const Tile & tile, const MP2::MapObjectType objectType );
+
+    void setWaterholeCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber );
 }

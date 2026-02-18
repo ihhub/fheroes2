@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2026                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,32 +20,8 @@
 
 #pragma once
 
-#include <cstdint>
-#include <vector>
-
-namespace PAL
+namespace Battle
 {
-    enum class PaletteType : int
-    {
-        STANDARD, // default
-        YELLOW_FONT,
-        WHITE_FONT,
-        GRAY_FONT,
-        RED, // for Blood Lust spell animation
-        GRAY, // for Petrify spell effect
-        BROWN,
-        TAN, // for Puzzle image generation
-        NO_CYCLE,
-        MIRROR_IMAGE,
-        DARKENING, // for disabled buttons
-        GOOD_TO_EVIL_INTERFACE, // a custom palette for converting Good Interface images into Evil Interface images.
-        GOOD_TO_EVIL_BUTTON, // for converting Good style buttons into Evil style buttons.
-        PURPLE, // For random object images.
-        BLUISH, // For underwater battlefield
-        CUSTOM
-    };
-
-    std::vector<uint8_t> GetCyclingPalette( const uint32_t stepId );
-    const std::vector<uint8_t> & GetPalette( const PaletteType type );
-    std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
+    // Returns true if configuration file requires saving.
+    bool showBattleInterfaceDialog();
 }

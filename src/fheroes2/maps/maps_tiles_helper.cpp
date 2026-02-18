@@ -1359,11 +1359,11 @@ namespace Maps
                 // On original map "Alteris 2" there is a treasure chest placed on the water and there might be other maps with such bug.
                 // If there is a bug then remove of the MP2::OBJ_TREASURE_CHEST will return 'true' and we can replace it with a Sea Chest object.
                 if ( removeObjectFromTileByType( tile, MP2::OBJ_TREASURE_CHEST ) ) {
-                    const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
+                    const auto & objects = getObjectsByGroup( ObjectGroup::ADVENTURE_WATER );
 
                     for ( size_t i = 0; i < objects.size(); ++i ) {
                         if ( objects[i].objectType == MP2::OBJ_SEA_CHEST ) {
-                            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ADVENTURE_WATER, static_cast<int32_t>( i ) );
+                            const auto & objectInfo = getObjectInfo( ObjectGroup::ADVENTURE_WATER, static_cast<int32_t>( i ) );
                             setObjectOnTile( tile, objectInfo, true );
 
                             break;
@@ -1736,7 +1736,7 @@ namespace Maps
     {
         tile.setMainObjectType( MP2::OBJ_MONSTER );
 
-        Maps::ObjectPart & mainObjectPart = tile.getMainObjectPart();
+        ObjectPart & mainObjectPart = tile.getMainObjectPart();
 
         if ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
             if ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
@@ -1940,8 +1940,8 @@ namespace Maps
         };
 
         const auto restoreMineObjectType = [&tile]( int directionVector ) {
-            if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
-                Tile & mineTile = world.getTile( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
+            if ( isValidDirection( tile.GetIndex(), directionVector ) ) {
+                Tile & mineTile = world.getTile( GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.getMainObjectType() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
                      && ( mineTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid || mineTile.getGroundObjectPart( tile.getMainObjectPart()._uid )
                           || mineTile.getTopObjectPart( tile.getMainObjectPart()._uid ) ) ) {
@@ -1963,8 +1963,8 @@ namespace Maps
             }
         }
 
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::RIGHT ) ) {
-            Tile & rightTile = world.getTile( Maps::GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
+        if ( isValidDirection( tile.GetIndex(), Direction::RIGHT ) ) {
+            Tile & rightTile = world.getTile( GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
 
             if ( rightTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid ) {
                 objectIcnTypeTemp = rightTile.getMainObjectPart().icnType;
@@ -1998,32 +1998,10 @@ namespace Maps
     {
         assert( objectType != MP2::OBJ_NONE );
 
-        // Verify that this tile indeed contains an object with given object type.
-        uint32_t objectUID = 0;
-
-        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
-            objectUID = tile.getMainObjectPart()._uid;
-        }
+        uint32_t const objectUID = getObjectUid( tile, objectType );
 
         if ( objectUID == 0 ) {
-            for ( auto iter = tile.getTopObjectParts().rbegin(); iter != tile.getTopObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
-                    objectUID = iter->_uid;
-                    break;
-                }
-            }
-        }
-
-        if ( objectUID == 0 ) {
-            for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
-                    objectUID = iter->_uid;
-                    break;
-                }
-            }
-        }
-
-        if ( objectUID == 0 ) {
+            // This tile doe not contain an object with given object type.
             return false;
         }
 
@@ -2049,7 +2027,7 @@ namespace Maps
 
             if ( world.getTile( tiles[currentId] ).removeObjectPartsByUID( objectUID ) ) {
                 // This tile has the object. Get neighboring tiles to see if they have the same.
-                const Maps::Indexes tileIndices = Maps::getAroundIndexes( tiles[currentId], 1 );
+                const Indexes tileIndices = getAroundIndexes( tiles[currentId], 1 );
                 for ( const int32_t tileIndex : tileIndices ) {
                     if ( tileIndex < 0 ) {
                         // Invalid tile index.
@@ -2083,8 +2061,8 @@ namespace Maps
             break;
         }
 
-        if ( ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getMainObjectPart().layerType == Maps::SHADOW_LAYER )
-             || ( tile.getMainObjectPart().layerType == Maps::TERRAIN_LAYER ) ) {
+        if ( ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getMainObjectPart().layerType == SHADOW_LAYER )
+             || ( tile.getMainObjectPart().layerType == TERRAIN_LAYER ) ) {
             return !MP2::isInGameActionObject( objectType, tile.isWater() );
         }
 
@@ -2145,7 +2123,7 @@ namespace Maps
             const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
 
             for ( int32_t x = minX; x < maxX; ++x ) {
-                Maps::Tile & tile = world.getTile( x, y );
+                Tile & tile = world.getTile( x, y );
 
                 int32_t fogDataIndex = x + fogCenterDataOffsetY;
 
@@ -2315,14 +2293,17 @@ namespace Maps
         for ( int32_t y = startY; y <= endY; ++y ) {
             const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
-                const Maps::Tile & currentTile = world.getTile( x + tileOffset );
+                const Tile & currentTile = world.getTile( x + tileOffset );
 
-                if ( currentTile.getMainObjectPart()._uid != 0 && ( currentTile.getMainObjectPart().layerType != SHADOW_LAYER ) ) {
-                    objectsUids.insert( currentTile.getMainObjectPart()._uid );
+                const ObjectPart & mainObjectPart = currentTile.getMainObjectPart();
+                if ( mainObjectPart._uid != 0 && mainObjectPart.layerType != SHADOW_LAYER
+                     && ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_ROAD || Tile::isSpriteRoad( mainObjectPart.icnType, mainObjectPart.icnIndex ) ) ) {
+                    objectsUids.insert( mainObjectPart._uid );
                 }
 
-                for ( const auto & part : currentTile.getGroundObjectParts() ) {
-                    if ( part._uid != 0 && ( part.layerType != SHADOW_LAYER ) && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
+                for ( const ObjectPart & part : currentTile.getGroundObjectParts() ) {
+                    if ( part._uid != 0 && part.layerType != SHADOW_LAYER && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32
+                         && ( part.icnType != MP2::OBJ_ICN_TYPE_ROAD || Tile::isSpriteRoad( part.icnType, part.icnIndex ) ) ) {
                         objectsUids.insert( part._uid );
                     }
                 }
@@ -2334,5 +2315,87 @@ namespace Maps
         }
 
         return objectsUids;
+    }
+
+    uint32_t getObjectUid( const Tile & tile, const MP2::MapObjectType objectType )
+    {
+        assert( objectType != MP2::OBJ_NONE );
+
+        if ( getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
+            return tile.getMainObjectPart()._uid;
+        }
+
+        for ( auto iter = tile.getTopObjectParts().rbegin(); iter != tile.getTopObjectParts().rend(); ++iter ) {
+            if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                return iter->_uid;
+            }
+        }
+
+        for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
+            if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                return iter->_uid;
+            }
+        }
+
+        return 0;
+    }
+
+    void setWaterholeCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber )
+    {
+        constexpr int8_t waterholeCloseImagesOffest = 66;
+        constexpr int8_t waterholeCloseAnimationCount = 7;
+
+        if ( frameNumber >= waterholeCloseAnimationCount ) {
+            assert( 0 );
+            return;
+        }
+
+        // Find the top-left tile.
+        int32_t startndex = tileIndex;
+        auto updateStartIndex = [&startndex]( const int32_t direction ) {
+            while ( isValidDirection( startndex, direction ) ) {
+                const Tile tile = world.getTile( GetDirectionIndex( startndex, direction ) );
+                if ( tile.getMainObjectType() != MP2::OBJ_WATERHOLE ) {
+                    return;
+                }
+                startndex = tile.GetIndex();
+            }
+        };
+
+        updateStartIndex( Direction::TOP );
+        updateStartIndex( Direction::LEFT );
+
+        auto updateImageIndex = [frameNumber, objectUid]( Tile & tile, const uint8_t indexOffset ) {
+            if ( tile.getMainObjectPart()._uid == objectUid ) {
+                tile.getMainObjectPart().icnIndex = indexOffset + frameNumber;
+                return;
+            }
+            for ( auto & part : tile.getGroundObjectParts() ) {
+                if ( part._uid == objectUid ) {
+                    part.icnIndex = indexOffset + frameNumber;
+                    return;
+                }
+            }
+        };
+
+        updateImageIndex( world.getTile( startndex ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 0 );
+        if ( isValidDirection( startndex, Direction::RIGHT ) ) {
+            updateImageIndex( world.getTile( startndex + 1 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 1 );
+            if ( isValidDirection( startndex + 1, Direction::RIGHT ) ) {
+                updateImageIndex( world.getTile( startndex + 2 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 2 );
+            }
+        }
+        // Move to the second row;
+        if ( isValidDirection( startndex, Direction::BOTTOM ) ) {
+            startndex += world.w();
+
+            updateImageIndex( world.getTile( startndex ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 3 );
+            if ( isValidDirection( startndex, Direction::RIGHT ) ) {
+                updateImageIndex( world.getTile( startndex + 1 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 4 );
+                if ( isValidDirection( startndex + 1, Direction::RIGHT ) ) {
+                    updateImageIndex( world.getTile( startndex + 2 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 5 );
+                }
+            }
+        }
     }
 }
