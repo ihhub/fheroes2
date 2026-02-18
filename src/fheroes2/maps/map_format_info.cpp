@@ -417,9 +417,17 @@ namespace
 
         for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
             for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
-                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MINES && objInfo.index >= 42 ) {
-                    // Shift the objects in the Mines group by 6 position "down" to add 6 new Hauned Mines.
-                    objInfo.index += 6;
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    if ( objInfo.index >= 42 ) {
+                        // Shift the objects in the Mines group by 6 position "down" to add 6 new Abandoned Mines.
+                        objInfo.index += 6;
+                    }
+                    else if ( objInfo.index == 40 ) {
+                        objInfo.index = 41;
+                    }
+                    else if ( objInfo.index == 41 ) {
+                        objInfo.index = 46;
+                    }
                 }
             }
         }

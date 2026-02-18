@@ -32,6 +32,12 @@
 namespace
 {
     const std::set<std::string, std::less<>> resurrectionH2DFileListSample{
+        "abandoned_mine_crack.image",
+        "abandoned_mine_desert.image",
+        "abandoned_mine_lava.image",
+        "abandoned_mine_rock.image",
+        "abandoned_mine_snow.image",
+        "abandoned_mine_swamp.image",
         "adventure-map-grass-cave-diff-01.image",
         "adventure-map-grass-cave-diff-02.image",
         "barbarian_castle_captain_quarter_left_side.image",
@@ -53,12 +59,6 @@ namespace
         "circular_stone_liths_left.image",
         "circular_stone_liths_top.image",
         "graphics_icon.image",
-        "haunted_mine_crack.image",
-        "haunted_mine_desert.image",
-        "haunted_mine_lava.image",
-        "haunted_mine_rock.image",
-        "haunted_mine_snow.image",
-        "haunted_mine_swamp.image",
         "hotkeys_icon.image",
         "keyboard_button_pressed_evil.image",
         "keyboard_button_pressed_good.image",
