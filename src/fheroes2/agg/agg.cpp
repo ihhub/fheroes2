@@ -116,3 +116,8 @@ bool AGG::AGGInitializer::init()
 
     return true;
 }
+
+bool AGG::isPoLResourceFilePresent()
+{
+    return heroes2x_agg.isGood();
+}

@@ -506,12 +506,7 @@ namespace
     void drawImageOnButton( const fheroes2::Image & image, const int32_t maxImageWidth, const int32_t maxImageHeight, fheroes2::Image & releasedSprite,
                             fheroes2::Image & pressedSprite )
     {
-        if ( !image.empty() || !releasedSprite.empty() || !pressedSprite.empty() ) {
-            // The image doesn't exist. It could mean 3 things:
-            // - the image really doesn't exist in case of incomplete resources
-            // - you are passing a wrong image
-            return;
-        }
+        assert( !image.empty() && !releasedSprite.empty() && !pressedSprite.empty() );
 
         fheroes2::Image newImage( std::min( maxImageWidth, image.width() + 4 ), std::min( maxImageHeight, image.height() + 4 ) );
         newImage.reset();
@@ -3117,7 +3112,9 @@ namespace
                 _icnVsSprite[id][44] = std::move( pressed );
 
                 // Adventure objects button.
-                drawImageOnButton( fheroes2::AGG::GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
+                if ( AGG::isPoLResourceFilePresent() ) {
+                    drawImageOnButton( fheroes2::AGG::GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
+                }
 
                 // Kingdom objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::OBJNARTI, 13 ), 39, 29, _icnVsSprite[id][37], _icnVsSprite[id][38] );
