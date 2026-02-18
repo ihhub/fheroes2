@@ -4344,7 +4344,26 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Abandoned mines are only for Grass and Dirt and they have different tiles number.
+        // Abandoned Mine: Generic.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 92U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 88U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 91U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 93U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 84U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 85U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 89U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 90U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 86U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNMULT, 87U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Abandoned Mine: Grass.
         {
             Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 6U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
@@ -4360,6 +4379,27 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // Abandoned Mines: Snow, Swamp, Lava and Desert.
+        for ( const auto type : { MP2::OBJ_ICN_TYPE_MTNSNOW, MP2::OBJ_ICN_TYPE_MTNSWMP, MP2::OBJ_ICN_TYPE_MTNLAVA, MP2::OBJ_ICN_TYPE_MTNDSRT } ) {
+            Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
+            object.groundLevelParts.emplace_back( type, 92U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, 88U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, 91U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, 93U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, 84U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, 85U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, 89U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, 90U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( type, 86U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+            object.topLevelParts.emplace_back( type, 87U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Abandoned Mine: Dirt.
         {
             Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
@@ -4372,6 +4412,25 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Abandoned Mine: Wasteland.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 122U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 118U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 121U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 123U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 114U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 115U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 119U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 120U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 116U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MTNCRCK, 117U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
 

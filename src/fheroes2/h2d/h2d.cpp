@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,12 @@
 namespace
 {
     const std::set<std::string, std::less<>> resurrectionH2DFileListSample{
+        "abandoned_mine_crack.image",
+        "abandoned_mine_desert.image",
+        "abandoned_mine_lava.image",
+        "abandoned_mine_rock.image",
+        "abandoned_mine_snow.image",
+        "abandoned_mine_swamp.image",
         "adventure-map-grass-cave-diff-01.image",
         "adventure-map-grass-cave-diff-02.image",
         "barbarian_castle_captain_quarter_left_side.image",

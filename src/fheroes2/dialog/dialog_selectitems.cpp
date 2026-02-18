@@ -1818,8 +1818,14 @@ int32_t Dialog::selectMineType( const int32_t type )
     auto updateListContent = [&listbox, &objectInfo, &allObjectInfo, &objectInfoIndexes, &listIcnId, &getObjectTypeByResource]( const uint32_t resourceId ) {
         const MP2::MapObjectType objectType = getObjectTypeByResource( resourceId );
 
-        // Mine appearance is the same for different mine resources so we keep the selection.
-        const bool keepSelection = ( objectType == MP2::OBJ_MINE ) && !objectInfo.empty() && ( objectInfo.front().objectType == MP2::OBJ_MINE );
+        // Mine and Abandoned Mine appearance is the same for different mine resources so we keep the selection.
+        bool keepSelection = !objectInfo.empty();
+        if ( keepSelection ) {
+            const bool isMineObject = ( objectType == MP2::OBJ_MINE ) || ( objectType == MP2::OBJ_ABANDONED_MINE );
+            const bool isMineObjectPart = ( objectInfo.front().objectType == MP2::OBJ_MINE ) || ( objectInfo.front().objectType == MP2::OBJ_ABANDONED_MINE );
+            keepSelection = isMineObject && isMineObjectPart;
+        }
+
         const int selectedId = keepSelection ? listbox.getCurrentId() : 0;
         const int topId = keepSelection ? listbox.getTopId() : 0;
 
