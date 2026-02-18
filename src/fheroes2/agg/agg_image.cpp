@@ -261,6 +261,81 @@ namespace
         }
     }
 
+    void applyAbandonedMineMask( const fheroes2::Image & mask, const int32_t maskOffsetX, const fheroes2::Image & existingMine, fheroes2::Image & output )
+    {
+        constexpr int32_t size{ 32 };
+        assert( maskOffsetX >= 0 && maskOffsetX + size <= mask.width() );
+        assert( existingMine.width() == size && existingMine.height() == size );
+        assert( output.width() == size && output.height() == size );
+
+        const uint8_t * maskY = mask.image() + maskOffsetX;
+        const uint8_t * existingMineImage = existingMine.image();
+        uint8_t * outputImage = output.image();
+
+        constexpr uint8_t copyData{ 70 };
+        constexpr uint8_t skipData{ 135 };
+
+        if ( output.singleLayer() ) {
+            assert( existingMine.singleLayer() );
+
+            for ( int32_t y = 0; y < size; ++y, maskY += mask.width() ) {
+                const uint8_t * maskX = maskY;
+                for ( int32_t x = 0; x < size; ++x, ++maskX, ++existingMineImage, ++outputImage ) {
+                    if ( *maskX == copyData ) {
+                        *outputImage = *existingMineImage;
+                    }
+                    else if ( *maskX == skipData ) {
+                        // Keep the same data.
+                    }
+                    else {
+                        *outputImage = *maskX;
+                    }
+                }
+            }
+        }
+        else if ( existingMine.singleLayer() ) {
+            uint8_t * outputTransform = output.transform();
+
+            for ( int32_t y = 0; y < size; ++y, maskY += mask.width() ) {
+                const uint8_t * maskX = maskY;
+                for ( int32_t x = 0; x < size; ++x, ++maskX, ++existingMineImage, ++outputImage, ++outputTransform ) {
+                    if ( *maskX == copyData ) {
+                        *outputImage = *existingMineImage;
+                        *outputTransform = 0;
+                    }
+                    else if ( *maskX == skipData ) {
+                        // Keep the same data.
+                    }
+                    else {
+                        *outputImage = *maskX;
+                        *outputTransform = 0;
+                    }
+                }
+            }
+        }
+        else {
+            const uint8_t * existingMineTransform = existingMine.transform();
+            uint8_t * outputTransform = output.transform();
+
+            for ( int32_t y = 0; y < size; ++y, maskY += mask.width() ) {
+                const uint8_t * maskX = maskY;
+                for ( int32_t x = 0; x < size; ++x, ++maskX, ++existingMineImage, ++existingMineTransform, ++outputImage, ++outputTransform ) {
+                    if ( *maskX == copyData ) {
+                        *outputImage = *existingMineImage;
+                        *outputTransform = *existingMineTransform;
+                    }
+                    else if ( *maskX == skipData ) {
+                        // Keep the same data.
+                    }
+                    else {
+                        *outputImage = *maskX;
+                        *outputTransform = 0;
+                    }
+                }
+            }
+        }
+    }
+
     void createAbandonedMine( const std::vector<fheroes2::Sprite> & dirtObjects, std::vector<fheroes2::Sprite> & mountainObjects, const size_t startMineIndex,
                               const std::string & correctionImagePath )
     {
@@ -290,52 +365,6 @@ namespace
         // If this assertion blows up then the game resources are not valid.
         assert( correctionImage.singleLayer() );
         assert( correctionImage.height() == 32 && ( correctionImage.width() == 64 || correctionImage.width() == 96 ) );
-
-        auto applyAbandonedMineMask = []( const fheroes2::Image & mask, const int32_t maskOffsetX, const fheroes2::Image & existingMine, fheroes2::Image & output ) {
-            assert( maskOffsetX >= 0 && maskOffsetX + 32 <= mask.width() );
-            assert( existingMine.width() == 32 && existingMine.height() == 32 );
-            assert( output.width() == 32 && output.height() == 32 );
-
-            const uint8_t * maskY = mask.image() + maskOffsetX;
-            const uint8_t * existingMineImage = existingMine.image();
-            uint8_t * newMineImage = output.image();
-
-            if ( output.singleLayer() || existingMine.singleLayer() ) {
-                for ( int32_t y = 0; y < 32; ++y, maskY += mask.width() ) {
-                    const uint8_t * maskX = maskY;
-                    for ( int32_t x = 0; x < 32; ++x, ++maskX, ++existingMineImage, ++newMineImage ) {
-                        if ( *maskX == 70 ) {
-                            *newMineImage = *existingMineImage;
-                        }
-                        else if ( *maskX == 135 ) {
-                        }
-                        else {
-                            *newMineImage = *maskX;
-                        }
-                    }
-                }
-            }
-            else {
-                const uint8_t * existingMineTransform = existingMine.transform();
-                uint8_t * newMineTransform = output.transform();
-
-                for ( int32_t y = 0; y < 32; ++y, maskY += mask.width() ) {
-                    const uint8_t * maskX = maskY;
-                    for ( int32_t x = 0; x < 32; ++x, ++maskX, ++existingMineImage, ++existingMineTransform, ++newMineImage, ++newMineTransform ) {
-                        if ( *maskX == 70 ) {
-                            *newMineImage = *existingMineImage;
-                            *newMineTransform = *existingMineTransform;
-                        }
-                        else if ( *maskX == 135 ) {
-                        }
-                        else {
-                            *newMineImage = *maskX;
-                            *newMineTransform = 0;
-                        }
-                    }
-                }
-            }
-        };
 
         applyAbandonedMineMask( correctionImage, correctionImage.width() - 32, dirtObjects[9], mountainObjects[mountainObjects.size() - 1] );
         applyAbandonedMineMask( correctionImage, correctionImage.width() - 64, dirtObjects[8], mountainObjects[mountainObjects.size() - 2] );
