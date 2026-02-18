@@ -1823,7 +1823,7 @@ int32_t Dialog::selectMineType( const int32_t type )
         if ( keepSelection ) {
             const bool isMineObject = ( objectType == MP2::OBJ_MINE ) || ( objectType == MP2::OBJ_ABANDONED_MINE );
             const bool isMineObjectPart = ( objectInfo.front().objectType == MP2::OBJ_MINE ) || ( objectInfo.front().objectType == MP2::OBJ_ABANDONED_MINE );
-            keepSelection = isMineObjectPart && !objectInfo.empty();
+            keepSelection = isMineObject && isMineObjectPart;
         }
 
         const int selectedId = keepSelection ? listbox.getCurrentId() : 0;
