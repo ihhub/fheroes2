@@ -423,9 +423,11 @@ namespace
                         objInfo.index += 6;
                     }
                     else if ( objInfo.index == 40 ) {
+                        // Shift Grass Abandoned Mine to a new position.
                         objInfo.index = 41;
                     }
                     else if ( objInfo.index == 41 ) {
+                        // Shift Dirt Abandoned Mine to a new position.
                         objInfo.index = 46;
                     }
                 }
