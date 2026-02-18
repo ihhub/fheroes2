@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-15 02:18+0000\n"
-"PO-Revision-Date: 2025-12-19 18:41+0300\n"
+"PO-Revision-Date: 2026-02-15 20:44+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -1086,9 +1086,8 @@ msgstr "Затенение сетки"
 msgid "Shadow Cursor"
 msgstr "Курсор с тенью"
 
-#, fuzzy
 msgid "Movement Area"
-msgstr "Передвижение героя"
+msgstr "Область передвижения"
 
 msgid "Toggle to display the turn order during the battle."
 msgstr "Включить/выключить показ порядка действий отрядов в бою."
@@ -1117,6 +1116,7 @@ msgstr ""
 
 msgid "Toggle showing the movement area of a highlighted creature on or off ."
 msgstr ""
+"Включить/выключить отображение области передвижения существа под курсором."
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -1130,9 +1130,8 @@ msgstr "Человек"
 msgid "AI"
 msgstr "Компьютер"
 
-#, fuzzy
 msgid "Terrain"
-msgstr "Почва"
+msgstr "Местность"
 
 msgid "Start"
 msgstr "Начать"
@@ -1153,11 +1152,15 @@ msgid ""
 "The battle will take place on a randomly selected terrain. Click to change "
 "the terrain type."
 msgstr ""
+"Битва пройдёт на случайно выбранной местности. Нажмите, чтобы изменить тип "
+"местности."
 
 msgid ""
 "The battle will take place on %{terrain-type} terrain. Click to change the "
 "terrain type."
 msgstr ""
+"Битва пройдёт на местности: %{terrain-type}. Нажмите, чтобы изменить тип "
+"местности."
 
 msgid "Please select another hero."
 msgstr "Пожалуйста, выберите другого героя."
@@ -3277,13 +3280,15 @@ msgid "System Info"
 msgstr "Системная информация"
 
 msgid "Nearest"
-msgstr ""
+msgstr "По соседним"
 
 msgid "Screen Scaling Type"
 msgstr ""
+"Масштабиро-\n"
+"вание экрана"
 
 msgid "Linear"
-msgstr ""
+msgstr "Линейное"
 
 msgid "Change the resolution of the game."
 msgstr "Изменить разрешение экрана."
@@ -3300,6 +3305,10 @@ msgid ""
 "the original game. The nearest scaling looks best on integer scales, for "
 "example 2.0x or 3.0x."
 msgstr ""
+"Выбор типа масштабирования изображения игры. Линейное масштабирование делает "
+"изображение размытым, а масштабирование по соседним пикселям сохраняет "
+"чёткость исходного изображения игры. Масштабирование по соседним пикселям "
+"лучше всего работает при целочисленном коэффициенте, например, 2.0x или 3.0x."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3891,7 +3900,6 @@ msgstr "Тип карты"
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -3899,7 +3907,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Язык:\n"
+"Поддерживаемые языки:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -4791,39 +4799,32 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Открывает окно системных настроек редактора карт."
 
-#, fuzzy
 msgid "Supported languages"
-msgstr "Поддержите нас"
+msgstr "Поддерживаемые языки"
 
 msgid "Language"
 msgstr "Язык"
 
-#, fuzzy
 msgid "This language already exists in the list."
-msgstr "Такой слух уже есть в списке."
+msgstr "Такой язык уже есть в списке."
 
 msgid "A map should have at least one language."
-msgstr ""
+msgstr "У карты должен быть хотя бы один язык."
 
-#, fuzzy
 msgid "Click to apply changes."
-msgstr "Нажмите, чтобы изменить фракцию."
+msgstr "Нажмите, чтобы принять изменения."
 
-#, fuzzy
 msgid "Add Language"
-msgstr "Язык"
+msgstr "Добавить язык."
 
-#, fuzzy
 msgid "Add an additional language."
-msgstr "Добавить дополнительное событие."
+msgstr "Добавить дополнительный язык."
 
-#, fuzzy
 msgid "Delete Language"
-msgstr "Выберите язык:"
+msgstr "Удалить язык"
 
-#, fuzzy
 msgid "Delete an existing language."
-msgstr "Удалить выбранное событие."
+msgstr "Удалить выбранный язык."
 
 msgid "Failed to generate a random map with given parameters."
 msgstr "Не удалось сгенерировать случайную карту с указанными параметрами."
@@ -6527,14 +6528,15 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Открывает окно системных настроек, позволяющих настроить игру."
 
-#, fuzzy
 msgid "Hero Movement Points"
-msgstr "Передвижение героя"
+msgstr "Очки передвижения героя"
 
 msgid ""
 "The hero's army cannot move anymore today. The movement points will be "
 "refilled tomorrow after you end your turn."
 msgstr ""
+"Сегодня армия героя больше не может передвигаться. Очки передвижения будут "
+"восполнены завтра после завершения Вашего хода."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -12609,12 +12611,3 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to "
-#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "Текущий язык карты - %{oldLanguage}. Вы собираетесь сменить его на "
-#~ "%{newLanguage}, после чего некоторые сообщения могут отображаться "
-#~ "некорректно. Вы хотите продолжить?"
