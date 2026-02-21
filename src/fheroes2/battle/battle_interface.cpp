@@ -3624,7 +3624,7 @@ std::vector<Game::DelayType> Battle::Interface::_mergeWithCommonAnimationsDelays
 {
     otherDelays.reserve( otherDelays.size() + _commonAnimationsDelays.size() );
     otherDelays.insert( otherDelays.end(), _commonAnimationsDelays.cbegin(), _commonAnimationsDelays.cend() );
-    return std::move( otherDelays );
+    return otherDelays;
 }
 
 void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions )

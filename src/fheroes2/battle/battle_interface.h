@@ -505,7 +505,7 @@ namespace Battle
         std::unique_ptr<OpponentSprite> _attackingOpponent;
         std::unique_ptr<OpponentSprite> _defendingOpponent;
 
-        std::vector<Game::DelayType> _commonAnimationsDelays{};
+        std::vector<Game::DelayType> _commonAnimationsDelays;
 
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
