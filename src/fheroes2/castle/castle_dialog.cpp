@@ -488,7 +488,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     // This variable must be declared out of the loop for performance reasons.
     uint32_t castleAnimationIndex = 1;
 
-    Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
+    Game::passAnimationDelay( Game::DelayType::CASTLE_AROUND_DELAY );
 
     while ( le.HandleEvents() && result == CastleDialogReturnValue::DoNothing ) {
         bool needRedraw = false;
@@ -780,7 +780,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         }
 
-        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
+        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_BUYHERO_DELAY ) ) {
             alphaHero += 10;
             if ( alphaHero >= 255 ) {
                 alphaHero = 255;
@@ -842,7 +842,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         }
 
         // Castle dialog animation.
-        if ( Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) || needRedraw ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CASTLE_AROUND_DELAY ) || needRedraw ) {
             CastleDialog::redrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
 
             display.render( dialogRoi );

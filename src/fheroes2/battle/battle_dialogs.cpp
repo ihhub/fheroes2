@@ -189,7 +189,7 @@ namespace
 
     void updateAnimation( fheroes2::Display & display, int & lastSequence, LoopedAnimationSequence & sequence, const fheroes2::Rect & animationRoi )
     {
-        if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
             if ( lastSequence != sequence.id() ) {
                 lastSequence = sequence.id();
                 const fheroes2::Sprite & base = fheroes2::AGG::GetICN( lastSequence, 0 );

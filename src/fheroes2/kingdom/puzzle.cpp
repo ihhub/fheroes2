@@ -116,8 +116,8 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         LocalEvent & le = LocalEvent::Get();
 
-        const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
-        Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
+        const std::vector<Game::DelayType> delayTypes = { Game::DelayType::PUZZLE_FADE_DELAY };
+        Game::passAnimationDelay( Game::DelayType::PUZZLE_FADE_DELAY );
 
         int alpha = 250;
 
@@ -132,7 +132,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
             }
 
-            if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::PUZZLE_FADE_DELAY ) ) {
                 fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
                 for ( size_t i = 0; i < pzl.size(); ++i ) {

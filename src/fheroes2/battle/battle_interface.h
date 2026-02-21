@@ -36,6 +36,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -74,7 +75,7 @@ namespace Battle
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
-    enum HeroAnimation : uint32_t
+    enum class HeroAnimation : uint32_t
     {
         OP_JOY,
         OP_CAST_MASS,
@@ -149,7 +150,7 @@ namespace Battle
         // Return true is animation state was changed.
         bool updateAnimationState();
 
-        void SetAnimation( const int rule );
+        void SetAnimation( const Battle::HeroAnimation rule );
         void IncreaseAnimFrame();
 
         bool isFinishFrame() const
@@ -185,7 +186,7 @@ namespace Battle
         fheroes2::Rect _area;
         fheroes2::Point _offset;
 
-        int _animationType{ OP_STATIC };
+        Battle::HeroAnimation _animationType{ Battle::HeroAnimation::OP_STATIC };
         int _heroIcnId{ ICN::UNKNOWN };
 
         bool _isFlippedHorizontally{ false };
@@ -478,6 +479,8 @@ namespace Battle
         void _startAutoCombat( const Unit & unit, Actions & actions );
         void _quickCombat( Actions & actions );
 
+        std::vector<Game::DelayType> _mergeWithCommonAnimationsDelays( std::vector<Game::DelayType> otherDelays );
+
         Arena & arena;
         Dialog::FrameBorder border;
 
@@ -502,9 +505,11 @@ namespace Battle
         std::unique_ptr<OpponentSprite> _attackingOpponent;
         std::unique_ptr<OpponentSprite> _defendingOpponent;
 
+        std::vector<Game::DelayType> _commonAnimationsDelays{};
+
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
-        bool humanturn_redraw{ true };
+        bool _needRedraw{ true };
 
         bool _applyUnderwaterEffect{ false };
 

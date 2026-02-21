@@ -495,7 +495,7 @@ void Interface::StatusPanel::drawAITurnProgress( const uint32_t progressValue )
     LocalEvent::Get().HandleEvents( false );
 
     const bool updateProgress = ( progressValue != _aiTurnProgress );
-    const bool isMapAnimation = Game::validateAnimationDelay( Game::MAPS_DELAY );
+    const bool isMapAnimation = Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY );
 
     if ( !updateProgress && !isMapAnimation ) {
         return;

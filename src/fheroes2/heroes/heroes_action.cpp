@@ -3478,13 +3478,13 @@ namespace
                     LocalEvent & le = LocalEvent::Get();
                     size_t delay = 0;
 
-                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
                         if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                             skipAnimation = true;
                             break;
                         }
 
-                        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                        if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
                             I.redraw( Interface::REDRAW_GAMEAREA );
@@ -3808,12 +3808,12 @@ namespace
         constexpr int32_t animationFrames = 7;
         uint8_t frame = 0;
 
-        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) ) {
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_FADE_DELAY } ) ) ) {
             if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 break;
             }
 
-            if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::HEROES_FADE_DELAY ) ) {
                 hero.SetOffset( { movementVector.x * frame, movementVector.y * frame } );
                 gameArea.ShiftCenter( movementVector );
 
@@ -3849,12 +3849,12 @@ namespace
         frame = 0;
         const uint32_t waterholeUid = Maps::getObjectUid( tile, objectType );
 
-        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
             if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                 break;
             }
 
-            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                 Maps::setWaterholeCloseFrame( dstIndex, waterholeUid, frame );
 
                 ++frame;

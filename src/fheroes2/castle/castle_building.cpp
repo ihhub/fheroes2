@@ -478,7 +478,7 @@ CastleDialog::BuildingsRenderQueue::BuildingsRenderQueue( const Castle & castle,
 
 bool CastleDialog::FadeBuilding::updateFadeAlpha()
 {
-    if ( _alpha < 255 && Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+    if ( _alpha < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_BUILD_DELAY ) ) {
         if ( _alpha < 255 - 15 ) {
             _alpha += 15;
         }

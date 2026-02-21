@@ -47,7 +47,7 @@ void Castle::_openTavern() const
     text->add( fheroes2::Text{ std::move( body ), fheroes2::FontType::normalWhite() } );
     text->add( fheroes2::Text{ std::move( rumor.text ), fheroes2::FontType::normalWhite(), rumor.language } );
 
-    const fheroes2::AnimationDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, 0, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
+    const fheroes2::AnimationDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, 0, Game::getAnimationDelayValue( Game::DelayType::CASTLE_TAVERN_DELAY ) );
     const fheroes2::TextDialogElement textBodyUI( text );
 
     fheroes2::showStandardTextMessage( GetStringBuilding( BUILD_TAVERN ), {}, Dialog::OK, { &imageUI, &textBodyUI } );

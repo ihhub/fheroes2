@@ -25,7 +25,7 @@
 
 namespace Game
 {
-    enum DelayType : int
+    enum class DelayType : uint8_t
     {
         SCROLL_DELAY = 0,
         SCROLL_START_DELAY,
