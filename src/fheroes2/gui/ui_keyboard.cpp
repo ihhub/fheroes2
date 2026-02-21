@@ -118,7 +118,7 @@ namespace
         EndOfText
     };
 
-    class KeyboardRenderer
+    class KeyboardRenderer final
     {
     public:
         KeyboardRenderer( fheroes2::Display & output, std::string & info, const size_t lengthLimit, const bool evilInterface )
@@ -326,7 +326,7 @@ namespace
         }
     };
 
-    struct KeyboardButton
+    struct KeyboardButton final
     {
         KeyboardButton() = default;
 
@@ -600,7 +600,7 @@ namespace
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonSize, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::AlphaNumeric; } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
                 return DialogAction::DoNothing;
             } );
@@ -610,7 +610,7 @@ namespace
                 lastButtonRow.back().button.hide();
             }
 
-            lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
                 return DialogAction::DoNothing;
             } );
@@ -622,7 +622,7 @@ namespace
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonSize, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::AlphaNumeric; } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
                 return DialogAction::DoNothing;
             } );
@@ -632,7 +632,7 @@ namespace
                 lastButtonRow.back().button.hide();
             }
 
-            lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
                 return DialogAction::DoNothing;
             } );
@@ -644,7 +644,7 @@ namespace
             lastButtonRow.emplace_back( _( "Keyboard|ABC" ), defaultSpecialButtonSize, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
                 return DialogAction::DoNothing;
             } );
@@ -652,7 +652,7 @@ namespace
             lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.hide();
 
-            lastButtonRow.emplace_back( "~", defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
                 return DialogAction::DoNothing;
             } );

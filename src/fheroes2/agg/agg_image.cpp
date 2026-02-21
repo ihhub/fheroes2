@@ -3112,7 +3112,9 @@ namespace
                 _icnVsSprite[id][44] = std::move( pressed );
 
                 // Adventure objects button.
-                drawImageOnButton( fheroes2::AGG::GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
+                if ( AGG::isPoLResourceFilePresent() ) {
+                    drawImageOnButton( fheroes2::AGG::GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
+                }
 
                 // Kingdom objects button.
                 drawImageOnButton( fheroes2::AGG::GetICN( ICN::OBJNARTI, 13 ), 39, 29, _icnVsSprite[id][37], _icnVsSprite[id][38] );

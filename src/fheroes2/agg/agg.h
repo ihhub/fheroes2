@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -56,4 +56,7 @@ namespace AGG
     };
 
     std::vector<uint8_t> getDataFromAggFile( const std::string & key, const bool ignoreExpansion );
+
+    // Only for internal usage within AGG namespace.
+    bool isPoLResourceFilePresent();
 }
