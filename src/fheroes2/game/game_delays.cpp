@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,13 +24,14 @@
 #include "game_delays.h"
 
 #include <cassert>
+#include <cstddef>
 
 #include "settings.h"
 #include "timing.h"
 
 namespace
 {
-    std::vector<fheroes2::TimeDelay> delays( Game::LAST_DELAY, fheroes2::TimeDelay( 0 ) );
+    std::vector<fheroes2::TimeDelay> delays( static_cast<size_t>( Game::DelayType::LAST_DELAY ), fheroes2::TimeDelay( 0 ) );
 
     static_assert( ( defaultBattleSpeed >= 0 ) && ( defaultBattleSpeed < 10 ) );
 
@@ -83,6 +84,11 @@ namespace
             multiplier = 4;
         }
     }
+
+    inline void setDelay( Game::DelayType type, const uint64_t delayMs )
+    {
+        delays[static_cast<size_t>( type )].setDelay( delayMs );
+    }
 }
 
 namespace Game
@@ -92,37 +98,38 @@ namespace Game
 
 void Game::AnimateDelaysInitialize()
 {
-    delays[SCROLL_DELAY].setDelay( 20 );
-    delays[SCROLL_START_DELAY].setDelay( 20 );
-    delays[CURSOR_BLINK_DELAY].setDelay( 440 );
-    delays[MAIN_MENU_DELAY].setDelay( 250 );
-    delays[MAPS_DELAY].setDelay( 250 );
-    delays[CASTLE_TAVERN_DELAY].setDelay( 75 );
-    delays[CASTLE_AROUND_DELAY].setDelay( 200 );
-    delays[CASTLE_BUYHERO_DELAY].setDelay( 130 );
-    delays[CASTLE_BUILD_DELAY].setDelay( 130 );
-    delays[CASTLE_UNIT_DELAY].setDelay( 150 );
-    delays[HEROES_FADE_DELAY].setDelay( 32 );
-    delays[HEROES_PICKUP_DELAY].setDelay( 40 );
-    delays[PUZZLE_FADE_DELAY].setDelay( 50 );
-    delays[BATTLE_DIALOG_DELAY].setDelay( 75 );
-    delays[BATTLE_FRAME_DELAY].setDelay( 120 );
-    delays[BATTLE_MISSILE_DELAY].setDelay( 40 );
-    delays[BATTLE_SPELL_DELAY].setDelay( 75 );
-    delays[BATTLE_DISRUPTING_DELAY].setDelay( 25 );
-    delays[BATTLE_CATAPULT_DELAY].setDelay( 90 );
-    delays[BATTLE_CATAPULT_BOULDER_DELAY].setDelay( 40 );
-    delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( 40 );
-    delays[BATTLE_BRIDGE_DELAY].setDelay( 90 );
-    delays[BATTLE_IDLE_DELAY].setDelay( 150 );
-    delays[BATTLE_OPPONENTS_DELAY].setDelay( 75 );
-    delays[BATTLE_FLAGS_DELAY].setDelay( 250 );
-    delays[BATTLE_POPUP_DELAY].setDelay( 800 );
-    delays[BATTLE_COLOR_CYCLE_DELAY].setDelay( 220 );
-    delays[BATTLE_SELECTED_UNIT_DELAY].setDelay( 160 );
-    delays[CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( 10 );
-    delays[CURRENT_HERO_DELAY].setDelay( 10 );
-    delays[CURRENT_AI_DELAY].setDelay( 10 );
+    setDelay( DelayType::SCROLL_DELAY, 20 );
+    setDelay( DelayType::SCROLL_START_DELAY, 20 );
+    setDelay( DelayType::CURSOR_BLINK_DELAY, 440 );
+    setDelay( DelayType::MAIN_MENU_DELAY, 250 );
+    setDelay( DelayType::MAPS_DELAY, 250 );
+    setDelay( DelayType::CASTLE_TAVERN_DELAY, 75 );
+    setDelay( DelayType::CASTLE_AROUND_DELAY, 200 );
+    setDelay( DelayType::CASTLE_BUYHERO_DELAY, 130 );
+    setDelay( DelayType::CASTLE_BUILD_DELAY, 130 );
+    setDelay( DelayType::CASTLE_UNIT_DELAY, 150 );
+    setDelay( DelayType::HEROES_FADE_DELAY, 32 );
+    setDelay( DelayType::HEROES_PICKUP_DELAY, 40 );
+    setDelay( DelayType::PUZZLE_FADE_DELAY, 50 );
+    setDelay( DelayType::BATTLE_DIALOG_DELAY, 75 );
+    setDelay( DelayType::BATTLE_FRAME_DELAY, 120 );
+    setDelay( DelayType::BATTLE_MISSILE_DELAY, 40 );
+    setDelay( DelayType::BATTLE_SPELL_DELAY, 75 );
+    setDelay( DelayType::BATTLE_DISRUPTING_DELAY, 25 );
+    setDelay( DelayType::BATTLE_CATAPULT_DELAY, 90 );
+    setDelay( DelayType::BATTLE_CATAPULT_BOULDER_DELAY, 40 );
+    setDelay( DelayType::BATTLE_CATAPULT_CLOUD_DELAY, 40 );
+    setDelay( DelayType::BATTLE_BRIDGE_DELAY, 90 );
+    setDelay( DelayType::BATTLE_IDLE_DELAY, 150 );
+    setDelay( DelayType::BATTLE_OPPONENTS_DELAY, 75 );
+    setDelay( DelayType::BATTLE_FLAGS_DELAY, 250 );
+    setDelay( DelayType::BATTLE_POPUP_DELAY, 800 );
+    setDelay( DelayType::BATTLE_COLOR_CYCLE_DELAY, 220 );
+    setDelay( DelayType::BATTLE_SELECTED_UNIT_DELAY, 160 );
+    setDelay( DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY, 10 );
+    setDelay( DelayType::BATTLEFIELD_BACKGROUND_ANIMATION_DELAY, 125 );
+    setDelay( DelayType::CURRENT_HERO_DELAY, 10 );
+    setDelay( DelayType::CURRENT_AI_DELAY, 10 );
 
     UpdateGameSpeed();
 
@@ -133,13 +140,13 @@ void Game::AnimateDelaysInitialize()
 
 void Game::AnimateResetDelay( const DelayType delayType )
 {
-    delays[delayType].reset();
+    delays[static_cast<size_t>( delayType )].reset();
 }
 
 bool Game::validateCustomAnimationDelay( const uint64_t delayMs )
 {
-    if ( delays[Game::DelayType::CUSTOM_DELAY].isPassed( delayMs ) ) {
-        delays[Game::DelayType::CUSTOM_DELAY].reset();
+    if ( delays[static_cast<size_t>( DelayType::CUSTOM_DELAY )].isPassed( delayMs ) ) {
+        delays[static_cast<size_t>( DelayType::CUSTOM_DELAY )].reset();
         return true;
     }
 
@@ -148,10 +155,10 @@ bool Game::validateCustomAnimationDelay( const uint64_t delayMs )
 
 bool Game::validateAnimationDelay( const DelayType delayType )
 {
-    assert( delayType != Game::DelayType::CUSTOM_DELAY );
+    assert( delayType != DelayType::CUSTOM_DELAY );
 
-    if ( delays[delayType].isPassed() ) {
-        delays[delayType].reset();
+    if ( delays[static_cast<size_t>( delayType )].isPassed() ) {
+        delays[static_cast<size_t>( delayType )].reset();
         return true;
     }
 
@@ -160,28 +167,28 @@ bool Game::validateAnimationDelay( const DelayType delayType )
 
 void Game::passAnimationDelay( const DelayType delayType )
 {
-    assert( delayType != Game::DelayType::CUSTOM_DELAY );
+    assert( delayType != DelayType::CUSTOM_DELAY );
 
-    delays[delayType].pass();
+    delays[static_cast<size_t>( delayType )].pass();
 }
 
 void Game::passCustomAnimationDelay( const uint64_t delayMs )
 {
-    delays[Game::DelayType::CUSTOM_DELAY].setDelay( delayMs );
-    delays[Game::DelayType::CUSTOM_DELAY].pass();
+    setDelay( DelayType::CUSTOM_DELAY, delayMs );
+    delays[static_cast<size_t>( DelayType::CUSTOM_DELAY )].pass();
 }
 
 void Game::setCustomUnitMovementDelay( const uint64_t delayMs )
 {
-    delays[Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( delayMs > 0 ? delayMs : 1 );
+    setDelay( DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY, delayMs > 0 ? delayMs : 1 );
 }
 
 void Game::UpdateGameSpeed()
 {
     const Settings & conf = Settings::Get();
 
-    SetupHeroMovement( conf.HeroesMoveSpeed(), delays[CURRENT_HERO_DELAY], humanHeroMultiplier );
-    SetupHeroMovement( conf.AIMoveSpeed(), delays[CURRENT_AI_DELAY], aiHeroMultiplier );
+    SetupHeroMovement( conf.HeroesMoveSpeed(), delays[static_cast<size_t>( DelayType::CURRENT_HERO_DELAY )], humanHeroMultiplier );
+    SetupHeroMovement( conf.AIMoveSpeed(), delays[static_cast<size_t>( DelayType::CURRENT_AI_DELAY )], aiHeroMultiplier );
 
     const int32_t battleSpeed = conf.BattleSpeed();
     // For the battle speed = 10 avoid the zero delay and set animation speed to the 1/3 of battleSpeedAdjustment step.
@@ -189,17 +196,17 @@ void Game::UpdateGameSpeed()
     // Reduce the Idle animation adjustment interval to: 1.2 for speed 1 ... 0.8 for speed 10.
     const double adjustedIdleAnimationSpeed = ( 28 - battleSpeed ) / 22.5;
 
-    delays[BATTLE_FRAME_DELAY].setDelay( static_cast<uint64_t>( 120 * adjustedBattleSpeed ) );
-    delays[BATTLE_MISSILE_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
-    delays[BATTLE_SPELL_DELAY].setDelay( static_cast<uint64_t>( 75 * adjustedBattleSpeed ) );
-    delays[BATTLE_DISRUPTING_DELAY].setDelay( static_cast<uint64_t>( 25 * adjustedBattleSpeed ) );
-    delays[BATTLE_CATAPULT_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
-    delays[BATTLE_CATAPULT_BOULDER_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
-    delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
-    delays[BATTLE_BRIDGE_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
-    delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedIdleAnimationSpeed ) );
-    delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 75 * adjustedIdleAnimationSpeed ) );
-    delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( 250 * adjustedIdleAnimationSpeed ) );
+    setDelay( DelayType::BATTLE_FRAME_DELAY, static_cast<uint64_t>( 120 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_MISSILE_DELAY, static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_SPELL_DELAY, static_cast<uint64_t>( 75 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_DISRUPTING_DELAY, static_cast<uint64_t>( 25 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_CATAPULT_DELAY, static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_CATAPULT_BOULDER_DELAY, static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_CATAPULT_CLOUD_DELAY, static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_BRIDGE_DELAY, static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
+    setDelay( DelayType::BATTLE_IDLE_DELAY, static_cast<uint64_t>( 150 * adjustedIdleAnimationSpeed ) );
+    setDelay( DelayType::BATTLE_OPPONENTS_DELAY, static_cast<uint64_t>( 75 * adjustedIdleAnimationSpeed ) );
+    setDelay( DelayType::BATTLE_FLAGS_DELAY, static_cast<uint64_t>( 250 * adjustedIdleAnimationSpeed ) );
 }
 
 int Game::HumanHeroAnimSpeedMultiplier()
@@ -222,10 +229,10 @@ uint32_t Game::ApplyBattleSpeed( const uint32_t delay )
     return battleSpeed == 0 ? 1 : battleSpeed;
 }
 
-bool Game::hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes )
+bool Game::hasEveryDelayPassed( const std::vector<DelayType> & delayTypes )
 {
-    for ( const Game::DelayType type : delayTypes ) {
-        if ( !delays[type].isPassed() ) {
+    for ( const DelayType type : delayTypes ) {
+        if ( !delays[static_cast<size_t>( type )].isPassed() ) {
             return false;
         }
     }
@@ -233,12 +240,12 @@ bool Game::hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes 
     return true;
 }
 
-bool Game::isDelayNeeded( const std::vector<Game::DelayType> & delayTypes )
+bool Game::isDelayNeeded( const std::vector<DelayType> & delayTypes )
 {
-    for ( const Game::DelayType type : delayTypes ) {
-        assert( type != Game::DelayType::CUSTOM_DELAY );
+    for ( const DelayType type : delayTypes ) {
+        assert( type != DelayType::CUSTOM_DELAY );
 
-        if ( delays[type].isPassed() ) {
+        if ( delays[static_cast<size_t>( type )].isPassed() ) {
             return false;
         }
     }
@@ -248,11 +255,11 @@ bool Game::isDelayNeeded( const std::vector<Game::DelayType> & delayTypes )
 
 bool Game::isCustomDelayNeeded( const uint64_t delayMs )
 {
-    return !delays[Game::DelayType::CUSTOM_DELAY].isPassed( delayMs );
+    return !delays[static_cast<size_t>( DelayType::CUSTOM_DELAY )].isPassed( delayMs );
 }
 
 uint64_t Game::getAnimationDelayValue( const DelayType delayType )
 {
-    assert( delayType != Game::DelayType::CUSTOM_DELAY );
-    return delays[delayType].getDelay();
+    assert( delayType != DelayType::CUSTOM_DELAY );
+    return delays[static_cast<size_t>( delayType )].getDelay();
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -46,6 +47,7 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
@@ -259,7 +261,7 @@ namespace
         // If there is a map bug the Object Animation destructor is not able to properly remove this object from the map.
         if ( actualObjectType != objectType && actualObjectType != MP2::OBJ_NONE ) {
             // Remove an object by its actual sprite type.
-            removeObjectFromTileByType( tile, actualObjectType );
+            Maps::removeObjectFromTileByType( tile, actualObjectType );
         }
 
         // Update radar in the place of the removed object.
@@ -3476,13 +3478,13 @@ namespace
                     LocalEvent & le = LocalEvent::Get();
                     size_t delay = 0;
 
-                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
                         if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                             skipAnimation = true;
                             break;
                         }
 
-                        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                        if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
                             I.redraw( Interface::REDRAW_GAMEAREA );
@@ -3720,6 +3722,156 @@ namespace
             _( "You come upon a great cat, purring as it rubs against your leg. Charmed, you reach down, but it bites you and flees. At least the laughter at your misfortune lifts your troops' spirits." ),
             Dialog::OK, elementUI );
     }
+
+    int getObjectDirecton( const int32_t tileIndex, const MP2::MapObjectType objectType )
+    {
+        int32_t directions = 0;
+
+        for ( const int32_t direction : Direction::allNeighboringDirections ) {
+            if ( !Maps::isValidDirection( tileIndex, direction ) ) {
+                continue;
+            }
+
+            const int32_t index = Maps::GetDirectionIndex( tileIndex, direction );
+
+            if ( world.getTile( index ).getMainObjectType() == objectType ) {
+                directions |= direction;
+            }
+        }
+
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT && ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT ) {
+            return Direction::TOP;
+        }
+        if ( ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT && ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::BOTTOM;
+        }
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT && ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT ) {
+            return Direction::LEFT;
+        }
+        if ( ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT && ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::RIGHT;
+        }
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT ) {
+            return Direction::TOP_LEFT;
+        }
+        if ( ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT ) {
+            return Direction::TOP_RIGHT;
+        }
+        if ( ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::BOTTOM_RIGHT;
+        }
+        if ( ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT ) {
+            return Direction::BOTTOM_LEFT;
+        }
+
+        return Direction::CENTER;
+    }
+
+    void actionToWaterhole( Heroes & hero, const MP2::MapObjectType objectType, int32_t dstIndex )
+    {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
+
+        fheroes2::Point movementVector;
+        const int centerDirection = getObjectDirecton( dstIndex, objectType );
+
+        switch ( centerDirection ) {
+        case Direction::TOP:
+            movementVector = { 0, -3 };
+            break;
+        case Direction::TOP_RIGHT:
+            movementVector = { 6, -3 };
+            break;
+        case Direction::BOTTOM_RIGHT:
+            movementVector = { 6, 3 };
+            break;
+        case Direction::BOTTOM:
+            movementVector = { 0, 3 };
+            break;
+        case Direction::BOTTOM_LEFT:
+            movementVector = { -6, 3 };
+            break;
+        case Direction::TOP_LEFT:
+            movementVector = { -6, -3 };
+            break;
+        default:
+            // This is not a valid direction for the Waterfall.
+            assert( 0 );
+            break;
+        }
+
+        const Maps::Tile & tile = world.getTile( dstIndex );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        LocalEvent & le = LocalEvent::Get();
+        Interface::AdventureMap & interface = Interface::AdventureMap::Get();
+        Interface::GameArea & gameArea = interface.getGameArea();
+
+        constexpr int32_t animationFrames = 7;
+        uint8_t frame = 0;
+
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_FADE_DELAY } ) ) ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                break;
+            }
+
+            if ( Game::validateAnimationDelay( Game::DelayType::HEROES_FADE_DELAY ) ) {
+                hero.SetOffset( { movementVector.x * frame, movementVector.y * frame } );
+                gameArea.ShiftCenter( movementVector );
+
+                ++frame;
+
+                Game::updateAdventureMapAnimationIndex();
+                interface.redraw( Interface::REDRAW_GAMEAREA );
+
+                display.render( interface.getGameArea().GetROI() );
+            }
+        }
+
+        Army army( tile );
+
+        const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+        // Hero' spell points and army could have changed. Update heroes icons and status area.
+        Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
+
+        if ( !res.isAttackerWin() ) {
+            BattleLose( hero, res, true );
+
+            return;
+        }
+
+        hero.IncreaseExperience( res.getAttackerExperience() );
+
+        AudioManager::PlaySound( M82::WSND00 );
+        hero.ShowPath( false );
+        hero.FadeOut( Game::HumanHeroAnimSpeedMultiplier() );
+        hero.setInvisible( true );
+
+        frame = 0;
+        const uint32_t waterholeUid = Maps::getObjectUid( tile, objectType );
+
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                break;
+            }
+
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
+                Maps::setWaterholeCloseFrame( dstIndex, waterholeUid, frame );
+
+                ++frame;
+
+                Game::updateAdventureMapAnimationIndex();
+                interface.redraw( Interface::REDRAW_GAMEAREA );
+
+                display.render( interface.getGameArea().GetROI() );
+            }
+        }
+
+        Maps::removeObjectFromMapByUID( dstIndex, waterholeUid );
+
+        hero.SetOffset( { 0, 0 } );
+        hero.ShowPath( true );
+        hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
+    }
 }
 
 void Heroes::ScoutRadar() const
@@ -3942,6 +4094,10 @@ void Heroes::Action( const int tileIndex )
 
     case MP2::OBJ_DAEMON_CAVE:
         ActionToDaemonCave( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_WATERHOLE:
+        actionToWaterhole( *this, objectType, tileIndex );
         break;
 
     case MP2::OBJ_STONE_LITHS:

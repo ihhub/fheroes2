@@ -1129,6 +1129,8 @@ namespace ICN
 
         EVIL_DIALOG_PLAIN_CORNERS,
 
+        SHIP_BATTLEFIELD_UNDERWATER_BUBBLES,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

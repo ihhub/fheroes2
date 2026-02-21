@@ -435,7 +435,7 @@ namespace
                 }
             }
 
-            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                 // Restore background with static monster animation part.
                 backgroundCopy.restore();
 
