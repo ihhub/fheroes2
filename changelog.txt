@@ -1,3 +1,43 @@
+version 1.1.14 (24 February 2026)
+- fix hero removal leftovers from the map in the Editor
+- add new variants of Abandoned Mines
+- enable several hardware buttons for all Virtual Keyboards
+- fix an assertion crash while viewing a Puzzle with The Succession Wars resources
+- update the Russian translation
+- add a battle option to highlight the creature's movement area
+- update the Polish translation
+- properly render the moat water effect for troops during a castle siege
+- fix invalid logic for future value of objects on the Adventure Map
+- add an extra check for Navigation skill in Witch's Hut to avoid wasting resources by AI heroes
+- modify the check for Well to take into account the number of days to reach it, rather than assuming it is 1 day
+- do not allow the random map generator to place more than one action object on a tile
+- add all possible roads "directions" using original assets
+- add multi-language support for maps
+- place free pickup objects during random map generation
+- add Evil interface buttons for High Scores dialog
+- fix the direct attacking up and down cursors' offset in battles
+- add missing translation of some texts
+- disable the Standard/Campaign button in the High Score dialog for the demo version of the game or when campaign files aren't present
+- speed up AI computations
+- speed up a check whether a tile contains water terrain
+- speed up game type switching in High Scores dialog
+- make AI heroes not move around blindly if they are on patrol
+- fill empty areas with decorative/flavour objects for randomly generated maps
+- make Liches avoid wasting friendly units while under AI control
+- update the Hungarian translation
+- do not waste spells by AI on mirrored monsters while retreating
+- add ability to select terrain type for Battle Only mode
+- fix inability to save files on iOS
+- do not do screen fading within the High Scores dialog
+- update the German translation
+- fix assertion failed crash in German version when line breaking after hyphens
+- show damage info dialog popup when targeting enemy unit with damage spells
+- adjust Guardian Spell usage by AI
+- add Screen Scaling Type to the graphics settings dialog and Interface Type to the game settings dialog
+- update the Ukrainian Translation
+- fix two bad pixels on Jezebel's portrait
+- reduce memory usage for single-layer images
+
 version 1.1.13 (21 December 2025)
 - update the Russian translation
 - add several missing letters for the CP-1251 code page
