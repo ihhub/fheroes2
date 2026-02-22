@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -82,7 +82,7 @@ namespace fheroes2
         const CustomAnimationDialogElement lighthouseCustomDynamicImageElement( ICN::OBJNMUL2, combined,
                                                                                 { fheroes2::tileWidthPx * 2 + lighthouseLight.x(),
                                                                                   fheroes2::tileWidthPx + lighthouseLight.y() - topOffset },
-                                                                                61, getAnimationDelayValue( Game::MAPS_DELAY ) );
+                                                                                61, getAnimationDelayValue( Game::DelayType::MAPS_DELAY ) );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showStandardTextMessage( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), _( "For every lighthouse controlled, your ships will move further each day." ), buttons,

@@ -1208,8 +1208,8 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
     fheroes2::Display & display = fheroes2::Display::instance();
     Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
-        if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::HEROES_PICKUP_DELAY ) ) {
             adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
             display.render();
         }

@@ -36,6 +36,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -74,7 +75,7 @@ namespace Battle
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
-    enum HeroAnimation : uint32_t
+    enum class HeroAnimation : uint32_t
     {
         OP_JOY,
         OP_CAST_MASS,
@@ -128,11 +129,13 @@ namespace Battle
         bool isReflectedImage{ false };
     };
 
-    class OpponentSprite
+    class OpponentSprite final
     {
     public:
         OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
         OpponentSprite( const OpponentSprite & ) = delete;
+
+        ~OpponentSprite() = default;
 
         OpponentSprite & operator=( const OpponentSprite & ) = delete;
 
@@ -147,7 +150,7 @@ namespace Battle
         // Return true is animation state was changed.
         bool updateAnimationState();
 
-        void SetAnimation( const int rule );
+        void SetAnimation( const Battle::HeroAnimation rule );
         void IncreaseAnimFrame();
 
         bool isFinishFrame() const
@@ -178,13 +181,15 @@ namespace Battle
     private:
         HeroBase * _heroBase{ nullptr };
         AnimationSequence _currentAnim;
-        int _animationType{ OP_STATIC };
         RandomizedDelay _idleTimer{ 8000 };
 
-        int _heroIcnId{ ICN::UNKNOWN };
-        bool _isFlippedHorizontally{ false };
         fheroes2::Rect _area;
         fheroes2::Point _offset;
+
+        Battle::HeroAnimation _animationType{ Battle::HeroAnimation::OP_STATIC };
+        int _heroIcnId{ ICN::UNKNOWN };
+
+        bool _isFlippedHorizontally{ false };
     };
 
     class Status final : public fheroes2::Rect
@@ -269,12 +274,12 @@ namespace Battle
         static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t currentUnitColor, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
-        PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _renderingRoi;
         fheroes2::Rect _battleRoi;
         std::vector<UnitPos> _rects;
 
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
+        PlayerColor _opponentColor{ PlayerColor::NONE };
         bool _isInsideBattleField{ false };
     };
 
@@ -314,7 +319,7 @@ namespace Battle
         bool _needDelay{ true };
     };
 
-    class Interface
+    class Interface final
     {
     public:
         Interface( Arena & battleArena, const int32_t tileIndex );
@@ -474,6 +479,8 @@ namespace Battle
         void _startAutoCombat( const Unit & unit, Actions & actions );
         void _quickCombat( Actions & actions );
 
+        std::vector<Game::DelayType> _mergeWithCommonAnimationsDelays( std::vector<Game::DelayType> otherDelays );
+
         Arena & arena;
         Dialog::FrameBorder border;
 
@@ -498,21 +505,28 @@ namespace Battle
         std::unique_ptr<OpponentSprite> _attackingOpponent;
         std::unique_ptr<OpponentSprite> _defendingOpponent;
 
+        std::vector<Game::DelayType> _commonAnimationsDelays;
+
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
-        bool humanturn_redraw{ true };
-        uint32_t animation_flags_frame{ 0 };
-        int catapult_frame{ 0 };
+        bool _needRedraw{ true };
 
-        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
+        bool _applyUnderwaterEffect{ false };
+
+        // True if background is bright. It is done to determine current unit contour cycling colors.
+        bool _brightLandType{ false };
+
+        uint32_t _flagAnimationFrameIndex{ 0 };
+        int catapult_frame{ 0 };
+        uint32_t _backgroundAnimationFrame{ 0 };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
 
         uint8_t _contourColor{ 110 };
 
-        // True if background is bright. It is done to determine current unit contour cycling colors.
-        bool _brightLandType{ false };
+        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
+
         uint32_t _contourCycle{ 0 };
 
         const Unit * _currentUnit{ nullptr };
