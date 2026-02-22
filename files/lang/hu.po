@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-15 02:18+0000\n"
-"PO-Revision-Date: 2026-01-04 22:27+0100\n"
+"PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Lokalize 26.03.70\n"
 
 msgid "SELECT"
 msgstr "VÁLASZT"
@@ -1066,9 +1066,8 @@ msgstr "Mozgás árnyék"
 msgid "Shadow Cursor"
 msgstr "Kurzor árnyék"
 
-#, fuzzy
 msgid "Movement Area"
-msgstr "Hős mozgása"
+msgstr "Mozgástér"
 
 msgid "Toggle to display the turn order during the battle."
 msgstr "Csatában a támadási sorrend kijelzésének váltása."
@@ -1094,6 +1093,7 @@ msgstr "Be- és kikapcsolja az egérkurzor alatti árnyékot."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off ."
 msgstr ""
+"A kijelölt teremtmény mozgástere megjelenítésének kapcsolója (BE vagy KI)."
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3871,7 +3871,6 @@ msgstr "Térkép típusa"
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -3879,7 +3878,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Nyelv:\n"
+"Támogatott nyelvek:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Összes hős és város elvesztése."
@@ -4765,39 +4764,32 @@ msgstr ""
 "Tekintsd meg a szerkesztő rendszer beállításait, amik lehetővé teszik annak "
 "testreszabását."
 
-#, fuzzy
 msgid "Supported languages"
-msgstr "Támogass minket itt"
+msgstr "Támogatott nyelvek"
 
 msgid "Language"
 msgstr "Nyelv"
 
-#, fuzzy
 msgid "This language already exists in the list."
-msgstr "Ez a szóbeszéd már megtalálható a listában."
+msgstr "Ez a nyelv már rajta van a listán."
 
 msgid "A map should have at least one language."
-msgstr ""
+msgstr "Egy térképhez legalább egy nyelv kell, hogy hozzárendelve legyen."
 
-#, fuzzy
 msgid "Click to apply changes."
-msgstr "Kattints az osztály megváltoztatásához."
+msgstr "Kattints a változtatások érvényesítéséhez."
 
-#, fuzzy
 msgid "Add Language"
-msgstr "Nyelv"
+msgstr "Nyelv hozzáadása"
 
-#, fuzzy
 msgid "Add an additional language."
-msgstr "További esemény hozzáadása."
+msgstr "További nyelv hozzáadása."
 
-#, fuzzy
 msgid "Delete Language"
-msgstr "Nyelv kiválasztása:"
+msgstr "Nyelv törlése"
 
-#, fuzzy
 msgid "Delete an existing language."
-msgstr "Meglévő esemény törlése."
+msgstr "Meglévő nyelv törlése."
 
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
@@ -6494,14 +6486,15 @@ msgstr ""
 "Megjeleníti a rendszerbeállítások menüt, melyben testre szabhatod a "
 "játékprogram működését."
 
-#, fuzzy
 msgid "Hero Movement Points"
-msgstr "Hős mozgása"
+msgstr "Hős mozgáspontjai"
 
 msgid ""
 "The hero's army cannot move anymore today. The movement points will be "
 "refilled tomorrow after you end your turn."
 msgstr ""
+"A hős serege ma már nem léphet többet. A mozgáspontok holnapra "
+"újratöltődnek, miután befejezted a körödet."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
