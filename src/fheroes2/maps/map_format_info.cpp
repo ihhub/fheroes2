@@ -107,7 +107,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 12 };
+    constexpr uint16_t currentSupportedVersion{ 13 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -407,6 +407,34 @@ namespace
         }
     }
 
+    void convertFromV12ToV13( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 12, "Remove this function." );
+
+        if ( map.version > 12 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    if ( objInfo.index >= 42 ) {
+                        // Shift the objects in the Mines group by 6 position "down" to add 6 new Abandoned Mines.
+                        objInfo.index += 6;
+                    }
+                    else if ( objInfo.index == 40 ) {
+                        // Shift Grass Abandoned Mine to a new position.
+                        objInfo.index = 41;
+                    }
+                    else if ( objInfo.index == 41 ) {
+                        // Shift Dirt Abandoned Mine to a new position.
+                        objInfo.index = 46;
+                    }
+                }
+            }
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
@@ -550,6 +578,7 @@ namespace
         }
 
         convertFromV11ToV12( map );
+        convertFromV12ToV13( map );
 
         return !stream.fail();
     }

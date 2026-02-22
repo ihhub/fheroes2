@@ -261,6 +261,118 @@ namespace
         }
     }
 
+    void applyAbandonedMineMask( const fheroes2::Image & mask, const int32_t maskOffsetX, const fheroes2::Image & existingMine, fheroes2::Image & output )
+    {
+        constexpr int32_t size{ 32 };
+        assert( maskOffsetX >= 0 && maskOffsetX + size <= mask.width() );
+        assert( existingMine.width() == size && existingMine.height() == size );
+        assert( output.width() == size && output.height() == size );
+
+        const uint8_t * maskY = mask.image() + maskOffsetX;
+        const uint8_t * existingMineImage = existingMine.image();
+        uint8_t * outputImage = output.image();
+
+        constexpr uint8_t copyData{ 70 };
+        constexpr uint8_t skipData{ 135 };
+
+        if ( output.singleLayer() ) {
+            assert( existingMine.singleLayer() );
+
+            for ( int32_t y = 0; y < size; ++y, maskY += mask.width() ) {
+                const uint8_t * maskX = maskY;
+                for ( int32_t x = 0; x < size; ++x, ++maskX, ++existingMineImage, ++outputImage ) {
+                    if ( *maskX == copyData ) {
+                        *outputImage = *existingMineImage;
+                    }
+                    else if ( *maskX == skipData ) {
+                        // Keep the same data.
+                    }
+                    else {
+                        *outputImage = *maskX;
+                    }
+                }
+            }
+        }
+        else if ( existingMine.singleLayer() ) {
+            uint8_t * outputTransform = output.transform();
+
+            for ( int32_t y = 0; y < size; ++y, maskY += mask.width() ) {
+                const uint8_t * maskX = maskY;
+                for ( int32_t x = 0; x < size; ++x, ++maskX, ++existingMineImage, ++outputImage, ++outputTransform ) {
+                    if ( *maskX == copyData ) {
+                        *outputImage = *existingMineImage;
+                        *outputTransform = 0;
+                    }
+                    else if ( *maskX == skipData ) {
+                        // Keep the same data.
+                    }
+                    else {
+                        *outputImage = *maskX;
+                        *outputTransform = 0;
+                    }
+                }
+            }
+        }
+        else {
+            const uint8_t * existingMineTransform = existingMine.transform();
+            uint8_t * outputTransform = output.transform();
+
+            for ( int32_t y = 0; y < size; ++y, maskY += mask.width() ) {
+                const uint8_t * maskX = maskY;
+                for ( int32_t x = 0; x < size; ++x, ++maskX, ++existingMineImage, ++existingMineTransform, ++outputImage, ++outputTransform ) {
+                    if ( *maskX == copyData ) {
+                        *outputImage = *existingMineImage;
+                        *outputTransform = *existingMineTransform;
+                    }
+                    else if ( *maskX == skipData ) {
+                        // Keep the same data.
+                    }
+                    else {
+                        *outputImage = *maskX;
+                        *outputTransform = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    void createAbandonedMine( const std::vector<fheroes2::Sprite> & dirtObjects, std::vector<fheroes2::Sprite> & mountainObjects, const size_t startMineIndex,
+                              const std::string & correctionImagePath )
+    {
+        // All mines have the same number of object parts.
+        constexpr size_t mineSpriteCount{ 10 };
+
+        // Verify that the input parameters are valid.
+        assert( dirtObjects.size() > 8 );
+        assert( !mountainObjects.empty() );
+        assert( startMineIndex < mountainObjects.size() );
+        assert( startMineIndex + mineSpriteCount <= mountainObjects.size() );
+        assert( !correctionImagePath.empty() );
+
+        // Resize the original set of objects to add a new Abandoned Mine.
+        const size_t originalSize{ mountainObjects.size() };
+        mountainObjects.resize( originalSize + mineSpriteCount );
+
+        // Copy the existing object parts from a mountain.
+        for ( size_t i = 0; i < mineSpriteCount; ++i ) {
+            mountainObjects[originalSize + i] = mountainObjects[startMineIndex + i];
+        }
+
+        // Load the correction image.
+        fheroes2::Sprite correctionImage;
+        fheroes2::h2d::readImage( correctionImagePath, correctionImage );
+
+        // If this assertion blows up then the game resources are not valid.
+        assert( correctionImage.singleLayer() );
+        assert( correctionImage.height() == 32 && ( correctionImage.width() == 64 || correctionImage.width() == 96 ) );
+
+        applyAbandonedMineMask( correctionImage, correctionImage.width() - 32, dirtObjects[9], mountainObjects[mountainObjects.size() - 1] );
+        applyAbandonedMineMask( correctionImage, correctionImage.width() - 64, dirtObjects[8], mountainObjects[mountainObjects.size() - 2] );
+        if ( correctionImage.width() == 96 ) {
+            applyAbandonedMineMask( correctionImage, 0, dirtObjects[7], mountainObjects[mountainObjects.size() - 3] );
+        }
+    }
+
     // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
     class OriginalAlphabetPreserver final
     {
@@ -5391,7 +5503,30 @@ namespace
             }
             break;
         }
-
+        case ICN::MTNCRCK:
+            loadICN( ICN::OBJNDIRT );
+            createAbandonedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 104, "abandoned_mine_crack.image" );
+            break;
+        case ICN::MTNDSRT:
+            loadICN( ICN::OBJNDIRT );
+            createAbandonedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "abandoned_mine_desert.image" );
+            break;
+        case ICN::MTNLAVA:
+            loadICN( ICN::OBJNDIRT );
+            createAbandonedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "abandoned_mine_lava.image" );
+            break;
+        case ICN::MTNMULT:
+            loadICN( ICN::OBJNDIRT );
+            createAbandonedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "abandoned_mine_rock.image" );
+            break;
+        case ICN::MTNSNOW:
+            loadICN( ICN::OBJNDIRT );
+            createAbandonedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "abandoned_mine_snow.image" );
+            break;
+        case ICN::MTNSWMP:
+            loadICN( ICN::OBJNDIRT );
+            createAbandonedMine( _icnVsSprite[ICN::OBJNDIRT], _icnVsSprite[id], 74, "abandoned_mine_swamp.image" );
+            break;
         default:
             break;
         }
