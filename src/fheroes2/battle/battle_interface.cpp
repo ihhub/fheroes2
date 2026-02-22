@@ -3101,6 +3101,8 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
             humanturn_redraw = true;
         }
 
+        _highlightUnitMovementArea = nullptr;
+
         if ( humanturn_spell.isValid() ) {
             HumanCastSpellTurn( unit, actions, msg );
         }
@@ -3135,6 +3137,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     popup.reset();
 
     _currentUnit = nullptr;
+    _highlightUnitMovementArea = nullptr;
 }
 
 void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, std::string & msg )
