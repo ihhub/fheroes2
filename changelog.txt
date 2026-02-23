@@ -15,7 +15,7 @@ version 1.1.14 (24 February 2026)
 - add multi-language support for maps
 - place free pickup objects during random map generation
 - add Evil interface buttons for High Scores dialog
-- fix the direct attacking up and down cursors' offset in battles
+- fix the direct attacking up and down cursor offset in battles
 - add missing translation of some texts
 - disable the Standard/Campaign button in the High Score dialog for the demo version of the game or when campaign files aren't present
 - speed up AI computations
