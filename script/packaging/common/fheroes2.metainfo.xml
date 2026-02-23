@@ -77,7 +77,7 @@
           <li>show damage info dialog popup when targeting enemy unit with damage spells</li>
           <li>adjust Guardian Spell usage by AI</li>
           <li>add Screen Scaling Type to the graphics settings dialog and Interface Type to the game settings dialog</li>
-          <li>update the Ukrainian Translation</li>
+          <li>update the Ukrainian translation</li>
           <li>fix two bad pixels on Jezebel's portrait</li>
           <li>reduce memory usage for single-layer images</li>
         </ul>
