@@ -25,7 +25,7 @@ version 1.1.14 (24 February 2026)
 - fill empty areas with decorative/flavour objects for randomly generated maps
 - make Liches avoid wasting friendly units while under AI control
 - update the Hungarian translation
-- do not waste spells by AI on mirrored monsters while retreating
+- AI no longer wastes spells on mirrored monsters while retreating
 - add ability to select terrain type for Battle Only mode
 - fix the inability to save files on iOS
 - do not do screen fading within the High Scores dialog
