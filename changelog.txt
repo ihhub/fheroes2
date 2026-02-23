@@ -22,7 +22,7 @@ version 1.1.14 (24 February 2026)
 - speed up a check whether a tile contains water terrain
 - speed up game type switching in High Scores dialog
 - make AI heroes not move around blindly if they are on patrol
-- fill empty areas with decorative/flavour objects for randomly generated maps
+- fill empty areas with decorative/flavour objects on randomly generated maps
 - make Liches avoid wasting friendly units while under AI control
 - update the Hungarian translation
 - AI no longer wastes spells on mirrored monsters while retreating
