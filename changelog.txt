@@ -30,7 +30,7 @@ version 1.1.14 (24 February 2026)
 - fix the inability to save files on iOS
 - do not do screen fading within the High Scores dialog
 - update the German translation
-- fix assertion failed crash in German version when line breaking after hyphens
+- fix an assertion failed crash in the German version when line breaking after hyphens
 - show damage info dialog popup when targeting enemy unit with damage spells
 - adjust Guardian Spell usage by AI
 - add Screen Scaling Type to the graphics settings dialog and Interface Type to the game settings dialog
