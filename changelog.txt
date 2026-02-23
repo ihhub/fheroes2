@@ -27,7 +27,7 @@ version 1.1.14 (24 February 2026)
 - update the Hungarian translation
 - do not waste spells by AI on mirrored monsters while retreating
 - add ability to select terrain type for Battle Only mode
-- fix inability to save files on iOS
+- fix the inability to save files on iOS
 - do not do screen fading within the High Scores dialog
 - update the German translation
 - fix assertion failed crash in German version when line breaking after hyphens
