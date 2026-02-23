@@ -58,22 +58,22 @@
           <li>add multi-language support for maps</li>
           <li>place free pickup objects during random map generation</li>
           <li>add Evil interface buttons for High Scores dialog</li>
-          <li>fix the direct attacking up and down cursors' offset in battles</li>
+          <li>fix the direct attacking up and down cursor offset in battles</li>
           <li>add missing translation of some texts</li>
           <li>disable the Standard/Campaign button in the High Score dialog for the demo version of the game or when campaign files aren't present</li>
           <li>speed up AI computations</li>
           <li>speed up a check whether a tile contains water terrain</li>
           <li>speed up game type switching in High Scores dialog</li>
           <li>make AI heroes not move around blindly if they are on patrol</li>
-          <li>fill empty areas with decorative/flavour objects for randomly generated maps</li>
+          <li>fill empty areas with decorative/flavour objects on randomly generated maps</li>
           <li>make Liches avoid wasting friendly units while under AI control</li>
           <li>update the Hungarian translation</li>
-          <li>do not waste spells by AI on mirrored monsters while retreating</li>
+          <li>AI no longer wastes spells on mirrored monsters while retreating</li>
           <li>add ability to select terrain type for Battle Only mode</li>
-          <li>fix inability to save files on iOS</li>
+          <li>fix the inability to save files on iOS</li>
           <li>do not do screen fading within the High Scores dialog</li>
           <li>update the German translation</li>
-          <li>fix assertion failed crash in German version when line breaking after hyphens</li>
+          <li>fix an assertion failed crash in the German version when line breaking after hyphens</li>
           <li>show damage info dialog popup when targeting enemy unit with damage spells</li>
           <li>adjust Guardian Spell usage by AI</li>
           <li>add Screen Scaling Type to the graphics settings dialog and Interface Type to the game settings dialog</li>
