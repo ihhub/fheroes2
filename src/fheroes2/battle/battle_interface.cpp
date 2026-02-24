@@ -6010,13 +6010,19 @@ void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( frame < 25 && Game::validateCustomAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            mixSprite = unitSprite;
-            fheroes2::AlphaBlit( stoneEffect, mixSprite, alpha );
-            Redraw();
+        if ( Game::validateCustomAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            if ( frame < 25 ) {
+                mixSprite = unitSprite;
+                fheroes2::AlphaBlit( stoneEffect, mixSprite, alpha );
+                Redraw();
 
-            alpha += 10;
-            ++frame;
+                alpha += 10;
+                ++frame;
+            }
+            else {
+                // Avoid making the game to freeze while sound is still being played.
+                Redraw();
+            }
         }
     }
 
