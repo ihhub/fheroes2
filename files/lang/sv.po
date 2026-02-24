@@ -1101,7 +1101,7 @@ msgstr ""
 
 msgid "Toggle showing the movement area of a highlighted creature on or off ."
 msgstr ""
-"Aktivera eller inakrivera visning av förflyttningsområdet för en markerad "
+"Aktivera eller inaktivera visning av förflyttningsområdet för en markerad "
 "varelse."
 
 msgid ""
