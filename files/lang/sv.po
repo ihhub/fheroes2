@@ -6495,7 +6495,7 @@ msgstr ""
 "vill avsluta din runda?"
 
 msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr "För att lämna fheroes2, tryck på Hemknappen eller svep uppåt"
+msgstr "För att lämna fheroes2, tryck på Hemknappen eller svep uppåt."
 
 msgid "Are you sure you want to quit?"
 msgstr "Är du säker på att du vill avsluta?"
