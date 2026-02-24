@@ -40,13 +40,13 @@ public:
     using Interface::ItemsActionBar<ArmyTroop>::RedrawItem;
     using Interface::ItemsActionBar<ArmyTroop>::ActionBarRightMouseHold;
 
-    ArmyBar( Army *, const bool miniSprites, const bool readOnly, const bool isEditMode = false, const bool saveLastTroop = true );
+    ArmyBar( Army * ptr, const bool miniSprites, const bool readOnly, const bool isEditMode = false, const bool saveLastTroop = true );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( ArmyTroop &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
-    void SetArmy( Army * );
+    void SetArmy( Army * ptr );
 
     void setTroopWindowOffsetY( const int32_t offsetY )
     {

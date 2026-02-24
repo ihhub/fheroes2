@@ -746,14 +746,34 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         // Right click
         if ( hero1 && le.isMouseRightButtonPressedInArea( rectHero1 ) ) {
             LocalEvent::Get().reset();
-            hero1->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+
+            Heroes::DialogOptions options;
+            options.mode = allow_buy_hero1 ? Heroes::DialogOptions::Mode::ForRecruit : Heroes::DialogOptions::Mode::RecruitToView;
+            options.renderBackgroundDialog = false;
+            options.animateDialogFading = true;
+
+            const auto dialogResult = hero1->OpenDialog( options, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+            if ( dialogResult == Heroes::DialogResult::Recruit ) {
+                RecruitHero( hero1 );
+                return ConstructionDialogResult::RecruitHero;
+            }
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.isMouseRightButtonPressedInArea( rectHero2 ) ) {
             LocalEvent::Get().reset();
-            hero2->OpenDialog( true, true, false, false, false, false, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+
+            Heroes::DialogOptions options;
+            options.mode = allow_buy_hero2 ? Heroes::DialogOptions::Mode::ForRecruit : Heroes::DialogOptions::Mode::RecruitToView;
+            options.renderBackgroundDialog = false;
+            options.animateDialogFading = true;
+
+            const auto dialogResult = hero2->OpenDialog( options, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
+            if ( dialogResult == Heroes::DialogResult::Recruit ) {
+                RecruitHero( hero1 );
+                return ConstructionDialogResult::RecruitHero;
+            }
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );

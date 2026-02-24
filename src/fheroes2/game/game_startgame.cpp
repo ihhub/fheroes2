@@ -384,7 +384,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     }
 }
 
-void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog, const bool disableDismiss /* = false */ )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -399,29 +399,33 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog, false,
-                                      fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() ) );
+        Heroes::DialogOptions options;
+        options.mode = Heroes::DialogOptions::Mode::Normal;
+        options.renderBackgroundDialog = renderBackgroundDialog;
+        options.animateDialogFading = needFade;
+
+        const auto heroDialogResult = ( *it )->OpenDialog( options, fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() ) );
 
         if ( needFade ) {
             needFade = false;
         }
 
-        switch ( result ) {
-        case Dialog::PREV:
+        switch ( heroDialogResult ) {
+        case Heroes::DialogResult::PreviousHero:
             if ( it == myHeroes.begin() ) {
                 it = myHeroes.end();
             }
             --it;
             break;
 
-        case Dialog::NEXT:
+        case Heroes::DialogResult::NextHero:
             ++it;
             if ( it == myHeroes.end() ) {
                 it = myHeroes.begin();
             }
             break;
 
-        case Dialog::DISMISS:
+        case Heroes::DialogResult::Dismiss:
             AudioManager::PlaySound( M82::KILLFADE );
 
             ( *it )->ShowPath( false );
@@ -446,11 +450,14 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
             result = Dialog::CANCEL;
             break;
 
-        case Dialog::CANCEL:
+        case Heroes::DialogResult::Exit:
+            result = Dialog::CANCEL;
             needFade = true;
             break;
 
         default:
+            // Other values must not be returned in this mode.
+            assert( 0 );
             break;
         }
     }
