@@ -1,5 +1,5 @@
 # Swedish translation for fheroes2
-# Copyright (C) 2020 - 2025 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2020 - 2026 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-15 02:18+0000\n"
-"PO-Revision-Date: 2025-12-03 17:37+0100\n"
+"PO-Revision-Date: 2026-02-24 17:33+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -1070,9 +1070,8 @@ msgstr "Skuggförflyttning"
 msgid "Shadow Cursor"
 msgstr "Skuggmarkör"
 
-#, fuzzy
 msgid "Movement Area"
-msgstr "Hjälteförflyttning"
+msgstr "Förflyttningsområde"
 
 msgid "Toggle to display the turn order during the battle."
 msgstr "Visa varelsernas turordning på slagfältet."
@@ -1102,6 +1101,8 @@ msgstr ""
 
 msgid "Toggle showing the movement area of a highlighted creature on or off ."
 msgstr ""
+"Aktivera eller inakrivera visning av förflyttningsområdet för en markerad "
+"varelse."
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -1114,9 +1115,8 @@ msgstr "Spelare"
 msgid "AI"
 msgstr "AI"
 
-#, fuzzy
 msgid "Terrain"
-msgstr "Terrängläge"
+msgstr "Terräng"
 
 msgid "Start"
 msgstr "Starta"
@@ -1137,11 +1137,15 @@ msgid ""
 "The battle will take place on a randomly selected terrain. Click to change "
 "the terrain type."
 msgstr ""
+"Striden kommer utspelas på en slumpad terrängtyp. Klicka för att ändra "
+"terrängtyp."
 
 msgid ""
 "The battle will take place on %{terrain-type} terrain. Click to change the "
 "terrain type."
 msgstr ""
+"Striden kommer utspelas på %{terrain-type}terrängtyp. Klicka för att ändra "
+"terrängtyp."
 
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
@@ -3260,13 +3264,13 @@ msgid "System Info"
 msgstr "Systeminfo."
 
 msgid "Nearest"
-msgstr ""
+msgstr "Närmaste"
 
 msgid "Screen Scaling Type"
 msgstr ""
 
 msgid "Linear"
-msgstr ""
+msgstr "Linjär"
 
 msgid "Change the resolution of the game."
 msgstr "Ändra spelets upplösning."
@@ -3858,7 +3862,6 @@ msgstr "Karttyp"
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -3866,7 +3869,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Språk:\n"
+"Stödda språk:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Förlora alla dina hjältar och städer."
@@ -4757,39 +4760,32 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
-#, fuzzy
 msgid "Supported languages"
-msgstr "Stöd oss på"
+msgstr "Stödda språk"
 
 msgid "Language"
 msgstr "Språk"
 
-#, fuzzy
 msgid "This language already exists in the list."
-msgstr "Detta rykte finns redan i listan."
+msgstr "Detta språk finns redan i listan."
 
 msgid "A map should have at least one language."
-msgstr ""
+msgstr "En karta bör ha minst ett språk."
 
-#, fuzzy
 msgid "Click to apply changes."
-msgstr "Klicka för byta klass."
+msgstr "Klicka för tillämpa ändringar."
 
-#, fuzzy
 msgid "Add Language"
-msgstr "Språk"
+msgstr "Lägg till Språk."
 
-#, fuzzy
 msgid "Add an additional language."
-msgstr "Lägg till en ytterligare händelse."
+msgstr "Lägg till ett ytterligare språk."
 
-#, fuzzy
 msgid "Delete Language"
-msgstr "Välj språk:"
+msgstr "Radera Språk"
 
-#, fuzzy
 msgid "Delete an existing language."
-msgstr "Radera en redan existerande händelse."
+msgstr "Radera ett redan existerande språk."
 
 msgid "Failed to generate a random map with given parameters."
 msgstr "Misslyckades att skapa en slumpad karta med givna parametrar"
@@ -6482,14 +6478,15 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy ditt spelande."
 
-#, fuzzy
 msgid "Hero Movement Points"
-msgstr "Hjälteförflyttning"
+msgstr "Förflyttningpoäng"
 
 msgid ""
 "The hero's army cannot move anymore today. The movement points will be "
 "refilled tomorrow after you end your turn."
 msgstr ""
+"Hjältens armé kan inte förflyttas mer idag. Förflyttningspoängen kommer att "
+"återfyllas imorgon efter du avslutat din tur."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -6498,7 +6495,7 @@ msgstr ""
 "vill avsluta din runda?"
 
 msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
+msgstr "För att lämna fheroes2, tryck på Hemknappen eller svep uppåt"
 
 msgid "Are you sure you want to quit?"
 msgstr "Är du säker på att du vill avsluta?"
