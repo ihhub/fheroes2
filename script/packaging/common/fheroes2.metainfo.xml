@@ -37,6 +37,52 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2026-02-24" version="v1.1.14">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.14</url>
+      <description>
+        <p>Changes in v1.1.14 (24 February 2026):</p>
+        <ul>
+          <li>fix hero removal leftovers from the map in the Editor</li>
+          <li>add new variants of Abandoned Mines</li>
+          <li>enable several hardware buttons for all Virtual Keyboards</li>
+          <li>fix an assertion crash while viewing a Puzzle with The Succession Wars resources</li>
+          <li>update the Russian translation</li>
+          <li>add a battle option to highlight the creature's movement area</li>
+          <li>update the Polish translation</li>
+          <li>properly render the moat water effect for troops during a castle siege</li>
+          <li>fix invalid logic for future value of objects on the Adventure Map</li>
+          <li>add an extra check for Navigation skill in Witch's Hut to avoid AI heroes wasting resources</li>
+          <li>modify the check for Well to take into account days to reach it, rather than assuming it takes one day</li>
+          <li>do not allow the random map generator to place more than one action object on a tile</li>
+          <li>add all possible road directions using original assets</li>
+          <li>add multi-language support for maps</li>
+          <li>place free pickup objects during random map generation</li>
+          <li>add Evil interface buttons to the High Scores dialog</li>
+          <li>fix the direct attacking up and down cursor offset in battles</li>
+          <li>add missing translation of some texts</li>
+          <li>disable the Standard/Campaign button in the High Score dialog for the demo version of the game or when campaign files aren't present</li>
+          <li>speed up AI computations</li>
+          <li>speed up the check whether a tile contains water terrain</li>
+          <li>speed up game type switching in High Scores dialog</li>
+          <li>make AI heroes not move around blindly if they are on patrol</li>
+          <li>fill empty areas with decorative/flavour objects on randomly generated maps</li>
+          <li>make Liches avoid wasting friendly units while under AI control</li>
+          <li>update the Hungarian translation</li>
+          <li>AI no longer wastes spells on mirrored monsters while retreating</li>
+          <li>add ability to select terrain type for Battle Only mode</li>
+          <li>fix the inability to save files on iOS</li>
+          <li>do not do screen fading within the High Scores dialog</li>
+          <li>update the German translation</li>
+          <li>fix an assertion failed crash in the German version when line breaking after hyphens</li>
+          <li>show damage info dialog popup when targeting enemy unit with damage spells</li>
+          <li>adjust Guardian Spell usage by AI</li>
+          <li>add Screen Scaling Type to the graphics settings dialog and Interface Type to the game settings dialog</li>
+          <li>update the Ukrainian translation</li>
+          <li>fix two bad pixels on Jezebel's portrait</li>
+          <li>reduce memory usage for single-layer images</li>
+        </ul>
+      </description>
+    </release>
     <release date="2025-12-21" version="v1.1.13">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.13</url>
       <description>
