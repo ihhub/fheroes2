@@ -8,7 +8,7 @@ version 1.1.14 (24 February 2026)
 - update the Polish translation
 - properly render the moat water effect for troops during a castle siege
 - fix invalid logic for future value of objects on the Adventure Map
-- add an extra check for Navigation skill in Witch's Hut to avoid wasting resources by AI heroes
+- add an extra check for Navigation skill in Witch's Hut to avoid AI heroes wasting resources
 - modify the check for Well to take into account the number of days to reach it, rather than assuming it is 1 day
 - do not allow the random map generator to place more than one action object on a tile
 - add all possible roads "directions" using original assets
