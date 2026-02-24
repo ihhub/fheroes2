@@ -11,7 +11,7 @@ version 1.1.14 (24 February 2026)
 - add an extra check for Navigation skill in Witch's Hut to avoid AI heroes wasting resources
 - modify the check for Well to take into account days to reach it, rather than assuming it takes one day
 - do not allow the random map generator to place more than one action object on a tile
-- add all possible roads "directions" using original assets
+- add all possible road directions using original assets
 - add multi-language support for maps
 - place free pickup objects during random map generation
 - add Evil interface buttons for High Scores dialog
