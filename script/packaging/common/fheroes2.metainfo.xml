@@ -51,18 +51,18 @@
           <li>update the Polish translation</li>
           <li>properly render the moat water effect for troops during a castle siege</li>
           <li>fix invalid logic for future value of objects on the Adventure Map</li>
-          <li>add an extra check for Navigation skill in Witch's Hut to avoid wasting resources by AI heroes</li>
-          <li>modify the check for Well to take into account the number of days to reach it, rather than assuming it is 1 day</li>
+          <li>add an extra check for Navigation skill in Witch's Hut to avoid AI heroes wasting resources</li>
+          <li>modify the check for Well to take into account days to reach it, rather than assuming it takes one day</li>
           <li>do not allow the random map generator to place more than one action object on a tile</li>
-          <li>add all possible roads "directions" using original assets</li>
+          <li>add all possible road directions using original assets</li>
           <li>add multi-language support for maps</li>
           <li>place free pickup objects during random map generation</li>
-          <li>add Evil interface buttons for High Scores dialog</li>
+          <li>add Evil interface buttons to the High Scores dialog</li>
           <li>fix the direct attacking up and down cursor offset in battles</li>
           <li>add missing translation of some texts</li>
           <li>disable the Standard/Campaign button in the High Score dialog for the demo version of the game or when campaign files aren't present</li>
           <li>speed up AI computations</li>
-          <li>speed up a check whether a tile contains water terrain</li>
+          <li>speed up the check whether a tile contains water terrain</li>
           <li>speed up game type switching in High Scores dialog</li>
           <li>make AI heroes not move around blindly if they are on patrol</li>
           <li>fill empty areas with decorative/flavour objects on randomly generated maps</li>
