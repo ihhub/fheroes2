@@ -2973,6 +2973,8 @@ namespace
                     else {
                         modified = std::move( temp );
                     }
+
+                    modified.setPosition( modified.x(), 0 );
                 }
             }
             if ( _icnVsSprite[id].size() > 63 && _icnVsSprite[id][63].width() == 19 && _icnVsSprite[id][63].height() == 37 ) { // Air Elemental
