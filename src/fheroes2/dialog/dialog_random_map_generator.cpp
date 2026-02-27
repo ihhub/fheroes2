@@ -261,7 +261,7 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
 
     HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, originalWaterPercentageLimit, configuration.waterPercentage };
     TextRestorer waterValue{ display, valuePositionX, positionY };
-    waterValue.render( std::to_string( configuration.waterPercentage ) + " / " + std::to_string( currentWaterPercentageLimit ), display );
+    waterValue.render( std::to_string( configuration.waterPercentage ) + "/" + std::to_string( currentWaterPercentageLimit ) + "%", display );
 
     positionY += ySpacing;
 
@@ -325,12 +325,12 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
             currentWaterPercentageLimit = newLimit;
 
             playerCountValue.render( std::to_string( configuration.playerCount ), display );
-            waterValue.render( std::to_string( configuration.waterPercentage ) + " / " + std::to_string( currentWaterPercentageLimit ), display );
+            waterValue.render( std::to_string( configuration.waterPercentage ) + "/" + std::to_string( currentWaterPercentageLimit ) + "%", display );
             display.render( window.activeArea() );
         }
         else if ( waterSlider.processEvents( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
-            waterValue.render( std::to_string( configuration.waterPercentage ) + " / " + std::to_string( currentWaterPercentageLimit ), display );
+            waterValue.render( std::to_string( configuration.waterPercentage ) + "/" + std::to_string( currentWaterPercentageLimit ) + "%", display );
             display.render( window.activeArea() );
         }
         else if ( monsterSlider.processEvents( le ) ) {
