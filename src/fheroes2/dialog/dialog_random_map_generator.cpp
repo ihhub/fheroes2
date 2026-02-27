@@ -185,6 +185,7 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
     configuration.playerCount = std::min<int32_t>( 6, configuration.playerCount );
 
     const int32_t originalWaterPercentageLimit{ Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth ) };
+    int32_t currentWaterPercentageLimit = originalWaterPercentageLimit;
     configuration.waterPercentage = std::min( configuration.waterPercentage, originalWaterPercentageLimit );
 
     Display & display = Display::instance();
@@ -260,7 +261,7 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
 
     HorizontalSlider waterSlider{ { inputPositionX, positionY }, 0, originalWaterPercentageLimit, configuration.waterPercentage };
     TextRestorer waterValue{ display, valuePositionX, positionY };
-    waterValue.render( std::to_string( configuration.waterPercentage ), display );
+    waterValue.render( std::to_string( configuration.waterPercentage ) + "/" + std::to_string( currentWaterPercentageLimit ) + "%", display );
 
     positionY += ySpacing;
 
@@ -321,14 +322,15 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
             const int32_t newLimit = Maps::Random_Generator::calculateMaximumWaterPercentage( configuration.playerCount, mapWidth );
             configuration.waterPercentage = std::min( configuration.waterPercentage, newLimit );
             waterSlider.setRange( 0, newLimit );
+            currentWaterPercentageLimit = newLimit;
 
             playerCountValue.render( std::to_string( configuration.playerCount ), display );
-            waterValue.render( std::to_string( configuration.waterPercentage ), display );
+            waterValue.render( std::to_string( configuration.waterPercentage ) + "/" + std::to_string( currentWaterPercentageLimit ) + "%", display );
             display.render( window.activeArea() );
         }
         else if ( waterSlider.processEvents( le ) ) {
             configuration.waterPercentage = waterSlider.getCurrentValue();
-            waterValue.render( std::to_string( configuration.waterPercentage ), display );
+            waterValue.render( std::to_string( configuration.waterPercentage ) + "/" + std::to_string( currentWaterPercentageLimit ) + "%", display );
             display.render( window.activeArea() );
         }
         else if ( monsterSlider.processEvents( le ) ) {
