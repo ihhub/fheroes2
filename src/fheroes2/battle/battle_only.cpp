@@ -350,11 +350,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
         else if ( le.isMouseRightButtonPressedInArea( terrainArea ) ) {
             if ( _terrainType == Maps::Ground::UNKNOWN ) {
-                fheroes2::showStandardTextMessage( _( "Terrain" ), _( "The battle will take place on a randomly selected terrain. Click or scroll to change the terrain type." ),
+                fheroes2::showStandardTextMessage( _( "Terrain" ), _( "The battle will take place on a randomly selected terrain. Click to change the terrain type." ),
                                                    0 );
             }
             else {
-                std::string message = _( "The battle will take place on %{terrain-type} terrain. Click or scroll to change the terrain type." );
+                std::string message = _( "The battle will take place on %{terrain-type} terrain. Click to change the terrain type." );
                 StringReplace( message, "%{terrain-type}", StringLower( Maps::Ground::String( _terrainType ) ) );
                 fheroes2::showStandardTextMessage( _( "Terrain" ), std::move( message ), 0 );
             }
