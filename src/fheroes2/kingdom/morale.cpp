@@ -74,7 +74,7 @@ std::string Morale::Description( int morale )
         return "Unknown";
     }
 
-    if ( Morale::BLOOD == morale ) {
+    if ( morale == Morale::BLOOD ) {
         StringReplace( msg, "%{morale}", _( "Blood" ) );
     }
     else {
