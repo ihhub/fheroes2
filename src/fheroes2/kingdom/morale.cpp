@@ -63,7 +63,6 @@ std::string Morale::Description( int morale )
         msg = _( "%{morale} morale may cause the hero's units to freeze in combat." );
         break;
     case Morale::NORMAL:
-        // return _( "Neutral morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
         msg = _( "%{morale} morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
         break;
     case Morale::GOOD:
