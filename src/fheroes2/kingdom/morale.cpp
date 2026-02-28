@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,9 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "morale.h"
+
 #include <algorithm>
 
-#include "morale.h"
+#include "tools.h"
 #include "translations.h"
 
 std::string Morale::String( int morale )
@@ -52,22 +54,34 @@ std::string Morale::String( int morale )
 
 std::string Morale::Description( int morale )
 {
+    std::string msg;
+
     switch ( morale ) {
     case Morale::TREASON:
     case Morale::AWFUL:
     case Morale::POOR:
-        return _( "Negative morale may cause the hero's units to freeze in combat." );
+        msg = _( "%{morale} morale may cause the hero's units to freeze in combat." );
+        break;
     case Morale::NORMAL:
-        return _( "Neutral morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
+        msg = _( "%{morale} morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
+        break;
     case Morale::GOOD:
     case Morale::GREAT:
     case Morale::BLOOD:
-        return _( "Positive morale may give the hero's units extra attacks in combat." );
-    default:
+        msg = _( "%{morale} morale may give the hero's units extra attacks in combat." );
         break;
+    default:
+        return "Unknown";
     }
 
-    return "Unknown";
+    if ( morale == Morale::BLOOD ) {
+        StringReplace( msg, "%{morale}", _( "Blood" ) );
+    }
+    else {
+        StringReplace( msg, "%{morale}", Morale::String( morale ) );
+    }
+
+    return msg;
 }
 
 int Morale::Normalize( const int morale )

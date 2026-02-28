@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,9 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "luck.h"
+
 #include <algorithm>
 
-#include "luck.h"
+#include "tools.h"
 #include "translations.h"
 
 std::string Luck::String( int luck )
@@ -52,22 +54,28 @@ std::string Luck::String( int luck )
 
 std::string Luck::Description( int luck )
 {
+    std::string msg;
+
     switch ( luck ) {
     case Luck::CURSED:
     case Luck::AWFUL:
     case Luck::BAD:
-        return _( "Negative luck sometimes falls on the hero's units in combat, causing their attacks to only do half damage." );
+        msg = _( "%{luck} luck sometimes falls on the hero's units in combat, causing their attacks to only do half damage." );
+        break;
     case Luck::NORMAL:
-        return _( "Neutral luck means the hero's units will never get lucky or unlucky attacks on the enemy." );
+        msg = _( "%{luck} luck means the hero's units will never get lucky or unlucky attacks on the enemy." );
+        break;
     case Luck::GOOD:
     case Luck::GREAT:
     case Luck::IRISH:
-        return _( "Positive luck sometimes lets the hero's units get lucky attacks (double strength) in combat." );
-    default:
+        msg = _( "%{luck} luck sometimes lets the hero's units get lucky attacks (double strength) in combat." );
         break;
+    default:
+        return "Unknown";
     }
 
-    return "Unknown";
+    StringReplace( msg, "%{luck}", Luck::String( luck ) );
+    return msg;
 }
 
 int Luck::Normalize( const int luck )
