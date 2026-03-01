@@ -56,6 +56,8 @@ namespace
             return ICN::PORT0094;
         case Race::NECR:
             return ICN::PORT0095;
+        case Race::AQUA:
+            return ICN::PORT0092; // TODO: Replace with Aquamari-specific values.
         default:
             return -1;
         }
@@ -76,6 +78,8 @@ namespace
             return { 42, 10 };
         case Race::NECR:
             return { 42, 9 };
+        case Race::AQUA:
+            return { 43, 9 }; // TODO: Replace with Aquamari-specific values.
         default:
             return {};
         }
@@ -228,6 +232,8 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
             return fheroes2::AGG::GetICN( ICN::MINICAPT, 4 );
         case Race::NECR:
             return fheroes2::AGG::GetICN( ICN::MINICAPT, 5 );
+        case Race::AQUA:
+            return fheroes2::AGG::GetICN( ICN::MINICAPT, 2 ); // TODO: Replace with Aquamari-specific values.
         default:
             break;
         }

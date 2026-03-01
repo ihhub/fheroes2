@@ -376,6 +376,10 @@ namespace
             case Race::NECR:
                 icnId = ICN::NECR32;
                 break;
+            case Race::AQUA:
+                // TODO: Replace with Aquamari-specific ICN once available.
+                icnId = ICN::SORC32;
+                break;
 
             default:
                 // Did you add a new race? Add logic above!

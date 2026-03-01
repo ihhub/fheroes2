@@ -122,6 +122,20 @@ public:
         FIRE_ELEMENT,
         WATER_ELEMENT,
 
+        // Aquamari faction creatures.
+        REEFSPAWN,
+        REEFSPAWN_SWARM,
+        STORMRAY,
+        HIGH_STORMRAY,
+        TIDECALLER,
+        HIGH_TIDECALLER,
+        ABYSSAL_MAULER,
+        IMPERIAL_BEHEMOTH,
+        STORMFIN,
+        STORMFIN_DRAKE,
+        LEVIARCH,
+        LEVIARCH_KING,
+
         // Editor-related monsters.
         RANDOM_MONSTER,
         RANDOM_MONSTER_LEVEL_1,

@@ -648,6 +648,44 @@ namespace
         return nullptr;
     }
 
+    const char * getAquamariBuildingName( const BuildingType buildingId )
+    {
+        switch ( buildingId ) {
+        case BUILD_SPEC:
+            return _( "Tidecaller's Beacon" );
+        case BUILD_WEL2:
+            return _( "Tidal Hatchery" );
+        case DWELLING_MONSTER1:
+            return _( "Reefspawn Nursery" );
+        case DWELLING_MONSTER2:
+            return _( "Stormray Eyrie" );
+        case DWELLING_UPGRADE2:
+            return _( "Upg. Stormray Eyrie" );
+        case DWELLING_MONSTER3:
+            return _( "Tidecaller Temple" );
+        case DWELLING_UPGRADE3:
+            return _( "Upg. Tidecaller Temple" );
+        case DWELLING_MONSTER4:
+            return _( "Abyssal Pit" );
+        case DWELLING_UPGRADE4:
+            return _( "Upg. Abyssal Pit" );
+        case DWELLING_MONSTER5:
+            return _( "Stormfin Spire" );
+        case DWELLING_UPGRADE5:
+            return _( "Upg. Stormfin Spire" );
+        case DWELLING_MONSTER6:
+            return _( "Leviarch Palace" );
+        case DWELLING_UPGRADE6:
+            return _( "Upg. Leviarch Palace" );
+        default:
+            break;
+        }
+
+        // Did you add a new building?
+        assert( 0 );
+        return nullptr;
+    }
+
     const char * getRandomBuildingName( const BuildingType buildingId )
     {
         switch ( buildingId ) {
@@ -784,6 +822,22 @@ namespace
         return nullptr;
     }
 
+    const char * getAquamariBuildingDescription( const BuildingType buildingId )
+    {
+        switch ( buildingId ) {
+        case BUILD_SPEC:
+            return _( "The Tidecaller's Beacon grants the Summon Boat spell to visiting heroes and provides a sea movement bonus equivalent to a Lighthouse." );
+        case BUILD_WEL2:
+            return _( "The Tidal Hatchery increases production of Reefspawn by %{count} per week." );
+        default:
+            break;
+        }
+
+        // Did you add a new building?
+        assert( 0 );
+        return nullptr;
+    }
+
     const char * getRandomBuildingDescription( const BuildingType buildingId )
     {
         switch ( buildingId ) {
@@ -823,6 +877,8 @@ namespace fheroes2
             return getWizardBuildingArea( buildingId );
         case Race::NECR:
             return getNecromancerBuildingArea( buildingId );
+        case Race::AQUA:
+            return getSorceressBuildingArea( buildingId ); // TODO: Replace with Aquamari-specific values.
         default:
             break;
         }
@@ -893,6 +949,8 @@ namespace fheroes2
             return getWizardBuildingName( buildingId );
         case Race::NECR:
             return getNecromancerBuildingName( buildingId );
+        case Race::AQUA:
+            return getAquamariBuildingName( buildingId );
         case Race::RAND:
             return getRandomBuildingName( buildingId );
         default:
@@ -965,6 +1023,8 @@ namespace fheroes2
             return getWizardBuildingDescription( buildingId );
         case Race::NECR:
             return getNecromancerBuildingDescription( buildingId );
+        case Race::AQUA:
+            return getAquamariBuildingDescription( buildingId );
         case Race::RAND:
             return getRandomBuildingDescription( buildingId );
         default:
@@ -1090,6 +1150,22 @@ namespace fheroes2
                 break;
             }
         }
+        else if ( race == Race::AQUA ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            default:
+                break;
+            }
+        }
 
         return buildingId;
     }
@@ -1112,6 +1188,7 @@ namespace fheroes2
             case Race::WZRD:
             case Race::WRLK:
             case Race::NECR:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER1;
                 break;
 
@@ -1137,6 +1214,7 @@ namespace fheroes2
             case Race::WZRD:
             case Race::WRLK:
             case Race::NECR:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER1;
                 break;
 
@@ -1163,6 +1241,7 @@ namespace fheroes2
 
             case Race::WZRD:
             case Race::WRLK:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER2;
                 break;
 
@@ -1186,6 +1265,7 @@ namespace fheroes2
                 break;
 
             case Race::SORC:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER4;
                 break;
 
@@ -1219,6 +1299,7 @@ namespace fheroes2
             case Race::BARB:
             case Race::SORC:
             case Race::NECR:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER5;
                 break;
 
@@ -1248,6 +1329,7 @@ namespace fheroes2
                 break;
 
             case Race::NECR:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER2;
                 break;
 
@@ -1275,6 +1357,7 @@ namespace fheroes2
                 break;
 
             case Race::NECR:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER3;
                 break;
 
@@ -1295,6 +1378,7 @@ namespace fheroes2
             case Race::SORC:
             case Race::WRLK:
             case Race::NECR:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER4;
                 break;
 
@@ -1307,6 +1391,7 @@ namespace fheroes2
             switch ( race ) {
             case Race::KNGT:
             case Race::BARB:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER5;
                 break;
 
@@ -1330,6 +1415,7 @@ namespace fheroes2
             case Race::KNGT:
             case Race::WRLK:
             case Race::WZRD:
+            case Race::AQUA:
                 requirement |= DWELLING_MONSTER6;
                 break;
 
@@ -1627,6 +1713,37 @@ namespace fheroes2
             priorities.emplace_back( BUILD_MARKETPLACE );
             priorities.emplace_back( BUILD_STATUE );
             priorities.emplace_back( BUILD_WELL );
+            break;
+        // TODO: Replace with Aquamari-specific values.
+        case Race::AQUA:
+            priorities.emplace_back( BUILD_SPEC );
+            priorities.emplace_back( DWELLING_MONSTER6 );
+            priorities.emplace_back( BUILD_MAGEGUILD1 );
+            priorities.emplace_back( BUILD_MAGEGUILD2 );
+            priorities.emplace_back( BUILD_MAGEGUILD3 );
+            priorities.emplace_back( BUILD_MAGEGUILD4 );
+            priorities.emplace_back( BUILD_MAGEGUILD5 );
+            priorities.emplace_back( BUILD_CAPTAIN );
+            priorities.emplace_back( BUILD_TENT );
+            priorities.emplace_back( BUILD_CASTLE );
+            priorities.emplace_back( BUILD_LEFTTURRET );
+            priorities.emplace_back( BUILD_RIGHTTURRET );
+            priorities.emplace_back( BUILD_MOAT );
+            priorities.emplace_back( DWELLING_MONSTER3 );
+            priorities.emplace_back( DWELLING_UPGRADE3 );
+            priorities.emplace_back( BUILD_SHIPYARD );
+            priorities.emplace_back( BUILD_MARKETPLACE );
+            priorities.emplace_back( DWELLING_MONSTER2 );
+            priorities.emplace_back( DWELLING_UPGRADE2 );
+            priorities.emplace_back( BUILD_THIEVESGUILD );
+            priorities.emplace_back( DWELLING_MONSTER1 );
+            priorities.emplace_back( BUILD_TAVERN );
+            priorities.emplace_back( BUILD_STATUE );
+            priorities.emplace_back( BUILD_WEL2 );
+            priorities.emplace_back( DWELLING_MONSTER4 );
+            priorities.emplace_back( DWELLING_UPGRADE4 );
+            priorities.emplace_back( BUILD_WELL );
+            priorities.emplace_back( DWELLING_MONSTER5 );
             break;
         default:
             // Did you add a new castle?

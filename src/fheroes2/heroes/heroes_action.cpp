@@ -512,6 +512,12 @@ namespace
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
 
             castle->trainHeroInMageGuild( hero );
+
+            // Aquamari Tidecaller's Beacon grants Summon Boat spell to visiting heroes.
+            if ( castle->GetRace() == Race::AQUA && castle->isBuild( BUILD_SPEC ) && hero.HaveSpellBook() ) {
+                hero.AppendSpellToBook( Spell( Spell::SUMMONBOAT ), true );
+            }
+
             Game::OpenCastleDialog( *castle );
 
             return;

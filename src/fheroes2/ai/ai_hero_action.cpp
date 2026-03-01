@@ -184,6 +184,7 @@ namespace
 
         case Race::SORC:
         case Race::WZRD:
+        case Race::AQUA:
             if ( hero.GetPower() < 5 ) {
                 return Skill::Primary::POWER;
             }

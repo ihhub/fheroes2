@@ -40,6 +40,10 @@ namespace fheroes2
         case Race::SORC:
             Blit( AGG::GetICN( ICN::STRIP, 6 ), output, offset.x, offset.y );
             break;
+        case Race::AQUA:
+            // TODO: Replace with Aquamari-specific values.
+            Blit( AGG::GetICN( ICN::STRIP, 6 ), output, offset.x, offset.y );
+            break;
         case Race::WRLK:
             Blit( AGG::GetICN( ICN::STRIP, 7 ), output, offset.x, offset.y );
             break;

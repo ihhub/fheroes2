@@ -42,8 +42,8 @@ const char * Race::String( int race )
         return _( "Wizard" );
     case Race::NECR:
         return _( "Necromancer" );
-    case Race::MULT:
-        return _( "Multi" );
+    case Race::AQUA:
+        return _( "Aquamari" );
     case Race::RAND:
         return _( "race|Random" );
     case Race::NONE:
@@ -72,8 +72,8 @@ const char * Race::DoubleLinedString( int race )
         return _( "doubleLined|Wizard" );
     case Race::NECR:
         return _( "doubleLined|Necro-\nmancer" );
-    case Race::MULT:
-        return _( "doubleLinedRace|Multi" );
+    case Race::AQUA:
+        return _( "doubleLined|Aquamari" );
     case Race::RAND:
         return _( "doubleLinedRace|Random" );
     case Race::NONE:
@@ -89,7 +89,7 @@ const char * Race::DoubleLinedString( int race )
 
 int Race::Rand()
 {
-    switch ( Rand::Get( 1, 6 ) ) {
+    switch ( Rand::Get( 1, 7 ) ) {
     case 1:
         return Race::KNGT;
     case 2:
@@ -100,11 +100,13 @@ int Race::Rand()
         return Race::WRLK;
     case 5:
         return Race::WZRD;
+    case 6:
+        return Race::NECR;
     default:
         break;
     }
 
-    return Race::NECR;
+    return Race::AQUA;
 }
 
 bool Race::isMagicalRace( const int race )
@@ -117,6 +119,7 @@ bool Race::isMagicalRace( const int race )
     case WRLK:
     case WZRD:
     case NECR:
+    case AQUA:
         return true;
     default:
         assert( 0 );
@@ -136,7 +139,7 @@ bool Race::isEvilRace( const int race )
     case KNGT:
     case SORC:
     case WZRD:
-    case MULT:
+    case AQUA:
     case RAND:
         return false;
     default:
@@ -163,7 +166,7 @@ uint8_t Race::IndexToRace( const int index )
     case 5:
         return Race::NECR;
     case 6:
-        return Race::MULT;
+        return Race::AQUA;
     case 7:
         return Race::RAND;
     default:
@@ -188,7 +191,9 @@ uint32_t Race::getRaceIcnIndex( const int race, const bool isActivePlayer )
         return isActivePlayer ? 55 : 74;
     case Race::NECR:
         return isActivePlayer ? 56 : 75;
-    case Race::MULT:
+    case Race::AQUA:
+        // TODO: Replace with custom Aquamari sprite indices once art is created.
+        // For now, reuse the former MULT slot (57/76).
         return isActivePlayer ? 57 : 76;
     case Race::RAND:
         return 58;
@@ -215,6 +220,8 @@ int Race::getNextRace( const int race )
     case Race::WZRD:
         return Race::NECR;
     case Race::NECR:
+        return Race::AQUA;
+    case Race::AQUA:
         return Race::RAND;
     case Race::RAND:
         return Race::KNGT;
@@ -241,12 +248,26 @@ int Race::getPreviousRace( const int race )
         return Race::WRLK;
     case Race::NECR:
         return Race::WZRD;
-    case Race::RAND:
+    case Race::AQUA:
         return Race::NECR;
+    case Race::RAND:
+        return Race::AQUA;
     default:
         // Did you add a new race? Add the logic above
         assert( 0 );
         break;
     }
     return Race::NONE;
+}
+
+bool Race::isMultiRace( const int raceFlags )
+{
+    // Count the number of distinct playable race bits set.
+    int count = 0;
+    int flags = raceFlags & Race::ALL;
+    while ( flags ) {
+        count += ( flags & 1 );
+        flags >>= 1;
+    }
+    return count > 1;
 }

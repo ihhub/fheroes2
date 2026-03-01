@@ -1811,6 +1811,7 @@ namespace Maps
             res.first = PlayerColor::PURPLE;
         }
 
+        // TODO: When Aquamari hero sprites are added, change modulo from 7 to 8 and add case 7 for Race::AQUA (shifting Race::RAND to case 7 or handling separately).
         switch ( heroSpriteIndex % 7 ) {
         case 0:
             res.second = Race::KNGT;

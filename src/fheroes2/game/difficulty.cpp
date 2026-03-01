@@ -105,6 +105,7 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const Kingd
                 }
                 break;
             case Race::SORC:
+            case Race::AQUA: // TODO: Replace with Aquamari-specific values.
                 if ( doesKingdomHaveResourceSource( Resource::MERCURY ) ) {
                     result += ProfitConditions::FromMine( Resource::MERCURY );
                 }

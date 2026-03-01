@@ -183,6 +183,9 @@ namespace MUS
             return WIZARD_CASTLE;
         case Race::NECR:
             return NECROMANCER_CASTLE;
+        case Race::AQUA:
+            // TODO: Replace with Aquamari-specific values once art is created.
+            return SORCERESS_CASTLE;
         default:
             // Did you add a new race? Add an appropriate music theme for it!
             assert( 0 );

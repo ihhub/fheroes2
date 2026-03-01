@@ -896,6 +896,9 @@ int ICN::getCaptainIcnId( const int race )
         return CSTLCAPW;
     case Race::WZRD:
         return CSTLCAPZ;
+    case Race::AQUA:
+        // TODO: Replace with Aquamari-specific values once art is created.
+        return CSTLCAPS;
     default:
         break;
     }
@@ -918,6 +921,9 @@ int ICN::getBuildingIcnId( const int race )
         return CSTLWRLK;
     case Race::WZRD:
         return CSTLWZRD;
+    case Race::AQUA:
+        // TODO: Replace with Aquamari-specific values once art is created.
+        return CSTLSORC;
     default:
         break;
     }
@@ -940,6 +946,9 @@ int ICN::getCastleIcnId( const int race )
         return CASTLEW;
     case Race::WZRD:
         return CASTLEZ;
+    case Race::AQUA:
+        // TODO: Replace with Aquamari-specific values once art is created.
+        return CASTLES;
     default:
         break;
     }

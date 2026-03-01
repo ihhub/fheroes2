@@ -158,6 +158,7 @@ public:
     }
 
     uint32_t GetCountNecromancyShrineBuild() const;
+    uint32_t GetCountTidecallersBeaconBuild() const;
     uint32_t GetCountBuilding( uint32_t ) const;
     uint32_t GetCountThievesGuild() const;
 

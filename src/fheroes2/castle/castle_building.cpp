@@ -56,6 +56,8 @@ namespace
             return ICN::TOWNBKG4;
         case Race::NECR:
             return ICN::TOWNBKG5;
+        case Race::AQUA:
+            return ICN::TOWNBKG2; // TODO: Replace with Aquamari-specific values.
         default:
             // Have you added a new race? Add the logic for it!
             assert( 0 );
@@ -381,6 +383,9 @@ namespace
                 break;
             case Race::WZRD:
                 bayIcnId = ICN::WIZARD_CASTLE_BAY;
+                break;
+            case Race::AQUA:
+                bayIcnId = ICN::TWNSEXT0; // TODO: Replace with Aquamari-specific values.
                 break;
             default:
                 // Did you add a new race? Add the logic for it!

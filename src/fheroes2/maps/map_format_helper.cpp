@@ -1395,7 +1395,7 @@ namespace Maps
         static_assert( Race::WRLK == 1 << 3, "The race values have changed. You are going to break map format!" );
         static_assert( Race::WZRD == 1 << 4, "The race values have changed. You are going to break map format!" );
         static_assert( Race::NECR == 1 << 5, "The race values have changed. You are going to break map format!" );
-        static_assert( Race::MULT == 1 << 6, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::AQUA == 1 << 6, "The race values have changed. You are going to break map format!" );
         static_assert( Race::RAND == 1 << 7, "The race values have changed. You are going to break map format!" );
 
         constexpr size_t mainColors{ maxNumOfPlayers };
@@ -1476,19 +1476,18 @@ namespace Maps
             if ( ( map.playerRace[i] & Race::RAND ) != 0 ) {
                 map.playerRace[i] = Race::RAND;
             }
-            if ( ( map.playerRace[i] & Race::MULT ) != 0 ) {
-                map.playerRace[i] = Race::MULT;
-            }
-            else {
+            // If the player has castles/heroes of multiple races, keep the combined race flags.
+            // Use Race::isMultiRace() at runtime to detect multi-race situations.
+            {
                 size_t raceCount = 0;
-                for ( uint8_t raceIdx = 0; raceIdx < 6; ++raceIdx ) {
+                for ( uint8_t raceIdx = 0; raceIdx < 7; ++raceIdx ) {
                     if ( ( map.playerRace[i] & ( 1 << raceIdx ) ) != 0 ) {
                         ++raceCount;
                     }
                 }
 
                 if ( raceCount > 1 ) {
-                    map.playerRace[i] = Race::MULT;
+                    // Keep the combined race flags as-is; isMultiRace() will detect this at runtime.
                 }
             }
         }

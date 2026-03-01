@@ -33,7 +33,7 @@
 
 namespace
 {
-    const std::array<Skill::FactionProperties, 6> factionProperties = { { { "knight",
+    const std::array<Skill::FactionProperties, 7> factionProperties = { { { "knight",
                                                                             { 1, 1, 1, 1 },
                                                                             { 2, 2, 1, 1 },
                                                                             0,
@@ -86,7 +86,18 @@ namespace
                                                                             10,
                                                                             { 15, 15, 35, 35 },
                                                                             { 25, 25, 25, 25 },
-                                                                            { 1, 3, 2, 3, 2, 0, 2, 1, 3, 2, 5, 3, 1, 4 } } } };
+                                                                            { 1, 3, 2, 3, 2, 0, 2, 1, 3, 2, 5, 3, 1, 4 } },
+                                                                          // Aquamari faction.
+                                                                          // heroInitialPrimarySkills are averaged across Tide Marshals (2,2,1,1) and Aquamancers (0,0,2,3).
+                                                                          { "aquamari",
+                                                                            { 1, 1, 1, 1 },
+                                                                            { 1, 1, 2, 2 },
+                                                                            15,
+                                                                            { 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1 },
+                                                                            10,
+                                                                            { 15, 15, 30, 40 },
+                                                                            { 20, 20, 30, 30 },
+                                                                            { 3, 3, 2, 2, 2, 2, 2, 3, 3, 4, 0, 2, 1, 4 } } } };
 
     const std::array<Skill::SecondarySkillValuesPerLevel, 14> secondarySkillValuesPerLevel = { { { "pathfinding", { 25, 50, 100 } },
                                                                                                  { "archery", { 10, 25, 50 } },
@@ -217,6 +228,9 @@ const Skill::FactionProperties * GameStatic::GetFactionProperties( const int rac
         return &factionProperties[4];
     case Race::NECR:
         return &factionProperties[5];
+    case Race::AQUA:
+        // TODO: Replace with Aquamari-specific values.
+        return &factionProperties[6];
     default:
         break;
     }

@@ -447,6 +447,10 @@ void Castle::_postLoad()
     case Race::NECR:
         _constructedBuildings &= ~( DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
+    case Race::AQUA:
+        // TODO: Replace with Aquamari-specific values.
+        _constructedBuildings &= ~( DWELLING_UPGRADE5 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+        break;
     default:
         break;
     }
@@ -1293,6 +1297,14 @@ bool Castle::BuyBuilding( const uint32_t buildingType )
         if ( HaveLibraryCapability() ) {
             _trainGuestHeroAndCaptainInMageGuild();
         }
+
+        // Aquamari Tidecaller's Beacon grants Summon Boat spell to the visiting hero.
+        if ( _race == Race::AQUA ) {
+            Heroes * hero = world.GetHero( *this );
+            if ( hero != nullptr && hero->HaveSpellBook() ) {
+                hero->AppendSpellToBook( Spell( Spell::SUMMONBOAT ), true );
+            }
+        }
         break;
 
     case DWELLING_MONSTER1:
@@ -1397,6 +1409,9 @@ void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
     case Race::NECR:
         index = 160;
         break;
+    case Race::AQUA:
+        index = 64; // TODO: Replace with Aquamari-specific values.
+        break;
     default:
         break;
     }
@@ -1441,6 +1456,8 @@ int Castle::GetICNBoat( const int race )
         return ICN::TWNWBOAT;
     case Race::WZRD:
         return ICN::TWNZBOAT;
+    case Race::AQUA:
+        return ICN::TWNSBOAT; // TODO: Replace with Aquamari-specific values.
     default:
         break;
     }
@@ -1802,6 +1819,65 @@ int Castle::GetICNBuilding( const uint32_t buildingType, const int race )
             return ICN::TWNZDW_5;
         case DWELLING_UPGRADE6:
             return ICN::TWNZUP_5;
+        default:
+            break;
+        }
+    }
+    // TODO: Replace with Aquamari-specific values.
+    else if ( Race::AQUA == race ) {
+        switch ( buildingType ) {
+        case BUILD_CASTLE:
+            return ICN::TWNSCSTL;
+        case BUILD_TENT:
+            return ICN::TWNSTENT;
+        case BUILD_SPEC:
+            return ICN::TWNSSPEC;
+        case BUILD_CAPTAIN:
+            return ICN::TWNSCAPT;
+        case BUILD_WEL2:
+            return ICN::TWNSWEL2;
+        case BUILD_LEFTTURRET:
+            return ICN::TWNSLTUR;
+        case BUILD_RIGHTTURRET:
+            return ICN::TWNSRTUR;
+        case BUILD_MOAT:
+            return ICN::TWNSMOAT;
+        case BUILD_MARKETPLACE:
+            return ICN::TWNSMARK;
+        case BUILD_THIEVESGUILD:
+            return ICN::TWNSTHIE;
+        case BUILD_TAVERN:
+            return ICN::TWNSTVRN;
+        case BUILD_WELL:
+            return ICN::TWNSWELL;
+        case BUILD_STATUE:
+            return ICN::TWNSSTAT;
+        case BUILD_SHIPYARD:
+            return ICN::TWNSDOCK;
+        case BUILD_MAGEGUILD1:
+        case BUILD_MAGEGUILD2:
+        case BUILD_MAGEGUILD3:
+        case BUILD_MAGEGUILD4:
+        case BUILD_MAGEGUILD5:
+            return ICN::TWNSMAGE;
+        case DWELLING_MONSTER1:
+            return ICN::TWNSDW_0;
+        case DWELLING_MONSTER2:
+            return ICN::TWNSDW_1;
+        case DWELLING_UPGRADE2:
+            return ICN::TWNSUP_1;
+        case DWELLING_MONSTER3:
+            return ICN::TWNSDW_2;
+        case DWELLING_UPGRADE3:
+            return ICN::TWNSUP_2;
+        case DWELLING_MONSTER4:
+            return ICN::TWNSDW_3;
+        case DWELLING_UPGRADE4:
+            return ICN::TWNSUP_3;
+        case DWELLING_MONSTER5:
+            return ICN::TWNSDW_4;
+        case DWELLING_MONSTER6:
+            return ICN::TWNSDW_5;
         default:
             break;
         }

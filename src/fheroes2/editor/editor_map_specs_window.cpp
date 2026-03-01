@@ -151,6 +151,10 @@ namespace
             case Race::NECR:
                 portraitIndex = 56;
                 break;
+            case Race::AQUA:
+                // TODO: Replace with Aquamari-specific portrait index once available.
+                portraitIndex = 53;
+                break;
             case Race::RAND:
                 portraitIndex = 58;
                 break;

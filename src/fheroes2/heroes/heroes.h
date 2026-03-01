@@ -155,6 +155,22 @@ public:
         SANDRO,
         CELIA,
 
+        // Aquamari Tide Marshal heroes (martial class).
+        THALGOR,
+        NERANTHIS,
+        CORALYX,
+        MAREVYN,
+        DELPHARA,
+        PELLAGAR,
+
+        // Aquamari Aquamancer heroes (magical class).
+        AZURIEL,
+        SIRENNA,
+        PELAGIUS,
+        ONDARA,
+        THESSALY,
+        LYSANDRE,
+
         // The Succession Wars campaign heroes.
         ROLAND,
         CORLAGON,

@@ -52,6 +52,10 @@ namespace fheroes2
         case Race::SORC:
             guildIcn = ICN::MAGEGLDS;
             break;
+        case Race::AQUA:
+            // TODO: Replace with Aquamari-specific values.
+            guildIcn = ICN::MAGEGLDS;
+            break;
         case Race::WRLK:
             guildIcn = ICN::MAGEGLDW;
             break;

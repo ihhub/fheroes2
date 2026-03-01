@@ -176,6 +176,9 @@ namespace fheroes2
             return isCastle ? 10 : 16;
         case Race::SORC:
             return isCastle ? 11 : 17;
+        case Race::AQUA:
+            // TODO: Replace with Aquamari-specific values.
+            return isCastle ? 11 : 17;
         case Race::WRLK:
             return isCastle ? 12 : 18;
         case Race::WZRD:

@@ -141,7 +141,11 @@ namespace
                 ICN::DRAGGREE, ICN::DRAGRED,  ICN::DRAGBLAK, ICN::HALFLING, ICN::BOAR,     ICN::GOLEM,    ICN::GOLEM2,   ICN::ROC,      ICN::MAGE1,
                 ICN::MAGE2,    ICN::TITANBLU, ICN::TITANBLA, ICN::SKELETON, ICN::ZOMBIE,   ICN::ZOMBIE2,  ICN::MUMMYW,   ICN::MUMMY2,   ICN::VAMPIRE,
                 ICN::VAMPIRE2, ICN::LICH,     ICN::LICH2,    ICN::DRAGBONE, ICN::ROGUE,    ICN::NOMAD,    ICN::GHOST,    ICN::GENIE,    ICN::MEDUSA,
-                ICN::EELEM,    ICN::AELEM,    ICN::FELEM,    ICN::WELEM,    ICN::UNKNOWN,  ICN::UNKNOWN,  ICN::UNKNOWN,  ICN::UNKNOWN,  ICN::UNKNOWN };
+                ICN::EELEM,    ICN::AELEM,    ICN::FELEM,    ICN::WELEM,
+                // Aquamari monsters (TODO: Replace placeholder ICNs with custom Aquamari sprites)
+                ICN::SPRITE,   ICN::SPRITE,   ICN::ROC,      ICN::ROC,      ICN::ELF,      ICN::ELF2,
+                ICN::OGRE,     ICN::OGRE2,    ICN::DRAGGREE, ICN::DRAGGREE, ICN::GENIE,    ICN::GENIE,
+                ICN::UNKNOWN,  ICN::UNKNOWN,  ICN::UNKNOWN,  ICN::UNKNOWN,  ICN::UNKNOWN };
 
         const char * binFileName[Monster::MONSTER_COUNT]
             = { "UNKNOWN",      "PEAS_FRM.BIN", "ARCHRFRM.BIN", "ARCHRFRM.BIN", "PIKMNFRM.BIN", "PIKMNFRM.BIN", "SWRDSFRM.BIN", "SWRDSFRM.BIN", "CVLRYFRM.BIN",
@@ -151,7 +155,11 @@ namespace
                 "DRAGGFRM.BIN", "DRAGRFRM.BIN", "DRAGBFRM.BIN", "HALFLFRM.BIN", "BOAR_FRM.BIN", "GOLEMFRM.BIN", "GOLEMFRM.BIN", "ROC__FRM.BIN", "MAGE1FRM.BIN",
                 "MAGE1FRM.BIN", "TITANFRM.BIN", "TITA2FRM.BIN", "SKEL_FRM.BIN", "ZOMB_FRM.BIN", "ZOMB_FRM.BIN", "MUMMYFRM.BIN", "MUMMYFRM.BIN", "VAMPIFRM.BIN",
                 "VAMPIFRM.BIN", "LICH_FRM.BIN", "LICH_FRM.BIN", "DRABNFRM.BIN", "ROGUEFRM.BIN", "NOMADFRM.BIN", "GHOSTFRM.BIN", "GENIEFRM.BIN", "MEDUSFRM.BIN",
-                "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN" };
+                "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN",
+                // Aquamari monsters (TODO: Replace placeholder BINs with custom Aquamari animations)
+                "SPRITFRM.BIN", "SPRITFRM.BIN", "ROC__FRM.BIN", "ROC__FRM.BIN", "ELF__FRM.BIN", "ELF__FRM.BIN",
+                "OGRE_FRM.BIN", "OGRE_FRM.BIN", "DRAGGFRM.BIN", "DRAGGFRM.BIN", "GENIEFRM.BIN", "GENIEFRM.BIN",
+                "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN" };
 
         const fheroes2::MonsterSound monsterSounds[Monster::MONSTER_COUNT] = {
             // melee attack | death | movement | wince | ranged attack | takeoff | landing | explosion
@@ -222,6 +230,19 @@ namespace
             { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Air Elemental
             { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Fire Elemental
             { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Water Elemental
+            // Aquamari monsters (TODO: Replace placeholder sounds with custom Aquamari sounds)
+            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Reefspawn
+            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Reefspawn Swarm
+            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN, M82::ROC_MOVE, M82::ROC_MOVE, M82::UNKNOWN }, // Stormray
+            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN, M82::ROC_MOVE, M82::ROC_MOVE, M82::UNKNOWN }, // High Stormray
+            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Tidecaller
+            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // High Tidecaller
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Abyssal Mauler
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Imperial Behemoth
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN, M82::DRGNMOVE, M82::DRGNMOVE, M82::UNKNOWN }, // Stormfin
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN, M82::DRGNMOVE, M82::DRGNMOVE, M82::UNKNOWN }, // Stormfin Drake
+            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Leviarch
+            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Leviarch King
             { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster
             { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 1
             { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 2
@@ -299,6 +320,20 @@ namespace
             { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, 0, {}, {} }, // Air Elemental
             { 8, 6, 4, 6, 40, Speed::FAST, 0, 0, {}, {} }, // Fire Elemental
             { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, 0, {}, {} }, // Water Elemental
+            // Aquamari monsters
+            // attack | defence | damageMin | damageMax | hp | speed | shots | baseStrength | abilities | weaknesses
+            { 3, 2, 1, 2, 3, Speed::AVERAGE, 0, 0, {}, {} }, // Reefspawn (Tier I base)
+            { 4, 3, 1, 3, 5, Speed::FAST, 0, 0, {}, {} }, // Reefspawn Swarm (Tier I upgrade)
+            { 5, 4, 2, 4, 15, Speed::VERYFAST, 0, 0, {}, {} }, // Stormray (Tier II base, flyer)
+            { 6, 5, 2, 5, 20, Speed::VERYFAST, 0, 0, {}, {} }, // High Stormray (Tier II upgrade, flyer)
+            { 6, 4, 3, 5, 20, Speed::AVERAGE, 8, 0, {}, {} }, // Tidecaller (Tier III base, ranged)
+            { 7, 5, 3, 7, 25, Speed::FAST, 12, 0, {}, {} }, // High Tidecaller (Tier III upgrade, ranged)
+            { 9, 9, 5, 10, 60, Speed::SLOW, 0, 0, {}, {} }, // Abyssal Mauler (Tier IV base, tank)
+            { 11, 11, 6, 12, 80, Speed::AVERAGE, 0, 0, {}, {} }, // Imperial Behemoth (Tier IV upgrade, tank)
+            { 12, 9, 8, 14, 90, Speed::VERYFAST, 0, 0, {}, {} }, // Stormfin (Tier V base, flyer)
+            { 14, 11, 10, 16, 120, Speed::ULTRAFAST, 0, 0, {}, {} }, // Stormfin Drake (Tier V upgrade, flyer)
+            { 15, 13, 20, 30, 180, Speed::FAST, 0, 0, {}, {} }, // Leviarch (Tier VI base)
+            { 17, 15, 25, 40, 250, Speed::FAST, 0, 0, {}, {} }, // Leviarch King (Tier VI upgrade)
             { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster
             { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster 1
             { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster 2
@@ -375,6 +410,19 @@ namespace
                 { gettext_noop( "Air Elemental" ), gettext_noop( "Air Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
                 { gettext_noop( "Fire Elemental" ), gettext_noop( "Fire Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
                 { gettext_noop( "Water Elemental" ), gettext_noop( "Water Elementals" ), 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                // Aquamari monsters: name, plural, growth, race, level, cost {gold, wood, ore, gems, crystal, sulfur, mercury}
+                { gettext_noop( "Reefspawn" ), gettext_noop( "Reefspawn" ), 12, Race::AQUA, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Reefspawn Swarm" ), gettext_noop( "Reefspawn Swarms" ), 12, Race::AQUA, 1, { 75, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Stormray" ), gettext_noop( "Stormrays" ), 8, Race::AQUA, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "High Stormray" ), gettext_noop( "High Stormrays" ), 8, Race::AQUA, 2, { 275, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Tidecaller" ), gettext_noop( "Tidecallers" ), 6, Race::AQUA, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "High Tidecaller" ), gettext_noop( "High Tidecallers" ), 6, Race::AQUA, 3, { 400, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Abyssal Mauler" ), gettext_noop( "Abyssal Maulers" ), 4, Race::AQUA, 4, { 600, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Imperial Behemoth" ), gettext_noop( "Imperial Behemoths" ), 4, Race::AQUA, 4, { 800, 0, 0, 0, 0, 0, 0 } },
+                { gettext_noop( "Stormfin" ), gettext_noop( "Stormfins" ), 3, Race::AQUA, 5, { 1000, 0, 0, 0, 0, 1, 0 } },
+                { gettext_noop( "Stormfin Drake" ), gettext_noop( "Stormfin Drakes" ), 3, Race::AQUA, 5, { 1300, 0, 0, 0, 0, 1, 0 } },
+                { gettext_noop( "Leviarch" ), gettext_noop( "Leviarchs" ), 1, Race::AQUA, 6, { 2500, 0, 0, 1, 0, 0, 0 } },
+                { gettext_noop( "Leviarch King" ), gettext_noop( "Leviarch Kings" ), 1, Race::AQUA, 6, { 3500, 0, 0, 1, 1, 0, 0 } },
                 { gettext_noop( "Random Monster" ), gettext_noop( "Random Monsters" ), 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
                 { gettext_noop( "Random Monster 1" ), gettext_noop( "Random Monsters 1" ), 0, Race::NONE, 1, { 0, 0, 0, 0, 0, 0, 0 } },
                 { gettext_noop( "Random Monster 2" ), gettext_noop( "Random Monsters 2" ), 0, Race::NONE, 2, { 0, 0, 0, 0, 0, 0, 0 } },
@@ -559,6 +607,31 @@ namespace
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_SPELLS );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::DOUBLE_DAMAGE_FROM_FIRE_CREATURES );
+
+        // Aquamari monster abilities.
+        // Stormray / High Stormray - flying units.
+        monsterData[Monster::STORMRAY].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::HIGH_STORMRAY].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+
+        // Tidecaller / High Tidecaller - ranged units (shots already set in battle stats).
+        // High Tidecaller gets double shooting like Rangers.
+        monsterData[Monster::HIGH_TIDECALLER].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
+
+        // Abyssal Mauler / Imperial Behemoth - large tank units.
+        monsterData[Monster::ABYSSAL_MAULER].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::IMPERIAL_BEHEMOTH].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+
+        // Stormfin / Stormfin Drake - flying sea dragons.
+        monsterData[Monster::STORMFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::STORMFIN].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::STORMFIN_DRAKE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::STORMFIN_DRAKE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::STORMFIN_DRAKE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+
+        // Leviarch / Leviarch King - powerful titan units.
+        monsterData[Monster::LEVIARCH].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::LEVIARCH_KING].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::LEVIARCH_KING].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
         // Calculate base value of monster strength.
         for ( fheroes2::MonsterData & data : monsterData ) {

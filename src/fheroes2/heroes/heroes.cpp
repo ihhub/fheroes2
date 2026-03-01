@@ -106,6 +106,14 @@ namespace
         gettext_noop( "Zom" ), gettext_noop( "Darlana" ), gettext_noop( "Zam" ), gettext_noop( "Ranloo" ), gettext_noop( "Charity" ), gettext_noop( "Rialdo" ),
         gettext_noop( "Roxana" ), gettext_noop( "Sandro" ), gettext_noop( "Celia" ),
 
+        // Aquamari Tide Marshal heroes (martial class).
+        gettext_noop( "Thalgor" ), gettext_noop( "Neranthis" ), gettext_noop( "Coralyx" ), gettext_noop( "Marevyn" ), gettext_noop( "Delphara" ),
+        gettext_noop( "Pellagar" ),
+
+        // Aquamari Aquamancer heroes (magical class).
+        gettext_noop( "Azuriel" ), gettext_noop( "Sirenna" ), gettext_noop( "Pelagius" ), gettext_noop( "Ondara" ), gettext_noop( "Thessaly" ),
+        gettext_noop( "Lysandre" ),
+
         // The Succession Wars campaign heroes.
         gettext_noop( "Roland" ), gettext_noop( "Lord Corlagon" ), gettext_noop( "Sister Eliza" ), gettext_noop( "Archibald" ), gettext_noop( "Lord Halton" ),
         gettext_noop( "Brother Brax" ),
@@ -132,11 +140,13 @@ namespace
             return { Heroes::MYRA, Heroes::MANDIGAL };
         case Race::NECR:
             return { Heroes::ZOM, Heroes::CELIA };
+        case Race::AQUA:
+            return { Heroes::THALGOR, Heroes::LYSANDRE };
         default:
             break;
         }
 
-        return { Heroes::LORDKILBURN, Heroes::CELIA };
+        return { Heroes::LORDKILBURN, Heroes::LYSANDRE };
     }
 
     int getObjectMoraleModifiers( const std::set<MP2::MapObjectType> & objectTypes, std::string * output )
@@ -972,6 +982,9 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
 
         // Bonuses from captured lighthouses
         result += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
+
+        // Aquamari Tidecaller's Beacon grants a lighthouse-equivalent sea movement bonus for each beacon built.
+        result += 500 * world.GetKingdom( GetColor() ).GetCountTidecallersBeaconBuild();
     }
     else {
         // Initial mobility on land depends on the speed of the slowest army unit
@@ -2240,7 +2253,7 @@ void AllHeroes::Init()
 
     _heroes.emplace_back( std::make_unique<Heroes>( Heroes::UNKNOWN, Race::KNGT ) );
 
-    for ( const int race : std::array<int, 6>{ Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR } ) {
+    for ( const int race : std::array<int, 7>{ Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR, Race::AQUA } ) {
         const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( race );
         assert( minHeroId <= maxHeroId );
 

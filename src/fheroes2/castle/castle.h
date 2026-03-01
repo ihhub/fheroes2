@@ -193,6 +193,11 @@ public:
         return _race == Race::NECR && ( BUILD_SHRINE & _constructedBuildings );
     }
 
+    bool isTidecallersBeaconBuilt() const
+    {
+        return _race == Race::AQUA && isBuild( BUILD_SPEC );
+    }
+
     uint32_t CountBuildings() const;
 
     Heroes * RecruitHero( Heroes * hero );

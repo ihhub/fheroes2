@@ -831,6 +831,10 @@ namespace fheroes2
         case Race::SORC:
             preparePortrait( ICN::CMBTHROS, 6, false );
             break;
+        case Race::AQUA:
+            // TODO: Replace with Aquamari-specific values.
+            preparePortrait( ICN::CMBTHROS, 6, false );
+            break;
         case Race::WRLK:
             preparePortrait( ICN::CMBTHROW, 7, false );
             break;

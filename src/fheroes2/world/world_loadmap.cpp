@@ -365,6 +365,11 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         case 0x86:
             vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::NONE ) );
             break;
+        case 0x07:
+        case 0x87:
+            // TODO: Aquamari castle type for custom maps.
+            vec_castles.AddCastle( std::make_unique<Castle>( posX, posY, Race::AQUA ) );
+            break;
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "Invalid MP2 format: castle at position [" << posX << "; " << posY << "], index " << posX + posY * width << " has invalid castle type "
@@ -553,6 +558,10 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         break;
                     case 5:
                         raceType = Race::NECR;
+                        break;
+                    case 6:
+                        // TODO: Replace with Aquamari-specific handling if needed.
+                        raceType = Race::AQUA;
                         break;
                     default:
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: unknown race ID for Jail hero " << static_cast<int>( raceId ) )

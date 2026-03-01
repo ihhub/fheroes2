@@ -66,6 +66,10 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     case Monster::LICH:
     case Monster::POWER_LICH:
         return ICN::LICH_MSL;
+    // Aquamari ranged unit (TODO: Replace with custom Aquamari missile sprite).
+    case Monster::TIDECALLER:
+    case Monster::HIGH_TIDECALLER:
+        return ICN::ELF__MSL;
 
     default:
         break;
@@ -274,6 +278,19 @@ Monster Monster::GetDowngrade() const
         return Monster( MAGE );
     case TITAN:
         return Monster( GIANT );
+    // Aquamari downgrades.
+    case REEFSPAWN_SWARM:
+        return Monster( REEFSPAWN );
+    case HIGH_STORMRAY:
+        return Monster( STORMRAY );
+    case HIGH_TIDECALLER:
+        return Monster( TIDECALLER );
+    case IMPERIAL_BEHEMOTH:
+        return Monster( ABYSSAL_MAULER );
+    case STORMFIN_DRAKE:
+        return Monster( STORMFIN );
+    case LEVIARCH_KING:
+        return Monster( LEVIARCH );
 
     default:
         break;
@@ -327,6 +344,19 @@ Monster Monster::GetUpgrade() const
         return Monster( ARCHMAGE );
     case GIANT:
         return Monster( TITAN );
+    // Aquamari upgrades.
+    case REEFSPAWN:
+        return Monster( REEFSPAWN_SWARM );
+    case STORMRAY:
+        return Monster( HIGH_STORMRAY );
+    case TIDECALLER:
+        return Monster( HIGH_TIDECALLER );
+    case ABYSSAL_MAULER:
+        return Monster( IMPERIAL_BEHEMOTH );
+    case STORMFIN:
+        return Monster( STORMFIN_DRAKE );
+    case LEVIARCH:
+        return Monster( LEVIARCH_KING );
 
     default:
         break;
@@ -352,6 +382,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( HALFLING );
         case Race::NECR:
             return Monster( SKELETON );
+        case Race::AQUA:
+            return Monster( REEFSPAWN );
         default:
             break;
         }
@@ -371,6 +403,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( BOAR );
         case Race::NECR:
             return Monster( ZOMBIE );
+        case Race::AQUA:
+            return Monster( STORMRAY );
         default:
             break;
         }
@@ -390,6 +424,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( BOAR );
         case Race::NECR:
             return Monster( MUTANT_ZOMBIE );
+        case Race::AQUA:
+            return Monster( HIGH_STORMRAY );
         default:
             break;
         }
@@ -409,6 +445,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( IRON_GOLEM );
         case Race::NECR:
             return Monster( MUMMY );
+        case Race::AQUA:
+            return Monster( TIDECALLER );
         default:
             break;
         }
@@ -428,6 +466,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( STEEL_GOLEM );
         case Race::NECR:
             return Monster( ROYAL_MUMMY );
+        case Race::AQUA:
+            return Monster( HIGH_TIDECALLER );
         default:
             break;
         }
@@ -447,6 +487,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( ROC );
         case Race::NECR:
             return Monster( VAMPIRE );
+        case Race::AQUA:
+            return Monster( ABYSSAL_MAULER );
         default:
             break;
         }
@@ -466,6 +508,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( ROC );
         case Race::NECR:
             return Monster( VAMPIRE_LORD );
+        case Race::AQUA:
+            return Monster( IMPERIAL_BEHEMOTH );
         default:
             break;
         }
@@ -485,6 +529,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( MAGE );
         case Race::NECR:
             return Monster( LICH );
+        case Race::AQUA:
+            return Monster( STORMFIN );
         default:
             break;
         }
@@ -504,6 +550,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( ARCHMAGE );
         case Race::NECR:
             return Monster( POWER_LICH );
+        case Race::AQUA:
+            return Monster( STORMFIN_DRAKE );
         default:
             break;
         }
@@ -523,6 +571,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( GIANT );
         case Race::NECR:
             return Monster( BONE_DRAGON );
+        case Race::AQUA:
+            return Monster( LEVIARCH );
         default:
             break;
         }
@@ -542,6 +592,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( TITAN );
         case Race::NECR:
             return Monster( BONE_DRAGON );
+        case Race::AQUA:
+            return Monster( LEVIARCH_KING );
         default:
             break;
         }
@@ -561,6 +613,8 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
             return Monster( TITAN );
         case Race::NECR:
             return Monster( BONE_DRAGON );
+        case Race::AQUA:
+            return Monster( LEVIARCH_KING );
         default:
             break;
         }

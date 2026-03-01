@@ -67,6 +67,7 @@ namespace
         static const std::vector<BuildOrder> standard = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 }, { BUILD_MARKETPLACE, 1 } };
         static const std::vector<BuildOrder> warlock = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 }, { BUILD_MARKETPLACE, 1 }, { BUILD_SPEC, 1 } };
 
+        // Aquamari uses the standard income structures (no income-generating BUILD_SPEC like Warlock).
         return ( type == Race::WRLK ) ? warlock : standard;
     }
 
@@ -118,6 +119,14 @@ namespace
                 { BUILD_MAGEGUILD2, 3 },    { BUILD_MAGEGUILD3, 4 },  { BUILD_MAGEGUILD4, 4 },  { BUILD_MAGEGUILD5, 4 },  { BUILD_TAVERN, 10 },
                 { BUILD_THIEVESGUILD, 10 }, { BUILD_SHIPYARD, 4 } };
 
+        // Aquamari: balanced martial+magical, all 6 tiers have upgrades, prioritize top-tier and mage guild
+        static const std::vector<BuildOrder> aquamariBuildOrder
+            = { { BUILD_CASTLE, 2 },        { BUILD_STATUE, 1 },      { BUILD_MARKETPLACE, 1 }, { DWELLING_UPGRADE6, 1 }, { DWELLING_MONSTER6, 1 },
+                { DWELLING_UPGRADE5, 1 },   { DWELLING_MONSTER5, 1 }, { DWELLING_UPGRADE4, 2 }, { DWELLING_MONSTER4, 1 }, { BUILD_MAGEGUILD1, 1 },
+                { DWELLING_UPGRADE3, 2 },   { DWELLING_MONSTER3, 1 }, { DWELLING_UPGRADE2, 3 }, { DWELLING_MONSTER2, 2 }, { DWELLING_MONSTER1, 4 },
+                { BUILD_TAVERN, 2 },        { BUILD_WEL2, 8 },        { BUILD_SPEC, 3 },        { BUILD_MAGEGUILD2, 3 },  { BUILD_MAGEGUILD3, 4 },
+                { BUILD_MAGEGUILD4, 5 },    { BUILD_MAGEGUILD5, 5 },  { BUILD_THIEVESGUILD, 10 }, { BUILD_SHIPYARD, 3 } };
+
         switch ( type ) {
         case Race::KNGT:
             return knightBuildOrder;
@@ -129,6 +138,8 @@ namespace
             return sorceressBuildOrder;
         case Race::BARB:
             return barbarianBuildOrder;
+        case Race::AQUA:
+            return aquamariBuildOrder;
         default:
             break;
         }

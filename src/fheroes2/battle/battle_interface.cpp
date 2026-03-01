@@ -399,6 +399,9 @@ namespace
             return Battle::WIZARD;
         case Race::NECR:
             return Battle::NECROMANCER;
+        case Race::AQUA:
+            // TODO: Replace with Aquamari-specific battle theme once available.
+            return Battle::SORCERESS;
         default:
             break;
         }
@@ -1010,6 +1013,10 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, HeroBase * 
     case Race::NECR:
         _heroIcnId = isCaptain ? ICN::CMBTCAPN : ICN::CMBTHRON;
         break;
+    case Race::AQUA:
+        // TODO: Replace with Aquamari-specific ICN once available.
+        _heroIcnId = isCaptain ? ICN::CMBTCAPS : ICN::CMBTHROS;
+        break;
     default:
         // Did you add a new faction? Add the logic here.
         assert( 0 );
@@ -1081,6 +1088,11 @@ fheroes2::Point Battle::OpponentSprite::GetCastPosition() const
     case Race::NECR:
         offset.x = isCaptain ? 5 : 13;
         offset.y = isCaptain ? 6 : -7;
+        break;
+    case Race::AQUA:
+        // TODO: Replace with Aquamari-specific offsets once sprites are available.
+        offset.x = isCaptain ? 0 : 11;
+        offset.y = isCaptain ? 3 : -8;
         break;
     default:
         break;
@@ -2447,6 +2459,10 @@ void Battle::Interface::_redrawBattleGround()
             break;
         case Race::WZRD:
             castleBackgroundIcnId = ICN::CASTBKGZ;
+            break;
+        case Race::AQUA:
+            // TODO: Replace with Aquamari-specific castle background ICN once available.
+            castleBackgroundIcnId = ICN::CASTBKGS;
             break;
         default:
             // Did you add a new race? Add the appropriate logic for it.

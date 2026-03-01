@@ -73,6 +73,8 @@ namespace
             return { 35, 9 };
         case Race::NECR:
             return { 35, 10 };
+        case Race::AQUA:
+            return { 36, 10 }; // TODO: Replace with Aquamari-specific values.
         default:
             // Did you add a new race?
             assert( 0 );
@@ -103,7 +105,7 @@ namespace
         Cost cost{};
     };
 
-    const std::array<BuildingStats, 86> buildingStats = { { { BUILD_THIEVESGUILD, Race::ALL, { 750, 5, 0, 0, 0, 0, 0 } },
+    const std::array<BuildingStats, 99> buildingStats = { { { BUILD_THIEVESGUILD, Race::ALL, { 750, 5, 0, 0, 0, 0, 0 } },
                                                             { BUILD_TAVERN, Race::ALL, { 500, 5, 0, 0, 0, 0, 0 } },
                                                             { BUILD_SHIPYARD, Race::ALL, { 2000, 20, 0, 0, 0, 0, 0 } },
                                                             { BUILD_WELL, Race::ALL, { 500, 0, 0, 0, 0, 0, 0 } },
@@ -126,6 +128,7 @@ namespace
                                                             { BUILD_WEL2, Race::WRLK, { 1000, 0, 0, 0, 0, 0, 0 } },
                                                             { BUILD_WEL2, Race::WZRD, { 1000, 0, 0, 0, 0, 0, 0 } },
                                                             { BUILD_WEL2, Race::NECR, { 1000, 0, 0, 0, 0, 0, 0 } },
+                                                            { BUILD_WEL2, Race::AQUA, { 1000, 0, 0, 0, 0, 0, 0 } },
 
                                                             { BUILD_SPEC, Race::KNGT, { 1500, 5, 0, 15, 0, 0, 0 } },
                                                             { BUILD_SPEC, Race::BARB, { 2000, 10, 0, 10, 0, 0, 0 } },
@@ -133,6 +136,7 @@ namespace
                                                             { BUILD_SPEC, Race::WRLK, { 3000, 5, 0, 10, 0, 0, 0 } },
                                                             { BUILD_SPEC, Race::WZRD, { 1500, 5, 5, 5, 5, 5, 5 } },
                                                             { BUILD_SPEC, Race::NECR, { 1000, 0, 10, 0, 10, 0, 0 } },
+                                                            { BUILD_SPEC, Race::AQUA, { 1500, 0, 5, 0, 10, 0, 0 } },
 
                                                             { BUILD_SHRINE, Race::NECR, { 4000, 10, 0, 0, 0, 10, 0 } },
 
@@ -197,7 +201,19 @@ namespace
                                                             { DWELLING_UPGRADE4, Race::NECR, { 4000, 5, 0, 0, 0, 10, 10 } },
                                                             { DWELLING_MONSTER5, Race::NECR, { 4000, 10, 0, 0, 10, 0, 0 } },
                                                             { DWELLING_UPGRADE5, Race::NECR, { 3000, 0, 0, 5, 0, 5, 0 } },
-                                                            { DWELLING_MONSTER6, Race::NECR, { 10000, 10, 5, 10, 5, 5, 5 } } } };
+                                                            { DWELLING_MONSTER6, Race::NECR, { 10000, 10, 5, 10, 5, 5, 5 } },
+
+                                                            { DWELLING_MONSTER1, Race::AQUA, { 500, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER2, Race::AQUA, { 1000, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE2, Race::AQUA, { 1500, 5, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER3, Race::AQUA, { 1500, 0, 0, 0, 0, 0, 0 } },
+                                                            { DWELLING_UPGRADE3, Race::AQUA, { 1500, 0, 5, 0, 0, 0, 0 } },
+                                                            { DWELLING_MONSTER4, Race::AQUA, { 2500, 0, 5, 5, 0, 5, 0 } },
+                                                            { DWELLING_UPGRADE4, Race::AQUA, { 1500, 0, 5, 0, 0, 5, 0 } },
+                                                            { DWELLING_MONSTER5, Race::AQUA, { 3000, 10, 0, 0, 0, 5, 5 } },
+                                                            { DWELLING_UPGRADE5, Race::AQUA, { 3000, 0, 5, 5, 0, 5, 0 } },
+                                                            { DWELLING_MONSTER6, Race::AQUA, { 10000, 0, 20, 20, 0, 10, 0 } },
+                                                            { DWELLING_UPGRADE6, Race::AQUA, { 5000, 0, 10, 5, 0, 10, 0 } } } };
 }
 
 Funds BuildingInfo::GetCost( const uint32_t buildingType, const int race )

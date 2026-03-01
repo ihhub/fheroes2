@@ -470,6 +470,9 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 case Race::NECR:
                     cur = Monster::SKELETON;
                     break;
+                case Race::AQUA:
+                    cur = Monster::REEFSPAWN;
+                    break;
                 default:
                     break;
                 }

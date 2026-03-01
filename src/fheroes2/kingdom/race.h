@@ -36,10 +36,14 @@ namespace Race
         WRLK = 0x08,
         WZRD = 0x10,
         NECR = 0x20,
-        MULT = 0x40,
+        AQUA = 0x40, // Aquamari (custom faction)
         RAND = 0x80,
-        ALL = KNGT | BARB | SORC | WRLK | WZRD | NECR
+        ALL = KNGT | BARB | SORC | WRLK | WZRD | NECR | AQUA
     };
+
+    // Returns true if the given race flags represent multiple distinct races
+    // (replaces the former MULT constant, which was a display concept, not a playable faction).
+    bool isMultiRace( const int raceFlags );
 
     const char * String( int race );
     const char * DoubleLinedString( int race );
