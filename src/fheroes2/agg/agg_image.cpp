@@ -2974,6 +2974,7 @@ namespace
                         modified = std::move( temp );
                     }
 
+                    // Original images' Y offset is not needed for rendering. Set it to 0 to align all images vertically.
                     modified.setPosition( modified.x(), 0 );
                 }
             }
