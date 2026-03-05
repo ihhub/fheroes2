@@ -60,25 +60,25 @@ std::string Morale::Description( int morale )
     case Morale::TREASON:
     case Morale::AWFUL:
     case Morale::POOR:
-        msg = _( "%{morale} morale may cause the hero's units to freeze in combat." );
+        msg = _( "%{morale-type} morale may cause the hero's units to freeze in combat." );
         break;
     case Morale::NORMAL:
-        msg = _( "%{morale} morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
+        msg = _( "%{morale-type} morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
         break;
     case Morale::GOOD:
     case Morale::GREAT:
     case Morale::BLOOD:
-        msg = _( "%{morale} morale may give the hero's units extra attacks in combat." );
+        msg = _( "%{morale-type} morale may give the hero's units extra attacks in combat." );
         break;
     default:
         return "Unknown";
     }
 
     if ( morale == Morale::BLOOD ) {
-        StringReplace( msg, "%{morale}", _( "Blood" ) );
+        StringReplace( msg, "%{morale-type}", _( "Blood" ) );
     }
     else {
-        StringReplace( msg, "%{morale}", Morale::String( morale ) );
+        StringReplace( msg, "%{morale-type}", Morale::String( morale ) );
     }
 
     return msg;
