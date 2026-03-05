@@ -151,6 +151,38 @@ namespace
 
         return Maps::Ground::UNKNOWN;
     }
+
+    int32_t getPrevTerrain( const int32_t terrainType )
+    {
+        switch ( terrainType ) {
+        case Maps::Ground::BEACH:
+            return Maps::Ground::WASTELAND;
+        case Maps::Ground::WASTELAND:
+            return Maps::Ground::DIRT;
+        case Maps::Ground::DIRT:
+            return Maps::Ground::DESERT;
+        case Maps::Ground::DESERT:
+            return Maps::Ground::LAVA;
+        case Maps::Ground::LAVA:
+            return Maps::Ground::SWAMP;
+        case Maps::Ground::SWAMP:
+            return Maps::Ground::SNOW;
+        case Maps::Ground::SNOW:
+            return Maps::Ground::GRASS;
+        case Maps::Ground::GRASS:
+            return Maps::Ground::WATER;
+        case Maps::Ground::WATER:
+            return Maps::Ground::UNKNOWN;
+        case Maps::Ground::UNKNOWN:
+            return Maps::Ground::BEACH;
+        default:
+            // How did you end up here? Did you add a new terrain type?
+            assert( 0 );
+            break;
+        }
+
+        return Maps::Ground::UNKNOWN;
+    }
 }
 
 Battle::Only::Only()
@@ -328,8 +360,13 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        if ( le.MouseClickLeft( terrainArea ) ) {
+        if ( le.MouseClickLeft( terrainArea ) || le.isMouseWheelDownInArea( terrainArea ) ) {
             _terrainType = getNextTerrain( _terrainType );
+            renderTerrain( terrainArea.getPosition(), _terrainType, display );
+            needRender = true;
+        }
+        else if ( le.isMouseWheelUpInArea( terrainArea ) ) {
+            _terrainType = getPrevTerrain( _terrainType );
             renderTerrain( terrainArea.getPosition(), _terrainType, display );
             needRender = true;
         }

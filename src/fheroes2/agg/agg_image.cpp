@@ -2973,6 +2973,9 @@ namespace
                     else {
                         modified = std::move( temp );
                     }
+
+                    // Original images' Y offset is not needed for rendering. Set it to 0 to align all images vertically.
+                    modified.setPosition( modified.x(), 0 );
                 }
             }
             if ( _icnVsSprite[id].size() > 63 && _icnVsSprite[id][63].width() == 19 && _icnVsSprite[id][63].height() == 37 ) { // Air Elemental
