@@ -220,6 +220,8 @@ jobs:
   make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
+    if: ${{ vars.SKIP_VITA_BUILD != 'true' }}
+    continue-on-error: true
     timeout-minutes: 30
     defaults:
       run:
