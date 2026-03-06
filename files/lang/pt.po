@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-15 02:18+0000\n"
+"POT-Creation-Date: 2026-03-06 22:23+0000\n"
 "PO-Revision-Date: 2025-09-05 14:15-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -9273,22 +9273,25 @@ msgstr "Ótima"
 msgid "luck|Irish"
 msgstr "Máxima"
 
+#, fuzzy
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 "Sorte negativa às vezes afeta as unidades do herói em combate, fazendo com "
 "que seus ataques causem apenas metade do dano."
 
+#, fuzzy
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 "Sorte neutra significa que as unidades do herói nunca terão ataques de sorte "
 "ou azar no inimigo."
 
+#, fuzzy
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "Sorte positiva às vezes permite que as unidades do herói obtenham ataques de "
@@ -9315,20 +9318,28 @@ msgstr "Ótima"
 msgid "morale|Blood!"
 msgstr "Sanguinária!"
 
-msgid "Negative morale may cause the hero's units to freeze in combat."
+#, fuzzy
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr ""
 "Moral negativa pode fazer com que as unidades do herói congelem em combate."
 
+#, fuzzy
 msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr ""
 "Moral neutra significa que as unidades do herói nunca serão abençoadas com "
 "ataques extras ou ficarão paralisadas durante o combate."
 
-msgid "Positive morale may give the hero's units extra attacks in combat."
+#, fuzzy
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
 msgstr ""
 "Moral positiva pode dar às unidades do herói ataques extras em combate."
+
+#, fuzzy
+msgid "Blood"
+msgstr "Reino de Sangue"
 
 msgid "Knight"
 msgstr "Cavaleiro"

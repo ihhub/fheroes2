@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-15 02:18+0000\n"
+"POT-Creation-Date: 2026-03-06 22:23+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -9361,23 +9361,23 @@ msgstr "Írske"
 
 #, fuzzy
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 "V boji sa na tvoje vojsko niekedy obráti smola a jeho útoky spôsobia len "
 "polovičné poškodenie."
 
 #, fuzzy
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 "Neutrálne šťastie znamená, že tvoje vojsko nikdy nebude mať šťastie alebo "
 "smolu pri útokoch na nepriateľa."
 
 #, fuzzy
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "Šťastie niekedy umožňuje tvojmu vojsku získať šťastné útoky (dvojnásobnú "
@@ -9405,20 +9405,25 @@ msgid "morale|Blood!"
 msgstr "Krvná!"
 
 #, fuzzy
-msgid "Negative morale may cause the hero's units to freeze in combat."
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr "Zlá morálka môže spôsobiť, že sa tvoje vojsko v boji zastaví."
 
 #, fuzzy
 msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr ""
 "Neutrálna morálka znamená, že tvoje vojsko nebude nikdy obdarené extra "
 "útokmi ani nezamrzne v boji."
 
 #, fuzzy
-msgid "Positive morale may give the hero's units extra attacks in combat."
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
 msgstr "Dobrá morálka môže tvojmu vojsku poskytnúť extra útoky v boji."
+
+#, fuzzy
+msgid "Blood"
+msgstr "Krvomoc"
 
 msgid "Knight"
 msgstr "Rytier"
