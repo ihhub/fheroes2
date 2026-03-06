@@ -6535,6 +6535,8 @@ msgid ""
 "The hero's army cannot move anymore today. The movement points will be "
 "refilled tomorrow after you end your turn."
 msgstr ""
+"O exército do herói não pode mais se mover hoje. Os pontos de movimento "
+"serão recarregados amanhã, após o término do seu turno."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
