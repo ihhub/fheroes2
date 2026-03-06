@@ -941,7 +941,7 @@ msgid_plural "%{count} %{unit} are revived."
 msgstr[0] "1 %{unit} revive."
 msgstr[1] "%{count} %{unit} revivem."
 
-msgid "Moved %{monster}: from[%{src}] to [%{dst}]."
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Movimento de %{monster}: de [%{src}] para [%{dst}]."
 
 msgid "The %{name} resists the spell!"
