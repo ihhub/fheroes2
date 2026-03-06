@@ -220,8 +220,6 @@ jobs:
   make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
-    if: ${{ vars.SKIP_VITA_BUILD != 'true' }}
-    continue-on-error: true
     timeout-minutes: 30
     defaults:
       run:
@@ -244,6 +242,22 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/vitasdk/vdpm
         cd vdpm
+        # TODO: remove this temporary patch after https://github.com/vitasdk/packages/pull/382 is merged
+        patch -p1 << 'EOF'
+        --- a/vdpm
+        +++ b/vdpm
+        @@ -77,7 +77,9 @@
+         # Download and extract a package to the VitaSDK "root"
+         # Will return a list of all files and directories for package management reasons
+         get_and_extract() {
+        -  if [ -f $1 ]; then
+        +  if [ "$1" = "zlib" ]; then
+        +    curl -sL "https://github.com/Districh-ru/fheroes2/releases/download/zlib-vita/zlib.tar.xz" | tar -C $VITASDK_ROOT -Jxvf -
+        +  elif [ -f $1 ]; then
+             tar -C $VITASDK_ROOT -Jxvf $1
+           else
+             curl -sL https://github.com/vitasdk/packages/releases/download/master/$1.tar.xz | tar -C $VITASDK_ROOT -Jxvf -
+        EOF
         export PATH=$VITASDK/bin:$PATH
         ./bootstrap-vitasdk.sh
         ./install-all.sh
