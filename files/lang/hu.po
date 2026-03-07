@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 22:23+0000\n"
+"POT-Creation-Date: 2026-03-07 08:02+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -1091,7 +1091,8 @@ msgid ""
 "cursor."
 msgstr "Be- és kikapcsolja az egérkurzor alatti árnyékot."
 
-msgid "Toggle showing the movement area of a highlighted creature on or off ."
+#, fuzzy
+msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 "A kijelölt teremtmény mozgástere megjelenítésének kapcsolója (BE vagy KI)."
 

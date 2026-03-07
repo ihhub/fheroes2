@@ -1100,7 +1100,7 @@ msgstr ""
 "Ativa ou desativa uma sombra que mostra a localização atual do hexágono do "
 "cursor do mouse."
 
-msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr "Ativa ou desativa a exibição da área de movimento de uma criatura em destaque."
 
 msgid ""
