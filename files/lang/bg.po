@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-15 02:18+0000\n"
+"POT-Creation-Date: 2026-03-07 08:02+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1100,7 +1100,7 @@ msgstr ""
 "Включи или изключи сянка, показваща текущото шестнадесетично местоположение "
 "на курсора на мишката."
 
-msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 
 msgid ""
@@ -9427,23 +9427,23 @@ msgstr "Ирландски"
 
 #, fuzzy
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 "Лош късмет понякога сполетява твойте армии в битка, което кара техните атаки "
 "да нанасят само половината щети."
 
 #, fuzzy
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 "Неутрален късмет означава, че армиите ти никога няма да получат късмет или "
 "злощастни атаки срещу врага."
 
 #, fuzzy
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "Добрият късмет понякога позволява на твойте армии да получават късметлийски "
@@ -9471,20 +9471,25 @@ msgid "morale|Blood!"
 msgstr "Кървав!"
 
 #, fuzzy
-msgid "Negative morale may cause the hero's units to freeze in combat."
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr "Лошият морал може да накара армиите ти да замръзнат в битка."
 
 #, fuzzy
 msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr ""
 "Неутрален морал означава, че твойте армии никога няма да бъдат благословени "
 "с допълнителни атаки или да замръзнат в битка."
 
 #, fuzzy
-msgid "Positive morale may give the hero's units extra attacks in combat."
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
 msgstr "Добрият морал може да даде на твойте армии допълнителни атаки в битка."
+
+#, fuzzy
+msgid "Blood"
+msgstr "Блъдрейн"
 
 msgid "Knight"
 msgstr "Рицар"

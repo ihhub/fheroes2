@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-15 02:18+0000\n"
+"POT-Creation-Date: 2026-03-07 08:02+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -1110,7 +1110,7 @@ msgstr ""
 "Schatten ein-/ausschalten, der die aktuelle Position des Mauszeigers auf dem "
 "Bewegungsfeld visualisiert."
 
-msgid "Toggle showing the movement area of a highlighted creature on or off ."
+msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 
 msgid ""
@@ -9330,22 +9330,25 @@ msgstr "Wunderbar"
 msgid "luck|Irish"
 msgstr "Himmlisch"
 
+#, fuzzy
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 "Negatives Glück befällt manchmal die Einheiten des Helden im Kampf, sodass "
 "ihre Angriffe nur halben Schaden anrichten."
 
+#, fuzzy
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 "Neutrales Glück bedeutet, dass die Einheiten des Helden niemals Glück oder "
 "Unglück erfahren."
 
+#, fuzzy
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "Positives Glück lässt die Einheiten des Helden manchmal glückliche Angriffe "
@@ -9372,22 +9375,30 @@ msgstr "Wunderbar"
 msgid "morale|Blood!"
 msgstr "\"BLUT!\""
 
-msgid "Negative morale may cause the hero's units to freeze in combat."
+#, fuzzy
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr ""
 "Negative Moral kann dazu führen, dass die Einheiten des Helden im Kampf "
 "erstarren."
 
+#, fuzzy
 msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr ""
 "Neutrale Moral bedeutet, dass die Einheiten des Helden niemals mit "
 "zusätzlichen Angriffen gesegnet werden oder im Kampf erstarren."
 
-msgid "Positive morale may give the hero's units extra attacks in combat."
+#, fuzzy
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
 msgstr ""
 "Positive Moral kann den Einheiten des Helden zusätzliche Angriffe im Kampf "
 "bescheren."
+
+#, fuzzy
+msgid "Blood"
+msgstr "Bloodreign"
 
 msgid "Knight"
 msgstr "Ritter"
