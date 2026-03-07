@@ -6529,7 +6529,7 @@ msgstr ""
 "Acessa o menu de opções do sistema, permitindo que você personalize seu jogo."
 
 msgid "Hero Movement Points"
-msgstr "Movimento do Herói"
+msgstr "Pontos de Movimento do Herói"
 
 msgid ""
 "The hero's army cannot move anymore today. The movement points will be "
