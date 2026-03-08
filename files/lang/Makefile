@@ -40,7 +40,7 @@ be.mo bg.mo ru.mo uk.mo: %.mo: %.po
 	$(call MSGFMT,CP1251)
 
 # German, Danish, French, Italian, Dutch, Norwegian, Portuguese, Spanish and Swedish translations use CP1252
-de.mo da.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
+de.mo da.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo zh_CN.mo: %.mo: %.po
 	$(call MSGFMT,CP1252)
 	
 # Greek uses CP1253
@@ -62,6 +62,12 @@ vi.mo: vi.po
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
 	$(call MSGFMT,ISO-8859-16)
+
+# Chinese uses CP65001
+zh_CN.mo: zh_CN.po
+	$(call MSGFMT,CP65001)
+
+
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
