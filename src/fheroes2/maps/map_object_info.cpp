@@ -157,8 +157,7 @@ namespace
         objects[256 + 13] = objects[256 + 9];
 
         // Direction: TOP, TOP_RIGHT, RIGHT.
-        objects[14].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 20, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[14].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 7, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+        objects[14].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 45, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
         objects[14].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 8, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
         objects[256 + 14] = objects[14];
 
@@ -214,11 +213,8 @@ namespace
         objects[256 + 21].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 8, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
         // Direction: TOP, TOP_RIGHT, BOTTOM_RIGHT.
-        // TODO: Combine first two sprites.
-        objects[22].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 20, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[22].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 7, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[22].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 8, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[256 + 22] = objects[22];
+        objects[22] = objects[14];
+        objects[256 + 22] = objects[256 + 14];
 
         // Direction: TOP_LEFT, TOP, TOP_RIGHT, BOTTOM_RIGHT.
         // TODO: Combine first two sprites.
@@ -445,9 +441,7 @@ namespace
         objects[256 + 66] = objects[66];
 
         // Direction: TOP_LEFT, TOP, BOTTOM_LEFT.
-        // TODO: Combine first two sprites.
-        objects[67].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 19, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[67].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 16, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+        objects[67].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 46, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
         objects[67].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 15, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
         objects[256 + 67] = objects[67];
 
@@ -804,11 +798,8 @@ namespace
         objects[256 + 130] = objects[130];
 
         // Direction: TOP_LEFT, TOP, LEFT.
-        // TODO: Combine first two sprites.
-        objects[131].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 19, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[131].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 16, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[131].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 15, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-        objects[256 + 131] = objects[131];
+        objects[131] = objects[67];
+        objects[256 + 131] = objects[256 + 67];
 
         // Direction: TOP_RIGHT, LEFT.
         objects[132].groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, 18, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );

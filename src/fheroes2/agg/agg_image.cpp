@@ -5538,8 +5538,10 @@ namespace
                 // 8 "y" roads crossings,
                 // 1 "V" roads crossing,
                 // 1 from (bottom-)right to top and top-left,
-                // 1 from (bottom-)left to top and top-right.
-                constexpr size_t newRoadsCount = 2 + 8 + 1 + 1 + 1;
+                // 1 from (bottom-)left to top and top-right,
+                // 1 from (bottom-)right to top and top-right,
+                // 1 from (bottom-)left to top and top-left.
+                constexpr size_t newRoadsCount = 2 + 8 + 1 + 1 + 1 + 1 + 1;
                 roadSprites.resize( _icnVsSprite[id].size() + newRoadsCount );
 
                 // "X" roads crossings.
@@ -5580,17 +5582,25 @@ namespace
                 fheroes2::Copy( roadSprites[12], 0, 0, roadSprites[42], 0, 0, 16, 32 );
                 fheroes2::Copy( roadSprites[9], roadSprites[9].width() - 16, 0, roadSprites[42], 16, 0, 16, 32 );
 
-                // from (bottom-)right to top and top-left.
+                // From (bottom-)right to top and top-left.
                 roadSprites[43].resize( 32, 32 );
                 roadSprites[43].reset();
                 fheroes2::Copy( roadSprites[7], 0, 0, roadSprites[43], 32 - roadSprites[7].width(), 0, roadSprites[7].width(), 32 );
                 fheroes2::Copy( roadSprites[13], 0, 0, roadSprites[43], 0, 0, 15, 5 );
 
-                // from (bottom-)left to top and top-right.
+                // From (bottom-)left to top and top-right.
                 roadSprites[44].resize( 32, 32 );
                 roadSprites[44].reset();
                 fheroes2::Copy( roadSprites[16], 0, 0, roadSprites[44], 0, 0, roadSprites[16].width(), 32 );
                 fheroes2::Copy( roadSprites[5], 6, 0, roadSprites[44], 16, 0, 16, 6 );
+
+                // From (bottom-)right to top and top-right.
+                roadSprites[45] = roadSprites[7];
+                fheroes2::Copy( roadSprites[5], 6, 0, roadSprites[45], roadSprites[45].width() - 16, 0, 16, 6 );
+
+                // From (bottom-)left to top and top-left.
+                roadSprites[46] = roadSprites[16];
+                fheroes2::Copy( roadSprites[13], 0, 0, roadSprites[46], 0, 0, 15, 5 );
             }
             break;
         }
