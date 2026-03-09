@@ -802,8 +802,8 @@ bool Maps::Tile::isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uin
 {
     switch ( objectIcnType ) {
     case MP2::OBJ_ICN_TYPE_ROAD: {
-        static const std::set<uint8_t> allowedIndecies{ 0,  2,  3,  4,  5,  6,  7,  9,  12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28,
-                                                        29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46 };
+        static const std::set<uint8_t> allowedIndecies{ 0,  2,  3,  4,  5,  6,  7,  9,  12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29,
+                                                        30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48 };
         return ( allowedIndecies.count( imageIndex ) == 1 );
     }
     case MP2::OBJ_ICN_TYPE_OBJNTOWN: {

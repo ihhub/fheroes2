@@ -5540,8 +5540,10 @@ namespace
                 // 1 from (bottom-)right to top and top-left,
                 // 1 from (bottom-)left to top and top-right,
                 // 1 from (bottom-)right to top and top-right,
-                // 1 from (bottom-)left to top and top-left.
-                constexpr size_t newRoadsCount = 2 + 8 + 1 + 1 + 1 + 1 + 1;
+                // 1 from (bottom-)left to top and top-left,
+                // 1 from top-left to right and bottom,
+                // 1 from top-right to left and bottom.
+                constexpr size_t newRoadsCount = 2 + 8 + 1 + 1 + 1 + 1 + 1 + 1 + 1;
                 roadSprites.resize( _icnVsSprite[id].size() + newRoadsCount );
 
                 // "X" roads crossings.
@@ -5601,6 +5603,18 @@ namespace
                 // From (bottom-)left to top and top-left.
                 roadSprites[46] = roadSprites[16];
                 fheroes2::Copy( roadSprites[13], 0, 0, roadSprites[46], 0, 0, 15, 5 );
+
+                // From top-left to right and bottom.
+                roadSprites[47].resize( 32, 32 );
+                roadSprites[47].reset();
+                fheroes2::Copy( roadSprites[12], 0, 0, roadSprites[47], 0, 0, roadSprites[12].width(), 32 );
+                fheroes2::Copy( roadSprites[6], 6, 27, roadSprites[47], 17, 27, 15, 5 );
+
+                // From top-right to left and bottom.
+                roadSprites[48].resize( 32, 32 );
+                roadSprites[48].reset();
+                fheroes2::Copy( roadSprites[9], 0, 0, roadSprites[48], 32 - roadSprites[9].width(), 0, roadSprites[9].width(), 32 );
+                fheroes2::Copy( roadSprites[14], 0, 26, roadSprites[48], 0, 26, 16, 6 );
             }
             break;
         }
