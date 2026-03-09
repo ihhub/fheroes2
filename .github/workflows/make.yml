@@ -244,7 +244,7 @@ jobs:
         cd vdpm
         export PATH=$VITASDK/bin:$PATH
         ./bootstrap-vitasdk.sh
-        ./install-all.sh
+        ./vdpm flac libmikmod libmodplug libogg libvita2d libvorbis libxmp mpg123 opus opusfile sdl2 sdl2_mixer zlib
         rm -rf ~/.vitasdk-cache
       env:
         VITASDK: /usr/local/vitasdk
