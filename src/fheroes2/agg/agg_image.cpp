@@ -5532,7 +5532,7 @@ namespace
             break;
         case ICN::ROAD: {
             auto & roadSprites = _icnVsSprite[id];
-            if ( _icnVsSprite[id].size() == 32 ) {
+            if ( roadSprites.size() == 32 ) {
                 // The next road sprites are added:
                 // 2 "X" roads crossings,
                 // 8 "y" roads crossings,
@@ -5544,7 +5544,7 @@ namespace
                 // 1 from top-left to right and bottom,
                 // 1 from top-right to left and bottom.
                 constexpr size_t newRoadsCount = 2 + 8 + 1 + 1 + 1 + 1 + 1 + 1 + 1;
-                roadSprites.resize( _icnVsSprite[id].size() + newRoadsCount );
+                roadSprites.resize( roadSprites.size() + newRoadsCount );
 
                 // "X" roads crossings.
                 auto makeXCross = [&]( const size_t outId, const size_t leftToRightId, const size_t rightToLeftId ) {
