@@ -198,12 +198,14 @@ jobs:
       with:
         name: ${{ matrix.package_name }}
         path: ${{ matrix.package_name }}
+        archive: false
         if-no-files-found: error
     - uses: actions/upload-artifact@v7
       if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'pull_request' && matrix.tools_package_name != '' }}
       with:
         name: ${{ matrix.tools_package_name }}
         path: ${{ matrix.tools_package_name }}
+        archive: false
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ contains( matrix.on, github.event_name ) && github.event_name == 'push' }}
@@ -276,6 +278,7 @@ jobs:
       with:
         name: fheroes2_psv.zip
         path: fheroes2_psv.zip
+        archive: false
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
@@ -324,6 +327,7 @@ jobs:
       with:
         name: fheroes2_switch.zip
         path: fheroes2_switch.zip
+        archive: false
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
@@ -380,6 +384,7 @@ jobs:
       with:
         name: ${{ matrix.package_name }}
         path: ${{ matrix.package_name }}
+        archive: false
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}

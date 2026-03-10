@@ -86,12 +86,14 @@ jobs:
       with:
         name: fheroes2_android.zip
         path: fheroes2_android.zip
+        archive: false
         if-no-files-found: error
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_android_aab.zip
         path: fheroes2_android_aab.zip
+        archive: false
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
