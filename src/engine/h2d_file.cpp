@@ -93,9 +93,7 @@ namespace fheroes2
         _fileStream.seek( it->second.first );
         const auto compressedData = _fileStream.getRaw( it->second.second );
 
-        const std::vector<uint8_t> decompressedData = Compression::unzipData( compressedData.data(), compressedData.size() );
-
-        return decompressedData;
+        return Compression::unzipData( compressedData.data(), compressedData.size() );
     }
 
     std::set<std::string, std::less<>> H2DReader::getAllFileNames() const
@@ -155,7 +153,7 @@ namespace fheroes2
             return false;
         }
 
-        _fileData[name] = Compression::zipData( data.data(), data.size(), 9 );
+        _fileData[name] = Compression::zipData( data.data(), data.size(), -1 );
         return true;
     }
 
