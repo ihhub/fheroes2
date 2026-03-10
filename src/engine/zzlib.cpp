@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -100,10 +100,15 @@ std::vector<uint8_t> Compression::unzipData( const uint8_t * src, const size_t s
     return res;
 }
 
-std::vector<uint8_t> Compression::zipData( const uint8_t * src, const size_t srcSize )
+std::vector<uint8_t> Compression::zipData( const uint8_t * src, const size_t srcSize, int compression )
 {
     if ( src == nullptr || srcSize == 0 ) {
         return {};
+    }
+
+    if ( compression < Z_BEST_SPEED || compression > Z_BEST_COMPRESSION ) {
+        // Compression level is incorrect. Reset to default.
+        compression = Z_DEFAULT_COMPRESSION;
     }
 
     const uLong srcSizeULong = static_cast<uLong>( srcSize );
@@ -120,7 +125,7 @@ std::vector<uint8_t> Compression::zipData( const uint8_t * src, const size_t src
         return {};
     }
 
-    const int ret = compress( res.data(), &dstSizeULong, src, srcSizeULong );
+    const int ret = compress2( res.data(), &dstSizeULong, src, srcSizeULong, compression );
 
     if ( ret != Z_OK ) {
         ERROR_LOG( "zlib error: " << ret )
