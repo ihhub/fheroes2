@@ -153,7 +153,7 @@ namespace fheroes2
             return false;
         }
 
-        _fileData[name] = Compression::zipData( data.data(), data.size(), -1 );
+        _fileData[name] = Compression::zipData( data.data(), data.size() );
         return true;
     }
 
