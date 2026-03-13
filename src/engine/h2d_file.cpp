@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +26,7 @@
 #include <cstring>
 
 #include "image.h"
+#include "zzlib.h"
 
 namespace
 {
@@ -36,7 +37,7 @@ namespace
     // 5 bytes - file name
     const size_t minFileSize = 4 + 4 + 4 + 4 + 5 + 1;
 
-    const uint8_t version{ 1U };
+    const uint8_t version{ 2U };
     const std::array<uint8_t, 4> magicSequence{ 'H', '2', 'D', version };
 }
 
@@ -72,7 +73,7 @@ namespace fheroes2
             const uint32_t size = _fileStream.getLE32();
             std::string name;
             _fileStream >> name;
-            if ( size == 0 || offset + size > fileSize || name.empty() ) {
+            if ( size == 0 || static_cast<size_t>( offset ) + size > fileSize || name.empty() ) {
                 continue;
             }
 
@@ -86,19 +87,21 @@ namespace fheroes2
     {
         const auto it = _fileNameAndOffset.find( fileName );
         if ( it == _fileNameAndOffset.end() ) {
-            return std::vector<uint8_t>();
+            return {};
         }
 
         _fileStream.seek( it->second.first );
-        return _fileStream.getRaw( it->second.second );
+        const auto compressedData = _fileStream.getRaw( it->second.second );
+
+        return Compression::unzipData( compressedData.data(), compressedData.size() );
     }
 
     std::set<std::string, std::less<>> H2DReader::getAllFileNames() const
     {
         std::set<std::string, std::less<>> names;
 
-        for ( const auto & value : _fileNameAndOffset ) {
-            names.insert( value.first );
+        for ( const auto & [name, offset] : _fileNameAndOffset ) {
+            names.insert( name );
         }
 
         return names;
@@ -124,21 +127,21 @@ namespace fheroes2
 
         // Calculate file info section size.
         size_t fileInfoSection = ( 4 + 4 ) * _fileData.size();
-        for ( const auto & data : _fileData ) {
+        for ( const auto & [name, data] : _fileData ) {
             // 4 byte for string size.
-            fileInfoSection += ( data.first.size() + 4 );
+            fileInfoSection += ( name.size() + 4 );
         }
 
         size_t offset = fileInfoSection + 4 + 4;
-        for ( const auto & data : _fileData ) {
+        for ( const auto & [name, data] : _fileData ) {
             fileStream.putLE32( static_cast<uint32_t>( offset ) );
-            fileStream.putLE32( static_cast<uint32_t>( data.second.size() ) );
-            fileStream << data.first;
-            offset += data.second.size();
+            fileStream.putLE32( static_cast<uint32_t>( data.size() ) );
+            fileStream << name;
+            offset += data.size();
         }
 
-        for ( const auto & data : _fileData ) {
-            fileStream.putRaw( data.second.data(), data.second.size() );
+        for ( const auto & [name, data] : _fileData ) {
+            fileStream.putRaw( data.data(), data.size() );
         }
 
         return true;
@@ -150,7 +153,7 @@ namespace fheroes2
             return false;
         }
 
-        _fileData[name] = data;
+        _fileData[name] = Compression::zipData( data.data(), data.size() );
         return true;
     }
 
@@ -184,11 +187,12 @@ namespace fheroes2
         const int32_t y = static_cast<int32_t>( stream.getLE32() );
         const bool isSingleLayer = ( stream.get() != 0 );
 
-        if ( ( static_cast<size_t>( width ) * height * ( isSingleLayer ? 1 : 2 ) + imageInfoLength ) != data.size() ) {
+        const size_t size = static_cast<size_t>( width ) * static_cast<size_t>( height );
+
+        if ( ( size * ( isSingleLayer ? 1 : 2 ) + imageInfoLength ) != data.size() ) {
             return false;
         }
 
-        const size_t size = static_cast<size_t>( width * height );
         if ( isSingleLayer ) {
             image._disableTransformLayer();
         }
