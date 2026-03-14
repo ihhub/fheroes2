@@ -137,12 +137,14 @@ jobs:
       with:
         name: ${{ matrix.zip_package_name }}
         path: build/${{ matrix.platform }}/${{ matrix.build_config }}/${{ matrix.zip_package_name }}
+        archive: false
         if-no-files-found: error
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.tools_package_name }}
         path: build/${{ matrix.platform }}/${{ matrix.build_config }}/${{ matrix.tools_package_name }}
+        archive: false
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
