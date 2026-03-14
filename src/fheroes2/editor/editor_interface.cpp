@@ -457,6 +457,9 @@ namespace
                     assert( mapFormat.heroMetadata.find( objectIter->id ) != mapFormat.heroMetadata.end() );
                     mapFormat.heroMetadata.erase( objectIter->id );
 
+                    // Properly remove hero object from the `world` tile.
+                    world.getTile( static_cast<int32_t>( mapTileIndex ) ).setHero( nullptr );
+
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
 

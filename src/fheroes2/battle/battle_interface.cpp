@@ -688,10 +688,10 @@ namespace
     Battle::CellDirection getAttackingCellDirectionForAttackDirection( const Battle::Unit & attacker, const Battle::AttackDirection dir )
     {
         switch ( dir ) {
-        // This attack is performed from the head cell of the wide attacking unit in the direction of "back and down".
+            // This attack is performed from the head cell of the wide attacking unit in the direction of "back and down".
         case Battle::AttackDirection::TOP:
             return attacker.isReflect() ? Battle::CellDirection::TOP_LEFT : Battle::CellDirection::TOP_RIGHT;
-        // This attack is performed from the head cell of the wide attacking unit in the direction of "back and up".
+            // This attack is performed from the head cell of the wide attacking unit in the direction of "back and up".
         case Battle::AttackDirection::BOTTOM:
             return attacker.isReflect() ? Battle::CellDirection::BOTTOM_LEFT : Battle::CellDirection::BOTTOM_RIGHT;
         case Battle::AttackDirection::UNKNOWN:
@@ -722,7 +722,7 @@ namespace
     uint8_t GetArmyColorFromPlayerColor( const PlayerColor playerColor )
     {
         switch ( playerColor ) {
-        // Units under Berserker spell.
+            // Units under Berserker spell.
         case PlayerColor::UNUSED:
             return Battle::ArmyColor::ARMY_COLOR_BLACK;
         case PlayerColor::BLUE:
@@ -3131,6 +3131,8 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
             _needRedraw = true;
         }
 
+        _highlightUnitMovementArea = nullptr;
+
         if ( humanturn_spell.isValid() ) {
             HumanCastSpellTurn( unit, actions, msg );
         }
@@ -3165,6 +3167,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
     popup.reset();
 
     _currentUnit = nullptr;
+    _highlightUnitMovementArea = nullptr;
 }
 
 void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, std::string & msg )
@@ -4931,7 +4934,7 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
             _redrawActionResurrectSpell( *target, spell );
         else
             switch ( spell.GetID() ) {
-            // simple spell animation
+                // simple spell animation
             case Spell::BLESS:
                 RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell.GetID() ), NONE );
                 break;
@@ -4978,7 +4981,7 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
                 RedrawTroopWithFrameAnimation( *target, ICN::BERZERK, M82::FromSpell( spell.GetID() ), NONE );
                 break;
 
-            // uniq spell animation
+                // uniq spell animation
             case Spell::ARROW:
                 _redrawActionArrowSpell( *target );
                 break;
@@ -6078,13 +6081,20 @@ void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
     while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( frame < 25 && Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
-            mixSprite = unitSprite;
-            fheroes2::AlphaBlit( stoneEffect, mixSprite, alpha );
-            Redraw();
+        if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
+            if ( frame < 25 ) {
+                mixSprite = unitSprite;
+                fheroes2::AlphaBlit( stoneEffect, mixSprite, alpha );
+                Redraw();
 
-            alpha += 10;
-            ++frame;
+                alpha += 10;
+                ++frame;
+            }
+            else if ( _needRedraw ) {
+                // Avoid making the game to freeze while sound is still being played.
+                Redraw();
+                _needRedraw = false;
+            }
         }
     }
 
@@ -7211,7 +7221,7 @@ void Battle::Interface::InterruptAutoCombatIfRequested( LocalEvent & le )
 void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & actions )
 {
     switch ( result ) {
-    // cast
+        // cast
     case 1: {
         const HeroBase * hero = _currentUnit->GetCurrentOrArmyCommander();
 
@@ -7266,7 +7276,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
         break;
     }
 
-    // retreat
+        // retreat
     case 2: {
         if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to retreat?" ), Dialog::YES | Dialog::NO ) ) {
@@ -7281,7 +7291,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
         break;
     }
 
-    // surrender
+        // surrender
     case 3: {
         if ( arena.CanSurrenderOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             const HeroBase * enemy = arena.getEnemyCommander( arena.GetCurrentColor() );

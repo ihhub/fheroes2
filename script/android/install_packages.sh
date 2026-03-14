@@ -2,7 +2,7 @@
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2025                                             #
+#   Copyright (C) 2022 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -23,7 +23,7 @@
 set -e -o pipefail
 
 PKG_FILE="android.zip"
-PKG_FILE_SHA256="7d342b07bca53f2ab7e3bd3414ae1de3029c2c3a8c32e133a8aacdf86361a351"
+PKG_FILE_SHA256="4a34d7cb11eeb31a16107b0d8e56ec2d487803ec618080bd5944834a4fe11c40"
 PKG_URL="https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/android-deps/$PKG_FILE"
 
 TMP_DIR="$(mktemp -d)"
