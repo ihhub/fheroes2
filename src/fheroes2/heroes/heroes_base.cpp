@@ -429,16 +429,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
-        if ( !haveMovePoints( spell ) ) {
-            if ( res ) {
-                *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
+        if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
+            if ( res != nullptr ) {
+                *res = _( "This spell cannot be cast on a boat." );
             }
             return false;
         }
 
-        if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
-            if ( res != nullptr ) {
-                *res = _( "This spell cannot be cast on a boat." );
+        if ( !haveMovePoints( spell ) ) {
+            if ( res ) {
+                *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
             }
             return false;
         }
@@ -474,17 +474,6 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             }
         }
 
-        if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
-            const VecCastles & castles = hero->GetKingdom().GetCastles();
-            const bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
-            if ( !hasCastles ) {
-                if ( res != nullptr ) {
-                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
-                }
-                return false;
-            }
-        }
-
         if ( spell == Spell::TOWNGATE ) {
             const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
             assert( castle != nullptr );
@@ -502,6 +491,17 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                     *res = _( "The nearest town is %{town}.\n\nThis town is occupied by your hero %{hero}." );
                     StringReplace( *res, "%{town}", castle->GetName() );
                     StringReplace( *res, "%{hero}", townHero->GetName() );
+                }
+                return false;
+            }
+        }
+
+        if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
+            const VecCastles & castles = hero->GetKingdom().GetCastles();
+            const bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
+            if ( !hasCastles ) {
+                if ( res != nullptr ) {
+                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
                 }
                 return false;
             }
