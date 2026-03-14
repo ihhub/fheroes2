@@ -724,7 +724,8 @@ namespace Maps::Random_Generator
     // Wouldn't render correctly but will speed up placement
     void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
-        if ( Maps::doesContainRoad( mapFormat.tiles[tileIndex] ) ) {
+        auto & tile = mapFormat.tiles[tileIndex];
+        if ( Maps::doesContainRoad( tile ) ) {
             return;
         }
 
@@ -732,6 +733,13 @@ namespace Maps::Random_Generator
         if ( objectInfo.empty() ) {
             assert( 0 );
             return;
+        }
+
+        if ( Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.terrainIndex ) ) {
+            // Set terrain image without extra objects under the road.
+            const int32_t groundType = Ground::getGroundByImageIndex( tile.terrainIndex );
+            tile.terrainIndex = Ground::getRandomTerrainImageIndex( groundType, false );
+            world.getTile( tileIndex ).setTerrain( tile.terrainIndex, tile.terrainFlags );
         }
 
         // We just increase the UID counter to use the last UID in `Maps::addObjectToMap()`.
