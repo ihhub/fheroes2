@@ -190,5 +190,5 @@ namespace Maps
     // Returns the UID of the object type in the tile. If there is no such object the function returns 0.
     uint32_t getObjectUid( const Tile & tile, const MP2::MapObjectType objectType );
 
-    void setWaterholeCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber );
+    void setMaelstromCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber );
 }

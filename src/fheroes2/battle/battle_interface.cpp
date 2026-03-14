@@ -1429,7 +1429,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
         break;
     }
     case Maps::Ground::WATER:
-        _applyUnderwaterEffect = world.getTile( tileIndex ).getMainObjectType( false ) == MP2::OBJ_WATERHOLE;
+        _applyUnderwaterEffect = world.getTile( tileIndex ).getMainObjectType( false ) == MP2::OBJ_MAELSTROM;
         _battleGroundIcn = ICN::CBKGWATR;
         _borderObjectsIcn = ICN::FRNG0013;
         break;

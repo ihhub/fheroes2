@@ -2042,8 +2042,8 @@ void AI::HeroesAction( Heroes & hero, const int32_t dst_index )
         AIToMagellanMaps( hero, dst_index );
         break;
 
-    case MP2::OBJ_WATERHOLE:
-        // TODO: Add a logic for the Waterhole.
+    case MP2::OBJ_MAELSTROM:
+        // TODO: Add a logic for visiting the Maelstrom object.
         break;
 
     case MP2::OBJ_STONE_LITHS:

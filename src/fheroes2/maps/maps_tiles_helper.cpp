@@ -2340,12 +2340,12 @@ namespace Maps
         return 0;
     }
 
-    void setWaterholeCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber )
+    void setMaelstromCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber )
     {
-        constexpr int8_t waterholeCloseImagesOffest = 66;
-        constexpr int8_t waterholeCloseAnimationCount = 7;
+        constexpr int8_t maelstromCloseImagesOffest = 66;
+        constexpr int8_t maelstromCloseAnimationCount = 7;
 
-        if ( frameNumber >= waterholeCloseAnimationCount ) {
+        if ( frameNumber >= maelstromCloseAnimationCount ) {
             assert( 0 );
             return;
         }
@@ -2355,7 +2355,7 @@ namespace Maps
         auto updateStartIndex = [&startndex]( const int32_t direction ) {
             while ( isValidDirection( startndex, direction ) ) {
                 const Tile tile = world.getTile( GetDirectionIndex( startndex, direction ) );
-                if ( tile.getMainObjectType() != MP2::OBJ_WATERHOLE ) {
+                if ( tile.getMainObjectType() != MP2::OBJ_MAELSTROM ) {
                     return;
                 }
                 startndex = tile.GetIndex();
@@ -2378,22 +2378,22 @@ namespace Maps
             }
         };
 
-        updateImageIndex( world.getTile( startndex ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 0 );
+        updateImageIndex( world.getTile( startndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 0 );
         if ( isValidDirection( startndex, Direction::RIGHT ) ) {
-            updateImageIndex( world.getTile( startndex + 1 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 1 );
+            updateImageIndex( world.getTile( startndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 1 );
             if ( isValidDirection( startndex + 1, Direction::RIGHT ) ) {
-                updateImageIndex( world.getTile( startndex + 2 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 2 );
+                updateImageIndex( world.getTile( startndex + 2 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 2 );
             }
         }
         // Move to the second row;
         if ( isValidDirection( startndex, Direction::BOTTOM ) ) {
             startndex += world.w();
 
-            updateImageIndex( world.getTile( startndex ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 3 );
+            updateImageIndex( world.getTile( startndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 3 );
             if ( isValidDirection( startndex, Direction::RIGHT ) ) {
-                updateImageIndex( world.getTile( startndex + 1 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 4 );
+                updateImageIndex( world.getTile( startndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 4 );
                 if ( isValidDirection( startndex + 1, Direction::RIGHT ) ) {
-                    updateImageIndex( world.getTile( startndex + 2 ), waterholeCloseImagesOffest + waterholeCloseAnimationCount * 5 );
+                    updateImageIndex( world.getTile( startndex + 2 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 5 );
                 }
             }
         }

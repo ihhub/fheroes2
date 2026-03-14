@@ -3767,7 +3767,7 @@ namespace
         return Direction::CENTER;
     }
 
-    void actionToWaterhole( Heroes & hero, const MP2::MapObjectType objectType, int32_t dstIndex )
+    void actionToMaelstrom( Heroes & hero, const MP2::MapObjectType objectType, int32_t dstIndex )
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
@@ -3847,7 +3847,7 @@ namespace
         hero.setInvisible( true );
 
         frame = 0;
-        const uint32_t waterholeUid = Maps::getObjectUid( tile, objectType );
+        const uint32_t maelstromUid = Maps::getObjectUid( tile, objectType );
 
         while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
             if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
@@ -3855,7 +3855,7 @@ namespace
             }
 
             if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
-                Maps::setWaterholeCloseFrame( dstIndex, waterholeUid, frame );
+                Maps::setMaelstromCloseFrame( dstIndex, maelstromUid, frame );
 
                 ++frame;
 
@@ -3866,7 +3866,7 @@ namespace
             }
         }
 
-        Maps::removeObjectFromMapByUID( dstIndex, waterholeUid );
+        Maps::removeObjectFromMapByUID( dstIndex, maelstromUid );
 
         hero.SetOffset( { 0, 0 } );
         hero.ShowPath( true );
@@ -4096,8 +4096,8 @@ void Heroes::Action( const int tileIndex )
         ActionToDaemonCave( *this, objectType, tileIndex );
         break;
 
-    case MP2::OBJ_WATERHOLE:
-        actionToWaterhole( *this, objectType, tileIndex );
+    case MP2::OBJ_MAELSTROM:
+        actionToMaelstrom( *this, objectType, tileIndex );
         break;
 
     case MP2::OBJ_STONE_LITHS:
