@@ -109,27 +109,12 @@ namespace fheroes2
             return;
         }
 
-        const int32_t roiWidth = _area.width - width();
-        const int32_t roiHeight = _area.height - height();
+        const int32_t length = isVertical() ? _area.height - height() : _area.width - width();
+        const int32_t pos = isVertical() ? std ::clamp( position.y - height() / 2 - _area.y, 0, length ) : std ::clamp( position.x - width() / 2 - _area.x, 0, length );
+        const int32_t newIndex = ( ( _maxIndex - _minIndex ) * pos + length / 2 ) / length + _minIndex;
 
-        Point newPosition;
-
-        if ( isVertical() ) {
-            newPosition.y = std ::clamp( position.y - height() / 2, _area.y, _area.y + roiHeight );
-            newPosition.x = _area.x + roiWidth / 2;
-        }
-        else {
-            newPosition.x = std ::clamp( position.x - width() / 2, _area.x, _area.x + roiWidth );
-            newPosition.y = _area.y + roiHeight / 2;
-        }
-
-        if ( newPosition.x != x() || newPosition.y != y() ) {
-            // Update only on the change.
-
-            const double indexPos = isVertical() ? static_cast<double>( newPosition.y - _area.y ) / roiHeight : static_cast<double>( newPosition.x - _area.x ) / roiWidth;
-            _currentIndex = static_cast<int>( std::lround( indexPos * ( _maxIndex - _minIndex ) ) ) + _minIndex;
-
-            setPosition( newPosition.x, newPosition.y );
+        if ( newIndex != _currentIndex ) {
+            moveToIndex( newIndex );
         }
     }
 
