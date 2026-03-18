@@ -295,10 +295,9 @@ namespace
             }
 
             if ( MP2::isOffGameActionObject( objectPart.objectType ) ) {
-                // Non-removal action objects can be placed on top of other objects.
-                // We cannot allow removable objects such as heroes or artifacts to be placed there
-                // because they affect passability.
-                // Non-removal action objects will always stay put.
+                // We cannot allow removable objects such as heroes or artifacts
+                // to be placed on top of other objects because they affect passability once removed.
+                // However, this is not true for non-removable action objects as they always stay put.
                 switch ( objectPart.objectType ) {
                 case MP2::OBJ_ARTIFACT:
                 case MP2::OBJ_BARREL:
