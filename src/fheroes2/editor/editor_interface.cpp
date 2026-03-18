@@ -274,7 +274,7 @@ namespace
 
     bool isActionObjectAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
-        // Active action object parts must be placed on a tile without any other objects.
+        // Active action object parts must be placed on a tile without any other action object parts.
         // Only ground parts should be checked for this condition.
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
@@ -290,13 +290,38 @@ namespace
             const auto & tile = world.getTile( pos.x, pos.y );
 
             if ( MP2::isOffGameActionObject( tile.getMainObjectType() ) ) {
-                // An action object already exist. We cannot allow to put anything on top of it.
+                // An action object part already exist. We cannot allow to put anything on top of it.
                 return false;
             }
 
-            if ( MP2::isOffGameActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
-                // We are trying to place an action object on a tile that has some other objects.
-                return false;
+            if ( MP2::isOffGameActionObject( objectPart.objectType ) ) {
+                // Non-removal action objects can be placed on top of other objects.
+                // We cannot allow removable objects such as heroes or artifacts to be placed there
+                // because they affect passability.
+                // Non-removal action objects will always stay put.
+                switch ( objectPart.objectType ) {
+                case MP2::OBJ_ARTIFACT:
+                case MP2::OBJ_BARREL:
+                case MP2::OBJ_BARRIER:
+                case MP2::OBJ_BOTTLE:
+                case MP2::OBJ_CAMPFIRE:
+                case MP2::OBJ_FLOTSAM:
+                case MP2::OBJ_HERO:
+                case MP2::OBJ_GENIE_LAMP:
+                case MP2::OBJ_JAIL:
+                case MP2::OBJ_MONSTER:
+                case MP2::OBJ_RESOURCE:
+                case MP2::OBJ_SEA_CHEST:
+                case MP2::OBJ_SHIPWRECK_SURVIVOR:
+                case MP2::OBJ_TREASURE_CHEST:
+                    if ( !Maps::isClearGround( tile ) ) {
+                        // We are trying to place a removable action object on a tile that has some other objects.
+                        return false;
+                    }
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
