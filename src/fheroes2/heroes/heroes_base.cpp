@@ -476,6 +476,13 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
         if ( spell == Spell::TOWNGATE ) {
             const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
+            if ( castle == nullptr ) {
+                if ( res != nullptr ) {
+                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
+                }
+                return false;
+            }
+
             assert( castle != nullptr );
 
             if ( castle->GetIndex() == hero->GetIndex() ) {
@@ -496,7 +503,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             }
         }
 
-        if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
+        if ( spell == Spell::TOWNPORTAL ) {
             const VecCastles & castles = hero->GetKingdom().GetCastles();
             const bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
