@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-03-23 13:59+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -8370,11 +8370,11 @@ msgstr "Csak hősök idézhetik meg ezt a varázslatot."
 msgid "This hero is not able to cast adventure spells."
 msgstr "A hős nem képes kaland varázslatok megidézésére."
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
-msgstr "Hősöd ma már túl fáradt ehhez a varázslathoz. Próbáld újra holnap."
-
 msgid "This spell cannot be cast on a boat."
 msgstr "A varázslat nem használható hajón."
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgstr "Hősöd ma már túl fáradt ehhez a varázslathoz. Próbáld újra holnap."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "A varázslat csak tengerparton használható."

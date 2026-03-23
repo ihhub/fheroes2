@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-03-23 13:59+0000\n"
 "PO-Revision-Date: 2026-02-15 20:44+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -8425,13 +8425,13 @@ msgstr "Только герои могут колдовать данное за�
 msgid "This hero is not able to cast adventure spells."
 msgstr "Ваш герой не может использовать заклинания на карте."
 
+msgid "This spell cannot be cast on a boat."
+msgstr "Это заклинание не действует в море."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
 "раз завтра."
-
-msgid "This spell cannot be cast on a boat."
-msgstr "Это заклинание не действует в море."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "Это заклинание действует только у воды."

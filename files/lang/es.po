@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-03-23 13:59+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -8601,14 +8601,14 @@ msgstr ""
 msgid "This hero is not able to cast adventure spells."
 msgstr "Lanzar un hechizo tipo aventura."
 
+#, fuzzy
+msgid "This spell cannot be cast on a boat."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Tu héroe está demasiado cansado como para conjurar este hechizo hoy. Prueba "
 "de nuevo mañana."
-
-#, fuzzy
-msgid "This spell cannot be cast on a boat."
-msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
 msgid "This spell can only be cast near an ocean."

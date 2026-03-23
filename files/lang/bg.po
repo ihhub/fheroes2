@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-03-23 13:59+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8630,13 +8630,13 @@ msgstr "Само герои могат да правят това заклина
 msgid "This hero is not able to cast adventure spells."
 msgstr "Този герой не може да прави приключенски магии."
 
+msgid "This spell cannot be cast on a boat."
+msgstr "Това заклинание не може да се направи на кораб."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Твоят герой е твърде уморен, за да направи това заклинание днес. Опитай "
 "отново утре."
-
-msgid "This spell cannot be cast on a boat."
-msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "Това заклинание може да се направи само близо до океан."
