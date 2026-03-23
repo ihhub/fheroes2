@@ -91,7 +91,7 @@ namespace Battle
             std::unique_ptr<ArtifactsBar> artifact;
             std::unique_ptr<ArmyBar> army;
 
-            void redraw( fheroes2::Image & output ) const;
+            void redraw( fheroes2::Image & output, const size_t armyId, const fheroes2::Point offset ) const;
 
             // Resets the state to empty and removes the morale & luck indicators from the screen
             void resetForNewHero();

@@ -67,22 +67,25 @@ namespace
 {
     const std::array<PlayerColor, 2> playerColor{ PlayerColor::BLUE, PlayerColor::RED };
     const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 571 };
-    const std::array<int32_t, 2> primarySkillOffsetX{ 216, 389 };
-    const std::array<int32_t, 2> secondarySkillOffsetX{ 22, 353 };
-    const std::array<int32_t, 2> artifactOffsetX{ 23, 367 };
     const std::array<int32_t, 2> armyOffsetX{ 36, 381 };
 
     constexpr fheroes2::Size terrainIconSize{ 32, 32 };
 
+    const std::array<fheroes2::Rect, 2> primarySkillArea{ fheroes2::Rect{ 216, 51, 34, 133 }, fheroes2::Rect{ 389, 51, 34, 133 } };
+    const std::array<fheroes2::Rect, 2> secondarySkillArea{ fheroes2::Rect{ 22, 199, 265, 34 }, fheroes2::Rect{ 353, 199, 265, 34 } };
+    const std::array<fheroes2::Rect, 2> artifactArea{ fheroes2::Rect{ 23, 347, 250, 70 }, fheroes2::Rect{ 367, 347, 250, 70 } };
+
+    const Troop defaultMonster{ Monster::PEASANT, 100 };
+
     void renderControlInfo( const Battle::ControlInfo & info )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
-        const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
+        const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
 
         fheroes2::Blit( cell, display, info.humanPlayerRoi.x, info.humanPlayerRoi.y );
         if ( info.result & CONTROL_HUMAN ) {
-            fheroes2::Blit( mark, display, info.humanPlayerRoi.x + 3, info.humanPlayerRoi.y + 2 );
+            fheroes2::Blit( mark, display, info.humanPlayerRoi.x + mark.x(), info.humanPlayerRoi.y + mark.y() );
         }
 
         fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
@@ -90,7 +93,7 @@ namespace
 
         fheroes2::Blit( cell, display, info.computerPlayerRoi.x, info.computerPlayerRoi.y );
         if ( info.result & CONTROL_AI ) {
-            fheroes2::Blit( mark, display, info.computerPlayerRoi.x + 3, info.computerPlayerRoi.y + 2 );
+            fheroes2::Blit( mark, display, info.computerPlayerRoi.x + mark.x(), info.computerPlayerRoi.y + mark.y() );
         }
         text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
         text.draw( info.computerPlayerRoi.x + cell.width() + 5, info.computerPlayerRoi.y + 5, display );
@@ -120,7 +123,12 @@ namespace
         }
     }
 
-    int32_t getNextTerrain( const int32_t terrainType )
+    void copyImage( const fheroes2::Image & input, fheroes2::Image & output, const fheroes2::Rect area, const fheroes2::Point offset )
+    {
+        fheroes2::Copy( input, area.x, area.y, output, area.x + offset.x, area.y + offset.y, area.width, area.height );
+    }
+
+    constexpr int32_t getNextTerrain( const int32_t terrainType )
     {
         switch ( terrainType ) {
         case Maps::Ground::UNKNOWN:
@@ -152,7 +160,7 @@ namespace
         return Maps::Ground::UNKNOWN;
     }
 
-    int32_t getPrevTerrain( const int32_t terrainType )
+    constexpr int32_t getPrevTerrain( const int32_t terrainType )
     {
         switch ( terrainType ) {
         case Maps::Ground::BEACH:
@@ -190,7 +198,7 @@ Battle::Only::Only()
     armyInfo[1].armyId = 1;
 
     for ( auto & info : armyInfo ) {
-        info.monster.GetTroop( 0 )->Set( Monster::PEASANT, 100 );
+        info.monster.GetTroop( 0 )->Set( defaultMonster );
         info.monsterBackup.Assign( info.monster );
     }
 
@@ -223,7 +231,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     for ( auto & info : armyInfo ) {
         info.hero = nullptr;
         info.monster.Reset();
-        info.monster.GetTroop( 0 )->Set( Monster::PEASANT, 100 );
+        info.monster.GetTroop( 0 )->Set( defaultMonster );
 
         if ( !_backupCompleted || !allowBackup ) {
             continue;
@@ -270,8 +278,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
     }
 
-    for ( const auto & info : armyInfo ) {
-        info.ui.redraw( display );
+    for ( size_t i = 0; i < armyInfo.size(); ++i ) {
+        armyInfo[i].ui.redraw( display, i, cur_pt );
     }
 
     if ( attackedArmyControlInfo ) {
@@ -512,7 +520,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
         for ( const int32_t i : { 0, 1 } ) {
             if ( armyInfo[i].needRedraw ) {
-                armyInfo[i].ui.redraw( display );
+                armyInfo[i].ui.redraw( display, i, cur_pt );
                 armyInfo[i].needRedraw = false;
 
                 needRender = true;
@@ -689,19 +697,19 @@ void Battle::Only::updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Poi
     ui.primarySkill->setTableSize( { 1, 4 } );
     ui.primarySkill->setInBetweenItemsOffset( { 0, -1 } );
     ui.primarySkill->SetTextOff( armyId == 0 ? 70 : -70, -25 );
-    ui.primarySkill->setRenderingOffset( { offset.x + primarySkillOffsetX[armyId], offset.y + 51 } );
+    ui.primarySkill->setRenderingOffset( { offset.x + primarySkillArea[armyId].x, offset.y + 51 } );
 
     ui.secondarySkill = std::make_unique<SecondarySkillsBar>( *hero, true, true );
     ui.secondarySkill->setTableSize( { 8, 1 } );
     ui.secondarySkill->setInBetweenItemsOffset( { -1, 0 } );
     ui.secondarySkill->SetContent( hero->GetSecondarySkills().ToVector() );
-    ui.secondarySkill->setRenderingOffset( { offset.x + secondarySkillOffsetX[armyId], offset.y + 199 } );
+    ui.secondarySkill->setRenderingOffset( { offset.x + secondarySkillArea[armyId].x, offset.y + 199 } );
 
     ui.artifact = std::make_unique<ArtifactsBar>( hero, true, false, true, true, nullptr );
     ui.artifact->setTableSize( { 7, 2 } );
     ui.artifact->setInBetweenItemsOffset( { 2, 2 } );
     ui.artifact->SetContent( hero->GetBagArtifacts() );
-    ui.artifact->setRenderingOffset( { offset.x + artifactOffsetX[armyId], offset.y + 347 } );
+    ui.artifact->setRenderingOffset( { offset.x + artifactArea[armyId].x, offset.y + 347 } );
 
     ui.army = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false, true );
     ui.army->setTableSize( { 5, 1 } );
@@ -721,7 +729,7 @@ int32_t Battle::Only::terrainType() const
     return _terrainType;
 }
 
-void Battle::Only::ArmyUI::redraw( fheroes2::Image & output ) const
+void Battle::Only::ArmyUI::redraw( fheroes2::Image & output, const size_t armyId, const fheroes2::Point offset ) const
 {
     if ( morale ) {
         morale->Redraw();
@@ -734,13 +742,25 @@ void Battle::Only::ArmyUI::redraw( fheroes2::Image & output ) const
     if ( primarySkill ) {
         primarySkill->Redraw( output );
     }
+    else {
+        const fheroes2::Sprite & clearBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+        copyImage( clearBackground, output, primarySkillArea[armyId], offset );
+    }
 
     if ( secondarySkill ) {
         secondarySkill->Redraw( output );
     }
+    else {
+        const fheroes2::Sprite & clearBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+        copyImage( clearBackground, output, secondarySkillArea[armyId], offset );
+    }
 
     if ( artifact ) {
         artifact->Redraw( output );
+    }
+    else {
+        const fheroes2::Sprite & clearBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+        copyImage( clearBackground, output, artifactArea[armyId], offset );
     }
 
     if ( army ) {
