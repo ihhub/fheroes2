@@ -531,8 +531,6 @@ void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & off
 
         display.render();
     }
-
-    _alphaValue = 255;
 }
 
 void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset /* = {} */ ) const

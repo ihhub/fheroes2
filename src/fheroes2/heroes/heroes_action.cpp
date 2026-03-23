@@ -686,6 +686,7 @@ namespace
         hero.Move2Dest( dst_index );
         hero.ResetMovePoints();
         hero.GetPath().Reset();
+        hero.setAlphaValue( 255 );
 
         // Update the radar map image before changing the direction of the hero.
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
@@ -3844,7 +3845,6 @@ namespace
         AudioManager::PlaySound( M82::WSND00 );
         hero.ShowPath( false );
         hero.FadeOut( Game::HumanHeroAnimSpeedMultiplier() );
-        hero.setInvisible( true );
 
         frame = 0;
         const uint32_t maelstromUid = Maps::getObjectUid( tile, objectType );
