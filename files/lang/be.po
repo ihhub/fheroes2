@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-03-23 13:59+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8440,13 +8440,13 @@ msgstr "Толькі героі могуць чараваць гэтыя чар�
 msgid "This hero is not able to cast adventure spells."
 msgstr "Гэты герой не можа чараваць паходныя чары."
 
+msgid "This spell cannot be cast on a boat."
+msgstr "Гэтыя чары нельга чараваць з вадаплава."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Ваш герой занадта стаміўся, каб чараваць сёння. Адпачніце і паспрабуйце "
 "зрабіць гэта заўтра."
-
-msgid "This spell cannot be cast on a boat."
-msgstr "Гэтыя чары нельга чараваць з вадаплава."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "Гэтыя чары можна чараваць толькі паблізу вады."
