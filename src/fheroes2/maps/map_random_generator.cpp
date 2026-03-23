@@ -968,6 +968,7 @@ namespace Maps::Random_Generator
         }
 
         Maps::updateMapPlayers( mapFormat );
+        world.updatePassabilities();
 
         // Set random map name and description to be unique.
         mapFormat.name = "Random map " + std::to_string( generatorSeed );
