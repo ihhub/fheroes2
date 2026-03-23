@@ -6037,7 +6037,7 @@ void Battle::Interface::_redrawActionResurrectSpell( Unit & target, const Spell 
 {
     if ( !target.isValid() ) {
         // Move the current monster to the top of a stack in graveyard if it exists there.
-        arena.GetGraveyard()->moveToLastIfPresent( &target );
+        Battle::Arena::GetGraveyard()->moveToLastIfPresent( &target );
 
         // Restore direction of the creature, since it could be killed when it was reflected.
         target.UpdateDirection();
