@@ -194,6 +194,8 @@ void Maps::FileInfo::Reset()
     mainLanguage = fheroes2::SupportedLanguage::English;
 
     translations = {};
+
+    creatorNotes = {};
 }
 
 bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
@@ -541,6 +543,8 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         translations.emplace_back( language );
     }
 
+    creatorNotes = map.creatorNotes;
+
     return true;
 }
 
@@ -681,7 +685,7 @@ OStreamBase & Maps::operator<<( OStreamBase & stream, const FileInfo & fi )
     return stream << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
                   << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
                   << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInFirstCastle << fi.version << fi.worldDay << fi.worldWeek << fi.worldMonth
-                  << fi.mainLanguage;
+                  << fi.mainLanguage << fi.creatorNotes;
 }
 
 IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
@@ -719,6 +723,14 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     }
     else {
         stream >> fi.mainLanguage;
+    }
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1200_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1200_RELEASE ) {
+        fi.creatorNotes = {};
+    }
+    else {
+        stream >> fi.creatorNotes;
     }
 
     return stream;
