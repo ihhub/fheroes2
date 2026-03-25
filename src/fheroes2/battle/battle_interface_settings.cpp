@@ -20,6 +20,7 @@
 
 #include "battle_interface_settings.h"
 
+#include <cassert>
 #include <cstdint>
 #include <string>
 
