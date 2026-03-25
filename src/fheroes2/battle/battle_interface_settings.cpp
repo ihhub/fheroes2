@@ -56,10 +56,26 @@ namespace
 
     void drawTurnOrder( const fheroes2::Rect & optionRoi )
     {
-        const bool isShowTurnOrderEnabled = Settings::Get().BattleShowTurnOrder();
-        const fheroes2::Sprite & turnOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowTurnOrderEnabled ? 4 : 3 );
-        fheroes2::drawOption( optionRoi, turnOrderIcon, _( "Turn Order" ), isShowTurnOrderEnabled ? _( "On" ) : _( "Off" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        const auto state = Settings::Get().getBattleTurnOrderState();
+        const fheroes2::Sprite & turnOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, state == BattleTurnOrderState::OFF ? 3 : 4 );
+
+        std::string description;
+        switch ( state ) {
+        case BattleTurnOrderState::OFF:
+            description = _( "Off" );
+            break;
+        case BattleTurnOrderState::TOP:
+            description = _( "battle_turn_order|Top" );
+            break;
+        case BattleTurnOrderState::BOTTOM:
+            description = _( "battle_turn_order|Bottom" );
+            break;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        fheroes2::drawOption( optionRoi, turnOrderIcon, _( "Turn Order" ), description, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawGrid( const fheroes2::Rect & optionRoi )
@@ -192,7 +208,7 @@ namespace
             bool redrawScreen = false;
 
             if ( le.MouseClickLeft( windowTurnOrderRoi ) ) {
-                conf.setBattleShowTurnOrder( !conf.BattleShowTurnOrder() );
+                conf.switchToNextBattleTurnOrderState();
                 redrawScreen = true;
             }
             else if ( le.MouseClickLeft( windowGridRoi ) ) {

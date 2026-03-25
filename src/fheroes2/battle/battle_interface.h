@@ -242,7 +242,8 @@ namespace Battle
             _opponentColor = opponentColor;
         }
 
-        void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi );
+        void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi,
+                     const bool isAboveDialog );
 
         bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset, const bool highlightUnitMomevementArea ) const;
 
@@ -276,6 +277,7 @@ namespace Battle
 
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         bool _isInsideBattleField{ false };
+        bool _isAboveDialog{ false };
     };
 
     class PopupDamageInfo : public Dialog::FrameBorder
