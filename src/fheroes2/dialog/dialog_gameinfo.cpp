@@ -100,10 +100,10 @@ void Dialog::GameInfo()
 
     const int32_t buttonAboutWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_ABOUT_GOOD, 0 ).width();
 
-    fheroes2::Button buttonAbout( dialogOffset.x + 401 - buttonAboutWidth, dialogOffset.y + 36,
-                                  isEvilInterface ? ICN::BUTTON_MAP_ABOUT_EVIL : ICN::BUTTON_MAP_ABOUT_GOOD, 0, 1 );
-    const bool isCreatorInfoPresent{ !mapInfo.creatorNotes.empty() };
+    fheroes2::Button buttonAbout( dialogOffset.x + 401 - buttonAboutWidth, dialogOffset.y + 36, isEvilInterface ? ICN::BUTTON_MAP_ABOUT_EVIL : ICN::BUTTON_MAP_ABOUT_GOOD,
+                                  0, 1 );
 
+    const bool isCreatorInfoPresent{ !mapInfo.creatorNotes.empty() };
     if ( isCreatorInfoPresent ) {
         // Make sure that this is a Resurrection map.
         assert( mapInfo.version == GameVersion::RESURRECTION );
