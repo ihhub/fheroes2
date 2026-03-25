@@ -1306,7 +1306,7 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
                 _renderingRoi.y = dialogRoi.y - turnOrderMonsterIconSize;
             }
             else {
-                _renderingRoi.y = dialogRoi.y + + dialogRoi.height;
+                _renderingRoi.y = dialogRoi.y + dialogRoi.height;
             }
         }
 
