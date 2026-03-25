@@ -927,7 +927,8 @@ namespace
 
                     return buttonInfo.action( renderer );
                 }
-                else if ( le.isMouseRightButtonPressedInArea( buttonInfo.button.area() ) ) {
+
+                if ( le.isMouseRightButtonPressedInArea( buttonInfo.button.area() ) ) {
                     fheroes2::showStandardTextMessage( buttonInfo.customTitle.empty() ? buttonInfo.text : buttonInfo.customTitle, buttonInfo.customDescription,
                                                        Dialog::ZERO );
                 }
