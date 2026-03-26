@@ -2,7 +2,8 @@
 
 ## Description
 
-This page is a collection of features and enhancements made in **fheroes2** project in comparison with the original Heroes of Might and Magic II game. All information presented in this document is subject to change and does not cover every detail presented in the project.
+This page is a collection of features and enhancements made in **fheroes2** project in comparison with the original Heroes of Might and Magic II game.
+All information presented in this document is subject to change and does not cover every detail presented in the project.
 ***
 
 ### Special characteristics for each creature in creature info window
@@ -24,22 +25,21 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Language selection](https://user-images.githubusercontent.com/55348946/208439961-eeea82b5-d2e5-4975-a115-a808bd13d189.png)
 
-
-<sup>[*]</sup> Language selection is available for any version of the original game, however assets containing text and voice acting will remain on the initial language.
+\[*\] Language selection is available for any version of the original game, however assets containing text and voice acting will remain on the initial language.
 ***
 
 ### Size adaptive buttons
 
 ![Adaptive buttons](https://github.com/ihhub/fheroes2/assets/55348946/d3e78010-ccfc-43f9-8d3d-16e269e6d52f)
 
-<sup>[*]</sup> Some translations require larger buttons.
+\[*\] Some translations require larger buttons.
 ***
 
 ### Hot keys list
 
 ![Hot keys](https://github.com/ihhub/fheroes2/assets/55348946/31c99f75-bd81-45a7-9ff1-ddad6df90676)
 
-<sup>[*]</sup> It's also possible to re-assign hot-keys.
+\[*\] It's also possible to re-assign hot-keys.
 ***
 
 ### Instant battle option
@@ -56,7 +56,7 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Finish battle](https://user-images.githubusercontent.com/55348946/190421334-68737241-5d37-4de5-bd52-67b87e70fe04.png)
 
-<sup>[*]</sup> Press **Q** to finish the battle in auto mode.
+\[*\] Press **Q** to finish the battle in auto mode.
 ***
 
 ### Auto battle confirmation/interruption dialogs
@@ -104,11 +104,11 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 ![Damage info](https://user-images.githubusercontent.com/55348946/208454845-9cf5b81b-0e50-4152-8af5-1fc4882e6525.png)
 ***
 
-### Multiple windows and dialogs adapted for "Evil" interface type 
+### Multiple windows and dialogs adapted for "Evil" interface type
 
 ![New Evil Windows](https://github.com/ihhub/fheroes2/assets/55348946/1381fa47-94dc-4ad2-accc-48923a813841)
 
-<sup>[*]</sup> In the original game they all were only in "good" (brown) colors.
+\[*\] In the original game they all were only in "good" (brown) colors.
 ***
 
 ### Attacking spell damage pop up window
@@ -120,7 +120,7 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Well recruit](https://github.com/ihhub/fheroes2/assets/55348946/82c6ed8f-671b-4df9-83f0-41de4de76b48)
 
-<sup>[*]</sup> In the original game the only way to hire creatures was to click each dwelling in castle screen.
+\[*\] In the original game the only way to hire creatures was to click each dwelling in castle screen.
 ***
 
 ### Larger creature counters
@@ -157,7 +157,7 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Cursor counters](https://user-images.githubusercontent.com/55348946/188269761-f986ac8c-9e0b-466c-86f5-a55daf1f6070.png)
 
-<sup>[*]</sup> In the original game counter was limited to 4 days.
+\[*\] In the original game counter was limited to 4 days.
 ***
 
 ### Visited status for multiple objects on an adventure map
@@ -184,7 +184,7 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Farm](https://user-images.githubusercontent.com/55348946/188310584-451818dd-c422-49ec-96b4-d4d187b28c4d.gif)
 
-<sup>[*]</sup> A shadow from a castle in front of the field was also removed.
+\[*\] A shadow from a castle in front of the field was also removed.
 ***
 
 ### Icon for original or expansion map types
@@ -241,7 +241,7 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Sorceress city](https://user-images.githubusercontent.com/55348946/188311620-b7947a89-1316-4059-91fc-e86eb229a310.gif)
 
-<sup>[*]</sup> Note, that water was always rendered in the corner in the original game, even if town had no access to ocean.
+\[*\] Note, that water was always rendered in the corner in the original game, even if town had no access to ocean.
 ***
 
 ### Added missing part of Captain's Quarters in Sorceress town
@@ -258,14 +258,14 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Save file list](https://github.com/ihhub/fheroes2/assets/55348946/6e0067fd-b446-4277-9118-a0654d30e3ba)
 
-<sup>[*]</sup> Fheroes2 also allows to delete files and wheel scroll list.
+\[*\] Fheroes2 also allows to delete files and wheel scroll list.
 ***
 
 ### Move army/artifacts buttons
 
 ![Move buttons](https://user-images.githubusercontent.com/55348946/188311741-cdd2a581-0ecb-4f70-8528-b709c920acd0.gif)
 
-<sup>[*]</sup> In the original game these arrows were just a part of image.
+\[*\] In the original game these arrows were just a part of image.
 ***
 
 ### Added shadow for a spell book at adventure map and battle screens
@@ -307,14 +307,14 @@ This page is a collection of features and enhancements made in **fheroes2** proj
 
 ![Campaign info window](https://github.com/ihhub/fheroes2/assets/55348946/2a115b2c-a049-472a-afd0-8546b527e687)
 
-<sup>[*]</sup> In the original game none of elements have info window.
+\[*\] In the original game none of elements have info window.
 ***
 
 ### Campaign difficulty selection
 
 ![Difficulty](https://github.com/ihhub/fheroes2/assets/55348946/0ab9bd0e-4740-4a5e-9b66-23bbc082a17d)
 
-<sup>[*]</sup> Selected difficulty will effect the result in **High Scores**.
+\[*\] Selected difficulty will effect the result in **High Scores**.
 ***
 
 ### New icon for Medusa's petrification ability
