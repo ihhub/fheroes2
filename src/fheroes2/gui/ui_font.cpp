@@ -6373,6 +6373,7 @@ namespace
         fheroes2::SetPixel( released[216 - 32], offset + 9, offset + 6, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[216 - 32], { offset + 4, offset + 7 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[216 - 32], { offset + 6, offset + 0 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[216 - 32], { offset + 5, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
 
         // Greek capital letter omega
         released[217 - 32].resize( released[48 - 32].width(), released[48 - 32].height() );
@@ -6401,8 +6402,9 @@ namespace
         released[242 - 32].reset();
         fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 2 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[242 - 32], { offset + 0, offset + 3 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 8 }, { offset + 4, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[242 - 32], { offset + 5, offset + 9 }, { offset + 4, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 8 }, { offset + 3, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 4, offset + 9 }, { offset + 3, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[242 - 32], offset + 2, offset + 10, buttonGoodReleasedColor );
     }
 
     void generateCP1254GoodButtonFont( std::vector<fheroes2::Sprite> & released )
