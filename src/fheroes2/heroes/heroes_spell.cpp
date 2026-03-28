@@ -203,12 +203,13 @@ namespace
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.ShowPath( false );
+
         hero.FadeOut();
 
         hero.Scout( dst );
         hero.Move2Dest( dst );
         hero.SpellCasted( Spell::DIMENSIONDOOR );
-        hero.GetPath().Reset();
+        hero.calculatePath( -1 );
 
         // Clear previous hero position on radar.
         I.getRadar().SetRenderArea( fromRoi );
