@@ -3532,6 +3532,16 @@ namespace
             // Greek capital letter chi
             font[215 - 32] = font[88 - 32];
 
+            // Greek capital letter gamma
+            font[227 - 32].resize( font[118 - 32].width(), font[118 - 32].height() + 2 );
+            font[227 - 32].reset();
+            fheroes2::Copy( font[118 - 32], 0, 0, font[227 - 32], 0, 0, 9, 7 );
+            fheroes2::Copy( font[118 - 32], 4, 4, font[227 - 32], 4, 5, 3, 1 );
+            fheroes2::Copy( font[118 - 32], 4, 4, font[227 - 32], 4, 6, 3, 1 );
+            fheroes2::Copy( font[118 - 32], 4, 5, font[227 - 32], 4, 7, 3, 2 );
+            font[227 - 32].setPosition( font[118 - 32].x(), font[118 - 32].y() );
+            updateNormalFontLetterShadow( font[227 - 32] );
+
             // Greek small letter kappa
             font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
             font[234 - 32].reset();
@@ -3548,13 +3558,36 @@ namespace
             // Greek small letter omicron
             font[239 - 32] = font[111 - 32];
 
-            // Greek small letter omicron with tonos
-            font[243 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            // Greek small letter pi
+            font[240 - 32] = font[110 - 32];
+            fheroes2::Copy( font[110 - 32], 3, 1, font[240 - 32], 3, 0, 2, 2 );
+            fheroes2::FillTransform( font[240 - 32], 4, 2, 1, 1, 1 );
+            fheroes2::Copy( font[110 - 32], 7, 0, font[240 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[110 - 32], 2, 0, font[240 - 32], 9, 0, 1, 2 );
+            updateNormalFontLetterShadow( font[240 - 32] );
+
+            // Greek small letter rho
+            font[241 - 32] = font[112 - 32];
+            fheroes2::FillTransform( font[241 - 32], 1, 0, 2, 3, 1 );
+            fheroes2::FillTransform( font[241 - 32], 3, 0, 1, 1, 1 );
+            fheroes2::Copy( font[112 - 32], 4, 0, font[241 - 32], 3, 1, 1, 1 );
+            updateNormalFontLetterShadow( font[241 - 32] );
+
+            // Greek small letter sigma
+            font[243 - 32].resize( font[111 - 32].width() + 1, font[111 - 32].height() );
             font[243 - 32].reset();
-            fheroes2::Copy( font[111 - 32], 0, 0, font[243 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
-            fheroes2::Copy( font[122 - 32], 2, 2, font[243 - 32], 3, 0, 2, 2 );
-            font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
-            updateSmallFontLetterShadow( font[243 - 32] );
+            fheroes2::Copy( font[111 - 32], 0, 0, font[243 - 32], 0, 0, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[243 - 32], 4, 0, font[243 - 32], 7, 0, 3, 1 );
+            font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() );
+            updateNormalFontLetterShadow( font[243 - 32] );
+
+            // Greek small letter upsilon
+            font[245 - 32].resize( font[117 - 32].width() - 1, font[117 - 32].height() );
+            fheroes2::Copy( font[117 - 32], 0, 0, font[245 - 32], 0, 0, font[117 - 32].width() - 1, font[117 - 32].height() );
+            fheroes2::FillTransform( font[245 - 32], 7, 7, 2, 2, 1 );
+            fheroes2::FillTransform( font[245 - 32], 8, 6, 2, 1, 1 );
+            fheroes2::FillTransform( font[245 - 32], 8, 6, 1, 1, 1 );
+            font[245 - 32].setPosition( font[117 - 32].x(), font[117 - 32].y() );
         }
 
         // Small font.
