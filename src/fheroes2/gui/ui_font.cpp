@@ -6349,7 +6349,7 @@ namespace
         released[213 - 32] = released[89 - 32];
 
         // Greek capital letter phi
-        released[214 - 32].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[214 - 32].resize( 9 + offset * 2, 10 + offset * 2 );
         released[214 - 32].reset();
         fheroes2::DrawLine( released[214 - 32], { offset + 1, offset + 2 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[214 - 32], { offset + 0, offset + 3 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
@@ -6398,13 +6398,13 @@ namespace
         fheroes2::SetPixel( released[218 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
 
         // Greek small letter sigma
-        released[242 - 32].resize( 11, 14 );
+        released[242 - 32].resize( 6 + offset * 2, 9 + offset * 2 );
         released[242 - 32].reset();
-        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 2 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[242 - 32], { offset + 0, offset + 3 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 8 }, { offset + 3, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[242 - 32], { offset + 4, offset + 9 }, { offset + 3, offset + 10 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[242 - 32], offset + 2, offset + 10, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 0, offset + 1 }, { offset + 0, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 6 }, { offset + 3, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 4, offset + 7 }, { offset + 3, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[242 - 32], offset + 2, offset + 8, buttonGoodReleasedColor );
     }
 
     void generateCP1254GoodButtonFont( std::vector<fheroes2::Sprite> & released )
