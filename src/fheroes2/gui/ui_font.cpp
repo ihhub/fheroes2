@@ -3665,12 +3665,13 @@ namespace
             updateSmallFontLetterShadow( font[234 - 32] );
 
             // Greek small letter lambda
-            font[235 - 32].resize( font[118 - 32].width(), font[118 - 32].height() + 1 );
+            font[235 - 32].resize( font[118 - 32].width(), font[118 - 32].height() + 2 );
             font[235 - 32].reset();
-            fheroes2::Flip( font[118 - 32], 1, 0, font[235 - 32], 1, 1, 7, 5, false, true );
-            fheroes2::Copy( font[118 - 32], 1, 0, font[235 - 32], 3, 0, 1, 1 );
+            fheroes2::Flip( font[118 - 32], 1, 0, font[235 - 32], 1, 2, 7, 5, false, true );
+            fheroes2::Copy( font[118 - 32], 1, 0, font[235 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[118 - 32], 1, 0, font[235 - 32], 2, 0, 1, 1 );
             removeShadows( font[235 - 32] );
-            font[235 - 32].setPosition( font[118 - 32].x(), font[118 - 32].y() - 1 );
+            font[235 - 32].setPosition( font[118 - 32].x(), font[118 - 32].y() - 2 );
             updateSmallFontLetterShadow( font[235 - 32] );
 
             // Greek small letter nu
