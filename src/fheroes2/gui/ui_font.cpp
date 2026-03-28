@@ -4562,7 +4562,7 @@ namespace
             fheroes2::Copy( font[41], 0, 0, font[206 - 32], 0, 3, font[41].width(), font[41].height() );
             fheroes2::Copy( font[194 - 32], 4, 0, font[206 - 32], 1, 0, 3, 2 );
             font[206 - 32].setPosition( font[41].x(), font[41].y() - 3 );
-            updateNormalFontLetterShadow( font[206 - 32] );
+            updateSmallFontLetterShadow( font[206 - 32] );
 
             // T with comma.
             font[222 - 32].resize( font[52].width(), font[52].height() + 4 );
@@ -4602,7 +4602,7 @@ namespace
             fheroes2::Copy( font[73], 0, 0, font[238 - 32], 0, 1, font[73].width(), font[73].height() );
             fheroes2::Copy( font[226 - 32], 2, 0, font[238 - 32], 1, 0, 3, 2 );
             font[238 - 32].setPosition( font[73].x(), font[73].y() - 1 );
-            updateNormalFontLetterShadow( font[238 - 32] );
+            updateSmallFontLetterShadow( font[238 - 32] );
 
             // t with comma.
             font[254 - 32].resize( font[84].width(), font[84].height() + 4 );
