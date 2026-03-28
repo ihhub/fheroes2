@@ -3542,6 +3542,26 @@ namespace
             font[227 - 32].setPosition( font[118 - 32].x(), font[118 - 32].y() );
             updateNormalFontLetterShadow( font[227 - 32] );
 
+            // Greek capital letter eta
+            font[231 - 32].resize( font[110 - 32].width() - 1, font[110 - 32].height() + 2 );
+            font[231 - 32].reset();
+            fheroes2::Copy( font[110 - 32], 0, 0, font[231 - 32], 0, 0, font[110 - 32].width() - 1, font[110 - 32].height() );
+            fheroes2::Copy( font[110 - 32], 7, 2, font[231 - 32], 7, 4, 2, 5 );
+            font[231 - 32].setPosition( font[110 - 32].x(), font[110 - 32].y() );
+            updateNormalFontLetterShadow( font[231 - 32] );
+
+            // Greek capital letter theta
+            font[232 - 32] = font[48 - 32];
+            fheroes2::Copy( font[53 - 32], 2, 4, font[232 - 32], 3, 5, 5, 2 );
+            updateNormalFontLetterShadow( font[232 - 32] );
+
+            // Greek capital letter iota
+            font[233 - 32].resize( font[105 - 32].width(), font[105 - 32].height() - 3 );
+            font[233 - 32].reset();
+            fheroes2::Copy( font[105 - 32], 1, 3, font[233 - 32], 1, 0, 4, 7 );
+            font[233 - 32].setPosition( font[105 - 32].x(), font[105 - 32].y() + 3 );
+            updateNormalFontLetterShadow( font[233 - 32] );
+
             // Greek small letter kappa
             font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
             font[234 - 32].reset();
@@ -3551,6 +3571,14 @@ namespace
             fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
             font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
             updateNormalFontLetterShadow( font[234 - 32] );
+
+            // Greek small letter mu
+            font[236 - 32].resize( font[117 - 32].width(), font[117 - 32].height() + 2 );
+            font[236 - 32].reset();
+            fheroes2::Copy( font[117 - 32], 0, 0, font[236 - 32], 0, 0, font[117 - 32].width(), font[117 - 32].height() );
+            fheroes2::Copy( font[117 - 32], 2, 3, font[236 - 32], 2, 5, 2, 4 );
+            font[236 - 32].setPosition( font[117 - 32].x(), font[117 - 32].y() );
+            updateNormalFontLetterShadow( font[236 - 32] );
 
             // Greek small letter nu
             font[237 - 32] = font[118 - 32];
