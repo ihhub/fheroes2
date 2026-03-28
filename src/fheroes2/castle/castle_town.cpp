@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -208,12 +208,12 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
 
     // draw castle sprite
     dst_pt.x = cur_pt.x + 459;
-    dst_pt.y = cur_pt.y + 5;
+    dst_pt.y = cur_pt.y + 6;
     DrawImageCastle( dst_pt );
 
     // castle name
     const fheroes2::Text castleName( GetName(), fheroes2::FontType::smallWhite() );
-    castleName.draw( cur_pt.x + 538 - castleName.width() / 2, cur_pt.y + 3, display );
+    castleName.draw( cur_pt.x + 538 - castleName.width() / 2, cur_pt.y + 2, display );
 
     dst_pt.y = cur_pt.y + 2;
 
