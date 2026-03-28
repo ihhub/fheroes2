@@ -385,10 +385,8 @@ namespace
 
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
             fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, 0 );
+            // Do not automatically load resources for button fonts as
+            // they are not stored in the original game resources.
 
             _normalFont = _icnVsSprite[ICN::FONT];
             _smallFont = _icnVsSprite[ICN::SMALFONT];
