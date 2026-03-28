@@ -54,6 +54,22 @@ namespace
         fheroes2::updateShadow( letter, { -1, 1 }, 2, true );
     }
 
+    void removeShadows( fheroes2::Image & image )
+    {
+        if ( image.empty() || image.singleLayer() ) {
+            return;
+        }
+
+        uint8_t * data = image.transform();
+        const uint8_t * dataEnd = data + image.width() * image.height();
+
+        for ( ; data != dataEnd; ++data ) {
+            if ( *data > 0 ) {
+                *data = 1;
+            }
+        }
+    }
+
     fheroes2::Sprite addContour( fheroes2::Sprite & input, const fheroes2::Point & contourOffset, const uint8_t colorId )
     {
         if ( input.empty() || input.singleLayer() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() )
@@ -3628,15 +3644,34 @@ namespace
             // Greek capital letter chi
             font[215 - 32] = font[88 - 32];
 
+            // Greek small letter eta
+            font[231 - 32].resize( font[110 - 32].width() - 1, font[110 - 32].height() + 1 );
+            font[231 - 32].reset();
+            fheroes2::Copy( font[110 - 32], 0, 0, font[231 - 32], 0, 0, font[110 - 32].width() - 1, font[110 - 32].height() );
+            fheroes2::Copy( font[110 - 32], 1, 0, font[231 - 32], 6, 5, 1, 1 );
+            font[231 - 32].setPosition( font[110 - 32].x(), font[110 - 32].y() );
+            updateSmallFontLetterShadow( font[231 - 32] );
+
+            // Greek small letter iota
+            font[233 - 32].resize( font[105 - 32].width(), font[105 - 32].height() - 2 );
+            fheroes2::Copy( font[105 - 32], 0, 2, font[233 - 32], 0, 0, font[233 - 32].width(), font[233 - 32].height() );
+            font[233 - 32].setPosition( font[233 - 32].x(), font[233 - 32].y() - 4 );
+
             // Greek small letter kappa
-            font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
+            font[234 - 32].resize( 5, 6 );
             font[234 - 32].reset();
-            fheroes2::Copy( font[75], 0, 0, font[234 - 32], 0, 0, 4, 6 );
-            fheroes2::Copy( font[75], 4, 4, font[234 - 32], 4, 0, 5, 6 );
-            fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
-            fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
-            font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
+            fheroes2::Copy( font[75 - 32], 3, 1, font[234 - 32], 1, 1, 4, 5 );
+            font[234 - 32].setPosition( font[107 - 32].x(), font[107 - 32].y() + 1 );
             updateSmallFontLetterShadow( font[234 - 32] );
+
+            // Greek small letter lambda
+            font[235 - 32].resize( font[118 - 32].width(), font[118 - 32].height() + 1 );
+            font[235 - 32].reset();
+            fheroes2::Flip( font[118 - 32], 1, 0, font[235 - 32], 1, 1, 7, 5, false, true );
+            fheroes2::Copy( font[118 - 32], 1, 0, font[235 - 32], 3, 0, 1, 1 );
+            removeShadows( font[235 - 32] );
+            font[235 - 32].setPosition( font[118 - 32].x(), font[118 - 32].y() - 1 );
+            updateSmallFontLetterShadow( font[235 - 32] );
 
             // Greek small letter nu
             font[237 - 32] = font[118 - 32];
@@ -3651,6 +3686,11 @@ namespace
             fheroes2::Copy( font[122 - 32], 2, 2, font[243 - 32], 3, 0, 2, 2 );
             font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[243 - 32] );
+
+            // Greek small letter upsilon
+            font[239 - 32].resize( font[117 - 32].width() - 1, font[117 - 32].height() );
+            fheroes2::Copy( font[117 - 32], 0, 0, font[239 - 32], 0, 0, font[117 - 32].width() - 1, font[117 - 32].height() );
+            fheroes2::FillTransform( font[239 - 32], 6, 5, 1, 1, 1 );
         }
     }
 
