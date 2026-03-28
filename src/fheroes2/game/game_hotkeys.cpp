@@ -433,6 +433,11 @@ void Game::HotKeysLoad( const std::string & filename )
 {
     initializeHotKeyEvents();
 
+    // We need to minimize the number of language switching while loading hotkeys.
+    // Therefore, we use a unique pointer to expand if needed the scope of this object
+    // and subsequently reduce the language switching.
+    std::unique_ptr<fheroes2::LanguageSwitcher> languageSwitcher;
+
     bool isFilePresent = System::IsFile( filename );
     if ( isFilePresent ) {
         TinyConfig config( '=', '#' );
@@ -445,7 +450,7 @@ void Game::HotKeysLoad( const std::string & filename )
                 nameToKey.try_emplace( StringUpper( KeySymGetName( key ) ), key );
             }
 
-            const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::SupportedLanguage::English );
+            languageSwitcher = std::make_unique<fheroes2::LanguageSwitcher>( fheroes2::SupportedLanguage::English );
 
             for ( int eventId = hotKeyEventToInt( HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( HotKeyEvent::NO_EVENT ); ++eventId ) {
                 const char * eventName = _( hotKeyEventInfo[eventId].name );
