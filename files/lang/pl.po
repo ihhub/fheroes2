@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-23 13:59+0000\n"
-"PO-Revision-Date: 2026-03-14 16:22+0100\n"
+"PO-Revision-Date: 2026-03-27 16:30+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.6\n"
 
 msgid "SELECT"
 msgstr "WYBIERZ"
@@ -42,9 +42,8 @@ msgstr "M-BD"
 msgid "EXIT"
 msgstr "WYJŚCIE"
 
-#, fuzzy
 msgid "smallerButton|EXIT"
-msgstr "OK"
+msgstr "WYJŚCIE"
 
 msgid "OKAY"
 msgstr "OK"
@@ -107,6 +106,12 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"O\n"
+"D\n"
+"R\n"
+"Z\n"
+"U\n"
+"Ć"
 
 msgid ""
 "E\n"
@@ -114,6 +119,13 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"W\n"
+"Y\n"
+"J\n"
+"Ś\n"
+"C\n"
+"I\n"
+"E"
 
 msgid ""
 "C\n"
@@ -125,6 +137,14 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"N\n"
+"I\n"
+"A"
 
 msgid ""
 "S\n"
@@ -136,6 +156,14 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 
 msgid ""
 "NEW\n"
@@ -151,11 +179,10 @@ msgstr ""
 "WCZYTAJ\n"
 "GRĘ"
 
-#, fuzzy
 msgid ""
 "RESTART\n"
 "GAME"
-msgstr "OD NOWA"
+msgstr "ZRESTARTUJ"
 
 msgid ""
 "SAVE\n"
@@ -168,15 +195,18 @@ msgid ""
 "QUICK\n"
 "SAVE"
 msgstr ""
+"SZYBKI\n"
+"ZAPIS"
 
 msgid "QUIT"
 msgstr "WYJŚCIE"
 
-#, fuzzy
 msgid ""
 "START\n"
 "MAP"
-msgstr "OD NOWA"
+msgstr ""
+"URUCHOM\n"
+"MAPĘ"
 
 msgid ""
 "MAIN\n"
@@ -199,13 +229,12 @@ msgstr ""
 "WCZYTAJ\n"
 "MAPĘ"
 
-#, fuzzy
 msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "ZAPISZ\n"
-"GRĘ"
+"MAPĘ"
 
 msgid "INFO"
 msgstr "INFO"
@@ -218,7 +247,7 @@ msgstr ""
 "WALKA"
 
 msgid "SETTINGS"
-msgstr ""
+msgstr "OPCJE"
 
 msgid ""
 "STANDARD\n"
@@ -290,14 +319,13 @@ msgid "DIFFICULTY"
 msgstr "TRUDNOŚĆ"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "ZOBACZ INTRO"
 
 msgid "RESET"
-msgstr ""
+msgstr "RESET"
 
-#, fuzzy
 msgid "START"
-msgstr "OD NOWA"
+msgstr "START"
 
 msgid ""
 "P\n"
@@ -307,6 +335,12 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
 
 msgid "army|Few"
 msgstr "Mało"
@@ -323,11 +357,12 @@ msgstr "Badacz"
 msgid "None"
 msgstr "Brak"
 
-#, fuzzy
 msgid ""
 "%{monster}\n"
 "%{range}"
-msgstr "Przefruń jednostką (%{monster}) tutaj"
+msgstr ""
+"%{monster}\n"
+"%{range}"
 
 msgid ""
 "A few\n"
@@ -707,7 +742,6 @@ msgstr ""
 "Ucieczka bohatera i porzucenie wojsk. Bohatera będzie można nająć ponownie, "
 "ale będzie posiadać jedynie początkowe oddziały."
 
-#, fuzzy
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again. The cost "
@@ -736,8 +770,8 @@ msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"Przyjmę twą kapitulację i pozwolę ci odejść wraz z twą armią za cenę "
-"%{price} szt. złota."
+"Przyjmę twą kapitulację i pozwolę ci odejść wraz z twą armią za cenę %"
+"{price} szt. złota."
 
 msgid "View %{monster} info"
 msgstr "Informacje o jednostce: %{monster}"
@@ -753,9 +787,9 @@ msgstr "Strzelaj do %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] "(pozostał %{count} strzał)"
+msgstr[0] "(pozostał 1 strzał)"
 msgstr[1] "(pozostały %{count} strzały)"
-msgstr[2] "(pozostało %{count} strzałów)"
+msgstr[2] "(pozostało %{count} strzał)"
 
 msgid "Attack %{monster}"
 msgstr "Zaatakuj jednostkę (%{monster})"
@@ -778,13 +812,11 @@ msgstr "Rzuć zaklęcie: %{spell}"
 msgid "Select spell target"
 msgstr "Wybierz cel zaklęcia"
 
-#, fuzzy
 msgid "Are you sure you want to enable the auto combat mode?"
 msgstr "Czy na pewno chcesz włączyć automatyczną walkę?"
 
-#, fuzzy
 msgid "Are you sure you want to resolve the battle in the quick combat mode?"
-msgstr "Czy na pewno chcesz dokończyć walkę w trybie automatycznym?"
+msgstr "Czy na pewno chcesz dokończyć walkę w trybie szybkiej walki?"
 
 msgid "View Ballista info"
 msgstr "Informacje o baliście"
@@ -792,11 +824,9 @@ msgstr "Informacje o baliście"
 msgid "Ballista"
 msgstr "Balista"
 
-#, fuzzy
 msgid "Automatic combat modes"
 msgstr "Automatyczna Walka"
 
-#, fuzzy
 msgid "Automatic Combat Modes"
 msgstr "Automatyczna Walka"
 
@@ -804,6 +834,8 @@ msgid ""
 "Choose between proceeding the combat in auto combat mode or in quick combat "
 "mode."
 msgstr ""
+"Wybierz, czy chcesz kontynuować automatyczną walkę, czy zmienić na tryb "
+"szybkiej walki."
 
 msgid "Customize system options"
 msgstr "Dostosuj ustawienia systemowe"
@@ -855,13 +887,16 @@ msgid ""
 "AUTO\n"
 "COMBAT"
 msgstr ""
+"AUTO\n"
+"WALKA"
 
 msgid ""
 "QUICK\n"
 "COMBAT"
 msgstr ""
+"SZYBKA\n"
+"WALKA"
 
-#, fuzzy
 msgid "The computer continues the combat for you."
 msgstr "Pozwala komputerowi rozegrać walkę za ciebie."
 
@@ -870,21 +905,22 @@ msgid ""
 "hotkey or the default Cancel key, or by performing a left or right click "
 "anywhere on the game screen."
 msgstr ""
+"Można przerwać tę czynność w dowolnym momencie, naciskając klawisz skrótu "
+"Auto Walki, domyślny klawisz Anulacji, albo klikając lewym lub prawym "
+"przyciskiem myszy w dowolnym miejscu na ekranie gry."
 
 msgid "Auto Combat"
 msgstr "Automatyczna Walka"
 
 msgid "The combat is resolved from the current state."
-msgstr ""
+msgstr "Walkę rozstrzyga się od stanu obecnego."
 
 msgid "quickCombat|This cannot be undone."
-msgstr ""
+msgstr "Tego nie można cofnąć."
 
-#, fuzzy
 msgid "Quick Combat"
-msgstr "Automatyczna Walka"
+msgstr "Szybka Walka"
 
-#, fuzzy
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
 msgstr[0] "%{name} pomija turę."
@@ -924,7 +960,6 @@ msgstr[2] "%{count} %{unit} zmartwychwstało(y)."
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Przeniesiono %{monster} z: [%{src}] do [%{dst}]."
 
-#, fuzzy
 msgid "The %{name} resists the spell!"
 msgid_plural "The %{name} resist the spell!"
 msgstr[0] "%{name} odpierają zaklęcie!"
@@ -955,42 +990,36 @@ msgstr "%{spell} zadaje %{damage} pkt. obrażeń żywej istocie."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń każdej żywej istocie."
 
-#, fuzzy
 msgid "The %{attacker}'s attack blinds the %{target}!"
 msgid_plural "The %{attacker}' attack blinds the %{target}!"
 msgstr[0] "Atak %{attacker} oślepia %{target}!"
 msgstr[1] "Atak %{attacker} oślepia %{target}!"
 msgstr[2] "Atak %{attacker} oślepia %{target}!"
 
-#, fuzzy
 msgid "The %{attacker}'s gaze turns the %{target} to stone!"
 msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr[0] "Spojrzenie %{attacker} zamienia %{target} w kamień!"
 msgstr[1] "Spojrzenie %{attacker} zamienia %{target} w kamień!"
 msgstr[2] "Spojrzenie %{attacker} zamienia %{target} w kamień!"
 
-#, fuzzy
 msgid "The %{attacker}'s curse falls upon the %{target}!"
 msgid_plural "The %{attacker}' curse falls upon the %{target}!"
 msgstr[0] "%{attacker} przeklina %{target}!"
 msgstr[1] "%{attacker} przeklina %{target}!"
 msgstr[2] "%{attacker} przeklina %{target}!"
 
-#, fuzzy
 msgid "The %{target} is paralyzed by the %{attacker}!"
 msgid_plural "The %{target} are paralyzed by the %{attacker}!"
 msgstr[0] "%{target} został sparaliżowany przez %{attacker}!"
 msgstr[1] "%{target} został sparaliżowany przez %{attacker}!"
 msgstr[2] "%{target} został sparaliżowany przez %{attacker}!"
 
-#, fuzzy
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] "%{attacker} rozpraszają pozytywne zaklęcia u %{target}!"
 msgstr[1] "%{attacker} rozpraszają pozytywne zaklęcia u %{target}!"
 msgstr[2] "%{attacker} rozpraszają pozytywne zaklęcia u %{target}!"
 
-#, fuzzy
 msgid "The %{attacker} casts %{spell} on the %{target}!"
 msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
 msgstr[0] "%{attacker} rzuca zaklęcie %{spell} na %{target}!"
@@ -1018,7 +1047,6 @@ msgstr "Stworzono lustrzane odbicie."
 msgid "The mirror image is destroyed!"
 msgstr "Zniszczono lustrzane odbicie!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat mode?"
 msgstr "Czy na pewno chcesz przerwać tryb automatyczny?"
 
@@ -1049,7 +1077,6 @@ msgstr "Zabici: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Zabici: %{min} - %{max}"
 
-#, fuzzy
 msgid "Turn Order"
 msgstr "Kolejność jednostek"
 
@@ -1065,15 +1092,11 @@ msgstr "Cieniowanie pola"
 msgid "Shadow Cursor"
 msgstr "Cieniowanie kursora"
 
-#, fuzzy
 msgid "Movement Area"
-msgstr "Cieniowanie pola"
+msgstr "Obszar ruchu"
 
-#, fuzzy
 msgid "Toggle to display the turn order during the battle."
-msgstr ""
-"Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
-"walki."
+msgstr "Przełącz, aby wyświetlić kolejność tur podczas bitwy."
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
@@ -1099,11 +1122,11 @@ msgstr ""
 "znajduje się kursor."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
-msgstr ""
+msgstr "Włącz lub wyłącz wyświetlanie obszaru ruchu podświetlonego stworzenia."
 
 msgid ""
-"Through eagle-eyed observation, %{name} is able to learn the magic spell "
-"%{spell}."
+"Through eagle-eyed observation, %{name} is able to learn the magic spell %"
+"{spell}."
 msgstr ""
 "Dzięki swemu sokolemu wzrokowi, %{name} nauczył się zaklęcia '%{spell}'."
 
@@ -1113,51 +1136,50 @@ msgstr "Człowiek"
 msgid "AI"
 msgstr "Komputer"
 
-#, fuzzy
 msgid "Terrain"
-msgstr "Brak obiektu"
+msgstr "Teren"
 
-#, fuzzy
 msgid "Start"
-msgstr "Rozpocznij od nowa"
+msgstr "Start"
 
-#, fuzzy
 msgid "Start the battle."
-msgstr "Powrót na pole bitwy."
+msgstr "Rozpocznij bitwę."
 
 msgid "Exit"
 msgstr "Wyjście"
 
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 msgid "Reset to default settings."
-msgstr ""
+msgstr "Przywróć ustawienia domyślne."
 
 msgid ""
 "The battle will take place on a randomly selected terrain. Click to change "
 "the terrain type."
 msgstr ""
+"Bitwa odbędzie się na losowo wybranym terenie. Kliknij, aby zmienić typ "
+"terenu."
 
 msgid ""
 "The battle will take place on %{terrain-type} terrain. Click to change the "
 "terrain type."
 msgstr ""
+"Bitwa odbędzie się na terenie %{terrain-type}. Kliknij, aby zmienić typ "
+"terenu."
 
 msgid "Please select another hero."
 msgstr "Wybierz innego bohatera."
 
-#, fuzzy
 msgid "Click to set this hero to be human-controlled."
-msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+msgstr ""
+"Kliknij, aby ustawić tego bohatera jako kontrolowanego przez człowieka."
 
-#, fuzzy
 msgid "Click to set this hero to be AI-controlled."
-msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+msgstr "Kliknij, aby ustawić tego bohatera jako kontrolowanego przez komputer."
 
-#, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "Spotkanie: %{name1} i %{name2}"
+msgstr "%{race1} %{name1} kontra %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Potwory"
@@ -1249,17 +1271,16 @@ msgstr "Zdrada"
 msgid "Final Justice"
 msgstr "Ostateczna Sprawiedliwość"
 
-#, fuzzy
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
 "rebellion against his brother. They are not allied with each other, so they "
 "will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
-"Aby zacząć powstanie, Roland potrzebuje pomocy w pokonaniu lordów w pobliżu "
-"jego zamku. Lordowie ci nie są sprzymierzeni, więc większość czasu spędzą na "
-"potyczkach między sobą. Zwyciężysz, gdy pokonasz wszystkich wrogich "
-"bohaterów oraz zdobędziesz ich zamki."
+"Roland potrzebuje, abyś pokonał lordów w pobliżu jego zamku, aby rozpocząć "
+"wojnę rebeliancką przeciwko bratu. Nie są ze sobą sprzymierzeni, więc "
+"większość czasu spędzą na walce między sobą. Zwycięstwo będzie twoje, gdy "
+"pokonasz wszystkie ich zamki i bohaterów."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
@@ -1279,7 +1300,6 @@ msgstr ""
 "zwyciężyć, zdobądź wszystkie zamki i miasta wroga oraz nie pozwól na utratę "
 "wszystkich osad krasnoludów, albo przeciwnik wygra."
 
-#, fuzzy
 msgid ""
 "You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
@@ -1343,11 +1363,10 @@ msgstr ""
 "To ostatnia bitwa. Obie strony są uzbrojone po zęby, a wszyscy sprzymierzyli "
 "się przeciw tobie. Pokonaj Archibalda i zakończ wojnę!"
 
-#, fuzzy
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
-"battle will be the easiest one you will face for the rest of the war..."
-"traitor."
+"battle will be the easiest one you will face for the rest of the "
+"war...traitor."
 msgstr ""
 "Po zmianie stron będziesz mieć trzy zamki, a przeciwnik tylko jeden. To "
 "będzie najłatwiejsza z czekających cię bitew... zdrajco."
@@ -1379,7 +1398,6 @@ msgstr "Apokalipsa"
 msgid "Greater Glory"
 msgstr "Większa Chwała"
 
-#, fuzzy
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region. They "
 "are not allied with one another, so they will spend most of their energy "
@@ -1601,7 +1619,6 @@ msgstr ""
 "pustkowiu. Dokonaj tego zanim nastanie pierwszy dzień trzeciego miesiąca, "
 "albo twojej rodzinie już nic nie pomoże."
 
-#, fuzzy
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be of no help to your kingdom."
@@ -1621,7 +1638,6 @@ msgstr ""
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr "Odbij zamek Ivory Gates, który padł z powodu zdrady."
 
-#, fuzzy
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so we will send you wood every 2 weeks. You must complete your mission "
@@ -1665,7 +1681,6 @@ msgstr ""
 "Udało się odkryć miejsce położenia biblioteki! Musisz do niej wyruszyć i "
 "zająć miasto Chronos, w którym się znajduje."
 
-#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
 "clues inscribed on stone obelisks which will help lead you to your prize. "
@@ -1746,27 +1761,22 @@ msgstr " zawsze ucieknie przed twoją armią."
 msgid " will be willing to join your army."
 msgstr " zawsze dołączy do twojej armii."
 
-#, fuzzy
 msgid "\"%{artifact}\" artifact will be carried over in the campaign."
 msgstr ""
 "Artefact \"%{artifact}\" zostanie przeniesiony do następnego scenariusza."
 
-#, fuzzy
 msgid "The army will be carried over in the campaign."
 msgstr "Armia zostanie przeniesiona do następnego scenariusza."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Królestwo otrzyma +%{count} %{resource} każdego dnia."
 
-#, fuzzy
 msgid "The \"%{spell}\" spell will be carried over in the campaign."
-msgstr "Zaklęcie \"%{spell}\" zostanie przeniesione do następnego scenariusza."
+msgstr "Zaklęcie „%{spell}” zostanie przeniesione do następnego scenariusza."
 
-#, fuzzy
 msgid "%{hero} can be hired during scenarios."
 msgstr "Bohater %{hero} może być zwerbowany w tym scenariuszu."
 
-#, fuzzy
 msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
 msgstr ""
 "Pokonany bohater %{hero} nie będzie dostępny w kolejnych scenariuszach."
@@ -1785,7 +1795,6 @@ msgid ""
 "'Ally'."
 msgstr "Warczące i burczące smoki przystają na dołączenie do twojej armii."
 
-#, fuzzy
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
 "attention. He shouts to them, \"Who of you is brave enough to join this "
@@ -1797,7 +1806,6 @@ msgstr ""
 "nieustraszonego sprzymierzeńca?\" Członkowie grupy wiwatują i biegną do "
 "ciebie by dołączyć do twoich szeregów."
 
-#, fuzzy
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
@@ -1810,7 +1818,6 @@ msgid ""
 msgstr ""
 "Ogry chrząkają na znak uznania, \"Sprzymierzeńcy Archibalda mogą przejść.\""
 
-#, fuzzy
 msgid ""
 "The dragons see you and call out. \"Our alliance with Archibald compels us "
 "to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
@@ -1819,7 +1826,6 @@ msgstr ""
 "przyłączyć się do ciebie. Jednakże nie ma miejsca w twoich szeregach, co za "
 "szkoda!\". Smoki momentalnie się rozpraszają."
 
-#, fuzzy
 msgid ""
 "The elves stand at attention as you approach. Their leader calls to you and "
 "says, \"Let us not impede your progress, ally! Move on, and may victory be "
@@ -2057,7 +2063,6 @@ msgstr "Zaawan. mądrość"
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Mistrzowska mądrość"
 
-#, fuzzy
 msgid ""
 "The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
@@ -2081,16 +2086,13 @@ msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr "Główny bohater otrzyma %{count} %{monster} na starcie scenariusza."
 
-#, fuzzy
 msgid ""
 "The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr "Główny bohater otrzyma zaklęcie \"%{spell}\" na starcie scenariusza."
 
-#, fuzzy
 msgid "The starting alignment of the scenario will be %{race}."
 msgstr "Początkową rasą w scenariuszu będzie %{race}."
 
-#, fuzzy
 msgid ""
 "The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
@@ -2106,7 +2108,6 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-#, fuzzy
 msgid "Price of Loyalty"
 msgstr "Cena Lojalności"
 
@@ -2134,22 +2135,18 @@ msgstr "Wymagania:"
 msgid "Exit this menu without doing anything."
 msgstr "Wyjdź z menu nie wprowadzając żadnych zmian."
 
-#, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "%{name} - nie można zbudować, zamek jest za daleko od wody."
 
 msgid "This building has been disabled."
-msgstr ""
+msgstr "Ten budynek został wyłączony."
 
-#, fuzzy
 msgid "Cannot afford the %{name}."
 msgstr "%{name} - nie stać cię na ten budynek."
 
-#, fuzzy
 msgid "The %{name} is already built."
 msgstr "%{name} - ten budynek został już wzniesiony."
 
-#, fuzzy
 msgid "Cannot build the %{name}."
 msgstr "%{name} - nie można zbudować."
 
@@ -2378,9 +2375,8 @@ msgstr "Nie możesz rekrutować - w mieście jest już bohater."
 msgid "Cannot recruit - you have too many Heroes."
 msgstr "Nie możesz rekrutować - masz za dużo bohaterów."
 
-#, fuzzy
 msgid "Cannot afford a Hero."
-msgstr "Nie stać cię na bohatera"
+msgstr "Nie stać cię na bohatera."
 
 msgid "There is no room in the garrison for this army."
 msgstr "W garnizonie nie ma miejsca na dla tej jednostki."
@@ -2586,59 +2582,47 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Kapliczka"
 
-#, fuzzy
 msgid "Special"
-msgstr "Nic specjalnego"
+msgstr "Specjalny"
 
 msgid "Horde Building"
-msgstr ""
+msgstr "Budynek Hordy"
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Niziołki"
+msgstr "1. Siedlisko"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Niziołki"
+msgstr "2. Siedlisko"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Niziołki"
+msgstr "Ul. 2. Siedlisko"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Niziołki"
+msgstr "3. Siedlisko"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Niziołki"
+msgstr "Ul. 3. Siedlisko"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Niziołki"
+msgstr "4. Siedlisko"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Niziołki"
+msgstr "Ul. 4. Siedlisko"
 
-#, fuzzy
 msgid "Dwelling 5"
-msgstr "Niziołki"
+msgstr "5. Siedlisko"
 
-#, fuzzy
 msgid "Upg. Dwelling 5"
-msgstr "Niziołki"
+msgstr "Ul. 5. Siedlisko"
 
-#, fuzzy
 msgid "Dwelling 6"
-msgstr "Niziołki"
+msgstr "6. Siedlisko"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Niziołki"
+msgstr "Ul. 6. Siedlisko"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "2x Ul. 6 Siedliska"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
