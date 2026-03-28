@@ -3447,11 +3447,28 @@ namespace
             // Greek capital letter eta
             font[199 - 32] = font[72 - 32];
 
+            // Greek capital letter theta
+            font[200 - 32] = font[79 - 32];
+            fheroes2::Copy( font[193 - 32], 7, 5, font[200 - 32], 7, 5, 3, 2 );
+            updateNormalFontLetterShadow( font[200 - 32] );
+
             // Greek capital letter iota
             font[201 - 32] = font[73 - 32];
 
             // Greek capital letter kappa
             font[202 - 32] = font[75 - 32];
+
+            // Greek capital letter lambda
+            font[203 - 32] = font[65 - 32];
+            fheroes2::FillTransform( font[203 - 32], 8, 5, 2, 1, 1 );
+            fheroes2::FillTransform( font[203 - 32], 7, 6, 4, 3, 1 );
+            fheroes2::Copy( font[65 - 32], 7, 6, font[203 - 32], 7, 5, 1, 1 );
+            fheroes2::Copy( font[65 - 32], 10, 6, font[203 - 32], 10, 5, 1, 1 );
+            fheroes2::FillTransform( font[203 - 32], 3, 0, 4, 4, 1 );
+            fheroes2::FillTransform( font[203 - 32], 2, 3, 2, 3, 1 );
+            fheroes2::FillTransform( font[203 - 32], 7, 0, 1, 1, 1 );
+            fheroes2::Copy( font[65 - 32], 7, 1, font[203 - 32], 8, 0, 1, 1 );
+            updateNormalFontLetterShadow( font[203 - 32] );
 
             // Greek capital letter mu
             font[204 - 32] = font[77 - 32];
@@ -3459,14 +3476,24 @@ namespace
             // Greek capital letter nu
             font[205 - 32] = font[78 - 32];
 
+            // Greek capital letter xi
+            font[206 - 32] = font[197 - 32];
+            fheroes2::FillTransform( font[206 - 32], 4, 2, 2, 2, 1 );
+            fheroes2::Copy( font[206 - 32], 6, 1, font[206 - 32], 4, 1, 2, 1 );
+            fheroes2::Copy( font[206 - 32], 6, 9, font[206 - 32], 3, 9, 3, 1 );
+            fheroes2::FillTransform( font[206 - 32], 0, 2, 11, 7, 1 );
+            fheroes2::Copy( font[197 - 32], 6, 4, font[206 - 32], 3, 4, 3, 2 );
+            fheroes2::Copy( font[197 - 32], 6, 4, font[206 - 32], 6, 4, 3, 2 );
+            updateNormalFontLetterShadow( font[206 - 32] );
+
             // Greek capital letter omicron
             font[207 - 32] = font[79 - 32];
 
             // Greek capital letter pi
             font[208 - 32] = font[195 - 32];
-            fheroes2::Copy( font[208 - 32], 4, 1, font[207 - 32], 8, 1, 2, 9 );
-            fheroes2::Copy( font[208 - 32], 4, 9, font[207 - 32], 8, 10, 2, 1 );
-            fheroes2::Copy( font[208 - 32], 6, 0, font[207 - 32], 10, 0, 1, 2 );
+            fheroes2::Copy( font[208 - 32], 4, 1, font[208 - 32], 8, 1, 2, 9 );
+            fheroes2::Copy( font[208 - 32], 4, 9, font[208 - 32], 8, 10, 2, 1 );
+            fheroes2::Copy( font[208 - 32], 6, 0, font[208 - 32], 10, 0, 1, 2 );
             updateNormalFontLetterShadow( font[208 - 32] );
 
             // Greek capital letter rho
@@ -3513,6 +3540,7 @@ namespace
             font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[243 - 32] );
         }
+
         // Small font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
@@ -6114,6 +6142,13 @@ namespace
         fheroes2::DrawLine( released[195 - 32], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[195 - 32], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
 
+        // Greek capital letter delta
+        released[196 - 32].resize( released[65 - 32].width() - 2, released[65 - 32].height() );
+        released[196 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 3, 2, released[196 - 32], 2, 2, 11, 10 );
+        fheroes2::FillTransform( released[196 - 32], 6, 7, 4, 1, 1 );
+        fheroes2::DrawLine( released[196 - 32], { offset + 4, offset + 9 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
+
         // Greek capital letter epsilon
         released[197 - 32] = released[69 - 32];
 
@@ -6123,17 +6158,40 @@ namespace
         // Greek capital letter eta
         released[199 - 32] = released[72 - 32];
 
+        // Greek capital letter theta
+        released[200 - 32] = released[79 - 32];
+        fheroes2::DrawLine( released[200 - 32], { offset + 3, offset + 5 }, { offset + 6, offset + 5 }, buttonGoodReleasedColor );
+
         // Greek capital letter iota
         released[201 - 32] = released[73 - 32];
 
         // Greek capital letter kappa
         released[202 - 32] = released[75 - 32];
 
+        // Greek capital letter lambda
+        released[203 - 32].resize( released[65 - 32].width() - 2, released[65 - 32].height() );
+        released[203 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 3, 2, released[203 - 32], 2, 2, 11, 10 );
+        fheroes2::FillTransform( released[203 - 32], 6, 7, 4, 1, 1 );
+        fheroes2::FillTransform( released[203 - 32], 5, 11, 1, 1, 1 );
+        fheroes2::FillTransform( released[203 - 32], 9, 11, 1, 1, 1 );
+
         // Greek capital letter mu
         released[204 - 32] = released[77 - 32];
 
         // Greek capital letter nu
         released[205 - 32] = released[78 - 32];
+
+        // Greek capital letter xi
+        released[206 - 32].resize( released[69 - 32].width(), released[69 - 32].height() );
+        released[206 - 32].reset();
+        fheroes2::DrawLine( released[206 - 32], { offset + 0, offset + 0 }, { offset + 0, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[206 - 32], { offset + 1, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[206 - 32], { offset + 8, offset + 0 }, { offset + 8, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[206 - 32], { offset + 0, offset + 8 }, { offset + 0, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[206 - 32], { offset + 1, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[206 - 32], { offset + 8, offset + 8 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[206 - 32], { offset + 2, offset + 4 }, { offset + 6, offset + 4 }, buttonGoodReleasedColor );
 
         // Greek capital letter omicron
         released[207 - 32] = released[79 - 32];
@@ -6149,6 +6207,16 @@ namespace
 
         // Greek capital letter rho
         released[209 - 32] = released[80 - 32];
+
+        // Greek capital letter sigma
+        released[211 - 32].resize( released[69 - 32].width(), released[69 - 32].height() );
+        released[211 - 32].reset();
+        fheroes2::DrawLine( released[211 - 32], { offset + 0, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[211 - 32], { offset + 8, offset + 0 }, { offset + 8, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[211 - 32], { offset + 0, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[211 - 32], { offset + 8, offset + 8 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[211 - 32], { offset + 0, offset + 1 }, { offset + 4, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[211 - 32], { offset + 0, offset + 8 }, { offset + 4, offset + 5 }, buttonGoodReleasedColor );
 
         // Greek capital letter tau
         released[212 - 32] = released[84 - 32];
@@ -6170,6 +6238,33 @@ namespace
         // Greek capital letter chi
         released[215 - 32] = released[88 - 32];
 
+        // Greek capital letter psi
+        released[216 - 32].resize( released[85 - 32].width(), released[85 - 32].height() );
+        released[216 - 32].reset();
+        fheroes2::DrawLine( released[216 - 32], { offset + 0, offset + 0 }, { offset + 3, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[216 - 32], { offset + 9, offset + 0 }, { offset + 12, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[216 - 32], { offset + 2, offset + 1 }, { offset + 2, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[216 - 32], { offset + 10, offset + 1 }, { offset + 10, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[216 - 32], offset + 3, offset + 6, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[216 - 32], offset + 9, offset + 6, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[216 - 32], { offset + 4, offset + 7 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[216 - 32], { offset + 6, offset + 0 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
+
+        // Greek capital letter omega
+        released[217 - 32].resize( released[48 - 32].width(), released[48 - 32].height() );
+        released[217 - 32].reset();
+        fheroes2::DrawLine( released[217 - 32], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[217 - 32], offset + 1, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[217 - 32], offset + 7, offset + 1, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[217 - 32], { offset + 0, offset + 2 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[217 - 32], { offset + 8, offset + 2 }, { offset + 8, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[217 - 32], offset + 1, offset + 7, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[217 - 32], offset + 2, offset + 8, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[217 - 32], offset + 7, offset + 7, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[217 - 32], offset + 6, offset + 8, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[217 - 32], { offset + 0, offset + 9 }, { offset + 3, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[217 - 32], { offset + 5, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+
         // Greek capital letter iota with dialytika
         released[218 - 32].resize( released[73 - 32].width(), released[73 - 32].height() + 2 );
         released[218 - 32].reset();
@@ -6177,11 +6272,13 @@ namespace
         fheroes2::SetPixel( released[218 - 32], offset + 0, offset + 0, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[218 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
 
-        // Greek small letter nu
-        released[237 - 32] = released[118 - 32];
-
-        // Greek small letter omicron
-        released[239 - 32] = released[111 - 32];
+        // Greek small letter sigma
+        released[242 - 32].resize( 11, 14 );
+        released[242 - 32].reset();
+        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 2 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 0, offset + 3 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 1, offset + 8 }, { offset + 4, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[242 - 32], { offset + 5, offset + 9 }, { offset + 4, offset + 10 }, buttonGoodReleasedColor );
     }
 
     void generateCP1254GoodButtonFont( std::vector<fheroes2::Sprite> & released )
