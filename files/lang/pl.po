@@ -454,21 +454,22 @@ msgstr "Legion"
 msgid "All %{race} troops +1"
 msgstr "Wszystkie %{race} oddziały +1"
 
+#, fuzzy
 msgid "NeutralRaceTroops|Neutral"
 msgstr "Neutralny"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Jednostki z %{count} różnych frakcji -%{penalty}"
 
+#, fuzzy
 msgid "Some undead in army -1"
 msgstr "Nieumarli w armii -1"
 
+#, fuzzy
 msgid ""
 "Default\n"
 "troop"
-msgstr ""
-"Domyślny\n"
-"oddział"
+msgstr "domyślna akcja"
 
 msgid "View %{name}"
 msgstr "Obejrzyj jednostkę (%{name})"
@@ -494,8 +495,9 @@ msgstr "Nie można przenieść ostatniej jednostki"
 msgid "Move the %{name}"
 msgstr "Przenieś %{name}"
 
+#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "Ustaw liczbę %{monster}"
+msgstr "Strzelaj do %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -503,9 +505,11 @@ msgstr[0] "%{name} niszczy połowę stworów wroga!"
 msgstr[1] "%{name} niszczą połowę stworów wroga!"
 msgstr[2] "%{name} niszczy połowę stworów wroga!"
 
+#, fuzzy
 msgid "%{name} has turned off the auto combat"
 msgstr "%{name} wyłączył automatyczną walkę"
 
+#, fuzzy
 msgid "%{name} has turned on the auto combat"
 msgstr "%{name} włączył automatyczną walkę"
 
@@ -520,7 +524,7 @@ msgstr ""
 "rzucenie wszelkich zaklęć bojowych."
 
 msgid "You cannot cast spells without a commanding hero."
-msgstr "Nie możesz rzucać zaklęć bez dowodzącego bohatera."
+msgstr ""
 
 msgid "You have already cast a spell this round."
 msgstr "W tej rundzie zaklęcie zostało już rzucone."
@@ -538,12 +542,13 @@ msgstr ""
 "Obok twojego bohatera nie ma wolnego miejsca gdzie można by przywołać "
 "Żywiołaki."
 
+#, fuzzy
 msgid ""
 "The Moat interrupts any movement through it and reduces the defense skill of "
 "troops present in it by %{count}."
 msgstr ""
-"Fosa przerywa każdy ruch przez nią i zmniejsza obronność wojsk w niej "
-"obecnych o %{count}."
+"Fosa zmniejsza współczynnik obrony o -%{count} oraz spowalnia jednostki o "
+"połowę."
 
 msgid "Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
@@ -569,11 +574,13 @@ msgstr "Włączone"
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
+#, fuzzy
 msgid "Change the interface settings of the game."
-msgstr "Zmień ustawienia interfejsu gry."
+msgstr "Zmień ustawienia grafiki gry."
 
+#, fuzzy
 msgid "Interface Settings"
-msgstr "Ustawienia interfejsu"
+msgstr "Ustawienia gry"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -606,7 +613,7 @@ msgid "The enemy has surrendered!"
 msgstr "Przeciwnik się poddał!"
 
 msgid "Their cowardice costs them %{gold} gold."
-msgstr "Tchórzostwo kosztuje ich %{gold} złota."
+msgstr ""
 
 msgid "The enemy has fled!"
 msgstr "Przeciwnik uciekł!"
@@ -623,11 +630,13 @@ msgstr "%{name} tchórzliwie ucieka z pola bitwy."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} poddaje się wrogowi i odchodzi w hańbie."
 
+#, fuzzy
 msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Twoje siły poniosły sromotną klęskę, a %{name} porzucił twoją sprawę."
+msgstr "Twoje wojska ponoszą dotkliwą klęskę, a %{name} opuszcza cię."
 
+#, fuzzy
 msgid "Your forces suffer a bitter defeat."
-msgstr "Twoje siły poniosły sromotną klęskę."
+msgstr "Twoje wojska ponoszą dotkliwą klęskę."
 
 msgid "Battlefield Casualties"
 msgstr "Ofiary walki"
@@ -638,11 +647,13 @@ msgstr "Atakujący"
 msgid "Defender"
 msgstr "Obrońca"
 
+#, fuzzy
 msgid "Click to leave the battle results."
-msgstr "Kliknij, aby opuścić wyniki bitwy."
+msgstr "Użyj wskazanej rozdzielczości."
 
+#, fuzzy
 msgid "Click to restart the battle in manual mode."
-msgstr "Kliknij, aby ponownie uruchomić bitwę w trybie ręcznym."
+msgstr "Kliknij, aby wrócić do głównego menu."
 
 msgid "Restart"
 msgstr "Rozpocznij od nowa"
