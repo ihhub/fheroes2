@@ -227,7 +227,7 @@ namespace
         const Settings & conf = Settings::Get();
 
         const int speed = conf.BattleSpeed();
-        std::string str = _( "Speed: %{speed}" );
+        std::string str = _( "battle_animation|Speed: %{speed}" );
         StringReplace( str, "%{speed}", speed );
         uint32_t speedIcnIndex = 0;
         if ( speed >= 8 ) {
@@ -238,7 +238,7 @@ namespace
         }
 
         const fheroes2::Sprite & speedIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, speedIcnIndex );
-        fheroes2::drawOption( optionRoi, speedIcon, _( "Speed" ), std::move( str ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, speedIcon, _( "battle_animation|Speed" ), std::move( str ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawInterfaceSettings( const fheroes2::Rect & optionRoi )
@@ -334,7 +334,7 @@ namespace
             }
 
             if ( le.isMouseRightButtonPressedInArea( windowSpeedRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Speed" ), _( "Set the speed of combat actions and animations." ), 0 );
+                fheroes2::showStandardTextMessage( _( "battle_animation|Speed" ), _( "Set the speed of combat actions and animations." ), 0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( windowInterfaceRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Interface Settings" ), _( "Change the interface settings of the game." ), 0 );
