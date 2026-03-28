@@ -75,6 +75,7 @@ namespace
             // English is a default language so it is not considered as an extra language.
             return false;
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::French:
@@ -382,6 +383,7 @@ namespace
         // Numeric layout can be used for special letters as well.
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::English:
@@ -411,6 +413,8 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xA1\xC7\xD5\x92", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xB2\xD2\xDC\xC1\xDE\xA8" };
+        case fheroes2::SupportedLanguage::Bulgarian:
+            return { "\xDB\xD3\xC5\xC8\xD8\xD9\xCA\xD1\xC7\xD6", "\xDC\xDF\xC0\xCE\xC6\xC3\xD2\xCD\xC2\xCC\xD7", "\xDE\xC9\xDA\xDD\xD4\xD5\xCF\xD0\xCB\xC1" };
         case fheroes2::SupportedLanguage::Czech:
             return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM" };
         case fheroes2::SupportedLanguage::Danish:
@@ -443,6 +447,8 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xA2\xE7\xF5\x92", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xB3\xF2\xFC\xE1\xFE\xB8" };
+        case fheroes2::SupportedLanguage::Bulgarian:
+            return { "\xFB\xF3\xE5\xE8\xF8\xF9\xEA\xF1\xE7\xF6", "\xFC\xFF\xE0\xEE\xE6\xE3\xF2\xED\xE2\xEC\xF7", "\xFE\xE9\xFA\xFD\xF4\xF5\xEF\xF0\xEB\xE1" };
         case fheroes2::SupportedLanguage::Czech:
             return { "\xEC\x9A\xE8\xF8\xBE\xFD\xE1\xED\xE9", "qwertzuiop\xFA", "asdfghjkl\xF9", "yxcvbnm" };
         case fheroes2::SupportedLanguage::Danish:
@@ -508,6 +514,7 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
             return { 30, defaultButtonHeight };
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Russian:
@@ -717,6 +724,7 @@ namespace
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::English:
