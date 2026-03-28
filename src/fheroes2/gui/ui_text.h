@@ -380,7 +380,7 @@ namespace fheroes2
         std::vector<Text> _texts;
     };
 
-    class FontCharHandler
+    class FontCharHandler final
     {
     public:
         explicit FontCharHandler( const FontType fontType );
