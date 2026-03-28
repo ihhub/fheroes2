@@ -1,5 +1,5 @@
 # Ukrainian translation of fheroes2
-# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2022 - 2026 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
@@ -6630,7 +6630,6 @@ msgstr ""
 msgid "Handicap"
 msgstr "Обмеження"
 
-#
 msgid ""
 "This lets you change the handicap of a particular player. Only human players "
 "may have a handicap. Handicapped players start with fewer resources and earn "
@@ -6657,7 +6656,6 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Помірні обмеження"
 
-#
 msgid ""
 "Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -6668,7 +6666,6 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Значні обмеження"
 
-#
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -9185,28 +9182,25 @@ msgstr "Чудова"
 msgid "luck|Irish"
 msgstr "Ірландська"
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes falls on the hero's units in combat, causing "
 "their attacks to only do half damage."
 msgstr ""
-"Іноді, негативна удача спіткає війська героя в бою, через що їхні атаки "
+"Іноді, %{luck-type} удача спіткає війська героя в бою, через що їхні атаки "
 "завдають лише половину шкоди."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck means the hero's units will never get lucky or unlucky "
 "attacks on the enemy."
 msgstr ""
-"Нейтральна удача означає, що війська героя ніколи не матимуть вдалі або "
+"%{luck-type} удача означає, що війська героя ніколи не матимуть вдалі або "
 "невдалі атаки по ворогу."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
-"Позитивна удача інколи дарує військам героя вдалу атаку (подвійна сила) в "
+"%{luck-type} удача інколи дарує військам героя вдалу атаку (подвійна сила) в "
 "бою."
 
 msgid "morale|Treason"
@@ -9230,26 +9224,22 @@ msgstr "Чудова"
 msgid "morale|Blood!"
 msgstr "Кров!"
 
-#, fuzzy
 msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
-msgstr "Негативна мораль може призвести до заклякання військ героя у бою."
+msgstr "%{morale-type} мораль може призвести до заклякання військ героя у бою."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale means the hero's units will never be blessed with "
 "extra attacks or freeze in combat."
 msgstr ""
-"Нейтральна мораль означає, що війська героя ніколи не будуть обдаровані "
+"%{morale-type} мораль означає, що війська героя ніколи не будуть обдаровані "
 "додатковими атаками або завмирати в бою."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale may give the hero's units extra attacks in combat."
-msgstr "Позитивна мораль може надати військам героя додатковий хід в бою."
+msgstr "%{morale-type} мораль може надати військам героя додатковий хід в бою."
 
-#, fuzzy
 msgid "Blood"
-msgstr "Бладрейн"
+msgstr "Кров"
 
 msgid "Knight"
 msgstr "Лицар"
@@ -12628,12 +12618,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to "
-#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "Ви збираєтеся змінити мову мапи з %{oldLanguage} на %{newLanguage}. Після "
-#~ "цього деякі тексти можуть відображатися неправильно. Ви бажаєте "
-#~ "продовжити?"
