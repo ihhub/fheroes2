@@ -12583,12 +12583,3 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to "
-#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "Du tänker ändra kartans språk från %{oldLanguage} till %{newLanguage}. En "
-#~ "del texter kan eventuellt inte visas korrekt efter detta. Vill du "
-#~ "fortfarande ändra språk?"
