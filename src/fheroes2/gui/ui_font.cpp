@@ -1382,12 +1382,12 @@ namespace
             font[161 - 32].setPosition( font[89 - 32 + offset].x(), font[89 - 32 + offset].y() - 3 );
             updateNormalFontLetterShadow( font[161 - 32] );
 
-            font[162 - 32].resize( font[89 + offset].width(), font[89 + offset].height() + 3 );
+            font[162 - 32].resize( font[121 - 32 + offset].width(), font[121 - 32 + offset].height() + 3 );
             font[162 - 32].reset();
-            fheroes2::Copy( font[89 + offset], 0, 0, font[162 - 32], 0, 3, font[89 + offset].width(), font[89 + offset].height() );
-            fheroes2::Copy( font[89 + offset], 4, 1, font[162 - 32], 6, 0, 1, 1 );
-            fheroes2::Copy( font[89 + offset], 4, 0, font[162 - 32], 6, 1, 1, 1 );
-            font[162 - 32].setPosition( font[89 + offset].x(), font[89 + offset].y() - 3 );
+            fheroes2::Copy( font[121 - 32 + offset], 0, 0, font[162 - 32], 0, 3, font[121 - 32 + offset].width(), font[121 - 32 + offset].height() );
+            fheroes2::Copy( font[121 - 32 + offset], 4, 1, font[162 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[121 - 32 + offset], 4, 0, font[162 - 32], 6, 1, 1, 1 );
+            font[162 - 32].setPosition( font[121 - 32 + offset].x(), font[121 - 32 + offset].y() - 3 );
             updateNormalFontLetterShadow( font[162 - 32] );
 
             // C with a horizontal line in the middle.
@@ -1445,7 +1445,7 @@ namespace
             fheroes2::Copy( font[195 - 32], 8, 1, font[165 - 32], 9, 2, 1, 1 );
             font[165 - 32].setPosition( font[195 - 32].x(), font[195 - 32].y() - 1 );
 
-            font[196 - 32] = font[36 + offset];
+            font[196 - 32] = font[68 - 32 + offset];
 
             font[197 - 32] = font[69 - 32 + offset];
 
@@ -1493,7 +1493,7 @@ namespace
             font[202 - 32] = font[75 - 32 + offset];
 
             font[204 - 32] = font[77 - 32 + offset];
-            font[205 - 32] = font[40 + offset];
+            font[205 - 32] = font[72 - 32 + offset];
             font[206 - 32] = font[79 - 32 + offset];
 
             font[207 - 32] = font[195 - 32];
@@ -1530,7 +1530,7 @@ namespace
             font[212 - 32].setPosition( font[80 - 32].x(), font[80 - 32].y() );
             updateNormalFontLetterShadow( font[212 - 32] );
 
-            font[213 - 32] = font[56 + offset];
+            font[213 - 32] = font[88 - 32 + offset];
 
             font[214 - 32].resize( font[85 - 32].width() + 2, font[85 - 32].height() + 1 );
             font[214 - 32].reset();
@@ -1753,7 +1753,7 @@ namespace
             font[244 - 32].setPosition( font[113 - 32].x(), font[113 - 32].y() );
             updateNormalFontLetterShadow( font[244 - 32] );
 
-            font[245 - 32] = font[56 + offset];
+            font[245 - 32] = font[88 - 32 + offset];
 
             font[246 - 32].resize( font[117 - 32].width() + 2, font[117 - 32].height() + 1 );
             font[246 - 32].reset();
@@ -1893,11 +1893,11 @@ namespace
             font[161 - 32].setPosition( font[89 - 32 + offset].x(), font[89 - 32 + offset].y() - 2 );
             updateSmallFontLetterShadow( font[161 - 32] );
 
-            font[162 - 32].resize( font[89 + offset].width(), font[89 + offset].height() + 2 );
+            font[162 - 32].resize( font[121 - 32 + offset].width(), font[121 - 32 + offset].height() + 2 );
             font[162 - 32].reset();
-            fheroes2::Copy( font[89 + offset], 0, 0, font[162 - 32], 0, 2, font[89 + offset].width(), font[89 + offset].height() );
-            fheroes2::Copy( font[89 + offset], 1, 0, font[162 - 32], 4, 0, 2, 1 );
-            font[162 - 32].setPosition( font[89 + offset].x(), font[89 + offset].y() - 2 );
+            fheroes2::Copy( font[121 - 32 + offset], 0, 0, font[162 - 32], 0, 2, font[121 - 32 + offset].width(), font[121 - 32 + offset].height() );
+            fheroes2::Copy( font[121 - 32 + offset], 1, 0, font[162 - 32], 4, 0, 2, 1 );
+            font[162 - 32].setPosition( font[121 - 32 + offset].x(), font[121 - 32 + offset].y() - 2 );
             updateSmallFontLetterShadow( font[162 - 32] );
 
             // C with a horizontal line in the middle.
@@ -1954,7 +1954,7 @@ namespace
             font[165 - 32].setPosition( font[195 - 32].x(), font[195 - 32].y() - 1 );
             updateSmallFontLetterShadow( font[165 - 32] );
 
-            font[196 - 32] = font[36 + offset];
+            font[196 - 32] = font[68 - 32 + offset];
             font[197 - 32] = font[69 - 32 + offset];
 
             font[198 - 32].resize( font[88 - 32].width() + 1, font[88 - 32].height() );
@@ -2009,7 +2009,7 @@ namespace
             updateSmallFontLetterShadow( font[203 - 32] );
 
             font[204 - 32] = font[77 - 32 + offset];
-            font[205 - 32] = font[40 + offset];
+            font[205 - 32] = font[72 - 32 + offset];
             font[206 - 32] = font[79 - 32 + offset];
 
             font[207 - 32] = font[195 - 32];
@@ -2026,7 +2026,7 @@ namespace
             font[210 - 32].setPosition( font[207 - 32].x(), font[207 - 32].y() );
 
             font[211 - 32] = font[89 - 32 + offset];
-            font[213 - 32] = font[56 + offset];
+            font[213 - 32] = font[88 - 32 + offset];
 
             font[214 - 32].resize( font[85 - 32].width(), font[85 - 32].height() + 1 );
             font[214 - 32].reset();
@@ -2248,7 +2248,7 @@ namespace
             font[212 - 32].setPosition( font[80 - 32].x(), font[80 - 32].y() ); // copy from a big better
             updateSmallFontLetterShadow( font[212 - 32] );
 
-            font[245 - 32] = font[56 + offset];
+            font[245 - 32] = font[88 - 32 + offset];
 
             font[246 - 32].resize( font[117 - 32].width() + 1, font[117 - 32].height() + 1 );
             font[246 - 32].reset();
@@ -6597,7 +6597,7 @@ namespace fheroes2
 
     void modifyBaseNormalFont( std::vector<Sprite> & icnVsSprite )
     {
-        if ( icnVsSprite.size() < 96 ) {
+        if ( icnVsSprite.size() < baseFontSize ) {
             return;
         }
 
@@ -6791,7 +6791,7 @@ namespace fheroes2
 
     void modifyBaseSmallFont( std::vector<Sprite> & icnVsSprite )
     {
-        if ( icnVsSprite.size() < 96 ) {
+        if ( icnVsSprite.size() < baseFontSize ) {
             return;
         }
 
