@@ -4797,8 +4797,9 @@ namespace
         case ICN::BUTTON_GOOD_FONT_PRESSED:
         case ICN::BUTTON_EVIL_FONT_RELEASED:
         case ICN::BUTTON_EVIL_FONT_PRESSED: {
-            generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
-                                    _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
+            // These aren't the original game resources and these images are being generated dynamically.
+            // So, we shouldn't do anything here.
+            // We could even assert this place as the engine shouldn't even call it.
             break;
         }
         case ICN::HISCORE: {

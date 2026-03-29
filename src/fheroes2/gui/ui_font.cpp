@@ -6321,14 +6321,6 @@ namespace fheroes2
         return false;
     }
 
-    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
-                                 std::vector<Sprite> & evilPressed )
-    {
-        generateGoodButtonFontBaseShape( goodReleased );
-
-        updateButtonFont( goodReleased, goodPressed, evilReleased, evilPressed );
-    }
-
     void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
