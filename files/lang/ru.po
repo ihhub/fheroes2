@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 10:02+0000\n"
 "PO-Revision-Date: 2026-02-15 20:44+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -542,11 +542,13 @@ msgstr ""
 "Ров прерывает любое передвижение через него и уменьшает на -%{count} навык "
 "обороны любого находящегося в нём отряда."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
-msgid "Speed"
-msgstr "Скорость"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Анимация"
 
 msgid "Interface"
 msgstr "Интерфейс"
@@ -2939,6 +2941,9 @@ msgstr "Урон"
 
 msgid "HP"
 msgstr "Здоровье"
+
+msgid "Speed"
+msgstr "Скорость"
 
 msgid "Growth"
 msgstr "Прирост"

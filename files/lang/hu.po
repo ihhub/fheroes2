@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 10:02+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -540,11 +540,13 @@ msgstr ""
 "A várárok megakasztja a keresztülhaladó egységek mozgását és csökkenti a "
 "benne álló egységek védelmi képességét %{count} százalékkal."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Sebesség: %{speed}"
 
-msgid "Speed"
-msgstr "Sebesség"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animáció"
 
 msgid "Interface"
 msgstr "Kezelőfelület"
@@ -2917,6 +2919,9 @@ msgstr "Sebzés"
 
 msgid "HP"
 msgstr "Életerő"
+
+msgid "Speed"
+msgstr "Sebesség"
 
 msgid "Growth"
 msgstr "Szaporulat"
