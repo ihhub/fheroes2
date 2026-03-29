@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 10:02+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -537,11 +537,13 @@ msgstr ""
 "Voldgraven afbryder enhver bevægelse gennem den og reducerer forsvarsevnen "
 "for tropperne, der er til stede i den, med %{count} point."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hastighed: %{speed}"
 
-msgid "Speed"
-msgstr "Hastighed"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animation"
 
 msgid "Interface"
 msgstr "Interface"
@@ -2977,6 +2979,9 @@ msgstr "Skade"
 
 msgid "HP"
 msgstr "Liv"
+
+msgid "Speed"
+msgstr "Hastighed"
 
 msgid "Growth"
 msgstr "Vækst"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 10:02+0000\n"
 "PO-Revision-Date: 2025-05-19 07:06+0200\n"
 "Last-Translator: PlatoHero <platozp@gmail.com>\n"
 "Language-Team: platozp@gmail.com\n"
@@ -446,10 +446,10 @@ msgid ""
 "troops present in it by %{count}."
 msgstr ""
 
-msgid "Speed: %{speed}"
+msgid "battleAnimation|Speed: %{speed}"
 msgstr ""
 
-msgid "Speed"
+msgid "battleAnimation|Speed"
 msgstr ""
 
 msgid "Interface"
@@ -2606,6 +2606,9 @@ msgid "Damage"
 msgstr ""
 
 msgid "HP"
+msgstr ""
+
+msgid "Speed"
 msgstr ""
 
 msgid "Growth"
