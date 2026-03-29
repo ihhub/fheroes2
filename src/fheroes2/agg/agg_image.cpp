@@ -2538,6 +2538,10 @@ namespace
                 imageArray[249 - 32] = imageArray[100];
                 imageArray.erase( imageArray.begin() + 218, imageArray.end() );
             }
+
+            // Add 32 empty images to the front of the array to have 1:1 correlation between character index and its corresponding image.
+            const fheroes2::Sprite firstSprite{ imageArray[0] };
+            imageArray.insert( imageArray.begin(), 32, firstSprite );
             break;
         }
         case ICN::YELLOW_FONT:
