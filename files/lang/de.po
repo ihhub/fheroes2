@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 10:02+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "AUSW."
+
+msgid "ABOUT"
+msgstr "ÜBER"
 
 msgid "S"
 msgstr "S"
@@ -3270,6 +3273,13 @@ msgstr ""
 "Verlust-\n"
 "bedingungen"
 
+msgid "About"
+msgstr "Über"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+
 msgid "Map Description"
 msgstr "Kartenbeschreibung"
 
@@ -5031,17 +5041,11 @@ msgstr "EREIGNISSE"
 msgid "LANGUAGE"
 msgstr "SPRACHE"
 
-msgid "ABOUT"
-msgstr "ÜBER"
-
 msgid "Change Map Name"
 msgstr "Kartennamen ändern"
 
 msgid "Change Map Description"
 msgstr "Kartenbeschreibung ändern"
-
-msgid "About"
-msgstr "Über"
 
 msgid "Click to edit custom rumors."
 msgstr "Klickt, um Gerüchte hinzuzufügen oder zu bearbeiten."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 10:02+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "CHỌN"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -3273,6 +3276,13 @@ msgstr ""
 "Điều kiện\n"
 "Thua"
 
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Nhấp để quay lại màn hình chính."
+
 #, fuzzy
 msgid "Map Description"
 msgstr ""
@@ -5128,18 +5138,12 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Chọn Mô tả"
-
-msgid "About"
-msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
