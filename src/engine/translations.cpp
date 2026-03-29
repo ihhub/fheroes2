@@ -334,7 +334,7 @@ namespace
         return pos ? ++pos : str;
     }
 
-    class MOFile
+    class MOFile final
     {
     public:
         MOFile() = default;
@@ -619,6 +619,11 @@ const char * Translation::gettext( const std::string & str )
 const char * Translation::gettext( const char * str )
 {
     return current ? current->ngettext( str, 0 ) : stripContext( str );
+}
+
+const char * Translation::getNonTranslated( const char * str )
+{
+    return stripContext( str );
 }
 
 const char * Translation::ngettext( const char * str, const char * plural, const size_t n )
