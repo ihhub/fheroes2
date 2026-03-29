@@ -1689,7 +1689,7 @@ namespace
             font[226 - 32].resize( font[231 - 32].width() + 1, font[231 - 32].height() );
             font[226 - 32].reset();
             fheroes2::Copy( font[231 - 32], 0, 0, font[226 - 32], 1, 0, font[231 - 32].width(), font[231 - 32].height() );
-            fheroes2::Copy( font[77], 1, 0, font[226 - 32], 1, 0, 3, 7 );
+            fheroes2::Copy( font[109 - 32], 1, 0, font[226 - 32], 1, 0, 3, 7 );
             fheroes2::Copy( font[226 - 32], 7, 1, font[226 - 32], 3, 0, 1, 1 );
             fheroes2::Copy( font[226 - 32], 7, 1, font[226 - 32], 3, 6, 1, 1 );
             fheroes2::Copy( font[226 - 32], 3, 4, font[226 - 32], 3, 5, 1, 1 );
@@ -1716,7 +1716,7 @@ namespace
             font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
             updateNormalFontLetterShadow( font[234 - 32] );
 
-            font[235 - 32] = font[78];
+            font[235 - 32] = font[110 - 32];
             fheroes2::Copy( font[235 - 32], 3, 0, font[235 - 32], 2, 1, 1, 1 );
             fheroes2::FillTransform( font[235 - 32], 0, 0, 2, 3, 1 );
             fheroes2::FillTransform( font[235 - 32], 2, 0, 1, 1, 1 );
@@ -1728,21 +1728,21 @@ namespace
             fheroes2::FillTransform( font[236 - 32], 0, 0, 3, 6, 1 );
             updateNormalFontLetterShadow( font[236 - 32] );
 
-            font[237 - 32] = font[78];
+            font[237 - 32] = font[110 - 32];
             fheroes2::FillTransform( font[237 - 32], 4, 0, 3, 8, 1 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 4, 3, 1, 2 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 5, 3, 1, 2 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 6, 3, 1, 2 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 7, 3, 1, 1 );
+            fheroes2::Copy( font[110 - 32], 4, 1, font[237 - 32], 4, 3, 1, 2 );
+            fheroes2::Copy( font[110 - 32], 4, 1, font[237 - 32], 5, 3, 1, 2 );
+            fheroes2::Copy( font[110 - 32], 4, 1, font[237 - 32], 6, 3, 1, 2 );
+            fheroes2::Copy( font[110 - 32], 4, 1, font[237 - 32], 7, 3, 1, 1 );
             updateNormalFontLetterShadow( font[237 - 32] );
 
             font[238 - 32] = font[47 + offset];
 
-            font[239 - 32] = font[78];
+            font[239 - 32] = font[110 - 32];
 
             font[240 - 32] = font[48 + offset];
             font[241 - 32] = font[35 + offset];
-            font[242 - 32] = font[77];
+            font[242 - 32] = font[109 - 32];
             font[243 - 32] = font[57 + offset];
 
             font[244 - 32].resize( font[81].width(), font[81].height() );
@@ -2216,18 +2216,18 @@ namespace
             updateSmallFontLetterShadow( font[237 - 32] );
 
             font[238 - 32] = font[47 + offset];
-            font[239 - 32] = font[78];
+            font[239 - 32] = font[110 - 32];
             font[240 - 32] = font[48 + offset];
             font[241 - 32] = font[35 + offset];
 
-            font[242 - 32].resize( font[77].width() - 4, font[77].height() );
+            font[242 - 32].resize( font[109 - 32].width() - 4, font[109 - 32].height() );
             font[242 - 32].reset();
-            fheroes2::Copy( font[77], 1, 0, font[242 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[77], 6, 1, font[242 - 32], 4, 1, 1, 4 );
-            fheroes2::Copy( font[77], 10, 1, font[242 - 32], 6, 1, 2, 4 );
-            fheroes2::Copy( font[77], 3, 0, font[242 - 32], 2, 0, 3, 1 );
-            fheroes2::Copy( font[77], 3, 0, font[242 - 32], 5, 0, 1, 1 );
-            font[242 - 32].setPosition( font[77].x(), font[77].y() );
+            fheroes2::Copy( font[109 - 32], 1, 0, font[242 - 32], 1, 0, 2, 5 );
+            fheroes2::Copy( font[109 - 32], 6, 1, font[242 - 32], 4, 1, 1, 4 );
+            fheroes2::Copy( font[109 - 32], 10, 1, font[242 - 32], 6, 1, 2, 4 );
+            fheroes2::Copy( font[109 - 32], 3, 0, font[242 - 32], 2, 0, 3, 1 );
+            fheroes2::Copy( font[109 - 32], 3, 0, font[242 - 32], 5, 0, 1, 1 );
+            font[242 - 32].setPosition( font[109 - 32].x(), font[109 - 32].y() );
             updateSmallFontLetterShadow( font[242 - 32] );
 
             font[243 - 32] = font[57 + offset];
