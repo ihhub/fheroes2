@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 10:02+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -548,11 +548,13 @@ msgstr ""
 "die Verteidigungsfertigkeit von Truppen, die sich in ihm befinden, um "
 "%{count}."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Geschw.: %{speed}"
 
-msgid "Speed"
-msgstr "Bewegung"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animation"
 
 msgid "Interface"
 msgstr "Anzeige"
@@ -2963,6 +2965,9 @@ msgstr "Schaden"
 
 msgid "HP"
 msgstr "TP"
+
+msgid "Speed"
+msgstr "Bewegung"
 
 msgid "Growth"
 msgstr "Wachstum"

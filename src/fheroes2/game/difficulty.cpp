@@ -321,3 +321,16 @@ bool Difficulty::isBasicAIBattleLogicApplicable( const int32_t difficulty, const
 
     return !isControlledByHuman;
 }
+
+bool Difficulty::isArtifactSortingAllowedForAI( const int32_t difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    default:
+        break;
+    }
+
+    return true;
+}

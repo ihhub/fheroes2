@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 10:02+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -536,11 +536,13 @@ msgstr ""
 "Ровът намалява с -%{count} умението за защита на всяка единица и забавя "
 "наполовина скоростта на движение."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Скорост: %{speed}"
 
-msgid "Speed"
-msgstr "Скорост"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Анексирам"
 
 msgid "Interface"
 msgstr "Интерфейс"
@@ -2973,6 +2975,9 @@ msgstr "Щети"
 
 msgid "HP"
 msgstr "Живот"
+
+msgid "Speed"
+msgstr "Скорост"
 
 msgid "Growth"
 msgstr "Растеж"

@@ -288,6 +288,7 @@ public:
     void ActionPreBattle();
     void ActionAfterBattle( const bool attackerWins );
 
+    // Draw image castle to position.
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
     CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool openMageGuildWindow, const bool fade, const bool renderBackgroundDialog );
