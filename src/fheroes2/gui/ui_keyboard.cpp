@@ -83,6 +83,7 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
         case fheroes2::SupportedLanguage::Ukrainian:
             return true;
         default:
@@ -393,6 +394,7 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "1234567890", "-:;()_+=", "[].,!'?" };
         default:
@@ -434,6 +436,8 @@ namespace
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xDA", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA8" };
         case fheroes2::SupportedLanguage::Slovak:
             return { "\xCF\xBC\x8A\xC8\x8D\x8E\xDD\xC1\xCD\xC9\xD3", "QWERTZUIOP\xDA", "ASDFGHJKL\xD4\xD2", "\xC4YXCVBNM\xC5\xC0" };
+        case fheroes2::SupportedLanguage::Spanish:
+            return { "QWERTYUIOP", "ASDFGHJKL\xD1\xC7", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xAF", "\xD4\xB2\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xAA", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA5" };
         default:
@@ -470,6 +474,8 @@ namespace
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xFA", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB8" };
         case fheroes2::SupportedLanguage::Slovak:
             return { "\xEF\xBE\x9A\xE8\x9D\x9E\xFD\xE1\xED\xE9\xF3", "qwertzuiop\xFA", "asdfghjkl\xF4\xF2", "\xE4yxcvbnm\xE5\xE0" };
+        case fheroes2::SupportedLanguage::Spanish:
+            return { "qwertyuiop", "asdfghjkl\xF1\xE7", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xBF", "\xF4\xB3\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xBA", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB4" };
         default:
@@ -526,6 +532,7 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
         case fheroes2::SupportedLanguage::Ukrainian:
             return { 24, defaultButtonHeight };
         default:
@@ -740,6 +747,7 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
         case fheroes2::SupportedLanguage::Ukrainian:
             addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported );
             break;
