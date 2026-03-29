@@ -75,14 +75,19 @@ namespace
             // English is a default language so it is not considered as an extra language.
             return false;
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
+        case fheroes2::SupportedLanguage::Hungarian:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Portuguese:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
+        case fheroes2::SupportedLanguage::Swedish:
         case fheroes2::SupportedLanguage::Ukrainian:
             return true;
         default:
@@ -383,15 +388,21 @@ namespace
         // Numeric layout can be used for special letters as well.
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
+        case fheroes2::SupportedLanguage::Greek:
+        case fheroes2::SupportedLanguage::Hungarian:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Portuguese:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
+        case fheroes2::SupportedLanguage::Swedish:
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "1234567890", "-:;()_+=", "[].,!'?" };
         default:
@@ -413,6 +424,8 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xA1\xC7\xD5\x92", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xB2\xD2\xDC\xC1\xDE\xA8" };
+        case fheroes2::SupportedLanguage::Bulgarian:
+            return { "\xDB\xD3\xC5\xC8\xD8\xD9\xCA\xD1\xC7\xD6", "\xDC\xDF\xC0\xCE\xC6\xC3\xD2\xCD\xC2\xCC\xD7", "\xDE\xC9\xDA\xDD\xD4\xD5\xCF\xD0\xCB\xC1" };
         case fheroes2::SupportedLanguage::Czech:
             return { "\xCC\x8A\xC8\xD8\x8E\xDD\xC1\xCD\xC9", "QWERTZUIOP\xDA", "ASDFGHJKL\xD9", "YXCVBNM" };
         case fheroes2::SupportedLanguage::Danish:
@@ -423,6 +436,12 @@ namespace
             return { "\xC9\xC8\xC7\xC0\xC2\xCA\xCB\xCD\xCE\xCF\xDB\xDC", "AZERTYUIOP\xD4", "QSDFGHJKLM\xD9", "WXCVBN" };
         case fheroes2::SupportedLanguage::German:
             return { "QWERTZUIOP\xDC", "ASDFGHJKL\xD6\xC4", "YXCVBNM\xDF" };
+        case fheroes2::SupportedLanguage::Greek:
+            return { "\xF2\xC5\xC1\xD4\xD5\xC8\xC9\xCF\xD0", "\xC1\xD3\xC4\xD6\xC3\xC7\xCE\xCA\xCB", "\xC6\xD7\xD8\xD9\xC2\xCD\xCC" };
+        case fheroes2::SupportedLanguage::Hungarian:
+            return { "QWERTZUIOP\xD5\xDA\xDB", "ASDFGHJKL\xC9\xC1", "YXCVBNM\xD6\xDC\xD3" };
+        case fheroes2::SupportedLanguage::Norwegian:
+            return { "QWERTYUIOP\xC5", "ASDFGHJKL\xD8\xC6", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x8C\x8F\xA3\xA5\xAF\xC6\xCA\xD1\xD3", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Portuguese:
@@ -431,6 +450,10 @@ namespace
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xDA", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA8" };
         case fheroes2::SupportedLanguage::Slovak:
             return { "\xCF\xBC\x8A\xC8\x8D\x8E\xDD\xC1\xCD\xC9\xD3", "QWERTZUIOP\xDA", "ASDFGHJKL\xD4\xD2", "\xC4YXCVBNM\xC5\xC0" };
+        case fheroes2::SupportedLanguage::Spanish:
+            return { "QWERTYUIOP", "ASDFGHJKL\xD1\xC7", "ZXCVBNM" };
+        case fheroes2::SupportedLanguage::Swedish:
+            return { "QWERTYUIOP\xC5", "ASDFGHJKL\xD6\xC4", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xAF", "\xD4\xB2\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xAA", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA5" };
         default:
@@ -447,6 +470,8 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xA2\xE7\xF5\x92", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xB3\xF2\xFC\xE1\xFE\xB8" };
+        case fheroes2::SupportedLanguage::Bulgarian:
+            return { "\xFB\xF3\xE5\xE8\xF8\xF9\xEA\xF1\xE7\xF6", "\xFC\xFF\xE0\xEE\xE6\xE3\xF2\xED\xE2\xEC\xF7", "\xFE\xE9\xFA\xFD\xF4\xF5\xEF\xF0\xEB\xE1" };
         case fheroes2::SupportedLanguage::Czech:
             return { "\xEC\x9A\xE8\xF8\xBE\xFD\xE1\xED\xE9", "qwertzuiop\xFA", "asdfghjkl\xF9", "yxcvbnm" };
         case fheroes2::SupportedLanguage::Danish:
@@ -457,6 +482,12 @@ namespace
             return { "\xE9\xE8\xE7\xE0\xE2\xEA\xEB\xED\xEE\xEF\xFB\xFC", "azertyuiop\xF4", "qsdfghjklm\xF9", "wxcvbn" };
         case fheroes2::SupportedLanguage::German:
             return { "qwertzuiop\xFC", "asdfghjkl\xF6\xE4", "yxcvbnm\xDF" };
+        case fheroes2::SupportedLanguage::Greek:
+            return { "\xF2\xE5\xF1\xF4\xF5\xE8\xE9\xEF\xF0", "\xE1\xF3\xE4\xF6\xE3\xE7\xEE\xEA\xEB", "\xE6\xF7\xF8\xF9\xE2\xED\xEC" };
+        case fheroes2::SupportedLanguage::Hungarian:
+            return { "qwertzuiop\xF5\xFA\xFB", "asdfghjkl\xE9\xE1", "yxcvbnm\xF6\xFC\xF3" };
+        case fheroes2::SupportedLanguage::Norwegian:
+            return { "qwertyuiop\xE5", "asdfghjkl\xF8\xE6", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x9C\x9F\xB3\xB9\xBF\xE6\xEA\xF1\xF3", "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Portuguese:
@@ -465,6 +496,10 @@ namespace
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xFA", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB8" };
         case fheroes2::SupportedLanguage::Slovak:
             return { "\xEF\xBE\x9A\xE8\x9D\x9E\xFD\xE1\xED\xE9\xF3", "qwertzuiop\xFA", "asdfghjkl\xF4\xF2", "\xE4yxcvbnm\xE5\xE0" };
+        case fheroes2::SupportedLanguage::Spanish:
+            return { "qwertyuiop", "asdfghjkl\xF1\xE7", "zxcvbnm" };
+        case fheroes2::SupportedLanguage::Swedish:
+            return { "qwertyuiop\xE5", "asdfghjkl\xF6\xE4", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Ukrainian:
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xBF", "\xF4\xB3\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xBA", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB4" };
         default:
@@ -514,14 +549,21 @@ namespace
         case fheroes2::SupportedLanguage::Polish:
             return { 30, defaultButtonHeight };
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::German:
+        case fheroes2::SupportedLanguage::Greek:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Portuguese:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
+        case fheroes2::SupportedLanguage::Swedish:
         case fheroes2::SupportedLanguage::Ukrainian:
             return { 24, defaultButtonHeight };
+        case fheroes2::SupportedLanguage::Hungarian:
+            return { 21, defaultButtonHeight };
         default:
             // Did you add a new supported language? Add the value above!
             assert( 0 );
@@ -724,19 +766,26 @@ namespace
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
+        case fheroes2::SupportedLanguage::Bulgarian:
         case fheroes2::SupportedLanguage::Czech:
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::English:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
+        case fheroes2::SupportedLanguage::Greek:
+        case fheroes2::SupportedLanguage::Hungarian:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Portuguese:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
+        case fheroes2::SupportedLanguage::Spanish:
+        case fheroes2::SupportedLanguage::Swedish:
         case fheroes2::SupportedLanguage::Ukrainian:
             addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported );
             break;
         default:
+            // Did you add a new supported language? Add the value above!
             assert( 0 );
             break;
         }
