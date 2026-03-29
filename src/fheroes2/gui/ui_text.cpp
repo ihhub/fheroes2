@@ -58,6 +58,7 @@ namespace
 
     const fheroes2::Sprite & getChar( const uint8_t character, const fheroes2::FontType & fontType )
     {
+        // TODO: remove the usage of 0x20 suffix.
         if ( character < 0x21 ) {
             return errorImage;
         }
@@ -146,6 +147,7 @@ namespace
 
     uint32_t getCharacterLimit( const fheroes2::FontSize fontSize )
     {
+        // TODO: remove the usage of 0x20 suffix.
         switch ( fontSize ) {
         case fheroes2::FontSize::SMALL:
             return fheroes2::AGG::GetICNCount( ICN::SMALFONT ) + 0x20 - 1;
