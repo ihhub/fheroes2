@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 10:02+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2026-02-24 17:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "VÄLJ"
+
+msgid "ABOUT"
+msgstr "OM"
 
 msgid "S"
 msgstr "S"
@@ -3224,6 +3227,13 @@ msgstr ""
 "Förlust-\n"
 "villkor"
 
+msgid "About"
+msgstr "Om"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klicka för att gå tillbaka till huvudmenyn."
+
 msgid "Map Description"
 msgstr "Kartbeskrivning"
 
@@ -4952,17 +4962,11 @@ msgstr "HÄNDELSER"
 msgid "LANGUAGE"
 msgstr "SPRÅK"
 
-msgid "ABOUT"
-msgstr "OM"
-
 msgid "Change Map Name"
 msgstr "Ändra Kartnamn"
 
 msgid "Change Map Description"
 msgstr "Ändra Kartbeskrivning"
-
-msgid "About"
-msgstr "Om"
 
 msgid "Click to edit custom rumors."
 msgstr "Klicka för att redigera anpassade rykten."

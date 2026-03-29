@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 10:02+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -21,6 +21,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ВЫБРАЦЬ"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -3271,6 +3274,13 @@ msgstr ""
 "Умовы\n"
 "паражэння"
 
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Націсніце, каб вярнуцца ў галоўнае меню."
+
 msgid "Map Description"
 msgstr "Апісанне мапы"
 
@@ -4983,17 +4993,11 @@ msgstr "ПАДЗЕІ"
 msgid "LANGUAGE"
 msgstr "МОВА"
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr "Змяніць назву мапы"
 
 msgid "Change Map Description"
 msgstr "Змяніць апісанне мапы"
-
-msgid "About"
-msgstr ""
 
 msgid "Click to edit custom rumors."
 msgstr "Націсніце, каб паправіць дададзеныя ў сцэнар чуткі."

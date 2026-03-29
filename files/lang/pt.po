@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 10:02+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "SELEC."
+
+msgid "ABOUT"
+msgstr "SOBRE"
 
 msgid "S"
 msgstr "P"
@@ -3242,6 +3245,13 @@ msgstr ""
 "de\n"
 "Derrota"
 
+msgid "About"
+msgstr "Sobre"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Clique para retornar ao menu principal."
+
 msgid "Map Description"
 msgstr "Descrição do Mapa"
 
@@ -4996,17 +5006,11 @@ msgstr "EVENTOS"
 msgid "LANGUAGE"
 msgstr "IDIOMA"
 
-msgid "ABOUT"
-msgstr "SOBRE"
-
 msgid "Change Map Name"
 msgstr "Alterar o Nome do Mapa"
 
 msgid "Change Map Description"
 msgstr "Alterar Descrição do Mapa"
-
-msgid "About"
-msgstr "Sobre"
 
 msgid "Click to edit custom rumors."
 msgstr "Clique para editar rumores personalizados."

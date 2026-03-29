@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 10:02+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "VÁLASZT"
+
+msgid "ABOUT"
+msgstr "LEÍRÁS"
 
 msgid "S"
 msgstr "S"
@@ -3222,6 +3225,13 @@ msgstr ""
 "Vesztési\n"
 "feltételek"
 
+msgid "About"
+msgstr "Leírás"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Kattints a főmenübe való visszatéréshez."
+
 msgid "Map Description"
 msgstr "Térkép leírása"
 
@@ -4963,17 +4973,11 @@ msgstr "ESEMÉNYEK"
 msgid "LANGUAGE"
 msgstr "NYELV"
 
-msgid "ABOUT"
-msgstr "LEÍRÁS"
-
 msgid "Change Map Name"
 msgstr "Térkép nevének megváltoztatása"
 
 msgid "Change Map Description"
 msgstr "Térképleírás megváltoztatása"
-
-msgid "About"
-msgstr "Leírás"
 
 msgid "Click to edit custom rumors."
 msgstr "Kattints egyéni szóbeszéd szerkesztéséhez."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 10:02+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -21,6 +21,9 @@ msgstr ""
 "X-Generator: Poedit 3.1.1\n"
 
 msgid "SELECT"
+msgstr ""
+
+msgid "ABOUT"
 msgstr ""
 
 msgid "S"
@@ -3039,6 +3042,13 @@ msgid ""
 "Conditions"
 msgstr ""
 
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Rodyti kitą miestą"
+
 msgid "Map Description"
 msgstr ""
 
@@ -4803,16 +4813,10 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
 msgstr ""
 
 #, fuzzy
