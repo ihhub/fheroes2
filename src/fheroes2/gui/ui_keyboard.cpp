@@ -81,6 +81,7 @@ namespace
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Hungarian:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -394,6 +395,7 @@ namespace
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Greek:
         case fheroes2::SupportedLanguage::Hungarian:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
@@ -436,6 +438,8 @@ namespace
             return { "\xF2\xC5\xC1\xD4\xD5\xC8\xC9\xCF\xD0", "\xC1\xD3\xC4\xD6\xC3\xC7\xCE\xCA\xCB", "\xC6\xD7\xD8\xD9\xC2\xCD\xCC" };
         case fheroes2::SupportedLanguage::Hungarian:
             return { "QWERTZUIOP\xD5\xDA\xDB", "ASDFGHJKL\xC9\xC1", "YXCVBNM\xD6\xDC\xD3" };
+        case fheroes2::SupportedLanguage::Norwegian:
+            return { "QWERTYUIOP\xC5", "ASDFGHJKL\xD8\xC6", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x8C\x8F\xA3\xA5\xAF\xC6\xCA\xD1\xD3", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Russian:
@@ -478,6 +482,8 @@ namespace
             return { "\xF2\xE5\xF1\xF4\xF5\xE8\xE9\xEF\xF0", "\xE1\xF3\xE4\xF6\xE3\xE7\xEE\xEA\xEB", "\xE6\xF7\xF8\xF9\xE2\xED\xEC" };
         case fheroes2::SupportedLanguage::Hungarian:
             return { "qwertzuiop\xF5\xFA\xFB", "asdfghjkl\xE9\xE1", "yxcvbnm\xF6\xFC\xF3" };
+        case fheroes2::SupportedLanguage::Norwegian:
+            return { "qwertyuiop\xE5", "asdfghjkl\xF8\xE6", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Polish:
             return { "\x9C\x9F\xB3\xB9\xBF\xE6\xEA\xF1\xF3", "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Russian:
@@ -541,6 +547,7 @@ namespace
         case fheroes2::SupportedLanguage::Danish:
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Greek:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::French:
         case fheroes2::SupportedLanguage::Slovak:
@@ -760,6 +767,7 @@ namespace
         case fheroes2::SupportedLanguage::German:
         case fheroes2::SupportedLanguage::Greek:
         case fheroes2::SupportedLanguage::Hungarian:
+        case fheroes2::SupportedLanguage::Norwegian:
         case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
         case fheroes2::SupportedLanguage::Slovak:
