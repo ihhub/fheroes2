@@ -43,6 +43,7 @@ namespace
     const uint8_t buttonEvilPressedColor = 36;
     const uint8_t buttonContourColor = 10;
     const fheroes2::Point buttonFontOffset{ -1, 0 };
+    constexpr uint8_t codePageExtraCharacterCount{ 128 };
 
     void updateNormalFontLetterShadow( fheroes2::Image & letter )
     {
@@ -158,15 +159,25 @@ namespace
         }
     }
 
+    void resizeCodePage( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    {
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = icnVsSprite[icnId];
+
+            // Resize the font to ASCII first to remove any redundant non-ASCII characters.
+            original.resize( baseFontSize );
+
+            // Add the rest of characters to have the full code page.
+            const fheroes2::Sprite firstSprite{ original[0] };
+            original.insert( original.end(), codePageExtraCharacterCount, firstSprite );
+
+            assert( original.size() == baseFontSize + codePageExtraCharacterCount );
+        }
+    }
+
     void generateCP1250Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            icnVsSprite[icnId].resize( baseFontSize );
-
-            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
-        }
+        resizeCodePage( icnVsSprite );
 
         // Normal font.
         {
@@ -1344,15 +1355,7 @@ namespace
     {
         // TODO: add support for Serbian Cyrillic and Macedonian languages by generating missing letters.
 
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            std::vector<fheroes2::Sprite> & original = icnVsSprite[icnId];
-
-            original.resize( baseFontSize );
-
-            const fheroes2::Sprite firstSprite{ original[0] };
-            original.insert( original.end(), 128, firstSprite );
-        }
+        resizeCodePage( icnVsSprite );
 
         // Normal font.
         {
@@ -2369,13 +2372,7 @@ namespace
     // (French localized maps have custom encoding that should be fixed by `fheroes2::fixFrenchCharactersForMP2Map()`)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            icnVsSprite[icnId].resize( baseFontSize );
-
-            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
-        }
+        resizeCodePage( icnVsSprite );
 
         // Normal font.
         {
@@ -3432,13 +3429,7 @@ namespace
     // Greek uses CP1253
     void generateCP1253Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            icnVsSprite[icnId].resize( baseFontSize );
-
-            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
-        }
+        resizeCodePage( icnVsSprite );
 
         // Normal font.
         {
@@ -3759,13 +3750,7 @@ namespace
     // Turkish uses CP1254
     void generateCP1254Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            icnVsSprite[icnId].resize( baseFontSize );
-
-            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
-        }
+        resizeCodePage( icnVsSprite );
 
         // Normal font.
         {
@@ -3997,13 +3982,7 @@ namespace
 
     void generateCP1258Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            icnVsSprite[icnId].resize( baseFontSize );
-
-            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
-        }
+        resizeCodePage( icnVsSprite );
 
         // Normal font.
         {
@@ -4481,13 +4460,7 @@ namespace
 
     void generateISO8859_16Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            icnVsSprite[icnId].resize( baseFontSize );
-
-            const fheroes2::Sprite firstSprite{ icnVsSprite[icnId][0] };
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstSprite );
-        }
+        resizeCodePage( icnVsSprite );
 
         // Normal font.
         {
@@ -5336,7 +5309,7 @@ namespace
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         const fheroes2::Sprite firstSprite{ released[0] };
-        released.insert( released.end(), 160, firstSprite );
+        released.insert( released.end(), codePageExtraCharacterCount, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
@@ -5612,7 +5585,7 @@ namespace
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         const fheroes2::Sprite firstSprite{ released[0] };
-        released.insert( released.end(), 160, firstSprite );
+        released.insert( released.end(), codePageExtraCharacterCount, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
@@ -6013,7 +5986,7 @@ namespace
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         const fheroes2::Sprite firstSprite{ released[0] };
-        released.insert( released.end(), 160, firstSprite );
+        released.insert( released.end(), codePageExtraCharacterCount, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
@@ -6248,7 +6221,7 @@ namespace
     {
         // Increase size to fit full CP1254 set of characters. Fill with 1px transparent images.
         const fheroes2::Sprite firstSprite{ released[0] };
-        released.insert( released.end(), 160, firstSprite );
+        released.insert( released.end(), codePageExtraCharacterCount, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
@@ -6412,7 +6385,7 @@ namespace
     {
         // Increase size to fit full CP1254 set of characters. Fill with 1px transparent images.
         const fheroes2::Sprite firstSprite{ released[0] };
-        released.insert( released.end(), 160, firstSprite );
+        released.insert( released.end(), codePageExtraCharacterCount, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
