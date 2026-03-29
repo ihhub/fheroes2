@@ -725,8 +725,8 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
         stream >> fi.mainLanguage;
     }
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1200_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1200_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1150_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1150_RELEASE ) {
         fi.creatorNotes = {};
     }
     else {
