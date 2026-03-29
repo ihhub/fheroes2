@@ -58,20 +58,15 @@ namespace
 
     const fheroes2::Sprite & getChar( const uint8_t character, const fheroes2::FontType & fontType )
     {
-        // TODO: remove the usage of 0x20 suffix.
-        if ( character < 0x21 ) {
-            return errorImage;
-        }
-
         switch ( fontType.size ) {
         case fheroes2::FontSize::SMALL:
             switch ( fontType.color ) {
             case fheroes2::FontColor::WHITE:
-                return fheroes2::AGG::GetICN( ICN::SMALFONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::SMALFONT, character );
             case fheroes2::FontColor::GRAY:
-                return fheroes2::AGG::GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::GRAY_SMALL_FONT, character );
             case fheroes2::FontColor::YELLOW:
-                return fheroes2::AGG::GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::YELLOW_SMALLFONT, character );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
@@ -81,15 +76,15 @@ namespace
         case fheroes2::FontSize::NORMAL:
             switch ( fontType.color ) {
             case fheroes2::FontColor::WHITE:
-                return fheroes2::AGG::GetICN( ICN::FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::FONT, character );
             case fheroes2::FontColor::GRAY:
-                return fheroes2::AGG::GetICN( ICN::GRAY_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::GRAY_FONT, character );
             case fheroes2::FontColor::YELLOW:
-                return fheroes2::AGG::GetICN( ICN::YELLOW_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::YELLOW_FONT, character );
             case fheroes2::FontColor::GOLDEN_GRADIENT:
-                return fheroes2::AGG::GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::GOLDEN_GRADIENT_FONT, character );
             case fheroes2::FontColor::SILVER_GRADIENT:
-                return fheroes2::AGG::GetICN( ICN::SILVER_GRADIENT_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::SILVER_GRADIENT_FONT, character );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
@@ -99,11 +94,11 @@ namespace
         case fheroes2::FontSize::LARGE:
             switch ( fontType.color ) {
             case fheroes2::FontColor::WHITE:
-                return fheroes2::AGG::GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::WHITE_LARGE_FONT, character );
             case fheroes2::FontColor::GOLDEN_GRADIENT:
-                return fheroes2::AGG::GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character );
             case fheroes2::FontColor::SILVER_GRADIENT:
-                return fheroes2::AGG::GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::SILVER_GRADIENT_LARGE_FONT, character );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
@@ -113,9 +108,9 @@ namespace
         case fheroes2::FontSize::BUTTON_RELEASED:
             switch ( fontType.color ) {
             case fheroes2::FontColor::WHITE:
-                return fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character );
             case fheroes2::FontColor::GRAY:
-                return fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
@@ -125,9 +120,9 @@ namespace
         case fheroes2::FontSize::BUTTON_PRESSED:
             switch ( fontType.color ) {
             case fheroes2::FontColor::WHITE:
-                return fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character );
             case fheroes2::FontColor::GRAY:
-                return fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
+                return fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character );
             default:
                 // Did you add a new font color? Add the corresponding logic for it!
                 assert( 0 );
@@ -147,16 +142,15 @@ namespace
 
     uint32_t getCharacterLimit( const fheroes2::FontSize fontSize )
     {
-        // TODO: remove the usage of 0x20 suffix.
         switch ( fontSize ) {
         case fheroes2::FontSize::SMALL:
-            return fheroes2::AGG::GetICNCount( ICN::SMALFONT ) + 0x20 - 1;
+            return fheroes2::AGG::GetICNCount( ICN::SMALFONT );
         case fheroes2::FontSize::NORMAL:
         case fheroes2::FontSize::LARGE:
-            return fheroes2::AGG::GetICNCount( ICN::FONT ) + 0x20 - 1;
+            return fheroes2::AGG::GetICNCount( ICN::FONT );
         case fheroes2::FontSize::BUTTON_RELEASED:
         case fheroes2::FontSize::BUTTON_PRESSED:
-            return fheroes2::AGG::GetICNCount( ICN::BUTTON_GOOD_FONT_RELEASED ) + 0x20 - 1;
+            return fheroes2::AGG::GetICNCount( ICN::BUTTON_GOOD_FONT_RELEASED );
         default:
             // Did you add a new font size? Please add implementation.
             assert( 0 );
