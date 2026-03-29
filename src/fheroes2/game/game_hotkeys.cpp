@@ -38,7 +38,6 @@
 #include "battle_arena.h"
 #include "dialog.h"
 #include "game_interface.h"
-#include "game_language.h"
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
@@ -50,7 +49,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_language.h"
 
 namespace
 {
@@ -346,22 +344,21 @@ namespace
         os << std::endl;
 
         Game::HotKeyCategory currentCategory = hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1].category;
-        os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
+        os << "# " << Translation::getNonTranslated( getHotKeyCategoryName( currentCategory ) ) << ':' << std::endl;
 
 #if defined( WITH_DEBUG )
         std::set<const char *> duplicationStringVerifier;
 #endif
 
-        const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::SupportedLanguage::English );
-
         for ( int32_t eventId = hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( Game::HotKeyEvent::NO_EVENT ); ++eventId ) {
             if ( currentCategory != hotKeyEventInfo[eventId].category ) {
                 currentCategory = hotKeyEventInfo[eventId].category;
                 os << std::endl;
-                os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
+                os << "# " << Translation::getNonTranslated( getHotKeyCategoryName( currentCategory ) ) << ':' << std::endl;
             }
 
-            const char * eventName = _( hotKeyEventInfo[eventId].name );
+            // Use the original name without translation to keep the configuration file consistent for all languages.
+            const char * eventName = Translation::getNonTranslated( hotKeyEventInfo[eventId].name );
             assert( strlen( eventName ) > 0 );
 #if defined( WITH_DEBUG )
             const bool isUnique = duplicationStringVerifier.emplace( eventName ).second;
@@ -445,10 +442,9 @@ void Game::HotKeysLoad( const std::string & filename )
                 nameToKey.try_emplace( StringUpper( KeySymGetName( key ) ), key );
             }
 
-            const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::SupportedLanguage::English );
-
             for ( int eventId = hotKeyEventToInt( HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( HotKeyEvent::NO_EVENT ); ++eventId ) {
-                const char * eventName = _( hotKeyEventInfo[eventId].name );
+                // Load the original name without using translation.
+                const char * eventName = Translation::getNonTranslated( hotKeyEventInfo[eventId].name );
                 std::string value = config.StrParams( eventName );
                 if ( value.empty() ) {
                     // TODO: remove this temporary workaround

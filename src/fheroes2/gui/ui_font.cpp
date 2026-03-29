@@ -6520,14 +6520,6 @@ namespace fheroes2
         return false;
     }
 
-    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
-                                 std::vector<Sprite> & evilPressed )
-    {
-        generateGoodButtonFontBaseShape( goodReleased );
-
-        updateButtonFont( goodReleased, goodPressed, evilReleased, evilPressed );
-    }
-
     void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
@@ -6536,9 +6528,8 @@ namespace fheroes2
 
         switch ( codePage ) {
         case CodePage::ASCII:
-            generateBaseButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
-                                    icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
-            return;
+            // Do nothing since the ASCII is the base font.
+            break;
         case CodePage::CP1250:
             generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
