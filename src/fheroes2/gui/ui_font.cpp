@@ -172,7 +172,8 @@ namespace
             original.insert( original.end(), codePageExtraCharacterCount, firstSprite );
 
             // Any code page should have 256 characters only.
-            assert( original.size() == 256 );
+            assert( original.size() == codePageExtraCharacterCount + asciiCharSetSize );
+            static_assert( asciiCharSetSize + codePageExtraCharacterCount == 256 );
         }
     }
 
