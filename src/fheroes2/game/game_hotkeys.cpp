@@ -49,7 +49,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_language.h"
 
 namespace
 {
