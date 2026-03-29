@@ -1914,6 +1914,20 @@ namespace
             font[160].resize( smallFontSpaceWidth, 1 );
             font[160].reset();
 
+            font[161].resize( font[89 + offset].width(), font[89 + offset].height() + 2 );
+            font[161].reset();
+            fheroes2::Copy( font[89 + offset], 0, 0, font[161], 0, 2, font[89 + offset].width(), font[89 + offset].height() );
+            fheroes2::Copy( font[89 + offset], 2, 0, font[161], 5, 0, 2, 1 );
+            font[161].setPosition( font[89 + offset].x(), font[89 + offset].y() - 2 );
+            updateSmallFontLetterShadow( font[161] );
+
+            font[162].resize( font[121 + offset].width(), font[121 + offset].height() + 2 );
+            font[162].reset();
+            fheroes2::Copy( font[121 + offset], 0, 0, font[162], 0, 2, font[121 + offset].width(), font[121 + offset].height() );
+            fheroes2::Copy( font[121 + offset], 1, 0, font[162], 4, 0, 2, 1 );
+            font[162].setPosition( font[121 + offset].x(), font[121 + offset].y() - 2 );
+            updateSmallFontLetterShadow( font[162] );
+
             // C with a horizontal line in the middle.
             font[170] = font[67];
             fheroes2::Copy( font[170], 3, 0, font[170], 2, 3, 3, 1 );
