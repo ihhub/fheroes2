@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 10:02+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -533,11 +533,13 @@ msgstr ""
 "Hào giảm -%{count} kỹ năng phòng thủ của bất kỳ đơn vị nào và làm chậm một "
 "nửa tốc độ di chuyển."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Tốc độ: %{speed}"
 
-msgid "Speed"
-msgstr "Tốc độ"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Thôn tính"
 
 msgid "Interface"
 msgstr "Giao diện"
@@ -2964,6 +2966,9 @@ msgstr "Sát thương"
 
 msgid "HP"
 msgstr "Máu"
+
+msgid "Speed"
+msgstr "Tốc độ"
 
 msgid "Growth"
 msgstr "Sinh trưởng"
