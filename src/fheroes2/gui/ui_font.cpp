@@ -171,7 +171,8 @@ namespace
             const fheroes2::Sprite firstSprite{ original[0] };
             original.insert( original.end(), codePageExtraCharacterCount, firstSprite );
 
-            assert( original.size() == asciiCharSetSize + codePageExtraCharacterCount );
+            // Any code page should have 256 characters only.
+            assert( original.size() == 256 );
         }
     }
 
@@ -6570,300 +6571,300 @@ namespace fheroes2
 
     void modifyBaseNormalFont( std::vector<Sprite> & icnVsSprite )
     {
-        if ( icnVsSprite.size() < asciiCharSetSize ) {
+        if ( icnVsSprite.size() < 96 ) {
             return;
         }
 
         // $ (dollar sign). Fix position.
-        icnVsSprite[36].setPosition( 0, 2 );
+        icnVsSprite[36 - 32].setPosition( 0, 2 );
 
         // Remove white line from % symbol
-        FillTransform( icnVsSprite[37], 5, 0, 5, 1, 1 );
-        FillTransform( icnVsSprite[37], 6, 2, 2, 1, 1 );
-        updateNormalFontLetterShadow( icnVsSprite[37] );
+        FillTransform( icnVsSprite[37 - 32], 5, 0, 5, 1, 1 );
+        FillTransform( icnVsSprite[37 - 32], 6, 2, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[37 - 32] );
 
         // & (ampersand). Fix position.
-        icnVsSprite[38].setPosition( 0, 1 );
+        icnVsSprite[38 - 32].setPosition( 0, 1 );
 
         // Move "-" further down
-        icnVsSprite[45].setPosition( icnVsSprite[45].x(), icnVsSprite[45].y() + 1 );
-        updateNormalFontLetterShadow( icnVsSprite[45] );
+        icnVsSprite[45 - 32].setPosition( icnVsSprite[45 - 32].x(), icnVsSprite[45 - 32].y() + 1 );
+        updateNormalFontLetterShadow( icnVsSprite[45 - 32] );
 
         // Add the '\' character.
-        icnVsSprite[92].resize( 8, 14 );
-        icnVsSprite[92].reset();
-        Blit( icnVsSprite[47], 0, 0, icnVsSprite[92], 1, 0, 7, 12, true );
-        icnVsSprite[92].setPosition( icnVsSprite[47].x(), icnVsSprite[47].y() );
-        updateNormalFontLetterShadow( icnVsSprite[92] );
+        icnVsSprite[92 - 32].resize( 8, 14 );
+        icnVsSprite[92 - 32].reset();
+        Blit( icnVsSprite[47 - 32], 0, 0, icnVsSprite[92 - 32], 1, 0, 7, 12, true );
+        icnVsSprite[92 - 32].setPosition( icnVsSprite[47 - 32].x(), icnVsSprite[47 - 32].y() );
+        updateNormalFontLetterShadow( icnVsSprite[92 - 32] );
 
         // Proper lowercase k.
-        FillTransform( icnVsSprite[107], 4, 1, 5, 8, 1 );
-        Copy( icnVsSprite[75], 6, 5, icnVsSprite[107], 4, 7, 3, 1 );
-        Copy( icnVsSprite[75], 6, 4, icnVsSprite[107], 4, 6, 4, 1 );
-        Copy( icnVsSprite[75], 7, 4, icnVsSprite[107], 6, 5, 3, 1 );
-        Copy( icnVsSprite[75], 7, 4, icnVsSprite[107], 7, 4, 2, 1 );
-        Copy( icnVsSprite[75], 6, 6, icnVsSprite[107], 4, 8, 4, 1 );
-        icnVsSprite[107].setPosition( icnVsSprite[107].x(), icnVsSprite[107].y() );
-        updateNormalFontLetterShadow( icnVsSprite[107] );
+        FillTransform( icnVsSprite[107 - 32], 4, 1, 5, 8, 1 );
+        Copy( icnVsSprite[75 - 32], 6, 5, icnVsSprite[107 - 32], 4, 7, 3, 1 );
+        Copy( icnVsSprite[75 - 32], 6, 4, icnVsSprite[107 - 32], 4, 6, 4, 1 );
+        Copy( icnVsSprite[75 - 32], 7, 4, icnVsSprite[107 - 32], 6, 5, 3, 1 );
+        Copy( icnVsSprite[75 - 32], 7, 4, icnVsSprite[107 - 32], 7, 4, 2, 1 );
+        Copy( icnVsSprite[75 - 32], 6, 6, icnVsSprite[107 - 32], 4, 8, 4, 1 );
+        icnVsSprite[107 - 32].setPosition( icnVsSprite[107 - 32].x(), icnVsSprite[107 - 32].y() );
+        updateNormalFontLetterShadow( icnVsSprite[107 - 32] );
 
         // Add the vertical bar '|' character. It is also used for the text input cursor.
-        icnVsSprite[124].resize( 3, icnVsSprite[91].height() + 3 );
-        Copy( icnVsSprite[91], 0, 0, icnVsSprite[124], 0, 0, 3, icnVsSprite[91].height() - 4 );
-        Copy( icnVsSprite[91], 0, icnVsSprite[91].height() - 7, icnVsSprite[124], 0, icnVsSprite[91].height() - 4, 3, 7 );
-        icnVsSprite[124].setPosition( icnVsSprite[91].x(), icnVsSprite[91].y() );
+        icnVsSprite[124 - 32].resize( 3, icnVsSprite[91 - 32].height() + 3 );
+        Copy( icnVsSprite[91 - 32], 0, 0, icnVsSprite[124 - 32], 0, 0, 3, icnVsSprite[91 - 32].height() - 4 );
+        Copy( icnVsSprite[91 - 32], 0, icnVsSprite[91 - 32].height() - 7, icnVsSprite[124 - 32], 0, icnVsSprite[91 - 32].height() - 4, 3, 7 );
+        icnVsSprite[124 - 32].setPosition( icnVsSprite[91 - 32].x(), icnVsSprite[91 - 32].y() );
 
         // Restore the original ASCII characters replaced in French assets with CP1252 symbols.
         if ( getResourceLanguage() == SupportedLanguage::French ) {
             // $ (dollar sign).
-            icnVsSprite[36].resize( 9, 12 );
-            icnVsSprite[36].reset();
-            SetPixel( icnVsSprite[36], 3, 0, 23 );
-            SetPixel( icnVsSprite[36], 4, 0, 18 );
-            SetPixel( icnVsSprite[36], 5, 0, 12 );
-            SetPixel( icnVsSprite[36], 6, 0, 23 );
-            SetPixel( icnVsSprite[36], 1, 1, 21 );
-            DrawLine( icnVsSprite[36], { 2, 1 }, { 7, 1 }, 10 );
-            SetPixel( icnVsSprite[36], 8, 1, 21 );
-            DrawLine( icnVsSprite[36], { 1, 2 }, { 1, 3 }, 10 );
-            DrawLine( icnVsSprite[36], { 2, 2 }, { 2, 3 }, 16 );
-            SetPixel( icnVsSprite[36], 3, 2, 21 );
-            DrawLine( icnVsSprite[36], { 4, 2 }, { 4, 3 }, 16 );
-            DrawLine( icnVsSprite[36], { 5, 2 }, { 5, 7 }, 10 );
-            SetPixel( icnVsSprite[36], 6, 2, 21 );
-            SetPixel( icnVsSprite[36], 7, 2, 16 );
-            SetPixel( icnVsSprite[36], 8, 2, 10 );
-            SetPixel( icnVsSprite[36], 1, 4, 21 );
-            DrawLine( icnVsSprite[36], { 2, 4 }, { 7, 4 }, 10 );
-            SetPixel( icnVsSprite[36], 8, 4, 21 );
-            SetPixel( icnVsSprite[36], 2, 5, 21 );
-            SetPixel( icnVsSprite[36], 3, 5, 16 );
-            DrawLine( icnVsSprite[36], { 4, 5 }, { 4, 7 }, 16 );
-            SetPixel( icnVsSprite[36], 1, 7, 10 );
-            SetPixel( icnVsSprite[36], 2, 7, 16 );
-            SetPixel( icnVsSprite[36], 3, 7, 21 );
-            Copy( icnVsSprite[36], 3, 5, icnVsSprite[36], 6, 5, 3, 3 );
-            SetPixel( icnVsSprite[36], 1, 8, 23 );
-            DrawLine( icnVsSprite[36], { 2, 8 }, { 7, 8 }, 12 );
-            SetPixel( icnVsSprite[36], 8, 8, 23 );
-            SetPixel( icnVsSprite[36], 3, 9, 25 );
-            SetPixel( icnVsSprite[36], 4, 9, 20 );
-            SetPixel( icnVsSprite[36], 5, 9, 14 );
-            SetPixel( icnVsSprite[36], 6, 9, 25 );
-            updateNormalFontLetterShadow( icnVsSprite[36] );
+            icnVsSprite[36 - 32].resize( 9, 12 );
+            icnVsSprite[36 - 32].reset();
+            SetPixel( icnVsSprite[36 - 32], 3, 0, 23 );
+            SetPixel( icnVsSprite[36 - 32], 4, 0, 18 );
+            SetPixel( icnVsSprite[36 - 32], 5, 0, 12 );
+            SetPixel( icnVsSprite[36 - 32], 6, 0, 23 );
+            SetPixel( icnVsSprite[36 - 32], 1, 1, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 1 }, { 7, 1 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 8, 1, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 1, 2 }, { 1, 3 }, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 2 }, { 2, 3 }, 16 );
+            SetPixel( icnVsSprite[36 - 32], 3, 2, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 4, 2 }, { 4, 3 }, 16 );
+            DrawLine( icnVsSprite[36 - 32], { 5, 2 }, { 5, 7 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 6, 2, 21 );
+            SetPixel( icnVsSprite[36 - 32], 7, 2, 16 );
+            SetPixel( icnVsSprite[36 - 32], 8, 2, 10 );
+            SetPixel( icnVsSprite[36 - 32], 1, 4, 21 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 4 }, { 7, 4 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 8, 4, 21 );
+            SetPixel( icnVsSprite[36 - 32], 2, 5, 21 );
+            SetPixel( icnVsSprite[36 - 32], 3, 5, 16 );
+            DrawLine( icnVsSprite[36 - 32], { 4, 5 }, { 4, 7 }, 16 );
+            SetPixel( icnVsSprite[36 - 32], 1, 7, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 7, 16 );
+            SetPixel( icnVsSprite[36 - 32], 3, 7, 21 );
+            Copy( icnVsSprite[36 - 32], 3, 5, icnVsSprite[36 - 32], 6, 5, 3, 3 );
+            SetPixel( icnVsSprite[36 - 32], 1, 8, 23 );
+            DrawLine( icnVsSprite[36 - 32], { 2, 8 }, { 7, 8 }, 12 );
+            SetPixel( icnVsSprite[36 - 32], 8, 8, 23 );
+            SetPixel( icnVsSprite[36 - 32], 3, 9, 25 );
+            SetPixel( icnVsSprite[36 - 32], 4, 9, 20 );
+            SetPixel( icnVsSprite[36 - 32], 5, 9, 14 );
+            SetPixel( icnVsSprite[36 - 32], 6, 9, 25 );
+            updateNormalFontLetterShadow( icnVsSprite[36 - 32] );
 
             // & (ampersand).
-            icnVsSprite[38].resize( 11, 12 );
-            icnVsSprite[38].reset();
-            SetPixel( icnVsSprite[38], 1, 0, 25 );
-            SetPixel( icnVsSprite[38], 2, 0, 18 );
-            DrawLine( icnVsSprite[38], { 3, 0 }, { 5, 0 }, 12 );
-            SetPixel( icnVsSprite[38], 6, 0, 25 );
-            DrawLine( icnVsSprite[38], { 1, 1 }, { 1, 3 }, 16 );
-            DrawLine( icnVsSprite[38], { 2, 1 }, { 2, 3 }, 10 );
-            DrawLine( icnVsSprite[38], { 3, 1 }, { 4, 1 }, 21 );
-            DrawLine( icnVsSprite[38], { 5, 1 }, { 5, 2 }, 16 );
-            DrawLine( icnVsSprite[38], { 6, 1 }, { 6, 2 }, 10 );
-            DrawLine( icnVsSprite[38], { 3, 3 }, { 3, 5 }, 10 );
-            SetPixel( icnVsSprite[38], 5, 3, 10 );
-            SetPixel( icnVsSprite[38], 6, 3, 21 );
-            DrawLine( icnVsSprite[38], { 2, 4 }, { 1, 5 }, 21 );
-            DrawLine( icnVsSprite[38], { 4, 4 }, { 7, 7 }, 10 );
-            SetPixel( icnVsSprite[38], 5, 4, 21 );
-            SetPixel( icnVsSprite[38], 8, 4, 16 );
-            DrawLine( icnVsSprite[38], { 9, 4 }, { 10, 4 }, 10 );
-            DrawLine( icnVsSprite[38], { 2, 5 }, { 2, 7 }, 10 );
-            SetPixel( icnVsSprite[38], 4, 5, 16 );
-            SetPixel( icnVsSprite[38], 6, 5, 21 );
-            SetPixel( icnVsSprite[38], 7, 5, 16 );
-            SetPixel( icnVsSprite[38], 8, 5, 10 );
-            DrawLine( icnVsSprite[38], { 9, 5 }, { 10, 5 }, 21 );
-            DrawLine( icnVsSprite[38], { 1, 6 }, { 1, 7 }, 16 );
-            SetPixel( icnVsSprite[38], 5, 6, 16 );
-            SetPixel( icnVsSprite[38], 7, 6, 10 );
-            SetPixel( icnVsSprite[38], 6, 7, 16 );
-            SetPixel( icnVsSprite[38], 8, 7, 21 );
-            SetPixel( icnVsSprite[38], 1, 8, 18 );
-            SetPixel( icnVsSprite[38], 2, 8, 12 );
-            DrawLine( icnVsSprite[38], { 3, 8 }, { 5, 8 }, 23 );
-            SetPixel( icnVsSprite[38], 6, 8, 18 );
-            DrawLine( icnVsSprite[38], { 7, 8 }, { 8, 8 }, 12 );
-            SetPixel( icnVsSprite[38], 9, 8, 23 );
-            SetPixel( icnVsSprite[38], 1, 9, 25 );
-            SetPixel( icnVsSprite[38], 2, 9, 20 );
-            DrawLine( icnVsSprite[38], { 3, 9 }, { 6, 9 }, 14 );
-            SetPixel( icnVsSprite[38], 7, 9, 25 );
-            SetPixel( icnVsSprite[38], 8, 9, 20 );
-            SetPixel( icnVsSprite[38], 9, 9, 14 );
-            updateNormalFontLetterShadow( icnVsSprite[38] );
+            icnVsSprite[38 - 32].resize( 11, 12 );
+            icnVsSprite[38 - 32].reset();
+            SetPixel( icnVsSprite[38 - 32], 1, 0, 25 );
+            SetPixel( icnVsSprite[38 - 32], 2, 0, 18 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 0 }, { 5, 0 }, 12 );
+            SetPixel( icnVsSprite[38 - 32], 6, 0, 25 );
+            DrawLine( icnVsSprite[38 - 32], { 1, 1 }, { 1, 3 }, 16 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 1 }, { 2, 3 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 1 }, { 4, 1 }, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 5, 1 }, { 5, 2 }, 16 );
+            DrawLine( icnVsSprite[38 - 32], { 6, 1 }, { 6, 2 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 3 }, { 3, 5 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 5, 3, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 3, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 4 }, { 1, 5 }, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 4, 4 }, { 7, 7 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 5, 4, 21 );
+            SetPixel( icnVsSprite[38 - 32], 8, 4, 16 );
+            DrawLine( icnVsSprite[38 - 32], { 9, 4 }, { 10, 4 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 5 }, { 2, 7 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 4, 5, 16 );
+            SetPixel( icnVsSprite[38 - 32], 6, 5, 21 );
+            SetPixel( icnVsSprite[38 - 32], 7, 5, 16 );
+            SetPixel( icnVsSprite[38 - 32], 8, 5, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 9, 5 }, { 10, 5 }, 21 );
+            DrawLine( icnVsSprite[38 - 32], { 1, 6 }, { 1, 7 }, 16 );
+            SetPixel( icnVsSprite[38 - 32], 5, 6, 16 );
+            SetPixel( icnVsSprite[38 - 32], 7, 6, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 7, 16 );
+            SetPixel( icnVsSprite[38 - 32], 8, 7, 21 );
+            SetPixel( icnVsSprite[38 - 32], 1, 8, 18 );
+            SetPixel( icnVsSprite[38 - 32], 2, 8, 12 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 8 }, { 5, 8 }, 23 );
+            SetPixel( icnVsSprite[38 - 32], 6, 8, 18 );
+            DrawLine( icnVsSprite[38 - 32], { 7, 8 }, { 8, 8 }, 12 );
+            SetPixel( icnVsSprite[38 - 32], 9, 8, 23 );
+            SetPixel( icnVsSprite[38 - 32], 1, 9, 25 );
+            SetPixel( icnVsSprite[38 - 32], 2, 9, 20 );
+            DrawLine( icnVsSprite[38 - 32], { 3, 9 }, { 6, 9 }, 14 );
+            SetPixel( icnVsSprite[38 - 32], 7, 9, 25 );
+            SetPixel( icnVsSprite[38 - 32], 8, 9, 20 );
+            SetPixel( icnVsSprite[38 - 32], 9, 9, 14 );
+            updateNormalFontLetterShadow( icnVsSprite[38 - 32] );
 
             // * (asterisk).
-            icnVsSprite[42].resize( 12, 15 );
-            icnVsSprite[42].reset();
-            icnVsSprite[42].setPosition( 0, 0 );
-            SetPixel( icnVsSprite[42], 6, 0, 16 );
-            SetPixel( icnVsSprite[42], 7, 0, 21 );
-            DrawLine( icnVsSprite[42], { 6, 1 }, { 6, 11 }, 10 );
-            SetPixel( icnVsSprite[42], 7, 1, 19 );
-            DrawLine( icnVsSprite[42], { 1, 2 }, { 2, 2 }, 12 );
-            SetPixel( icnVsSprite[42], 7, 2, 18 );
-            SetPixel( icnVsSprite[42], 10, 2, 18 );
-            SetPixel( icnVsSprite[42], 11, 2, 12 );
-            DrawLine( icnVsSprite[42], { 1, 3 }, { 4, 6 }, 21 );
-            DrawLine( icnVsSprite[42], { 2, 3 }, { 4, 5 }, 16 );
-            DrawLine( icnVsSprite[42], { 3, 3 }, { 8, 8 }, 10 );
-            DrawLine( icnVsSprite[42], { 7, 3 }, { 7, 4 }, 16 );
-            DrawLine( icnVsSprite[42], { 9, 3 }, { 8, 4 }, 16 );
-            DrawLine( icnVsSprite[42], { 10, 3 }, { 7, 6 }, 10 );
-            DrawLine( icnVsSprite[42], { 11, 3 }, { 8, 6 }, 21 );
-            SetPixel( icnVsSprite[42], 7, 5, 10 );
-            SetPixel( icnVsSprite[42], 5, 6, 10 );
-            DrawLine( icnVsSprite[42], { 4, 7 }, { 2, 9 }, 16 );
-            DrawLine( icnVsSprite[42], { 5, 7 }, { 3, 9 }, 10 );
-            DrawLine( icnVsSprite[42], { 8, 7 }, { 9, 8 }, 16 );
-            DrawLine( icnVsSprite[42], { 5, 8 }, { 4, 9 }, 21 );
-            DrawLine( icnVsSprite[42], { 7, 8 }, { 7, 9 }, 16 );
-            SetPixel( icnVsSprite[42], 8, 9, 23 );
-            SetPixel( icnVsSprite[42], 9, 9, 12 );
-            SetPixel( icnVsSprite[42], 10, 9, 18 );
-            SetPixel( icnVsSprite[42], 11, 9, 23 );
-            DrawLine( icnVsSprite[42], { 1, 10 }, { 2, 10 }, 14 );
-            SetPixel( icnVsSprite[42], 3, 10, 25 );
-            SetPixel( icnVsSprite[42], 7, 10, 18 );
-            SetPixel( icnVsSprite[42], 9, 10, 25 );
-            DrawLine( icnVsSprite[42], { 10, 10 }, { 11, 10 }, 14 );
-            SetPixel( icnVsSprite[42], 7, 11, 19 );
-            SetPixel( icnVsSprite[42], 6, 12, 16 );
-            SetPixel( icnVsSprite[42], 7, 12, 21 );
-            updateNormalFontLetterShadow( icnVsSprite[42] );
+            icnVsSprite[42 - 32].resize( 12, 15 );
+            icnVsSprite[42 - 32].reset();
+            icnVsSprite[42 - 32].setPosition( 0, 0 );
+            SetPixel( icnVsSprite[42 - 32], 6, 0, 16 );
+            SetPixel( icnVsSprite[42 - 32], 7, 0, 21 );
+            DrawLine( icnVsSprite[42 - 32], { 6, 1 }, { 6, 11 }, 10 );
+            SetPixel( icnVsSprite[42 - 32], 7, 1, 19 );
+            DrawLine( icnVsSprite[42 - 32], { 1, 2 }, { 2, 2 }, 12 );
+            SetPixel( icnVsSprite[42 - 32], 7, 2, 18 );
+            SetPixel( icnVsSprite[42 - 32], 10, 2, 18 );
+            SetPixel( icnVsSprite[42 - 32], 11, 2, 12 );
+            DrawLine( icnVsSprite[42 - 32], { 1, 3 }, { 4, 6 }, 21 );
+            DrawLine( icnVsSprite[42 - 32], { 2, 3 }, { 4, 5 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 3, 3 }, { 8, 8 }, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 7, 3 }, { 7, 4 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 9, 3 }, { 8, 4 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 10, 3 }, { 7, 6 }, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 11, 3 }, { 8, 6 }, 21 );
+            SetPixel( icnVsSprite[42 - 32], 7, 5, 10 );
+            SetPixel( icnVsSprite[42 - 32], 5, 6, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 4, 7 }, { 2, 9 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 5, 7 }, { 3, 9 }, 10 );
+            DrawLine( icnVsSprite[42 - 32], { 8, 7 }, { 9, 8 }, 16 );
+            DrawLine( icnVsSprite[42 - 32], { 5, 8 }, { 4, 9 }, 21 );
+            DrawLine( icnVsSprite[42 - 32], { 7, 8 }, { 7, 9 }, 16 );
+            SetPixel( icnVsSprite[42 - 32], 8, 9, 23 );
+            SetPixel( icnVsSprite[42 - 32], 9, 9, 12 );
+            SetPixel( icnVsSprite[42 - 32], 10, 9, 18 );
+            SetPixel( icnVsSprite[42 - 32], 11, 9, 23 );
+            DrawLine( icnVsSprite[42 - 32], { 1, 10 }, { 2, 10 }, 14 );
+            SetPixel( icnVsSprite[42 - 32], 3, 10, 25 );
+            SetPixel( icnVsSprite[42 - 32], 7, 10, 18 );
+            SetPixel( icnVsSprite[42 - 32], 9, 10, 25 );
+            DrawLine( icnVsSprite[42 - 32], { 10, 10 }, { 11, 10 }, 14 );
+            SetPixel( icnVsSprite[42 - 32], 7, 11, 19 );
+            SetPixel( icnVsSprite[42 - 32], 6, 12, 16 );
+            SetPixel( icnVsSprite[42 - 32], 7, 12, 21 );
+            updateNormalFontLetterShadow( icnVsSprite[42 - 32] );
 
             // Put dots instead of the other replaced ASCII characters like it is done in the original English assets.
             // TODO: make ASCII character's sprites for the printable characters instead of dots for all languages.
-            const Sprite & dotSprite = icnVsSprite[46];
+            const Sprite & dotSprite = icnVsSprite[46 - 32];
             // # (number sign).
-            icnVsSprite[35] = dotSprite;
+            icnVsSprite[35 - 32] = dotSprite;
             // < (less than).
-            icnVsSprite[60] = dotSprite;
+            icnVsSprite[60 - 32] = dotSprite;
             // > (greater than).
-            icnVsSprite[62] = dotSprite;
+            icnVsSprite[62 - 32] = dotSprite;
             // @ (at sign).
-            icnVsSprite[64] = dotSprite;
+            icnVsSprite[64 - 32] = dotSprite;
             // ^ (caret - circumflex).
-            icnVsSprite[94] = dotSprite;
+            icnVsSprite[94 - 32] = dotSprite;
             // ` (grave accent).
-            icnVsSprite[96] = dotSprite;
+            icnVsSprite[96 - 32] = dotSprite;
             // { (opening brace).
-            icnVsSprite[123] = dotSprite;
+            icnVsSprite[123 - 32] = dotSprite;
             // } (closing brace).
-            icnVsSprite[125] = dotSprite;
+            icnVsSprite[125 - 32] = dotSprite;
             // ~ (tilde).
-            icnVsSprite[126] = dotSprite;
+            icnVsSprite[126 - 32] = dotSprite;
             // DEL (delete).
-            icnVsSprite[127] = dotSprite;
+            icnVsSprite[127 - 32] = dotSprite;
         }
     }
 
     void modifyBaseSmallFont( std::vector<Sprite> & icnVsSprite )
     {
-        if ( icnVsSprite.size() < asciiCharSetSize ) {
+        if ( icnVsSprite.size() < 96 ) {
             return;
         }
 
         // $ (dollar sign). Fix position.
-        icnVsSprite[36].setPosition( 0, -1 );
+        icnVsSprite[36 - 32].setPosition( 0, -1 );
 
         // Remove white line from % symbol
-        FillTransform( icnVsSprite[37], 3, 0, 4, 1, 1 );
-        FillTransform( icnVsSprite[37], 4, 1, 2, 1, 1 );
-        updateNormalFontLetterShadow( icnVsSprite[37] );
+        FillTransform( icnVsSprite[37 - 32], 3, 0, 4, 1, 1 );
+        FillTransform( icnVsSprite[37 - 32], 4, 1, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[37 - 32] );
 
         // Add the '*' (asterisk) character.
-        icnVsSprite[42].resize( 6, 8 );
-        icnVsSprite[42].reset();
-        icnVsSprite[42].setPosition( 0, 0 );
-        DrawLine( icnVsSprite[42], { 3, 0 }, { 3, 6 }, 10 );
-        DrawLine( icnVsSprite[42], { 1, 1 }, { 5, 5 }, 10 );
-        DrawLine( icnVsSprite[42], { 5, 1 }, { 1, 5 }, 10 );
-        updateSmallFontLetterShadow( icnVsSprite[42] );
+        icnVsSprite[42 - 32].resize( 6, 8 );
+        icnVsSprite[42 - 32].reset();
+        icnVsSprite[42 - 32].setPosition( 0, 0 );
+        DrawLine( icnVsSprite[42 - 32], { 3, 0 }, { 3, 6 }, 10 );
+        DrawLine( icnVsSprite[42 - 32], { 1, 1 }, { 5, 5 }, 10 );
+        DrawLine( icnVsSprite[42 - 32], { 5, 1 }, { 1, 5 }, 10 );
+        updateSmallFontLetterShadow( icnVsSprite[42 - 32] );
 
         // Add the '\' character.
-        icnVsSprite[92].resize( 5, 9 );
-        icnVsSprite[92].reset();
-        Copy( icnVsSprite[47], 4, 0, icnVsSprite[92], 1, 0, 1, 2 );
-        Copy( icnVsSprite[47], 4, 0, icnVsSprite[92], 2, 2, 1, 2 );
-        Copy( icnVsSprite[47], 4, 0, icnVsSprite[92], 3, 4, 1, 2 );
-        Copy( icnVsSprite[47], 4, 0, icnVsSprite[92], 4, 6, 1, 2 );
-        icnVsSprite[92].setPosition( icnVsSprite[47].x(), icnVsSprite[47].y() );
-        updateSmallFontLetterShadow( icnVsSprite[92] );
+        icnVsSprite[92 - 32].resize( 5, 9 );
+        icnVsSprite[92 - 32].reset();
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 1, 0, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 2, 2, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 3, 4, 1, 2 );
+        Copy( icnVsSprite[47 - 32], 4, 0, icnVsSprite[92 - 32], 4, 6, 1, 2 );
+        icnVsSprite[92 - 32].setPosition( icnVsSprite[47 - 32].x(), icnVsSprite[47 - 32].y() );
+        updateSmallFontLetterShadow( icnVsSprite[92 - 32] );
 
         // Proper lowercase k.
-        icnVsSprite[107].resize( 6, 8 );
-        icnVsSprite[107].reset();
-        Copy( icnVsSprite[108], 1, 0, icnVsSprite[107], 1, 0, 2, 7 );
-        Copy( icnVsSprite[108], 1, 0, icnVsSprite[107], 1, 6, 1, 1 );
-        Copy( icnVsSprite[88], 6, 0, icnVsSprite[107], 3, 2, 3, 3 );
-        Copy( icnVsSprite[97], 2, icnVsSprite[97].height() - 2, icnVsSprite[107], 5, 6, 2, 1 );
-        Copy( icnVsSprite[97], 2, 0, icnVsSprite[107], 4, 5, 1, 1 );
-        icnVsSprite[107].setPosition( icnVsSprite[107].x(), icnVsSprite[107].y() );
-        updateSmallFontLetterShadow( icnVsSprite[107] );
+        icnVsSprite[107 - 32].resize( 6, 8 );
+        icnVsSprite[107 - 32].reset();
+        Copy( icnVsSprite[108 - 32], 1, 0, icnVsSprite[107 - 32], 1, 0, 2, 7 );
+        Copy( icnVsSprite[108 - 32], 1, 0, icnVsSprite[107 - 32], 1, 6, 1, 1 );
+        Copy( icnVsSprite[88 - 32], 6, 0, icnVsSprite[107 - 32], 3, 2, 3, 3 );
+        Copy( icnVsSprite[97 - 32], 2, icnVsSprite[97 - 32].height() - 2, icnVsSprite[107 - 32], 5, 6, 2, 1 );
+        Copy( icnVsSprite[97 - 32], 2, 0, icnVsSprite[107 - 32], 4, 5, 1, 1 );
+        icnVsSprite[107 - 32].setPosition( icnVsSprite[107 - 32].x(), icnVsSprite[107 - 32].y() );
+        updateSmallFontLetterShadow( icnVsSprite[107 - 32] );
 
         // Restore the original ASCII characters replaced in French assets with CP1252 symbols.
         if ( getResourceLanguage() == SupportedLanguage::French ) {
             // $ (dollar sign).
-            icnVsSprite[36].resize( 6, 10 );
-            icnVsSprite[36].reset();
-            DrawLine( icnVsSprite[36], { 3, 0 }, { 3, 8 }, 10 );
-            SetPixel( icnVsSprite[36], 2, 1, 10 );
-            SetPixel( icnVsSprite[36], 4, 1, 10 );
-            DrawLine( icnVsSprite[36], { 1, 2 }, { 1, 3 }, 10 );
-            SetPixel( icnVsSprite[36], 5, 2, 10 );
-            SetPixel( icnVsSprite[36], 2, 4, 10 );
-            SetPixel( icnVsSprite[36], 4, 4, 10 );
-            DrawLine( icnVsSprite[36], { 5, 5 }, { 5, 6 }, 10 );
-            SetPixel( icnVsSprite[36], 1, 6, 10 );
-            SetPixel( icnVsSprite[36], 2, 7, 10 );
-            SetPixel( icnVsSprite[36], 4, 7, 10 );
-            updateSmallFontLetterShadow( icnVsSprite[36] );
+            icnVsSprite[36 - 32].resize( 6, 10 );
+            icnVsSprite[36 - 32].reset();
+            DrawLine( icnVsSprite[36 - 32], { 3, 0 }, { 3, 8 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 1, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 1, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 1, 2 }, { 1, 3 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 5, 2, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 4, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 4, 10 );
+            DrawLine( icnVsSprite[36 - 32], { 5, 5 }, { 5, 6 }, 10 );
+            SetPixel( icnVsSprite[36 - 32], 1, 6, 10 );
+            SetPixel( icnVsSprite[36 - 32], 2, 7, 10 );
+            SetPixel( icnVsSprite[36 - 32], 4, 7, 10 );
+            updateSmallFontLetterShadow( icnVsSprite[36 - 32] );
 
             // & (ampersand).
-            icnVsSprite[38].resize( 7, 8 );
-            icnVsSprite[38].reset();
-            icnVsSprite[38].setPosition( 0, 0 );
-            SetPixel( icnVsSprite[38], 3, 0, 10 );
-            DrawLine( icnVsSprite[38], { 2, 1 }, { 2, 2 }, 10 );
-            DrawLine( icnVsSprite[38], { 4, 1 }, { 4, 2 }, 10 );
-            SetPixel( icnVsSprite[38], 3, 3, 10 );
-            SetPixel( icnVsSprite[38], 2, 4, 10 );
-            SetPixel( icnVsSprite[38], 4, 4, 10 );
-            SetPixel( icnVsSprite[38], 6, 4, 10 );
-            SetPixel( icnVsSprite[38], 1, 5, 10 );
-            SetPixel( icnVsSprite[38], 5, 5, 10 );
-            DrawLine( icnVsSprite[38], { 2, 6 }, { 4, 6 }, 10 );
-            SetPixel( icnVsSprite[38], 6, 6, 10 );
-            updateSmallFontLetterShadow( icnVsSprite[38] );
+            icnVsSprite[38 - 32].resize( 7, 8 );
+            icnVsSprite[38 - 32].reset();
+            icnVsSprite[38 - 32].setPosition( 0, 0 );
+            SetPixel( icnVsSprite[38 - 32], 3, 0, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 1 }, { 2, 2 }, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 4, 1 }, { 4, 2 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 3, 3, 10 );
+            SetPixel( icnVsSprite[38 - 32], 2, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 4, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 4, 10 );
+            SetPixel( icnVsSprite[38 - 32], 1, 5, 10 );
+            SetPixel( icnVsSprite[38 - 32], 5, 5, 10 );
+            DrawLine( icnVsSprite[38 - 32], { 2, 6 }, { 4, 6 }, 10 );
+            SetPixel( icnVsSprite[38 - 32], 6, 6, 10 );
+            updateSmallFontLetterShadow( icnVsSprite[38 - 32] );
 
             // Put dots instead of the other replaced ASCII characters like it is done in the original English assets.
             // TODO: make ASCII character's sprites for the printable characters instead of dots for all languages.
-            const Sprite & dotSprite = icnVsSprite[46];
+            const Sprite & dotSprite = icnVsSprite[46 - 32];
             // # (number sign).
-            icnVsSprite[35] = dotSprite;
+            icnVsSprite[35 - 32] = dotSprite;
             // < (less than).
-            icnVsSprite[60] = dotSprite;
+            icnVsSprite[60 - 32] = dotSprite;
             // > (greater than).
-            icnVsSprite[62] = dotSprite;
+            icnVsSprite[62 - 32] = dotSprite;
             // @ (at sign).
-            icnVsSprite[64] = dotSprite;
+            icnVsSprite[64 - 32] = dotSprite;
             // ^ (caret - circumflex).
-            icnVsSprite[94] = dotSprite;
+            icnVsSprite[94 - 32] = dotSprite;
             // ` (grave accent).
-            icnVsSprite[96] = dotSprite;
+            icnVsSprite[96 - 32] = dotSprite;
             // { (opening brace).
-            icnVsSprite[123] = dotSprite;
+            icnVsSprite[123 - 32] = dotSprite;
             // } (closing brace).
-            icnVsSprite[125] = dotSprite;
+            icnVsSprite[125 - 32] = dotSprite;
             // ~ (tilde).
-            icnVsSprite[126] = dotSprite;
+            icnVsSprite[126 - 32] = dotSprite;
             // DEL (delete).
-            icnVsSprite[127] = dotSprite;
+            icnVsSprite[127 - 32] = dotSprite;
         }
     }
 
