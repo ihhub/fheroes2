@@ -3833,8 +3833,9 @@ msgstr ""
 msgid "Default Buildings"
 msgstr ""
 
+# ΠΕΡΙΟΡΙΣΜΟΣ δεν χωράει ενώ «ΠΕΡΙΟΡΙΣΗ» είναι αρχαία (και αγγράματη!) λέξη
 msgid "RESTRICT"
-msgstr "ΠΕΡΙΟΡΙΣΗ"
+msgstr "ΑΠΟΚΛΙΣΗ"
 
 msgid "Default Army"
 msgstr ""
