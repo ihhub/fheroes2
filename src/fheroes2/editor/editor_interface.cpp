@@ -875,21 +875,21 @@ namespace
         os << "-------   Towns   -------" << std::endl;
         for ( const auto & [index, castle] : mapFormat.castleMetadata ) {
             if ( !castle.customName.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << castle.customName << std::endl;
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << castle.customName << std::endl;
             }
         }
 
         os << "-------   Heroes   -------" << std::endl;
         for ( const auto & [index, hero] : mapFormat.heroMetadata ) {
             if ( !hero.customName.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << hero.customName << std::endl;
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << hero.customName << std::endl;
             }
         }
 
         os << "-------   Sphinxes   -------" << std::endl;
         for ( const auto & [index, sphinx] : mapFormat.sphinxMetadata ) {
             if ( !sphinx.riddle.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
                 os << "  Answers:" << std::endl;
                 for ( const auto & answer : sphinx.answers ) {
                     os << "    " << answer << std::endl;
@@ -900,14 +900,14 @@ namespace
         os << "-------   Events   -------" << std::endl;
         for ( const auto & [index, event] : mapFormat.adventureMapEventMetadata ) {
             if ( !event.message.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << event.message << std::endl;
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << event.message << std::endl;
             }
         }
 
         os << "-------   Signs   -------" << std::endl;
         for ( const auto & [index, sign] : mapFormat.signMetadata ) {
             if ( !sign.message.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << sign.message << std::endl;
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sign.message << std::endl;
             }
         }
 
