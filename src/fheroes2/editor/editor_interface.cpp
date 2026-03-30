@@ -91,6 +91,12 @@
 #include "world.h"
 #include "world_object_uid.h"
 
+#if defined( WITH_DEBUG )
+#include <sstream>
+
+#include "logging.h"
+#endif
+
 namespace fheroes2
 {
     class Image;
@@ -858,6 +864,70 @@ namespace
 
         return allowedMonsters;
     }
+
+#if defined( WITH_DEBUG )
+    std::string getAllMapTexts( const Maps::Map_Format::MapFormat & mapFormat )
+    {
+        std::ostringstream os;
+
+        os << "******* Map texts *******" << std::endl;
+
+        os << "-------   Towns   -------" << std::endl;
+        for ( const auto & [index, castle] : mapFormat.castleMetadata ) {
+            if ( !castle.customName.empty() ) {
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << castle.customName << std::endl;
+            }
+        }
+
+        os << "-------   Heroes   -------" << std::endl;
+        for ( const auto & [index, hero] : mapFormat.heroMetadata ) {
+            if ( !hero.customName.empty() ) {
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << hero.customName << std::endl;
+            }
+        }
+
+        os << "-------   Sphinxes   -------" << std::endl;
+        for ( const auto & [index, sphinx] : mapFormat.sphinxMetadata ) {
+            if ( !sphinx.riddle.empty() ) {
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
+                os << "  Answers:" << std::endl;
+                for ( const auto & answer: sphinx.answers ) {
+                    os << "    " << answer << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Events   -------" << std::endl;
+        for ( const auto & [index, event] : mapFormat.adventureMapEventMetadata ) {
+            if ( !event.message.empty() ) {
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << event.message << std::endl;
+            }
+        }
+
+        os << "-------   Signs   -------" << std::endl;
+        for ( const auto & [index, sign] : mapFormat.signMetadata ) {
+            if ( !sign.message.empty() ) {
+                os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << sign.message << std::endl;
+            }
+        }
+
+        os << "-------   Daily events   -------" << std::endl;
+        for ( const auto & event : mapFormat.dailyEvents ) {
+            if ( !event.message.empty() ) {
+                os << "Day " << event.firstOccurrenceDay << ": " << event.message << std::endl;
+            }
+        }
+
+        os << "-------   Rumors  -------" << std::endl;
+        for ( const auto & rumor : mapFormat.rumors ) {
+            os << rumor << std::endl;
+        }
+
+        os << "******* End *******" << std::endl;
+
+        return os.str();
+    }
+#endif
 }
 
 namespace Interface
@@ -1073,6 +1143,9 @@ namespace Interface
                             _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
                         }
                     }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_OUTPUT_ALL_TEXT ) ) {
+                    VERBOSE_LOG( getAllMapTexts( _mapFormat ) )
                 }
 #endif
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {

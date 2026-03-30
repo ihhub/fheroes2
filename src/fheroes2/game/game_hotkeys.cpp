@@ -173,6 +173,8 @@ namespace
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-generate random map" ), fheroes2::Key::KEY_F5 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-configure random map" ), fheroes2::Key::KEY_F6 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_OUTPUT_ALL_TEXT )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|output all text" ), fheroes2::Key::KEY_F2 };
 #endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
