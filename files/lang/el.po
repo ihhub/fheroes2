@@ -1,4 +1,4 @@
-# Greek translation of fheroes 2
+# Greek translation of fheroes2
 # Copyright (C) 2022-2025 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
