@@ -91,10 +91,11 @@ msgstr "ΑΠΟΛΥΣΗ"
 msgid "UPGRADE"
 msgstr "ΑΝΑΒΑΘΜΙΣΗ"
 
+# εναλλακτικά «ΠΡΟΣΦΟΡΑ», αλλά επέλεξα δώρο επειδή δεν χρειάζεται να την αποδεχτεί ο παραλήπτης
 msgid "GIFT"
 msgstr "ΔΩΡΟ"
 
-# ταιριάζει με «έναρξη»
+# ταιριάζει με «ΕΝΑΡΞΗ»
 msgid "RESTART"
 msgstr "ΕΠΑΝΕΝΑΡΞΗ"
 
@@ -185,7 +186,7 @@ msgstr ""
 "ΦΟΡΤΩΣΗ\n"
 "ΠΑΙΧΝΙΔΙΟΥ"
 
-# ταιριάζει με «έναρξη»
+# ταιριάζει με «ΕΝΑΡΞΗ»
 msgid ""
 "RESTART\n"
 "GAME"
@@ -331,8 +332,9 @@ msgstr "ΤΥΧΑΙΟΣ"
 msgid "DIFFICULTY"
 msgstr "ΔΥΣΚΟΛΙΑ"
 
+# ΠΡΟΒΟΛΗ ΕΙΣΑΓΩΓΗΣ ήταν σε δύο γραμμές επομένως πρέπει αναγκαστικά να το μειώσουμε
 msgid "VIEW INTRO"
-msgstr "ΠΡΟΒΟΛΗ ΕΙΣΑΓΩΓΗΣ"
+msgstr "ΕΙΣΑΓΩΓΗ"
 
 msgid "RESET"
 msgstr "ΕΠΑΝΑΦΟΡΑ"
@@ -1059,8 +1061,8 @@ msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 
 msgid ""
-"Through eagle-eyed observation, %{name} is able to learn the magic spell %"
-"{spell}."
+"Through eagle-eyed observation, %{name} is able to learn the magic spell "
+"%{spell}."
 msgstr ""
 
 msgid "Human"
@@ -1261,8 +1263,8 @@ msgstr ""
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
-"battle will be the easiest one you will face for the rest of the "
-"war...traitor."
+"battle will be the easiest one you will face for the rest of the war..."
+"traitor."
 msgstr ""
 
 msgid "Barbarian Wars"
@@ -5737,8 +5739,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid ""
-"The alliance consisting of %{allies} and you must defeat the enemy %"
-"{enemies}."
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
 msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
@@ -6559,8 +6561,8 @@ msgstr ""
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
-"In exchange for your protection, they agree to teach you a simple spell - '%"
-"{spell}'."
+"In exchange for your protection, they agree to teach you a simple spell - "
+"'%{spell}'."
 msgstr ""
 
 msgid "Shrine of the 2nd Circle"
@@ -6568,8 +6570,8 @@ msgstr ""
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
-"In exchange for your protection, they agree to teach you a spell - '%"
-"{spell}'."
+"In exchange for your protection, they agree to teach you a spell - "
+"'%{spell}'."
 msgstr ""
 
 msgid "Shrine of the 3rd Circle"
@@ -6599,8 +6601,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You approach the hut and observe a witch inside studying an ancient tome on %"
-"{skill}.\n"
+"You approach the hut and observe a witch inside studying an ancient tome on "
+"%{skill}.\n"
 "\n"
 msgstr ""
 
@@ -6827,8 +6829,8 @@ msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 
 msgid ""
-"A leprechaun offers you the %{art} for the small price of %{gold} Gold and %"
-"{count} %{res}."
+"A leprechaun offers you the %{art} for the small price of %{gold} Gold and "
+"%{count} %{res}."
 msgstr ""
 
 msgid "Do you wish to buy this artifact?"
@@ -10637,16 +10639,16 @@ msgid "Cure"
 msgstr ""
 
 msgid ""
-"Removes all negative spells cast upon one of your units, and restores up to %"
-"{count} HP per level of spell power."
+"Removes all negative spells cast upon one of your units, and restores up to "
+"%{count} HP per level of spell power."
 msgstr ""
 
 msgid "Mass Cure"
 msgstr ""
 
 msgid ""
-"Removes all negative spells cast upon your forces, and restores up to %"
-"{count} HP per level of spell power, per creature."
+"Removes all negative spells cast upon your forces, and restores up to "
+"%{count} HP per level of spell power, per creature."
 msgstr ""
 
 msgid "Resurrect"
@@ -10805,8 +10807,8 @@ msgid "Hypnotize"
 msgstr ""
 
 msgid ""
-"Brings a single enemy unit under your control if its hits are less than %"
-"{count} times the caster's spell power."
+"Brings a single enemy unit under your control if its hits are less than "
+"%{count} times the caster's spell power."
 msgstr ""
 
 msgid "Cold Ray"
