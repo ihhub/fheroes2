@@ -891,7 +891,7 @@ namespace
             if ( !sphinx.riddle.empty() ) {
                 os << "[" << ( index % mapFormat.width ) << ',' << ( index % mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
                 os << "  Answers:" << std::endl;
-                for ( const auto & answer: sphinx.answers ) {
+                for ( const auto & answer : sphinx.answers ) {
                     os << "    " << answer << std::endl;
                 }
             }
