@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -21,6 +21,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ВЫБРАЦЬ"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -563,11 +566,13 @@ msgstr ""
 "з яго, ходзіць толькі адну клетку. Таксама абарона такога атрада зніжаецца "
 "на %{count}."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Хуткасць: %{speed}"
 
-msgid "Speed"
-msgstr "Хуткасць"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Анімацыя"
 
 msgid "Interface"
 msgstr "Інтэрфейс"
@@ -2969,6 +2974,9 @@ msgstr "Пашкод."
 msgid "HP"
 msgstr "Здароўе"
 
+msgid "Speed"
+msgstr "Хуткасць"
+
 msgid "Growth"
 msgstr "Прырост"
 
@@ -3265,6 +3273,13 @@ msgid ""
 msgstr ""
 "Умовы\n"
 "паражэння"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Націсніце, каб вярнуцца ў галоўнае меню."
 
 msgid "Map Description"
 msgstr "Апісанне мапы"
@@ -4978,17 +4993,11 @@ msgstr "ПАДЗЕІ"
 msgid "LANGUAGE"
 msgstr "МОВА"
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr "Змяніць назву мапы"
 
 msgid "Change Map Description"
 msgstr "Змяніць апісанне мапы"
-
-msgid "About"
-msgstr ""
 
 msgid "Click to edit custom rumors."
 msgstr "Націсніце, каб паправіць дададзеныя ў сцэнар чуткі."

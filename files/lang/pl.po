@@ -24,6 +24,9 @@ msgstr ""
 msgid "SELECT"
 msgstr "WYBIERZ"
 
+msgid "ABOUT"
+msgstr ""
+
 msgid "S"
 msgstr "M"
 
@@ -551,11 +554,13 @@ msgstr ""
 "Fosa zmniejsza współczynnik obrony o -%{count} oraz spowalnia jednostki o "
 "połowę."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
 
-msgid "Speed"
-msgstr "Szybkość"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Aneksja"
 
 msgid "Interface"
 msgstr "Interfejs"
@@ -2953,6 +2958,9 @@ msgstr "Obrażenia"
 msgid "HP"
 msgstr "PŻ"
 
+msgid "Speed"
+msgstr "Szybkość"
+
 msgid "Growth"
 msgstr "Przyrost"
 
@@ -5056,18 +5064,12 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Wybrany opis"
-
-msgid "About"
-msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."

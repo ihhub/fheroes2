@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ENDRE"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "L"
@@ -519,11 +522,13 @@ msgstr ""
 "Vollgraven reduserer forsvarsevnen til krigere som befinner seg i den med "
 "%{count} og halverer skrittene deres."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
-msgid "Speed"
-msgstr "Hurtighet"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Underleggelse"
 
 msgid "Interface"
 msgstr "Grensesnitt"
@@ -3013,6 +3018,9 @@ msgstr "Skade"
 msgid "HP"
 msgstr "Liv"
 
+msgid "Speed"
+msgstr "Hurtighet"
+
 msgid "Growth"
 msgstr "Vekst"
 
@@ -3322,6 +3330,13 @@ msgid ""
 msgstr ""
 "Taps-\n"
 "vilkår"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
 #, fuzzy
 msgid "Map Description"
@@ -5200,18 +5215,12 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Kartbeskrivelse"
-
-msgid "About"
-msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."

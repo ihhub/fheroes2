@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -19,6 +19,9 @@ msgstr ""
 "X-Generator: Poedit 3.1.1\n"
 
 msgid "SELECT"
+msgstr ""
+
+msgid "ABOUT"
 msgstr ""
 
 msgid "S"
@@ -479,11 +482,13 @@ msgstr ""
 "De Moat verminderd by -%{count} de verdedgings vaardigheid van een eenheid "
 "en versloomt naar de helft van de bewegings snelheid"
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Snelheid: %{speed}"
 
-msgid "Speed"
-msgstr "Snelheid"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Annexatie"
 
 msgid "Interface"
 msgstr ""
@@ -2891,6 +2896,9 @@ msgstr ""
 msgid "HP"
 msgstr ""
 
+msgid "Speed"
+msgstr "Snelheid"
+
 msgid "Growth"
 msgstr ""
 
@@ -3158,6 +3166,14 @@ msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 msgid "Map Description"
 msgstr ""
@@ -4879,16 +4895,10 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
 msgstr ""
 
 #, fuzzy

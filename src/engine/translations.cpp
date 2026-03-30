@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -334,7 +334,7 @@ namespace
         return pos ? ++pos : str;
     }
 
-    class MOFile
+    class MOFile final
     {
     public:
         MOFile() = default;
@@ -619,6 +619,11 @@ const char * Translation::gettext( const std::string & str )
 const char * Translation::gettext( const char * str )
 {
     return current ? current->ngettext( str, 0 ) : stripContext( str );
+}
+
+const char * Translation::getNonTranslated( const char * str )
+{
+    return stripContext( str );
 }
 
 const char * Translation::ngettext( const char * str, const char * plural, const size_t n )

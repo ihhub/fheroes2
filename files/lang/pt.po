@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-03-29 15:04+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "SELEC."
+
+msgid "ABOUT"
+msgstr "SOBRE"
 
 msgid "S"
 msgstr "P"
@@ -545,11 +548,13 @@ msgstr ""
 "O Fosso interrompe qualquer movimento através dele e reduz a habilidade "
 "dedefesa das tropas presentes nele em %{count}."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Velocidade: %{speed}"
 
-msgid "Speed"
-msgstr "Velocidade"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animação"
 
 msgid "Interface"
 msgstr "Aparência"
@@ -2935,6 +2940,9 @@ msgstr "Dano"
 msgid "HP"
 msgstr "PV"
 
+msgid "Speed"
+msgstr "Velocidade"
+
 msgid "Growth"
 msgstr "Produção"
 
@@ -3236,6 +3244,13 @@ msgstr ""
 "Condições\n"
 "de\n"
 "Derrota"
+
+msgid "About"
+msgstr "Sobre"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Clique para retornar ao menu principal."
 
 msgid "Map Description"
 msgstr "Descrição do Mapa"
@@ -4991,17 +5006,11 @@ msgstr "EVENTOS"
 msgid "LANGUAGE"
 msgstr "IDIOMA"
 
-msgid "ABOUT"
-msgstr "SOBRE"
-
 msgid "Change Map Name"
 msgstr "Alterar o Nome do Mapa"
 
 msgid "Change Map Description"
 msgstr "Alterar Descrição do Mapa"
-
-msgid "About"
-msgstr "Sobre"
 
 msgid "Click to edit custom rumors."
 msgstr "Clique para editar rumores personalizados."
@@ -12713,12 +12722,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to "
-#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "Você está prestes a alterar o idioma do mapa de %{oldLanguage} para "
-#~ "%{newLanguage}. Alguns textos podem não ser exibidos corretamente depois "
-#~ "disso. Deseja prosseguir?"
