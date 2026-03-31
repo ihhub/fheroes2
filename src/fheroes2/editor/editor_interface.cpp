@@ -866,6 +866,22 @@ namespace
     }
 
 #if defined( WITH_DEBUG )
+    int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
+    {
+        for ( size_t i = 0; i < mapFormat.tiles.size(); ++i ) {
+            for ( const auto & objectInfo : mapFormat.tiles[i].objects ) {
+                if ( objectInfo.id == uid ) {
+                    if ( objectInfo.group == group ) {
+                        return static_cast<int32_t>( i );
+                    }
+                }
+            }
+        }
+
+        // It could be a dangling object kept by the previous version of the Editor.
+        return -1;
+    }
+
     std::string getAllMapTexts( const Maps::Map_Format::MapFormat & mapFormat )
     {
         std::ostringstream os;
@@ -873,23 +889,41 @@ namespace
         os << "******* Map texts *******" << std::endl;
 
         os << "-------   Towns   -------" << std::endl;
-        for ( const auto & [index, castle] : mapFormat.castleMetadata ) {
+        for ( const auto & [uid, castle] : mapFormat.castleMetadata ) {
             if ( !castle.customName.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << castle.customName << std::endl;
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_TOWNS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << castle.customName << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << castle.customName << std::endl;
+                }
             }
         }
 
         os << "-------   Heroes   -------" << std::endl;
-        for ( const auto & [index, hero] : mapFormat.heroMetadata ) {
+        for ( const auto & [uid, hero] : mapFormat.heroMetadata ) {
             if ( !hero.customName.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << hero.customName << std::endl;
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_HEROES );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << hero.customName << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << hero.customName << std::endl;
+                }
             }
         }
 
         os << "-------   Sphinxes   -------" << std::endl;
-        for ( const auto & [index, sphinx] : mapFormat.sphinxMetadata ) {
+        for ( const auto & [uid, sphinx] : mapFormat.sphinxMetadata ) {
             if ( !sphinx.riddle.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << sphinx.riddle << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
+                }
                 os << "  Answers:" << std::endl;
                 for ( const auto & answer : sphinx.answers ) {
                     os << "    " << answer << std::endl;
@@ -898,16 +932,28 @@ namespace
         }
 
         os << "-------   Events   -------" << std::endl;
-        for ( const auto & [index, event] : mapFormat.adventureMapEventMetadata ) {
+        for ( const auto & [uid, event] : mapFormat.adventureMapEventMetadata ) {
             if ( !event.message.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << event.message << std::endl;
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << event.message << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << event.message << std::endl;
+                }
             }
         }
 
         os << "-------   Signs   -------" << std::endl;
-        for ( const auto & [index, sign] : mapFormat.signMetadata ) {
+        for ( const auto & [uid, sign] : mapFormat.signMetadata ) {
             if ( !sign.message.empty() ) {
-                os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sign.message << std::endl;
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << sign.message << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sign.message << std::endl;
+                }
             }
         }
 
