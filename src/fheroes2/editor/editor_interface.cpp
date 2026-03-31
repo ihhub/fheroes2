@@ -870,10 +870,8 @@ namespace
     {
         for ( size_t i = 0; i < mapFormat.tiles.size(); ++i ) {
             for ( const auto & objectInfo : mapFormat.tiles[i].objects ) {
-                if ( objectInfo.id == uid ) {
-                    if ( objectInfo.group == group ) {
-                        return static_cast<int32_t>( i );
-                    }
+                if ( objectInfo.id == uid && objectInfo.group == group ) {
+                    return static_cast<int32_t>( i );
                 }
             }
         }
