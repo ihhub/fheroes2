@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 15:04+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -5778,6 +5778,10 @@ msgstr "Nouvelle carte aléatoire"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Nouvelle carte aléatoire"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Défilement gauche"
 
 msgid "hotkey|roland campaign"
 msgstr "Campagne de Roland"
