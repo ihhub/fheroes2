@@ -902,7 +902,12 @@ namespace
         os << "-------   Heroes   -------" << std::endl;
         for ( const auto & [uid, hero] : mapFormat.heroMetadata ) {
             if ( !hero.customName.empty() ) {
-                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_HEROES );
+                int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_HEROES );
+                if ( index < 0 ) {
+                    // It could be a Jail object.
+                    index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                }
+
                 if ( index < 0 ) {
                     os << "!!! [absent object " << uid << "]: " << hero.customName << std::endl;
                 }
