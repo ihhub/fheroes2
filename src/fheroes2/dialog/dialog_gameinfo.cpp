@@ -123,13 +123,13 @@ void Dialog::GameInfo()
     text.fitToOneRow( scenarioNameRoi.width );
     if ( isCreatorInfoPresent ) {
         // We need to center the map name according to the center of the frame.
-        const int32_t noShiftWidth = ( scenarioNameMaxWidth - buttonAboutWidth );
+        const int32_t noShiftWidth = ( scenarioNameMaxWidth / 2 - buttonAboutWidth ) * 2;
         if ( text.width() <= noShiftWidth ) {
             text.draw( scenarioNameRoi.x, shadowOffset.y + 32, scenarioNameMaxWidth, display );
         }
         else {
             // It seems that we need to shift the scenario name to the left.
-            const int32_t offsetX = std::min( text.width(), scenarioNameRoi.width );
+            const int32_t offsetX = ( text.width() - noShiftWidth ) / 2;
             text.draw( scenarioNameRoi.x + offsetX, shadowOffset.y + 32, scenarioNameRoi.width, display );
         }
     }
