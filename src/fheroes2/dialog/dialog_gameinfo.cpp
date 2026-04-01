@@ -119,17 +119,18 @@ void Dialog::GameInfo()
     const fheroes2::Rect scenarioNameRoi{ 37 + shadowOffset.x, 29 + shadowOffset.y, scenarioNameMaxWidth - ( isCreatorInfoPresent ? buttonAboutWidth : 0 ), 19 };
 
     fheroes2::Text text( mapInfo.name, fheroes2::FontType::normalWhite(), mapLanguage );
-    text.fitToOneRow( scenarioNameRoi.width );
+    // We deduct 2 to have at least 1 pixel space between text and text field borders.
+    text.fitToOneRow( scenarioNameRoi.width - 2 );
     if ( isCreatorInfoPresent ) {
         // We need to center the map name according to the center of the frame.
-        const int32_t noShiftWidth = ( scenarioNameMaxWidth / 2 - buttonAboutWidth ) * 2;
+        const int32_t noShiftWidth = scenarioNameMaxWidth - buttonAboutWidth * 2 - 2;
         if ( text.width() <= noShiftWidth ) {
             text.draw( scenarioNameRoi.x, shadowOffset.y + 32, scenarioNameMaxWidth, display );
         }
         else {
             // It seems that we need to shift the scenario name to the left.
-            const int32_t offsetX = ( text.width() - noShiftWidth ) / 2;
-            text.draw( scenarioNameRoi.x + offsetX, shadowOffset.y + 32, scenarioNameRoi.width, display );
+            const int32_t offsetX = scenarioNameRoi.width - text.width() - 1;
+            text.draw( scenarioNameRoi.x + offsetX, shadowOffset.y + 32, display );
         }
     }
     else {
