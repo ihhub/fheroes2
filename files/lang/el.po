@@ -5204,6 +5204,9 @@ msgstr ""
 msgid "hotkey|re-configure random map"
 msgstr ""
 
+msgid "hotkey|output all text"
+msgstr ""
+
 msgid "hotkey|roland campaign"
 msgstr ""
 

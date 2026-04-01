@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 15:04+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5899,6 +5899,10 @@ msgstr "Nytt automatisk kart"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Nytt automatisk kart"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Panorer til venstre"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
