@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 15:04+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -5650,6 +5650,10 @@ msgstr "gerar novo mapa aleatório"
 
 msgid "hotkey|re-configure random map"
 msgstr "reconfigurar mapa aleatório"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "rolar para a esquerda"
 
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"
