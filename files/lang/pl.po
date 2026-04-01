@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
-"PO-Revision-Date: 2026-03-30 12:49+0100\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"PO-Revision-Date: 2026-03-14 16:22+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -5743,6 +5743,10 @@ msgstr "nowa losowa mapa"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "nowa losowa mapa"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "skroluj w lewo"
 
 msgid "hotkey|roland campaign"
 msgstr "kampania Rolanda"
