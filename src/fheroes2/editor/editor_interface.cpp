@@ -876,7 +876,7 @@ namespace
             }
         }
 
-        // It could be a dangling object kept by the previous version of the Editor.
+        // It could be a leftover object kept by the previous version of the Editor.
         return -1;
     }
 
