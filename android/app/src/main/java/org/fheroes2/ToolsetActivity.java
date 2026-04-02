@@ -142,8 +142,8 @@ public final class ToolsetActivity extends AppCompatActivity
             new Thread( () -> {
                 try ( final InputStream in = contentResolver.openInputStream( exeFileUri ) ) {
                     if ( !InnoExtract.isInnoSetupInstaller( in ) ) {
-                        liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false,
-                                                          BackgroundTaskResult.RESULT_INVALID_FILE, "" ) );
+                        liveStatus.postValue(
+                            new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_INVALID_FILE, "" ) );
                         return;
                     }
                 }

@@ -50,13 +50,14 @@ import java.util.zip.Inflater;
  */
 final class InnoExtract
 {
-    private static final byte[] LOADER_MAGIC = { 0x72, 0x44, 0x6C, 0x50, 0x74, 0x53, (byte) 0xCD, (byte) 0xE6, (byte) 0xD7, 0x7B, 0x0B, 0x2A };
+    private static final byte[] LOADER_MAGIC = { 0x72, 0x44, 0x6C, 0x50, 0x74, 0x53, (byte)0xCD, (byte)0xE6, (byte)0xD7, 0x7B, 0x0B, 0x2A };
 
     private static final Set<String> TARGET_DIRS = new HashSet<>();
 
     private static final String GOG_CD_IMAGE_NAME = "homm2.gog";
 
-    static {
+    static
+    {
         TARGET_DIRS.add( "data" );
         TARGET_DIRS.add( "maps" );
         TARGET_DIRS.add( "music" );
@@ -174,7 +175,7 @@ final class InnoExtract
         raf.seek( headerOffset );
         final byte[] versionBytes = new byte[64];
         raf.readFully( versionBytes );
-        final String version = new String( versionBytes, 0, indexOf( versionBytes, (byte) 0 ), StandardCharsets.US_ASCII );
+        final String version = new String( versionBytes, 0, indexOf( versionBytes, (byte)0 ), StandardCharsets.US_ASCII );
 
         if ( !version.contains( "Inno Setup" ) ) {
             throw new IOException( "Not an Inno Setup installer: unexpected version string: " + version );
@@ -185,7 +186,7 @@ final class InnoExtract
         raf.seek( block1Start + 4 ); // skip CRC
         final long block1StoredSize = readUint32( raf );
         final int block1Compressed = raf.readUnsignedByte();
-        final byte[] block1Raw = new byte[(int) block1StoredSize];
+        final byte[] block1Raw = new byte[(int)block1StoredSize];
         raf.readFully( block1Raw );
         byte[] block1 = stripBlockCrc( block1Raw );
         if ( block1Compressed != 0 ) {
@@ -197,7 +198,7 @@ final class InnoExtract
         raf.seek( block2Start + 4 ); // skip CRC
         final long block2StoredSize = readUint32( raf );
         final int block2Compressed = raf.readUnsignedByte();
-        final byte[] block2Raw = new byte[(int) block2StoredSize];
+        final byte[] block2Raw = new byte[(int)block2StoredSize];
         raf.readFully( block2Raw );
         byte[] block2 = stripBlockCrc( block2Raw );
         if ( block2Compressed != 0 ) {
@@ -299,9 +300,8 @@ final class InnoExtract
      * Extracts the GOG CD image (homm2.gog) from the installer, converts it to ISO,
      * and extracts ANIM files from it using the isotools library.
      */
-    private static boolean extractAnimFromGogCdImage( final RandomAccessFile raf, final long dataOffset, final DataEntry[] dataEntries,
-                                                      final FileInfo gogFileInfo, final File cacheDir, final File outputDir )
-        throws IOException
+    private static boolean extractAnimFromGogCdImage( final RandomAccessFile raf, final long dataOffset, final DataEntry[] dataEntries, final FileInfo gogFileInfo,
+                                                      final File cacheDir, final File outputDir ) throws IOException
     {
         Files.createDirectories( cacheDir.toPath() );
 
@@ -313,8 +313,7 @@ final class InnoExtract
             extractFile( raf, dataOffset, dataEntries, gogFileInfo, gogTempFile );
 
             // Convert GOG BIN format to ISO
-            try ( final InputStream gogIn = Files.newInputStream( gogTempFile.toPath() );
-                  final OutputStream isoOut = Files.newOutputStream( isoTempFile.toPath() ) ) {
+            try ( final InputStream gogIn = Files.newInputStream( gogTempFile.toPath() ); final OutputStream isoOut = Files.newOutputStream( isoTempFile.toPath() ) ) {
                 HoMM2AssetManagement.gogToISO( gogIn, isoOut );
             }
 
@@ -346,7 +345,7 @@ final class InnoExtract
                 final byte[] decompressed = readAndDecompressChunk( raf, chunkPos, entry.chunkSize, entry.fileSize );
 
                 if ( entry.fileOffset > 0 && entry.fileOffset + entry.fileSize <= decompressed.length ) {
-                    out.write( decompressed, (int) entry.fileOffset, (int) entry.fileSize );
+                    out.write( decompressed, (int)entry.fileOffset, (int)entry.fileSize );
                 }
                 else {
                     out.write( decompressed );
@@ -367,7 +366,7 @@ final class InnoExtract
             throw new IOException( "Invalid chunk data header at offset " + chunkPos );
         }
 
-        final byte[] compData = new byte[(int) chunkSize];
+        final byte[] compData = new byte[(int)chunkSize];
         raf.readFully( compData );
 
         // Try zlib decompression first
@@ -464,10 +463,8 @@ final class InnoExtract
         final Map<String, FileInfo> fileMap = new HashMap<>();
 
         for ( final String targetDir : TARGET_DIRS ) {
-            final byte[][] patterns = {
-                encodeUTF16LE( targetDir + "\\" ), encodeUTF16LE( targetDir.toUpperCase( Locale.ROOT ) + "\\" ),
-                encodeUTF16LE( targetDir + "/" ), encodeUTF16LE( targetDir.toUpperCase( Locale.ROOT ) + "/" )
-            };
+            final byte[][] patterns = { encodeUTF16LE( targetDir + "\\" ), encodeUTF16LE( targetDir.toUpperCase( Locale.ROOT ) + "\\" ), encodeUTF16LE( targetDir + "/" ),
+                                        encodeUTF16LE( targetDir.toUpperCase( Locale.ROOT ) + "/" ) };
 
             for ( final byte[] pattern : patterns ) {
                 int searchPos = 0;
@@ -529,7 +526,7 @@ final class InnoExtract
 
         for ( long offset = 0; offset < fileLen; offset += bufSize - LOADER_MAGIC.length ) {
             raf.seek( offset );
-            final int read = raf.read( buf, 0, (int) Math.min( bufSize, fileLen - offset ) );
+            final int read = raf.read( buf, 0, (int)Math.min( bufSize, fileLen - offset ) );
 
             if ( read < LOADER_MAGIC.length ) {
                 break;
@@ -597,7 +594,7 @@ final class InnoExtract
     {
         final int limit = end - needle.length;
 
-        outer:
+    outer:
         for ( int i = start; i <= limit; i++ ) {
             for ( int j = 0; j < needle.length; j++ ) {
                 if ( haystack[i + j] != needle[j] ) {
@@ -615,8 +612,8 @@ final class InnoExtract
         final byte[] buf = new byte[str.length() * 2];
         for ( int i = 0; i < str.length(); i++ ) {
             final char c = str.charAt( i );
-            buf[i * 2] = (byte) ( c & 0xFF );
-            buf[i * 2 + 1] = (byte) ( ( c >> 8 ) & 0xFF );
+            buf[i * 2] = (byte)( c & 0xFF );
+            buf[i * 2 + 1] = (byte)( ( c >> 8 ) & 0xFF );
         }
         return buf;
     }
@@ -669,7 +666,7 @@ final class InnoExtract
         System.arraycopy( stripped, 0, lzmaAlone, 0, 5 );
         // Uncompressed size = -1 (unknown)
         for ( int i = 5; i < 13; i++ ) {
-            lzmaAlone[i] = (byte) 0xFF;
+            lzmaAlone[i] = (byte)0xFF;
         }
         System.arraycopy( stripped, 5, lzmaAlone, 13, stripped.length - 5 );
 
@@ -770,7 +767,7 @@ final class InnoExtract
 
         static DataEntry parse( final byte[] data, final int offset )
         {
-            return new DataEntry( (int) readUint32LE( data, offset ), (int) readUint32LE( data, offset + 4 ), readUint32LE( data, offset + 8 ) & 0xFFFFFFFFL,
+            return new DataEntry( (int)readUint32LE( data, offset ), (int)readUint32LE( data, offset + 4 ), readUint32LE( data, offset + 8 ) & 0xFFFFFFFFL,
                                   readUint64LE( data, offset + 12 ), readUint64LE( data, offset + 20 ), readUint64LE( data, offset + 28 ),
                                   ( data[offset + 72] & 0xFF ) | ( ( data[offset + 73] & 0xFF ) << 8 ) );
         }
