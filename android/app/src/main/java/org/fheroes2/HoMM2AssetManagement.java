@@ -131,7 +131,7 @@ final class HoMM2AssetManagement
     /**
      * @return true if at least one animation was found and extracted, otherwise returns false
      */
-    private static boolean extractAnimationsFromISO( final File externalFilesDir, final File isoFile ) throws IOException
+    static boolean extractAnimationsFromISO( final File externalFilesDir, final File isoFile ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
         final Set<String> allowedSubdirNames = new HashSet<>();
@@ -222,7 +222,7 @@ final class HoMM2AssetManagement
     /**
      * Converts HOMM2.GOG file to ISO format
      */
-    private static void gogToISO( final InputStream gogStream, final OutputStream isoStream ) throws IOException
+    static void gogToISO( final InputStream gogStream, final OutputStream isoStream ) throws IOException
     {
         final int chunkSize = 2352;
         final byte[] chunk = new byte[chunkSize];

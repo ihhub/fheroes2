@@ -54,6 +54,7 @@ public final class ToolsetActivity extends AppCompatActivity
             RESULT_NONE,
             RESULT_SUCCESS,
             RESULT_NO_ASSETS,
+            RESULT_INVALID_FILE,
             RESULT_ERROR
         }
 
@@ -127,6 +128,51 @@ public final class ToolsetActivity extends AppCompatActivity
                 }
             } ).start();
         }
+
+        private void extractAssetsFromGogExe( final File externalFilesDir, final File cacheDir, final Uri exeFileUri, final ContentResolver contentResolver )
+        {
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
+
+            liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
+
+            new Thread( () -> {
+                try ( final InputStream in = contentResolver.openInputStream( exeFileUri ) ) {
+                    if ( !InnoExtract.isInnoSetupInstaller( in ) ) {
+                        liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false,
+                                                          BackgroundTaskResult.RESULT_INVALID_FILE, "" ) );
+                        return;
+                    }
+                }
+                catch ( final Exception ex ) {
+                    Log.e( "fheroes2", "Failed to validate GOG installer.", ex );
+
+                    liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_ERROR,
+                                                      String.format( "%s", ex ) ) );
+                    return;
+                }
+
+                try ( final InputStream in = contentResolver.openInputStream( exeFileUri ) ) {
+                    if ( InnoExtract.extractAssets( in, cacheDir, externalFilesDir ) ) {
+                        liveStatus.postValue(
+                            new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_SUCCESS, "" ) );
+                    }
+                    else {
+                        liveStatus.postValue(
+                            new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_NO_ASSETS, "" ) );
+                    }
+                }
+                catch ( final Exception ex ) {
+                    Log.e( "fheroes2", "Failed to extract assets from GOG installer.", ex );
+
+                    liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_ERROR,
+                                                      String.format( "%s", ex ) ) );
+                }
+            } ).start();
+        }
     }
 
     private ToolsetActivityViewModel viewModel = null;
@@ -138,6 +184,15 @@ public final class ToolsetActivity extends AppCompatActivity
         }
 
         viewModel.extractAssets( getExternalFilesDir( null ), getCacheDir(), result, getContentResolver() );
+    } );
+
+    private final ActivityResultLauncher<String> gogExeChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
+        // No EXE file was selected
+        if ( result == null ) {
+            return;
+        }
+
+        viewModel.extractAssetsFromGogExe( getExternalFilesDir( null ), getCacheDir(), result, getContentResolver() );
     } );
 
     @Override
@@ -195,6 +250,24 @@ public final class ToolsetActivity extends AppCompatActivity
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void importGogExeButtonClicked( final View view )
+    {
+        try {
+            gogExeChooserLauncher.launch( "*/*" );
+        }
+        catch ( final Exception ex ) {
+            Log.e( "fheroes2", "Failed to import GOG installer.", ex );
+
+            ( new AlertDialog.Builder( this ) )
+                .setTitle( R.string.activity_toolset_import_gog_exe_error_title )
+                .setMessage( R.string.activity_toolset_import_gog_exe_error_message )
+                .setPositiveButton( R.string.activity_toolset_import_gog_exe_error_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
+        }
+    }
+
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void downloadHoMM2DemoButtonClicked( final View view )
     {
         try {
@@ -228,6 +301,7 @@ public final class ToolsetActivity extends AppCompatActivity
     {
         final Button startGameButton = findViewById( R.id.activity_toolset_start_game_btn );
         final Button extractHoMM2AssetsButton = findViewById( R.id.activity_toolset_extract_homm2_assets_btn );
+        final Button importGogExeButton = findViewById( R.id.activity_toolset_import_gog_exe_btn );
         final Button downloadHoMM2DemoButton = findViewById( R.id.activity_toolset_download_homm2_demo_btn );
         final Button saveFileManagerButton = findViewById( R.id.activity_toolset_save_file_manager_btn );
         final Button mapFileManagerButton = findViewById( R.id.activity_toolset_map_file_manager_btn );
@@ -239,6 +313,7 @@ public final class ToolsetActivity extends AppCompatActivity
 
         startGameButton.setEnabled( !modelStatus.isBackgroundTaskExecuting && modelStatus.isHoMM2AssetsPresent );
         extractHoMM2AssetsButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        importGogExeButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         downloadHoMM2DemoButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         saveFileManagerButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         mapFileManagerButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
@@ -251,6 +326,9 @@ public final class ToolsetActivity extends AppCompatActivity
             break;
         case RESULT_NO_ASSETS:
             lastTaskStatusTextView.setText( getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found ) );
+            break;
+        case RESULT_INVALID_FILE:
+            lastTaskStatusTextView.setText( getString( R.string.activity_toolset_last_task_status_lbl_text_invalid_gog_file ) );
             break;
         case RESULT_ERROR:
             lastTaskStatusTextView.setText( String.format( getString( R.string.activity_toolset_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError ) );
