@@ -45,6 +45,12 @@ namespace
     const uint8_t buttonContourColor = 10;
     const fheroes2::Point buttonFontOffset{ -1, 0 };
 
+    // The widths must be the same as space width for respective fonts.
+    // Refer to FontCharHandler::_getSpaceCharWidth() function.
+    constexpr int32_t smallFontSpaceWidth{ 4 };
+    constexpr int32_t normalFontSpaceWidth{ 6 };
+    constexpr int32_t bigFontSpaceWidth{ 8 };
+
     void updateNormalFontLetterShadow( fheroes2::Image & letter )
     {
         fheroes2::updateShadow( letter, { -1, 2 }, 2, false );
@@ -273,6 +279,10 @@ namespace
             fheroes2::Copy( font[140], 4, 0, font[159], 4, 0, 3, 2 );
             font[159].setPosition( font[122].x(), font[122].y() - 3 );
             updateNormalFontLetterShadow( font[159] );
+
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
 
             // Uppercase L with stroke
             font[163].resize( font[76].width(), font[76].height() + 3 );
@@ -790,6 +800,7 @@ namespace
             font[253].setPosition( font[121].x(), font[121].y() - 3 );
             updateNormalFontLetterShadow( font[253] );
         }
+
         // Small font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
@@ -874,6 +885,10 @@ namespace
             fheroes2::Copy( font[122], 2, 2, font[159], 3, 0, 2, 2 );
             font[159].setPosition( font[122].x(), font[122].y() - 3 );
             updateSmallFontLetterShadow( font[159] );
+
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
 
             // Uppercase L with stroke
             font[163].resize( font[76].width(), font[76].height() );
@@ -1379,6 +1394,10 @@ namespace
             fheroes2::Copy( font[168], 4, 5, font[168], 7, 1, 1, 1 );
             font[168].setPosition( font[69 + offset].x(), font[69 + offset].y() - 3 );
             updateNormalFontLetterShadow( font[168] );
+
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
 
             font[161].resize( font[89 + offset].width(), font[89 + offset].height() + 3 );
             font[161].reset();
@@ -1891,6 +1910,10 @@ namespace
             font[168].setPosition( font[69].x(), font[69].y() - 2 );
             updateSmallFontLetterShadow( font[168] );
 
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
+
             font[161].resize( font[89 + offset].width(), font[89 + offset].height() + 2 );
             font[161].reset();
             fheroes2::Copy( font[89 + offset], 0, 0, font[161], 0, 2, font[89 + offset].width(), font[89 + offset].height() );
@@ -2379,6 +2402,10 @@ namespace
         // Normal font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
 
             // Inverted exclamation mark !.
             font[161].resize( font[33].width() + 1, font[33].height() + 3 );
@@ -2933,6 +2960,10 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
+
             // Inverted exclamation mark !.
             font[161].resize( font[33].width(), font[33].height() );
             font[161].reset();
@@ -3437,6 +3468,10 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
 
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
+
             // Greek capital letter alpha
             font[193] = font[65];
 
@@ -3615,6 +3650,10 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
+
             // Greek capital letter alpha
             font[193] = font[65];
 
@@ -3758,6 +3797,10 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
 
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
+
             // C with cedilla.
             font[199].resize( font[67].width(), font[67].height() + 3 );
             font[199].reset();
@@ -3873,9 +3916,14 @@ namespace
             font[254].setPosition( font[115].x(), font[115].y() );
             updateNormalFontLetterShadow( font[254] );
         }
+
         // Small font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
 
             // C with cedilla.
             font[199].resize( font[67].width(), font[67].height() + 3 );
@@ -3989,6 +4037,10 @@ namespace
         // Normal font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
 
             // A with grave accent ` and generate the grave accent for further use.
             font[192].resize( font[65].width(), font[65].height() + 3 );
@@ -4230,6 +4282,10 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
+
             // A with grave accent `. Generate grave accent for further use.
             font[192].resize( font[65].width(), font[65].height() + 3 );
             font[192].reset();
@@ -4468,6 +4524,10 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
 
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
+
             // S with comma.
             font[170].resize( font[83].width(), font[83].height() + 4 );
             font[170].reset();
@@ -4561,9 +4621,14 @@ namespace
             font[254].setPosition( font[116].x(), font[116].y() );
             updateNormalFontLetterShadow( font[254] );
         }
+
         // Small font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
 
             // S with comma.
             font[170].resize( font[83].width(), font[83].height() + 4 );
@@ -5356,6 +5421,10 @@ namespace
         fheroes2::Copy( released[90], 0, 0, released[143], 0, 3, released[90].width(), released[90].height() );
         fheroes2::DrawLine( released[143], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
+        // NBSP character.
+        released[160].resize( bigFontSpaceWidth, 1 );
+        released[160].reset();
+
         // L with stroke.
         released[163] = released[76];
         fheroes2::DrawLine( released[163], { offset + 1, offset + 6 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
@@ -5619,6 +5688,10 @@ namespace
         fheroes2::DrawLine( released[146], { offset + 1, offset + 0 }, { offset + 1, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[146], { offset + 2, offset + 0 }, { offset + 2, offset + 1 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[146], offset + 0, offset + 3, buttonGoodReleasedColor );
+
+        // NBSP character.
+        released[160].resize( bigFontSpaceWidth, 1 );
+        released[160].reset();
 
         // y with breve.
         released[161].resize( 9 + offset * 2, 13 + offset * 2 );
@@ -6009,6 +6082,10 @@ namespace
             released[charCode].setPosition( buttonFontOffset.x - 2, released[charCode].y() );
         }
 
+        // NBSP character.
+        released[160].resize( bigFontSpaceWidth, 1 );
+        released[160].reset();
+
         // A with grave.
         released[192].resize( released[65].width(), released[65].height() + 3 );
         released[192].reset();
@@ -6228,6 +6305,10 @@ namespace
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
 
+        // NBSP character.
+        released[160].resize( bigFontSpaceWidth, 1 );
+        released[160].reset();
+
         // Greek capital letter alpha
         released[193] = released[65];
 
@@ -6396,6 +6477,10 @@ namespace
         for ( const int charCode : { 214, 220, 221 } ) {
             released[charCode].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
         }
+
+        // NBSP character.
+        released[160].resize( bigFontSpaceWidth, 1 );
+        released[160].reset();
 
         // Offset G with breve.
         released[208].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
