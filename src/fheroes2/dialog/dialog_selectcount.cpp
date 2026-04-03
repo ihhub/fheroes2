@@ -384,7 +384,8 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 // We should verify the height of the text before allowing to enter one more line.
                 std::string tmp = result;
                 const size_t tempCharInsertPos = InsertKeySym( tmp, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
-                if ( textInput.height( tmp ) <= textInputArea.height ) {
+
+                if ( !isMultiLine || ( textInput.height( tmp ) <= textInputArea.height ) ) {
                     result = std::move( tmp );
                     charInsertPos = tempCharInsertPos;
                 }
