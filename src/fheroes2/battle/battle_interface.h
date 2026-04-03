@@ -128,7 +128,7 @@ namespace Battle
         bool isReflectedImage{ false };
     };
 
-    class OpponentSprite
+    class OpponentSprite final
     {
     public:
         OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
