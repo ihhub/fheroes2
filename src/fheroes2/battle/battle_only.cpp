@@ -24,7 +24,6 @@
 #include "battle_only.h"
 
 #include <cassert>
-#include <cstddef>
 #include <initializer_list>
 #include <string>
 #include <utility>
