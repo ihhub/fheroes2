@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <map>
-#include <optional>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -1273,11 +1272,96 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
+fheroes2::GameMode Game::startCampaignScenario( const int32_t difficulty, const bool allowToRestart, const std::optional<int32_t> scenarioBonusId )
+{
+    Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+    const int chosenCampaignID = campaignSaveData.getCampaignID();
+
+    const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
+
+    const Campaign::ScenarioInfoId & currentScenarioInfoId = campaignSaveData.getCurrentScenarioInfoId();
+
+    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+    const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
+
+    Maps::FileInfo mapInfo = scenario.loadMap();
+
+    // Update French language-specific characters to match CP1252 only for French assets when French language is selected.
+    if ( mapInfo.version != GameVersion::RESURRECTION && fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French
+         && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
+        fheroes2::fixFrenchCharactersForMP2Map( mapInfo.name );
+        fheroes2::fixFrenchCharactersForMP2Map( mapInfo.description );
+    }
+
+    Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
+
+    Settings & conf = Settings::Get();
+    conf.setCurrentMapInfo( mapInfo );
+
+    const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
+    assert( !scenarioBonusId || ( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() ) );
+
+    const Campaign::ScenarioBonusData scenarioBonus = [scenarioBonusId, &bonusChoices = std::as_const( bonusChoices )]() -> Campaign::ScenarioBonusData {
+        if ( !scenarioBonusId ) {
+            return {};
+        }
+
+        if ( scenarioBonusId < 0 || static_cast<size_t>( *scenarioBonusId ) >= bonusChoices.size() ) {
+            return {};
+        }
+
+        return bonusChoices[*scenarioBonusId];
+    }();
+
+    // Scenario bonus related to the starting faction has to be set before calling players.SetStartGame(). If the scenario bonus includes the starting army, then
+    // only the starting faction should still be set.
+    if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
+        SetScenarioBonus( currentScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
+    }
+
+    // Betrayal scenario eliminates all obtained awards.
+    if ( isBetrayalScenario( currentScenarioInfoId ) ) {
+        campaignSaveData.removeAllAwards();
+    }
+
+    // Scenario difficulty must be set before loading the map, because it is used during the map loading process.
+    campaignSaveData.setDifficulty( difficulty, campaignSaveData.isStarting() && !allowToRestart );
+
+    Players & players = conf.GetPlayers();
+    players.SetStartGame();
+
+    conf.SetGameType( Game::TYPE_CAMPAIGN );
+
+    const bool isSWCampaign = ( chosenCampaignID == Campaign::ROLAND_CAMPAIGN ) || ( chosenCampaignID == Campaign::ARCHIBALD_CAMPAIGN );
+
+    if ( !world.LoadMapMP2( mapInfo.filename, isSWCampaign ) ) {
+        fheroes2::showStandardTextMessage( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ),
+                                           Dialog::OK );
+
+        // TODO: find a way to restore world for the current game after a failure.
+        conf.setCurrentMapInfo( {} );
+        return fheroes2::GameMode::CANCEL;
+    }
+
+    // Fade-out screen before loading a scenario.
+    fheroes2::fadeOutDisplay();
+
+    // The rest of the scenario bonuses should be set after calling players.SetStartGame().
+    if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
+        SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
+    }
+
+    applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
+
+    campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
+
+    return fheroes2::GameMode::START_GAME;
+}
+
 fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     display.fill( 0 );
-    Settings & conf = Settings::Get();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -1594,76 +1678,12 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
-            Maps::FileInfo mapInfo = scenario.loadMap();
-
-            // Update French language-specific characters to match CP1252 only for French assets when French language is selected.
-            if ( mapInfo.version != GameVersion::RESURRECTION && fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::French
-                 && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::French ) {
-                fheroes2::fixFrenchCharactersForMP2Map( mapInfo.name );
-                fheroes2::fixFrenchCharactersForMP2Map( mapInfo.description );
+            const fheroes2::GameMode result = startCampaignScenario( currentDifficulty, allowToRestart, scenarioBonusId );
+            if ( result != fheroes2::GameMode::CANCEL ) {
+                return result;
             }
 
-            Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
-
-            conf.setCurrentMapInfo( mapInfo );
-
-            assert( !scenarioBonusId || ( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() ) );
-
-            const Campaign::ScenarioBonusData scenarioBonus = [scenarioBonusId, &bonusChoices = std::as_const( bonusChoices )]() -> Campaign::ScenarioBonusData {
-                if ( !scenarioBonusId ) {
-                    return {};
-                }
-
-                if ( scenarioBonusId < 0 || static_cast<size_t>( *scenarioBonusId ) >= bonusChoices.size() ) {
-                    return {};
-                }
-
-                return bonusChoices[*scenarioBonusId];
-            }();
-
-            // Scenario bonus related to the starting faction has to be set before calling players.SetStartGame(). If the scenario bonus includes the starting army, then
-            // only the starting faction should still be set.
-            if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
-                SetScenarioBonus( currentScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
-            }
-
-            // Betrayal scenario eliminates all obtained awards.
-            if ( isBetrayalScenario( currentScenarioInfoId ) ) {
-                campaignSaveData.removeAllAwards();
-            }
-
-            // Scenario difficulty must be set before loading the map, because it is used during the map loading process.
-            campaignSaveData.setDifficulty( currentDifficulty, campaignSaveData.isStarting() && !allowToRestart );
-
-            Players & players = conf.GetPlayers();
-            players.SetStartGame();
-
-            conf.SetGameType( Game::TYPE_CAMPAIGN );
-
-            const bool isSWCampaign = ( chosenCampaignID == Campaign::ROLAND_CAMPAIGN ) || ( chosenCampaignID == Campaign::ARCHIBALD_CAMPAIGN );
-
-            if ( !world.LoadMapMP2( mapInfo.filename, isSWCampaign ) ) {
-                fheroes2::showStandardTextMessage( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ),
-                                                   Dialog::OK );
-
-                // TODO: find a way to restore world for the current game after a failure.
-                conf.setCurrentMapInfo( {} );
-                continue;
-            }
-
-            // Fade-out screen before loading a scenario.
-            fheroes2::fadeOutDisplay();
-
-            // The rest of the scenario bonuses should be set after calling players.SetStartGame().
-            if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
-                SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
-            }
-
-            applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
-
-            campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
-
-            return fheroes2::GameMode::START_GAME;
+            continue;
         }
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VIEW_INTRO ) ) {
             AudioManager::ResetAudio();
