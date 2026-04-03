@@ -1125,7 +1125,7 @@ namespace Interface
         int32_t fastScrollRepeatCount = 0;
         const int32_t fastScrollStartThreshold = 2;
 
-        const std::vector<Game::DelayType> delayTypes = { Game::MAPS_DELAY };
+        const std::vector<Game::DelayType> delayTypes = { Game::DelayType::MAPS_DELAY };
 
         LocalEvent & le = LocalEvent::Get();
         Cursor & cursor = Cursor::Get();
@@ -1282,7 +1282,7 @@ namespace Interface
                     }
 
                     if ( scrollDirection != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
-                        if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
+                        if ( Game::validateAnimationDelay( Game::DelayType::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
                             ++fastScrollRepeatCount;
                         }
 
@@ -1468,7 +1468,7 @@ namespace Interface
             }
 
             // Scrolling the game area
-            if ( _gameArea.NeedScroll() && Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
+            if ( _gameArea.NeedScroll() && Game::validateAnimationDelay( Game::DelayType::SCROLL_DELAY ) ) {
                 assert( !_gameArea.isDragScroll() );
 
                 if ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
@@ -1487,7 +1487,7 @@ namespace Interface
             assert( res == fheroes2::GameMode::CANCEL );
 
             // Map objects animation
-            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                 if ( conf.isEditorAnimationEnabled() ) {
                     Game::updateAdventureMapAnimationIndex();
                 }
