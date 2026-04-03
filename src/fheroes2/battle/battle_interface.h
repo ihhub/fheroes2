@@ -269,12 +269,12 @@ namespace Battle
         static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t currentUnitColor, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
-        PlayerColor _opponentColor{ PlayerColor::NONE };
         fheroes2::Rect _renderingRoi;
         fheroes2::Rect _battleRoi;
         std::vector<UnitPos> _rects;
 
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
+        PlayerColor _opponentColor{ PlayerColor::NONE };
         bool _isInsideBattleField{ false };
     };
 
@@ -314,7 +314,7 @@ namespace Battle
         bool _needDelay{ true };
     };
 
-    class Interface
+    class Interface final
     {
     public:
         Interface( Arena & battleArena, const int32_t tileIndex );
@@ -500,8 +500,8 @@ namespace Battle
 
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
-        bool humanturn_redraw{ true };
-        uint32_t animation_flags_frame{ 0 };
+        bool _needRedraw{ true };
+        uint32_t _flagAnimationFrameIndex{ 0 };
         int catapult_frame{ 0 };
 
         PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
