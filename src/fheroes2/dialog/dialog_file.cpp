@@ -21,8 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <vector>
+
 #include "campaign_data.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game.h"
