@@ -47,6 +47,7 @@
 #include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
+#include "battle_grave.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "bin_info.h"
@@ -6036,6 +6037,13 @@ void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
 void Battle::Interface::_redrawActionResurrectSpell( Unit & target, const Spell & spell )
 {
     if ( !target.isValid() ) {
+        // TODO: the below logic doesn't work properly for cases when a 2-hex unit is being resurrected in relation to another 2-hex unit.
+        //       This will require us to redo rendering sequence as we render from left to right and the right hex always has higher priority
+        //       over left hex.
+
+        // Move the current monster to the top of a stack in graveyard if it exists there.
+        Battle::Arena::GetGraveyard()->moveToLastIfPresent( &target );
+
         // Restore direction of the creature, since it could be killed when it was reflected.
         target.UpdateDirection();
 

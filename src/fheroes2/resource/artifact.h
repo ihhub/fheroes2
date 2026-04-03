@@ -341,6 +341,9 @@ public:
 
     std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
+    // Useful only for AI heroes.
+    void sortFromWorstToBest();
+
     std::string String() const;
 };
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -208,7 +208,7 @@ namespace
         hero.Scout( dst );
         hero.Move2Dest( dst );
         hero.SpellCasted( Spell::DIMENSIONDOOR );
-        hero.GetPath().Reset();
+        hero.calculatePath( -1 );
 
         // Clear previous hero position on radar.
         I.getRadar().SetRenderArea( fromRoi );

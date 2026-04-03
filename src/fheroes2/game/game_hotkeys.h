@@ -86,6 +86,7 @@ namespace Game
         // TODO: remove these hotkeys when the time is right.
         EDITOR_RANDOM_MAP_REGENERATE,
         EDITOR_RANDOM_MAP_RECONFIGURE,
+        EDITOR_OUTPUT_ALL_TEXT,
 #endif
 
         CAMPAIGN_ROLAND,

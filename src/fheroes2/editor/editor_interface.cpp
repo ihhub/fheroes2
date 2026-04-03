@@ -91,6 +91,12 @@
 #include "world.h"
 #include "world_object_uid.h"
 
+#if defined( WITH_DEBUG )
+#include <sstream>
+
+#include "logging.h"
+#endif
+
 namespace fheroes2
 {
     class Image;
@@ -274,7 +280,7 @@ namespace
 
     bool isActionObjectAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
-        // Active action object parts must be placed on a tile without any other objects.
+        // Active action object parts must be placed on a tile without any other action object parts.
         // Only ground parts should be checked for this condition.
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
@@ -290,13 +296,37 @@ namespace
             const auto & tile = world.getTile( pos.x, pos.y );
 
             if ( MP2::isOffGameActionObject( tile.getMainObjectType() ) ) {
-                // An action object already exist. We cannot allow to put anything on top of it.
+                // An action object part already exist. We cannot allow to put anything on top of it.
                 return false;
             }
 
-            if ( MP2::isOffGameActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
-                // We are trying to place an action object on a tile that has some other objects.
-                return false;
+            if ( MP2::isOffGameActionObject( objectPart.objectType ) ) {
+                // We cannot allow removable objects such as heroes or artifacts
+                // to be placed on top of other objects because they affect passability once removed.
+                // However, this is not true for non-removable action objects as they always stay put.
+                switch ( objectPart.objectType ) {
+                case MP2::OBJ_ARTIFACT:
+                case MP2::OBJ_BARREL:
+                case MP2::OBJ_BARRIER:
+                case MP2::OBJ_BOTTLE:
+                case MP2::OBJ_CAMPFIRE:
+                case MP2::OBJ_FLOTSAM:
+                case MP2::OBJ_HERO:
+                case MP2::OBJ_GENIE_LAMP:
+                case MP2::OBJ_JAIL:
+                case MP2::OBJ_MONSTER:
+                case MP2::OBJ_RESOURCE:
+                case MP2::OBJ_SEA_CHEST:
+                case MP2::OBJ_SHIPWRECK_SURVIVOR:
+                case MP2::OBJ_TREASURE_CHEST:
+                    if ( !Maps::isClearGround( tile ) ) {
+                        // We are trying to place a removable action object on a tile that has some other objects.
+                        return false;
+                    }
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
@@ -834,6 +864,119 @@ namespace
 
         return allowedMonsters;
     }
+
+#if defined( WITH_DEBUG )
+    int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
+    {
+        for ( size_t i = 0; i < mapFormat.tiles.size(); ++i ) {
+            for ( const auto & objectInfo : mapFormat.tiles[i].objects ) {
+                if ( objectInfo.id == uid && objectInfo.group == group ) {
+                    return static_cast<int32_t>( i );
+                }
+            }
+        }
+
+        // It could be a leftover object kept by the previous version of the Editor.
+        return -1;
+    }
+
+    std::string getAllMapTexts( const Maps::Map_Format::MapFormat & mapFormat )
+    {
+        std::ostringstream os;
+
+        os << "******* Map texts *******" << std::endl;
+
+        os << "-------   Towns   -------" << std::endl;
+        for ( const auto & [uid, castle] : mapFormat.castleMetadata ) {
+            if ( !castle.customName.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_TOWNS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << castle.customName << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << castle.customName << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Heroes   -------" << std::endl;
+        for ( const auto & [uid, hero] : mapFormat.heroMetadata ) {
+            if ( !hero.customName.empty() ) {
+                int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_HEROES );
+                if ( index < 0 ) {
+                    // It could be a Jail object.
+                    index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                }
+
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << hero.customName << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << hero.customName << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Sphinxes   -------" << std::endl;
+        for ( const auto & [uid, sphinx] : mapFormat.sphinxMetadata ) {
+            if ( !sphinx.riddle.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << sphinx.riddle << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
+                }
+                os << "  Answers:" << std::endl;
+                for ( const auto & answer : sphinx.answers ) {
+                    os << "    " << answer << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Events   -------" << std::endl;
+        for ( const auto & [uid, event] : mapFormat.adventureMapEventMetadata ) {
+            if ( !event.message.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << event.message << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << event.message << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Signs   -------" << std::endl;
+        for ( const auto & [uid, sign] : mapFormat.signMetadata ) {
+            if ( !sign.message.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << sign.message << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sign.message << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Daily events   -------" << std::endl;
+        for ( const auto & event : mapFormat.dailyEvents ) {
+            if ( !event.message.empty() ) {
+                os << "Day " << event.firstOccurrenceDay << ": " << event.message << std::endl;
+            }
+        }
+
+        os << "-------   Rumors  -------" << std::endl;
+        for ( const auto & rumor : mapFormat.rumors ) {
+            os << rumor << std::endl;
+        }
+
+        os << "******* End *******" << std::endl;
+
+        return os.str();
+    }
+#endif
 }
 
 namespace Interface
@@ -1049,6 +1192,9 @@ namespace Interface
                             _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
                         }
                     }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_OUTPUT_ALL_TEXT ) ) {
+                    VERBOSE_LOG( getAllMapTexts( _mapFormat ) )
                 }
 #endif
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {

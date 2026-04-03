@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ENDRE"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "L"
@@ -519,11 +522,13 @@ msgstr ""
 "Vollgraven reduserer forsvarsevnen til krigere som befinner seg i den med "
 "%{count} og halverer skrittene deres."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
-msgid "Speed"
-msgstr "Hurtighet"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Underleggelse"
 
 msgid "Interface"
 msgstr "Grensesnitt"
@@ -3013,6 +3018,9 @@ msgstr "Skade"
 msgid "HP"
 msgstr "Liv"
 
+msgid "Speed"
+msgstr "Hurtighet"
+
 msgid "Growth"
 msgstr "Vekst"
 
@@ -3322,6 +3330,13 @@ msgid ""
 msgstr ""
 "Taps-\n"
 "vilkår"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
 #, fuzzy
 msgid "Map Description"
@@ -5200,18 +5215,12 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Kartbeskrivelse"
-
-msgid "About"
-msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5890,6 +5899,10 @@ msgstr "Nytt automatisk kart"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Nytt automatisk kart"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Panorer til venstre"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
@@ -8744,13 +8757,13 @@ msgstr "Kun helter kan bruke denne trolldommen."
 msgid "This hero is not able to cast adventure spells."
 msgstr "Denne helten er ikke i stand til å bruke kartmagi."
 
+msgid "This spell cannot be cast on a boat."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Din helt er for sliten til å bruke denne trolldommen i dag. Prøv igjen i "
 "morgen."
-
-msgid "This spell cannot be cast on a boat."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "Denne trolldommen kan kun bli brukt i nærheten av sjø."
