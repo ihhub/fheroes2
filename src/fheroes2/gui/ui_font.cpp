@@ -4290,7 +4290,7 @@ namespace
             // [242] COMBINING DOT BELOW.
             // The most appropriate solution should be to put this symbol centered below a previous symbol.
             // However, this would require logical changes in rendering which we want to avoid.
-            font[242].setPosition( font[242].x() - font[242].width(), font[242].y() + 4 );
+            font[242].setPosition( font[242].x() - font[242].width(), font[242].y() + 3 );
 
             // o with acute accent.
             font[243].resize( font[111].width(), font[111].height() + 3 );
