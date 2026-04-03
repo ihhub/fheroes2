@@ -48,7 +48,7 @@ namespace
             return false;
         }
 
-        Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
         const int chosenCampaignID = campaignSaveData.getCampaignID();
         const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
         const Campaign::ScenarioInfoId & currentScenarioInfoId = campaignSaveData.getCurrentScenarioInfoId();
@@ -119,15 +119,14 @@ namespace
                         continue;
                     }
 
-                    Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+                    const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
                     result = Game::startCampaignScenario( campaignSaveData.getDifficulty(), true, campaignSaveData.getCurrentScenarioBonusId() );
                     break;
                 }
-                else {
-                    // TODO: restart the campaign here.
-                    fheroes2::showStandardTextMessage( _( "Restart Game" ), "This option is under construction.", Dialog::OK );
-                    result = fheroes2::GameMode::CANCEL;
-                }
+
+                // TODO: restart the campaign here.
+                fheroes2::showStandardTextMessage( _( "Restart Game" ), "This option is under construction.", Dialog::OK );
+                result = fheroes2::GameMode::CANCEL;
                 break;
             }
             else if ( le.MouseClickLeft( saveGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
