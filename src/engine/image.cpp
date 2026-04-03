@@ -737,15 +737,26 @@ namespace fheroes2
         }
 
         const int32_t outWidth = out.width();
-        const int32_t inWidth = in.width();
-        const int32_t inHeight = in.height();
+        int32_t inWidth = in.width();
+        if ( outWidth < ( inWidth + outPos.x + std::max<int32_t>( shadowOffset.x, 0 ) ) ) {
+            inWidth = outWidth - ( outPos.x + std::max<int32_t>( shadowOffset.x, 0 ) );
+        }
+
+        int32_t inHeight = in.height();
+        if ( out.height() < ( inHeight + outPos.y + std::max<int32_t>( shadowOffset.y, 0 ) ) ) {
+            inHeight = out.height() - ( outPos.y + std::max<int32_t>( shadowOffset.y, 0 ) );
+        }
+
+        if ( inWidth <= 1 || inHeight <= 1 ) {
+            return;
+        }
+
         const int32_t shadowOffsetX = std::min<int32_t>( shadowOffset.x, 0 );
         const int32_t shadowOffsetY = std::min<int32_t>( shadowOffset.y, 0 );
         const int32_t outStartOffset = outPos.x + shadowOffsetX + in.x() + ( outPos.y + shadowOffsetY + in.y() ) * outWidth;
 
         // The shadow should not be outside of 'out' image.
-        assert( outStartOffset >= 0 && outWidth >= ( inWidth + outPos.x + std::max<int32_t>( shadowOffset.x, 0 ) )
-                && out.height() >= ( inHeight + outPos.y + std::max<int32_t>( shadowOffset.y, 0 ) ) );
+        assert( outStartOffset >= 0 );
 
         const int32_t absOffsetX = std::abs( shadowOffset.x );
         const int32_t absOffsetY = std::abs( shadowOffset.y );
