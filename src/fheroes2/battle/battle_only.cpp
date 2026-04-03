@@ -77,8 +77,48 @@ namespace
 
     const Troop defaultMonster{ Monster::PEASANT, 100 };
 
-    const fheroes2::Rect defendingHeroTypeCheckboxArea{ 500, 425, 19, 19 };
-    constexpr int32_t defendingHeroTypeNameMaxWidth{ 92 };
+    const fheroes2::Rect primarySkillTextRoi{ 262, 61, 115, 109 };
+    const fheroes2::Rect titleTextRoi{ 72, 26, 496, 19 };
+
+    constexpr fheroes2::Rect defendingHeroTypeCheckboxArea{ 616, 422, 19, 19 };
+    constexpr int32_t defendingHeroTypeNameMaxWidth{ 342 };
+
+    const std::array<fheroes2::Rect, 2> heroPortraitArea{ fheroes2::Rect{ 88, 66, 111, 105 }, fheroes2::Rect{ 440, 66, 111, 105 } };
+    const std::array<fheroes2::Rect, 2> heroPortraitInternalArea{ fheroes2::Rect{ 93, 72, 101, 93 }, fheroes2::Rect{ 445, 72, 101, 93 } };
+
+    const fheroes2::Point shadowOffset{ -5, 5 };
+
+    void prepareBackround( fheroes2::Image & output, const fheroes2::Point offset, const bool isEvilInterface )
+    {
+        const auto & heroMeetingImage = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+
+        // Render hero portrait area.
+        for ( const fheroes2::Rect & area : heroPortraitArea ) {
+            fheroes2::Blit( heroMeetingImage, area.x, area.y, output, area.x + offset.x, area.y + offset.y, area.width, area.height );
+        }
+
+        // Render dialog's title.
+        fheroes2::Blit( heroMeetingImage, titleTextRoi.x, titleTextRoi.y, output, titleTextRoi.x + offset.x, titleTextRoi.y + offset.y, titleTextRoi.width,
+                        titleTextRoi.height );
+        if ( isEvilInterface ) {
+            fheroes2::ApplyPalette( output, titleTextRoi.x + offset.x, titleTextRoi.y + offset.y, output, titleTextRoi.x + offset.x, titleTextRoi.y + offset.y,
+                                    titleTextRoi.width, titleTextRoi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+
+        // Shadow generation requires an input image. We know that the image has no transparent pixels.
+        // So, instead of cropping an image we just create 'fake' black images because it's faster to do.
+        fheroes2::Sprite tempImage( heroPortraitArea[0].width, heroPortraitArea[0].height );
+        tempImage.fill( 0 );
+
+        for ( const fheroes2::Rect & area : heroPortraitArea ) {
+            fheroes2::addGradientShadow( tempImage, output, { area.x + offset.x, area.y + offset.y }, shadowOffset );
+        }
+
+        tempImage.resize( titleTextRoi.width, titleTextRoi.height );
+        tempImage.fill( 0 );
+
+        fheroes2::addGradientShadow( tempImage, output, { titleTextRoi.x + offset.x, titleTextRoi.y + offset.y }, shadowOffset );
+    }
 
     int32_t getMaxDefendingHeroAreaWidth()
     {
@@ -89,22 +129,24 @@ namespace
         return cell.width() + 5 + text.width();
     }
 
-    void renderDefendingHeroTypeUI( const int heroType, const fheroes2::Point windowOffset )
+    void renderDefendingHeroTypeUI( const int heroType, const fheroes2::Point offset, const bool isEvilInterface, fheroes2::Image & output )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
 
-        const fheroes2::Point offset{ windowOffset.x + defendingHeroTypeCheckboxArea.x, windowOffset.y + defendingHeroTypeCheckboxArea.y };
-
-        fheroes2::Blit( cell, display, offset.x, offset.y );
+        fheroes2::Blit( cell, output, offset.x, offset.y );
         if ( ( heroType & CONTROL_HUMAN ) == CONTROL_HUMAN ) {
             const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
-            fheroes2::Blit( mark, display, offset.x + mark.x(), offset.y + mark.y() );
+            fheroes2::Blit( mark, output, offset.x + mark.x(), offset.y + mark.y() );
+        }
+
+        if ( isEvilInterface ) {
+            fheroes2::ApplyPalette( output, offset.x, offset.y, output, offset.x, offset.y, cell.width(), cell.height(),
+                                    PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
         }
 
         fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
         text.fitToOneRow( defendingHeroTypeNameMaxWidth );
-        text.draw( offset.x + cell.width() + 5, offset.y + 5, display );
+        text.draw( offset.x + cell.width() + 5, offset.y + 5, output );
     }
 
     void renderTerrain( const fheroes2::Point offset, const int32_t terrainType, fheroes2::Image & output )
@@ -219,19 +261,22 @@ Battle::Only::Only()
     armyInfo[1].player.SetColor( playerColor[1] );
 }
 
-bool Battle::Only::setup( const bool allowBackup, bool & reset )
+bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
 {
-    reset = false;
+    resetBattleSetup = false;
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, true, display );
 
-    const fheroes2::Point cur_pt( frameborder.activeArea().x, frameborder.activeArea().y );
+    const fheroes2::Point windowOffset( frameborder.activeArea().x, frameborder.activeArea().y );
 
-    armyInfo[0].portraitRoi = { cur_pt.x + 93, cur_pt.y + 72, 101, 93 };
-    armyInfo[1].portraitRoi = { cur_pt.x + 445, cur_pt.y + 72, 101, 93 };
+    for ( size_t i = 0; i < armyInfo.size(); ++i ) {
+        armyInfo[i].portraitRoi = { windowOffset.x + heroPortraitInternalArea[i].x, windowOffset.y + heroPortraitInternalArea[i].y, heroPortraitInternalArea[i].width,
+                                    heroPortraitInternalArea[i].height };
+    }
 
     armyInfo[0].player.SetControl( armyInfo[0].controlType );
     armyInfo[1].player.SetControl( armyInfo[1].controlType );
@@ -261,60 +306,58 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         armyInfo[0].isHeroPresent = true;
     }
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-    fheroes2::Copy( background, 0, 0, display, cur_pt.x, cur_pt.y, background.width(), background.height() );
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    prepareBackround( display, windowOffset, isEvilInterface );
 
-    redrawOpponents( cur_pt );
-    redrawOpponentsStats( cur_pt );
+    fheroes2::ImageRestorer primaryTextRoiRestorer( display, windowOffset.x + primarySkillTextRoi.x, windowOffset.y + primarySkillTextRoi.y, primarySkillTextRoi.width,
+                                                    primarySkillTextRoi.height );
+    fheroes2::ImageRestorer titleRoiRestorer( display, windowOffset.x + titleTextRoi.x, windowOffset.y + titleTextRoi.y, titleTextRoi.width, titleTextRoi.height );
+
+    redrawOpponents( windowOffset );
+    redrawOpponentsStats( windowOffset );
 
     for ( auto & info : armyInfo ) {
         if ( info.hero != nullptr ) {
             info.hero->GetSecondarySkills().FillMax( Skill::Secondary() );
 
-            updateHero( info, cur_pt );
+            updateHero( info, windowOffset );
         }
         else {
             info.ui.army = std::make_unique<ArmyBar>( &info.monster, true, false, true );
             info.ui.army->setTableSize( { 5, 1 } );
-            info.ui.army->setRenderingOffset( { cur_pt.x + armyOffsetX[info.armyId], cur_pt.y + 267 } );
+            info.ui.army->setRenderingOffset( { windowOffset.x + armyOffsetX[info.armyId], windowOffset.y + 267 } );
             info.ui.army->setInBetweenItemsOffset( { 2, 0 } );
         }
+
+        info.ui.redraw( display );
     }
 
-    for ( size_t i = 0; i < armyInfo.size(); ++i ) {
-        armyInfo[i].ui.redraw( display, i, cur_pt );
-    }
+    const int32_t heroTypeAreaWidth = getMaxDefendingHeroAreaWidth();
+    const fheroes2::Rect defendingHeroTypeRoi{ defendingHeroTypeCheckboxArea.x + windowOffset.x - heroTypeAreaWidth, defendingHeroTypeCheckboxArea.y + windowOffset.y,
+                                               heroTypeAreaWidth, defendingHeroTypeCheckboxArea.height };
 
     if ( armyInfo[1].hero != nullptr ) {
-        renderDefendingHeroTypeUI( armyInfo[1].player.GetControl(), cur_pt );
+        renderDefendingHeroTypeUI( armyInfo[1].player.GetControl(), defendingHeroTypeRoi.getPosition(), isEvilInterface, display );
     }
 
-    const fheroes2::Rect defendingHeroTypeRoi{ defendingHeroTypeCheckboxArea.x + cur_pt.x, defendingHeroTypeCheckboxArea.y + cur_pt.y, getMaxDefendingHeroAreaWidth(),
-                                               defendingHeroTypeCheckboxArea.height };
+    const int32_t buttonResetIcn = ( isEvilInterface ? ICN::BUTTON_RESET_EVIL : ICN::BUTTON_RESET_GOOD );
+    const int32_t buttonStartIcn = ( isEvilInterface ? ICN::BUTTON_START_EVIL : ICN::BUTTON_START_GOOD );
+    const int32_t buttonExitIcn = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
 
-    // hide the swap army/artifact arrows
-    const fheroes2::Sprite & stoneBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
-    fheroes2::Copy( stoneBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
-    fheroes2::Copy( stoneBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
+    constexpr int32_t buttonYOffset{ 446 };
+    fheroes2::Button buttonReset( windowOffset.x + 30, windowOffset.y + buttonYOffset, buttonResetIcn, 0, 1 );
+    fheroes2::Button buttonStart( windowOffset.x + 178, windowOffset.y + buttonYOffset, buttonStartIcn, 0, 1 );
+    fheroes2::Button buttonExit( windowOffset.x + 366, windowOffset.y + buttonYOffset, buttonExitIcn, 0, 1 );
 
-    // hide the shadow from the original EXIT button
-    const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
-    fheroes2::Copy( buttonOverride, 0, 0, display, cur_pt.x + 276, cur_pt.y + 428, 84, 32 );
-
-    fheroes2::Button buttonReset( cur_pt.x + 30, cur_pt.y + 428, ICN::BUTTON_RESET_GOOD, 0, 1 );
-    fheroes2::Button buttonStart( cur_pt.x + 178, cur_pt.y + 428, ICN::BUTTON_START_GOOD, 0, 1 );
-    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_SMALL_EXIT_GOOD, 0, 1 );
-
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ), display, buttonReset.area().getPosition(), { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ), display, buttonStart.area().getPosition(), { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonResetIcn, 0 ), display, buttonReset.area().getPosition(), shadowOffset );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonStartIcn, 0 ), display, buttonStart.area().getPosition(), shadowOffset );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonExitIcn, 0 ), display, buttonExit.area().getPosition(), shadowOffset );
 
     buttonStart.draw();
     buttonExit.draw();
     buttonReset.draw();
 
-    const fheroes2::Rect terrainArea{ cur_pt.x + 306, cur_pt.y + 272, terrainIconSize.width, terrainIconSize.height };
+    const fheroes2::Rect terrainArea{ windowOffset.x + 306, windowOffset.y + 272, terrainIconSize.width, terrainIconSize.height };
     renderTerrain( terrainArea.getPosition(), _terrainType, display );
 
     display.render();
@@ -346,7 +389,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             break;
         }
         if ( le.MouseClickLeft( buttonReset.area() ) ) {
-            reset = true;
+            resetBattleSetup = true;
             result = true;
 
             break;
@@ -404,13 +447,20 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                         first.hero->GetSecondarySkills().FillMax( Skill::Secondary() );
                     }
 
-                    updateHero( first, cur_pt );
+                    updateHero( first, windowOffset );
                 }
 
-                redrawOpponents( cur_pt );
+                titleRoiRestorer.restore();
+                redrawOpponents( windowOffset );
 
                 first.needRedraw = true;
                 needRedrawOpponentsStats = true;
+
+                // User can not click two hero portraits at the same time so we can break the loop.
+                break;
+            }
+            else if ( le.isMouseRightButtonPressedInArea( first.portraitRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Hero" ), _( "Click to select a hero." ), Dialog::ZERO );
 
                 // User can not click two hero portraits at the same time so we can break the loop.
                 break;
@@ -515,14 +565,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
 
         if ( needRedrawOpponentsStats ) {
-            redrawOpponentsStats( cur_pt );
+            primaryTextRoiRestorer.restore();
+            redrawOpponentsStats( windowOffset );
 
             needRender = true;
         }
 
         for ( const int32_t i : { 0, 1 } ) {
             if ( armyInfo[i].needRedraw ) {
-                armyInfo[i].ui.redraw( display, i, cur_pt );
+                armyInfo[i].ui.redraw( display );
                 armyInfo[i].needRedraw = false;
 
                 needRender = true;
@@ -531,7 +582,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
         if ( needRedrawControlInfo ) {
             assert( armyInfo[1].hero != nullptr );
-            renderDefendingHeroTypeUI( armyInfo[1].player.GetControl(), cur_pt );
+            renderDefendingHeroTypeUI( armyInfo[1].player.GetControl(), defendingHeroTypeRoi.getPosition(), isEvilInterface, display );
 
             needRender = true;
         }
@@ -562,9 +613,7 @@ void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Rect textRoi( top.x + 89, top.y + 27, 462, 17 );
-    fheroes2::Copy( background, 89, 27, display, textRoi );
 
     std::string message = _( "%{race1} %{name1} vs %{race2} %{name2}" );
 
@@ -606,10 +655,6 @@ void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
 
 void Battle::Only::redrawOpponentsStats( const fheroes2::Point & top ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-
-    fheroes2::Copy( background, 262, 61, display, top.x + 262, top.y + 61, 115, 109 );
     fheroes2::RedrawPrimarySkillInfo( top, armyInfo[0].ui.primarySkill.get(), armyInfo[1].ui.primarySkill.get() );
 }
 
@@ -727,7 +772,7 @@ int32_t Battle::Only::terrainType() const
     return _terrainType;
 }
 
-void Battle::Only::ArmyUI::redraw( fheroes2::Image & output, const size_t armyId, const fheroes2::Point offset ) const
+void Battle::Only::ArmyUI::redraw( fheroes2::Image & output ) const
 {
     if ( morale ) {
         morale->Redraw();
@@ -740,25 +785,13 @@ void Battle::Only::ArmyUI::redraw( fheroes2::Image & output, const size_t armyId
     if ( primarySkill ) {
         primarySkill->Redraw( output );
     }
-    else {
-        const fheroes2::Sprite & clearBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
-        copyImage( clearBackground, output, primarySkillArea[armyId], offset );
-    }
 
     if ( secondarySkill ) {
         secondarySkill->Redraw( output );
     }
-    else {
-        const fheroes2::Sprite & clearBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
-        copyImage( clearBackground, output, secondarySkillArea[armyId], offset );
-    }
 
     if ( artifact ) {
         artifact->Redraw( output );
-    }
-    else {
-        const fheroes2::Sprite & clearBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
-        copyImage( clearBackground, output, artifactArea[armyId], offset );
     }
 
     if ( army ) {
@@ -785,5 +818,5 @@ void Battle::Only::ArmyInfo::reset()
     hero = nullptr;
 
     monster.Reset();
-    monster.GetTroop( 0 )->Set( Monster::PEASANT, 100 );
+    monster.GetTroop( 0 )->Set( defaultMonster );
 }

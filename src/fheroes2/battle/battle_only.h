@@ -54,7 +54,7 @@ namespace Battle
         Only & operator=( const Only & ) = delete;
 
         // Returns true if setup is successful.
-        bool setup( const bool allowBackup, bool & reset );
+        bool setup( const bool allowBackup, bool & resetBattleSetup );
 
         int32_t terrainType() const;
 
@@ -72,7 +72,7 @@ namespace Battle
             std::unique_ptr<ArtifactsBar> artifact;
             std::unique_ptr<ArmyBar> army;
 
-            void redraw( fheroes2::Image & output, const size_t armyId, const fheroes2::Point offset ) const;
+            void redraw( fheroes2::Image & output ) const;
 
             // Resets the state to empty and removes the morale & luck indicators from the screen
             void resetForNewHero();
