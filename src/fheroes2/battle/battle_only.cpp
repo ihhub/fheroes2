@@ -459,7 +459,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
                 // User can not click two hero portraits at the same time so we can break the loop.
                 break;
             }
-            else if ( le.isMouseRightButtonPressedInArea( first.portraitRoi ) ) {
+
+            if ( le.isMouseRightButtonPressedInArea( first.portraitRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hero" ), _( "Click to select a hero." ), Dialog::ZERO );
 
                 // User can not click two hero portraits at the same time so we can break the loop.
