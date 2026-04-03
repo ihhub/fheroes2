@@ -173,11 +173,6 @@ namespace
         }
     }
 
-    void copyImage( const fheroes2::Image & input, fheroes2::Image & output, const fheroes2::Rect area, const fheroes2::Point offset )
-    {
-        fheroes2::Copy( input, area.x, area.y, output, area.x + offset.x, area.y + offset.y, area.width, area.height );
-    }
-
     constexpr int32_t getNextTerrain( const int32_t terrainType )
     {
         switch ( terrainType ) {
