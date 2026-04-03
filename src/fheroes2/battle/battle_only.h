@@ -45,26 +45,6 @@ namespace fheroes2
 
 namespace Battle
 {
-    struct ControlInfo final
-    {
-        ControlInfo( const fheroes2::Point & pt, const int ctrl )
-            : result( ctrl )
-            , humanPlayerRoi( pt.x, pt.y, 24, 24 )
-            , computerPlayerRoi( pt.x + 75, pt.y, 24, 24 )
-        {
-            // Do nothing.
-        }
-
-        ControlInfo( const ControlInfo & ) = delete;
-
-        ControlInfo & operator=( const ControlInfo & ) = delete;
-
-        int result{ 0 };
-
-        const fheroes2::Rect humanPlayerRoi;
-        const fheroes2::Rect computerPlayerRoi;
-    };
-
     class Only
     {
     public:
@@ -126,8 +106,6 @@ namespace Battle
         };
 
         std::array<ArmyInfo, 2> armyInfo;
-
-        std::unique_ptr<ControlInfo> attackedArmyControlInfo;
 
         bool _backupCompleted{ false };
 

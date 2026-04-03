@@ -77,26 +77,34 @@ namespace
 
     const Troop defaultMonster{ Monster::PEASANT, 100 };
 
-    void renderControlInfo( const Battle::ControlInfo & info )
+    const fheroes2::Rect defendingHeroTypeCheckboxArea{ 500, 425, 19, 19 };
+    constexpr int32_t defendingHeroTypeNameMaxWidth{ 92 };
+
+    int32_t getMaxDefendingHeroAreaWidth()
+    {
+        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
+        text.fitToOneRow( defendingHeroTypeNameMaxWidth );
+
+        return cell.width() + 5 + text.width();
+    }
+
+    void renderDefendingHeroTypeUI( const int heroType, const fheroes2::Point windowOffset )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
-        const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
+        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
 
-        fheroes2::Blit( cell, display, info.humanPlayerRoi.x, info.humanPlayerRoi.y );
-        if ( info.result & CONTROL_HUMAN ) {
-            fheroes2::Blit( mark, display, info.humanPlayerRoi.x + mark.x(), info.humanPlayerRoi.y + mark.y() );
+        const fheroes2::Point offset{ windowOffset.x + defendingHeroTypeCheckboxArea.x, windowOffset.y + defendingHeroTypeCheckboxArea.y };
+
+        fheroes2::Blit( cell, display, offset.x, offset.y );
+        if ( ( heroType & CONTROL_HUMAN ) == CONTROL_HUMAN ) {
+            const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+            fheroes2::Blit( mark, display, offset.x + mark.x(), offset.y + mark.y() );
         }
 
         fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
-        text.draw( info.humanPlayerRoi.x + cell.width() + 5, info.humanPlayerRoi.y + 5, display );
-
-        fheroes2::Blit( cell, display, info.computerPlayerRoi.x, info.computerPlayerRoi.y );
-        if ( info.result & CONTROL_AI ) {
-            fheroes2::Blit( mark, display, info.computerPlayerRoi.x + mark.x(), info.computerPlayerRoi.y + mark.y() );
-        }
-        text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
-        text.draw( info.computerPlayerRoi.x + cell.width() + 5, info.computerPlayerRoi.y + 5, display );
+        text.fitToOneRow( defendingHeroTypeNameMaxWidth );
+        text.draw( offset.x + cell.width() + 5, offset.y + 5, display );
     }
 
     void renderTerrain( const fheroes2::Point offset, const int32_t terrainType, fheroes2::Image & output )
@@ -274,17 +282,16 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
     }
 
-    if ( armyInfo[1].hero != nullptr ) {
-        attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
-    }
-
     for ( size_t i = 0; i < armyInfo.size(); ++i ) {
         armyInfo[i].ui.redraw( display, i, cur_pt );
     }
 
-    if ( attackedArmyControlInfo ) {
-        renderControlInfo( *attackedArmyControlInfo );
+    if ( armyInfo[1].hero != nullptr ) {
+        renderDefendingHeroTypeUI( armyInfo[1].player.GetControl(), cur_pt );
     }
+
+    const fheroes2::Rect defendingHeroTypeRoi{ defendingHeroTypeCheckboxArea.x + cur_pt.x, defendingHeroTypeCheckboxArea.y + cur_pt.y, getMaxDefendingHeroAreaWidth(),
+                                               defendingHeroTypeCheckboxArea.height };
 
     // hide the swap army/artifact arrows
     const fheroes2::Sprite & stoneBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
@@ -313,6 +320,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     display.render();
 
     bool result = false;
+
+    bool renderAttackingHeroType{ false };
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
@@ -408,9 +417,9 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        if ( attackedArmyControlInfo == nullptr && armyInfo[1].hero != nullptr ) {
-            attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
+        if ( !renderAttackingHeroType && armyInfo[1].hero != nullptr ) {
             needRedrawControlInfo = true;
+            renderAttackingHeroType = true;
         }
 
         for ( const auto & [firstId, secondId] : { std::pair<int32_t, int32_t>{ 0, 1 }, std::pair<int32_t, int32_t>{ 1, 0 } } ) {
@@ -479,26 +488,19 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        if ( attackedArmyControlInfo ) {
-            assert( armyInfo[1].hero );
-
-            if ( le.MouseClickLeft( attackedArmyControlInfo->humanPlayerRoi ) && armyInfo[1].player.isControlAI() ) {
-                attackedArmyControlInfo->result = CONTROL_HUMAN;
-                armyInfo[1].player.SetControl( CONTROL_HUMAN );
-
-                needRedrawControlInfo = true;
-            }
-            else if ( le.MouseClickLeft( attackedArmyControlInfo->computerPlayerRoi ) && armyInfo[1].player.isControlHuman() ) {
-                attackedArmyControlInfo->result = CONTROL_AI;
-                armyInfo[1].player.SetControl( CONTROL_AI );
+        if ( armyInfo[1].hero != nullptr ) {
+            if ( le.MouseClickLeft( defendingHeroTypeRoi ) ) {
+                if ( armyInfo[1].player.isControlAI() ) {
+                    armyInfo[1].player.SetControl( CONTROL_HUMAN );
+                }
+                else {
+                    armyInfo[1].player.SetControl( CONTROL_AI );
+                }
 
                 needRedrawControlInfo = true;
             }
-            else if ( le.isMouseRightButtonPressedInArea( attackedArmyControlInfo->humanPlayerRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Human" ), _( "Click to set this hero to be human-controlled." ), 0 );
-            }
-            else if ( le.isMouseRightButtonPressedInArea( attackedArmyControlInfo->computerPlayerRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "AI" ), _( "Click to set this hero to be AI-controlled." ), 0 );
+            else if ( le.isMouseRightButtonPressedInArea( defendingHeroTypeRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Human" ), _( "If this checkbox is checked, the defending hero is going be human-controlled." ), 0 );
             }
         }
 
@@ -528,8 +530,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
 
         if ( needRedrawControlInfo ) {
-            assert( attackedArmyControlInfo != nullptr );
-            renderControlInfo( *attackedArmyControlInfo );
+            assert( armyInfo[1].hero != nullptr );
+            renderDefendingHeroTypeUI( armyInfo[1].player.GetControl(), cur_pt );
 
             needRender = true;
         }
@@ -541,8 +543,6 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     armyInfo[0].ui = {};
     armyInfo[1].ui = {};
-
-    attackedArmyControlInfo.reset();
 
     return result;
 }
@@ -658,8 +658,6 @@ void Battle::Only::reset()
 {
     armyInfo[0].reset();
     armyInfo[1].reset();
-
-    attackedArmyControlInfo.reset();
 
     _terrainType = Maps::Ground::UNKNOWN;
 }
