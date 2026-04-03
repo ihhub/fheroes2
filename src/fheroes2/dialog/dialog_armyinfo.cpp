@@ -563,7 +563,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     DrawMonsterInfo( pos_rt.getPosition(), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
-    fheroes2::RandomMonsterAnimation monsterAnimation( troop );
+    fheroes2::RandomMonsterAnimation monsterAnimation( troop, true );
     const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 175 );
     if ( !isAnimated ) {
         monsterAnimation.reset();

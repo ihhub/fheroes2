@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -22,6 +22,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "VÆLG"
+
+msgid "ABOUT"
+msgstr "OM"
 
 msgid "S"
 msgstr "S"
@@ -537,11 +540,13 @@ msgstr ""
 "Voldgraven afbryder enhver bevægelse gennem den og reducerer forsvarsevnen "
 "for tropperne, der er til stede i den, med %{count} point."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hastighed: %{speed}"
 
-msgid "Speed"
-msgstr "Hastighed"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animation"
 
 msgid "Interface"
 msgstr "Interface"
@@ -2978,6 +2983,9 @@ msgstr "Skade"
 msgid "HP"
 msgstr "Liv"
 
+msgid "Speed"
+msgstr "Hastighed"
+
 msgid "Growth"
 msgstr "Vækst"
 
@@ -3281,6 +3289,13 @@ msgid ""
 msgstr ""
 "Tabs-\n"
 "vilkår"
+
+msgid "About"
+msgstr "Om"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klik her for at vende tilbage til hovedmenuen."
 
 msgid "Map Description"
 msgstr "Kortbeskrivelse"
@@ -5040,17 +5055,11 @@ msgstr "BEGIVENHEDER"
 msgid "LANGUAGE"
 msgstr "SPROG"
 
-msgid "ABOUT"
-msgstr "OM"
-
 msgid "Change Map Name"
 msgstr "Skift kortnavn"
 
 msgid "Change Map Description"
 msgstr "Skift kortbeskrivelse"
-
-msgid "About"
-msgstr "Om"
 
 msgid "Click to edit custom rumors."
 msgstr "Klik for at redigere tilpassede rygter."
@@ -5698,6 +5707,10 @@ msgstr "Generer nyt kort"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Generer nyt kort"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Rul til venstre"
 
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
@@ -8505,13 +8518,13 @@ msgstr "Kun helte kan kaste denne magi."
 msgid "This hero is not able to cast adventure spells."
 msgstr "Denne helt er ikke i stand til at kaste eventyrmagi."
 
+msgid "This spell cannot be cast on a boat."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Din helt er for træt til at kaste denne besværgelse i dag. Prøv igen i "
 "morgen."
-
-msgid "This spell cannot be cast on a boat."
-msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "Denne besværgelse kan kun kastes i nærheden af et hav."
@@ -12750,12 +12763,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to "
-#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "Du er ved at ændre kortets sprog fra %{oldLanguage} til %{newLanguage}. "
-#~ "Nogle tekster vil måske ikke blive vist korrekt efter dette. Ønsker du at "
-#~ "fortsætte?"

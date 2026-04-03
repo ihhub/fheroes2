@@ -41,7 +41,9 @@
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
+#include "difficulty.h"
 #include "direction.h"
+#include "game.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "ground.h"
@@ -1457,6 +1459,10 @@ bool Heroes::PickupArtifact( const Artifact & art )
         if ( scout( assembledArtifact._assembledArtifactID ) ) {
             return true;
         }
+    }
+
+    if ( isControlAI() && Difficulty::isArtifactSortingAllowedForAI( Game::getDifficulty() ) ) {
+        GetBagArtifacts().sortFromWorstToBest();
     }
 
     return true;

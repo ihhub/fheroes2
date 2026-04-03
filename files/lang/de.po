@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "AUSW."
+
+msgid "ABOUT"
+msgstr "ÜBER"
 
 msgid "S"
 msgstr "S"
@@ -548,11 +551,13 @@ msgstr ""
 "die Verteidigungsfertigkeit von Truppen, die sich in ihm befinden, um "
 "%{count}."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Geschw.: %{speed}"
 
-msgid "Speed"
-msgstr "Bewegung"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animation"
 
 msgid "Interface"
 msgstr "Anzeige"
@@ -2964,6 +2969,9 @@ msgstr "Schaden"
 msgid "HP"
 msgstr "TP"
 
+msgid "Speed"
+msgstr "Bewegung"
+
 msgid "Growth"
 msgstr "Wachstum"
 
@@ -3264,6 +3272,13 @@ msgid ""
 msgstr ""
 "Verlust-\n"
 "bedingungen"
+
+msgid "About"
+msgstr "Über"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klicken, um zum Hauptmenü zurückzukehren."
 
 msgid "Map Description"
 msgstr "Kartenbeschreibung"
@@ -5026,17 +5041,11 @@ msgstr "EREIGNISSE"
 msgid "LANGUAGE"
 msgstr "SPRACHE"
 
-msgid "ABOUT"
-msgstr "ÜBER"
-
 msgid "Change Map Name"
 msgstr "Kartennamen ändern"
 
 msgid "Change Map Description"
 msgstr "Kartenbeschreibung ändern"
-
-msgid "About"
-msgstr "Über"
 
 msgid "Click to edit custom rumors."
 msgstr "Klickt, um Gerüchte hinzuzufügen oder zu bearbeiten."
@@ -5678,6 +5687,10 @@ msgstr "Zufällige Karte neu generieren"
 
 msgid "hotkey|re-configure random map"
 msgstr "Zufällige Karte neu konfigurieren"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Links scrollen"
 
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
@@ -8551,13 +8564,13 @@ msgstr "Nur Helden können diesen Zauber sprechen."
 msgid "This hero is not able to cast adventure spells."
 msgstr "Dieser Held ist nicht in der Lage, Abenteuerzauber zu sprechen."
 
+msgid "This spell cannot be cast on a boat."
+msgstr "Dieser Zauber kann nicht auf einem Boot verwendet werden."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Euer Held ist zu müde, um heute diesen Zauber zu sprechen. Versucht es "
 "morgen erneut."
-
-msgid "This spell cannot be cast on a boat."
-msgstr "Dieser Zauber kann nicht auf einem Boot verwendet werden."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "Dieser Zauber kann nur in der Nähe von Wasser verwendet werden."

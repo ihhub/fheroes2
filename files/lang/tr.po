@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 08:02+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "SEÇ"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -535,11 +538,12 @@ msgstr ""
 "Hendek savunma becerisi herhangi bir birimin savunma becerisi ve hareket "
 "hızını %{count} düşürüyor."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hız: %{speed}"
 
-msgid "Speed"
-msgstr "Hız"
+msgid "battleAnimation|Speed"
+msgstr ""
 
 msgid "Interface"
 msgstr "Arayüz"
@@ -2846,6 +2850,9 @@ msgstr ""
 msgid "HP"
 msgstr ""
 
+msgid "Speed"
+msgstr "Hız"
+
 msgid "Growth"
 msgstr ""
 
@@ -3125,6 +3132,13 @@ msgid ""
 msgstr ""
 "Yenilgi\n"
 "Şartları"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
 
 msgid "Map Description"
 msgstr ""
@@ -4828,16 +4842,10 @@ msgstr "ETKİNLİKLER"
 msgid "LANGUAGE"
 msgstr "DİL"
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
 msgstr ""
 
 #, fuzzy
@@ -5460,6 +5468,10 @@ msgstr ""
 
 msgid "hotkey|re-configure random map"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -7748,10 +7760,10 @@ msgstr ""
 msgid "This hero is not able to cast adventure spells."
 msgstr ""
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell cannot be cast on a boat."
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell can only be cast near an ocean."

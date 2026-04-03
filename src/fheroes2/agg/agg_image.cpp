@@ -130,6 +130,8 @@ namespace
                                                 ICN::BUTTON_5_EVIL,
                                                 ICN::BUTTON_MAP_SELECT_GOOD,
                                                 ICN::BUTTON_MAP_SELECT_EVIL,
+                                                ICN::BUTTON_MAP_ABOUT_GOOD,
+                                                ICN::BUTTON_MAP_ABOUT_EVIL,
                                                 ICN::BUTTONS_NEW_GAME_MENU_GOOD,
                                                 ICN::BUTTONS_NEW_GAME_MENU_EVIL,
                                                 ICN::BUTTONS_EDITOR_MENU_GOOD,
@@ -385,10 +387,8 @@ namespace
 
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
             fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, 0 );
+            // Do not automatically load resources for button fonts as
+            // they are not stored in the original game resources.
 
             _normalFont = _icnVsSprite[ICN::FONT];
             _smallFont = _icnVsSprite[ICN::SMALFONT];
@@ -745,6 +745,14 @@ namespace
             }
 
             const char * text = fheroes2::getSupportedText( gettext_noop( "SELECT" ), fheroes2::FontType::buttonReleasedWhite() );
+            getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
+
+            break;
+        }
+        case ICN::BUTTON_MAP_ABOUT_GOOD: {
+            _icnVsSprite[id].resize( 2 );
+
+            const char * text = fheroes2::getSupportedText( gettext_noop( "ABOUT" ), fheroes2::FontType::buttonReleasedWhite() );
             getTextAdaptedSprite( _icnVsSprite[id][0], _icnVsSprite[id][1], text, ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
 
             break;
@@ -1464,6 +1472,7 @@ namespace
         case ICN::BUTTON_HSCORES_VERTICAL_STANDARD_EVIL:
         case ICN::BUTTON_GIFT_EVIL:
         case ICN::BUTTON_MAP_SELECT_EVIL:
+        case ICN::BUTTON_MAP_ABOUT_EVIL:
         case ICN::BUTTON_SMALL_ACCEPT_EVIL:
         case ICN::BUTTON_SMALL_DECLINE_EVIL:
         case ICN::BUTTON_SMALL_MAX_EVIL:
@@ -1489,6 +1498,9 @@ namespace
             }
             else if ( id == ICN::BUTTON_MAP_SELECT_EVIL ) {
                 goodButtonIcnID = ICN::BUTTON_MAP_SELECT_GOOD;
+            }
+            else if ( id == ICN::BUTTON_MAP_ABOUT_EVIL ) {
+                goodButtonIcnID = ICN::BUTTON_MAP_ABOUT_GOOD;
             }
             else if ( id == ICN::BUTTON_SMALL_RESTART_EVIL ) {
                 goodButtonIcnID = ICN::BUTTON_SMALL_RESTART_GOOD;
@@ -2538,6 +2550,10 @@ namespace
                 imageArray[249 - 32] = imageArray[100];
                 imageArray.erase( imageArray.begin() + 218, imageArray.end() );
             }
+
+            // Add 32 empty images to the front of the array to have 1:1 correlation between character index and its corresponding image.
+            const fheroes2::Sprite firstSprite{ imageArray[0] };
+            imageArray.insert( imageArray.begin(), 32, firstSprite );
             break;
         }
         case ICN::YELLOW_FONT:
@@ -4799,8 +4815,9 @@ namespace
         case ICN::BUTTON_GOOD_FONT_PRESSED:
         case ICN::BUTTON_EVIL_FONT_RELEASED:
         case ICN::BUTTON_EVIL_FONT_PRESSED: {
-            generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
-                                    _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
+            // These aren't the original game resources and these images are being generated dynamically.
+            // So, we shouldn't do anything here.
+            // We could even assert this place as the engine shouldn't even call it.
             break;
         }
         case ICN::HISCORE: {
