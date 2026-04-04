@@ -1154,6 +1154,42 @@ bool World::loadResurrectionMap( const std::string & filename )
                 if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
                     tileData[0] = static_cast<uint32_t>( artifactInfo.radius );
                 }
+                else if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE ||
+                          objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR ) {
+                    auto & selected = artifactInfo.selected;
+                    if ( !selected.empty() ) {
+                        // Verify that the input data is correct.
+                        int32_t allowedArtifactLevel{ Artifact::ART_NONE };
+                        switch ( objectInfo.objectType ) {
+                        case MP2::OBJ_RANDOM_ARTIFACT:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_ALL_NORMAL;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_TREASURE;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_MINOR;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_MAJOR;
+                            break;
+                        default:
+                            assert( 0 );
+                            break;
+                        }
+
+                        selected.erase( std::remove_if( selected.begin(), selected.end(),
+                                                        [allowedArtifactLevel]( const int value ) {
+                                                            const Artifact temp{ value };
+                                                            return !temp.isValid() || ( temp.Level() & allowedArtifactLevel ) == 0;
+                                                        } ),
+                                        selected.end() );
+
+                        if ( !artifactInfo.selected.empty() ) {
+                            tileData[1] = Rand::Get( artifactInfo.selected );
+                        }
+                    }
+                }
                 else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
                     assert( artifactInfo.selected.size() == 1 );
 

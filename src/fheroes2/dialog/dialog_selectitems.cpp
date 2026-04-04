@@ -227,6 +227,138 @@ namespace
         }
     };
 
+    class SelectEnumArtifact : public Dialog::ItemSelectionWindow
+    {
+    public:
+        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
+
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
+
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            renderItem( getImage( index ), Artifact( index ).GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int32_t & index ) override
+        {
+            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
+        }
+
+    protected:
+        virtual fheroes2::Sprite getImage( const int index )
+        {
+            const Artifact art( index );
+            return fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+        }
+
+    private:
+        static const int32_t _offsetY{ 42 };
+    };
+
+    class MultiArtifactSelection final : public SelectEnumArtifact
+    {
+    public:
+        using SelectEnumArtifact::SelectEnumArtifact;
+
+        using Interface::ListBox<int32_t>::ActionListDoubleClick;
+        using Interface::ListBox<int32_t>::ActionListSingleClick;
+        using Interface::ListBox<int32_t>::ActionListPressRight;
+
+        void setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
+        {
+            _ids = std::move( allowed );
+
+            for ( const int32_t id : selected ) {
+                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
+                    _selected.emplace( id );
+                }
+            }
+
+            if ( _selected.empty() ) {
+                _selected.insert( _ids.begin(), _ids.end() );
+            }
+
+            SetListContent( _ids );
+            // For multi-selection we don't have any current item.
+            SetCurrent( static_cast<int32_t>( 0 ) );
+
+            enableToggleButtons();
+        }
+
+        std::vector<int32_t> getSelected() const
+        {
+            return { _selected.begin(), _selected.end() };
+        }
+
+        void ActionListSingleClick( int32_t & id ) override
+        {
+            updateStatus( id );
+        }
+
+        void ActionListDoubleClick( int32_t & id ) override
+        {
+            updateStatus( id );
+        }
+
+    protected:
+        void onToggleOn() override
+        {
+            _selected = {};
+
+            for ( const int32_t id : _ids ) {
+                _selected.emplace( id );
+            }
+
+            setButtonOkayStatus( true );
+        }
+
+        void onToggleOff() override
+        {
+            _selected = {};
+
+            setButtonOkayStatus( false );
+        }
+
+    private:
+        std::vector<int32_t> _ids;
+        std::set<int32_t> _selected;
+
+        void updateStatus( const int32_t id )
+        {
+            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
+
+            if ( _selected.count( id ) == 0 ) {
+                _selected.emplace( id );
+            }
+            else {
+                _selected.erase( id );
+            }
+
+            setButtonOkayStatus( !_selected.empty() );
+        }
+
+        bool isDoubleClicked() override
+        {
+            return false;
+        }
+
+        fheroes2::Sprite getImage( const int index ) override
+        {
+            const Artifact art( index );
+            fheroes2::Sprite image = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+
+            if ( _selected.count( index ) == 0 ) {
+                fheroes2::ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+
+            return image;
+        }
+    };
+
     class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
     {
     public:
@@ -252,34 +384,6 @@ namespace
 
     private:
         static const int32_t _offsetY{ 35 };
-    };
-
-    class SelectEnumArtifact final : public Dialog::ItemSelectionWindow
-    {
-    public:
-        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
-            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
-        {
-            SetAreaMaxItems( rtAreaItems.height / _offsetY );
-        }
-
-        using Dialog::ItemSelectionWindow::ActionListPressRight;
-
-        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
-        {
-            const Artifact art( index );
-            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
-
-            renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-        }
-
-        void ActionListPressRight( int32_t & index ) override
-        {
-            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
-        }
-
-    private:
-        static const int32_t _offsetY{ 42 };
     };
 
     class SelectEnumSpell final : public Dialog::ItemSelectionWindow
@@ -1166,6 +1270,17 @@ void Dialog::multiSelectMonsters( std::vector<int32_t> allowed, std::vector<int3
     const int32_t result = monsterList.selectItemsEventProcessing();
     if ( result == Dialog::OK ) {
         selected = monsterList.getSelected();
+    }
+}
+
+void Dialog::multiSelectArtifact( std::vector<int32_t> allowed, std::vector<int32_t> & selected )
+{
+    MultiArtifactSelection artifactList( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifacts:" ) );
+    artifactList.setup( std::move( allowed ), selected );
+
+    const int32_t result = artifactList.selectItemsEventProcessing();
+    if ( result == Dialog::OK ) {
+        selected = artifactList.getSelected();
     }
 }
 
