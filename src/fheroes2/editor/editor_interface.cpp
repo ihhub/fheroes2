@@ -1908,7 +1908,7 @@ namespace Interface
                         spellLevel = 1;
                     }
 
-                    std::string title = std::string( MP2::StringObject( objectType ) ) + ':';
+                    std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
@@ -1924,7 +1924,7 @@ namespace Interface
                     auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
-                    std::string title = std::string( MP2::StringObject( objectType ) ) + ':';
+                    std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSecondarySkillSelectionWindow( title, 1, newMetadata.selectedItems )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
@@ -1941,7 +1941,7 @@ namespace Interface
                     auto newMetadata = originalMetadata;
 
                     int32_t spellLevel = 5;
-                    std::string title = std::string( MP2::StringObject( objectType ) ) + ':';
+                    std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
