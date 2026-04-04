@@ -1864,8 +1864,8 @@ namespace Interface
 
                         action.commit();
                     }
-                    else if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE ||
-                              objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR ) {
+                    else if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE
+                              || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR ) {
                         assert( _mapFormat.artifactMetadata.find( object.id ) != _mapFormat.artifactMetadata.end() );
 
                         auto & selected = _mapFormat.artifactMetadata[object.id].selected;
