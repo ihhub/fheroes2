@@ -384,7 +384,6 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 // Character deletion shouldn't check any length as we are reduce the text.
                 // This is useful when the text is actually bigger that the text window and it is not possible to enter anything
                 // but we have to allow to delete characters.
-                std::string tmp = result;
                 charInsertPos = InsertKeySym( result, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
             }
             else {
