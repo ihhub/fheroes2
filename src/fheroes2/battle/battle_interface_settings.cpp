@@ -55,7 +55,7 @@ namespace
     const fheroes2::Rect movementAreaRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
                                           fheroes2::optionIconSize, fheroes2::optionIconSize };
 
-    void drawTurnOrder( const fheroes2::Rect & optionRoi )
+    void drawTurnOrder( const fheroes2::Rect & optionRoi, const bool isTurnOrderInsideWindow )
     {
         const auto state = Settings::Get().getBattleTurnOrderState();
         const fheroes2::Sprite & turnOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, state == BattleTurnOrderState::OFF ? 3 : 4 );
@@ -69,7 +69,7 @@ namespace
             description = _( "battle_turn_order|Top" );
             break;
         case BattleTurnOrderState::BOTTOM:
-            description = _( "battle_turn_order|Bottom" );
+            description = isTurnOrderInsideWindow ? _( "battle_turn_order|Top" ) : _( "battle_turn_order|Bottom" );
             break;
         default:
             assert( 0 );
@@ -161,7 +161,7 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void openInterfaceBattleOptionDialog( bool & saveConfiguration )
+    void openInterfaceBattleOptionDialog( bool & saveConfiguration, const bool isTurnOrderInsideWindow )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -189,8 +189,9 @@ namespace
         const fheroes2::Rect windowShadowCursorRoi( shadowCursorRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowMovementAreaRoi( movementAreaRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowTurnOrderRoi, &windowGridRoi, &windowDamageInfoRoi, &windowShadowMovementRoi, &windowShadowCursorRoi, &windowMovementAreaRoi]() {
-            drawTurnOrder( windowTurnOrderRoi );
+        const auto drawOptions = [&windowTurnOrderRoi, &windowGridRoi, &windowDamageInfoRoi, &windowShadowMovementRoi, &windowShadowCursorRoi, &windowMovementAreaRoi,
+                                  isTurnOrderInsideWindow]() {
+            drawTurnOrder( windowTurnOrderRoi, isTurnOrderInsideWindow );
             drawGrid( windowGridRoi );
             drawDamageInfo( windowDamageInfoRoi );
             drawShadowMovement( windowShadowMovementRoi );
@@ -210,6 +211,13 @@ namespace
 
             if ( le.MouseClickLeft( windowTurnOrderRoi ) ) {
                 conf.switchToNextBattleTurnOrderState();
+
+                if ( isTurnOrderInsideWindow && ( conf.getBattleTurnOrderState() == BattleTurnOrderState::BOTTOM ) ) {
+                    // When rendering of this option is done within the battlefield window
+                    // we cannot do it at the bottom of the window so for these cases we skip bottom option.
+                    conf.switchToNextBattleTurnOrderState();
+                }
+
                 redrawScreen = true;
             }
             else if ( le.MouseClickLeft( windowGridRoi ) ) {
@@ -274,11 +282,11 @@ namespace
 
 namespace Battle
 {
-    bool showBattleInterfaceDialog()
+    bool showBattleInterfaceDialog( const bool isTurnOrderInsideWindow )
     {
         bool isSaveConfiguration{ false };
 
-        openInterfaceBattleOptionDialog( isSaveConfiguration );
+        openInterfaceBattleOptionDialog( isSaveConfiguration, isTurnOrderInsideWindow );
         return isSaveConfiguration;
     }
 }

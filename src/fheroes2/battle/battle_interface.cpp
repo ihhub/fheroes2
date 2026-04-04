@@ -1277,7 +1277,7 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
     }
 
     auto & display = fheroes2::Display::instance();
-    _isInsideBattleField = ( dialogRoi.y <= turnOrderMonsterIconSize );
+    _isInsideBattleField = isRenderingInsideBattlefieldWindow( dialogRoi );
 
     const int32_t unitsToDraw = std::min( _battleRoi.width / turnOrderMonsterIconSize, validUnitCount );
 
@@ -1369,6 +1369,12 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         ++unitRectIndex;
         ++unitsProcessed;
     }
+}
+
+bool Battle::TurnOrder::isRenderingInsideBattlefieldWindow( const fheroes2::Rect & battlefieldWindow )
+{
+    // It is assumed that the window is centered in relation to display.
+    return ( battlefieldWindow.y <= turnOrderMonsterIconSize );
 }
 
 Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
@@ -3569,8 +3575,9 @@ void Battle::Interface::_openBattleSettingsDialog()
 {
     const Settings & conf = Settings::Get();
     const bool showGrid = conf.BattleShowGrid();
+    const bool isTurnOrderInsideWindow{ TurnOrder::isRenderingInsideBattlefieldWindow( border.GetRect() ) };
 
-    DialogBattleSettings();
+    DialogBattleSettings( isTurnOrderInsideWindow );
 
     if ( showGrid != conf.BattleShowGrid() ) {
         // The grid setting has changed. Update for the Battlefield ground.

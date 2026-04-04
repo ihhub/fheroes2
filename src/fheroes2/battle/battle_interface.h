@@ -71,7 +71,7 @@ namespace Battle
     enum class CastleDefenseStructure : int;
     enum class CellDirection;
 
-    void DialogBattleSettings();
+    void DialogBattleSettings( const bool isTurnOrderInsideWindow );
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
     enum HeroAnimation : uint32_t
@@ -263,6 +263,9 @@ namespace Battle
         {
             _restorer.reset();
         }
+
+        // Pass window area which might include frame decorations.
+        static bool isRenderingInsideBattlefieldWindow( const fheroes2::Rect & battlefieldWindow );
 
     private:
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
