@@ -1731,7 +1731,7 @@ namespace Interface
                     }
                 }
                 else if ( objectType == MP2::OBJ_SIGN || objectType == MP2::OBJ_BOTTLE ) {
-                    std::string header = _( "Input %{object} text" );
+                    std::string header = _( "Input %{object} text:" );
                     StringReplace( header, "%{object}", MP2::StringObject( objectType ) );
 
                     auto & originalMessage = _mapFormat.signMetadata[object.id].message;
@@ -1767,7 +1767,7 @@ namespace Interface
 
                     const Monster tempMonster( static_cast<int>( object.index ) + 1 );
 
-                    std::string str = _( "Set %{monster} Count" );
+                    std::string str = _( "Set %{monster} Count:" );
                     StringReplace( str, "%{monster}", tempMonster.GetName() );
 
                     std::unique_ptr<const fheroes2::MonsterDialogElement> monsterUi = nullptr;
@@ -1816,7 +1816,7 @@ namespace Interface
 
                     const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
 
-                    std::string str = _( "Set %{resource-type} Count" );
+                    std::string str = _( "Set %{resource-type} Count:" );
                     StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
@@ -1833,7 +1833,7 @@ namespace Interface
                         auto & originalRadius = _mapFormat.artifactMetadata[object.id].radius;
                         int32_t radius = originalRadius;
 
-                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius" ), 0, 100, radius ) && radius != originalRadius ) {
+                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius ) && radius != originalRadius ) {
                             fheroes2::ActionCreator action( _historyManager, _mapFormat );
                             originalRadius = radius;
                             action.commit();
@@ -1908,7 +1908,8 @@ namespace Interface
                         spellLevel = 1;
                     }
 
-                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems, false, 1, false )
+                    std::string title = std::string( MP2::StringObject( objectType ) ) + ':';
+                    if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
@@ -1923,7 +1924,8 @@ namespace Interface
                     auto & originalMetadata = _mapFormat.selectionObjectMetadata[object.id];
                     auto newMetadata = originalMetadata;
 
-                    if ( Editor::openSecondarySkillSelectionWindow( MP2::StringObject( objectType ), 1, newMetadata.selectedItems )
+                    std::string title = std::string( MP2::StringObject( objectType ) ) + ':';
+                    if ( Editor::openSecondarySkillSelectionWindow( title, 1, newMetadata.selectedItems )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );
@@ -1939,7 +1941,8 @@ namespace Interface
                     auto newMetadata = originalMetadata;
 
                     int32_t spellLevel = 5;
-                    if ( Editor::openSpellSelectionWindow( MP2::StringObject( objectType ), spellLevel, newMetadata.selectedItems, false, 1, false )
+                    std::string title = std::string( MP2::StringObject( objectType ) ) + ':';
+                    if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
                         originalMetadata = std::move( newMetadata );

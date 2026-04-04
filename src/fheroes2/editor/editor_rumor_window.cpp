@@ -148,7 +148,7 @@ namespace Editor
 
         int32_t offsetY = windowArea.y + elementOffset;
 
-        const fheroes2::Text title( _( "Rumors" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( _( "Rumors:" ), fheroes2::FontType::normalYellow() );
         title.draw( windowArea.x + ( windowArea.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;

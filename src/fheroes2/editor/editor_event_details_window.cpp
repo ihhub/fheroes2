@@ -92,7 +92,7 @@ namespace Editor
 
         int32_t offsetY = dialogRoi.y + elementOffset;
 
-        const fheroes2::Text title( MP2::StringObject( MP2::OBJ_EVENT ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( std::string( MP2::StringObject( MP2::OBJ_EVENT ) ) + ':', fheroes2::FontType::normalYellow() );
         title.draw( dialogRoi.x + ( dialogRoi.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;
@@ -327,7 +327,7 @@ namespace Editor
 
                     const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
 
-                    std::string message = _( "Set %{resource-type} Count" );
+                    std::string message = _( "Set %{resource-type} Count:" );
                     StringReplace( message, "%{resource-type}", Resource::String( resourceType ) );
 
                     if ( Dialog::SelectCount( std::move( message ), -99999, 999999, temp, 1, &resourceUI ) ) {
@@ -423,7 +423,7 @@ namespace Editor
                 const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
                 int32_t tempValue{ eventMetadata.experience };
 
-                if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), tempValue, 1, &tempExperienceUI ) ) {
+                if ( Dialog::SelectCount( _( "Set Experience value:" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), tempValue, 1, &tempExperienceUI ) ) {
                     eventMetadata.experience = tempValue;
 
                     experienceRoiRestorer.restore();

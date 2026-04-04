@@ -477,7 +477,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             const Monster mons = Dialog::selectMonster( cur );
 
             if ( mons.isValid() ) {
-                std::string str = _( "Set %{monster} Count" );
+                std::string str = _( "Set %{monster} Count:" );
                 StringReplace( str, "%{monster}", mons.GetName() );
 
                 int32_t count = 1;

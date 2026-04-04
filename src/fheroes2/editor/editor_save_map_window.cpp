@@ -362,7 +362,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
-                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ _( "Change Map Name:" ), fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.

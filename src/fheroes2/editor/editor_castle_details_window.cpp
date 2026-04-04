@@ -512,7 +512,8 @@ namespace
                 };
 
                 int32_t selectedLevel = currentBannedSpellsLevel;
-                while ( Editor::openSpellSelectionWindow( getMageGuildTitle( selectedLevel ), selectedLevel, bannedSpellsContainer[selectedLevel - 1], true,
+                while ( Editor::openSpellSelectionWindow( std::string( getMageGuildTitle( selectedLevel ) ) + ':', selectedLevel,
+                                                          bannedSpellsContainer[selectedLevel - 1], true,
                                                           MageGuild::getMaxSpellsCount( selectedLevel, hasLibraryCapability ), true ) ) {
                     if ( selectedLevel == currentBannedSpellsLevel ) {
                         // The banned spells dialog was closed with confirmation of changes.
@@ -835,7 +836,7 @@ namespace Editor
                 if ( le.MouseClickLeft( nameArea ) ) {
                     std::string res = castleMetadata.customName;
 
-                    const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
+                    const fheroes2::Text body{ _( "Enter Castle name:" ), fheroes2::FontType::normalWhite() };
                     if ( Dialog::inputString( fheroes2::Text{}, body, res, Maps::Map_Format::nameCharLimit, false, language ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;

@@ -515,7 +515,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                     const fheroes2::ExperienceDialogElement tempExperienceUI{ 0 };
                     int32_t value = static_cast<int32_t>( _experience );
 
-                    if ( Dialog::SelectCount( _( "Set Experience value" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), value, 1, &tempExperienceUI ) ) {
+                    if ( Dialog::SelectCount( _( "Set Experience value:" ), 0, static_cast<int32_t>( Heroes::getExperienceMaxValue() ), value, 1, &tempExperienceUI ) ) {
                         useDefaultExperience = false;
                         _experience = static_cast<uint32_t>( value );
                         experienceInfo.setDefaultState( useDefaultExperience );
@@ -545,7 +545,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
                 if ( le.MouseClickLeft() ) {
                     int32_t value = static_cast<int32_t>( GetSpellPoints() );
-                    if ( Dialog::SelectCount( _( "Set Spell Points value" ), 0, std::max( spellPointsMaxValue, value ), value ) ) {
+                    if ( Dialog::SelectCount( _( "Set Spell Points value:" ), 0, std::max( spellPointsMaxValue, value ), value ) ) {
                         useDefaultSpellPoints = false;
                         SetSpellPoints( static_cast<uint32_t>( value ) );
                         spellPointsInfo.setDefaultState( useDefaultSpellPoints );
@@ -621,7 +621,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             if ( le.isMouseLeftButtonPressed() && buttonPatrol->isReleased() && !Modes( PATROL ) ) {
                 buttonPatrol->drawOnPress();
                 int32_t value = static_cast<int32_t>( _patrolDistance );
-                if ( Dialog::SelectCount( _( "Set patrol radius in tiles" ), 0, 255, value ) ) {
+                if ( Dialog::SelectCount( _( "Set patrol radius in tiles:" ), 0, 255, value ) ) {
                     SetModes( PATROL );
                     _patrolDistance = static_cast<uint32_t>( value );
                 }
@@ -640,7 +640,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         else if ( isEditor ) {
             if ( le.MouseClickLeft( titleRoi ) ) {
                 std::string res = _name;
-                const fheroes2::Text body{ _( "Enter hero's name" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ _( "Enter hero's name:" ), fheroes2::FontType::normalWhite() };
 
                 if ( Dialog::inputString( fheroes2::Text{}, body, res, Maps::Map_Format::nameCharLimit, false, language ) && !res.empty() ) {
                     _name = std::move( res );

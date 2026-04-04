@@ -1404,7 +1404,7 @@ void Dialog::selectTownType( int32_t & type, int32_t & color )
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Castle/town placing" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Castle/town placing:" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // Render color and race selection sprites.
@@ -1672,7 +1672,7 @@ int32_t Dialog::selectMineType( const int32_t type )
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Mine placing" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Mine placing:" ), fheroes2::FontType::normalYellow() );
     int32_t offsetY = area.y + 10;
     text.draw( area.x + ( area.width - text.width() ) / 2, offsetY, display );
 
@@ -2013,7 +2013,7 @@ PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t av
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Select color" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Select color:" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // Render color selection sprites.
