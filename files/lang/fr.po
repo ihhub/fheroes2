@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 04:52+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1067,6 +1067,12 @@ msgstr "Perte : %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Perte : %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Ordre de jeu"
 
@@ -1128,12 +1134,12 @@ msgstr ""
 msgid "Human"
 msgstr "Humain"
 
-msgid "AI"
-msgstr "IA"
-
 #, fuzzy
 msgid "Terrain"
 msgstr "Terrains"
+
+msgid "Battle Only"
+msgstr "Champ de bataille"
 
 msgid "Start"
 msgstr "Commencer"
@@ -1164,11 +1170,15 @@ msgid "Please select another hero."
 msgstr "Veuillez choisir un autre héros."
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Cliquez ici pour sélectionner cette couleur."
 
+msgid "Hero"
+msgstr "Héros"
+
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Cliquez ici pour sélectionner cette couleur."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -6203,9 +6213,6 @@ msgstr ""
 "Une partie multijoueurs, avec plusieurs joueurs humains en compétition les "
 "uns contre les autres sur une seule carte."
 
-msgid "Battle Only"
-msgstr "Champ de bataille"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Configurez et jouez une bataille sans charger de carte."
 
@@ -6871,14 +6878,58 @@ msgstr "Défense"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Cliquez ici pour enregistrer les propriétés des événements."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "ESPACE"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Changer le nom de la carte"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Cliquez pour valider la langue choisie."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Cliquez pour quitter les résultats de la bataille."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Fleurs"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Cliquez ici pour enregistrer les propriétés des événements."
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Concepteurs de cartes"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr ""
@@ -9903,9 +9954,6 @@ msgstr "Monstre aléatoire - fort"
 msgid "Random Monster - very strong"
 msgstr "Monstre aléatoire - très fort"
 
-msgid "Hero"
-msgstr "Héros"
-
 msgid "Nothing Special"
 msgstr "Rien de spécial"
 
@@ -12909,3 +12957,10 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#~ msgid "AI"
+#~ msgstr "IA"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Cliquez ici pour sélectionner cette couleur."

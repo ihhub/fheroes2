@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 04:52+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2026-02-24 17:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1058,6 +1058,12 @@ msgstr "Stupar: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Stupar: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Turordning"
 
@@ -1118,11 +1124,11 @@ msgstr "Genom sin falkblick så kan %{name} lära sig besvärjelsen %{spell}."
 msgid "Human"
 msgstr "Spelare"
 
-msgid "AI"
-msgstr "AI"
-
 msgid "Terrain"
 msgstr "Terräng"
+
+msgid "Battle Only"
+msgstr "Endast Strid"
 
 msgid "Start"
 msgstr "Starta"
@@ -1156,11 +1162,17 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
 
-msgid "Click to set this hero to be human-controlled."
-msgstr "Klicka för att ange denna hjälte som spelarkontrollerad."
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Klicka för att välja färg."
 
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Klicka för att ange denna hjälte som AI-kontrollerad."
+msgid "Hero"
+msgstr "Hjälte"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Klicka för att ange denna hjälte som spelarkontrollerad."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} mot %{race2} %{name2}"
@@ -6030,9 +6042,6 @@ msgstr ""
 "Ett spel med flera spelare, där flera mänskliga spelare som tävlar mot "
 "varandra på en karta."
 
-msgid "Battle Only"
-msgstr "Endast Strid"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Konfigurera och spela en strid utan någon karta."
 
@@ -6682,14 +6691,59 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr "De möjliga värdena går från och med %{min} till och med %{max}."
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Klicka för att spara Händelseegenskaperna."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "MELLANSLAG"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Ändra Kartnamn"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Klicka för att anta valt språk."
+
+#, fuzzy
+msgid "Backspace"
+msgstr "Tillbaka"
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Klicka här för att lämna stridsresultaten."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Blommor"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Klicka för att spara Händelseegenskaperna."
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Kartkreatörer"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "Värdet är ogiltigt."
@@ -9647,9 +9701,6 @@ msgstr "Slumpad Varelse - starkt"
 msgid "Random Monster - very strong"
 msgstr "Slumpad Varelse - väldigt starkt"
 
-msgid "Hero"
-msgstr "Hjälte"
-
 msgid "Nothing Special"
 msgstr "Ingenting Speciellt"
 
@@ -12600,3 +12651,9 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "AI"
+#~ msgstr "AI"
+
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Klicka för att ange denna hjälte som AI-kontrollerad."

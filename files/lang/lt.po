@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 04:52+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -971,6 +971,12 @@ msgstr ""
 msgid "Perish: %{min} - %{max}"
 msgstr ""
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr ""
 
@@ -1021,10 +1027,10 @@ msgstr ""
 msgid "Human"
 msgstr ""
 
-msgid "AI"
+msgid "Terrain"
 msgstr ""
 
-msgid "Terrain"
+msgid "Battle Only"
 msgstr ""
 
 msgid "Start"
@@ -1058,11 +1064,15 @@ msgid "Please select another hero."
 msgstr ""
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Rodyti kitą miestą"
 
+msgid "Hero"
+msgstr ""
+
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Rodyti kitą miestą"
 
 #, fuzzy
@@ -5870,9 +5880,6 @@ msgid ""
 "on a single map."
 msgstr ""
 
-msgid "Battle Only"
-msgstr ""
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
@@ -6459,13 +6466,54 @@ msgstr "Gynybos įgūdis"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Rodyti kitą miestą"
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Pasirinkti %{name}"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Rodyti kitą miestą"
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Rodyti kitą miestą"
+
+msgid "Lowercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Rodyti kitą miestą"
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -9000,9 +9048,6 @@ msgstr "Atsitiktinė pilis"
 #, fuzzy
 msgid "Random Monster - very strong"
 msgstr "Atsitiktinė pilis"
-
-msgid "Hero"
-msgstr ""
 
 msgid "Nothing Special"
 msgstr ""
@@ -11610,3 +11655,7 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Rodyti kitą miestą"

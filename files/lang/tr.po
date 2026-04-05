@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 04:52+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -1045,6 +1045,12 @@ msgstr "Yok oldu: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Yok oldu: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Sıra sırası"
 
@@ -1103,11 +1109,11 @@ msgstr ""
 msgid "Human"
 msgstr "İnsan"
 
-msgid "AI"
-msgstr "Bilgisayar"
-
 msgid "Terrain"
 msgstr ""
+
+msgid "Battle Only"
+msgstr "Sadece Savaş"
 
 msgid "Start"
 msgstr "Başla"
@@ -1137,12 +1143,16 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
 
-msgid "Click to set this hero to be human-controlled."
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Hero"
 msgstr ""
 
-#, fuzzy
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -5873,9 +5883,6 @@ msgid ""
 "on a single map."
 msgstr ""
 
-msgid "Battle Only"
-msgstr "Sadece Savaş"
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
@@ -6437,13 +6444,54 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Oyunun dilini değiştir."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Seçili dili seçmek için tıklayın."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
+
+msgid "Lowercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -8927,9 +8975,6 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
-msgstr ""
-
-msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"
@@ -11491,3 +11536,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#~ msgid "AI"
+#~ msgstr "Bilgisayar"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
