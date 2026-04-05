@@ -268,6 +268,9 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
 
     const fheroes2::Point windowOffset( frameborder.activeArea().x, frameborder.activeArea().y );
 
+    const fheroes2::Text dialogTitle( _( "Battle Only" ), fheroes2::FontType::normalYellow() );
+    dialogTitle.drawInRoi( windowOffset.x + ( frameborder.activeArea().width - dialogTitle.width() ) / 2, windowOffset.y + 7, display, frameborder.activeArea() );
+
     for ( size_t i = 0; i < armyInfo.size(); ++i ) {
         armyInfo[i].portraitRoi = { windowOffset.x + heroPortraitInternalArea[i].x, windowOffset.y + heroPortraitInternalArea[i].y, heroPortraitInternalArea[i].width,
                                     heroPortraitInternalArea[i].height };
