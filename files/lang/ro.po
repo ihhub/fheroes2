@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "SELECTEAZĂ"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -535,11 +538,13 @@ msgstr ""
 "Șanțul reduce cu -%{count} abilitatea de apărare a oricărei unități și "
 "reduce la jumătate viteza de mișcare."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Viteză: %{speed}"
 
-msgid "Speed"
-msgstr "Viteză"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Anexare"
 
 msgid "Interface"
 msgstr "Interfață"
@@ -2828,6 +2833,9 @@ msgstr ""
 msgid "HP"
 msgstr ""
 
+msgid "Speed"
+msgstr "Viteză"
+
 msgid "Growth"
 msgstr ""
 
@@ -3095,6 +3103,13 @@ msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
 
 #, fuzzy
 msgid "Map Description"
@@ -4811,16 +4826,10 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
 msgstr ""
 
 #, fuzzy
@@ -5447,6 +5456,10 @@ msgstr ""
 
 msgid "hotkey|re-configure random map"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Personalizează opțiunile sistemului"
 
 msgid "hotkey|roland campaign"
 msgstr ""
