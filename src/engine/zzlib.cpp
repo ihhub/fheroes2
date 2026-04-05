@@ -160,7 +160,7 @@ bool Compression::unzipStream( IStreamBase & inputStream, OStreamBase & outputSt
 
 bool Compression::zipStreamBuf( const IStreamBuf & inputStream, OStreamBase & outputStream )
 {
-    const std::vector<uint8_t> zip = zipData( inputStream.data(), inputStream.size() );
+    const std::vector<uint8_t> zip = zipData( inputStream.data(), inputStream.size(), false );
     if ( zip.empty() ) {
         return false;
     }
