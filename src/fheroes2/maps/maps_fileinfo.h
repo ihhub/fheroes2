@@ -259,6 +259,9 @@ namespace Maps
         // It is very unlikely that a player suddenly decides to switch a language in the middle of a playthrough.
         std::vector<fheroes2::SupportedLanguage> translations;
 
+        // Optional field available only in Resurrection maps.
+        std::string creatorNotes;
+
     private:
         void FillUnions( const PlayerColorsSet side1Colors, const PlayerColorsSet side2Colors );
     };

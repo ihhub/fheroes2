@@ -6,7 +6,7 @@ This open source multiplatform project, written from scratch, is designed to rep
 improvements in gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes
 and user interface improvements), breathing new life into one of the most addictive turn-based strategy games.
 
-You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
+You can find a complete list of all of our changes and enhancements in [**this page**](GAME_IMPROVEMENTS.md).
 
 <!-- markdownlint-disable MD033 -->
 <div class="image-showcase">

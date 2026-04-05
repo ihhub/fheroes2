@@ -91,6 +91,12 @@
 #include "world.h"
 #include "world_object_uid.h"
 
+#if defined( WITH_DEBUG )
+#include <sstream>
+
+#include "logging.h"
+#endif
+
 namespace fheroes2
 {
     class Image;
@@ -858,6 +864,119 @@ namespace
 
         return allowedMonsters;
     }
+
+#if defined( WITH_DEBUG )
+    int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
+    {
+        for ( size_t i = 0; i < mapFormat.tiles.size(); ++i ) {
+            for ( const auto & objectInfo : mapFormat.tiles[i].objects ) {
+                if ( objectInfo.id == uid && objectInfo.group == group ) {
+                    return static_cast<int32_t>( i );
+                }
+            }
+        }
+
+        // It could be a leftover object kept by the previous version of the Editor.
+        return -1;
+    }
+
+    std::string getAllMapTexts( const Maps::Map_Format::MapFormat & mapFormat )
+    {
+        std::ostringstream os;
+
+        os << "******* Map texts *******" << std::endl;
+
+        os << "-------   Towns   -------" << std::endl;
+        for ( const auto & [uid, castle] : mapFormat.castleMetadata ) {
+            if ( !castle.customName.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_TOWNS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << castle.customName << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << castle.customName << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Heroes   -------" << std::endl;
+        for ( const auto & [uid, hero] : mapFormat.heroMetadata ) {
+            if ( !hero.customName.empty() ) {
+                int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_HEROES );
+                if ( index < 0 ) {
+                    // It could be a Jail object.
+                    index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                }
+
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << hero.customName << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << hero.customName << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Sphinxes   -------" << std::endl;
+        for ( const auto & [uid, sphinx] : mapFormat.sphinxMetadata ) {
+            if ( !sphinx.riddle.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << sphinx.riddle << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sphinx.riddle << std::endl;
+                }
+                os << "  Answers:" << std::endl;
+                for ( const auto & answer : sphinx.answers ) {
+                    os << "    " << answer << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Events   -------" << std::endl;
+        for ( const auto & [uid, event] : mapFormat.adventureMapEventMetadata ) {
+            if ( !event.message.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << event.message << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << event.message << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Signs   -------" << std::endl;
+        for ( const auto & [uid, sign] : mapFormat.signMetadata ) {
+            if ( !sign.message.empty() ) {
+                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    os << "!!! [absent object " << uid << "]: " << sign.message << std::endl;
+                }
+                else {
+                    os << "[" << ( index % mapFormat.width ) << ',' << ( index / mapFormat.width ) << "]: " << sign.message << std::endl;
+                }
+            }
+        }
+
+        os << "-------   Daily events   -------" << std::endl;
+        for ( const auto & event : mapFormat.dailyEvents ) {
+            if ( !event.message.empty() ) {
+                os << "Day " << event.firstOccurrenceDay << ": " << event.message << std::endl;
+            }
+        }
+
+        os << "-------   Rumors  -------" << std::endl;
+        for ( const auto & rumor : mapFormat.rumors ) {
+            os << rumor << std::endl;
+        }
+
+        os << "******* End *******" << std::endl;
+
+        return os.str();
+    }
+#endif
 }
 
 namespace Interface
@@ -1073,6 +1192,9 @@ namespace Interface
                             _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
                         }
                     }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_OUTPUT_ALL_TEXT ) ) {
+                    VERBOSE_LOG( getAllMapTexts( _mapFormat ) )
                 }
 #endif
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
