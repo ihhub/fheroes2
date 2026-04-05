@@ -110,7 +110,7 @@ namespace Battle
 
         int32_t _terrainType{ Maps::Ground::UNKNOWN };
 
-        void redrawOpponents( const fheroes2::Point & top ) const;
+        void redrawOpponents( const fheroes2::Point & offset ) const;
 
         void redrawOpponentsStats( const fheroes2::Point & top ) const;
 

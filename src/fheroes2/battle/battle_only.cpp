@@ -608,17 +608,13 @@ void Battle::Only::updateHero( ArmyInfo & info, const fheroes2::Point & offset )
     updateArmyUI( info.ui, info.hero, offset, info.armyId );
 }
 
-void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
+void Battle::Only::redrawOpponents( const fheroes2::Point & offset ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    const fheroes2::Rect textRoi( top.x + 89, top.y + 27, 462, 17 );
-
     std::string message = _( "%{race1} %{name1} vs %{race2} %{name2}" );
 
     if ( armyInfo[0].hero ) {
         StringReplace( message, "%{name1}", armyInfo[0].hero->GetName() );
-        StringReplace( message, "%{race1}", std::string( Race::String( armyInfo[0].hero->GetRace() ) ) );
+        StringReplace( message, "%{race1}", std::string_view( Race::String( armyInfo[0].hero->GetRace() ) ) );
     }
     else {
         StringReplace( message, "%{race1}", "" );
@@ -626,15 +622,18 @@ void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
     }
     if ( armyInfo[1].hero ) {
         StringReplace( message, "%{name2}", armyInfo[1].hero->GetName() );
-        StringReplace( message, "%{race2}", std::string( Race::String( armyInfo[1].hero->GetRace() ) ) );
+        StringReplace( message, "%{race2}", std::string_view( Race::String( armyInfo[1].hero->GetRace() ) ) );
     }
     else {
         StringReplace( message, "%{race2}", "" );
         StringReplace( message, " %{name2}", _( "Monsters" ) );
     }
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Rect textRoi( offset.x + 89, offset.y + 27, 462, 17 );
+
     fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
-    text.drawInRoi( top.x + 320 - text.width() / 2, top.y + 29, display, textRoi );
+    text.drawInRoi( offset.x + 320 - text.width() / 2, offset.y + 29, display, textRoi );
 
     for ( const size_t idx : { 0, 1 } ) {
         if ( armyInfo[idx].hero ) {
