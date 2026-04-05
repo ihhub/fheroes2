@@ -685,7 +685,7 @@ void Battle::Only::StartBattle()
         copyHero( *armyInfo[idx].hero, armyInfo[idx].heroBackup );
 
         armyInfo[idx].monster.Reset();
-        armyInfo[idx].monster.GetTroop( 0 )->Set( Monster::PEASANT, 100 );
+        armyInfo[idx].monster.GetTroop( 0 )->Set( defaultMonster );
         armyInfo[idx].monsterBackup.Assign( armyInfo[idx].monster );
     }
 
