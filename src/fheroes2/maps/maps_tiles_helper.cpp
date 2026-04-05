@@ -98,23 +98,31 @@ namespace
     {
         Artifact art;
 
-        switch ( tile.getMainObjectType() ) {
-        case MP2::OBJ_RANDOM_ARTIFACT:
-            art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
-            break;
-        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
-            art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
-            break;
-        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
-            art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
-            break;
-        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
-            art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
-            break;
-        default:
-            // Did you add another random artifact type? Add the logic above!
-            assert( 0 );
-            return;
+        if ( tile.metadata()[1] != Artifact::UNKNOWN ) {
+            // This metadata is only set for fh2 map format.
+            art = static_cast<int32_t>( tile.metadata()[1] );
+
+            tile.metadata()[1] = 0;
+        }
+        else {
+            switch ( tile.getMainObjectType() ) {
+            case MP2::OBJ_RANDOM_ARTIFACT:
+                art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
+                break;
+            case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+                art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
+                break;
+            case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+                art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
+                break;
+            case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+                art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
+                break;
+            default:
+                // Did you add another random artifact type? Add the logic above!
+                assert( 0 );
+                return;
+            }
         }
 
         if ( !art.isValid() ) {
