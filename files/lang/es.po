@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -21,6 +21,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ESCOGER"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -550,11 +553,13 @@ msgstr ""
 "El foso reduce la habilidad de defensa de las tropas atrapadas en él en un "
 "%{count} y limita su rango de movimiento."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Velocidad: %{speed}"
 
-msgid "Speed"
-msgstr "Velocidad"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Anexión"
 
 msgid "Interface"
 msgstr "Interfaz"
@@ -2928,6 +2933,9 @@ msgstr "Daño"
 msgid "HP"
 msgstr "PV"
 
+msgid "Speed"
+msgstr "Velocidad"
+
 msgid "Growth"
 msgstr "Crecimiento"
 
@@ -3228,6 +3236,13 @@ msgid ""
 msgstr ""
 "Condiciones\n"
 "de Derrota"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Haz clic para volver al menú principal."
 
 #, fuzzy
 msgid "Map Description"
@@ -5115,18 +5130,12 @@ msgstr "EVENTOS"
 msgid "LANGUAGE"
 msgstr "IDIOMA"
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Descripción seleccionada"
-
-msgid "About"
-msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5807,6 +5816,10 @@ msgstr "Resumen del reino"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Resumen del reino"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Asiento caliente"
 
 msgid "hotkey|roland campaign"
 msgstr ""
