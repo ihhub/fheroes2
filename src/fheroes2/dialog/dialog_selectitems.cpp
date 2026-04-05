@@ -67,7 +67,7 @@
 
 namespace
 {
-    const int32_t dialogHeightDeduction = 150;
+    constexpr int32_t dialogHeightDeduction{ 150 };
 
     fheroes2::Sprite renderMonsterOnBackground( const fheroes2::Sprite & monsterSprite )
     {
@@ -87,6 +87,46 @@ namespace
         // NOTICE: This calculation should be consistent with the number of KINGDOM_TOWNS objects.
         return townRace * 2 + ( isCastle ? 0 : 1 );
     }
+
+    class MultiItemSelectionBase
+    {
+    public:
+        std::vector<int32_t> getSelected() const
+        {
+            return { _selected.begin(), _selected.end() };
+        }
+
+    protected:
+        std::vector<int32_t> _ids;
+        std::set<int32_t> _selected;
+
+        void _setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
+        {
+            _ids = std::move( allowed );
+
+            for ( const int32_t id : selected ) {
+                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
+                    _selected.emplace( id );
+                }
+            }
+
+            if ( _selected.empty() ) {
+                _selected.insert( _ids.begin(), _ids.end() );
+            }
+        }
+
+        void _updateSelected( const int32_t id )
+        {
+            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
+
+            if ( _selected.count( id ) == 0 ) {
+                _selected.emplace( id );
+            }
+            else {
+                _selected.erase( id );
+            }
+        }
+    };
 
     class SelectEnumMonster : public Dialog::ItemSelectionWindow
     {
@@ -126,7 +166,7 @@ namespace
         }
     };
 
-    class MultiMonsterSelection final : public SelectEnumMonster
+    class MultiMonsterSelection final : public SelectEnumMonster, public MultiItemSelectionBase
     {
     public:
         using SelectEnumMonster::SelectEnumMonster;
@@ -137,28 +177,13 @@ namespace
 
         void setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
         {
-            _ids = std::move( allowed );
-
-            for ( const int32_t id : selected ) {
-                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
-                    _selected.emplace( id );
-                }
-            }
-
-            if ( _selected.empty() ) {
-                _selected.insert( _ids.begin(), _ids.end() );
-            }
+            _setup( std::move( allowed ), selected );
 
             SetListContent( _ids );
             // For multi-selection we don't have any current item.
             SetCurrent( static_cast<int32_t>( 0 ) );
 
             enableToggleButtons();
-        }
-
-        std::vector<int32_t> getSelected() const
-        {
-            return { _selected.begin(), _selected.end() };
         }
 
         void ActionListSingleClick( int32_t & id ) override
@@ -191,19 +216,9 @@ namespace
         }
 
     private:
-        std::vector<int32_t> _ids;
-        std::set<int32_t> _selected;
-
         void updateStatus( const int32_t id )
         {
-            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
-
-            if ( _selected.count( id ) == 0 ) {
-                _selected.emplace( id );
-            }
-            else {
-                _selected.erase( id );
-            }
+            _updateSelected( id );
 
             setButtonOkayStatus( !_selected.empty() );
         }
@@ -259,7 +274,7 @@ namespace
         static const int32_t _offsetY{ 42 };
     };
 
-    class MultiArtifactSelection final : public SelectEnumArtifact
+    class MultiArtifactSelection final : public SelectEnumArtifact, public MultiItemSelectionBase
     {
     public:
         using SelectEnumArtifact::SelectEnumArtifact;
@@ -270,28 +285,13 @@ namespace
 
         void setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
         {
-            _ids = std::move( allowed );
-
-            for ( const int32_t id : selected ) {
-                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
-                    _selected.emplace( id );
-                }
-            }
-
-            if ( _selected.empty() ) {
-                _selected.insert( _ids.begin(), _ids.end() );
-            }
+            _setup( std::move( allowed ), selected );
 
             SetListContent( _ids );
             // For multi-selection we don't have any current item.
             SetCurrent( static_cast<int32_t>( 0 ) );
 
             enableToggleButtons();
-        }
-
-        std::vector<int32_t> getSelected() const
-        {
-            return { _selected.begin(), _selected.end() };
         }
 
         void ActionListSingleClick( int32_t & id ) override
@@ -324,19 +324,9 @@ namespace
         }
 
     private:
-        std::vector<int32_t> _ids;
-        std::set<int32_t> _selected;
-
         void updateStatus( const int32_t id )
         {
-            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
-
-            if ( _selected.count( id ) == 0 ) {
-                _selected.emplace( id );
-            }
-            else {
-                _selected.erase( id );
-            }
+            _updateSelected( id );
 
             setButtonOkayStatus( !_selected.empty() );
         }
