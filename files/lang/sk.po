@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ZVOĽ"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -534,11 +537,13 @@ msgid ""
 msgstr ""
 "Priekopa znižuje obranu každého o -%{count} a spomaľuje pohyb na polovicu."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Rýchlosť: %{speed}"
 
-msgid "Speed"
-msgstr "Rýchlosť"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Anexia"
 
 msgid "Interface"
 msgstr "Rozhranie"
@@ -2961,6 +2966,9 @@ msgstr "Poškodenie"
 msgid "HP"
 msgstr "Zdravie"
 
+msgid "Speed"
+msgstr "Rýchlosť"
+
 msgid "Growth"
 msgstr "Nárast"
 
@@ -3260,6 +3268,13 @@ msgid ""
 msgstr ""
 "Podmienky\n"
 "prehry"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 
 #, fuzzy
 msgid "Map Description"
@@ -5122,18 +5137,12 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Zvolený opis"
-
-msgid "About"
-msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5805,6 +5814,10 @@ msgstr "nová mapa, náhodná"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "nová mapa, náhodná"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "posun naľavo"
 
 msgid "hotkey|roland campaign"
 msgstr "kampaň roland"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2026-02-15 20:44+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -23,6 +23,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ВЫБОР"
+
+msgid "ABOUT"
+msgstr "О КАРТЕ"
 
 msgid "S"
 msgstr "М"
@@ -542,11 +545,13 @@ msgstr ""
 "Ров прерывает любое передвижение через него и уменьшает на -%{count} навык "
 "обороны любого находящегося в нём отряда."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
-msgid "Speed"
-msgstr "Скорость"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Анимация"
 
 msgid "Interface"
 msgstr "Интерфейс"
@@ -2940,6 +2945,9 @@ msgstr "Урон"
 msgid "HP"
 msgstr "Здоровье"
 
+msgid "Speed"
+msgstr "Скорость"
+
 msgid "Growth"
 msgstr "Прирост"
 
@@ -3234,6 +3242,13 @@ msgid ""
 msgstr ""
 "Условия\n"
 "поражения"
+
+msgid "About"
+msgstr "О карте"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Нажмите для возврата в главное меню."
 
 msgid "Map Description"
 msgstr "Описание карты"
@@ -4991,17 +5006,11 @@ msgstr "СОБЫТИЯ"
 msgid "LANGUAGE"
 msgstr "ЯЗЫК"
 
-msgid "ABOUT"
-msgstr "О КАРТЕ"
-
 msgid "Change Map Name"
 msgstr "Изменить название карты"
 
 msgid "Change Map Description"
 msgstr "Изменить описание карты"
-
-msgid "About"
-msgstr "О карте"
 
 msgid "Click to edit custom rumors."
 msgstr "Нажмите, чтобы отредактировать пользовательские слухи."
@@ -5643,6 +5652,10 @@ msgstr "заново генерировать случайную карту"
 
 msgid "hotkey|re-configure random map"
 msgstr "изменить параметры случайной карты"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "прокрутка влево"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"

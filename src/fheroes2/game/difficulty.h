@@ -78,4 +78,6 @@ namespace Difficulty
     bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const BuildingType building );
 
     bool isBasicAIBattleLogicApplicable( const int32_t difficulty, const bool isControlledByHuman );
+
+    bool isArtifactSortingAllowedForAI( const int32_t difficulty );
 }
