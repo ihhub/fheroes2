@@ -610,7 +610,7 @@ namespace fheroes2
 
                 const int32_t charWidth = charHandler.getWidth( *data );
 
-                if ( ( lineWidth + charWidth > maxWidth ) && ( charWidth <= maxWidth ) ) {
+                if ( ( lineWidth != 0 ) && ( lineWidth + charWidth > maxWidth ) ) {
                     // Current character has exceeded the maximum line width
                     // and the character is not bigger than the maximum width.
 
