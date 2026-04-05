@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 15:04+0000\n"
+"POT-Creation-Date: 2026-04-05 04:52+0000\n"
 "PO-Revision-Date: 2026-04-01 14:30+0100\n"
 "Last-Translator: Yannis Anthymidis <yannis-foss@anth.me.uk>\n"
 "Language-Team: Greek\n"
@@ -3454,6 +3454,9 @@ msgid "Select Hero:"
 msgstr ""
 
 msgid "Select Monsters:"
+msgstr ""
+
+msgid "Select Artifacts:"
 msgstr ""
 
 msgid "race|Random"

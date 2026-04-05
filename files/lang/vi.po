@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 04:52+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3815,6 +3815,10 @@ msgstr "Chọn Tướng:"
 #, fuzzy
 msgid "Select Monsters:"
 msgstr "Chọn Quái vật:"
+
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Chọn Bảo vật:"
 
 msgid "race|Random"
 msgstr "Ngẫu nhiên"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 04:52+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3829,6 +3829,10 @@ msgstr "Choisir héros :"
 #, fuzzy
 msgid "Select Monsters:"
 msgstr "Choisir créature :"
+
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Choisir artéfact :"
 
 msgid "race|Random"
 msgstr "Aléatoire"
