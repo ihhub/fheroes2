@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <string>
 #include <vector>
 
@@ -98,11 +99,43 @@ void Dialog::GameInfo()
 
     fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
-    const fheroes2::Rect scenarioNameRoi{ 37 + shadowOffset.x, 29 + shadowOffset.y, 349, 19 };
+    const int32_t buttonAboutWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_ABOUT_GOOD, 0 ).width();
+
+    fheroes2::Button buttonAbout( dialogOffset.x + 401 - buttonAboutWidth, dialogOffset.y + 36, isEvilInterface ? ICN::BUTTON_MAP_ABOUT_EVIL : ICN::BUTTON_MAP_ABOUT_GOOD,
+                                  0, 1 );
+
+    const bool isCreatorInfoPresent{ !mapInfo.creatorNotes.empty() };
+    if ( isCreatorInfoPresent ) {
+        // Make sure that this is a Resurrection map.
+        assert( mapInfo.version == GameVersion::RESURRECTION );
+
+        buttonAbout.draw();
+    }
+    else {
+        buttonAbout.hide();
+    }
+
+    const int32_t scenarioNameMaxWidth{ 349 };
+    const fheroes2::Rect scenarioNameRoi{ 37 + shadowOffset.x, 29 + shadowOffset.y, scenarioNameMaxWidth - ( isCreatorInfoPresent ? buttonAboutWidth : 0 ), 19 };
 
     fheroes2::Text text( mapInfo.name, fheroes2::FontType::normalWhite(), mapLanguage );
-    text.fitToOneRow( scenarioNameRoi.width );
-    text.draw( scenarioNameRoi.x, shadowOffset.y + 32, scenarioNameRoi.width, display );
+    // We deduct 2 to have at least 1 pixel space between text and text field borders.
+    text.fitToOneRow( scenarioNameRoi.width - 2 );
+    if ( isCreatorInfoPresent ) {
+        // We need to center the map name according to the center of the frame.
+        const int32_t noShiftWidth = scenarioNameMaxWidth - buttonAboutWidth * 2 - 2;
+        if ( text.width() <= noShiftWidth ) {
+            text.draw( scenarioNameRoi.x, shadowOffset.y + 32, scenarioNameMaxWidth, display );
+        }
+        else {
+            // It seems that we need to shift the scenario name to the left.
+            const int32_t offsetX = scenarioNameRoi.width - text.width() - 1;
+            text.draw( scenarioNameRoi.x + offsetX, shadowOffset.y + 32, display );
+        }
+    }
+    else {
+        text.draw( scenarioNameRoi.x, shadowOffset.y + 32, scenarioNameRoi.width, display );
+    }
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, shadowOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
@@ -174,8 +207,21 @@ void Dialog::GameInfo()
     while ( le.HandleEvents() ) {
         buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
+        if ( isCreatorInfoPresent ) {
+            buttonAbout.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonAbout.area() ) );
+        }
+
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
+
+        if ( isCreatorInfoPresent ) {
+            if ( le.MouseClickLeft( buttonAbout.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "About" ), mapInfo.creatorNotes, Dialog::OK );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonAbout.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "About" ), _( "Click to read notes from the map creator." ), Dialog::ZERO );
+            }
         }
 
         if ( le.isMouseRightButtonPressedInArea( scenarioDescripionRoi ) ) {

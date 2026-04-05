@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -52,6 +52,9 @@ namespace Translation
 
     // Converts the given string to lowercase in a locale aware way
     std::string StringLower( std::string str );
+
+    // Use it only if you need the original English string but with stripped context.
+    const char * getNonTranslated( const char * str );
 }
 
 #define _( str ) Translation::gettext( str )
