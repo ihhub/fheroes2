@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 04:52+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3677,6 +3677,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Select Monsters:"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "Select Artifacts:"
 msgstr "Selecteer spreuk doelwit"
 
 msgid "race|Random"
