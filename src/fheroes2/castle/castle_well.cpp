@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -231,9 +231,9 @@ void Castle::_openWell()
             Monster( _race, GetActualDwelling( castleDwellings[4] ) ), Monster( _race, GetActualDwelling( castleDwellings[5] ) ) };
 
     std::array<fheroes2::RandomMonsterAnimation, maxNumOfDwellings> monsterAnimInfo
-        = { fheroes2::RandomMonsterAnimation( castleMonster[0] ), fheroes2::RandomMonsterAnimation( castleMonster[1] ),
-            fheroes2::RandomMonsterAnimation( castleMonster[2] ), fheroes2::RandomMonsterAnimation( castleMonster[3] ),
-            fheroes2::RandomMonsterAnimation( castleMonster[4] ), fheroes2::RandomMonsterAnimation( castleMonster[5] ) };
+        = { fheroes2::RandomMonsterAnimation( castleMonster[0], false ), fheroes2::RandomMonsterAnimation( castleMonster[1], false ),
+            fheroes2::RandomMonsterAnimation( castleMonster[2], false ), fheroes2::RandomMonsterAnimation( castleMonster[3], false ),
+            fheroes2::RandomMonsterAnimation( castleMonster[4], false ), fheroes2::RandomMonsterAnimation( castleMonster[5], false ) };
 
     fheroes2::Image background;
     background._disableTransformLayer();

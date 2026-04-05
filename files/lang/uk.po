@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2026-01-31 15:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ОБРАТИ"
+
+msgid "ABOUT"
+msgstr "ПРО МАПУ"
 
 msgid "S"
 msgstr "М"
@@ -548,11 +551,13 @@ msgstr ""
 "Рів перериває будь-який рух через нього і зменшує навичку захисту військ, що "
 "знаходяться в ньому, на %{count}."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Швидкість: %{speed}"
 
-msgid "Speed"
-msgstr "Швидкість"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Анімація"
 
 msgid "Interface"
 msgstr "Інтерфейс"
@@ -2944,6 +2949,9 @@ msgstr "Шкода"
 msgid "HP"
 msgstr "Здоров'я"
 
+msgid "Speed"
+msgstr "Швидкість"
+
 msgid "Growth"
 msgstr "Приріст"
 
@@ -3232,6 +3240,13 @@ msgid ""
 "Loss\n"
 "Conditions"
 msgstr "Умови поразки"
+
+msgid "About"
+msgstr "Опис"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Тицьніть для повернення до головного меню."
 
 msgid "Map Description"
 msgstr "Опис мапи"
@@ -4973,17 +4988,11 @@ msgstr "ПОДІЇ"
 msgid "LANGUAGE"
 msgstr "МОВА"
 
-msgid "ABOUT"
-msgstr "ПРО МАПУ"
-
 msgid "Change Map Name"
 msgstr "Змінити назву мапи"
 
 msgid "Change Map Description"
 msgstr "Змінити опис мапи"
-
-msgid "About"
-msgstr "Опис"
 
 msgid "Click to edit custom rumors."
 msgstr "Тицьніть, щоб редагувати власні чутки."
@@ -5621,6 +5630,10 @@ msgstr "перегенерувати випадкову мапу"
 
 msgid "hotkey|re-configure random map"
 msgstr "переналаштувати випадкову мапу"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "прокрутити ліворуч"
 
 msgid "hotkey|roland campaign"
 msgstr "кампанія Роланда"

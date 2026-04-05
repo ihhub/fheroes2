@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "VÁLASZT"
+
+msgid "ABOUT"
+msgstr "LEÍRÁS"
 
 msgid "S"
 msgstr "S"
@@ -540,11 +543,13 @@ msgstr ""
 "A várárok megakasztja a keresztülhaladó egységek mozgását és csökkenti a "
 "benne álló egységek védelmi képességét %{count} százalékkal."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Sebesség: %{speed}"
 
-msgid "Speed"
-msgstr "Sebesség"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animáció"
 
 msgid "Interface"
 msgstr "Kezelőfelület"
@@ -2918,6 +2923,9 @@ msgstr "Sebzés"
 msgid "HP"
 msgstr "Életerő"
 
+msgid "Speed"
+msgstr "Sebesség"
+
 msgid "Growth"
 msgstr "Szaporulat"
 
@@ -3216,6 +3224,13 @@ msgid ""
 msgstr ""
 "Vesztési\n"
 "feltételek"
+
+msgid "About"
+msgstr "Leírás"
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Kattints a főmenübe való visszatéréshez."
 
 msgid "Map Description"
 msgstr "Térkép leírása"
@@ -4958,17 +4973,11 @@ msgstr "ESEMÉNYEK"
 msgid "LANGUAGE"
 msgstr "NYELV"
 
-msgid "ABOUT"
-msgstr "LEÍRÁS"
-
 msgid "Change Map Name"
 msgstr "Térkép nevének megváltoztatása"
 
 msgid "Change Map Description"
 msgstr "Térképleírás megváltoztatása"
-
-msgid "About"
-msgstr "Leírás"
 
 msgid "Click to edit custom rumors."
 msgstr "Kattints egyéni szóbeszéd szerkesztéséhez."
@@ -5605,6 +5614,10 @@ msgstr "véletlenszerű térkép újragenerálása"
 
 msgid "hotkey|re-configure random map"
 msgstr "véletlenszerű térkép újrakonfigurálása"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "görgetés balra"
 
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"
@@ -12569,12 +12582,3 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to "
-#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "A térkép nyelvét készülsz megváltoztatni. Régi nyelv: %{oldLanguage}, új "
-#~ "nyelv: %{newLanguage}. Néhány szöveg nem biztos, hogy megfelelően jelenik "
-#~ "meg ezután. Így is végre akarod hajtani a műveletet?"

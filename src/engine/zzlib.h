@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,7 +42,8 @@ namespace Compression
     std::vector<uint8_t> unzipData( const uint8_t * src, const size_t srcSize, size_t realSize = 0 );
 
     // Zips the input data and returns the compressed data or an empty vector in case of an error.
-    std::vector<uint8_t> zipData( const uint8_t * src, const size_t srcSize );
+    // Set isMaximumCompression only when compressing data not during the gameplay.
+    std::vector<uint8_t> zipData( const uint8_t * src, const size_t srcSize, const bool isMaximumCompression );
 
     // Reads & unzips the zipped chunk from the given input stream and writes it to the given output
     // stream. Returns true on success or false on error.

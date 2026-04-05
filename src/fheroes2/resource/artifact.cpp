@@ -1399,8 +1399,9 @@ std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 
             // At this point, we have confirmed that all the artifact parts are present
             // so remove the parts and then add the assembled artifact to BagArtifacts
-            for ( const int artifactId : setData.second )
+            for ( const int artifactId : setData.second ) {
                 RemoveArtifact( artifactId );
+            }
 
             assembledArtifactSets.insert( setData.first );
             PushArtifact( setData.first._assembledArtifactID );
@@ -1408,6 +1409,23 @@ std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
     }
 
     return assembledArtifactSets;
+}
+
+void BagArtifacts::sortFromWorstToBest()
+{
+    if ( size() < 2 ) {
+        // Nothing to do here.
+        return;
+    }
+
+    std::sort( begin(), end(), []( const auto & left, const auto & right ) {
+        // No sorting should be done for Magic Book.
+        if ( left == Artifact::MAGIC_BOOK || right == Artifact::MAGIC_BOOK ) {
+            return false;
+        }
+
+        return left.getArtifactValue() < right.getArtifactValue();
+    } );
 }
 
 bool ArtifactSetData::operator<( const ArtifactSetData & other ) const

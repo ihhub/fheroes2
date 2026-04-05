@@ -390,6 +390,11 @@ namespace
         AI::OptimizeTroopsOrder( giverArmy );
 
         BagArtifacts::exchangeArtifacts( taker, giver );
+
+        if ( Difficulty::isArtifactSortingAllowedForAI( Game::getDifficulty() ) ) {
+            left.GetBagArtifacts().sortFromWorstToBest();
+            right.GetBagArtifacts().sortFromWorstToBest();
+        }
     }
 
     void AIToCastle( Heroes & hero, const int32_t dstIndex )
@@ -486,6 +491,10 @@ namespace
                 captureCastle();
 
                 hero.IncreaseExperience( res.getAttackerExperience() );
+
+                if ( Difficulty::isArtifactSortingAllowedForAI( Game::getDifficulty() ) ) {
+                    hero.GetBagArtifacts().sortFromWorstToBest();
+                }
             }
             // The defender won
             else if ( res.isDefenderWin() && defender ) {
@@ -569,6 +578,10 @@ namespace
         // The attacker won
         if ( res.isAttackerWin() ) {
             hero.IncreaseExperience( res.getAttackerExperience() );
+
+            if ( Difficulty::isArtifactSortingAllowedForAI( Game::getDifficulty() ) ) {
+                hero.GetBagArtifacts().sortFromWorstToBest();
+            }
         }
         // The defender won
         else if ( res.isDefenderWin() ) {
