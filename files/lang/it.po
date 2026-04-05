@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -19,6 +19,9 @@ msgstr ""
 "X-Generator: Poedit 3.2\n"
 
 msgid "SELECT"
+msgstr ""
+
+msgid "ABOUT"
 msgstr ""
 
 msgid "S"
@@ -472,11 +475,13 @@ msgid ""
 "troops present in it by %{count}."
 msgstr ""
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Velocità: %{speed}"
 
-msgid "Speed"
-msgstr "Velocità"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Navigazione"
 
 msgid "Interface"
 msgstr "Interfaccia"
@@ -2790,6 +2795,9 @@ msgstr "Danni"
 msgid "HP"
 msgstr "PF"
 
+msgid "Speed"
+msgstr "Velocità"
+
 msgid "Growth"
 msgstr "Crescita"
 
@@ -3094,6 +3102,13 @@ msgid ""
 msgstr ""
 "Condizioni\n"
 "Sconfitta"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Clicca per salvare la partita in corso."
 
 #, fuzzy
 msgid "Map Description"
@@ -4925,18 +4940,12 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr ""
 
 #, fuzzy
 msgid "Change Map Description"
 msgstr "Descrizione scelta"
-
-msgid "About"
-msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5602,6 +5611,10 @@ msgstr "Sommario Regno"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Sommario Regno"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Inizia una partita singola o multigiocatore."
 
 msgid "hotkey|roland campaign"
 msgstr ""
