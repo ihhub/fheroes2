@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 04:52+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2026-01-31 15:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1078,6 +1078,12 @@ msgstr "Загине %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Загине %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Порядок ходів"
 
@@ -1138,11 +1144,11 @@ msgstr "Завдяки орлиному зору %{name} зміг вивчити
 msgid "Human"
 msgstr "Людина"
 
-msgid "AI"
-msgstr "Комп'ютер"
-
 msgid "Terrain"
 msgstr "Рельєф"
+
+msgid "Battle Only"
+msgstr "Лише битва"
 
 msgid "Start"
 msgstr "Почати"
@@ -1178,11 +1184,17 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
 
-msgid "Click to set this hero to be human-controlled."
-msgstr "Тицьніть, щоб встановити цього героя як керованого людиною."
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Тицьніть, щоб вибрати колір."
 
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Тицьніть, щоб встановити цього героя як керованого комп'ютером."
+msgid "Hero"
+msgstr "Герой"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Тицьніть, щоб встановити цього героя як керованого людиною."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} проти %{race2} %{name2}"
@@ -6058,9 +6070,6 @@ msgstr ""
 "Багатокористувацька гра, в якій кілька гравців змагаються один проти одного "
 "на одній мапі."
 
-msgid "Battle Only"
-msgstr "Лише битва"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Налаштуйте та зіграйте бій, не завантажуючи жодної мапи."
 
@@ -6723,14 +6732,59 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr "Доступні значення знаходяться в діапазоні від %{min} до %{max}."
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Тицьніть, щоб зберегти властивості події."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "ПРОБІЛ"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Змінити назву мапи"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Тицніть, щоб вибрати мову."
+
+#, fuzzy
+msgid "Backspace"
+msgstr "Назад"
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Тицьніть щоб вийти з результатів битви."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Квіти"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Тицьніть, щоб зберегти властивості події."
+
 msgid "Keyboard|ABC"
 msgstr "АБВ"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Дизайнери мап"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "Введене значення недійсне."
@@ -9698,9 +9752,6 @@ msgstr "Випадковий Монстр - сильний"
 msgid "Random Monster - very strong"
 msgstr "Випадковий Монстр - могутній"
 
-msgid "Hero"
-msgstr "Герой"
-
 msgid "Nothing Special"
 msgstr "Нічого особливого"
 
@@ -12645,6 +12696,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "AI"
+#~ msgstr "Комп'ютер"
+
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Тицьніть, щоб встановити цього героя як керованого комп'ютером."
 
 #~ msgid ""
 #~ "You are about to change the map's language from %{oldLanguage} to "

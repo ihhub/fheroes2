@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 04:52+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2026-04-01 14:30+0100\n"
 "Last-Translator: Yannis Anthymidis <yannis-foss@anth.me.uk>\n"
 "Language-Team: Greek\n"
@@ -1019,6 +1019,12 @@ msgstr ""
 msgid "Perish: %{min} - %{max}"
 msgstr ""
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr ""
 
@@ -1068,10 +1074,10 @@ msgstr ""
 msgid "Human"
 msgstr ""
 
-msgid "AI"
+msgid "Terrain"
 msgstr ""
 
-msgid "Terrain"
+msgid "Battle Only"
 msgstr ""
 
 msgid "Start"
@@ -1102,10 +1108,14 @@ msgstr ""
 msgid "Please select another hero."
 msgstr ""
 
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr ""
 
-msgid "Click to set this hero to be AI-controlled."
+msgid "Hero"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -5597,9 +5607,6 @@ msgid ""
 "on a single map."
 msgstr ""
 
-msgid "Battle Only"
-msgstr ""
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
@@ -6156,14 +6163,51 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+msgid "Click to switch to uppercase letters."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "ΚΕΝΟ"
 
+msgid "Change language"
+msgstr ""
+
+msgid "Click to switch between languages."
+msgstr ""
+
+msgid "Backspace"
+msgstr ""
+
+msgid "Click to remove characters."
+msgstr ""
+
+msgid "Lowercase"
+msgstr ""
+
+msgid "Click to switch to lowercase letters."
+msgstr ""
+
 msgid "Keyboard|ABC"
 msgstr "ΑΒΓ"
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr ""
@@ -8633,9 +8677,6 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
-msgstr ""
-
-msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"
