@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "AUTRE"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -540,11 +543,13 @@ msgstr ""
 "Le Fossé réduit de -%{count} la caractéristique de défense de n'importe "
 "quelle créature et ralentit sa capacité de mouvement."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Vitesse : %{speed}"
 
-msgid "Speed"
-msgstr "Vitesse"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animation"
 
 msgid "Interface"
 msgstr "Interface"
@@ -2970,6 +2975,9 @@ msgstr "Dégâts"
 msgid "HP"
 msgstr "PV"
 
+msgid "Speed"
+msgstr "Vitesse"
+
 msgid "Growth"
 msgstr "Croissance"
 
@@ -3275,6 +3283,13 @@ msgid ""
 msgstr ""
 "Conditions\n"
 "de défaite"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Cliquez pour revenir au menu principal."
 
 #, fuzzy
 msgid "Map Description"
@@ -5095,17 +5110,11 @@ msgstr "ÉVÉNEMENT"
 msgid "LANGUAGE"
 msgstr "LANGUE"
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr "Changer le nom de la carte"
 
 msgid "Change Map Description"
 msgstr "Changer la description de la carte"
-
-msgid "About"
-msgstr ""
 
 msgid "Click to edit custom rumors."
 msgstr "Cliquez pour éditer les rumeurs personnalisées."
@@ -5769,6 +5778,10 @@ msgstr "Nouvelle carte aléatoire"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Nouvelle carte aléatoire"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Défilement gauche"
 
 msgid "hotkey|roland campaign"
 msgstr "Campagne de Roland"

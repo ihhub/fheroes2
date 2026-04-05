@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 13:59+0000\n"
+"POT-Creation-Date: 2026-04-01 01:29+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ZVOLIT"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -539,11 +542,13 @@ msgstr ""
 "Příkop přeruší jakýkoli pohyb skrz něj a snižuje obrannou sílu jednotek, "
 "které se v něm nacházejí, o %{count}."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Rychlost: %{speed}"
 
-msgid "Speed"
-msgstr "Rychlost"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Animace"
 
 msgid "Interface"
 msgstr "Rozhraní"
@@ -2905,6 +2910,9 @@ msgstr "Škody"
 msgid "HP"
 msgstr "Zdravi"
 
+msgid "Speed"
+msgstr "Rychlost"
+
 msgid "Growth"
 msgstr "Růst"
 
@@ -3204,6 +3212,13 @@ msgid ""
 msgstr ""
 "Podmínky\n"
 "prohry"
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klikni pro návrat do hlavního menu."
 
 msgid "Map Description"
 msgstr "Popis mapy"
@@ -4967,17 +4982,11 @@ msgstr "UDÁLOSTI"
 msgid "LANGUAGE"
 msgstr "JAZYK"
 
-msgid "ABOUT"
-msgstr ""
-
 msgid "Change Map Name"
 msgstr "Změnit název mapy"
 
 msgid "Change Map Description"
 msgstr "Změnit popis mapy"
-
-msgid "About"
-msgstr ""
 
 msgid "Click to edit custom rumors."
 msgstr "Klikněte pro úpravu vlastních pověstí."
@@ -5623,6 +5632,10 @@ msgstr "Nová náhodná mapa"
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Nová náhodná mapa"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Posun vlevo"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolandova kampaň"
@@ -12541,11 +12554,3 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to "
-#~ "%{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "Chystáte se změnit jazyk mapy z %{oldLanguage} na %{newLanguage}. Některé "
-#~ "texty nemusí být po této změně zobrazeny správně.Chcete pokračovat?"

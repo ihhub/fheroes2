@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -101,6 +101,32 @@ Battle::Unit * Battle::Graveyard::getLastUnit( const int32_t index ) const
     }
 
     return units.back();
+}
+
+void Battle::Graveyard::moveToLastIfPresent( Battle::Unit * unit )
+{
+    assert( unit != nullptr && Board::isValidIndex( unit->GetHeadIndex() )
+            && ( unit->isWide() ? Board::isValidIndex( unit->GetTailIndex() ) : !Board::isValidIndex( unit->GetTailIndex() ) ) );
+
+    Graveyard & graveyard = *this;
+
+    auto & headIndexMonsters = graveyard[unit->GetHeadIndex()];
+
+    auto iter = std::find( headIndexMonsters.begin(), headIndexMonsters.end(), unit );
+    if ( iter == headIndexMonsters.end() ) {
+        // The monster isn't dead. Nothing needs to be done.
+        return;
+    }
+
+    std::rotate( iter, iter + 1, headIndexMonsters.end() );
+
+    if ( unit->isWide() ) {
+        auto & tailIndexMonsters = graveyard[unit->GetTailIndex()];
+
+        iter = std::find( tailIndexMonsters.begin(), tailIndexMonsters.end(), unit );
+        assert( iter != tailIndexMonsters.end() );
+        std::rotate( iter, iter + 1, tailIndexMonsters.end() );
+    }
 }
 
 std::vector<Battle::Unit *> Battle::Graveyard::getUnits( const int32_t index ) const

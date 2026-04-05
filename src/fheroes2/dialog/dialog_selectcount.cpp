@@ -380,11 +380,18 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 }
                 charInsertPos = newPos;
             }
+            else if ( ( le.getPressedKeyValue() == fheroes2::Key::KEY_DELETE ) || ( le.getPressedKeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
+                // Character deletion shouldn't check any length as we are reducing the existing text.
+                // This is useful when the text is actually bigger that the text window and it is not possible to enter anything
+                // but we have to allow to delete characters.
+                charInsertPos = InsertKeySym( result, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
+            }
             else {
                 // We should verify the height of the text before allowing to enter one more line.
                 std::string tmp = result;
                 const size_t tempCharInsertPos = InsertKeySym( tmp, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
-                if ( textInput.height( tmp ) <= textInputArea.height ) {
+
+                if ( !isMultiLine || ( textInput.height( tmp ) <= textInputArea.height ) ) {
                     result = std::move( tmp );
                     charInsertPos = tempCharInsertPos;
                 }
