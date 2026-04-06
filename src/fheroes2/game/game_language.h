@@ -40,6 +40,7 @@ namespace fheroes2
         Bulgarian,
         Danish,
         Dutch,
+        Esperanto,
         Greek,
         Hungarian,
         Norwegian,
@@ -63,5 +64,6 @@ namespace fheroes2
         CP1254,
         CP1258,
         ISO8859_16,
+	    ISO8859_3
     };
 }
