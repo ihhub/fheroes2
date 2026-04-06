@@ -885,6 +885,9 @@ namespace
         std::ostringstream os;
 
         os << "******* Map texts *******" << std::endl;
+        os << "Name: " << mapFormat.name << std::endl;
+        os << "Description: " << mapFormat.description << std::endl;
+        os << "Creator notes: " << mapFormat.creatorNotes << std::endl;
 
         os << "-------   Towns   -------" << std::endl;
         for ( const auto & [uid, castle] : mapFormat.castleMetadata ) {
