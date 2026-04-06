@@ -140,6 +140,41 @@ jobs:
             ./src/dist/tools/xmi2midi
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
+        - name: macOS SDL2 (ARM)
+          on: [ 'pull_request', 'push' ]
+          os: macos-14
+          dependencies: sdl2 sdl2_mixer sdl2_image
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_IMAGE: ON
+          package_name: fheroes2_macos_arm64_SDL2.zip
+          package_files: >-
+            LICENSE
+            changelog.txt
+            fheroes2
+            ./docs/README.txt
+            files/data/*.h2d
+            files/lang/*.mo
+            maps/*.fh2m
+            ./script/demo/download_demo_version.sh
+            ./script/homm2/extract_homm2_resources.sh
+            script/macos/Brewfile
+          tools_package_name: fheroes2_tools_macos_arm64_SDL2.zip
+          tools_package_files: >-
+            LICENSE
+            ./docs/GRAPHICAL_ASSETS.md
+            ./script/agg/extract_agg.sh
+            ./src/dist/tools/82m2wav
+            ./src/dist/tools/bin2txt
+            ./src/dist/tools/extractor
+            ./src/dist/tools/h2dmgr
+            ./src/dist/tools/icn2img
+            ./src/dist/tools/pal2img
+            ./src/dist/tools/til2img
+            ./src/dist/tools/xmi2midi
+          release_name: macOS ARM64 build with SDL2 (latest commit)
+          release_tag: fheroes2-osx-arm64-sdl2_dev
         - name: macOS SDL2 App Bundle
           on: [ 'pull_request' ]
           os: macos-latest
