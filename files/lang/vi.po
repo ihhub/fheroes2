@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1047,6 +1047,12 @@ msgstr "Chết %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Chết: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Thứ tự Xếp hàng"
 
@@ -1104,12 +1110,12 @@ msgstr ""
 msgid "Human"
 msgstr "Con người"
 
-msgid "AI"
-msgstr "AI"
-
 #, fuzzy
 msgid "Terrain"
 msgstr "Chế độ Địa hình"
+
+msgid "Battle Only"
+msgstr "Chỉ Chiến đấu"
 
 #, fuzzy
 msgid "Start"
@@ -1142,11 +1148,16 @@ msgid "Please select another hero."
 msgstr "Hãy chọn một tướng khác."
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Nhấp để chọn màu này."
 
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid "Hero"
+msgstr "Tướng"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Nhấp để chọn màu này."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3816,6 +3827,10 @@ msgstr "Chọn Tướng:"
 msgid "Select Monsters:"
 msgstr "Chọn Quái vật:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Chọn Bảo vật:"
+
 msgid "race|Random"
 msgstr "Ngẫu nhiên"
 
@@ -6235,9 +6250,6 @@ msgstr ""
 "Một trò chơi nhiều người chơi, trong đó một số người chơi sẽ đấu với nhau "
 "trên một bản đồ."
 
-msgid "Battle Only"
-msgstr "Chỉ Chiến đấu"
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 "Thiết lập và chơi một trận chiến mà không cần phải tải bất cứ bản đồ nào."
@@ -6892,13 +6904,56 @@ msgstr "Phòng thủ"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Thay đổi ngôn ngữ của trò chơi."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Bấm để chọn ngôn ngữ đã chọn."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Hoa"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Thiết kế Bản đồ"
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -9917,10 +9972,6 @@ msgstr "Ngẫu nhiên Quái vật - mạnh"
 
 msgid "Random Monster - very strong"
 msgstr "Ngẫu nhiên Quái vật - rất mạnh"
-
-#, fuzzy
-msgid "Hero"
-msgstr "Tướng"
 
 msgid "Nothing Special"
 msgstr "Không có gì Đặc biệt"
@@ -12974,3 +13025,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "AI"
+#~ msgstr "AI"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Nhấp để chọn màu này."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1089,6 +1089,12 @@ msgstr "Mueren: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Mueren: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Orden de turno"
 
@@ -1151,12 +1157,13 @@ msgstr ""
 msgid "Human"
 msgstr "Humano"
 
-msgid "AI"
-msgstr "IA"
-
 #, fuzzy
 msgid "Terrain"
 msgstr "Objeto de terreno"
+
+#, fuzzy
+msgid "Battle Only"
+msgstr "Enano de Combate"
 
 msgid "Start"
 msgstr "Comenzar"
@@ -1187,11 +1194,15 @@ msgid "Please select another hero."
 msgstr "Por favor, selecciona otro héroe."
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 
+msgid "Hero"
+msgstr "Héroe"
+
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3786,6 +3797,10 @@ msgstr "Mejor héroe:"
 msgid "Select Monsters:"
 msgstr "Mejor monstruo:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Artefactos"
+
 msgid "race|Random"
 msgstr "Aleatorio"
 
@@ -6235,10 +6250,6 @@ msgstr ""
 "Una partida multijugador con varios jugadores humanos compitiendo entre "
 "ellos en un mapa."
 
-#, fuzzy
-msgid "Battle Only"
-msgstr "Enano de Combate"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Configurar y jugar una batalla sin cargar ningún mapa."
 
@@ -6904,14 +6915,57 @@ msgstr "Defensa"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Haz clic para volver al menú principal"
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "ESPACIO"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Cambiar el idioma del juego."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Haz clic para seleccionar el idioma."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Flores"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Haz clic para volver al menú principal"
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "El valor ingresado no es válido."
@@ -9881,9 +9935,6 @@ msgstr "Cualquier castillo"
 msgid "Random Monster - very strong"
 msgstr "Cualquier castillo"
 
-msgid "Hero"
-msgstr "Héroe"
-
 msgid "Nothing Special"
 msgstr "Nada especial"
 
@@ -12668,3 +12719,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "AI"
+#~ msgstr "IA"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Haga clic aquí para seleccionar el escenario donde jugar."

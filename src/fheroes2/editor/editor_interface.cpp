@@ -885,6 +885,9 @@ namespace
         std::ostringstream os;
 
         os << "******* Map texts *******" << std::endl;
+        os << "Name: " << mapFormat.name << std::endl;
+        os << "Description: " << mapFormat.description << std::endl;
+        os << "Creator notes: " << mapFormat.creatorNotes << std::endl;
 
         os << "-------   Towns   -------" << std::endl;
         for ( const auto & [uid, castle] : mapFormat.castleMetadata ) {
@@ -899,7 +902,7 @@ namespace
             }
         }
 
-        os << "-------   Heroes   -------" << std::endl;
+        os << "-------   Heroes / Jails   -------" << std::endl;
         for ( const auto & [uid, hero] : mapFormat.heroMetadata ) {
             if ( !hero.customName.empty() ) {
                 int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_HEROES );
@@ -947,10 +950,15 @@ namespace
             }
         }
 
-        os << "-------   Signs   -------" << std::endl;
+        os << "-------   Signs / Bottles   -------" << std::endl;
         for ( const auto & [uid, sign] : mapFormat.signMetadata ) {
             if ( !sign.message.empty() ) {
-                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    // This could be a bottle.
+                    index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_WATER );
+                }
+
                 if ( index < 0 ) {
                     os << "!!! [absent object " << uid << "]: " << sign.message << std::endl;
                 }
@@ -969,7 +977,7 @@ namespace
 
         os << "-------   Rumors  -------" << std::endl;
         for ( const auto & rumor : mapFormat.rumors ) {
-            os << rumor << std::endl;
+            os << "Rumor: " << rumor << std::endl;
         }
 
         os << "******* End *******" << std::endl;
@@ -1863,6 +1871,50 @@ namespace Interface
                         Maps::setSpellOnTile( tile, newSpellId );
 
                         action.commit();
+                    }
+                    else if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE
+                              || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR ) {
+                        assert( _mapFormat.artifactMetadata.find( object.id ) != _mapFormat.artifactMetadata.end() );
+
+                        auto & selected = _mapFormat.artifactMetadata[object.id].selected;
+
+                        int32_t allowedArtifactLevel{ Artifact::ART_NONE };
+                        switch ( objectInfo.objectType ) {
+                        case MP2::OBJ_RANDOM_ARTIFACT:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_ALL_NORMAL;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_TREASURE;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_MINOR;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_MAJOR;
+                            break;
+                        default:
+                            assert( 0 );
+                            break;
+                        }
+
+                        std::vector<int32_t> allowed;
+                        for ( int32_t id = Artifact::UNKNOWN; id < Artifact::ARTIFACT_COUNT; ++id ) {
+                            const int32_t level = Artifact( id ).Level();
+                            if ( ( level & allowedArtifactLevel ) != 0 ) {
+                                allowed.emplace_back( id );
+                            }
+                        }
+
+                        assert( !allowed.empty() );
+
+                        std::vector<int32_t> temp = selected;
+
+                        Dialog::multiSelectArtifact( allowed, temp );
+                        if ( temp != selected ) {
+                            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                            selected = std::move( temp );
+                            action.commit();
+                        }
                     }
                     else if ( Artifact( static_cast<int>( objectInfo.metadata[0] ) ).isValid() ) {
                         fheroes2::ArtifactDialogElement( static_cast<int>( objectInfo.metadata[0] ) ).showPopup( Dialog::OK );

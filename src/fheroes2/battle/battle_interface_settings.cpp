@@ -20,6 +20,7 @@
 
 #include "battle_interface_settings.h"
 
+#include <cassert>
 #include <cstdint>
 #include <string>
 
@@ -54,12 +55,28 @@ namespace
     const fheroes2::Rect movementAreaRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
                                           fheroes2::optionIconSize, fheroes2::optionIconSize };
 
-    void drawTurnOrder( const fheroes2::Rect & optionRoi )
+    void drawTurnOrder( const fheroes2::Rect & optionRoi, const bool isTurnOrderInsideWindow )
     {
-        const bool isShowTurnOrderEnabled = Settings::Get().BattleShowTurnOrder();
-        const fheroes2::Sprite & turnOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowTurnOrderEnabled ? 4 : 3 );
-        fheroes2::drawOption( optionRoi, turnOrderIcon, _( "Turn Order" ), isShowTurnOrderEnabled ? _( "On" ) : _( "Off" ),
-                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        const auto state = Settings::Get().getBattleTurnOrderState();
+        const fheroes2::Sprite & turnOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, state == BattleTurnOrderState::OFF ? 3 : 4 );
+
+        std::string description;
+        switch ( state ) {
+        case BattleTurnOrderState::OFF:
+            description = _( "Off" );
+            break;
+        case BattleTurnOrderState::TOP:
+            description = _( "battle_turn_order|Top" );
+            break;
+        case BattleTurnOrderState::BOTTOM:
+            description = isTurnOrderInsideWindow ? _( "battle_turn_order|Top" ) : _( "battle_turn_order|Bottom" );
+            break;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        fheroes2::drawOption( optionRoi, turnOrderIcon, _( "Turn Order" ), description, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawGrid( const fheroes2::Rect & optionRoi )
@@ -144,7 +161,7 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void openInterfaceBattleOptionDialog( bool & saveConfiguration )
+    void openInterfaceBattleOptionDialog( bool & saveConfiguration, const bool isTurnOrderInsideWindow )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -172,8 +189,9 @@ namespace
         const fheroes2::Rect windowShadowCursorRoi( shadowCursorRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowMovementAreaRoi( movementAreaRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowTurnOrderRoi, &windowGridRoi, &windowDamageInfoRoi, &windowShadowMovementRoi, &windowShadowCursorRoi, &windowMovementAreaRoi]() {
-            drawTurnOrder( windowTurnOrderRoi );
+        const auto drawOptions = [&windowTurnOrderRoi, &windowGridRoi, &windowDamageInfoRoi, &windowShadowMovementRoi, &windowShadowCursorRoi, &windowMovementAreaRoi,
+                                  isTurnOrderInsideWindow]() {
+            drawTurnOrder( windowTurnOrderRoi, isTurnOrderInsideWindow );
             drawGrid( windowGridRoi );
             drawDamageInfo( windowDamageInfoRoi );
             drawShadowMovement( windowShadowMovementRoi );
@@ -192,7 +210,14 @@ namespace
             bool redrawScreen = false;
 
             if ( le.MouseClickLeft( windowTurnOrderRoi ) ) {
-                conf.setBattleShowTurnOrder( !conf.BattleShowTurnOrder() );
+                conf.switchToNextBattleTurnOrderState();
+
+                if ( isTurnOrderInsideWindow && ( conf.getBattleTurnOrderState() == BattleTurnOrderState::BOTTOM ) ) {
+                    // When rendering of this option is done within the battlefield window
+                    // we cannot do it at the bottom of the window so for these cases we skip bottom option.
+                    conf.switchToNextBattleTurnOrderState();
+                }
+
                 redrawScreen = true;
             }
             else if ( le.MouseClickLeft( windowGridRoi ) ) {
@@ -257,11 +282,11 @@ namespace
 
 namespace Battle
 {
-    bool showBattleInterfaceDialog()
+    bool showBattleInterfaceDialog( const bool isTurnOrderInsideWindow )
     {
         bool isSaveConfiguration{ false };
 
-        openInterfaceBattleOptionDialog( isSaveConfiguration );
+        openInterfaceBattleOptionDialog( isSaveConfiguration, isTurnOrderInsideWindow );
         return isSaveConfiguration;
     }
 }
