@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -1056,6 +1056,12 @@ msgstr "Megöl: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Megöl: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Körsorrend"
 
@@ -1110,11 +1116,11 @@ msgstr ""
 msgid "Human"
 msgstr "Ember"
 
-msgid "AI"
-msgstr "Gép"
-
 msgid "Terrain"
 msgstr "Talaj"
+
+msgid "Battle Only"
+msgstr "Csak csata"
 
 msgid "Start"
 msgstr "Start"
@@ -1148,11 +1154,17 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Kérlek válassz másik hőst."
 
-msgid "Click to set this hero to be human-controlled."
-msgstr "Kattints a hős emberi irányításához."
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Kattints a szín kiválasztásához."
 
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Kattints a hős gépi irányításához."
+msgid "Hero"
+msgstr "Hős"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Kattints a hős emberi irányításához."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
@@ -3752,6 +3764,10 @@ msgstr "Hős kiválasztása:"
 msgid "Select Monsters:"
 msgstr "Lények kiválasztása:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Varázstárgy kiválasztása:"
+
 msgid "race|Random"
 msgstr "Véletlen"
 
@@ -6041,9 +6057,6 @@ msgstr ""
 "Többjátékos játék, több emberi játékos részvételével, akik egymás ellen "
 "küzdenek egyetlen térképen."
 
-msgid "Battle Only"
-msgstr "Csak csata"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Egyetlen csata beállítása és lejátszása térkép betöltése nélkül."
 
@@ -6689,14 +6702,59 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr "Az igénybe vehető álló értéktartomány %{min} és %{max} között van."
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Kattints az esemény beállítások mentéséhez."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "SPACE"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Térkép nevének megváltoztatása"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Kattints a kijelölt nyelv kiválasztásához."
+
+#, fuzzy
+msgid "Backspace"
+msgstr "Vissza"
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Kattints a csata eredményeiből való kilépéshez."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Virágok"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Kattints az esemény beállítások mentéséhez."
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Térkép tervezők"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "A megadott érték helytelen."
@@ -9639,9 +9697,6 @@ msgstr "Véletlenszerű lény - erős"
 msgid "Random Monster - very strong"
 msgstr "Véletlenszerű lény - nagyon erős"
 
-msgid "Hero"
-msgstr "Hős"
-
 msgid "Nothing Special"
 msgstr "Semmi érdekes"
 
@@ -12582,3 +12637,9 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid "AI"
+#~ msgstr "Gép"
+
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Kattints a hős gépi irányításához."

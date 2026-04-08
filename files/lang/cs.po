@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -1065,6 +1065,12 @@ msgstr "Zabije: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Zabije: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Pořadí tahu"
 
@@ -1119,12 +1125,12 @@ msgstr ""
 msgid "Human"
 msgstr "Člověk"
 
-msgid "AI"
-msgstr "AI"
-
 #, fuzzy
 msgid "Terrain"
 msgstr "Režim terénu"
+
+msgid "Battle Only"
+msgstr "Pouze bitva"
 
 msgid "Start"
 msgstr "Start"
@@ -1155,11 +1161,15 @@ msgid "Please select another hero."
 msgstr "Vyber jiného hrdinu."
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Kliknout pro výběr barvy."
 
+msgid "Hero"
+msgstr "Hrdina"
+
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Kliknout pro výběr barvy."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3744,6 +3754,10 @@ msgstr "Vybrat hrdinu:"
 msgid "Select Monsters:"
 msgstr "Vybrat jednotku:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Vybrat arkefakt:"
+
 msgid "race|Random"
 msgstr "Náhodný"
 
@@ -6048,9 +6062,6 @@ msgid ""
 msgstr ""
 "Hra pro více hráčů, kde několik hráčů soutěží proti sobě na jedné mapě."
 
-msgid "Battle Only"
-msgstr "Pouze bitva"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Nastavte a zahrajte si bitvu bez načítání jakékoli mapy."
 
@@ -6698,14 +6709,58 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr "Dostupné hodnoty se pohybují v rozmezí od %{min} do %{max}."
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Klikněte pro uložení vlastnosti události."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "Mezerník"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Změnit název mapy"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Kliknutím vybereš zvolený jazyk."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Kliknutím se rozlišení změní na vybrané."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Květiny"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Klikněte pro uložení vlastnosti události."
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Návrháři map"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "Vložená hodnota není platná."
@@ -9639,9 +9694,6 @@ msgstr "Náhodná jednotka - silná"
 msgid "Random Monster - very strong"
 msgstr "Náhodná jednotka - velmi silná"
 
-msgid "Hero"
-msgstr "Hrdina"
-
 msgid "Nothing Special"
 msgstr "Nic zvláštního"
 
@@ -12554,3 +12606,10 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "AI"
+#~ msgstr "AI"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Kliknout pro výběr barvy."

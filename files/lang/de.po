@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -1068,6 +1068,12 @@ msgstr "Sterben: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Sterben: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Reihenfolge"
 
@@ -1128,11 +1134,11 @@ msgstr ""
 msgid "Human"
 msgstr "Mensch"
 
-msgid "AI"
-msgstr "KI"
-
 msgid "Terrain"
 msgstr "Gelände"
+
+msgid "Battle Only"
+msgstr "Nur Schlacht"
 
 msgid "Start"
 msgstr "Start"
@@ -1166,11 +1172,17 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Bitte wählt einen anderen Helden aus."
 
-msgid "Click to set this hero to be human-controlled."
-msgstr "Klickt, dass dieser Held menschgesteuert ist."
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Klickt, um die Farbe auszuwählen."
 
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Klickt, dass dieser Held KI-gesteuert ist."
+msgid "Hero"
+msgstr "Held"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Klickt, dass dieser Held menschgesteuert ist."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} gegen %{race2} %{name2}"
@@ -3797,6 +3809,10 @@ msgstr "Held auswählen:"
 msgid "Select Monsters:"
 msgstr "Monster auswählen:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Artefakt auswählen:"
+
 msgid "race|Random"
 msgstr "Zufällig"
 
@@ -6113,9 +6129,6 @@ msgstr ""
 "Ein Mehrspieler-Spiel, bei dem mehrere menschliche Spieler auf einer "
 "einzigen Karte gegeneinander antreten."
 
-msgid "Battle Only"
-msgstr "Nur Schlacht"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Einen Schlacht einrichten und spielen, ohne eine Karte zu laden."
 
@@ -6790,14 +6803,59 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr "Die verfügbaren Werte reichen von %{min} bis %{max}."
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Klickt, um die Ereigniseigenschaften zu speichern."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "LEERTASTE"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Kartennamen ändern"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Klickt, um die ausgewählte Sprache auszuwählen."
+
+#, fuzzy
+msgid "Backspace"
+msgstr "Zurück"
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Klickt, um die Kampfergebnisse zu verlassen."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Blumen"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Klickt, um die Ereigniseigenschaften zu speichern."
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Kartendesigner"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "Der eingegebene Wert ist ungültig."
@@ -9840,9 +9898,6 @@ msgstr "Zufälliges Monster - stark"
 msgid "Random Monster - very strong"
 msgstr "Zufälliges Monster - sehr stark"
 
-msgid "Hero"
-msgstr "Held"
-
 msgid "Nothing Special"
 msgstr "Nichts besonderes"
 
@@ -12835,3 +12890,9 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
+
+#~ msgid "AI"
+#~ msgstr "KI"
+
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Klickt, dass dieser Held KI-gesteuert ist."

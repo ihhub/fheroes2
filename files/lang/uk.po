@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-05 13:11+0000\n"
 "PO-Revision-Date: 2026-01-31 15:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -551,13 +551,11 @@ msgstr ""
 "Рів перериває будь-який рух через нього і зменшує навичку захисту військ, що "
 "знаходяться в ньому, на %{count}."
 
-#, fuzzy
 msgid "battleAnimation|Speed: %{speed}"
 msgstr "Швидкість: %{speed}"
 
-#, fuzzy
 msgid "battleAnimation|Speed"
-msgstr "Анімація"
+msgstr "Швидкість"
 
 msgid "Interface"
 msgstr "Інтерфейс"
@@ -1078,6 +1076,12 @@ msgstr "Загине %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Загине %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Порядок ходів"
 
@@ -1095,9 +1099,8 @@ msgstr "Затінення сітки"
 msgid "Shadow Cursor"
 msgstr "Тінь курсора"
 
-#, fuzzy
 msgid "Movement Area"
-msgstr "Рух Героя"
+msgstr "Зона переміщення"
 
 msgid "Toggle to display the turn order during the battle."
 msgstr "Перемкнути відображення черговості ходів загонів під час битви."
@@ -1138,11 +1141,11 @@ msgstr "Завдяки орлиному зору %{name} зміг вивчити
 msgid "Human"
 msgstr "Людина"
 
-msgid "AI"
-msgstr "Комп'ютер"
-
 msgid "Terrain"
 msgstr "Рельєф"
+
+msgid "Battle Only"
+msgstr "Лише битва"
 
 msgid "Start"
 msgstr "Почати"
@@ -1178,11 +1181,15 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
 
-msgid "Click to set this hero to be human-controlled."
-msgstr "Тицьніть, щоб встановити цього героя як керованого людиною."
+msgid "Click to select a hero."
+msgstr "Тицьніть, щоб вибрати героя."
 
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Тицьніть, щоб встановити цього героя як керованого комп'ютером."
+msgid "Hero"
+msgstr "Герой"
+
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Якщо цей прапорець встановлено, герой оборони буде керований людиною."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} проти %{race2} %{name2}"
@@ -3244,9 +3251,8 @@ msgstr "Умови поразки"
 msgid "About"
 msgstr "Опис"
 
-#, fuzzy
 msgid "Click to read notes from the map creator."
-msgstr "Тицьніть для повернення до головного меню."
+msgstr "Тицьніть, щоб прочитати нотатки від автора мапи."
 
 msgid "Map Description"
 msgstr "Опис мапи"
@@ -3763,6 +3769,9 @@ msgstr "Оберіть героя:"
 
 msgid "Select Monsters:"
 msgstr "Оберіть монстрів:"
+
+msgid "Select Artifacts:"
+msgstr "Оберіть артефакти:"
 
 msgid "race|Random"
 msgstr "Випадково"
@@ -5631,9 +5640,8 @@ msgstr "перегенерувати випадкову мапу"
 msgid "hotkey|re-configure random map"
 msgstr "переналаштувати випадкову мапу"
 
-#, fuzzy
 msgid "hotkey|output all text"
-msgstr "прокрутити ліворуч"
+msgstr "вивести весь текст"
 
 msgid "hotkey|roland campaign"
 msgstr "кампанія Роланда"
@@ -6053,9 +6061,6 @@ msgid ""
 msgstr ""
 "Багатокористувацька гра, в якій кілька гравців змагаються один проти одного "
 "на одній мапі."
-
-msgid "Battle Only"
-msgstr "Лише битва"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Налаштуйте та зіграйте бій, не завантажуючи жодної мапи."
@@ -6719,14 +6724,50 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr "Доступні значення знаходяться в діапазоні від %{min} до %{max}."
 
+msgid "Uppercase"
+msgstr ""
+
+msgid "Click to switch to uppercase letters."
+msgstr "Тицьніть, щоб перейти до великих літер."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+msgid "Keyboard type"
+msgstr "Тип клавіатури"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "ПРОБІЛ"
 
+msgid "Change language"
+msgstr "Змінити мову"
+
+msgid "Click to switch between languages."
+msgstr "Тицьніть, щоб перемикатися між мовами."
+
+msgid "Backspace"
+msgstr "Видалити"
+
+msgid "Click to remove characters."
+msgstr "Тицьніть, щоб видалити символи."
+
+msgid "Lowercase"
+msgstr "Малі літери"
+
+msgid "Click to switch to lowercase letters."
+msgstr "Тицьніть, щоб перейти до малих літер."
+
 msgid "Keyboard|ABC"
 msgstr "АБВ"
+
+msgid "Swap sign"
+msgstr "Змінити знак"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "Введене значення недійсне."
@@ -8643,10 +8684,10 @@ msgid "Click to enable hero's patrol mode."
 msgstr "Тицьніть для увімкнення патрулювання героєм."
 
 msgid "Blood Morale"
-msgstr "Кровожерлива"
+msgstr "Кровожерлива мораль"
 
 msgid "%{morale} Morale"
-msgstr "%{morale} моралі"
+msgstr "%{morale} мораль"
 
 msgid "%{luck} Luck"
 msgstr "%{luck} вдачі"
@@ -9198,28 +9239,25 @@ msgstr "Чудова"
 msgid "luck|Irish"
 msgstr "Ірландська"
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes falls on the hero's units in combat, causing "
 "their attacks to only do half damage."
 msgstr ""
-"Іноді, негативна удача спіткає війська героя в бою, через що їхні атаки "
+"Іноді, %{luck-type} удача спіткає війська героя в бою, через що їхні атаки "
 "завдають лише половину шкоди."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck means the hero's units will never get lucky or unlucky "
 "attacks on the enemy."
 msgstr ""
-"Нейтральна удача означає, що війська героя ніколи не матимуть вдалі або "
+"%{luck-type} удача означає, що війська героя ніколи не матимуть вдалі або "
 "невдалі атаки по ворогу."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
-"Позитивна удача інколи дарує військам героя вдалу атаку (подвійна сила) в "
+"%{luck-type} удача інколи дарує військам героя вдалу атаку (подвійна сила) в "
 "бою."
 
 msgid "morale|Treason"
@@ -9243,26 +9281,22 @@ msgstr "Чудова"
 msgid "morale|Blood!"
 msgstr "Кров!"
 
-#, fuzzy
 msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
-msgstr "Негативна мораль може призвести до заклякання військ героя у бою."
+msgstr "%{morale-type} мораль може призвести до заклякання військ героя у бою."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale means the hero's units will never be blessed with "
 "extra attacks or freeze in combat."
 msgstr ""
-"Нейтральна мораль означає, що війська героя ніколи не будуть обдаровані "
+"%{morale-type} мораль означає, що війська героя ніколи не будуть обдаровані "
 "додатковими атаками або завмирати в бою."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale may give the hero's units extra attacks in combat."
-msgstr "Позитивна мораль може надати військам героя додатковий хід в бою."
+msgstr "%{morale-type} мораль може надати військам героя додатковий хід в бою."
 
-#, fuzzy
 msgid "Blood"
-msgstr "Бладрейн"
+msgstr "Кровожерлива"
 
 msgid "Knight"
 msgstr "Лицар"
@@ -9693,9 +9727,6 @@ msgstr "Випадковий Монстр - сильний"
 
 msgid "Random Monster - very strong"
 msgstr "Випадковий Монстр - могутній"
-
-msgid "Hero"
-msgstr "Герой"
 
 msgid "Nothing Special"
 msgstr "Нічого особливого"
@@ -12641,6 +12672,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "AI"
+#~ msgstr "Комп'ютер"
+
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Тицьніть, щоб встановити цього героя як керованого комп'ютером."
 
 #~ msgid ""
 #~ "You are about to change the map's language from %{oldLanguage} to "
