@@ -885,6 +885,9 @@ namespace
         std::ostringstream os;
 
         os << "******* Map texts *******" << std::endl;
+        os << "Name: " << mapFormat.name << std::endl;
+        os << "Description: " << mapFormat.description << std::endl;
+        os << "Creator notes: " << mapFormat.creatorNotes << std::endl;
 
         os << "-------   Towns   -------" << std::endl;
         for ( const auto & [uid, castle] : mapFormat.castleMetadata ) {
@@ -899,7 +902,7 @@ namespace
             }
         }
 
-        os << "-------   Heroes   -------" << std::endl;
+        os << "-------   Heroes / Jails   -------" << std::endl;
         for ( const auto & [uid, hero] : mapFormat.heroMetadata ) {
             if ( !hero.customName.empty() ) {
                 int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::KINGDOM_HEROES );
@@ -947,10 +950,15 @@ namespace
             }
         }
 
-        os << "-------   Signs   -------" << std::endl;
+        os << "-------   Signs / Bottles   -------" << std::endl;
         for ( const auto & [uid, sign] : mapFormat.signMetadata ) {
             if ( !sign.message.empty() ) {
-                const int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                int32_t index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+                if ( index < 0 ) {
+                    // This could be a bottle.
+                    index = getObjectIndex( mapFormat, uid, Maps::ObjectGroup::ADVENTURE_WATER );
+                }
+
                 if ( index < 0 ) {
                     os << "!!! [absent object " << uid << "]: " << sign.message << std::endl;
                 }
@@ -969,7 +977,7 @@ namespace
 
         os << "-------   Rumors  -------" << std::endl;
         for ( const auto & rumor : mapFormat.rumors ) {
-            os << rumor << std::endl;
+            os << "Rumor: " << rumor << std::endl;
         }
 
         os << "******* End *******" << std::endl;

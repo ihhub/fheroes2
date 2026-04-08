@@ -1,5 +1,5 @@
 # Russian translation of fheroes2
-# Copyright (C) 2021 - 2025 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2021 - 2026 fheroes2 team <fhomm2@gmail.com>
 # Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
 # Copyright (C) 2009 Andrey Afletdinov <afletdinov@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
@@ -1125,7 +1125,6 @@ msgid ""
 msgstr ""
 "Включить/выключить отрисовку тени под курсором на гексагональной сетке."
 
-#, fuzzy
 msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 "Включить/выключить отображение области передвижения существа под курсором."
@@ -9248,7 +9247,6 @@ msgstr "Отличная"
 msgid "luck|Irish"
 msgstr "Фортуна!"
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes falls on the hero's units in combat, causing "
 "their attacks to only do half damage."
@@ -9256,7 +9254,6 @@ msgstr ""
 "Отрицательная удача иногда посещает войска героя в бою, неудача вынуждает "
 "отряд атаковать только вполсилы."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck means the hero's units will never get lucky or unlucky "
 "attacks on the enemy."
@@ -9264,7 +9261,6 @@ msgstr ""
 "Нормальная удача подразумевает, что войска героя не будут проводить как "
 "удачные, так и неудачные атаки."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
@@ -9293,12 +9289,10 @@ msgstr "Отличная"
 msgid "morale|Blood!"
 msgstr "Эйфория!"
 
-#, fuzzy
 msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr ""
 "Отрицательная мораль может заставить отряд героя застыть на месте от ужаса."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale means the hero's units will never be blessed with "
 "extra attacks or freeze in combat."
@@ -9306,16 +9300,14 @@ msgstr ""
 "Обычная мораль подразумевает, что отряды героя не будут поощряться "
 "дополнительной атакой или пропускать ход."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale may give the hero's units extra attacks in combat."
 msgstr ""
 "Положительная мораль может дать войскам героя возможность дополнительной "
 "атаки в сражении."
 
-#, fuzzy
 msgid "Blood"
-msgstr "Бладрейн"
+msgstr "'В Бой'"
 
 msgid "Knight"
 msgstr "Рыцарь"
