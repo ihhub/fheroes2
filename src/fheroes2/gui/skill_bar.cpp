@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -206,7 +206,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 
     // The case when we are in Editor mode.
     auto primarySkillEditDialog = [skill]( int32_t & skillValue ) {
-        std::string header = _( "Set %{skill} Skill" );
+        std::string header = _( "Set %{skill} Skill:" );
         StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
 
         const auto [min, max] = Skill::Primary::getSkillValueRange( skill );
