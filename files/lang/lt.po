@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -415,7 +415,7 @@ msgid "Move the %{name}"
 msgstr "Prarasti miestą '%{name}'."
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Pulti %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3352,23 +3352,23 @@ msgstr ""
 msgid "Random Map Generator"
 msgstr "Atsitiktinė pilis"
 
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr ""
 
-msgid "rmg|Map layout"
+msgid "rmg|Map layout:"
 msgstr ""
 
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr ""
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Atsitiktinė pilis"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3600,8 +3600,9 @@ msgstr "Pasirinkti %{name}"
 msgid "Select Ocean Object:"
 msgstr "Magiškas artefaktas"
 
-msgid "Castle/town placing"
-msgstr ""
+#, fuzzy
+msgid "Castle/town placing:"
+msgstr "Rodyti kitą miestą"
 
 msgid "doubleLinedRace|Neutral"
 msgstr ""
@@ -3636,7 +3637,7 @@ msgstr "Gynybos įgūdis"
 msgid "Select Landscape Object:"
 msgstr "Magiškas artefaktas"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3676,7 +3677,7 @@ msgid "Select Adventure Object:"
 msgstr "Magiškas artefaktas"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Pasirinkti %{name}"
 
 msgid "Players Icon"
@@ -4002,7 +4003,7 @@ msgid "Click to change the Castle name."
 msgstr "Rodyti kitą miestą"
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Išeiti iš pilies"
 
 #, fuzzy
@@ -4076,6 +4077,10 @@ msgid ""
 "if they are controlled by a computer."
 msgstr ""
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Pulti %{monster}"
+
 msgid "Message:"
 msgstr ""
 
@@ -4103,7 +4108,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4141,8 +4146,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Burtų galia"
 
 msgid "Artifact"
 msgstr "Magiškas artefaktas"
@@ -4307,11 +4313,11 @@ msgstr "Grįžti į mūšį."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Rasti magišką artefaktą '%{name}'"
 
 msgid "%{object} has no properties to change."
@@ -4622,8 +4628,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
-msgid "Supported languages"
-msgstr ""
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Pasirinkti %{name}"
 
 msgid "Language"
 msgstr ""
@@ -4827,10 +4834,19 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Name:"
+msgstr ""
+"Pasaulio\n"
+"dydis"
+
+msgid "Change Map Description:"
+msgstr ""
+
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4909,6 +4925,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6448,7 +6467,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Puolimo įgūdis"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -7953,17 +7972,18 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Burtų galia"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
-msgstr ""
+#, fuzzy
+msgid "Enter hero's name:"
+msgstr "Išeiti iš pilies"
 
 #, fuzzy
 msgid "Click to change class."

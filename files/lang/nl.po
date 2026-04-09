@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -427,7 +427,7 @@ msgid "Move the %{name}"
 msgstr "Verplaats de %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Schiet %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3472,22 +3472,22 @@ msgstr ""
 msgid "Random Map Generator"
 msgstr ""
 
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr ""
 
-msgid "rmg|Map layout"
+msgid "rmg|Map layout:"
 msgstr ""
 
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr ""
 
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr ""
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3720,7 +3720,7 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Ocean Object:"
 msgstr "Selecteer spreuk doelwit"
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3755,7 +3755,7 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Landscape Object:"
 msgstr "Selecteer spreuk doelwit"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3795,8 +3795,9 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Adventure Object:"
 msgstr "Selecteer spreuk doelwit"
 
-msgid "Select color"
-msgstr ""
+#, fuzzy
+msgid "Select color:"
+msgstr "Selecteer spreuk doelwit"
 
 msgid "Players Icon"
 msgstr ""
@@ -4107,8 +4108,9 @@ msgid "Click to change the Castle name."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
-msgid "Enter Castle name"
-msgstr ""
+#, fuzzy
+msgid "Enter Castle name:"
+msgstr "Keer terug naar de strijd."
 
 #, fuzzy
 msgid "Reset the Castle name."
@@ -4181,6 +4183,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Schiet %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Brichtenbalk"
 
@@ -4209,7 +4215,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4248,8 +4254,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Spreuk Punten"
 
 msgid "Artifact"
 msgstr ""
@@ -4395,10 +4402,10 @@ msgstr "Keer terug naar de strijd."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4698,8 +4705,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
-msgid "Supported languages"
-msgstr ""
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Selecteer spreuk doelwit"
 
 msgid "Language"
 msgstr ""
@@ -4909,10 +4917,17 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Name:"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Change Map Description:"
+msgstr ""
+
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4993,6 +5008,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6492,7 +6510,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Aanvalsvaardigheid instellen"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -7982,16 +8000,16 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Spreuk Punten"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 #, fuzzy

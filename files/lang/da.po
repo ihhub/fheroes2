@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -491,7 +491,8 @@ msgstr "Sidste trop kan ikke flyttes"
 msgid "Move the %{name}"
 msgstr "Flyt %{name}"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "Indstil antal %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3606,24 +3607,25 @@ msgid "Random Map Generator"
 msgstr "Tilfældigt væsen"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Spiller-ikon"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Spiller-ikon"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Vand-elemental"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Tilfældigt væsen - stærk"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3859,7 +3861,8 @@ msgstr "Vælg skat:"
 msgid "Select Ocean Object:"
 msgstr "Vælg hav-objekt:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Borg/by-vindue"
 
 msgid "doubleLinedRace|Neutral"
@@ -3892,7 +3895,8 @@ msgstr "Vælg Bosted:"
 msgid "Select Landscape Object:"
 msgstr "Vælg Landskab-objekt:"
 
-msgid "Mine placing"
+#, fuzzy
+msgid "Mine placing:"
 msgstr "Mine-placering"
 
 msgid ""
@@ -3927,7 +3931,8 @@ msgstr "Vælg Power Up-objekt:"
 msgid "Select Adventure Object:"
 msgstr "Vælg Eventyr-objekt:"
 
-msgid "Select color"
+#, fuzzy
+msgid "Select color:"
 msgstr "Vælg farve"
 
 msgid "Players Icon"
@@ -4249,7 +4254,8 @@ msgstr "Byhær"
 msgid "Click to change the Castle name."
 msgstr "Klik for at ændre borgnavn."
 
-msgid "Enter Castle name"
+#, fuzzy
+msgid "Enter Castle name:"
 msgstr "Skriv borgnavn"
 
 msgid "Reset the Castle name."
@@ -4325,6 +4331,10 @@ msgstr ""
 "Hvis dette felt er aktiveret, vil denne begivenhed udløses for %{color} "
 "computerspiller."
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Bestem antal af %{resource-type}"
+
 msgid "Message:"
 msgstr "Besked:"
 
@@ -4349,7 +4359,8 @@ msgstr "Tekst til begivenhedsmeddelelse"
 msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
-msgid "Daily Events"
+#, fuzzy
+msgid "Daily events:"
 msgstr "Daglige begivenheder"
 
 msgid "Click to save the events."
@@ -4385,7 +4396,8 @@ msgstr "Aflys begivenheden efter første besøg"
 msgid "Computer colors allowed to get the event:"
 msgstr "Computerfarver er tilladt for at få begivenheden:"
 
-msgid "Set Experience value"
+#, fuzzy
+msgid "Set Experience value:"
 msgstr "Indstil erfaringspoint"
 
 msgid "Artifact"
@@ -4550,10 +4562,12 @@ msgstr "Vend tilbage til spillets hovedmenu."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Forlad editoren og spil kortet i Enkeltspiller-tilstand."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Input %{object} text:"
 msgstr "Indtast tekst til %{object}"
 
-msgid "Set Random Ultimate Artifact Radius"
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
 
 msgid "%{object} has no properties to change."
@@ -4877,7 +4891,7 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Støt os på"
 
 msgid "Language"
@@ -5069,11 +5083,21 @@ msgstr "BEGIVENHEDER"
 msgid "LANGUAGE"
 msgstr "SPROG"
 
-msgid "Change Map Name"
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "OM"
+
+#, fuzzy
+msgid "Change Map Name:"
 msgstr "Skift kortnavn"
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Skift kortbeskrivelse"
+
+#, fuzzy
+msgid "map|About"
+msgstr "Om"
 
 msgid "Click to edit custom rumors."
 msgstr "Klik for at redigere tilpassede rygter."
@@ -5148,6 +5172,10 @@ msgstr "Slå animation af objekterne til eller fra."
 
 msgid "Toggle display of objects' passability."
 msgstr "Slå visning af objekters fremkommelighed til eller fra."
+
+#, fuzzy
+msgid "Rumors:"
+msgstr "Rygter"
 
 msgid "Rumor:"
 msgstr "Rygte:"
@@ -6781,7 +6809,8 @@ msgstr ""
 "standard\n"
 "værdi"
 
-msgid "Set %{skill} Skill"
+#, fuzzy
+msgid "Set %{skill} Skill:"
 msgstr "Indstil %{skill} Evne"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8692,16 +8721,19 @@ msgstr "Indstil magipointværdi. Højreklik: Nulstil til standardværdi."
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr "Skift magipointværdi. Højreklik: Nulstil til standardværdi."
 
-msgid "Set Spell Points value"
+#, fuzzy
+msgid "Set Spell Points value:"
 msgstr "Indstil antal magipoint"
 
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
-msgid "Set patrol radius in tiles"
+#, fuzzy
+msgid "Set patrol radius in tiles:"
 msgstr "Indstil patruljeradius i feltantal"
 
-msgid "Enter hero's name"
+#, fuzzy
+msgid "Enter hero's name:"
 msgstr "Indtast heltens navn"
 
 msgid "Click to change class."

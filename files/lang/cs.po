@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -494,7 +494,8 @@ msgstr "Poslední jednotku nelze přesunout"
 msgid "Move the %{name}"
 msgstr "Přesunout %{name}"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "Nastavit počet %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3525,24 +3526,25 @@ msgid "Random Map Generator"
 msgstr "Náhodná jednotka"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Ikona hráče"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Ikona hráče"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Vodní Elementál"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Náhodná jednotka - silná"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3782,7 +3784,8 @@ msgstr "Vyberte poklad:"
 msgid "Select Ocean Object:"
 msgstr "Vyberte oceánský objekt:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Umístění hradu/města"
 
 msgid "doubleLinedRace|Neutral"
@@ -3815,7 +3818,8 @@ msgstr "Vybrat jednotku:"
 msgid "Select Landscape Object:"
 msgstr "Vybrat object krajiny:"
 
-msgid "Mine placing"
+#, fuzzy
+msgid "Mine placing:"
 msgstr "Umístění dolu"
 
 msgid ""
@@ -3849,7 +3853,7 @@ msgid "Select Adventure Object:"
 msgstr "Vyberte dobrodružný objekt:"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Vybrat jednotku:"
 
 msgid "Players Icon"
@@ -4172,7 +4176,8 @@ msgstr "Armáda města"
 msgid "Click to change the Castle name."
 msgstr "Klikněte pro změnu názvu mapy."
 
-msgid "Enter Castle name"
+#, fuzzy
+msgid "Enter Castle name:"
 msgstr "Zadejte název hradu"
 
 #, fuzzy
@@ -4251,6 +4256,10 @@ msgstr ""
 "Pokud je toto zaškrtávací políčko označeno, tato událost se spustí pro "
 "%{color} hráče, pokud ho ovládá počítač."
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Nastavit počet %{resource-type}"
+
 msgid "Message:"
 msgstr "Zpráva:"
 
@@ -4275,7 +4284,8 @@ msgstr "Text události"
 msgid "Day: %{day}"
 msgstr "Den: %{day}"
 
-msgid "Daily Events"
+#, fuzzy
+msgid "Daily events:"
 msgstr "Denní události"
 
 msgid "Click to save the events."
@@ -4311,7 +4321,8 @@ msgstr "Zrušit událost po první návštěvě"
 msgid "Computer colors allowed to get the event:"
 msgstr "Barvy počítače, kterým je povoleno získat událost:"
 
-msgid "Set Experience value"
+#, fuzzy
+msgid "Set Experience value:"
 msgstr "Nastavte hodnotu zkušeností"
 
 msgid "Artifact"
@@ -4475,10 +4486,12 @@ msgstr "Vrátit se do hlavního menu hry."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Opustit editor a spustit mapu v režimu standardní hry."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Input %{object} text:"
 msgstr "Zadejte text %{object}"
 
-msgid "Set Random Ultimate Artifact Radius"
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Nastavit náhodný rádius Ultimátního artefaktu"
 
 msgid "%{object} has no properties to change."
@@ -4797,7 +4810,7 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr "Zobrazí systémové menu, s volbami pro úpravu chování hry."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Podpořte nás na"
 
 msgid "Language"
@@ -4996,11 +5009,19 @@ msgstr "UDÁLOSTI"
 msgid "LANGUAGE"
 msgstr "JAZYK"
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
+msgstr ""
+
+#, fuzzy
+msgid "Change Map Name:"
 msgstr "Změnit název mapy"
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Změnit popis mapy"
+
+msgid "map|About"
+msgstr ""
 
 msgid "Click to edit custom rumors."
 msgstr "Klikněte pro úpravu vlastních pověstí."
@@ -5072,6 +5093,10 @@ msgstr "Přepnout animaci objektů."
 
 msgid "Toggle display of objects' passability."
 msgstr "Přepnout zobrazení průchodnosti objektů."
+
+#, fuzzy
+msgid "Rumors:"
+msgstr "Pověsti"
 
 msgid "Rumor:"
 msgstr "Pověst:"
@@ -6688,7 +6713,8 @@ msgstr ""
 "Výchozí\n"
 "hodnota"
 
-msgid "Set %{skill} Skill"
+#, fuzzy
+msgid "Set %{skill} Skill:"
 msgstr "Nastavit dovednost %{skill}"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8557,16 +8583,19 @@ msgstr ""
 "Změňte hodnotu bodů magie. Klikněte pravým tlačítkem pro obnovení na výchozí "
 "hodnotu."
 
-msgid "Set Spell Points value"
+#, fuzzy
+msgid "Set Spell Points value:"
 msgstr "Nastavte hodnotu bodů magie"
 
 msgid "View Spell Points Info"
 msgstr "Zobrazit informace o bodech magie"
 
-msgid "Set patrol radius in tiles"
+#, fuzzy
+msgid "Set patrol radius in tiles:"
 msgstr "Nastavte hlídkový rádius v polích"
 
-msgid "Enter hero's name"
+#, fuzzy
+msgid "Enter hero's name:"
 msgstr "Zadejte jméno hrdiny"
 
 #, fuzzy

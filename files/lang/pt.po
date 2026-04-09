@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -498,7 +498,8 @@ msgstr "Não é possível mover a última tropa"
 msgid "Move the %{name}"
 msgstr "Mover %{name}"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "Definir Quantidade de %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3575,22 +3576,28 @@ msgstr "Território Desconhecido"
 msgid "Random Map Generator"
 msgstr "Gerador de Mapas Aleatórios"
 
-msgid "rmg|Player count"
+#, fuzzy
+msgid "rmg|Player count:"
 msgstr "Quantidade de jogadores"
 
-msgid "rmg|Map layout"
+#, fuzzy
+msgid "rmg|Map layout:"
 msgstr "Layout do mapa"
 
-msgid "rmg|Water percentage"
+#, fuzzy
+msgid "rmg|Water percentage:"
 msgstr "Porcentagem de água"
 
-msgid "rmg|Monster strength"
+#, fuzzy
+msgid "rmg|Monster strength:"
 msgstr "Força dos monstros"
 
-msgid "rmg|Resource availability"
+#, fuzzy
+msgid "rmg|Resource availability:"
 msgstr "Disponibilidade de recursos"
 
-msgid "rmg|Map seed"
+#, fuzzy
+msgid "rmg|Map seed:"
 msgstr "Semente do mapa"
 
 msgid "Click to generate a new map."
@@ -3817,7 +3824,8 @@ msgstr "Selecionar Tesouro:"
 msgid "Select Ocean Object:"
 msgstr "Selecionar Objeto Oceânico:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Colocação de Castelo/Cidade"
 
 msgid "doubleLinedRace|Neutral"
@@ -3850,7 +3858,8 @@ msgstr "Selecionar Moradia:"
 msgid "Select Landscape Object:"
 msgstr "Selecionar Objeto de Paisagem:"
 
-msgid "Mine placing"
+#, fuzzy
+msgid "Mine placing:"
 msgstr "Colocação de Mina"
 
 msgid ""
@@ -3885,7 +3894,8 @@ msgstr "Selecionar Objeto de Aprimoramento:"
 msgid "Select Adventure Object:"
 msgstr "Selecionar Objeto de Aventura:"
 
-msgid "Select color"
+#, fuzzy
+msgid "Select color:"
 msgstr "Selecionar Cor"
 
 msgid "Players Icon"
@@ -4205,7 +4215,8 @@ msgstr "Exército da Cidade"
 msgid "Click to change the Castle name."
 msgstr "Clique para alterar o nome do Castelo."
 
-msgid "Enter Castle name"
+#, fuzzy
+msgid "Enter Castle name:"
 msgstr "Insira o nome do Castelo"
 
 msgid "Reset the Castle name."
@@ -4281,6 +4292,10 @@ msgstr ""
 "Se essa caixa de seleção estiver marcada, esse evento será acionado para o "
 "jogador %{color} se ele for controlado por um computador."
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Definir Quantidade de %{resource-type}."
+
 msgid "Message:"
 msgstr "Mensagem:"
 
@@ -4305,7 +4320,8 @@ msgstr "Texto da Mensagem do Evento"
 msgid "Day: %{day}"
 msgstr "Dia: %{day}"
 
-msgid "Daily Events"
+#, fuzzy
+msgid "Daily events:"
 msgstr "Eventos Diários"
 
 msgid "Click to save the events."
@@ -4341,7 +4357,8 @@ msgstr "Cancelar evento após a primeira visita"
 msgid "Computer colors allowed to get the event:"
 msgstr "Cores de computador permitidas para obter o evento:"
 
-msgid "Set Experience value"
+#, fuzzy
+msgid "Set Experience value:"
 msgstr "Definir o valor da Experiência"
 
 msgid "Artifact"
@@ -4506,10 +4523,12 @@ msgstr "Retornar ao Menu Principal do jogo."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Sair do Editor e jogar o mapa no modo de Jogo Padrão."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Input %{object} text:"
 msgstr "Inserir texto de %{object}"
 
-msgid "Set Random Ultimate Artifact Radius"
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Definir Raio do Artefato Definitivo Aleatório"
 
 msgid "%{object} has no properties to change."
@@ -4831,7 +4850,8 @@ msgstr ""
 "Visualizar as opções do sistema do editor, que permitem personalizar o "
 "editor."
 
-msgid "Supported languages"
+#, fuzzy
+msgid "Supported languages:"
 msgstr "Idiomas suportados"
 
 msgid "Language"
@@ -5022,11 +5042,21 @@ msgstr "EVENTOS"
 msgid "LANGUAGE"
 msgstr "IDIOMA"
 
-msgid "Change Map Name"
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "SOBRE"
+
+#, fuzzy
+msgid "Change Map Name:"
 msgstr "Alterar o Nome do Mapa"
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Alterar Descrição do Mapa"
+
+#, fuzzy
+msgid "map|About"
+msgstr "Sobre"
 
 msgid "Click to edit custom rumors."
 msgstr "Clique para editar rumores personalizados."
@@ -5101,6 +5131,10 @@ msgstr "Alternar animação dos objetos."
 
 msgid "Toggle display of objects' passability."
 msgstr "Alternar exibição da transitabilidade dos objetos."
+
+#, fuzzy
+msgid "Rumors:"
+msgstr "Rumores"
 
 msgid "Rumor:"
 msgstr "Rumor:"
@@ -6732,7 +6766,8 @@ msgstr ""
 "Valor\n"
 "padrão"
 
-msgid "Set %{skill} Skill"
+#, fuzzy
+msgid "Set %{skill} Skill:"
 msgstr "Definir %{skill}"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8654,16 +8689,19 @@ msgstr ""
 "Alterar o valor da Mana. Clique com o botão direito para redefinir para o "
 "valor padrão."
 
-msgid "Set Spell Points value"
+#, fuzzy
+msgid "Set Spell Points value:"
 msgstr "Definir o valor da Mana"
 
 msgid "View Spell Points Info"
 msgstr "Ver Informações Sobre a Mana"
 
-msgid "Set patrol radius in tiles"
+#, fuzzy
+msgid "Set patrol radius in tiles:"
 msgstr "Definir raio de patrulha em ladrilhos"
 
-msgid "Enter hero's name"
+#, fuzzy
+msgid "Enter hero's name:"
 msgstr "Insira o nome do herói"
 
 msgid "Click to change class."

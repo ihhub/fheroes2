@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -487,7 +487,7 @@ msgid "Move the %{name}"
 msgstr "Премести %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Застреляй %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3609,24 +3609,25 @@ msgid "Random Map Generator"
 msgstr "Случайно чудовище"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Брой на играчи"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Брой на играчи"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Воден елементал"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Случайно чудовище - силно"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3872,7 +3873,7 @@ msgid "Select Ocean Object:"
 msgstr "Океански обекти"
 
 #, fuzzy
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr "Опции на замъка"
 
 msgid "doubleLinedRace|Neutral"
@@ -3916,7 +3917,7 @@ msgstr "Избери заклинание:"
 msgid "Select Landscape Object:"
 msgstr "Океански обекти"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3958,7 +3959,7 @@ msgid "Select Adventure Object:"
 msgstr "Океански обекти"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Избери чудовище:"
 
 msgid "Players Icon"
@@ -4295,7 +4296,7 @@ msgid "Click to change the Castle name."
 msgstr "Кликни, за да покажеш следващия град."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Губиш героя: %{name}."
 
 #, fuzzy
@@ -4372,6 +4373,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Застреляй %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Лента за съобщения"
 
@@ -4399,7 +4404,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Ден: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4446,7 +4451,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Опит"
 
 msgid "Artifact"
@@ -4616,11 +4621,11 @@ msgstr "Кликни, за да се върнеш към главното мен
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Случаен върховен артефакт"
 
 msgid "%{object} has no properties to change."
@@ -4969,7 +4974,7 @@ msgstr ""
 "редактора."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Подкрепете ни на"
 
 msgid "Language"
@@ -5188,12 +5193,19 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr "Размер на карта"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Избрано описание"
+
+msgid "map|About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5280,6 +5292,9 @@ msgid "Toggle animation of the objects."
 msgstr "Превключи изтриването на %{type} обекти."
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6936,7 +6951,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Задайте умение за нападение"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8819,17 +8834,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Магия"
 
 msgid "View Spell Points Info"
 msgstr "Виж информация за магическите точките"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Губиш героя: %{name}."
 
 #, fuzzy

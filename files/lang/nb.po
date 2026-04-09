@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -471,7 +471,7 @@ msgid "Move the %{name}"
 msgstr "Flytt %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Skyt på %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3653,24 +3653,25 @@ msgid "Random Map Generator"
 msgstr "Tilfeldig monster"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Spillerikon"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Spillerikon"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Vannånd"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Tilfeldig monster - sterk"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3916,7 +3917,7 @@ msgid "Select Ocean Object:"
 msgstr "Sjøting"
 
 #, fuzzy
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr "Borgvalg"
 
 msgid "doubleLinedRace|Neutral"
@@ -3958,7 +3959,7 @@ msgstr "Velg trolldom:"
 msgid "Select Landscape Object:"
 msgstr "Sjøting"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -4000,7 +4001,7 @@ msgid "Select Adventure Object:"
 msgstr "Sjøting"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Velg monster:"
 
 msgid "Players Icon"
@@ -4340,7 +4341,7 @@ msgid "Click to change the Castle name."
 msgstr "Klikk for å vise neste by."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Mist helten kalt %{name}."
 
 #, fuzzy
@@ -4417,6 +4418,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Skyt på %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Kamplogg"
 
@@ -4444,7 +4449,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4491,7 +4496,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Erfaringspoeng"
 
 msgid "Artifact"
@@ -4661,11 +4666,11 @@ msgstr "Klikk her for å dra tilbake til hovedmenyen."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Tilfeldig sjeldneste skatt"
 
 msgid "%{object} has no properties to change."
@@ -5007,7 +5012,7 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis karttegnerens systeminnstillinger der den kan skreddersys."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Støtt oss på"
 
 msgid "Language"
@@ -5230,12 +5235,21 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr ""
+"Kartets\n"
+"størrelse"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Kartbeskrivelse"
+
+msgid "map|About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5323,6 +5337,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6994,7 +7011,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Spesifiser angrepsevne"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8938,17 +8955,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Mana"
 
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Mist helten kalt %{name}."
 
 #, fuzzy
