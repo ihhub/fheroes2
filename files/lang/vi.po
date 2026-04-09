@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -485,7 +485,7 @@ msgid "Move the %{name}"
 msgstr "Di chuyển %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Bắn %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3600,24 +3600,25 @@ msgid "Random Map Generator"
 msgstr "Ngẫu nhiên Quái vật"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Biểu tượng Người chơi"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Biểu tượng Người chơi"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Nguyên tố Nước"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Ngẫu nhiên Quái vật - mạnh"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3857,7 +3858,8 @@ msgstr "Chọn Kho báu:"
 msgid "Select Ocean Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Đặt Lâu đài/thị trấn"
 
 msgid "doubleLinedRace|Neutral"
@@ -3892,7 +3894,7 @@ msgstr "Chọn Phép:"
 msgid "Select Landscape Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3934,7 +3936,7 @@ msgid "Select Adventure Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Chọn Quái vật:"
 
 msgid "Players Icon"
@@ -4270,7 +4272,7 @@ msgid "Click to change the Castle name."
 msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Mất tướng: %{name}."
 
 #, fuzzy
@@ -4347,6 +4349,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Bắn %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Thanh Tin nhắn"
 
@@ -4374,7 +4380,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Ngày: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4421,7 +4427,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Kinh nghiệm"
 
 msgid "Artifact"
@@ -4590,11 +4596,11 @@ msgstr "Nhấp để quay lại màn hình chính."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Ngẫu nhiên Bảo vật Tối thượng"
 
 msgid "%{object} has no properties to change."
@@ -4934,7 +4940,7 @@ msgstr ""
 "sửa."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Hỗ trợ chúng tôi tại"
 
 msgid "Language"
@@ -5153,12 +5159,19 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr "Tệp bản đồ"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Chọn Mô tả"
+
+msgid "map|About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5245,6 +5258,9 @@ msgid "Toggle animation of the objects."
 msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6886,7 +6902,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Chọn Kỹ năng Tấn công"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8813,17 +8829,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Điểm Phép thuật"
 
 msgid "View Spell Points Info"
 msgstr "Xem Thông tin Điểm Phép thuật"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Mất tướng: %{name}."
 
 #, fuzzy

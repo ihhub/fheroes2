@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -487,7 +487,7 @@ msgid "Move the %{name}"
 msgstr "Premiestni: %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Streľ do: %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3588,24 +3588,25 @@ msgid "Random Map Generator"
 msgstr "Náhodný tvor"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Ikona hráča"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Ikona hráča"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Vodný elementál"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Náhodný tvor - silný"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3851,7 +3852,7 @@ msgid "Select Ocean Object:"
 msgstr "Objekty oceánu"
 
 #, fuzzy
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr "Možnosti hradu"
 
 msgid "doubleLinedRace|Neutral"
@@ -3893,7 +3894,7 @@ msgstr "Zvoľ kúzlo:"
 msgid "Select Landscape Object:"
 msgstr "Objekty oceánu"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3935,7 +3936,7 @@ msgid "Select Adventure Object:"
 msgstr "Objekty oceánu"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Zvoľ bojovníka:"
 
 msgid "Players Icon"
@@ -4270,7 +4271,7 @@ msgid "Click to change the Castle name."
 msgstr "Kliknutím zobraz ďalšie mesto."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Stratíš hrdinu '%{name}'."
 
 #, fuzzy
@@ -4347,6 +4348,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Streľ do: %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Panel správ"
 
@@ -4374,7 +4379,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Deň: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4421,7 +4426,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Skúsenosti"
 
 msgid "Artifact"
@@ -4591,11 +4596,11 @@ msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Náhodný ultimátny artefakt"
 
 msgid "%{object} has no properties to change."
@@ -4931,7 +4936,7 @@ msgstr ""
 "Zobraziť systémové možnosti editora, ktoré umožňujú prispôsobiť editor."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Prispej na"
 
 msgid "Language"
@@ -5152,12 +5157,19 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr "Veľkosť mapy"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Zvolený opis"
+
+msgid "map|About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5243,6 +5255,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6892,7 +6907,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Zvoľ zručnosť útoku"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8760,17 +8775,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Body kúziel"
 
 msgid "View Spell Points Info"
 msgstr "Zobraz info o bodoch kúziel"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Stratíš hrdinu '%{name}'."
 
 #, fuzzy

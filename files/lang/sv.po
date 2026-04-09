@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2026-02-24 17:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -494,7 +494,8 @@ msgstr "Kan ej flytta sista truppen"
 msgid "Move the %{name}"
 msgstr "Flytta %{name}"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "Ange antal %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3545,22 +3546,28 @@ msgstr "Outforskat Område"
 msgid "Random Map Generator"
 msgstr "Slumpkartgenerator"
 
-msgid "rmg|Player count"
+#, fuzzy
+msgid "rmg|Player count:"
 msgstr "Spelarantal"
 
-msgid "rmg|Map layout"
+#, fuzzy
+msgid "rmg|Map layout:"
 msgstr "Kartplan"
 
-msgid "rmg|Water percentage"
+#, fuzzy
+msgid "rmg|Water percentage:"
 msgstr "Havsprocent"
 
-msgid "rmg|Monster strength"
+#, fuzzy
+msgid "rmg|Monster strength:"
 msgstr "Varelsestyrka"
 
-msgid "rmg|Resource availability"
+#, fuzzy
+msgid "rmg|Resource availability:"
 msgstr "Resurstillgänglighet"
 
-msgid "rmg|Map seed"
+#, fuzzy
+msgid "rmg|Map seed:"
 msgstr "Kartseed"
 
 msgid "Click to generate a new map."
@@ -3785,7 +3792,8 @@ msgstr "Välj Skatt:"
 msgid "Select Ocean Object:"
 msgstr "Välj Havsföremål:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Borg/stadsplacering"
 
 msgid "doubleLinedRace|Neutral"
@@ -3818,7 +3826,8 @@ msgstr "Välj Bostad:"
 msgid "Select Landscape Object:"
 msgstr "Välj Landskapsföremål:"
 
-msgid "Mine placing"
+#, fuzzy
+msgid "Mine placing:"
 msgstr "Gruvplacering"
 
 msgid ""
@@ -3850,7 +3859,8 @@ msgstr "Välj Kraftökningsföremål:"
 msgid "Select Adventure Object:"
 msgstr "Välj Äventyrsföremål:"
 
-msgid "Select color"
+#, fuzzy
+msgid "Select color:"
 msgstr "Välj Färg:"
 
 msgid "Players Icon"
@@ -4172,7 +4182,8 @@ msgstr "Stadsarmé"
 msgid "Click to change the Castle name."
 msgstr "Klicka för att ändra Borgens namn."
 
-msgid "Enter Castle name"
+#, fuzzy
+msgid "Enter Castle name:"
 msgstr "Skriv Borgnamn"
 
 msgid "Reset the Castle name."
@@ -4248,6 +4259,10 @@ msgstr ""
 "Om denna checkruta är ifylld så kommer händelsen bara aktiveras för %{color} "
 "spelare om de är styrda av datorn."
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Ange Antal %{resource-type}"
+
 msgid "Message:"
 msgstr "Meddelande:"
 
@@ -4272,7 +4287,8 @@ msgstr "Händelsetext"
 msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
-msgid "Daily Events"
+#, fuzzy
+msgid "Daily events:"
 msgstr "Dagliga Händelser"
 
 msgid "Click to save the events."
@@ -4308,7 +4324,8 @@ msgstr "Avbryt händelse efter första besök"
 msgid "Computer colors allowed to get the event:"
 msgstr "Datorfärger som kan få händelsen:"
 
-msgid "Set Experience value"
+#, fuzzy
+msgid "Set Experience value:"
 msgstr "Ange erfarenhetspoäng"
 
 msgid "Artifact"
@@ -4470,10 +4487,12 @@ msgstr "Återgå till Huvudmenyn."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Lämna Redigaren och spela kartan i Solospelsläge."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Input %{object} text:"
 msgstr "Skriv in %{object} text"
 
-msgid "Set Random Ultimate Artifact Radius"
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Ange slumpad radie för Främsta artefakt"
 
 msgid "%{object} has no properties to change."
@@ -4792,7 +4811,8 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
-msgid "Supported languages"
+#, fuzzy
+msgid "Supported languages:"
 msgstr "Stödda språk"
 
 msgid "Language"
@@ -4978,11 +4998,21 @@ msgstr "HÄNDELSER"
 msgid "LANGUAGE"
 msgstr "SPRÅK"
 
-msgid "Change Map Name"
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "OM"
+
+#, fuzzy
+msgid "Change Map Name:"
 msgstr "Ändra Kartnamn"
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Ändra Kartbeskrivning"
+
+#, fuzzy
+msgid "map|About"
+msgstr "Om"
 
 msgid "Click to edit custom rumors."
 msgstr "Klicka för att redigera anpassade rykten."
@@ -5059,6 +5089,10 @@ msgstr "Aktivera animationen för föremålen."
 
 msgid "Toggle display of objects' passability."
 msgstr "Visa föremålens framkomlighet."
+
+#, fuzzy
+msgid "Rumors:"
+msgstr "Rykten"
 
 msgid "Rumor:"
 msgstr "Rykte:"
@@ -6671,7 +6705,8 @@ msgid ""
 "value"
 msgstr "Standardvärde"
 
-msgid "Set %{skill} Skill"
+#, fuzzy
+msgid "Set %{skill} Skill:"
 msgstr "Ange %{skill}sförmåga"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8574,16 +8609,19 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 "Ändra besvärjelsepoängen. Högerklicka för att återställa till standard."
 
-msgid "Set Spell Points value"
+#, fuzzy
+msgid "Set Spell Points value:"
 msgstr "Ange Besvärjelsepoäng"
 
 msgid "View Spell Points Info"
 msgstr "Visa information för besvärjelsepoäng"
 
-msgid "Set patrol radius in tiles"
+#, fuzzy
+msgid "Set patrol radius in tiles:"
 msgstr "Ange patrullradie i antal rutor"
 
-msgid "Enter hero's name"
+#, fuzzy
+msgid "Enter hero's name:"
 msgstr "Ange hjältens namn"
 
 msgid "Click to change class."

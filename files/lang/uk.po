@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2026-01-31 15:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -502,7 +502,8 @@ msgstr "Не вдалось перемістити останній загін"
 msgid "Move the %{name}"
 msgstr "Перемістити %{name}"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "Задати кількість %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3556,22 +3557,28 @@ msgstr "Незвідана територія"
 msgid "Random Map Generator"
 msgstr "Генератор випадкових мап"
 
-msgid "rmg|Player count"
+#, fuzzy
+msgid "rmg|Player count:"
 msgstr "Кількість гравців"
 
-msgid "rmg|Map layout"
+#, fuzzy
+msgid "rmg|Map layout:"
 msgstr "Розкладка мапи"
 
-msgid "rmg|Water percentage"
+#, fuzzy
+msgid "rmg|Water percentage:"
 msgstr "Відсоток води"
 
-msgid "rmg|Monster strength"
+#, fuzzy
+msgid "rmg|Monster strength:"
 msgstr "Сила монстрів"
 
-msgid "rmg|Resource availability"
+#, fuzzy
+msgid "rmg|Resource availability:"
 msgstr "Доступність ресурсів"
 
-msgid "rmg|Map seed"
+#, fuzzy
+msgid "rmg|Map seed:"
 msgstr "Варіація мапи"
 
 msgid "Click to generate a new map."
@@ -3797,7 +3804,8 @@ msgstr "Оберіть скарб:"
 msgid "Select Ocean Object:"
 msgstr "Оберіть об'єкти океану:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Розміщення замку/міста"
 
 msgid "doubleLinedRace|Neutral"
@@ -3830,7 +3838,8 @@ msgstr "Оберіть помешкання:"
 msgid "Select Landscape Object:"
 msgstr "Вибрати об'єкт місцевості:"
 
-msgid "Mine placing"
+#, fuzzy
+msgid "Mine placing:"
 msgstr "Розміщення шахти"
 
 msgid ""
@@ -3862,7 +3871,8 @@ msgstr "Виберіть об'єкт підсилювач:"
 msgid "Select Adventure Object:"
 msgstr "Виберіть пригодницький об'єкт:"
 
-msgid "Select color"
+#, fuzzy
+msgid "Select color:"
 msgstr "Виберіть колір"
 
 msgid "Players Icon"
@@ -4181,7 +4191,8 @@ msgstr "Гарнізон міста"
 msgid "Click to change the Castle name."
 msgstr "Тицьніть, щоб змінити назву замку."
 
-msgid "Enter Castle name"
+#, fuzzy
+msgid "Enter Castle name:"
 msgstr "Ввести назву замку"
 
 msgid "Reset the Castle name."
@@ -4257,6 +4268,10 @@ msgstr ""
 "Якщо цей прапорець встановлено, ця подія спрацює для %{color} гравця, якщо "
 "ним керує комп'ютер."
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Задати кількість %{resource-type}"
+
 msgid "Message:"
 msgstr "Повідомлення:"
 
@@ -4281,7 +4296,8 @@ msgstr "Текст повідомлення події"
 msgid "Day: %{day}"
 msgstr "День: %{day}"
 
-msgid "Daily Events"
+#, fuzzy
+msgid "Daily events:"
 msgstr "Щоденні події"
 
 msgid "Click to save the events."
@@ -4317,7 +4333,8 @@ msgstr "Скасувати подію після першого відвідув
 msgid "Computer colors allowed to get the event:"
 msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
-msgid "Set Experience value"
+#, fuzzy
+msgid "Set Experience value:"
 msgstr "Задати кількість досвіду"
 
 msgid "Artifact"
@@ -4482,10 +4499,12 @@ msgstr "Повернутися до головного меню."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Вийти з редактора і грати на мапі в режимі Стандартної Гри."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Input %{object} text:"
 msgstr "Ввести %{object} текст"
 
-msgid "Set Random Ultimate Artifact Radius"
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Встановити радіус випадкового Легендарного Артефакту"
 
 msgid "%{object} has no properties to change."
@@ -4804,7 +4823,8 @@ msgstr ""
 "Перегляд системних параметрів редактора, за допомогою яких ви можете "
 "налаштувати редактор."
 
-msgid "Supported languages"
+#, fuzzy
+msgid "Supported languages:"
 msgstr "Підтримувані мови"
 
 msgid "Language"
@@ -4997,11 +5017,21 @@ msgstr "ПОДІЇ"
 msgid "LANGUAGE"
 msgstr "МОВА"
 
-msgid "Change Map Name"
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "ПРО МАПУ"
+
+#, fuzzy
+msgid "Change Map Name:"
 msgstr "Змінити назву мапи"
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Змінити опис мапи"
+
+#, fuzzy
+msgid "map|About"
+msgstr "Опис"
 
 msgid "Click to edit custom rumors."
 msgstr "Тицьніть, щоб редагувати власні чутки."
@@ -5076,6 +5106,10 @@ msgstr "Анімації об'єктів умівк/вимк."
 
 msgid "Toggle display of objects' passability."
 msgstr "Відображення прохідності об'єктів увімк/вимк."
+
+#, fuzzy
+msgid "Rumors:"
+msgstr "Чутки"
 
 msgid "Rumor:"
 msgstr "Чутка:"
@@ -6703,7 +6737,8 @@ msgstr ""
 "Значення\n"
 "як усталено"
 
-msgid "Set %{skill} Skill"
+#, fuzzy
+msgid "Set %{skill} Skill:"
 msgstr "Встановити навичку %{skill}"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -8594,16 +8629,19 @@ msgstr ""
 "Змінити значення очок заклинань. Тицьніть правою кнопкою миші, щоб відновити "
 "значення як усталено."
 
-msgid "Set Spell Points value"
+#, fuzzy
+msgid "Set Spell Points value:"
 msgstr "Задати кількість очок мани"
 
 msgid "View Spell Points Info"
 msgstr "Переглянути інформацію про очки магії"
 
-msgid "Set patrol radius in tiles"
+#, fuzzy
+msgid "Set patrol radius in tiles:"
 msgstr "Встановити радіус патрулювання в стільниках"
 
-msgid "Enter hero's name"
+#, fuzzy
+msgid "Enter hero's name:"
 msgstr "Ввести ім'я героя"
 
 msgid "Click to change class."

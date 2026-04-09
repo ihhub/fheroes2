@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2026-04-01 14:30+0100\n"
 "Last-Translator: Yannis Anthymidis <yannis-foss@anth.me.uk>\n"
 "Language-Team: Greek\n"
@@ -490,7 +490,7 @@ msgstr ""
 msgid "Move the %{name}"
 msgstr ""
 
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr ""
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3266,22 +3266,22 @@ msgstr ""
 msgid "Random Map Generator"
 msgstr ""
 
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr ""
 
-msgid "rmg|Map layout"
+msgid "rmg|Map layout:"
 msgstr ""
 
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr ""
 
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr ""
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 msgid "Click to generate a new map."
@@ -3493,7 +3493,7 @@ msgstr ""
 msgid "Select Ocean Object:"
 msgstr ""
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3526,7 +3526,7 @@ msgstr ""
 msgid "Select Landscape Object:"
 msgstr ""
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3558,7 +3558,7 @@ msgstr ""
 msgid "Select Adventure Object:"
 msgstr ""
 
-msgid "Select color"
+msgid "Select color:"
 msgstr ""
 
 msgid "Players Icon"
@@ -3862,7 +3862,7 @@ msgstr ""
 msgid "Click to change the Castle name."
 msgstr ""
 
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr ""
 
 msgid "Reset the Castle name."
@@ -3932,6 +3932,9 @@ msgid ""
 "if they are controlled by a computer."
 msgstr ""
 
+msgid "Set %{resource-type} Count:"
+msgstr ""
+
 msgid "Message:"
 msgstr ""
 
@@ -3956,7 +3959,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 msgid "Click to save the events."
@@ -3992,7 +3995,7 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr ""
 
 msgid "Artifact"
@@ -4136,10 +4139,10 @@ msgstr ""
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4432,7 +4435,7 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr ""
 
 msgid "Language"
@@ -4613,10 +4616,18 @@ msgstr "ΣΥΜΒΑΝΤΑ"
 msgid "LANGUAGE"
 msgstr "ΓΛΩΣΣΑ"
 
-msgid "Change Map Name"
+# η λέξη «ΠΛΗΡΟΦΟΡΙΕΣ» είναι πιο σωστή, αλλά ήταν υπερβολικά μεγάλη
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "ΣΧΕΤΙΚΑ"
+
+msgid "Change Map Name:"
 msgstr ""
 
-msgid "Change Map Description"
+msgid "Change Map Description:"
+msgstr ""
+
+msgid "map|About"
 msgstr ""
 
 msgid "Click to edit custom rumors."
@@ -4684,6 +4695,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6146,7 +6160,7 @@ msgid ""
 "value"
 msgstr ""
 
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr ""
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -7620,16 +7634,16 @@ msgstr ""
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr ""
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 msgid "Click to change class."

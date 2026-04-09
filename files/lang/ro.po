@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 13:11+0000\n"
+"POT-Creation-Date: 2026-04-09 15:00+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -482,7 +482,7 @@ msgid "Move the %{name}"
 msgstr "Mută %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Trage în %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -3407,22 +3407,23 @@ msgstr ""
 msgid "Random Map Generator"
 msgstr ""
 
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr ""
 
-msgid "rmg|Map layout"
+msgid "rmg|Map layout:"
 msgstr ""
 
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr ""
 
-msgid "rmg|Monster strength"
+#, fuzzy
+msgid "rmg|Monster strength:"
+msgstr "Normal"
+
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Resource availability"
-msgstr ""
-
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3650,7 +3651,7 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Ocean Object:"
 msgstr "Selectați ținta vrăjii"
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3685,7 +3686,7 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Landscape Object:"
 msgstr "Selectați ținta vrăjii"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3726,8 +3727,9 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Adventure Object:"
 msgstr "Selectați ținta vrăjii"
 
-msgid "Select color"
-msgstr ""
+#, fuzzy
+msgid "Select color:"
+msgstr "Selectați ținta vrăjii"
 
 msgid "Players Icon"
 msgstr ""
@@ -4039,8 +4041,9 @@ msgstr "Oraș"
 msgid "Click to change the Castle name."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
-msgid "Enter Castle name"
-msgstr ""
+#, fuzzy
+msgid "Enter Castle name:"
+msgstr "Întoarce-te la luptă."
 
 #, fuzzy
 msgid "Reset the Castle name."
@@ -4114,6 +4117,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Trage în %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Bara de mesaje"
 
@@ -4141,7 +4148,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Ziua: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4181,8 +4188,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Puncte de vrajă"
 
 msgid "Artifact"
 msgstr "Artifact"
@@ -4329,10 +4337,10 @@ msgstr "Întoarce-te la luptă."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4633,7 +4641,7 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Sprijiniți-ne pe"
 
 msgid "Language"
@@ -4840,10 +4848,18 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Name:"
+msgstr "Limbă"
+
+#, fuzzy
+msgid "Change Map Description:"
+msgstr "Designeri de hărți"
+
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4918,6 +4934,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -6427,7 +6446,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Setează abilitățile de atac"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -7920,16 +7939,16 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Puncte de vrajă"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 #, fuzzy
