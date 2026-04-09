@@ -63,6 +63,10 @@ vi.mo: vi.po
 ro.mo: ro.po
 	$(call MSGFMT,ISO-8859-16)
 
+# Esperanto uses ISO-8859-3
+eo.mo: eo.po
+	$(call MSGFMT,ISO-8859-3)
+
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
 %.mo: %.po
