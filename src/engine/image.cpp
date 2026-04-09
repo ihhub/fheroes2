@@ -1138,13 +1138,15 @@ namespace fheroes2
         uint8_t * imageY = image.image() + y * imageWidth + x;
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
+        const uint32_t transformOffset = transformId * 256;
+
         if ( image.singleLayer() ) {
             for ( ; imageY != imageYEnd; imageY += imageWidth ) {
                 uint8_t * imageX = imageY;
                 const uint8_t * imageXEnd = imageX + width;
 
                 for ( ; imageX != imageXEnd; ++imageX ) {
-                    *imageX = *( transformTable + transformId * 256 + *imageX );
+                    *imageX = *( transformTable + transformOffset + *imageX );
                 }
             }
         }
@@ -1158,7 +1160,7 @@ namespace fheroes2
 
                 for ( ; imageX != imageXEnd; ++imageX, ++transformX ) {
                     if ( *transformX == 0 ) {
-                        *imageX = *( transformTable + transformId * 256 + *imageX );
+                        *imageX = *( transformTable + transformOffset + *imageX );
                     }
                 }
             }
