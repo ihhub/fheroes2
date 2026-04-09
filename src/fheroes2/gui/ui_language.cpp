@@ -343,6 +343,8 @@ namespace fheroes2
             return CodePage::CP1258;
         case SupportedLanguage::Romanian:
             return CodePage::ISO8859_16;
+        case SupportedLanguage::Esperanto:
+            return CodePage::ISO8859_3;
         default:
             // Add new language handling code!
             assert( 0 );
