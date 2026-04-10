@@ -70,7 +70,7 @@ namespace
             { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
             { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese },
             { "el", fheroes2::SupportedLanguage::Greek },      { "greek", fheroes2::SupportedLanguage::Greek },
-            { "eo", fheroes2::SupportedLanguage::Greek },      { "esperanto", fheroes2::SupportedLanguage::Greek } };
+            { "eo", fheroes2::SupportedLanguage::Esperanto },  { "esperanto", fheroes2::SupportedLanguage::Esperanto } };
 }
 
 namespace fheroes2
