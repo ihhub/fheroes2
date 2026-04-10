@@ -569,17 +569,17 @@ void Maps::FileInfo::FillUnions( const PlayerColorsSet side1Colors, const Player
 
 bool Maps::FileInfo::CompareByFileName::operator()( const FileInfo & lhs, const FileInfo & rhs ) const
 {
-    return fheroes2::compareStringsCaseInsensitively( lhs.filename, rhs.filename );
+    return fheroes2::compareStringsCaseInsensitively( System::GetFileName( lhs.filename ), System::GetFileName( rhs.filename ) );
 }
 
 bool Maps::FileInfo::CompareByFileName::operator()( const FileInfo & lhs, const std::string & rhs ) const
 {
-    return fheroes2::compareStringsCaseInsensitively( lhs.filename, rhs );
+    return fheroes2::compareStringsCaseInsensitively( System::GetFileName( lhs.filename ), System::GetFileName( rhs ) );
 }
 
 bool Maps::FileInfo::CompareByFileName::operator()( const std::string & lhs, const FileInfo & rhs ) const
 {
-    return fheroes2::compareStringsCaseInsensitively( lhs, rhs.filename );
+    return fheroes2::compareStringsCaseInsensitively( System::GetFileName( lhs ), System::GetFileName( rhs.filename ) );
 }
 
 bool Maps::FileInfo::CompareByMapName::operator()( const FileInfo & lhs, const FileInfo & rhs ) const
