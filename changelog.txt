@@ -1,3 +1,54 @@
+version 1.1.15 (12 April 2026)
+- fix inconsistency in the Editor's window titles
+- add "Ravenhold" map into the fheroes2 bundle
+- add "Apocalypse" map into the fheroes2 bundle
+- add "Final Invasion" map into the fheroes2 bundle
+- update the Ukrainian translation
+- update the Russian translation
+- replace multiple variants of "Eruption" map with a single one with multiple languages
+- add ability to show Turn Order window below the battlefield
+- add popup windows for all buttons for the Virtual Keyboard
+- rework Battle Only interface
+- add ability to select artifacts for Random Artifact objects in the Editor
+- fix rendering deadlock for vertical text when a character width is bigger than the maximum width
+- fix issues for the text input window
+- replace multiple variants of "7 deserts" map with a single one with multiple languages
+- add NBSP character to all fonts
+- update the Greek translation
+- update the Belarusian translation
+- add ABOUT button to show map information during gameplay
+- speed up engine loading and language switching
+- recalculate hero path after "Dimension Door" spell usage
+- fix rendering of dead monsters during Resurrection spells animation
+- AI heroes will sort artifacts from worst to best to diminish their defeat
+- separate battle animation Speed string from monster Speed
+- add Brazilian Portuguese language support for the Virtual Keyboard
+- remove death monster animation in the castle's well dialog
+- adjust castle image and castle name in Town's dialog
+- add Norwegian language support for the Virtual Keyboard
+- add Swedish language support for the Virtual Keyboard
+- add Hungarian language support for the Virtual Keyboard
+- add Spanish language support to Virtual Keyboard
+- add Bulgarian language support for the Virtual Keyboard
+- update CP-1253 fonts for the Greek language
+- relax the conditions of action object placement in the Editor
+- improve adventure map spells messages order
+- move scrollbar only to discrete positions corresponding to the list items
+- avoid terrain objects being placed under road objects in the Random Map Generator
+- update object passabilities after the Random Map Generator finishes generating map
+- compress fheroes2 assets data in h2d file
+- add Timidity PAT files to PS Vita package
+- generate new sprites for diagonal road crossings
+- update the Portuguese Translation
+- adjust morale and luck descriptions
+- update the Polish translation
+- show water percentage limit in Random Generator
+- fix vertical offset for small monster images
+- add support to change terrain type in the Battle Only by mouse wheel
+- fix animation freezing while playing the sound of Petrification spell
+- set 'exchange all troops' default hotkey to 'X', avoid clashing with Mage Guild
+- update the Swedish translation
+
 version 1.1.14 (24 February 2026)
 - fix hero removal leftovers from the map in the Editor
 - add new variants of Abandoned Mines

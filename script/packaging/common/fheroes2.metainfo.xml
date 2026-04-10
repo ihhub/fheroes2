@@ -37,6 +37,63 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2026-04-12" version="v1.1.15">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.15</url>
+      <description>
+        <p>Changes in v1.1.15 (12 April 2026):</p>
+        <ul>
+          <li>fix inconsistency in the Editor's window titles</li>
+          <li>add "Ravenhold" map into the fheroes2 bundle</li>
+          <li>add "Apocalypse" map into the fheroes2 bundle</li>
+          <li>add "Final Invasion" map into the fheroes2 bundle</li>
+          <li>update the Ukrainian translation</li>
+          <li>update the Russian translation</li>
+          <li>replace multiple variants of "Eruption" map with a single one with multiple languages</li>
+          <li>add ability to show Turn Order window below the battlefield</li>
+          <li>add popup windows for all buttons for the Virtual Keyboard</li>
+          <li>rework Battle Only interface</li>
+          <li>add ability to select artifacts for Random Artifact objects in the Editor</li>
+          <li>fix rendering deadlock for vertical text when a character width is bigger than the maximum width</li>
+          <li>fix issues for the text input window</li>
+          <li>replace multiple variants of "7 deserts" map with a single one with multiple languages</li>
+          <li>add NBSP character to all fonts</li>
+          <li>update the Greek translation</li>
+          <li>update the Belarusian translation</li>
+          <li>add ABOUT button to show map information during gameplay</li>
+          <li>speed up engine loading and language switching</li>
+          <li>recalculate hero path after "Dimension Door" spell usage</li>
+          <li>fix rendering of dead monsters during Resurrection spells animation</li>
+          <li>AI heroes will sort artifacts from worst to best to diminish their defeat</li>
+          <li>separate battle animation Speed string from monster Speed</li>
+          <li>add Brazilian Portuguese language support for the Virtual Keyboard</li>
+          <li>remove death monster animation in the castle's well dialog</li>
+          <li>adjust castle image and castle name in Town's dialog</li>
+          <li>add Norwegian language support for the Virtual Keyboard</li>
+          <li>add Swedish language support for the Virtual Keyboard</li>
+          <li>add Hungarian language support for the Virtual Keyboard</li>
+          <li>add Spanish language support to Virtual Keyboard</li>
+          <li>add Bulgarian language support for the Virtual Keyboard</li>
+          <li>update CP-1253 fonts for the Greek language</li>
+          <li>relax the conditions of action object placement in the Editor</li>
+          <li>improve adventure map spells messages order</li>
+          <li>move scrollbar only to discrete positions corresponding to the list items</li>
+          <li>avoid terrain objects being placed under road objects in the Random Map Generator</li>
+          <li>update object passabilities after the Random Map Generator finishes generating map</li>
+          <li>compress fheroes2 assets data in h2d file</li>
+          <li>add Timidity PAT files to PS Vita package</li>
+          <li>generate new sprites for diagonal road crossings</li>
+          <li>update the Portuguese Translation</li>
+          <li>adjust morale and luck descriptions</li>
+          <li>update the Polish translation</li>
+          <li>show water percentage limit in Random Generator</li>
+          <li>fix vertical offset for small monster images</li>
+          <li>add support to change terrain type in the Battle Only by mouse wheel</li>
+          <li>fix animation freezing while playing the sound of Petrification spell</li>
+          <li>set 'exchange all troops' default hotkey to 'X', avoid clashing with Mage Guild</li>
+          <li>update the Swedish translation</li>
+        </ul>
+      </description>
+    </release>
     <release date="2026-02-24" version="v1.1.14">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.14</url>
       <description>
