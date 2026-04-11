@@ -44,7 +44,7 @@ version 1.1.15 (12 April 2026)
 - update the Polish translation
 - show water percentage limit in Random Generator
 - fix vertical offset for small monster images
-- add support to change terrain type in the Battle Only by mouse wheel
+- make it possible to change terrain type in the Battle Only mode with the mouse wheel
 - fix animation freezing while playing the sound of Petrification spell
 - set 'exchange all troops' default hotkey to 'X' to avoid conflicting with Mage Guild
 - update the Swedish translation
