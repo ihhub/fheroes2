@@ -31,7 +31,7 @@ version 1.1.15 (12 April 2026)
 - add Spanish language support to Virtual Keyboard
 - add Bulgarian language support for the Virtual Keyboard
 - update CP-1253 fonts for the Greek language
-- relax the conditions of action object placement in the Editor
+- Loosen the conditions for action object placement in the Editor
 - improve adventure map spells messages order
 - move scrollbar only to discrete positions corresponding to the list items
 - avoid terrain objects being placed under road objects in the Random Map Generator
