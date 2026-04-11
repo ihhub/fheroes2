@@ -5,7 +5,7 @@ version 1.1.15 (12 April 2026)
 - add "Final Invasion" map into the fheroes2 bundle
 - update the Ukrainian translation
 - update the Russian translation
-- replace multiple variants of "Eruption" map with a single one with multiple languages
+- consolidate all translated versions of the "Eruption" map into a single map file
 - add ability to show Turn Order window below the battlefield
 - add popup windows for all buttons for the Virtual Keyboard
 - rework Battle Only interface
