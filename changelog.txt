@@ -16,7 +16,7 @@ version 1.1.15 (12 April 2026)
 - add NBSP character to all fonts
 - update the Greek translation
 - update the Belarusian translation
-- add ABOUT button to show map information during gameplay
+- make the ABOUT button available from the scenario info during gameplay
 - speed up engine loading and language switching
 - recalculate hero path after "Dimension Door" spell usage
 - fix rendering of dead monsters during Resurrection spells animation
