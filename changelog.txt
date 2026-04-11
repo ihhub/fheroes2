@@ -20,7 +20,7 @@ version 1.1.15 (12 April 2026)
 - speed up engine loading and language switching
 - recalculate hero path after "Dimension Door" spell usage
 - fix rendering of dead monsters during Resurrection spell animation
-- AI heroes will sort artifacts from worst to best to diminish their defeat
+- make AI heroes sort artifacts from worst to best to minimize losses on defeat
 - separate battle animation Speed string from monster Speed
 - add Brazilian Portuguese language support for the Virtual Keyboard
 - remove death monster animation in the castle's well dialog
