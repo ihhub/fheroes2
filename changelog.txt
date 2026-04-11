@@ -19,7 +19,7 @@ version 1.1.15 (12 April 2026)
 - make the ABOUT button available from the scenario info during gameplay
 - speed up engine loading and language switching
 - recalculate hero path after "Dimension Door" spell usage
-- fix rendering of dead monsters during Resurrection spells animation
+- fix rendering of dead monsters during Resurrection spell animation
 - AI heroes will sort artifacts from worst to best to diminish their defeat
 - separate battle animation Speed string from monster Speed
 - add Brazilian Portuguese language support for the Virtual Keyboard
