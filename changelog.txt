@@ -12,7 +12,7 @@ version 1.1.15 (12 April 2026)
 - add ability to select artifacts for Random Artifact objects in the Editor
 - fix rendering deadlock for vertical text when a character width is bigger than the maximum width
 - fix issues for the text input window
-- replace multiple variants of "7 deserts" map with a single one with multiple languages
+- consolidate all translated versions of the "7 deserts" map into a single map file
 - add NBSP character to all fonts
 - update the Greek translation
 - update the Belarusian translation
