@@ -1,6 +1,6 @@
 version 1.1.15 (12 April 2026)
 - fix inconsistency in the Editor's window titles
-- add "Ravenhold" map into the fheroes2 bundle
+- add "Ravenhold" map to the fheroes2 bundle
 - add "Apocalypse" map into the fheroes2 bundle
 - add "Final Invasion" map into the fheroes2 bundle
 - update the Ukrainian translation
