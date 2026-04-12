@@ -94,4 +94,4 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 
 ## Frequently Asked Questions (FAQ)
 
-You can find answers to the most commonly asked questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).
+You can find answers to the most commonly asked questions on our [**F.A.Q. page**](FAQ.md).
