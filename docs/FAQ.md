@@ -21,6 +21,7 @@ Yes, absolutely. It is a free open source project.
 
 **fheroes2** is a collaboration project of a team of people from many areas. The team includes developers, QA engineers (testers), music/audio composers, 2D artists
 and most importantly - players. Here are many areas which you can contribute to the project:
+
 * **development**. The biggest area. Basic programming skills are required (even if it's not C++ language) to solve some issues. We have a huge variety of bugs to be
 fixed and features to be implemented. You can try your skills by picking issues which have **Good first issue** label on them. The project has automated CI/CD pipeline
 which helps any developer to find some weak places in their code. Also every pull request goes through proper code review to keep the quality of the source code.
