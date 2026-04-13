@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:23+0000\n"
+"POT-Creation-Date: 2026-04-13 11:44+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5602,9 +5602,8 @@ msgstr "Разработка и поддръжка"
 msgid "Special Thanks to"
 msgstr "Специални благодарности на"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "и много-много други поддръжници!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Подкрепете ни на"
@@ -13012,6 +13011,10 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#, fuzzy
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "и много-много други поддръжници!"
 
 #~ msgid "AI"
 #~ msgstr "ИИ"
