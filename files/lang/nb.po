@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:23+0000\n"
+"POT-Creation-Date: 2026-04-13 11:44+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5649,9 +5649,8 @@ msgstr "Utvikling og støtte"
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "og mange flere bidragsytere!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Støtt oss på"
@@ -13229,6 +13228,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#, fuzzy
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "og mange flere bidragsytere!"
 
 #~ msgid "AI"
 #~ msgstr "Datamaskin"

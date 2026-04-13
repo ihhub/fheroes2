@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:23+0000\n"
+"POT-Creation-Date: 2026-04-13 11:44+0000\n"
 "PO-Revision-Date: 2026-04-07 19:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5512,9 +5512,8 @@ msgstr "Development i wsparcie"
 msgid "Special Thanks to"
 msgstr "Specjalnie podziękowania dla"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "i wielu, wielu innym!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Wesprzyj nas"
@@ -12932,6 +12931,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#, fuzzy
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "i wielu, wielu innym!"
 
 #~ msgid "AI"
 #~ msgstr "Komputer"

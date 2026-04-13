@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:23+0000\n"
+"POT-Creation-Date: 2026-04-13 11:44+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5566,9 +5566,8 @@ msgstr "Phát triển và Hỗ trợ"
 msgid "Special Thanks to"
 msgstr "Lời cảm ơn Chân thành tới"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "và nhiều - nhiều những người hỗ trợ khác!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Hỗ trợ chúng tôi tại"
@@ -13044,6 +13043,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "và nhiều - nhiều những người hỗ trợ khác!"
 
 #~ msgid "AI"
 #~ msgstr "AI"
