@@ -4716,6 +4716,29 @@ namespace
         }
     }
 
+    void generateISO8859_3Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    {
+        resizeCodePage( icnVsSprite );
+
+        // Normal font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // NBSP character.
+            font[160].resize( normalFontSpaceWidth, 1 );
+            font[160].reset();
+        }
+
+        // Small font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+            // NBSP character.
+            font[160].resize( smallFontSpaceWidth, 1 );
+            font[160].reset();
+        }
+    }
+
     void generateGoodButtonFontBaseShape( std::vector<fheroes2::Sprite> & released )
     {
         // Button font does not exist in the original game assets but we can regenerate it from scratch.
@@ -6556,6 +6579,9 @@ namespace fheroes2
         case CodePage::ISO8859_16:
             generateISO8859_16Alphabet( icnVsSprite );
             break;
+        case CodePage::ISO8859_3:
+            generateISO8859_3Alphabet( icnVsSprite );
+            break;
         default:
             // Add new code page generation code!
             assert( 0 );
@@ -6635,6 +6661,9 @@ namespace fheroes2
             break;
         case CodePage::ISO8859_16:
             // generateISO8859_16GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case CodePage::ISO8859_3:
+            // generateISO8859_3GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
             // Add new code page generation code!

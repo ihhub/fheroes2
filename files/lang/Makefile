@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2024 - 2025                                             #
+#   Copyright (C) 2024 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -62,6 +62,10 @@ vi.mo: vi.po
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
 	$(call MSGFMT,ISO-8859-16)
+
+# Esperanto uses ISO-8859-3
+eo.mo: eo.po
+	$(call MSGFMT,ISO-8859-3)
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
