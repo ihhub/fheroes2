@@ -23,7 +23,7 @@ jobs:
       runCxxAnalyzers: ${{ steps.dispatch.outputs.runCxxAnalyzers }}
       runSonarAnalyzer: ${{ steps.dispatch.outputs.runSonarAnalyzer }}
     steps:
-    - uses: actions/github-script@v8
+    - uses: actions/github-script@v9
       id: dispatch
       with:
         script: |
