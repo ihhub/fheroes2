@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,13 +74,15 @@ namespace
         FADING_OUT
     };
 
-    class AnimationSequence
+    class AnimationSequence final
     {
     public:
         AnimationSequence() = delete;
         explicit AnimationSequence( const int32_t imageCount )
             : _imageCount( imageCount )
-        {}
+        {
+            // Do nothing.
+        }
 
         int32_t pageId() const
         {
@@ -134,7 +136,7 @@ namespace
         }
 
     private:
-        const int32_t _imageCount;
+        const int32_t _imageCount = 0;
         int32_t _alphaValue = 0;
         int32_t _noActionCounter = 0;
         int32_t _pageId = 0;
@@ -340,7 +342,7 @@ namespace
 
         offsetY += constributorsHeight;
 
-        name.set( _( "and many-many other contributors and supporters!" ), fheroes2::FontType::normalWhite() );
+        name.set( _( "and all the people who have helped make the project possible!" ), fheroes2::FontType::normalWhite() );
         name.draw( output.width() / 2 - name.width() / 2, offsetY, output );
 
         const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
