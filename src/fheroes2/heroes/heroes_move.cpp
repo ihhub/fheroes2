@@ -595,8 +595,14 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
         }
 
         if ( const int frontDirection = _path.GetFrontDirection(); GetDirection() != frontDirection ) {
-            // The hero is changing the direction of movement.
-            _angleStep( frontDirection );
+            // Hold rotation frame for N ticks to match the movement speed (similar to original game)
+            const int32_t freeze = std::clamp( 4 / Game::HumanHeroAnimSpeedMultiplier(), 1, 3 );
+            if ( ++_rotationFrameHold >= freeze ) {
+                _rotationFrameHold = 0;
+
+                // The hero is changing the direction of movement.
+                _angleStep( frontDirection );
+            }
         }
         else {
             // Set valid direction sprite in case of AI hero appearing from fog.
