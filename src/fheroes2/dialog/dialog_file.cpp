@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <vector>
+
+#include "campaign_data.h"
+#include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_io.h"
@@ -38,6 +44,23 @@
 
 namespace
 {
+    bool isRestartAvailable( const Settings & config )
+    {
+        if ( !config.isCampaignGameType() ) {
+            // As of now we support only campaign scenarios.
+            return false;
+        }
+
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const int chosenCampaignID = campaignSaveData.getCampaignID();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
+        const Campaign::ScenarioInfoId & currentScenarioInfoId = campaignSaveData.getCurrentScenarioInfoId();
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+        const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
+
+        return scenario.isMapFilePresent();
+    }
+
     fheroes2::GameMode selectFileOption()
     {
         // setup cursor
@@ -58,8 +81,9 @@ namespace
         const fheroes2::ButtonBase & quickSaveButton = optionButtons.button( 4 );
         const fheroes2::ButtonBase & quitButton = optionButtons.button( 5 );
 
-        // For now this button is disabled.
-        restartGameButton.disable();
+        if ( !isRestartAvailable( config ) ) {
+            restartGameButton.disable();
+        }
 
         background.renderSymmetricButtons( optionButtons, 0, false );
 
@@ -92,6 +116,17 @@ namespace
                 }
             }
             else if ( restartGameButton.isEnabled() && le.MouseClickLeft( restartGameButton.area() ) ) {
+                if ( config.isCampaignGameType() ) {
+                    if ( fheroes2::showStandardTextMessage( _( "Restart Game" ), _( "Are you sure you want to restart this scenario?" ), Dialog::YES | Dialog::NO )
+                         == Dialog::NO ) {
+                        continue;
+                    }
+
+                    const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+                    result = Game::startCampaignScenario( campaignSaveData.getDifficulty(), true, campaignSaveData.getCurrentScenarioBonusId() );
+                    break;
+                }
+
                 // TODO: restart the campaign here.
                 fheroes2::showStandardTextMessage( _( "Restart Game" ), "This option is under construction.", Dialog::OK );
                 result = fheroes2::GameMode::CANCEL;

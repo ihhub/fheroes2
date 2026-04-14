@@ -25,6 +25,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 
 #include "color.h"
@@ -74,6 +75,7 @@ namespace Game
     fheroes2::GameMode DisplayLoadGameDialog();
     fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
     fheroes2::GameMode DisplayHighScores( bool isCampaign );
+    fheroes2::GameMode startCampaignScenario( const int32_t difficulty, const bool allowToRestart, const std::optional<int32_t> scenarioBonusId );
 
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
