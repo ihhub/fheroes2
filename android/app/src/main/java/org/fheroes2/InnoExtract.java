@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,20 +51,11 @@ import java.util.zip.Inflater;
  */
 final class InnoExtract
 {
-    private static final byte[] LOADER_MAGIC = { 0x72, 0x44, 0x6C, 0x50, 0x74, 0x53, (byte)0xCD, (byte)0xE6, (byte)0xD7, 0x7B, 0x0B, 0x2A };
+    private static final byte[] loaderMagic = { (byte)0x72, (byte)0x44, (byte)0x6C, (byte)0x50, (byte)0x74, (byte)0x53, (byte)0xCD, (byte)0xE6, (byte)0xD7, (byte)0x7B, (byte)0x0B, (byte)0x2A };
 
-    private static final Set<String> TARGET_DIRS = new HashSet<>();
+    private static final Set<String> targetDirs = new HashSet<>( Arrays.asList( "data", "maps", "music", "anim" ) );
 
-    private static final String GOG_CD_IMAGE_NAME = "homm2.gog";
-
-    static
-    {
-        TARGET_DIRS.add( "data" );
-        TARGET_DIRS.add( "maps" );
-        TARGET_DIRS.add( "music" );
-        TARGET_DIRS.add( "anim" );
-        TARGET_DIRS.add( "anim2" );
-    }
+    private static final String gogCdImageName = "homm2.gog";
 
     private InnoExtract()
     {
@@ -226,7 +218,7 @@ final class InnoExtract
         boolean result = false;
 
         final Set<File> allowedSubdirs = new HashSet<>();
-        for ( final String dirName : TARGET_DIRS ) {
+        for ( final String dirName : targetDirs ) {
             allowedSubdirs.add( new File( outputDir, dirName ).getCanonicalFile() );
         }
 
@@ -238,7 +230,7 @@ final class InnoExtract
 
             // Check for GOG CD image (homm2.gog) which contains ANIM files
             final String fileName = pathParts[pathParts.length - 1].toLowerCase( Locale.ROOT );
-            if ( fileName.equals( GOG_CD_IMAGE_NAME ) ) {
+            if ( fileName.equals( gogCdImageName ) ) {
                 gogCdImageInfo = fileInfo;
                 continue;
             }
@@ -247,7 +239,7 @@ final class InnoExtract
                 continue;
             }
 
-            if ( !TARGET_DIRS.contains( pathParts[0].toLowerCase( Locale.ROOT ) ) ) {
+            if ( !targetDirs.contains( pathParts[0].toLowerCase( Locale.ROOT ) ) ) {
                 continue;
             }
 
@@ -462,7 +454,7 @@ final class InnoExtract
     {
         final Map<String, FileInfo> fileMap = new HashMap<>();
 
-        for ( final String targetDir : TARGET_DIRS ) {
+        for ( final String targetDir : targetDirs ) {
             final byte[][] patterns = { encodeUTF16LE( targetDir + "\\" ), encodeUTF16LE( targetDir.toUpperCase( Locale.ROOT ) + "\\" ), encodeUTF16LE( targetDir + "/" ),
                                         encodeUTF16LE( targetDir.toUpperCase( Locale.ROOT ) + "/" ) };
 
@@ -520,19 +512,21 @@ final class InnoExtract
 
     private static long findLoaderMagic( final RandomAccessFile raf ) throws IOException
     {
+        // The signature position is not fixed — it depends on the size of the compiled PE binary.
+        // Without full PE header parsing, we scan the entire file in overlapping buffered chunks.
         final int bufSize = 262144;
         final byte[] buf = new byte[bufSize];
         final long fileLen = raf.length();
 
-        for ( long offset = 0; offset < fileLen; offset += bufSize - LOADER_MAGIC.length ) {
+        for ( long offset = 0; offset < fileLen; offset += bufSize - loaderMagic.length ) {
             raf.seek( offset );
             final int read = raf.read( buf, 0, (int)Math.min( bufSize, fileLen - offset ) );
 
-            if ( read < LOADER_MAGIC.length ) {
+            if ( read < loaderMagic.length ) {
                 break;
             }
 
-            final int idx = findBytes( buf, LOADER_MAGIC, 0, read );
+            final int idx = findBytes( buf, loaderMagic, 0, read );
             if ( idx >= 0 ) {
                 return offset + idx;
             }
@@ -548,12 +542,12 @@ final class InnoExtract
         final String lower = name.toLowerCase( Locale.ROOT ).replace( '\\', '/' );
 
         // Match the GOG CD image file
-        if ( lower.equals( GOG_CD_IMAGE_NAME ) || lower.endsWith( "/" + GOG_CD_IMAGE_NAME ) ) {
+        if ( lower.equals( gogCdImageName ) || lower.endsWith( "/" + gogCdImageName ) ) {
             return true;
         }
 
         final String[] parts = lower.split( "/" );
-        return parts.length >= 2 && TARGET_DIRS.contains( parts[0] );
+        return parts.length >= 2 && targetDirs.contains( parts[0] );
     }
 
     private static int readUint32LE( final byte[] data, final int offset )
@@ -594,14 +588,17 @@ final class InnoExtract
     {
         final int limit = end - needle.length;
 
-    outer:
         for ( int i = start; i <= limit; i++ ) {
+            boolean found = true;
             for ( int j = 0; j < needle.length; j++ ) {
                 if ( haystack[i + j] != needle[j] ) {
-                    continue outer;
+                    found = false;
+                    break;
                 }
             }
-            return i;
+            if ( found ) {
+                return i;
+            }
         }
 
         return -1;
