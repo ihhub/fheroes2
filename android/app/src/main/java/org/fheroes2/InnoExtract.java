@@ -31,8 +31,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +51,8 @@ import java.util.zip.Inflater;
  */
 final class InnoExtract
 {
-    private static final byte[] loaderMagic = { (byte)0x72, (byte)0x44, (byte)0x6C, (byte)0x50, (byte)0x74, (byte)0x53, (byte)0xCD, (byte)0xE6, (byte)0xD7, (byte)0x7B, (byte)0x0B, (byte)0x2A };
+    private static final byte[] loaderMagic
+        = { (byte)0x72, (byte)0x44, (byte)0x6C, (byte)0x50, (byte)0x74, (byte)0x53, (byte)0xCD, (byte)0xE6, (byte)0xD7, (byte)0x7B, (byte)0x0B, (byte)0x2A };
 
     private static final Set<String> targetDirs = new HashSet<>( Arrays.asList( "data", "maps", "music", "anim" ) );
 
