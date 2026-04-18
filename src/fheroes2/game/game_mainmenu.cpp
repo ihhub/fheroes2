@@ -98,8 +98,8 @@ namespace
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_MAIN_MENU ) << " to open Editor." )
         }
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::GLOBAL_APP_QUIT ) << " or " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL )
-                       << " to Quit the game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::GLOBAL_APP_QUIT ) << " or "
+                       << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Quit the game." )
     }
 }
 
