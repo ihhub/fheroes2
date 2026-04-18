@@ -33,6 +33,7 @@
 #include "dialog_selectscenario.h"
 #include "editor_interface.h"
 #include "game.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
@@ -221,7 +222,13 @@ namespace Editor
 
         bool generateRandomMap = false;
 
-        while ( le.HandleEvents() ) {
+        while ( true ) {
+            if ( !le.HandleEvents( true, true ) || HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
+                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                    return fheroes2::GameMode::QUIT_GAME;
+                }
+            }
+
             if ( buttonNewMap.isEnabled() ) {
                 mainModeButtons.drawOnState( le );
                 buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMainMenu.area() ) );

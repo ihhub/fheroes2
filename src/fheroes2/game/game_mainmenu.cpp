@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,6 +42,7 @@
 #include "editor_mainmenu.h"
 #include "game.h" // IWYU pragma: associated
 #include "game_delays.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
@@ -97,7 +98,7 @@ namespace
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_MAIN_MENU ) << " to open Editor." )
         }
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_QUIT ) << " or " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::GLOBAL_APP_QUIT ) << " or " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL )
                        << " to Quit the game." )
     }
 }
@@ -314,7 +315,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                 break;
             }
             else {
@@ -365,8 +366,8 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
             return fheroes2::GameMode::CREDITS;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
-            if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+        if ( HotKeyPressEvent( HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+            if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }
