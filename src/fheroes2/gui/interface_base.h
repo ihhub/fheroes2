@@ -22,7 +22,6 @@
 
 #include <cstdint>
 
-#include "game_mode.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "math_base.h"

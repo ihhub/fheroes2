@@ -44,7 +44,6 @@
 #include "game_delays.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
 #include "icn.h"
