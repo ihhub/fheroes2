@@ -360,7 +360,7 @@ namespace
                 const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
                 const int32_t b = static_cast<int32_t>( id >> 12 );
                 int32_t minDistance = INT32_MAX;
-                uint32_t bestPos = 0;
+                uint8_t bestPos = 0;
 
                 // Use the "No cycle" palette.
                 // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
@@ -385,7 +385,7 @@ namespace
                     }
                 }
 
-                rgbToId[id] = static_cast<uint8_t>( bestPos ); // it's safe to cast
+                rgbToId[id] = bestPos;
             }
         }
 
