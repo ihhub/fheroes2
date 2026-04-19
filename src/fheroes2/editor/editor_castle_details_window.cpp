@@ -860,7 +860,8 @@ namespace Editor
                 }
 
                 if ( fheroes2::showStandardTextMessage( getCastleName( castleMetadata.customName, isTown ), _( "You have unsaved changes. Do you wish to proceed?" ),
-                    Dialog::OK | Dialog::CANCEL ) == Dialog::OK ) {
+                                                        Dialog::OK | Dialog::CANCEL )
+                     == Dialog::OK ) {
                     return false;
                 }
             }
