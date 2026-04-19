@@ -1417,6 +1417,43 @@ namespace Interface
                             _brushTiles.clear();
                         }
                     }
+                    else if ( _editorPanel.isRoadDraw() ) {
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                if ( Maps::setRoadOnTile( _mapFormat, _tileUnderCursor ) ) {
+                                    _redraw |= mapUpdateFlags;
+
+                                    action.commit();
+                                }
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
+
+                    else if ( _editorPanel.isStreamDraw() ) {
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                if ( Maps::addStream( _mapFormat, tileIndex ) ) {
+                                    _redraw |= mapUpdateFlags;
+
+                                    action.commit();
+                                }
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
@@ -2087,6 +2124,8 @@ namespace Interface
 
                 action.commit();
             }
+
+            _brushTiles.clear();
         }
         else if ( _editorPanel.isStreamDraw() ) {
             if ( tile.isWater() ) {
@@ -2103,6 +2142,8 @@ namespace Interface
 
                 action.commit();
             }
+
+            _brushTiles.clear();
         }
         else if ( _editorPanel.isEraseMode() ) {
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
