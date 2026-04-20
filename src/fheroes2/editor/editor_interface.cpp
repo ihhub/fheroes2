@@ -1419,7 +1419,7 @@ namespace Interface
                     }
                     else if ( _editorPanel.isRoadDraw() ) {
                         if ( le.isMouseLeftButtonPressed() ) {
-                            if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                            if ( _brushTiles.count( _tileUnderCursor ) == 0 && !world.getTile( _tileUnderCursor ).isWater() ) {
                                 _brushTiles.emplace( _tileUnderCursor );
 
                                 fheroes2::ActionCreator action( _historyManager, _mapFormat );
