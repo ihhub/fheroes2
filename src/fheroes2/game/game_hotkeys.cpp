@@ -111,6 +111,8 @@ namespace
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
 #endif
 
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_APP_QUIT )] = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
+
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|new game" ), fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )]
@@ -127,7 +129,6 @@ namespace
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|multi-player game" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SETTINGS )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|settings" ), fheroes2::Key::KEY_T };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_QUIT )] = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|select map" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL )]

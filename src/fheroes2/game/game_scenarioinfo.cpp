@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -38,8 +38,8 @@
 #include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game.h" // IWYU pragma: associated
+#include "game_exit.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
 #include "icn.h"
@@ -338,7 +338,7 @@ namespace
 
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
-                if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     fheroes2::fadeOutDisplay();
 
                     return fheroes2::GameMode::QUIT_GAME;
