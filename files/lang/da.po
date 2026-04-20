@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4251,6 +4251,10 @@ msgstr "Borghær"
 msgid "Town Army"
 msgstr "Byhær"
 
+#, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Hvor mange væsener ønsker du at flytte?"
+
 msgid "Click to change the Castle name."
 msgstr "Klik for at ændre borgnavn."
 
@@ -5610,6 +5614,12 @@ msgstr "Kortdesignere"
 msgid "Package Design"
 msgstr "Pakkedesign"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Er du sikker på om du vil afslutte?"
+
 msgid "High Scores"
 msgstr "Ranglister"
 
@@ -5658,6 +5668,9 @@ msgstr "Tekstunderstøttelsestilstand"
 msgid "hotkey|toggle developer mode"
 msgstr "Udviklertilstand (til/fra)"
 
+msgid "hotkey|quit"
+msgstr "Forlad"
+
 msgid "hotkey|new game"
 msgstr "Nyt spil"
 
@@ -5681,9 +5694,6 @@ msgstr "Flerspillerspil"
 
 msgid "hotkey|settings"
 msgstr "Indstillinger"
-
-msgid "hotkey|quit"
-msgstr "Forlad"
 
 msgid "hotkey|select map"
 msgstr "Vælg kort"
@@ -6655,12 +6665,6 @@ msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "En eller flere helte kan stadig ride. Er du sikker på at du vil ende din tur?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Er du sikker på om du vil afslutte?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""

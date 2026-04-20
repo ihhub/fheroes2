@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4337,6 +4337,10 @@ msgid "Town Army"
 msgstr "By"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Flytt hvor mange styrker?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Klikk for å vise neste by."
 
@@ -5784,6 +5788,12 @@ msgstr "Karttegnere"
 msgid "Package Design"
 msgstr "Innpakningsdesign"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Er du sikker på at du vil avslutte?"
+
 msgid "High Scores"
 msgstr "Rekordtavle"
 
@@ -5833,6 +5843,9 @@ msgstr "Tekstmodus"
 msgid "hotkey|toggle developer mode"
 msgstr "Tekstmodus"
 
+msgid "hotkey|quit"
+msgstr "Avslutt"
+
 msgid "hotkey|new game"
 msgstr "Nytt parti"
 
@@ -5857,9 +5870,6 @@ msgstr "Flerspillermodus"
 
 msgid "hotkey|settings"
 msgstr "Innstillinger"
-
-msgid "hotkey|quit"
-msgstr "Avslutt"
 
 msgid "hotkey|select map"
 msgstr "Velg kart"
@@ -6851,12 +6861,6 @@ msgid ""
 msgstr ""
 "Én eller flere helter kan fortsatt forflytte seg. Vil du likevel avslutte "
 "turen din?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Er du sikker på at du vil avslutte?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
