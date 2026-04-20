@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -4234,6 +4234,10 @@ msgstr "Burgarmee"
 msgid "Town Army"
 msgstr "Stadtarmee"
 
+#, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Wie viele Truppen sollen verlegt werden?"
+
 msgid "Click to change the Castle name."
 msgstr "Klickt, um den Burgnamen zu ändern."
 
@@ -5600,6 +5604,12 @@ msgstr "Kartendesigner"
 msgid "Package Design"
 msgstr "Verpackungsdesign"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr "Um fheroes2 zu verlassen, drückt die Home-Taste oder wischt nach oben."
+
+msgid "Are you sure you want to quit?"
+msgstr "Seid Ihr sicher, dass Ihr das Spiel verlassen wollt?"
+
 msgid "High Scores"
 msgstr "Bestenliste"
 
@@ -5648,6 +5658,9 @@ msgstr "Texthilfemodus ein-/ausschalten"
 msgid "hotkey|toggle developer mode"
 msgstr "Entwicklermodus ein-/ausschalten"
 
+msgid "hotkey|quit"
+msgstr "Beenden"
+
 msgid "hotkey|new game"
 msgstr "Neues Spiel"
 
@@ -5671,9 +5684,6 @@ msgstr "Mehrspieler-Spiel"
 
 msgid "hotkey|settings"
 msgstr "Einstellungen"
-
-msgid "hotkey|quit"
-msgstr "Beenden"
 
 msgid "hotkey|select map"
 msgstr "Karte auswählen"
@@ -6655,12 +6665,6 @@ msgid ""
 msgstr ""
 "Mindestens ein Held kann sich noch bewegen. Seid Ihr sicher, dass Ihr Euren "
 "Zug beenden möchtet?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr "Um fheroes2 zu verlassen, drückt die Home-Taste oder wischt nach oben."
-
-msgid "Are you sure you want to quit?"
-msgstr "Seid Ihr sicher, dass Ihr das Spiel verlassen wollt?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""

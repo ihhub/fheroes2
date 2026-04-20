@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4212,6 +4212,10 @@ msgstr "Exército do Castelo"
 msgid "Town Army"
 msgstr "Exército da Cidade"
 
+#, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Quantas criaturas você deseja mover?"
+
 msgid "Click to change the Castle name."
 msgstr "Clique para alterar o nome do Castelo."
 
@@ -5563,6 +5567,12 @@ msgstr "Designers de Mapa"
 msgid "Package Design"
 msgstr "Design da Embalagem"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr "Para sair do fheroes2, pressione o botão Home ou deslize para cima."
+
+msgid "Are you sure you want to quit?"
+msgstr "Você tem certeza de que deseja sair?"
+
 msgid "High Scores"
 msgstr "Melhores Pontuações"
 
@@ -5611,6 +5621,9 @@ msgstr "alternar modo de suporte a texto"
 msgid "hotkey|toggle developer mode"
 msgstr "alternar modo de desenvolvedor"
 
+msgid "hotkey|quit"
+msgstr "sair"
+
 msgid "hotkey|new game"
 msgstr "novo jogo"
 
@@ -5634,9 +5647,6 @@ msgstr "jogo multijogador"
 
 msgid "hotkey|settings"
 msgstr "configurações"
-
-msgid "hotkey|quit"
-msgstr "sair"
 
 msgid "hotkey|select map"
 msgstr "selecionar mapa"
@@ -6610,12 +6620,6 @@ msgid ""
 msgstr ""
 "Um ou mais heróis ainda podem se mover, você tem certeza de que deseja "
 "encerrar seu turno?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr "Para sair do fheroes2, pressione o botão Home ou deslize para cima."
-
-msgid "Are you sure you want to quit?"
-msgstr "Você tem certeza de que deseja sair?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""

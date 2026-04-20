@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4096,6 +4096,10 @@ msgid "Town Army"
 msgstr "Castello"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Quante forze spostare?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Clicca per andare alla città succ."
 
@@ -5496,6 +5500,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Sei sicuro di voler chiudere il gioco?"
+
 msgid "High Scores"
 msgstr "Classifiche"
 
@@ -5544,6 +5554,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5570,9 +5583,6 @@ msgstr "Inizia una partita singola o multigiocatore."
 #, fuzzy
 msgid "hotkey|settings"
 msgstr "Impostazioni"
-
-msgid "hotkey|quit"
-msgstr ""
 
 msgid "hotkey|select map"
 msgstr ""
@@ -6508,12 +6518,6 @@ msgid ""
 msgstr ""
 "Sei sicuro di voler concludere il tuo turno? Alcuni eroi si possono ancora "
 "spostare."
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Sei sicuro di voler chiudere il gioco?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
