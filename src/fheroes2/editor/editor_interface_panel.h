@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -96,7 +96,8 @@ namespace Interface
 
         bool useMouseDragMovement() const
         {
-            return ( _selectedInstrument != Instrument::TERRAIN && _selectedInstrument != Instrument::ERASE );
+            return ( _selectedInstrument != Instrument::TERRAIN && _selectedInstrument != Instrument::ERASE && _selectedInstrument != Instrument::ROAD
+                     && _selectedInstrument != Instrument::STREAM );
         }
 
         // Set Editor panel positions on screen.
