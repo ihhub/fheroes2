@@ -2670,18 +2670,6 @@ namespace Interface
         return true;
     }
 
-    bool EditorInterface::_setObjectOnTileAsAction( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
-    {
-        fheroes2::ActionCreator action( _historyManager, _mapFormat );
-
-        if ( _setObjectOnTile( tile, groupType, objectIndex ) ) {
-            action.commit();
-            return true;
-        }
-
-        return false;
-    }
-
     bool EditorInterface::updateRandomMapConfiguration( const int32_t mapWidth )
     {
         Maps::Random_Generator::Configuration temp{ _randomMapConfig };

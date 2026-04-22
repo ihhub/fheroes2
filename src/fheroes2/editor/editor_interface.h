@@ -160,8 +160,6 @@ namespace Interface
 
         bool _setObjectOnTile( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
-        bool _setObjectOnTileAsAction( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
-
         void _handleObjectMouseLeftClick( Maps::Tile & tile );
 
         // Returns true if the placement was successful.
