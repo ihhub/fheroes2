@@ -259,20 +259,20 @@ namespace
     bool isObjectMovable( const Maps::ObjectGroup group )
     {
         switch ( group ) {
-        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
-        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
-        case Maps::ObjectGroup::LANDSCAPE_TREES:
-        case Maps::ObjectGroup::LANDSCAPE_WATER:
-        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
         case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
         case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
         case Maps::ObjectGroup::ADVENTURE_MINES:
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
         case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
         case Maps::ObjectGroup::ADVENTURE_TREASURES:
         case Maps::ObjectGroup::ADVENTURE_WATER:
-        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
         case Maps::ObjectGroup::KINGDOM_HEROES:
         case Maps::ObjectGroup::KINGDOM_TOWNS:
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+        case Maps::ObjectGroup::LANDSCAPE_WATER:
         case Maps::ObjectGroup::MONSTERS:
             return true;
         default:
