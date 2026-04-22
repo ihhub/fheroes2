@@ -2615,6 +2615,9 @@ namespace Interface
             if ( _tryToPlaceObject( tile, objectType, groupType, false, action ) ) {
                 assert( action.get() != nullptr );
 
+                // If this assertion blows up then the code is invalid.
+                assert( Maps::getLastObjectUID() == objectUID );
+
                 _mapFormat.castleMetadata = std::move( castleMetadata );
                 _mapFormat.heroMetadata = std::move( heroMetadata );
                 _mapFormat.sphinxMetadata = std::move( sphinxMetadata );
