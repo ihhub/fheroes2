@@ -1492,7 +1492,7 @@ namespace Interface
 
                                     for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
                                         if ( isObjectMovable( objectIter->group ) ) {
-                                            _editorPanel.setObjectBasedCursor( objectIter->index, objectIter->group );
+                                            _editorPanel.setObjectBasedCursor( static_cast<int32_t>( objectIter->index ), objectIter->group );
                                             updateCursor( _tileUnderCursor );
                                             break;
                                         }
@@ -2574,7 +2574,7 @@ namespace Interface
         }
 
         for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
-            const int32_t objectType = objectIter->index;
+            const int32_t objectType = static_cast<int32_t>( objectIter->index );
             const Maps::ObjectGroup groupType = objectIter->group;
             const uint32_t objectUID = objectIter->id;
 
