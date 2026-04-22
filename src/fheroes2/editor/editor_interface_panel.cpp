@@ -797,8 +797,7 @@ namespace Interface
     {
         switch ( _selectedInstrument ) {
         case Instrument::MONSTERS:
-            _interface.setCursorUpdater(
-                [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+            setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
             return;
         case Instrument::LANDSCAPE_OBJECTS:
             switch ( _selectedLandscapeObject ) {
@@ -807,8 +806,7 @@ namespace Interface
             case LandscapeObjectBrush::ROCKS:
             case LandscapeObjectBrush::TREES:
             case LandscapeObjectBrush::WATER_OBJECTS:
-                _interface.setCursorUpdater(
-                    [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+                setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
                 return;
             default:
                 break;
@@ -823,8 +821,7 @@ namespace Interface
             case AdventureObjectBrush::POWER_UPS:
             case AdventureObjectBrush::TREASURES:
             case AdventureObjectBrush::WATER_ADVENTURE:
-                _interface.setCursorUpdater(
-                    [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+                setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
                 return;
             default:
                 break;
@@ -833,44 +830,74 @@ namespace Interface
         case Instrument::KINGDOM_OBJECTS:
             switch ( _selectedKingdomObject ) {
             case KingdomObjectBrush::HEROES:
-                _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
-                    if ( type == -1 ) {
-                        // The object type is not set. We show the POINTER cursor for this case.
-                        Cursor::Get().SetThemes( Cursor::POINTER );
-                        return;
-                    }
-
-                    // TODO: render ICN::MINIHERO from the existing hero images.
-                    const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
-
-                    // Mini-hero images contain a pole with a flag.
-                    // This causes a situation that a selected tile does not properly correspond to current position of the cursor.
-                    // We need to add a hardcoded correction.
-                    const int32_t heroCorrectionY{ 12 };
-                    Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
-                } );
-                return;
             case KingdomObjectBrush::TOWNS:
-                _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
-                    int32_t type = -1;
-                    int32_t color = -1;
-                    getTownObjectProperties( type, color );
-
-                    if ( type == -1 || color == -1 ) {
-                        // The object type is not set. We show the POINTER cursor for this case.
-                        Cursor::Get().SetThemes( Cursor::POINTER );
-                        return;
-                    }
-
-                    const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.getTile( tileIndex ).GetGround() );
-
-                    Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
-                } );
+                setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
                 return;
             default:
                 break;
             }
             break;
+        default:
+            break;
+        }
+
+        _interface.setCursorUpdater( {} );
+    }
+
+    void EditorPanel::setObjectBasedCursor( const int32_t type, const Maps::ObjectGroup group )
+    {
+        if ( type < 0 ) {
+            // The object type is not set. We show the POINTER cursor for this case.
+            Cursor::Get().SetThemes( Cursor::POINTER );
+            _interface.setCursorUpdater( {} );
+            return;
+        }
+
+        switch ( group ) {
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+        case Maps::ObjectGroup::LANDSCAPE_WATER:
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
+        case Maps::ObjectGroup::ADVENTURE_MINES:
+        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
+        case Maps::ObjectGroup::ADVENTURE_TREASURES:
+        case Maps::ObjectGroup::ADVENTURE_WATER:
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
+        case Maps::ObjectGroup::MONSTERS:
+            _interface.setCursorUpdater( [type, group]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+            return;
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+            _interface.setCursorUpdater( [type]( const int32_t /*tileIndex*/ ) {
+                // TODO: render ICN::MINIHERO from the existing hero images.
+                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
+
+                // Mini-hero images contain a pole with a flag.
+                // This causes a situation that a selected tile does not properly correspond to current position of the cursor.
+                // We need to add a hardcoded correction.
+                const int32_t heroCorrectionY{ 12 };
+                Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+            } );
+            return;
+        case Maps::ObjectGroup::KINGDOM_TOWNS:
+            _interface.setCursorUpdater( [type]( const int32_t tileIndex ) {
+                int32_t townType = -1;
+                int32_t color = -1;
+                getTownObjectProperties( type, townType, color );
+
+                if ( townType == -1 || color == -1 ) {
+                    // The object type is not set. We show the POINTER cursor for this case.
+                    Cursor::Get().SetThemes( Cursor::POINTER );
+                    return;
+                }
+
+                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( townType, color, world.getTile( tileIndex ).GetGround() );
+
+                Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+            } );
+            return;
         default:
             break;
         }
@@ -1140,7 +1167,7 @@ namespace Interface
                     int32_t type = -1;
                     int32_t color = -1;
 
-                    getTownObjectProperties( type, color );
+                    getTownObjectProperties( getSelectedObjectType(), type, color );
                     Dialog::selectTownType( type, color );
 
                     return _generateTownObjectProperties( type, color );
@@ -1285,7 +1312,7 @@ namespace Interface
         _interface.updateCursor( _interface.getGameArea().GetValidTileIdFromPoint( LocalEvent::Get().getMouseCursorPos() ) );
     }
 
-    void EditorPanel::getTownObjectProperties( int32_t & type, int32_t & color ) const
+    void EditorPanel::getTownObjectProperties( const int32_t packedType, int32_t & type, int32_t & color )
     {
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
         if ( townObjects.empty() ) {
@@ -1296,8 +1323,8 @@ namespace Interface
             return;
         }
 
-        type = _selectedKingdomObjectType[KingdomObjectBrush::TOWNS] % static_cast<int32_t>( townObjects.size() );
-        color = _selectedKingdomObjectType[KingdomObjectBrush::TOWNS] / static_cast<int32_t>( townObjects.size() );
+        type = packedType % static_cast<int32_t>( townObjects.size() );
+        color = packedType / static_cast<int32_t>( townObjects.size() );
     }
 
     int32_t EditorPanel::_generateTownObjectProperties( const int32_t type, const int32_t color )

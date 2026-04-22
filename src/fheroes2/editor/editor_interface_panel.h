@@ -96,8 +96,17 @@ namespace Interface
 
         bool useMouseDragMovement() const
         {
-            return ( _selectedInstrument != Instrument::TERRAIN && _selectedInstrument != Instrument::ERASE && _selectedInstrument != Instrument::ROAD
-                     && _selectedInstrument != Instrument::STREAM );
+            switch ( _selectedInstrument ) {
+            case Instrument::LANDSCAPE_OBJECTS:
+            case Instrument::ADVENTURE_OBJECTS:
+            case Instrument::KINGDOM_OBJECTS:
+            case Instrument::MONSTERS:
+                return true;
+            default:
+                break;
+            }
+
+            return false;
         }
 
         // Set Editor panel positions on screen.
@@ -116,11 +125,13 @@ namespace Interface
 
         Maps::ObjectGroup getSelectedObjectGroup() const;
 
-        void getTownObjectProperties( int32_t & type, int32_t & color ) const;
-
         static const char * getObjectGroupName( const Maps::ObjectGroup groupName );
 
         void updateUndoRedoButtonsStates( const bool isUndoAvailable, const bool isRedoAvailable );
+
+        void setObjectBasedCursor( const int32_t type, const Maps::ObjectGroup group );
+
+        static void getTownObjectProperties( const int32_t packedType, int32_t & type, int32_t & color );
 
     private:
         static int _getGroundId( const uint8_t brushId );

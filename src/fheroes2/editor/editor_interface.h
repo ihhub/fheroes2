@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -163,10 +164,17 @@ namespace Interface
 
         void _handleObjectMouseLeftClick( Maps::Tile & tile );
 
+        // Returns true if the placement was successful.
+        // 'action' input argument will be populated in case of success.
+        bool _tryToPlaceObject( Maps::Tile & tile, const int32_t objectType, const Maps::ObjectGroup groupType, const bool isNewObject,
+                                std::unique_ptr<fheroes2::ActionCreator> & action );
+
+        void _tryToMoveObject( const int32_t originalTile, const int32_t destinationTile );
+
         void _validateObjectsOnTerrainUpdate();
 
-        // Returns true if an existing object was moved.
-        bool _moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex );
+        // Returns true if an existing object was moved on top.
+        bool _tryToMoveObjectOnTop( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex );
 
         void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
 
@@ -180,6 +188,8 @@ namespace Interface
         int32_t _tileUnderCursor{ -1 };
 
         std::set<int32_t> _brushTiles;
+
+        int32_t _tileToMoveFrom{ -1 };
 
         Maps::Random_Generator::Configuration _randomMapConfig;
 
