@@ -553,7 +553,7 @@ namespace Interface
             }
         }
         else if ( _selectedInstrument == Instrument::DETAIL ) {
-            const fheroes2::Text instrumentName( _( "Cell\nDetails" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text instrumentName( _( "Click to edit\n\nor\n\nclick and hold to move" ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
         }
         else if ( _selectedInstrument == Instrument::ROAD ) {
@@ -1240,7 +1240,7 @@ namespace Interface
                                                Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
-            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for special editing of action objects." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for moving or editing of objects." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::ADVENTURE_OBJECTS] ) ) {
             fheroes2::showStandardTextMessage( _( "Adventure Objects Mode" ),
