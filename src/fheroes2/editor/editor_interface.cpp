@@ -2581,7 +2581,7 @@ namespace Interface
             if ( !isObjectMovable( groupType ) ) {
                 continue;
             }
-            
+
             if ( originalTile == destinationTile ) {
                 _tryToMoveObjectOnTop( originalTile, groupType, objectType );
                 return;
