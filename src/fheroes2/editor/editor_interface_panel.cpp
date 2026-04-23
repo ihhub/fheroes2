@@ -809,41 +809,21 @@ namespace Interface
             setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
             return;
         case Instrument::LANDSCAPE_OBJECTS:
-            switch ( _selectedLandscapeObject ) {
-            case LandscapeObjectBrush::LANDSCAPE_MISC:
-            case LandscapeObjectBrush::MOUNTAINS:
-            case LandscapeObjectBrush::ROCKS:
-            case LandscapeObjectBrush::TREES:
-            case LandscapeObjectBrush::WATER_OBJECTS:
+            if ( _selectedLandscapeObject > -1 ) {
                 setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
                 return;
-            default:
-                break;
             }
             break;
         case Instrument::ADVENTURE_OBJECTS:
-            switch ( _selectedAdventureObject ) {
-            case AdventureObjectBrush::ADVENTURE_MISC:
-            case AdventureObjectBrush::ARTIFACTS:
-            case AdventureObjectBrush::DWELLINGS:
-            case AdventureObjectBrush::MINES:
-            case AdventureObjectBrush::POWER_UPS:
-            case AdventureObjectBrush::TREASURES:
-            case AdventureObjectBrush::WATER_ADVENTURE:
+            if ( _selectedAdventureObject > -1 ) {
                 setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
                 return;
-            default:
-                break;
             }
             break;
         case Instrument::KINGDOM_OBJECTS:
-            switch ( _selectedKingdomObject ) {
-            case KingdomObjectBrush::HEROES:
-            case KingdomObjectBrush::TOWNS:
+            if ( _selectedKingdomObject > -1 ) {
                 setObjectBasedCursor( getSelectedObjectType(), getSelectedObjectGroup() );
                 return;
-            default:
-                break;
             }
             break;
         default:
