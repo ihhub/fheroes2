@@ -890,6 +890,30 @@ namespace
         return allowedMonsters;
     }
 
+    bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
+    {
+        const auto & objects = mapFormat.tiles[tileId].objects;
+
+        for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
+            if ( isObjectMovable( objectIter->group ) ) {
+                type = static_cast<int32_t>( objectIter->index );
+                if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    // Castles store their colors inside flags.
+                    const int color = Maps::getTownColorIndex( mapFormat, tileId, objectIter->id );
+
+                    type = Interface::EditorPanel::generateTownObjectProperties( type, color );
+                }
+
+                group = objectIter->group;
+                objectUID = objectIter->id;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 #if defined( WITH_DEBUG )
     int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
     {
@@ -1488,22 +1512,12 @@ namespace Interface
                                 if ( _brushTiles.size() == 1 ) {
                                     assert( _tileToMoveFrom >= 0 );
 
-                                    const auto & objects = _mapFormat.tiles[_tileToMoveFrom].objects;
-
-                                    for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
-                                        if ( isObjectMovable( objectIter->group ) ) {
-                                            int32_t type = static_cast<int32_t>( objectIter->index );
-                                            if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                                                // Castles store their colors inside flags.
-                                                const int color = Maps::getTownColorIndex( _mapFormat, _tileToMoveFrom, objectIter->id );
-
-                                                type = EditorPanel::generateTownObjectProperties( type, color );
-                                            }
-
-                                            _editorPanel.setObjectBasedCursor( type, objectIter->group );
-                                            updateCursor( _tileUnderCursor );
-                                            break;
-                                        }
+                                    int32_t type{ -1 };
+                                    Maps::ObjectGroup group{ Maps::ObjectGroup::NONE };
+                                    uint32_t id{ 0 };
+                                    if ( getMovableObjectInfo( _mapFormat, _tileToMoveFrom, type, group, id ) ) {
+                                        _editorPanel.setObjectBasedCursor( type, group );
+                                        updateCursor( _tileUnderCursor );
                                     }
                                 }
 
@@ -2581,76 +2595,64 @@ namespace Interface
             return;
         }
 
-        for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
-            int32_t objectType = static_cast<int32_t>( objectIter->index );
-            const Maps::ObjectGroup groupType = objectIter->group;
-            const uint32_t objectUID = objectIter->id;
-
-            if ( !isObjectMovable( groupType ) ) {
-                continue;
-            }
-
-            if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                // Castles store their colors inside flags.
-                const int color = Maps::getTownColorIndex( _mapFormat, originalTile, objectUID );
-
-                objectType = EditorPanel::generateTownObjectProperties( objectType, color );
-            }
-
-            if ( originalTile == destinationTile ) {
-                _tryToMoveObjectOnTop( originalTile, groupType, objectType );
-                return;
-            }
-
-            Maps::Tile & tile = world.getTile( destinationTile );
-
-            // Since we want to preserve the object UID (and not to break translations)
-            // we need to temporary set the last object UID here and then reset it back to what it should be before the changes.
-            const uint32_t originalLastObjectUID = Maps::getLastObjectUID();
-
-            // Some objects have metadata. We need to save it before removing objects.
-            // Ideally, we should save only the object's metadata but to make things easier, let's save everything for now.
-            // TODO: save only the current object metadata.
-            std::map<uint32_t, Maps::Map_Format::CastleMetadata> castleMetadata = _mapFormat.castleMetadata;
-            std::map<uint32_t, Maps::Map_Format::HeroMetadata> heroMetadata = _mapFormat.heroMetadata;
-            std::map<uint32_t, Maps::Map_Format::SphinxMetadata> sphinxMetadata = _mapFormat.sphinxMetadata;
-            std::map<uint32_t, Maps::Map_Format::SignMetadata> signMetadata = _mapFormat.signMetadata;
-            std::map<uint32_t, Maps::Map_Format::AdventureMapEventMetadata> adventureMapEventMetadata = _mapFormat.adventureMapEventMetadata;
-            std::map<uint32_t, Maps::Map_Format::SelectionObjectMetadata> selectionObjectMetadata = _mapFormat.selectionObjectMetadata;
-            std::map<uint32_t, Maps::Map_Format::CapturableObjectMetadata> capturableObjectsMetadata = _mapFormat.capturableObjectsMetadata;
-            std::map<uint32_t, Maps::Map_Format::MonsterMetadata> monsterMetadata = _mapFormat.monsterMetadata;
-            std::map<uint32_t, Maps::Map_Format::ArtifactMetadata> artifactMetadata = _mapFormat.artifactMetadata;
-            std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
-
-            auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
-            removeObjects( _mapFormat, { objectUID }, { groupType } );
-
-            Maps::setLastObjectUID( objectUID - 1 );
-
-            if ( _tryToPlaceObject( tile, objectType, groupType, false, action ) ) {
-                assert( action.get() != nullptr );
-
-                // If this assertion blows up then the code is invalid.
-                assert( Maps::getLastObjectUID() == objectUID );
-
-                _mapFormat.castleMetadata = std::move( castleMetadata );
-                _mapFormat.heroMetadata = std::move( heroMetadata );
-                _mapFormat.sphinxMetadata = std::move( sphinxMetadata );
-                _mapFormat.signMetadata = std::move( signMetadata );
-                _mapFormat.adventureMapEventMetadata = std::move( adventureMapEventMetadata );
-                _mapFormat.selectionObjectMetadata = std::move( selectionObjectMetadata );
-                _mapFormat.capturableObjectsMetadata = std::move( capturableObjectsMetadata );
-                _mapFormat.monsterMetadata = std::move( monsterMetadata );
-                _mapFormat.artifactMetadata = std::move( artifactMetadata );
-                _mapFormat.resourceMetadata = std::move( resourceMetadata );
-
-                action->commit();
-            }
-
-            Maps::setLastObjectUID( originalLastObjectUID );
-
+        int32_t objectType{ -1 };
+        Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
+        uint32_t objectUID{ 0 };
+        if ( !getMovableObjectInfo( _mapFormat, originalTile, objectType, groupType, objectUID ) ) {
             return;
         }
+
+        if ( originalTile == destinationTile ) {
+            _tryToMoveObjectOnTop( originalTile, groupType, objectType );
+            return;
+        }
+
+        Maps::Tile & tile = world.getTile( destinationTile );
+
+        // Since we want to preserve the object UID (and not to break translations)
+        // we need to temporary set the last object UID here and then reset it back to what it should be before the changes.
+        const uint32_t originalLastObjectUID = Maps::getLastObjectUID();
+
+        // Some objects have metadata. We need to save it before removing objects.
+        // Ideally, we should save only the object's metadata but to make things easier, let's save everything for now.
+        // TODO: save only the current object metadata.
+        std::map<uint32_t, Maps::Map_Format::CastleMetadata> castleMetadata = _mapFormat.castleMetadata;
+        std::map<uint32_t, Maps::Map_Format::HeroMetadata> heroMetadata = _mapFormat.heroMetadata;
+        std::map<uint32_t, Maps::Map_Format::SphinxMetadata> sphinxMetadata = _mapFormat.sphinxMetadata;
+        std::map<uint32_t, Maps::Map_Format::SignMetadata> signMetadata = _mapFormat.signMetadata;
+        std::map<uint32_t, Maps::Map_Format::AdventureMapEventMetadata> adventureMapEventMetadata = _mapFormat.adventureMapEventMetadata;
+        std::map<uint32_t, Maps::Map_Format::SelectionObjectMetadata> selectionObjectMetadata = _mapFormat.selectionObjectMetadata;
+        std::map<uint32_t, Maps::Map_Format::CapturableObjectMetadata> capturableObjectsMetadata = _mapFormat.capturableObjectsMetadata;
+        std::map<uint32_t, Maps::Map_Format::MonsterMetadata> monsterMetadata = _mapFormat.monsterMetadata;
+        std::map<uint32_t, Maps::Map_Format::ArtifactMetadata> artifactMetadata = _mapFormat.artifactMetadata;
+        std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
+
+        auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+        removeObjects( _mapFormat, { objectUID }, { groupType } );
+
+        Maps::setLastObjectUID( objectUID - 1 );
+
+        if ( _tryToPlaceObject( tile, objectType, groupType, false, action ) ) {
+            assert( action.get() != nullptr );
+
+            // If this assertion blows up then the code is invalid.
+            assert( Maps::getLastObjectUID() == objectUID );
+
+            _mapFormat.castleMetadata = std::move( castleMetadata );
+            _mapFormat.heroMetadata = std::move( heroMetadata );
+            _mapFormat.sphinxMetadata = std::move( sphinxMetadata );
+            _mapFormat.signMetadata = std::move( signMetadata );
+            _mapFormat.adventureMapEventMetadata = std::move( adventureMapEventMetadata );
+            _mapFormat.selectionObjectMetadata = std::move( selectionObjectMetadata );
+            _mapFormat.capturableObjectsMetadata = std::move( capturableObjectsMetadata );
+            _mapFormat.monsterMetadata = std::move( monsterMetadata );
+            _mapFormat.artifactMetadata = std::move( artifactMetadata );
+            _mapFormat.resourceMetadata = std::move( resourceMetadata );
+
+            action->commit();
+        }
+
+        Maps::setLastObjectUID( originalLastObjectUID );
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
