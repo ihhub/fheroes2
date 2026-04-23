@@ -806,7 +806,7 @@ private:
     Role _aiRole{ Role::HUNTER };
 
     // Used to freeze the rotation animation for N frames to match the rotation animation with movement speed.
-    int32_t _rotationFrameHold{ 0 };
+    int8_t _skippedFramesForAngleStep{ 0 };
 };
 
 struct VecHeroes final : public std::vector<Heroes *>
