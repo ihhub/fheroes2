@@ -867,7 +867,7 @@ namespace Interface
         case Maps::ObjectGroup::LANDSCAPE_TREES:
         case Maps::ObjectGroup::LANDSCAPE_WATER:
         case Maps::ObjectGroup::MONSTERS:
-            _interface.setCursorUpdater( [type, group]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+            _interface.setCursorUpdater( [group, type]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
             return;
         case Maps::ObjectGroup::KINGDOM_HEROES:
             _interface.setCursorUpdater( [type]( const int32_t /*tileIndex*/ ) {
@@ -881,12 +881,12 @@ namespace Interface
                 Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
             } );
             return;
-        case Maps::ObjectGroup::KINGDOM_TOWNS:
-            _interface.setCursorUpdater( [type]( const int32_t tileIndex ) {
-                int32_t townType = -1;
-                int32_t color = -1;
-                getTownObjectProperties( type, townType, color );
+        case Maps::ObjectGroup::KINGDOM_TOWNS: {
+            int32_t townType = -1;
+            int32_t color = -1;
+            getTownObjectProperties( type, townType, color );
 
+            _interface.setCursorUpdater( [townType, color]( const int32_t tileIndex ) {
                 if ( townType == -1 || color == -1 ) {
                     // The object type is not set. We show the POINTER cursor for this case.
                     Cursor::Get().SetThemes( Cursor::POINTER );
@@ -898,6 +898,7 @@ namespace Interface
                 Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
             } );
             return;
+        }
         default:
             break;
         }
