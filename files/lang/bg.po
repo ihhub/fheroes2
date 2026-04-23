@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4292,6 +4292,10 @@ msgid "Town Army"
 msgstr "Град"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Колко единици ще преместите?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Кликни, за да покажеш следващия град."
 
@@ -5737,6 +5741,12 @@ msgstr "Дизайнери на картите"
 msgid "Package Design"
 msgstr "Дизайн на опаковката"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Сигурен ли си че искаш да напуснеш играта?"
+
 msgid "High Scores"
 msgstr "Класиране"
 
@@ -5786,6 +5796,9 @@ msgstr "превключване потдръжка на текст"
 msgid "hotkey|toggle developer mode"
 msgstr "превключване потдръжка на текст"
 
+msgid "hotkey|quit"
+msgstr "напусни"
+
 msgid "hotkey|new game"
 msgstr "нова игра"
 
@@ -5810,9 +5823,6 @@ msgstr "мултиплейър игра"
 
 msgid "hotkey|settings"
 msgstr "настойки"
-
-msgid "hotkey|quit"
-msgstr "напусни"
 
 msgid "hotkey|select map"
 msgstr "избери карта"
@@ -6791,12 +6801,6 @@ msgid ""
 msgstr ""
 "Един или повече герои все още имат ход. Сигурен ли си, че искаш да приключиш "
 "своя ход?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Сигурен ли си че искаш да напуснеш играта?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""

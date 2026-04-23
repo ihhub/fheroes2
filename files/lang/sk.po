@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4267,6 +4267,10 @@ msgid "Town Army"
 msgstr "Mesto"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Koľko jednotiek na presun?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Kliknutím zobraz ďalšie mesto."
 
@@ -5697,6 +5701,12 @@ msgstr "Návrhári máp"
 msgid "Package Design"
 msgstr "Dizajn balíkov"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Určite chceš skončiť?"
+
 msgid "High Scores"
 msgstr "Najvyššie skóre"
 
@@ -5746,6 +5756,9 @@ msgstr "prepni mód podpory textu"
 msgid "hotkey|toggle developer mode"
 msgstr "prepni mód podpory textu"
 
+msgid "hotkey|quit"
+msgstr "ukonči"
+
 msgid "hotkey|new game"
 msgstr "nová hra"
 
@@ -5770,9 +5783,6 @@ msgstr "hra viacero hráčov"
 
 msgid "hotkey|settings"
 msgstr "nastavenie"
-
-msgid "hotkey|quit"
-msgstr "ukonči"
 
 msgid "hotkey|select map"
 msgstr "zvoľ mapu"
@@ -6750,12 +6760,6 @@ msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Jeden alebo viac hrdinov sa ešte môže pohnúť, naozaj chceš ukončiť svoj ťah?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Určite chceš skončiť?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr "Určite chceš reštartovať hru? (Tvoja aktuálna hra sa stratí.)"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4239,6 +4239,10 @@ msgstr "Гарнізон замка"
 msgid "Town Army"
 msgstr "Гарнізон горада"
 
+#, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Колькі істот хочаце перамясціць?"
+
 msgid "Click to change the Castle name."
 msgstr "Націсніце тут, каб змяніць назву замка."
 
@@ -5521,6 +5525,12 @@ msgstr "Распрацоўка мап"
 msgid "Package Design"
 msgstr "Дызайн упакоўкі"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Сапраўды хочаце завяршыць гульню?"
+
 msgid "High Scores"
 msgstr "Табліца рэкордаў"
 
@@ -5569,6 +5579,9 @@ msgstr "суправаджэнне тэкстам (укл./выкл.)"
 msgid "hotkey|toggle developer mode"
 msgstr "рэжым распрацоўкі (укл./выкл.)"
 
+msgid "hotkey|quit"
+msgstr "выйсці з гульні"
+
 msgid "hotkey|new game"
 msgstr "новая гульня"
 
@@ -5592,9 +5605,6 @@ msgstr "гульня на некалькі гульцоў"
 
 msgid "hotkey|settings"
 msgstr "налады"
-
-msgid "hotkey|quit"
-msgstr "выйсці з гульні"
 
 msgid "hotkey|select map"
 msgstr "выбраць мапу"
@@ -6560,12 +6570,6 @@ msgid ""
 msgstr ""
 "Адзін або некалькі вашых герояў яшчэ могуць хадзіць. Сапраўды хочаце "
 "завяршыць свой ход?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Сапраўды хочаце завяршыць гульню?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2026-02-24 17:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4179,6 +4179,10 @@ msgstr "Borgarmé"
 msgid "Town Army"
 msgstr "Stadsarmé"
 
+#, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Hur många varelser vill du flytta?"
+
 msgid "Click to change the Castle name."
 msgstr "Klicka för att ändra Borgens namn."
 
@@ -5518,6 +5522,12 @@ msgstr "Kartkreatörer"
 msgid "Package Design"
 msgstr "Paketdesign"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr "För att lämna fheroes2, tryck på Hemknappen eller svep uppåt."
+
+msgid "Are you sure you want to quit?"
+msgstr "Är du säker på att du vill avsluta?"
+
 msgid "High Scores"
 msgstr "Poänglistan"
 
@@ -5566,6 +5576,9 @@ msgstr "Aktivera textstöd"
 msgid "hotkey|toggle developer mode"
 msgstr "Aktivera utvecklarläge"
 
+msgid "hotkey|quit"
+msgstr "Avsluta"
+
 msgid "hotkey|new game"
 msgstr "Nytt spel"
 
@@ -5589,9 +5602,6 @@ msgstr "Flerspelarspel"
 
 msgid "hotkey|settings"
 msgstr "Inställningar"
-
-msgid "hotkey|quit"
-msgstr "Avsluta"
 
 msgid "hotkey|select map"
 msgstr "Välj karta"
@@ -6554,12 +6564,6 @@ msgid ""
 msgstr ""
 "En eller flera hjältar kan fortfarande flytta sig. Är du säker på att du "
 "vill avsluta din runda?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr "För att lämna fheroes2, tryck på Hemknappen eller svep uppåt."
-
-msgid "Are you sure you want to quit?"
-msgstr "Är du säker på att du vill avsluta?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""

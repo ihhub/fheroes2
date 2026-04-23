@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 11:44+0000\n"
+"POT-Creation-Date: 2026-04-20 00:54+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4268,6 +4268,10 @@ msgid "Town Army"
 msgstr "Thị trấn"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Bao nhiêu quân sẽ được di chuyển?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Nhấp để xem thị trấn sau."
 
@@ -5701,6 +5705,12 @@ msgstr "Thiết kế Bản đồ"
 msgid "Package Design"
 msgstr "Thiết kế Đóng gói"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Ngươi có muốt thoát không?"
+
 msgid "High Scores"
 msgstr "Điểm Cao"
 
@@ -5750,6 +5760,9 @@ msgstr "chuyển đội chế độ hỗ trợ văn bản"
 msgid "hotkey|toggle developer mode"
 msgstr "chuyển đội chế độ hỗ trợ văn bản"
 
+msgid "hotkey|quit"
+msgstr "thoát"
+
 msgid "hotkey|new game"
 msgstr "trò chơi mới"
 
@@ -5774,9 +5787,6 @@ msgstr "trò chơi nhiều người"
 
 msgid "hotkey|settings"
 msgstr "thiết lập"
-
-msgid "hotkey|quit"
-msgstr "thoát"
 
 msgid "hotkey|select map"
 msgstr "chọn bản đồ"
@@ -6744,12 +6754,6 @@ msgid ""
 msgstr ""
 "Một hoặc nhiều tướng vẫn có thể di chuyển, ngươi có chắc chắn muốn kết thúc "
 "lượt của mình không?"
-
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Ngươi có muốt thoát không?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""

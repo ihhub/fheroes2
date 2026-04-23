@@ -49,6 +49,7 @@
 #include "editor_sphinx_window.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
 #include "ground.h"
@@ -1140,7 +1141,7 @@ namespace Interface
 
         while ( res == fheroes2::GameMode::CANCEL ) {
             if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-                if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     res = fheroes2::GameMode::QUIT_GAME;
 
                     break;
@@ -1153,8 +1154,8 @@ namespace Interface
 
             // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
-                if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                    res = EventExit();
+                if ( HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                    res = Game::processExitEvent();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                     res = eventNewMap();
@@ -1417,6 +1418,43 @@ namespace Interface
                             _brushTiles.clear();
                         }
                     }
+                    else if ( _editorPanel.isRoadDraw() ) {
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( _brushTiles.count( _tileUnderCursor ) == 0 && !world.getTile( _tileUnderCursor ).isWater() ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                if ( Maps::setRoadOnTile( _mapFormat, _tileUnderCursor ) ) {
+                                    _redraw |= mapUpdateFlags;
+
+                                    action.commit();
+                                }
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
+
+                    else if ( _editorPanel.isStreamDraw() ) {
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                _brushTiles.emplace( _tileUnderCursor );
+
+                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                                if ( Maps::addStream( _mapFormat, tileIndex ) ) {
+                                    _redraw |= mapUpdateFlags;
+
+                                    action.commit();
+                                }
+                            }
+                        }
+                        else {
+                            _brushTiles.clear();
+                        }
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
@@ -1597,8 +1635,8 @@ namespace Interface
                 return fheroes2::GameMode::CANCEL;
             }
 
-            if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
-                if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
+                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     return fheroes2::GameMode::QUIT_GAME;
                 }
             }
@@ -2087,6 +2125,8 @@ namespace Interface
 
                 action.commit();
             }
+
+            _brushTiles.clear();
         }
         else if ( _editorPanel.isStreamDraw() ) {
             if ( tile.isWater() ) {
@@ -2103,6 +2143,8 @@ namespace Interface
 
                 action.commit();
             }
+
+            _brushTiles.clear();
         }
         else if ( _editorPanel.isEraseMode() ) {
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
