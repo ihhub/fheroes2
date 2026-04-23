@@ -97,9 +97,9 @@ namespace Interface
         bool useMouseDragMovement() const
         {
             switch ( _selectedInstrument ) {
-            case Instrument::LANDSCAPE_OBJECTS:
             case Instrument::ADVENTURE_OBJECTS:
             case Instrument::KINGDOM_OBJECTS:
+            case Instrument::LANDSCAPE_OBJECTS:
             case Instrument::MONSTERS:
                 return true;
             default:
