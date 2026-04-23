@@ -620,16 +620,25 @@ namespace Interface
             if ( _selectedLandscapeObject < 0 ) {
                 return -1;
             }
+
+            assert( static_cast<size_t>( _selectedLandscapeObject ) < _selectedLandscapeObjectType.size() );
+
             return _selectedLandscapeObjectType[_selectedLandscapeObject];
         case Instrument::ADVENTURE_OBJECTS:
             if ( _selectedAdventureObject < 0 ) {
                 return -1;
             }
+
+            assert( static_cast<size_t>( _selectedAdventureObject ) < _selectedAdventureObjectType.size() );
+
             return _selectedAdventureObjectType[_selectedAdventureObject];
         case Instrument::KINGDOM_OBJECTS:
             if ( _selectedKingdomObject < 0 ) {
                 return -1;
             }
+
+            assert( static_cast<size_t>( _selectedKingdomObject ) < _selectedKingdomObjectType.size() );
+
             return _selectedKingdomObjectType[_selectedKingdomObject];
         default:
             // Why are you trying to get type for the non-object instrument. Check your logic!
