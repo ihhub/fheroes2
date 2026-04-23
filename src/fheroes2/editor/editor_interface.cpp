@@ -2590,6 +2590,13 @@ namespace Interface
                 continue;
             }
 
+            if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                // Castles store their colors inside flags.
+                const int color = Maps::getTownColorIndex( _mapFormat, originalTile, objectUID );
+
+                objectType = EditorPanel::generateTownObjectProperties( objectType, color );
+            }
+
             if ( originalTile == destinationTile ) {
                 _tryToMoveObjectOnTop( originalTile, groupType, objectType );
                 return;
@@ -2614,13 +2621,6 @@ namespace Interface
             std::map<uint32_t, Maps::Map_Format::MonsterMetadata> monsterMetadata = _mapFormat.monsterMetadata;
             std::map<uint32_t, Maps::Map_Format::ArtifactMetadata> artifactMetadata = _mapFormat.artifactMetadata;
             std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
-
-            if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                // Castles store their colors inside flags.
-                const int color = Maps::getTownColorIndex( _mapFormat, originalTile, objectUID );
-
-                objectType = EditorPanel::generateTownObjectProperties( objectType, color );
-            }
 
             auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
             removeObjects( _mapFormat, { objectUID }, { groupType } );
