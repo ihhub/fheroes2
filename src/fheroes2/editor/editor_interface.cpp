@@ -1492,7 +1492,15 @@ namespace Interface
 
                                     for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
                                         if ( isObjectMovable( objectIter->group ) ) {
-                                            _editorPanel.setObjectBasedCursor( static_cast<int32_t>( objectIter->index ), objectIter->group );
+                                            int32_t type = static_cast<int32_t>( objectIter->index );
+                                            if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                                                // Castles store their colors inside flags.
+                                                const int color = Maps::getTownColorIndex( _mapFormat, _tileToMoveFrom, objectIter->id );
+
+                                                type = EditorPanel::generateTownObjectProperties( type, color );
+                                            }
+
+                                            _editorPanel.setObjectBasedCursor( type, objectIter->group );
                                             updateCursor( _tileUnderCursor );
                                             break;
                                         }
@@ -2574,7 +2582,7 @@ namespace Interface
         }
 
         for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
-            const int32_t objectType = static_cast<int32_t>( objectIter->index );
+            int32_t objectType = static_cast<int32_t>( objectIter->index );
             const Maps::ObjectGroup groupType = objectIter->group;
             const uint32_t objectUID = objectIter->id;
 
@@ -2606,6 +2614,13 @@ namespace Interface
             std::map<uint32_t, Maps::Map_Format::MonsterMetadata> monsterMetadata = _mapFormat.monsterMetadata;
             std::map<uint32_t, Maps::Map_Format::ArtifactMetadata> artifactMetadata = _mapFormat.artifactMetadata;
             std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
+
+            if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                // Castles store their colors inside flags.
+                const int color = Maps::getTownColorIndex( _mapFormat, originalTile, objectUID );
+
+                objectType = EditorPanel::generateTownObjectProperties( objectType, color );
+            }
 
             auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
             removeObjects( _mapFormat, { objectUID }, { groupType } );

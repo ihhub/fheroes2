@@ -1160,7 +1160,7 @@ namespace Interface
                     getTownObjectProperties( getSelectedObjectType(), type, color );
                     Dialog::selectTownType( type, color );
 
-                    return _generateTownObjectProperties( type, color );
+                    return generateTownObjectProperties( type, color );
                 } );
                 return res;
             }
@@ -1317,7 +1317,7 @@ namespace Interface
         color = packedType / static_cast<int32_t>( townObjects.size() );
     }
 
-    int32_t EditorPanel::_generateTownObjectProperties( const int32_t type, const int32_t color )
+    int32_t EditorPanel::generateTownObjectProperties( const int32_t type, const int32_t color )
     {
         const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
         if ( townObjects.empty() ) {

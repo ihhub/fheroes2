@@ -133,6 +133,8 @@ namespace Interface
 
         static void getTownObjectProperties( const int32_t packedType, int32_t & type, int32_t & color );
 
+        static int32_t generateTownObjectProperties( const int32_t type, const int32_t color );
+
     private:
         static int _getGroundId( const uint8_t brushId );
 
@@ -145,8 +147,6 @@ namespace Interface
         static const char * _getAdventureObjectTypeName( const uint8_t brushId );
         static const char * _getKingdomObjectTypeName( const uint8_t brushId );
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
-
-        static int32_t _generateTownObjectProperties( const int32_t type, const int32_t color );
 
         void _setCursor();
 
