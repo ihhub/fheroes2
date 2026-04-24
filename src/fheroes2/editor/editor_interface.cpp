@@ -931,7 +931,8 @@ namespace
         }
 
         if ( foundObjectIter == potentialObjects.end() ) {
-            for ( auto groundObjectPartIter = tile.getGroundObjectParts().crbegin(); groundObjectPartIter != tile.getGroundObjectParts().crend(); ++groundObjectPartIter ) {
+            for ( auto groundObjectPartIter = tile.getGroundObjectParts().crbegin(); groundObjectPartIter != tile.getGroundObjectParts().crend();
+                  ++groundObjectPartIter ) {
                 if ( groundObjectPartIter->isPassabilityTransparent() ) {
                     continue;
                 }
