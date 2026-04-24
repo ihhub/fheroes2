@@ -892,23 +892,76 @@ namespace
 
     bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
     {
-        const auto & objects = mapFormat.tiles[tileId].objects;
+        // Many objects are located on more than one tile.
+        // In this case we cannot rely just on MapFormat.
+        //
+        // First, find all possible objects in the area around the tile.
+        const fheroes2::Point tilePos{ tileId % mapFormat.width, tileId / mapFormat.width };
 
-        for ( auto objectIter = objects.crbegin(); objectIter != objects.crend(); ++objectIter ) {
-            if ( isObjectMovable( objectIter->group ) ) {
-                type = static_cast<int32_t>( objectIter->index );
-                if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                    // Castles store their colors inside flags.
-                    const int color = Maps::getTownColorIndex( mapFormat, tileId, objectIter->id );
+        const int32_t minX = std::max( 0, tilePos.x - Maps::maxActionObjectDimensions.width );
+        const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxActionObjectDimensions.width );
+        const int32_t minY = std::max( 0, tilePos.y - Maps::maxActionObjectDimensions.height );
+        const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxActionObjectDimensions.height );
 
-                    type = Interface::EditorPanel::generateTownObjectProperties( type, color );
+        std::map<uint32_t, const Maps::Map_Format::TileObjectInfo *> potentialObjects;
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            const int32_t tileOffsetY{ y * mapFormat.width };
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                for ( const auto & object : mapFormat.tiles[x + tileOffsetY].objects ) {
+                    if ( isObjectMovable( object.group ) ) {
+                        potentialObjects.emplace( object.id, &object );
+                    }
+                }
+            }
+        }
+
+        if ( potentialObjects.empty() ) {
+            // No movable objects exist.
+            return false;
+        }
+
+        const auto & tile = world.getTile( tileId );
+        auto foundObjectIter = potentialObjects.end();
+
+        for ( auto topObjectPartIter = tile.getTopObjectParts().crbegin(); topObjectPartIter != tile.getTopObjectParts().crend(); ++topObjectPartIter ) {
+            foundObjectIter = potentialObjects.find( topObjectPartIter->_uid );
+            if ( foundObjectIter != potentialObjects.end() ) {
+                break;
+            }
+        }
+
+        if ( foundObjectIter == potentialObjects.end() ) {
+            for ( auto groundObjectPartIter = tile.getGroundObjectParts().crbegin(); groundObjectPartIter != tile.getGroundObjectParts().crend(); ++groundObjectPartIter ) {
+                if ( groundObjectPartIter->isPassabilityTransparent() ) {
+                    continue;
                 }
 
-                group = objectIter->group;
-                objectUID = objectIter->id;
-
-                return true;
+                foundObjectIter = potentialObjects.find( groundObjectPartIter->_uid );
+                if ( foundObjectIter != potentialObjects.end() ) {
+                    break;
+                }
             }
+        }
+
+        if ( foundObjectIter == potentialObjects.end() ) {
+            foundObjectIter = potentialObjects.find( tile.getMainObjectPart()._uid );
+        }
+
+        if ( foundObjectIter != potentialObjects.end() ) {
+            const Maps::Map_Format::TileObjectInfo & object = *( foundObjectIter->second );
+
+            // The object has been found.
+            type = static_cast<int32_t>( object.index );
+            if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                // Castles store their colors inside flags.
+                const int color = Maps::getTownColorIndex( mapFormat, tileId, object.id );
+
+                type = Interface::EditorPanel::generateTownObjectProperties( type, color );
+            }
+
+            group = object.group;
+            objectUID = object.id;
+            return true;
         }
 
         return false;
@@ -2587,13 +2640,6 @@ namespace Interface
     {
         assert( originalTile >= 0 );
         assert( destinationTile >= 0 );
-
-        // Verify whether any objects exist on the original tile.
-        const auto & objects = _mapFormat.tiles[originalTile].objects;
-        if ( objects.empty() ) {
-            // Nothing to do.
-            return;
-        }
 
         int32_t objectType{ -1 };
         Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
