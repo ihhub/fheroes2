@@ -151,10 +151,9 @@ namespace Interface
         struct MovableObjectInfo final
         {
             int32_t tileIndex{ -1 };
-
             int32_t objectType{ -1 };
-            Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
             uint32_t objectUID{ 0 };
+            Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
         };
 
         EditorInterface()
