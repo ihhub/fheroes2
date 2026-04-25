@@ -92,6 +92,8 @@ dependencies {
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
 
+    implementation 'org.tukaani:xz:1.10'
+
     implementation 'com.google.android.material:material:1.13.0'
 }
 
