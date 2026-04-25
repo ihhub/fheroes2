@@ -795,9 +795,8 @@ final class InnoExtract
         {
             // Use the outer class helpers to avoid code duplication.
             return new DataEntry( InnoExtract.readUint32LE( data, offset ), InnoExtract.readUint32LE( data, offset + 4 ),
-                                  InnoExtract.readUint32LE( data, offset + 8 ) & 0xFFFFFFFFL,
-                                  InnoExtract.readUint64LE( data, offset + 12 ), InnoExtract.readUint64LE( data, offset + 20 ),
-                                  InnoExtract.readUint64LE( data, offset + 28 ),
+                                  InnoExtract.readUint32LE( data, offset + 8 ) & 0xFFFFFFFFL, InnoExtract.readUint64LE( data, offset + 12 ),
+                                  InnoExtract.readUint64LE( data, offset + 20 ), InnoExtract.readUint64LE( data, offset + 28 ),
                                   ( data[offset + 72] & 0xFF ) | ( ( data[offset + 73] & 0xFF ) << 8 ) );
         }
     }
