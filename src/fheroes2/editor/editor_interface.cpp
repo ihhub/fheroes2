@@ -933,10 +933,9 @@ namespace
 
         auto checkMainObjectPart = [&tile, &potentialObjects, objectType]() {
             const auto & mainObjectPart = tile.getMainObjectPart();
-            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex );
 
             // This is an action object. Only the main object part and then ground object parts should be searched.
-            if ( type == objectType ) {
+            if ( Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex ) == objectType ) {
                 return potentialObjects.find( mainObjectPart._uid );
             }
 
@@ -951,8 +950,7 @@ namespace
                     continue;
                 }
 
-                const MP2::MapObjectType type = Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex );
-                if ( type != objectType ) {
+                if ( Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex ) != objectType ) {
                     continue;
                 }
 
@@ -969,8 +967,7 @@ namespace
             // We search from end to start of the container.
             const auto & topObjectParts = tile.getTopObjectParts();
             for ( auto objectPartIter = topObjectParts.crbegin(); objectPartIter != topObjectParts.crend(); ++objectPartIter ) {
-                const MP2::MapObjectType type = Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex );
-                if ( type != objectType ) {
+                if ( Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex ) != objectType ) {
                     continue;
                 }
 
