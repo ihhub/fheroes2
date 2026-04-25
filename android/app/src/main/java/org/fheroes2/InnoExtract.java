@@ -58,6 +58,17 @@ final class InnoExtract
 
     private static final String gogCdImageName = "homm2.gog";
 
+    // Buffer size used for all I/O streaming operations.
+    private static final int IO_BUFFER_SIZE = 65536;
+
+    // Maximum byte length of a UTF-16LE scan string — used as a sanity check to
+    // skip obviously invalid length prefixes when scanning the installer block data.
+    private static final int MAX_SCAN_STRING_LENGTH = 10000;
+
+    // Maximum byte distance to backtrack when searching for a length prefix in
+    // UTF-16LE encoded block data (2 bytes per character, i.e. ~2000 characters max).
+    private static final int MAX_BACKTRACK_DISTANCE = 4000;
+
     private InnoExtract()
     {
         throw new IllegalStateException( "Instantiation is not allowed" );
@@ -136,11 +147,12 @@ final class InnoExtract
             Files.createDirectories( cacheDir.toPath() );
 
             try ( final OutputStream out = Files.newOutputStream( tempFile.toPath() ) ) {
-                final byte[] buffer = new byte[65536];
-                int bytesRead;
+                final byte[] buffer = new byte[IO_BUFFER_SIZE];
+                int bytesRead = inputStream.read( buffer );
 
-                while ( ( bytesRead = inputStream.read( buffer ) ) != -1 ) {
+                while ( bytesRead != -1 ) {
                     out.write( buffer, 0, bytesRead );
+                    bytesRead = inputStream.read( buffer );
                 }
             }
 
@@ -176,6 +188,7 @@ final class InnoExtract
 
         // Block1 (file entries): CRC(4) + stored_size(4) + compressed(1) + data
         final long block1Start = headerOffset + 64;
+        // TODO: validate block CRC32 to detect corrupted installer files
         raf.seek( block1Start + 4 ); // skip CRC
         final long block1StoredSize = readUint32( raf );
         final int block1Compressed = raf.readUnsignedByte();
@@ -188,6 +201,7 @@ final class InnoExtract
 
         // Block2 (data entries): CRC(4) + stored_size(4) + compressed(1) + data
         final long block2Start = block1Start + 9 + block1StoredSize;
+        // TODO: validate block CRC32 to detect corrupted installer files
         raf.seek( block2Start + 4 ); // skip CRC
         final long block2StoredSize = readUint32( raf );
         final int block2Compressed = raf.readUnsignedByte();
@@ -408,7 +422,7 @@ final class InnoExtract
             }
 
             final int strLen = readUint32LE( block1, idx - 4 );
-            if ( strLen <= 0 || strLen > 10000 || idx + strLen > block1.length ) {
+            if ( strLen <= 0 || strLen > MAX_SCAN_STRING_LENGTH || idx + strLen > block1.length ) {
                 pos = idx + biMarker.length;
                 continue;
             }
@@ -469,10 +483,10 @@ final class InnoExtract
                     }
 
                     // Find the string that contains this match by backtracking to the length prefix
-                    for ( int backtrack = idx - 2; backtrack >= Math.max( 4, idx - 4000 ); backtrack -= 2 ) {
+                    for ( int backtrack = idx - 2; backtrack >= Math.max( 4, idx - MAX_BACKTRACK_DISTANCE ); backtrack -= 2 ) {
                         final int maybeLen = readUint32LE( block1, backtrack - 4 );
 
-                        if ( maybeLen > 0 && maybeLen < 4000 && maybeLen % 2 == 0 ) {
+                        if ( maybeLen > 0 && maybeLen < MAX_BACKTRACK_DISTANCE && maybeLen % 2 == 0 ) {
                             final int strStart = backtrack;
                             final int strEnd = strStart + maybeLen;
 
@@ -538,15 +552,26 @@ final class InnoExtract
 
     // ---- Helpers ----
 
+    // Returns true if name refers to either the GOG CD image or a target game-asset file.
     private static boolean isTargetFile( final String name )
     {
         final String lower = name.toLowerCase( Locale.ROOT ).replace( '\\', '/' );
+        return isGogCdImage( lower ) || isGameAssetFile( lower );
+    }
 
-        // Match the GOG CD image file
-        if ( lower.equals( gogCdImageName ) || lower.endsWith( "/" + gogCdImageName ) ) {
-            return true;
-        }
+    // Returns true if the given lower-cased, forward-slash-normalised path refers to
+    // the GOG CD image (homm2.gog) that contains the ANIM data.
+    private static boolean isGogCdImage( final String lower )
+    {
+        final int lastSlash = lower.lastIndexOf( '/' );
+        final String baseName = lastSlash >= 0 ? lower.substring( lastSlash + 1 ) : lower;
+        return baseName.equals( gogCdImageName );
+    }
 
+    // Returns true if the given lower-cased, forward-slash-normalised path belongs to
+    // one of the target game-asset directories (data, maps, music, anim).
+    private static boolean isGameAssetFile( final String lower )
+    {
         final String[] parts = lower.split( "/" );
         return parts.length >= 2 && targetDirs.contains( parts[0] );
     }
@@ -565,8 +590,10 @@ final class InnoExtract
 
     private static long readUint32( final RandomAccessFile raf ) throws IOException
     {
+        // Java always zero-initialises arrays; readFully then fills all 4 bytes.
         final byte[] buf = new byte[4];
         raf.readFully( buf );
+        // readUint32LE returns a signed int; mask to treat the value as unsigned 32-bit.
         return readUint32LE( buf, 0 ) & 0xFFFFFFFFL;
     }
 
@@ -709,7 +736,7 @@ final class InnoExtract
             inflater.setInput( data );
 
             final ByteArrayOutputStream result = new ByteArrayOutputStream( data.length * 2 );
-            final byte[] buffer = new byte[65536];
+            final byte[] buffer = new byte[IO_BUFFER_SIZE];
 
             while ( !inflater.finished() ) {
                 final int count = inflater.inflate( buffer );
@@ -728,12 +755,13 @@ final class InnoExtract
 
     private static byte[] readAllBytes( final InputStream in ) throws IOException
     {
-        final ByteArrayOutputStream result = new ByteArrayOutputStream( 65536 );
-        final byte[] buffer = new byte[65536];
-        int bytesRead;
+        final ByteArrayOutputStream result = new ByteArrayOutputStream( IO_BUFFER_SIZE );
+        final byte[] buffer = new byte[IO_BUFFER_SIZE];
+        int bytesRead = in.read( buffer );
 
-        while ( ( bytesRead = in.read( buffer ) ) != -1 ) {
+        while ( bytesRead != -1 ) {
             result.write( buffer, 0, bytesRead );
+            bytesRead = in.read( buffer );
         }
 
         return result.toByteArray();
@@ -765,21 +793,12 @@ final class InnoExtract
 
         static DataEntry parse( final byte[] data, final int offset )
         {
-            return new DataEntry( (int)readUint32LE( data, offset ), (int)readUint32LE( data, offset + 4 ), readUint32LE( data, offset + 8 ) & 0xFFFFFFFFL,
-                                  readUint64LE( data, offset + 12 ), readUint64LE( data, offset + 20 ), readUint64LE( data, offset + 28 ),
+            // Use the outer class helpers to avoid code duplication.
+            return new DataEntry( InnoExtract.readUint32LE( data, offset ), InnoExtract.readUint32LE( data, offset + 4 ),
+                                  InnoExtract.readUint32LE( data, offset + 8 ) & 0xFFFFFFFFL,
+                                  InnoExtract.readUint64LE( data, offset + 12 ), InnoExtract.readUint64LE( data, offset + 20 ),
+                                  InnoExtract.readUint64LE( data, offset + 28 ),
                                   ( data[offset + 72] & 0xFF ) | ( ( data[offset + 73] & 0xFF ) << 8 ) );
-        }
-
-        private static long readUint32LE( final byte[] data, final int offset )
-        {
-            return ( data[offset] & 0xFF ) | ( ( data[offset + 1] & 0xFF ) << 8 ) | ( ( data[offset + 2] & 0xFF ) << 16 ) | ( ( data[offset + 3] & 0xFF ) << 24 );
-        }
-
-        private static long readUint64LE( final byte[] data, final int offset )
-        {
-            final long lo = readUint32LE( data, offset ) & 0xFFFFFFFFL;
-            final long hi = readUint32LE( data, offset + 4 ) & 0xFFFFFFFFL;
-            return lo | ( hi << 32 );
         }
     }
 
