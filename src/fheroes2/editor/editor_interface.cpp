@@ -956,9 +956,9 @@ namespace
                     continue;
                 }
 
-                auto foundObjectIter = potentialObjects.find( objectPartIter->_uid );
-                if ( foundObjectIter != potentialObjects.end() ) {
-                    return foundObjectIter;
+                auto potentialObjectIter = potentialObjects.find( objectPartIter->_uid );
+                if ( potentialObjectIter != potentialObjects.end() ) {
+                    return potentialObjectIter;
                 }
             }
 
@@ -974,9 +974,9 @@ namespace
                     continue;
                 }
 
-                auto foundObjectIter = potentialObjects.find( objectPartIter->_uid );
-                if ( foundObjectIter != potentialObjects.end() ) {
-                    return foundObjectIter;
+                auto potentialObjectIter = potentialObjects.find( objectPartIter->_uid );
+                if ( potentialObjectIter != potentialObjects.end() ) {
+                    return potentialObjectIter;
                 }
             }
 
