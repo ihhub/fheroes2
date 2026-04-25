@@ -32,6 +32,7 @@
 #include "history_manager.h"
 #include "interface_base.h"
 #include "map_format_info.h"
+#include "map_object_info.h"
 #include "map_random_generator.h"
 #include "timing.h"
 
@@ -40,8 +41,6 @@ enum class PlayerColor : uint8_t;
 namespace Maps
 {
     class Tile;
-
-    enum class ObjectGroup : uint8_t;
 }
 
 namespace Interface

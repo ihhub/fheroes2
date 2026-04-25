@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <list>
 #include <map>
 #include <memory>
 #include <optional>
@@ -62,7 +63,6 @@
 #include "interface_radar.h"
 #include "localevent.h"
 #include "map_format_helper.h"
-#include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
