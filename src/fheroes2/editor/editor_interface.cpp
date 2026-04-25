@@ -1010,8 +1010,8 @@ namespace
 
         type = static_cast<int32_t>( object.index );
         if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            // Castles store their colors inside flags.
-            // The chosen tile might not be the main tile.
+            // Castles and towns store their colors inside flags.
+            // The chosen tile might not be the main tile of the castle.
             // We need to get flag information from the main tile.
             const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
 
