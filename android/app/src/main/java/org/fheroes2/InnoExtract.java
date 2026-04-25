@@ -42,6 +42,8 @@ import java.util.Set;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
+import android.util.Log;
+
 /**
  * Extracts HoMM2 game assets from GOG Inno Setup installers (v5.5.0+ / v5.6.2).
  * Pure Java implementation — no native dependencies required.
@@ -84,6 +86,7 @@ final class InnoExtract
             return findLoaderMagic( raf ) >= 0;
         }
         catch ( final IOException e ) {
+            Log.w( "fheroes2", "isInnoSetupInstaller: " + e.getMessage() );
             return false;
         }
     }
@@ -120,7 +123,8 @@ final class InnoExtract
      * @param installerFile   the Inno Setup EXE file
      * @param outputDir       the directory to extract assets into (e.g. externalFilesDir)
      * @return true if at least one asset was extracted
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs, including {@link java.io.EOFException} when
+     *                     the installer file is truncated or otherwise corrupted
      */
     static boolean extractAssets( final File installerFile, final File cacheDir, final File outputDir ) throws IOException
     {
@@ -137,7 +141,8 @@ final class InnoExtract
      * @param cacheDir        a directory for the temporary file
      * @param outputDir       the directory to extract assets into
      * @return true if at least one asset was extracted
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs, including {@link java.io.EOFException} when
+     *                     the installer data is truncated or otherwise corrupted
      */
     static boolean extractAssets( final InputStream inputStream, final File cacheDir, final File outputDir ) throws IOException
     {
