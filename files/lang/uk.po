@@ -1,5 +1,5 @@
 # Ukrainian translation of fheroes2
-# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2022 - 2026 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
@@ -502,9 +502,8 @@ msgstr "Не вдалось перемістити останній загін"
 msgid "Move the %{name}"
 msgstr "Перемістити %{name}"
 
-#, fuzzy
 msgid "Set %{monster} Count:"
-msgstr "Задати кількість %{monster}"
+msgstr "Задати кількість %{monster}:"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -1078,10 +1077,10 @@ msgid "Perish: %{min} - %{max}"
 msgstr "Загине %{min} - %{max}"
 
 msgid "battle_turn_order|Top"
-msgstr ""
+msgstr "Верх"
 
 msgid "battle_turn_order|Bottom"
-msgstr ""
+msgstr "Низ"
 
 msgid "Turn Order"
 msgstr "Порядок ходів"
@@ -1132,7 +1131,7 @@ msgid ""
 msgstr "Перемкнути затінення клітини, на яку наведений курсор миші."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
-msgstr ""
+msgstr "Увімкнути або вимкнути відображення зони руху виділеної істоти."
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -3557,29 +3556,23 @@ msgstr "Незвідана територія"
 msgid "Random Map Generator"
 msgstr "Генератор випадкових мап"
 
-#, fuzzy
 msgid "rmg|Player count:"
-msgstr "Кількість гравців"
+msgstr "Кількість гравців:"
 
-#, fuzzy
 msgid "rmg|Map layout:"
-msgstr "Розкладка мапи"
+msgstr "Розкладка мапи:"
 
-#, fuzzy
 msgid "rmg|Water percentage:"
-msgstr "Відсоток води"
+msgstr "Відсоток води:"
 
-#, fuzzy
 msgid "rmg|Monster strength:"
-msgstr "Сила монстрів"
+msgstr "Сила монстрів:"
 
-#, fuzzy
 msgid "rmg|Resource availability:"
-msgstr "Доступність ресурсів"
+msgstr "Доступність ресурсів:"
 
-#, fuzzy
 msgid "rmg|Map seed:"
-msgstr "Варіація мапи"
+msgstr "Варіація мапи:"
 
 msgid "Click to generate a new map."
 msgstr "Тицьніть, щоб згенерувати нову мапу."
@@ -3804,9 +3797,8 @@ msgstr "Оберіть скарб:"
 msgid "Select Ocean Object:"
 msgstr "Оберіть об'єкти океану:"
 
-#, fuzzy
 msgid "Castle/town placing:"
-msgstr "Розміщення замку/міста"
+msgstr "Розміщення замку/міста:"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральний"
@@ -3838,9 +3830,8 @@ msgstr "Оберіть помешкання:"
 msgid "Select Landscape Object:"
 msgstr "Вибрати об'єкт місцевості:"
 
-#, fuzzy
 msgid "Mine placing:"
-msgstr "Розміщення шахти"
+msgstr "Розміщення шахти:"
 
 msgid ""
 "Resource\n"
@@ -3871,9 +3862,8 @@ msgstr "Виберіть об'єкт підсилювач:"
 msgid "Select Adventure Object:"
 msgstr "Виберіть пригодницький об'єкт:"
 
-#, fuzzy
 msgid "Select color:"
-msgstr "Виберіть колір"
+msgstr "Виберіть колір:"
 
 msgid "Players Icon"
 msgstr "Кількість гравців"
@@ -4195,9 +4185,8 @@ msgstr "Скільки істот бажаєте перемістити?"
 msgid "Click to change the Castle name."
 msgstr "Тицьніть, щоб змінити назву замку."
 
-#, fuzzy
 msgid "Enter Castle name:"
-msgstr "Ввести назву замку"
+msgstr "Ввести назву замку:"
 
 msgid "Reset the Castle name."
 msgstr "Скинути назву замку."
@@ -4272,9 +4261,8 @@ msgstr ""
 "Якщо цей прапорець встановлено, ця подія спрацює для %{color} гравця, якщо "
 "ним керує комп'ютер."
 
-#, fuzzy
 msgid "Set %{resource-type} Count:"
-msgstr "Задати кількість %{resource-type}"
+msgstr "Задати кількість %{resource-type}:"
 
 msgid "Message:"
 msgstr "Повідомлення:"
@@ -4300,9 +4288,8 @@ msgstr "Текст повідомлення події"
 msgid "Day: %{day}"
 msgstr "День: %{day}"
 
-#, fuzzy
 msgid "Daily events:"
-msgstr "Щоденні події"
+msgstr "Щоденні події:"
 
 msgid "Click to save the events."
 msgstr "Тицьніть, щоб зберегти події."
@@ -4337,9 +4324,8 @@ msgstr "Скасувати подію після першого відвідув
 msgid "Computer colors allowed to get the event:"
 msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
-#, fuzzy
 msgid "Set Experience value:"
-msgstr "Задати кількість досвіду"
+msgstr "Задати кількість досвіду:"
 
 msgid "Artifact"
 msgstr "Артефакт"
@@ -4503,13 +4489,11 @@ msgstr "Повернутися до головного меню."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Вийти з редактора і грати на мапі в режимі Стандартної Гри."
 
-#, fuzzy
 msgid "Input %{object} text:"
-msgstr "Ввести %{object} текст"
+msgstr "Ввести %{object} текст:"
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius:"
-msgstr "Встановити радіус випадкового Легендарного Артефакту"
+msgstr "Встановити радіус випадкового Легендарного Артефакту:"
 
 msgid "%{object} has no properties to change."
 msgstr "%{object} не має властивостей, які можна змінити."
@@ -4827,9 +4811,8 @@ msgstr ""
 "Перегляд системних параметрів редактора, за допомогою яких ви можете "
 "налаштувати редактор."
 
-#, fuzzy
 msgid "Supported languages:"
-msgstr "Підтримувані мови"
+msgstr "Підтримувані мови:"
 
 msgid "Language"
 msgstr "Мова"
@@ -5021,19 +5004,15 @@ msgstr "ПОДІЇ"
 msgid "LANGUAGE"
 msgstr "МОВА"
 
-#, fuzzy
 msgid "map|ABOUT"
 msgstr "ПРО МАПУ"
 
-#, fuzzy
 msgid "Change Map Name:"
-msgstr "Змінити назву мапи"
+msgstr "Змінити назву мапи:"
 
-#, fuzzy
 msgid "Change Map Description:"
-msgstr "Змінити опис мапи"
+msgstr "Змінити опис мапи:"
 
-#, fuzzy
 msgid "map|About"
 msgstr "Опис"
 
@@ -5111,9 +5090,8 @@ msgstr "Анімації об'єктів умівк/вимк."
 msgid "Toggle display of objects' passability."
 msgstr "Відображення прохідності об'єктів увімк/вимк."
 
-#, fuzzy
 msgid "Rumors:"
-msgstr "Чутки"
+msgstr "Чутки:"
 
 msgid "Rumor:"
 msgstr "Чутка:"
@@ -5406,7 +5384,7 @@ msgid "Special Thanks to"
 msgstr "Особлива подяка"
 
 msgid "and all the people who have helped make the project possible!"
-msgstr ""
+msgstr "а також усім, хто допоміг втілити цей проект у життя!"
 
 msgid "Support us at"
 msgstr "Підтримайте нас нас "
@@ -6741,9 +6719,8 @@ msgstr ""
 "Значення\n"
 "як усталено"
 
-#, fuzzy
 msgid "Set %{skill} Skill:"
-msgstr "Встановити навичку %{skill}"
+msgstr "Встановити навичку %{skill}:"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
@@ -6764,7 +6741,7 @@ msgid "The available values range from %{min} to %{max}."
 msgstr "Доступні значення знаходяться в діапазоні від %{min} до %{max}."
 
 msgid "Uppercase"
-msgstr ""
+msgstr "Великі літери"
 
 msgid "Click to switch to uppercase letters."
 msgstr "Тицьніть, щоб перейти до великих літер."
@@ -6776,7 +6753,7 @@ msgid "Keyboard type"
 msgstr "Тип клавіатури"
 
 msgid "Click to switch between keyboard types."
-msgstr ""
+msgstr "Тицьніть, щоб перемикатися між типами клавіатури."
 
 msgid "Keyboard|SPACE"
 msgstr "ПРОБІЛ"
@@ -6806,7 +6783,7 @@ msgid "Swap sign"
 msgstr "Змінити знак"
 
 msgid "Click to switch between signed and unsigned numbers."
-msgstr ""
+msgstr "Тицьніть, щоб переключитися між підписаними та непідписаними числами."
 
 msgid "The entered value is invalid."
 msgstr "Введене значення недійсне."
@@ -8636,20 +8613,17 @@ msgstr ""
 "Змінити значення очок заклинань. Тицьніть правою кнопкою миші, щоб відновити "
 "значення як усталено."
 
-#, fuzzy
 msgid "Set Spell Points value:"
-msgstr "Задати кількість очок мани"
+msgstr "Задати кількість очок мани:"
 
 msgid "View Spell Points Info"
 msgstr "Переглянути інформацію про очки магії"
 
-#, fuzzy
 msgid "Set patrol radius in tiles:"
-msgstr "Встановити радіус патрулювання в стільниках"
+msgstr "Встановити радіус патрулювання в стільниках:"
 
-#, fuzzy
 msgid "Enter hero's name:"
-msgstr "Ввести ім'я героя"
+msgstr "Ввести ім'я героя:"
 
 msgid "Click to change class."
 msgstr "Тицьніть, щоб змінити клас."
