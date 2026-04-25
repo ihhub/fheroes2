@@ -1300,7 +1300,7 @@ void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type /* = Vi
 
     // An object could be bigger than 1 tile so we need to check all its tiles.
     constexpr int32_t searchDist = []() constexpr {
-        constexpr int32_t max = std::max( Maps::maxActionObjectDimensions.width, Maps::maxActionObjectDimensions.height );
+        constexpr int32_t max = std::max( Maps::maxActionGroundObjectDimensions.width, Maps::maxActionGroundObjectDimensions.height );
         static_assert( max > 0 );
 
         return max - 1;
@@ -1342,7 +1342,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 
     // An object could be bigger than 1 tile so we need to check all its tiles.
     constexpr int32_t searchDist = []() constexpr {
-        constexpr int32_t max = std::max( Maps::maxActionObjectDimensions.width, Maps::maxActionObjectDimensions.height );
+        constexpr int32_t max = std::max( Maps::maxActionGroundObjectDimensions.width, Maps::maxActionGroundObjectDimensions.height );
         static_assert( max > 0 );
 
         return max - 1;

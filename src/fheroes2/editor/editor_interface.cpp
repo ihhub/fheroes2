@@ -907,10 +907,10 @@ namespace
         // First, find all possible objects in the area around the tile.
         const fheroes2::Point tilePos{ tileId % mapFormat.width, tileId / mapFormat.width };
 
-        const int32_t minX = std::max( 0, tilePos.x - Maps::maxActionObjectDimensions.width );
-        const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxActionObjectDimensions.width + 1 );
-        const int32_t minY = std::max( 0, tilePos.y - Maps::maxActionObjectDimensions.height );
-        const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxActionObjectDimensions.height + 1 );
+        const int32_t minX = std::max( 0, tilePos.x - Maps::maxObjectDimensions.width );
+        const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxObjectDimensions.width + 1 );
+        const int32_t minY = std::max( 0, tilePos.y - Maps::maxObjectDimensions.height );
+        const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxObjectDimensions.height + 1 );
 
         std::map<uint32_t, const Maps::Map_Format::TileObjectInfo *> potentialObjects;
         for ( int32_t y = minY; y < maxY; ++y ) {
@@ -2686,6 +2686,11 @@ namespace Interface
     {
         assert( movableObjectInfo.tileIndex >= 0 );
         assert( destinationTile >= 0 );
+
+        if ( movableObjectInfo.groupType == Maps::ObjectGroup::NONE ) {
+            // No object to move.
+            return;
+        }
 
         if ( movableObjectInfo.tileIndex == destinationTile ) {
             _tryToMoveObjectOnTop( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType );
