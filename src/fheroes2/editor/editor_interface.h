@@ -189,6 +189,8 @@ namespace Interface
 
         bool _placeCastle( const int32_t posX, const int32_t posY, const PlayerColor color, const int32_t type );
 
+        void _resetMovableObjectInfo();
+
         EditorPanel _editorPanel;
 
         int32_t _areaSelectionStartTileId{ -1 };

@@ -1642,14 +1642,7 @@ namespace Interface
                             }
 
                             // Make sure to clear the action related information.
-                            if ( _movableObjectInfo.tileIndex >= 0 ) {
-                                _brushTiles.clear();
-                                _movableObjectInfo = {};
-
-                                Cursor::Get().SetThemes( Cursor::POINTER );
-                                setCursorUpdater( {} );
-                                updateCursor( _tileUnderCursor );
-                            }
+                            _resetMovableObjectInfo();
                         }
                     }
                 }
@@ -1926,13 +1919,7 @@ namespace Interface
             // Comparing a metadata structure is much faster than restoring the whole map.
 
             // Since this is an edit mode, clear object movement mode information.
-            if ( _movableObjectInfo.tileIndex >= 0 ) {
-                _brushTiles.clear();
-                _movableObjectInfo = {};
-                Cursor::Get().SetThemes( Cursor::POINTER );
-                setCursorUpdater( {} );
-                updateCursor( tileIndex );
-            }
+            _resetMovableObjectInfo();
 
             for ( const auto & object : _mapFormat.tiles[tileIndex].objects ) {
                 const auto & objectGroupInfo = Maps::getObjectsByGroup( object.group );
@@ -3184,5 +3171,19 @@ namespace Interface
                 ++i;
             }
         }
+    }
+
+    void EditorInterface::_resetMovableObjectInfo()
+    {
+        if ( _movableObjectInfo.tileIndex < 0 ) {
+            return;
+        }
+
+        _brushTiles.clear();
+        _movableObjectInfo = {};
+
+        Cursor::Get().SetThemes( Cursor::POINTER );
+        setCursorUpdater( {} );
+        updateCursor( _tileUnderCursor );
     }
 }
