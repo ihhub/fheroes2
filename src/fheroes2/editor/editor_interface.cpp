@@ -260,7 +260,8 @@ namespace
     {
         const bool isActionObject = MP2::isOffGameActionObject( info.objectType );
         if ( !isActionObject ) {
-            // Non-actions are allowed to be placed everywhere even being truncated over the edges of the map.
+            // Non-action objects are allowed to be placed everywhere on the map (if other conditions are met)
+            // even being truncated over the edges of the map.
             return true;
         }
 
