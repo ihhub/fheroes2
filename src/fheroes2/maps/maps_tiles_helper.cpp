@@ -245,10 +245,8 @@ namespace
         for ( const auto & partInfo : info.groundLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                if ( isActionObject ) {
-                    // Make sure that the above condition about object placement is correct.
-                    assert( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER );
-                }
+                // Make sure that the above condition about object placement is correct.
+                assert( !isActionObject || ( partInfo.layerType == Maps::SHADOW_LAYER ) || ( partInfo.layerType == Maps::TERRAIN_LAYER ) );
 
                 // Ignore this tile since it is out of the map.
                 continue;
