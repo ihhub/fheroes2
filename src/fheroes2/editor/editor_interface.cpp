@@ -350,7 +350,7 @@ namespace
     bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
                                      const std::function<bool( const Maps::Tile & tile )> & condition )
     {
-        const auto & offsets = Maps::getGroundLevelUsedTileOffset( info );
+        const std::vector<fheroes2::Point> offsets = Maps::getGroundLevelUsedTileOffset( info );
         if ( offsets.empty() ) {
             return true;
         }
