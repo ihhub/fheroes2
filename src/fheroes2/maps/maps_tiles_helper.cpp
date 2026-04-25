@@ -328,10 +328,9 @@ namespace
         for ( const auto & partInfo : info.topLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                if ( isActionObject ) {
-                    // This shouldn't happen as the object must be verified before placement.
-                    assert( 0 );
-                }
+                // If this assertion blows up then the object verification before was incorrect.
+                assert( !isActionObject );
+
                 continue;
             }
 
