@@ -148,6 +148,15 @@ namespace Interface
             fheroes2::Time _timer;
         };
 
+        struct MovableObjectInfo final
+        {
+            int32_t tileIndex{ -1 };
+
+            int32_t objectType{ -1 };
+            Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
+            uint32_t objectUID{ 0 };
+        };
+
         EditorInterface()
             : BaseInterface( true )
             , _editorPanel( *this )
@@ -167,7 +176,7 @@ namespace Interface
         bool _tryToPlaceObject( Maps::Tile & tile, const int32_t objectType, const Maps::ObjectGroup groupType, const bool isNewObject,
                                 std::unique_ptr<fheroes2::ActionCreator> & action );
 
-        void _tryToMoveObject( const int32_t originalTile, const int32_t destinationTile );
+        void _tryToMoveObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile );
 
         void _validateObjectsOnTerrainUpdate();
 
@@ -187,7 +196,7 @@ namespace Interface
 
         std::set<int32_t> _brushTiles;
 
-        int32_t _tileToMoveFrom{ -1 };
+        MovableObjectInfo _movableObjectInfo;
 
         Maps::Random_Generator::Configuration _randomMapConfig;
 

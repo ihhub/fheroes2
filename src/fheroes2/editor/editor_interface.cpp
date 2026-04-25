@@ -1619,17 +1619,16 @@ namespace Interface
                         if ( le.isMouseLeftButtonPressed() ) {
                             if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
                                 if ( _brushTiles.empty() ) {
-                                    _tileToMoveFrom = _tileUnderCursor;
+                                    _movableObjectInfo = {};
+                                    _movableObjectInfo.tileIndex = _tileUnderCursor;
                                 }
 
                                 if ( _brushTiles.size() == 1 ) {
-                                    assert( _tileToMoveFrom >= 0 );
+                                    assert( _movableObjectInfo.tileIndex >= 0 );
 
-                                    int32_t type{ -1 };
-                                    Maps::ObjectGroup group{ Maps::ObjectGroup::NONE };
-                                    uint32_t id{ 0 };
-                                    if ( getMovableObjectInfo( _mapFormat, _tileToMoveFrom, type, group, id ) ) {
-                                        _editorPanel.setObjectBasedCursor( type, group );
+                                    if ( getMovableObjectInfo( _mapFormat, _movableObjectInfo.tileIndex, _movableObjectInfo.objectType, _movableObjectInfo.groupType,
+                                                               _movableObjectInfo.objectUID ) ) {
+                                        _editorPanel.setObjectBasedCursor( _movableObjectInfo.objectType, _movableObjectInfo.groupType );
                                         updateCursor( _tileUnderCursor );
                                     }
                                 }
@@ -1639,13 +1638,13 @@ namespace Interface
                         }
                         else {
                             if ( le.isMouseLeftButtonReleased() ) {
-                                _tryToMoveObject( _tileToMoveFrom, _tileUnderCursor );
+                                _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
                             }
 
                             // Make sure to clear the action related information.
-                            if ( _tileToMoveFrom >= 0 ) {
+                            if ( _movableObjectInfo.tileIndex >= 0 ) {
                                 _brushTiles.clear();
-                                _tileToMoveFrom = -1;
+                                _movableObjectInfo = {};
 
                                 Cursor::Get().SetThemes( Cursor::POINTER );
                                 setCursorUpdater( {} );
@@ -1927,9 +1926,9 @@ namespace Interface
             // Comparing a metadata structure is much faster than restoring the whole map.
 
             // Since this is an edit mode, clear object movement mode information.
-            if ( _tileToMoveFrom >= 0 ) {
+            if ( _movableObjectInfo.tileIndex >= 0 ) {
                 _brushTiles.clear();
-                _tileToMoveFrom = -1;
+                _movableObjectInfo = {};
                 Cursor::Get().SetThemes( Cursor::POINTER );
                 setCursorUpdater( {} );
                 updateCursor( tileIndex );
@@ -2696,20 +2695,13 @@ namespace Interface
         return true;
     }
 
-    void EditorInterface::_tryToMoveObject( const int32_t originalTile, const int32_t destinationTile )
+    void EditorInterface::_tryToMoveObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile )
     {
-        assert( originalTile >= 0 );
+        assert( movableObjectInfo.tileIndex >= 0 );
         assert( destinationTile >= 0 );
 
-        int32_t objectType{ -1 };
-        Maps::ObjectGroup groupType{ Maps::ObjectGroup::NONE };
-        uint32_t objectUID{ 0 };
-        if ( !getMovableObjectInfo( _mapFormat, originalTile, objectType, groupType, objectUID ) ) {
-            return;
-        }
-
-        if ( originalTile == destinationTile ) {
-            _tryToMoveObjectOnTop( originalTile, groupType, objectType );
+        if ( movableObjectInfo.tileIndex == destinationTile ) {
+            _tryToMoveObjectOnTop( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType );
             return;
         }
 
@@ -2734,15 +2726,15 @@ namespace Interface
         std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
 
         auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
-        removeObjects( _mapFormat, { objectUID }, { groupType } );
+        removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType } );
 
-        Maps::setLastObjectUID( objectUID - 1 );
+        Maps::setLastObjectUID( movableObjectInfo.objectUID - 1 );
 
-        if ( _tryToPlaceObject( tile, objectType, groupType, false, action ) ) {
+        if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
             assert( action.get() != nullptr );
 
             // If this assertion blows up then the code is invalid.
-            assert( Maps::getLastObjectUID() == objectUID );
+            assert( Maps::getLastObjectUID() == movableObjectInfo.objectUID );
 
             _mapFormat.castleMetadata = std::move( castleMetadata );
             _mapFormat.heroMetadata = std::move( heroMetadata );
