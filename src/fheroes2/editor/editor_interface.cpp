@@ -256,30 +256,6 @@ namespace
         return { startPos.x + startPos.y * worldWidth, endPos.x + endPos.y * worldWidth };
     }
 
-    bool isObjectMovable( const Maps::ObjectGroup group )
-    {
-        switch ( group ) {
-        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
-        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
-        case Maps::ObjectGroup::ADVENTURE_MINES:
-        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
-        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
-        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
-        case Maps::ObjectGroup::ADVENTURE_TREASURES:
-        case Maps::ObjectGroup::ADVENTURE_WATER:
-        case Maps::ObjectGroup::KINGDOM_HEROES:
-        case Maps::ObjectGroup::KINGDOM_TOWNS:
-        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
-        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
-        case Maps::ObjectGroup::LANDSCAPE_TREES:
-        case Maps::ObjectGroup::LANDSCAPE_WATER:
-        case Maps::ObjectGroup::MONSTERS:
-            return true;
-        default:
-            return false;
-        }
-    }
-
     bool isObjectPlacementAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
         // Run through all tile offsets and check that all objects parts can be put on the map.
@@ -890,8 +866,41 @@ namespace
         return allowedMonsters;
     }
 
+    bool isObjectMovable( const Maps::ObjectGroup group )
+    {
+        switch ( group ) {
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
+        case Maps::ObjectGroup::ADVENTURE_MINES:
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
+        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
+        case Maps::ObjectGroup::ADVENTURE_TREASURES:
+        case Maps::ObjectGroup::ADVENTURE_WATER:
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+        case Maps::ObjectGroup::KINGDOM_TOWNS:
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+        case Maps::ObjectGroup::LANDSCAPE_WATER:
+        case Maps::ObjectGroup::MONSTERS:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
     {
+        // Check which object we really need to move.
+        // The logic should be aligned with placeObjectOnTile() function from maps_tiles_helper.cpp file.
+        const auto & tile = world.getTile( tileId );
+        const MP2::MapObjectType objectType{ tile.getMainObjectType() };
+        if ( objectType == MP2::OBJ_NONE ) {
+            // No object is on the tile.
+            return false;
+        }
+
         // Many objects are located on more than one tile.
         // In this case we cannot rely just on MapFormat.
         //
@@ -899,9 +908,9 @@ namespace
         const fheroes2::Point tilePos{ tileId % mapFormat.width, tileId / mapFormat.width };
 
         const int32_t minX = std::max( 0, tilePos.x - Maps::maxActionObjectDimensions.width );
-        const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxActionObjectDimensions.width );
+        const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxActionObjectDimensions.width + 1 );
         const int32_t minY = std::max( 0, tilePos.y - Maps::maxActionObjectDimensions.height );
-        const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxActionObjectDimensions.height );
+        const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxActionObjectDimensions.height + 1 );
 
         std::map<uint32_t, const Maps::Map_Format::TileObjectInfo *> potentialObjects;
         for ( int32_t y = minY; y < maxY; ++y ) {
@@ -920,52 +929,101 @@ namespace
             return false;
         }
 
-        const auto & tile = world.getTile( tileId );
         auto foundObjectIter = potentialObjects.end();
 
-        for ( auto topObjectPartIter = tile.getTopObjectParts().crbegin(); topObjectPartIter != tile.getTopObjectParts().crend(); ++topObjectPartIter ) {
-            foundObjectIter = potentialObjects.find( topObjectPartIter->_uid );
-            if ( foundObjectIter != potentialObjects.end() ) {
-                break;
-            }
-        }
+        auto checkMainObjectPart = [&tile, &potentialObjects, objectType]() {
+            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex );
 
-        if ( foundObjectIter == potentialObjects.end() ) {
-            for ( auto groundObjectPartIter = tile.getGroundObjectParts().crbegin(); groundObjectPartIter != tile.getGroundObjectParts().crend();
-                  ++groundObjectPartIter ) {
-                if ( groundObjectPartIter->isPassabilityTransparent() ) {
+            // This is an action object. Only the main object part and then ground object parts should be searched.
+            if ( type == objectType ) {
+                return potentialObjects.find( tile.getMainObjectPart()._uid );
+            }
+
+            return potentialObjects.end();
+        };
+
+        auto searchGroundObjectParts = [&tile, &potentialObjects, objectType]() {
+            // We search from end to start of the container.
+            const auto & groundObjectParts = tile.getGroundObjectParts();
+            for ( auto objectPartIter = groundObjectParts.crbegin(); objectPartIter != groundObjectParts.crend(); ++objectPartIter ) {
+                if ( objectPartIter->isPassabilityTransparent() ) {
                     continue;
                 }
 
-                foundObjectIter = potentialObjects.find( groundObjectPartIter->_uid );
-                if ( foundObjectIter != potentialObjects.end() ) {
-                    break;
+                const MP2::MapObjectType type = Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex );
+                if ( type != objectType ) {
+                    continue;
                 }
+
+                auto foundObjectIter = potentialObjects.find( objectPartIter->_uid );
+                if ( foundObjectIter != potentialObjects.end() ) {
+                    return foundObjectIter;
+                }
+            }
+
+            return potentialObjects.end();
+        };
+
+        auto searchTopObjectParts = [&tile, &potentialObjects, objectType]() {
+            // We search from end to start of the container.
+            const auto & topObjectParts = tile.getTopObjectParts();
+            for ( auto objectPartIter = topObjectParts.crbegin(); objectPartIter != topObjectParts.crend(); ++objectPartIter ) {
+                const MP2::MapObjectType type = Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex );
+                if ( type != objectType ) {
+                    continue;
+                }
+
+                auto foundObjectIter = potentialObjects.find( objectPartIter->_uid );
+                if ( foundObjectIter != potentialObjects.end() ) {
+                    return foundObjectIter;
+                }
+            }
+
+            return potentialObjects.end();
+        };
+
+        if ( MP2::isOffGameActionObject( objectType ) ) {
+            // This is an action object. Top level objects parts aren't considered for this case.
+            foundObjectIter = checkMainObjectPart();
+
+            if ( foundObjectIter == potentialObjects.end() ) {
+                foundObjectIter = searchGroundObjectParts();
+            }
+        }
+        else {
+            foundObjectIter = searchTopObjectParts();
+
+            if ( foundObjectIter == potentialObjects.end() ) {
+                foundObjectIter = checkMainObjectPart();
+            }
+
+            if ( foundObjectIter == potentialObjects.end() ) {
+                foundObjectIter = searchGroundObjectParts();
             }
         }
 
         if ( foundObjectIter == potentialObjects.end() ) {
-            foundObjectIter = potentialObjects.find( tile.getMainObjectPart()._uid );
+            return false;
         }
 
-        if ( foundObjectIter != potentialObjects.end() ) {
-            const Maps::Map_Format::TileObjectInfo & object = *( foundObjectIter->second );
+        // The object has been found.
+        assert( foundObjectIter->second != nullptr );
+        const Maps::Map_Format::TileObjectInfo & object = *( foundObjectIter->second );
 
-            // The object has been found.
-            type = static_cast<int32_t>( object.index );
-            if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                // Castles store their colors inside flags.
-                const int color = Maps::getTownColorIndex( mapFormat, tileId, object.id );
+        type = static_cast<int32_t>( object.index );
+        if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            // Castles store their colors inside flags.
+            // The chosen tile might not be the main tile.
+            // We need to get flag information from the main tile.
+            const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
 
-                type = Interface::EditorPanel::generateTownObjectProperties( type, color );
-            }
-
-            group = object.group;
-            objectUID = object.id;
-            return true;
+            const int color = Maps::getTownColorIndex( mapFormat, ( mainTileIndex >= 0 ) ? mainTileIndex : tileId, object.id );
+            type = Interface::EditorPanel::generateTownObjectProperties( type, color );
         }
 
-        return false;
+        group = object.group;
+        objectUID = object.id;
+        return true;
     }
 
 #if defined( WITH_DEBUG )
