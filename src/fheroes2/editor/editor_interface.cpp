@@ -773,7 +773,7 @@ namespace
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
+                errorMessage = _( "Action objects cannot be placed outside the map." );
                 return false;
             }
 
@@ -808,7 +808,7 @@ namespace
             const auto & basementObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) || !isObjectPlacementAllowed( basementObjectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
+                errorMessage = _( "Action objects cannot be placed outside the map." );
                 return false;
             }
 
