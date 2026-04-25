@@ -932,11 +932,12 @@ namespace
         auto foundObjectIter = potentialObjects.end();
 
         auto checkMainObjectPart = [&tile, &potentialObjects, objectType]() {
-            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex );
+            const auto & mainObjectPart = tile.getMainObjectPart();
+            const MP2::MapObjectType type = Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex );
 
             // This is an action object. Only the main object part and then ground object parts should be searched.
             if ( type == objectType ) {
-                return potentialObjects.find( tile.getMainObjectPart()._uid );
+                return potentialObjects.find( mainObjectPart._uid );
             }
 
             return potentialObjects.end();
