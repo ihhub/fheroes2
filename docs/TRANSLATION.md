@@ -119,9 +119,7 @@ How to [**create a pull request from your fork**](https://docs.github.com/en/pul
 The pull request title has to be something human-understandable. This allows the team to quickly identify the purpose of
 your work, I.E. "Update the Slovak translation".
 
-<details>
-
-<summary>Pull request restrictions - Please read</summary>
+### Pull request restrictions - Please read
 
 The fheroes2 team has set a maximum of 400 total modified lines for any pull request for translations. For contributors wanting to
 add translated lines to a new language this has a maximum of 30 total modified lines for that first pull request.
@@ -135,8 +133,6 @@ or less complete, less than this amount can be accepted.
 
 Preferably a pull request should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
 example creature names or castle buildings.
-
-</details>
 
 ## Updating PO Templates and Translatable Strings in PO Files
 
