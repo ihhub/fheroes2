@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-20 00:54+0000\n"
+"POT-Creation-Date: 2026-04-26 12:18+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4516,8 +4516,11 @@ msgid ""
 msgstr "Per favore, scegli un altro eroe."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
 
 msgid "Erase"
@@ -4668,7 +4671,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Sconfiggi tutti gli eroi e città nemiche."
 
 #, fuzzy

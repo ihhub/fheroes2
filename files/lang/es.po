@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-20 00:54+0000\n"
+"POT-Creation-Date: 2026-04-26 12:18+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4693,11 +4693,12 @@ msgid ""
 msgstr "Por favor, selecciona otro héroe."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
-"Detalles\n"
-"Celda"
 
 msgid "Erase"
 msgstr "Borrar"
@@ -4853,7 +4854,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Derrota a todos los heroes enemígos y sus ciudades."
 
 #, fuzzy
@@ -12749,6 +12750,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid ""
+#~ "Cell\n"
+#~ "Details"
+#~ msgstr ""
+#~ "Detalles\n"
+#~ "Celda"
 
 #~ msgid "AI"
 #~ msgstr "IA"

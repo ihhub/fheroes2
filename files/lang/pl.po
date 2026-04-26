@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-20 00:54+0000\n"
+"POT-Creation-Date: 2026-04-26 12:18+0000\n"
 "PO-Revision-Date: 2026-04-07 19:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4654,11 +4654,12 @@ msgid ""
 msgstr "Wybierz innego bohatera."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
-"Szczegóły\n"
-"komórki"
 
 msgid "Erase"
 msgstr "Usuwanie"
@@ -4801,7 +4802,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Pokonaj wszystkich wrogów i miasta."
 
 #, fuzzy
@@ -12935,6 +12936,13 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid ""
+#~ "Cell\n"
+#~ "Details"
+#~ msgstr ""
+#~ "Szczegóły\n"
+#~ "komórki"
 
 #, fuzzy
 #~ msgid "and many-many other contributors and supporters!"
