@@ -813,8 +813,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         const auto currentMetadata = getHeroMetadata();
         if ( currentMetadata != *initialHeroMetadata ) {
-            if ( fheroes2::showStandardTextMessage( GetName(), _( "You have unsaved changes. Do you want to save them?" ), Dialog::YES | Dialog::NO )
-                 == Dialog::NO ) {
+            if ( fheroes2::showStandardTextMessage( GetName(), _( "You have unsaved changes. Do you want to save them?" ), Dialog::YES | Dialog::NO ) == Dialog::NO ) {
                 applyHeroMetadata( *initialHeroMetadata, Modes( JAIL ), true );
             }
         }
