@@ -933,6 +933,9 @@ namespace
 
         auto checkMainObjectPart = [&tile, &potentialObjects, objectType]() {
             const auto & mainObjectPart = tile.getMainObjectPart();
+            if ( mainObjectPart.isPassabilityTransparent() ) {
+                return potentialObjects.end();
+            }
 
             // This is an action object. Only the main object part and then ground object parts should be searched.
             if ( Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex ) == objectType ) {
