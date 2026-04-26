@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -595,8 +595,17 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
         }
 
         if ( const int frontDirection = _path.GetFrontDirection(); GetDirection() != frontDirection ) {
-            // The hero is changing the direction of movement.
-            _angleStep( frontDirection );
+            // Hold rotation frame for N ticks to match the movement speed (similar to original game)
+            const int speedMultiplier = isControlHuman() ? Game::HumanHeroAnimSpeedMultiplier() : Game::AIHeroAnimSpeedMultiplier();
+            const int32_t angleStepFramesToSkip = std::clamp( 4 / speedMultiplier, 1, 3 );
+            ++_skippedFramesForAngleStep;
+
+            if ( _skippedFramesForAngleStep >= angleStepFramesToSkip ) {
+                _skippedFramesForAngleStep = 0;
+
+                // The hero is changing the direction of movement.
+                _angleStep( frontDirection );
+            }
         }
         else {
             // Set valid direction sprite in case of AI hero appearing from fog.
