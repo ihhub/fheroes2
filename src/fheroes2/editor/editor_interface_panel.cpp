@@ -1230,7 +1230,7 @@ namespace Interface
                                                Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
-            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for moving or editing of objects." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for moving or customizing objects." ), Dialog::ZERO );
         }
         else if ( le.isMouseRightButtonPressedInArea( _instrumentButtonsRect[Instrument::ADVENTURE_OBJECTS] ) ) {
             fheroes2::showStandardTextMessage( _( "Adventure Objects Mode" ),
