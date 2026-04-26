@@ -1566,13 +1566,9 @@ namespace Interface
                             if ( brushSize.width > 0 && _brushTiles.count( _tileUnderCursor ) == 0 ) {
                                 _brushTiles.emplace( _tileUnderCursor );
 
-                                fheroes2::ActionCreator action( _historyManager, _mapFormat );
-
                                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
-                                if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() ) ) {
-                                    action.commit();
-                                    _redraw |= mapUpdateFlags;
-                                }
+
+                                _removeObjectsAsAction( Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() );
                             }
                         }
                         else {
@@ -1689,11 +1685,7 @@ namespace Interface
                         // Erase objects in the selected area.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                        if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( _areaSelectionStartTileId, _tileUnderCursor ),
-                                            _editorPanel.getEraseObjectGroups() ) ) {
-                            action.commit();
-                            _redraw |= mapUpdateFlags;
-                        }
+                        _removeObjectsAsAction( Maps::getObjectUidsInArea( _areaSelectionStartTileId, _tileUnderCursor ), _editorPanel.getEraseObjectGroups() );
                     }
                 }
 
@@ -2349,14 +2341,8 @@ namespace Interface
             }
 
             // This is a case when area was not selected but a single tile was clicked.
-
-            fheroes2::ActionCreator action( _historyManager, _mapFormat );
-
             const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
-            if ( removeObjects( _mapFormat, Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() ) ) {
-                action.commit();
-                _redraw |= mapUpdateFlags;
-            }
+            _removeObjectsAsAction( Maps::getObjectUidsInArea( indices.x, indices.y ), _editorPanel.getEraseObjectGroups() );
 
             _areaSelectionStartTileId = -1;
 
@@ -3190,5 +3176,20 @@ namespace Interface
         Cursor::Get().SetThemes( Cursor::POINTER );
         setCursorUpdater( {} );
         updateCursor( _tileUnderCursor );
+    }
+
+    void EditorInterface::_removeObjectsAsAction( std::set<uint32_t> objectUIDs, const std::set<Maps::ObjectGroup> & groups )
+    {
+        if ( objectUIDs.empty() || groups.empty() ) {
+            // Nothing to do.
+            return;
+        }
+
+        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+        if ( removeObjects( _mapFormat, std::move( objectUIDs ), groups ) ) {
+            action.commit();
+            _redraw |= mapUpdateFlags;
+        }
     }
 }
