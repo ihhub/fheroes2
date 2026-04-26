@@ -86,6 +86,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
 
+    std::unique_ptr<Maps::Map_Format::HeroMetadata> initialHeroMetadata;
+    if ( isEditor ) {
+        initialHeroMetadata = std::make_unique<Maps::Map_Format::HeroMetadata>( getHeroMetadata() );
+    }
+
     if ( renderBackgroundDialog ) {
         background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         dialogRoi = background->activeArea();
@@ -785,9 +790,6 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     buttonExit.drawOnPress();
 
-    // Fade-out hero dialog.
-    fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
-
     if ( isEditor ) {
         if ( useDefaultExperience ) {
             // Tell Editor that default experience value is set.
@@ -806,7 +808,19 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             power = -1;
             knowledge = -1;
         }
+
+        assert( initialHeroMetadata.get() != nullptr );
+
+        const auto currentMetadata = getHeroMetadata();
+        if ( currentMetadata != *initialHeroMetadata ) {
+            if ( fheroes2::showStandardTextMessage( GetName(), _( "You have unsaved changes. Do you want to save them?" ), Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+                applyHeroMetadata( *initialHeroMetadata, Modes( JAIL ), true );
+            }
+        }
     }
+
+    // Fade-out hero dialog.
+    fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
 
     return Dialog::CANCEL;
 }
