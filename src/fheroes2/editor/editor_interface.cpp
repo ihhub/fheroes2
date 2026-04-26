@@ -258,6 +258,13 @@ namespace
 
     bool isObjectPlacementAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
+        const bool isActionObject = MP2::isOffGameActionObject( info.objectType );
+        if ( !isActionObject ) {
+            // Non-action objects are allowed to be placed everywhere on the map (if other conditions are met)
+            // even being truncated over the edges of the map.
+            return true;
+        }
+
         // Run through all tile offsets and check that all objects parts can be put on the map.
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER ) {
@@ -281,6 +288,8 @@ namespace
 
     bool isActionObjectAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
+        const bool isActionObject = MP2::isOffGameActionObject( info.objectType );
+
         // Active action object parts must be placed on a tile without any other action object parts.
         // Only ground parts should be checked for this condition.
         for ( const auto & objectPart : info.groundLevelParts ) {
@@ -291,7 +300,11 @@ namespace
 
             const fheroes2::Point pos{ mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y };
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                return false;
+                if ( isActionObject ) {
+                    return false;
+                }
+
+                continue;
             }
 
             const auto & tile = world.getTile( pos.x, pos.y );
@@ -334,19 +347,26 @@ namespace
         return true;
     }
 
-    bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
-                           const std::function<bool( const Maps::Tile & tile )> & condition )
+    bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
+                                     const std::function<bool( const Maps::Tile & tile )> & condition )
     {
+        const std::vector<fheroes2::Point> offsets = Maps::getGroundLevelUsedTileOffset( info );
         if ( offsets.empty() ) {
             return true;
         }
 
         assert( condition );
 
+        const bool isActionObject = MP2::isOffGameActionObject( info.objectType );
+
         for ( const auto & offset : offsets ) {
             const fheroes2::Point temp{ mainTilePos.x + offset.x, mainTilePos.y + offset.y };
             if ( !Maps::isValidAbsPoint( temp.x, temp.y ) ) {
-                return false;
+                if ( isActionObject ) {
+                    return false;
+                }
+
+                continue;
             }
 
             if ( !condition( world.getTile( temp.x, temp.y ) ) ) {
@@ -355,12 +375,6 @@ namespace
         }
 
         return true;
-    }
-
-    bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
-                                     const std::function<bool( const Maps::Tile & tile )> & condition )
-    {
-        return isConditionValid( Maps::getGroundLevelUsedTileOffset( info ), mainTilePos, condition );
     }
 
     bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups )
@@ -759,7 +773,7 @@ namespace
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
+                errorMessage = _( "Action objects cannot be placed outside the map." );
                 return false;
             }
 
@@ -794,7 +808,7 @@ namespace
             const auto & basementObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) || !isObjectPlacementAllowed( basementObjectInfo, tilePos ) ) {
-                errorMessage = _( "Objects cannot be placed outside the map." );
+                errorMessage = _( "Action objects cannot be placed outside the map." );
                 return false;
             }
 

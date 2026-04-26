@@ -214,26 +214,29 @@ namespace
         // Verify that the object is allowed to be placed.
         const fheroes2::Point mainTilePos = tile.GetCenter();
 
-        for ( const auto & partInfo : info.groundLevelParts ) {
-            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadows and terrain objects do not affect on passability so it is fine to ignore them not being rendered.
-                continue;
+        const bool isActionObject = MP2::isOffGameActionObject( info.objectType );
+        if ( isActionObject ) {
+            for ( const auto & partInfo : info.groundLevelParts ) {
+                if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+                    // Shadows and terrain objects do not affect on passability so it is fine to ignore them not being rendered.
+                    continue;
+                }
+
+                const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+                if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                    // This shouldn't happen as the object must be verified before placement.
+                    assert( 0 );
+                    return false;
+                }
             }
 
-            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
-                return false;
-            }
-        }
-
-        for ( const auto & partInfo : info.topLevelParts ) {
-            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
-                return false;
+            for ( const auto & partInfo : info.topLevelParts ) {
+                const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+                if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                    // This shouldn't happen as the object must be verified before placement.
+                    assert( 0 );
+                    return false;
+                }
             }
         }
 
@@ -243,7 +246,7 @@ namespace
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
                 // Make sure that the above condition about object placement is correct.
-                assert( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER );
+                assert( !isActionObject || ( partInfo.layerType == Maps::SHADOW_LAYER ) || ( partInfo.layerType == Maps::TERRAIN_LAYER ) );
 
                 // Ignore this tile since it is out of the map.
                 continue;
@@ -325,8 +328,9 @@ namespace
         for ( const auto & partInfo : info.topLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
+                // If this assertion blows up then the object verification before was incorrect.
+                assert( !isActionObject );
+
                 continue;
             }
 
