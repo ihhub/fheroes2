@@ -2739,6 +2739,11 @@ namespace Interface
             _mapFormat.artifactMetadata = std::move( artifactMetadata );
             _mapFormat.resourceMetadata = std::move( resourceMetadata );
 
+            const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( movableObjectInfo.objectUID );
+            if ( capturableObjectIter != _mapFormat.capturableObjectsMetadata.end() ) {
+                world.CaptureObject( destinationTile, capturableObjectIter->second.ownerColor );
+            }
+
             action->commit();
         }
 
