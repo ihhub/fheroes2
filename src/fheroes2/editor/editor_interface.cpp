@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <list>
 #include <map>
 #include <memory>
 #include <optional>
@@ -62,7 +63,6 @@
 #include "interface_radar.h"
 #include "localevent.h"
 #include "map_format_helper.h"
-#include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -866,6 +866,167 @@ namespace
         return allowedMonsters;
     }
 
+    bool isObjectMovable( const Maps::ObjectGroup group )
+    {
+        switch ( group ) {
+        case Maps::ObjectGroup::ADVENTURE_ARTIFACTS:
+        case Maps::ObjectGroup::ADVENTURE_DWELLINGS:
+        case Maps::ObjectGroup::ADVENTURE_MINES:
+        case Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS:
+        case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
+        case Maps::ObjectGroup::ADVENTURE_TREASURES:
+        case Maps::ObjectGroup::ADVENTURE_WATER:
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+        case Maps::ObjectGroup::KINGDOM_TOWNS:
+        case Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS:
+        case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
+        case Maps::ObjectGroup::LANDSCAPE_ROCKS:
+        case Maps::ObjectGroup::LANDSCAPE_TREES:
+        case Maps::ObjectGroup::LANDSCAPE_WATER:
+        case Maps::ObjectGroup::MONSTERS:
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
+    {
+        // Check which object we really need to move.
+        // The logic should be aligned with placeObjectOnTile() function from maps_tiles_helper.cpp file.
+        const auto & tile = world.getTile( tileId );
+        const MP2::MapObjectType objectType{ tile.getMainObjectType() };
+        if ( objectType == MP2::OBJ_NONE ) {
+            // No object is on the tile.
+            return false;
+        }
+
+        // Many objects are located on more than one tile.
+        // In this case we cannot rely just on MapFormat.
+        //
+        // First, find all possible objects in the area around the tile.
+        const fheroes2::Point tilePos{ tileId % mapFormat.width, tileId / mapFormat.width };
+
+        const int32_t minX = std::max( 0, tilePos.x - Maps::maxObjectDimensions.width );
+        const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxObjectDimensions.width + 1 );
+        const int32_t minY = std::max( 0, tilePos.y - Maps::maxObjectDimensions.height );
+        const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxObjectDimensions.height + 1 );
+
+        std::map<uint32_t, const Maps::Map_Format::TileObjectInfo *> potentialObjects;
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            const int32_t tileOffsetY{ y * mapFormat.width };
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                for ( const auto & object : mapFormat.tiles[x + tileOffsetY].objects ) {
+                    if ( isObjectMovable( object.group ) ) {
+                        potentialObjects.emplace( object.id, &object );
+                    }
+                }
+            }
+        }
+
+        if ( potentialObjects.empty() ) {
+            // No movable objects exist.
+            return false;
+        }
+
+        auto foundObjectIter = potentialObjects.end();
+
+        auto checkMainObjectPart = [&tile, &potentialObjects, objectType]() {
+            const auto & mainObjectPart = tile.getMainObjectPart();
+            if ( mainObjectPart.isPassabilityTransparent() ) {
+                return potentialObjects.end();
+            }
+
+            // This is an action object. Only the main object part and then ground object parts should be searched.
+            if ( Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex ) == objectType ) {
+                return potentialObjects.find( mainObjectPart._uid );
+            }
+
+            return potentialObjects.end();
+        };
+
+        auto searchGroundObjectParts = [&tile, &potentialObjects, objectType]() {
+            // We search from end to start of the container.
+            const auto & groundObjectParts = tile.getGroundObjectParts();
+            for ( auto objectPartIter = groundObjectParts.crbegin(); objectPartIter != groundObjectParts.crend(); ++objectPartIter ) {
+                if ( objectPartIter->isPassabilityTransparent() ) {
+                    continue;
+                }
+
+                if ( Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex ) != objectType ) {
+                    continue;
+                }
+
+                auto potentialObjectIter = potentialObjects.find( objectPartIter->_uid );
+                if ( potentialObjectIter != potentialObjects.end() ) {
+                    return potentialObjectIter;
+                }
+            }
+
+            return potentialObjects.end();
+        };
+
+        auto searchTopObjectParts = [&tile, &potentialObjects, objectType]() {
+            // We search from end to start of the container.
+            const auto & topObjectParts = tile.getTopObjectParts();
+            for ( auto objectPartIter = topObjectParts.crbegin(); objectPartIter != topObjectParts.crend(); ++objectPartIter ) {
+                if ( Maps::getObjectTypeByIcn( objectPartIter->icnType, objectPartIter->icnIndex ) != objectType ) {
+                    continue;
+                }
+
+                auto potentialObjectIter = potentialObjects.find( objectPartIter->_uid );
+                if ( potentialObjectIter != potentialObjects.end() ) {
+                    return potentialObjectIter;
+                }
+            }
+
+            return potentialObjects.end();
+        };
+
+        if ( MP2::isOffGameActionObject( objectType ) ) {
+            // This is an action object. Top level objects parts aren't considered for this case.
+            foundObjectIter = checkMainObjectPart();
+
+            if ( foundObjectIter == potentialObjects.end() ) {
+                foundObjectIter = searchGroundObjectParts();
+            }
+        }
+        else {
+            foundObjectIter = searchTopObjectParts();
+
+            if ( foundObjectIter == potentialObjects.end() ) {
+                foundObjectIter = checkMainObjectPart();
+            }
+
+            if ( foundObjectIter == potentialObjects.end() ) {
+                foundObjectIter = searchGroundObjectParts();
+            }
+        }
+
+        if ( foundObjectIter == potentialObjects.end() ) {
+            return false;
+        }
+
+        // The object has been found.
+        assert( foundObjectIter->second != nullptr );
+        const Maps::Map_Format::TileObjectInfo & object = *( foundObjectIter->second );
+
+        type = static_cast<int32_t>( object.index );
+        if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            // Castles and towns store their colors inside flags.
+            // The chosen tile might not be the main tile of the castle.
+            // We need to get flag information from the main tile.
+            const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
+
+            const int color = Maps::getTownColorIndex( mapFormat, ( mainTileIndex >= 0 ) ? mainTileIndex : tileId, object.id );
+            type = Interface::EditorPanel::generateTownObjectProperties( type, color );
+        }
+
+        group = object.group;
+        objectUID = object.id;
+        return true;
+    }
+
 #if defined( WITH_DEBUG )
     int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
     {
@@ -1436,7 +1597,6 @@ namespace Interface
                             _brushTiles.clear();
                         }
                     }
-
                     else if ( _editorPanel.isStreamDraw() ) {
                         if ( le.isMouseLeftButtonPressed() ) {
                             if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
@@ -1453,6 +1613,36 @@ namespace Interface
                         }
                         else {
                             _brushTiles.clear();
+                        }
+                    }
+                    else if ( _editorPanel.isDetailEdit() ) {
+                        if ( le.isMouseLeftButtonPressed() ) {
+                            if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
+                                if ( _brushTiles.empty() ) {
+                                    _movableObjectInfo = {};
+                                    _movableObjectInfo.tileIndex = _tileUnderCursor;
+                                }
+
+                                if ( _brushTiles.size() == 1 ) {
+                                    assert( _movableObjectInfo.tileIndex >= 0 );
+
+                                    if ( getMovableObjectInfo( _mapFormat, _movableObjectInfo.tileIndex, _movableObjectInfo.objectType, _movableObjectInfo.groupType,
+                                                               _movableObjectInfo.objectUID ) ) {
+                                        _editorPanel.setObjectBasedCursor( _movableObjectInfo.objectType, _movableObjectInfo.groupType );
+                                        updateCursor( _tileUnderCursor );
+                                    }
+                                }
+
+                                _brushTiles.emplace( _tileUnderCursor );
+                            }
+                        }
+                        else {
+                            if ( le.isMouseLeftButtonReleased() ) {
+                                _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
+                            }
+
+                            // Make sure to clear the action related information.
+                            _resetMovableObjectInfo();
                         }
                     }
                 }
@@ -1727,6 +1917,9 @@ namespace Interface
         if ( _editorPanel.isDetailEdit() ) {
             // Trigger an action only when metadata has been changed to avoid expensive computations and bloated list of actions.
             // Comparing a metadata structure is much faster than restoring the whole map.
+
+            // Since this is an edit mode, clear object movement mode information.
+            _resetMovableObjectInfo();
 
             for ( const auto & object : _mapFormat.tiles[tileIndex].objects ) {
                 const auto & objectGroupInfo = Maps::getObjectsByGroup( object.group );
@@ -2183,20 +2376,30 @@ namespace Interface
             return;
         }
 
-        const fheroes2::Point tilePos = tile.GetCenter();
-
         const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
 
-        if ( _moveExistingObject( tile.GetIndex(), groupType, objectType ) ) {
+        if ( _tryToMoveObjectOnTop( tile.GetIndex(), groupType, objectType ) ) {
             return;
         }
+
+        std::unique_ptr<fheroes2::ActionCreator> action;
+        if ( _tryToPlaceObject( tile, objectType, groupType, true, action ) ) {
+            assert( action.get() != nullptr );
+            action->commit();
+        }
+    }
+
+    bool EditorInterface::_tryToPlaceObject( Maps::Tile & tile, const int32_t objectType, const Maps::ObjectGroup groupType, const bool isNewObject,
+                                             std::unique_ptr<fheroes2::ActionCreator> & action )
+    {
+        const fheroes2::Point tilePos = tile.GetCenter();
 
         std::string errorMessage;
 
         if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -2230,18 +2433,22 @@ namespace Interface
                 std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
                 StringReplace( warning, "%{count}", AllHeroes::getMaximumAllowedHeroes() );
                 _warningMessage.reset( std::move( warning ) );
-                return;
+                return false;
             }
 
             if ( kingdomHeroCount >= GameStatic::GetKingdomMaxHeroes() ) {
                 std::string warning( _( "A maximum of %{count} heroes of the same color can be placed on the map." ) );
                 StringReplace( warning, "%{count}", GameStatic::GetKingdomMaxHeroes() );
                 _warningMessage.reset( std::move( warning ) );
-                return;
+                return false;
             }
 
-            if ( !_setObjectOnTileAsAction( tile, groupType, objectType ) ) {
-                return;
+            if ( !action ) {
+                action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+            }
+
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                return false;
             }
 
             Heroes * hero = world.GetHeroForHire( Race::IndexToRace( static_cast<int>( objectInfo.metadata[1] ) ) );
@@ -2261,7 +2468,7 @@ namespace Interface
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -2272,7 +2479,7 @@ namespace Interface
                     for ( const auto & object : tileInfo.objects ) {
                         if ( groupType == object.group && static_cast<uint32_t>( objectType ) == object.index ) {
                             _warningMessage.reset( _( "Only one Random Ultimate Artifact can be placed on the map." ) );
-                            return;
+                            return false;
                         }
                     }
                 }
@@ -2280,15 +2487,22 @@ namespace Interface
 
             // For each Spell Scroll artifact we select a spell.
             if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
-                const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+                int spellId = Spell::NONE;
+                if ( isNewObject ) {
+                    spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
 
-                if ( spellId == Spell::NONE ) {
-                    // We do not place the Spell Scroll artifact if the spell for it was not selected.
-                    return;
+                    if ( spellId == Spell::NONE ) {
+                        // We do not place the Spell Scroll artifact if the spell for it was not selected.
+                        return false;
+                    }
                 }
 
-                if ( !_setObjectOnTileAsAction( tile, groupType, objectType ) ) {
-                    return;
+                if ( !action ) {
+                    action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+                }
+
+                if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                    return false;
                 }
 
                 assert( !_mapFormat.tiles[tile.GetIndex()].objects.empty() );
@@ -2304,31 +2518,37 @@ namespace Interface
                 Maps::setSpellOnTile( tile, spellId );
             }
             else {
-                _setObjectOnTileAsAction( tile, groupType, objectType );
+                if ( !action ) {
+                    action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+                }
+
+                if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                    return false;
+                }
             }
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
             int32_t type = -1;
             int32_t color = -1;
-            _editorPanel.getTownObjectProperties( type, color );
+            EditorPanel::getTownObjectProperties( objectType, type, color );
             if ( type < 0 || color < 0 ) {
                 // Check your logic!
                 assert( 0 );
-                return;
+                return false;
             }
 
             if ( !verifyObjectPlacement( tilePos, groupType, type, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
-            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            if ( !action ) {
+                action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+            }
 
             if ( !_placeCastle( tilePos.x, tilePos.y, Color::IndexToColor( color ), type ) ) {
-                return;
+                return false;
             }
-
-            action.commit();
 
             if ( !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
@@ -2338,40 +2558,40 @@ namespace Interface
             if ( objectType < 0 ) {
                 // Check your logic!
                 assert( 0 );
-                return;
+                return false;
             }
 
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
-            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            if ( !action ) {
+                action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+            }
 
             if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
-                return;
+                return false;
             }
-
-            action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
-            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            if ( !action ) {
+                action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+            }
 
             if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
-                return;
+                return false;
             }
 
             // For River Deltas we update the nearby Streams to properly connect to them.
             if ( const int riverDeltaDirection = Maps::getRiverDeltaDirectionByIndex( groupType, objectType ); riverDeltaDirection != Direction::UNKNOWN ) {
                 Maps::updateStreamsToDeltaConnection( _mapFormat, tile.GetIndex(), riverDeltaDirection );
             }
-
-            action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
@@ -2382,7 +2602,7 @@ namespace Interface
                     std::string warning( _( "A maximum of %{count} obelisks can be placed on the map." ) );
                     StringReplace( warning, "%{count}", numOfPuzzleTiles );
                     _warningMessage.reset( std::move( warning ) );
-                    return;
+                    return false;
                 }
             }
             else if ( objectInfo.objectType == MP2::OBJ_JAIL ) {
@@ -2401,25 +2621,35 @@ namespace Interface
                     std::string warning( _( "A maximum of %{count} heroes including jailed heroes can be placed on the map." ) );
                     StringReplace( warning, "%{count}", AllHeroes::getMaximumAllowedHeroes() );
                     _warningMessage.reset( std::move( warning ) );
-                    return;
+                    return false;
                 }
             }
 
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
-            _setObjectOnTileAsAction( tile, groupType, objectType );
+            if ( !action ) {
+                action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+            }
+
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                return false;
+            }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
-            if ( !_setObjectOnTileAsAction( tile, groupType, objectType ) ) {
-                return;
+            if ( !action ) {
+                action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+            }
+
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                return false;
             }
 
             assert( !_mapFormat.tiles[tile.GetIndex()].objects.empty() );
@@ -2437,11 +2667,82 @@ namespace Interface
         else {
             if ( !verifyObjectPlacement( tilePos, groupType, objectType, errorMessage ) ) {
                 _warningMessage.reset( std::move( errorMessage ) );
-                return;
+                return false;
             }
 
-            _setObjectOnTileAsAction( tile, groupType, objectType );
+            if ( !action ) {
+                action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+            }
+
+            if ( !_setObjectOnTile( tile, groupType, objectType ) ) {
+                return false;
+            }
         }
+
+        return true;
+    }
+
+    void EditorInterface::_tryToMoveObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile )
+    {
+        assert( movableObjectInfo.tileIndex >= 0 );
+        assert( destinationTile >= 0 );
+
+        if ( movableObjectInfo.groupType == Maps::ObjectGroup::NONE ) {
+            // No object to move.
+            return;
+        }
+
+        if ( movableObjectInfo.tileIndex == destinationTile ) {
+            _tryToMoveObjectOnTop( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType );
+            return;
+        }
+
+        Maps::Tile & tile = world.getTile( destinationTile );
+
+        // Since we want to preserve the object UID (and not to break translations)
+        // we need to temporary set the last object UID here and then reset it back to what it should be before the changes.
+        const uint32_t originalLastObjectUID = Maps::getLastObjectUID();
+
+        // Some objects have metadata. We need to save it before removing objects.
+        // Ideally, we should save only the object's metadata but to make things easier, let's save everything for now.
+        // TODO: save only the current object metadata.
+        std::map<uint32_t, Maps::Map_Format::CastleMetadata> castleMetadata = _mapFormat.castleMetadata;
+        std::map<uint32_t, Maps::Map_Format::HeroMetadata> heroMetadata = _mapFormat.heroMetadata;
+        std::map<uint32_t, Maps::Map_Format::SphinxMetadata> sphinxMetadata = _mapFormat.sphinxMetadata;
+        std::map<uint32_t, Maps::Map_Format::SignMetadata> signMetadata = _mapFormat.signMetadata;
+        std::map<uint32_t, Maps::Map_Format::AdventureMapEventMetadata> adventureMapEventMetadata = _mapFormat.adventureMapEventMetadata;
+        std::map<uint32_t, Maps::Map_Format::SelectionObjectMetadata> selectionObjectMetadata = _mapFormat.selectionObjectMetadata;
+        std::map<uint32_t, Maps::Map_Format::CapturableObjectMetadata> capturableObjectsMetadata = _mapFormat.capturableObjectsMetadata;
+        std::map<uint32_t, Maps::Map_Format::MonsterMetadata> monsterMetadata = _mapFormat.monsterMetadata;
+        std::map<uint32_t, Maps::Map_Format::ArtifactMetadata> artifactMetadata = _mapFormat.artifactMetadata;
+        std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
+
+        auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+        removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType } );
+
+        Maps::setLastObjectUID( movableObjectInfo.objectUID - 1 );
+
+        if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
+            assert( action.get() != nullptr );
+
+            // If this assertion blows up then the code is invalid.
+            assert( Maps::getLastObjectUID() == movableObjectInfo.objectUID );
+
+            _mapFormat.castleMetadata = std::move( castleMetadata );
+            _mapFormat.heroMetadata = std::move( heroMetadata );
+            _mapFormat.sphinxMetadata = std::move( sphinxMetadata );
+            _mapFormat.signMetadata = std::move( signMetadata );
+            _mapFormat.adventureMapEventMetadata = std::move( adventureMapEventMetadata );
+            _mapFormat.selectionObjectMetadata = std::move( selectionObjectMetadata );
+            _mapFormat.capturableObjectsMetadata = std::move( capturableObjectsMetadata );
+            _mapFormat.monsterMetadata = std::move( monsterMetadata );
+            _mapFormat.artifactMetadata = std::move( artifactMetadata );
+            _mapFormat.resourceMetadata = std::move( resourceMetadata );
+
+            action->commit();
+        }
+
+        Maps::setLastObjectUID( originalLastObjectUID );
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
@@ -2477,18 +2778,6 @@ namespace Interface
         Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
 
         return true;
-    }
-
-    bool EditorInterface::_setObjectOnTileAsAction( Maps::Tile & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
-    {
-        fheroes2::ActionCreator action( _historyManager, _mapFormat );
-
-        if ( _setObjectOnTile( tile, groupType, objectIndex ) ) {
-            action.commit();
-            return true;
-        }
-
-        return false;
     }
 
     bool EditorInterface::updateRandomMapConfiguration( const int32_t mapWidth )
@@ -2766,26 +3055,15 @@ namespace Interface
         }
     }
 
-    bool EditorInterface::_moveExistingObject( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex )
+    bool EditorInterface::_tryToMoveObjectOnTop( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex )
     {
         assert( tileIndex >= 0 && static_cast<size_t>( tileIndex ) < _mapFormat.tiles.size() );
 
         if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
             int32_t type = -1;
             int32_t color = -1;
-            _editorPanel.getTownObjectProperties( type, color );
+            EditorPanel::getTownObjectProperties( objectIndex, type, color );
             if ( type < 0 || color < 0 ) {
-                // Check your logic!
-                assert( 0 );
-                return false;
-            }
-
-            objectIndex = type;
-        }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            const int32_t type = _editorPanel.getSelectedObjectType();
-
-            if ( type < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return false;
@@ -2898,5 +3176,19 @@ namespace Interface
                 ++i;
             }
         }
+    }
+
+    void EditorInterface::_resetMovableObjectInfo()
+    {
+        if ( _movableObjectInfo.tileIndex < 0 ) {
+            return;
+        }
+
+        _brushTiles.clear();
+        _movableObjectInfo = {};
+
+        Cursor::Get().SetThemes( Cursor::POINTER );
+        setCursorUpdater( {} );
+        updateCursor( _tileUnderCursor );
     }
 }

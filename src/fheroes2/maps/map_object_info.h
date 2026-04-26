@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,8 +30,11 @@
 
 namespace Maps
 {
-    // The maximum possible dimensions (width and height) for an action object on the map.
-    constexpr fheroes2::Size maxActionObjectDimensions{ 4, 2 };
+    // The maximum possible dimensions (width and height) for an action ground object on the map.
+    constexpr fheroes2::Size maxActionGroundObjectDimensions{ 4, 2 };
+
+    // The maximum object dimensions possible, including top and bottom parts.
+    constexpr fheroes2::Size maxObjectDimensions{ 8, 5 };
 
     // An object usually contains of multiple parts / tiles. Each part has its own features like object layer type or image index.
     // An object always contains a main object part.
