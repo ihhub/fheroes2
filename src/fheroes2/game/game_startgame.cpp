@@ -1518,6 +1518,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
             else if ( _gameArea.needDragScrollRedraw() ) {
                 setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
+            else if ( _gameArea.updateInertia() ) {
+                setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
+            }
         }
 
         // Check that the kingdom is not vanquished yet (has at least one hero or castle).

@@ -207,6 +207,10 @@ bool Settings::Read( const std::string & filePath )
     // scroll speed
     SetScrollSpeed( config.IntParams( "scroll speed" ) );
 
+    if ( config.Exists( "map scroll inertia" ) ) {
+        setMapScrollInertia( config.StrParams( "map scroll inertia" ) != "off" );
+    }
+
     if ( config.Exists( "battle speed" ) ) {
         SetBattleSpeed( config.IntParams( "battle speed" ) );
     }
@@ -456,6 +460,9 @@ std::string Settings::String() const
 
     os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
+
+    os << std::endl << "# Inertia (momentum) when scrolling the Adventure Map by dragging: on/off" << std::endl;
+    os << "map scroll inertia = " << ( _mapScrollInertia ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Toggle battle grid: on/off" << std::endl;
     os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
@@ -926,6 +933,11 @@ void Settings::setHighlightBattleMovementArea( const bool enable )
 void Settings::SetScrollSpeed( int speed )
 {
     scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
+}
+
+void Settings::setMapScrollInertia( const bool enable )
+{
+    _mapScrollInertia = enable;
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
