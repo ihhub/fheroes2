@@ -2740,7 +2740,7 @@ namespace Interface
                 world.CaptureObject( destinationTile, capturableObjectIter->second.ownerColor );
             }
 
-            if (movableObjectInfo.groupType == Maps::ObjectGroup::KINGDOM_TOWNS) {
+            if ( movableObjectInfo.groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
                 // Update the castle entrance road.
 
                 const int32_t previousEntranceIndex = movableObjectInfo.tileIndex + _mapFormat.width;
