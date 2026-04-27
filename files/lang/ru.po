@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:18+0000\n"
+"POT-Creation-Date: 2026-04-27 00:00+0000\n"
 "PO-Revision-Date: 2026-04-11 12:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4402,7 +4402,8 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr "%{objects} можно размещать только на воде."
 
-msgid "Objects cannot be placed outside the map."
+#, fuzzy
+msgid "Action objects cannot be placed outside the map."
 msgstr "Объекты нельзя размещать за пределами карты."
 
 msgid "Action objects must be placed on clear tiles."

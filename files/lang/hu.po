@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:18+0000\n"
+"POT-Creation-Date: 2026-04-27 00:00+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -4388,7 +4388,8 @@ msgstr "Szent Varázstárgy csak ásásra alkalmas terepen helyezhető el."
 msgid "%{objects} must be placed on water."
 msgstr "%{objects} elhelyezése vízre kell történjen."
 
-msgid "Objects cannot be placed outside the map."
+#, fuzzy
+msgid "Action objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
 msgid "Action objects must be placed on clear tiles."

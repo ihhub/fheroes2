@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:18+0000\n"
+"POT-Creation-Date: 2026-04-27 00:00+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4480,7 +4480,8 @@ msgstr "L'Ultime artéfact ne peut être placé que sur un terrain creusable."
 msgid "%{objects} must be placed on water."
 msgstr "%{objects} doit être placé sur l'eau."
 
-msgid "Objects cannot be placed outside the map."
+#, fuzzy
+msgid "Action objects cannot be placed outside the map."
 msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
 
 msgid "Action objects must be placed on clear tiles."

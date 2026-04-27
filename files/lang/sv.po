@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:18+0000\n"
+"POT-Creation-Date: 2026-04-27 00:00+0000\n"
 "PO-Revision-Date: 2026-02-24 17:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4385,7 +4385,8 @@ msgstr "Den Främsta Artefakten kan endast placeras på grävbar terräng."
 msgid "%{objects} must be placed on water."
 msgstr "%{objects}  måste placeras på vatten."
 
-msgid "Objects cannot be placed outside the map."
+#, fuzzy
+msgid "Action objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
 
 msgid "Action objects must be placed on clear tiles."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:18+0000\n"
+"POT-Creation-Date: 2026-04-27 00:00+0000\n"
 "PO-Revision-Date: 2026-04-07 19:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4454,7 +4454,7 @@ msgid "%{objects} must be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
