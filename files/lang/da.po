@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 03:01+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4701,7 +4701,20 @@ msgstr "Helte"
 msgid "Towns"
 msgstr "Byer"
 
-msgid "editorErasure|Landscape objects"
+#, fuzzy
+msgid "editorErasure|Mountains"
+msgstr "Væsener"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Veje"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Helte"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Landskabsobjekter"
 
 msgid "editorErasure|Adventure non pickable objects"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 03:01+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2026-04-01 14:30+0100\n"
 "Last-Translator: Yannis Anthymidis <yannis-foss@anth.me.uk>\n"
 "Language-Team: Greek\n"
@@ -4268,7 +4268,16 @@ msgstr ""
 msgid "Towns"
 msgstr ""
 
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr ""
+
+msgid "editorErasure|Rocks"
+msgstr ""
+
+msgid "editorErasure|Trees"
+msgstr ""
+
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr ""
 
 msgid "editorErasure|Adventure non pickable objects"

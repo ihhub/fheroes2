@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 03:01+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4472,7 +4472,19 @@ msgid "Towns"
 msgstr ""
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Selectați ținta vrăjii"
 
 msgid "editorErasure|Adventure non pickable objects"
