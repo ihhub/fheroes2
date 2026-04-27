@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 00:00+0000\n"
+"POT-Creation-Date: 2026-04-27 03:01+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -8689,6 +8689,10 @@ msgstr ""
 
 msgid "Click to enable hero's patrol mode."
 msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Kattints a változtatások elfogadásához."
 
 msgid "Blood Morale"
 msgstr "Szenvedélyes morál"

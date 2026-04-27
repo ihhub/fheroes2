@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 00:00+0000\n"
+"POT-Creation-Date: 2026-04-27 03:01+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -8807,6 +8807,10 @@ msgstr "Helten patruljerer en radius på %{tiles} felter. Venstreklik: Slå fra.
 
 msgid "Click to enable hero's patrol mode."
 msgstr "Klik for at aktivere heltens patruljetilstand."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Klik for at acceptere de foretagne ændringer."
 
 msgid "Blood Morale"
 msgstr "Blodsmoral"
