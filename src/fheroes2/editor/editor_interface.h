@@ -189,6 +189,8 @@ namespace Interface
 
         void _resetMovableObjectInfo();
 
+        void _removeObjectsAsAction( std::set<uint32_t> objectUIDs, const std::set<Maps::ObjectGroup> & groups );
+
         EditorPanel _editorPanel;
 
         int32_t _areaSelectionStartTileId{ -1 };
