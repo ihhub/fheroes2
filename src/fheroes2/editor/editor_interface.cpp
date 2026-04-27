@@ -469,11 +469,8 @@ namespace
                     world.getTile( static_cast<int32_t>( mapTileIndex ) ).updateRoadFlag();
 
                     // There could be a road in front of the castle entrance.
-                    const size_t bottomTileIndex = mapTileIndex + mapFormat.width;
-                    assert( bottomTileIndex < mapFormat.tiles.size() );
-                    if ( Maps::doesContainRoad( mapFormat.tiles[bottomTileIndex] ) ) {
-                        Maps::setRoadOnTile( mapFormat, static_cast<int32_t>( bottomTileIndex ) );
-                    }
+                    const int32_t bottomTileIndex = static_cast<int32_t>( mapTileIndex ) + mapFormat.width;
+                    Maps::updateRoadOnTile( mapFormat, bottomTileIndex );
 
                     needRedraw = true;
                     updateMapPlayerInformation = true;
@@ -2743,6 +2740,16 @@ namespace Interface
                 world.CaptureObject( destinationTile, capturableObjectIter->second.ownerColor );
             }
 
+            if ( movableObjectInfo.groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                // Update the castle entrance road.
+
+                const int32_t previousEntranceIndex = movableObjectInfo.tileIndex + _mapFormat.width;
+                Maps::updateRoadOnTile( _mapFormat, previousEntranceIndex );
+
+                const int32_t newEntranceIndex = destinationTile + _mapFormat.width;
+                Maps::updateRoadOnTile( _mapFormat, newEntranceIndex );
+            }
+
             action->commit();
         }
 
@@ -2987,9 +2994,9 @@ namespace Interface
 
         const int32_t bottomIndex = Maps::GetDirectionIndex( tile.GetIndex(), Direction::BOTTOM );
 
-        if ( Maps::isValidAbsIndex( bottomIndex ) && Maps::doesContainRoad( _mapFormat.tiles[bottomIndex] ) ) {
-            // Update road if there is one in front of the town/castle entrance.
-            Maps::setRoadOnTile( _mapFormat, bottomIndex );
+        if ( Maps::isValidAbsIndex( bottomIndex ) ) {
+            // Update road in front of the town/castle entrance.
+            Maps::updateRoadOnTile( _mapFormat, bottomIndex );
         }
 
         // By default use random (default) army for the neutral race town/castle.

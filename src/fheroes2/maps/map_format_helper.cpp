@@ -902,57 +902,10 @@ namespace
         return true;
     }
 
-    bool updateRoadObjectOnTile( Maps::Map_Format::MapFormat & map, const int32_t tileIndex )
-    {
-        assert( static_cast<size_t>( tileIndex ) < map.tiles.size() );
-
-        auto & tile = map.tiles[tileIndex];
-
-        auto iter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
-
-        if ( iter == tile.objects.end() ) {
-            return false;
-        }
-
-        const int roadObjectIndex = getRoadObjectIndex( map, tileIndex );
-
-        if ( iter->index == static_cast<uint32_t>( roadObjectIndex ) ) {
-            // Nothing to update here.
-            return false;
-        }
-
-        Maps::removeObjectFromMapByUID( tileIndex, iter->id );
-
-        // To replace the road on the `world` map we temporarily change the last object UID to the UID previous to the current road UID.
-        const uint32_t lastUid = Maps::getLastObjectUID();
-        Maps::setLastObjectUID( iter->id - 1 );
-
-        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, roadObjectIndex );
-        if ( !setObjectOnTile( world.getTile( tileIndex ), objectInfo, false ) ) {
-            assert( 0 );
-            return false;
-        }
-
-        assert( Maps::getLastObjectUID() == iter->id );
-
-        // Restore the last object UID.
-        Maps::setLastObjectUID( lastUid );
-
-        // Just update the road direction index.
-        iter->index = static_cast<uint32_t>( roadObjectIndex );
-
-        return true;
-    }
-
     void updateRoadObjectsInAreaAround( Maps::Map_Format::MapFormat & map, const int32_t centerTileIndex, const int32_t centerToRectBorderDistance )
     {
         for ( const int32_t index : Maps::getAroundIndexes( centerTileIndex, centerToRectBorderDistance ) ) {
-            const auto & tile = map.tiles[index];
-            if ( !Maps::doesContainRoad( tile ) ) {
-                continue;
-            }
-
-            updateRoadObjectOnTile( map, index );
+            Maps::updateRoadOnTile( map, index );
         }
     }
 
@@ -1875,7 +1828,7 @@ namespace Maps
 
         auto & tile = map.tiles[tileIndex];
 
-        auto iter = std::find_if( tile.objects.cbegin(), tile.objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
+        const auto iter = std::find_if( tile.objects.cbegin(), tile.objects.cend(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
 
         if ( iter == tile.objects.cend() ) {
             // Nothing to do here.
@@ -1891,15 +1844,54 @@ namespace Maps
         return true;
     }
 
+    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex )
+    {
+        assert( static_cast<size_t>( tileIndex ) < map.tiles.size() );
+
+        auto & tile = map.tiles[tileIndex];
+
+        const auto iter = std::find_if( tile.objects.begin(), tile.objects.end(), []( const auto & object ) { return object.group == Maps::ObjectGroup::ROADS; } );
+
+        if ( iter == tile.objects.end() ) {
+            // Nothing to do here.
+            return false;
+        }
+
+        const int roadObjectIndex = getRoadObjectIndex( map, tileIndex );
+
+        if ( iter->index == static_cast<uint32_t>( roadObjectIndex ) ) {
+            // Nothing to update here.
+            return false;
+        }
+
+        removeObjectFromMapByUID( tileIndex, iter->id );
+
+        // To replace the road on the `world` map we temporarily change the last object UID to the UID previous to the current road UID.
+        const uint32_t lastUid = Maps::getLastObjectUID();
+        setLastObjectUID( iter->id - 1 );
+
+        const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ROADS, roadObjectIndex );
+        if ( !setObjectOnTile( world.getTile( tileIndex ), objectInfo, false ) ) {
+            assert( 0 );
+            return false;
+        }
+
+        assert( Maps::getLastObjectUID() == iter->id );
+
+        // Restore the last object UID.
+        setLastObjectUID( lastUid );
+
+        // Just update the road direction index.
+        iter->index = static_cast<uint32_t>( roadObjectIndex );
+
+        return true;
+    }
+
     void updateAllRoads( Map_Format::MapFormat & map )
     {
         const int32_t size = map.width * map.width;
         for ( int32_t index = 0; index < size; ++index ) {
-            if ( !Maps::doesContainRoad( map.tiles[index] ) ) {
-                continue;
-            }
-
-            updateRoadObjectOnTile( map, index );
+            updateRoadOnTile( map, index );
         }
     }
 
