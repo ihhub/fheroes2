@@ -1515,10 +1515,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
 
                 setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
-            else if ( _gameArea.needDragScrollRedraw() ) {
-                setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
-            }
-            else if ( _gameArea.updateInertia() ) {
+            else if ( _gameArea.needDragScrollRedraw() || _gameArea.updateInertia() ) {
                 setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
         }
