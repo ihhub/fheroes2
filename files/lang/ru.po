@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 00:00+0000\n"
+"POT-Creation-Date: 2026-04-27 03:01+0000\n"
 "PO-Revision-Date: 2026-04-11 12:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -8695,6 +8695,10 @@ msgstr ""
 
 msgid "Click to enable hero's patrol mode."
 msgstr "Нажмите, чтобы установить героя в режим патруля."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Нажмите, чтобы применить внесённые изменения."
 
 msgid "Blood Morale"
 msgstr "В Бой!"
