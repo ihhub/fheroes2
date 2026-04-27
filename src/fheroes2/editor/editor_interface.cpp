@@ -1683,7 +1683,6 @@ namespace Interface
                     }
                     else if ( _editorPanel.isEraseMode() ) {
                         // Erase objects in the selected area.
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         _removeObjectsAsAction( Maps::getObjectUidsInArea( _areaSelectionStartTileId, _tileUnderCursor ), _editorPanel.getEraseObjectGroups() );
                     }
