@@ -251,11 +251,16 @@ namespace Interface
         };
 
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
-        const std::array<uint32_t, 11> _eraseButtonObjectTypes{ ObjectErasureType::ERASE_MOUNTAINS,              ObjectErasureType::ERASE_ROCKS,
-                                                                ObjectErasureType::ERASE_TREES,                  ObjectErasureType::ERASE_LANDSCAPE,
-                                                                ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE, ObjectErasureType::ERASE_TOWNS,
-                                                                ObjectErasureType::ERASE_ADVENTURE_PICKABLE,     ObjectErasureType::ERASE_MONSTERS,
-                                                                ObjectErasureType::ERASE_HEROES,                 ObjectErasureType::ERASE_ROADS,
+        const std::array<uint32_t, 11> _eraseButtonObjectTypes{ ObjectErasureType::ERASE_MOUNTAINS,
+                                                                ObjectErasureType::ERASE_ROCKS,
+                                                                ObjectErasureType::ERASE_TREES,
+                                                                ObjectErasureType::ERASE_LANDSCAPE,
+                                                                ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE,
+                                                                ObjectErasureType::ERASE_TOWNS,
+                                                                ObjectErasureType::ERASE_ADVENTURE_PICKABLE,
+                                                                ObjectErasureType::ERASE_MONSTERS,
+                                                                ObjectErasureType::ERASE_HEROES,
+                                                                ObjectErasureType::ERASE_ROADS,
                                                                 ObjectErasureType::ERASE_STREAMS };
 
         EditorInterface & _interface;
