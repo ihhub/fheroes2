@@ -230,28 +230,33 @@ namespace Interface
             BRUSH_SIZE_COUNT = 4U
         };
 
-        enum ObjectErasureType : uint8_t
+        enum ObjectErasureType : uint32_t
         {
-            ERASE_NONE = 0x00,
+            ERASE_NONE = 0,
             // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
-            ERASE_LANDSCAPE = 0x01,
-            ERASE_ADVENTURE_NON_PICKABLE = 0x02,
-            ERASE_TOWNS = 0x04,
-            ERASE_ADVENTURE_PICKABLE = 0x08,
-            ERASE_MONSTERS = 0x10,
-            ERASE_HEROES = 0x20,
-            ERASE_STREAMS = 0x40,
-            ERASE_ROADS = 0x80,
+            ERASE_MOUNTAINS = ( 1 << 0 ),
+            ERASE_ROCKS = ( 1 << 1 ),
+            ERASE_TREES = ( 1 << 2 ),
+            ERASE_LANDSCAPE = ( 1 << 3 ),
+            ERASE_ADVENTURE_NON_PICKABLE = ( 1 << 4 ),
+            ERASE_TOWNS = ( 1 << 5 ),
+            ERASE_ADVENTURE_PICKABLE = ( 1 << 6 ),
+            ERASE_MONSTERS = ( 1 << 7 ),
+            ERASE_HEROES = ( 1 << 8 ),
+            ERASE_STREAMS = ( 1 << 9 ),
+            ERASE_ROADS = ( 1 << 10 ),
 
-            ERASE_ALL_OBJECTS
-            = ERASE_LANDSCAPE | ERASE_ADVENTURE_NON_PICKABLE | ERASE_TOWNS | ERASE_ADVENTURE_PICKABLE | ERASE_MONSTERS | ERASE_HEROES | ERASE_STREAMS | ERASE_ROADS,
+            ERASE_ALL_OBJECTS = ERASE_MOUNTAINS | ERASE_ROCKS | ERASE_TREES | ERASE_LANDSCAPE | ERASE_ADVENTURE_NON_PICKABLE | ERASE_TOWNS | ERASE_ADVENTURE_PICKABLE
+                                | ERASE_MONSTERS | ERASE_HEROES | ERASE_STREAMS | ERASE_ROADS,
         };
 
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
-        const std::array<uint32_t, 8> _eraseButtonObjectTypes{ ObjectErasureType::ERASE_LANDSCAPE, ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE,
-                                                               ObjectErasureType::ERASE_TOWNS,     ObjectErasureType::ERASE_ADVENTURE_PICKABLE,
-                                                               ObjectErasureType::ERASE_MONSTERS,  ObjectErasureType::ERASE_HEROES,
-                                                               ObjectErasureType::ERASE_ROADS,     ObjectErasureType::ERASE_STREAMS };
+        const std::array<uint32_t, 11> _eraseButtonObjectTypes{ ObjectErasureType::ERASE_MOUNTAINS,              ObjectErasureType::ERASE_ROCKS,
+                                                                ObjectErasureType::ERASE_TREES,                  ObjectErasureType::ERASE_LANDSCAPE,
+                                                                ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE, ObjectErasureType::ERASE_TOWNS,
+                                                                ObjectErasureType::ERASE_ADVENTURE_PICKABLE,     ObjectErasureType::ERASE_MONSTERS,
+                                                                ObjectErasureType::ERASE_HEROES,                 ObjectErasureType::ERASE_ROADS,
+                                                                ObjectErasureType::ERASE_STREAMS };
 
         EditorInterface & _interface;
 
@@ -284,7 +289,7 @@ namespace Interface
         std::array<fheroes2::Rect, AdventureObjectBrush::ADVENTURE_COUNT> _adventureObjectButtonsRect;
         std::array<fheroes2::Rect, KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> _kingdomObjectButtonsRect;
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
-        std::array<fheroes2::Rect, 8> _eraseButtonsRect;
+        std::array<fheroes2::Rect, 11> _eraseButtonsRect;
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
 
