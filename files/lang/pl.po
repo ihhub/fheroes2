@@ -3272,7 +3272,7 @@ msgstr ""
 "przegranej"
 
 msgid "About"
-msgstr ""
+msgstr "Info"
 
 #, fuzzy
 msgid "Click to read notes from the map creator."
@@ -4184,9 +4184,8 @@ msgstr "Losowe miasto"
 msgid "BANNED SPELLS"
 msgstr ""
 
-#, fuzzy
 msgid "Click to accept the changes made."
-msgstr "Kliknij aby przejść do następnego miasta."
+msgstr "Kliknij, aby zatwierdzić zmiany."
 
 #, fuzzy
 msgid "Exit this dialog, discarding the changes made."
@@ -4275,102 +4274,90 @@ msgstr "Wybierz zaklęcie:"
 msgid "Castle Settings"
 msgstr "Ustawienia gry"
 
-#, fuzzy
 msgid "Message Text:"
-msgstr "Pasek Wiadomości"
+msgstr "Tekst wiadomości:"
 
 msgid "Reward:"
-msgstr ""
+msgstr "Nagroda:"
 
 msgid "Player colors allowed to get event:"
-msgstr ""
+msgstr "Kolory graczy-ludzi otrzymujących zdarzenie:"
 
 msgid "Computer colors allowed to get event:"
-msgstr ""
+msgstr "Kolory komputerów otrzymujących zdarzenie:"
 
 msgid "First day of occurrence:"
-msgstr ""
+msgstr "Data pierw. zdarzenia:"
 
 msgid "Repeat period (days):"
-msgstr ""
+msgstr "Powtórz co (dni):"
 
 msgid "Allow %{color} human player to get event"
-msgstr ""
+msgstr "Pozwól, by %{color} gracz-człowiek otrzymał zdarzenie"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a human."
-msgstr ""
+msgstr "Jeśli to pole jest zaznaczone, %{color} gracz otrzyma to zdarzenie, jeśli jest kontrolowany przez człowieka."
 
 msgid "Allow %{color} computer player to get event"
-msgstr ""
+msgstr "Pozwól, by %{color} gracz-komputer otrzymał zdarzenie"
 
 msgid ""
 "If this checkbox is checked, this event will trigger for the %{color} player "
 "if they are controlled by a computer."
-msgstr ""
+msgstr "Jeśli to pole jest zaznaczone, %{color} gracz otrzyma to zdarzenie, jeśli jest kontrolowany przez komputer."
 
-#, fuzzy
 msgid "Set %{resource-type} Count:"
-msgstr "Ustaw ilość - %{resource-type}"
+msgstr "Ustaw ilość - %{resource-type}:"
 
-#, fuzzy
 msgid "Message:"
-msgstr "Pasek Wiadomości"
+msgstr "Wiadomość:"
 
-#, fuzzy
 msgid "Click to save the Event properties."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zapisać właściwości zdarzenia."
 
 msgid "No resources will be given as a reward."
-msgstr ""
+msgstr "Żadne zasoby nie zostaną przyznane jako nagroda."
 
-#, fuzzy
 msgid "Resources"
-msgstr "Surowiec"
+msgstr "Zasoby"
 
 msgid "Resources will be given as a reward."
-msgstr ""
+msgstr "Zasoby zostaną przyznane jako nagroda."
 
-#, fuzzy
 msgid "Click here to change the event message."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zmienić tekst wiadomości."
 
 msgid "Event Message Text"
-msgstr ""
+msgstr "Tekst wiadomości"
 
 msgid "Day: %{day}"
 msgstr "Dzień: %{day}"
 
 msgid "Daily events:"
-msgstr ""
+msgstr "Harmonogram zdarzeń:"
 
-#, fuzzy
 msgid "Click to save the events."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zapisać zdarzenia."
 
-#, fuzzy
 msgid "Add Event"
-msgstr "Zdarzenie"
+msgstr "Dodaj zdarzenie"
 
-#, fuzzy
 msgid "Add an additional event."
-msgstr "Programiści"
+msgstr "Dodaj nowe zdarzenie."
 
-#, fuzzy
 msgid "Edit Event"
-msgstr "Zdarzenie"
+msgstr "Zmień zdarzenie"
 
-#, fuzzy
 msgid "Edit an existing event."
-msgstr "Wczytaj istniejącą mapę."
+msgstr "Zmień istniejące zdarzenie."
 
 msgid "Delete Event"
-msgstr ""
+msgstr "Usuń zdarzenie"
 
-#, fuzzy
 msgid "Delete an existing event."
-msgstr "Wczytaj istniejącą mapę."
+msgstr "Usuń istniejące zdarzenie."
 
 #, fuzzy
 msgid "Effects:"
@@ -4884,38 +4871,32 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Pokazuje menu z opcjami systemowymi, pozwalając na zmianę ustawień gry."
 
-#, fuzzy
 msgid "Supported languages:"
-msgstr "Wesprzyj nas"
+msgstr "Wspierane języki:"
 
 msgid "Language"
 msgstr "Język"
 
 msgid "This language already exists in the list."
-msgstr ""
+msgstr "Ten język już istnieje na liście."
 
 msgid "A map should have at least one language."
-msgstr ""
+msgstr "Mapa powinna mieć przynajmniej jeden język."
 
-#, fuzzy
 msgid "Click to apply changes."
-msgstr "Kliknij aby przejść do następnego miasta."
+msgstr "Kliknij, aby zatwierdzić zmiany."
 
-#, fuzzy
 msgid "Add Language"
-msgstr "Język"
+msgstr "Dodaj język"
 
-#, fuzzy
 msgid "Add an additional language."
-msgstr "Programiści"
+msgstr "Dodaj nowy język."
 
-#, fuzzy
 msgid "Delete Language"
-msgstr "Wybierz język gry:"
+msgstr "Usuń język"
 
-#, fuzzy
 msgid "Delete an existing language."
-msgstr "Wczytaj istniejącą mapę."
+msgstr "Usuń istniejący język."
 
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
@@ -4966,17 +4947,14 @@ msgstr "Mapy niedostępne!"
 msgid "[%{pos}]: %{race} hero"
 msgstr "%{color} gracz"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} hero"
-msgstr "Spotkanie: %{name1} i %{name2}"
+msgstr "[%{pos}]: %{name}, %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} castle"
-msgstr "%{color} gracz"
+msgstr "[%{pos}]: Zamek, %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} town"
-msgstr "%{color} gracz"
+msgstr "[%{pos}]: Miasto, %{race}"
 
 #, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
@@ -4986,20 +4964,17 @@ msgstr "Spotkanie: %{name1} i %{name2}"
 msgid "[%{pos}]: %{name}, %{race} town"
 msgstr "Spotkanie: %{name1} i %{name2}"
 
-#, fuzzy
 msgid "None."
-msgstr "Brak"
+msgstr "Brak."
 
-#, fuzzy
 msgid "One side defeats the other."
-msgstr "Wybierz innego bohatera."
+msgstr "Jedna strona pokonuje drugą."
 
-#, fuzzy
 msgid "Accumulate gold."
-msgstr "Zgromadź %{count} złota."
+msgstr "Zgromadzenie złota."
 
 msgid "Run out of time."
-msgstr ""
+msgstr "Upływ czasu."
 
 #, fuzzy
 msgid "alliance|1st"
@@ -5021,20 +4996,17 @@ msgstr " sojusz"
 msgid "alliance|5th"
 msgstr " sojusz"
 
-#, fuzzy
 msgid "Special Loss Condition"
-msgstr "Warunki porażki"
+msgstr "Specjalne warunki porażki"
 
-#, fuzzy
 msgid "Special Victory Condition"
-msgstr "Warunki zwycięstwa"
+msgstr "Specjalne warunki zwycięstwa"
 
-#, fuzzy
 msgid "Allow standard victory conditions"
-msgstr "Warunki zwycięstwa"
+msgstr "Pozwól na standardowe warunki zwycięstwa"
 
 msgid "Allow this condition also for AI"
-msgstr ""
+msgstr "Stosuj ten warunek także dla komputera"
 
 #, fuzzy
 msgid "Set alliances:"
@@ -5044,24 +5016,20 @@ msgstr " sojusz"
 msgid "{%number} alliance: "
 msgstr " sojusz"
 
-#, fuzzy
 msgid "Gold:"
-msgstr "Złoto"
+msgstr "Złoto: "
 
-#, fuzzy
 msgid "Select a Town to capture to achieve victory"
 msgstr "Wybierz miasto docelowe."
 
-#, fuzzy
 msgid "Click here to change the town needed to capture to achieve victory."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zmienić miasto, którego zdobycie oznacza zwycięstwo."
 
 msgid "Select a Hero to defeat to achieve victory"
-msgstr ""
+msgstr "Wybierz bohatera, którego pokonanie oznacza zwycięstwo"
 
-#, fuzzy
 msgid "Click here to change the hero needed to defeat to achieve victory."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zmienić bohatera, którego pokonanie oznacza zwycięstwo."
 
 msgid "Put %{color} player in the %{alliance} alliance"
 msgstr ""
@@ -5072,7 +5040,7 @@ msgid ""
 msgstr ""
 
 msgid "Days:"
-msgstr ""
+msgstr "Dni:"
 
 msgid "Select a Town to lose to suffer defeat"
 msgstr ""
@@ -5088,98 +5056,78 @@ msgstr ""
 msgid "Click here to change the hero whose loss would mean defeat."
 msgstr "Zapisz bieżącą grę."
 
-#, fuzzy
 msgid "Map Difficulty"
-msgstr ""
-"Trudność\n"
-"mapy"
+msgstr "Trudność mapy"
 
 msgid "RUMORS"
-msgstr ""
+msgstr "POGŁOSKI"
 
 msgid "EVENTS"
-msgstr ""
+msgstr "ZDARZENIA"
 
 msgid "LANGUAGE"
-msgstr ""
+msgstr "JĘZYK"
 
 msgid "map|ABOUT"
-msgstr ""
+msgstr "INFO"
 
-#, fuzzy
 msgid "Change Map Name:"
-msgstr ""
-"Wielkość\n"
-"mapy"
+msgstr "Zmień nazwę mapy:"
 
-#, fuzzy
 msgid "Change Map Description:"
-msgstr "Wybrany opis"
+msgstr "Zmień opis mapy:"
 
 msgid "map|About"
-msgstr ""
+msgstr "Info"
 
-#, fuzzy
 msgid "Click to edit custom rumors."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zmienić własne pogłoski."
 
 msgid "Rumors"
-msgstr ""
+msgstr "Pogłoski"
 
-#, fuzzy
 msgid "Click to edit daily events."
-msgstr "Użyj wskazanej rozdzielczości."
+msgstr "Kliknij, aby zmienić harmonogram zdarzeń."
 
-#, fuzzy
 msgid "Events"
-msgstr "Zdarzenie"
+msgstr "Zdarzenia"
 
-#, fuzzy
 msgid "Click to change the language of the map."
-msgstr "Zmień język gry."
+msgstr "Kliknij, aby zmienić język mapy."
 
 msgid ""
 "Click to edit notes from the map creator. These notes are optional and do "
 "not appear during gameplay."
-msgstr ""
+msgstr "Kliknij, aby zmienić notatki od autora mapy. Są one opcjonalne i nie pokazują się podczas rozgrywki."
 
-#, fuzzy
 msgid "Click to change your map name."
-msgstr "Kliknij aby przejść do następnego miasta."
+msgstr "Kliknij, aby zmienić nazwę mapy."
 
-#, fuzzy
 msgid "Map Name"
-msgstr ""
-"Wielkość\n"
-"mapy"
+msgstr "Nazwa mapy"
 
-#, fuzzy
 msgid "Click to change the description of the current map."
-msgstr "Opis aktualnie wybranej mapy."
+msgstr "Kliknij, aby zmienić opis aktualnej mapy."
 
-#, fuzzy
 msgid "Click to change the victory condition of the current map."
-msgstr "Opis aktualnie wybranej mapy."
+msgstr "Kliknij, aby zmienić warunki zwycięstwa aktualnej mapy."
 
-#, fuzzy
 msgid "Click to change the loss condition of the current map."
-msgstr "Opis aktualnie wybranej mapy."
+msgstr "Kliknij, aby zmienić warunki porażki aktualnej mapy."
 
 msgid "Indicates the player types in the scenario. Click to change."
-msgstr ""
+msgstr "Wskazuje typ graczy w scenariuszu. Kliknij, aby zmienić."
 
-#, fuzzy
 msgid "Player Type"
-msgstr "Typ mapy"
+msgstr "Typ graczy"
 
-#, fuzzy
 msgid ""
 "Click to set map difficulty. More difficult maps might include more or "
 "stronger enemies, fewer resources, or other special conditions making things "
 "tougher for the human player."
 msgstr ""
-"Poziom trudności na aktualnie wybranej mapie, określony przez autora "
-"scenariusza. Na bardziej złożonych mapach mogą występować silniejsi "
+"Kliknij, aby ustawić poziom trudności mapy. "
+"Na trudniejszych mapach mogą występować silniejsi "
 "przeciwnicy, mniej zasobów lub inne specjalne warunki utrudniające rozgrywkę."
 
 #, fuzzy
@@ -5207,41 +5155,38 @@ msgid "Toggle display of objects' passability."
 msgstr ""
 
 msgid "Rumors:"
-msgstr ""
+msgstr "Pogłoski:"
 
 msgid "Rumor:"
-msgstr ""
+msgstr "Pogłoska:"
 
 msgid "Rumor"
-msgstr ""
+msgstr "Pogłoska"
 
 msgid "This rumor already exists in the list."
-msgstr ""
+msgstr "Ta pogłoska już istnieje na liście."
 
 #, fuzzy
 msgid "Click to save the rumors."
 msgstr "Zapisz bieżącą grę."
 
 msgid "Add Rumor"
-msgstr ""
+msgstr "Dodaj pogłoskę"
 
-#, fuzzy
 msgid "Add an additional rumor."
-msgstr "Programiści"
+msgstr "Dodaj nową pogłoskę."
 
 msgid "Edit Rumor"
-msgstr ""
+msgstr "Zmień pogłoskę"
 
-#, fuzzy
 msgid "Edit an existing rumor."
-msgstr "Wczytaj istniejącą mapę."
+msgstr "Zmień istniejącą pogłoskę."
 
 msgid "Delete Rumor"
-msgstr ""
+msgstr "Usuń pogłoskę"
 
-#, fuzzy
 msgid "Delete an existing rumor."
-msgstr "Wczytaj istniejącą mapę."
+msgstr "Usuń istniejącą pogłoskę."
 
 #, fuzzy
 msgid ""
@@ -5360,7 +5305,7 @@ msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
+msgstr "Dzień: %{day} Tydzień: %{week} Miesiąc: %{month}"
 
 msgid "difficulty|Easy"
 msgstr "Łatwy"
@@ -6879,7 +6824,7 @@ msgid ""
 msgstr "Obrona"
 
 msgid "The available values range from %{min} to %{max}."
-msgstr ""
+msgstr "Dostępne wartości znajdują się w przedziale od %{min} do %{max}."
 
 msgid "Uppercase"
 msgstr ""
@@ -11913,7 +11858,7 @@ msgid ""
 msgstr ""
 
 msgid "Victory can be achieved by finding any Ultimate Artifact."
-msgstr ""
+msgstr "Zwycięstwo można osiągnąć, znajdując dowolny najpotężniejszy artefakt."
 
 msgid "Dummy 2"
 msgstr "Artefakt 2"
