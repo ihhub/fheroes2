@@ -636,6 +636,9 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         // Clear the initial spells and a possible spellBook.
         SpellBookDeactivate();
 
+        // Make sure that the Artifact Bag is empty.
+        GetBagArtifacts() = {};
+
         const size_t artifactCount = heroMetadata.artifact.size();
         assert( artifactCount == 14 );
         for ( size_t i = 0; i < artifactCount; ++i ) {
