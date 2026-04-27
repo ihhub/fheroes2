@@ -304,7 +304,7 @@ namespace Interface
         struct DragSample
         {
             fheroes2::Point delta;
-            uint64_t timeMs;
+            uint64_t timeMs{};
         };
 
         std::deque<DragSample> _dragSamples;
