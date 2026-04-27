@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <deque>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -252,6 +253,9 @@ namespace Interface
             return _needRedrawByMouseDragging;
         }
 
+        // Advances the inertia scroll by one frame. Returns true if a redraw is needed.
+        bool updateInertia();
+
         bool isFastScrollEnabled() const
         {
             return _isFastScrollEnabled;
@@ -296,6 +300,22 @@ namespace Interface
         bool _needRedrawByMouseDragging{ false };
         bool _isFastScrollEnabled{ false };
         bool _resetMousePositionForFastScroll{ false };
+
+        struct DragSample
+        {
+            fheroes2::Point delta;
+            uint64_t timeMs;
+        };
+
+        std::deque<DragSample> _dragSamples;
+        fheroes2::Time _dragTimer;
+
+        double _inertiaVelX{ 0.0 };
+        double _inertiaVelY{ 0.0 };
+        double _inertiaAccumX{ 0.0 };
+        double _inertiaAccumY{ 0.0 };
+        bool _inertiaActive{ false };
+        fheroes2::Time _inertiaTimer;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const
