@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 03:01+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4662,7 +4662,20 @@ msgstr "Heróis"
 msgid "Towns"
 msgstr "Cidades"
 
-msgid "editorErasure|Landscape objects"
+#, fuzzy
+msgid "editorErasure|Mountains"
+msgstr "Monstros"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Estradas"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Heróis"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Objetos de paisagem"
 
 msgid "editorErasure|Adventure non pickable objects"

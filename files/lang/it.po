@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 03:01+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4571,7 +4571,19 @@ msgid "Towns"
 msgstr "Castello"
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Scegli artefatto:"
 
 msgid "editorErasure|Adventure non pickable objects"

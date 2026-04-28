@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 03:01+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -4691,7 +4691,20 @@ msgstr "Helden"
 msgid "Towns"
 msgstr "Städte"
 
-msgid "editorErasure|Landscape objects"
+#, fuzzy
+msgid "editorErasure|Mountains"
+msgstr "Monster"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Straßen"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Helden"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Landschaftsobjekte"
 
 msgid "editorErasure|Adventure non pickable objects"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 03:01+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4746,7 +4746,19 @@ msgid "Towns"
 msgstr "Thị trấn"
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Chọn Đối tượng Đại dương:"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Chọn Đối tượng Đại dương:"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Chọn Đối tượng Đại dương:"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Chọn Đối tượng Đại dương:"
 
 msgid "editorErasure|Adventure non pickable objects"
