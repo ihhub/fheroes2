@@ -129,7 +129,7 @@ namespace
             : _metadata( metadata )
             , _beforeMetadata( metadata )
         {
-           // Do nothing.
+            // Do nothing.
         }
 
         bool prepare() override
