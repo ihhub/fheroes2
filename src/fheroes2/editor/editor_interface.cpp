@@ -2212,7 +2212,7 @@ namespace Interface
                     std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSecondarySkillSelectionWindow( title, 1, newMetadata.selectedItems )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SELECTION_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
