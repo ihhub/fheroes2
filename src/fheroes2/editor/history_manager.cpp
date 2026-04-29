@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <map>
 
 #include "map_format_helper.h"
 #include "map_format_info.h"
