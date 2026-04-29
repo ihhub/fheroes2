@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +37,7 @@ namespace fheroes2
 {
     class HistoryManager;
 
+    // A generic action class with basic functionality.
     class Action
     {
     public:
@@ -48,10 +49,28 @@ namespace fheroes2
     };
 
     // Remember the map state and create an action if the map has changed.
-    class ActionCreator
+    class ActionCreator final
     {
     public:
-        explicit ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat );
+        enum class ActionType : uint8_t
+        {
+            // A generic map action type. It covers every possible map change scenario but it is the most resource demanding operation.
+            // Use it when you aren't sure what changes are done or the changes are too complex.
+            GENERIC,
+            // Metadata update for a single object type.
+            HERO_METADATA,
+            CASTLE_METADATA,
+            SPHINX_METADATA,
+            SIGN_METADATA,
+            ADVENTURE_MAP_EVENT_METADATA,
+            SELECTION_METADATA,
+            CAPTURABLE_OBJECT_METADATA,
+            MONSTER_METADATA,
+            ARTIFACT_METADATA,
+            RESOURCE_METADATA,
+        };
+
+        explicit ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat, const ActionType type = ActionType::GENERIC );
 
         ~ActionCreator()
         {
@@ -73,7 +92,8 @@ namespace fheroes2
         std::unique_ptr<Action> _action;
     };
 
-    class HistoryManager
+    // Action history manager that stores and handles actions done in the past.
+    class HistoryManager final
     {
     public:
         void setStateCallback( std::function<void( const bool, const bool )> stateCallback )

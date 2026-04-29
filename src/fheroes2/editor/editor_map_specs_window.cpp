@@ -935,7 +935,7 @@ namespace
             return false;
         }
 
-        void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
+        void getConditionMetadata( Maps::Map_Format::BaseMapFormat & mapFormat ) const
         {
             assert( mapFormat.victoryConditionType == _conditionType );
 
@@ -1619,7 +1619,7 @@ namespace
             return false;
         }
 
-        void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
+        void getConditionMetadata( Maps::Map_Format::BaseMapFormat & mapFormat ) const
         {
             assert( _conditionType == mapFormat.lossConditionType );
 
@@ -1953,7 +1953,7 @@ namespace
         return selectedCondition;
     }
 
-    uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const PlayerColor currentColor )
+    uint32_t getPlayerIcnIndex( const Maps::Map_Format::BaseMapFormat & mapFormat, const PlayerColor currentColor )
     {
         if ( !( mapFormat.availablePlayerColors & currentColor ) ) {
             // This player is not available.

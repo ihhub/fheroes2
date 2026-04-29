@@ -1951,7 +1951,7 @@ namespace Interface
                     hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage );
                     Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
                     if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::HERO_METADATA );
                         _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
                         action.commit();
                     }
@@ -1966,7 +1966,7 @@ namespace Interface
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
 
                     if ( Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage ) && ( castleMetadata != newCastleMetadata ) ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::CASTLE_METADATA );
                         castleMetadata = std::move( newCastleMetadata );
                         action.commit();
                     }
@@ -1981,7 +1981,7 @@ namespace Interface
                     const fheroes2::Text body{ std::move( header ), fheroes2::FontType::normalWhite() };
                     if ( Dialog::inputString( fheroes2::Text{}, body, signText, Maps::Map_Format::messageCharLimit, true, _mapFormat.mainLanguage )
                          && originalMessage != signText ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SIGN_METADATA );
                         originalMessage = std::move( signText );
                         action.commit();
                     }
@@ -1994,7 +1994,7 @@ namespace Interface
 
                     if ( Editor::eventDetailsDialog( newEventData, _mapFormat.humanPlayerColors, _mapFormat.computerPlayerColors, _mapFormat.mainLanguage )
                          && newEventData != eventMetadata ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ADVENTURE_MAP_EVENT_METADATA );
                         eventMetadata = std::move( newEventData );
                         action.commit();
                     }
@@ -2027,7 +2027,7 @@ namespace Interface
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
                          && ( _mapFormat.monsterMetadata[object.id].count != monsterCount || ( selectionUi && selectedMonsters != selectionUi->getSelected() ) ) ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::MONSTER_METADATA );
                         _mapFormat.monsterMetadata[object.id].count = monsterCount;
 
                         if ( selectionUi ) {
@@ -2062,7 +2062,7 @@ namespace Interface
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
                     if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI ) && resourceMetadata->second.count != resourceCount ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::RESOURCE_METADATA );
                         resourceMetadata->second.count = resourceCount;
                         action.commit();
                     }
@@ -2075,7 +2075,7 @@ namespace Interface
                         int32_t radius = originalRadius;
 
                         if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius ) && radius != originalRadius ) {
-                            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                            fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
                             originalRadius = radius;
                             action.commit();
                         }
@@ -2095,7 +2095,7 @@ namespace Interface
                             return;
                         }
 
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
 
                         // As of now only one spell can be selected for Spell Scroll.
                         selected.clear();
@@ -2144,7 +2144,7 @@ namespace Interface
 
                         Dialog::multiSelectArtifact( allowed, temp );
                         if ( temp != selected ) {
-                            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                            fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
                             selected = std::move( temp );
                             action.commit();
                         }
@@ -2165,7 +2165,7 @@ namespace Interface
                     Maps::Map_Format::SphinxMetadata newMetadata = originalMetadata;
 
                     if ( Editor::openSphinxWindow( newMetadata, _mapFormat.mainLanguage ) && newMetadata != originalMetadata ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SPHINX_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
@@ -2196,7 +2196,7 @@ namespace Interface
                     std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SELECTION_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
@@ -2229,7 +2229,7 @@ namespace Interface
                     std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SELECTION_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
@@ -2253,7 +2253,7 @@ namespace Interface
                     const PlayerColor newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
 
                     if ( newColor != ownerColor ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::CAPTURABLE_OBJECT_METADATA );
 
                         if ( newColor == PlayerColor::NONE ) {
                             _mapFormat.capturableObjectsMetadata.erase( object.id );
