@@ -5017,7 +5017,7 @@ msgid "{%number} alliance: "
 msgstr " sojusz"
 
 msgid "Gold:"
-msgstr "Złoto: "
+msgstr "Złoto:"
 
 msgid "Select a Town to capture to achieve victory"
 msgstr "Wybierz miasto docelowe."
