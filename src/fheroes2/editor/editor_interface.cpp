@@ -918,9 +918,9 @@ namespace
         // First, find all possible objects in the area around the tile.
         const fheroes2::Point tilePos{ tileId % mapFormat.width, tileId / mapFormat.width };
 
-        const int32_t minX = std::max( 0, tilePos.x - Maps::maxObjectDimensions.width );
+        const int32_t minX = std::max( (int32_t)0, tilePos.x - Maps::maxObjectDimensions.width );
         const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxObjectDimensions.width + 1 );
-        const int32_t minY = std::max( 0, tilePos.y - Maps::maxObjectDimensions.height );
+        const int32_t minY = std::max( (int32_t)0, tilePos.y - Maps::maxObjectDimensions.height );
         const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxObjectDimensions.height + 1 );
 
         std::map<uint32_t, const Maps::Map_Format::TileObjectInfo *> potentialObjects;

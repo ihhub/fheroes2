@@ -26,7 +26,7 @@ set(
 set(
 	GNU_CXX_WARN_OPTS
 	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Wold-style-cast
-	-Woverloaded-virtual -Wsuggest-override
+	-Woverloaded-virtual -Wsuggest-override -fpermissive
 	)
 set(
 	MSVC_CC_WARN_OPTS

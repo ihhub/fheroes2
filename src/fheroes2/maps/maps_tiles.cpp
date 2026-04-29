@@ -607,12 +607,12 @@ int Maps::Tile::getTileIndependentPassability() const
         if ( MP2::isOffGameActionObject( type ) ) {
             // This is an action object part.
             isActionObject = true;
-            return MP2::getActionObjectDirection( type );
+            return (int32_t)MP2::getActionObjectDirection( type );
         }
 
         if ( type == MP2::OBJ_REEFS ) {
             // Reefs are inaccessible.
-            return 0;
+            return (int32_t)0;
         }
 
         if ( !part.isPassabilityTransparent() && !isObjectPartShadow( part ) ) {

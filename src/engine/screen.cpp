@@ -1302,7 +1302,11 @@ namespace
                 return false;
             }
 
+#ifdef __PS2__
+            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_ARGB8888 , SDL_TEXTUREACCESS_STREAMING, resolutionInfo.gameWidth, resolutionInfo.gameHeight );
+#else
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
+#endif
             if ( _texture == nullptr ) {
                 ERROR_LOG( "Failed to create a texture from a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
                                                                            << " size. The error: " << SDL_GetError() )
@@ -1520,8 +1524,8 @@ namespace fheroes2
             Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
             if ( _cursor->_keepInScreenArea ) {
-                cursorROI.x = std::clamp( cursorROI.x, 0, width() - cursorROI.width );
-                cursorROI.y = std::clamp( cursorROI.y, 0, height() - cursorROI.height );
+                cursorROI.x = std::clamp( cursorROI.x, (int32_t)0, width() - cursorROI.width );
+                cursorROI.y = std::clamp( cursorROI.y, (int32_t)0, height() - cursorROI.height );
             }
 
             const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );

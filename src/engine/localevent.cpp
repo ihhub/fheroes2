@@ -1031,7 +1031,7 @@ namespace EventProcessing
                 break;
             }
 
-#if defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined(__PS2__)
             // Custom button mapping for Nintendo Switch
             if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_A ) {
                 buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B;
@@ -1126,7 +1126,7 @@ namespace EventProcessing
                 return;
             }
 
-            const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.which );
+            const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( 0 );
             if ( removedController == nullptr ) {
                 ERROR_LOG( "Failed to remove a controller with ID " << event.which << ". Error description: " << SDL_GetError() )
                 return;
@@ -1141,7 +1141,7 @@ namespace EventProcessing
         void onControllerAddedEvent( const SDL_JoyDeviceEvent & event )
         {
             if ( _gameController == nullptr ) {
-                _gameController = SDL_GameControllerOpen( event.which );
+                _gameController = SDL_GameControllerOpen( 0 );
                 if ( _gameController != nullptr ) {
                     // We force enable the software-rendered mouse cursor to properly convert controller events to mouse events
                     // and render the cursor especially if no hardware mouse device is present and the hardware cursor is disabled by OS.

@@ -42,6 +42,21 @@ target_include_directories(
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
+if(PS2)
+target_link_libraries(
+	engine
+	smacker
+	${USE_SDL_VERSION}::${USE_SDL_VERSION}
+	${USE_SDL_VERSION}_mixer
+	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image>
+	$<$<BOOL:${ENABLE_IMAGE}>:PNG::PNG>
+	Threads::Threads
+	z
+	xmp
+	modplug
+	atomic
+	)
+else()
 target_link_libraries(
 	engine
 	smacker
@@ -52,3 +67,4 @@ target_link_libraries(
 	Threads::Threads
 	ZLIB::ZLIB
 	)
+endif()
