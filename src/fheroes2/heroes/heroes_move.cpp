@@ -310,7 +310,7 @@ void Heroes::_angleStep( const int targetDirection )
 
     // Reset turning animation delay.
     _skippedFramesForAngleStep = 0;
-    
+
     const bool clockwise = Direction::ShortDistanceClockWise( _direction, targetDirection );
 
     // start index
