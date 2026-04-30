@@ -38,7 +38,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Contribution and Development
 
-This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](docs/FAQ.md).
+This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](docs/FAQ.md#q-how-can-i-contribute-to-the-project).
 
 ### Developing fheroes2 engine
 
