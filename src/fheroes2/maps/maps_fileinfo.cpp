@@ -65,8 +65,8 @@ namespace
     {
         assert( humanPlayerCount >= 1 );
 
-        // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
-        std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
+        MapsFileInfoList result;
+        result.reserve( mapFiles.size() );
 
         const auto currentLanguage = fheroes2::getCurrentLanguage();
 
@@ -115,14 +115,7 @@ namespace
                 fheroes2::fixFrenchCharactersForMP2Map( fi.description );
             }
 
-            uniqueMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
-        }
-
-        MapsFileInfoList result;
-        result.reserve( uniqueMaps.size() );
-
-        for ( auto & [name, info] : uniqueMaps ) {
-            result.emplace_back( std::move( info ) );
+            result.emplace_back( std::move( fi ) );
         }
 
         return result;
