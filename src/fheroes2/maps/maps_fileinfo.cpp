@@ -775,7 +775,8 @@ MapsFileInfoList Maps::getEditorMapFileInfos()
         return {};
     }
 
-    std::map<std::string, Maps::FileInfo, std::less<>> sortedMaps;
+    // There could be different file locations but with the same filename.
+    std::multimap<std::string, Maps::FileInfo, std::less<>> sortedMaps;
     const auto currentLanguage = fheroes2::getCurrentLanguage();
 
     for ( const std::string & mapFile : maps ) {
@@ -785,7 +786,7 @@ MapsFileInfoList Maps::getEditorMapFileInfos()
             continue;
         }
 
-        sortedMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
+        sortedMaps.emplace( System::GetFileName( mapFile ), std::move( fi ) );
     }
 
     if ( sortedMaps.empty() ) {
