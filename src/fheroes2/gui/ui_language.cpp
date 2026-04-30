@@ -132,7 +132,7 @@ namespace fheroes2
                                                              SupportedLanguage::Esperanto };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
-            if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
+            if ( language != resourceLanguage ) {
                 supportedLanguges[getCodePage( language )].emplace_back( language );
             }
         }

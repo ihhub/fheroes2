@@ -6599,38 +6599,6 @@ namespace fheroes2
         icnVsSprite[ICN::SILVER_GRADIENT_LARGE_FONT].clear();
     }
 
-    bool isAlphabetSupported( const SupportedLanguage language )
-    {
-        switch ( language ) {
-        case SupportedLanguage::Belarusian:
-        case SupportedLanguage::Bulgarian:
-        case SupportedLanguage::Czech:
-        case SupportedLanguage::Danish:
-        case SupportedLanguage::Dutch:
-        case SupportedLanguage::French:
-        case SupportedLanguage::German:
-        case SupportedLanguage::Greek:
-        case SupportedLanguage::Hungarian:
-        case SupportedLanguage::Italian:
-        case SupportedLanguage::Norwegian:
-        case SupportedLanguage::Polish:
-        case SupportedLanguage::Portuguese:
-        case SupportedLanguage::Romanian:
-        case SupportedLanguage::Russian:
-        case SupportedLanguage::Slovak:
-        case SupportedLanguage::Spanish:
-        case SupportedLanguage::Swedish:
-        case SupportedLanguage::Turkish:
-        case SupportedLanguage::Ukrainian:
-        case SupportedLanguage::Vietnamese:
-            return true;
-        default:
-            break;
-        }
-
-        return false;
-    }
-
     void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );

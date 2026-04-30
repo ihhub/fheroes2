@@ -5843,9 +5843,7 @@ namespace fheroes2::AGG
         static bool areOriginalResourcesInUse = false;
         static CodePage currentCodePage{ CodePage::NONE };
 
-        const bool loadOriginalResources = loadOriginalAlphabet || !isAlphabetSupported( language );
-
-        if ( loadOriginalResources ) {
+        if ( loadOriginalAlphabet ) {
             if ( alphabetPreserver.isPreserved() ) {
                 if ( areOriginalResourcesInUse ) {
                     // Since we are already using the original resources, we don't need to do anything else.
@@ -5881,6 +5879,6 @@ namespace fheroes2::AGG
         }
 
         currentCodePage = getCodePage( language );
-        areOriginalResourcesInUse = loadOriginalResources;
+        areOriginalResourcesInUse = loadOriginalAlphabet;
     }
 }
