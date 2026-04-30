@@ -736,7 +736,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     return stream;
 }
 
-MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )
+MapsFileInfoList Maps::getAllMapFileInfos( const uint8_t humanPlayerCount )
 {
     ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
 
@@ -746,11 +746,11 @@ MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t
         maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
     }
 
-    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, true );
+    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, false, true );
 
     if ( isPOLSupported ) {
         const ListFiles resurrectionMaps = Settings::FindFiles( "maps", ".fh2m", false );
-        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, isForEditor, false );
+        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, false, false );
 
         validMaps.reserve( maps.size() + resurrectionMaps.size() );
 
@@ -759,17 +759,12 @@ MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t
         }
     }
 
-    if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
-    }
-    else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
-    }
+    std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
 
     return validMaps;
 }
 
-MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )
+MapsFileInfoList Maps::getEditorMapFileInfos()
 {
     if ( !Settings::Get().isPriceOfLoyaltySupported() ) {
         // Resurrection maps require POL resources presence.
@@ -777,16 +772,33 @@ MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, cons
     }
 
     const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
-    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, false );
-
-    if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
-    }
-    else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
+    if ( maps.empty() ) {
+        // No files exist.
+        return {};
     }
 
-    return validMaps;
+    std::map<std::string, Maps::FileInfo, std::less<>> sortedMaps;
+
+    const auto currentLanguage = fheroes2::getCurrentLanguage();
+
+    for ( const std::string & mapFile : maps ) {
+        Maps::FileInfo fi;
+
+        if ( !fi.readResurrectionMap( mapFile, true, currentLanguage ) ) {
+            continue;
+        }
+
+        sortedMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
+    }
+
+    MapsFileInfoList result;
+    result.reserve( sortedMaps.size() );
+
+    for ( auto & [name, info] : sortedMaps ) {
+        result.emplace_back( std::move( info ) );
+    }
+
+    return result;
 }
 
 bool Maps::tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )

@@ -182,7 +182,7 @@ namespace Editor
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
+        MapsFileInfoList lists = Maps::getEditorMapFileInfos();
 
         const int32_t listWidth = maxFileNameWidth + 9;
         const int32_t listHeightDeduction = 112 + 17;
