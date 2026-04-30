@@ -110,7 +110,7 @@ namespace
             }
 
             // Update French language-specific characters to match CP1252.
-            if ( fixSpecialFrenchCharacters ) {
+            if ( isOriginalMapFormat && fixSpecialFrenchCharacters ) {
                 fheroes2::fixFrenchCharactersForMP2Map( fi.name );
                 fheroes2::fixFrenchCharactersForMP2Map( fi.description );
             }
