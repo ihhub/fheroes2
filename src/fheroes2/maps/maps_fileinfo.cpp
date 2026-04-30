@@ -63,6 +63,8 @@ namespace
     // This function returns an unsorted array. It is a caller responsibility to take care of sorting if needed.
     MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isOriginalMapFormat )
     {
+        assert( humanPlayerCount >= 1 );
+
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
         std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
@@ -89,8 +91,6 @@ namespace
                     continue;
                 }
             }
-
-            assert( humanPlayerCount >= 1 );
 
             const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
             if ( humanOnlyColorsCount > humanPlayerCount ) {
