@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,8 +24,8 @@ class ThemeManager
     // Static properties
     static themeToggle = null;
     static themeKey = "theme";
-    static darkTheme = "dark";
-    static lightTheme = "light";
+    static darkTheme = "Evil";
+    static lightTheme = "Good";
     static accessibility = null;
 
     // Static initialization method
@@ -54,15 +54,15 @@ class ThemeManager
 
         // Update button text and ARIA attributes
         if ( this.themeToggle ) {
-            this.themeToggle.textContent = theme === this.darkTheme ? "☀️ Light Mode" : "🌙 Dark Mode";
+            this.themeToggle.textContent = theme === this.darkTheme ? "☀️ Good Interface" : "🌙 Evil Interface";
 
             // Update ARIA attributes
-            this.themeToggle.setAttribute( "aria-label", `Switch to ${theme === this.darkTheme ? this.lightTheme : this.darkTheme} mode` );
+            this.themeToggle.setAttribute( "aria-label", `Switch to ${theme === this.darkTheme ? this.lightTheme : this.darkTheme} Interface` );
             this.themeToggle.setAttribute( "aria-pressed", theme === this.darkTheme ? "true" : "false" );
 
             // Announce theme change if accessibility manager is available
             if ( this.accessibility ) {
-                this.accessibility.announce( `${theme === this.darkTheme ? 'Dark' : 'Light'} mode activated` );
+                this.accessibility.announce( `${theme === this.darkTheme ? 'Evil' : 'Good'} Interface activated` );
             }
         }
     }
@@ -105,7 +105,7 @@ class ThemeManager
         if ( this.themeToggle ) {
             // Set initial ARIA attributes
             const currentTheme = document.documentElement.getAttribute( "data-theme" );
-            this.themeToggle.setAttribute( "aria-label", `Switch to ${currentTheme === this.darkTheme ? this.lightTheme : this.darkTheme} mode` );
+            this.themeToggle.setAttribute( "aria-label", `Switch to ${currentTheme === this.darkTheme ? this.lightTheme : this.darkTheme} Interface` );
             this.themeToggle.setAttribute( "aria-pressed", currentTheme === this.darkTheme ? "true" : "false" );
 
             // Add keyboard event handling
