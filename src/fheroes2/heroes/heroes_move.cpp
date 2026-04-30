@@ -294,6 +294,23 @@ bool Heroes::_moveStep( const bool jumpToNextTile )
 
 void Heroes::_angleStep( const int targetDirection )
 {
+    // Hero movement animation depends on the animation speed.
+    // To make the speed of the hero turning animation the same
+    // we need to skip certain frames.
+    const int speedMultiplier = isControlHuman() ? Game::HumanHeroAnimSpeedMultiplier() : Game::AIHeroAnimSpeedMultiplier();
+    assert( speedMultiplier > 0 );
+    const int32_t framesToSkip = std::clamp( 4 / speedMultiplier, 1, 3 );
+    assert( _skippedFramesForAngleStep >= 0);
+
+    ++_skippedFramesForAngleStep;
+    if ( _skippedFramesForAngleStep < framesToSkip ) {
+        // Skip the animation change for this frame.
+        return;
+    }
+
+    // Reset turning animation delay.
+    _skippedFramesForAngleStep = 0;
+    
     const bool clockwise = Direction::ShortDistanceClockWise( _direction, targetDirection );
 
     // start index
@@ -595,17 +612,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
         }
 
         if ( const int frontDirection = _path.GetFrontDirection(); GetDirection() != frontDirection ) {
-            // Hold rotation frame for N ticks to match the movement speed (similar to original game)
-            const int speedMultiplier = isControlHuman() ? Game::HumanHeroAnimSpeedMultiplier() : Game::AIHeroAnimSpeedMultiplier();
-            const int32_t angleStepFramesToSkip = std::clamp( 4 / speedMultiplier, 1, 3 );
-            ++_skippedFramesForAngleStep;
-
-            if ( _skippedFramesForAngleStep >= angleStepFramesToSkip ) {
-                _skippedFramesForAngleStep = 0;
-
-                // The hero is changing the direction of movement.
-                _angleStep( frontDirection );
-            }
+            _angleStep( frontDirection );
         }
         else {
             // Set valid direction sprite in case of AI hero appearing from fog.
