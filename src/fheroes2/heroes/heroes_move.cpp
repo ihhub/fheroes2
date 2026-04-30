@@ -300,7 +300,7 @@ void Heroes::_angleStep( const int targetDirection )
     const int speedMultiplier = isControlHuman() ? Game::HumanHeroAnimSpeedMultiplier() : Game::AIHeroAnimSpeedMultiplier();
     assert( speedMultiplier > 0 );
     const int32_t framesToSkip = std::clamp( 4 / speedMultiplier, 1, 3 );
-    assert( _skippedFramesForAngleStep >= 0);
+    assert( _skippedFramesForAngleStep >= 0 );
 
     ++_skippedFramesForAngleStep;
     if ( _skippedFramesForAngleStep < framesToSkip ) {
@@ -612,6 +612,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
         }
 
         if ( const int frontDirection = _path.GetFrontDirection(); GetDirection() != frontDirection ) {
+            // The hero is changing the direction of movement.
             _angleStep( frontDirection );
         }
         else {
