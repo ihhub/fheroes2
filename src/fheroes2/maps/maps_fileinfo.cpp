@@ -778,7 +778,6 @@ MapsFileInfoList Maps::getEditorMapFileInfos()
     }
 
     std::map<std::string, Maps::FileInfo, std::less<>> sortedMaps;
-
     const auto currentLanguage = fheroes2::getCurrentLanguage();
 
     for ( const std::string & mapFile : maps ) {
@@ -789,6 +788,11 @@ MapsFileInfoList Maps::getEditorMapFileInfos()
         }
 
         sortedMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
+    }
+
+    if ( sortedMaps.empty() ) {
+        // No valid maps.
+        return {};
     }
 
     MapsFileInfoList result;
