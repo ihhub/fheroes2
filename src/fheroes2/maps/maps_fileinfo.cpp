@@ -61,7 +61,7 @@ namespace
     const size_t mapDescriptionLength = 200;
 
     // This function returns an unsorted array. It is a caller responsibility to take care of sorting if needed.
-    MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isForEditor, const bool isOriginalMapFormat )
+    MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isOriginalMapFormat )
     {
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
         std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
@@ -80,41 +80,39 @@ namespace
             Maps::FileInfo fi;
 
             if ( isOriginalMapFormat ) {
-                if ( !fi.readMP2Map( mapFile, isForEditor ) ) {
+                if ( !fi.readMP2Map( mapFile, false ) ) {
                     continue;
                 }
             }
             else {
-                if ( !fi.readResurrectionMap( mapFile, isForEditor, currentLanguage ) ) {
+                if ( !fi.readResurrectionMap( mapFile, false, currentLanguage ) ) {
                     continue;
                 }
             }
 
-            if ( !isForEditor ) {
-                assert( humanPlayerCount >= 1 );
+            assert( humanPlayerCount >= 1 );
 
-                const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
-                if ( humanOnlyColorsCount > humanPlayerCount ) {
-                    // This map requires more human-only players than needed.
-                    continue;
-                }
+            const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
+            if ( humanOnlyColorsCount > humanPlayerCount ) {
+                // This map requires more human-only players than needed.
+                continue;
+            }
 
-                const int computerHumanColorsCount = Color::Count( fi.AllowCompHumanColors() );
-                if ( humanPlayerCount > ( humanOnlyColorsCount + computerHumanColorsCount ) ) {
-                    // This map does not allow to be played by this number of human players.
-                    continue;
-                }
+            const int computerHumanColorsCount = Color::Count( fi.AllowCompHumanColors() );
+            if ( humanPlayerCount > ( humanOnlyColorsCount + computerHumanColorsCount ) ) {
+                // This map does not allow to be played by this number of human players.
+                continue;
+            }
 
-                if ( humanOnlyColorsCount == humanPlayerCount ) {
-                    // The map has the exact number of human-only players. Make sure that the user cannot select any other players.
-                    fi.removeHumanColors( fi.AllowCompHumanColors() );
-                }
+            if ( humanOnlyColorsCount == humanPlayerCount ) {
+                // The map has the exact number of human-only players. Make sure that the user cannot select any other players.
+                fi.removeHumanColors( fi.AllowCompHumanColors() );
+            }
 
-                // Update French language-specific characters to match CP1252.
-                if ( fixSpecialFrenchCharacters ) {
-                    fheroes2::fixFrenchCharactersForMP2Map( fi.name );
-                    fheroes2::fixFrenchCharactersForMP2Map( fi.description );
-                }
+            // Update French language-specific characters to match CP1252.
+            if ( fixSpecialFrenchCharacters ) {
+                fheroes2::fixFrenchCharactersForMP2Map( fi.name );
+                fheroes2::fixFrenchCharactersForMP2Map( fi.description );
             }
 
             uniqueMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
@@ -746,11 +744,11 @@ MapsFileInfoList Maps::getAllMapFileInfos( const uint8_t humanPlayerCount )
         maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
     }
 
-    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, false, true );
+    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, true );
 
     if ( isPOLSupported ) {
         const ListFiles resurrectionMaps = Settings::FindFiles( "maps", ".fh2m", false );
-        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, false, false );
+        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, false );
 
         validMaps.reserve( maps.size() + resurrectionMaps.size() );
 
