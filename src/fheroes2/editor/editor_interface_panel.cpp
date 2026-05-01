@@ -417,8 +417,8 @@ namespace Interface
 
         // Detail mode types.
         for ( size_t i = 0; i < _detailModeButtonsRect.size(); ++i ) {
-            _detailModeButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 2 ) * 2 * buttonStepX,
-                                          offsetY + static_cast<int32_t>( i / 2 ) * buttonStepY, buttonWidth, buttonHeight };
+            _detailModeButtonsRect[i]
+                = { offsetX + static_cast<int32_t>( i % 2 ) * 2 * buttonStepX, offsetY + static_cast<int32_t>( i / 2 ) * buttonStepY, buttonWidth, buttonHeight };
         }
 
         // Adventure objects buttons position.
