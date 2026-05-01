@@ -281,7 +281,10 @@ public:
     // Sets the speed of AI-controlled heroes in the range 0 - 10, 0 means "don't show"
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
-    void setMapScrollInertia( bool enable );
+    void setMapScrollInertia( const bool enable )
+    {
+        _mapScrollInertia = enable;
+    }
     // Sets the speed of human-controlled heroes in the range 1 - 10
     void SetHeroesMoveSpeed( int );
     // Sets the animation speed during combat in the range 1 - 10

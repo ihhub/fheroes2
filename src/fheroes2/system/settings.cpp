@@ -935,11 +935,6 @@ void Settings::SetScrollSpeed( int speed )
     scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
 }
 
-void Settings::setMapScrollInertia( const bool enable )
-{
-    _mapScrollInertia = enable;
-}
-
 bool Settings::isPriceOfLoyaltySupported() const
 {
     return _gameOptions.Modes( GAME_PRICELOYALTY );
