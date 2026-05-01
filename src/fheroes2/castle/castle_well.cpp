@@ -242,9 +242,9 @@ void Castle::_openWell()
 
     LocalEvent & le = LocalEvent::Get();
 
-    Game::passAnimationDelay( Game::CASTLE_UNIT_DELAY );
+    Game::passAnimationDelay( Game::DelayType::CASTLE_UNIT_DELAY );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CASTLE_UNIT_DELAY } ) ) ) {
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
         buttonMax.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMax.area() ) );
@@ -284,7 +284,7 @@ void Castle::_openWell()
             }
         }
 
-        if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CASTLE_UNIT_DELAY ) ) {
             fheroes2::Copy( background, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
 
             _wellRedrawMonsterAnimation( roi, monsterAnimInfo );
