@@ -993,6 +993,10 @@ namespace Interface
                         _redraw();
                         handleObjectMouseClick( Dialog::selectMonsterType );
                     }
+                    else if ( _selectedInstrument == Instrument::DETAIL ) {
+                        // Reset to Detail Editing mode.
+                        _selectedDetailBrushType = DetailBrushType::EDITING;
+                    }
 
                     setRedraw();
 
