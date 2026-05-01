@@ -378,7 +378,7 @@ namespace Battle
                            LoopedAnimationSequence & sequence, std::string & title, std::string & surrenderText, std::string & outcomeText );
 }
 
-void Battle::DialogBattleSettings()
+void Battle::DialogBattleSettings( const bool isTurnOrderInsideWindow )
 {
     // We should make file writing only once.
     bool saveConfiguration = false;
@@ -392,7 +392,7 @@ void Battle::DialogBattleSettings()
             action = openBattleOptionDialog( saveConfiguration );
             break;
         case DialogAction::InterfaceSettings:
-            saveConfiguration |= showBattleInterfaceDialog();
+            saveConfiguration |= showBattleInterfaceDialog( isTurnOrderInsideWindow );
             action = DialogAction::Open;
             break;
         case DialogAction::AudioSettings:

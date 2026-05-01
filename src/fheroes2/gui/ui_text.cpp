@@ -610,8 +610,9 @@ namespace fheroes2
 
                 const int32_t charWidth = charHandler.getWidth( *data );
 
-                if ( lineWidth + charWidth > maxWidth ) {
-                    // Current character has exceeded the maximum line width.
+                if ( ( lineWidth != 0 ) && ( lineWidth + charWidth > maxWidth ) ) {
+                    // Current character has exceeded the maximum line width
+                    // and the character is not bigger than the maximum width.
 
                     if ( !_keepLineTrailingSpaces && isSpaceChar( *data ) ) {
                         // Current character could be a space character then current line is over.

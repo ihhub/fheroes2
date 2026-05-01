@@ -182,7 +182,7 @@ namespace Editor
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
+        MapsFileInfoList lists = Maps::getEditorMapFileInfos();
 
         const int32_t listWidth = maxFileNameWidth + 9;
         const int32_t listHeightDeduction = 112 + 17;
@@ -362,7 +362,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
-                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ _( "Change Map Name:" ), fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.

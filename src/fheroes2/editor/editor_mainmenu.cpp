@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,6 +33,7 @@
 #include "dialog_selectscenario.h"
 #include "editor_interface.h"
 #include "game.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
@@ -221,7 +222,13 @@ namespace Editor
 
         bool generateRandomMap = false;
 
-        while ( le.HandleEvents() ) {
+        while ( true ) {
+            if ( !le.HandleEvents( true, true ) || HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
+                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                    return fheroes2::GameMode::QUIT_GAME;
+                }
+            }
+
             if ( buttonNewMap.isEnabled() ) {
                 mainModeButtons.drawOnState( le );
                 buttonMainMenu.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMainMenu.area() ) );
@@ -382,7 +389,7 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
+        MapsFileInfoList lists = Maps::getEditorMapFileInfos();
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-29 15:04+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2026-04-01 14:30+0100\n"
 "Last-Translator: Yannis Anthymidis <yannis-foss@anth.me.uk>\n"
 "Language-Team: Greek\n"
@@ -490,7 +490,7 @@ msgstr ""
 msgid "Move the %{name}"
 msgstr ""
 
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr ""
 
 msgid "%{name} destroys half the enemy troops!"
@@ -1019,6 +1019,12 @@ msgstr ""
 msgid "Perish: %{min} - %{max}"
 msgstr ""
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr ""
 
@@ -1068,10 +1074,10 @@ msgstr ""
 msgid "Human"
 msgstr ""
 
-msgid "AI"
+msgid "Terrain"
 msgstr ""
 
-msgid "Terrain"
+msgid "Battle Only"
 msgstr ""
 
 msgid "Start"
@@ -1102,10 +1108,14 @@ msgstr ""
 msgid "Please select another hero."
 msgstr ""
 
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr ""
 
-msgid "Click to set this hero to be AI-controlled."
+msgid "Hero"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3256,22 +3266,22 @@ msgstr ""
 msgid "Random Map Generator"
 msgstr ""
 
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr ""
 
-msgid "rmg|Map layout"
+msgid "rmg|Map layout:"
 msgstr ""
 
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr ""
 
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr ""
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 msgid "Click to generate a new map."
@@ -3456,6 +3466,9 @@ msgstr ""
 msgid "Select Monsters:"
 msgstr ""
 
+msgid "Select Artifacts:"
+msgstr ""
+
 msgid "race|Random"
 msgstr ""
 
@@ -3480,7 +3493,7 @@ msgstr ""
 msgid "Select Ocean Object:"
 msgstr ""
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3513,7 +3526,7 @@ msgstr ""
 msgid "Select Landscape Object:"
 msgstr ""
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3545,7 +3558,7 @@ msgstr ""
 msgid "Select Adventure Object:"
 msgstr ""
 
-msgid "Select color"
+msgid "Select color:"
 msgstr ""
 
 msgid "Players Icon"
@@ -3846,10 +3859,13 @@ msgstr ""
 msgid "Town Army"
 msgstr ""
 
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr ""
+
 msgid "Click to change the Castle name."
 msgstr ""
 
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr ""
 
 msgid "Reset the Castle name."
@@ -3919,6 +3935,9 @@ msgid ""
 "if they are controlled by a computer."
 msgstr ""
 
+msgid "Set %{resource-type} Count:"
+msgstr ""
+
 msgid "Message:"
 msgstr ""
 
@@ -3943,7 +3962,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 msgid "Click to save the events."
@@ -3979,7 +3998,7 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr ""
 
 msgid "Artifact"
@@ -4032,7 +4051,7 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
@@ -4123,10 +4142,10 @@ msgstr ""
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4203,8 +4222,11 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
 
 msgid "Erase"
@@ -4246,7 +4268,16 @@ msgstr ""
 msgid "Towns"
 msgstr ""
 
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr ""
+
+msgid "editorErasure|Rocks"
+msgstr ""
+
+msgid "editorErasure|Trees"
+msgstr ""
+
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr ""
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4343,7 +4374,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -4419,7 +4450,7 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr ""
 
 msgid "Language"
@@ -4600,10 +4631,18 @@ msgstr "ΣΥΜΒΑΝΤΑ"
 msgid "LANGUAGE"
 msgstr "ΓΛΩΣΣΑ"
 
-msgid "Change Map Name"
+# η λέξη «ΠΛΗΡΟΦΟΡΙΕΣ» είναι πιο σωστή, αλλά ήταν υπερβολικά μεγάλη
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "ΣΧΕΤΙΚΑ"
+
+msgid "Change Map Name:"
 msgstr ""
 
-msgid "Change Map Description"
+msgid "Change Map Description:"
+msgstr ""
+
+msgid "map|About"
 msgstr ""
 
 msgid "Click to edit custom rumors."
@@ -4671,6 +4710,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -4931,7 +4973,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many-many other contributors and supporters!"
+msgid "and all the people who have helped make the project possible!"
 msgstr ""
 
 msgid "Support us at"
@@ -5066,6 +5108,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr ""
+
 msgid "High Scores"
 msgstr ""
 
@@ -5114,6 +5162,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5136,9 +5187,6 @@ msgid "hotkey|multi-player game"
 msgstr ""
 
 msgid "hotkey|settings"
-msgstr ""
-
-msgid "hotkey|quit"
 msgstr ""
 
 msgid "hotkey|select map"
@@ -5594,9 +5642,6 @@ msgid ""
 "on a single map."
 msgstr ""
 
-msgid "Battle Only"
-msgstr ""
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
@@ -6013,12 +6058,6 @@ msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr ""
-
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 
@@ -6136,7 +6175,7 @@ msgid ""
 "value"
 msgstr ""
 
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr ""
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6153,14 +6192,51 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+msgid "Click to switch to uppercase letters."
+msgstr ""
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "ΚΕΝΟ"
 
+msgid "Change language"
+msgstr ""
+
+msgid "Click to switch between languages."
+msgstr ""
+
+msgid "Backspace"
+msgstr ""
+
+msgid "Click to remove characters."
+msgstr ""
+
+msgid "Lowercase"
+msgstr ""
+
+msgid "Click to switch to lowercase letters."
+msgstr ""
+
 msgid "Keyboard|ABC"
 msgstr "ΑΒΓ"
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr ""
@@ -6244,6 +6320,9 @@ msgstr ""
 
 msgid "Greek"
 msgstr "Ελληνικά"
+
+msgid "Esperanto"
+msgstr ""
 
 msgid "Slow"
 msgstr ""
@@ -7573,16 +7652,16 @@ msgstr ""
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr ""
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 msgid "Click to change class."
@@ -7641,6 +7720,9 @@ msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
 
 msgid "Click to enable hero's patrol mode."
+msgstr ""
+
+msgid "Do you want to save the changes made?"
 msgstr ""
 
 msgid "Blood Morale"
@@ -8630,9 +8712,6 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
-msgstr ""
-
-msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"

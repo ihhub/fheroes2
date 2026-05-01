@@ -1256,7 +1256,7 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
 }
 
 void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output,
-                                const fheroes2::Rect & dialogRoi )
+                                const fheroes2::Rect & dialogRoi, const bool isAboveDialog )
 {
     if ( _restorer ) {
         _restorer->restore();
@@ -1280,9 +1280,14 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
     }
 
     auto & display = fheroes2::Display::instance();
-    _isInsideBattleField = ( dialogRoi.y <= turnOrderMonsterIconSize );
+    _isInsideBattleField = isRenderingInsideBattlefieldWindow( dialogRoi );
 
     const int32_t unitsToDraw = std::min( _battleRoi.width / turnOrderMonsterIconSize, validUnitCount );
+
+    if ( !_isInsideBattleField && ( isAboveDialog != _isAboveDialog ) ) {
+        _isAboveDialog = isAboveDialog;
+        _rects.clear();
+    }
 
     if ( _rects.size() != static_cast<size_t>( unitsToDraw ) ) {
         // Update units icons positions.
@@ -1301,7 +1306,12 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         }
         else {
             _renderingRoi.x = offsetX;
-            _renderingRoi.y = dialogRoi.y - turnOrderMonsterIconSize;
+            if ( _isAboveDialog ) {
+                _renderingRoi.y = dialogRoi.y - turnOrderMonsterIconSize;
+            }
+            else {
+                _renderingRoi.y = dialogRoi.y + dialogRoi.height;
+            }
         }
 
         _renderingRoi.height = turnOrderMonsterIconSize;
@@ -1362,6 +1372,12 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         ++unitRectIndex;
         ++unitsProcessed;
     }
+}
+
+bool Battle::TurnOrder::isRenderingInsideBattlefieldWindow( const fheroes2::Rect & battlefieldWindow )
+{
+    // It is assumed that the window is centered in relation to display.
+    return ( battlefieldWindow.y <= turnOrderMonsterIconSize );
 }
 
 Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
@@ -1632,13 +1648,14 @@ void Battle::Interface::RedrawPartialFinish()
 
 void Battle::Interface::redrawPreRender()
 {
-    if ( Settings::Get().BattleShowTurnOrder() ) {
+    const auto turnOrderState = Settings::Get().getBattleTurnOrderState();
+    if ( turnOrderState != BattleTurnOrderState::OFF ) {
         const Unit * unit = nullptr;
         const Cell * cell = Board::GetCell( _currentCellIndex );
         if ( cell != nullptr ) {
             unit = cell->GetUnit();
         }
-        _turnOrder.redraw( _currentUnit, _contourColor, unit, _mainSurface, border.GetRect() );
+        _turnOrder.redraw( _currentUnit, _contourColor, unit, _mainSurface, border.GetRect(), ( turnOrderState == BattleTurnOrderState::TOP ) );
     }
     else {
         // If the option is being turned off we need to restore the background and clear the restorer to avoid repeating the same image operation.
@@ -3199,7 +3216,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         // Toggle the display of the battle turn order
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_TOGGLE_TURN_ORDER_DISPLAY ) ) {
-            conf.setBattleShowTurnOrder( !conf.BattleShowTurnOrder() );
+            conf.switchToNextBattleTurnOrderState();
 
             _needRedraw = true;
         }
@@ -3272,7 +3289,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
-    else if ( conf.BattleShowTurnOrder() && le.isMouseCursorPosInArea( _turnOrder.getRenderingRoi() ) ) {
+    else if ( ( conf.getBattleTurnOrderState() != BattleTurnOrderState::OFF ) && le.isMouseCursorPosInArea( _turnOrder.getRenderingRoi() ) ) {
         cursor.SetThemes( Cursor::POINTER );
         if ( _turnOrder.queueEventProcessing( *this, msg, _interfacePosition.getPosition(), highlightUnitMovementArea ) ) {
             _needRedraw = true;
@@ -3588,8 +3605,9 @@ void Battle::Interface::_openBattleSettingsDialog()
 {
     const Settings & conf = Settings::Get();
     const bool showGrid = conf.BattleShowGrid();
+    const bool isTurnOrderInsideWindow{ TurnOrder::isRenderingInsideBattlefieldWindow( border.GetRect() ) };
 
-    DialogBattleSettings();
+    DialogBattleSettings( isTurnOrderInsideWindow );
 
     if ( showGrid != conf.BattleShowGrid() ) {
         // The grid setting has changed. Update for the Battlefield ground.
@@ -6538,9 +6556,9 @@ void Battle::Interface::_redrawActionArmageddonSpell()
 
     // Hide Turn Order for the Armageddon animation original image not to shake it together with the land.
     Settings & settings = Settings::Get();
-    const bool isTurnOrderShown = settings.BattleShowTurnOrder();
-    if ( isTurnOrderShown ) {
-        settings.setBattleShowTurnOrder( false );
+    const auto turnOrderState = settings.getBattleTurnOrderState();
+    if ( turnOrderState != BattleTurnOrderState::OFF ) {
+        settings.setBattleTurnOrderState( BattleTurnOrderState::OFF );
     }
 
     // Set all non-dead troops animation to static and redraw the '_mainSurface'.
@@ -6548,8 +6566,8 @@ void Battle::Interface::_redrawActionArmageddonSpell()
     RedrawPartialStart();
 
     // Restore the Turn Order rendering if it was enabled.
-    if ( isTurnOrderShown ) {
-        settings.setBattleShowTurnOrder( true );
+    if ( turnOrderState != BattleTurnOrderState::OFF ) {
+        settings.setBattleTurnOrderState( turnOrderState );
     }
 
     fheroes2::Image spriteWhitening;
@@ -6616,9 +6634,9 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
 
     // Hide Turn Order for the Earthquake animation original image not to shake it together with the land.
     Settings & settings = Settings::Get();
-    const bool isTurnOrderShown = settings.BattleShowTurnOrder();
-    if ( isTurnOrderShown ) {
-        settings.setBattleShowTurnOrder( false );
+    const auto turnOrderState = settings.getBattleTurnOrderState();
+    if ( turnOrderState != BattleTurnOrderState::OFF ) {
+        settings.setBattleTurnOrderState( BattleTurnOrderState::OFF );
     }
 
     // Set all non-dead troops animation to static and redraw the '_mainSurface'.
@@ -6626,8 +6644,8 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
     RedrawPartialStart();
 
     // Restore the Turn Order rendering if it was enabled.
-    if ( isTurnOrderShown ) {
-        settings.setBattleShowTurnOrder( true );
+    if ( turnOrderState != BattleTurnOrderState::OFF ) {
+        settings.setBattleTurnOrderState( turnOrderState );
     }
 
     fheroes2::Image battlefieldImage;

@@ -512,7 +512,8 @@ namespace
                 };
 
                 int32_t selectedLevel = currentBannedSpellsLevel;
-                while ( Editor::openSpellSelectionWindow( getMageGuildTitle( selectedLevel ), selectedLevel, bannedSpellsContainer[selectedLevel - 1], true,
+                while ( Editor::openSpellSelectionWindow( std::string( getMageGuildTitle( selectedLevel ) ) + ':', selectedLevel,
+                                                          bannedSpellsContainer[selectedLevel - 1], true,
                                                           MageGuild::getMaxSpellsCount( selectedLevel, hasLibraryCapability ), true ) ) {
                     if ( selectedLevel == currentBannedSpellsLevel ) {
                         // The banned spells dialog was closed with confirmation of changes.
@@ -609,6 +610,8 @@ namespace Editor
 {
     bool castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const PlayerColor color, const fheroes2::SupportedLanguage language )
     {
+        const auto beforeChangesCastleMetadata{ castleMetadata };
+
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -804,6 +807,40 @@ namespace Editor
         std::string message;
         bool buildingRestriction = false;
 
+        auto updateMetadata = [&castleMetadata, &buildings, isNeutral, &defaultArmySign, &castleArmy, isTown, &allowCastleSign, &defaultBuildingsSign]() {
+            // Update army in metadata.
+            if ( isNeutral && !defaultArmySign.isHidden() ) {
+                Maps::setDefaultCastleDefenderArmy( castleMetadata );
+            }
+            else {
+                Maps::saveCastleArmy( castleArmy, castleMetadata );
+            }
+
+            // Update buildings data.
+            castleMetadata.builtBuildings.clear();
+            castleMetadata.bannedBuildings.clear();
+
+            // Build main buildings for town or castle.
+            castleMetadata.builtBuildings.push_back( isTown ? BUILD_TENT : BUILD_CASTLE );
+
+            if ( isTown && allowCastleSign.isHidden() ) {
+                castleMetadata.bannedBuildings.push_back( BUILD_CASTLE );
+            }
+
+            castleMetadata.customBuildings = defaultBuildingsSign.isHidden();
+
+            if ( castleMetadata.customBuildings ) {
+                for ( const BuildingData & building : buildings ) {
+                    std::vector<BuildingType> buildingLevels = building.getBuildLevel();
+                    std::move( buildingLevels.begin(), buildingLevels.end(), std::back_inserter( castleMetadata.builtBuildings ) );
+
+                    if ( const BuildingType buildId = building.getRestrictLevel(); buildId != BUILD_NOTHING ) {
+                        castleMetadata.bannedBuildings.push_back( buildId );
+                    }
+                }
+            }
+        };
+
         while ( le.HandleEvents() ) {
             buttonOkay.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOkay.area() ) );
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
@@ -816,7 +853,17 @@ namespace Editor
             }
 
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                return false;
+                updateMetadata();
+
+                if ( beforeChangesCastleMetadata == castleMetadata ) {
+                    return false;
+                }
+
+                if ( fheroes2::showStandardTextMessage( getCastleName( castleMetadata.customName, isTown ), _( "You have unsaved changes. Do you wish to proceed?" ),
+                                                        Dialog::OK | Dialog::CANCEL )
+                     == Dialog::OK ) {
+                    return false;
+                }
             }
 
             if ( le.MouseClickLeft( buttonRestrictBuilding.area() ) ) {
@@ -835,7 +882,7 @@ namespace Editor
                 if ( le.MouseClickLeft( nameArea ) ) {
                     std::string res = castleMetadata.customName;
 
-                    const fheroes2::Text body{ _( "Enter Castle name" ), fheroes2::FontType::normalWhite() };
+                    const fheroes2::Text body{ _( "Enter Castle name:" ), fheroes2::FontType::normalWhite() };
                     if ( Dialog::inputString( fheroes2::Text{}, body, res, Maps::Map_Format::nameCharLimit, false, language ) && !res.empty() ) {
                         castleMetadata.customName = std::move( res );
                         redrawName = true;
@@ -1011,37 +1058,7 @@ namespace Editor
             }
         }
 
-        // Update army in metadata.
-        if ( isNeutral && !defaultArmySign.isHidden() ) {
-            Maps::setDefaultCastleDefenderArmy( castleMetadata );
-        }
-        else {
-            Maps::saveCastleArmy( castleArmy, castleMetadata );
-        }
-
-        // Update buildings data.
-        castleMetadata.builtBuildings.clear();
-        castleMetadata.bannedBuildings.clear();
-
-        // Build main buildings for town or castle.
-        castleMetadata.builtBuildings.push_back( isTown ? BUILD_TENT : BUILD_CASTLE );
-
-        if ( isTown && allowCastleSign.isHidden() ) {
-            castleMetadata.bannedBuildings.push_back( BUILD_CASTLE );
-        }
-
-        castleMetadata.customBuildings = defaultBuildingsSign.isHidden();
-
-        if ( castleMetadata.customBuildings ) {
-            for ( const BuildingData & building : buildings ) {
-                std::vector<BuildingType> buildingLevels = building.getBuildLevel();
-                std::move( buildingLevels.begin(), buildingLevels.end(), std::back_inserter( castleMetadata.builtBuildings ) );
-
-                if ( const BuildingType buildId = building.getRestrictLevel(); buildId != BUILD_NOTHING ) {
-                    castleMetadata.bannedBuildings.push_back( buildId );
-                }
-            }
-        }
+        updateMetadata();
 
         return true;
     }

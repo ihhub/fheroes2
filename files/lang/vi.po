@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -485,7 +485,7 @@ msgid "Move the %{name}"
 msgstr "Di chuyển %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Bắn %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -1047,6 +1047,12 @@ msgstr "Chết %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Chết: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Thứ tự Xếp hàng"
 
@@ -1104,12 +1110,12 @@ msgstr ""
 msgid "Human"
 msgstr "Con người"
 
-msgid "AI"
-msgstr "AI"
-
 #, fuzzy
 msgid "Terrain"
 msgstr "Chế độ Địa hình"
+
+msgid "Battle Only"
+msgstr "Chỉ Chiến đấu"
 
 #, fuzzy
 msgid "Start"
@@ -1142,11 +1148,16 @@ msgid "Please select another hero."
 msgstr "Hãy chọn một tướng khác."
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Nhấp để chọn màu này."
 
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid "Hero"
+msgstr "Tướng"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Nhấp để chọn màu này."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3589,24 +3600,25 @@ msgid "Random Map Generator"
 msgstr "Ngẫu nhiên Quái vật"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Biểu tượng Người chơi"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Biểu tượng Người chơi"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Nguyên tố Nước"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Ngẫu nhiên Quái vật - mạnh"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3816,6 +3828,10 @@ msgstr "Chọn Tướng:"
 msgid "Select Monsters:"
 msgstr "Chọn Quái vật:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Chọn Bảo vật:"
+
 msgid "race|Random"
 msgstr "Ngẫu nhiên"
 
@@ -3842,7 +3858,8 @@ msgstr "Chọn Kho báu:"
 msgid "Select Ocean Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Đặt Lâu đài/thị trấn"
 
 msgid "doubleLinedRace|Neutral"
@@ -3877,7 +3894,7 @@ msgstr "Chọn Phép:"
 msgid "Select Landscape Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3919,7 +3936,7 @@ msgid "Select Adventure Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Chọn Quái vật:"
 
 msgid "Players Icon"
@@ -4251,11 +4268,15 @@ msgid "Town Army"
 msgstr "Thị trấn"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Bao nhiêu quân sẽ được di chuyển?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Mất tướng: %{name}."
 
 #, fuzzy
@@ -4332,6 +4353,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Bắn %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Thanh Tin nhắn"
 
@@ -4359,7 +4384,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Ngày: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4406,7 +4431,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Kinh nghiệm"
 
 msgid "Artifact"
@@ -4466,7 +4491,8 @@ msgstr "Bảo vật không thể đặt trên nước."
 msgid "%{objects} must be placed on water."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
-msgid "Objects cannot be placed outside the map."
+#, fuzzy
+msgid "Action objects cannot be placed outside the map."
 msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 
 #, fuzzy
@@ -4575,11 +4601,11 @@ msgstr "Nhấp để quay lại màn hình chính."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Ngẫu nhiên Bảo vật Tối thượng"
 
 msgid "%{object} has no properties to change."
@@ -4668,8 +4694,11 @@ msgid ""
 msgstr "Hãy chọn một tướng khác."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
 
 #, fuzzy
@@ -4717,7 +4746,19 @@ msgid "Towns"
 msgstr "Thị trấn"
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Chọn Đối tượng Đại dương:"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Chọn Đối tượng Đại dương:"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Chọn Đối tượng Đại dương:"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Chọn Đối tượng Đại dương:"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4829,7 +4870,7 @@ msgid "Detail Mode"
 msgstr "Chế độ Chi tiết"
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Dùng để hiệu chỉnh đặc biệt cho quái vật, tướng và thị trấn."
 
 #, fuzzy
@@ -4919,7 +4960,7 @@ msgstr ""
 "sửa."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Hỗ trợ chúng tôi tại"
 
 msgid "Language"
@@ -5138,12 +5179,19 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr "Tệp bản đồ"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Chọn Mô tả"
+
+msgid "map|About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5230,6 +5278,9 @@ msgid "Toggle animation of the objects."
 msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -5535,9 +5586,8 @@ msgstr "Phát triển và Hỗ trợ"
 msgid "Special Thanks to"
 msgstr "Lời cảm ơn Chân thành tới"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "và nhiều - nhiều những người hỗ trợ khác!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Hỗ trợ chúng tôi tại"
@@ -5671,6 +5721,12 @@ msgstr "Thiết kế Bản đồ"
 msgid "Package Design"
 msgstr "Thiết kế Đóng gói"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Ngươi có muốt thoát không?"
+
 msgid "High Scores"
 msgstr "Điểm Cao"
 
@@ -5720,6 +5776,9 @@ msgstr "chuyển đội chế độ hỗ trợ văn bản"
 msgid "hotkey|toggle developer mode"
 msgstr "chuyển đội chế độ hỗ trợ văn bản"
 
+msgid "hotkey|quit"
+msgstr "thoát"
+
 msgid "hotkey|new game"
 msgstr "trò chơi mới"
 
@@ -5744,9 +5803,6 @@ msgstr "trò chơi nhiều người"
 
 msgid "hotkey|settings"
 msgstr "thiết lập"
-
-msgid "hotkey|quit"
-msgstr "thoát"
 
 msgid "hotkey|select map"
 msgstr "chọn bản đồ"
@@ -6235,9 +6291,6 @@ msgstr ""
 "Một trò chơi nhiều người chơi, trong đó một số người chơi sẽ đấu với nhau "
 "trên một bản đồ."
 
-msgid "Battle Only"
-msgstr "Chỉ Chiến đấu"
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 "Thiết lập và chơi một trận chiến mà không cần phải tải bất cứ bản đồ nào."
@@ -6718,12 +6771,6 @@ msgstr ""
 "Một hoặc nhiều tướng vẫn có thể di chuyển, ngươi có chắc chắn muốn kết thúc "
 "lượt của mình không?"
 
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Ngươi có muốt thoát không?"
-
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 "Ngươi có chắc là ngươi muốn bắt đầu lại không? (Trò chơi hiện tại của ngươi "
@@ -6874,7 +6921,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Chọn Kỹ năng Tấn công"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6892,13 +6939,56 @@ msgstr "Phòng thủ"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Thay đổi ngôn ngữ của trò chơi."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Bấm để chọn ngôn ngữ đã chọn."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Hoa"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Nhấp để lưu trò chơi hiện tại."
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Thiết kế Bản đồ"
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6986,6 +7076,9 @@ msgstr "Tiếng Việt"
 #, fuzzy
 msgid "Greek"
 msgstr "Xanh"
+
+msgid "Esperanto"
+msgstr ""
 
 msgid "Slow"
 msgstr "Chậm"
@@ -8758,17 +8851,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Điểm Phép thuật"
 
 msgid "View Spell Points Info"
 msgstr "Xem Thông tin Điểm Phép thuật"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Mất tướng: %{name}."
 
 #, fuzzy
@@ -8836,6 +8929,10 @@ msgstr ""
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
 msgstr "Nhấp để chọn màu này."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Nhấp để xem thị trấn sau."
 
 msgid "Blood Morale"
 msgstr "Tinh thần Máu lửa"
@@ -9917,10 +10014,6 @@ msgstr "Ngẫu nhiên Quái vật - mạnh"
 
 msgid "Random Monster - very strong"
 msgstr "Ngẫu nhiên Quái vật - rất mạnh"
-
-#, fuzzy
-msgid "Hero"
-msgstr "Tướng"
 
 msgid "Nothing Special"
 msgstr "Không có gì Đặc biệt"
@@ -12974,3 +13067,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "và nhiều - nhiều những người hỗ trợ khác!"
+
+#~ msgid "AI"
+#~ msgstr "AI"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Nhấp để chọn màu này."

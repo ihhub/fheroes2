@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -471,7 +471,7 @@ msgid "Move the %{name}"
 msgstr "Flytt %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Skyt på %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -1056,6 +1056,12 @@ msgstr "Dødstall : %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Dødstall : %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 #, fuzzy
 msgid "Turn Order"
 msgstr ""
@@ -1127,12 +1133,12 @@ msgstr ""
 msgid "Human"
 msgstr "Menneske"
 
-msgid "AI"
-msgstr "Datamaskin"
-
 #, fuzzy
 msgid "Terrain"
 msgstr "Terrengmodus"
+
+msgid "Battle Only"
+msgstr "Kampmodus"
 
 #, fuzzy
 msgid "Start"
@@ -1165,11 +1171,16 @@ msgid "Please select another hero."
 msgstr "Vennligst velg en annen helt."
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
 
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid "Hero"
+msgstr "Helter"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
 
 #, fuzzy
@@ -3642,24 +3653,25 @@ msgid "Random Map Generator"
 msgstr "Tilfeldig monster"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Spillerikon"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Spillerikon"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Vannånd"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Tilfeldig monster - sterk"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3870,6 +3882,10 @@ msgstr "Velg helt:"
 msgid "Select Monsters:"
 msgstr "Velg monster:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Velg en skatt:"
+
 msgid "race|Random"
 msgstr "Tilfeldig"
 
@@ -3901,7 +3917,7 @@ msgid "Select Ocean Object:"
 msgstr "Sjøting"
 
 #, fuzzy
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr "Borgvalg"
 
 msgid "doubleLinedRace|Neutral"
@@ -3943,7 +3959,7 @@ msgstr "Velg trolldom:"
 msgid "Select Landscape Object:"
 msgstr "Sjøting"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3985,7 +4001,7 @@ msgid "Select Adventure Object:"
 msgstr "Sjøting"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Velg monster:"
 
 msgid "Players Icon"
@@ -4321,11 +4337,15 @@ msgid "Town Army"
 msgstr "By"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Flytt hvor mange styrker?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Klikk for å vise neste by."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Mist helten kalt %{name}."
 
 #, fuzzy
@@ -4402,6 +4422,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Skyt på %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Kamplogg"
 
@@ -4429,7 +4453,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4476,7 +4500,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Erfaringspoeng"
 
 msgid "Artifact"
@@ -4537,7 +4561,7 @@ msgid "%{objects} must be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
@@ -4646,11 +4670,11 @@ msgstr "Klikk her for å dra tilbake til hovedmenyen."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Tilfeldig sjeldneste skatt"
 
 msgid "%{object} has no properties to change."
@@ -4741,8 +4765,11 @@ msgid ""
 msgstr "Vennligst velg en annen helt."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
 
 #, fuzzy
@@ -4791,7 +4818,19 @@ msgid "Towns"
 msgstr "Byer"
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Sjøting"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4900,7 +4939,7 @@ msgid "Detail Mode"
 msgstr "Detaljemodus"
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Brukes for spesielle tilpasninger av monster, helter eller byer."
 
 #, fuzzy
@@ -4992,7 +5031,7 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis karttegnerens systeminnstillinger der den kan skreddersys."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Støtt oss på"
 
 msgid "Language"
@@ -5215,12 +5254,21 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr ""
+"Kartets\n"
+"størrelse"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Kartbeskrivelse"
+
+msgid "map|About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5308,6 +5356,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -5617,9 +5668,8 @@ msgstr "Utvikling og støtte"
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "og mange flere bidragsytere!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Støtt oss på"
@@ -5753,6 +5803,12 @@ msgstr "Karttegnere"
 msgid "Package Design"
 msgstr "Innpakningsdesign"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Er du sikker på at du vil avslutte?"
+
 msgid "High Scores"
 msgstr "Rekordtavle"
 
@@ -5802,6 +5858,9 @@ msgstr "Tekstmodus"
 msgid "hotkey|toggle developer mode"
 msgstr "Tekstmodus"
 
+msgid "hotkey|quit"
+msgstr "Avslutt"
+
 msgid "hotkey|new game"
 msgstr "Nytt parti"
 
@@ -5826,9 +5885,6 @@ msgstr "Flerspillermodus"
 
 msgid "hotkey|settings"
 msgstr "Innstillinger"
-
-msgid "hotkey|quit"
-msgstr "Avslutt"
 
 msgid "hotkey|select map"
 msgstr "Velg kart"
@@ -6322,9 +6378,6 @@ msgid ""
 msgstr ""
 "Et flerspillerparti hvor flere menneskelige spillere konkurrerer mot "
 "hverandre på et enkelt kart."
-
-msgid "Battle Only"
-msgstr "Kampmodus"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Sett opp og spill en kamp uten å laste inn et kart."
@@ -6824,12 +6877,6 @@ msgstr ""
 "Én eller flere helter kan fortsatt forflytte seg. Vil du likevel avslutte "
 "turen din?"
 
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Er du sikker på at du vil avslutte?"
-
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 "Er du sikker på at du vil begynne på nytt?\n"
@@ -6982,7 +7029,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Spesifiser angrepsevne"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -7000,13 +7047,56 @@ msgstr "Forsvar"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Klikk for å lagre det nåværende spillet."
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "MELLOMROM"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Endre språket til spillet."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Trykk for å velge et språk."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Blomster"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Klikk for å lagre det nåværende spillet."
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Karttegnere"
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -7094,6 +7184,9 @@ msgstr ""
 #, fuzzy
 msgid "Greek"
 msgstr "Grønn"
+
+msgid "Esperanto"
+msgstr ""
 
 msgid "Slow"
 msgstr "Treg"
@@ -8883,17 +8976,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Mana"
 
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Mist helten kalt %{name}."
 
 #, fuzzy
@@ -8961,6 +9054,10 @@ msgstr ""
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Klikk for å vise neste by."
 
 msgid "Blood Morale"
 msgstr "Blodskampånd"
@@ -10072,10 +10169,6 @@ msgstr "Tilfeldig monster - sterk"
 
 msgid "Random Monster - very strong"
 msgstr "Tilfeldig monster - veldig sterk"
-
-#, fuzzy
-msgid "Hero"
-msgstr "Helter"
 
 msgid "Nothing Special"
 msgstr "Ingenting spesielt"
@@ -13158,3 +13251,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#, fuzzy
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "og mange flere bidragsytere!"
+
+#~ msgid "AI"
+#~ msgstr "Datamaskin"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Klikk her for å velge hvilket kart du vil spille."

@@ -79,6 +79,13 @@ enum class SaveFileSortingMethod : uint8_t
     TIMESTAMP,
 };
 
+enum class BattleTurnOrderState : uint8_t
+{
+    OFF = 0,
+    TOP = 1,
+    BOTTOM = 2
+};
+
 class Settings
 {
 public:
@@ -195,7 +202,6 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
-    bool BattleShowTurnOrder() const;
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
@@ -209,7 +215,7 @@ public:
     bool isEvilInterfaceEnabled() const;
     bool isBattleMovementAreaHighlightEnabled() const;
 
-    void setInterfaceType( InterfaceType type )
+    void setInterfaceType( const InterfaceType type )
     {
         _interfaceType = type;
     }
@@ -282,7 +288,6 @@ public:
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
-    void setBattleShowTurnOrder( const bool enable );
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
@@ -372,10 +377,22 @@ public:
         return _viewWorldZoomLevel;
     }
 
-    void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
+    void SetViewWorldZoomLevel( const ZoomLevel zoomLevel )
     {
         _viewWorldZoomLevel = zoomLevel;
     }
+
+    void setBattleTurnOrderState( const BattleTurnOrderState state )
+    {
+        _battleTurnOrderState = state;
+    }
+
+    BattleTurnOrderState getBattleTurnOrderState() const
+    {
+        return _battleTurnOrderState;
+    }
+
+    void switchToNextBattleTurnOrderState();
 
     SaveFileSortingMethod getSaveFileSortingMethod() const
     {
@@ -438,6 +455,7 @@ private:
     int32_t game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
+    BattleTurnOrderState _battleTurnOrderState{ BattleTurnOrderState::OFF };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };

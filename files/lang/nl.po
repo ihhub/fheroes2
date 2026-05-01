@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -427,7 +427,7 @@ msgid "Move the %{name}"
 msgstr "Verplaats de %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Schiet %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -1008,6 +1008,12 @@ msgstr "Vergaan: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Vergaan: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 #, fuzzy
 msgid "Turn Order"
 msgstr "Legerorde"
@@ -1069,10 +1075,10 @@ msgstr ""
 msgid "Human"
 msgstr "Mens"
 
-msgid "AI"
-msgstr "Computer"
-
 msgid "Terrain"
+msgstr ""
+
+msgid "Battle Only"
 msgstr ""
 
 msgid "Start"
@@ -1104,13 +1110,17 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Selecteer een andere held."
 
-msgid "Click to set this hero to be human-controlled."
-msgstr ""
-
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid "Click to select a hero."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Hero"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr ""
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3462,22 +3472,22 @@ msgstr ""
 msgid "Random Map Generator"
 msgstr ""
 
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr ""
 
-msgid "rmg|Map layout"
+msgid "rmg|Map layout:"
 msgstr ""
 
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr ""
 
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr ""
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3679,6 +3689,10 @@ msgstr ""
 msgid "Select Monsters:"
 msgstr "Selecteer spreuk doelwit"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Selecteer spreuk doelwit"
+
 msgid "race|Random"
 msgstr ""
 
@@ -3706,7 +3720,7 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Ocean Object:"
 msgstr "Selecteer spreuk doelwit"
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3741,7 +3755,7 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Landscape Object:"
 msgstr "Selecteer spreuk doelwit"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3781,8 +3795,9 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Adventure Object:"
 msgstr "Selecteer spreuk doelwit"
 
-msgid "Select color"
-msgstr ""
+#, fuzzy
+msgid "Select color:"
+msgstr "Selecteer spreuk doelwit"
 
 msgid "Players Icon"
 msgstr ""
@@ -4088,13 +4103,17 @@ msgstr ""
 msgid "Town Army"
 msgstr "Held Scherm"
 
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr ""
+
 #, fuzzy
 msgid "Click to change the Castle name."
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
-msgid "Enter Castle name"
-msgstr ""
+#, fuzzy
+msgid "Enter Castle name:"
+msgstr "Keer terug naar de strijd."
 
 #, fuzzy
 msgid "Reset the Castle name."
@@ -4167,6 +4186,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Schiet %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Brichtenbalk"
 
@@ -4195,7 +4218,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4234,8 +4257,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Spreuk Punten"
 
 msgid "Artifact"
 msgstr ""
@@ -4289,7 +4313,7 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
@@ -4381,10 +4405,10 @@ msgstr "Keer terug naar de strijd."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4465,8 +4489,11 @@ msgid ""
 msgstr "Selecteer een andere held."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
 
 msgid "Erase"
@@ -4510,7 +4537,19 @@ msgid "Towns"
 msgstr ""
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Selecteer spreuk doelwit"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4607,7 +4646,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -4684,8 +4723,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
-msgid "Supported languages"
-msgstr ""
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Selecteer spreuk doelwit"
 
 msgid "Language"
 msgstr ""
@@ -4895,10 +4935,17 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Name:"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Change Map Description:"
+msgstr ""
+
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4979,6 +5026,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -5257,7 +5307,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many-many other contributors and supporters!"
+msgid "and all the people who have helped make the project possible!"
 msgstr ""
 
 msgid "Support us at"
@@ -5392,6 +5442,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr ""
+
 msgid "High Scores"
 msgstr ""
 
@@ -5440,6 +5496,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5462,9 +5521,6 @@ msgid "hotkey|multi-player game"
 msgstr ""
 
 msgid "hotkey|settings"
-msgstr ""
-
-msgid "hotkey|quit"
 msgstr ""
 
 msgid "hotkey|select map"
@@ -5934,9 +5990,6 @@ msgid ""
 "on a single map."
 msgstr ""
 
-msgid "Battle Only"
-msgstr ""
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
@@ -6357,12 +6410,6 @@ msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr ""
-
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 
@@ -6481,7 +6528,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Aanvalsvaardigheid instellen"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6498,13 +6545,58 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+msgid "Lowercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6589,6 +6681,9 @@ msgid "Vietnamese"
 msgstr "Zie %{name}"
 
 msgid "Greek"
+msgstr ""
+
+msgid "Esperanto"
 msgstr ""
 
 msgid "Slow"
@@ -7926,16 +8021,16 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Spreuk Punten"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 #, fuzzy
@@ -7997,6 +8092,11 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
 msgstr ""
 "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
@@ -8992,9 +9092,6 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
-msgstr ""
-
-msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"
@@ -11554,3 +11651,11 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#~ msgid "AI"
+#~ msgstr "Computer"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr ""
+#~ "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"

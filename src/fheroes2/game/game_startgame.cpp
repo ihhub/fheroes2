@@ -46,6 +46,7 @@
 #include "dialog.h"
 #include "direction.h"
 #include "game_delays.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
@@ -1069,7 +1070,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
 
     while ( res == fheroes2::GameMode::CANCEL ) {
         if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-            if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                 res = fheroes2::GameMode::QUIT_GAME;
 
                 break;
@@ -1106,8 +1107,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
             // Hotkeys
             if ( le.isAnyKeyPressed() ) {
                 // Adventure map control
-                if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                    res = EventExit();
+                if ( HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                    res = Game::processExitEvent();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_END_TURN ) ) {
                     res = EventEndTurn();

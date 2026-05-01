@@ -51,6 +51,8 @@ namespace Game
         GLOBAL_TOGGLE_DEVELOPER_MODE,
 #endif
 
+        GLOBAL_APP_QUIT,
+
         MAIN_MENU_NEW_GAME,
         MAIN_MENU_LOAD_GAME,
         MAIN_MENU_HIGHSCORES,
@@ -59,7 +61,6 @@ namespace Game
         MAIN_MENU_CAMPAIGN,
         MAIN_MENU_MULTI,
         MAIN_MENU_SETTINGS,
-        MAIN_MENU_QUIT,
         MAIN_MENU_SELECT_MAP,
         MAIN_MENU_MAP_SIZE_SMALL,
         MAIN_MENU_MAP_SIZE_MEDIUM,

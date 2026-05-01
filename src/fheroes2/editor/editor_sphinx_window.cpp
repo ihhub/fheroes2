@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -159,7 +159,7 @@ namespace Editor
 
         int32_t offsetY = windowArea.y + elementOffset;
 
-        const fheroes2::Text title( MP2::StringObject( MP2::OBJ_SPHINX ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( std::string( MP2::StringObject( MP2::OBJ_SPHINX ) ) + ':', fheroes2::FontType::normalYellow() );
         title.draw( windowArea.x + ( windowArea.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;
@@ -295,7 +295,7 @@ namespace Editor
 
                     const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
 
-                    std::string str = _( "Set %{resource-type} Count" );
+                    std::string str = _( "Set %{resource-type} Count:" );
                     StringReplace( str, "%{resource-type}", Resource::String( resourceType ) );
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 1000000, temp, 1, &resourceUI ) ) {

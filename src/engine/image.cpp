@@ -344,29 +344,27 @@ namespace
 
     uint8_t GetPALColorId( const uint8_t red, const uint8_t green, const uint8_t blue )
     {
-        static uint8_t rgbToId[64 * 64 * 64];
+        constexpr uint32_t size = 64 * 64 * 64;
+        static uint8_t rgbToId[size];
         static bool isInitialized = false;
         if ( !isInitialized ) {
             isInitialized = true;
-            const uint32_t size = 64 * 64 * 64;
-
-            int32_t r = 0;
-            int32_t g = 0;
-            int32_t b = 0;
 
             const uint8_t * gamePalette = fheroes2::getGamePalette();
 
+            constexpr uint32_t startOffset = 10;
+            const uint8_t * correctorY = transformTable + 256 * 15 + startOffset;
+
             for ( uint32_t id = 0; id < size; ++id ) {
-                r = static_cast<int32_t>( id % 64 );
-                g = static_cast<int32_t>( id >> 6 ) % 64;
-                b = static_cast<int32_t>( id >> 12 );
+                const int32_t r = static_cast<int32_t>( id & 63 );
+                const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
+                const int32_t b = static_cast<int32_t>( id >> 12 );
                 int32_t minDistance = INT32_MAX;
-                uint32_t bestPos = 0;
+                uint8_t bestPos = 0;
 
                 // Use the "No cycle" palette.
                 // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
-                constexpr uint32_t startOffset = 10;
-                const uint8_t * correctorX = transformTable + 256 * 15 + startOffset;
+                const uint8_t * correctorX = correctorY;
 
                 for ( uint32_t i = startOffset; i < 246; ++i, ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
@@ -387,11 +385,11 @@ namespace
                     }
                 }
 
-                rgbToId[id] = static_cast<uint8_t>( bestPos ); // it's safe to cast
+                rgbToId[id] = bestPos;
             }
         }
 
-        return rgbToId[red + green * 64 + blue * 64 * 64];
+        return rgbToId[red + ( green << 6U ) + ( blue << 12U )];
     }
 
     void ApplyRawPalette( const fheroes2::Image & in, int32_t inX, int32_t inY, fheroes2::Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
@@ -1138,13 +1136,15 @@ namespace fheroes2
         uint8_t * imageY = image.image() + y * imageWidth + x;
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
+        const uint32_t transformOffset = transformId * 256;
+
         if ( image.singleLayer() ) {
             for ( ; imageY != imageYEnd; imageY += imageWidth ) {
                 uint8_t * imageX = imageY;
                 const uint8_t * imageXEnd = imageX + width;
 
                 for ( ; imageX != imageXEnd; ++imageX ) {
-                    *imageX = *( transformTable + transformId * 256 + *imageX );
+                    *imageX = *( transformTable + transformOffset + *imageX );
                 }
             }
         }
@@ -1158,7 +1158,7 @@ namespace fheroes2
 
                 for ( ; imageX != imageXEnd; ++imageX, ++transformX ) {
                     if ( *transformX == 0 ) {
-                        *imageX = *( transformTable + transformId * 256 + *imageX );
+                        *imageX = *( transformTable + transformOffset + *imageX );
                     }
                 }
             }

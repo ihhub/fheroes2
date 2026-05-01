@@ -935,7 +935,7 @@ namespace
             return false;
         }
 
-        void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
+        void getConditionMetadata( Maps::Map_Format::BaseMapFormat & mapFormat ) const
         {
             assert( mapFormat.victoryConditionType == _conditionType );
 
@@ -1619,7 +1619,7 @@ namespace
             return false;
         }
 
-        void getConditionMetadata( Maps::Map_Format::MapFormat & mapFormat ) const
+        void getConditionMetadata( Maps::Map_Format::BaseMapFormat & mapFormat ) const
         {
             assert( _conditionType == mapFormat.lossConditionType );
 
@@ -1953,7 +1953,7 @@ namespace
         return selectedCondition;
     }
 
-    uint32_t getPlayerIcnIndex( const Maps::Map_Format::MapFormat & mapFormat, const PlayerColor currentColor )
+    uint32_t getPlayerIcnIndex( const Maps::Map_Format::BaseMapFormat & mapFormat, const PlayerColor currentColor )
     {
         if ( !( mapFormat.availablePlayerColors & currentColor ) ) {
             // This player is not available.
@@ -2099,7 +2099,7 @@ namespace Editor
         offsetX = activeArea.x + 15;
         offsetY = scenarioBoxRoi.y + scenarioBoxRoi.height + 65;
 
-        text.set( _( "Map Difficulty" ), fheroes2::FontType::normalWhite() );
+        text.set( std::string( _( "Map Difficulty" ) ) + ':', fheroes2::FontType::normalWhite() );
         text.draw( offsetX + ( difficultyStepX * 4 - text.width() ) / 2, scenarioBoxRoi.y + scenarioBoxRoi.height + 65, display );
 
         std::array<fheroes2::Rect, 4> difficultyRects;
@@ -2136,7 +2136,7 @@ namespace Editor
         offsetX = activeArea.x + activeArea.width - descriptionBoxWidth - 15;
         offsetY -= 23;
 
-        text.set( _( "Map Description" ), fheroes2::FontType::normalWhite() );
+        text.set( std::string( _( "Map Description" ) ) + ':', fheroes2::FontType::normalWhite() );
         text.draw( offsetX + ( descriptionBoxWidth - text.width() ) / 2, offsetY, display );
 
         offsetY += 25;
@@ -2151,7 +2151,7 @@ namespace Editor
         // Victory conditions.
         offsetY += descriptionTextRoi.height + 20;
 
-        text.set( _( "Special Victory Condition" ), fheroes2::FontType::normalWhite() );
+        text.set( std::string( _( "Special Victory Condition" ) ) + ':', fheroes2::FontType::normalWhite() );
         text.draw( activeArea.x + activeArea.width / 4 - text.width() / 2, offsetY, display );
 
         offsetY += 20;
@@ -2185,7 +2185,7 @@ namespace Editor
         // Loss conditions.
         offsetY = descriptionTextRoi.y + descriptionTextRoi.height + 20;
 
-        text.set( _( "Special Loss Condition" ), fheroes2::FontType::normalWhite() );
+        text.set( std::string( _( "Special Loss Condition" ) ) + ':', fheroes2::FontType::normalWhite() );
         text.draw( activeArea.x + 3 * activeArea.width / 4 - text.width() / 2, offsetY, display );
 
         offsetY += 20;
@@ -2230,7 +2230,7 @@ namespace Editor
                                                   fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
 
         fheroes2::ButtonSprite buttonAbout;
-        translatedText = fheroes2::getSupportedText( gettext_noop( "ABOUT" ), fheroes2::FontType::buttonReleasedWhite() );
+        translatedText = fheroes2::getSupportedText( gettext_noop( "map|ABOUT" ), fheroes2::FontType::buttonReleasedWhite() );
         background.renderTextAdaptedButtonSprite( buttonAbout, translatedText, { 21, 12 }, fheroes2::StandardWindow::Padding::TOP_RIGHT );
 
         auto renderMapName = [&text, &mapFormat, &display, &scenarioBox, &mapNameRoi, &scenarioBoxRoi]() {
@@ -2307,7 +2307,7 @@ namespace Editor
 
                 std::string editableMapName = mapFormat.name;
 
-                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ _( "Change Map Name:" ), fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, mapFormat.mainLanguage ) ) {
                     mapFormat.name = std::move( editableMapName );
 
@@ -2318,7 +2318,7 @@ namespace Editor
             else if ( le.MouseClickLeft( descriptionTextRoi ) ) {
                 std::string descripton = mapFormat.description;
 
-                const fheroes2::Text body{ _( "Change Map Description" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ _( "Change Map Description:" ), fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, descripton, Maps::Map_Format::messageCharLimit, true, mapFormat.mainLanguage ) ) {
                     mapFormat.description = std::move( descripton );
 
@@ -2363,7 +2363,7 @@ namespace Editor
             else if ( le.MouseClickLeft( buttonAbout.area() ) ) {
                 std::string notes = mapFormat.creatorNotes;
 
-                const fheroes2::Text body{ _( "About" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ std::string( _( "map|About" ) ) + ':', fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, notes, Maps::Map_Format::messageCharLimit, true, mapFormat.mainLanguage ) ) {
                     mapFormat.creatorNotes = std::move( notes );
                 }
@@ -2384,7 +2384,7 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Language" ), _( "Click to change the language of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonAbout.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "About" ),
+                fheroes2::showStandardTextMessage( _( "map|About" ),
                                                    _( "Click to edit notes from the map creator. These notes are optional and do not appear during gameplay." ),
                                                    Dialog::ZERO );
             }

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -498,7 +498,8 @@ msgstr "Não é possível mover a última tropa"
 msgid "Move the %{name}"
 msgstr "Mover %{name}"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "Definir Quantidade de %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -1059,6 +1060,12 @@ msgstr "Morrem: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Morrem: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Ordem de Turno"
 
@@ -1120,11 +1127,11 @@ msgstr ""
 msgid "Human"
 msgstr "Humano"
 
-msgid "AI"
-msgstr "IA"
-
 msgid "Terrain"
 msgstr "Terreno"
+
+msgid "Battle Only"
+msgstr "Apenas Batalha"
 
 msgid "Start"
 msgstr "Iniciar"
@@ -1158,11 +1165,17 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Por favor, selecione outro herói."
 
-msgid "Click to set this hero to be human-controlled."
-msgstr "Clique para definir este herói como controlado por um humano."
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Clique para selecionar a cor."
 
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Clique para definir este herói como controlado pela IA."
+msgid "Hero"
+msgstr "Herói"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Clique para definir este herói como controlado por um humano."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3563,22 +3576,28 @@ msgstr "Território Desconhecido"
 msgid "Random Map Generator"
 msgstr "Gerador de Mapas Aleatórios"
 
-msgid "rmg|Player count"
+#, fuzzy
+msgid "rmg|Player count:"
 msgstr "Quantidade de jogadores"
 
-msgid "rmg|Map layout"
+#, fuzzy
+msgid "rmg|Map layout:"
 msgstr "Layout do mapa"
 
-msgid "rmg|Water percentage"
+#, fuzzy
+msgid "rmg|Water percentage:"
 msgstr "Porcentagem de água"
 
-msgid "rmg|Monster strength"
+#, fuzzy
+msgid "rmg|Monster strength:"
 msgstr "Força dos monstros"
 
-msgid "rmg|Resource availability"
+#, fuzzy
+msgid "rmg|Resource availability:"
 msgstr "Disponibilidade de recursos"
 
-msgid "rmg|Map seed"
+#, fuzzy
+msgid "rmg|Map seed:"
 msgstr "Semente do mapa"
 
 msgid "Click to generate a new map."
@@ -3777,6 +3796,10 @@ msgstr "Selecionar Herói:"
 msgid "Select Monsters:"
 msgstr "Selecionar Monstros:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Selecionar Artefato:"
+
 msgid "race|Random"
 msgstr "Aleatória"
 
@@ -3801,7 +3824,8 @@ msgstr "Selecionar Tesouro:"
 msgid "Select Ocean Object:"
 msgstr "Selecionar Objeto Oceânico:"
 
-msgid "Castle/town placing"
+#, fuzzy
+msgid "Castle/town placing:"
 msgstr "Colocação de Castelo/Cidade"
 
 msgid "doubleLinedRace|Neutral"
@@ -3834,7 +3858,8 @@ msgstr "Selecionar Moradia:"
 msgid "Select Landscape Object:"
 msgstr "Selecionar Objeto de Paisagem:"
 
-msgid "Mine placing"
+#, fuzzy
+msgid "Mine placing:"
 msgstr "Colocação de Mina"
 
 msgid ""
@@ -3869,7 +3894,8 @@ msgstr "Selecionar Objeto de Aprimoramento:"
 msgid "Select Adventure Object:"
 msgstr "Selecionar Objeto de Aventura:"
 
-msgid "Select color"
+#, fuzzy
+msgid "Select color:"
 msgstr "Selecionar Cor"
 
 msgid "Players Icon"
@@ -4186,10 +4212,15 @@ msgstr "Exército do Castelo"
 msgid "Town Army"
 msgstr "Exército da Cidade"
 
+#, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Quantas criaturas você deseja mover?"
+
 msgid "Click to change the Castle name."
 msgstr "Clique para alterar o nome do Castelo."
 
-msgid "Enter Castle name"
+#, fuzzy
+msgid "Enter Castle name:"
 msgstr "Insira o nome do Castelo"
 
 msgid "Reset the Castle name."
@@ -4265,6 +4296,10 @@ msgstr ""
 "Se essa caixa de seleção estiver marcada, esse evento será acionado para o "
 "jogador %{color} se ele for controlado por um computador."
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Definir Quantidade de %{resource-type}."
+
 msgid "Message:"
 msgstr "Mensagem:"
 
@@ -4289,7 +4324,8 @@ msgstr "Texto da Mensagem do Evento"
 msgid "Day: %{day}"
 msgstr "Dia: %{day}"
 
-msgid "Daily Events"
+#, fuzzy
+msgid "Daily events:"
 msgstr "Eventos Diários"
 
 msgid "Click to save the events."
@@ -4325,7 +4361,8 @@ msgstr "Cancelar evento após a primeira visita"
 msgid "Computer colors allowed to get the event:"
 msgstr "Cores de computador permitidas para obter o evento:"
 
-msgid "Set Experience value"
+#, fuzzy
+msgid "Set Experience value:"
 msgstr "Definir o valor da Experiência"
 
 msgid "Artifact"
@@ -4383,7 +4420,8 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr "%{objects} devem ser colocado na água."
 
-msgid "Objects cannot be placed outside the map."
+#, fuzzy
+msgid "Action objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
 
 msgid "Action objects must be placed on clear tiles."
@@ -4490,10 +4528,12 @@ msgstr "Retornar ao Menu Principal do jogo."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Sair do Editor e jogar o mapa no modo de Jogo Padrão."
 
-msgid "Input %{object} text"
+#, fuzzy
+msgid "Input %{object} text:"
 msgstr "Inserir texto de %{object}"
 
-msgid "Set Random Ultimate Artifact Radius"
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Definir Raio do Artefato Definitivo Aleatório"
 
 msgid "%{object} has no properties to change."
@@ -4576,11 +4616,12 @@ msgstr ""
 "selecionar outro monstro."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
-"Detalhes do\n"
-"Ladrilho"
 
 msgid "Erase"
 msgstr "Apagar"
@@ -4621,7 +4662,20 @@ msgstr "Heróis"
 msgid "Towns"
 msgstr "Cidades"
 
-msgid "editorErasure|Landscape objects"
+#, fuzzy
+msgid "editorErasure|Mountains"
+msgstr "Monstros"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Estradas"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Heróis"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Objetos de paisagem"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4732,7 +4786,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Modo Detalhe"
 
-msgid "Used for special editing of action objects."
+#, fuzzy
+msgid "Used for moving or customizing objects."
 msgstr "Usado para edição especial de objetos de ação."
 
 msgid "Adventure Objects Mode"
@@ -4815,7 +4870,8 @@ msgstr ""
 "Visualizar as opções do sistema do editor, que permitem personalizar o "
 "editor."
 
-msgid "Supported languages"
+#, fuzzy
+msgid "Supported languages:"
 msgstr "Idiomas suportados"
 
 msgid "Language"
@@ -5006,11 +5062,21 @@ msgstr "EVENTOS"
 msgid "LANGUAGE"
 msgstr "IDIOMA"
 
-msgid "Change Map Name"
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "SOBRE"
+
+#, fuzzy
+msgid "Change Map Name:"
 msgstr "Alterar o Nome do Mapa"
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Alterar Descrição do Mapa"
+
+#, fuzzy
+msgid "map|About"
+msgstr "Sobre"
 
 msgid "Click to edit custom rumors."
 msgstr "Clique para editar rumores personalizados."
@@ -5085,6 +5151,10 @@ msgstr "Alternar animação dos objetos."
 
 msgid "Toggle display of objects' passability."
 msgstr "Alternar exibição da transitabilidade dos objetos."
+
+#, fuzzy
+msgid "Rumors:"
+msgstr "Rumores"
 
 msgid "Rumor:"
 msgstr "Rumor:"
@@ -5378,8 +5448,8 @@ msgstr "Desenvolvimento e Suporte"
 msgid "Special Thanks to"
 msgstr "Agradecimentos Especiais para"
 
-msgid "and many-many other contributors and supporters!"
-msgstr "e muitos outros colaboradores e apoiadores!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Apoie-nos em"
@@ -5513,6 +5583,12 @@ msgstr "Designers de Mapa"
 msgid "Package Design"
 msgstr "Design da Embalagem"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr "Para sair do fheroes2, pressione o botão Home ou deslize para cima."
+
+msgid "Are you sure you want to quit?"
+msgstr "Você tem certeza de que deseja sair?"
+
 msgid "High Scores"
 msgstr "Melhores Pontuações"
 
@@ -5561,6 +5637,9 @@ msgstr "alternar modo de suporte a texto"
 msgid "hotkey|toggle developer mode"
 msgstr "alternar modo de desenvolvedor"
 
+msgid "hotkey|quit"
+msgstr "sair"
+
 msgid "hotkey|new game"
 msgstr "novo jogo"
 
@@ -5584,9 +5663,6 @@ msgstr "jogo multijogador"
 
 msgid "hotkey|settings"
 msgstr "configurações"
-
-msgid "hotkey|quit"
-msgstr "sair"
 
 msgid "hotkey|select map"
 msgstr "selecionar mapa"
@@ -6073,9 +6149,6 @@ msgid ""
 msgstr ""
 "Um jogo multijogador, com vários jogadores humanos competindo entre si em um "
 "único mapa."
-
-msgid "Battle Only"
-msgstr "Apenas Batalha"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Configure e jogue uma batalha sem carregar nenhum mapa."
@@ -6564,12 +6637,6 @@ msgstr ""
 "Um ou mais heróis ainda podem se mover, você tem certeza de que deseja "
 "encerrar seu turno?"
 
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr "Para sair do fheroes2, pressione o botão Home ou deslize para cima."
-
-msgid "Are you sure you want to quit?"
-msgstr "Você tem certeza de que deseja sair?"
-
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 "Você tem certeza de que deseja reiniciar? (Seu jogo atual será perdido)."
@@ -6719,7 +6786,8 @@ msgstr ""
 "Valor\n"
 "padrão"
 
-msgid "Set %{skill} Skill"
+#, fuzzy
+msgid "Set %{skill} Skill:"
 msgstr "Definir %{skill}"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6740,14 +6808,59 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr "Os valores disponíveis variam de %{min} a %{max}."
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Clique para salvar as propriedades do Evento."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "ESPAÇO"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Alterar o Nome do Mapa"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Clique para escolher o idioma selecionado."
+
+#, fuzzy
+msgid "Backspace"
+msgstr "Voltar"
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Clique para sair dos resultados da batalha."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Flores"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Clique para salvar as propriedades do Evento."
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Designers de Mapa"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr "O valor inserido é inválido."
@@ -6834,6 +6947,9 @@ msgstr "Vietnamita"
 
 msgid "Greek"
 msgstr "Grego"
+
+msgid "Esperanto"
+msgstr ""
 
 msgid "Slow"
 msgstr "Lenta"
@@ -8596,16 +8712,19 @@ msgstr ""
 "Alterar o valor da Mana. Clique com o botão direito para redefinir para o "
 "valor padrão."
 
-msgid "Set Spell Points value"
+#, fuzzy
+msgid "Set Spell Points value:"
 msgstr "Definir o valor da Mana"
 
 msgid "View Spell Points Info"
 msgstr "Ver Informações Sobre a Mana"
 
-msgid "Set patrol radius in tiles"
+#, fuzzy
+msgid "Set patrol radius in tiles:"
 msgstr "Definir raio de patrulha em ladrilhos"
 
-msgid "Enter hero's name"
+#, fuzzy
+msgid "Enter hero's name:"
 msgstr "Insira o nome do herói"
 
 msgid "Click to change class."
@@ -8682,6 +8801,10 @@ msgstr ""
 
 msgid "Click to enable hero's patrol mode."
 msgstr "Clique para ativar o modo de patrulha do herói."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Clique para aceitar as alterações feitas."
 
 msgid "Blood Morale"
 msgstr "Moral Sangrenta"
@@ -9740,9 +9863,6 @@ msgstr "Monstro Aleatório - Forte"
 
 msgid "Random Monster - very strong"
 msgstr "Monstro Aleatório - Muito Forte"
-
-msgid "Hero"
-msgstr "Herói"
 
 msgid "Nothing Special"
 msgstr "Nada Especial"
@@ -12726,3 +12846,19 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid ""
+#~ "Cell\n"
+#~ "Details"
+#~ msgstr ""
+#~ "Detalhes do\n"
+#~ "Ladrilho"
+
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "e muitos outros colaboradores e apoiadores!"
+
+#~ msgid "AI"
+#~ msgstr "IA"
+
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Clique para definir este herói como controlado pela IA."

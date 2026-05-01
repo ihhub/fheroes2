@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -487,7 +487,8 @@ msgstr "Son birlik hareket ettirilemiyor"
 msgid "Move the %{name}"
 msgstr "%{name} 'i hareket ettir"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "%{monster} sayısını ayarla"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -1045,6 +1046,12 @@ msgstr "Yok oldu: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Yok oldu: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Sıra sırası"
 
@@ -1103,11 +1110,11 @@ msgstr ""
 msgid "Human"
 msgstr "İnsan"
 
-msgid "AI"
-msgstr "Bilgisayar"
-
 msgid "Terrain"
 msgstr ""
+
+msgid "Battle Only"
+msgstr "Sadece Savaş"
 
 msgid "Start"
 msgstr "Başla"
@@ -1137,12 +1144,16 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
 
-msgid "Click to set this hero to be human-controlled."
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Hero"
 msgstr ""
 
-#, fuzzy
-msgid "Click to set this hero to be AI-controlled."
-msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -3430,22 +3441,22 @@ msgstr ""
 msgid "Random Map Generator"
 msgstr ""
 
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr ""
 
-msgid "rmg|Map layout"
+msgid "rmg|Map layout:"
 msgstr ""
 
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr ""
 
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr ""
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3641,6 +3652,10 @@ msgstr ""
 msgid "Select Monsters:"
 msgstr "Büyü hedefini seç"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Defineyi seç:"
+
 msgid "race|Random"
 msgstr ""
 
@@ -3665,7 +3680,7 @@ msgstr "Defineyi seç:"
 msgid "Select Ocean Object:"
 msgstr "Okyanus Hedefini Seç:"
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3700,7 +3715,7 @@ msgstr "Büyü hedefini seç"
 msgid "Select Landscape Object:"
 msgstr "Büyü hedefini seç"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3739,8 +3754,9 @@ msgstr "Büyü hedefini seç"
 msgid "Select Adventure Object:"
 msgstr "Büyü hedefini seç"
 
-msgid "Select color"
-msgstr ""
+#, fuzzy
+msgid "Select color:"
+msgstr "Büyü hedefini seç"
 
 msgid "Players Icon"
 msgstr ""
@@ -4045,12 +4061,16 @@ msgstr ""
 msgid "Town Army"
 msgstr "Kahraman Ekranı"
 
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr ""
+
 #, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
-msgid "Enter Castle name"
-msgstr ""
+#, fuzzy
+msgid "Enter Castle name:"
+msgstr "Savaşa geri dön."
 
 #, fuzzy
 msgid "Reset the Castle name."
@@ -4124,6 +4144,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "%{monster} sayısını ayarla"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Mesaj Çubuğu"
 
@@ -4150,7 +4174,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4190,8 +4214,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Büyü Puanları"
 
 msgid "Artifact"
 msgstr ""
@@ -4244,7 +4269,7 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
@@ -4337,10 +4362,10 @@ msgstr "Savaşa geri dön."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4421,8 +4446,11 @@ msgid ""
 msgstr "Lütfen başka bir kahraman seç."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
 
 msgid "Erase"
@@ -4465,7 +4493,19 @@ msgid "Towns"
 msgstr ""
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Büyü hedefini seç"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4562,7 +4602,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -4639,8 +4679,9 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 
-msgid "Supported languages"
-msgstr ""
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Dil Seç:"
 
 msgid "Language"
 msgstr "Dil"
@@ -4842,10 +4883,18 @@ msgstr "ETKİNLİKLER"
 msgid "LANGUAGE"
 msgstr "DİL"
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid "Change Map Description"
+#, fuzzy
+msgid "Change Map Name:"
+msgstr "Oyunun dilini değiştir."
+
+#, fuzzy
+msgid "Change Map Description:"
+msgstr "Oyunun çözünürlüğünü seç"
+
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4920,6 +4969,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -5192,7 +5244,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many-many other contributors and supporters!"
+msgid "and all the people who have helped make the project possible!"
 msgstr ""
 
 msgid "Support us at"
@@ -5327,6 +5379,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Çıkmak istediğine emin misin?"
+
 msgid "High Scores"
 msgstr ""
 
@@ -5375,6 +5433,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5397,9 +5458,6 @@ msgid "hotkey|multi-player game"
 msgstr ""
 
 msgid "hotkey|settings"
-msgstr ""
-
-msgid "hotkey|quit"
 msgstr ""
 
 msgid "hotkey|select map"
@@ -5869,9 +5927,6 @@ msgid ""
 "on a single map."
 msgstr ""
 
-msgid "Battle Only"
-msgstr "Sadece Savaş"
-
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
@@ -6292,12 +6347,6 @@ msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Çıkmak istediğine emin misin?"
-
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 
@@ -6416,7 +6465,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Saldırı Becerisini Ayarla"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6433,13 +6482,54 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Oyunun dilini değiştir."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Seçili dili seçmek için tıklayın."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
+
+msgid "Lowercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6524,6 +6614,9 @@ msgid "Vietnamese"
 msgstr "Görünüm %{name}"
 
 msgid "Greek"
+msgstr ""
+
+msgid "Esperanto"
 msgstr ""
 
 msgid "Slow"
@@ -7859,16 +7952,16 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Büyü Puanları"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 #, fuzzy
@@ -7929,6 +8022,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Blood Morale"
@@ -8923,9 +9020,6 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
-msgstr ""
-
-msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"
@@ -11487,3 +11581,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#~ msgid "AI"
+#~ msgstr "Bilgisayar"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"

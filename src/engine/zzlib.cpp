@@ -100,7 +100,7 @@ std::vector<uint8_t> Compression::unzipData( const uint8_t * src, const size_t s
     return res;
 }
 
-std::vector<uint8_t> Compression::zipData( const uint8_t * src, const size_t srcSize, const int compression )
+std::vector<uint8_t> Compression::zipData( const uint8_t * src, const size_t srcSize, const bool isMaximumCompression )
 {
     if ( src == nullptr || srcSize == 0 ) {
         return {};
@@ -120,9 +120,7 @@ std::vector<uint8_t> Compression::zipData( const uint8_t * src, const size_t src
         return {};
     }
 
-    const bool isDefaultCompression = compression < Z_BEST_SPEED || compression > Z_BEST_COMPRESSION;
-
-    const int ret = compress2( res.data(), &dstSizeULong, src, srcSizeULong, isDefaultCompression ? -1 : compression );
+    const int ret = compress2( res.data(), &dstSizeULong, src, srcSizeULong, isMaximumCompression ? Z_BEST_COMPRESSION : Z_DEFAULT_COMPRESSION );
 
     if ( ret != Z_OK ) {
         ERROR_LOG( "zlib error: " << ret )
@@ -162,7 +160,7 @@ bool Compression::unzipStream( IStreamBase & inputStream, OStreamBase & outputSt
 
 bool Compression::zipStreamBuf( const IStreamBuf & inputStream, OStreamBase & outputStream )
 {
-    const std::vector<uint8_t> zip = zipData( inputStream.data(), inputStream.size() );
+    const std::vector<uint8_t> zip = zipData( inputStream.data(), inputStream.size(), false );
     if ( zip.empty() ) {
         return false;
     }

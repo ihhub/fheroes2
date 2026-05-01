@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 01:29+0000\n"
+"POT-Creation-Date: 2026-04-27 23:52+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -487,7 +487,7 @@ msgid "Move the %{name}"
 msgstr "Premiestni: %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Streľ do: %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -1068,6 +1068,12 @@ msgstr "Zahynie: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Zahynie: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
 msgid "Turn Order"
 msgstr "Poradie"
 
@@ -1121,12 +1127,12 @@ msgstr "Pozorovaním orlím zrakom, %{name} sa dokáže naučiť kúzlo %{spell}
 msgid "Human"
 msgstr "Človek"
 
-msgid "AI"
-msgstr "UI"
-
 #, fuzzy
 msgid "Terrain"
 msgstr "Režim terénu"
+
+msgid "Battle Only"
+msgstr "Rýchly boj"
 
 #, fuzzy
 msgid "Start"
@@ -1159,11 +1165,16 @@ msgid "Please select another hero."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
 
 #, fuzzy
-msgid "Click to set this hero to be human-controlled."
+msgid "Click to select a hero."
 msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
-msgid "Click to set this hero to be AI-controlled."
+msgid "Hero"
+msgstr "Hrdinovia"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
@@ -3577,24 +3588,25 @@ msgid "Random Map Generator"
 msgstr "Náhodný tvor"
 
 #, fuzzy
-msgid "rmg|Player count"
+msgid "rmg|Player count:"
 msgstr "Ikona hráča"
 
-msgid "rmg|Map layout"
-msgstr ""
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Ikona hráča"
 
 #, fuzzy
-msgid "rmg|Water percentage"
+msgid "rmg|Water percentage:"
 msgstr "Vodný elementál"
 
 #, fuzzy
-msgid "rmg|Monster strength"
+msgid "rmg|Monster strength:"
 msgstr "Náhodný tvor - silný"
 
-msgid "rmg|Resource availability"
+msgid "rmg|Resource availability:"
 msgstr ""
 
-msgid "rmg|Map seed"
+msgid "rmg|Map seed:"
 msgstr ""
 
 #, fuzzy
@@ -3805,6 +3817,10 @@ msgstr "Zvoľ hrdinu:"
 msgid "Select Monsters:"
 msgstr "Zvoľ bojovníka:"
 
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Zvoľ artefakt:"
+
 msgid "race|Random"
 msgstr "Náhodná"
 
@@ -3836,7 +3852,7 @@ msgid "Select Ocean Object:"
 msgstr "Objekty oceánu"
 
 #, fuzzy
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr "Možnosti hradu"
 
 msgid "doubleLinedRace|Neutral"
@@ -3878,7 +3894,7 @@ msgstr "Zvoľ kúzlo:"
 msgid "Select Landscape Object:"
 msgstr "Objekty oceánu"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3920,7 +3936,7 @@ msgid "Select Adventure Object:"
 msgstr "Objekty oceánu"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Zvoľ bojovníka:"
 
 msgid "Players Icon"
@@ -4251,11 +4267,15 @@ msgid "Town Army"
 msgstr "Mesto"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Koľko jednotiek na presun?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Kliknutím zobraz ďalšie mesto."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Stratíš hrdinu '%{name}'."
 
 #, fuzzy
@@ -4332,6 +4352,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Streľ do: %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Panel správ"
 
@@ -4359,7 +4383,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Deň: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4406,7 +4430,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Skúsenosti"
 
 msgid "Artifact"
@@ -4467,7 +4491,7 @@ msgid "%{objects} must be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
@@ -4576,11 +4600,11 @@ msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Náhodný ultimátny artefakt"
 
 msgid "%{object} has no properties to change."
@@ -4671,8 +4695,11 @@ msgid ""
 msgstr "Prosím zvoľ ďalšieho hrdinu."
 
 msgid ""
-"Cell\n"
-"Details"
+"Click to edit\n"
+"\n"
+"or\n"
+"\n"
+"click and hold to move"
 msgstr ""
 
 #, fuzzy
@@ -4721,7 +4748,19 @@ msgid "Towns"
 msgstr "Mestá"
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Objekty oceánu"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Objekty oceánu"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Objekty oceánu"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Objekty oceánu"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4827,7 +4866,7 @@ msgid "Detail Mode"
 msgstr "Režim detailov"
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Slúži na špeciálne úpravy príšer, hrdinov a miest."
 
 #, fuzzy
@@ -4916,7 +4955,7 @@ msgstr ""
 "Zobraziť systémové možnosti editora, ktoré umožňujú prispôsobiť editor."
 
 #, fuzzy
-msgid "Supported languages"
+msgid "Supported languages:"
 msgstr "Prispej na"
 
 msgid "Language"
@@ -5137,12 +5176,19 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr "Veľkosť mapy"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Zvolený opis"
+
+msgid "map|About"
+msgstr ""
 
 #, fuzzy
 msgid "Click to edit custom rumors."
@@ -5228,6 +5274,9 @@ msgid "Toggle animation of the objects."
 msgstr ""
 
 msgid "Toggle display of objects' passability."
+msgstr ""
+
+msgid "Rumors:"
 msgstr ""
 
 msgid "Rumor:"
@@ -5532,9 +5581,8 @@ msgstr "Vývoj a podpora"
 msgid "Special Thanks to"
 msgstr "Špeciálne poďakovanie pre"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "a mnoho ďalších podporovateľov!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Prispej na"
@@ -5668,6 +5716,12 @@ msgstr "Návrhári máp"
 msgid "Package Design"
 msgstr "Dizajn balíkov"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Určite chceš skončiť?"
+
 msgid "High Scores"
 msgstr "Najvyššie skóre"
 
@@ -5717,6 +5771,9 @@ msgstr "prepni mód podpory textu"
 msgid "hotkey|toggle developer mode"
 msgstr "prepni mód podpory textu"
 
+msgid "hotkey|quit"
+msgstr "ukonči"
+
 msgid "hotkey|new game"
 msgstr "nová hra"
 
@@ -5741,9 +5798,6 @@ msgstr "hra viacero hráčov"
 
 msgid "hotkey|settings"
 msgstr "nastavenie"
-
-msgid "hotkey|quit"
-msgstr "ukonči"
 
 msgid "hotkey|select map"
 msgstr "zvoľ mapu"
@@ -6237,9 +6291,6 @@ msgstr ""
 "Hra pre viacerých hráčov, v ktorej proti sebe na jednej mape nastupuje "
 "niekoľko ľudských hráčov."
 
-msgid "Battle Only"
-msgstr "Rýchly boj"
-
 msgid "Setup and play a battle without loading any map."
 msgstr "Nastaviť a hrať bitku bez načítania mapy."
 
@@ -6725,12 +6776,6 @@ msgid ""
 msgstr ""
 "Jeden alebo viac hrdinov sa ešte môže pohnúť, naozaj chceš ukončiť svoj ťah?"
 
-msgid "To exit fheroes2, press the Home button or swipe up."
-msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Určite chceš skončiť?"
-
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr "Určite chceš reštartovať hru? (Tvoja aktuálna hra sa stratí.)"
 
@@ -6880,7 +6925,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Zvoľ zručnosť útoku"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6898,14 +6943,58 @@ msgstr "Obrana"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Klikni pre uloženie terajšej hry."
+
 msgid "Keyboard|123"
 msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
+msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "MEDZERNÍK"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Zmeň jazyk hry."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Klikni pre výber zvoleného jazyka."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Kvety"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Klikni pre uloženie terajšej hry."
+
 msgid "Keyboard|ABC"
 msgstr "ABC"
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Návrhári máp"
+
+msgid "Click to switch between signed and unsigned numbers."
+msgstr ""
 
 msgid "The entered value is invalid."
 msgstr ""
@@ -6990,6 +7079,9 @@ msgstr "Vietnamsky"
 #, fuzzy
 msgid "Greek"
 msgstr "Zelený"
+
+msgid "Esperanto"
+msgstr ""
 
 msgid "Slow"
 msgstr "Pomalá"
@@ -8704,17 +8796,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Body kúziel"
 
 msgid "View Spell Points Info"
 msgstr "Zobraz info o bodoch kúziel"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Stratíš hrdinu '%{name}'."
 
 #, fuzzy
@@ -8782,6 +8874,10 @@ msgstr ""
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
 msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Kliknutím zobraz ďalšie mesto."
 
 msgid "Blood Morale"
 msgstr "Krvná Morálka"
@@ -9868,10 +9964,6 @@ msgstr "Náhodný tvor - silný"
 
 msgid "Random Monster - very strong"
 msgstr "Náhodný tvor - veľmi silný"
-
-#, fuzzy
-msgid "Hero"
-msgstr "Hrdinovia"
 
 msgid "Nothing Special"
 msgstr "Nič zvláštne"
@@ -12844,3 +12936,14 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#, fuzzy
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "a mnoho ďalších podporovateľov!"
+
+#~ msgid "AI"
+#~ msgstr "UI"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."

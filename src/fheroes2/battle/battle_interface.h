@@ -72,7 +72,7 @@ namespace Battle
     enum class CastleDefenseStructure : int;
     enum class CellDirection;
 
-    void DialogBattleSettings();
+    void DialogBattleSettings( const bool isTurnOrderInsideWindow );
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
     enum class HeroAnimation : uint32_t
@@ -247,7 +247,8 @@ namespace Battle
             _opponentColor = opponentColor;
         }
 
-        void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi );
+        void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi,
+                     const bool isAboveDialog );
 
         bool queueEventProcessing( Interface & interface, std::string & msg, const fheroes2::Point & offset, const bool highlightUnitMomevementArea ) const;
 
@@ -268,6 +269,9 @@ namespace Battle
             _restorer.reset();
         }
 
+        // Pass window area which might include frame decorations.
+        static bool isRenderingInsideBattlefieldWindow( const fheroes2::Rect & battlefieldWindow );
+
     private:
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
@@ -281,6 +285,7 @@ namespace Battle
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         PlayerColor _opponentColor{ PlayerColor::NONE };
         bool _isInsideBattleField{ false };
+        bool _isAboveDialog{ false };
     };
 
     class PopupDamageInfo : public Dialog::FrameBorder
