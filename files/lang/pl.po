@@ -25,7 +25,7 @@ msgid "SELECT"
 msgstr "WYBIERZ"
 
 msgid "ABOUT"
-msgstr ""
+msgstr "INFO"
 
 msgid "S"
 msgstr "M"
@@ -499,9 +499,8 @@ msgstr "Nie można przenieść ostatniej jednostki"
 msgid "Move the %{name}"
 msgstr "Przenieś %{name}"
 
-#, fuzzy
 msgid "Set %{monster} Count:"
-msgstr "Strzelaj do %{monster}"
+msgstr "Ustaw ilość - %{monster}:"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -509,11 +508,9 @@ msgstr[0] "%{name} niszczy połowę stworów wroga!"
 msgstr[1] "%{name} niszczą połowę stworów wroga!"
 msgstr[2] "%{name} niszczy połowę stworów wroga!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto combat"
 msgstr "%{name} wyłączył automatyczną walkę"
 
-#, fuzzy
 msgid "%{name} has turned on the auto combat"
 msgstr "%{name} włączył automatyczną walkę"
 
@@ -528,7 +525,7 @@ msgstr ""
 "rzucenie wszelkich zaklęć bojowych."
 
 msgid "You cannot cast spells without a commanding hero."
-msgstr ""
+msgstr "Nie możesz rzucać zaklęć bez dowodzącego bohatera."
 
 msgid "You have already cast a spell this round."
 msgstr "W tej rundzie zaklęcie zostało już rzucone."
@@ -546,21 +543,18 @@ msgstr ""
 "Obok twojego bohatera nie ma wolnego miejsca gdzie można by przywołać "
 "Żywiołaki."
 
-#, fuzzy
 msgid ""
 "The Moat interrupts any movement through it and reduces the defense skill of "
 "troops present in it by %{count}."
 msgstr ""
-"Fosa zmniejsza współczynnik obrony o -%{count} oraz spowalnia jednostki o "
-"połowę."
+"Fosa przerywa ruch i obniża współczynnik obrony przebywających w niej "
+"oddziałów o %{count}."
 
-#, fuzzy
 msgid "battleAnimation|Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
 
-#, fuzzy
 msgid "battleAnimation|Speed"
-msgstr "Aneksja"
+msgstr "Szybkość"
 
 msgid "Interface"
 msgstr "Interfejs"
@@ -580,13 +574,11 @@ msgstr "Włączone"
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
-#, fuzzy
 msgid "Change the interface settings of the game."
-msgstr "Zmień ustawienia grafiki gry."
+msgstr "Zmień ustawienia interfejsu gry."
 
-#, fuzzy
 msgid "Interface Settings"
-msgstr "Ustawienia gry"
+msgstr "Ustawienia interfejsu"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -619,7 +611,7 @@ msgid "The enemy has surrendered!"
 msgstr "Przeciwnik się poddał!"
 
 msgid "Their cowardice costs them %{gold} gold."
-msgstr ""
+msgstr "Ich tchórzostwo kosztowało ich %{gold} sztuk złota."
 
 msgid "The enemy has fled!"
 msgstr "Przeciwnik uciekł!"
@@ -636,11 +628,9 @@ msgstr "%{name} tchórzliwie ucieka z pola bitwy."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} poddaje się wrogowi i odchodzi w hańbie."
 
-#, fuzzy
 msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Twoje wojska ponoszą dotkliwą klęskę, a %{name} opuszcza cię."
 
-#, fuzzy
 msgid "Your forces suffer a bitter defeat."
 msgstr "Twoje wojska ponoszą dotkliwą klęskę."
 
@@ -653,13 +643,11 @@ msgstr "Atakujący"
 msgid "Defender"
 msgstr "Obrońca"
 
-#, fuzzy
 msgid "Click to leave the battle results."
-msgstr "Użyj wskazanej rozdzielczości."
+msgstr "Kliknij, aby zaakceptować wynik bitwy."
 
-#, fuzzy
 msgid "Click to restart the battle in manual mode."
-msgstr "Kliknij, aby wrócić do głównego menu."
+msgstr "Kliknij, aby powtórzyć bitwę w trybie ręcznym."
 
 msgid "Restart"
 msgstr "Rozpocznij od nowa"
@@ -1185,13 +1173,11 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Wybierz innego bohatera."
 
-#, fuzzy
 msgid "Click to select a hero."
-msgstr "Kliknij, aby wybrać kolor."
+msgstr "Kliknij, aby wybrać bohatera."
 
-#, fuzzy
 msgid "Hero"
-msgstr "Bohaterowie"
+msgstr "Bohater"
 
 #, fuzzy
 msgid ""
@@ -3830,9 +3816,8 @@ msgstr "Wybierz skarb:"
 msgid "Select Ocean Object:"
 msgstr "Wybierz obiekt wodny:"
 
-#, fuzzy
 msgid "Castle/town placing:"
-msgstr "Umieszczanie zamku/miasta"
+msgstr "Umieszczanie zamku/miasta:"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutralny"
@@ -3864,9 +3849,8 @@ msgstr "Wybierz siedlisko:"
 msgid "Select Landscape Object:"
 msgstr "Wybierz obiekt terenu:"
 
-#, fuzzy
 msgid "Mine placing:"
-msgstr "Umieszczanie kopalni"
+msgstr "Umieszczanie kopalni:"
 
 msgid ""
 "Resource\n"
@@ -4511,20 +4495,18 @@ msgid ""
 "be playable."
 msgstr ""
 
-#, fuzzy
 msgid "Start Map"
-msgstr "Rozpocznij od nowa"
+msgstr "Uruchom mapę"
 
-#, fuzzy
 msgid ""
 "Do you wish to leave the Editor and start the map? (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Czy na pewno chcesz wczytać nową grę? (aktualna rozgrywka zostanie przerwana)"
+"Czy chcesz opuścić edytor i uruchomić mapę? (Wszelkie niezapisane zmiany w "
+"bieżącej mapie zostaną utracone.)"
 
-#, fuzzy
 msgid "Create a new map from scratch."
-msgstr "nowa mapa od początku"
+msgstr "Utwórz nową mapę od podstaw."
 
 msgid "New Map"
 msgstr "Nowa Mapa"
@@ -4535,33 +4517,29 @@ msgstr "Wczytaj Mapę"
 msgid "Load an existing map."
 msgstr "Wczytaj istniejącą mapę."
 
-#, fuzzy
 msgid "Save Map"
-msgstr "Zapisz grę"
+msgstr "Zapisz mapę"
 
-#, fuzzy
 msgid "Save the current map."
-msgstr "Zapisz bieżącą grę."
+msgstr "Zapisz obecną mapę."
 
 msgid "Quit out of the map editor."
-msgstr ""
+msgstr "Wyjdź z edytora map."
 
-#, fuzzy
 msgid "Return to the game's Main Menu."
-msgstr "Kliknij, aby wrócić do głównego menu."
+msgstr "Wróć do głównego menu gry."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
-msgstr ""
+msgstr "Wyjdź z edytora map i uruchom mapę w grze standardowej."
 
 msgid "Input %{object} text:"
 msgstr ""
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius:"
-msgstr "Losowy najpotężniejszy artefakt"
+msgstr "Ustaw promień losowego najpotężniejszego artefaktu:"
 
 msgid "%{object} has no properties to change."
-msgstr ""
+msgstr "Obiekt '%{object}' nie posiada właściwości do zmiany."
 
 #, fuzzy
 msgid "This artifact"
@@ -4624,9 +4602,8 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "Zapisz plik:"
 
-#, fuzzy
 msgid "Used to place %{object}."
-msgstr "Znajdź najpotężniejszy artefakt."
+msgstr "Umieść %{object}."
 
 msgid "Select object type"
 msgstr "Wybierz typ obiektu"
@@ -4691,36 +4668,32 @@ msgstr "Bohaterowie"
 msgid "Towns"
 msgstr "Miasta"
 
-#, fuzzy
 msgid "editorErasure|Mountains"
-msgstr "Drogi"
+msgstr "Góry"
 
-#, fuzzy
 msgid "editorErasure|Rocks"
-msgstr "Drogi"
+msgstr "Kamienie"
 
-#, fuzzy
 msgid "editorErasure|Trees"
-msgstr "Strumienie"
+msgstr "Drzewa"
 
-#, fuzzy
 msgid "editorErasure|Miscellaneous and Water landscape objects"
-msgstr "Wybierz artefakt:"
+msgstr "Obiekty wodne i pozostałe"
 
 msgid "editorErasure|Adventure non pickable objects"
-msgstr ""
+msgstr "Obiekty stałe"
 
 msgid "editorErasure|Castles"
-msgstr ""
+msgstr "Zamki"
 
 msgid "editorErasure|Adventure pickable objects"
-msgstr ""
+msgstr "Obiekty do zebrania"
 
 msgid "editorErasure|Monsters"
-msgstr ""
+msgstr "Potwory"
 
 msgid "editorErasure|Heroes"
-msgstr ""
+msgstr "Bohaterowie"
 
 msgid "editorErasure|Roads"
 msgstr "Drogi"
@@ -4732,165 +4705,163 @@ msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Rysuje teren linią\n"
+"grubości %{size} x %{size}."
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Usuwa obiekty linią\n"
+"grubości %{size} x %{size}."
 
-#, fuzzy
 msgid "Small Brush"
-msgstr "Małe mapy"
+msgstr "Mały pędzel"
 
-#, fuzzy
 msgid "Medium Brush"
-msgstr "Średnie mapy"
+msgstr "Średni pędzel"
 
-#, fuzzy
 msgid "Large Brush"
-msgstr "Duże mapy"
+msgstr "Duży pędzel"
 
 msgid "Area Fill"
-msgstr ""
+msgstr "Wypełnianie obszaru"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Służy do wypełniania dużych obszarów."
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Wymazywanie obszaru"
 
 msgid "Used to click and drag for clearing large areas."
-msgstr ""
+msgstr "Służy do wymazywania dużych obszarów."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
+"Dla wszystkich bohaterów ruch kosztuje %{rate} razy więcej. (Znaj. drogi "
+"zmniejsza lub usuwa to ograniczenie.)"
 
 msgid "Traversable only by boat."
-msgstr ""
+msgstr "Można go przebyć jedynie w łodzi."
 
 msgid "No special modifiers."
-msgstr ""
+msgstr "Brak specjalnych modyfikatorów."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr ""
+msgstr "Włącz/wyłącz wymazywanie obiektów - %{type}."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
 msgstr ""
+"Obiekty tego typu zostaną usunięte przez narzędzie wymazywania. Kliknij tutaj "
+"lewym przyciskiem myszy, aby odznaczyć ten typ. Naciśnij i przytrzymaj "
+"ten przycisk, aby odznaczyć wszystkie inne typy obiektów."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
 msgstr ""
+"Obiekty tego typu NIE zostaną usunięte przez narzędzie wymazywania. Kliknij tutaj "
+"lewym przyciskiem myszy, aby zaznaczyć ten typ. Naciśnij i przytrzymaj "
+"ten przycisk, aby zaznaczyć wszystkie inne typy obiektów."
 
 msgid "Terrain Mode"
-msgstr ""
+msgstr "Tryb terenu"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
-msgstr ""
+msgstr "Służy do rysowania podstawowego terenu mapy: trawy, ziemi, wody itp."
 
 msgid "Landscape Objects Mode"
-msgstr ""
+msgstr "Tryb obiektów krajobrazu"
 
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
-msgstr ""
+msgstr "Służy do umieszczania obiektów krajobrazu (gór, skał, drzew itp.) na mapie."
 
 msgid "Detail Mode"
-msgstr ""
+msgstr "Tryb szczegółów"
 
-#, fuzzy
 msgid "Used for moving or customizing objects."
-msgstr "Pokonaj wszystkich wrogów i miasta."
+msgstr "Służy do przemieszczania i dostosowywania obiektów."
 
-#, fuzzy
 msgid "Adventure Objects Mode"
-msgstr "Opcje przygody"
+msgstr "Tryb obiektów przygody"
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
-msgstr ""
+msgstr "Służy do umieszczania obiektów przygody (artefaktów, siedlisk, kopalń, skarbów itp.) na mapie."
 
-#, fuzzy
 msgid "Kingdom Objects Mode"
-msgstr "Przychód"
+msgstr "Tryb obiektów królestwa"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
-msgstr ""
+msgstr "Służy do umieszczania obiektów królestwa (miast, zamków i bohaterów) na mapie."
 
-#, fuzzy
 msgid "Monsters Mode"
-msgstr "Potwory"
+msgstr "Tryb potworów"
 
-#, fuzzy
 msgid "Used to place monsters on the map."
-msgstr "Znajdź najpotężniejszy artefakt."
+msgstr "Służy do umieszczania potworów na mapie."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr ""
+msgstr "Służy do rysowania strumieni metodą 'Kliknij i przeciągnij'."
 
 msgid "Stream Mode"
-msgstr ""
+msgstr "Tryb strumieni"
 
 msgid "Allows you to draw roads by clicking and dragging."
-msgstr ""
+msgstr "Służy do rysowania dróg metodą 'Kliknij i przeciągnij'."
 
-#, fuzzy
 msgid "Road Mode"
-msgstr "Droga"
+msgstr "Tryb dróg"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "Tryb wymazywania"
 
 msgid "Used to erase objects from the map."
-msgstr ""
+msgstr "Służy do wymazywania obiektów z mapy."
 
 msgid "Change between zoom and normal view."
-msgstr ""
+msgstr "Zmień pomiędzy normalnym i powiększonym widokiem."
 
 msgid "Magnify"
-msgstr ""
+msgstr "Powiększ"
 
 msgid "Undo"
-msgstr ""
+msgstr "Cofnij"
 
 msgid "Undo your last action."
-msgstr ""
+msgstr "Cofnij ostatnią akcję."
 
 msgid "Redo"
-msgstr ""
+msgstr "Ponów"
 
 msgid "Redo the last undone action."
-msgstr ""
+msgstr "Ponów ostatnio cofniętą akcję."
 
 msgid "Edit map title, description, and other general information."
-msgstr ""
+msgstr "Zmień nazwę i opis mapy oraz inne ogólne informacje."
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Zamiana w Kamień"
+msgstr "Specyfikacje"
 
 msgid "File Options"
 msgstr "Opcje plików"
 
-#, fuzzy
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
-"Pokazuje menu z opcjami plików, pozwalając na: wczytanie gry, zapisanie gry "
-"rozpoczęcie nowej gry lub wyjście z bieżącej gry."
+"Otwiera menu opcji plików, gdzie można zapisać lub wczytać mapę albo wyjść z edytora."
 
-#, fuzzy
 msgid "View the editor system options, which let you customize the editor."
-msgstr ""
-"Pokazuje menu z opcjami systemowymi, pozwalając na zmianę ustawień gry."
+msgstr "Wyświetla opcje systemowe edytora, pozwalające na jego dostosowanie."
 
 msgid "Supported languages:"
 msgstr "Wspierane języki:"
@@ -4964,9 +4935,8 @@ msgstr "Kliknij, aby wrócić do głównego menu."
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
 
-#, fuzzy
 msgid "[%{pos}]: %{race} hero"
-msgstr "%{color} gracz"
+msgstr "[%{pos}]: %{race}"
 
 msgid "[%{pos}]: %{name}, %{race} hero"
 msgstr "[%{pos}]: %{name}, %{race}"
@@ -4977,13 +4947,11 @@ msgstr "[%{pos}]: Zamek, %{race}"
 msgid "[%{pos}]: %{race} town"
 msgstr "[%{pos}]: Miasto, %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} castle"
-msgstr "Spotkanie: %{name1} i %{name2}"
+msgstr "[%{pos}]: Zamek %{name}, %{race}"
 
-#, fuzzy
 msgid "[%{pos}]: %{name}, %{race} town"
-msgstr "Spotkanie: %{name1} i %{name2}"
+msgstr "[%{pos}]: Miasto %{name}, %{race}"
 
 msgid "None."
 msgstr "Brak."
@@ -4997,25 +4965,20 @@ msgstr "Zgromadzenie złota."
 msgid "Run out of time."
 msgstr "Upływ czasu."
 
-#, fuzzy
 msgid "alliance|1st"
-msgstr " sojusz"
+msgstr "1."
 
-#, fuzzy
 msgid "alliance|2nd"
-msgstr " sojusz"
+msgstr "2."
 
-#, fuzzy
 msgid "alliance|3rd"
-msgstr " sojusz"
+msgstr "3."
 
-#, fuzzy
 msgid "alliance|4th"
-msgstr " sojusz"
+msgstr "4."
 
-#, fuzzy
 msgid "alliance|5th"
-msgstr " sojusz"
+msgstr "5."
 
 msgid "Special Loss Condition"
 msgstr "Specjalne warunki porażki"
@@ -5029,13 +4992,11 @@ msgstr "Pozwól na standardowe warunki zwycięstwa"
 msgid "Allow this condition also for AI"
 msgstr "Stosuj ten warunek także dla komputera"
 
-#, fuzzy
 msgid "Set alliances:"
-msgstr " sojusz"
+msgstr "Ustaw sojusze:"
 
-#, fuzzy
 msgid "{%number} alliance: "
-msgstr " sojusz"
+msgstr "{%number} sojusz: "
 
 msgid "Gold:"
 msgstr "Złoto:"
@@ -5053,29 +5014,27 @@ msgid "Click here to change the hero needed to defeat to achieve victory."
 msgstr "Kliknij, aby zmienić bohatera, którego pokonanie oznacza zwycięstwo."
 
 msgid "Put %{color} player in the %{alliance} alliance"
-msgstr ""
+msgstr "%{color} gracz w %{alliance} sojuszu"
 
 msgid ""
 "If this checkbox is checked, the %{color} player will be in the %{alliance} "
 "alliance."
-msgstr ""
+msgstr "Jeśli to pole jest zaznaczone, %{color} gracz będzie w %{alliance} sojuszu."
 
 msgid "Days:"
 msgstr "Dni:"
 
 msgid "Select a Town to lose to suffer defeat"
-msgstr ""
+msgstr "Wybierz miasto, którego utrata oznacza porażkę"
 
-#, fuzzy
 msgid "Click here to change the town whose loss would mean defeat."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zmienić miasto, którego utrata oznacza porażkę."
 
 msgid "Select a Hero to lose to suffer defeat"
-msgstr ""
+msgstr "Wybierz bohatera, którego utrata oznacza porażkę"
 
-#, fuzzy
 msgid "Click here to change the hero whose loss would mean defeat."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zmienić bohatera, którego utrata oznacza porażkę."
 
 msgid "Map Difficulty"
 msgstr "Trudność mapy"
@@ -5163,19 +5122,17 @@ msgstr "%{color} gracz"
 msgid "editor|%{count} %{resource}"
 msgstr "Wybierz ilość %{resource}:"
 
-#, fuzzy
 msgid "Animation"
-msgstr "Aneksja"
+msgstr "Animacja"
 
-#, fuzzy
 msgid "Passability"
-msgstr "Osobowość:"
+msgstr "Przejezdność"
 
 msgid "Toggle animation of the objects."
-msgstr ""
+msgstr "Włącz/wyłącz animację obiektów."
 
 msgid "Toggle display of objects' passability."
-msgstr ""
+msgstr "Włącz/wyłącz wyświetlanie przejezdności obiektów."
 
 msgid "Rumors:"
 msgstr "Pogłoski:"
@@ -5189,9 +5146,8 @@ msgstr "Pogłoska"
 msgid "This rumor already exists in the list."
 msgstr "Ta pogłoska już istnieje na liście."
 
-#, fuzzy
 msgid "Click to save the rumors."
-msgstr "Zapisz bieżącą grę."
+msgstr "Kliknij, aby zapisać pogłoski."
 
 msgid "Add Rumor"
 msgstr "Dodaj pogłoskę"
@@ -6544,7 +6500,6 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "%{color} gracz - nowa tura."
 
-#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in the next week, you will be eliminated."
@@ -7647,13 +7602,12 @@ msgstr ""
 "Pijesz wodę w oazie, ale nic się nie dzieje. Być może trzeba tu wrócić po "
 "najbliższej bitwie."
 
-#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
 msgstr ""
-"Orzeźwiająca woda z oazy wzmacnia ducha twoich żołnierzy i dodaje im sił. "
-"Możesz dziś jeszcze pokonać spory kawałek drogi."
+"Orzeźwiająca woda z oazy wzmacnia ducha twoich oddziałów i dodaje im sił. "
+"Możesz dziś przebyć nieco dalszą drogę."
 
 msgid ""
 "The drink at the watering hole is refreshing, but offers no further benefit. "
@@ -9835,7 +9789,7 @@ msgid "Desert Tent"
 msgstr "Namiot na pustyni"
 
 msgid "Stone Liths"
-msgstr "Głazy"
+msgstr "Kamienne wrota"
 
 msgid "Wagon Camp"
 msgstr "Tabor"
@@ -11192,15 +11146,14 @@ msgstr ""
 "%{name} przedłuża czas trwania wszystkich zaklęć rzucanych przez bohatera o "
 "%{count} tury."
 
-#, fuzzy
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
-"Podczas swych wędrówek krajobraz nagle zmienia się, ukazując makabryczną "
-"scenę: sępy żerujące na pobojowisku straszliwej batalii. Szybkie oględziny "
-"szczątek owocują znalezieniem zaczarowanej klepsydry."
+"Nagła zmiana krajobrazu zaskakuje twe oczy przerażającym widokiem sępów "
+"dojadających zwłoki pozostałe na polu niedawno rozegranej bitwy. Przeszukujesz "
+"pole odnajdując zaczarowaną klepsydrę."
 
 msgid "Gold Watch"
 msgstr "Złoty Zegarek"
@@ -11555,15 +11508,14 @@ msgstr ""
 "%{name} sprawia, że wszystkie oddziały bohatera stają się odporne na "
 "zaklęcia rozproszenia magii."
 
-#, fuzzy
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
 "He presents  you with a gift: A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
-"Spotykasz starego przyjaciela Czarodzieja, podróżującego w przeciwnym "
-"kierunku. Obdarowuje cię on podarkiem: różdżką zdolną ochronić twe oddziały "
-"przed zaklęciami rozproszenia magii."
+"Spotykasz swego starego przyjaciela, czarodzieja, który podróżuje w przeciwnym "
+"kierunku. Z okazji spotkania daje ci on przydatny prezent: różdżkę, która nie "
+"pozwala wrogowi używać czaru rozproszenia magii przeciwko twym oddziałom."
 
 msgid "Golden Bow"
 msgstr "Złoty Łuk"
@@ -11703,18 +11655,16 @@ msgstr "Potworna Maska"
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
 msgstr "%{name} nie pozwala neutralnym armiom na dołączenie do armii bohatera."
 
-#, fuzzy
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
 "your visage into an awful grimace! Oh no! It's actually the hideous mask of "
 "Gromluck Greene, and you are stuck with it."
 msgstr ""
-"Przeczesując grób Sinfilasa Gardolada, słynnego zmiennokształtnego "
-"Czarnoksiężnika, odkrywasz jego osławioną maskę. Drżąc na całym ciele, "
-"zakładasz ją, a ta wykręca twoją twarz w okropnym grymasie! O nie! Okazało "
-"się, że to tak naprawdę jest Potworna Maska Gromluck'a Greene'a, a ty w niej "
-"utknąłeś na dobre."
+"Po splądrowaniu grobu słynnego zmiennokształtnego czarnoksiężnika, "
+"Sinfilasa Gardolada, znajdujesz legendarną maskę. Zakładasz ją drżąc "
+"z podniecenia, a na twojej twarzy pojawia się straszny grymas! O nie! "
+"To potworna maska Gromlucka Greene, i przylgnęła do ciebie na stałe."
 
 msgid "Endless Pouch of Sulfur"
 msgstr "Bezdenna Sakiewka Siarki"
@@ -11849,13 +11799,12 @@ msgstr ""
 msgid "White Pearl"
 msgstr "Biała Perła"
 
-#, fuzzy
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
-"Spacer poprzez nieckę wyschniętego słonego jeziora kończy się niespodziewaną "
-"nagrodą: białą perłą skrytą pomiędzy pokruszonymi muszlami i śmieciami."
+"Spacer po wyschniętym słonym jeziorze kończy się znalezieniem wyjątkowego skarbu "
+"- pośród kawałków muszli i wyschniętych wodorostów zauważasz białą perłę."
 
 msgid "Black Pearl"
 msgstr "Czarna Perła"
@@ -11865,10 +11814,9 @@ msgid ""
 "its cave lair. A quick, brutal fight dispatches the beast, and a search of "
 "its foul nest turns up a huge black pearl."
 msgstr ""
-"Plotki o Gryfie niespotykanych rozmiarów, żerującym na okolicy, zaprowadziły "
-"cię do jego skalnego leża. Krótka, zacięta walka przynosi kres bestii, a "
-"przeszukanie jego plugawego gniazda kończy się znalezieniem wielkiej czarnej "
-"perły."
+"Pogłoski o wielkim gryfie, który dawał się we znaki okolicznym mieszkańcom, "
+"doprowadziły cię do jego jaskini. Po krótkiej, gwałtownej walce pokonujesz bestię, "
+"a przeszukawszy jej plugawe gniazdo odnajdujesz wielką czarną perłę."
 
 msgid "Magic Book"
 msgstr "Księga Zaklęć"
