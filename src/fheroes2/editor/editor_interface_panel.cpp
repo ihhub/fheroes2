@@ -415,6 +415,12 @@ namespace Interface
                                                offsetY + static_cast<int32_t>( i / 3 ) * buttonStepY, buttonWidth, buttonHeight };
         }
 
+        // Detail mode types.
+        for ( size_t i = 0; i < _detailModeButtonsRect.size(); ++i ) {
+            _detailModeButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 2 ) * 2 * buttonStepX,
+                                          offsetY + static_cast<int32_t>( i / 2 ) * buttonStepY, buttonWidth, buttonHeight };
+        }
+
         // Adventure objects buttons position.
         for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
             _adventureObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 2 ) * buttonStepX + ( i < 4 ? buttonHalfStepX : ( i < 6 ? 0 : buttonStepX * 2 ) ),
@@ -511,6 +517,15 @@ namespace Interface
             }
 
             updateObjectTypeSelection( _selectedLandscapeObject, _landscapeObjectButtonsRect, _getLandscapeObjectTypeName,
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 80 }, display );
+        }
+        else if ( _selectedInstrument == Instrument::DETAIL ) {
+            // Detail mode types.
+            for ( uint32_t i = 0; i < DetailBrushType::DETAIL_MODE_COUNT; ++i ) {
+                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 18 ), 0, 0, display, _detailModeButtonsRect[i] );
+            }
+
+            updateObjectTypeSelection( _selectedDetailBrushType, _detailModeButtonsRect, _getDetailModeTypeName,
                                        { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 80 }, display );
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
@@ -774,6 +789,24 @@ namespace Interface
         }
 
         return getObjectGroupName( _selectedLandscapeObjectGroup[brushId] );
+    }
+
+    const char * EditorPanel::_getDetailModeTypeName( const uint8_t brushId )
+    {
+        switch ( brushId ) {
+        case DetailBrushType::VIEWING:
+            return _( "editorDetailMode|View" );
+        case DetailBrushType::EDITING:
+            return _( "editorDetailMode|Edit" );
+        case DetailBrushType::MOVING:
+            return _( "editorDetailMode|Move" );
+        case DetailBrushType::COPYING:
+            return _( "editorDetailMode|Copy" );
+        default:
+            break;
+        }
+
+        return "Unknown detail mode";
     }
 
     const char * EditorPanel::_getAdventureObjectTypeName( const uint8_t brushId )
@@ -1103,6 +1136,42 @@ namespace Interface
             if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::LANDSCAPE_MISC] ) ) {
                 handleObjectMouseClick( Dialog::selectLandscapeMiscellaneousObjectType );
                 return res;
+            }
+        }
+        else if ( _selectedInstrument == Instrument::DETAIL ) {
+            for ( size_t i = 0; i < _detailModeButtonsRect.size(); ++i ) {
+                if ( ( _selectedDetailBrushType != static_cast<int8_t>( i ) ) && le.isMouseLeftButtonPressedInArea( _detailModeButtonsRect[i] ) ) {
+                    _selectedDetailBrushType = static_cast<int8_t>( i );
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    setRedraw();
+                    break;
+                }
+            }
+
+            for ( uint8_t brushId = DetailBrushType::VIEWING; brushId < DetailBrushType::DETAIL_MODE_COUNT; ++brushId ) {
+                if ( le.isMouseRightButtonPressedInArea( _detailModeButtonsRect[brushId] ) ) {
+                    switch ( brushId ) {
+                    case DetailBrushType::VIEWING:
+                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "View objects on the Adventure Map." ), Dialog::ZERO );
+                        break;
+                    case DetailBrushType::EDITING:
+                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "Edit objects on the Adventure Map." ), Dialog::ZERO );
+                        break;
+                    case DetailBrushType::MOVING:
+                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "Move objects on the Adventure Map." ), Dialog::ZERO );
+                        break;
+                    case DetailBrushType::COPYING:
+                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "Copy objects on the Adventure Map." ), Dialog::ZERO );
+                        break;
+                    default:
+                        assert( 0 );
+                        break;
+                    }
+                    break;
+                }
             }
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
