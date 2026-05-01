@@ -779,7 +779,7 @@ MapsFileInfoList Maps::getEditorMapFileInfos()
             continue;
         }
 
-        sortedMaps.emplace( System::GetFileName( mapFile ), std::move( fi ) );
+        sortedMaps.emplace( StringLower( System::GetFileName( mapFile ) ), std::move( fi ) );
     }
 
     if ( sortedMaps.empty() ) {
