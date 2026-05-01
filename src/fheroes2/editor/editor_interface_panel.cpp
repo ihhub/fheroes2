@@ -581,10 +581,6 @@ namespace Interface
                 text.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 95, _rectInstrumentPanel.width - 10, display );
             }
         }
-        else if ( _selectedInstrument == Instrument::DETAIL ) {
-            const fheroes2::Text instrumentName( _( "Click to edit\n\nor\n\nclick and hold to move" ), fheroes2::FontType::normalWhite() );
-            instrumentName.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
-        }
         else if ( _selectedInstrument == Instrument::ROAD ) {
             const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::ROADS ), fheroes2::FontType::normalWhite() );
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
