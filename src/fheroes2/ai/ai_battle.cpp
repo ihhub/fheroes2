@@ -157,7 +157,7 @@ namespace
         return bestAttackVector;
     }
 
-    double optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
+    double optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos, double allEnemiesThreat )
     {
         assert( attackPos.isValidForUnit( attacker ) );
 
@@ -193,6 +193,29 @@ namespace
                 += doubleCellAttackValue( attacker, target, Battle::Board::GetIndexDirection( attackTargetIdx, Battle::Board::GetReflectDirection( attackDirection ) ),
                                           attackTargetIdx );
         }
+        
+        if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) || attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+            uint32_t killed = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
+            uint32_t ressurectPoints;
+            if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) )
+                ressurectPoints = killed * attacker.Monster::GetHitPoints();
+            else {
+                ressurectPoints = killed * target.Monster::GetHitPoints();
+                ressurectPoints = std::min(ressurectPoints, (attacker.GetMaxCount() * attacker.Monster::GetHitPoints() - attacker.GetHitPoints()));
+            }
+            
+            // first effect: target will need to kill this ressurected creatures
+            const double avgNumberOfPowerfulTargets = 1.5; // average number of powerful troops in target's army
+            attackValue += ressurectPoints / avgNumberOfPowerfulTargets;
+            
+            // second effect: attacker troop becomes more powerful and can kill enemies faster
+            const double avgNumOfAtackers = 2.0;
+            const double avgBattleTurns = 5.0; // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
+            double ressurectK = 1 + std::max(ressurectPoints - allEnemiesThreat/avgNumOfAtackers, 0.0) / (attacker.GetHitPoints() * 0.5); // *0.5 to get average hit points of the troop in the battle
+            double killTimeK = 1/ressurectK;
+            assert(killTimeK <= 1);
+            attackValue += (allEnemiesThreat/avgNumOfAtackers) * avgBattleTurns * (1 - killTimeK);
+        }
 
         return attackValue;
     }
@@ -207,6 +230,9 @@ namespace
         // For each position near enemy units, select the maximum attack value among neighboring enemy melee units, and then add the sum of the attack values of
         // neighboring enemy archers to encourage the use of attacking positions that block these archers
         std::sort( enemies.begin(), enemies.end(), []( const Battle::Unit * unit1, const Battle::Unit * unit2 ) { return !unit1->isArchers() && unit2->isArchers(); } );
+
+        double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), static_cast<double>( 0.0 ),
+                                [&attacker]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
 
         PositionValues result;
 
@@ -246,7 +272,7 @@ namespace
                     continue;
                 }
 
-                const double attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
+                const double attackValue = optimalAttackValue( attacker, *enemyUnit, pos, allEnemiesThreat );
 
                 if ( const auto [iter, inserted] = result.try_emplace( pos, attackValue ); !inserted ) {
                     // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
@@ -295,7 +321,7 @@ namespace
     }
 
     MeleeAttackOutcome BestAttackOutcome( const Battle::Unit & attacker, const Battle::Unit & defender, const PositionValues & valuesOfAttackPositions,
-                                          const std::function<bool( const Battle::Position & )> & posFilter = {} )
+                                          double allEnemiesThreat, const std::function<bool( const Battle::Position & )> & posFilter = {} )
     {
         MeleeAttackOutcome bestOutcome;
 
@@ -332,7 +358,7 @@ namespace
             assert( posValueIter != valuesOfAttackPositions.end() );
 
             MeleeAttackOutcome current;
-            current.attackValue = optimalAttackValue( attacker, defender, pos );
+            current.attackValue = optimalAttackValue( attacker, defender, pos, allEnemiesThreat );
             current.positionValue = posValueIter->second;
             current.canAttackImmediately = Battle::Board::CanAttackTargetFromPosition( attacker, defender, posHeadIdx );
 
@@ -1542,10 +1568,13 @@ double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Batt
 
     MeleeAttackOutcome bestOutcome;
 
+    double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), static_cast<double>( 0.0 ),
+                            [&currentUnit]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( currentUnit ); } );
+
     for ( const Battle::Unit * enemy : enemies ) {
         assert( enemy != nullptr );
 
-        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat );
 
         if ( !outcome.canAttackImmediately ) {
             continue;
@@ -1715,14 +1744,17 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
     // Current unit can be under the influence of the Hypnotize spell
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
+    double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), static_cast<double>( 0.0 ),
+                            [&currentUnit]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( currentUnit ); } );
+
     // 1. Cover our archers and attack enemy units blocking them, if there are any. Units whose affiliation has been changed should not cover the archers, because
     // such units will block them instead of covering them.
     if ( currentUnit.GetArmyColor() == _myColor ) {
         const bool isAnyEnemyCanBeAttackedImmediately
-            = std::any_of( enemies.begin(), enemies.end(), [&currentUnit, &valuesOfAttackPositions]( const Battle::Unit * enemy ) {
+            = std::any_of( enemies.begin(), enemies.end(), [&currentUnit, &valuesOfAttackPositions, allEnemiesThreat]( const Battle::Unit * enemy ) {
                   assert( enemy != nullptr );
 
-                  const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                  const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat );
 
                   return outcome.canAttackImmediately;
               } );
@@ -1960,7 +1992,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                 for ( const Battle::Unit * enemy : adjacentEnemies ) {
                     assert( enemy != nullptr );
 
-                    const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                    const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat );
 
                     if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
                         bestOutcome = outcome;
@@ -2006,7 +2038,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                     const Battle::Position pos = Battle::Position::GetReachable( currentUnit, target.cell );
                     assert( pos.isValidForUnit( currentUnit ) );
 
-                    const double attackValue = optimalAttackValue( currentUnit, *enemy, pos );
+                    const double attackValue = optimalAttackValue( currentUnit, *enemy, pos, allEnemiesThreat );
                     if ( bestAttackValue < attackValue ) {
                         bestAttackValue = attackValue;
 
@@ -2037,7 +2069,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
 
-            const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, [this, &currentUnit]( const Battle::Position & pos ) {
+            const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat, [this, &currentUnit]( const Battle::Position & pos ) {
                 return isPositionLocatedInDefendedArea( currentUnit, pos );
             } );
 
