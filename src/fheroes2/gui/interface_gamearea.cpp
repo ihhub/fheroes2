@@ -1047,8 +1047,8 @@ void Interface::GameArea::QueueEventProcessing()
                     }
                     _inertiaVelX = sumX / static_cast<double>( dt );
                     _inertiaVelY = sumY / static_cast<double>( dt );
-                    const double speed = std::sqrt( _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY );
-                    if ( speed > 0.15 && Settings::Get().isMapScrollInertiaEnabled() ) {
+                    const double speedSq = _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY;
+                    if ( speedSq > 0.15 * 0.15 && Settings::Get().isMapScrollInertiaEnabled() ) {
                         _inertiaActive = true;
                         _inertiaAccumX = 0.0;
                         _inertiaAccumY = 0.0;
@@ -1163,7 +1163,7 @@ bool Interface::GameArea::updateInertia()
     _inertiaVelX *= decay;
     _inertiaVelY *= decay;
 
-    if ( std::sqrt( _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY ) < 0.05 ) {
+    if ( _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY < 0.05 * 0.05 ) {
         _inertiaActive = false;
         return false;
     }
@@ -1184,11 +1184,13 @@ bool Interface::GameArea::updateInertia()
     SetCenterInPixels( getCurrentCenterInPixels() + fheroes2::Point( pixelX, pixelY ) );
     const fheroes2::Point after = _topLeftTileOffset;
 
-    if ( after.x == before.x ) {
+    // Only zero the velocity when the map actually tried to move but was blocked by a boundary.
+    // If pixelX is 0 (subpixel accumulation hasn't reached a full pixel yet), keep decaying normally.
+    if ( pixelX != 0 && after.x == before.x ) {
         _inertiaVelX = 0.0;
         _inertiaAccumX = 0.0;
     }
-    if ( after.y == before.y ) {
+    if ( pixelY != 0 && after.y == before.y ) {
         _inertiaVelY = 0.0;
         _inertiaAccumY = 0.0;
     }
