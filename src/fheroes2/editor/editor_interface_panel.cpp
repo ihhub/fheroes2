@@ -525,7 +525,7 @@ namespace Interface
                 fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 18 ), 0, 0, display, _detailModeButtonsRect[i] );
             }
 
-            updateObjectTypeSelection( _selectedDetailBrushType, _detailModeButtonsRect, _getDetailModeTypeName,
+            updateObjectTypeSelection( static_cast<int8_t>( _selectedDetailBrushType ), _detailModeButtonsRect, _getDetailModeTypeName,
                                        { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 80 }, display );
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
@@ -1140,8 +1140,8 @@ namespace Interface
         }
         else if ( _selectedInstrument == Instrument::DETAIL ) {
             for ( size_t i = 0; i < _detailModeButtonsRect.size(); ++i ) {
-                if ( ( _selectedDetailBrushType != static_cast<int8_t>( i ) ) && le.isMouseLeftButtonPressedInArea( _detailModeButtonsRect[i] ) ) {
-                    _selectedDetailBrushType = static_cast<int8_t>( i );
+                if ( ( _selectedDetailBrushType != static_cast<uint8_t>( i ) ) && le.isMouseLeftButtonPressedInArea( _detailModeButtonsRect[i] ) ) {
+                    _selectedDetailBrushType = static_cast<uint8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
                     _setCursor();
