@@ -2829,10 +2829,9 @@ namespace Interface
 
         Maps::Tile & tile = world.getTile( destinationTile );
         if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
-            assert( action.get() != nullptr );
-
             copyMetadataToObjectClone( movableObjectInfo.objectUID, Maps::getLastObjectUID(), _mapFormat, destinationTile );
 
+            assert( action.get() != nullptr );
             action->commit();
         }
     }
