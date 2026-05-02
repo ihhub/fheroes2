@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -5919,6 +5919,14 @@ msgstr "Obrazovka výstavby"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "Koupit všechny jednotky ve studni"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Následující hrdina"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Opakovat poslední akci"
 
 msgid "hotkey|split stack by half"
 msgstr "Rozdělit jednotku napůl"

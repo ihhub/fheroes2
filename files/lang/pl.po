@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-30 03:17+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2026-04-07 19:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5994,6 +5994,14 @@ msgstr "ekran budowy zamku/miasta"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "rekrutuj wszystkie stworzenia"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "pokaż następnego bohatera"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "domyślna akcja"
 
 msgid "hotkey|split stack by half"
 msgstr "podziel jednostki na pół"

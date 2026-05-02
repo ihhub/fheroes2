@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6097,6 +6097,14 @@ msgstr "màn hình xây dựng"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "mua tất cả các qoái vật trong giếng"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "tướng tiếp theo"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "thực hiện lại tác vụ cuối"
 
 msgid "hotkey|split stack by half"
 msgstr "chia đạo quân làm đôi"

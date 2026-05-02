@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -5985,6 +5985,14 @@ msgstr "Bau-Bildschirm"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "Alle Monster im Brunnen kaufen"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Nächster Held"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Letzte Aktion wiederherstellen"
 
 msgid "hotkey|split stack by half"
 msgstr "Stapel halbieren"
