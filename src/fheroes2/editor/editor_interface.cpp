@@ -1028,9 +1028,46 @@ namespace
             // Castles and towns store their colors inside flags.
             // The chosen tile might not be the main tile of the castle.
             // We need to get flag information from the main tile.
-            const int32_t mainTileIndex = Maps::Tile::getIndexOfMainTile( tile );
+            int32_t mainTileIndex = tileId;
 
-            const int color = Maps::getTownColorIndex( mapFormat, ( mainTileIndex >= 0 ) ? mainTileIndex : tileId, object.id );
+            if ( !MP2::isOffGameActionObject( tile.getMainObjectType( false ) ) ) {
+                // This is not the main castle / town tile and also it could be a random castle.
+                // Maps::Tile::getIndexOfMainTile() simply won't work for this case.
+                // So, we need to do our own optimized logic.
+
+                const int32_t foundMainIndex = [tileId, &mapFormat, objectUID = object.id]() -> int32_t {
+                    // Maximum castle size in tile is 5 x 5 and the main tile in not at the bottom.
+                    // So the furthest point from to the center is 3.
+                    constexpr int32_t radiusOfSearch{ 3 };
+                    for ( int32_t y = radiusOfSearch; y >= -1; --y ) {
+                        const int32_t offsetX = tileId + y * mapFormat.width;
+                        for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
+                            const int32_t index = offsetX + x;
+                            if ( !Maps::isValidAbsIndex( index ) ) {
+                                continue;
+                            }
+
+                            const Maps::Tile & foundTile = world.getTile( index );
+                            const MP2::MapObjectType tileObjectType{ foundTile.getMainObjectType( false ) };
+                            if ( tileObjectType != MP2::OBJ_CASTLE && tileObjectType != MP2::OBJ_RANDOM_CASTLE ) {
+                                continue;
+                            }
+
+                            if ( foundTile.getMainObjectPart()._uid != 0 && ( objectUID == foundTile.getMainObjectPart()._uid ) ) {
+                                return index;
+                            }
+                        }
+                    }
+
+                    return -1;
+                }();
+
+                if ( foundMainIndex >= 0 ) {
+                    mainTileIndex = foundMainIndex;
+                }
+            }
+
+            const int color = Maps::getTownColorIndex( mapFormat, mainTileIndex, object.id );
             type = Interface::EditorPanel::generateTownObjectProperties( type, color );
         }
 
