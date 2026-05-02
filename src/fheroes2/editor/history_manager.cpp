@@ -186,9 +186,6 @@ namespace fheroes2
         case ActionType::SELECTION_METADATA:
             _action = std::make_unique<MetadataMapAction<Maps::Map_Format::SelectionObjectMetadata>>( mapFormat.selectionObjectMetadata );
             break;
-        case ActionType::CAPTURABLE_OBJECT_METADATA:
-            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::CapturableObjectMetadata>>( mapFormat.capturableObjectsMetadata );
-            break;
         case ActionType::MONSTER_METADATA:
             _action = std::make_unique<MetadataMapAction<Maps::Map_Format::MonsterMetadata>>( mapFormat.monsterMetadata );
             break;

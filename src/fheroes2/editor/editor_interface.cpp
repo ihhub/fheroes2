@@ -2254,7 +2254,7 @@ namespace Interface
                     const PlayerColor newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
 
                     if ( newColor != ownerColor ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::CAPTURABLE_OBJECT_METADATA );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::GENERIC );
 
                         if ( newColor == PlayerColor::NONE ) {
                             _mapFormat.capturableObjectsMetadata.erase( object.id );
