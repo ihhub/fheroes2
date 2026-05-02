@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -578,11 +578,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     keep = bottomArmyBar.GetSelectedItem();
                 }
 
-                if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DOWN ) ) {
+                if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_HERO ) ) {
                     hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_UP ) ) {
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_GARRISON ) ) {
                     GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }

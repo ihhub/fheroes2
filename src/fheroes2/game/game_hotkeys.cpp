@@ -325,6 +325,10 @@ namespace
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|construction screen" ), fheroes2::Key::KEY_B };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL_BUY_ALL )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|buy all monsters in well" ), fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_HERO )]
+            = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|merge troops with hero" ), fheroes2::Key::KEY_DOWN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_GARRISON )]
+            = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|merge troops with garrison" ), fheroes2::Key::KEY_UP };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF )]
             = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|split stack by half" ), fheroes2::Key::KEY_LEFT_SHIFT };
