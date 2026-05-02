@@ -1039,6 +1039,55 @@ namespace
         return true;
     }
 
+    template <typename T>
+    bool copyMetadataIfAvailable( const uint32_t originalObjectUID, const uint32_t newObjectUID, std::map<uint32_t, T> & metadata )
+    {
+        auto iter = metadata.find( originalObjectUID );
+        if ( iter == metadata.end() ) {
+            return false;
+        }
+
+        metadata[newObjectUID] = iter->second;
+        return true;
+    }
+
+    void copyMetadataToObjectClone( const uint32_t originalObjectUID, const uint32_t newObjectUID, Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId )
+    {
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.castleMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.heroMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.sphinxMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.signMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.adventureMapEventMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.selectionObjectMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.capturableObjectsMetadata ) ) {
+            auto iter = mapFormat.capturableObjectsMetadata.find( newObjectUID );
+            if ( iter != mapFormat.capturableObjectsMetadata.end() ) {
+                world.CaptureObject( tileId, iter->second.ownerColor );
+            }
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.monsterMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.artifactMetadata ) ) {
+            return;
+        }
+
+        copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.resourceMetadata );
+    }
+
 #if defined( WITH_DEBUG )
     int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
     {
@@ -1231,7 +1280,7 @@ namespace Interface
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
 
                     assert( Maps::isValidAbsIndex( indices.x ) );
-                    const bool isActionObject = ( _editorPanel.isDetailEdit() && brushSize.width == 1 && brushSize.height == 1
+                    const bool isActionObject = ( _editorPanel.isObjectEditingMode() && brushSize.width == 1 && brushSize.height == 1
                                                   && MP2::isOffGameActionObject( world.getTile( indices.x ).getMainObjectType() ) );
 
                     _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isActionObject );
@@ -1623,7 +1672,7 @@ namespace Interface
                             _brushTiles.clear();
                         }
                     }
-                    else if ( _editorPanel.isDetailEdit() ) {
+                    else if ( _editorPanel.isObjectMovingMode() || _editorPanel.isObjectCopyingMode() ) {
                         if ( le.isMouseLeftButtonPressed() ) {
                             if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
                                 if ( _brushTiles.empty() ) {
@@ -1646,7 +1695,12 @@ namespace Interface
                         }
                         else {
                             if ( le.isMouseLeftButtonReleased() ) {
-                                _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
+                                if ( _editorPanel.isObjectMovingMode() ) {
+                                    _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
+                                }
+                                else {
+                                    _tryToCopyObject( _movableObjectInfo, _tileUnderCursor );
+                                }
                             }
 
                             // Make sure to clear the action related information.
@@ -1917,7 +1971,7 @@ namespace Interface
 
         Maps::Tile & tile = world.getTile( tileIndex );
 
-        if ( _editorPanel.isDetailEdit() ) {
+        if ( _editorPanel.isObjectEditingMode() ) {
             // Trigger an action only when metadata has been changed to avoid expensive computations and bloated list of actions.
             // Comparing a metadata structure is much faster than restoring the whole map.
 
@@ -2755,6 +2809,32 @@ namespace Interface
         }
 
         Maps::setLastObjectUID( originalLastObjectUID );
+    }
+
+    void EditorInterface::_tryToCopyObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile )
+    {
+        assert( movableObjectInfo.tileIndex >= 0 );
+        assert( destinationTile >= 0 );
+
+        if ( movableObjectInfo.groupType == Maps::ObjectGroup::NONE ) {
+            // No object to move.
+            return;
+        }
+
+        if ( movableObjectInfo.tileIndex == destinationTile ) {
+            // Cannot copy to itself.
+            return;
+        }
+
+        auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+
+        Maps::Tile & tile = world.getTile( destinationTile );
+        if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
+            copyMetadataToObjectClone( movableObjectInfo.objectUID, Maps::getLastObjectUID(), _mapFormat, destinationTile );
+
+            assert( action.get() != nullptr );
+            action->commit();
+        }
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const

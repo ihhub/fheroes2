@@ -3324,7 +3324,7 @@ namespace
         }
         case ICN::EDITPANL:
             if ( _icnVsSprite[id].size() == 6 ) {
-                _icnVsSprite[id].resize( 18 );
+                _icnVsSprite[id].resize( 21 );
 
                 // Make empty buttons for object types.
                 _icnVsSprite[id][6]._disableTransformLayer();
@@ -3385,6 +3385,11 @@ namespace
 
                 // Make erase Streams button image.
                 Blit( fheroes2::AGG::GetICN( ICN::STREAM, 2 ), 0, 0, _icnVsSprite[id][17], 1, 8, 24, 11 );
+
+                // Make Detail mode images.
+                Blit( fheroes2::AGG::GetICN( ICN::CMSECO, 5 ), 0, 0, _icnVsSprite[id][18], 8, 4, 11, 18 );
+                Blit( fheroes2::AGG::GetICN( ICN::CMSECO, 2 ), 0, 0, _icnVsSprite[id][19], 3, 1, 21, 24 );
+                Blit( fheroes2::AGG::GetICN( ICN::ADVMCO, 8 ), 0, 0, _icnVsSprite[id][20], 6, 3, 15, 20 );
             }
             break;
         case ICN::TEXTBAR:
