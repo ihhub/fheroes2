@@ -113,7 +113,7 @@ namespace Interface
             case Instrument::MONSTERS:
                 return true;
             case Instrument::DETAIL:
-                return ( _selectedDetailBrushType == DetailBrushType::EDITING ) || ( _selectedDetailBrushType == DetailBrushType::VIEWING );
+                return ( _selectedDetailBrushType == DetailBrushType::EDITING );
             default:
                 break;
             }
@@ -265,16 +265,14 @@ namespace Interface
 
         enum DetailBrushType : uint8_t
         {
-            // Viewing the map. No interaction can be done.
-            VIEWING = 0,
             // Edit objects and also can move the map view by dragging.
-            EDITING = 1,
+            EDITING = 0,
             // Moving existing object by dragging them.
-            MOVING = 2,
+            MOVING = 1,
             // Making a copy of an existing object by dragging it.
-            COPYING = 3,
+            COPYING = 2,
 
-            DETAIL_MODE_COUNT = 4,
+            DETAIL_MODE_COUNT = 3,
         };
 
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).

@@ -417,8 +417,7 @@ namespace Interface
 
         // Detail mode types.
         for ( size_t i = 0; i < _detailModeButtonsRect.size(); ++i ) {
-            _detailModeButtonsRect[i]
-                = { offsetX + static_cast<int32_t>( i % 2 ) * 2 * buttonStepX, offsetY + static_cast<int32_t>( i / 2 ) * buttonStepY, buttonWidth, buttonHeight };
+            _detailModeButtonsRect[i] = { offsetX + static_cast<int32_t>( i ) * buttonStepX, offsetY, buttonWidth, buttonHeight };
         }
 
         // Adventure objects buttons position.
@@ -526,7 +525,7 @@ namespace Interface
             }
 
             updateObjectTypeSelection( static_cast<int8_t>( _selectedDetailBrushType ), _detailModeButtonsRect, _getDetailModeTypeName,
-                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 80 }, display );
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, display );
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             // Adventure objects buttons.
@@ -790,8 +789,6 @@ namespace Interface
     const char * EditorPanel::_getDetailModeTypeName( const uint8_t brushId )
     {
         switch ( brushId ) {
-        case DetailBrushType::VIEWING:
-            return _( "editorDetailMode|View" );
         case DetailBrushType::EDITING:
             return _( "editorDetailMode|Edit" );
         case DetailBrushType::MOVING:
@@ -1151,12 +1148,9 @@ namespace Interface
                 }
             }
 
-            for ( uint8_t brushId = DetailBrushType::VIEWING; brushId < DetailBrushType::DETAIL_MODE_COUNT; ++brushId ) {
+            for ( uint8_t brushId = DetailBrushType::EDITING; brushId < DetailBrushType::DETAIL_MODE_COUNT; ++brushId ) {
                 if ( le.isMouseRightButtonPressedInArea( _detailModeButtonsRect[brushId] ) ) {
                     switch ( brushId ) {
-                    case DetailBrushType::VIEWING:
-                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "View objects on the Adventure Map." ), Dialog::ZERO );
-                        break;
                     case DetailBrushType::EDITING:
                         fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "Edit objects on the Adventure Map." ), Dialog::ZERO );
                         break;

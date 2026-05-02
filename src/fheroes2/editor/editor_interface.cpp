@@ -1038,6 +1038,55 @@ namespace
         return true;
     }
 
+    template <typename T>
+    bool copyMetadataIfAvailable( const uint32_t originalObjectUID, const uint32_t newObjectUID, std::map<uint32_t, T> & metadata )
+    {
+        auto iter = metadata.find( originalObjectUID );
+        if ( iter == metadata.end() ) {
+            return false;
+        }
+
+        metadata[newObjectUID] = iter->second;
+        return true;
+    }
+
+    void copyMetadataToObjectClone( const uint32_t originalObjectUID, const uint32_t newObjectUID, Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId )
+    {
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.castleMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.heroMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.sphinxMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.signMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.adventureMapEventMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.selectionObjectMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.capturableObjectsMetadata ) ) {
+            auto iter = mapFormat.capturableObjectsMetadata.find( newObjectUID );
+            if ( iter != mapFormat.capturableObjectsMetadata.end() ) {
+                world.CaptureObject( tileId, iter->second.ownerColor );
+            }
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.monsterMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.artifactMetadata ) ) {
+            return;
+        }
+
+        copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.resourceMetadata );
+    }
+
 #if defined( WITH_DEBUG )
     int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
     {
@@ -2781,6 +2830,9 @@ namespace Interface
         Maps::Tile & tile = world.getTile( destinationTile );
         if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
             assert( action.get() != nullptr );
+
+            copyMetadataToObjectClone( movableObjectInfo.objectUID, Maps::getLastObjectUID(), _mapFormat, destinationTile );
+
             action->commit();
         }
     }
