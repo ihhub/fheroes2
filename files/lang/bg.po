@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4717,14 +4717,6 @@ msgid ""
 "select another monster."
 msgstr "Моля, избери друг герой."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 #, fuzzy
 msgid "Erase"
 msgstr "Режим на изтриване"
@@ -4769,6 +4761,18 @@ msgstr "Герой"
 
 msgid "Towns"
 msgstr "Градове"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Подробен режим"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Подробен режим"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Подробен режим"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4854,6 +4858,15 @@ msgstr "Преминаване само с лодка."
 
 msgid "No special modifiers."
 msgstr "Без специални модификатори."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Превключи изтриването на %{type} обекти."

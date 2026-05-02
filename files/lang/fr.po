@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4681,14 +4681,6 @@ msgstr ""
 "Cliquez ici pour\n"
 "sélectionner un autre créature."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Effacer"
 
@@ -4727,6 +4719,18 @@ msgstr "Héros"
 
 msgid "Towns"
 msgstr "Villages"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Details"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Details"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Details"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4814,6 +4818,15 @@ msgstr "Traversable uniquement par bateau."
 
 msgid "No special modifiers."
 msgstr "Aucun modificateur particulier."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Effacement %{type}."

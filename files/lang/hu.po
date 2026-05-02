@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2026-02-15 23:50+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -4582,14 +4582,6 @@ msgstr ""
 "Kattints ide, egy másik\n"
 "lény kiválasztásához."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Törlés"
 
@@ -4628,6 +4620,18 @@ msgstr "Hősök"
 
 msgid "Towns"
 msgstr "Városok"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Tulajdonságok mód"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Tulajdonságok mód"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Tulajdonságok mód"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4713,6 +4717,15 @@ msgstr "Csak hajóval járható."
 
 msgid "No special modifiers."
 msgstr "Nincs speciális módosító."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "%{type} tárgyak törlésének kapcsolója."

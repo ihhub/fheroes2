@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4693,14 +4693,6 @@ msgid ""
 "select another monster."
 msgstr "Hãy chọn một tướng khác."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 #, fuzzy
 msgid "Erase"
 msgstr "Chế độ Xóa"
@@ -4744,6 +4736,18 @@ msgstr "Tướng"
 
 msgid "Towns"
 msgstr "Thị trấn"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Chế độ Chi tiết"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Chế độ Chi tiết"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Chế độ Chi tiết"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4829,6 +4833,15 @@ msgstr "Chỉ có thể di chuyển bằng thuyền."
 
 msgid "No special modifiers."
 msgstr "Không có sửa đổi đặc biệt."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."

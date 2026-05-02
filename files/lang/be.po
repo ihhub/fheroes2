@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4607,14 +4607,6 @@ msgid ""
 "select another monster."
 msgstr ""
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Сцірка"
 
@@ -4653,6 +4645,18 @@ msgstr "Героі"
 
 msgid "Towns"
 msgstr "Гарады"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Уласцівасці аб’ектаў"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Уласцівасці аб’ектаў"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Уласцівасці аб’ектаў"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4736,6 +4740,15 @@ msgstr "Па марской паверхні можна перамяшчацца
 
 msgid "No special modifiers."
 msgstr "Без спецыяльных мадыфікатараў."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Выдаленне аб’ектаў тыпу \"%{type}\"."
