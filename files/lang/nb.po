@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6181,6 +6181,14 @@ msgstr "Byggeskjerm"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "Kjøp alle krigere fra brønnen"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Neste helt"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Standard handling"
 
 msgid "hotkey|split stack by half"
 msgstr "Del tropper i to"

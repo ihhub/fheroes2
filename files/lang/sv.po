@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2026-02-24 17:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -5905,6 +5905,14 @@ msgstr "Byggvy"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "Rekrytera alla varelser i brunnen"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Nästa hjälte"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Gör om senaste åtgärden"
 
 msgid "hotkey|split stack by half"
 msgstr "Dela truppen till hälften"

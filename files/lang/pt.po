@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -5948,6 +5948,14 @@ msgstr "tela de construção"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "comprar todos os monstros no poço"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "próximo herói"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "refazer última ação"
 
 msgid "hotkey|split stack by half"
 msgstr "dividir pilha pela metade"

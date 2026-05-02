@@ -466,7 +466,9 @@ namespace Battle
         void ResetIdleTroopAnimation() const;
         void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
-        void CheckGlobalEvents( LocalEvent & );
+
+        // Warning: This method checks and resets the next delays: BATTLE_SELECTED_UNIT_DELAY, BATTLE_FLAGS_DELAY, BATTLE_OPPONENTS_DELAY.
+        void _checkGlobalEvents( LocalEvent & le );
         void InterruptAutoCombatIfRequested( LocalEvent & le );
         void SetHeroAnimationReactionToTroopDeath( const PlayerColor deathColor ) const;
 
@@ -484,7 +486,7 @@ namespace Battle
         void _startAutoCombat( const Unit & unit, Actions & actions );
         void _quickCombat( Actions & actions );
 
-        std::vector<Game::DelayType> _mergeWithCommonAnimationsDelays( std::vector<Game::DelayType> otherDelays );
+        std::vector<Game::DelayType> _mergeWithCommonAnimationsDelays( std::vector<Game::DelayType> otherDelays ) const;
 
         Arena & arena;
         Dialog::FrameBorder border;

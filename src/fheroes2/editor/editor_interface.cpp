@@ -377,7 +377,8 @@ namespace
         return true;
     }
 
-    bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups )
+    bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups,
+                        const bool updateMapInfoIfNeeded )
     {
         if ( objectsUids.empty() || objectGroups.empty() ) {
             return false;
@@ -608,7 +609,7 @@ namespace
             }
         }
 
-        if ( updateMapPlayerInformation && !Maps::updateMapPlayers( mapFormat ) ) {
+        if ( updateMapInfoIfNeeded && updateMapPlayerInformation && !Maps::updateMapPlayers( mapFormat ) ) {
             assert( 0 );
         }
 
@@ -2714,7 +2715,7 @@ namespace Interface
         std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
 
         auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
-        removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType } );
+        removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType }, false );
 
         Maps::setLastObjectUID( movableObjectInfo.objectUID - 1 );
 
@@ -3050,7 +3051,7 @@ namespace Interface
         }
 
         if ( !uids.empty() ) {
-            removeObjects( _mapFormat, uids, groups );
+            removeObjects( _mapFormat, uids, groups, true );
         }
 
         // Run through each town and castle and update its terrain.
@@ -3212,7 +3213,7 @@ namespace Interface
 
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-        if ( removeObjects( _mapFormat, std::move( objectUIDs ), groups ) ) {
+        if ( removeObjects( _mapFormat, std::move( objectUIDs ), groups, true ) ) {
             action.commit();
             _redraw |= mapUpdateFlags;
         }

@@ -174,6 +174,8 @@ namespace Game
         // Also used to build a castle in the town.
         TOWN_CONSTRUCTION,
         TOWN_WELL_BUY_ALL,
+        TOWN_MERGE_TROOPS_WITH_HERO,
+        TOWN_MERGE_TROOPS_WITH_GARRISON,
 
         ARMY_SPLIT_STACK_BY_HALF,
         ARMY_SPLIT_STACK_BY_ONE,
