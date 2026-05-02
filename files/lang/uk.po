@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 02:17+0000\n"
 "PO-Revision-Date: 2026-01-31 15:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5899,6 +5899,14 @@ msgstr "екран будівництва"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "придбати усіх монстрів у колодязі"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "наступний герой"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "повторити останню дію"
 
 msgid "hotkey|split stack by half"
 msgstr "розділити загін навпіл"
