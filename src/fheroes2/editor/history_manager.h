@@ -59,13 +59,13 @@ namespace fheroes2
             // Use it when you aren't sure what changes are done or the changes are too complex.
             GENERIC,
             // Metadata update for a single object type.
+            // An exception is capturable objects as they need to enforce map redrawing.
             HERO_METADATA,
             CASTLE_METADATA,
             SPHINX_METADATA,
             SIGN_METADATA,
             ADVENTURE_MAP_EVENT_METADATA,
             SELECTION_METADATA,
-            CAPTURABLE_OBJECT_METADATA,
             MONSTER_METADATA,
             ARTIFACT_METADATA,
             RESOURCE_METADATA,
