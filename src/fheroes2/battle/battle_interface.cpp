@@ -689,10 +689,10 @@ namespace
     Battle::CellDirection getAttackingCellDirectionForAttackDirection( const Battle::Unit & attacker, const Battle::AttackDirection dir )
     {
         switch ( dir ) {
-            // This attack is performed from the head cell of the wide attacking unit in the direction of "back and down".
+        // This attack is performed from the head cell of the wide attacking unit in the direction of "back and down".
         case Battle::AttackDirection::TOP:
             return attacker.isReflect() ? Battle::CellDirection::TOP_LEFT : Battle::CellDirection::TOP_RIGHT;
-            // This attack is performed from the head cell of the wide attacking unit in the direction of "back and up".
+        // This attack is performed from the head cell of the wide attacking unit in the direction of "back and up".
         case Battle::AttackDirection::BOTTOM:
             return attacker.isReflect() ? Battle::CellDirection::BOTTOM_LEFT : Battle::CellDirection::BOTTOM_RIGHT;
         case Battle::AttackDirection::UNKNOWN:
@@ -723,7 +723,7 @@ namespace
     uint8_t GetArmyColorFromPlayerColor( const PlayerColor playerColor )
     {
         switch ( playerColor ) {
-            // Units under Berserker spell.
+        // Units under Berserker spell.
         case PlayerColor::UNUSED:
             return Battle::ArmyColor::ARMY_COLOR_BLACK;
         case PlayerColor::BLUE:
@@ -1122,8 +1122,6 @@ bool Battle::OpponentSprite::updateAnimationState()
                 SetAnimation( Battle::HeroAnimation::OP_STATIC );
                 return true;
             }
-
-            return false;
         }
         else if ( _idleTimer.checkDelay() ) {
             SetAnimation( ( Rand::Get( 1, 3 ) < 2 ) ? Battle::HeroAnimation::OP_IDLE2 : Battle::HeroAnimation::OP_IDLE );
@@ -4952,7 +4950,7 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
             _redrawActionResurrectSpell( *target, spell );
         else
             switch ( spell.GetID() ) {
-                // simple spell animation
+             // simple spell animation
             case Spell::BLESS:
                 RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell.GetID() ), NONE );
                 break;
@@ -4999,7 +4997,7 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
                 RedrawTroopWithFrameAnimation( *target, ICN::BERZERK, M82::FromSpell( spell.GetID() ), NONE );
                 break;
 
-                // uniq spell animation
+            // uniq spell animation
             case Spell::ARROW:
                 _redrawActionArrowSpell( *target );
                 break;
@@ -7267,7 +7265,7 @@ void Battle::Interface::InterruptAutoCombatIfRequested( LocalEvent & le )
 void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & actions )
 {
     switch ( result ) {
-        // cast
+    // cast
     case 1: {
         const HeroBase * hero = _currentUnit->GetCurrentOrArmyCommander();
 
@@ -7322,7 +7320,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
         break;
     }
 
-        // retreat
+    // retreat
     case 2: {
         if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to retreat?" ), Dialog::YES | Dialog::NO ) ) {
@@ -7337,7 +7335,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
         break;
     }
 
-        // surrender
+    // surrender
     case 3: {
         if ( arena.CanSurrenderOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             const HeroBase * enemy = arena.getEnemyCommander( arena.GetCurrentColor() );
