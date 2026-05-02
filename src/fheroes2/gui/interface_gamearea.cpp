@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstdlib>
 #include <deque>
 #include <list>
@@ -1031,6 +1032,32 @@ void Interface::GameArea::QueueEventProcessing()
     const fheroes2::Point & mousePosition = le.getMouseCursorPos();
 
     if ( !le.isMouseLeftButtonPressed() ) {
+        if ( _mouseDraggingMovement && !_dragSamples.empty() ) {
+            const uint64_t now = _dragTimer.getMs();
+            const uint64_t lastSampleAge = now - _dragSamples.back().timeMs;
+
+            if ( lastSampleAge < 50 && _dragSamples.size() >= 2 ) {
+                const uint64_t dt = _dragSamples.back().timeMs - _dragSamples.front().timeMs;
+                if ( dt > 0 ) {
+                    double sumX = 0.0;
+                    double sumY = 0.0;
+                    for ( const DragSample & s : _dragSamples ) {
+                        sumX += s.delta.x;
+                        sumY += s.delta.y;
+                    }
+                    _inertiaVelX = sumX / static_cast<double>( dt );
+                    _inertiaVelY = sumY / static_cast<double>( dt );
+                    const double speedSq = _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY;
+                    if ( speedSq > 0.15 * 0.15 && Settings::Get().isMapScrollInertiaEnabled() ) {
+                        _inertiaActive = true;
+                        _inertiaAccumX = 0.0;
+                        _inertiaAccumY = 0.0;
+                        _inertiaTimer.reset();
+                    }
+                }
+            }
+        }
+        _dragSamples.clear();
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
@@ -1039,6 +1066,11 @@ void Interface::GameArea::QueueEventProcessing()
         if ( !_mouseDraggingInitiated ) {
             _mouseDraggingInitiated = true;
             _lastMouseDragPosition = mousePosition;
+            _dragSamples.clear();
+            _dragTimer.reset();
+            _inertiaActive = false;
+            _inertiaAccumX = 0.0;
+            _inertiaAccumY = 0.0;
         }
         else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
@@ -1051,9 +1083,16 @@ void Interface::GameArea::QueueEventProcessing()
             _needRedrawByMouseDragging = false;
         }
         else {
+            const fheroes2::Point delta = _lastMouseDragPosition - mousePosition;
+
+            _dragSamples.push_back( { delta, _dragTimer.getMs() } );
+            while ( _dragSamples.size() > 2 && _dragSamples.back().timeMs - _dragSamples.front().timeMs > 100 ) {
+                _dragSamples.pop_front();
+            }
+
             // Update the center coordinates and redraw the adventure map only if the mouse was moved.
             _needRedrawByMouseDragging = true;
-            SetCenterInPixels( getCurrentCenterInPixels() + _lastMouseDragPosition - mousePosition );
+            SetCenterInPixels( getCurrentCenterInPixels() + delta );
             _lastMouseDragPosition = mousePosition;
         }
 
@@ -1105,6 +1144,61 @@ void Interface::GameArea::QueueEventProcessing()
         _prevIndexPos = index;
         updateCursor = false;
     }
+}
+
+bool Interface::GameArea::updateInertia()
+{
+    if ( !_inertiaActive ) {
+        return false;
+    }
+
+    const uint64_t dtMs = _inertiaTimer.getMs();
+    if ( dtMs == 0 ) {
+        return false;
+    }
+    _inertiaTimer.reset();
+
+    // Exponential velocity decay with a time constant of 200 ms.
+    const double decay = std::exp( -static_cast<double>( dtMs ) / 200.0 );
+    _inertiaVelX *= decay;
+    _inertiaVelY *= decay;
+
+    if ( _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY < 0.05 * 0.05 ) {
+        _inertiaActive = false;
+        return false;
+    }
+
+    _inertiaAccumX += _inertiaVelX * static_cast<double>( dtMs );
+    _inertiaAccumY += _inertiaVelY * static_cast<double>( dtMs );
+
+    const int32_t pixelX = static_cast<int32_t>( _inertiaAccumX );
+    const int32_t pixelY = static_cast<int32_t>( _inertiaAccumY );
+    _inertiaAccumX -= pixelX;
+    _inertiaAccumY -= pixelY;
+
+    if ( pixelX == 0 && pixelY == 0 ) {
+        return true;
+    }
+
+    const fheroes2::Point before = _topLeftTileOffset;
+    SetCenterInPixels( getCurrentCenterInPixels() + fheroes2::Point( pixelX, pixelY ) );
+    const fheroes2::Point after = _topLeftTileOffset;
+
+    // Only zero the velocity when the map actually tried to move but was blocked by a boundary.
+    // If pixelX is 0 (subpixel accumulation hasn't reached a full pixel yet), keep decaying normally.
+    if ( pixelX != 0 && after.x == before.x ) {
+        _inertiaVelX = 0.0;
+        _inertiaAccumX = 0.0;
+    }
+    if ( pixelY != 0 && after.y == before.y ) {
+        _inertiaVelY = 0.0;
+        _inertiaAccumY = 0.0;
+    }
+    if ( std::abs( _inertiaVelX ) < 1e-10 && std::abs( _inertiaVelY ) < 1e-10 ) {
+        _inertiaActive = false;
+    }
+
+    return true;
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
