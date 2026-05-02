@@ -330,8 +330,8 @@ namespace Interface
         int8_t _selectedAdventureObject{ -1 };
         int8_t _selectedKingdomObject{ -1 };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
-        uint32_t _eraseTypes{ ObjectErasureType::ERASE_ALL_OBJECTS };
         uint8_t _selectedDetailBrushType{ DetailBrushType::EDITING };
+        uint32_t _eraseTypes{ ObjectErasureType::ERASE_ALL_OBJECTS };
 
         std::array<int32_t, LandscapeObjectBrush::LANDSCAPE_COUNT> _selectedLandscapeObjectType;
         std::array<int32_t, AdventureObjectBrush::ADVENTURE_COUNT> _selectedAdventureObjectType;
