@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2026-04-01 14:30+0100\n"
 "Last-Translator: Yannis Anthymidis <yannis-foss@anth.me.uk>\n"
 "Language-Team: Greek\n"
@@ -4221,14 +4221,6 @@ msgid ""
 "select another monster."
 msgstr ""
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr ""
 
@@ -4267,6 +4259,16 @@ msgstr ""
 
 msgid "Towns"
 msgstr ""
+
+msgid "editorDetailMode|Edit"
+msgstr ""
+
+msgid "editorDetailMode|Move"
+msgstr ""
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "ΕΠΙΣΤΡΟΦΗ"
 
 msgid "editorErasure|Mountains"
 msgstr ""
@@ -4341,6 +4343,15 @@ msgid "Traversable only by boat."
 msgstr ""
 
 msgid "No special modifiers."
+msgstr ""
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
 msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."

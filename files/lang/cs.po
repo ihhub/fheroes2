@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4577,14 +4577,6 @@ msgstr ""
 "Klikněte zde\n"
 "pro další jednotky."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Vymazat"
 
@@ -4623,6 +4615,18 @@ msgstr "Hrdinové"
 
 msgid "Towns"
 msgstr "Města"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Detailní ežim"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Detailní ežim"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Detailní ežim"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4708,6 +4712,15 @@ msgstr "Překonatelné pouze lodí."
 
 msgid "No special modifiers."
 msgstr "Žádné speciální modifikátory."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Přepnout mazání objektů typu %{type}."

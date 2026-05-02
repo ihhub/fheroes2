@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 02:17+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -4644,14 +4644,6 @@ msgstr ""
 "Klickt, um\n"
 "ein anderes Monster auszuwählen."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Löschen"
 
@@ -4690,6 +4682,18 @@ msgstr "Helden"
 
 msgid "Towns"
 msgstr "Städte"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Detail-Modus"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Detail-Modus"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Detail-Modus"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4775,6 +4779,15 @@ msgstr "Nur mit dem Boot befahrbar."
 
 msgid "No special modifiers."
 msgstr "Keine besonderen Modifikatoren."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Löschens von %{type}-Objekten ein-/ausschalten."
