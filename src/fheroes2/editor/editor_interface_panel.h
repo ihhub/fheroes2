@@ -101,7 +101,7 @@ namespace Interface
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || isObjectMode() || isObjectEditingMode() || isObjectMovingMode() || isObjectCopyingMode();
+                   || _selectedInstrument == Instrument::ERASE || isObjectMode() || _selectedInstrument == Instrument::DETAIL;
         }
 
         bool useMouseDragMovement() const
