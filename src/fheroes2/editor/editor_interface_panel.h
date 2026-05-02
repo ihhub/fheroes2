@@ -265,7 +265,7 @@ namespace Interface
 
         enum DetailBrushType : uint8_t
         {
-            // Edit objects and also can move the map view by dragging.
+            // Edit objects which can also move the map view by dragging.
             EDITING = 0,
             // Moving existing object by dragging them.
             MOVING = 1,
