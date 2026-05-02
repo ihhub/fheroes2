@@ -6322,9 +6322,7 @@ void Battle::Interface::_redrawActionDeathWaveSpell( const int32_t strength )
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
-    const std::vector<Game::DelayType> allDelays = _mergeWithCommonAnimationsDelays( { Game::DelayType::BATTLE_DISRUPTING_DELAY } );
-
-    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && position < area.width + waveLength ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::BATTLE_DISRUPTING_DELAY } ) ) && position < area.width + waveLength ) {
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_DISRUPTING_DELAY ) ) {
             const int32_t wavePositionX = ( area.x + position < 0 ) ? 0 : ( area.x + position );
             const int32_t waveWidth = position > waveLength ? ( position > area.width ? ( waveLength - position + area.width ) : waveLength ) : position;
@@ -6464,7 +6462,7 @@ void Battle::Interface::_redrawActionHolyShoutSpell( const uint8_t strength )
 
     AudioManager::PlaySound( M82::MASSCURS );
 
-    while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) || Game::isDelayNeeded( _commonAnimationsDelays ) ) && frame < maxFrame ) {
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) ) && frame < maxFrame ) {
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
             // Display the maximum spell effect for 1 more 'spellcastDelay' without rendering a frame.
             if ( frame != halfMaxFrame ) {
@@ -6590,11 +6588,9 @@ void Battle::Interface::_redrawActionArmageddonSpell()
     AudioManager::PlaySound( M82::ARMGEDN );
     uint32_t alpha = 10;
 
-    const std::vector<Game::DelayType> allDelays = _mergeWithCommonAnimationsDelays( { Game::DelayType::BATTLE_SPELL_DELAY } );
-
     Game::passAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && alpha < 100 ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::BATTLE_SPELL_DELAY } ) ) && alpha < 100 ) {
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             fheroes2::ApplyPalette( spriteWhitening, 9 );
             fheroes2::Copy( spriteWhitening, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
@@ -6606,7 +6602,7 @@ void Battle::Interface::_redrawActionArmageddonSpell()
 
     fheroes2::Copy( spriteReddish, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && Mixer::isPlaying( -1 ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 28 ) ) - 14;
             const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 22 ) ) - 11;
@@ -6661,12 +6657,10 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
     LocalEvent & le = LocalEvent::Get();
     uint32_t frame = 0;
 
-    const std::vector<Game::DelayType> allDelays = _mergeWithCommonAnimationsDelays( { Game::DelayType::BATTLE_SPELL_DELAY } );
-
     Game::passAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY );
 
     // Draw earth quake animation.
-    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && frame < 18 ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::BATTLE_SPELL_DELAY } ) ) && frame < 18 ) {
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 28 ) ) - 14;
             const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 22 ) ) - 11;
@@ -6689,6 +6683,8 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
     frame = 0;
 
     AudioManager::PlaySound( M82::CATSND02 );
+
+    const std::vector<Game::DelayType> allDelays = _mergeWithCommonAnimationsDelays( { Game::DelayType::BATTLE_SPELL_DELAY } );
 
     Game::passAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY );
 
