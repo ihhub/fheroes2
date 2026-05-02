@@ -1112,6 +1112,7 @@ bool Heroes::Recruit( const PlayerColor col, const fheroes2::Point & pt )
     ResetModes( JAIL );
 
     SetColor( col );
+    setAlphaValue( 255 );
 
     SetCenter( pt );
     setDirection( Direction::RIGHT );

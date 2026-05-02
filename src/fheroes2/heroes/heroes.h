@@ -700,6 +700,11 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
+    void setAlphaValue( const uint8_t alphaValue )
+    {
+        _alphaValue = alphaValue;
+    }
+
     double getAIMinimumJoiningArmyStrength() const;
 
     uint32_t getDailyRestoredSpellPoints() const;
