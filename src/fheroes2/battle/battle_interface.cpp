@@ -4950,7 +4950,7 @@ void Battle::Interface::redrawActionSpellCastPart1( const Spell & spell, int32_t
             _redrawActionResurrectSpell( *target, spell );
         else
             switch ( spell.GetID() ) {
-             // simple spell animation
+            // simple spell animation
             case Spell::BLESS:
                 RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell.GetID() ), NONE );
                 break;
