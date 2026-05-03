@@ -381,8 +381,9 @@ namespace
                 // Use the "No cycle" palette.
                 // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
                 const uint8_t * correctorX = correctorY;
+                const uint8_t * correctorXEnd = correctorX + colorCount;
 
-                for ( uint32_t i = 0; i < colorCount; ++i, ++correctorX ) {
+                for ( ; correctorX != correctorXEnd; ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
                     const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
