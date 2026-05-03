@@ -1049,7 +1049,7 @@ namespace
 
                             const Maps::Tile & foundTile = world.getTile( index );
                             const MP2::MapObjectType tileObjectType{ foundTile.getMainObjectType( false ) };
-                            if ( tileObjectType != MP2::OBJ_CASTLE && tileObjectType != MP2::OBJ_RANDOM_CASTLE ) {
+                            if ( tileObjectType != MP2::OBJ_CASTLE && tileObjectType != MP2::OBJ_RANDOM_CASTLE && tileObjectType != MP2::OBJ_RANDOM_TOWN ) {
                                 continue;
                             }
 
