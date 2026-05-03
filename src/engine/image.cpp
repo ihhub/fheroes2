@@ -355,6 +355,9 @@ namespace
 
             const uint8_t * gamePalette = fheroes2::getGamePalette();
 
+            // Use the "No cycle" palette.
+            // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
+            // Plus we exclude all repeated colors.
             constexpr uint32_t colorCount{ 219 };
             const std::array<uint8_t, colorCount> nonCyclingUniqueColorPos{ 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
                                                                             29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
@@ -378,8 +381,6 @@ namespace
                 int32_t minDistance = INT32_MAX;
                 uint8_t bestPos = 0;
 
-                // Use the "No cycle" palette.
-                // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
                 const uint8_t * correctorX = correctorY;
                 const uint8_t * correctorXEnd = correctorX + colorCount;
 
