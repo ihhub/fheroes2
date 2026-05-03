@@ -2081,7 +2081,7 @@ namespace Interface
                     std::unique_ptr<const ObjectMultiSelectionUI> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
                         selectionUi = std::make_unique<const ObjectMultiSelectionUI>( std::move( allowedMonsters ), selectedMonsters, _( "Select Monsters:" ),
-                                                                                     Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectMonsters );
+                                                                                      Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectMonsters );
                     }
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
@@ -2145,9 +2145,9 @@ namespace Interface
 
                         std::unique_ptr<const ObjectMultiSelectionUI> selectionUi{ nullptr };
                         selectionUi = std::make_unique<const ObjectMultiSelectionUI>( std::move( allowed ), selected, _( "Select Artifacts:" ),
-                                                                                     Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectArtifact );
+                                                                                      Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectArtifact );
 
-                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius, 1, nullptr, selectionUi.get() ) 
+                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius, 1, nullptr, selectionUi.get() )
                              && ( radius != originalRadius || selected != selectionUi->getSelected() ) ) {
                             fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
                             originalRadius = radius;

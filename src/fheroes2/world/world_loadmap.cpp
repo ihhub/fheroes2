@@ -1152,8 +1152,8 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & objectInfo = artifactObjects[object.index];
 
                 if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE
-                          || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR
-                          || objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                     || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR
+                     || objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
                     auto & selected = artifactInfo.selected;
                     if ( !selected.empty() ) {
                         // Verify that the input data is correct.
