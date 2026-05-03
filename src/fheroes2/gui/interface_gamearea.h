@@ -312,8 +312,8 @@ namespace Interface
 
         double _inertiaVelX{ 0.0 };
         double _inertiaVelY{ 0.0 };
-        double _inertiaAccumX{ 0.0 };
-        double _inertiaAccumY{ 0.0 };
+        double _inertiaSubpixelShiftX{ 0.0 };
+        double _inertiaSubpixelShiftY{ 0.0 };
         bool _inertiaActive{ false };
         fheroes2::Time _inertiaTimer;
 

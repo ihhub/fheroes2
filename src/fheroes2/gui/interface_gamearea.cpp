@@ -1030,9 +1030,10 @@ void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mousePosition = le.getMouseCursorPos();
+    const Settings & conf = Settings::Get();
 
     if ( !le.isMouseLeftButtonPressed() ) {
-        if ( _mouseDraggingMovement && !_dragSamples.empty() ) {
+        if ( _mouseDraggingMovement && conf.isMapScrollInertiaEnabled() && !_dragSamples.empty() ) {
             const uint64_t now = _dragTimer.getMs();
             const uint64_t lastSampleAge = now - _dragSamples.back().timeMs;
 
@@ -1050,8 +1051,8 @@ void Interface::GameArea::QueueEventProcessing()
                     const double speedSq = _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY;
                     if ( speedSq > 0.15 * 0.15 && Settings::Get().isMapScrollInertiaEnabled() ) {
                         _inertiaActive = true;
-                        _inertiaAccumX = 0.0;
-                        _inertiaAccumY = 0.0;
+                        _inertiaSubpixelShiftX = 0.0;
+                        _inertiaSubpixelShiftY = 0.0;
                         _inertiaTimer.reset();
                     }
                 }
@@ -1069,8 +1070,8 @@ void Interface::GameArea::QueueEventProcessing()
             _dragSamples.clear();
             _dragTimer.reset();
             _inertiaActive = false;
-            _inertiaAccumX = 0.0;
-            _inertiaAccumY = 0.0;
+            _inertiaSubpixelShiftX = 0.0;
+            _inertiaSubpixelShiftY = 0.0;
         }
         else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
@@ -1085,9 +1086,11 @@ void Interface::GameArea::QueueEventProcessing()
         else {
             const fheroes2::Point delta = _lastMouseDragPosition - mousePosition;
 
-            _dragSamples.push_back( { delta, _dragTimer.getMs() } );
-            while ( _dragSamples.size() > 2 && _dragSamples.back().timeMs - _dragSamples.front().timeMs > 100 ) {
-                _dragSamples.pop_front();
+            if ( conf.isMapScrollInertiaEnabled() ) {
+                _dragSamples.push_back( { delta, _dragTimer.getMs() } );
+                while ( _dragSamples.size() > 2 && _dragSamples.back().timeMs - _dragSamples.front().timeMs > 100 ) {
+                    _dragSamples.pop_front();
+                }
             }
 
             // Update the center coordinates and redraw the adventure map only if the mouse was moved.
@@ -1113,7 +1116,6 @@ void Interface::GameArea::QueueEventProcessing()
         return;
     }
 
-    const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
@@ -1152,14 +1154,15 @@ bool Interface::GameArea::updateInertia()
         return false;
     }
 
-    const uint64_t dtMs = _inertiaTimer.getMs();
-    if ( dtMs == 0 ) {
+    const uint64_t rawDtMs = _inertiaTimer.getMs();
+    if ( rawDtMs == 0 ) {
         return false;
     }
     _inertiaTimer.reset();
+    const double dtMs = static_cast<double>( rawDtMs );
 
     // Exponential velocity decay with a time constant of 200 ms.
-    const double decay = std::exp( -static_cast<double>( dtMs ) / 200.0 );
+    const double decay = std::exp( -dtMs / 200.0 );
     _inertiaVelX *= decay;
     _inertiaVelY *= decay;
 
@@ -1168,31 +1171,30 @@ bool Interface::GameArea::updateInertia()
         return false;
     }
 
-    _inertiaAccumX += _inertiaVelX * static_cast<double>( dtMs );
-    _inertiaAccumY += _inertiaVelY * static_cast<double>( dtMs );
+    _inertiaSubpixelShiftX += _inertiaVelX * dtMs;
+    _inertiaSubpixelShiftY += _inertiaVelY * dtMs;
 
-    const int32_t pixelX = static_cast<int32_t>( _inertiaAccumX );
-    const int32_t pixelY = static_cast<int32_t>( _inertiaAccumY );
-    _inertiaAccumX -= pixelX;
-    _inertiaAccumY -= pixelY;
+    const fheroes2::Point viewShift( static_cast<int32_t>( _inertiaSubpixelShiftX ), static_cast<int32_t>( _inertiaSubpixelShiftY ) );
+    _inertiaSubpixelShiftX -= viewShift.x;
+    _inertiaSubpixelShiftY -= viewShift.y;
 
-    if ( pixelX == 0 && pixelY == 0 ) {
+    if ( viewShift.x == 0 && viewShift.y == 0 ) {
         return true;
     }
 
     const fheroes2::Point before = _topLeftTileOffset;
-    SetCenterInPixels( getCurrentCenterInPixels() + fheroes2::Point( pixelX, pixelY ) );
+    SetCenterInPixels( getCurrentCenterInPixels() + viewShift );
     const fheroes2::Point after = _topLeftTileOffset;
 
     // Only zero the velocity when the map actually tried to move but was blocked by a boundary.
-    // If pixelX is 0 (subpixel accumulation hasn't reached a full pixel yet), keep decaying normally.
-    if ( pixelX != 0 && after.x == before.x ) {
+    // If viewShift.x is 0 (subpixel accumulation hasn't reached a full pixel yet), keep decaying normally.
+    if ( viewShift.x != 0 && after.x == before.x ) {
         _inertiaVelX = 0.0;
-        _inertiaAccumX = 0.0;
+        _inertiaSubpixelShiftX = 0.0;
     }
-    if ( pixelY != 0 && after.y == before.y ) {
+    if ( viewShift.y != 0 && after.y == before.y ) {
         _inertiaVelY = 0.0;
-        _inertiaAccumY = 0.0;
+        _inertiaSubpixelShiftY = 0.0;
     }
     if ( std::abs( _inertiaVelX ) < 1e-10 && std::abs( _inertiaVelY ) < 1e-10 ) {
         _inertiaActive = false;
