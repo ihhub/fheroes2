@@ -1640,7 +1640,7 @@ void World::setUltimateArtifact()
 
         tileId = existingUltimateArtIter->GetIndex();
         radius = static_cast<int32_t>( existingUltimateArtIter->metadata()[0] );
-        artifact = existingUltimateArtIter->metadata()[1];
+        artifact = static_cast<int32_t>( existingUltimateArtIter->metadata()[1] );
 
         assert( radius >= 0 );
 
