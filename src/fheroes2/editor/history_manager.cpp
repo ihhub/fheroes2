@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <map>
 
 #include "map_format_helper.h"
 #include "map_format_info.h"
@@ -30,13 +31,27 @@
 
 namespace
 {
+    class BaseMapAction : public fheroes2::Action
+    {
+    public:
+        BaseMapAction() = default;
+
+        ~BaseMapAction() override = default;
+
+        // Disable the copy and move (implicitly) constructors and assignment operators.
+        BaseMapAction( const BaseMapAction & ) = delete;
+        BaseMapAction & operator=( const BaseMapAction & ) = delete;
+
+        virtual bool prepare() = 0;
+    };
+
     // This class holds 2 copies of MapFormat objects in a compressed format:
     // - one copy before the action
     // - one copy after the action
-    class MapAction final : public fheroes2::Action
+    class GenericMapAction final : public BaseMapAction
     {
     public:
-        explicit MapAction( Maps::Map_Format::MapFormat & mapFormat )
+        explicit GenericMapAction( Maps::Map_Format::MapFormat & mapFormat )
             : _mapFormat( mapFormat )
             , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
@@ -45,12 +60,7 @@ namespace
             }
         }
 
-        // Disable the copy and move (implicitly) constructors and assignment operators.
-        MapAction( const MapAction & ) = delete;
-        MapAction & operator=( const MapAction & ) = delete;
-        ~MapAction() override = default;
-
-        bool prepare()
+        bool prepare() override
         {
             if ( !Maps::Map_Format::saveMap( _afterMapFormat, _mapFormat ) ) {
                 assert( 0 );
@@ -111,19 +121,93 @@ namespace
         const uint32_t _latestObjectUIDBefore{ 0 };
         uint32_t _latestObjectUIDAfter{ 0 };
     };
+
+    template <typename T>
+    class MetadataMapAction : public BaseMapAction
+    {
+    public:
+        explicit MetadataMapAction( std::map<uint32_t, T> & metadata )
+            : _metadata( metadata )
+            , _beforeMetadata( metadata )
+        {
+            // Do nothing.
+        }
+
+        bool prepare() override
+        {
+            _afterMetadata = _metadata;
+            return true;
+        }
+
+        bool redo() override
+        {
+            _metadata = _afterMetadata;
+            return true;
+        }
+
+        bool undo() override
+        {
+            _metadata = _beforeMetadata;
+            return true;
+        }
+
+    private:
+        std::map<uint32_t, T> & _metadata;
+
+        const std::map<uint32_t, T> _beforeMetadata;
+        std::map<uint32_t, T> _afterMetadata;
+    };
 }
 
 namespace fheroes2
 {
-    ActionCreator::ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat )
+    ActionCreator::ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat, const ActionType type )
         : _manager( manager )
     {
-        _action = std::make_unique<MapAction>( mapFormat );
+        switch ( type ) {
+        case ActionType::GENERIC:
+            _action = std::make_unique<GenericMapAction>( mapFormat );
+            break;
+        case ActionType::HERO_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::HeroMetadata>>( mapFormat.heroMetadata );
+            break;
+        case ActionType::CASTLE_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::CastleMetadata>>( mapFormat.castleMetadata );
+            break;
+        case ActionType::SPHINX_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::SphinxMetadata>>( mapFormat.sphinxMetadata );
+            break;
+        case ActionType::SIGN_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::SignMetadata>>( mapFormat.signMetadata );
+            break;
+        case ActionType::ADVENTURE_MAP_EVENT_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::AdventureMapEventMetadata>>( mapFormat.adventureMapEventMetadata );
+            break;
+        case ActionType::SELECTION_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::SelectionObjectMetadata>>( mapFormat.selectionObjectMetadata );
+            break;
+        case ActionType::CAPTURABLE_OBJECT_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::CapturableObjectMetadata>>( mapFormat.capturableObjectsMetadata );
+            break;
+        case ActionType::MONSTER_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::MonsterMetadata>>( mapFormat.monsterMetadata );
+            break;
+        case ActionType::ARTIFACT_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::ArtifactMetadata>>( mapFormat.artifactMetadata );
+            break;
+        case ActionType::RESOURCE_METADATA:
+            _action = std::make_unique<MetadataMapAction<Maps::Map_Format::ResourceMetadata>>( mapFormat.resourceMetadata );
+            break;
+        default:
+            // Did you add a new action type? Add the missing logic!
+            assert( 0 );
+            break;
+        }
     }
 
     void ActionCreator::commit()
     {
-        auto * action = dynamic_cast<MapAction *>( _action.get() );
+        auto * action = dynamic_cast<BaseMapAction *>( _action.get() );
         if ( action == nullptr ) {
             // How is it even possible? Did you call this method twice?
             assert( 0 );

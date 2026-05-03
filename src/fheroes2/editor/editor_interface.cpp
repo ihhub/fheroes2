@@ -377,7 +377,8 @@ namespace
         return true;
     }
 
-    bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups )
+    bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, std::set<uint32_t> objectsUids, const std::set<Maps::ObjectGroup> & objectGroups,
+                        const bool updateMapInfoIfNeeded )
     {
         if ( objectsUids.empty() || objectGroups.empty() ) {
             return false;
@@ -608,7 +609,7 @@ namespace
             }
         }
 
-        if ( updateMapPlayerInformation && !Maps::updateMapPlayers( mapFormat ) ) {
+        if ( updateMapInfoIfNeeded && updateMapPlayerInformation && !Maps::updateMapPlayers( mapFormat ) ) {
             assert( 0 );
         }
 
@@ -1038,6 +1039,55 @@ namespace
         return true;
     }
 
+    template <typename T>
+    bool copyMetadataIfAvailable( const uint32_t originalObjectUID, const uint32_t newObjectUID, std::map<uint32_t, T> & metadata )
+    {
+        auto iter = metadata.find( originalObjectUID );
+        if ( iter == metadata.end() ) {
+            return false;
+        }
+
+        metadata[newObjectUID] = iter->second;
+        return true;
+    }
+
+    void copyMetadataToObjectClone( const uint32_t originalObjectUID, const uint32_t newObjectUID, Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId )
+    {
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.castleMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.heroMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.sphinxMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.signMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.adventureMapEventMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.selectionObjectMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.capturableObjectsMetadata ) ) {
+            auto iter = mapFormat.capturableObjectsMetadata.find( newObjectUID );
+            if ( iter != mapFormat.capturableObjectsMetadata.end() ) {
+                world.CaptureObject( tileId, iter->second.ownerColor );
+            }
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.monsterMetadata ) ) {
+            return;
+        }
+        if ( copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.artifactMetadata ) ) {
+            return;
+        }
+
+        copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.resourceMetadata );
+    }
+
 #if defined( WITH_DEBUG )
     int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
     {
@@ -1230,7 +1280,7 @@ namespace Interface
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
 
                     assert( Maps::isValidAbsIndex( indices.x ) );
-                    const bool isActionObject = ( _editorPanel.isDetailEdit() && brushSize.width == 1 && brushSize.height == 1
+                    const bool isActionObject = ( _editorPanel.isObjectEditingMode() && brushSize.width == 1 && brushSize.height == 1
                                                   && MP2::isOffGameActionObject( world.getTile( indices.x ).getMainObjectType() ) );
 
                     _gameArea.renderTileAreaSelect( display, indices.x, indices.y, isActionObject );
@@ -1306,7 +1356,7 @@ namespace Interface
         int32_t fastScrollRepeatCount = 0;
         const int32_t fastScrollStartThreshold = 2;
 
-        const std::vector<Game::DelayType> delayTypes = { Game::MAPS_DELAY };
+        const std::vector<Game::DelayType> delayTypes = { Game::DelayType::MAPS_DELAY };
 
         LocalEvent & le = LocalEvent::Get();
         Cursor & cursor = Cursor::Get();
@@ -1463,7 +1513,7 @@ namespace Interface
                     }
 
                     if ( scrollDirection != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
-                        if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
+                        if ( Game::validateAnimationDelay( Game::DelayType::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
                             ++fastScrollRepeatCount;
                         }
 
@@ -1622,7 +1672,7 @@ namespace Interface
                             _brushTiles.clear();
                         }
                     }
-                    else if ( _editorPanel.isDetailEdit() ) {
+                    else if ( _editorPanel.isObjectMovingMode() || _editorPanel.isObjectCopyingMode() ) {
                         if ( le.isMouseLeftButtonPressed() ) {
                             if ( _brushTiles.count( _tileUnderCursor ) == 0 ) {
                                 if ( _brushTiles.empty() ) {
@@ -1645,7 +1695,12 @@ namespace Interface
                         }
                         else {
                             if ( le.isMouseLeftButtonReleased() ) {
-                                _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
+                                if ( _editorPanel.isObjectMovingMode() ) {
+                                    _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
+                                }
+                                else {
+                                    _tryToCopyObject( _movableObjectInfo, _tileUnderCursor );
+                                }
                             }
 
                             // Make sure to clear the action related information.
@@ -1706,7 +1761,7 @@ namespace Interface
             }
 
             // Scrolling the game area
-            if ( _gameArea.NeedScroll() && Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
+            if ( _gameArea.NeedScroll() && Game::validateAnimationDelay( Game::DelayType::SCROLL_DELAY ) ) {
                 assert( !_gameArea.isDragScroll() );
 
                 if ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
@@ -1725,7 +1780,7 @@ namespace Interface
             assert( res == fheroes2::GameMode::CANCEL );
 
             // Map objects animation
-            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                 if ( conf.isEditorAnimationEnabled() ) {
                     Game::updateAdventureMapAnimationIndex();
                 }
@@ -1916,7 +1971,7 @@ namespace Interface
 
         Maps::Tile & tile = world.getTile( tileIndex );
 
-        if ( _editorPanel.isDetailEdit() ) {
+        if ( _editorPanel.isObjectEditingMode() ) {
             // Trigger an action only when metadata has been changed to avoid expensive computations and bloated list of actions.
             // Comparing a metadata structure is much faster than restoring the whole map.
 
@@ -1951,7 +2006,7 @@ namespace Interface
                     hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage );
                     Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
                     if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::HERO_METADATA );
                         _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
                         action.commit();
                     }
@@ -1966,7 +2021,7 @@ namespace Interface
                     Maps::Map_Format::CastleMetadata newCastleMetadata = castleMetadata;
 
                     if ( Editor::castleDetailsDialog( newCastleMetadata, race, color, _mapFormat.mainLanguage ) && ( castleMetadata != newCastleMetadata ) ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::CASTLE_METADATA );
                         castleMetadata = std::move( newCastleMetadata );
                         action.commit();
                     }
@@ -1981,7 +2036,7 @@ namespace Interface
                     const fheroes2::Text body{ std::move( header ), fheroes2::FontType::normalWhite() };
                     if ( Dialog::inputString( fheroes2::Text{}, body, signText, Maps::Map_Format::messageCharLimit, true, _mapFormat.mainLanguage )
                          && originalMessage != signText ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SIGN_METADATA );
                         originalMessage = std::move( signText );
                         action.commit();
                     }
@@ -1994,7 +2049,7 @@ namespace Interface
 
                     if ( Editor::eventDetailsDialog( newEventData, _mapFormat.humanPlayerColors, _mapFormat.computerPlayerColors, _mapFormat.mainLanguage )
                          && newEventData != eventMetadata ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ADVENTURE_MAP_EVENT_METADATA );
                         eventMetadata = std::move( newEventData );
                         action.commit();
                     }
@@ -2027,7 +2082,7 @@ namespace Interface
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
                          && ( _mapFormat.monsterMetadata[object.id].count != monsterCount || ( selectionUi && selectedMonsters != selectionUi->getSelected() ) ) ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::MONSTER_METADATA );
                         _mapFormat.monsterMetadata[object.id].count = monsterCount;
 
                         if ( selectionUi ) {
@@ -2062,7 +2117,7 @@ namespace Interface
 
                     // We cannot support more than 6 digits in the dialog due to its UI element size.
                     if ( Dialog::SelectCount( std::move( str ), 0, 999999, resourceCount, 1, &resourceUI ) && resourceMetadata->second.count != resourceCount ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::RESOURCE_METADATA );
                         resourceMetadata->second.count = resourceCount;
                         action.commit();
                     }
@@ -2075,7 +2130,7 @@ namespace Interface
                         int32_t radius = originalRadius;
 
                         if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius ) && radius != originalRadius ) {
-                            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                            fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
                             originalRadius = radius;
                             action.commit();
                         }
@@ -2095,7 +2150,7 @@ namespace Interface
                             return;
                         }
 
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
 
                         // As of now only one spell can be selected for Spell Scroll.
                         selected.clear();
@@ -2144,7 +2199,7 @@ namespace Interface
 
                         Dialog::multiSelectArtifact( allowed, temp );
                         if ( temp != selected ) {
-                            fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                            fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
                             selected = std::move( temp );
                             action.commit();
                         }
@@ -2165,7 +2220,7 @@ namespace Interface
                     Maps::Map_Format::SphinxMetadata newMetadata = originalMetadata;
 
                     if ( Editor::openSphinxWindow( newMetadata, _mapFormat.mainLanguage ) && newMetadata != originalMetadata ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SPHINX_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
@@ -2196,7 +2251,7 @@ namespace Interface
                     std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SELECTION_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
@@ -2212,7 +2267,7 @@ namespace Interface
                     std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSecondarySkillSelectionWindow( title, 1, newMetadata.selectedItems )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SELECTION_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
@@ -2229,7 +2284,7 @@ namespace Interface
                     std::string const title = std::string( MP2::StringObject( objectType ) ) + ':';
                     if ( Editor::openSpellSelectionWindow( title, spellLevel, newMetadata.selectedItems, false, 1, false )
                          && originalMetadata.selectedItems != newMetadata.selectedItems ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::SELECTION_METADATA );
                         originalMetadata = std::move( newMetadata );
                         action.commit();
                     }
@@ -2253,7 +2308,7 @@ namespace Interface
                     const PlayerColor newColor = Dialog::selectPlayerColor( ownerColor, _mapFormat.availablePlayerColors );
 
                     if ( newColor != ownerColor ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::CAPTURABLE_OBJECT_METADATA );
 
                         if ( newColor == PlayerColor::NONE ) {
                             _mapFormat.capturableObjectsMetadata.erase( object.id );
@@ -2714,7 +2769,7 @@ namespace Interface
         std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
 
         auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
-        removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType } );
+        removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType }, false );
 
         Maps::setLastObjectUID( movableObjectInfo.objectUID - 1 );
 
@@ -2754,6 +2809,32 @@ namespace Interface
         }
 
         Maps::setLastObjectUID( originalLastObjectUID );
+    }
+
+    void EditorInterface::_tryToCopyObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile )
+    {
+        assert( movableObjectInfo.tileIndex >= 0 );
+        assert( destinationTile >= 0 );
+
+        if ( movableObjectInfo.groupType == Maps::ObjectGroup::NONE ) {
+            // No object to move.
+            return;
+        }
+
+        if ( movableObjectInfo.tileIndex == destinationTile ) {
+            // Cannot copy to itself.
+            return;
+        }
+
+        auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
+
+        Maps::Tile & tile = world.getTile( destinationTile );
+        if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
+            copyMetadataToObjectClone( movableObjectInfo.objectUID, Maps::getLastObjectUID(), _mapFormat, destinationTile );
+
+            assert( action.get() != nullptr );
+            action->commit();
+        }
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
@@ -3050,7 +3131,7 @@ namespace Interface
         }
 
         if ( !uids.empty() ) {
-            removeObjects( _mapFormat, uids, groups );
+            removeObjects( _mapFormat, uids, groups, true );
         }
 
         // Run through each town and castle and update its terrain.
@@ -3212,7 +3293,7 @@ namespace Interface
 
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-        if ( removeObjects( _mapFormat, std::move( objectUIDs ), groups ) ) {
+        if ( removeObjects( _mapFormat, std::move( objectUIDs ), groups, true ) ) {
             action.commit();
             _redraw |= mapUpdateFlags;
         }

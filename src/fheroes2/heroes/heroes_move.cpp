@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -294,6 +294,23 @@ bool Heroes::_moveStep( const bool jumpToNextTile )
 
 void Heroes::_angleStep( const int targetDirection )
 {
+    // Hero movement animation depends on the animation speed.
+    // To make the speed of the hero turning animation the same
+    // we need to skip certain frames.
+    const int speedMultiplier = isControlHuman() ? Game::HumanHeroAnimSpeedMultiplier() : Game::AIHeroAnimSpeedMultiplier();
+    assert( speedMultiplier > 0 );
+    const int32_t framesToSkip = std::clamp( 4 / speedMultiplier, 1, 3 );
+    assert( _skippedFramesForAngleStep >= 0 );
+
+    ++_skippedFramesForAngleStep;
+    if ( _skippedFramesForAngleStep < framesToSkip ) {
+        // Skip the animation change for this frame.
+        return;
+    }
+
+    // Reset turning animation delay.
+    _skippedFramesForAngleStep = 0;
+
     const bool clockwise = Direction::ShortDistanceClockWise( _direction, targetDirection );
 
     // start index
@@ -508,8 +525,8 @@ void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & off
 
     _alphaValue = 255;
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) && _alphaValue > 0 ) {
-        if ( !Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_FADE_DELAY } ) ) && _alphaValue > 0 ) {
+        if ( !Game::validateAnimationDelay( Game::DelayType::HEROES_FADE_DELAY ) ) {
             continue;
         }
 
@@ -517,7 +534,7 @@ void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & off
             gamearea.ShiftCenter( offset );
         }
 
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
             Game::updateAdventureMapAnimationIndex();
             if ( isControlAI() ) {
                 // Draw hourglass sand grains animation.
@@ -551,8 +568,8 @@ void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offs
 
     _alphaValue = 0;
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) && _alphaValue < 255 ) {
-        if ( !Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_FADE_DELAY } ) ) && _alphaValue < 255 ) {
+        if ( !Game::validateAnimationDelay( Game::DelayType::HEROES_FADE_DELAY ) ) {
             continue;
         }
 
@@ -560,7 +577,7 @@ void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offs
             gamearea.ShiftCenter( offset );
         }
 
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
             Game::updateAdventureMapAnimationIndex();
             if ( isControlAI() ) {
                 // Draw hourglass sand grains animation.

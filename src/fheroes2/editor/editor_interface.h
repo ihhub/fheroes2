@@ -176,6 +176,8 @@ namespace Interface
 
         void _tryToMoveObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile );
 
+        void _tryToCopyObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile );
+
         void _validateObjectsOnTerrainUpdate();
 
         // Returns true if an existing object was moved on top.

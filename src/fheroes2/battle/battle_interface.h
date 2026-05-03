@@ -36,6 +36,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -74,7 +75,7 @@ namespace Battle
     void DialogBattleSettings( const bool isTurnOrderInsideWindow );
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
-    enum HeroAnimation : uint32_t
+    enum class HeroAnimation : uint32_t
     {
         OP_JOY,
         OP_CAST_MASS,
@@ -134,6 +135,8 @@ namespace Battle
         OpponentSprite( const fheroes2::Rect & area, HeroBase * hero, const bool isReflect );
         OpponentSprite( const OpponentSprite & ) = delete;
 
+        ~OpponentSprite() = default;
+
         OpponentSprite & operator=( const OpponentSprite & ) = delete;
 
         const fheroes2::Rect & GetArea() const
@@ -147,7 +150,7 @@ namespace Battle
         // Return true is animation state was changed.
         bool updateAnimationState();
 
-        void SetAnimation( const int rule );
+        void SetAnimation( const Battle::HeroAnimation rule );
         void IncreaseAnimFrame();
 
         bool isFinishFrame() const
@@ -178,13 +181,15 @@ namespace Battle
     private:
         HeroBase * _heroBase{ nullptr };
         AnimationSequence _currentAnim;
-        int _animationType{ OP_STATIC };
         RandomizedDelay _idleTimer{ 8000 };
 
-        int _heroIcnId{ ICN::UNKNOWN };
-        bool _isFlippedHorizontally{ false };
         fheroes2::Rect _area;
         fheroes2::Point _offset;
+
+        Battle::HeroAnimation _animationType{ Battle::HeroAnimation::OP_STATIC };
+        int _heroIcnId{ ICN::UNKNOWN };
+
+        bool _isFlippedHorizontally{ false };
     };
 
     class Status final : public fheroes2::Rect
@@ -461,7 +466,9 @@ namespace Battle
         void ResetIdleTroopAnimation() const;
         void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
-        void CheckGlobalEvents( LocalEvent & );
+
+        // Warning: This method checks and resets the next delays: BATTLE_SELECTED_UNIT_DELAY, BATTLE_FLAGS_DELAY, BATTLE_OPPONENTS_DELAY.
+        void _checkGlobalEvents( LocalEvent & le );
         void InterruptAutoCombatIfRequested( LocalEvent & le );
         void SetHeroAnimationReactionToTroopDeath( const PlayerColor deathColor ) const;
 
@@ -478,6 +485,8 @@ namespace Battle
 
         void _startAutoCombat( const Unit & unit, Actions & actions );
         void _quickCombat( Actions & actions );
+
+        std::vector<Game::DelayType> _mergeWithCommonAnimationsDelays( std::vector<Game::DelayType> otherDelays ) const;
 
         Arena & arena;
         Dialog::FrameBorder border;
@@ -503,21 +512,25 @@ namespace Battle
         std::unique_ptr<OpponentSprite> _attackingOpponent;
         std::unique_ptr<OpponentSprite> _defendingOpponent;
 
+        std::vector<Game::DelayType> _commonAnimationsDelays;
+
         Spell humanturn_spell{ Spell::NONE };
         bool humanturn_exit{ true };
         bool _needRedraw{ true };
+
+        // True if background is bright. It is done to determine current unit contour cycling colors.
+        bool _brightLandType{ false };
+
         uint32_t _flagAnimationFrameIndex{ 0 };
         int catapult_frame{ 0 };
-
-        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
 
         // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
         std::optional<int> _preBattleSoundChannelId{ -1 };
 
         uint8_t _contourColor{ 110 };
 
-        // True if background is bright. It is done to determine current unit contour cycling colors.
-        bool _brightLandType{ false };
+        PlayerColor _interruptAutoCombatForColor{ PlayerColor::NONE };
+
         uint32_t _contourCycle{ 0 };
 
         const Unit * _currentUnit{ nullptr };

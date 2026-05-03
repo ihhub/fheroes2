@@ -621,7 +621,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
     display.render( restorer.rect() );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CASTLE_UNIT_DELAY } ) ) ) {
         if ( buttonUpgrade ) {
             buttonUpgrade->drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonUpgrade->area() ) );
         }
@@ -682,7 +682,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             }
         }
 
-        if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CASTLE_UNIT_DELAY ) ) {
             // TODO: Only redraw the half of the window containing the creature. Note that fire-breathing creatures spew fire into the other half,
             // so the animation has to be changed to only walking animation. Also their walking animation overlaps with the creature name.
             fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );

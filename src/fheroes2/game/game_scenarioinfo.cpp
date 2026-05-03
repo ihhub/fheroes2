@@ -508,7 +508,7 @@ fheroes2::GameMode Game::SelectScenario( const uint8_t humanPlayerCount )
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    MapsFileInfoList maps = Maps::getAllMapFileInfos( false, humanPlayerCount );
+    MapsFileInfoList maps = Maps::getAllMapFileInfos( humanPlayerCount );
     if ( maps.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;

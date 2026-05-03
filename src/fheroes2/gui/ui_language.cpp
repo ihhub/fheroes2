@@ -35,7 +35,6 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_font.h"
 
 namespace
 {
@@ -132,7 +131,7 @@ namespace fheroes2
                                                              SupportedLanguage::Esperanto };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
-            if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
+            if ( language != resourceLanguage ) {
                 supportedLanguges[getCodePage( language )].emplace_back( language );
             }
         }
