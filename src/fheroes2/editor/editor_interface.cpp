@@ -137,14 +137,16 @@ namespace
         const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
     };
 
-    class MonsterMultiSelection final : public fheroes2::DialogElement
+    class ObjectMultiSelectionUI final : public fheroes2::DialogElement
     {
     public:
-        MonsterMultiSelection( std::vector<int32_t> allowed, std::vector<int32_t> selected, std::string text, const bool isEvilInterface )
+        ObjectMultiSelectionUI( std::vector<int32_t> allowed, std::vector<int32_t> selected, std::string text, const bool isEvilInterface,
+                                std::function<void( std::vector<int32_t>, std::vector<int32_t> & )> objectSelection )
             : _allowed( std::move( allowed ) )
             , _selected( std::move( selected ) )
             , _text( std::move( text ), fheroes2::FontType::normalWhite() )
             , _buttonSelection( 0, 0, ( isEvilInterface ? ICN::BUTTON_SELECT_EVIL : ICN::BUTTON_SELECT_GOOD ), 0, 1 )
+            , _objectSelection( std::move( objectSelection ) )
         {
             const int32_t offset{ 5 };
 
@@ -160,7 +162,7 @@ namespace
             _area.height += buttonArea.height;
         }
 
-        ~MonsterMultiSelection() override = default;
+        ~ObjectMultiSelectionUI() override = default;
 
         void draw( fheroes2::Image & output, const fheroes2::Point & offset ) const override
         {
@@ -178,8 +180,8 @@ namespace
             if ( le.isMouseRightButtonPressedInArea( buttonRect ) ) {
                 fheroes2::showStandardTextMessage( _( "SELECT" ), _( "Click to make selection." ), 0 );
             }
-            else if ( le.MouseClickLeft( buttonRect ) ) {
-                Dialog::multiSelectMonsters( _allowed, _selected );
+            else if ( le.MouseClickLeft( buttonRect ) && _objectSelection != nullptr ) {
+                _objectSelection( _allowed, _selected );
             }
         }
 
@@ -209,6 +211,8 @@ namespace
 
         const fheroes2::Text _text;
         mutable fheroes2::Button _buttonSelection;
+
+        std::function<void( std::vector<int32_t>, std::vector<int32_t> & )> _objectSelection{ nullptr };
     };
 
     size_t getObeliskCount( const Maps::Map_Format::MapFormat & _mapFormat )
@@ -2074,10 +2078,10 @@ namespace Interface
 
                     std::vector<int32_t> allowedMonsters = getAllowedMonsters( tempMonster, objectType );
 
-                    std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
+                    std::unique_ptr<const ObjectMultiSelectionUI> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
-                        selectionUi = std::make_unique<const MonsterMultiSelection>( std::move( allowedMonsters ), selectedMonsters, _( "Select Monsters:" ),
-                                                                                     Settings::Get().isEvilInterfaceEnabled() );
+                        selectionUi = std::make_unique<const ObjectMultiSelectionUI>( std::move( allowedMonsters ), selectedMonsters, _( "Select Monsters:" ),
+                                                                                     Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectMonsters );
                     }
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
@@ -2129,9 +2133,25 @@ namespace Interface
                         auto & originalRadius = _mapFormat.artifactMetadata[object.id].radius;
                         int32_t radius = originalRadius;
 
-                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius ) && radius != originalRadius ) {
+                        auto & selected = _mapFormat.artifactMetadata[object.id].selected;
+
+                        std::vector<int32_t> allowed;
+                        for ( int32_t id = Artifact::UNKNOWN; id < Artifact::ARTIFACT_COUNT; ++id ) {
+                            const int32_t level = Artifact( id ).Level();
+                            if ( ( level & Artifact::ART_ULTIMATE ) != 0 ) {
+                                allowed.emplace_back( id );
+                            }
+                        }
+
+                        std::unique_ptr<const ObjectMultiSelectionUI> selectionUi{ nullptr };
+                        selectionUi = std::make_unique<const ObjectMultiSelectionUI>( std::move( allowed ), selected, _( "Select Artifacts:" ),
+                                                                                     Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectArtifact );
+
+                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius, 1, nullptr, selectionUi.get() ) 
+                             && ( radius != originalRadius || selected != selectionUi->getSelected() ) ) {
                             fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
                             originalRadius = radius;
+                            selected = selectionUi->getSelected();
                             action.commit();
                         }
                     }

@@ -1151,11 +1151,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( object.index < artifactObjects.size() );
                 const auto & objectInfo = artifactObjects[object.index];
 
-                if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
-                    tileData[0] = static_cast<uint32_t>( artifactInfo.radius );
-                }
-                else if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE
-                          || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR ) {
+                if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE
+                          || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR
+                          || objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
                     auto & selected = artifactInfo.selected;
                     if ( !selected.empty() ) {
                         // Verify that the input data is correct.
@@ -1173,6 +1171,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                         case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
                             allowedArtifactLevel = Artifact::ART_LEVEL_MAJOR;
                             break;
+                        case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+                            allowedArtifactLevel = Artifact::ART_ULTIMATE;
+                            break;
                         default:
                             assert( 0 );
                             break;
@@ -1188,6 +1189,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                         if ( !artifactInfo.selected.empty() ) {
                             tileData[1] = Rand::Get( artifactInfo.selected );
                         }
+                    }
+
+                    if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                        tileData[0] = static_cast<uint32_t>( artifactInfo.radius );
                     }
                 }
                 else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
@@ -1620,6 +1625,8 @@ void World::setUltimateArtifact()
     int32_t tileId = -1;
     int32_t radius = 0;
 
+    Artifact artifact{ Artifact::UNKNOWN };
+
     const auto existingUltimateArtIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
     if ( existingUltimateArtIter != vec_tiles.end() ) {
@@ -1633,6 +1640,7 @@ void World::setUltimateArtifact()
 
         tileId = existingUltimateArtIter->GetIndex();
         radius = static_cast<int32_t>( existingUltimateArtIter->metadata()[0] );
+        artifact = existingUltimateArtIter->metadata()[1];
 
         assert( radius >= 0 );
 
@@ -1677,7 +1685,7 @@ void World::setUltimateArtifact()
         if ( !pool.empty() ) {
             const int32_t pos = Rand::Get( pool );
 
-            _ultimateArtifact.Set( pos, getUltimateArtifact() );
+            _ultimateArtifact.Set( pos, artifact.isValid() ? artifact : getUltimateArtifact() );
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact has been placed at tile " << pos )
         }
@@ -1713,7 +1721,7 @@ void World::setUltimateArtifact()
         }
     }
 
-    _ultimateArtifact.Set( pos, getUltimateArtifact() );
+    _ultimateArtifact.Set( pos, artifact.isValid() ? artifact : getUltimateArtifact() );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
 }
