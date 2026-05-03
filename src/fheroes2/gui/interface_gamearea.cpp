@@ -1049,7 +1049,7 @@ void Interface::GameArea::QueueEventProcessing()
                     _inertiaVelX = sumX / static_cast<double>( dt );
                     _inertiaVelY = sumY / static_cast<double>( dt );
                     const double speedSq = _inertiaVelX * _inertiaVelX + _inertiaVelY * _inertiaVelY;
-                    if ( speedSq > 0.15 * 0.15 && Settings::Get().isMapScrollInertiaEnabled() ) {
+                    if ( speedSq > 0.15 * 0.15 ) {
                         _inertiaActive = true;
                         _inertiaSubpixelShiftX = 0.0;
                         _inertiaSubpixelShiftY = 0.0;
