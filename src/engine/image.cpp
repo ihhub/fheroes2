@@ -392,7 +392,7 @@ namespace
                     const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
                     ++palette;
                     const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
-                    ++palette;
+
                     // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
                     const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
                                              + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
