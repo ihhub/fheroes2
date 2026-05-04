@@ -112,6 +112,7 @@ Settings::Settings()
     , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( defaultBattleSpeed )
+    , _mapScrollInertia( false )
     , game_type( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
@@ -135,6 +136,9 @@ Settings::Settings()
 
         // Adventure Map scrolling is disabled by default for handheld devices as it is very hard to navigate on small screens. Use drag and move logic.
         scroll_speed = SCROLL_SPEED_NONE;
+
+        // Smooth scrolling (inertia) feels natural on touch devices and is enabled by default.
+        _mapScrollInertia = true;
     }
 
     // The Price of Loyalty is not supported by default.
@@ -207,8 +211,8 @@ bool Settings::Read( const std::string & filePath )
     // scroll speed
     SetScrollSpeed( config.IntParams( "scroll speed" ) );
 
-    if ( config.Exists( "map scroll inertia" ) ) {
-        setMapScrollInertia( config.StrParams( "map scroll inertia" ) != "off" );
+    if ( config.Exists( "map smooth scrolling" ) ) {
+        setMapScrollInertia( config.StrParams( "map smooth scrolling" ) != "off" );
     }
 
     if ( config.Exists( "battle speed" ) ) {
@@ -471,8 +475,8 @@ std::string Settings::String() const
     os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
-    os << std::endl << "# Inertia (momentum) when scrolling the Adventure Map by dragging: on/off" << std::endl;
-    os << "map scroll inertia = " << ( _mapScrollInertia ? "on" : "off" ) << std::endl;
+    os << std::endl << "# Smooth scrolling when panning the Adventure Map by dragging: on/off" << std::endl;
+    os << "map smooth scrolling = " << ( _mapScrollInertia ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Toggle battle grid: on/off" << std::endl;
     os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;

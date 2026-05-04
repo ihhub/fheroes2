@@ -301,21 +301,37 @@ namespace Interface
         bool _isFastScrollEnabled{ false };
         bool _resetMousePositionForFastScroll{ false };
 
-        struct DragSample
+        struct MapScrollInertia
         {
-            fheroes2::Point delta;
-            uint64_t timeMs{};
+            struct DragSample
+            {
+                fheroes2::Point delta;
+                uint64_t timeMs{};
+            };
+
+            std::deque<DragSample> dragSamples;
+            fheroes2::Time dragTimer;
+
+            double velX{ 0.0 };
+            double velY{ 0.0 };
+            double subpixelShiftX{ 0.0 };
+            double subpixelShiftY{ 0.0 };
+            bool active{ false };
+            fheroes2::Time timer;
+
+            // Processes one inertia tick, applies the scroll to the given GameArea.
+            // Returns true if a redraw is needed, false if inertia has stopped.
+            bool update( GameArea & area );
+
+            // Stops inertia and clears drag samples.
+            void deactivate()
+            {
+                active = false;
+                dragSamples.clear();
+            }
         };
 
-        std::deque<DragSample> _dragSamples;
-        fheroes2::Time _dragTimer;
-
-        double _inertiaVelX{ 0.0 };
-        double _inertiaVelY{ 0.0 };
-        double _inertiaSubpixelShiftX{ 0.0 };
-        double _inertiaSubpixelShiftY{ 0.0 };
-        bool _inertiaActive{ false };
-        fheroes2::Time _inertiaTimer;
+        MapScrollInertia _inertia;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const
