@@ -1053,8 +1053,14 @@ namespace
                                 continue;
                             }
 
-                            if ( foundTile.getMainObjectPart()._uid != 0 && ( objectUID == foundTile.getMainObjectPart()._uid ) ) {
+                            if ( objectUID == foundTile.getMainObjectPart()._uid ) {
                                 return index;
+                            }
+
+                            for ( const auto & objectPart : foundTile.getGroundObjectParts() ) {
+                                if ( objectPart._uid == objectUID ) {
+                                    return index;
+                                }
                             }
                         }
                     }
