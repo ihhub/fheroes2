@@ -33,8 +33,6 @@ namespace fheroes2
 
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
-    bool isAlphabetSupported( const SupportedLanguage language );
-
     void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
     void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite );

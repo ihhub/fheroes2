@@ -80,7 +80,7 @@ jobs:
     - name: Create packages
       run: |
         7z a -bb1 -tzip -- fheroes2_android.zip LICENSE changelog.txt fheroes2.apk ./docs/README.txt ./docs/README_android.md
-        7z a -bb1 -tzip -- fheroes2_android_aab.zip LICENSE fheroes2.aab
+        7z a -bb1 -tzip -- fheroes2_android_aab.zip LICENSE changelog.txt fheroes2.aab
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:

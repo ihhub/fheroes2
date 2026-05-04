@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
-"PO-Revision-Date: 2026-04-06 20:44+0200\n"
+"POT-Creation-Date: 2026-05-03 23:51+0000\n"
+"PO-Revision-Date: 2026-05-02 23:44+0200\n"
 "Last-Translator: Kaffeino <kaffeino@posteo.co.uk>\n"
 "Language-Team: Esperanto <kaffeino@posteo.co.uk>\n"
 "Language: eo\n"
@@ -4199,14 +4199,6 @@ msgid ""
 "select another monster."
 msgstr ""
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr ""
 
@@ -4245,6 +4237,16 @@ msgstr ""
 
 msgid "Towns"
 msgstr ""
+
+msgid "editorDetailMode|Edit"
+msgstr ""
+
+msgid "editorDetailMode|Move"
+msgstr ""
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "REEN"
 
 msgid "editorErasure|Mountains"
 msgstr ""
@@ -4319,6 +4321,15 @@ msgid "Traversable only by boat."
 msgstr ""
 
 msgid "No special modifiers."
+msgstr ""
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
 msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
@@ -5447,6 +5458,12 @@ msgid "hotkey|construction screen"
 msgstr ""
 
 msgid "hotkey|buy all monsters in well"
+msgstr ""
+
+msgid "hotkey|merge troops with hero"
+msgstr ""
+
+msgid "hotkey|merge troops with garrison"
 msgstr ""
 
 msgid "hotkey|split stack by half"
@@ -8267,45 +8284,47 @@ msgid "Blood"
 msgstr ""
 
 msgid "Knight"
-msgstr ""
+msgstr "Kavaliro"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Barbaro"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Sorĉistino"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Fisorĉisto"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Magiisto"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Mortsorĉisto"
 
 msgid "Multi"
 msgstr ""
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Kavaliro"
 
 msgid "doubleLined|Barbarian"
-msgstr ""
+msgstr "Barbaro"
 
 msgid "doubleLined|Sorceress"
-msgstr ""
+msgstr "Sorĉistino"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Fisorĉisto"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Magiisto"
 
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
 msgstr ""
+"Mort-\n"
+"sorĉisto"
 
 msgid "doubleLinedRace|Multi"
 msgstr ""
@@ -8350,85 +8369,85 @@ msgid "Zoom"
 msgstr ""
 
 msgid "week|Squirrel"
-msgstr ""
+msgstr "Sciuro"
 
 msgid "week|Rabbit"
-msgstr ""
+msgstr "Kuniklo"
 
 msgid "week|Gopher"
-msgstr ""
+msgstr "Muso"
 
 msgid "week|Badger"
-msgstr ""
+msgstr "Melo"
 
 msgid "week|Rat"
-msgstr ""
+msgstr "Rato"
 
 msgid "week|Eagle"
-msgstr ""
+msgstr "Aglo"
 
 msgid "week|Weasel"
-msgstr ""
+msgstr "Mustelo"
 
 msgid "week|Raven"
-msgstr ""
+msgstr "Korvo"
 
 msgid "week|Mongoose"
-msgstr ""
+msgstr "Mungo"
 
 msgid "week|Dog"
-msgstr ""
+msgstr "Hundo"
 
 msgid "week|Aardvark"
-msgstr ""
+msgstr "Terporko"
 
 msgid "week|Lizard"
-msgstr ""
+msgstr "Rampaĵo"
 
 msgid "week|Tortoise"
-msgstr ""
+msgstr "Testudo"
 
 msgid "week|Hedgehog"
-msgstr ""
+msgstr "Erinaco"
 
 msgid "week|Condor"
-msgstr ""
+msgstr "Kondoro"
 
 msgid "week|Ant"
-msgstr ""
+msgstr "Formiko"
 
 msgid "week|Grasshopper"
-msgstr ""
+msgstr "Akrido"
 
 msgid "week|Dragonfly"
-msgstr ""
+msgstr "Libelo"
 
 msgid "week|Spider"
-msgstr ""
+msgstr "Araneo"
 
 msgid "week|Butterfly"
-msgstr ""
+msgstr "Papilio"
 
 msgid "week|Bumblebee"
-msgstr ""
+msgstr "Burdo"
 
 msgid "week|Locust"
-msgstr ""
+msgstr "Glavsaltulo"
 
 msgid "week|Earthworm"
-msgstr ""
+msgstr "Tervermo"
 
 msgid "week|Hornet"
-msgstr ""
+msgstr "Krabro"
 
 msgid "week|Beetle"
-msgstr ""
+msgstr "Skarabo"
 
 msgid "week|PLAGUE"
-msgstr ""
+msgstr "PESTO"
 
 msgid "week|Unnamed"
-msgstr ""
+msgstr "Sennoma"
 
 msgid "Desert"
 msgstr ""
@@ -8548,7 +8567,7 @@ msgid "Buoy"
 msgstr ""
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Ostaro"
 
 msgid "Daemon Cave"
 msgstr ""
@@ -8913,430 +8932,430 @@ msgid "randomRace|level 6 creatures"
 msgstr ""
 
 msgid "Unknown Monsters"
-msgstr ""
+msgstr "Nekonataj monstroj"
 
 msgid "Unknown Monster"
-msgstr ""
+msgstr "Nekonata monstro"
 
 msgid "Peasant"
-msgstr ""
+msgstr "Kamparano"
 
 msgid "Peasants"
-msgstr ""
+msgstr "Kamparanoj"
 
 msgid "Archer"
-msgstr ""
+msgstr "Arkisto"
 
 msgid "Archers"
-msgstr ""
+msgstr "Arkistoj"
 
 msgid "Ranger"
-msgstr ""
+msgstr "Limgardisto"
 
 msgid "Rangers"
-msgstr ""
+msgstr "Limgardistoj"
 
 msgid "Pikeman"
-msgstr ""
+msgstr "Ponardegisto"
 
 msgid "Pikemen"
-msgstr ""
+msgstr "Ponardegistoj"
 
 msgid "Veteran Pikeman"
-msgstr ""
+msgstr "Veterana ponardegisto"
 
 msgid "Veteran Pikemen"
-msgstr ""
+msgstr "Veteranaj ponardegistoj"
 
 msgid "Swordsman"
-msgstr ""
+msgstr "Glavisto"
 
 msgid "Swordsmen"
-msgstr ""
+msgstr "Glavistoj"
 
 msgid "Master Swordsman"
-msgstr ""
+msgstr "Majstro glavisto"
 
 msgid "Master Swordsmen"
-msgstr ""
+msgstr "Majstroj glavistoj"
 
 msgid "Cavalries"
-msgstr ""
+msgstr "Rajdisto"
 
 msgid "Cavalry"
-msgstr ""
+msgstr "Rajdistoj"
 
 msgid "Champion"
-msgstr ""
+msgstr "Ĉampiono"
 
 msgid "Champions"
-msgstr ""
+msgstr "Ĉampionoj"
 
 msgid "Paladin"
-msgstr ""
+msgstr "Dikavaliro"
 
 msgid "Paladins"
-msgstr ""
+msgstr "Dikavaliroj"
 
 msgid "Crusader"
-msgstr ""
+msgstr "Kruckavaliro"
 
 msgid "Crusaders"
-msgstr ""
+msgstr "Kruckavaliroj"
 
 msgid "Goblin"
-msgstr ""
+msgstr "Koboldo"
 
 msgid "Goblins"
-msgstr ""
+msgstr "Koboldoj"
 
 msgid "Orc"
-msgstr ""
+msgstr "Orko"
 
 msgid "Orcs"
-msgstr ""
+msgstr "Orkoj"
 
 msgid "Orc Chief"
-msgstr ""
+msgstr "Ĉeforko"
 
 msgid "Orc Chiefs"
-msgstr ""
+msgstr "Ĉeforkoj"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Lupo"
 
 msgid "Wolves"
-msgstr ""
+msgstr "Lupoj"
 
 msgid "Ogre"
-msgstr ""
+msgstr "Ogro"
 
 msgid "Ogres"
-msgstr ""
+msgstr "Ogroj"
 
 msgid "Ogre Lord"
-msgstr ""
+msgstr "Ogra sinjoro"
 
 msgid "Ogre Lords"
-msgstr ""
+msgstr "Ograj sinjoroj"
 
 msgid "Troll"
-msgstr ""
+msgstr "Trolo"
 
 msgid "Trolls"
-msgstr ""
+msgstr "Troloj"
 
 msgid "War Troll"
-msgstr ""
+msgstr "Milittrolo"
 
 msgid "War Trolls"
-msgstr ""
+msgstr "Milittroloj"
 
 msgid "Cyclopes"
-msgstr ""
+msgstr "Ciklopo"
 
 msgid "Cyclops"
-msgstr ""
+msgstr "Ciklopoj"
 
 msgid "Sprite"
-msgstr ""
+msgstr "Feeto"
 
 msgid "Sprites"
-msgstr ""
+msgstr "Feetoj"
 
 msgid "Dwarf"
-msgstr ""
+msgstr "Gnomo"
 
 msgid "Dwarves"
-msgstr ""
+msgstr "Gnomoj"
 
 msgid "Battle Dwarf"
-msgstr ""
+msgstr "Batalgnomo"
 
 msgid "Battle Dwarves"
-msgstr ""
+msgstr "Batalgnomoj"
 
 msgid "Elf"
-msgstr ""
+msgstr "Elfo"
 
 msgid "Elves"
-msgstr ""
+msgstr "Elfoj"
 
 msgid "Grand Elf"
-msgstr ""
+msgstr "Granda elfo"
 
 msgid "Grand Elves"
-msgstr ""
+msgstr "Grandaj elfoj"
 
 msgid "Druid"
-msgstr ""
+msgstr "Druido"
 
 msgid "Druids"
-msgstr ""
+msgstr "Druidoj"
 
 msgid "Greater Druid"
-msgstr ""
+msgstr "Granda druido"
 
 msgid "Greater Druids"
-msgstr ""
+msgstr "Grandaj druidoj"
 
 msgid "Unicorn"
-msgstr ""
+msgstr "Kornoĉevalo"
 
 msgid "Unicorns"
-msgstr ""
+msgstr "Kornoĉevaloj"
 
 msgid "Phoenix"
-msgstr ""
+msgstr "Fenikso"
 
 msgid "Phoenixes"
-msgstr ""
+msgstr "Feniksoj"
 
 msgid "Centaur"
-msgstr ""
+msgstr "Ĉevalviro"
 
 msgid "Centaurs"
-msgstr ""
+msgstr "Ĉevalviroj"
 
 msgid "Gargoyle"
-msgstr ""
+msgstr "Sputulo"
 
 msgid "Gargoyles"
-msgstr ""
+msgstr "Sputuloj"
 
 msgid "Griffin"
-msgstr ""
+msgstr "Leonaglo"
 
 msgid "Griffins"
-msgstr ""
+msgstr "Leonagloj"
 
 msgid "Minotaur"
-msgstr ""
+msgstr "Bovoviro"
 
 msgid "Minotaurs"
-msgstr ""
+msgstr "Bovoviroj"
 
 msgid "Minotaur King"
-msgstr ""
+msgstr "Bovovira reĝo"
 
 msgid "Minotaur Kings"
-msgstr ""
+msgstr "Bovoviraj reĝoj"
 
 msgid "Hydra"
-msgstr ""
+msgstr "Hidro"
 
 msgid "Hydras"
-msgstr ""
+msgstr "Hidroj"
 
 msgid "Green Dragon"
-msgstr ""
+msgstr "Verda drako"
 
 msgid "Green Dragons"
-msgstr ""
+msgstr "Verdaj drakoj"
 
 msgid "Red Dragon"
-msgstr ""
+msgstr "Ruĝa drako"
 
 msgid "Red Dragons"
-msgstr ""
+msgstr "Ruĝaj drakoj"
 
 msgid "Black Dragon"
-msgstr ""
+msgstr "Nigra drako"
 
 msgid "Black Dragons"
-msgstr ""
+msgstr "Nigraj drakoj"
 
 msgid "Halfling"
-msgstr ""
+msgstr "Duonulo"
 
 msgid "Halflings"
-msgstr ""
+msgstr "Duonuloj"
 
 msgid "Boar"
-msgstr ""
+msgstr "Apro"
 
 msgid "Boars"
-msgstr ""
+msgstr "Aproj"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Fera golemo"
 
 msgid "Iron Golems"
-msgstr ""
+msgstr "Feraj golemoj"
 
 msgid "Steel Golem"
-msgstr ""
+msgstr "Ŝtala golemo"
 
 msgid "Steel Golems"
-msgstr ""
+msgstr "Ŝtalaj golemoj"
 
 msgid "Roc"
-msgstr ""
+msgstr "Roĥo"
 
 msgid "Rocs"
-msgstr ""
+msgstr "Roĥoj"
 
 msgid "Mage"
-msgstr ""
+msgstr "Saĝulo"
 
 msgid "Magi"
-msgstr ""
+msgstr "Saĝuloj"
 
 msgid "Archmage"
-msgstr ""
+msgstr "Ĉefmagiisto"
 
 msgid "Archmagi"
-msgstr ""
+msgstr "Ĉefmagiistoj"
 
 msgid "Giant"
-msgstr ""
+msgstr "Giganto"
 
 msgid "Giants"
-msgstr ""
+msgstr "Gigantoj"
 
 msgid "Titan"
-msgstr ""
+msgstr "Titano"
 
 msgid "Titans"
-msgstr ""
+msgstr "Titanoj"
 
 msgid "Skeletons"
-msgstr ""
+msgstr "Ostaroj"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zombio"
 
 msgid "Zombies"
-msgstr ""
+msgstr "Zombioj"
 
 msgid "Mutant Zombie"
-msgstr ""
+msgstr "Abomena zombio"
 
 msgid "Mutant Zombies"
-msgstr ""
+msgstr "Abomenaj zombioj"
 
 msgid "Mummies"
-msgstr ""
+msgstr "Mumioj"
 
 msgid "Mummy"
-msgstr ""
+msgstr "Mumio"
 
 msgid "Royal Mummies"
-msgstr ""
+msgstr "Reĝaj mumioj"
 
 msgid "Royal Mummy"
-msgstr ""
+msgstr "Reĝa mumio"
 
 msgid "Vampire"
-msgstr ""
+msgstr "Vampiro"
 
 msgid "Vampires"
-msgstr ""
+msgstr "Vampiroj"
 
 msgid "Vampire Lord"
-msgstr ""
+msgstr "Vampira sinjoro"
 
 msgid "Vampire Lords"
-msgstr ""
+msgstr "Vampiraj sinjoroj"
 
 msgid "Lich"
-msgstr ""
+msgstr "Liĉo"
 
 msgid "Liches"
-msgstr ""
+msgstr "Liĉoj"
 
 msgid "Power Lich"
-msgstr ""
+msgstr "Praliĉo"
 
 msgid "Power Liches"
-msgstr ""
+msgstr "Praliĉoj"
 
 msgid "Bone Dragon"
-msgstr ""
+msgstr "Drakostaro"
 
 msgid "Bone Dragons"
-msgstr ""
+msgstr "Drakostaroj"
 
 msgid "Rogue"
-msgstr ""
+msgstr "Rabisto"
 
 msgid "Rogues"
-msgstr ""
+msgstr "Rabistoj"
 
 msgid "Nomad"
-msgstr ""
+msgstr "Nomado"
 
 msgid "Nomads"
-msgstr ""
+msgstr "Nomadoj"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Fantomo"
 
 msgid "Ghosts"
-msgstr ""
+msgstr "Fantomoj"
 
 msgid "Genie"
-msgstr ""
+msgstr "Ĵino"
 
 msgid "Genies"
-msgstr ""
+msgstr "Ĵinoj"
 
 msgid "Medusa"
-msgstr ""
+msgstr "Serpentharulo"
 
 msgid "Medusas"
-msgstr ""
+msgstr "Serpentharuloj"
 
 msgid "Earth Elemental"
-msgstr ""
+msgstr "Tera elementulo"
 
 msgid "Earth Elementals"
-msgstr ""
+msgstr "Teraj elementuloj"
 
 msgid "Air Elemental"
-msgstr ""
+msgstr "Aera elementulo"
 
 msgid "Air Elementals"
-msgstr ""
+msgstr "Aeraj elementuloj"
 
 msgid "Fire Elemental"
-msgstr ""
+msgstr "Fajra elementulo"
 
 msgid "Fire Elementals"
-msgstr ""
+msgstr "Fajraj elementuloj"
 
 msgid "Water Elemental"
-msgstr ""
+msgstr "Akva elementulo"
 
 msgid "Water Elementals"
-msgstr ""
+msgstr "Akvaj elementuloj"
 
 msgid "Random Monsters"
-msgstr ""
+msgstr "Hazardaj monstroj"
 
 msgid "Random Monster 1"
-msgstr ""
+msgstr "Hazarda monstro 1"
 
 msgid "Random Monsters 1"
-msgstr ""
+msgstr "Hazardaj monstroj 1"
 
 msgid "Random Monster 2"
-msgstr ""
+msgstr "Hazarda monstro 2"
 
 msgid "Random Monsters 2"
-msgstr ""
+msgstr "Hazardaj monstroj 2"
 
 msgid "Random Monster 3"
-msgstr ""
+msgstr "Hazarda monstro 3"
 
 msgid "Random Monsters 3"
-msgstr ""
+msgstr "Hazardaj monstroj 3"
 
 msgid "Random Monster 4"
-msgstr ""
+msgstr "Hazarda monstro 4"
 
 msgid "Random Monsters 4"
-msgstr ""
+msgstr "Hazardaj monstroj 4"
 
 msgid "Double shot"
 msgstr ""

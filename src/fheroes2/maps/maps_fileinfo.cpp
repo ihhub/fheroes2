@@ -61,10 +61,12 @@ namespace
     const size_t mapDescriptionLength = 200;
 
     // This function returns an unsorted array. It is a caller responsibility to take care of sorting if needed.
-    MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isForEditor, const bool isOriginalMapFormat )
+    MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isOriginalMapFormat )
     {
-        // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
-        std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
+        assert( humanPlayerCount >= 1 );
+
+        MapsFileInfoList result;
+        result.reserve( mapFiles.size() );
 
         const auto currentLanguage = fheroes2::getCurrentLanguage();
 
@@ -80,51 +82,40 @@ namespace
             Maps::FileInfo fi;
 
             if ( isOriginalMapFormat ) {
-                if ( !fi.readMP2Map( mapFile, isForEditor ) ) {
+                if ( !fi.readMP2Map( mapFile, false ) ) {
                     continue;
                 }
             }
             else {
-                if ( !fi.readResurrectionMap( mapFile, isForEditor, currentLanguage ) ) {
+                if ( !fi.readResurrectionMap( mapFile, false, currentLanguage ) ) {
                     continue;
                 }
             }
 
-            if ( !isForEditor ) {
-                assert( humanPlayerCount >= 1 );
-
-                const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
-                if ( humanOnlyColorsCount > humanPlayerCount ) {
-                    // This map requires more human-only players than needed.
-                    continue;
-                }
-
-                const int computerHumanColorsCount = Color::Count( fi.AllowCompHumanColors() );
-                if ( humanPlayerCount > ( humanOnlyColorsCount + computerHumanColorsCount ) ) {
-                    // This map does not allow to be played by this number of human players.
-                    continue;
-                }
-
-                if ( humanOnlyColorsCount == humanPlayerCount ) {
-                    // The map has the exact number of human-only players. Make sure that the user cannot select any other players.
-                    fi.removeHumanColors( fi.AllowCompHumanColors() );
-                }
-
-                // Update French language-specific characters to match CP1252.
-                if ( fixSpecialFrenchCharacters ) {
-                    fheroes2::fixFrenchCharactersForMP2Map( fi.name );
-                    fheroes2::fixFrenchCharactersForMP2Map( fi.description );
-                }
+            const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
+            if ( humanOnlyColorsCount > humanPlayerCount ) {
+                // This map requires more human-only players than needed.
+                continue;
             }
 
-            uniqueMaps.try_emplace( System::GetFileName( mapFile ), std::move( fi ) );
-        }
+            const int computerHumanColorsCount = Color::Count( fi.AllowCompHumanColors() );
+            if ( humanPlayerCount > ( humanOnlyColorsCount + computerHumanColorsCount ) ) {
+                // This map does not allow to be played by this number of human players.
+                continue;
+            }
 
-        MapsFileInfoList result;
-        result.reserve( uniqueMaps.size() );
+            if ( humanOnlyColorsCount == humanPlayerCount ) {
+                // The map has the exact number of human-only players. Make sure that the user cannot select any other players.
+                fi.removeHumanColors( fi.AllowCompHumanColors() );
+            }
 
-        for ( auto & [name, info] : uniqueMaps ) {
-            result.emplace_back( std::move( info ) );
+            // Update French language-specific characters to match CP1252.
+            if ( isOriginalMapFormat && fixSpecialFrenchCharacters ) {
+                fheroes2::fixFrenchCharactersForMP2Map( fi.name );
+                fheroes2::fixFrenchCharactersForMP2Map( fi.description );
+            }
+
+            result.emplace_back( std::move( fi ) );
         }
 
         return result;
@@ -736,7 +727,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, FileInfo & fi )
     return stream;
 }
 
-MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )
+MapsFileInfoList Maps::getAllMapFileInfos( const uint8_t humanPlayerCount )
 {
     ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
 
@@ -746,11 +737,11 @@ MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t
         maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
     }
 
-    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, true );
+    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, true );
 
     if ( isPOLSupported ) {
         const ListFiles resurrectionMaps = Settings::FindFiles( "maps", ".fh2m", false );
-        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, isForEditor, false );
+        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, false );
 
         validMaps.reserve( maps.size() + resurrectionMaps.size() );
 
@@ -759,17 +750,12 @@ MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const uint8_t
         }
     }
 
-    if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
-    }
-    else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
-    }
+    std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
 
     return validMaps;
 }
 
-MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, const uint8_t humanPlayerCount )
+MapsFileInfoList Maps::getEditorMapFileInfos()
 {
     if ( !Settings::Get().isPriceOfLoyaltySupported() ) {
         // Resurrection maps require POL resources presence.
@@ -777,16 +763,38 @@ MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, cons
     }
 
     const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
-    MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, isForEditor, false );
-
-    if ( isForEditor ) {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByFileName{} );
-    }
-    else {
-        std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
+    if ( maps.empty() ) {
+        // No files exist.
+        return {};
     }
 
-    return validMaps;
+    // There could be different file locations but with the same filename.
+    std::multimap<std::string, Maps::FileInfo, std::less<>> sortedMaps;
+    const auto currentLanguage = fheroes2::getCurrentLanguage();
+
+    for ( const std::string & mapFile : maps ) {
+        Maps::FileInfo fi;
+
+        if ( !fi.readResurrectionMap( mapFile, true, currentLanguage ) ) {
+            continue;
+        }
+
+        sortedMaps.emplace( StringLower( System::GetFileName( mapFile ) ), std::move( fi ) );
+    }
+
+    if ( sortedMaps.empty() ) {
+        // No valid maps.
+        return {};
+    }
+
+    MapsFileInfoList result;
+    result.reserve( sortedMaps.size() );
+
+    for ( auto & [name, info] : sortedMaps ) {
+        result.emplace_back( std::move( info ) );
+    }
+
+    return result;
 }
 
 bool Maps::tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )

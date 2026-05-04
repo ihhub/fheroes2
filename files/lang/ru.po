@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-02 08:03+0000\n"
 "PO-Revision-Date: 2026-04-11 12:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4598,14 +4598,6 @@ msgstr ""
 "чтобы выбрать\n"
 "другое существо."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Ластик"
 
@@ -4644,6 +4636,18 @@ msgstr "Герои"
 
 msgid "Towns"
 msgstr "Города"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Характеристики"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Характеристики"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Характеристики"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4725,6 +4729,15 @@ msgstr "Передвижение возможно только на корабл
 
 msgid "No special modifiers."
 msgstr "Нет особых модификаторов."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Удаление объектов типа: %{type}."
@@ -5923,6 +5936,14 @@ msgstr "экран строительства замка"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "купить всех существ в колодце"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "следующий герой"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "повторить последнее действие"
 
 msgid "hotkey|split stack by half"
 msgstr "разделить отряд пополам"

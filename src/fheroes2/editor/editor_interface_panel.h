@@ -60,9 +60,19 @@ namespace Interface
             return _selectedInstrument == Instrument::TERRAIN;
         }
 
-        bool isDetailEdit() const
+        bool isObjectEditingMode() const
         {
-            return _selectedInstrument == Instrument::DETAIL;
+            return ( _selectedInstrument == Instrument::DETAIL ) && ( _selectedDetailBrushType == DetailBrushType::EDITING );
+        }
+
+        bool isObjectMovingMode() const
+        {
+            return ( _selectedInstrument == Instrument::DETAIL ) && ( _selectedDetailBrushType == DetailBrushType::MOVING );
+        }
+
+        bool isObjectCopyingMode() const
+        {
+            return ( _selectedInstrument == Instrument::DETAIL ) && ( _selectedDetailBrushType == DetailBrushType::COPYING );
         }
 
         bool isRoadDraw() const
@@ -102,6 +112,8 @@ namespace Interface
             case Instrument::LANDSCAPE_OBJECTS:
             case Instrument::MONSTERS:
                 return true;
+            case Instrument::DETAIL:
+                return ( _selectedDetailBrushType == DetailBrushType::EDITING );
             default:
                 break;
             }
@@ -144,6 +156,7 @@ namespace Interface
         }
 
         static const char * _getLandscapeObjectTypeName( const uint8_t brushId );
+        static const char * _getDetailModeTypeName( const uint8_t brushId );
         static const char * _getAdventureObjectTypeName( const uint8_t brushId );
         static const char * _getKingdomObjectTypeName( const uint8_t brushId );
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
@@ -250,6 +263,18 @@ namespace Interface
                                 | ERASE_MONSTERS | ERASE_HEROES | ERASE_STREAMS | ERASE_ROADS,
         };
 
+        enum DetailBrushType : uint8_t
+        {
+            // Edit objects which can also move the map view by dragging.
+            EDITING = 0,
+            // Moving existing object by dragging them.
+            MOVING = 1,
+            // Making a copy of an existing object by dragging it.
+            COPYING = 2,
+
+            DETAIL_MODE_COUNT = 3,
+        };
+
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
         const std::array<uint32_t, 11> _eraseButtonObjectTypes{ ObjectErasureType::ERASE_MOUNTAINS,
                                                                 ObjectErasureType::ERASE_ROCKS,
@@ -291,6 +316,7 @@ namespace Interface
         std::array<fheroes2::Rect, Instrument::INSTRUMENTS_COUNT> _instrumentButtonsRect;
         std::array<fheroes2::Rect, TerrainBrush::TERRAIN_COUNT> _terrainButtonsRect;
         std::array<fheroes2::Rect, LandscapeObjectBrush::LANDSCAPE_COUNT> _landscapeObjectButtonsRect;
+        std::array<fheroes2::Rect, DetailBrushType::DETAIL_MODE_COUNT> _detailModeButtonsRect;
         std::array<fheroes2::Rect, AdventureObjectBrush::ADVENTURE_COUNT> _adventureObjectButtonsRect;
         std::array<fheroes2::Rect, KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> _kingdomObjectButtonsRect;
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
@@ -304,6 +330,7 @@ namespace Interface
         int8_t _selectedAdventureObject{ -1 };
         int8_t _selectedKingdomObject{ -1 };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+        uint8_t _selectedDetailBrushType{ DetailBrushType::EDITING };
         uint32_t _eraseTypes{ ObjectErasureType::ERASE_ALL_OBJECTS };
 
         std::array<int32_t, LandscapeObjectBrush::LANDSCAPE_COUNT> _selectedLandscapeObjectType;

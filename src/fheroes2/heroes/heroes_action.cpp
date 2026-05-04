@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -3476,13 +3476,13 @@ namespace
                     LocalEvent & le = LocalEvent::Get();
                     size_t delay = 0;
 
-                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
                         if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                             skipAnimation = true;
                             break;
                         }
 
-                        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                        if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
                             I.redraw( Interface::REDRAW_GAMEAREA );
