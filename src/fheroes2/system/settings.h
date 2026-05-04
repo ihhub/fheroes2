@@ -462,12 +462,12 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
-    bool _mapScrollInertia;
 
     int32_t game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
     BattleTurnOrderState _battleTurnOrderState{ BattleTurnOrderState::OFF };
+    bool _mapScrollInertia{ false };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };

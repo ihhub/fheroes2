@@ -312,10 +312,12 @@ namespace Interface
             std::deque<DragSample> dragSamples;
             fheroes2::Time dragTimer;
 
-            double velX{ 0.0 };
-            double velY{ 0.0 };
-            double subpixelShiftX{ 0.0 };
-            double subpixelShiftY{ 0.0 };
+            // Velocity in fixed-point 1/256 px/ms units (e.g. 256 = 1 px/ms).
+            int32_t velX{ 0 };
+            int32_t velY{ 0 };
+            // Sub-pixel accumulator in 1/256-pixel fixed-point units. Half-pixel precision (0.5 px) is sufficient.
+            int32_t subpixelShiftX{ 0 };
+            int32_t subpixelShiftY{ 0 };
             bool active{ false };
             fheroes2::Time timer;
 

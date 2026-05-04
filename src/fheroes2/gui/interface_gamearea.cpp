@@ -1040,20 +1040,24 @@ void Interface::GameArea::QueueEventProcessing()
             if ( lastSampleAge < 50 && _inertia.dragSamples.size() >= 2 ) {
                 const uint64_t dt = _inertia.dragSamples.back().timeMs - _inertia.dragSamples.front().timeMs;
                 if ( dt > 0 ) {
-                    double sumX = 0.0;
-                    double sumY = 0.0;
+                    int64_t sumX = 0;
+                    int64_t sumY = 0;
                     for ( const MapScrollInertia::DragSample & s : _inertia.dragSamples ) {
                         sumX += s.delta.x;
                         sumY += s.delta.y;
                     }
-                    _inertia.velX = sumX / static_cast<double>( dt );
-                    _inertia.velY = sumY / static_cast<double>( dt );
-                    const double speedSq = _inertia.velX * _inertia.velX + _inertia.velY * _inertia.velY;
-                    if ( speedSq > 0.15 * 0.15 ) {
+                    // Threshold: 0.15 px/ms → 38 in 1/256 units → 38²=1444
+                    _inertia.velX = static_cast<int32_t>( sumX * 256 / static_cast<int64_t>( dt ) );
+                    _inertia.velY = static_cast<int32_t>( sumY * 256 / static_cast<int64_t>( dt ) );
+                    if ( _inertia.velX * _inertia.velX + _inertia.velY * _inertia.velY > 1444 ) {
                         _inertia.active = true;
-                        _inertia.subpixelShiftX = 0.0;
-                        _inertia.subpixelShiftY = 0.0;
+                        _inertia.subpixelShiftX = 0;
+                        _inertia.subpixelShiftY = 0;
                         _inertia.timer.reset();
+                    }
+                    else {
+                        _inertia.velX = 0;
+                        _inertia.velY = 0;
                     }
                 }
             }
@@ -1070,8 +1074,10 @@ void Interface::GameArea::QueueEventProcessing()
             _inertia.dragSamples.clear();
             _inertia.dragTimer.reset();
             _inertia.active = false;
-            _inertia.subpixelShiftX = 0.0;
-            _inertia.subpixelShiftY = 0.0;
+            _inertia.velX = 0;
+            _inertia.velY = 0;
+            _inertia.subpixelShiftX = 0;
+            _inertia.subpixelShiftY = 0;
         }
         else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
@@ -1160,24 +1166,30 @@ bool Interface::GameArea::MapScrollInertia::update( GameArea & area )
     }
     timer.reset();
 
-    // Exponential velocity decay. The time constant of 200 ms was chosen empirically
-    // to feel natural: fast enough to stop within a second, slow enough to feel smooth.
-    const double dtMs = static_cast<double>( elapsedTimeMs );
-    const double decay = std::exp( -dtMs / 200.0 );
-    velX *= decay;
-    velY *= decay;
+    // Exponential velocity decay approximated as vel *= (200 - dt) / 200.
+    // The time constant of 200 ms was chosen empirically to feel natural:
+    // fast enough to stop within a second, slow enough to feel smooth.
+    if ( elapsedTimeMs >= 200 ) {
+        deactivate();
+        return false;
+    }
+    const int32_t dtMs = static_cast<int32_t>( elapsedTimeMs );
+    velX = velX * ( 200 - dtMs ) / 200;
+    velY = velY * ( 200 - dtMs ) / 200;
 
-    if ( velX * velX + velY * velY < 0.05 * 0.05 ) {
+    // Stop threshold: 0.05 px/ms → 13 in 1/256 units → 13²=169.
+    if ( velX * velX + velY * velY < 169 ) {
         deactivate();
         return false;
     }
 
+    // Accumulate in 1/256-pixel fixed-point units for half-pixel precision.
     subpixelShiftX += velX * dtMs;
     subpixelShiftY += velY * dtMs;
 
-    const fheroes2::Point viewShift( static_cast<int32_t>( subpixelShiftX ), static_cast<int32_t>( subpixelShiftY ) );
-    subpixelShiftX -= viewShift.x;
-    subpixelShiftY -= viewShift.y;
+    const fheroes2::Point viewShift( subpixelShiftX / 256, subpixelShiftY / 256 );
+    subpixelShiftX -= viewShift.x * 256;
+    subpixelShiftY -= viewShift.y * 256;
 
     if ( viewShift.x == 0 && viewShift.y == 0 ) {
         return true;
@@ -1197,14 +1209,14 @@ bool Interface::GameArea::MapScrollInertia::update( GameArea & area )
     // We only do this when the shift was non-zero; a zero shift means the subpixel
     // accumulation hasn't reached a full pixel yet, so we keep decaying normally.
     if ( viewShift.x != 0 && afterCenter.x == beforeCenter.x ) {
-        velX = 0.0;
-        subpixelShiftX = 0.0;
+        velX = 0;
+        subpixelShiftX = 0;
     }
     if ( viewShift.y != 0 && afterCenter.y == beforeCenter.y ) {
-        velY = 0.0;
-        subpixelShiftY = 0.0;
+        velY = 0;
+        subpixelShiftY = 0;
     }
-    if ( std::abs( velX ) < 1e-10 && std::abs( velY ) < 1e-10 ) {
+    if ( velX == 0 && velY == 0 ) {
         deactivate();
     }
 

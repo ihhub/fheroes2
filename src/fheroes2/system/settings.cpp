@@ -112,7 +112,6 @@ Settings::Settings()
     , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( defaultBattleSpeed )
-    , _mapScrollInertia( false )
     , game_type( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
