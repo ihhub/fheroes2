@@ -814,7 +814,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         const auto currentMetadata = getHeroMetadata();
         if ( currentMetadata != *initialHeroMetadata ) {
             if ( fheroes2::showStandardTextMessage( GetName(), _( "Do you want to save the changes made?" ), Dialog::YES | Dialog::NO ) == Dialog::NO ) {
-                applyHeroMetadata( *initialHeroMetadata, Modes( JAIL ), true );
+                return Dialog::DISMISS;
             }
         }
     }

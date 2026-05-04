@@ -2040,12 +2040,13 @@ namespace Interface
                     hero.SetColor( color );
                     hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], objectType == MP2::OBJ_JAIL, true );
 
-                    hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage );
-                    Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
-                    if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::HERO_METADATA );
-                        _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
-                        action.commit();
+                    if ( hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage ) != Dialog::DISMISS ) {
+                        Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
+                        if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
+                            fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::HERO_METADATA );
+                            _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
+                            action.commit();
+                        }
                     }
                 }
                 else if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_RANDOM_TOWN || objectType == MP2::OBJ_RANDOM_CASTLE ) {
