@@ -817,6 +817,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 return Dialog::DISMISS;
             }
         }
+        else {
+            // This could happen when we automatically change the location of certain items.
+            // For example, when pushing artifacts we put them to the first position.
+            return Dialog::DISMISS;
+        }
     }
 
     // Fade-out hero dialog.
