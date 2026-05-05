@@ -1731,7 +1731,10 @@ namespace Interface
                             }
                         }
                         else {
-                            if ( le.isMouseLeftButtonReleased() ) {
+                            // We need to check that the movable info is valid.
+                            // It could happen that a map maker presses left mouse button, then while holding presses right button,
+                            // and then releases the left button.
+                            if ( _movableObjectInfo.tileIndex >= 0 && le.isMouseLeftButtonReleased() ) {
                                 if ( _editorPanel.isObjectMovingMode() ) {
                                     _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
                                 }
