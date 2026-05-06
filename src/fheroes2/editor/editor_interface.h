@@ -78,6 +78,9 @@ namespace Interface
 
         void undoAction()
         {
+            // Movable object state must be reset if a user tries to do another action at the same time.
+            _resetMovableObjectInfo();
+
             if ( _historyManager.undo() ) {
                 _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
             }
@@ -85,6 +88,9 @@ namespace Interface
 
         void redoAction()
         {
+            // Movable object state must be reset if a user tries to do another action at the same time.
+            _resetMovableObjectInfo();
+
             if ( _historyManager.redo() ) {
                 _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
             }

@@ -1279,6 +1279,11 @@ namespace Interface
 
         const fheroes2::Rect newRoi = _gameArea.GetROI();
 
+        _areaSelectionStartTileId = -1;
+        _tileUnderCursor = -1;
+        _brushTiles.clear();
+        _movableObjectInfo = {};
+
         if ( prevRoi == fheroes2::Rect{} ) {
             // This is the first initialization of the game area for the Editor.
             // Make the top-left corner of the first tile to be at the top-left corner of the shown game area.
@@ -1627,6 +1632,17 @@ namespace Interface
                 const bool isBrushEmpty = ( _editorPanel.getBrushArea() == fheroes2::Rect() );
 
                 if ( isValidTile ) {
+                    if ( !_editorPanel.isObjectMovingMode() && !_editorPanel.isObjectCopyingMode() ) {
+                        // There could be the case when a map maker does very weird stuff:
+                        // - start moving an object
+                        // - move the cursor to Interface Panel
+                        // - switch to another brush
+                        // - switch back to move or copy brush
+                        // - clicks on the map
+                        // The state of the map might be different.
+                        _resetMovableObjectInfo();
+                    }
+
                     const int32_t tileIndex = tilePos.y * world.w() + tilePos.x;
                     if ( _tileUnderCursor != tileIndex ) {
                         _tileUnderCursor = tileIndex;
