@@ -2815,7 +2815,7 @@ namespace Interface
             return;
         }
 
-        if ( _getSameObjectPresentOnTile( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType) != nullptr ) {
+        if ( _getSameObjectPresentOnTile( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
             // The same objects exists on the destination tile. Ignore it.
             _warningMessage.reset( _( "The same object exists on the tile." ) );
             return;
@@ -2889,7 +2889,7 @@ namespace Interface
             return;
         }
 
-        if ( _getSameObjectPresentOnTile( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType) != nullptr ) {
+        if ( _getSameObjectPresentOnTile( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
             // The same objects exists on the destination tile. Ignore it.
             _warningMessage.reset( _( "The same object exists on the tile." ) );
             return;
@@ -3243,8 +3243,8 @@ namespace Interface
         return Maps::readMapInEditor( _mapFormat );
     }
 
-    const Maps::Map_Format::TileObjectInfo * EditorInterface::_getSameObjectPresentOnTile(
-        const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex ) const
+    const Maps::Map_Format::TileObjectInfo * EditorInterface::_getSameObjectPresentOnTile( const int32_t tileIndex, const Maps::ObjectGroup groupType,
+                                                                                           int32_t objectIndex ) const
     {
         assert( tileIndex >= 0 && static_cast<size_t>( tileIndex ) < _mapFormat.tiles.size() );
 
