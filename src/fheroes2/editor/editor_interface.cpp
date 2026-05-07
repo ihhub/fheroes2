@@ -2815,7 +2815,7 @@ namespace Interface
             return;
         }
 
-        if ( _getSameObjectPresentOnTile( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
+        if ( _getSameObjectPresentOnTile( destinationTile, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
             // The same objects exists on the destination tile. Ignore it.
             _warningMessage.reset( _( "The same object exists on the tile." ) );
             return;
@@ -2889,7 +2889,7 @@ namespace Interface
             return;
         }
 
-        if ( _getSameObjectPresentOnTile( movableObjectInfo.tileIndex, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
+        if ( _getSameObjectPresentOnTile( destinationTile, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
             // The same objects exists on the destination tile. Ignore it.
             _warningMessage.reset( _( "The same object exists on the tile." ) );
             return;
