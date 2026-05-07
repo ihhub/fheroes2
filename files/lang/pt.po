@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 08:03+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4573,6 +4573,10 @@ msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "É possível colocar no máximo %{count} obeliscos no mapa."
+
+#, fuzzy
+msgid "The same object exists on the tile."
+msgstr "Essa resposta existe na lista."
 
 msgid "The map is corrupted."
 msgstr "O mapa está corrompido."

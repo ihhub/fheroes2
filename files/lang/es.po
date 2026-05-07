@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 08:03+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4645,6 +4645,9 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Se pueden colocar un máximo de %{count} obeliscos en el mapa."
+
+msgid "The same object exists on the tile."
+msgstr ""
 
 #, fuzzy
 msgid "The map is corrupted."

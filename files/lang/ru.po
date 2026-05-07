@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 08:03+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2026-04-11 12:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4554,6 +4554,10 @@ msgstr "На одной карте можно разместить только 
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На карте можно разместить не более %{count} обелисков."
+
+#, fuzzy
+msgid "The same object exists on the tile."
+msgstr "Такой ответ уже есть в списке."
 
 msgid "The map is corrupted."
 msgstr "Карта повреждена."

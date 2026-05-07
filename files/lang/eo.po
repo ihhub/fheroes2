@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 23:51+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2026-05-02 23:44+0200\n"
 "Last-Translator: Kaffeino <kaffeino@posteo.co.uk>\n"
 "Language-Team: Esperanto <kaffeino@posteo.co.uk>\n"
@@ -4160,6 +4160,9 @@ msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
+msgstr ""
+
+msgid "The same object exists on the tile."
 msgstr ""
 
 msgid "The map is corrupted."

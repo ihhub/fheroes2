@@ -792,9 +792,16 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     const std::vector<Skill::Secondary> & skills = _secondarySkills.ToVector();
     const size_t skillsSize = skills.size();
     assert( heroMetadata.secondarySkill.size() == skillsSize && heroMetadata.secondarySkillLevel.size() == skillsSize );
+
+    size_t skillId{ 0 };
     for ( size_t i = 0; i < skillsSize; ++i ) {
-        heroMetadata.secondarySkill[i] = static_cast<int8_t>( skills[i].Skill() );
-        heroMetadata.secondarySkillLevel[i] = static_cast<uint8_t>( skills[i].Level() );
+        if ( !skills[i].isValid() ) {
+            continue;
+        }
+
+        heroMetadata.secondarySkill[skillId] = static_cast<int8_t>( skills[i].Skill() );
+        heroMetadata.secondarySkillLevel[skillId] = static_cast<uint8_t>( skills[i].Level() );
+        ++skillId;
     }
 
     // Hero's name.
