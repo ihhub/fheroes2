@@ -1053,17 +1053,26 @@ namespace
 
                             const Maps::Tile & foundTile = world.getTile( index );
                             const MP2::MapObjectType tileObjectType{ foundTile.getMainObjectType( false ) };
+                            // Check that the tile is indeed the main entrance of the castle.
                             if ( tileObjectType != MP2::OBJ_CASTLE && tileObjectType != MP2::OBJ_RANDOM_CASTLE && tileObjectType != MP2::OBJ_RANDOM_TOWN ) {
                                 continue;
                             }
 
-                            if ( objectUID == foundTile.getMainObjectPart()._uid ) {
-                                return index;
+                            // Make sure that the object part is also the main entrance of the castle and to the same castle.
+                            const auto & mainObjectPart = foundTile.getMainObjectPart();
+                            if ( objectUID == mainObjectPart._uid ) {
+                                const auto objectPartType = Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex );
+                                if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
+                                    return index;
+                                }
                             }
 
                             for ( const auto & objectPart : foundTile.getGroundObjectParts() ) {
                                 if ( objectPart._uid == objectUID ) {
-                                    return index;
+                                    const auto objectPartType = Maps::getObjectTypeByIcn( objectPart.icnType, objectPart.icnIndex );
+                                    if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
+                                        return index;
+                                    }
                                 }
                             }
                         }
