@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 08:03+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -4602,6 +4602,10 @@ msgstr ""
 
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Es können maximal %{count} Obelisken auf der Karte platziert werden."
+
+#, fuzzy
+msgid "The same object exists on the tile."
+msgstr "Diese Antwort existiert bereits in der Liste."
 
 msgid "The map is corrupted."
 msgstr "Die Karte ist beschädigt."

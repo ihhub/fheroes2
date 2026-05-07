@@ -137,14 +137,16 @@ namespace
         const bool _isHideInterfaceEnabled{ Settings::Get().isHideInterfaceEnabled() };
     };
 
-    class MonsterMultiSelection final : public fheroes2::DialogElement
+    class ObjectMultiSelectionUI final : public fheroes2::DialogElement
     {
     public:
-        MonsterMultiSelection( std::vector<int32_t> allowed, std::vector<int32_t> selected, std::string text, const bool isEvilInterface )
+        ObjectMultiSelectionUI( std::vector<int32_t> allowed, std::vector<int32_t> selected, std::string text, const bool isEvilInterface,
+                                std::function<void( std::vector<int32_t>, std::vector<int32_t> & )> objectSelection )
             : _allowed( std::move( allowed ) )
             , _selected( std::move( selected ) )
             , _text( std::move( text ), fheroes2::FontType::normalWhite() )
             , _buttonSelection( 0, 0, ( isEvilInterface ? ICN::BUTTON_SELECT_EVIL : ICN::BUTTON_SELECT_GOOD ), 0, 1 )
+            , _objectSelection( std::move( objectSelection ) )
         {
             const int32_t offset{ 5 };
 
@@ -160,7 +162,7 @@ namespace
             _area.height += buttonArea.height;
         }
 
-        ~MonsterMultiSelection() override = default;
+        ~ObjectMultiSelectionUI() override = default;
 
         void draw( fheroes2::Image & output, const fheroes2::Point & offset ) const override
         {
@@ -178,8 +180,8 @@ namespace
             if ( le.isMouseRightButtonPressedInArea( buttonRect ) ) {
                 fheroes2::showStandardTextMessage( _( "SELECT" ), _( "Click to make selection." ), 0 );
             }
-            else if ( le.MouseClickLeft( buttonRect ) ) {
-                Dialog::multiSelectMonsters( _allowed, _selected );
+            else if ( le.MouseClickLeft( buttonRect ) && _objectSelection != nullptr ) {
+                _objectSelection( _allowed, _selected );
             }
         }
 
@@ -209,6 +211,8 @@ namespace
 
         const fheroes2::Text _text;
         mutable fheroes2::Button _buttonSelection;
+
+        std::function<void( std::vector<int32_t>, std::vector<int32_t> & )> _objectSelection{ nullptr };
     };
 
     size_t getObeliskCount( const Maps::Map_Format::MapFormat & _mapFormat )
@@ -1049,12 +1053,27 @@ namespace
 
                             const Maps::Tile & foundTile = world.getTile( index );
                             const MP2::MapObjectType tileObjectType{ foundTile.getMainObjectType( false ) };
+                            // Check that the tile is indeed the main entrance of the castle.
                             if ( tileObjectType != MP2::OBJ_CASTLE && tileObjectType != MP2::OBJ_RANDOM_CASTLE && tileObjectType != MP2::OBJ_RANDOM_TOWN ) {
                                 continue;
                             }
 
-                            if ( foundTile.getMainObjectPart()._uid != 0 && ( objectUID == foundTile.getMainObjectPart()._uid ) ) {
-                                return index;
+                            // Make sure that the object part is also the main entrance of the castle and to the same castle.
+                            const auto & mainObjectPart = foundTile.getMainObjectPart();
+                            if ( objectUID == mainObjectPart._uid ) {
+                                const auto objectPartType = Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex );
+                                if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
+                                    return index;
+                                }
+                            }
+
+                            for ( const auto & objectPart : foundTile.getGroundObjectParts() ) {
+                                if ( objectPart._uid == objectUID ) {
+                                    const auto objectPartType = Maps::getObjectTypeByIcn( objectPart.icnType, objectPart.icnIndex );
+                                    if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
+                                        return index;
+                                    }
+                                }
                             }
                         }
                     }
@@ -1268,6 +1287,11 @@ namespace Interface
                                    display.height() - 2 * fheroes2::borderWidthPx );
 
         const fheroes2::Rect newRoi = _gameArea.GetROI();
+
+        _areaSelectionStartTileId = -1;
+        _tileUnderCursor = -1;
+        _brushTiles.clear();
+        _movableObjectInfo = {};
 
         if ( prevRoi == fheroes2::Rect{} ) {
             // This is the first initialization of the game area for the Editor.
@@ -1617,6 +1641,17 @@ namespace Interface
                 const bool isBrushEmpty = ( _editorPanel.getBrushArea() == fheroes2::Rect() );
 
                 if ( isValidTile ) {
+                    if ( !_editorPanel.isObjectMovingMode() && !_editorPanel.isObjectCopyingMode() ) {
+                        // There could be the case when a map maker does very weird stuff:
+                        // - start moving an object
+                        // - move the cursor to Interface Panel
+                        // - switch to another brush
+                        // - switch back to move or copy brush
+                        // - clicks on the map
+                        // The state of the map might be different.
+                        _resetMovableObjectInfo();
+                    }
+
                     const int32_t tileIndex = tilePos.y * world.w() + tilePos.x;
                     if ( _tileUnderCursor != tileIndex ) {
                         _tileUnderCursor = tileIndex;
@@ -1731,7 +1766,10 @@ namespace Interface
                             }
                         }
                         else {
-                            if ( le.isMouseLeftButtonReleased() ) {
+                            // We need to check that the movable info is valid.
+                            // It could happen that a map maker presses left mouse button, then while holding presses right button,
+                            // and then releases the left button.
+                            if ( _movableObjectInfo.tileIndex >= 0 && le.isMouseLeftButtonReleased() ) {
                                 if ( _editorPanel.isObjectMovingMode() ) {
                                     _tryToMoveObject( _movableObjectInfo, _tileUnderCursor );
                                 }
@@ -2040,12 +2078,13 @@ namespace Interface
                     hero.SetColor( color );
                     hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], objectType == MP2::OBJ_JAIL, true );
 
-                    hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage );
-                    Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
-                    if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
-                        fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::HERO_METADATA );
-                        _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
-                        action.commit();
+                    if ( hero.OpenDialog( false, false, true, true, true, true, _mapFormat.mainLanguage ) != Dialog::DISMISS ) {
+                        Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
+                        if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
+                            fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::HERO_METADATA );
+                            _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
+                            action.commit();
+                        }
                     }
                 }
                 else if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_RANDOM_TOWN || objectType == MP2::OBJ_RANDOM_CASTLE ) {
@@ -2111,10 +2150,10 @@ namespace Interface
 
                     std::vector<int32_t> allowedMonsters = getAllowedMonsters( tempMonster, objectType );
 
-                    std::unique_ptr<const MonsterMultiSelection> selectionUi{ nullptr };
+                    std::unique_ptr<const ObjectMultiSelectionUI> selectionUi{ nullptr };
                     if ( !allowedMonsters.empty() ) {
-                        selectionUi = std::make_unique<const MonsterMultiSelection>( std::move( allowedMonsters ), selectedMonsters, _( "Select Monsters:" ),
-                                                                                     Settings::Get().isEvilInterfaceEnabled() );
+                        selectionUi = std::make_unique<const ObjectMultiSelectionUI>( std::move( allowedMonsters ), selectedMonsters, _( "Select Monsters:" ),
+                                                                                      Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectMonsters );
                     }
 
                     if ( Dialog::SelectCount( std::move( str ), 0, 500000, monsterCount, 1, monsterUi.get(), selectionUi.get() )
@@ -2166,9 +2205,25 @@ namespace Interface
                         auto & originalRadius = _mapFormat.artifactMetadata[object.id].radius;
                         int32_t radius = originalRadius;
 
-                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius ) && radius != originalRadius ) {
+                        auto & selected = _mapFormat.artifactMetadata[object.id].selected;
+
+                        std::vector<int32_t> allowed;
+                        for ( int32_t id = Artifact::UNKNOWN; id < Artifact::ARTIFACT_COUNT; ++id ) {
+                            const int32_t level = Artifact( id ).Level();
+                            if ( ( level & Artifact::ART_ULTIMATE ) != 0 ) {
+                                allowed.emplace_back( id );
+                            }
+                        }
+
+                        std::unique_ptr<const ObjectMultiSelectionUI> selectionUi{ nullptr };
+                        selectionUi = std::make_unique<const ObjectMultiSelectionUI>( std::move( allowed ), selected, _( "Select Artifacts:" ),
+                                                                                      Settings::Get().isEvilInterfaceEnabled(), Dialog::multiSelectArtifact );
+
+                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius:" ), 0, 100, radius, 1, nullptr, selectionUi.get() )
+                             && ( radius != originalRadius || selected != selectionUi->getSelected() ) ) {
                             fheroes2::ActionCreator action( _historyManager, _mapFormat, fheroes2::ActionCreator::ActionType::ARTIFACT_METADATA );
                             originalRadius = radius;
+                            selected = selectionUi->getSelected();
                             action.commit();
                         }
                     }
@@ -2785,6 +2840,12 @@ namespace Interface
             return;
         }
 
+        if ( _getSameObjectPresentOnTile( destinationTile, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
+            // The same objects exists on the destination tile. Ignore it.
+            _warningMessage.reset( _( "The same object exists on the tile." ) );
+            return;
+        }
+
         Maps::Tile & tile = world.getTile( destinationTile );
 
         // Since we want to preserve the object UID (and not to break translations)
@@ -2850,6 +2911,12 @@ namespace Interface
 
         if ( movableObjectInfo.tileIndex == destinationTile ) {
             // Cannot copy to itself.
+            return;
+        }
+
+        if ( _getSameObjectPresentOnTile( destinationTile, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
+            // The same objects exists on the destination tile. Ignore it.
+            _warningMessage.reset( _( "The same object exists on the tile." ) );
             return;
         }
 
@@ -3176,6 +3243,34 @@ namespace Interface
 
     bool EditorInterface::_tryToMoveObjectOnTop( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex )
     {
+        const auto * object = _getSameObjectPresentOnTile( tileIndex, groupType, objectIndex );
+        if ( object == nullptr ) {
+            // Object hasn't been found.
+            return false;
+        }
+
+        if ( object->id == Maps::getLastObjectUID() ) {
+            // Just do nothing since this is the last object.
+            return true;
+        }
+
+        const uint32_t oldObjectUID = object->id;
+
+        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+        const uint32_t newObjectUID = Maps::getNewObjectUID();
+        _updateObjectMetadata( *object, newObjectUID );
+        _updateObjectUID( oldObjectUID, newObjectUID );
+
+        action.commit();
+
+        // TODO: so far this is the only way to update objects for rendering.
+        return Maps::readMapInEditor( _mapFormat );
+    }
+
+    const Maps::Map_Format::TileObjectInfo * EditorInterface::_getSameObjectPresentOnTile( const int32_t tileIndex, const Maps::ObjectGroup groupType,
+                                                                                           int32_t objectIndex ) const
+    {
         assert( tileIndex >= 0 && static_cast<size_t>( tileIndex ) < _mapFormat.tiles.size() );
 
         if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
@@ -3185,7 +3280,7 @@ namespace Interface
             if ( type < 0 || color < 0 ) {
                 // Check your logic!
                 assert( 0 );
-                return false;
+                return nullptr;
             }
 
             objectIndex = type;
@@ -3193,27 +3288,11 @@ namespace Interface
 
         for ( const auto & object : _mapFormat.tiles[tileIndex].objects ) {
             if ( object.group == groupType && object.index == static_cast<uint32_t>( objectIndex ) ) {
-                if ( object.id == Maps::getLastObjectUID() ) {
-                    // Just do nothing since this is the last object.
-                    return true;
-                }
-
-                const uint32_t oldObjectUID = object.id;
-
-                fheroes2::ActionCreator action( _historyManager, _mapFormat );
-
-                const uint32_t newObjectUID = Maps::getNewObjectUID();
-                _updateObjectMetadata( object, newObjectUID );
-                _updateObjectUID( oldObjectUID, newObjectUID );
-
-                action.commit();
-
-                // TODO: so far this is the only way to update objects for rendering.
-                return Maps::readMapInEditor( _mapFormat );
+                return &object;
             }
         }
 
-        return false;
+        return nullptr;
     }
 
     void EditorInterface::_updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID )
