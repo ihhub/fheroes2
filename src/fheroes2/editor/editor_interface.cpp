@@ -2831,6 +2831,12 @@ namespace Interface
             return;
         }
 
+        if ( _getSameObjectPresentOnTile( destinationTile, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
+            // The same objects exists on the destination tile. Ignore it.
+            _warningMessage.reset( _( "The same object exists on the tile." ) );
+            return;
+        }
+
         Maps::Tile & tile = world.getTile( destinationTile );
 
         // Since we want to preserve the object UID (and not to break translations)
@@ -2896,6 +2902,12 @@ namespace Interface
 
         if ( movableObjectInfo.tileIndex == destinationTile ) {
             // Cannot copy to itself.
+            return;
+        }
+
+        if ( _getSameObjectPresentOnTile( destinationTile, movableObjectInfo.groupType, movableObjectInfo.objectType ) != nullptr ) {
+            // The same objects exists on the destination tile. Ignore it.
+            _warningMessage.reset( _( "The same object exists on the tile." ) );
             return;
         }
 
@@ -3222,6 +3234,34 @@ namespace Interface
 
     bool EditorInterface::_tryToMoveObjectOnTop( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex )
     {
+        const auto * object = _getSameObjectPresentOnTile( tileIndex, groupType, objectIndex );
+        if ( object == nullptr ) {
+            // Object hasn't been found.
+            return false;
+        }
+
+        if ( object->id == Maps::getLastObjectUID() ) {
+            // Just do nothing since this is the last object.
+            return true;
+        }
+
+        const uint32_t oldObjectUID = object->id;
+
+        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+        const uint32_t newObjectUID = Maps::getNewObjectUID();
+        _updateObjectMetadata( *object, newObjectUID );
+        _updateObjectUID( oldObjectUID, newObjectUID );
+
+        action.commit();
+
+        // TODO: so far this is the only way to update objects for rendering.
+        return Maps::readMapInEditor( _mapFormat );
+    }
+
+    const Maps::Map_Format::TileObjectInfo * EditorInterface::_getSameObjectPresentOnTile( const int32_t tileIndex, const Maps::ObjectGroup groupType,
+                                                                                           int32_t objectIndex ) const
+    {
         assert( tileIndex >= 0 && static_cast<size_t>( tileIndex ) < _mapFormat.tiles.size() );
 
         if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
@@ -3231,7 +3271,7 @@ namespace Interface
             if ( type < 0 || color < 0 ) {
                 // Check your logic!
                 assert( 0 );
-                return false;
+                return nullptr;
             }
 
             objectIndex = type;
@@ -3239,27 +3279,11 @@ namespace Interface
 
         for ( const auto & object : _mapFormat.tiles[tileIndex].objects ) {
             if ( object.group == groupType && object.index == static_cast<uint32_t>( objectIndex ) ) {
-                if ( object.id == Maps::getLastObjectUID() ) {
-                    // Just do nothing since this is the last object.
-                    return true;
-                }
-
-                const uint32_t oldObjectUID = object.id;
-
-                fheroes2::ActionCreator action( _historyManager, _mapFormat );
-
-                const uint32_t newObjectUID = Maps::getNewObjectUID();
-                _updateObjectMetadata( object, newObjectUID );
-                _updateObjectUID( oldObjectUID, newObjectUID );
-
-                action.commit();
-
-                // TODO: so far this is the only way to update objects for rendering.
-                return Maps::readMapInEditor( _mapFormat );
+                return &object;
             }
         }
 
-        return false;
+        return nullptr;
     }
 
     void EditorInterface::_updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID )
