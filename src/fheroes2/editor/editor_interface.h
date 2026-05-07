@@ -183,6 +183,8 @@ namespace Interface
         // Returns true if an existing object was moved on top.
         bool _tryToMoveObjectOnTop( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex );
 
+        const Maps::Map_Format::TileObjectInfo * _getSameObjectPresentOnTile( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex ) const;
+
         void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
 
         void _updateObjectUID( const uint32_t oldObjectUID, const uint32_t newObjectUID );
