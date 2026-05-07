@@ -2294,8 +2294,6 @@ void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 {
     assert( castle );
 
-    const fheroes2::Point & center = castle->GetCenter();
-
     _castles.emplace_back( std::move( castle ) );
 
     /* Register position of all castle elements on the map
@@ -2315,6 +2313,8 @@ void AllCastles::AddCastle( std::unique_ptr<Castle> && castle )
 
     // Castles are added from top to bottom, from left to right.
     // Tiles containing castle ID cannot be overwritten.
+
+    const fheroes2::Point & center = _castles.back()->GetCenter();
 
     for ( int32_t y = -2; y <= 1; ++y ) {
         for ( int32_t x = -2; x <= 2; ++x ) {
