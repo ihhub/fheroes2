@@ -1450,15 +1450,6 @@ void Maps::Tile::fixMP2MapTileObjectType( Tile & tile )
 bool Maps::Tile::removeObjectPartsByUID( const uint32_t objectUID )
 {
     bool isObjectPartRemoved = false;
-    if ( _mainObjectPart._uid == objectUID ) {
-        _mainObjectPart = {};
-
-        // We need to sort main and ground object parts if the main part was removed
-        // to properly place the object with the highest priority to the `_mainObjectPart`.
-        sortObjectParts();
-
-        isObjectPartRemoved = true;
-    }
 
     size_t partCountBefore = _groundObjectPart.size();
     _groundObjectPart.remove_if( [objectUID]( const auto & v ) { return v._uid == objectUID; } );
@@ -1469,6 +1460,16 @@ bool Maps::Tile::removeObjectPartsByUID( const uint32_t objectUID )
     partCountBefore = _topObjectPart.size();
     _topObjectPart.remove_if( [objectUID]( const auto & v ) { return v._uid == objectUID; } );
     if ( partCountBefore != _topObjectPart.size() ) {
+        isObjectPartRemoved = true;
+    }
+
+    if ( _mainObjectPart._uid == objectUID ) {
+        _mainObjectPart = {};
+
+        // We need to sort main and ground object parts if the main part was removed
+        // to properly place the object with the highest priority to the `_mainObjectPart`.
+        sortObjectParts();
+
         isObjectPartRemoved = true;
     }
 
