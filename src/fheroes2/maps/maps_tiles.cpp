@@ -1453,6 +1453,10 @@ bool Maps::Tile::removeObjectPartsByUID( const uint32_t objectUID )
     if ( _mainObjectPart._uid == objectUID ) {
         _mainObjectPart = {};
 
+        // We need to sort main and ground object parts if the main part was removed
+        // to properly place the object with the highest priority to the `_mainObjectPart`.
+        sortObjectParts();
+
         isObjectPartRemoved = true;
     }
 
