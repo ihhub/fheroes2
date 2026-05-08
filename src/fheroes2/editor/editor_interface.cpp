@@ -2529,6 +2529,12 @@ namespace Interface
         if ( _tryToPlaceObject( tile, objectType, groupType, true, action ) ) {
             assert( action.get() != nullptr );
             action->commit();
+
+            // TODO: this takes a lot of time. Find a way to avoid it.
+            if ( !Maps::readMapInEditor( _mapFormat ) ) {
+                // It shouldn't happen.
+                assert( 0 );
+            }
         }
     }
 
@@ -2894,6 +2900,12 @@ namespace Interface
             }
 
             action->commit();
+
+            // TODO: this takes a lot of time. Find a way to avoid it.
+            if ( !Maps::readMapInEditor( _mapFormat ) ) {
+                // It shouldn't happen.
+                assert( 0 );
+            }
         }
 
         Maps::setLastObjectUID( originalLastObjectUID );
@@ -2928,6 +2940,12 @@ namespace Interface
 
             assert( action.get() != nullptr );
             action->commit();
+
+            // TODO: this takes a lot of time. Find a way to avoid it.
+            if ( !Maps::readMapInEditor( _mapFormat ) ) {
+                // It shouldn't happen.
+                assert( 0 );
+            }
         }
     }
 
@@ -3264,7 +3282,7 @@ namespace Interface
 
         action.commit();
 
-        // TODO: so far this is the only way to update objects for rendering.
+        // TODO: this takes a lot of time. Find a way to avoid it.
         return Maps::readMapInEditor( _mapFormat );
     }
 
