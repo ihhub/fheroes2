@@ -61,39 +61,21 @@ namespace Skill
 
 namespace AI
 {
-    // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
-    enum class PriorityTaskType : int
-    {
-        // AI will focus on siegeing or chasing the selected enemy castle or hero.
-        ATTACK,
-
-        // Target will usually be a friendly castle. AI will move heroes to defend and garrison it.
-        DEFEND,
-
-        // Target must be a friendly castle or hero. AI with such priority set should focus on bringing more troops to the target.
-        REINFORCE
-    };
-
     // TODO: this structure is not being updated during AI heroes' actions.
     struct RegionStats
     {
-        bool evaluated = false;
         double highestThreat = -1;
         int friendlyHeroes = 0;
         int friendlyCastles = 0;
         int enemyCastles = 0;
         int safetyFactor = 0;
         int spellLevel = 2;
+        bool evaluated = false;
     };
 
     struct AICastle
     {
-        Castle * castle = nullptr;
-        bool underThreat = false;
-        int safetyFactor = 0;
-        int buildingValue = 0;
-
-        AICastle( Castle * inCastle, bool inThreat, int inSafety, int inValue )
+        AICastle( Castle * inCastle, const bool inThreat, const int inSafety, const int inValue )
             : castle( inCastle )
             , underThreat( inThreat )
             , safetyFactor( inSafety )
@@ -101,18 +83,20 @@ namespace AI
         {
             assert( castle != nullptr );
         }
+
+        Castle * castle{ nullptr };
+        int safetyFactor{ 0 };
+        int buildingValue{ 0 };
+        bool underThreat{ false };
     };
 
     struct BudgetEntry
     {
-        int resource = Resource::UNKNOWN;
-        int missing = 0;
-        bool priority = false;
-        bool recurringCost = false;
-
-        BudgetEntry( int type )
+        BudgetEntry( const int type )
             : resource( type )
-        {}
+        {
+            // Do nothing.
+        }
 
         void reset()
         {
@@ -120,9 +104,14 @@ namespace AI
             priority = false;
             recurringCost = false;
         }
+
+        int resource{ Resource::UNKNOWN };
+        int missing{ 0 };
+        bool priority{ false };
+        bool recurringCost{ false };
     };
 
-    struct EnemyArmy
+    struct EnemyArmy final
     {
         EnemyArmy() = default;
 
@@ -131,7 +120,9 @@ namespace AI
             , hero( hero_ )
             , strength( strength_ )
             , movePoints( movePoints_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         int32_t index{ -1 };
         const Heroes * hero{ nullptr };
@@ -139,25 +130,40 @@ namespace AI
         uint32_t movePoints{ 0 };
     };
 
-    struct PriorityTask
+    struct PriorityTask final
     {
+        // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
+        enum class Type : int
+        {
+            // AI will focus on siegeing or chasing the selected enemy castle or hero.
+            ATTACK,
+
+            // Target will usually be a friendly castle. AI will move heroes to defend and garrison it.
+            DEFEND,
+
+            // Target must be a friendly castle or hero. AI with such priority set should focus on bringing more troops to the target.
+            REINFORCE,
+        };
+
         PriorityTask() = default;
 
-        explicit PriorityTask( PriorityTaskType taskType )
+        explicit PriorityTask( const Type taskType )
             : type( taskType )
-        {}
+        {
+            // Do nothing.
+        }
 
-        PriorityTask( PriorityTaskType taskType, int secondaryTask )
+        PriorityTask( const Type taskType, const int secondaryTask )
             : type( taskType )
         {
             secondaryTaskTileId.insert( secondaryTask );
         }
 
-        PriorityTaskType type{ PriorityTaskType::ATTACK };
+        Type type{ Type::ATTACK };
         std::set<int32_t> secondaryTaskTileId;
     };
 
-    class Planner
+    class Planner final
     {
     public:
         static Planner & Get();
@@ -259,7 +265,7 @@ namespace AI
                 return false;
             }
 
-            return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
+            return iter->second.type == PriorityTask::Type::ATTACK || iter->second.type == PriorityTask::Type::DEFEND;
         }
 
         // The following member variables should not be saved or serialized

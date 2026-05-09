@@ -1160,7 +1160,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
                 assert( iter != _priorityTargets.end() );
 
                 const PriorityTask & attackTask = iter->second;
-                assert( attackTask.type == PriorityTaskType::ATTACK );
+                assert( attackTask.type == PriorityTask::Type::ATTACK );
 
                 for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
                     const Castle * castleUnderThreat = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
@@ -1273,7 +1273,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
             assert( iter != _priorityTargets.end() );
 
             const PriorityTask & attackTask = iter->second;
-            assert( attackTask.type == PriorityTaskType::ATTACK );
+            assert( attackTask.type == PriorityTask::Type::ATTACK );
 
             for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
@@ -1797,7 +1797,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
                 assert( iter != _priorityTargets.end() );
 
                 const PriorityTask & attackTask = iter->second;
-                assert( attackTask.type == PriorityTaskType::ATTACK );
+                assert( attackTask.type == PriorityTask::Type::ATTACK );
 
                 for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
                     const Castle * castleUnderThreat = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
@@ -1910,7 +1910,7 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
             assert( iter != _priorityTargets.end() );
 
             const PriorityTask & attackTask = iter->second;
-            assert( attackTask.type == PriorityTaskType::ATTACK );
+            assert( attackTask.type == PriorityTask::Type::ATTACK );
 
             for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
@@ -2720,7 +2720,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     return priorityTarget;
 }
 
-void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
+void AI::Planner::updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
 {
     if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HERO ) {
         // Priorities are only for castles and heroes at the moment.
@@ -2790,11 +2790,11 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         }
     }
 
-    const PriorityTaskType taskType = iter->second.type;
+    const PriorityTask::Type taskType = iter->second.type;
 
     switch ( taskType ) {
-    case PriorityTaskType::DEFEND:
-    case PriorityTaskType::REINFORCE:
+    case PriorityTask::Type::DEFEND:
+    case PriorityTask::Type::REINFORCE:
         if ( hero.GetIndex() != tileIndex ) {
             // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. If any of these assertions blow up, then this is not
             // one of these cases.
@@ -2818,6 +2818,8 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
         // How is it even possible that a hero died while simply moving into a castle?
         assert( hero.isActive() );
 
+        // Logically, a hero can still do some other actions but he has to come back to castle within the same turn.
+        // TODO: implement the logic of hero going out of the castle to do something and then coming back within the same turn.
         hero.SetModes( Heroes::SLEEPER );
 
 #ifdef WITH_DEBUG
@@ -2826,14 +2828,14 @@ void AI::Planner::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const
             assert( castle != nullptr );
 
             DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero.GetName() << " stays in " << castle->GetName() << " to " << ( taskType == PriorityTaskType::DEFEND ? "defend the castle" : "reinforce" ) )
+                       hero.GetName() << " stays in " << castle->GetName() << " to " << ( taskType == PriorityTask::Type::DEFEND ? "defend the castle" : "reinforce" ) )
         }
 #endif
 
         _priorityTargets.erase( tileIndex );
 
         break;
-    case PriorityTaskType::ATTACK:
+    case PriorityTask::Type::ATTACK:
         removePriorityAttackTarget( tileIndex );
 
         updateTile();
@@ -2958,6 +2960,7 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
              return isUltimateArtifactAvailableToHero( art, hero );
          }() ) {
         // We need to hold this hero on this tile until the next turn
+        // TODO: implement the logic of hero going out of the castle to do something and then coming back within the same turn.
         hero.SetModes( Heroes::SLEEPER );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is ready to dig up the Ultimate Artifact at tile " << heroIdx << " during the next turn" )

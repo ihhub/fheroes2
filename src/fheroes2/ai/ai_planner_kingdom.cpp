@@ -539,11 +539,11 @@ bool AI::Planner::updateIndividualPriorityForCastle( const Castle & castle, cons
         --daysToReach;
     }
 
-    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( enemyArmy.index, PriorityTaskType::ATTACK, castleIndex ); !inserted ) {
+    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( enemyArmy.index, PriorityTask::Type::ATTACK, castleIndex ); !inserted ) {
         iter->second.secondaryTaskTileId.insert( castleIndex );
     }
 
-    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( castleIndex, PriorityTaskType::DEFEND, enemyArmy.index ); !inserted ) {
+    if ( const auto [iter, inserted] = _priorityTargets.try_emplace( castleIndex, PriorityTask::Type::DEFEND, enemyArmy.index ); !inserted ) {
         iter->second.secondaryTaskTileId.insert( enemyArmy.index );
     }
 
@@ -571,7 +571,7 @@ void AI::Planner::removePriorityAttackTarget( const int32_t tileIndex )
     }
 
     const PriorityTask & attackTask = it->second;
-    if ( attackTask.type != PriorityTaskType::ATTACK ) {
+    if ( attackTask.type != PriorityTask::Type::ATTACK ) {
         return;
     }
 
@@ -584,7 +584,7 @@ void AI::Planner::removePriorityAttackTarget( const int32_t tileIndex )
             continue;
         }
 
-        if ( defenseTask->second.type != PriorityTaskType::DEFEND ) {
+        if ( defenseTask->second.type != PriorityTask::Type::DEFEND ) {
             continue;
         }
 
@@ -623,12 +623,14 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
 fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 {
 #if defined( WITH_DEBUG )
-    class AIAutoControlModeCommitter
+    class AIAutoControlModeCommitter final
     {
     public:
         explicit AIAutoControlModeCommitter( const Kingdom & kingdom )
             : _kingdomColor( kingdom.GetColor() )
-        {}
+        {
+            // Do nothing.
+        }
 
         AIAutoControlModeCommitter( const AIAutoControlModeCommitter & ) = delete;
 
@@ -820,6 +822,8 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
     std::set<int> castlesInDanger;
     std::vector<AICastle> sortedCastleList;
 
+    const int gameDifficulty{ Game::getDifficulty() };
+
     while ( true ) {
         // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
         for ( Heroes * hero : heroes ) {
@@ -828,7 +832,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_NONE );
         }
 
-        setHeroRoles( heroes, Game::getDifficulty() );
+        setHeroRoles( heroes, gameDifficulty );
 
         castlesInDanger = findCastlesInDanger( kingdom );
         for ( Heroes * hero : heroes ) {
@@ -874,7 +878,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
                 assert( castle != nullptr );
 
                 if ( castle->GetHero() == nullptr ) {
-                    if ( const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE ); inserted ) {
+                    if ( const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTask::Type::REINFORCE ); inserted ) {
                         DEBUG_LOG( DBG_AI, DBG_INFO, castle->GetName() << " is designated as a priority target to reinforce nearby heroes" )
 
                         moreTaskForHeroes = true;
