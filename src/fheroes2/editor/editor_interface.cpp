@@ -101,6 +101,8 @@
 namespace fheroes2
 {
     class Image;
+
+    enum class SupportedLanguage : uint8_t;
 }
 
 namespace
@@ -2981,7 +2983,7 @@ namespace Interface
 
             objectMetadata.restore( _mapFormat, Maps::getLastObjectUID() );
 
-            const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( movableObjectInfo.objectUID );
+            const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( Maps::getLastObjectUID() );
             if ( capturableObjectIter != _mapFormat.capturableObjectsMetadata.end() ) {
                 world.CaptureObject( destinationTile, capturableObjectIter->second.ownerColor );
             }
