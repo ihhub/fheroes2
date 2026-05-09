@@ -1050,10 +1050,10 @@ void Interface::GameArea::QueueEventProcessing()
                         sumX += s.delta.x;
                         sumY += s.delta.y;
                     }
-                    // Threshold: 0.2 px/ms → 51 in 1/256 units → 51²=2601
+                    // Threshold: 0.3 px/ms → 77 in 1/256 units → 77²=5929
                     _inertia.velX = static_cast<int32_t>( sumX * 256 / static_cast<int64_t>( dt ) );
                     _inertia.velY = static_cast<int32_t>( sumY * 256 / static_cast<int64_t>( dt ) );
-                    if ( _inertia.velX * _inertia.velX + _inertia.velY * _inertia.velY > 2601 ) {
+                    if ( _inertia.velX * _inertia.velX + _inertia.velY * _inertia.velY > 5929 ) {
                         _inertia.active = true;
                         _inertia.subpixelShiftX = 0;
                         _inertia.subpixelShiftY = 0;
