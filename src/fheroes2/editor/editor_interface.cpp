@@ -467,6 +467,10 @@ namespace
                     assert( mapFormat.castleMetadata.find( objectId ) != mapFormat.castleMetadata.end() );
                     mapFormat.castleMetadata.erase( objectId );
 
+                    for ( auto & [language, info] : mapFormat.translationInfo ) {
+                        info.castleMetadata.erase( objectId );
+                    }
+
                     // Remove the castle from `world` castles vector.
                     world.removeCastle( Maps::GetPoint( static_cast<int32_t>( mapTileIndex ) ) );
 
@@ -504,6 +508,10 @@ namespace
                     assert( mapFormat.heroMetadata.find( objectIter->id ) != mapFormat.heroMetadata.end() );
                     mapFormat.heroMetadata.erase( objectIter->id );
 
+                    for ( auto & [language, info] : mapFormat.translationInfo ) {
+                        info.heroMetadata.erase( objectIter->id );
+                    }
+
                     // Properly remove hero object from the `world` tile.
                     world.getTile( static_cast<int32_t>( mapTileIndex ) ).setHero( nullptr );
 
@@ -524,6 +532,10 @@ namespace
                     case MP2::OBJ_EVENT:
                         assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
                         mapFormat.adventureMapEventMetadata.erase( objectIter->id );
+
+                        for ( auto & [language, info] : mapFormat.translationInfo ) {
+                            info.adventureMapEventMetadata.erase( objectIter->id );
+                        }
                         break;
                     case MP2::OBJ_PYRAMID:
                         mapFormat.selectionObjectMetadata.erase( objectIter->id );
@@ -531,10 +543,18 @@ namespace
                     case MP2::OBJ_SIGN:
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
                         mapFormat.signMetadata.erase( objectIter->id );
+
+                        for ( auto & [language, info] : mapFormat.translationInfo ) {
+                            info.signMetadata.erase( objectIter->id );
+                        }
                         break;
                     case MP2::OBJ_SPHINX:
                         assert( mapFormat.sphinxMetadata.find( objectIter->id ) != mapFormat.sphinxMetadata.end() );
                         mapFormat.sphinxMetadata.erase( objectIter->id );
+
+                        for ( auto & [language, info] : mapFormat.translationInfo ) {
+                            info.sphinxMetadata.erase( objectIter->id );
+                        }
                         break;
                     case MP2::OBJ_WITCHS_HUT:
                         mapFormat.selectionObjectMetadata.erase( objectIter->id );
@@ -1143,6 +1163,108 @@ namespace
 
         copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.resourceMetadata );
     }
+
+    template <typename T>
+    void preseveMetadata( const uint32_t objectUID, const std::map<uint32_t, T> & allObjectsMetadata, std::unique_ptr<T> & metadata )
+    {
+        auto iter = allObjectsMetadata.find( objectUID );
+        if ( iter != allObjectsMetadata.end() ) {
+            metadata = std::make_unique<T>( iter->second );
+        }
+    }
+
+    template <typename T>
+    void restoreMetadata( const uint32_t objectUID, std::map<uint32_t, T> & allObjectsMetadata, std::unique_ptr<T> & metadata )
+    {
+        if ( !metadata ) {
+            return;
+        }
+
+        // Overwrite any metadata existed before.
+        allObjectsMetadata[objectUID] = std::move( *metadata.release() );
+    }
+
+    struct MovableTranslationFormat final
+    {
+        void preserve( const Maps::Map_Format::TranslationFormat & translationFormat, const uint32_t objectUID )
+        {
+            preseveMetadata( objectUID, translationFormat.castleMetadata, castleMetadata );
+            preseveMetadata( objectUID, translationFormat.heroMetadata, heroMetadata );
+            preseveMetadata( objectUID, translationFormat.sphinxMetadata, sphinxMetadata );
+            preseveMetadata( objectUID, translationFormat.signMetadata, signMetadata );
+            preseveMetadata( objectUID, translationFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+        }
+
+        void restore( Maps::Map_Format::TranslationFormat & translationFormat, const uint32_t objectUID )
+        {
+            restoreMetadata( objectUID, translationFormat.castleMetadata, castleMetadata );
+            restoreMetadata( objectUID, translationFormat.heroMetadata, heroMetadata );
+            restoreMetadata( objectUID, translationFormat.sphinxMetadata, sphinxMetadata );
+            restoreMetadata( objectUID, translationFormat.signMetadata, signMetadata );
+            restoreMetadata( objectUID, translationFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+        }
+
+        std::unique_ptr<std::string> castleMetadata;
+        std::unique_ptr<std::string> heroMetadata;
+        std::unique_ptr<Maps::Map_Format::TranslationSphinxMetadata> sphinxMetadata;
+        std::unique_ptr<std::string> signMetadata;
+        std::unique_ptr<std::string> adventureMapEventMetadata;
+    };
+
+    struct MovableObjectMetadata final
+    {
+        void preserve( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t objectUID )
+        {
+            preseveMetadata( objectUID, mapFormat.castleMetadata, castleMetadata );
+            preseveMetadata( objectUID, mapFormat.heroMetadata, heroMetadata );
+            preseveMetadata( objectUID, mapFormat.sphinxMetadata, sphinxMetadata );
+            preseveMetadata( objectUID, mapFormat.signMetadata, signMetadata );
+            preseveMetadata( objectUID, mapFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+            preseveMetadata( objectUID, mapFormat.selectionObjectMetadata, selectionObjectMetadata );
+            preseveMetadata( objectUID, mapFormat.capturableObjectsMetadata, capturableObjectsMetadata );
+            preseveMetadata( objectUID, mapFormat.monsterMetadata, monsterMetadata );
+            preseveMetadata( objectUID, mapFormat.artifactMetadata, artifactMetadata );
+            preseveMetadata( objectUID, mapFormat.resourceMetadata, resourceMetadata );
+
+            for ( const auto & [language, originalInfo] : mapFormat.translationInfo ) {
+                MovableTranslationFormat info;
+                info.preserve( originalInfo, objectUID );
+
+                translationInfo.try_emplace( language, std::move( info ) );
+            }
+        }
+
+        void restore( Maps::Map_Format::MapFormat & mapFormat, const uint32_t objectUID )
+        {
+            restoreMetadata( objectUID, mapFormat.castleMetadata, castleMetadata );
+            restoreMetadata( objectUID, mapFormat.heroMetadata, heroMetadata );
+            restoreMetadata( objectUID, mapFormat.sphinxMetadata, sphinxMetadata );
+            restoreMetadata( objectUID, mapFormat.signMetadata, signMetadata );
+            restoreMetadata( objectUID, mapFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+            restoreMetadata( objectUID, mapFormat.selectionObjectMetadata, selectionObjectMetadata );
+            restoreMetadata( objectUID, mapFormat.capturableObjectsMetadata, capturableObjectsMetadata );
+            restoreMetadata( objectUID, mapFormat.monsterMetadata, monsterMetadata );
+            restoreMetadata( objectUID, mapFormat.artifactMetadata, artifactMetadata );
+            restoreMetadata( objectUID, mapFormat.resourceMetadata, resourceMetadata );
+
+            for ( auto & [language, originalInfo] : mapFormat.translationInfo ) {
+                translationInfo[language].restore( originalInfo, objectUID );
+            }
+        }
+
+        std::unique_ptr<Maps::Map_Format::CastleMetadata> castleMetadata;
+        std::unique_ptr<Maps::Map_Format::HeroMetadata> heroMetadata;
+        std::unique_ptr<Maps::Map_Format::SphinxMetadata> sphinxMetadata;
+        std::unique_ptr<Maps::Map_Format::SignMetadata> signMetadata;
+        std::unique_ptr<Maps::Map_Format::AdventureMapEventMetadata> adventureMapEventMetadata;
+        std::unique_ptr<Maps::Map_Format::SelectionObjectMetadata> selectionObjectMetadata;
+        std::unique_ptr<Maps::Map_Format::CapturableObjectMetadata> capturableObjectsMetadata;
+        std::unique_ptr<Maps::Map_Format::MonsterMetadata> monsterMetadata;
+        std::unique_ptr<Maps::Map_Format::ArtifactMetadata> artifactMetadata;
+        std::unique_ptr<Maps::Map_Format::ResourceMetadata> resourceMetadata;
+
+        std::map<fheroes2::SupportedLanguage, MovableTranslationFormat> translationInfo;
+    };
 
 #if defined( WITH_DEBUG )
     int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
@@ -2848,55 +2970,27 @@ namespace Interface
 
         Maps::Tile & tile = world.getTile( destinationTile );
 
-        // Since we want to preserve the object UID (and not to break translations)
-        // we need to temporary set the last object UID here and then reset it back to what it should be before the changes.
-        const uint32_t originalLastObjectUID = Maps::getLastObjectUID();
-
-        // Some objects have metadata. We need to save it before removing objects.
-        // Ideally, we should save only the object's metadata but to make things easier, let's save everything for now.
-        // TODO: save only the current object metadata.
-        std::map<uint32_t, Maps::Map_Format::CastleMetadata> castleMetadata = _mapFormat.castleMetadata;
-        std::map<uint32_t, Maps::Map_Format::HeroMetadata> heroMetadata = _mapFormat.heroMetadata;
-        std::map<uint32_t, Maps::Map_Format::SphinxMetadata> sphinxMetadata = _mapFormat.sphinxMetadata;
-        std::map<uint32_t, Maps::Map_Format::SignMetadata> signMetadata = _mapFormat.signMetadata;
-        std::map<uint32_t, Maps::Map_Format::AdventureMapEventMetadata> adventureMapEventMetadata = _mapFormat.adventureMapEventMetadata;
-        std::map<uint32_t, Maps::Map_Format::SelectionObjectMetadata> selectionObjectMetadata = _mapFormat.selectionObjectMetadata;
-        std::map<uint32_t, Maps::Map_Format::CapturableObjectMetadata> capturableObjectsMetadata = _mapFormat.capturableObjectsMetadata;
-        std::map<uint32_t, Maps::Map_Format::MonsterMetadata> monsterMetadata = _mapFormat.monsterMetadata;
-        std::map<uint32_t, Maps::Map_Format::ArtifactMetadata> artifactMetadata = _mapFormat.artifactMetadata;
-        std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
+        MovableObjectMetadata objectMetadata;
+        objectMetadata.preserve( _mapFormat, movableObjectInfo.objectUID );
 
         auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
         removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType }, false );
 
-        Maps::setLastObjectUID( movableObjectInfo.objectUID - 1 );
-
         if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
             assert( action.get() != nullptr );
 
-            // If this assertion blows up then the code is invalid.
-            assert( Maps::getLastObjectUID() == movableObjectInfo.objectUID );
-
-            _mapFormat.castleMetadata = std::move( castleMetadata );
-            _mapFormat.heroMetadata = std::move( heroMetadata );
-            _mapFormat.sphinxMetadata = std::move( sphinxMetadata );
-            _mapFormat.signMetadata = std::move( signMetadata );
-            _mapFormat.adventureMapEventMetadata = std::move( adventureMapEventMetadata );
-            _mapFormat.selectionObjectMetadata = std::move( selectionObjectMetadata );
-            _mapFormat.capturableObjectsMetadata = std::move( capturableObjectsMetadata );
-            _mapFormat.monsterMetadata = std::move( monsterMetadata );
-            _mapFormat.artifactMetadata = std::move( artifactMetadata );
-            _mapFormat.resourceMetadata = std::move( resourceMetadata );
+            objectMetadata.restore( _mapFormat, Maps::getLastObjectUID() );
 
             const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( movableObjectInfo.objectUID );
             if ( capturableObjectIter != _mapFormat.capturableObjectsMetadata.end() ) {
                 world.CaptureObject( destinationTile, capturableObjectIter->second.ownerColor );
             }
 
+            // Update map players for cases when heroes or towns are moved.
+            Maps::updateMapPlayers( _mapFormat );
+
             action->commit();
         }
-
-        Maps::setLastObjectUID( originalLastObjectUID );
     }
 
     void EditorInterface::_tryToCopyObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile )
@@ -3352,6 +3446,15 @@ namespace Interface
 
         if ( replaceKey( _mapFormat.artifactMetadata, object.id, newObjectUID ) ) {
             ++objectsReplaced;
+        }
+
+        // Update translations.
+        for ( auto & [language, info] : _mapFormat.translationInfo ) {
+            replaceKey( info.castleMetadata, object.id, newObjectUID );
+            replaceKey( info.heroMetadata, object.id, newObjectUID );
+            replaceKey( info.sphinxMetadata, object.id, newObjectUID );
+            replaceKey( info.signMetadata, object.id, newObjectUID );
+            replaceKey( info.adventureMapEventMetadata, object.id, newObjectUID );
         }
 
         assert( objectsReplaced == 0 || objectsReplaced == 1 );
