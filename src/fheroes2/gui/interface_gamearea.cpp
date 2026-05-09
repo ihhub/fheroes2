@@ -927,6 +927,11 @@ void Interface::GameArea::SetScroll( const int direction )
 {
     assert( !isDragScroll() );
 
+    // Do not allow edge scrolling while inertial scrolling is active.
+    if ( _inertia.active ) {
+        return;
+    }
+
     if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {
             scrollDirection |= direction;
@@ -1045,10 +1050,10 @@ void Interface::GameArea::QueueEventProcessing()
                         sumX += s.delta.x;
                         sumY += s.delta.y;
                     }
-                    // Threshold: 0.15 px/ms → 38 in 1/256 units → 38²=1444
+                    // Threshold: 0.2 px/ms → 51 in 1/256 units → 51²=2601
                     _inertia.velX = static_cast<int32_t>( sumX * 256 / static_cast<int64_t>( dt ) );
                     _inertia.velY = static_cast<int32_t>( sumY * 256 / static_cast<int64_t>( dt ) );
-                    if ( _inertia.velX * _inertia.velX + _inertia.velY * _inertia.velY > 1444 ) {
+                    if ( _inertia.velX * _inertia.velX + _inertia.velY * _inertia.velY > 2601 ) {
                         _inertia.active = true;
                         _inertia.subpixelShiftX = 0;
                         _inertia.subpixelShiftY = 0;
