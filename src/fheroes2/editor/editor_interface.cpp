@@ -2728,7 +2728,7 @@ namespace Interface
                 assert( 0 );
             }
 
-            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+            if ( isNewObject && !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
             }
         }
@@ -2817,7 +2817,7 @@ namespace Interface
                 return false;
             }
 
-            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+            if ( isNewObject && !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
             }
         }
@@ -2981,15 +2981,41 @@ namespace Interface
         if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
             assert( action.get() != nullptr );
 
-            objectMetadata.restore( _mapFormat, Maps::getLastObjectUID() );
+            const uint32_t objectNewUID{ Maps::getLastObjectUID() };
+            objectMetadata.restore( _mapFormat, objectNewUID );
 
-            const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( Maps::getLastObjectUID() );
+            const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( objectNewUID );
             if ( capturableObjectIter != _mapFormat.capturableObjectsMetadata.end() ) {
                 world.CaptureObject( destinationTile, capturableObjectIter->second.ownerColor );
             }
 
-            // Update map players for cases when heroes or towns are moved.
-            Maps::updateMapPlayers( _mapFormat );
+            const auto heroObjectIter = _mapFormat.heroMetadata.find( objectNewUID );
+            if ( heroObjectIter != _mapFormat.heroMetadata.end() ) {
+                // A hero was moved. Fix victory and loss conditions.
+                if ( _mapFormat.victoryConditionType == Maps::FileInfo::VICTORY_KILL_HERO
+                     && _mapFormat.victoryConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+
+                if ( _mapFormat.lossConditionType == Maps::FileInfo::LOSS_HERO
+                     && _mapFormat.lossConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.lossConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+            }
+
+            const auto castleObjectIter = _mapFormat.castleMetadata.find( objectNewUID );
+            if ( castleObjectIter != _mapFormat.castleMetadata.end() ) {
+                // A castle was moved. Fix victory and loss conditions.
+                if ( _mapFormat.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN
+                     && _mapFormat.victoryConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+
+                if ( _mapFormat.lossConditionType == Maps::FileInfo::LOSS_TOWN
+                     && _mapFormat.lossConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.lossConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+            }
 
             action->commit();
         }
