@@ -263,9 +263,9 @@ namespace
                 continue;
             }
 
-            world.getTile( pos.x, pos.y ).replaceObject( townUID, oldObject.groundLevelParts[i].icnType, newObject.groundLevelParts[i].icnType,
-                                                         static_cast<uint8_t>( oldObject.groundLevelParts[i].icnIndex ),
-                                                         static_cast<uint8_t>( newObject.groundLevelParts[i].icnIndex ) );
+            world.getTile( pos.x, pos.y )
+                .replaceObject( townUID, oldObject.groundLevelParts[i].icnType, newObject.groundLevelParts[i].icnType,
+                                static_cast<uint8_t>( oldObject.groundLevelParts[i].icnIndex ), static_cast<uint8_t>( newObject.groundLevelParts[i].icnIndex ) );
         }
 
         for ( size_t i = 0; i < oldObject.topLevelParts.size(); ++i ) {
@@ -274,9 +274,9 @@ namespace
                 continue;
             }
 
-            world.getTile( pos.x, pos.y ).replaceObject( townUID, oldObject.topLevelParts[i].icnType, newObject.topLevelParts[i].icnType,
-                                                         static_cast<uint8_t>( oldObject.topLevelParts[i].icnIndex ),
-                                                         static_cast<uint8_t>( newObject.topLevelParts[i].icnIndex ) );
+            world.getTile( pos.x, pos.y )
+                .replaceObject( townUID, oldObject.topLevelParts[i].icnType, newObject.topLevelParts[i].icnType,
+                                static_cast<uint8_t>( oldObject.topLevelParts[i].icnIndex ), static_cast<uint8_t>( newObject.topLevelParts[i].icnIndex ) );
         }
     }
 
