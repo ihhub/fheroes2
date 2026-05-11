@@ -26,6 +26,8 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
+#include <deque>
+#include <functional>
 #include <list>
 #include <map>
 #include <ostream>
