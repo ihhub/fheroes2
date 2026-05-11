@@ -212,8 +212,8 @@ namespace
             const double avgNumOfAtackers = 2.0;
             const double avgBattleTurns = 5.0; // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
             const double ressurectK = 1
-                                + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAtackers, 0.0 )
-                                      / ( attacker.GetHitPoints() * 0.5 ); // *0.5 to get average hit points of the troop in the battle
+                                      + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAtackers, 0.0 )
+                                            / ( attacker.GetHitPoints() * 0.5 ); // *0.5 to get average hit points of the troop in the battle
             const double killTimeK = 1 / ressurectK;
             assert( killTimeK <= 1 );
             attackValue += ( allEnemiesThreat / avgNumOfAtackers ) * avgBattleTurns * ( 1 - killTimeK );
@@ -233,9 +233,9 @@ namespace
         // neighboring enemy archers to encourage the use of attacking positions that block these archers
         std::sort( enemies.begin(), enemies.end(), []( const Battle::Unit * unit1, const Battle::Unit * unit2 ) { return !unit1->isArchers() && unit2->isArchers(); } );
 
-        const double allEnemiesThreat
-            = std::accumulate( enemies.begin(), enemies.end(), 0.0,
-                               [&attacker]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
+        const double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), 0.0, [&attacker]( const double total, const Battle::Unit * unit ) {
+            return total + unit->evaluateThreatForUnit( attacker );
+        } );
 
         PositionValues result;
 
@@ -1571,9 +1571,9 @@ double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Batt
 
     MeleeAttackOutcome bestOutcome;
 
-    const double allEnemiesThreat
-        = std::accumulate( enemies.begin(), enemies.end(), 0.0,
-                           [&currentUnit]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( currentUnit ); } );
+    const double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), 0.0, [&currentUnit]( const double total, const Battle::Unit * unit ) {
+        return total + unit->evaluateThreatForUnit( currentUnit );
+    } );
 
     for ( const Battle::Unit * enemy : enemies ) {
         assert( enemy != nullptr );
@@ -1748,9 +1748,9 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
     // Current unit can be under the influence of the Hypnotize spell
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
-    const double allEnemiesThreat
-        = std::accumulate( enemies.begin(), enemies.end(), 0.0,
-                           [&currentUnit]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( currentUnit ); } );
+    const double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), 0.0, [&currentUnit]( const double total, const Battle::Unit * unit ) {
+        return total + unit->evaluateThreatForUnit( currentUnit );
+    } );
 
     // 1. Cover our archers and attack enemy units blocking them, if there are any. Units whose affiliation has been changed should not cover the archers, because
     // such units will block them instead of covering them.
