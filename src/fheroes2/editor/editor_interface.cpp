@@ -242,6 +242,46 @@ namespace
         return obeliskCount;
     }
 
+    void replaceTownBasement( const uint32_t townUID, const uint32_t oldIndex, const uint32_t newIndex, const fheroes2::Point mainTilePos )
+    {
+        if ( oldIndex == newIndex ) {
+            // No need to replace.
+            return;
+        }
+
+        const auto & basements = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS );
+        assert( oldIndex < basements.size() );
+        assert( newIndex < basements.size() );
+
+        const auto & oldObject = basements[oldIndex];
+        const auto & newObject = basements[newIndex];
+
+        assert( oldObject.groundLevelParts.size() == newObject.groundLevelParts.size() );
+        assert( oldObject.topLevelParts.size() == newObject.topLevelParts.size() );
+
+        for ( size_t i = 0; i < oldObject.groundLevelParts.size(); ++i ) {
+            const fheroes2::Point pos{ mainTilePos + oldObject.groundLevelParts[i].tileOffset };
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                continue;
+            }
+
+            world.getTile( pos.x, pos.y )
+                .replaceObject( townUID, oldObject.groundLevelParts[i].icnType, newObject.groundLevelParts[i].icnType,
+                                static_cast<uint8_t>( oldObject.groundLevelParts[i].icnIndex ), static_cast<uint8_t>( newObject.groundLevelParts[i].icnIndex ) );
+        }
+
+        for ( size_t i = 0; i < oldObject.topLevelParts.size(); ++i ) {
+            const fheroes2::Point pos{ mainTilePos + oldObject.topLevelParts[i].tileOffset };
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                continue;
+            }
+
+            world.getTile( pos.x, pos.y )
+                .replaceObject( townUID, oldObject.topLevelParts[i].icnType, newObject.topLevelParts[i].icnType,
+                                static_cast<uint8_t>( oldObject.topLevelParts[i].icnIndex ), static_cast<uint8_t>( newObject.topLevelParts[i].icnIndex ) );
+        }
+    }
+
     fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
         if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
@@ -3310,9 +3350,12 @@ namespace Interface
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             for ( auto & object : _mapFormat.tiles[i].objects ) {
                 if ( object.group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
-                    const auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
-                    const int groundType = Maps::Ground::getGroundByImageIndex( worldTile.getTerrainImageIndex() );
+                    const int groundType = Maps::Ground::getGroundByImageIndex( _mapFormat.tiles[i].terrainIndex );
                     const int32_t basementId = fheroes2::getTownBasementId( groundType );
+
+                    const fheroes2::Point pos{ static_cast<int32_t>( i ) % _mapFormat.width, static_cast<int32_t>( i ) / _mapFormat.width };
+                    replaceTownBasement( object.id, object.index, static_cast<uint32_t>( basementId ), pos );
+
                     object.index = static_cast<uint32_t>( basementId );
                 }
             }
