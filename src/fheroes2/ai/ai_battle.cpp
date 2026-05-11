@@ -58,6 +58,7 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "monster.h"
 #include "monster_info.h"
 #include "resource.h"
 #include "settings.h"
