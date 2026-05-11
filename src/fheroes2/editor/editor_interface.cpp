@@ -928,7 +928,7 @@ namespace
         }
     }
 
-    bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
+    bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, int32_t & tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
     {
         // Check which object we really need to move.
         // The logic should be aligned with placeObjectOnTile() function from maps_tiles_helper.cpp file.
@@ -945,18 +945,28 @@ namespace
         // First, find all possible objects in the area around the tile.
         const fheroes2::Point tilePos{ tileId % mapFormat.width, tileId / mapFormat.width };
 
+        struct LocalObjectInfo final
+        {
+            const Maps::Map_Format::TileObjectInfo * object{ nullptr };
+            int32_t tileIndex{ -1 };
+        };
+
         const int32_t minX = std::max( 0, tilePos.x - Maps::maxObjectDimensions.width );
         const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxObjectDimensions.width + 1 );
         const int32_t minY = std::max( 0, tilePos.y - Maps::maxObjectDimensions.height );
         const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxObjectDimensions.height + 1 );
 
-        std::map<uint32_t, const Maps::Map_Format::TileObjectInfo *> potentialObjects;
+        std::map<uint32_t, LocalObjectInfo> potentialObjects;
         for ( int32_t y = minY; y < maxY; ++y ) {
             const int32_t tileOffsetY{ y * mapFormat.width };
             for ( int32_t x = minX; x < maxX; ++x ) {
                 for ( const auto & object : mapFormat.tiles[x + tileOffsetY].objects ) {
                     if ( isObjectMovable( object.group ) ) {
-                        potentialObjects.emplace( object.id, &object );
+                        LocalObjectInfo info;
+                        info.object = &object;
+                        info.tileIndex = x + tileOffsetY;
+
+                        potentialObjects.emplace( object.id, info );
                     }
                 }
             }
@@ -1046,74 +1056,20 @@ namespace
         }
 
         // The object has been found.
-        assert( foundObjectIter->second != nullptr );
-        const Maps::Map_Format::TileObjectInfo & object = *( foundObjectIter->second );
+        const auto & objectInfo = foundObjectIter->second;
 
-        type = static_cast<int32_t>( object.index );
-        if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            // Castles and towns store their colors inside flags.
-            // The chosen tile might not be the main tile of the castle.
-            // We need to get flag information from the main tile.
-            int32_t mainTileIndex = tileId;
+        assert( objectInfo.object != nullptr );
+        assert( objectInfo.tileIndex >= 0 );
+        tileId = objectInfo.tileIndex;
+        type = static_cast<int32_t>( objectInfo.object->index );
+        group = objectInfo.object->group;
+        objectUID = objectInfo.object->id;
 
-            if ( !MP2::isOffGameActionObject( tile.getMainObjectType( false ) ) ) {
-                // This is not the main castle / town tile and also it could be a random castle.
-                // Maps::Tile::getIndexOfMainTile() simply won't work for this case.
-                // So, we need to do our own optimized logic.
-
-                const int32_t foundMainIndex = [tileId, &mapFormat, objectUID = object.id]() -> int32_t {
-                    // Maximum castle size in tile is 5 x 5 and the main tile in not at the bottom.
-                    // So the furthest point from to the center is 3.
-                    constexpr int32_t radiusOfSearch{ 3 };
-                    for ( int32_t y = radiusOfSearch; y >= -1; --y ) {
-                        const int32_t offsetX = tileId + y * mapFormat.width;
-                        for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
-                            const int32_t index = offsetX + x;
-                            if ( !Maps::isValidAbsIndex( index ) ) {
-                                continue;
-                            }
-
-                            const Maps::Tile & foundTile = world.getTile( index );
-                            const MP2::MapObjectType tileObjectType{ foundTile.getMainObjectType( false ) };
-                            // Check that the tile is indeed the main entrance of the castle.
-                            if ( tileObjectType != MP2::OBJ_CASTLE && tileObjectType != MP2::OBJ_RANDOM_CASTLE && tileObjectType != MP2::OBJ_RANDOM_TOWN ) {
-                                continue;
-                            }
-
-                            // Make sure that the object part is also the main entrance of the castle and to the same castle.
-                            const auto & mainObjectPart = foundTile.getMainObjectPart();
-                            if ( objectUID == mainObjectPart._uid ) {
-                                const auto objectPartType = Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex );
-                                if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
-                                    return index;
-                                }
-                            }
-
-                            for ( const auto & objectPart : foundTile.getGroundObjectParts() ) {
-                                if ( objectPart._uid == objectUID ) {
-                                    const auto objectPartType = Maps::getObjectTypeByIcn( objectPart.icnType, objectPart.icnIndex );
-                                    if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
-                                        return index;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    return -1;
-                }();
-
-                if ( foundMainIndex >= 0 ) {
-                    mainTileIndex = foundMainIndex;
-                }
-            }
-
-            const int color = Maps::getTownColorIndex( mapFormat, mainTileIndex, object.id );
+        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            const int color = Maps::getTownColorIndex( mapFormat, tileId, objectUID );
             type = Interface::EditorPanel::generateTownObjectProperties( type, color );
         }
 
-        group = object.group;
-        objectUID = object.id;
         return true;
     }
 
