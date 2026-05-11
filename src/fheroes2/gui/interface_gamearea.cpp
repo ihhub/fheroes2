@@ -1123,8 +1123,7 @@ void Interface::GameArea::QueueEventProcessing()
 
 bool Interface::GameArea::updateInertia()
 {
-    return _inertiaHandler.update( [this]() { return getCurrentCenterInPixels(); },
-                                   [this]( const fheroes2::Point & pos ) { SetCenterInPixels( pos ); } );
+    return _inertiaHandler.update( [this]() { return getCurrentCenterInPixels(); }, [this]( const fheroes2::Point & pos ) { SetCenterInPixels( pos ); } );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
