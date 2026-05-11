@@ -195,7 +195,7 @@ namespace
         }
 
         if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) || attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
-            uint32_t killed = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
+            const uint32_t killed = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
             uint32_t ressurectPoints;
             if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) )
                 ressurectPoints = killed * attacker.Monster::GetHitPoints();
@@ -211,10 +211,10 @@ namespace
             // second effect: attacker troop becomes more powerful and can kill enemies faster
             const double avgNumOfAtackers = 2.0;
             const double avgBattleTurns = 5.0; // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
-            double ressurectK = 1
+            const double ressurectK = 1
                                 + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAtackers, 0.0 )
                                       / ( attacker.GetHitPoints() * 0.5 ); // *0.5 to get average hit points of the troop in the battle
-            double killTimeK = 1 / ressurectK;
+            const double killTimeK = 1 / ressurectK;
             assert( killTimeK <= 1 );
             attackValue += ( allEnemiesThreat / avgNumOfAtackers ) * avgBattleTurns * ( 1 - killTimeK );
         }
@@ -233,8 +233,8 @@ namespace
         // neighboring enemy archers to encourage the use of attacking positions that block these archers
         std::sort( enemies.begin(), enemies.end(), []( const Battle::Unit * unit1, const Battle::Unit * unit2 ) { return !unit1->isArchers() && unit2->isArchers(); } );
 
-        double allEnemiesThreat
-            = std::accumulate( enemies.begin(), enemies.end(), static_cast<double>( 0.0 ),
+        const double allEnemiesThreat
+            = std::accumulate( enemies.begin(), enemies.end(), 0.0,
                                [&attacker]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
 
         PositionValues result;
@@ -1571,8 +1571,8 @@ double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Batt
 
     MeleeAttackOutcome bestOutcome;
 
-    double allEnemiesThreat
-        = std::accumulate( enemies.begin(), enemies.end(), static_cast<double>( 0.0 ),
+    const double allEnemiesThreat
+        = std::accumulate( enemies.begin(), enemies.end(), 0.0,
                            [&currentUnit]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( currentUnit ); } );
 
     for ( const Battle::Unit * enemy : enemies ) {
@@ -1748,8 +1748,8 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
     // Current unit can be under the influence of the Hypnotize spell
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
-    double allEnemiesThreat
-        = std::accumulate( enemies.begin(), enemies.end(), static_cast<double>( 0.0 ),
+    const double allEnemiesThreat
+        = std::accumulate( enemies.begin(), enemies.end(), 0.0,
                            [&currentUnit]( const double total, const Battle::Unit * unit ) { return total + unit->evaluateThreatForUnit( currentUnit ); } );
 
     // 1. Cover our archers and attack enemy units blocking them, if there are any. Units whose affiliation has been changed should not cover the archers, because
