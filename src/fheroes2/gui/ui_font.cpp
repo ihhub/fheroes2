@@ -4850,7 +4850,7 @@ namespace
             fheroes2::Copy( font[65], 4, 0, font[166], 5, 0, 1, 1 );
             fheroes2::Copy( font[65], 4, 0, font[166], 6, 1, 1, 1 );
             font[166].setPosition( font[72].x(), font[72].y() - 3 );
-            updateNormalFontLetterShadow( font[166] );
+            updateSmallFontLetterShadow( font[166] );
 
             // Uppercase J with circumflex.
             font[172].resize( font[74].width(), font[74].height() + 3 );
@@ -4858,7 +4858,7 @@ namespace
             fheroes2::Copy( font[74], 0, 0, font[172], 0, 3, font[74].width(), font[74].height() );
             fheroes2::Copy( font[166], 4, 0, font[172], 4, 0, 3, 2 );
             font[172].setPosition( font[74].x(), font[74].y() - 3 );
-            updateNormalFontLetterShadow( font[172] );
+            updateSmallFontLetterShadow( font[172] );
 
             // Lowercase h with circumflex.
             font[182].resize( font[104].width(), font[104].height() + 3 );
@@ -4866,7 +4866,7 @@ namespace
             fheroes2::Copy( font[104], 0, 0, font[182], 0, 3, font[104].width(), font[104].height() );
             fheroes2::Copy( font[166], 4, 0, font[182], 4, 2, 3, 2 );
             font[182].setPosition( font[104].x(), font[104].y() - 3 );
-            updateNormalFontLetterShadow( font[182] );
+            updateSmallFontLetterShadow( font[182] );
 
             // Lowercase j with circumflex.
             font[188].resize( font[106].width(), font[106].height() + 3 );
@@ -4874,7 +4874,7 @@ namespace
             fheroes2::Copy( font[106], 0, 0, font[188], 0, 3, font[106].width(), font[106].height() );
             fheroes2::Copy( font[166], 4, 0, font[188], 2, 2, 3, 2 );
             font[188].setPosition( font[106].x(), font[106].y() - 3 );
-            updateNormalFontLetterShadow( font[188] );
+            updateSmallFontLetterShadow( font[188] );
 
             // Uppercase C with circumflex.
             font[198].resize( font[67].width(), font[67].height() + 3 );
@@ -4882,7 +4882,7 @@ namespace
             fheroes2::Copy( font[67], 0, 0, font[198], 0, 3, font[67].width(), font[67].height() );
             fheroes2::Copy( font[166], 4, 0, font[198], 3, 0, 3, 2 );
             font[198].setPosition( font[67].x(), font[67].y() - 3 );
-            updateNormalFontLetterShadow( font[198] );
+            updateSmallFontLetterShadow( font[198] );
 
             // Uppercase G with circumflex.
             font[216].resize( font[71].width(), font[71].height() + 3 );
@@ -4890,7 +4890,7 @@ namespace
             fheroes2::Copy( font[71], 0, 0, font[216], 0, 3, font[71].width(), font[71].height() );
             fheroes2::Copy( font[166], 4, 0, font[216], 4, 0, 3, 2 );
             font[216].setPosition( font[71].x(), font[71].y() - 3 );
-            updateNormalFontLetterShadow( font[216] );
+            updateSmallFontLetterShadow( font[216] );
 
             // Uppercase U with breve. Generate accent for further use.
             font[221].resize( font[85].width(), font[85].height() + 3 );
@@ -4901,7 +4901,7 @@ namespace
             fheroes2::Copy( font[65], 4, 0, font[221], 6, 1, 1, 1 );
             fheroes2::Copy( font[65], 4, 0, font[221], 7, 0, 1, 1 );
             font[221].setPosition( font[85].x(), font[85].y() - 3 );
-            updateNormalFontLetterShadow( font[221] );
+            updateSmallFontLetterShadow( font[221] );
 
             // Uppercase S with circumflex.
             font[222].resize( font[83].width(), font[83].height() + 3 );
@@ -4909,7 +4909,7 @@ namespace
             fheroes2::Copy( font[83], 0, 0, font[222], 0, 3, font[83].width(), font[83].height() );
             fheroes2::Copy( font[166], 4, 0, font[222], 3, 0, 3, 2 );
             font[222].setPosition( font[83].x(), font[83].y() - 3 );
-            updateNormalFontLetterShadow( font[222] );
+            updateSmallFontLetterShadow( font[222] );
 
             // Lowercase c with circumflex.
             font[230].resize( font[99].width(), font[99].height() + 3 );
@@ -4917,7 +4917,7 @@ namespace
             fheroes2::Copy( font[99], 0, 0, font[230], 0, 3, font[99].width(), font[99].height() );
             fheroes2::Copy( font[166], 4, 0, font[230], 2, 0, 3, 2 );
             font[230].setPosition( font[99].x(), font[99].y() - 3 );
-            updateNormalFontLetterShadow( font[230] );
+            updateSmallFontLetterShadow( font[230] );
 
             // Lowercase g with circumflex.
             font[248].resize( font[103].width(), font[103].height() + 3 );
@@ -4925,7 +4925,7 @@ namespace
             fheroes2::Copy( font[103], 0, 0, font[248], 0, 3, font[103].width(), font[103].height() );
             fheroes2::Copy( font[166], 4, 0, font[248], 2, 0, 3, 2 );
             font[248].setPosition( font[103].x(), font[103].y() - 3 );
-            updateNormalFontLetterShadow( font[248] );
+            updateSmallFontLetterShadow( font[248] );
 
             // Lowercase u with breve.
             font[253].resize( font[117].width(), font[117].height() + 3 );
@@ -4933,7 +4933,7 @@ namespace
             fheroes2::Copy( font[117], 0, 0, font[253], 0, 3, font[117].width(), font[117].height() );
             fheroes2::Copy( font[221], 4, 0, font[253], 2, 0, 4, 2 );
             font[253].setPosition( font[117].x(), font[117].y() - 3 );
-            updateNormalFontLetterShadow( font[253] );
+            updateSmallFontLetterShadow( font[253] );
 
             // Lowercase s with circumflex.
             font[254].resize( font[115].width(), font[115].height() + 3 );
@@ -4941,7 +4941,7 @@ namespace
             fheroes2::Copy( font[115], 0, 0, font[254], 0, 3, font[115].width(), font[115].height() );
             fheroes2::Copy( font[166], 4, 0, font[254], 2, 0, 3, 2 );
             font[254].setPosition( font[115].x(), font[115].y() - 3 );
-            updateNormalFontLetterShadow( font[254] );
+            updateSmallFontLetterShadow( font[254] );
         }
     }
 
