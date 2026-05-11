@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <deque>
 #include <list>
 #include <map>
 #include <ostream>
@@ -928,7 +927,7 @@ void Interface::GameArea::SetScroll( const int direction )
     assert( !isDragScroll() );
 
     // Do not allow edge scrolling while inertial scrolling is active.
-    if ( _inertia.active ) {
+    if ( _inertiaHandler.isActive() ) {
         return;
     }
 
@@ -1037,36 +1036,9 @@ void Interface::GameArea::QueueEventProcessing()
     const Settings & conf = Settings::Get();
 
     if ( !le.isMouseLeftButtonPressed() ) {
-        if ( _mouseDraggingMovement && conf.isMapScrollInertiaEnabled() && !_inertia.dragSamples.empty() ) {
-            const uint64_t now = _inertia.dragTimer.getMs();
-            const uint64_t lastSampleAge = now - _inertia.dragSamples.back().timeMs;
-
-            if ( lastSampleAge < 50 && _inertia.dragSamples.size() >= 2 ) {
-                const uint64_t dt = _inertia.dragSamples.back().timeMs - _inertia.dragSamples.front().timeMs;
-                if ( dt > 0 ) {
-                    int64_t sumX = 0;
-                    int64_t sumY = 0;
-                    for ( const MapScrollInertia::DragSample & s : _inertia.dragSamples ) {
-                        sumX += s.delta.x;
-                        sumY += s.delta.y;
-                    }
-                    // Threshold: 0.3 px/ms → 77 in 1/256 units → 77²=5929
-                    _inertia.velX = static_cast<int32_t>( sumX * 256 / static_cast<int64_t>( dt ) );
-                    _inertia.velY = static_cast<int32_t>( sumY * 256 / static_cast<int64_t>( dt ) );
-                    if ( _inertia.velX * _inertia.velX + _inertia.velY * _inertia.velY > 5929 ) {
-                        _inertia.active = true;
-                        _inertia.subpixelShiftX = 0;
-                        _inertia.subpixelShiftY = 0;
-                        _inertia.timer.reset();
-                    }
-                    else {
-                        _inertia.velX = 0;
-                        _inertia.velY = 0;
-                    }
-                }
-            }
+        if ( _mouseDraggingMovement && conf.isMapSmoothScrollingEnabled() ) {
+            _inertiaHandler.commitRelease();
         }
-        _inertia.dragSamples.clear();
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
@@ -1075,13 +1047,7 @@ void Interface::GameArea::QueueEventProcessing()
         if ( !_mouseDraggingInitiated ) {
             _mouseDraggingInitiated = true;
             _lastMouseDragPosition = mousePosition;
-            _inertia.dragSamples.clear();
-            _inertia.dragTimer.reset();
-            _inertia.active = false;
-            _inertia.velX = 0;
-            _inertia.velY = 0;
-            _inertia.subpixelShiftX = 0;
-            _inertia.subpixelShiftY = 0;
+            _inertiaHandler.reset();
         }
         else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
@@ -1096,11 +1062,8 @@ void Interface::GameArea::QueueEventProcessing()
         else {
             const fheroes2::Point delta = _lastMouseDragPosition - mousePosition;
 
-            if ( conf.isMapScrollInertiaEnabled() ) {
-                _inertia.dragSamples.push_back( { delta, _inertia.dragTimer.getMs() } );
-                while ( _inertia.dragSamples.size() > 2 && _inertia.dragSamples.back().timeMs - _inertia.dragSamples.front().timeMs > 100 ) {
-                    _inertia.dragSamples.pop_front();
-                }
+            if ( conf.isMapSmoothScrollingEnabled() ) {
+                _inertiaHandler.addMovementStep( delta );
             }
 
             // Update the center coordinates and redraw the adventure map only if the mouse was moved.
@@ -1158,78 +1121,10 @@ void Interface::GameArea::QueueEventProcessing()
     }
 }
 
-bool Interface::GameArea::MapScrollInertia::update( GameArea & area )
-{
-    if ( !active ) {
-        return false;
-    }
-
-    const uint64_t elapsedTimeMs = timer.getMs();
-    if ( elapsedTimeMs == 0 ) {
-        return false;
-    }
-    timer.reset();
-
-    // Exponential velocity decay approximated as vel *= (200 - dt) / 200.
-    // The time constant of 200 ms was chosen empirically to feel natural:
-    // fast enough to stop within a second, slow enough to feel smooth.
-    if ( elapsedTimeMs >= 200 ) {
-        deactivate();
-        return false;
-    }
-    const int32_t dtMs = static_cast<int32_t>( elapsedTimeMs );
-    velX = velX * ( 200 - dtMs ) / 200;
-    velY = velY * ( 200 - dtMs ) / 200;
-
-    // Stop threshold: 0.05 px/ms → 13 in 1/256 units → 13²=169.
-    if ( velX * velX + velY * velY < 169 ) {
-        deactivate();
-        return false;
-    }
-
-    // Accumulate in 1/256-pixel fixed-point units for half-pixel precision.
-    subpixelShiftX += velX * dtMs;
-    subpixelShiftY += velY * dtMs;
-
-    const fheroes2::Point viewShift( subpixelShiftX / 256, subpixelShiftY / 256 );
-    subpixelShiftX -= viewShift.x * 256;
-    subpixelShiftY -= viewShift.y * 256;
-
-    if ( viewShift.x == 0 && viewShift.y == 0 ) {
-        return true;
-    }
-
-    const fheroes2::Point beforeCenter = area.getCurrentCenterInPixels();
-    area.SetCenterInPixels( beforeCenter + viewShift );
-    const fheroes2::Point afterCenter = area.getCurrentCenterInPixels();
-
-    // If both axes are blocked by the map boundary, stop inertia immediately.
-    if ( beforeCenter == afterCenter ) {
-        deactivate();
-        return false;
-    }
-
-    // Zero out the velocity for any axis that hit a boundary, so the other axis can continue.
-    // We only do this when the shift was non-zero; a zero shift means the subpixel
-    // accumulation hasn't reached a full pixel yet, so we keep decaying normally.
-    if ( viewShift.x != 0 && afterCenter.x == beforeCenter.x ) {
-        velX = 0;
-        subpixelShiftX = 0;
-    }
-    if ( viewShift.y != 0 && afterCenter.y == beforeCenter.y ) {
-        velY = 0;
-        subpixelShiftY = 0;
-    }
-    if ( velX == 0 && velY == 0 ) {
-        deactivate();
-    }
-
-    return true;
-}
-
 bool Interface::GameArea::updateInertia()
 {
-    return _inertia.update( *this );
+    return _inertiaHandler.update( [this]() { return getCurrentCenterInPixels(); },
+                                   [this]( const fheroes2::Point & pos ) { SetCenterInPixels( pos ); } );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const

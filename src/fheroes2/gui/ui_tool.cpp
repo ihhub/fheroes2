@@ -910,4 +910,132 @@ namespace fheroes2
 
         return multiFontText;
     }
+
+    void UIScrollInertia::reset()
+    {
+        _movementSteps.clear();
+        _dragTimer.reset();
+        _active = false;
+        _velX = 0;
+        _velY = 0;
+        _subpixelShiftX = 0;
+        _subpixelShiftY = 0;
+    }
+
+    void UIScrollInertia::addMovementStep( const fheroes2::Point & delta )
+    {
+        _movementSteps.emplace_back( delta, _dragTimer.getMs() );
+        while ( _movementSteps.size() > 2 && _movementSteps.back().timeMs - _movementSteps.front().timeMs > 100 ) {
+            _movementSteps.pop_front();
+        }
+    }
+
+    void UIScrollInertia::commitRelease()
+    {
+        if ( _movementSteps.size() >= 2 ) {
+            const uint64_t now = _dragTimer.getMs();
+            const uint64_t lastSampleAge = now - _movementSteps.back().timeMs;
+
+            if ( lastSampleAge < 50 ) {
+                const uint64_t dt = _movementSteps.back().timeMs - _movementSteps.front().timeMs;
+                if ( dt > 0 ) {
+                    int64_t sumX = 0;
+                    int64_t sumY = 0;
+                    for ( const auto & step : _movementSteps ) {
+                        sumX += step.delta.x;
+                        sumY += step.delta.y;
+                    }
+                    // Threshold: 0.3 px/ms = 77 in 1/256 units, 77*77=5929
+                    _velX = static_cast<int32_t>( sumX * 256 / static_cast<int64_t>( dt ) );
+                    _velY = static_cast<int32_t>( sumY * 256 / static_cast<int64_t>( dt ) );
+                    if ( _velX * _velX + _velY * _velY > 5929 ) {
+                        _active = true;
+                        _subpixelShiftX = 0;
+                        _subpixelShiftY = 0;
+                        _timer.reset();
+                    }
+                    else {
+                        _velX = 0;
+                        _velY = 0;
+                    }
+                }
+            }
+        }
+        _movementSteps.clear();
+    }
+
+    bool UIScrollInertia::update( const std::function<fheroes2::Point()> & getPosition, const std::function<void( const fheroes2::Point & )> & setPosition )
+    {
+        if ( !_active ) {
+            return false;
+        }
+
+        const uint64_t elapsedTimeMs = _timer.getMs();
+        if ( elapsedTimeMs == 0 ) {
+            return false;
+        }
+        _timer.reset();
+
+        // Exponential velocity decay approximated as vel *= (200 - dt) / 200.
+        // The time constant of 200 ms was chosen empirically to feel natural:
+        // fast enough to stop within a second, slow enough to feel smooth.
+        if ( elapsedTimeMs >= 200 ) {
+            _deactivate();
+            return false;
+        }
+        const int32_t dtMs = static_cast<int32_t>( elapsedTimeMs );
+        _velX = _velX * ( 200 - dtMs ) / 200;
+        _velY = _velY * ( 200 - dtMs ) / 200;
+
+        // Stop threshold: 0.05 px/ms = 13 in 1/256 units, 13*13=169.
+        if ( _velX * _velX + _velY * _velY < 169 ) {
+            _deactivate();
+            return false;
+        }
+
+        // Accumulate in 1/256-pixel fixed-point units for half-pixel precision.
+        _subpixelShiftX += _velX * dtMs;
+        _subpixelShiftY += _velY * dtMs;
+
+        const fheroes2::Point viewShift( _subpixelShiftX / 256, _subpixelShiftY / 256 );
+        _subpixelShiftX -= viewShift.x * 256;
+        _subpixelShiftY -= viewShift.y * 256;
+
+        if ( viewShift.x == 0 && viewShift.y == 0 ) {
+            return true;
+        }
+
+        const fheroes2::Point beforeCenter = getPosition();
+        setPosition( beforeCenter + viewShift );
+        const fheroes2::Point afterCenter = getPosition();
+
+        // If both axes are blocked by the map boundary, stop inertia immediately.
+        if ( beforeCenter == afterCenter ) {
+            _deactivate();
+            return false;
+        }
+
+        // Zero out the velocity for any axis that hit a boundary, so the other axis can continue.
+        // We only do this when the shift was non-zero; a zero shift means the subpixel
+        // accumulation has not reached a full pixel yet, so we keep decaying normally.
+        if ( viewShift.x != 0 && afterCenter.x == beforeCenter.x ) {
+            _velX = 0;
+            _subpixelShiftX = 0;
+        }
+        if ( viewShift.y != 0 && afterCenter.y == beforeCenter.y ) {
+            _velY = 0;
+            _subpixelShiftY = 0;
+        }
+        if ( _velX == 0 && _velY == 0 ) {
+            _deactivate();
+        }
+
+        return true;
+    }
+
+    void UIScrollInertia::_deactivate()
+    {
+        _active = false;
+        _movementSteps.clear();
+    }
 }

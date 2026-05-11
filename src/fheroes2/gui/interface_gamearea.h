@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <deque>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -34,6 +33,7 @@
 #include "math_base.h"
 #include "mp2.h"
 #include "timing.h"
+#include "ui_tool.h"
 
 namespace Interface
 {
@@ -301,39 +301,7 @@ namespace Interface
         bool _isFastScrollEnabled{ false };
         bool _resetMousePositionForFastScroll{ false };
 
-        struct MapScrollInertia
-        {
-            struct DragSample
-            {
-                fheroes2::Point delta;
-                uint64_t timeMs{};
-            };
-
-            std::deque<DragSample> dragSamples;
-            fheroes2::Time dragTimer;
-
-            // Velocity in fixed-point 1/256 px/ms units (e.g. 256 = 1 px/ms).
-            int32_t velX{ 0 };
-            int32_t velY{ 0 };
-            // Sub-pixel accumulator in 1/256-pixel fixed-point units. Half-pixel precision (0.5 px) is sufficient.
-            int32_t subpixelShiftX{ 0 };
-            int32_t subpixelShiftY{ 0 };
-            bool active{ false };
-            fheroes2::Time timer;
-
-            // Processes one inertia tick, applies the scroll to the given GameArea.
-            // Returns true if a redraw is needed, false if inertia has stopped.
-            bool update( GameArea & area );
-
-            // Stops inertia and clears drag samples.
-            void deactivate()
-            {
-                active = false;
-                dragSamples.clear();
-            }
-        };
-
-        MapScrollInertia _inertia;
+        fheroes2::UIScrollInertia _inertiaHandler;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const

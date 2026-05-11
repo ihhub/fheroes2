@@ -136,9 +136,9 @@ public:
         return scroll_speed;
     }
 
-    bool isMapScrollInertiaEnabled() const
+    bool isMapSmoothScrollingEnabled() const
     {
-        return _mapScrollInertia;
+        return _isMapSmoothScrollingEnabled;
     }
 
     int GameDifficulty() const
@@ -288,9 +288,9 @@ public:
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
 
-    void setMapScrollInertia( const bool enable )
+    void setMapSmoothScrolling( const bool enable )
     {
-        _mapScrollInertia = enable;
+        _isMapSmoothScrollingEnabled = enable;
     }
 
     // Sets the speed of human-controlled heroes in the range 1 - 10
@@ -467,7 +467,7 @@ private:
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
     BattleTurnOrderState _battleTurnOrderState{ BattleTurnOrderState::OFF };
-    bool _mapScrollInertia{ false };
+    bool _isMapSmoothScrollingEnabled{ false };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };

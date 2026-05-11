@@ -137,7 +137,7 @@ Settings::Settings()
         scroll_speed = SCROLL_SPEED_NONE;
 
         // Smooth scrolling (inertia) feels natural on touch devices and is enabled by default.
-        _mapScrollInertia = true;
+        _isMapSmoothScrollingEnabled = true;
     }
 
     // The Price of Loyalty is not supported by default.
@@ -211,7 +211,7 @@ bool Settings::Read( const std::string & filePath )
     SetScrollSpeed( config.IntParams( "scroll speed" ) );
 
     if ( config.Exists( "map smooth scrolling" ) ) {
-        setMapScrollInertia( config.StrParams( "map smooth scrolling" ) != "off" );
+        setMapSmoothScrolling( config.StrParams( "map smooth scrolling" ) != "off" );
     }
 
     if ( config.Exists( "battle speed" ) ) {
@@ -475,7 +475,7 @@ std::string Settings::String() const
     os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# Smooth scrolling when panning the Adventure Map by dragging: on/off" << std::endl;
-    os << "map smooth scrolling = " << ( _mapScrollInertia ? "on" : "off" ) << std::endl;
+    os << "map smooth scrolling = " << ( _isMapSmoothScrollingEnabled ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Toggle battle grid: on/off" << std::endl;
     os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
