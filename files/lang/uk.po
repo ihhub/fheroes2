@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 14:55+0000\n"
-"PO-Revision-Date: 2026-01-31 15:48+0200\n"
+"PO-Revision-Date: 2026-05-16 09:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -1077,10 +1077,10 @@ msgid "Perish: %{min} - %{max}"
 msgstr "Загине %{min} - %{max}"
 
 msgid "battle_turn_order|Top"
-msgstr "Верх"
+msgstr "Вгорі"
 
 msgid "battle_turn_order|Bottom"
-msgstr "Низ"
+msgstr "Внизу"
 
 msgid "Turn Order"
 msgstr "Порядок ходів"
@@ -4178,9 +4178,8 @@ msgstr "Гарнізон замку"
 msgid "Town Army"
 msgstr "Гарнізон міста"
 
-#, fuzzy
 msgid "You have unsaved changes. Do you wish to proceed?"
-msgstr "Скільки істот бажаєте перемістити?"
+msgstr "Ви маєте незбережені зміни. Бажаєте продовжити?"
 
 msgid "Click to change the Castle name."
 msgstr "Тицьніть, щоб змінити назву замку."
@@ -4382,9 +4381,8 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr "%{objects} мусять бути розміщені на воді."
 
-#, fuzzy
 msgid "Action objects cannot be placed outside the map."
-msgstr "Неможливо розмістити об'єкт поза мапою."
+msgstr "Неможливо розмістити об'єкти дії поза мапою."
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Об'єкти дії мають бути розміщені на чистому просторі."
@@ -4533,9 +4531,8 @@ msgstr "На мапі можна розмістити лише один випа
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
 
-#, fuzzy
 msgid "The same object exists on the tile."
-msgstr "Ця відповідь є у списку."
+msgstr "Цей самий об'єкт є на плитці."
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -4613,33 +4610,26 @@ msgstr "Герої"
 msgid "Towns"
 msgstr "Міста"
 
-#, fuzzy
 msgid "editorDetailMode|Edit"
-msgstr "Деталізація"
+msgstr "Редагувати"
 
-#, fuzzy
 msgid "editorDetailMode|Move"
-msgstr "Деталізація"
+msgstr "Перемістити"
 
-#, fuzzy
 msgid "editorDetailMode|Copy"
-msgstr "Деталізація"
+msgstr "Копіювати"
 
-#, fuzzy
 msgid "editorErasure|Mountains"
-msgstr "Монстри"
+msgstr "Гори"
 
-#, fuzzy
 msgid "editorErasure|Rocks"
-msgstr "Дороги"
+msgstr "Скелі"
 
-#, fuzzy
 msgid "editorErasure|Trees"
-msgstr "Герої"
+msgstr "Дерева"
 
-#, fuzzy
 msgid "editorErasure|Miscellaneous and Water landscape objects"
-msgstr "Ландшафтні об'єкти"
+msgstr "Різне та об'єкти водного ландшафту"
 
 msgid "editorErasure|Adventure non pickable objects"
 msgstr "Пригодницькі статичні об'єкти"
@@ -4711,13 +4701,13 @@ msgid "No special modifiers."
 msgstr "Ніяких спеціальних модифікаторів."
 
 msgid "Edit objects on the Adventure Map."
-msgstr ""
+msgstr "Редагувати об’єкти на мапі пригод."
 
 msgid "Move objects on the Adventure Map."
-msgstr ""
+msgstr "Переміщати об’єкти на мапі пригод."
 
 msgid "Copy objects on the Adventure Map."
-msgstr ""
+msgstr "Копіювати об’єкти на мапі пригод."
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Видалити %{type}."
@@ -4759,9 +4749,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Деталізація"
 
-#, fuzzy
 msgid "Used for moving or customizing objects."
-msgstr "Використовується для спеціального редагування об'єктів дії."
+msgstr "Використовується для переміщення або редагування об'єктів."
 
 msgid "Adventure Objects Mode"
 msgstr "Пригодницькі об'єкти"
@@ -5917,13 +5906,11 @@ msgstr "екран будівництва"
 msgid "hotkey|buy all monsters in well"
 msgstr "придбати усіх монстрів у колодязі"
 
-#, fuzzy
 msgid "hotkey|merge troops with hero"
-msgstr "наступний герой"
+msgstr "об'єднати війська з героєм"
 
-#, fuzzy
 msgid "hotkey|merge troops with garrison"
-msgstr "повторити останню дію"
+msgstr "об'єднати війська з гарнізоном"
 
 msgid "hotkey|split stack by half"
 msgstr "розділити загін навпіл"
@@ -8743,9 +8730,8 @@ msgstr ""
 msgid "Click to enable hero's patrol mode."
 msgstr "Тицьніть для увімкнення патрулювання героєм."
 
-#, fuzzy
 msgid "Do you want to save the changes made?"
-msgstr "Тицьніть, щоб прийняти внесені зміни."
+msgstr "Ви хочете зберегти внесені зміни?"
 
 msgid "Blood Morale"
 msgstr "Кровожерлива мораль"
