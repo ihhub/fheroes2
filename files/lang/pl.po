@@ -8406,7 +8406,7 @@ msgid ""
 "\n"
 "Your answer?"
 msgstr ""
-"sphinx|'\n"
+"'\n"
 "\n"
 "Twoja odpowiedź?"
 
