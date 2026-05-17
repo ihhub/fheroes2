@@ -846,12 +846,12 @@ namespace Maps::Random_Generator
                 continue;
             }
 
+            // Connect regions only after placing mines and castles to avoid
             for ( const auto & [regionId, tileIndex] : region.connections ) {
                 mapState.getNodeToUpdate( tileIndex ).type = NodeType::PATH;
                 const auto & path = findPathToNearestRoad( mapState, width, region.id, tileIndex );
                 for ( const auto & step : path ) {
-                    mapState.getNodeToUpdate( step ).type = NodeType::PATH;
-                    forceTempRoadOnTile( mapFormat, step );
+                    forceTempRoadOnTile( mapState, mapFormat, step );
                 }
             }
 
