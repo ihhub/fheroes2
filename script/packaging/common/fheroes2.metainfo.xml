@@ -42,6 +42,7 @@
       <description>
         <p>Changes in v1.1.16 (17 May 2026):</p>
         <ul>
+          <li>update the Brazilian Portuguese translation</li>
           <li>update the Russian translation</li>
           <li>update the Polish translation</li>
           <li>update castle mound after new terrain being placed in the Editor</li>

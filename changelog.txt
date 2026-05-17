@@ -1,4 +1,5 @@
 version 1.1.16 (17 May 2026)
+- update the Brazilian Portuguese translation
 - update the Russian translation
 - update the Polish translation
 - update castle mound after new terrain being placed in the Editor
