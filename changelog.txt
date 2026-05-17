@@ -1,3 +1,30 @@
+version 1.1.16 (17 May 2026)
+- update the Brazilian Portuguese translation
+- update the Russian translation
+- update the Polish translation
+- update castle mound after new terrain being placed in the Editor
+- fix missing tile passability update while removing objects in the Editor
+- allow to select certain artifacts to be buried as Ultimate Artifact in the Editor
+- fix the first editing of the hero when cancelling in the Editor
+- expand detail mode in the Editor to support editing, moving and copying brushes
+- add separate hotkeys to merge troops in castle
+- display all maps, even duplicates for both the game and the Editor
+- sort maps alphabetically by file name in the Editor
+- make hero turning animation depend on the animation speed
+- reduce application resources usage for object update actions in the Editor
+- make Eraser tool in the Editor more granular
+- fix castle entrance road update on placing/erasing a castle in the Editor
+- speed up eraser functionality in case of no objects to be erased in the Editor
+- add a popup dialog to confirm unsaved changes for hero in the Editor
+- allow placement of non-action objects over the edges of the map in the Editor
+- add ability to move an object in the Editor
+- update the Ukrainian translation
+- add drag-to-draw ability to Roads and Streams in the Editor
+- add a confirmation window while exiting castle's window in the Editor
+- add application exiting logic for the Editor's Main Menu
+- reduce the application startup time
+- add Esperanto translation
+
 version 1.1.15 (12 April 2026)
 - fix inconsistency in the Editor's window titles
 - add "Ravenhold" map to the fheroes2 bundle
