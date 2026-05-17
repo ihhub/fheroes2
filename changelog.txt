@@ -3,7 +3,7 @@ version 1.1.16 (17 May 2026)
 - update the Polish translation
 - update castle mound after new terrain being placed in the Editor
 - fix missing tile passability update while removing objects in the Editor
-- allow to select certain artifacts to be burried as Ultimate Artifact in the Editor
+- allow to select certain artifacts to be buried as Ultimate Artifact in the Editor
 - fix the first editing of the hero when cancelling in the Editor
 - expand detail mode in the Editor to support editing, moving and copying brushes
 - add separate hotkeys to merge troops in castle
