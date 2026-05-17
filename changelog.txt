@@ -17,7 +17,7 @@ version 1.1.16 (17 May 2026)
 - add ability to move an object in the Editor
 - update the Ukrainian translation
 - add drag-to-draw ability to Roads and Streams in the Editor
-- add a confirmation window while existing castle's window in the Editor
+- add a confirmation window while exiting castle's window in the Editor
 - add application exiting logic for the Editor's Main Menu
 - reduce the application startup time
 - add Esperanto translation
