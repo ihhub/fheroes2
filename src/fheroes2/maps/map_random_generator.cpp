@@ -846,15 +846,6 @@ namespace Maps::Random_Generator
                 continue;
             }
 
-            // Connect regions only after placing mines and castles to avoid
-            for ( const auto & [regionId, tileIndex] : region.connections ) {
-                mapState.getNodeToUpdate( tileIndex ).type = NodeType::PATH;
-                const auto & path = findPathToNearestRoad( mapState, width, region.id, tileIndex );
-                for ( const auto & step : path ) {
-                    forceTempRoadOnTile( mapState, mapFormat, step );
-                }
-            }
-
             const auto & mineInfo = Maps::getObjectInfo( ObjectGroup::ADVENTURE_MINES, fheroes2::getMineObjectInfoId( Resource::GOLD, Ground::GRASS ) );
             std::vector<int32_t> options = findTilesForPlacement( mapState, width, region.id, findTilesByType( region, NodeType::OPEN ), mineInfo );
             if ( options.empty() ) {
@@ -876,6 +867,15 @@ namespace Maps::Random_Generator
             if ( regionSizeLimit > regionSizeForGoldMine ) {
                 for ( size_t idx = 0; idx < regionConfiguration.goldMineCount; ++idx ) {
                     placeMine( mapFormat, mapState, mapEconomy, options, Resource::GOLD, config.monsterStrength );
+                }
+            }
+
+            // Connect regions only after placing mines and castles to avoid roads under these objects.
+            for ( const auto & [regionId, tileIndex] : region.connections ) {
+                mapState.getNodeToUpdate( tileIndex ).type = NodeType::PATH;
+                const auto & path = findPathToNearestRoad( mapState, width, region.id, tileIndex );
+                for ( const auto & step : path ) {
+                    forceTempRoadOnTile( mapState, mapFormat, step );
                 }
             }
         }
