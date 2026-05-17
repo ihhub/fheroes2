@@ -42,10 +42,10 @@
       <description>
         <p>Changes in v1.1.16 (17 May 2026):</p>
         <ul>
-          <li>update castle basement after new terrain being placed in the Editor</li>
+          <li>update castle mound after new terrain being placed in the Editor</li>
           <li>fix missing tile passability update while removing objects in the Editor</li>
-          <li>allow to select certain artifacts to be digged as Ultimate Artifact in the Editor</li>
-          <li>fix the first editing of the hero while cancelling in the Editor</li>
+          <li>allow to select certain artifacts to be burried as Ultimate Artifact in the Editor</li>
+          <li>fix the first editing of the hero when cancelling in the Editor</li>
           <li>expand detail mode in the Editor to support editing, moving and copying brushes</li>
           <li>add separate hotkeys to merge troops in castle</li>
           <li>display all maps, even duplicates for both the game and the Editor</li>
@@ -60,7 +60,7 @@
           <li>add ability to move an object in the Editor</li>
           <li>update the Ukrainian translation</li>
           <li>add drag-to-draw ability to Roads and Streams in the Editor</li>
-          <li>add a confirmation window while existing castle's window in the Editor</li>
+          <li>add a confirmation window while exiting castle's window in the Editor</li>
           <li>add application exiting logic for the Editor's Main Menu</li>
           <li>reduce the application startup time</li>
           <li>add Esperanto translation</li>
