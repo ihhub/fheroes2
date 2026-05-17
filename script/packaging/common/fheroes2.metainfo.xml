@@ -42,6 +42,8 @@
       <description>
         <p>Changes in v1.1.16 (17 May 2026):</p>
         <ul>
+          <li>update the Russian translation</li>
+          <li>update the Polish translation</li>
           <li>update castle mound after new terrain being placed in the Editor</li>
           <li>fix missing tile passability update while removing objects in the Editor</li>
           <li>allow to select certain artifacts to be burried as Ultimate Artifact in the Editor</li>
