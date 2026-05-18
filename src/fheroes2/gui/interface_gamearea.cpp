@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <deque>
+#include <functional>
 #include <list>
 #include <map>
 #include <ostream>
@@ -927,6 +928,11 @@ void Interface::GameArea::SetScroll( const int direction )
 {
     assert( !isDragScroll() );
 
+    // Do not allow edge scrolling while inertial scrolling is active.
+    if ( _inertiaHandler.isActive() ) {
+        return;
+    }
+
     if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {
             scrollDirection |= direction;
@@ -1029,8 +1035,12 @@ void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mousePosition = le.getMouseCursorPos();
+    const Settings & conf = Settings::Get();
 
     if ( !le.isMouseLeftButtonPressed() ) {
+        if ( _mouseDraggingMovement && conf.isMapSmoothScrollingEnabled() ) {
+            _inertiaHandler.commitRelease();
+        }
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
@@ -1039,6 +1049,7 @@ void Interface::GameArea::QueueEventProcessing()
         if ( !_mouseDraggingInitiated ) {
             _mouseDraggingInitiated = true;
             _lastMouseDragPosition = mousePosition;
+            _inertiaHandler.reset();
         }
         else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
@@ -1051,9 +1062,15 @@ void Interface::GameArea::QueueEventProcessing()
             _needRedrawByMouseDragging = false;
         }
         else {
+            const fheroes2::Point delta = _lastMouseDragPosition - mousePosition;
+
+            if ( conf.isMapSmoothScrollingEnabled() ) {
+                _inertiaHandler.addMovementStep( delta );
+            }
+
             // Update the center coordinates and redraw the adventure map only if the mouse was moved.
             _needRedrawByMouseDragging = true;
-            SetCenterInPixels( getCurrentCenterInPixels() + _lastMouseDragPosition - mousePosition );
+            SetCenterInPixels( getCurrentCenterInPixels() + delta );
             _lastMouseDragPosition = mousePosition;
         }
 
@@ -1074,7 +1091,6 @@ void Interface::GameArea::QueueEventProcessing()
         return;
     }
 
-    const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
@@ -1105,6 +1121,11 @@ void Interface::GameArea::QueueEventProcessing()
         _prevIndexPos = index;
         updateCursor = false;
     }
+}
+
+bool Interface::GameArea::updateInertia()
+{
+    return _inertiaHandler.update( [this]() { return getCurrentCenterInPixels(); }, [this]( const fheroes2::Point & pos ) { SetCenterInPixels( pos ); } );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
