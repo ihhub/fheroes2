@@ -259,7 +259,7 @@ namespace
         // If there is a map bug the Object Animation destructor is not able to properly remove this object from the map.
         if ( actualObjectType != objectType && actualObjectType != MP2::OBJ_NONE ) {
             // Remove an object by its actual sprite type.
-            removeObjectFromTileByType( tile, actualObjectType );
+            Maps::removeObjectFromTileByType( tile, actualObjectType );
         }
 
         // Update radar in the place of the removed object.
@@ -684,6 +684,7 @@ namespace
         hero.Move2Dest( dst_index );
         hero.ResetMovePoints();
         hero.GetPath().Reset();
+        hero.setAlphaValue( 255 );
 
         // Update the radar map image before changing the direction of the hero.
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
