@@ -1455,7 +1455,13 @@ namespace Interface
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
             if ( _editorPanel.showAreaSelectRect() && ( _tileUnderCursor > -1 ) ) {
-                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                fheroes2::Rect brushSize;
+                if ( _movableObjectInfo.groupType != Maps::ObjectGroup::NONE ) {
+                    brushSize = getObjectOccupiedArea( _movableObjectInfo.groupType, _movableObjectInfo.objectType );
+                }
+                else {
+                    brushSize = _editorPanel.getBrushArea();
+                }
 
                 if ( brushSize.width > 0 && brushSize.height > 0 ) {
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
@@ -3533,5 +3539,36 @@ namespace Interface
             action.commit();
             _redraw |= mapUpdateFlags;
         }
+    }
+
+    fheroes2::Rect EditorInterface::getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
+    {
+        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            // TODO: make occupied area calculation for complex objects.
+            return { -2, -3, 5, 5 };
+        }
+
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+            assert( 0 );
+            return { 0, 0, 1, 1 };
+        }
+
+        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
+        if ( offsets.size() < 2 ) {
+            return { 0, 0, 1, 1 };
+        }
+
+        fheroes2::Point minPos{ offsets.front() };
+        fheroes2::Point maxPos{ offsets.front() };
+
+        for ( const auto & offset : offsets ) {
+            minPos.x = std::min( minPos.x, offset.x );
+            minPos.y = std::min( minPos.y, offset.y );
+            maxPos.x = std::max( maxPos.x, offset.x );
+            maxPos.y = std::max( maxPos.y, offset.y );
+        }
+
+        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
     }
 }

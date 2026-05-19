@@ -116,6 +116,8 @@ namespace Interface
 
         bool updateRandomMapConfiguration( const int32_t mapWidth );
 
+        static fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType );
+
     private:
         class WarningMessage final
         {
