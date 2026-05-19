@@ -31,10 +31,10 @@
 #include "game_mode.h"
 #include "history_manager.h"
 #include "interface_base.h"
-#include "math_base.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "map_random_generator.h"
+#include "math_base.h"
 #include "timing.h"
 
 enum class PlayerColor : uint8_t;
