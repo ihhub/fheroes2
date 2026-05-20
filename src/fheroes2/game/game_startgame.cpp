@@ -308,6 +308,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     bool openConstructionWindow{ false };
     bool openMageGuildWindow{ false };
     Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, true, renderBackgroundDialog );
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
         switch ( result ) {
@@ -332,6 +333,12 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
         }
 
         assert( it != myCastles.end() );
+        // Set selected castle and redraw adventure map only in high resolution
+        if ( !fheroes2::Display::instance().isDefaultSize() ) {
+            SetUpdateSoundsOnFocusUpdate( false );
+            adventureMapInterface.SetFocus( *it );
+            adventureMapInterface.redraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR | Interface::REDRAW_STATUS );
+        }
 
         openConstructionWindow
             = ( result == Castle::CastleDialogReturnValue::PreviousConstructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextConstructionWindow );
@@ -345,8 +352,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
     // and there is no need update Adventure map interface at this time.
     if ( renderBackgroundDialog ) {
-        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
-
         if ( heroCountBefore != myKingdom.GetHeroes().size() ) {
             // A hero could be recruited in the castle or a hero could be dismissed by opening hero's dialog
             // and switching to the other hero and dismissing this hero. We need to update the hero list scrollbar.
