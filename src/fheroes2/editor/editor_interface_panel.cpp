@@ -84,37 +84,6 @@ namespace
         Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
     }
 
-    fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
-    {
-        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            // TODO: make occupied area calculation for complex objects.
-            return { -2, -3, 5, 5 };
-        }
-
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
-            assert( 0 );
-            return { 0, 0, 1, 1 };
-        }
-
-        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
-        if ( offsets.size() < 2 ) {
-            return { 0, 0, 1, 1 };
-        }
-
-        fheroes2::Point minPos{ offsets.front() };
-        fheroes2::Point maxPos{ offsets.front() };
-
-        for ( const auto & offset : offsets ) {
-            minPos.x = std::min( minPos.x, offset.x );
-            minPos.y = std::min( minPos.y, offset.y );
-            maxPos.x = std::max( maxPos.x, offset.x );
-            maxPos.y = std::max( maxPos.y, offset.y );
-        }
-
-        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
-    }
-
     fheroes2::Image makeInstrumentPanelBackground( const int32_t width, const int32_t height )
     {
         fheroes2::Image background;
@@ -240,7 +209,7 @@ namespace Interface
             if ( objectType >= 0 ) {
                 const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
 
-                return getObjectOccupiedArea( objectGroup, objectType );
+                return EditorInterface::getObjectOccupiedArea( objectGroup, objectType );
             }
 
             return {};
