@@ -158,7 +158,7 @@ namespace
         return bestAttackVector;
     }
 
-    double optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos, double allEnemiesThreat )
+    double optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos, const double allEnemiesThreat )
     {
         assert( attackPos.isValidForUnit( attacker ) );
 
@@ -198,23 +198,27 @@ namespace
         if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) || attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
             const uint32_t killed = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
             uint32_t ressurectPoints;
-            if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) )
+            if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
                 ressurectPoints = killed * attacker.Monster::GetHitPoints();
-            else {
+            } else {
                 ressurectPoints = killed * target.Monster::GetHitPoints();
                 ressurectPoints = std::min( ressurectPoints, ( attacker.GetMaxCount() * attacker.Monster::GetHitPoints() - attacker.GetHitPoints() ) );
             }
 
             // first effect: target will need to kill this ressurected creatures
-            const double avgNumberOfPowerfulTargets = 1.5; // average number of powerful troops in target's army
+            // average number of powerful troops in target's army
+            constexpr double avgNumberOfPowerfulTargets = 1.5;
             attackValue += ressurectPoints / avgNumberOfPowerfulTargets;
 
             // second effect: attacker troop becomes more powerful and can kill enemies faster
-            const double avgNumOfAtackers = 2.0;
-            const double avgBattleTurns = 5.0; // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
+            // average number of troops like atacker in atacker's army
+            constexpr double avgNumOfAtackers = 2.0;
+            // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
+            constexpr double avgBattleTurns = 5.0;
             const double ressurectK = 1
                                       + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAtackers, 0.0 )
-                                            / ( attacker.GetHitPoints() * 0.5 ); // *0.5 to get average hit points of the troop in the battle
+                                            // *0.5 to get average hit points of the troop in the battle
+                                            / ( attacker.GetHitPoints() * 0.5 );
             const double killTimeK = 1 / ressurectK;
             assert( killTimeK <= 1 );
             attackValue += ( allEnemiesThreat / avgNumOfAtackers ) * avgBattleTurns * ( 1 - killTimeK );
@@ -325,7 +329,7 @@ namespace
     }
 
     MeleeAttackOutcome BestAttackOutcome( const Battle::Unit & attacker, const Battle::Unit & defender, const PositionValues & valuesOfAttackPositions,
-                                          double allEnemiesThreat, const std::function<bool( const Battle::Position & )> & posFilter = {} )
+                                          const double allEnemiesThreat, const std::function<bool( const Battle::Position & )> & posFilter = {} )
     {
         MeleeAttackOutcome bestOutcome;
 
