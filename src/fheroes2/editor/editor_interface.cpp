@@ -370,6 +370,7 @@ namespace
                 case MP2::OBJ_BARRIER:
                 case MP2::OBJ_BOTTLE:
                 case MP2::OBJ_CAMPFIRE:
+                case MP2::OBJ_EVENT:
                 case MP2::OBJ_FLOTSAM:
                 case MP2::OBJ_HERO:
                 case MP2::OBJ_GENIE_LAMP:
