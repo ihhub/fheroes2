@@ -564,7 +564,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 display.render( fheroes2::getBoundaryRect( topArmyBar.GetArea(), bottomArmyBar.GetArea() ) );
             }
 
-            needRedraw = needRedraw || updateStatusBar();
+            if ( updateStatusBar() ) {
+                needRedraw = true;
+                needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+            }
 
             // Actions with hero army.
             if ( hero ) {
@@ -763,14 +766,14 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             AudioManager::PlaySound( M82::BUILDTWN );
                             fadeBuilding.startFadeBuilding( BUILD_CASTLE );
                             needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_CASTLES;
+                            needRedrawAdventureMap |= Interface::REDRAW_CASTLES | Interface::REDRAW_STATUS;
                             break;
                         }
 
                         case BUILD_CASTLE: {
                             result = constructionDialogHandler();
                             needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_CASTLES | Interface::REDRAW_HEROES | Interface::REDRAW_STATUS;
+                            needRedrawAdventureMap |= Interface::REDRAW_HEROES | Interface::REDRAW_STATUS;
                             break;
                         }
 
@@ -824,6 +827,14 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else {
                 display.render( dialogRoi );
             }
+            // Redraw Adventure map status panel if needed and allowed
+            if ( needRedrawAdventureMap > 0 && !isDefaultScreenSize ) {
+                // Save current window before adventure map redraw
+                const std::unique_ptr<fheroes2::ImageRestorer> windowRestorer
+                    = std::make_unique<fheroes2::ImageRestorer>( display, dialogWithShadowRoi.x, dialogWithShadowRoi.y, dialogWithShadowRoi.width,
+                                                                 dialogWithShadowRoi.height );
+                Interface::AdventureMap::Get().redraw( needRedrawAdventureMap );
+            }
         }
 
         needRedraw = fadeBuilding.updateFadeAlpha();
@@ -860,15 +871,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             if ( !needRedraw ) {
                 ++castleAnimationIndex;
             }
-        }
-
-        // Redraw Adventure map status panel if needed and allowed
-        if ( needRedrawAdventureMap > 0 && !isDefaultScreenSize ) {
-            // Save current window before adventure map redraw
-            std::unique_ptr<fheroes2::ImageRestorer> const restorer_window
-                = std::make_unique<fheroes2::ImageRestorer>( display, dialogWithShadowRoi.x, dialogWithShadowRoi.y, dialogWithShadowRoi.width,
-                                                             dialogWithShadowRoi.height );
-            Interface::AdventureMap::Get().redraw( needRedrawAdventureMap );
         }
     }
 
