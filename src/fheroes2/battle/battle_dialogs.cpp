@@ -496,7 +496,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
         }
     }
-    else ( defenderIsHuman ) {
+    else if ( defenderIsHuman ) {
         if ( res.defender & RESULT_WINS ) {
             GetSummaryParams( res.defender, res.attacker, _defendingArmy->GetCommander(), res.defenderExperience, _attackingArmy->GetSurrenderCost(), sequence, title,
                               surrenderText, outcomeText );
