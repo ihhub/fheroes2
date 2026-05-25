@@ -492,8 +492,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     Game::passAnimationDelay( Game::DelayType::CASTLE_AROUND_DELAY );
 
     while ( le.HandleEvents() && result == CastleDialogReturnValue::DoNothing ) {
-        bool needRedraw = false;
-        uint32_t needRedrawAdventureMap = 0;
+        uint32_t needRedraw = 0;
         bool needFadeIn = false;
 
         // During hero purchase or building construction skip any interaction with the dialog.
@@ -565,8 +564,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             }
 
             if ( updateStatusBar() ) {
-                needRedraw = true;
-                needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+                needRedraw |= Interface::REDRAW_STATUS;
             }
 
             // Actions with hero army.
@@ -601,8 +599,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         bottomArmyBar.ResetSelected();
                     }
 
-                    needRedraw = true;
-                    needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+                    needRedraw |= Interface::REDRAW_STATUS;
                 }
             }
 
@@ -611,7 +608,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 openHeroDialog( topArmyBar, bottomArmyBar, *hero );
 
                 needFadeIn = true;
-                needRedraw = true;
+                needRedraw |= Interface::REDRAW_STATUS;
             }
 
             // Get pressed hotkey.
@@ -674,8 +671,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                         if ( purchaseSpellBookIfNecessary( *this, hero ) ) {
                             // Guest hero purchased the spellbook, redraw the resource panel
-                            needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+                            needRedraw |= Interface::REDRAW_STATUS;
                         }
 
                         const auto mageGuildResult = mageGuildDialogHandler( hero );
@@ -690,8 +686,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         const Troop monsterToRecruit
                             = Dialog::RecruitMonster( Monster( _race, monsterDwelling ), getMonstersInDwelling( it->id ), true, recruitMonsterWindowOffsetY );
                         if ( Castle::RecruitMonster( monsterToRecruit ) ) {
-                            needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+                            needRedraw |= Interface::REDRAW_STATUS;
                         }
                     }
                     else {
@@ -729,23 +724,20 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             }
 
                             fadeBuilding.startFadeBoat();
-                            needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+                            needRedraw |= Interface::REDRAW_STATUS;
                             break;
                         }
 
                         case BUILD_MARKETPLACE: {
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             Dialog::Marketplace( GetKingdom(), false );
-                            needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+                            needRedraw |= Interface::REDRAW_STATUS;
                             break;
                         }
 
                         case BUILD_WELL:
                             _openWell();
-                            needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_STATUS;
+                            needRedraw |= Interface::REDRAW_STATUS;
                             break;
 
                         case BUILD_TENT: {
@@ -765,15 +757,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                             AudioManager::PlaySound( M82::BUILDTWN );
                             fadeBuilding.startFadeBuilding( BUILD_CASTLE );
-                            needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_CASTLES | Interface::REDRAW_STATUS;
+                            needRedraw |= Interface::REDRAW_CASTLES | Interface::REDRAW_STATUS;
                             break;
                         }
 
                         case BUILD_CASTLE: {
                             result = constructionDialogHandler();
-                            needRedraw = true;
-                            needRedrawAdventureMap |= Interface::REDRAW_HEROES | Interface::REDRAW_STATUS;
+                            needRedraw |= Interface::REDRAW_HEROES | Interface::REDRAW_STATUS;
                             break;
                         }
 
@@ -804,12 +794,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
             fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
 
-            if ( !needRedraw ) {
+            if ( needRedraw == 0 ) {
                 display.render( dialogRoi );
             }
         }
 
-        if ( needRedraw ) {
+        if ( needRedraw > 0 ) {
             // Redraw the bottom part of the castle dialog (army bars, resources, exit button).
             topArmyBar.Redraw( display );
             if ( bottomArmyBar.isValid() && alphaHero >= 255 ) {
@@ -827,17 +817,18 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else {
                 display.render( dialogRoi );
             }
-            // Redraw Adventure map status panel if needed and allowed
-            if ( needRedrawAdventureMap > 0 && !isDefaultScreenSize ) {
+            // Redraw Adventure map elements if needed and allowed
+            if ( !isDefaultScreenSize ) {
                 // Save current window before adventure map redraw
                 const std::unique_ptr<fheroes2::ImageRestorer> windowRestorer
                     = std::make_unique<fheroes2::ImageRestorer>( display, dialogWithShadowRoi.x, dialogWithShadowRoi.y, dialogWithShadowRoi.width,
                                                                  dialogWithShadowRoi.height );
-                Interface::AdventureMap::Get().redraw( needRedrawAdventureMap );
+                Interface::AdventureMap::Get().redraw( needRedraw );
             }
         }
 
-        needRedraw = fadeBuilding.updateFadeAlpha();
+        // We don't need to redraw adventure map, use variable as we want
+        needRedraw = fadeBuilding.updateFadeAlpha() ? 1 : 0;
         if ( fadeBuilding.isFadeDone() ) {
             const uint32_t build = fadeBuilding.getBuilding();
 
@@ -863,12 +854,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         }
 
         // Castle dialog animation.
-        if ( Game::validateAnimationDelay( Game::DelayType::CASTLE_AROUND_DELAY ) || needRedraw ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CASTLE_AROUND_DELAY ) || needRedraw > 0 ) {
             CastleDialog::redrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
 
             display.render( dialogRoi );
 
-            if ( !needRedraw ) {
+            if ( needRedraw == 0 ) {
                 ++castleAnimationIndex;
             }
         }
