@@ -18,6 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#pragma once
+
+#include <cstdint>
+
 namespace fheroes2
 {
     enum class GameMode : int;
@@ -25,5 +29,13 @@ namespace fheroes2
 
 namespace Game
 {
-    fheroes2::GameMode processExitEvent();
+    enum class ExitContext : uint8_t
+    {
+        GAME,
+
+        // Exiting from the map editor. Warn user about unsaved changes
+        EDITOR,
+    };
+
+    fheroes2::GameMode processExitEvent(const ExitContext context = ExitContext::GAME);
 }
