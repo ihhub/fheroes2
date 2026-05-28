@@ -200,7 +200,8 @@ namespace
             uint32_t ressurectPoints;
             if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
                 ressurectPoints = killed * attacker.Monster::GetHitPoints();
-            } else {
+            }
+            else {
                 ressurectPoints = killed * target.Monster::GetHitPoints();
                 ressurectPoints = std::min( ressurectPoints, ( attacker.GetMaxCount() * attacker.Monster::GetHitPoints() - attacker.GetHitPoints() ) );
             }
