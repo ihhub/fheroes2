@@ -37,5 +37,5 @@ namespace Game
         EDITOR,
     };
 
-    fheroes2::GameMode processExitEvent(const ExitContext context = ExitContext::GAME);
+    fheroes2::GameMode processExitEvent( const ExitContext context = ExitContext::GAME );
 }

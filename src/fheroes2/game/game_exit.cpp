@@ -30,7 +30,7 @@
 
 namespace Game
 {
-    fheroes2::GameMode processExitEvent(const ExitContext context /* = ExitContext::GAME */)
+    fheroes2::GameMode processExitEvent( const ExitContext context /* = ExitContext::GAME */ )
     {
 #if defined( __IPHONEOS__ )
         // iOS discourages to exit a running application.
@@ -38,8 +38,7 @@ namespace Game
 #else
         std::string message;
 
-        switch (context)
-        {
+        switch ( context ) {
         case ExitContext::GAME:
             message = _( "Are you sure you want to quit?" );
             break;
@@ -48,6 +47,7 @@ namespace Game
             message = _( "Are you sure you want to quit? (Any unsaved changes to the current map will be lost.)" );
             break;
         
+            
         default:
             // Have you added a new ExitContext enum? Update the logic above!
             assert( 0 );
