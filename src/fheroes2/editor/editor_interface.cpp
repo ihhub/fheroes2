@@ -1551,7 +1551,7 @@ namespace Interface
 
         while ( res == fheroes2::GameMode::CANCEL ) {
             if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-                if ( Game::processExitEvent(Game::ExitContext::EDITOR) == fheroes2::GameMode::QUIT_GAME ) {
+                if ( Game::processExitEvent( Game::ExitContext::EDITOR ) == fheroes2::GameMode::QUIT_GAME ) {
                     res = fheroes2::GameMode::QUIT_GAME;
 
                     break;
@@ -1565,7 +1565,7 @@ namespace Interface
             // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                    res = Game::processExitEvent(Game::ExitContext::EDITOR);
+                    res = Game::processExitEvent( Game::ExitContext::EDITOR );
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                     res = eventNewMap();
@@ -2085,7 +2085,7 @@ namespace Interface
             }
 
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
-                if ( Game::processExitEvent(Game::ExitContext::EDITOR) == fheroes2::GameMode::QUIT_GAME ) {
+                if ( Game::processExitEvent( Game::ExitContext::EDITOR ) == fheroes2::GameMode::QUIT_GAME ) {
                     return fheroes2::GameMode::QUIT_GAME;
                 }
             }

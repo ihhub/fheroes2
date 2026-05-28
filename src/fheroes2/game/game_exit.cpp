@@ -20,8 +20,8 @@
 
 #include "game_exit.h"
 
-#include <string>
 #include <cassert>
+#include <string>
 
 #include "dialog.h"
 #include "game_mode.h"
@@ -46,8 +46,7 @@ namespace Game
         case ExitContext::EDITOR:
             message = _( "Are you sure you want to quit? (Any unsaved changes to the current map will be lost.)" );
             break;
-        
-            
+
         default:
             // Have you added a new ExitContext enum? Update the logic above!
             assert( 0 );
