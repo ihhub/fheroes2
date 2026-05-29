@@ -42,6 +42,45 @@
 
 namespace
 {
+#if defined( TARGET_PS_VITA )
+    // On PS Vita, getting a list of files using std::filesystem for some reason works much slower than using the native file system API
+    class SceUIDWrapper final
+    {
+    public:
+        SceUIDWrapper( const std::string & path )
+            : uid( sceIoDopen( path.c_str() ) )
+        {
+            // Do nothing.
+        }
+
+        SceUIDWrapper( const SceUIDWrapper & ) = delete;
+
+        ~SceUIDWrapper()
+        {
+            if ( !isValid() ) {
+                return;
+            }
+
+            sceIoDclose( uid );
+        }
+
+        SceUIDWrapper & operator=( const SceUIDWrapper & ) = delete;
+
+        bool isValid() const
+        {
+            return uid >= 0;
+        }
+
+        SceUID get() const
+        {
+            return uid;
+        }
+
+    private:
+        const SceUID uid;
+    };
+#endif
+
     template <typename F>
     bool nameFilter( const std::string & filename, const bool needExactMatch, const std::string & filter, const F & strCmp )
     {
@@ -76,41 +115,6 @@ namespace
 #endif
 
 #if defined( TARGET_PS_VITA )
-        // On PS Vita, getting a list of files using std::filesystem for some reason works much slower than using the native file system API
-        class SceUIDWrapper
-        {
-        public:
-            SceUIDWrapper( const std::string & path )
-                : uid( sceIoDopen( path.c_str() ) )
-            {}
-
-            SceUIDWrapper( const SceUIDWrapper & ) = delete;
-
-            ~SceUIDWrapper()
-            {
-                if ( !isValid() ) {
-                    return;
-                }
-
-                sceIoDclose( uid );
-            }
-
-            SceUIDWrapper & operator=( const SceUIDWrapper & ) = delete;
-
-            bool isValid() const
-            {
-                return uid >= 0;
-            }
-
-            SceUID get() const
-            {
-                return uid;
-            }
-
-        private:
-            const SceUID uid;
-        };
-
         const SceUIDWrapper uid( path );
         if ( !uid.isValid() ) {
             return;
@@ -147,6 +151,45 @@ namespace
             }
 
             files.emplace_back( System::fsPathToString( entryPath ) );
+        }
+#endif
+    }
+
+    void getChildDirectories( const std::string & path, ListDirs & dirs )
+    {
+        std::string correctedPath;
+        if ( !System::GetCaseInsensitivePath( path, correctedPath ) ) {
+            return;
+        }
+
+#if defined( TARGET_PS_VITA )
+        const SceUIDWrapper uid( path );
+        if ( !uid.isValid() ) {
+            return;
+        }
+
+        SceIoDirent entry;
+
+        while ( sceIoDread( uid.get(), &entry ) > 0 ) {
+            // Ensure that this directory entry is a regular file
+            if ( !S_ISDIR( entry.d_stat.st_mode ) ) {
+                continue;
+            }
+
+            dirs.emplace_back( System::concatPath( path, entry.d_name ) );
+        }
+#else
+        std::error_code ec;
+
+        // Using the non-throwing overload
+        for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( correctedPath, ec ) ) {
+            // Using the non-throwing overload
+            if ( !entry.is_directory( ec ) ) {
+                continue;
+            }
+
+            const std::filesystem::path & entryPath = entry.path();
+            dirs.emplace_back( System::fsPathToString( entryPath.filename() ) );
         }
 #endif
     }
@@ -187,4 +230,9 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter )
     ListFiles list;
     list.ReadDir( path, filter );
     return list.empty();
+}
+
+void ListDirs::ReadDir( const std::string & path )
+{
+    getChildDirectories( path, *this );
 }

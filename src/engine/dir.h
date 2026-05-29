@@ -40,3 +40,9 @@ struct ListFiles : public std::list<std::string>
     // Returns true if there are no files in the 'path' directory with names ending in 'filter', case-insensitive, otherwise returns false.
     static bool IsEmpty( const std::string & path, const std::string & filter );
 };
+
+struct ListDirs : public std::list<std::string>
+{
+    // Adds internal directories from the 'path' directory, case-insensitive.
+    void ReadDir( const std::string & path );
+};

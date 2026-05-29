@@ -350,8 +350,11 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t baseYOffset, fheroes2::Display & display ) const
 {
+    const auto normalFontColor = (!_isPOLSupported && info.version != GameVersion::SUCCESSION_WARS ) ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+
     fheroes2::Text mapName{ info.name,
-                            { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) },
+                            { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : normalFontColor ) },
                             info.getSupportedLanguage() };
     mapName.fitToOneRow( SCENARIO_LIST_MAP_NAME_WIDTH );
     const int32_t xCoordinate = GetCenteredTextXCoordinate( _offsetX + SCENARIO_LIST_MAP_NAME_OFFSET_X, SCENARIO_LIST_MAP_NAME_WIDTH, mapName.width() );
@@ -477,6 +480,8 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
             }
         }
     }
+
+    const bool isPOLSupported = Settings::Get().isPriceOfLoyaltySupported();
 
     outputMapSelectionInTextSupportMode();
 
@@ -640,7 +645,12 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                 return nullptr;
             }
 
-            return &( *it );
+            if ( !isPOLSupported && it->version != GameVersion::SUCCESSION_WARS ) {
+                fheroes2::showStandardTextMessage( "", _( "This map requires the Price of Loyalty game resources." ), Dialog::OK );
+            }
+            else {
+                return &( *it );
+            }
         }
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {

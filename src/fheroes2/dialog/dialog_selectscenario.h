@@ -30,6 +30,7 @@
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "settings.h"
 
 namespace fheroes2
 {
@@ -47,7 +48,10 @@ public:
     explicit ScenarioListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , _offsetX( pt.x )
-    {}
+        , _isPOLSupported( Settings::Get().isPriceOfLoyaltySupported() )
+    {
+        // Do nothing.
+    }
 
     void RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & dst ) override;
@@ -89,6 +93,7 @@ private:
     const int32_t _offsetX;
     bool _isDoubleClicked{ false };
     bool _isForEditor{ false };
+    const bool _isPOLSupported{ false };
 
     void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const;
     void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );

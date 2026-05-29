@@ -51,7 +51,8 @@ namespace Maps
         SMALL = 36,
         MEDIUM = 72,
         LARGE = 108,
-        XLARGE = 144
+        XLARGE = 144,
+        GIGANTIC = 180,
     };
 
     using Indexes = MapsIndexes;

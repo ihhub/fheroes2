@@ -64,6 +64,8 @@ namespace
     // This constant sets the maximum displayed file name width. This value affects the dialog horizontal size.
     const int32_t maxFileNameWidth = 260;
 
+    std::string currentSaveFileFolder;
+
     void redrawDateTime( fheroes2::Image & output, const time_t timestamp, const int32_t dstx, const int32_t dsty, const fheroes2::FontType font )
     {
         const size_t arraySize = 5;
@@ -115,25 +117,88 @@ namespace
         textInput.drawInRoi( field.x + 4 + ( maxFileNameWidth - textInput.width() ) / 2, field.y + 4, output, field );
     }
 
-    class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
+    struct OSEntryInfo final
+    {
+        std::string folderName;
+
+        std::optional<Maps::FileInfo> fileInfo;
+    };
+
+    class OSEntryListBox final : public Interface::ListBox<OSEntryInfo>
     {
     public:
-        using Interface::ListBox<Maps::FileInfo>::ActionListDoubleClick;
-        using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
-        using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
+        using Interface::ListBox<OSEntryInfo>::ActionListDoubleClick;
+        using Interface::ListBox<OSEntryInfo>::ActionListSingleClick;
+        using Interface::ListBox<OSEntryInfo>::ActionListPressRight;
 
         using ListBox::ListBox;
 
-        void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;
-        void RedrawBackground( const fheroes2::Point & dst ) override;
-
-        void ActionCurrentUp() override;
-        void ActionCurrentDn() override;
-        void ActionListDoubleClick( Maps::FileInfo & info ) override;
-        void ActionListSingleClick( Maps::FileInfo & info ) override;
-
-        void ActionListPressRight( Maps::FileInfo & info ) override
+        void RedrawItem( const OSEntryInfo & entry, int32_t dstx, int32_t dsty, bool current ) override
         {
+            fheroes2::Display & display = fheroes2::Display::instance();
+            dsty += 2;
+
+            if ( entry.folderName.empty() ) {
+                // This is a file.
+                assert( entry.fileInfo.has_value() );
+
+                std::string fileName = System::GetStem( entry.fileInfo->filename );
+                assert( !fileName.empty() );
+
+                const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+                
+                fheroes2::Text text{ std::move( fileName ), font };
+                text.keepLineTrailingSpaces();
+                text.fitToOneRow( maxFileNameWidth );
+                text.draw( dstx + 4 + ( maxFileNameWidth - text.width() ) / 2, dsty, display );
+
+                redrawDateTime( display, entry.fileInfo->timestamp, dstx + maxFileNameWidth + 9, dsty, font );
+            }
+            else {
+                const fheroes2::FontType font
+                    = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType{ fheroes2::FontSize::NORMAL, fheroes2::FontColor::GRAY };
+                fheroes2::Text text{ entry.folderName, font };
+                text.keepLineTrailingSpaces();
+                text.fitToOneRow( maxFileNameWidth );
+                text.draw( dstx + 4 + ( maxFileNameWidth - text.width() ) / 2, dsty, display );
+            }
+        }
+
+        void RedrawBackground( const fheroes2::Point & /*unused*/ ) override
+        {
+            _listBackground->restore();
+        }
+
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListDoubleClick( OSEntryInfo & /*unused*/ ) override
+        {
+            _isDoubleClicked = true;
+        }
+
+        void ActionListSingleClick( OSEntryInfo & /*unused*/ ) override
+        {
+            // Do nothing.
+        }
+
+        void ActionListPressRight( OSEntryInfo & entry ) override
+        {
+            if ( !entry.folderName.empty() ) {
+                fheroes2::showStandardTextMessage( _( "Directory" ), entry.folderName, Dialog::ZERO );
+                return;
+            }
+
+            assert( entry.fileInfo.has_value() );
+            const auto & info = entry.fileInfo.value();
+
             const fheroes2::Text header( System::GetStem( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
@@ -171,49 +236,6 @@ namespace
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 
-    void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
-    {
-        std::string savname( System::GetStem( info.filename ) );
-        assert( !savname.empty() );
-
-        const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        dsty += 2;
-
-        fheroes2::Text text{ std::move( savname ), font };
-        text.keepLineTrailingSpaces();
-        text.fitToOneRow( maxFileNameWidth );
-        text.draw( dstx + 4 + ( maxFileNameWidth - text.width() ) / 2, dsty, display );
-
-        redrawDateTime( display, info.timestamp, dstx + maxFileNameWidth + 9, dsty, font );
-    }
-
-    void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
-    {
-        _listBackground->restore();
-    }
-
-    void FileInfoListBox::ActionCurrentUp()
-    {
-        // Do nothing.
-    }
-
-    void FileInfoListBox::ActionCurrentDn()
-    {
-        // Do nothing.
-    }
-
-    void FileInfoListBox::ActionListDoubleClick( Maps::FileInfo & /*unused*/ )
-    {
-        _isDoubleClicked = true;
-    }
-
-    void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ )
-    {
-        // Do nothing.
-    }
-
     void sortMapInfos( MapsFileInfoList & mapInfos )
     {
         const SaveFileSortingMethod sortType = Settings::Get().getSaveFileSortingMethod();
@@ -226,10 +248,23 @@ namespace
         }
     }
 
-    MapsFileInfoList getSortedMapsFileInfoList()
+    std::vector<OSEntryInfo> getOSEntries( const std::string & path )
     {
+        std::vector<OSEntryInfo> entries;
+
+        ListDirs dirs;
+        dirs.ReadDir( path );
+
+        entries.emplace_back().folderName = "[Parent folder]";
+
+        entries.reserve( dirs.size() + 1 );
+
+        for ( auto & dir : dirs ) {
+            entries.emplace_back().folderName = "[" + dir + ']';
+        }
+
         ListFiles files;
-        files.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension() );
+        files.ReadDir( path, Game::GetSaveFileExtension() );
 
         MapsFileInfoList mapInfos;
         mapInfos.reserve( files.size() );
@@ -244,15 +279,28 @@ namespace
 
         sortMapInfos( mapInfos );
 
-        return mapInfos;
+        entries.reserve( entries.size() + mapInfos.size() );
+        for ( auto & mapInfo : mapInfos ) {
+            entries.emplace_back().fileInfo = std::move( mapInfo );
+        }
+
+        return entries;
     }
 
-    MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
-                                                     const std::string & lastChoice )
+    std::vector<OSEntryInfo>::const_iterator findInMapInfos( const std::vector<OSEntryInfo> & entries, const std::string & lastChoice )
     {
-        return std::find_if( begin, end, [&lastChoice]( const Maps::FileInfo & info ) { return info.filename == lastChoice; } );
+        return std::find_if( entries.begin(), entries.end(), [&lastChoice]( const auto & entry ) {
+            if ( !entry.folderName.empty() ) {
+                return false;
+            }
+
+            assert( entry.fileInfo.has_value() );
+            return entry.fileInfo->filename == lastChoice;
+            }
+        );
     }
 
+    /*
     MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
                                                      const std::string & lastChoice, const uint32_t lastChoiceTimestamp, const SaveFileSortingMethod sortingMethod )
     {
@@ -291,7 +339,9 @@ namespace
 
         return end;
     }
+    */
 
+    /*
     MapsFileInfoList::const_iterator findInMapInfos( const MapsFileInfoList::const_iterator & begin, const MapsFileInfoList::const_iterator & end,
                                                      const std::string & lastChoice, const SaveFileSortingMethod sortingMethod )
     {
@@ -319,13 +369,18 @@ namespace
 
         return end;
     }
+    */
 
     std::string selectFileListSimple( const std::string & header, const std::string & lastfile, const bool isEditing )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        MapsFileInfoList lists = getSortedMapsFileInfoList();
+        if ( currentSaveFileFolder.empty() ) {
+            currentSaveFileFolder = Game::GetSaveDir();
+        }
+
+        auto lists = getOSEntries( Game::GetSaveDir() );
 
         const int32_t listHeightDeduction = 120;
         const int32_t listAreaOffsetY = 3;
@@ -372,7 +427,7 @@ namespace
 
         background.renderOkayCancelButtons( buttonOk, buttonCancel );
 
-        FileInfoListBox listbox( dialogArea.getPosition() );
+        OSEntryListBox listbox( dialogArea.getPosition() );
 
         // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.
         listbox.initListBackgroundRestorer( listRoi );
@@ -404,7 +459,7 @@ namespace
         if ( !lastfile.empty() ) {
             filename = System::GetStem( lastfile );
             charInsertPos = filename.size();
-            const MapsFileInfoList::const_iterator it = findInMapInfos( lists.cbegin(), lists.cend(), lastfile, fileSortingMethod );
+            const auto it = findInMapInfos( lists, lastfile );
 
             if ( it != lists.cend() ) {
                 listbox.SetCurrent( std::distance( lists.cbegin(), it ) );
@@ -419,7 +474,7 @@ namespace
         }
 
         if ( filename.empty() && listbox.isSelected() ) {
-            filename = System::GetStem( listbox.GetCurrent().filename );
+            // filename = System::GetStem( listbox.GetCurrent().filename );
             charInsertPos = filename.size();
         }
 
@@ -467,6 +522,7 @@ namespace
             fheroes2::Blit( mark, display, { markBackgroundDateRoi.x + 3, markBackgroundDateRoi.y + 3, mark.width(), mark.height() } );
         }
 
+        /*
         // Redraw sort radio buttons, sort file list in new method, and return whether to redraw the list.
         auto switchFileSorting
             = [&markBackgroundNameRoi, &markBackgroundDateRoi, &markBackground, &mark, &display, &listbox, &lists, &settings]( const bool doSortByDate ) {
@@ -503,6 +559,7 @@ namespace
                   }
                   return redrawNeeded;
               };
+        */
 
         if ( isEditing ) {
             // Render a button to open the Virtual Keyboard window.
@@ -523,7 +580,7 @@ namespace
         if ( listbox.isSelected() ) {
             // Render the saved file name, date and time.
             redrawTextInputField( filename, textInputRoi, display );
-            redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
+            // redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
         }
 
         display.render( background.totalArea() );
@@ -558,6 +615,7 @@ namespace
             bool listUpdated = false;
 
             if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+                /*
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
@@ -588,11 +646,12 @@ namespace
                 }
 
                 needRedraw = true;
+                */
             }
             else if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                       || listbox.isDoubleClicked() ) {
                 if ( isListboxSelected ) {
-                    result = listbox.GetCurrent().filename;
+                    // result = listbox.GetCurrent().filename;
                 }
                 else if ( !filename.empty() ) {
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
@@ -600,11 +659,11 @@ namespace
             }
             else if ( le.MouseClickLeft( nameHeaderRoi ) && settings.getSaveFileSortingMethod() != SaveFileSortingMethod::FILENAME ) {
                 listUpdated = true;
-                needRedraw = switchFileSorting( false );
+                // needRedraw = switchFileSorting( false );
             }
             else if ( le.MouseClickLeft( dateHeaderRoi ) && settings.getSaveFileSortingMethod() != SaveFileSortingMethod::TIMESTAMP ) {
                 listUpdated = true;
-                needRedraw = switchFileSorting( true );
+                // needRedraw = switchFileSorting( true );
             }
             else if ( isEditing ) {
                 assert( textInput != nullptr );
@@ -688,20 +747,29 @@ namespace
 
             if ( needRedraw ) {
                 if ( isListboxSelected ) {
-                    const std::string selectedFileName = System::GetStem( listbox.GetCurrent().filename );
-                    if ( lastSelectedSaveFileName != selectedFileName ) {
-                        lastSelectedSaveFileName = selectedFileName;
-                        filename = selectedFileName;
-                        charInsertPos = filename.size();
-
-                        buttonOkDisabler();
+                    const auto & currentItem = listbox.GetCurrent();
+                    if ( !currentItem.folderName.empty() ) {
+                        buttonOk.disable();
+                        buttonOk.draw();
                     }
+                    else {
+                        assert( currentItem.fileInfo.has_value() );
 
-                    textInputBackground.restore();
-                    dateBackground.restore();
+                        const std::string selectedFileName = System::GetStem( currentItem.fileInfo->filename );
+                        if ( lastSelectedSaveFileName != selectedFileName ) {
+                            lastSelectedSaveFileName = selectedFileName;
+                            filename = selectedFileName;
+                            charInsertPos = filename.size();
 
-                    redrawTextInputField( filename, textInputRoi, display );
-                    redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
+                            buttonOkDisabler();
+                        }
+
+                        textInputBackground.restore();
+                        dateBackground.restore();
+
+                        redrawTextInputField( filename, textInputRoi, display );
+                        redrawDateTime( display, currentItem.fileInfo->timestamp, dateTimeOffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
+                    }
                 }
                 else if ( isEditing ) {
                     // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.

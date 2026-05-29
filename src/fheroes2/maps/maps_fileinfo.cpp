@@ -733,13 +733,13 @@ MapsFileInfoList Maps::getAllMapFileInfos( const uint8_t humanPlayerCount )
 
     const bool isPOLSupported = Settings::Get().isPriceOfLoyaltySupported();
 
-    if ( isPOLSupported ) {
+    // if ( isPOLSupported ) {
         maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
-    }
+    // }
 
     MapsFileInfoList validMaps = getValidMaps( maps, humanPlayerCount, true );
 
-    if ( isPOLSupported ) {
+    // if ( isPOLSupported ) {
         const ListFiles resurrectionMaps = Settings::FindFiles( "maps", ".fh2m", false );
         MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, humanPlayerCount, false );
 
@@ -748,7 +748,7 @@ MapsFileInfoList Maps::getAllMapFileInfos( const uint8_t humanPlayerCount )
         for ( auto & map : validResurrectionMaps ) {
             validMaps.emplace_back( std::move( map ) );
         }
-    }
+    // }
 
     std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::CompareByMapName{} );
 
