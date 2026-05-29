@@ -192,7 +192,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
                 // This monster has Mirror Image copies.
                 // Add an additional bonus to it.
                 for ( const auto * enemyUnit : enemies ) {
-                    if ( enemyUnit->Modes( Battle::CAP_MIRRORIMAGE ) && enemyUnit->GetMirror() == unit ) {
+                    if ( enemyUnit->Modes( Battle::CAP_MIRRORIMAGE ) && ( enemyUnit->GetMirror() == unit ) ) {
                         overallStrength += enemyUnit->GetStrength();
                     }
                 }
