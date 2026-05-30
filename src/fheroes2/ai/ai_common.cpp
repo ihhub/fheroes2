@@ -438,9 +438,8 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
 bool AI::isUselessActionObject( const Kingdom & kingdom, const MP2::MapObjectType objectType, const int32_t tileIndex )
 {
     switch ( objectType ) {
-    // These objects can be visited only once.
+    // Magellan's Maps object should be visited only once.
     case MP2::OBJ_MAGELLANS_MAPS:
-    case MP2::OBJ_OBELISK:
         return kingdom.isVisited( objectType );
     // Heroes cannot re-capture their own or ally's objects.
     case MP2::OBJ_ALCHEMIST_LAB:
@@ -461,6 +460,9 @@ bool AI::isUselessActionObject( const Kingdom & kingdom, const MP2::MapObjectTyp
 
         return fogCountToUncoverByTower < 0;
     }
+    // An obelisk should be visited only once.
+    case MP2::OBJ_OBELISK:
+        return kingdom.isVisited( tileIndex, objectType );
     // Traveller's Tent should be visited only once.
     case MP2::OBJ_TRAVELLER_TENT:
         return kingdom.isTravellerTentVisited( Maps::getBarrierColorFromTile( world.getTile( tileIndex ) ) );
