@@ -1909,6 +1909,20 @@ namespace Interface
                             _resetMovableObjectInfo();
                         }
                     }
+                    else if ( le.isMouseWheelUp() ) {
+                        if ( _editorPanel.setNextSelectedObjectType() ) {
+                            _editorPanel.setObjectBasedCursor( _editorPanel.getSelectedObjectType(), _editorPanel.getSelectedObjectGroup() );
+                            updateCursor( _tileUnderCursor );
+                            _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                        }
+                    }
+                    else if ( le.isMouseWheelDown() ) {
+                        if ( _editorPanel.setPreviousSelectedObjectType() ) {
+                            _editorPanel.setObjectBasedCursor( _editorPanel.getSelectedObjectType(), _editorPanel.getSelectedObjectGroup() );
+                            updateCursor( _tileUnderCursor );
+                            _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                        }
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );

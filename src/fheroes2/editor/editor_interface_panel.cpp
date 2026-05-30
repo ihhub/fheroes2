@@ -160,6 +160,40 @@ namespace
             drawInstrumentName( output, ObjectTypeNamePosition, getObjectTypeName( objectId ) );
         }
     }
+
+    bool setNextObjectInGroup( int & objectIndex, const Maps::ObjectGroup group )
+    {
+        if ( objectIndex < 0 ) {
+            return false;
+        }
+
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        assert( static_cast<size_t>( objectIndex ) < objectInfo.size() );
+
+        ++objectIndex;
+        if ( static_cast<size_t>( objectIndex ) >= objectInfo.size() ) {
+            objectIndex = 0;
+        }
+
+        return true;
+    }
+
+    bool setPreviousObjectInGroup( int & objectIndex, const Maps::ObjectGroup group )
+    {
+        if ( objectIndex < 0 ) {
+            return false;
+        }
+
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        assert( static_cast<size_t>( objectIndex ) < objectInfo.size() );
+
+        --objectIndex;
+        if ( objectIndex < 0 ) {
+            objectIndex = static_cast<int32_t>( objectInfo.size() ) - 1;
+        }
+
+        return true;
+    }
 }
 
 namespace Interface
@@ -643,6 +677,126 @@ namespace Interface
             // Why are you trying to get type for the non-object instrument. Check your logic!
             assert( 0 );
             return -1;
+        }
+    }
+
+    bool EditorPanel::setNextSelectedObjectType()
+    {
+        switch ( _selectedInstrument ) {
+        case Instrument::MONSTERS: {
+            if ( _selectedMonsterType < 0 ) {
+                return false;
+            }
+
+            return setNextObjectInGroup( _selectedMonsterType, Maps::ObjectGroup::MONSTERS );
+        }
+        case Instrument::LANDSCAPE_OBJECTS:
+            if ( _selectedLandscapeObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedLandscapeObject ) < _selectedLandscapeObjectType.size() );
+            return setNextObjectInGroup( _selectedLandscapeObjectType[_selectedLandscapeObject], _selectedLandscapeObjectGroup[_selectedLandscapeObject] );
+        case Instrument::ADVENTURE_OBJECTS:
+            if ( _selectedAdventureObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedAdventureObject ) < _selectedAdventureObjectType.size() );
+            return setNextObjectInGroup( _selectedAdventureObjectType[_selectedAdventureObject], _selectedAdventureObjectGroup[_selectedAdventureObject] );
+        case Instrument::KINGDOM_OBJECTS:
+            if ( _selectedKingdomObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedKingdomObject ) < _selectedKingdomObjectType.size() );
+            if ( _selectedKingdomObjectGroup[_selectedKingdomObject] == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                // Towns have special logic to handle their type as we store town's type and color.
+                int32_t type = -1;
+                int32_t color = -1;
+                getTownObjectProperties( getSelectedObjectType(), type, color );
+                if ( type < 0 || color < 0 ) {
+                    return false;
+                }
+
+                const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+
+                ++type;
+                if ( type >= static_cast<int32_t>( townObjects.size() ) ) {
+                    type = 0;
+                    ++color;
+                    if ( color >= Color::GetIndex( PlayerColor::UNUSED ) ) {
+                        color = Color::GetIndex( PlayerColor::NONE );
+                    }
+                }
+
+                _selectedKingdomObjectType[_selectedKingdomObject] = generateTownObjectProperties( type, color );
+                return true;
+            }
+
+            return setNextObjectInGroup( _selectedKingdomObjectType[_selectedKingdomObject], _selectedKingdomObjectGroup[_selectedKingdomObject] );
+        default:
+            return false;
+        }
+    }
+
+    bool EditorPanel::setPreviousSelectedObjectType()
+    {
+        switch ( _selectedInstrument ) {
+        case Instrument::MONSTERS: {
+            if ( _selectedMonsterType < 0 ) {
+                return false;
+            }
+
+            return setPreviousObjectInGroup( _selectedMonsterType, Maps::ObjectGroup::MONSTERS );
+        }
+        case Instrument::LANDSCAPE_OBJECTS:
+            if ( _selectedLandscapeObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedLandscapeObject ) < _selectedLandscapeObjectType.size() );
+            return setPreviousObjectInGroup( _selectedLandscapeObjectType[_selectedLandscapeObject], _selectedLandscapeObjectGroup[_selectedLandscapeObject] );
+        case Instrument::ADVENTURE_OBJECTS:
+            if ( _selectedAdventureObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedAdventureObject ) < _selectedAdventureObjectType.size() );
+            return setPreviousObjectInGroup( _selectedAdventureObjectType[_selectedAdventureObject], _selectedAdventureObjectGroup[_selectedAdventureObject] );
+        case Instrument::KINGDOM_OBJECTS:
+            if ( _selectedKingdomObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedKingdomObject ) < _selectedKingdomObjectType.size() );
+            if ( _selectedKingdomObjectGroup[_selectedKingdomObject] == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                // Towns have special logic to handle their type as we store town's type and color.
+                int32_t type = -1;
+                int32_t color = -1;
+                getTownObjectProperties( getSelectedObjectType(), type, color );
+                if ( type < 0 || color < 0 ) {
+                    return false;
+                }
+
+                const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+
+                --type;
+                if ( type < 0 ) {
+                    type = static_cast<int32_t>( townObjects.size() ) - 1;
+                    --color;
+                    if ( color < 0 ) {
+                        color = Color::GetIndex( PlayerColor::UNUSED ) - 1;
+                    }
+                }
+
+                _selectedKingdomObjectType[_selectedKingdomObject] = generateTownObjectProperties( type, color );
+                return true;
+            }
+
+            return setPreviousObjectInGroup( _selectedKingdomObjectType[_selectedKingdomObject], _selectedKingdomObjectGroup[_selectedKingdomObject] );
+        default:
+            return false;
         }
     }
 
