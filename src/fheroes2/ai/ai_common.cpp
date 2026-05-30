@@ -458,7 +458,7 @@ bool AI::isUselessActionObject( const Kingdom & kingdom, const MP2::MapObjectTyp
         const int32_t fogCountToUncoverByTower
             = Maps::getFogTileCountToBeRevealed( tileIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), kingdom.GetColor() );
 
-        return fogCountToUncoverByTower < 0;
+        return fogCountToUncoverByTower <= 0;
     }
     // An obelisk should be visited only once.
     case MP2::OBJ_OBELISK:
