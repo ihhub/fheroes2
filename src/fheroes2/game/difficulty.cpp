@@ -211,6 +211,25 @@ bool Difficulty::areAIHeroRolesAllowed( const int difficulty )
     return true;
 }
 
+bool Difficulty::isAIStrategicPlanningLimited( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return true;
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return false;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return false;
+}
+
 int Difficulty::getMinStatDiffForAIHeroesMeeting( const int difficulty )
 {
     switch ( difficulty ) {

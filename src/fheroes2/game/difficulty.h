@@ -62,6 +62,8 @@ namespace Difficulty
 
     bool areAIHeroRolesAllowed( const int difficulty );
 
+    bool isAIStrategicPlanningLimited( const int difficulty );
+
     // Returns the minimum advantage in stats (i.e. the sum of the levels of primary and secondary skills) that a hero must have in order to allow another hero with the
     // same role to meet on his own initiative with this hero to exchange armies and artifacts
     int getMinStatDiffForAIHeroesMeeting( const int difficulty );
