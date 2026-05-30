@@ -747,9 +747,9 @@ namespace
         case MP2::OBJ_EYE_OF_MAGI:
         // No use of these object for AI.
         case MP2::OBJ_ORACLE:
-        // AI has no brains to do anything from sign messages.
+        // AI doesn't read messages.
         case MP2::OBJ_SIGN:
-        // AI has no brains to handle Sirens object.
+        // TODO: AI has no brains to handle Sirens object.
         case MP2::OBJ_SIRENS:
         // TODO: AI doesn't know how it use Sphinx object properly.
         case MP2::OBJ_SPHINX:
