@@ -427,21 +427,6 @@ bool Kingdom::isValidKingdomObjectForAI( const Maps::Tile & tile, const MP2::Map
         return false;
     }
 
-    // Remove useless objects for AI heroes as they bring no value.
-    // It is good to exclude them here to avoid unnecessary calculations.
-    // Refer to isValidObjectForHero() function in ai_planner_hero.cpp file.
-    switch ( objectType ) {
-    case MP2::OBJ_BOAT:
-    case MP2::OBJ_EYE_OF_MAGI:
-    case MP2::OBJ_ORACLE:
-    case MP2::OBJ_SIGN:
-    case MP2::OBJ_STONE_LITHS:
-    case MP2::OBJ_WHIRLPOOL:
-        return false;
-    default:
-        break;
-    }
-
     if ( isVisited( tile.GetIndex(), objectType ) ) {
         return false;
     }

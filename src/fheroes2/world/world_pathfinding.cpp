@@ -29,6 +29,7 @@
 #include <tuple>
 #include <utility>
 
+#include "ai_common.h"
 #include "army.h"
 #include "artifact.h"
 #include "castle.h"
@@ -1174,10 +1175,18 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
 
     const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( const int index ) {
         const auto & tile = world.getTile( index );
-        const MP2::MapObjectType objectType = tile.getMainObjectType();
 
-        // std::set insert returns a pair, second value is true if it was unique
-        if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObjectForAI( tile, objectType ) ) {
+        // std::set insert returns a pair, second value is true if it was unique.
+        if ( !uniqueIndices.insert( index ).second ) {
+            return;
+        }
+
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
+        if ( AI::isUselessActionObject( objectType ) ) {
+            return;
+        }
+
+        if ( kingdom.isValidKingdomObjectForAI( tile, objectType ) ) {
             result.emplace_back( index, objectType );
         }
     };

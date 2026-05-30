@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,6 +44,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "mp2.h"
 #include "payment.h"
 #include "players.h"
 #include "puzzle.h"
@@ -435,4 +436,21 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
     const int32_t idx = art.getPosition();
 
     return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).isSuitableForUltimateArtifact();
+}
+
+bool AI::isUselessActionObject( const MP2::MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case MP2::OBJ_BOAT:
+    case MP2::OBJ_EYE_OF_MAGI:
+    case MP2::OBJ_ORACLE:
+    case MP2::OBJ_SIGN:
+    case MP2::OBJ_STONE_LITHS:
+    case MP2::OBJ_WHIRLPOOL:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
 }

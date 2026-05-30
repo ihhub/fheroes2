@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,11 @@ class UltimateArtifact;
 struct Funds;
 
 enum BuildingType : uint32_t;
+
+namespace MP2
+{
+    enum MapObjectType : uint16_t;
+}
 
 namespace AI
 {
@@ -72,4 +77,7 @@ namespace AI
     // the Ultimate Artifact is considered available to the given hero if this hero knows its exact location and there
     // is a free slot in the hero's artifact bag. See the implementation for details.
     bool isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero );
+
+    // Returns true if the AI has no benefit of visiting this object under any circumstances.
+    bool isUselessActionObject( const MP2::MapObjectType objectType );
 }
