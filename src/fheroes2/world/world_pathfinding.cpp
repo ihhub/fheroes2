@@ -1172,11 +1172,12 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     const Kingdom & kingdom = world.GetKingdom( _color );
     std::set<int> uniqueIndices;
 
-    const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index ) {
-        const MP2::MapObjectType objectType = world.getTile( index ).getMainObjectType();
+    const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( const int index ) {
+        const auto & tile = world.getTile( index );
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
 
         // std::set insert returns a pair, second value is true if it was unique
-        if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObject( world.getTile( index ), objectType ) ) {
+        if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObjectForAI( tile, objectType ) ) {
             result.emplace_back( index, objectType );
         }
     };

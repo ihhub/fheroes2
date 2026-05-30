@@ -741,6 +741,15 @@ namespace
             return kingdom.AllowPayment( payment );
         }
 
+        // TODO: AI has no brains to handle Sirens object.
+        case MP2::OBJ_SIRENS:
+        // TODO: AI doesn't know how it use Sphinx object properly.
+        case MP2::OBJ_SPHINX:
+        // TODO: AI doesn't know how it use Trading Post object properly.
+        case MP2::OBJ_TRADING_POST:
+            return false;
+
+        // The below objects must never being analyzed.
         // AI should never consider a boat as a destination point. It uses them only to make a path.
         case MP2::OBJ_BOAT:
         // Eye of Magi is not an action object at all.
@@ -749,16 +758,11 @@ namespace
         case MP2::OBJ_ORACLE:
         // AI doesn't read messages.
         case MP2::OBJ_SIGN:
-        // TODO: AI has no brains to handle Sirens object.
-        case MP2::OBJ_SIRENS:
-        // TODO: AI doesn't know how it use Sphinx object properly.
-        case MP2::OBJ_SPHINX:
         // AI should never consider a stone lith as a destination point. It uses them only to make a path.
         case MP2::OBJ_STONE_LITHS:
-        // TODO: AI doesn't know how it use Trading Post object properly.
-        case MP2::OBJ_TRADING_POST:
         // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
         case MP2::OBJ_WHIRLPOOL:
+            assert( 0 );
             return false;
 
         default:
