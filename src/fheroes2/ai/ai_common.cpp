@@ -52,11 +52,6 @@
 #include "resource_trading.h"
 #include "world.h"
 
-namespace MP2
-{
-    enum MapObjectType : uint16_t;
-}
-
 bool AI::BuildIfPossible( Castle & castle, const BuildingType building )
 {
     switch ( castle.CheckBuyBuilding( building ) ) {
