@@ -451,10 +451,6 @@ bool Kingdom::isValidKingdomObjectForAI( const Maps::Tile & tile, const MP2::Map
         return !Players::isFriends( _color, static_cast<PlayerColorsSet>( getColorFromTile( tile ) ) );
     }
 
-    if ( MP2::isValuableResourceObject( objectType ) ) {
-        return doesTileContainValuableItems( tile );
-    }
-
     return true;
 }
 
