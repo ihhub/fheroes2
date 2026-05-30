@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
