@@ -438,33 +438,39 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
 bool AI::isUselessActionObject( const Kingdom & kingdom, const MP2::MapObjectType objectType, const int32_t tileIndex )
 {
     switch ( objectType ) {
+    // These objects can be visited only once.
     case MP2::OBJ_MAGELLANS_MAPS:
+    case MP2::OBJ_OBELISK:
         return kingdom.isVisited( objectType );
+    // Heroes cannot re-capture their own or ally's objects.
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_LIGHTHOUSE:
     case MP2::OBJ_MINE:
     case MP2::OBJ_SAWMILL:
         return kingdom.isFriends( Maps::getColorFromTile( world.getTile( tileIndex ) ) );
+    // Single visit objects with no resources have no value.
     case MP2::OBJ_DAEMON_CAVE:
     case MP2::OBJ_LEAN_TO:
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_WAGON:
         return !Maps::doesTileContainValuableItems( world.getTile( tileIndex ) );
+    // If Observation Tower uncovers nothing, then we skip it.
     case MP2::OBJ_OBSERVATION_TOWER: {
         const int32_t fogCountToUncoverByTower
             = Maps::getFogTileCountToBeRevealed( tileIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), kingdom.GetColor() );
 
         return fogCountToUncoverByTower < 0;
     }
-    case MP2::OBJ_OBELISK:
-        return kingdom.isVisited( tileIndex, objectType );
+    // Traveller's Tent should be visited only once.
     case MP2::OBJ_TRAVELLER_TENT:
         return kingdom.isTravellerTentVisited( Maps::getBarrierColorFromTile( world.getTile( tileIndex ) ) );
+    // Single visit objects with no resources have no value.
     case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_PYRAMID:
     case MP2::OBJ_SHIPWRECK:
         return kingdom.isVisited( tileIndex, objectType ) || !Maps::doesTileContainValuableItems( world.getTile( tileIndex ) );
+    // No value objects.
     case MP2::OBJ_BOAT:
     case MP2::OBJ_EYE_OF_MAGI:
     case MP2::OBJ_ORACLE:
