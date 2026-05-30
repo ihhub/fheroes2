@@ -725,7 +725,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             continue;
         }
 
-        RegionStats & stats = _regions[regionID];
         if ( !isUnderViewSpell && tile.isFog( myColor ) ) {
             continue;
         }
@@ -753,6 +752,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             assert( 0 );
         }
 
+        RegionStats & stats = _regions[regionID];
         if ( objectType == MP2::OBJ_HERO ) {
             const Heroes * hero = tile.getHero();
             assert( hero != nullptr );
