@@ -2905,8 +2905,8 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( formerBoatIdx );
-    updateMapActionObjectCache( nextTileIdx );
+    updateMapActionObjectCache( hero.GetKingdom(), formerBoatIdx );
+    updateMapActionObjectCache( hero.GetKingdom(), nextTileIdx );
 }
 
 void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
@@ -2932,7 +2932,7 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
 
     updatePriorityTargets( hero, tileIndex, objectType );
 
-    updateMapActionObjectCache( tileIndex );
+    updateMapActionObjectCache( hero.GetKingdom(), tileIndex );
 }
 
 void AI::Planner::HeroesActionNewPosition( Heroes & hero )
@@ -3007,8 +3007,8 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( formerBoatIdx );
-    updateMapActionObjectCache( nextTileIdx );
+    updateMapActionObjectCache( hero.GetKingdom(), formerBoatIdx );
+    updateMapActionObjectCache( hero.GetKingdom(), nextTileIdx );
 }
 
 bool AI::Planner::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
@@ -3167,8 +3167,8 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
                     assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
 
-                    updateMapActionObjectCache( prevHeroPosition );
-                    updateMapActionObjectCache( bestHero->GetIndex() );
+                    updateMapActionObjectCache( bestHero->GetKingdom(), prevHeroPosition );
+                    updateMapActionObjectCache( bestHero->GetKingdom(), bestHero->GetIndex() );
 
                     prevHeroPosition = bestHero->GetIndex();
                 }
@@ -3197,11 +3197,11 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
 
         if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {
             // The hero died or moved to another position. We have to update the action object cache.
-            updateMapActionObjectCache( prevHeroPosition );
+            updateMapActionObjectCache( bestHero->GetKingdom(), prevHeroPosition );
 
             if ( bestHero->isActive() ) {
                 // Hero moved to another position and is still alive.
-                updateMapActionObjectCache( bestHero->GetIndex() );
+                updateMapActionObjectCache( bestHero->GetKingdom(), bestHero->GetIndex() );
             }
         }
 

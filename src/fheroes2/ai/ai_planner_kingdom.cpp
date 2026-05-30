@@ -862,7 +862,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
             assert( !heroes.empty() && heroes.back() != nullptr );
 
-            updateMapActionObjectCache( heroes.back()->GetIndex() );
+            updateMapActionObjectCache( heroes.back()->GetKingdom(), heroes.back()->GetIndex() );
 
             ++availableHeroCount;
 
