@@ -717,7 +717,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     for ( int idx = 0; idx < mapSize; ++idx ) {
         const Maps::Tile & tile = world.getTile( idx );
-        MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const uint32_t regionID = tile.GetRegion();
         if ( regionID >= _regions.size() ) {
@@ -729,6 +728,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             continue;
         }
 
+        MP2::MapObjectType objectType = tile.getMainObjectType();
         if ( !MP2::isInGameActionObject( objectType ) ) {
             continue;
         }
