@@ -684,13 +684,8 @@ namespace Interface
     bool EditorPanel::setNextSelectedObjectType()
     {
         switch ( _selectedInstrument ) {
-        case Instrument::MONSTERS: {
-            if ( _selectedMonsterType < 0 ) {
-                return false;
-            }
-
+        case Instrument::MONSTERS:
             return setNextObjectInGroup( _selectedMonsterType, Maps::ObjectGroup::MONSTERS );
-        }
         case Instrument::LANDSCAPE_OBJECTS:
             if ( _selectedLandscapeObject < 0 ) {
                 return false;
@@ -744,13 +739,8 @@ namespace Interface
     bool EditorPanel::setPreviousSelectedObjectType()
     {
         switch ( _selectedInstrument ) {
-        case Instrument::MONSTERS: {
-            if ( _selectedMonsterType < 0 ) {
-                return false;
-            }
-
+        case Instrument::MONSTERS:
             return setPreviousObjectInGroup( _selectedMonsterType, Maps::ObjectGroup::MONSTERS );
-        }
         case Instrument::LANDSCAPE_OBJECTS:
             if ( _selectedLandscapeObject < 0 ) {
                 return false;
