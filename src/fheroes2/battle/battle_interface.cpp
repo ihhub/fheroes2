@@ -6928,9 +6928,12 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     size_t overlaySpriteCount = _unitSpellEffectInfos.size();
     _unitSpellEffectInfos.reserve( overlaySpriteCount + targets.size() );
 
+    const fheroes2::Sprite & initialSpellSprite = fheroes2::AGG::GetICN( icn, 0 );
+
     for ( const Battle::TargetInfo & target : targets ) {
         if ( target.defender ) {
             _unitSpellEffectInfos.emplace_back( target.defender->GetUID(), icn, ( isReflectICN && target.defender->isReflect() ) );
+            _unitSpellEffectInfos.back().position = CalculateSpellPosition( *target.defender, icn, initialSpellSprite );
         }
     }
 
@@ -7048,6 +7051,10 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, const int ic
 
     _unitSpellEffectInfos.emplace_back( unit.GetUID(), icn, reflect );
 
+    UnitSpellEffectInfo & unitSpellEffectInfo = _unitSpellEffectInfos.back();
+    // Set position for the initial spell sprite.
+    unitSpellEffectInfo.position = CalculateSpellPosition( unit, icn, fheroes2::AGG::GetICN( icn, 0 ) );
+
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
 
@@ -7062,9 +7069,10 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, const int ic
 
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             if ( frame < maxICNFrame ) {
-                _unitSpellEffectInfos.back().position = CalculateSpellPosition( unit, icn, fheroes2::AGG::GetICN( icn, frame ) );
-                _unitSpellEffectInfos.back().icnIndex = frame;
+                unitSpellEffectInfo.position = CalculateSpellPosition( unit, icn, fheroes2::AGG::GetICN( icn, frame ) );
+                unitSpellEffectInfo.icnIndex = frame;
             }
+
             Redraw();
 
             if ( animation != NONE ) {
@@ -7076,7 +7084,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, const int ic
                     unit.SwitchAnimation( Monster_Info::WNCE_DOWN );
                 }
             }
+
             ++frame;
+
             if ( frame == maxICNFrame ) {
                 // Spell animation is finished, so delete the overlay sprite from unit.
                 _unitSpellEffectInfos.pop_back();
