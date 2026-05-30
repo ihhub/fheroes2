@@ -438,7 +438,7 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
 bool AI::isValuableAdventureMapObject( const Kingdom & kingdom, const MP2::MapObjectType objectType, const int32_t tileIndex )
 {
     if ( !MP2::isInGameActionObject( objectType ) ) {
-        // Only action objects has any value.
+        // Only action objects have any value.
         return false;
     }
 
@@ -476,7 +476,6 @@ bool AI::isValuableAdventureMapObject( const Kingdom & kingdom, const MP2::MapOb
     case MP2::OBJ_MAGELLANS_MAPS:
         // Magellan's Maps object should be visited only once.
         return !kingdom.isVisited( objectType );
-    
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_LIGHTHOUSE:
     case MP2::OBJ_MINE:
