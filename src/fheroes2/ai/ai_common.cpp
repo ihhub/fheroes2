@@ -472,6 +472,9 @@ bool AI::isUselessActionObject( const Kingdom & kingdom, const MP2::MapObjectTyp
     case MP2::OBJ_PYRAMID:
     case MP2::OBJ_SHIPWRECK:
         return kingdom.isVisited( tileIndex, objectType ) || !Maps::doesTileContainValuableItems( world.getTile( tileIndex ) );
+    // A Hut of Magi should uncover all areas at once so visiting any other similar object makes no sense.
+    case MP2::OBJ_HUT_OF_MAGI:
+        return kingdom.isVisited( objectType ) || !Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
     // No value objects.
     case MP2::OBJ_BOAT:
     case MP2::OBJ_EYE_OF_MAGI:
