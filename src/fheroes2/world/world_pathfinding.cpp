@@ -1181,11 +1181,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
 
         const auto & tile = world.getTile( index );
         const MP2::MapObjectType objectType = tile.getMainObjectType();
-        if ( AI::isUselessActionObject( kingdom, objectType, index ) ) {
-            return;
-        }
-
-        if ( kingdom.isValidKingdomObjectForAI( tile, objectType ) ) {
+        if ( AI::isValuableAdventureMapObject( kingdom, objectType, index ) ) {
             result.emplace_back( index, objectType );
         }
     };

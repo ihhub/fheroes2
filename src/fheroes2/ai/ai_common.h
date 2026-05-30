@@ -78,6 +78,6 @@ namespace AI
     // is a free slot in the hero's artifact bag. See the implementation for details.
     bool isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero );
 
-    // Returns true if the AI has no benefit of visiting this object under any circumstances.
-    bool isUselessActionObject( const Kingdom & kingdom, const MP2::MapObjectType objectType, const int32_t tileIndex );
+    // Returns true if the AI has some benefit of visiting this object under any circumstances.
+    bool isValuableAdventureMapObject( const Kingdom & kingdom, const MP2::MapObjectType objectType, const int32_t tileIndex );
 }

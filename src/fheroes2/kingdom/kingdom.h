@@ -210,8 +210,6 @@ public:
     bool isVisited( const Maps::Tile & ) const;
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObjectForAI( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const;
-
     bool opponentsCanRecruitMoreHeroes() const;
     bool opponentsHaveHeroes() const;
 
@@ -237,8 +235,6 @@ public:
     // Checks whether this tile is visible to any hero who has an artifact with the VIEW_MONSTER_INFORMATION
     // bonus (for example, a Crystal Ball)
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
-
-    bool isFriends( const PlayerColor color ) const;
 
     static uint32_t GetMaxHeroes();
 

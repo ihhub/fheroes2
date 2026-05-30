@@ -729,13 +729,9 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         }
 
         MP2::MapObjectType objectType = tile.getMainObjectType();
-        if ( !MP2::isInGameActionObject( objectType ) ) {
-            continue;
-        }
-
         // Remove useless objects for AI heroes as they bring no value.
         // It is good to exclude them here to avoid unnecessary calculations.
-        if ( isUselessActionObject( kingdom, objectType, idx ) ) {
+        if ( !isValuableAdventureMapObject( kingdom, objectType, idx ) ) {
             continue;
         }
 

@@ -421,39 +421,6 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
         visit_object.emplace_front( index, objectType );
 }
 
-bool Kingdom::isValidKingdomObjectForAI( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const
-{
-    if ( !MP2::isInGameActionObject( objectType ) ) {
-        return false;
-    }
-
-    if ( isVisited( tile.GetIndex(), objectType ) ) {
-        return false;
-    }
-
-    // Check castle first to ignore guest hero (tile with both Castle and Hero)
-    if ( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE ) {
-        const PlayerColor tileColor = getColorFromTile( tile );
-
-        // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
-        return _color == tileColor || !Players::isFriends( _color, static_cast<PlayerColorsSet>( tileColor ) );
-    }
-
-    // Hero object can overlay other objects when standing on top of it: force check with getMainObjectType( true )
-    if ( objectType == MP2::OBJ_HERO ) {
-        const Heroes * hero = tile.getHero();
-
-        // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
-        return hero && ( _color == hero->GetColor() || !Players::isFriends( _color, static_cast<PlayerColorsSet>( hero->GetColor() ) ) );
-    }
-
-    if ( MP2::isCaptureObject( objectType ) ) {
-        return !Players::isFriends( _color, static_cast<PlayerColorsSet>( getColorFromTile( tile ) ) );
-    }
-
-    return true;
-}
-
 bool Kingdom::opponentsCanRecruitMoreHeroes() const
 {
     for ( const PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
@@ -897,11 +864,6 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     }
 
     return false;
-}
-
-bool Kingdom::isFriends( const PlayerColor color ) const
-{
-    return ( Color::allPlayerColors() & color ) && ( _color == color || Players::isFriends( _color, static_cast<PlayerColorsSet>( color ) ) );
 }
 
 Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
