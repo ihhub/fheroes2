@@ -537,18 +537,6 @@ const Recruits & Kingdom::GetRecruits()
     return recruits;
 }
 
-void Kingdom::SetVisitTravelersTent( const int barrierColor )
-{
-    // visited_tents_color is a bitfield
-    _visitedTentsColors |= ( 1 << barrierColor );
-}
-
-bool Kingdom::IsVisitTravelersTent( const int barrierColor ) const
-{
-    // visited_tents_color is a bitfield
-    return ( _visitedTentsColors & ( 1 << barrierColor ) ) != 0;
-}
-
 bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
     return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
@@ -913,6 +901,11 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
     }
 
     return false;
+}
+
+bool Kingdom::isFriends( const PlayerColor color ) const
+{
+    return ( Color::allPlayerColors() & color ) && ( _color == color || Players::isFriends( _color, static_cast<PlayerColorsSet>( color ) ) );
 }
 
 Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const

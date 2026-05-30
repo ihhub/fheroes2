@@ -79,5 +79,5 @@ namespace AI
     bool isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const Heroes & hero );
 
     // Returns true if the AI has no benefit of visiting this object under any circumstances.
-    bool isUselessActionObject( const MP2::MapObjectType objectType );
+    bool isUselessActionObject( const Kingdom & kingdom, const MP2::MapObjectType objectType, const int32_t tileIndex );
 }

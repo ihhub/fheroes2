@@ -735,7 +735,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         // Remove useless objects for AI heroes as they bring no value.
         // It is good to exclude them here to avoid unnecessary calculations.
-        if ( isUselessActionObject( objectType ) ) {
+        if ( isUselessActionObject( kingdom, objectType, idx ) ) {
             continue;
         }
 

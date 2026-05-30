@@ -418,10 +418,10 @@ namespace
             return !kingdom.isVisited( tile );
 
         case MP2::OBJ_BARRIER:
-            return kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_TRAVELLER_TENT:
-            return !kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return !kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:

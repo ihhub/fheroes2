@@ -186,7 +186,7 @@ namespace
 
         // AI may have the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER ) {
-            return world.GetKingdom( color ).IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return world.GetKingdom( color ).isTravellerTentVisited( getBarrierColorFromTile( tile ) );
         }
 
         // AI can use boats to overcome water obstacles
@@ -1174,15 +1174,14 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     std::set<int> uniqueIndices;
 
     const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( const int index ) {
-        const auto & tile = world.getTile( index );
-
         // std::set insert returns a pair, second value is true if it was unique.
         if ( !uniqueIndices.insert( index ).second ) {
             return;
         }
 
+        const auto & tile = world.getTile( index );
         const MP2::MapObjectType objectType = tile.getMainObjectType();
-        if ( AI::isUselessActionObject( objectType ) ) {
+        if ( AI::isUselessActionObject( kingdom, objectType, index ) ) {
             return;
         }
 

@@ -374,7 +374,7 @@ namespace
         const int32_t barrierColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getBarrierColorName( barrierColor ) );
 
-        if ( kingdom.IsVisitTravelersTent( barrierColor ) ) {
+        if ( kingdom.isTravellerTentVisited( barrierColor ) ) {
             str.append( "\n\n" );
             str.append( _( "(tent visited)" ) );
         }
@@ -388,7 +388,7 @@ namespace
         const int32_t tentColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
-        if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
+        if ( kingdom.isTravellerTentVisited( tentColor ) ) {
             str.append( "\n\n" );
             str.append( _( "(already visited)" ) );
         }
