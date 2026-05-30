@@ -749,7 +749,7 @@ namespace
         case MP2::OBJ_TRADING_POST:
             return false;
 
-        // The below objects must never being analyzed.
+        // The following objects must never be analyzed.
         // AI should never consider a boat as a destination point. It uses them only to make a path.
         case MP2::OBJ_BOAT:
         // Eye of Magi is not an action object at all.
