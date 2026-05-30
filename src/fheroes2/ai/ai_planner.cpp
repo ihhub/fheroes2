@@ -177,7 +177,7 @@ void AI::Planner::updateMapActionObjectCache( const Kingdom & kingdom, const int
     const MP2::MapObjectType objectType = world.getTile( mapIndex ).getMainObjectType();
 
     if ( !isValuableAdventureMapObject( kingdom, objectType, mapIndex ) ) {
-         _mapActionObjects.erase( mapIndex );
+        _mapActionObjects.erase( mapIndex );
 
         return;
     }
