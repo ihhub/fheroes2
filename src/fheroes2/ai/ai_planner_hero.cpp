@@ -2905,8 +2905,9 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( hero.GetKingdom(), formerBoatIdx );
-    updateMapActionObjectCache( hero.GetKingdom(), nextTileIdx );
+    const auto & kingdom = hero.GetKingdom();
+    updateMapActionObjectCache( kingdom, formerBoatIdx );
+    updateMapActionObjectCache( kingdom, nextTileIdx );
 }
 
 void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
@@ -3007,8 +3008,9 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( hero.GetKingdom(), formerBoatIdx );
-    updateMapActionObjectCache( hero.GetKingdom(), nextTileIdx );
+    const auto & kingdom = hero.GetKingdom();
+    updateMapActionObjectCache( kingdom, formerBoatIdx );
+    updateMapActionObjectCache( kingdom, nextTileIdx );
 }
 
 bool AI::Planner::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
@@ -3167,8 +3169,9 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
                     assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
 
-                    updateMapActionObjectCache( bestHero->GetKingdom(), prevHeroPosition );
-                    updateMapActionObjectCache( bestHero->GetKingdom(), bestHero->GetIndex() );
+                    const auto & kingdom = bestHero->GetKingdom();
+                    updateMapActionObjectCache( kingdom, prevHeroPosition );
+                    updateMapActionObjectCache( kingdom, bestHero->GetIndex() );
 
                     prevHeroPosition = bestHero->GetIndex();
                 }
@@ -3196,12 +3199,13 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
         }
 
         if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {
+            const auto & kingdom = bestHero->GetKingdom();
             // The hero died or moved to another position. We have to update the action object cache.
-            updateMapActionObjectCache( bestHero->GetKingdom(), prevHeroPosition );
+            updateMapActionObjectCache( kingdom, prevHeroPosition );
 
             if ( bestHero->isActive() ) {
                 // Hero moved to another position and is still alive.
-                updateMapActionObjectCache( bestHero->GetKingdom(), bestHero->GetIndex() );
+                updateMapActionObjectCache( kingdom, bestHero->GetIndex() );
             }
         }
 
