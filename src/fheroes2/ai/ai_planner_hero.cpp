@@ -350,7 +350,7 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
         case MP2::OBJ_MAGELLANS_MAPS:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
+            return !kingdom.isVisited( objectType ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
@@ -415,7 +415,7 @@ namespace
         }
 
         case MP2::OBJ_OBELISK:
-            return !kingdom.isVisited( tile );
+            return !kingdom.isVisited( index, objectType );
 
         case MP2::OBJ_BARRIER:
             return kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) );
@@ -442,7 +442,7 @@ namespace
                 return false;
             }
 
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+            if ( !kingdom.isVisited( index, objectType ) ) {
                 // This shrine has not been visited by any hero. It's worth to do it.
                 return true;
             }
@@ -480,7 +480,7 @@ namespace
                 return false;
             }
 
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+            if ( !kingdom.isVisited( index, objectType ) ) {
                 // The AI heroes should not have prior knowledge what skill this object has.
                 return true;
             }
@@ -668,14 +668,14 @@ namespace
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+            if ( !kingdom.isVisited( index, objectType ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && isHeroStrongerThan( tile, ai, heroArmyStrength, 2 );
             }
             break;
 
         case MP2::OBJ_PYRAMID:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+            if ( !kingdom.isVisited( index, objectType ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
                        && isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
@@ -728,7 +728,7 @@ namespace
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUT_OF_MAGI:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
+            return !kingdom.isVisited( objectType ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
 
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
