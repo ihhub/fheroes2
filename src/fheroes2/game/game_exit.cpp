@@ -20,9 +20,6 @@
 
 #include "game_exit.h"
 
-#include <cassert>
-#include <string>
-
 #include "dialog.h"
 #include "game_mode.h"
 #include "translations.h"

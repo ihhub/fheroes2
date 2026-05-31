@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include <cstdint>
-
 namespace fheroes2
 {
     enum class GameMode : int;
