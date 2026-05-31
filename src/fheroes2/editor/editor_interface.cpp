@@ -50,7 +50,6 @@
 #include "editor_sphinx_window.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
 #include "ground.h"
