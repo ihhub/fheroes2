@@ -233,7 +233,7 @@ namespace AI
         bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
                                 const bool moreTasksForHeroes );
 
-        void updateMapActionObjectCache( const int mapIndex );
+        void updateMapActionObjectCache( const Kingdom & kingdom, const int mapIndex );
 
         std::set<int> findCastlesInDanger( const Kingdom & kingdom );
 
