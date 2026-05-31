@@ -215,8 +215,8 @@ bool Difficulty::isAIStrategicPlanningLimited( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-    case Difficulty::NORMAL:
         return true;
+    case Difficulty::NORMAL:
     case Difficulty::HARD:
     case Difficulty::EXPERT:
     case Difficulty::IMPOSSIBLE:

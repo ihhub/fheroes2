@@ -982,7 +982,7 @@ namespace
         return 1.0;
     }
 
-    double scaleWithDistanceAndTime( const double value, const uint32_t distance, const MP2::MapObjectType objectType, bool limitDistanceEvaluation )
+    double scaleWithDistanceAndTime( const double value, const uint32_t distance, const MP2::MapObjectType objectType, const bool limitDistanceEvaluation )
     {
         if ( distance == 0 ) {
             return value;
@@ -998,7 +998,7 @@ namespace
 
         // We scale non-linearly (more value lost as distance increases)
         // Force quadratic growth on easier game difficulties instead of logarithmic one to confine AI
-        const double modifier = ( limitDistanceEvaluation ) ? correctedDistance : std::log10( correctedDistance );
+        const double modifier = limitDistanceEvaluation ? correctedDistance : std::log10( correctedDistance );
 
         return value - ( correctedDistance * modifier );
     }
