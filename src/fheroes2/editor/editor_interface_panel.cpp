@@ -721,8 +721,9 @@ namespace Interface
                 if ( type >= static_cast<int32_t>( townObjects.size() ) ) {
                     type = 0;
                     ++color;
-                    if ( color >= Color::GetIndex( PlayerColor::UNUSED ) ) {
-                        color = Color::GetIndex( PlayerColor::NONE );
+                    // The neutral color (NONE) goes after the player colors so the total castles colors count is (player colors + 1).
+                    if ( color > Color::Count( Color::allPlayerColors() ) ) {
+                        color = 0;
                     }
                 }
 
@@ -777,7 +778,8 @@ namespace Interface
                     type = static_cast<int32_t>( townObjects.size() ) - 1;
                     --color;
                     if ( color < 0 ) {
-                        color = Color::GetIndex( PlayerColor::UNUSED ) - 1;
+                        // The neutral color (NONE) goes after the player colors and its index is equal to the count of player colors.
+                        color = Color::Count( Color::allPlayerColors() );
                     }
                 }
 
