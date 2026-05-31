@@ -29,13 +29,5 @@ namespace fheroes2
 
 namespace Game
 {
-    enum class ExitContext : uint8_t
-    {
-        GAME,
-
-        // Exiting from the map editor. Warn user about unsaved changes
-        EDITOR,
-    };
-
-    fheroes2::GameMode processExitEvent( const ExitContext context = ExitContext::GAME );
+    fheroes2::GameMode processExitEvent();
 }

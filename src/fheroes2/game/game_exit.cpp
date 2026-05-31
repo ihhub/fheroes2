@@ -30,30 +30,13 @@
 
 namespace Game
 {
-    fheroes2::GameMode processExitEvent( const ExitContext context /* = ExitContext::GAME */ )
+    fheroes2::GameMode processExitEvent()
     {
 #if defined( __IPHONEOS__ )
         // iOS discourages to exit a running application.
         fheroes2::showStandardTextMessage( _( "Quit" ), _( "To exit fheroes2, press the Home button or swipe up." ), Dialog::OK );
 #else
-        std::string message;
-
-        switch ( context ) {
-        case ExitContext::GAME:
-            message = _( "Are you sure you want to quit?" );
-            break;
-
-        case ExitContext::EDITOR:
-            message = _( "Are you sure you want to quit? (Any unsaved changes to the current map will be lost.)" );
-            break;
-
-        default:
-            // Have you added a new ExitContext enum? Update the logic above!
-            assert( 0 );
-            break;
-        }
-
-        if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), message, Dialog::YES | Dialog::NO ) ) {
+        if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) ) {
             return fheroes2::GameMode::QUIT_GAME;
         }
 #endif
