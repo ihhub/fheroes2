@@ -37,6 +37,39 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2026-05-17" version="v1.1.16">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.16</url>
+      <description>
+        <p>Changes in v1.1.16 (17 May 2026):</p>
+        <ul>
+          <li>update the Brazilian Portuguese translation</li>
+          <li>update the Russian translation</li>
+          <li>update the Polish translation</li>
+          <li>update castle mound after new terrain being placed in the Editor</li>
+          <li>fix missing tile passability update while removing objects in the Editor</li>
+          <li>allow to select certain artifacts to be buried as Ultimate Artifact in the Editor</li>
+          <li>fix the first editing of the hero when cancelling in the Editor</li>
+          <li>expand detail mode in the Editor to support editing, moving and copying brushes</li>
+          <li>add separate hotkeys to merge troops in castle</li>
+          <li>display all maps, even duplicates for both the game and the Editor</li>
+          <li>sort maps alphabetically by file name in the Editor</li>
+          <li>make hero turning animation depend on the animation speed</li>
+          <li>reduce application resources usage for object update actions in the Editor</li>
+          <li>make Eraser tool in the Editor more granular</li>
+          <li>fix castle entrance road update on placing/erasing a castle in the Editor</li>
+          <li>speed up eraser functionality in case of no objects to be erased in the Editor</li>
+          <li>add a popup dialog to confirm unsaved changes for hero in the Editor</li>
+          <li>allow placement of non-action objects over the edges of the map in the Editor</li>
+          <li>add ability to move an object in the Editor</li>
+          <li>update the Ukrainian translation</li>
+          <li>add drag-to-draw ability to Roads and Streams in the Editor</li>
+          <li>add a confirmation window while exiting castle's window in the Editor</li>
+          <li>add application exiting logic for the Editor's Main Menu</li>
+          <li>reduce the application startup time</li>
+          <li>add Esperanto translation</li>
+        </ul>
+      </description>
+    </release>
     <release date="2026-04-12" version="v1.1.15">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.15</url>
       <description>

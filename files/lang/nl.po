@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -4447,6 +4447,9 @@ msgstr ""
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
+msgid "The same object exists on the tile."
+msgstr ""
+
 #, fuzzy
 msgid "The map is corrupted."
 msgstr "Het spiegelbeeld wordt gecreëerd."
@@ -4488,14 +4491,6 @@ msgid ""
 "select another monster."
 msgstr "Selecteer een andere held."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr ""
 
@@ -4534,6 +4529,15 @@ msgid "Heroes"
 msgstr ""
 
 msgid "Towns"
+msgstr ""
+
+msgid "editorDetailMode|Edit"
+msgstr ""
+
+msgid "editorDetailMode|Move"
+msgstr ""
+
+msgid "editorDetailMode|Copy"
 msgstr ""
 
 #, fuzzy
@@ -4613,6 +4617,15 @@ msgid "Traversable only by boat."
 msgstr ""
 
 msgid "No special modifiers."
+msgstr ""
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
 msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
@@ -5813,6 +5826,13 @@ msgstr ""
 
 msgid "hotkey|buy all monsters in well"
 msgstr ""
+
+msgid "hotkey|merge troops with hero"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Systeem instellingen aanpassen"
 
 msgid "hotkey|split stack by half"
 msgstr ""

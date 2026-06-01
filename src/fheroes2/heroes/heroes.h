@@ -700,6 +700,11 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
+    void setAlphaValue( const uint8_t alphaValue )
+    {
+        _alphaValue = alphaValue;
+    }
+
     double getAIMinimumJoiningArmyStrength() const;
 
     uint32_t getDailyRestoredSpellPoints() const;
@@ -804,6 +809,9 @@ private:
 
     // This value should NOT be saved in save file as it's dynamically set during AI turn.
     Role _aiRole{ Role::HUNTER };
+
+    // Used to freeze the rotation animation for N frames to match the rotation animation with movement speed.
+    int8_t _skippedFramesForAngleStep{ 0 };
 };
 
 struct VecHeroes final : public std::vector<Heroes *>

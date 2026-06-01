@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -478,7 +478,7 @@ CastleDialog::BuildingsRenderQueue::BuildingsRenderQueue( const Castle & castle,
 
 bool CastleDialog::FadeBuilding::updateFadeAlpha()
 {
-    if ( _alpha < 255 && Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
+    if ( _alpha < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_BUILD_DELAY ) ) {
         if ( _alpha < 255 - 15 ) {
             _alpha += 15;
         }

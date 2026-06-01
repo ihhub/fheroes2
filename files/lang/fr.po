@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2025-11-08 13:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4640,6 +4640,9 @@ msgstr "Un seul ultime artéfact aléatoire peut être placé sur la carte."
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Un maximum de %{count} obélisques peuvent être placés sur la carte."
 
+msgid "The same object exists on the tile."
+msgstr ""
+
 msgid "The map is corrupted."
 msgstr "La carte est corrompue."
 
@@ -4681,14 +4684,6 @@ msgstr ""
 "Cliquez ici pour\n"
 "sélectionner un autre créature."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Effacer"
 
@@ -4727,6 +4722,18 @@ msgstr "Héros"
 
 msgid "Towns"
 msgstr "Villages"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Details"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Details"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Details"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4814,6 +4821,15 @@ msgstr "Traversable uniquement par bateau."
 
 msgid "No special modifiers."
 msgstr "Aucun modificateur particulier."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Effacement %{type}."
@@ -6063,6 +6079,14 @@ msgstr "Écran de construction"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "Enrôler toutes les créatures dans le puits"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Héros suivant"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Refaire la dernière action"
 
 msgid "hotkey|split stack by half"
 msgstr "Diviser la troupe en deux"

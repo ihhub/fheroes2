@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-27 23:52+0000\n"
+"POT-Creation-Date: 2026-05-07 14:55+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4536,6 +4536,10 @@ msgstr "Na mapě může být umístěn pouze jeden náhodný Ultimátní artefak
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
 
+#, fuzzy
+msgid "The same object exists on the tile."
+msgstr "Tato odpověď již existuje v seznamu."
+
 msgid "The map is corrupted."
 msgstr "Mapa je poškozena."
 
@@ -4577,14 +4581,6 @@ msgstr ""
 "Klikněte zde\n"
 "pro další jednotky."
 
-msgid ""
-"Click to edit\n"
-"\n"
-"or\n"
-"\n"
-"click and hold to move"
-msgstr ""
-
 msgid "Erase"
 msgstr "Vymazat"
 
@@ -4623,6 +4619,18 @@ msgstr "Hrdinové"
 
 msgid "Towns"
 msgstr "Města"
+
+#, fuzzy
+msgid "editorDetailMode|Edit"
+msgstr "Detailní ežim"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Detailní ežim"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Detailní ežim"
 
 #, fuzzy
 msgid "editorErasure|Mountains"
@@ -4708,6 +4716,15 @@ msgstr "Překonatelné pouze lodí."
 
 msgid "No special modifiers."
 msgstr "Žádné speciální modifikátory."
+
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Přepnout mazání objektů typu %{type}."
@@ -5919,6 +5936,14 @@ msgstr "Obrazovka výstavby"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "Koupit všechny jednotky ve studni"
+
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Následující hrdina"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Opakovat poslední akci"
 
 msgid "hotkey|split stack by half"
 msgstr "Rozdělit jednotku napůl"

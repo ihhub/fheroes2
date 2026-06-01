@@ -84,37 +84,6 @@ namespace
         Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
     }
 
-    fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
-    {
-        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            // TODO: make occupied area calculation for complex objects.
-            return { -2, -3, 5, 5 };
-        }
-
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
-            assert( 0 );
-            return { 0, 0, 1, 1 };
-        }
-
-        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
-        if ( offsets.size() < 2 ) {
-            return { 0, 0, 1, 1 };
-        }
-
-        fheroes2::Point minPos{ offsets.front() };
-        fheroes2::Point maxPos{ offsets.front() };
-
-        for ( const auto & offset : offsets ) {
-            minPos.x = std::min( minPos.x, offset.x );
-            minPos.y = std::min( minPos.y, offset.y );
-            maxPos.x = std::max( maxPos.x, offset.x );
-            maxPos.y = std::max( maxPos.y, offset.y );
-        }
-
-        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
-    }
-
     fheroes2::Image makeInstrumentPanelBackground( const int32_t width, const int32_t height )
     {
         fheroes2::Image background;
@@ -240,7 +209,7 @@ namespace Interface
             if ( objectType >= 0 ) {
                 const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
 
-                return getObjectOccupiedArea( objectGroup, objectType );
+                return EditorInterface::getObjectOccupiedArea( objectGroup, objectType );
             }
 
             return {};
@@ -415,6 +384,11 @@ namespace Interface
                                                offsetY + static_cast<int32_t>( i / 3 ) * buttonStepY, buttonWidth, buttonHeight };
         }
 
+        // Detail mode types.
+        for ( size_t i = 0; i < _detailModeButtonsRect.size(); ++i ) {
+            _detailModeButtonsRect[i] = { offsetX + static_cast<int32_t>( i ) * buttonStepX, offsetY, buttonWidth, buttonHeight };
+        }
+
         // Adventure objects buttons position.
         for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
             _adventureObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 2 ) * buttonStepX + ( i < 4 ? buttonHalfStepX : ( i < 6 ? 0 : buttonStepX * 2 ) ),
@@ -513,6 +487,15 @@ namespace Interface
             updateObjectTypeSelection( _selectedLandscapeObject, _landscapeObjectButtonsRect, _getLandscapeObjectTypeName,
                                        { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 80 }, display );
         }
+        else if ( _selectedInstrument == Instrument::DETAIL ) {
+            // Detail mode types.
+            for ( uint32_t i = 0; i < DetailBrushType::DETAIL_MODE_COUNT; ++i ) {
+                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 18 ), 0, 0, display, _detailModeButtonsRect[i] );
+            }
+
+            updateObjectTypeSelection( static_cast<int8_t>( _selectedDetailBrushType ), _detailModeButtonsRect, _getDetailModeTypeName,
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, display );
+        }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             // Adventure objects buttons.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
@@ -565,10 +548,6 @@ namespace Interface
                 text.set( _( "Click here to\nselect another monster." ), fheroes2::FontType::smallWhite() );
                 text.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 95, _rectInstrumentPanel.width - 10, display );
             }
-        }
-        else if ( _selectedInstrument == Instrument::DETAIL ) {
-            const fheroes2::Text instrumentName( _( "Click to edit\n\nor\n\nclick and hold to move" ), fheroes2::FontType::normalWhite() );
-            instrumentName.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
         }
         else if ( _selectedInstrument == Instrument::ROAD ) {
             const fheroes2::Text instrumentName( getObjectGroupName( Maps::ObjectGroup::ROADS ), fheroes2::FontType::normalWhite() );
@@ -776,6 +755,22 @@ namespace Interface
         return getObjectGroupName( _selectedLandscapeObjectGroup[brushId] );
     }
 
+    const char * EditorPanel::_getDetailModeTypeName( const uint8_t brushId )
+    {
+        switch ( brushId ) {
+        case DetailBrushType::EDITING:
+            return _( "editorDetailMode|Edit" );
+        case DetailBrushType::MOVING:
+            return _( "editorDetailMode|Move" );
+        case DetailBrushType::COPYING:
+            return _( "editorDetailMode|Copy" );
+        default:
+            break;
+        }
+
+        return "Unknown detail mode";
+    }
+
     const char * EditorPanel::_getAdventureObjectTypeName( const uint8_t brushId )
     {
         if ( brushId >= _selectedAdventureObjectGroup.size() ) {
@@ -964,6 +959,10 @@ namespace Interface
                         _redraw();
                         handleObjectMouseClick( Dialog::selectMonsterType );
                     }
+                    else if ( _selectedInstrument == Instrument::DETAIL ) {
+                        // Reset to Detail Editing mode.
+                        _selectedDetailBrushType = DetailBrushType::EDITING;
+                    }
 
                     setRedraw();
 
@@ -1103,6 +1102,39 @@ namespace Interface
             if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::LANDSCAPE_MISC] ) ) {
                 handleObjectMouseClick( Dialog::selectLandscapeMiscellaneousObjectType );
                 return res;
+            }
+        }
+        else if ( _selectedInstrument == Instrument::DETAIL ) {
+            for ( size_t i = 0; i < _detailModeButtonsRect.size(); ++i ) {
+                if ( ( _selectedDetailBrushType != static_cast<uint8_t>( i ) ) && le.isMouseLeftButtonPressedInArea( _detailModeButtonsRect[i] ) ) {
+                    _selectedDetailBrushType = static_cast<uint8_t>( i );
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    setRedraw();
+                    break;
+                }
+            }
+
+            for ( uint8_t brushId = DetailBrushType::EDITING; brushId < DetailBrushType::DETAIL_MODE_COUNT; ++brushId ) {
+                if ( le.isMouseRightButtonPressedInArea( _detailModeButtonsRect[brushId] ) ) {
+                    switch ( brushId ) {
+                    case DetailBrushType::EDITING:
+                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "Edit objects on the Adventure Map." ), Dialog::ZERO );
+                        break;
+                    case DetailBrushType::MOVING:
+                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "Move objects on the Adventure Map." ), Dialog::ZERO );
+                        break;
+                    case DetailBrushType::COPYING:
+                        fheroes2::showStandardTextMessage( _getDetailModeTypeName( brushId ), _( "Copy objects on the Adventure Map." ), Dialog::ZERO );
+                        break;
+                    default:
+                        assert( 0 );
+                        break;
+                    }
+                    break;
+                }
             }
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {

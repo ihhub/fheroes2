@@ -34,6 +34,7 @@
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "map_random_generator.h"
+#include "math_base.h"
 #include "timing.h"
 
 enum class PlayerColor : uint8_t;
@@ -78,6 +79,9 @@ namespace Interface
 
         void undoAction()
         {
+            // Movable object state must be reset if a user tries to do another action at the same time.
+            _resetMovableObjectInfo();
+
             if ( _historyManager.undo() ) {
                 _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
             }
@@ -85,6 +89,9 @@ namespace Interface
 
         void redoAction()
         {
+            // Movable object state must be reset if a user tries to do another action at the same time.
+            _resetMovableObjectInfo();
+
             if ( _historyManager.redo() ) {
                 _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
             }
@@ -109,6 +116,8 @@ namespace Interface
         void openMapSpecificationsDialog();
 
         bool updateRandomMapConfiguration( const int32_t mapWidth );
+
+        static fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType );
 
     private:
         class WarningMessage final
@@ -176,10 +185,14 @@ namespace Interface
 
         void _tryToMoveObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile );
 
+        void _tryToCopyObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile );
+
         void _validateObjectsOnTerrainUpdate();
 
         // Returns true if an existing object was moved on top.
         bool _tryToMoveObjectOnTop( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex );
+
+        const Maps::Map_Format::TileObjectInfo * _getSameObjectPresentOnTile( const int32_t tileIndex, const Maps::ObjectGroup groupType, int32_t objectIndex ) const;
 
         void _updateObjectMetadata( const Maps::Map_Format::TileObjectInfo & object, const uint32_t newObjectUID );
 

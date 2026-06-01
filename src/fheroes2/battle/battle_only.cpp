@@ -171,6 +171,9 @@ namespace
         if ( terrainType == Maps::Ground::UNKNOWN ) {
             fheroes2::ApplyPalette( output, offset.x + 1, offset.y + 1, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height,
                                     PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+            const fheroes2::Text unknownTerrainText{ "?", fheroes2::FontType::normalYellow() };
+            unknownTerrainText.draw( offset.x + terrainIconSize.width / 2 - 4, offset.y + terrainIconSize.height / 2 - 5, output );
         }
     }
 
