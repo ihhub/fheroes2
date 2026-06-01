@@ -112,3 +112,7 @@ target_link_libraries(
 	engine
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}main
 	)
+
+if(PS2)
+	set(CMAKE_EXECUTABLE_SUFFIX .elf)
+endif()

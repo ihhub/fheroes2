@@ -55,6 +55,9 @@ target_link_libraries(
 	xmp
 	modplug
 	atomic
+	ogg
+	opus 
+	opusfile
 	)
 else()
 target_link_libraries(

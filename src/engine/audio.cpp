@@ -66,7 +66,7 @@ namespace
 {
     struct AudioSpec
     {
-#if defined( TARGET_PS_VITA )
+#if defined( TARGET_PS_VITA ) || defined(__PS2__)
         // Notice: The PS Vita sound resampler is CPU intensive if the value is not 22050.
         int frequency = 22050;
 #else

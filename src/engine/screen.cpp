@@ -942,6 +942,10 @@ namespace
             // Nintendo Switch supports arbitrary resolutions via the HW scaler
             // 848x480 is the smallest resolution supported by fheroes2
             resolutionSet.emplace( 848, 480 );
+#elif defined(__PS2__)
+            // Nintendo Switch supports arbitrary resolutions via the HW scaler
+            // 848x480 is the smallest resolution supported by fheroes2
+            resolutionSet.emplace( 640, 480 );
 #endif
             resolutionSet = FilterResolutions( resolutionSet );
 
@@ -1255,7 +1259,7 @@ namespace
                 ERROR_LOG( "Failed to get the number of render drivers. The error value: " << driverCount << ", description: " << SDL_GetError() )
             }
 
-            _surface = SDL_CreateRGBSurface( 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
+            _surface = SDL_CreateRGBSurfaceWithFormat( 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, isPaletteModeSupported ? 8 : 32, SDL_PIXELFORMAT_ABGR8888);
             if ( _surface == nullptr ) {
                 ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
                 clear();
@@ -1303,7 +1307,7 @@ namespace
             }
 
 #ifdef __PS2__
-            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_ARGB8888 , SDL_TEXTUREACCESS_STREAMING, resolutionInfo.gameWidth, resolutionInfo.gameHeight );
+            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, resolutionInfo.gameWidth, resolutionInfo.gameHeight );
 #else
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
 #endif
@@ -1331,6 +1335,7 @@ namespace
                 return;
 
             generatePalette( colorIds, _surface );
+            
             if ( _surface->format->BitsPerPixel == 8 ) {
                 const int returnCode = SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
                 if ( returnCode < 0 ) {
@@ -1341,7 +1346,11 @@ namespace
 
         bool isMouseCursorActive() const override
         {
+#ifdef __PS2__
+            return true;
+#else
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
+#endif
         }
 
         void _createPalette()
@@ -1405,6 +1414,9 @@ namespace
 
 #if !SDL_VERSION_ATLEAST( 2, 0, 18 )
 #error SDL_RenderSetVSync() is only supported since SDL 2.0.18
+#endif
+#ifdef __PS2__
+            SDL_SetHint(SDL_HINT_PS2_DYNAMIC_VSYNC, "1");
 #endif
 
             if ( const int returnCode = SDL_RenderSetVSync( _renderer, _isVSyncEnabled ? SDL_ENABLE : SDL_DISABLE ); returnCode != 0 ) {
@@ -1524,8 +1536,8 @@ namespace fheroes2
             Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
             if ( _cursor->_keepInScreenArea ) {
-                cursorROI.x = std::clamp( cursorROI.x, (int32_t)0, width() - cursorROI.width );
-                cursorROI.y = std::clamp( cursorROI.y, (int32_t)0, height() - cursorROI.height );
+                cursorROI.x = std::clamp<int32_t>( cursorROI.x, 0, width() - cursorROI.width );
+                cursorROI.y = std::clamp<int32_t>( cursorROI.y, 0, height() - cursorROI.height );
             }
 
             const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );

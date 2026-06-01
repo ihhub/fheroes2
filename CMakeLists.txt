@@ -60,7 +60,9 @@ set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL2)
 #
 find_package(${USE_SDL_VERSION} REQUIRED)
 find_package(${USE_SDL_VERSION}_mixer REQUIRED)
+if(NOT PS2)
 find_package(ZLIB REQUIRED)
+endif()
 find_package(Threads)
 
 if(ENABLE_IMAGE)
