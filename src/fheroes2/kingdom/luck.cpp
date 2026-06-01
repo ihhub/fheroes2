@@ -52,6 +52,30 @@ std::string Luck::String( int luck )
     return "Unknown";
 }
 
+std::string Luck::Percent( int luck )
+{
+    switch ( luck ) {
+    case Luck::CURSED:
+        return _( "luck|25%" );
+    case Luck::AWFUL:
+        return _( "luck|16.7%" );
+    case Luck::BAD:
+        return _( "luck|8.3%" );
+    case Luck::NORMAL:
+        return _( "luck|0%" );
+    case Luck::GOOD:
+        return _( "luck|4.2%" );
+    case Luck::GREAT:
+        return _( "luck|8.3%" );
+    case Luck::IRISH:
+        return _( "luck|12.5%" );
+    default:
+        break;
+    }
+
+    return "Unknown";
+}
+
 std::string Luck::Description( int luck )
 {
     std::string msg;
@@ -60,7 +84,7 @@ std::string Luck::Description( int luck )
     case Luck::CURSED:
     case Luck::AWFUL:
     case Luck::BAD:
-        msg = _( "%{luck-type} luck sometimes falls on the hero's units in combat, causing their attacks to only do half damage." );
+        msg = _( "%{luck-type} luck sometimes falls on the hero's units in combat, causing their attacks to only do half damage. \nChance: %{luck-percent}" );
         break;
     case Luck::NORMAL:
         msg = _( "%{luck-type} luck means the hero's units will never get lucky or unlucky attacks on the enemy." );
@@ -68,13 +92,14 @@ std::string Luck::Description( int luck )
     case Luck::GOOD:
     case Luck::GREAT:
     case Luck::IRISH:
-        msg = _( "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double strength) in combat." );
+        msg = _( "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double strength) in combat. \nChance: %{luck-percent}" );
         break;
     default:
         return "Unknown";
     }
 
     StringReplace( msg, "%{luck-type}", Luck::String( luck ) );
+    StringReplace( msg, "%{luck-percent}", Luck::Percent( luck ) );
     return msg;
 }
 
