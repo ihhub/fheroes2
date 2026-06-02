@@ -35,24 +35,34 @@ namespace fheroes2
     public:
         static AutoGameplay & instance();
 
-        void setMaxDaysInGameplay( const uint32_t days )
+        void setMaxDaysInGameplay( const int32_t days )
         {
             _maxDaysInGameplay = days;
         }
 
-        uint32_t getMaxDaysInGameplay() const
+        int32_t getMaxDaysInGameplay() const
         {
             return _maxDaysInGameplay;
         }
 
         void setMovementSpeed( const int32_t speed )
         {
-            _movementSpeed = std::clamp( speed, 0, 10 );
+            _movementSpeed = std::clamp( speed, 1, 10 );
         }
 
         int32_t getMovementSpeed() const
         {
             return _movementSpeed;
+        }
+
+        void setMaxRounds( const int32_t roundLimit )
+        {
+            _maxRounds = std::clamp( roundLimit, 1, 100 );
+        }
+
+        int32_t getMaxRounds() const
+        {
+            return _maxRounds;
         }
 
         struct PlayerInfo final
@@ -144,7 +154,9 @@ namespace fheroes2
 
         int32_t _roundId{ 0 };
 
-        uint32_t _maxDaysInGameplay{ 365 };
+        int32_t _maxRounds{ 1 };
+
+        int32_t _maxDaysInGameplay{ 365 };
 
         int32_t _movementSpeed{ 10 };
 

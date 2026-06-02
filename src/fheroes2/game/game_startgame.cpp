@@ -793,7 +793,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         if ( isAutoGameplay ) {
             fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
-            if ( world.CountDay() > autoGameplay.getMaxDaysInGameplay() ) {
+            if ( static_cast<int32_t>( world.CountDay() ) > autoGameplay.getMaxDaysInGameplay() ) {
                 autoGameplay.markTimeLimit();
                 res = fheroes2::GameMode::MAIN_MENU;
                 break;

@@ -37,14 +37,22 @@ namespace fheroes2
         fheroes2::Display & display = fheroes2::Display::instance();
         const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
         const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpostIcnId, 1 );
-        fheroes2::Blit( bar, display, position.x, position.y );
-
+        // The original slider is 230 pixels wide with the active slider area of 187.
         constexpr int32_t buttonWidth{ 15 };
+
+        constexpr int32_t leftOffset{ 24 };
+        constexpr int32_t rightOffset{ 19 };
+        const int32_t leftSliderArea{ leftOffset + width / 2 };
+        const int32_t rightSliderArea{ rightOffset + width -  width / 2 };
+
+        fheroes2::Blit( bar, 0, 0, display, position.x, position.y, leftSliderArea, bar.height() );
+        fheroes2::Blit( bar, bar.width() - rightSliderArea, 0, display, position.x + leftSliderArea, position.y, rightSliderArea, bar.height() );
+
         _buttonLeft.setPosition( position.x + 6, position.y + 1 );
         _buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
         _buttonLeft.subscribe( &_timedButtonLeft );
         _buttonLeft.draw( display );
-        _buttonRight.setPosition( position.x + bar.width() - buttonWidth, position.y + 1 );
+        _buttonRight.setPosition( position.x + leftOffset + width + rightOffset - buttonWidth, position.y + 1 );
         _buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
         _buttonRight.subscribe( &_timedButtonRight );
         _buttonRight.draw( display );
@@ -53,7 +61,7 @@ namespace fheroes2
         const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, width, 1, static_cast<int32_t>( maxIndex + 1 ),
                                                                                    { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
         _scrollbar.setImage( scrollbarSlider );
-        _scrollbar.setArea( { position.x + buttonWidth + 9, position.y + 3, width, 11 } );
+        _scrollbar.setArea( { position.x + leftOffset, position.y + 3, width, 11 } );
         _scrollbar.setRange( minIndex, maxIndex );
         _scrollbar.moveToIndex( currentIndex );
 

@@ -34,12 +34,40 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_slider.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
 
 namespace
 {
+    constexpr int32_t roundLimit{ 100 };
+    constexpr int32_t dayLimit{ 1000 };
+    constexpr int32_t speedLimit{ 10 };
+
+    constexpr int32_t sliderWidth{ 150 };
+
+    class TextRestorer final
+    {
+    public:
+        TextRestorer( fheroes2::Image & output, const int32_t positionX, const int32_t positionY )
+            : _restorer( output, positionX, positionY, 150, 40 )
+        {
+            // Do nothing.
+        }
+
+        void render( std::string content, fheroes2::Image & output )
+        {
+            const fheroes2::Rect & roi = _restorer.rect();
+            _restorer.restore();
+            const fheroes2::Text text{ std::move( content ), fheroes2::FontType::normalYellow() };
+            text.draw( roi.x, roi.y + 2, output );
+        }
+
+    private:
+        fheroes2::ImageRestorer _restorer;
+    };
+
     bool loadMap()
     {
         auto & conf = Settings::Get();
@@ -111,7 +139,7 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        StandardWindow window( 400, 200, true, display );
+        StandardWindow window( 500, 300, true, display );
         const Rect activeArea( window.activeArea() );
 
         const Settings & conf = Settings::Get();
@@ -127,6 +155,37 @@ namespace fheroes2
         Text text( _( "Auto map testing" ), FontType::normalWhite() );
         text.fitToOneRow( titleTextRoi.width );
         text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
+
+        fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
+
+        constexpr int32_t optionTextMaxWidth{ 200 };
+        const int32_t positionX = activeArea.x + 10;
+        const int32_t inputPositionX = positionX + optionTextMaxWidth;
+        const int32_t valuePositionX = inputPositionX + sliderWidth + 55;
+        const int32_t ySpacing = 45;
+        int32_t positionY = activeArea.y + 70;
+
+        text.set( _( "auto|Round count:" ), FontType::normalWhite() );
+        text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
+        fheroes2::HorizontalSlider roundCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, roundLimit, autoGameplay.getMaxRounds() };
+        TextRestorer roundCountValue{ display, valuePositionX, positionY };
+        roundCountValue.render( std::to_string( autoGameplay.getMaxRounds() ) + '/' + std::to_string( roundLimit ), display );
+
+        positionY += ySpacing;
+
+        text.set( _( "auto|Max days per game:" ), FontType::normalWhite() );
+        text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
+        fheroes2::HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, dayLimit, autoGameplay.getMaxDaysInGameplay() };
+        TextRestorer dayCountValue{ display, valuePositionX, positionY };
+        dayCountValue.render( std::to_string( autoGameplay.getMaxDaysInGameplay() ) + '/' + std::to_string( dayLimit ), display );
+
+        positionY += ySpacing;
+
+        text.set( _( "auto|Animation speed:" ), FontType::normalWhite() );
+        text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
+        fheroes2::HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, speedLimit, autoGameplay.getMovementSpeed() };
+        TextRestorer speedCountValue{ display, valuePositionX, positionY };
+        speedCountValue.render( std::to_string( autoGameplay.getMovementSpeed() ) + '/' + std::to_string( speedLimit ), display );
 
         Button buttonCancel;
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
@@ -150,6 +209,22 @@ namespace fheroes2
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || eventHandler.MouseClickLeft( buttonOk.area() ) ) {
                 runPlayTest( 1, 365 );
                 return true;
+            }
+
+            if ( roundCountSlider.processEvents( eventHandler ) ) {
+                autoGameplay.setMaxRounds( roundCountSlider.getCurrentValue() );
+                roundCountValue.render( std::to_string( roundCountSlider.getCurrentValue() ) + '/' + std::to_string( roundLimit ), display );
+                display.render( window.activeArea() );
+            }
+            else if ( dayCountSlider.processEvents( eventHandler ) ) {
+                autoGameplay.setMaxDaysInGameplay( dayCountSlider.getCurrentValue() );
+                dayCountValue.render( std::to_string( dayCountSlider.getCurrentValue() ) + '/' + std::to_string( dayLimit ), display );
+                display.render( window.activeArea() );
+            }
+            else if ( speedCountSlider.processEvents( eventHandler ) ) {
+                autoGameplay.setMovementSpeed( speedCountSlider.getCurrentValue() );
+                speedCountValue.render( std::to_string( speedCountSlider.getCurrentValue() ) + '/' + std::to_string( speedLimit ), display );
+                display.render( window.activeArea() );
             }
 
             if ( eventHandler.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
