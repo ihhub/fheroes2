@@ -173,24 +173,21 @@ namespace
 
         ++objectIndex;
         if ( static_cast<size_t>( objectIndex ) >= objectInfo.size() ) {
-            objectIndex = 0;
+            objectIndex = static_cast<int32_t>( objectInfo.size() ) - 1;
         }
 
         return true;
     }
 
-    bool setPreviousObjectInGroup( int & objectIndex, const Maps::ObjectGroup group )
+    bool setPreviousObjectInGroup( int & objectIndex )
     {
         if ( objectIndex < 0 ) {
             return false;
         }
 
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        assert( static_cast<size_t>( objectIndex ) < objectInfo.size() );
-
         --objectIndex;
         if ( objectIndex < 0 ) {
-            objectIndex = static_cast<int32_t>( objectInfo.size() ) - 1;
+            objectIndex = 0;
         }
 
         return true;
@@ -707,27 +704,18 @@ namespace Interface
 
             assert( static_cast<size_t>( _selectedKingdomObject ) < _selectedKingdomObjectType.size() );
             if ( _selectedKingdomObjectGroup[_selectedKingdomObject] == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                // Towns have special logic to handle their type as we store town's type and color.
-                int32_t type = -1;
-                int32_t color = -1;
-                getTownObjectProperties( getSelectedObjectType(), type, color );
-                if ( type < 0 || color < 0 ) {
+                if ( _selectedKingdomObjectType[_selectedKingdomObject] < 0 ) {
                     return false;
                 }
 
                 const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
 
-                ++type;
-                if ( type >= static_cast<int32_t>( townObjects.size() ) ) {
-                    type = 0;
-                    ++color;
-                    // The neutral color (NONE) goes after the player colors so the total castles colors count is (player colors + 1).
-                    if ( color > Color::Count( Color::allPlayerColors() ) ) {
-                        color = 0;
-                    }
-                }
+                ++_selectedKingdomObjectType[_selectedKingdomObject];
+                const int32_t objectCount{ static_cast<int32_t>( townObjects.size() ) * ( Color::Count( Color::allPlayerColors() ) + 1 ) };
 
-                _selectedKingdomObjectType[_selectedKingdomObject] = generateTownObjectProperties( type, color );
+                if ( _selectedKingdomObjectType[_selectedKingdomObject] >= objectCount ) {
+                    _selectedKingdomObjectType[_selectedKingdomObject] = objectCount - 1;
+                }
                 return true;
             }
 
@@ -741,53 +729,28 @@ namespace Interface
     {
         switch ( _selectedInstrument ) {
         case Instrument::MONSTERS:
-            return setPreviousObjectInGroup( _selectedMonsterType, Maps::ObjectGroup::MONSTERS );
+            return setPreviousObjectInGroup( _selectedMonsterType );
         case Instrument::LANDSCAPE_OBJECTS:
             if ( _selectedLandscapeObject < 0 ) {
                 return false;
             }
 
             assert( static_cast<size_t>( _selectedLandscapeObject ) < _selectedLandscapeObjectType.size() );
-            return setPreviousObjectInGroup( _selectedLandscapeObjectType[_selectedLandscapeObject], _selectedLandscapeObjectGroup[_selectedLandscapeObject] );
+            return setPreviousObjectInGroup( _selectedLandscapeObjectType[_selectedLandscapeObject] );
         case Instrument::ADVENTURE_OBJECTS:
             if ( _selectedAdventureObject < 0 ) {
                 return false;
             }
 
             assert( static_cast<size_t>( _selectedAdventureObject ) < _selectedAdventureObjectType.size() );
-            return setPreviousObjectInGroup( _selectedAdventureObjectType[_selectedAdventureObject], _selectedAdventureObjectGroup[_selectedAdventureObject] );
+            return setPreviousObjectInGroup( _selectedAdventureObjectType[_selectedAdventureObject] );
         case Instrument::KINGDOM_OBJECTS:
             if ( _selectedKingdomObject < 0 ) {
                 return false;
             }
 
             assert( static_cast<size_t>( _selectedKingdomObject ) < _selectedKingdomObjectType.size() );
-            if ( _selectedKingdomObjectGroup[_selectedKingdomObject] == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                // Towns have special logic to handle their type as we store town's type and color.
-                int32_t type = -1;
-                int32_t color = -1;
-                getTownObjectProperties( getSelectedObjectType(), type, color );
-                if ( type < 0 || color < 0 ) {
-                    return false;
-                }
-
-                const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-
-                --type;
-                if ( type < 0 ) {
-                    type = static_cast<int32_t>( townObjects.size() ) - 1;
-                    --color;
-                    if ( color < 0 ) {
-                        // The neutral color (NONE) goes after the player colors and its index is equal to the count of player colors.
-                        color = Color::Count( Color::allPlayerColors() );
-                    }
-                }
-
-                _selectedKingdomObjectType[_selectedKingdomObject] = generateTownObjectProperties( type, color );
-                return true;
-            }
-
-            return setPreviousObjectInGroup( _selectedKingdomObjectType[_selectedKingdomObject], _selectedKingdomObjectGroup[_selectedKingdomObject] );
+            return setPreviousObjectInGroup( _selectedKingdomObjectType[_selectedKingdomObject] );
         default:
             return false;
         }
