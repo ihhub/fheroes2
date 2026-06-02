@@ -275,10 +275,6 @@ namespace fheroes2
         }
 
         // Switch off AI auto control mode for all players.
-        for ( Player * player : conf.GetPlayers() ) {
-            if ( player != nullptr ) {
-                player->setAIAutoControlMode( false );
-            }
-        }
+        currentPlayer->setAIAutoControlMode( false );
     }
 }

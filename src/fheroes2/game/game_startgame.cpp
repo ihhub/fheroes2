@@ -798,20 +798,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 res = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
-
-            bool isInterrupted{ false };
-            for ( const Player * player : sortedPlayers ) {
-                if ( player->GetControl() & CONTROL_HUMAN ) {
-                    autoGameplay.interrupt( world.CountDay() );
-                    isInterrupted = true;
-                    break;
-                }
-            }
-
-            if ( isInterrupted ) {
-                res = fheroes2::GameMode::MAIN_MENU;
-                break;
-            }
         }
 
         res = fheroes2::GameMode::END_TURN;
@@ -942,6 +928,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                         Game::AutoSave();
                     }
 #endif
+                    if ( isAutoGameplay && kingdom.GetControl() != CONTROL_AI ) {
+                        fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
+                        autoGameplay.interrupt( world.CountDay() );
+                        res = fheroes2::GameMode::MAIN_MENU;
+                        break;
+                    }
 
                     break;
                 default:
