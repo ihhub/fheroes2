@@ -43,7 +43,7 @@ namespace fheroes2
         constexpr int32_t leftOffset{ 24 };
         constexpr int32_t rightOffset{ 19 };
         const int32_t leftSliderArea{ leftOffset + width / 2 };
-        const int32_t rightSliderArea{ rightOffset + width -  width / 2 };
+        const int32_t rightSliderArea{ rightOffset + width - width / 2 };
 
         fheroes2::Blit( bar, 0, 0, display, position.x, position.y, leftSliderArea, bar.height() );
         fheroes2::Blit( bar, bar.width() - rightSliderArea, 0, display, position.x + leftSliderArea, position.y, rightSliderArea, bar.height() );

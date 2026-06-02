@@ -267,8 +267,7 @@ namespace fheroes2
             return;
         }
 
-        if ( fheroes2::showStandardTextMessage( _( "Auto gameplay" ),
-                                                _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
+        if ( fheroes2::showStandardTextMessage( _( "Auto gameplay" ), _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
                                                 Dialog::YES | Dialog::NO )
              == Dialog::NO ) {
             return;
