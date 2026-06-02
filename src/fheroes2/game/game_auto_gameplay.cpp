@@ -85,17 +85,22 @@ namespace
         return world.loadResurrectionMap( mapInfo.filename );
     }
 
-    void runPlayTest( const uint32_t roundCount, const uint32_t daysInGameLimit )
+    void runPlayTest()
     {
-        assert( roundCount > 0 );
-        assert( daysInGameLimit > 0 );
-
         Settings & conf = Settings::Get();
         fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
-        autoGameplay.setMaxDaysInGameplay( daysInGameLimit );
         autoGameplay.reset( conf.GetPlayers().GetColors() );
 
-        for ( uint32_t roundId = 0; roundId < roundCount; ++roundId ) {
+        const int32_t currentAISpeed{ conf.AIMoveSpeed() };
+
+        if ( autoGameplay.getMovementSpeed() == 10 ) {
+            conf.SetAIMoveSpeed( 0 );
+        }
+        else {
+            conf.SetAIMoveSpeed( autoGameplay.getMovementSpeed() - 1 );
+        }
+
+        for ( int32_t roundId = 0; roundId < autoGameplay.getMaxRounds(); ++roundId ) {
             if ( !loadMap() ) {
                 fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to load the map." ), Dialog::ZERO );
                 return;
@@ -130,6 +135,9 @@ namespace
                 }
             }
         }
+
+        // Restore the original AI speed.
+        conf.SetAIMoveSpeed( currentAISpeed );
     }
 }
 
@@ -207,7 +215,7 @@ namespace fheroes2
             }
 
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || eventHandler.MouseClickLeft( buttonOk.area() ) ) {
-                runPlayTest( 1, 365 );
+                runPlayTest();
                 return true;
             }
 
