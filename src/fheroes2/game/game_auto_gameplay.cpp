@@ -168,4 +168,22 @@ namespace fheroes2
         static AutoGameplay gameplay;
         return gameplay;
     }
+
+    void interruptAutoGameplay()
+    {
+        Settings & conf = Settings::Get();
+        Player * currentPlayer = conf.GetPlayers().GetCurrent();
+        if ( currentPlayer != nullptr && currentPlayer->isAIAutoControlMode() ) {
+            if ( fheroes2::showStandardTextMessage( _( "Auto gameplay" ),
+                                                    _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
+                                                    Dialog::YES | Dialog::NO )
+                 == Dialog::YES ) {
+                for ( Player * player : conf.GetPlayers() ) {
+                    if ( player != nullptr ) {
+                        player->setAIAutoControlMode( false );
+                    }
+                }
+            }
+        }
+    }
 }

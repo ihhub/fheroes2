@@ -149,4 +149,6 @@ namespace fheroes2
 
         std::vector<std::vector<PlayerInfo>> _roundResults;
     };
+
+    void interruptAutoGameplay();
 }

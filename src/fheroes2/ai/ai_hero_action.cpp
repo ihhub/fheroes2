@@ -46,6 +46,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_auto_gameplay.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_mode.h"
@@ -77,10 +78,8 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_info.h"
-#include "translations.h"
 #include "visit.h"
 #include "world.h"
-#include "ui_dialog.h"
 
 namespace
 {
@@ -2286,19 +2285,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
         if ( isAutoGameplay && le.isMouseLeftButtonPressed() ) {
-            Player * currentPlayer = conf.GetPlayers().GetCurrent();
-            if ( currentPlayer != nullptr && currentPlayer->isAIAutoControlMode() ) {
-                if ( fheroes2::showStandardTextMessage( _( "Auto gameplay" ),
-                                                        _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
-                                                        Dialog::YES | Dialog::NO )
-                     == Dialog::YES ) {
-                    for ( Player * player : conf.GetPlayers() ) {
-                        if ( player != nullptr ) {
-                            player->setAIAutoControlMode( false );
-                        }
-                    }
-                }
-            }
+            fheroes2::interruptAutoGameplay();
         }
 
         if ( !hero.isActive() || !hero.isMoveEnabled() ) {
