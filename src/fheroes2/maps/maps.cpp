@@ -34,6 +34,7 @@
 #include "army.h"
 #include "color.h"
 #include "direction.h"
+#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -43,11 +44,9 @@
 #include "players.h"
 #include "race.h"
 #include "resource.h"
+#include "settings.h"
 #include "translations.h"
 #include "world.h"
-
-#include "settings.h"
-#include "game.h"
 
 namespace
 {

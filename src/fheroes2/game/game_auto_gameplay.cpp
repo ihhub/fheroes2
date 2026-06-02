@@ -20,11 +20,14 @@
 
 #include "game_auto_gameplay.h"
 
+#include <cassert>
+
 #include "agg_image.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "logging.h"
 #include "players.h"
 #include "screen.h"
 #include "settings.h"
@@ -34,10 +37,6 @@
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
-
-#include "logging.h"
-
-#include <cassert>
 
 namespace
 {

@@ -2137,10 +2137,9 @@ namespace Interface
                     continue;
                 }
                 
-                if ( fheroes2::
-                         showStandardTextMessage( _( "Start Map" ),
-                                                  _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
-                                                  Dialog::YES | Dialog::NO )
+                if ( fheroes2::showStandardTextMessage( _( "Start Map" ),
+                                                        _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
+                                                        Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
                     return fheroes2::GameMode::NEW_STANDARD;
                 }
@@ -3612,8 +3611,8 @@ namespace Interface
         }
 
         if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
-            fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
-                                               _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Unplayable Map" ), _( "This map is not playable. You need at least one human player for the map to be playable." ),
+                                               Dialog::OK );
             return false;
         }
 

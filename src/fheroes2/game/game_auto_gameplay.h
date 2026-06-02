@@ -31,7 +31,7 @@ namespace fheroes2
 
     class AutoGameplay final
     {
-    public:        
+    public:
         static AutoGameplay & instance();
 
         void setMaxDaysInGameplay( const uint32_t days )
