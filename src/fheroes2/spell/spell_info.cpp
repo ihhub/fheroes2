@@ -399,14 +399,10 @@ namespace fheroes2
 
                      // On original HoMM2 maps, neutral boats can only be summoned by human players
                      {
-#if defined( WITH_DEBUG )
                          const Player * player = Players::Get( heroColor );
                          assert( player != nullptr );
 
                          const bool isAIAutoControlMode = player->isAIAutoControlMode();
-#else
-                         const bool isAIAutoControlMode = false;
-#endif
 
                          return hero.isControlAI() && !isAIAutoControlMode;
                      }

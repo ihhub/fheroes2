@@ -51,13 +51,7 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
         return;
     }
 
-#ifndef NDEBUG
-#if defined( WITH_DEBUG )
     const bool isAIAutoControlMode = player->isAIAutoControlMode();
-#else
-    const bool isAIAutoControlMode = false;
-#endif // WITH_DEBUG
-#endif // !NDEBUG
 
     assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
 
@@ -102,13 +96,7 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
         return;
     }
 
-#ifndef NDEBUG
-#if defined( WITH_DEBUG )
     const bool isAIAutoControlMode = player->isAIAutoControlMode();
-#else
-    const bool isAIAutoControlMode = false;
-#endif // WITH_DEBUG
-#endif // !NDEBUG
 
     assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
 

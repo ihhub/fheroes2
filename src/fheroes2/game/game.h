@@ -46,6 +46,7 @@ namespace Game
         TYPE_HOTSEAT = 0x04,
         TYPE_NETWORK = 0x08,
         TYPE_BATTLEONLY = 0x10,
+        TYPE_AUTO_GAMEPLAY = 0x20,
 
         // TYPE_LOADFILE used in the Settings::LoadedGameVersion, if you change that value,
         // change in that function as well.

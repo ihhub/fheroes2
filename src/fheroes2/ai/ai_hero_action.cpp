@@ -77,8 +77,10 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_info.h"
+#include "translations.h"
 #include "visit.h"
 #include "world.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -2264,7 +2266,8 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
     Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
     Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
-    const Settings & conf = Settings::Get();
+    Settings & conf = Settings::Get();
+    const bool isAutoGameplay{ conf.IsGameType( Game::TYPE_AUTO_GAMEPLAY ) };
 
     const PlayerColorsSet colors = AIGetAllianceColors();
     bool recenterNeeded = true;
@@ -2282,6 +2285,22 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+        if ( isAutoGameplay && le.isMouseLeftButtonPressed() ) {
+            Player * currentPlayer = conf.GetPlayers().GetCurrent();
+            if ( currentPlayer != nullptr && currentPlayer->isAIAutoControlMode() ) {
+                if ( fheroes2::showStandardTextMessage( _( "Auto gameplay" ),
+                                                        _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
+                                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    for ( Player * player : conf.GetPlayers() ) {
+                        if ( player != nullptr ) {
+                            player->setAIAutoControlMode( false );
+                        }
+                    }
+                }
+            }
+        }
+
         if ( !hero.isActive() || !hero.isMoveEnabled() ) {
             break;
         }

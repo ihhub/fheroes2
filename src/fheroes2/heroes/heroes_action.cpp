@@ -3727,7 +3727,6 @@ void Heroes::ScoutRadar() const
 {
     Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-#if defined( WITH_DEBUG )
     if ( GetColor() != PlayerColor::NONE ) {
         const Player * player = Players::Get( GetColor() );
         assert( player != nullptr );
@@ -3735,14 +3734,9 @@ void Heroes::ScoutRadar() const
         // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we
         // don't call 'SetRenderArea()'.
         if ( !player->isAIAutoControlMode() ) {
-#endif
-
             I.getRadar().SetRenderArea( GetScoutRoi() );
-
-#if defined( WITH_DEBUG )
         }
     }
-#endif
 
     I.setRedraw( Interface::REDRAW_RADAR );
 }
@@ -3769,14 +3763,10 @@ void Heroes::Action( const int tileIndex )
 
     std::unique_ptr<FocusUpdater> focusUpdater;
 
-#if defined( WITH_DEBUG )
     const Player * player = Players::Get( GetKingdom().GetColor() );
     assert( player != nullptr );
 
     const bool isAIAutoControlMode = player->isAIAutoControlMode();
-#else
-    const bool isAIAutoControlMode = false;
-#endif
 
     if ( !GetKingdom().isControlAI() || isAIAutoControlMode ) {
         focusUpdater = std::make_unique<FocusUpdater>();

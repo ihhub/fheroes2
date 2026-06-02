@@ -46,6 +46,9 @@
 #include "translations.h"
 #include "world.h"
 
+#include "settings.h"
+#include "game.h"
+
 namespace
 {
     Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const MP2::MapObjectType objectType, const bool ignoreHeroes = true )
@@ -468,7 +471,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
     const Kingdom & kingdom = world.GetKingdom( playerColor );
 
     const bool isAIPlayer = kingdom.isControlAI();
-    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
+    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() ) || Settings::Get().IsGameType( Game::TYPE_AUTO_GAMEPLAY );
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );

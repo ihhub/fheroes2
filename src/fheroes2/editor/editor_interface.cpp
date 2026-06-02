@@ -49,6 +49,7 @@
 #include "editor_spell_selection.h"
 #include "editor_sphinx_window.h"
 #include "game.h"
+#include "game_auto_gameplay.h"
 #include "game_delays.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
@@ -1616,6 +1617,40 @@ namespace Interface
                     VERBOSE_LOG( getAllMapTexts( _mapFormat ) )
                 }
 #endif
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_PLAY_TEST ) ) {
+                    if ( !_prepareMapForGameplay() ) {
+                        continue;
+                    }
+
+                    // Make a copy of the current map.
+                    const Maps::FileInfo mapInfo = conf.getCurrentMapInfo();
+
+                    RWStreamBuf _beforeMapFormat;
+                    if ( !Maps::Map_Format::saveMap( _beforeMapFormat, _mapFormat ) ) {
+                        assert( 0 );
+                        continue;
+                    }
+
+                    const uint32_t _latestObjectUIDBefore{ Maps::getLastObjectUID() };
+
+                    if ( fheroes2::openMapAutoPlayTest() ) {
+                        // Restore the map.
+                        if ( !Maps::Map_Format::loadMap( _beforeMapFormat, _mapFormat ) ) {
+                            assert( 0 );
+                        }
+
+                        if ( !Maps::readMapInEditor( _mapFormat ) ) {
+                            // If this assertion blows up then something is really wrong with the Editor.
+                            assert( 0 );
+                        }
+
+                        Maps::setLastObjectUID( _latestObjectUIDBefore );
+
+                        conf.setCurrentMapInfo( std::move( mapInfo ) );
+
+                        setRedraw( REDRAW_ALL );
+                    }
+                }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
@@ -2098,36 +2133,16 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonStartMap.area() ) ) {
-                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
-                if ( isNameEmpty
-                     && fheroes2::showStandardTextMessage(
-                            _( "Unsaved Changes" ),
-                            _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
-                            Dialog::YES | Dialog::NO )
-                            == Dialog::NO ) {
+                if ( !Get()._prepareMapForGameplay() ) {
                     continue;
                 }
-                if ( isNameEmpty ) {
-                    Get().saveMapToFile();
-                    isNameEmpty = conf.getCurrentMapInfo().name.empty();
-                    if ( isNameEmpty ) {
-                        // Saving was aborted.
-                        display.render( background.totalArea() );
-                        continue;
-                    }
-                }
-                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
-                    fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
-                                                       _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
-                }
-                else {
-                    if ( fheroes2::
-                             showStandardTextMessage( _( "Start Map" ),
-                                                      _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
-                                                      Dialog::YES | Dialog::NO )
-                         == Dialog::YES ) {
-                        return fheroes2::GameMode::NEW_STANDARD;
-                    }
+                
+                if ( fheroes2::
+                         showStandardTextMessage( _( "Start Map" ),
+                                                  _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
+                                                  Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    return fheroes2::GameMode::NEW_STANDARD;
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
@@ -3571,5 +3586,37 @@ namespace Interface
         }
 
         return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
+    }
+
+    bool EditorInterface::_prepareMapForGameplay()
+    {
+        const auto & conf = Settings::Get();
+
+        bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+        if ( isNameEmpty
+             && fheroes2::showStandardTextMessage(
+                    _( "Unsaved Changes" ),
+                    _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
+                    Dialog::YES | Dialog::NO )
+                    == Dialog::NO ) {
+            return false;
+        }
+
+        if ( isNameEmpty ) {
+            Get().saveMapToFile();
+            isNameEmpty = conf.getCurrentMapInfo().name.empty();
+            if ( isNameEmpty ) {
+                // File save I/O operation failed.
+                return false;
+            }
+        }
+
+        if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
+            fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
+                                               _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
+            return false;
+        }
+
+        return true;
     }
 }

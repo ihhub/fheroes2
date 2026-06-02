@@ -45,6 +45,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
+#include "game_auto_gameplay.h"
 #include "game_delays.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
@@ -109,11 +110,7 @@ namespace
         // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
         const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
 
-#if defined( WITH_DEBUG )
         if ( isFriendlyAI || player->isAIAutoControlMode() ) {
-#else
-        if ( isFriendlyAI ) {
-#endif
             // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
             return player->GetFriends();
         }
@@ -736,6 +733,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
+    const bool isAutoGameplay{ conf.IsGameType( Game::TYPE_AUTO_GAMEPLAY ) };
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
         // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
@@ -765,8 +763,14 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
     if ( !isLoadedFromSave || world.CountDay() == 1 ) {
         // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
-        for ( const Player * player : sortedPlayers ) {
+        for ( Player * player : sortedPlayers ) {
             world.ClearFog( player->GetColor() );
+
+            if ( isAutoGameplay ) {
+                // Every player for auto gameplay mode is being set as Human player controlled by AI.
+                player->SetControl( CONTROL_HUMAN );
+                player->setAIAutoControlMode( true );
+            }
         }
     }
 
@@ -785,6 +789,29 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         if ( res != fheroes2::GameMode::CANCEL ) {
             break;
+        }
+
+        if ( isAutoGameplay ) {
+            fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
+            if ( world.CountDay() > autoGameplay.getMaxDaysInGameplay() ) {
+                autoGameplay.markTimeLimit();
+                res = fheroes2::GameMode::MAIN_MENU;
+                break;
+            }
+
+            bool isInterrupted{ false };
+            for ( const Player * player : sortedPlayers ) {
+                if ( player->GetControl() & CONTROL_HUMAN ) {
+                    autoGameplay.interrupt( world.CountDay() );
+                    isInterrupted = true;
+                    break;
+                }
+            }
+
+            if ( isInterrupted ) {
+                res = fheroes2::GameMode::MAIN_MENU;
+                break;
+            }
         }
 
         res = fheroes2::GameMode::END_TURN;
@@ -878,19 +905,17 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     _statusPanel.Reset();
                     _statusPanel.SetState( StatusType::STATUS_AITURN );
 
-#if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
                         _radar.SetHide( false );
                         _radar.SetRedraw( REDRAW_RADAR );
                     }
-#endif
 
                     redraw( 0 );
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
-                    if ( isHotSeatGame ) {
+                    if ( isHotSeatGame || isAutoGameplay ) {
                         Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 
@@ -901,7 +926,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     kingdom.ActionBeforeTurn();
 
 #if defined( WITH_DEBUG )
-                    if ( !isLoadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                    if ( !isAutoGameplay && !isLoadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                         // This is a human player which gave control to AI so we need to do autosave here.
                         Game::AutoSave();
                     }
@@ -912,7 +937,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     assert( res != fheroes2::GameMode::CANCEL );
 
 #if defined( WITH_DEBUG )
-                    if ( !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                    if ( !isAutoGameplay && !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                         // This is a human player which gave control to AI so we need to do autosave here.
                         Game::AutoSave();
                     }

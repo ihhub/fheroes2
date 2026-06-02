@@ -1752,7 +1752,6 @@ void Heroes::Scout( const int tileIndex ) const
 
     Maps::ClearFog( tileIndex, GetScoutingDistance(), GetColor() );
 
-#if defined( WITH_DEBUG )
     const Player * player = Players::Get( GetColor() );
     assert( player != nullptr );
 
@@ -1763,7 +1762,6 @@ void Heroes::Scout( const int tileIndex ) const
         // As AI don't waste time for thinking between hero moves we don't need to force radar update in other places.
         ScoutRadar();
     }
-#endif
 }
 
 int32_t Heroes::GetScoutingDistance() const
