@@ -2136,7 +2136,7 @@ namespace Interface
                 if ( !Get()._prepareMapForGameplay() ) {
                     continue;
                 }
-                
+
                 if ( fheroes2::showStandardTextMessage( _( "Start Map" ),
                                                         _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
                                                         Dialog::YES | Dialog::NO )

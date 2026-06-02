@@ -74,7 +74,7 @@ namespace fheroes2
             _roundId = 0;
             _roundResults.clear();
 
-            auto & infos =_roundResults.emplace_back();
+            auto & infos = _roundResults.emplace_back();
             for ( const auto color : PlayerColorsVector( colors ) ) {
                 auto & info = infos.emplace_back();
                 info.color = color;
