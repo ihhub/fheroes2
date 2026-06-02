@@ -2265,7 +2265,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
     Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
     Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     const bool isAutoGameplay{ conf.IsGameType( Game::TYPE_AUTO_GAMEPLAY ) };
 
     const PlayerColorsSet colors = AIGetAllianceColors();

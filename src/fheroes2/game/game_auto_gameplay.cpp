@@ -114,7 +114,7 @@ namespace fheroes2
         StandardWindow window( 400, 200, true, display );
         const Rect activeArea( window.activeArea() );
 
-        Settings & conf = Settings::Get();
+        const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         const Sprite & titleBox = AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );

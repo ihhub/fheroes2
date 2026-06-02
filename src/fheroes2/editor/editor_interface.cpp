@@ -1623,7 +1623,7 @@ namespace Interface
                     }
 
                     // Make a copy of the current map.
-                    const Maps::FileInfo mapInfo = conf.getCurrentMapInfo();
+                    Maps::FileInfo mapInfo = conf.getCurrentMapInfo();
 
                     RWStreamBuf _beforeMapFormat;
                     if ( !Maps::Map_Format::saveMap( _beforeMapFormat, _mapFormat ) ) {
@@ -3602,7 +3602,7 @@ namespace Interface
         }
 
         if ( isNameEmpty ) {
-            Get().saveMapToFile();
+            saveMapToFile();
             isNameEmpty = conf.getCurrentMapInfo().name.empty();
             if ( isNameEmpty ) {
                 // File save I/O operation failed.
