@@ -85,6 +85,13 @@ namespace
         SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH = 292,
         SELECTED_SCENARIO_DESCRIPTION_HEIGHT = 90,
         SELECTED_SCENARIO_GENERAL_OFFSET_Y = 265,
+        // OK BUTTON MASK
+        OK_BUTTON_MASK_SOURCE_OFFSET_X = 70,
+        OK_BUTTON_MASK_SOURCE_Y = 423,
+        OK_BUTTON_MASK_DESTINATION_X = 130,
+        OK_BUTTON_MASK_DESTINATION_Y = 420,
+        OK_BUTTON_MASK_EXTRA_WIDTH = 20,
+        OK_BUTTON_MASK_EXTRA_HEIGHT = 10,
         // COMMON
         ICON_SIZE = 18,
         MAP_SIZE_BUTTON_OFFSET_Y = 23
@@ -550,7 +557,19 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     fheroes2::Button buttonSelectXLarge( rt.x + 222, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_XLARGE, 0, 1 );
     fheroes2::Button buttonSelectAll( rt.x + 284, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_ALL, 0, 1 );
 
-    const auto drawAllButtons = [&buttonOk, &buttonCancel, &buttonSelectSmall, &buttonSelectMedium, &buttonSelectLarge, &buttonSelectXLarge, &buttonSelectAll]() {
+    // The below code is used to mask the ok button that exists from the image
+    const auto & okButtonMask = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+    const auto drawOkButtonMask = [&]() {
+        fheroes2::Blit( okButtonMask, ( okButtonMask.width() / 2 ) - OK_BUTTON_MASK_SOURCE_OFFSET_X,
+                        423 - OK_BUTTON_MASK_EXTRA_HEIGHT,
+                        display, rt.x + OK_BUTTON_MASK_DESTINATION_X,
+                        rt.y + OK_BUTTON_MASK_DESTINATION_Y - OK_BUTTON_MASK_EXTRA_HEIGHT,
+                        buttonOk.area().width + OK_BUTTON_MASK_EXTRA_WIDTH, buttonOk.area().height + OK_BUTTON_MASK_EXTRA_HEIGHT );
+    };
+
+    const auto drawAllButtons
+       = [&buttonOk, &buttonCancel, &drawOkButtonMask, &buttonSelectSmall, &buttonSelectMedium, &buttonSelectLarge, &buttonSelectXLarge, &buttonSelectAll]() {
+        drawOkButtonMask();
         buttonOk.draw();
         buttonCancel.draw();
         buttonSelectSmall.draw();
