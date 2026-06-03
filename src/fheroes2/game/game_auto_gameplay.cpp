@@ -21,10 +21,13 @@
 #include "game_auto_gameplay.h"
 
 #include <cassert>
+#include <map>
 #include <ostream>
 #include <string>
 
 #include "agg_image.h"
+#include "color.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
@@ -74,7 +77,7 @@ namespace
         fheroes2::ImageRestorer _restorer;
     };
 
-    bool loadMap()
+    bool prepareMap()
     {
         auto & conf = Settings::Get();
         const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
@@ -89,6 +92,130 @@ namespace
         players.SetStartGame();
 
         return world.loadResurrectionMap( mapInfo.filename );
+    }
+
+    void displayResults( const fheroes2::AutoGameplay & gameplay )
+    {
+        if ( gameplay.getResults().empty() ) {
+            // Nothing to display.
+            return;
+        }
+
+        // Process only rounds that ended before time limit.
+        int32_t roundByTimeLimit{ 0 };
+        std::map<PlayerColor, int32_t> wins;
+
+        for ( const auto & result : gameplay.getResults() ) {
+            // Check that everyone either lost of won.
+            bool isTimeLimitRound{ false };
+            for ( const auto & info : result ) {
+                if ( info.state == fheroes2::AutoGameplay::PlayerInfo::State::TIME_LIMIT ) {
+                    isTimeLimitRound = true;
+                    break;
+                }
+            }
+
+            if ( isTimeLimitRound ) {
+                ++roundByTimeLimit;
+                continue;
+            }
+
+            for ( const auto & info : result ) {
+                if ( info.state == fheroes2::AutoGameplay::PlayerInfo::State::WINNER ) {
+                    ++wins[info.color];
+                }
+                else {
+                    // If this assertion blows up then our logic is not valid.
+                    assert( info.state == fheroes2::AutoGameplay::PlayerInfo::State::LOSER );
+                }
+            }
+        }
+
+        // Display the results.
+        constexpr int32_t playerStepX{ 80 };
+        const int32_t roundCount{ static_cast<int32_t>( gameplay.getResults().size() ) };
+        const int32_t playerCount{ static_cast<int32_t>( gameplay.getResults().front().size() ) };
+
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::StandardWindow window( 500, 210, true, display );
+        const fheroes2::Rect activeArea( window.activeArea() );
+
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
+        const fheroes2::Sprite & titleBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+        const fheroes2::Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
+        const fheroes2::Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
+
+        Copy( titleBox, 0, 0, display, titleBoxRoi );
+        addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
+
+        fheroes2::Text text( _( "Results" ), fheroes2::FontType::normalWhite() );
+        text.fitToOneRow( titleTextRoi.width );
+        text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
+
+        // Render players.
+        int32_t offsetX = activeArea.x + ( activeArea.width - playerCount * playerStepX ) / 2;
+        int32_t offsetY = titleBoxRoi.y + titleBoxRoi.height + 10;
+
+        std::vector<fheroes2::Rect> playerRects( playerCount );
+        PlayerColorsSet playerColorSet{ 0 };
+        for ( const auto & info : gameplay.getResults().front() ) {
+            playerColorSet |= info.color;
+        }
+
+        const PlayerColorsVector availableColors{ playerColorSet };
+
+        const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+        for ( int32_t i = 0; i < playerCount; ++i ) {
+            playerRects[i].x = offsetX + i * playerStepX;
+            playerRects[i].y = offsetY;
+
+            fheroes2::Blit( playerIconShadow, display, playerRects[i].x - 5, playerRects[i].y + 3 );
+
+            const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + 3;
+
+            const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
+            playerRects[i].width = playerIcon.width();
+            playerRects[i].height = playerIcon.height();
+            fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
+        }
+
+        offsetY += playerRects[0].height + 10;
+
+        for ( int32_t i = 0; i < playerCount; ++i ) {
+            text.set( std::to_string( wins[availableColors[i]] * 100 / roundCount ) + "%", fheroes2::FontType::normalYellow() );
+            text.fitToOneRow( playerRects[i].width );
+            text.draw( playerRects[i].x, offsetY, playerRects[i].width, display );
+        }
+
+        offsetY += 20;
+        text.set( std::to_string( roundCount ) + _( " rounds" ), fheroes2::FontType::normalWhite() );
+        text.fitToOneRow( titleTextRoi.width );
+        text.draw( titleTextRoi.x, offsetY, titleTextRoi.width, display );
+
+        offsetY += 20;
+        text.set( std::to_string( roundByTimeLimit ) + _( " rounds reached time limit." ), fheroes2::FontType::normalWhite() );
+        text.fitToOneRow( titleTextRoi.width );
+        text.draw( titleTextRoi.x, offsetY, titleTextRoi.width, display );
+
+        fheroes2::Button buttonOk;
+        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        window.renderButton( buttonOk, buttonOkIcn, 0, 1, { 6, 6 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        LocalEvent & le = LocalEvent::Get();
+
+        display.render( window.totalArea() );
+
+        while ( le.HandleEvents() ) {
+            buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+                break;
+            }
+        }
     }
 
     void runPlayTest()
@@ -107,14 +234,12 @@ namespace
         }
 
         for ( int32_t roundId = 0; roundId < autoGameplay.getMaxRounds(); ++roundId ) {
-            if ( !loadMap() ) {
-                fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to load the map." ), Dialog::ZERO );
+            if ( !prepareMap() ) {
+                fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to prepare the map for auto gameplay." ), Dialog::ZERO );
                 return;
             }
 
             conf.SetGameType( Game::TYPE_AUTO_GAMEPLAY );
-
-            autoGameplay.reset( conf.GetPlayers().GetColors() );
 
             Game::StartGame();
 
@@ -140,7 +265,26 @@ namespace
                     }
                 }
             }
+
+            // Verify whether the current round ended properly or was interrupted by a user.
+            bool isInterrupted{ false };
+            for ( const auto & info : autoGameplay.getResults().back() ) {
+                if ( info.state == fheroes2::AutoGameplay::PlayerInfo::State::INTERRUPTED ) {
+                    isInterrupted = true;
+                    break;
+                }
+            }
+
+            if ( isInterrupted ) {
+                break;
+            }
+
+            if ( roundId < autoGameplay.getMaxRounds() - 1 ) {
+                autoGameplay.nextRound();
+            }
         }
+
+        displayResults( autoGameplay );
 
         // Restore the original AI speed.
         conf.SetAIMoveSpeed( currentAISpeed );
