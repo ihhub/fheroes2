@@ -21,6 +21,7 @@
 #include "game_auto_gameplay.h"
 
 #include <cassert>
+#include <cstddef>
 #include <map>
 #include <memory>
 #include <ostream>
