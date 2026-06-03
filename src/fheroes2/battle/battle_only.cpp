@@ -450,6 +450,12 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
                     }
 
                     updateHero( first, windowOffset );
+
+                    if ( first.controlType == CONTROL_AI ) {
+                        buttonStart.enable();
+                        buttonStart.draw();
+                        needRender = true;
+                    }
                 }
 
                 titleRoiRestorer.restore();
@@ -608,6 +614,9 @@ void Battle::Only::updateHero( ArmyInfo & info, const fheroes2::Point & offset )
     if ( info.hero == nullptr ) {
         return;
     }
+
+    info.monster.Reset();
+    info.monster.GetTroop( 0 )->Set( defaultMonster );
 
     updateArmyUI( info.ui, info.hero, offset, info.armyId );
 }
