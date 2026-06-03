@@ -154,12 +154,12 @@ namespace
         Copy( titleBox, 0, 0, display, titleBoxRoi );
         addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
 
-        fheroes2::Text text( _( "Results" ), fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( _( "Auto Gameplay results" ), fheroes2::FontType::normalWhite() );
         text.fitToOneRow( titleTextRoi.width );
         text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
         // Render players.
-        const int32_t offsetX = activeArea.x + ( activeArea.width - playerCount * playerStepX ) / 2;
+        const int32_t offsetX = activeArea.x + ( activeArea.width - playerCount * playerStepX + 18 ) / 2;
         int32_t offsetY = titleBoxRoi.y + titleBoxRoi.height + 10;
 
         std::vector<fheroes2::Rect> playerRects( playerCount );
@@ -194,12 +194,16 @@ namespace
         }
 
         offsetY += 20;
-        text.set( std::to_string( roundCount ) + _( " rounds" ), fheroes2::FontType::normalWhite() );
+
+        std::string roundString = _n( "autoplay|1 round", "autoplay|%{count} rounds", roundCount );
+        StringReplace( roundString, "%{count}", roundCount );
+
+        text.set( std::move( roundString ), fheroes2::FontType::normalWhite() );
         text.fitToOneRow( titleTextRoi.width );
         text.draw( titleTextRoi.x, offsetY, titleTextRoi.width, display );
 
         offsetY += 20;
-        text.set( std::to_string( roundByTimeLimit ) + _( " rounds reached time limit." ), fheroes2::FontType::normalWhite() );
+        text.set( std::to_string( roundByTimeLimit ) + _( " round(s) reached time limit" ), fheroes2::FontType::normalWhite() );
         text.fitToOneRow( titleTextRoi.width );
         text.draw( titleTextRoi.x, offsetY, titleTextRoi.width, display );
 
@@ -220,6 +224,14 @@ namespace
 
             if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to close the dialog." ), Dialog::ZERO );
+            }
+
+            for ( size_t i = 0; i < availableColors.size(); ++i ) {
+                if ( le.isMouseRightButtonPressedInArea( playerRects[i] ) ) {
+                    std::string playerString{ _( "Won %{percent}% of rounds." ) };
+                    StringReplace( playerString, "%{percent}", wins[availableColors[i]] * 100 / roundCount );
+                    fheroes2::showStandardTextMessage( Color::String( availableColors[i] ), std::move( playerString ), Dialog::ZERO );
+                }
             }
         }
     }
