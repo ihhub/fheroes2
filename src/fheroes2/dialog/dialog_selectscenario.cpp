@@ -551,7 +551,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     fheroes2::Button buttonOk( rt.x + 40, rt.y + 410, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
     fheroes2::Button buttonCancel;
     buttonCancel.setICNInfo( ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
-    int cancelWidth = buttonCancel.area().width;
+    int const cancelWidth = buttonCancel.area().width;
     // Different languages have different icon widths. This fixes the problem of having a bigger button while aligning it correctly
     buttonCancel.setPosition( rt.x + rt.width - cancelWidth - 40, rt.y + 410 );
     
