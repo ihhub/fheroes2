@@ -51,7 +51,6 @@
 #include "game.h"
 #include "game_auto_gameplay.h"
 #include "game_delays.h"
-#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
 #include "ground.h"
@@ -1387,6 +1386,24 @@ namespace
         return os.str();
     }
 #endif
+
+    fheroes2::GameMode processEditorExitEvent()
+    {
+#if defined( __IPHONEOS__ )
+        // iOS discourages to exit a running application.
+        fheroes2::showStandardTextMessage( _( "Quit" ),
+                                           _( "To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to the current map will be lost.)" ),
+                                           Dialog::OK );
+#else
+        if ( Dialog::YES
+             & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit? (Any unsaved changes to the current map will be lost.)" ),
+                                                  Dialog::YES | Dialog::NO ) ) {
+            return fheroes2::GameMode::QUIT_GAME;
+        }
+#endif
+
+        return fheroes2::GameMode::CANCEL;
+    }
 }
 
 namespace Interface
@@ -1553,7 +1570,7 @@ namespace Interface
 
         while ( res == fheroes2::GameMode::CANCEL ) {
             if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( processEditorExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     res = fheroes2::GameMode::QUIT_GAME;
 
                     break;
@@ -1567,7 +1584,7 @@ namespace Interface
             // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                    res = Game::processExitEvent();
+                    res = processEditorExitEvent();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                     res = eventNewMap();
@@ -1914,6 +1931,12 @@ namespace Interface
                             _resetMovableObjectInfo();
                         }
                     }
+                    else if ( ( le.isMouseWheelUp() && _editorPanel.setPreviousSelectedObjectType() )
+                              || ( le.isMouseWheelDown() && _editorPanel.setNextSelectedObjectType() ) ) {
+                        _editorPanel.setObjectBasedCursor( _editorPanel.getSelectedObjectType(), _editorPanel.getSelectedObjectGroup() );
+                        updateCursor( _tileUnderCursor );
+                        _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
@@ -2091,7 +2114,7 @@ namespace Interface
             }
 
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
-                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( processEditorExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     return fheroes2::GameMode::QUIT_GAME;
                 }
             }

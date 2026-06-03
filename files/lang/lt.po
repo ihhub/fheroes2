@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-03 03:02+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -4214,6 +4214,22 @@ msgstr ""
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
+"prarastas, jei neįrašėte)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
+"prarastas, jei neįrašėte)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr ""
