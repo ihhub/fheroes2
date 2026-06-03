@@ -554,7 +554,6 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     int cancelWidth = buttonCancel.area().width;
     // Different languages have different icon widths. This fixes the problem of having a bigger button while aligning it correctly
     buttonCancel.setPosition( rt.x + rt.width - cancelWidth - 40, rt.y + 410 );
-    
     fheroes2::Button buttonSelectSmall( rt.x + 36, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_SMALL, 0, 1 );
     fheroes2::Button buttonSelectMedium( rt.x + 98, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_MEDIUM, 0, 1 );
     fheroes2::Button buttonSelectLarge( rt.x + 160, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_LARGE, 0, 1 );
@@ -564,10 +563,8 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     // The below code is used to mask the ok button that exists from the image
     const auto & okButtonMask = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
     const auto drawOkButtonMask = [&]() {
-        fheroes2::Blit( okButtonMask, ( okButtonMask.width() / 2 ) - OK_BUTTON_MASK_SOURCE_OFFSET_X,
-                        423 - OK_BUTTON_MASK_EXTRA_HEIGHT,
-                        display, rt.x + OK_BUTTON_MASK_DESTINATION_X,
-                        rt.y + OK_BUTTON_MASK_DESTINATION_Y - OK_BUTTON_MASK_EXTRA_HEIGHT,
+        fheroes2::Blit( okButtonMask, ( okButtonMask.width() / 2 ) - OK_BUTTON_MASK_SOURCE_OFFSET_X, 423 - OK_BUTTON_MASK_EXTRA_HEIGHT, display,
+                        rt.x + OK_BUTTON_MASK_DESTINATION_X, rt.y + OK_BUTTON_MASK_DESTINATION_Y - OK_BUTTON_MASK_EXTRA_HEIGHT,
                         buttonOk.area().width + OK_BUTTON_MASK_EXTRA_WIDTH, buttonOk.area().height + OK_BUTTON_MASK_EXTRA_HEIGHT );
     };
 
