@@ -461,8 +461,7 @@ bool AI::isValuableAdventureMapObject( const Kingdom & kingdom, const MP2::MapOb
     case MP2::OBJ_HERO: {
         const Heroes * otherHero = world.getTile( tileIndex ).getHero();
         if ( otherHero == nullptr ) {
-            // How is it possible that a hero does not exist?
-            assert( 0 );
+            // It could happen when adding new heroes at the start of game.
             return false;
         }
 

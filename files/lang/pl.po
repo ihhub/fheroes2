@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-16 12:26+0000\n"
+"POT-Creation-Date: 2026-06-03 03:02+0000\n"
 "PO-Revision-Date: 2026-04-07 19:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4398,6 +4398,22 @@ msgstr "Obiekty interaktywne muszą być umieszczone na pustych polach."
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Na mapie można umieścić maksymalnie %{count} rodzaju '%{objects}'."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Czy na pewno chcesz wczytać nową mapę? (Wszelkie niezapisane zmiany w "
+"bieżącej mapie zostaną utracone.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Czy na pewno chcesz utworzyć nową mapę? (Wszelkie niezapisane zmiany w "
+"bieżącej mapie zostaną utracone.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Nie udało się wygenerować mapy z podanymi parametrami."

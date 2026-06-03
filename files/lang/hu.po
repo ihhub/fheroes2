@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-03 03:02+0000\n"
 "PO-Revision-Date: 2026-05-18 00:45+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
@@ -4375,6 +4375,22 @@ msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximum %{count} %{objects} helyezhető el a térképen."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Biztos hogy benne hogy új térképet töltesz be? (A jelenlegi térkép "
+"változtatásai el fognak veszni.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
+"változtatásai el fognak veszni.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Nem lehetséges térkép generálása a megadott paraméterekkel."
