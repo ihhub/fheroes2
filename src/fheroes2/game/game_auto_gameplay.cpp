@@ -40,6 +40,7 @@
 #include "players.h"
 #include "screen.h"
 #include "settings.h"
+#include "statusbar.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -56,25 +57,24 @@ namespace
 
     constexpr int32_t sliderWidth{ 150 };
 
-    class TextRestorer final
+    class TextRestorer final : public fheroes2::MovableText
     {
     public:
-        TextRestorer( fheroes2::Image & output, const int32_t positionX, const int32_t positionY )
-            : _restorer( output, positionX, positionY, 150, 40 )
+        TextRestorer( fheroes2::Image & output, const fheroes2::Point offset )
+            : fheroes2::MovableText( output )
+            , _offset( offset )
         {
             // Do nothing.
         }
 
-        void render( std::string content, fheroes2::Image & output )
+        void render( std::string content )
         {
-            const fheroes2::Rect & roi = _restorer.rect();
-            _restorer.restore();
-            const fheroes2::Text text{ std::move( content ), fheroes2::FontType::normalYellow() };
-            text.draw( roi.x, roi.y + 2, output );
+            update( std::make_unique<fheroes2::Text>( std::move( content ), fheroes2::FontType::normalYellow() ) );
+            draw( _offset.x, _offset.y );
         }
 
     private:
-        fheroes2::ImageRestorer _restorer;
+        const fheroes2::Point _offset;
     };
 
     bool prepareMap()
@@ -109,7 +109,7 @@ namespace
             // Check that everyone either lost of won.
             bool isTimeLimitRound{ false };
             for ( const auto & info : result ) {
-                if ( info.state == fheroes2::AutoGameplay::PlayerInfo::State::TIME_LIMIT ) {
+                if ( info.state == fheroes2::AutoGameplay::PlayerState::TIME_LIMIT ) {
                     isTimeLimitRound = true;
                     break;
                 }
@@ -121,12 +121,12 @@ namespace
             }
 
             for ( const auto & info : result ) {
-                if ( info.state == fheroes2::AutoGameplay::PlayerInfo::State::WINNER ) {
+                if ( info.state == fheroes2::AutoGameplay::PlayerState::WINNER ) {
                     ++wins[info.color];
                 }
                 else {
                     // If this assertion blows up then our logic is not valid.
-                    assert( info.state == fheroes2::AutoGameplay::PlayerInfo::State::LOSER );
+                    assert( info.state == fheroes2::AutoGameplay::PlayerState::LOSER );
                 }
             }
         }
@@ -247,16 +247,16 @@ namespace
                 VERBOSE_LOG( "----- Round " << roundId + 1 << " -----" )
                 for ( const auto & info : infos ) {
                     switch ( info.state ) {
-                    case fheroes2::AutoGameplay::PlayerInfo::State::WINNER:
+                    case fheroes2::AutoGameplay::PlayerState::WINNER:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " won" )
                         break;
-                    case fheroes2::AutoGameplay::PlayerInfo::State::LOSER:
+                    case fheroes2::AutoGameplay::PlayerState::LOSER:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " lost on " << info.dayOfState << " day" )
                         break;
-                    case fheroes2::AutoGameplay::PlayerInfo::State::TIME_LIMIT:
+                    case fheroes2::AutoGameplay::PlayerState::TIME_LIMIT:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " hit time limit on " << info.dayOfState << " day" )
                         break;
-                    case fheroes2::AutoGameplay::PlayerInfo::State::INTERRUPTED:
+                    case fheroes2::AutoGameplay::PlayerState::INTERRUPTED:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " interrupted on " << info.dayOfState << " day" )
                         break;
                     default:
@@ -269,8 +269,9 @@ namespace
             // Verify whether the current round ended properly or was interrupted by a user.
             bool isInterrupted{ false };
             for ( const auto & info : autoGameplay.getResults().back() ) {
-                if ( info.state == fheroes2::AutoGameplay::PlayerInfo::State::INTERRUPTED ) {
+                if ( info.state == fheroes2::AutoGameplay::PlayerState::INTERRUPTED ) {
                     isInterrupted = true;
+                    
                     break;
                 }
             }
@@ -279,15 +280,20 @@ namespace
                 break;
             }
 
-            if ( roundId < autoGameplay.getMaxRounds() - 1 ) {
-                autoGameplay.nextRound();
-            }
+            autoGameplay.nextRound();
         }
+
+        autoGameplay.popLastResults();
 
         displayResults( autoGameplay );
 
         // Restore the original AI speed.
         conf.SetAIMoveSpeed( currentAISpeed );
+    }
+
+    std::string getValueString( const int32_t value, const int32_t limit )
+    {
+        return std::to_string( value ) + '/' + std::to_string( limit );
     }
 }
 
@@ -323,27 +329,27 @@ namespace fheroes2
         const int32_t ySpacing = 45;
         int32_t positionY = activeArea.y + 70;
 
-        text.set( _( "auto|Round count:" ), FontType::normalWhite() );
+        text.set( _( "auto|Number of rounds:" ), FontType::normalWhite() );
         text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
         fheroes2::HorizontalSlider roundCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, roundLimit, autoGameplay.getMaxRounds() };
-        TextRestorer roundCountValue{ display, valuePositionX, positionY };
-        roundCountValue.render( std::to_string( autoGameplay.getMaxRounds() ) + '/' + std::to_string( roundLimit ), display );
+        TextRestorer roundCountValue{ display, { valuePositionX, positionY } };
+        roundCountValue.render( getValueString( autoGameplay.getMaxRounds(), roundLimit ) );
 
         positionY += ySpacing;
 
         text.set( _( "auto|Max days per game:" ), FontType::normalWhite() );
         text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
         fheroes2::HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, dayLimit, autoGameplay.getMaxDaysInGameplay() };
-        TextRestorer dayCountValue{ display, valuePositionX, positionY };
-        dayCountValue.render( std::to_string( autoGameplay.getMaxDaysInGameplay() ) + '/' + std::to_string( dayLimit ), display );
+        TextRestorer dayCountValue{ display, { valuePositionX, positionY } };
+        dayCountValue.render( getValueString( autoGameplay.getMaxDaysInGameplay(), dayLimit ) );
 
         positionY += ySpacing;
 
         text.set( _( "auto|Animation speed:" ), FontType::normalWhite() );
         text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
         fheroes2::HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, speedLimit, autoGameplay.getMovementSpeed() };
-        TextRestorer speedCountValue{ display, valuePositionX, positionY };
-        speedCountValue.render( std::to_string( autoGameplay.getMovementSpeed() ) + '/' + std::to_string( speedLimit ), display );
+        TextRestorer speedCountValue{ display, { valuePositionX, positionY } };
+        speedCountValue.render( getValueString( autoGameplay.getMovementSpeed(), speedLimit ) );
 
         Button buttonCancel;
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
@@ -371,17 +377,17 @@ namespace fheroes2
 
             if ( roundCountSlider.processEvents( eventHandler ) ) {
                 autoGameplay.setMaxRounds( roundCountSlider.getCurrentValue() );
-                roundCountValue.render( std::to_string( roundCountSlider.getCurrentValue() ) + '/' + std::to_string( roundLimit ), display );
+                roundCountValue.render( getValueString( roundCountSlider.getCurrentValue(), roundLimit ) );
                 display.render( window.activeArea() );
             }
             else if ( dayCountSlider.processEvents( eventHandler ) ) {
                 autoGameplay.setMaxDaysInGameplay( dayCountSlider.getCurrentValue() );
-                dayCountValue.render( std::to_string( dayCountSlider.getCurrentValue() ) + '/' + std::to_string( dayLimit ), display );
+                dayCountValue.render( getValueString( dayCountSlider.getCurrentValue(), dayLimit ) );
                 display.render( window.activeArea() );
             }
             else if ( speedCountSlider.processEvents( eventHandler ) ) {
                 autoGameplay.setMovementSpeed( speedCountSlider.getCurrentValue() );
-                speedCountValue.render( std::to_string( speedCountSlider.getCurrentValue() ) + '/' + std::to_string( speedLimit ), display );
+                speedCountValue.render( getValueString( speedCountSlider.getCurrentValue(), speedLimit ) );
                 display.render( window.activeArea() );
             }
 
@@ -417,7 +423,13 @@ namespace fheroes2
             return;
         }
 
-        if ( fheroes2::showStandardTextMessage( _( "Auto gameplay" ), _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
+        const auto & autoGameplay = AutoGameplay::instance();
+
+        std::string title{  _( "Auto gameplay\n(round %{currentRound} of %{totalRounds})" ) };
+        StringReplace( title, "%{currentRound}", autoGameplay.getResults().size() );
+        StringReplace( title, "%{totalRounds}", autoGameplay.getMaxRounds() );
+
+        if ( fheroes2::showStandardTextMessage( std::move( title ), _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
                                                 Dialog::YES | Dialog::NO )
              == Dialog::NO ) {
             return;

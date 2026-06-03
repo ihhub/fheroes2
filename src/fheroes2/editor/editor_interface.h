@@ -206,6 +206,8 @@ namespace Interface
 
         bool _prepareMapForGameplay();
 
+        bool _runAutoGameplay();
+
         EditorPanel _editorPanel;
 
         int32_t _areaSelectionStartTileId{ -1 };

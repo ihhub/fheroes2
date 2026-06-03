@@ -30,11 +30,24 @@
 
 namespace fheroes2
 {
-    bool openMapAutoPlayTest();
-
     class AutoGameplay final
     {
     public:
+        enum class PlayerState : uint8_t
+        {
+            WINNER,
+            LOSER,
+            TIME_LIMIT,
+            INTERRUPTED,
+        };
+
+        struct PlayerInfo final
+        {
+            PlayerColor color{ PlayerColor::NONE };
+            PlayerState state{ PlayerState::WINNER };
+            uint32_t dayOfState{ 1 };
+        };
+
         static AutoGameplay & instance();
 
         void setMaxDaysInGameplay( const int32_t days )
@@ -67,24 +80,8 @@ namespace fheroes2
             return _maxRounds;
         }
 
-        struct PlayerInfo final
-        {
-            enum class State : uint8_t
-            {
-                WINNER,
-                LOSER,
-                TIME_LIMIT,
-                INTERRUPTED,
-            };
-
-            PlayerColor color{ PlayerColor::NONE };
-            State state{ State::WINNER };
-            uint32_t dayOfState{ 0 };
-        };
-
         void reset( const PlayerColorsSet colors )
         {
-            _roundId = 0;
             _roundResults.clear();
 
             auto & infos = _roundResults.emplace_back();
@@ -98,12 +95,10 @@ namespace fheroes2
         {
             assert( !_roundResults.empty() );
 
-            ++_roundId;
-
             std::vector<PlayerInfo> lastResult = _roundResults.back();
             for ( auto & state : lastResult ) {
                 state.dayOfState = 0;
-                state.state = PlayerInfo::State::WINNER;
+                state.state = PlayerState::WINNER;
             }
 
             _roundResults.emplace_back( std::move( lastResult ) );
@@ -116,7 +111,7 @@ namespace fheroes2
             for ( auto & info : _roundResults.back() ) {
                 if ( info.color == color ) {
                     info.dayOfState = day;
-                    info.state = PlayerInfo::State::LOSER;
+                    info.state = PlayerState::LOSER;
                 }
             }
         }
@@ -126,9 +121,9 @@ namespace fheroes2
             assert( !_roundResults.empty() );
 
             for ( auto & info : _roundResults.back() ) {
-                if ( info.state != PlayerInfo::State::LOSER ) {
+                if ( info.state != PlayerState::LOSER ) {
                     info.dayOfState = _maxDaysInGameplay;
-                    info.state = PlayerInfo::State::TIME_LIMIT;
+                    info.state = PlayerState::TIME_LIMIT;
                 }
             }
         }
@@ -138,9 +133,9 @@ namespace fheroes2
             assert( !_roundResults.empty() );
 
             for ( auto & info : _roundResults.back() ) {
-                if ( info.state != PlayerInfo::State::LOSER ) {
+                if ( info.state != PlayerState::LOSER ) {
                     info.dayOfState = day;
-                    info.state = PlayerInfo::State::INTERRUPTED;
+                    info.state = PlayerState::INTERRUPTED;
                 }
             }
         }
@@ -150,20 +145,23 @@ namespace fheroes2
             return _roundResults;
         }
 
+        void popLastResults()
+        {
+            _roundResults.pop_back();
+        }
+
     private:
         AutoGameplay() = default;
         ~AutoGameplay() = default;
 
-        int32_t _roundId{ 0 };
-
         int32_t _maxRounds{ 1 };
-
         int32_t _maxDaysInGameplay{ 365 };
-
         int32_t _movementSpeed{ 10 };
 
         std::vector<std::vector<PlayerInfo>> _roundResults;
     };
+
+    bool openMapAutoPlayTest();
 
     void interruptAutoGameplay();
 }
