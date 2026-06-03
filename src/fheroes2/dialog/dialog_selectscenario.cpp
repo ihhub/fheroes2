@@ -52,6 +52,7 @@
 #include "ui_language.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -548,8 +549,11 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                                          SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH, SELECTED_SCENARIO_DESCRIPTION_HEIGHT );
 
     fheroes2::Button buttonOk( rt.x + 40, rt.y + 410, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-    fheroes2::Button buttonCancel( rt.x + 240, rt.y + 410, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
-
+    fheroes2::Button buttonCancel;
+    buttonCancel.setICNInfo( ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+    int cancelWidth = buttonCancel.area().width;
+    // Different languages have different icon widths. This fixes the problem of having a bigger button while aligning it correctly
+    buttonCancel.setPosition( rt.x + rt.width - cancelWidth - 40, rt.y + 410 );
     
     fheroes2::Button buttonSelectSmall( rt.x + 36, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_SMALL, 0, 1 );
     fheroes2::Button buttonSelectMedium( rt.x + 98, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_MEDIUM, 0, 1 );
@@ -567,11 +571,12 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
                         buttonOk.area().width + OK_BUTTON_MASK_EXTRA_WIDTH, buttonOk.area().height + OK_BUTTON_MASK_EXTRA_HEIGHT );
     };
 
-    const auto drawAllButtons
-       = [&buttonOk, &buttonCancel, &drawOkButtonMask, &buttonSelectSmall, &buttonSelectMedium, &buttonSelectLarge, &buttonSelectXLarge, &buttonSelectAll]() {
+    const auto drawAllButtons = [&]() {
         drawOkButtonMask();
         buttonOk.draw();
         buttonCancel.draw();
+        buttonOk.drawShadow( display );
+        buttonCancel.drawShadow( display );
         buttonSelectSmall.draw();
         buttonSelectMedium.draw();
         buttonSelectLarge.draw();
