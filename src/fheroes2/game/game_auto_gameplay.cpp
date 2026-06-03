@@ -21,13 +21,19 @@
 #include "game_auto_gameplay.h"
 
 #include <cassert>
+#include <ostream>
+#include <string>
 
 #include "agg_image.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
 #include "players.h"
 #include "screen.h"
 #include "settings.h"

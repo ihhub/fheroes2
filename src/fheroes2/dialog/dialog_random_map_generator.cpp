@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 #include <string>
 #include <utility>
 
@@ -40,10 +39,8 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
-#include "ui_scrollbar.h"
 #include "ui_slider.h"
 #include "ui_text.h"
-#include "ui_tool.h"
 #include "ui_window.h"
 
 namespace

@@ -77,6 +77,7 @@
 #include "render_processor.h"
 #include "resource.h"
 #include "screen.h"
+#include "serialize.h"
 #include "settings.h"
 #include "spell.h"
 #include "system.h"

@@ -20,9 +20,15 @@
 
 #include "ui_slider.h"
 
+#include <algorithm>
+#include <cassert>
+#include <functional>
+
 #include "agg_image.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "screen.h"
 #include "settings.h"
 
 namespace fheroes2
