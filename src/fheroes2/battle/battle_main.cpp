@@ -370,7 +370,7 @@ Battle::Result Battle::Loader( Army & attackingArmy, Army & defendingArmy, const
             showBattle = true;
         }
         // ... or when any of the participating human players are controlled by AI.
-        // Never show battle during AI play test.
+        // Never show battle during auto gamplay mode.
         else if ( !conf.IsGameType( Game::TYPE_AUTO_GAMEPLAY ) ) {
             const Player * attackingPlayer = Players::Get( attackingArmy.GetColor() );
             const Player * defendingPlayer = Players::Get( defendingArmy.GetColor() );

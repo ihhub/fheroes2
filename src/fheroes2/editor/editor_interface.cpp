@@ -2162,7 +2162,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonAutoGameplay.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Auto Gameplay" ), _( "Run the map int auto gameplay mode." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Auto Gameplay" ), _( "Run the map in the Auto Gameplay mode." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
@@ -3651,9 +3651,9 @@ namespace Interface
             }
 
             Maps::setLastObjectUID( _latestObjectUIDBefore );
-
             conf.setCurrentMapInfo( std::move( mapInfo ) );
 
+            // Make sure to redraw everything as we are switching from the game into the Editor.
             setRedraw( REDRAW_ALL );
 
             return true;

@@ -217,6 +217,10 @@ namespace
             if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
                 break;
             }
+
+            if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to close the dialog." ), Dialog::ZERO );
+            }
         }
     }
 
