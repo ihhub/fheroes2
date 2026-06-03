@@ -428,6 +428,14 @@ namespace fheroes2
         StringReplace( title, "%{currentRound}", autoGameplay.getResults().size() );
         StringReplace( title, "%{totalRounds}", autoGameplay.getMaxRounds() );
 
+        // We need to reset left mouse button state to avoid mis-clicking on the dialog's buttons.
+        LocalEvent & eventHandler = LocalEvent::Get();
+        while ( eventHandler.HandleEvents() ) {
+            if ( !eventHandler.isMouseLeftButtonPressed() ) {
+                break;
+            }
+        }
+
         if ( fheroes2::showStandardTextMessage( std::move( title ), _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
                                                 Dialog::YES | Dialog::NO )
              == Dialog::NO ) {
