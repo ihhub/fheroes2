@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <map>
+#include <memory>
 #include <ostream>
 #include <string>
 
@@ -40,12 +41,13 @@
 #include "players.h"
 #include "screen.h"
 #include "settings.h"
-#include "statusbar.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_slider.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
