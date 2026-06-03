@@ -157,7 +157,7 @@ namespace
         text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
         // Render players.
-        int32_t offsetX = activeArea.x + ( activeArea.width - playerCount * playerStepX ) / 2;
+        const int32_t offsetX = activeArea.x + ( activeArea.width - playerCount * playerStepX ) / 2;
         int32_t offsetY = titleBoxRoi.y + titleBoxRoi.height + 10;
 
         std::vector<fheroes2::Rect> playerRects( playerCount );
@@ -271,7 +271,6 @@ namespace
             for ( const auto & info : autoGameplay.getResults().back() ) {
                 if ( info.state == fheroes2::AutoGameplay::PlayerState::INTERRUPTED ) {
                     isInterrupted = true;
-                    
                     break;
                 }
             }
@@ -425,7 +424,7 @@ namespace fheroes2
 
         const auto & autoGameplay = AutoGameplay::instance();
 
-        std::string title{  _( "Auto gameplay\n(round %{currentRound} of %{totalRounds})" ) };
+        std::string title{ _( "Auto gameplay\n(round %{currentRound} of %{totalRounds})" ) };
         StringReplace( title, "%{currentRound}", autoGameplay.getResults().size() );
         StringReplace( title, "%{totalRounds}", autoGameplay.getMaxRounds() );
 
