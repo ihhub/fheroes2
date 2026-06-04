@@ -1582,7 +1582,7 @@ namespace
                                              buttonSize, false, ICN::STONEBAK );
                 fheroes2::makeButtonSprites( _icnVsSprite[id][8], _icnVsSprite[id][9], fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
                                              buttonSize, false, ICN::STONEBAK );
-                fheroes2::makeButtonSprites( _icnVsSprite[id][12], _icnVsSprite[id][13], fheroes2::getSupportedText( gettext_noop( "AUTO\nGAME-PLAY" ), buttonFontType ),
+                fheroes2::makeButtonSprites( _icnVsSprite[id][12], _icnVsSprite[id][13], fheroes2::getSupportedText( gettext_noop( "AUTO\nPLAY-TEST" ), buttonFontType ),
                                              buttonSize, false, ICN::STONEBAK );
 
                 // Quit
