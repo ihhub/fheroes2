@@ -55,7 +55,7 @@
 #include "ui_window.h"
 #include "world.h"
 
-#if defined( DEBUG )
+#if defined( WITH_DEBUG )
 #include <ostream>
 
 #include "logging.h"
@@ -271,7 +271,7 @@ namespace
 
             Game::StartGame();
 
-#if defined( DEBUG )
+#if defined( WITH_DEBUG )
             for ( const auto & infos : autoPlaytest.getResults() ) {
                 VERBOSE_LOG( "----- Playthrough " << playthroughId + 1 << " -----" )
                 for ( const auto & info : infos ) {
