@@ -38,7 +38,7 @@ namespace fheroes2
         HorizontalSlider( const HorizontalSlider & ) = delete;
         HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
-        HorizontalSlider( const int32_t width, const fheroes2::Point position, const int minIndex, const int maxIndex, const int currentIndex );
+        HorizontalSlider( const int32_t width, const Point position, const int minIndex, const int maxIndex, const int currentIndex );
 
         int getCurrentValue() const
         {
@@ -50,11 +50,11 @@ namespace fheroes2
         bool processEvents( LocalEvent & le );
 
     private:
-        fheroes2::Scrollbar _scrollbar;
-        fheroes2::Button _buttonLeft;
-        fheroes2::Button _buttonRight;
+        Scrollbar _scrollbar;
+        Button _buttonLeft;
+        Button _buttonRight;
 
-        fheroes2::TimedEventValidator _timedButtonLeft;
-        fheroes2::TimedEventValidator _timedButtonRight;
+        TimedEventValidator _timedButtonLeft;
+        TimedEventValidator _timedButtonRight;
     };
 }
