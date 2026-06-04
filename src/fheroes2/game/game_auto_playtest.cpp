@@ -27,6 +27,7 @@
 #include <string>
 
 #include "agg_image.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "color.h"
 #include "cursor.h"
@@ -39,6 +40,7 @@
 #include "localevent.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "mus.h"
 #include "pal.h"
 #include "players.h"
 #include "screen.h"
@@ -221,6 +223,8 @@ namespace
 
         display.render( window.totalArea() );
 
+        AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
+
         while ( le.HandleEvents() ) {
             buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
@@ -240,6 +244,8 @@ namespace
                 }
             }
         }
+
+        AudioManager::ResetAudio();
     }
 
     void runPlayTest()
