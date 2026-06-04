@@ -257,7 +257,8 @@ namespace
         RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
 
         const fheroes2::Text title( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
-        title.draw( listRoi.x + ( listRoi.width - title.width() ) / 2, roi.y + 16, display );
+        int x = ( title.width() > listRoi.width ) ? roi.x + ( roi.width - title.width() ) / 2 : listRoi.x + ( listRoi.width - title.width() ) / 2;
+        title.draw( x, roi.y + 16, display );
 
         display.render( background.totalArea() );
 
