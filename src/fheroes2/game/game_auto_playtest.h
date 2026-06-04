@@ -48,11 +48,15 @@ namespace fheroes2
             uint32_t dayOfState{ 1 };
         };
 
+        static constexpr int32_t playthroughLimit{ 100 };
+        static constexpr int32_t dayLimit{ 1000 };
+        static constexpr int32_t animationLimit{ 9 };
+
         static AutoPlaytest & instance();
 
         void setMaxDaysInPlaythrough( const int32_t days )
         {
-            _maxDaysInPlaythrough = std::clamp( days, 1, 1000 );
+            _maxDaysInPlaythrough = std::clamp( days, 1, dayLimit );
         }
 
         int32_t getMaxDaysInPlaythrough() const
@@ -62,7 +66,7 @@ namespace fheroes2
 
         void setAnimationSpeed( const int32_t speed )
         {
-            _animationSpeed = std::clamp( speed, 1, 9 );
+            _animationSpeed = std::clamp( speed, 1, animationLimit );
         }
 
         int32_t getAnimationSpeed() const
@@ -70,9 +74,9 @@ namespace fheroes2
             return _animationSpeed;
         }
 
-        void setMaxPlaythroughs( const int32_t playthroughLimit )
+        void setMaxPlaythroughs( const int32_t playthroughCount )
         {
-            _maxPlaythroughs = std::clamp( playthroughLimit, 1, 100 );
+            _maxPlaythroughs = std::clamp( playthroughCount, 1, playthroughLimit );
         }
 
         int32_t getMaxPlaythroughs() const
@@ -168,7 +172,7 @@ namespace fheroes2
 
         int32_t _maxPlaythroughs{ 1 };
         int32_t _maxDaysInPlaythrough{ 365 };
-        int32_t _animationSpeed{ 9 };
+        int32_t _animationSpeed{ animationLimit };
         bool _isAnimationEnabled{ true };
     };
 

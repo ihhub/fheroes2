@@ -63,10 +63,6 @@
 
 namespace
 {
-    constexpr int32_t playthroughLimit{ 100 };
-    constexpr int32_t dayLimit{ 1000 };
-    constexpr int32_t animationLimit{ 9 };
-
     constexpr int32_t sliderWidth{ 150 };
 
     class TextRestorer final : public fheroes2::MovableText
@@ -375,7 +371,7 @@ namespace fheroes2
         text.fitToOneRow( titleTextRoi.width );
         text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
-        auto & autoPlaytest = fheroes2::AutoPlaytest::instance();
+        auto & autoPlaytest = AutoPlaytest::instance();
 
         constexpr int32_t optionTextMaxWidth{ 250 };
         constexpr int32_t optionTitleOffsetX{ 10 };
@@ -388,24 +384,24 @@ namespace fheroes2
         text.set( _( "autoPlaytest|Number of playthroughs:" ), FontType::normalWhite() );
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
-        fheroes2::HorizontalSlider playthroughCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, playthroughLimit, autoPlaytest.getMaxPlaythroughs() };
+        HorizontalSlider playthroughCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::playthroughLimit, autoPlaytest.getMaxPlaythroughs() };
         TextRestorer playthroughCountValue{ display, { valuePositionX, positionY + 2 } };
-        playthroughCountValue.render( getValueString( autoPlaytest.getMaxPlaythroughs(), playthroughLimit ) );
+        playthroughCountValue.render( getValueString( autoPlaytest.getMaxPlaythroughs(), AutoPlaytest::playthroughLimit ) );
 
         positionY += ySpacing;
 
         text.set( _( "autoPlaytest|Max days per playthrough:" ), FontType::normalWhite() );
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
-        fheroes2::HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, dayLimit, autoPlaytest.getMaxDaysInPlaythrough() };
+        HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::dayLimit, autoPlaytest.getMaxDaysInPlaythrough() };
         TextRestorer dayCountValue{ display, { valuePositionX, positionY + 2 } };
-        dayCountValue.render( getValueString( autoPlaytest.getMaxDaysInPlaythrough(), dayLimit ) );
+        dayCountValue.render( getValueString( autoPlaytest.getMaxDaysInPlaythrough(), AutoPlaytest::dayLimit ) );
 
         positionY += ySpacing;
 
         const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface ) };
 
-        text.set( _( "autoPlaytest|Enable animation" ), fheroes2::FontType::normalWhite() );
+        text.set( _( "autoPlaytest|Enable animation" ), FontType::normalWhite() );
         text.draw( animationCheckboxArea.x + animationCheckboxArea.width + 5, animationCheckboxArea.y + 2, display );
 
         positionY += 30;
@@ -413,9 +409,9 @@ namespace fheroes2
         text.set( _( "autoPlaytest|Animation speed:" ), FontType::normalWhite() );
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
-        fheroes2::HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, animationLimit, autoPlaytest.getAnimationSpeed() };
+        HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::animationLimit, autoPlaytest.getAnimationSpeed() };
         TextRestorer speedCountValue{ display, { valuePositionX, positionY + 2 } };
-        speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), animationLimit ) );
+        speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), AutoPlaytest::animationLimit ) );
 
         positionY += ySpacing;
         text.set( _( "Left clicking at any point will interrupt the playtest." ), FontType::normalWhite() );
@@ -447,17 +443,17 @@ namespace fheroes2
 
             if ( playthroughCountSlider.processEvents( eventHandler ) ) {
                 autoPlaytest.setMaxPlaythroughs( playthroughCountSlider.getCurrentValue() );
-                playthroughCountValue.render( getValueString( playthroughCountSlider.getCurrentValue(), playthroughLimit ) );
+                playthroughCountValue.render( getValueString( playthroughCountSlider.getCurrentValue(), AutoPlaytest::playthroughLimit ) );
                 display.render( window.activeArea() );
             }
             else if ( dayCountSlider.processEvents( eventHandler ) ) {
                 autoPlaytest.setMaxDaysInPlaythrough( dayCountSlider.getCurrentValue() );
-                dayCountValue.render( getValueString( dayCountSlider.getCurrentValue(), dayLimit ) );
+                dayCountValue.render( getValueString( dayCountSlider.getCurrentValue(), AutoPlaytest::dayLimit ) );
                 display.render( window.activeArea() );
             }
             else if ( autoPlaytest.isAnimationEnabled() && speedCountSlider.processEvents( eventHandler ) ) {
                 autoPlaytest.setAnimationSpeed( speedCountSlider.getCurrentValue() );
-                speedCountValue.render( getValueString( speedCountSlider.getCurrentValue(), animationLimit ) );
+                speedCountValue.render( getValueString( speedCountSlider.getCurrentValue(), AutoPlaytest::animationLimit ) );
                 display.render( window.activeArea() );
             }
             else if ( eventHandler.MouseClickLeft( animationCheckboxArea ) ) {
@@ -512,8 +508,8 @@ namespace fheroes2
             }
         }
 
-        if ( fheroes2::showStandardTextMessage( std::move( title ), _( "Do you want to interrupt auto playtest? The effect will take place only on the next turn." ),
-                                                Dialog::YES | Dialog::NO )
+        if ( showStandardTextMessage( std::move( title ), _( "Do you want to interrupt auto playtest? The effect will take place only on the next turn." ),
+                                      Dialog::YES | Dialog::NO )
              == Dialog::NO ) {
             return;
         }
