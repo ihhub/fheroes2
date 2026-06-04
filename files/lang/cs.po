@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-03 03:02+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -4393,6 +4393,22 @@ msgstr "Akční objekty musí být umístěny na prázdných polích."
 #, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Opravdu si přejete načíst novou mapu? (Všechny neuložené změny na aktuální "
+"mapě budou ztraceny.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Opravdu si přejete vytvořit novou mapu? (Všechny neuložené změny na aktuální "
+"mapě budou ztraceny.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr ""

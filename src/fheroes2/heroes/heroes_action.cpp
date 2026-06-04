@@ -3656,7 +3656,7 @@ namespace
 
         std::string title = MP2::StringObject( objectType );
 
-        if ( kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) ) ) {
+        if ( kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) ) ) {
             AudioManager::PlaySound( M82::EXPERNCE );
 
             fheroes2::showStandardTextMessage(
@@ -3692,7 +3692,7 @@ namespace
             _( "You enter the tent and see an old woman gazing into a magic gem. She looks up and says,\n\"In my travels, I have learned much in the way of arcane magic. A great oracle taught me his skill. I have the answer you seek.\"" ),
             Dialog::OK );
 
-        kingdom.SetVisitTravelersTent( tentColor );
+        kingdom.markTravellerTentVisited( tentColor );
     }
 
     // Black Cat gives +3 morale and -2 luck.

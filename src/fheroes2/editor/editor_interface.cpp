@@ -50,7 +50,6 @@
 #include "editor_sphinx_window.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
 #include "ground.h"
@@ -370,6 +369,7 @@ namespace
                 case MP2::OBJ_BARRIER:
                 case MP2::OBJ_BOTTLE:
                 case MP2::OBJ_CAMPFIRE:
+                case MP2::OBJ_EVENT:
                 case MP2::OBJ_FLOTSAM:
                 case MP2::OBJ_HERO:
                 case MP2::OBJ_GENIE_LAMP:
@@ -1384,6 +1384,24 @@ namespace
         return os.str();
     }
 #endif
+
+    fheroes2::GameMode processEditorExitEvent()
+    {
+#if defined( __IPHONEOS__ )
+        // iOS discourages to exit a running application.
+        fheroes2::showStandardTextMessage( _( "Quit" ),
+                                           _( "To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to the current map will be lost.)" ),
+                                           Dialog::OK );
+#else
+        if ( Dialog::YES
+             & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit? (Any unsaved changes to the current map will be lost.)" ),
+                                                  Dialog::YES | Dialog::NO ) ) {
+            return fheroes2::GameMode::QUIT_GAME;
+        }
+#endif
+
+        return fheroes2::GameMode::CANCEL;
+    }
 }
 
 namespace Interface
@@ -1455,7 +1473,13 @@ namespace Interface
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
             if ( _editorPanel.showAreaSelectRect() && ( _tileUnderCursor > -1 ) ) {
-                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                fheroes2::Rect brushSize;
+                if ( _movableObjectInfo.groupType != Maps::ObjectGroup::NONE ) {
+                    brushSize = getObjectOccupiedArea( _movableObjectInfo.groupType, _movableObjectInfo.objectType );
+                }
+                else {
+                    brushSize = _editorPanel.getBrushArea();
+                }
 
                 if ( brushSize.width > 0 && brushSize.height > 0 ) {
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
@@ -1544,7 +1568,7 @@ namespace Interface
 
         while ( res == fheroes2::GameMode::CANCEL ) {
             if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( processEditorExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     res = fheroes2::GameMode::QUIT_GAME;
 
                     break;
@@ -1558,7 +1582,7 @@ namespace Interface
             // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                    res = Game::processExitEvent();
+                    res = processEditorExitEvent();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                     res = eventNewMap();
@@ -1902,6 +1926,12 @@ namespace Interface
                             _resetMovableObjectInfo();
                         }
                     }
+                    else if ( ( le.isMouseWheelUp() && _editorPanel.setPreviousSelectedObjectType() )
+                              || ( le.isMouseWheelDown() && _editorPanel.setNextSelectedObjectType() ) ) {
+                        _editorPanel.setObjectBasedCursor( _editorPanel.getSelectedObjectType(), _editorPanel.getSelectedObjectGroup() );
+                        updateCursor( _tileUnderCursor );
+                        _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
@@ -2078,7 +2108,7 @@ namespace Interface
             }
 
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
-                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( processEditorExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     return fheroes2::GameMode::QUIT_GAME;
                 }
             }
@@ -3533,5 +3563,36 @@ namespace Interface
             action.commit();
             _redraw |= mapUpdateFlags;
         }
+    }
+
+    fheroes2::Rect EditorInterface::getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
+    {
+        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            // TODO: make occupied area calculation for complex objects.
+            return { -2, -3, 5, 5 };
+        }
+
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+            assert( 0 );
+            return { 0, 0, 1, 1 };
+        }
+
+        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
+        if ( offsets.size() < 2 ) {
+            return { 0, 0, 1, 1 };
+        }
+
+        fheroes2::Point minPos{ offsets.front() };
+        fheroes2::Point maxPos{ offsets.front() };
+
+        for ( const auto & offset : offsets ) {
+            minPos.x = std::min( minPos.x, offset.x );
+            minPos.y = std::min( minPos.y, offset.y );
+            maxPos.x = std::max( maxPos.x, offset.x );
+            maxPos.y = std::max( maxPos.y, offset.y );
+        }
+
+        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
     }
 }

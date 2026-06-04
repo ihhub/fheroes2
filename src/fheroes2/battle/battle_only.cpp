@@ -171,6 +171,9 @@ namespace
         if ( terrainType == Maps::Ground::UNKNOWN ) {
             fheroes2::ApplyPalette( output, offset.x + 1, offset.y + 1, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height,
                                     PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+            const fheroes2::Text unknownTerrainText{ "?", fheroes2::FontType::normalYellow() };
+            unknownTerrainText.draw( offset.x + terrainIconSize.width / 2 - 4, offset.y + terrainIconSize.height / 2 - 5, output );
         }
     }
 
@@ -382,7 +385,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
             buttonReset.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonReset.area() ) );
         }
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( buttonStart.isEnabled() && ( le.MouseClickLeft( buttonStart.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
             result = true;
 
             break;
