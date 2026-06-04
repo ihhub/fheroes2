@@ -24,7 +24,6 @@
 #include <cstddef>
 #include <map>
 #include <memory>
-#include <ostream>
 #include <string>
 
 #include "agg_image.h"
@@ -37,7 +36,6 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
-#include "logging.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "pal.h"
@@ -53,6 +51,12 @@
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
+
+#if defined( DEBUG )
+#include <ostream>
+
+#include "logging.h"
+#endif
 
 namespace
 {
