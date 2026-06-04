@@ -355,6 +355,23 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonStartIcn, 0 ), display, buttonStart.area().getPosition(), shadowOffset );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonExitIcn, 0 ), display, buttonExit.area().getPosition(), shadowOffset );
 
+    auto updateStartButton = [&buttonStart]( const Army & first, const Army & second ) {
+        const bool isArmyValid = ( first.isValid() && second.isValid() );
+        if ( isArmyValid && !buttonStart.isEnabled() ) {
+            buttonStart.enable();
+            buttonStart.draw();
+            return true;
+        }
+
+        if ( !isArmyValid && buttonStart.isEnabled() ) {
+            buttonStart.disable();
+            buttonStart.draw();
+            return true;
+        }
+
+        return false;
+    };
+
     buttonStart.draw();
     buttonExit.draw();
     buttonReset.draw();
@@ -451,11 +468,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
 
                     updateHero( first, windowOffset );
 
-                    if ( first.controlType == CONTROL_AI ) {
-                        buttonStart.enable();
-                        buttonStart.draw();
-                        needRender = true;
-                    }
+                    needRender = needRender || updateStartButton( first.monster, second.monster );
                 }
 
                 titleRoiRestorer.restore();
@@ -500,17 +513,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
 
                 armyInfo[firstId].needRedraw = true;
 
-                const bool isArmyValid = ( armyInfo[firstId].monster.isValid() && armyInfo[secondId].monster.isValid() );
-                if ( isArmyValid && !buttonStart.isEnabled() ) {
-                    buttonStart.enable();
-                    buttonStart.draw();
-                    needRender = true;
-                }
-                else if ( !isArmyValid && buttonStart.isEnabled() ) {
-                    buttonStart.disable();
-                    buttonStart.draw();
-                    needRender = true;
-                }
+                needRender = needRender || updateStartButton( armyInfo[firstId].monster, armyInfo[secondId].monster );
             }
             else if ( firstUI.artifact != nullptr && le.isMouseCursorPosInArea( firstUI.artifact->GetArea() ) && firstUI.artifact->QueueEventProcessing() ) {
                 if ( firstUI.army != nullptr && firstUI.army->isSelected() ) {
