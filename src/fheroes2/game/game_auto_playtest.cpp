@@ -27,6 +27,7 @@
 #include <string>
 
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -310,6 +311,9 @@ namespace
         }
 
         autoPlaytest.popLastResults();
+
+        // Make sure to reset music and audio as the playtest could be interrupted.
+        AudioManager::ResetAudio();
 
         displayResults( autoPlaytest );
 
