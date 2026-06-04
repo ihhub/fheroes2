@@ -895,6 +895,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
                         _radar.SetHide( false );
                         _radar.SetRedraw( REDRAW_RADAR );
+
+                        _iconsPanel.showIcons( ICON_ANY );
+                        _iconsPanel.setRedraw();
                     }
 
                     redraw( 0 );
