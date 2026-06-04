@@ -39,7 +39,7 @@
 #include "castle.h"
 #include "dialog.h"
 #include "game.h"
-#include "game_auto_gameplay.h"
+#include "game_auto_playtest.h"
 #include "game_io.h"
 #include "game_video.h"
 #include "game_video_type.h"
@@ -481,8 +481,8 @@ void GameOver::Result::Reset()
 fheroes2::GameMode GameOver::Result::checkGameOver()
 {
     const Settings & conf = Settings::Get();
-    const bool isAutoGameplay{ conf.IsGameType( Game::TYPE_AUTO_GAMEPLAY ) };
-    const PlayerColorsSet humanColors = isAutoGameplay ? conf.GetPlayers().GetColors() : Players::HumanColors();
+    const bool isAutoPlaytest{ conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) };
+    const PlayerColorsSet humanColors = isAutoPlaytest ? conf.GetPlayers().GetColors() : Players::HumanColors();
     const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
 
     const PlayerColor currentColor = conf.CurrentColor();
@@ -497,8 +497,8 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             // This notification should always be displayed for the AI players. For human players, this should only be displayed in a multiplayer game for a
             // human player who is not currently active - in all other cases, the "you have been eliminated" dialog should be displayed.
             if ( !( humanColors & color ) || ( !isSinglePlayer && color != currentColor ) ) {
-                if ( isAutoGameplay ) {
-                    fheroes2::AutoGameplay::instance().setDefeatedPlayer( color, world.CountDay() );
+                if ( isAutoPlaytest ) {
+                    fheroes2::AutoPlaytest::instance().setDefeatedPlayer( color, world.CountDay() );
                 }
                 else {
                     Game::DialogPlayers( color, _( "Major Event!" ), _( "%{color} player has been vanquished!" ) );
@@ -611,8 +611,8 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
         }();
 
         if ( result & GameOver::LOSS ) {
-            if ( isAutoGameplay ) {
-                fheroes2::AutoGameplay::instance().setDefeatedPlayer( currentColor, world.CountDay() );
+            if ( isAutoPlaytest ) {
+                fheroes2::AutoPlaytest::instance().setDefeatedPlayer( currentColor, world.CountDay() );
             }
 
             const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, this]() {
@@ -651,13 +651,13 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             // LOSS_ALL fulfillment by itself is not a reason to end the multiplayer game, unless all human-controlled players are vanquished
             const bool endGame = ( result != GameOver::LOSS_ALL || activeHumanColors == 0 );
 
-            if ( showLossDialog && !isAutoGameplay ) {
+            if ( showLossDialog && !isAutoPlaytest ) {
                 DialogLoss( result );
             }
 
             if ( endGame ) {
                 AudioManager::ResetAudio();
-                if ( !isAutoGameplay ) {
+                if ( !isAutoPlaytest ) {
                     Video::ShowVideo( { { "LOSE.SMK", Video::VideoControl::PLAY_CUTSCENE_LOOP } } );
                 }
 
@@ -665,12 +665,12 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             }
         }
         else if ( result & GameOver::WINS ) {
-            if ( !isAutoGameplay ) {
+            if ( !isAutoPlaytest ) {
                 DialogWins( result );
             }
 
             AudioManager::ResetAudio();
-            if ( !isAutoGameplay ) {
+            if ( !isAutoPlaytest ) {
                 Video::ShowVideo( { { "WIN.SMK", Video::VideoControl::PLAY_CUTSCENE_WAIT } }, { standardGameResults() }, true );
             }
 

@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game_auto_gameplay.h"
+#include "game_auto_playtest.h"
 
 #include <cassert>
 #include <cstddef>
@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -39,6 +40,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "pal.h"
 #include "players.h"
 #include "screen.h"
 #include "settings.h"
@@ -54,9 +56,9 @@
 
 namespace
 {
-    constexpr int32_t roundLimit{ 100 };
+    constexpr int32_t playthroughLimit{ 100 };
     constexpr int32_t dayLimit{ 1000 };
-    constexpr int32_t speedLimit{ 10 };
+    constexpr int32_t animationLimit{ 9 };
 
     constexpr int32_t sliderWidth{ 150 };
 
@@ -97,65 +99,65 @@ namespace
         return world.loadResurrectionMap( mapInfo.filename );
     }
 
-    void displayResults( const fheroes2::AutoGameplay & gameplay )
+    void displayResults( const fheroes2::AutoPlaytest & playtest )
     {
-        if ( gameplay.getResults().empty() ) {
+        if ( playtest.getResults().empty() ) {
             // Nothing to display.
             return;
         }
 
-        // Process only rounds that ended before time limit.
-        int32_t roundByTimeLimit{ 0 };
+        // Process only playthroughs that ended before time limit.
+        int32_t playthroughByTimeLimit{ 0 };
         std::map<PlayerColor, int32_t> wins;
 
-        for ( const auto & result : gameplay.getResults() ) {
+        for ( const auto & result : playtest.getResults() ) {
             // Check that everyone either lost of won.
-            bool isTimeLimitRound{ false };
+            bool isTimeLimitPlaythrough{ false };
             for ( const auto & info : result ) {
-                if ( info.state == fheroes2::AutoGameplay::PlayerState::TIME_LIMIT ) {
-                    isTimeLimitRound = true;
+                if ( info.state == fheroes2::AutoPlaytest::PlayerState::TIME_LIMIT ) {
+                    isTimeLimitPlaythrough = true;
                     break;
                 }
             }
 
-            if ( isTimeLimitRound ) {
-                ++roundByTimeLimit;
+            if ( isTimeLimitPlaythrough ) {
+                ++playthroughByTimeLimit;
                 continue;
             }
 
             for ( const auto & info : result ) {
-                if ( info.state == fheroes2::AutoGameplay::PlayerState::WINNER ) {
+                if ( info.state == fheroes2::AutoPlaytest::PlayerState::WINNER ) {
                     ++wins[info.color];
                 }
                 else {
                     // If this assertion blows up then our logic is not valid.
-                    assert( info.state == fheroes2::AutoGameplay::PlayerState::LOSER );
+                    assert( info.state == fheroes2::AutoPlaytest::PlayerState::LOSER );
                 }
             }
         }
 
         // Display the results.
         constexpr int32_t playerStepX{ 80 };
-        const int32_t roundCount{ static_cast<int32_t>( gameplay.getResults().size() ) };
-        const int32_t playerCount{ static_cast<int32_t>( gameplay.getResults().front().size() ) };
+        const int32_t playthroughCount{ static_cast<int32_t>( playtest.getResults().size() ) };
+        const int32_t playerCount{ static_cast<int32_t>( playtest.getResults().front().size() ) };
 
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow window( 500, 210, true, display );
+        fheroes2::StandardWindow window( 500, 220, true, display );
         const fheroes2::Rect activeArea( window.activeArea() );
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         const fheroes2::Sprite & titleBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
-        const fheroes2::Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
-        const fheroes2::Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
+        const fheroes2::Rect titleBoxRoi{ activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() };
+        const fheroes2::Rect titleTextRoi{ titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 };
 
         Copy( titleBox, 0, 0, display, titleBoxRoi );
         addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
 
-        fheroes2::Text text( _( "Auto Gameplay results" ), fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( _( "Auto Playtest results" ), fheroes2::FontType::normalWhite() );
         text.fitToOneRow( titleTextRoi.width );
         text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
@@ -165,7 +167,7 @@ namespace
 
         std::vector<fheroes2::Rect> playerRects( playerCount );
         PlayerColorsSet playerColorSet{ 0 };
-        for ( const auto & info : gameplay.getResults().front() ) {
+        for ( const auto & info : playtest.getResults().front() ) {
             playerColorSet |= info.color;
         }
 
@@ -189,24 +191,22 @@ namespace
         offsetY += playerRects[0].height + 10;
 
         for ( int32_t i = 0; i < playerCount; ++i ) {
-            text.set( std::to_string( wins[availableColors[i]] * 100 / roundCount ) + "%", fheroes2::FontType::normalYellow() );
+            text.set( std::to_string( wins[availableColors[i]] * 100 / playthroughCount ) + "%", fheroes2::FontType::normalYellow() );
             text.fitToOneRow( playerRects[i].width );
             text.draw( playerRects[i].x, offsetY, playerRects[i].width, display );
         }
 
         offsetY += 20;
 
-        std::string roundString = _n( "autoplay|1 round", "autoplay|%{count} rounds", roundCount );
-        StringReplace( roundString, "%{count}", roundCount );
+        std::string playthroughString = _n( "1 playthrough", "%{count} playthroughs", playthroughCount );
+        StringReplace( playthroughString, "%{count}", playthroughCount );
 
-        text.set( std::move( roundString ), fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( titleTextRoi.width );
-        text.draw( titleTextRoi.x, offsetY, titleTextRoi.width, display );
+        text.set( std::move( playthroughString ), fheroes2::FontType::normalWhite() );
+        text.draw( activeArea.x, offsetY, activeArea.width, display );
 
         offsetY += 20;
-        text.set( std::to_string( roundByTimeLimit ) + _( " round(s) reached time limit" ), fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( titleTextRoi.width );
-        text.draw( titleTextRoi.x, offsetY, titleTextRoi.width, display );
+        text.set( std::to_string( playthroughByTimeLimit ) + _( " playthrough(s) reached the specified time limit" ), fheroes2::FontType::normalWhite() );
+        text.draw( activeArea.x, offsetY, activeArea.width, display );
 
         fheroes2::Button buttonOk;
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
@@ -229,8 +229,8 @@ namespace
 
             for ( size_t i = 0; i < availableColors.size(); ++i ) {
                 if ( le.isMouseRightButtonPressedInArea( playerRects[i] ) ) {
-                    std::string playerString{ _( "Won %{percent}% of rounds." ) };
-                    StringReplace( playerString, "%{percent}", wins[availableColors[i]] * 100 / roundCount );
+                    std::string playerString{ _( "Won %{percent}% of playthroughs." ) };
+                    StringReplace( playerString, "%{percent}", wins[availableColors[i]] * 100 / playthroughCount );
                     fheroes2::showStandardTextMessage( Color::String( availableColors[i] ), std::move( playerString ), Dialog::ZERO );
                 }
             }
@@ -240,42 +240,45 @@ namespace
     void runPlayTest()
     {
         Settings & conf = Settings::Get();
-        fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
-        autoGameplay.reset( conf.GetPlayers().GetColors() );
+        auto & autoPlaytest = fheroes2::AutoPlaytest::instance();
+        autoPlaytest.reset( conf.GetPlayers().GetColors() );
 
         const int32_t currentAISpeed{ conf.AIMoveSpeed() };
 
-        if ( autoGameplay.getMovementSpeed() == 10 ) {
-            conf.SetAIMoveSpeed( 0 );
+        if ( autoPlaytest.isAnimationEnabled() ) {
+            conf.SetAIMoveSpeed( autoPlaytest.getAnimationSpeed() );
         }
         else {
-            conf.SetAIMoveSpeed( autoGameplay.getMovementSpeed() - 1 );
+            conf.SetAIMoveSpeed( 10 );
         }
 
-        for ( int32_t roundId = 0; roundId < autoGameplay.getMaxRounds(); ++roundId ) {
+        Game::UpdateGameSpeed();
+
+        for ( int32_t playthroughId = 0; playthroughId < autoPlaytest.getMaxPlaythroughs(); ++playthroughId ) {
             if ( !prepareMap() ) {
-                fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to prepare the map for auto gameplay." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to prepare the map for auto playtest." ), Dialog::ZERO );
                 return;
             }
 
-            conf.SetGameType( Game::TYPE_AUTO_GAMEPLAY );
+            conf.SetGameType( Game::TYPE_AUTO_PLAYTEST );
 
             Game::StartGame();
 
-            for ( const auto & infos : autoGameplay.getResults() ) {
-                VERBOSE_LOG( "----- Round " << roundId + 1 << " -----" )
+#if defined( DEBUG )
+            for ( const auto & infos : autoPlaytest.getResults() ) {
+                VERBOSE_LOG( "----- Playthrough " << playthroughId + 1 << " -----" )
                 for ( const auto & info : infos ) {
                     switch ( info.state ) {
-                    case fheroes2::AutoGameplay::PlayerState::WINNER:
+                    case fheroes2::AutoPlaytest::PlayerState::WINNER:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " won" )
                         break;
-                    case fheroes2::AutoGameplay::PlayerState::LOSER:
+                    case fheroes2::AutoPlaytest::PlayerState::LOSER:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " lost on " << info.dayOfState << " day" )
                         break;
-                    case fheroes2::AutoGameplay::PlayerState::TIME_LIMIT:
+                    case fheroes2::AutoPlaytest::PlayerState::TIME_LIMIT:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " hit time limit on " << info.dayOfState << " day" )
                         break;
-                    case fheroes2::AutoGameplay::PlayerState::INTERRUPTED:
+                    case fheroes2::AutoPlaytest::PlayerState::INTERRUPTED:
                         VERBOSE_LOG( "Player " << Color::String( info.color ) << " interrupted on " << info.dayOfState << " day" )
                         break;
                     default:
@@ -284,11 +287,12 @@ namespace
                     }
                 }
             }
+#endif
 
-            // Verify whether the current round ended properly or was interrupted by a user.
+            // Verify whether the current playthrough ended properly or was interrupted by a user.
             bool isInterrupted{ false };
-            for ( const auto & info : autoGameplay.getResults().back() ) {
-                if ( info.state == fheroes2::AutoGameplay::PlayerState::INTERRUPTED ) {
+            for ( const auto & info : autoPlaytest.getResults().back() ) {
+                if ( info.state == fheroes2::AutoPlaytest::PlayerState::INTERRUPTED ) {
                     isInterrupted = true;
                     break;
                 }
@@ -298,20 +302,39 @@ namespace
                 break;
             }
 
-            autoGameplay.nextRound();
+            autoPlaytest.nextPlaythrough();
         }
 
-        autoGameplay.popLastResults();
+        autoPlaytest.popLastResults();
 
-        displayResults( autoGameplay );
+        displayResults( autoPlaytest );
 
         // Restore the original AI speed.
         conf.SetAIMoveSpeed( currentAISpeed );
+        Game::UpdateGameSpeed();
     }
 
     std::string getValueString( const int32_t value, const int32_t limit )
     {
         return std::to_string( value ) + '/' + std::to_string( limit );
+    }
+
+    fheroes2::Rect renderCheckbox( const int32_t offsetX, const int32_t offsetY, const bool isEnabled, fheroes2::Image & output, const bool isEvilInterface )
+    {
+        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+
+        fheroes2::Blit( cell, output, offsetX, offsetY );
+        if ( isEnabled ) {
+            const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+            fheroes2::Blit( mark, output, offsetX + mark.x(), offsetY + mark.y() );
+        }
+
+        if ( isEvilInterface ) {
+            fheroes2::ApplyPalette( output, offsetX, offsetY, output, offsetX, offsetY, cell.width(), cell.height(),
+                                    PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+
+        return { offsetX, offsetY, cell.width(), cell.height() };
     }
 }
 
@@ -321,7 +344,7 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        StandardWindow window( 500, 300, true, display );
+        StandardWindow window( 550, 320, true, display );
         const Rect activeArea( window.activeArea() );
 
         const Settings & conf = Settings::Get();
@@ -334,40 +357,55 @@ namespace fheroes2
         Copy( titleBox, 0, 0, display, titleBoxRoi );
         addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
 
-        Text text( _( "Auto map testing" ), FontType::normalWhite() );
+        Text text( _( "Auto Playtest" ), FontType::normalWhite() );
         text.fitToOneRow( titleTextRoi.width );
         text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
-        fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
+        auto & autoPlaytest = fheroes2::AutoPlaytest::instance();
 
-        constexpr int32_t optionTextMaxWidth{ 200 };
+        constexpr int32_t optionTextMaxWidth{ 250 };
+        constexpr int32_t optionTitleOffsetX{ 10 };
         const int32_t positionX = activeArea.x + 10;
         const int32_t inputPositionX = positionX + optionTextMaxWidth;
-        const int32_t valuePositionX = inputPositionX + sliderWidth + 55;
-        const int32_t ySpacing = 45;
+        const int32_t valuePositionX = inputPositionX + sliderWidth + 57;
+        constexpr int32_t ySpacing{ 45 };
         int32_t positionY = activeArea.y + 70;
 
-        text.set( _( "auto|Number of rounds:" ), FontType::normalWhite() );
-        text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
-        fheroes2::HorizontalSlider roundCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, roundLimit, autoGameplay.getMaxRounds() };
-        TextRestorer roundCountValue{ display, { valuePositionX, positionY } };
-        roundCountValue.render( getValueString( autoGameplay.getMaxRounds(), roundLimit ) );
+        text.set( _( "autoPlaytest|Number of playthroughs:" ), FontType::normalWhite() );
+        text.fitToOneRow( optionTextMaxWidth );
+        text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
+        fheroes2::HorizontalSlider playthroughCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, playthroughLimit, autoPlaytest.getMaxPlaythroughs() };
+        TextRestorer playthroughCountValue{ display, { valuePositionX, positionY + 2 } };
+        playthroughCountValue.render( getValueString( autoPlaytest.getMaxPlaythroughs(), playthroughLimit ) );
 
         positionY += ySpacing;
 
-        text.set( _( "auto|Max days per game:" ), FontType::normalWhite() );
-        text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
-        fheroes2::HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, dayLimit, autoGameplay.getMaxDaysInGameplay() };
-        TextRestorer dayCountValue{ display, { valuePositionX, positionY } };
-        dayCountValue.render( getValueString( autoGameplay.getMaxDaysInGameplay(), dayLimit ) );
+        text.set( _( "autoPlaytest|Max days per playthrough:" ), FontType::normalWhite() );
+        text.fitToOneRow( optionTextMaxWidth );
+        text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
+        fheroes2::HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, dayLimit, autoPlaytest.getMaxDaysInPlaythrough() };
+        TextRestorer dayCountValue{ display, { valuePositionX, positionY + 2 } };
+        dayCountValue.render( getValueString( autoPlaytest.getMaxDaysInPlaythrough(), dayLimit ) );
 
         positionY += ySpacing;
 
-        text.set( _( "auto|Animation speed:" ), FontType::normalWhite() );
-        text.draw( positionX + ( optionTextMaxWidth - text.width() ) / 2, positionY, display );
-        fheroes2::HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, speedLimit, autoGameplay.getMovementSpeed() };
-        TextRestorer speedCountValue{ display, { valuePositionX, positionY } };
-        speedCountValue.render( getValueString( autoGameplay.getMovementSpeed(), speedLimit ) );
+        const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface ) };
+
+        text.set( _( "autoPlaytest|Enable animation" ), fheroes2::FontType::normalWhite() );
+        text.draw( animationCheckboxArea.x + animationCheckboxArea.width + 5, animationCheckboxArea.y + 2, display );
+
+        positionY += 30;
+
+        text.set( _( "autoPlaytest|Animation speed:" ), FontType::normalWhite() );
+        text.fitToOneRow( optionTextMaxWidth );
+        text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
+        fheroes2::HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, animationLimit, autoPlaytest.getAnimationSpeed() };
+        TextRestorer speedCountValue{ display, { valuePositionX, positionY + 2 } };
+        speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), animationLimit ) );
+
+        positionY += ySpacing;
+        text.set( _( "Left clicking at any point will interrupt the playtest." ), FontType::normalWhite() );
+        text.draw( positionX, positionY, activeArea.width, display );
 
         Button buttonCancel;
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
@@ -393,24 +431,29 @@ namespace fheroes2
                 return true;
             }
 
-            if ( roundCountSlider.processEvents( eventHandler ) ) {
-                autoGameplay.setMaxRounds( roundCountSlider.getCurrentValue() );
-                roundCountValue.render( getValueString( roundCountSlider.getCurrentValue(), roundLimit ) );
+            if ( playthroughCountSlider.processEvents( eventHandler ) ) {
+                autoPlaytest.setMaxPlaythroughs( playthroughCountSlider.getCurrentValue() );
+                playthroughCountValue.render( getValueString( playthroughCountSlider.getCurrentValue(), playthroughLimit ) );
                 display.render( window.activeArea() );
             }
             else if ( dayCountSlider.processEvents( eventHandler ) ) {
-                autoGameplay.setMaxDaysInGameplay( dayCountSlider.getCurrentValue() );
+                autoPlaytest.setMaxDaysInPlaythrough( dayCountSlider.getCurrentValue() );
                 dayCountValue.render( getValueString( dayCountSlider.getCurrentValue(), dayLimit ) );
                 display.render( window.activeArea() );
             }
-            else if ( speedCountSlider.processEvents( eventHandler ) ) {
-                autoGameplay.setMovementSpeed( speedCountSlider.getCurrentValue() );
-                speedCountValue.render( getValueString( speedCountSlider.getCurrentValue(), speedLimit ) );
+            else if ( autoPlaytest.isAnimationEnabled() && speedCountSlider.processEvents( eventHandler ) ) {
+                autoPlaytest.setAnimationSpeed( speedCountSlider.getCurrentValue() );
+                speedCountValue.render( getValueString( speedCountSlider.getCurrentValue(), animationLimit ) );
+                display.render( window.activeArea() );
+            }
+            else if ( eventHandler.MouseClickLeft( animationCheckboxArea ) ) {
+                autoPlaytest.enableAnimation( !autoPlaytest.isAnimationEnabled() );
+                renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface );
                 display.render( window.activeArea() );
             }
 
             if ( eventHandler.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
-                showStandardTextMessage( _( "Okay" ), _( "Click to run an automated map testing." ), Dialog::ZERO );
+                showStandardTextMessage( _( "Okay" ), _( "Click to run an automated map playtest." ), Dialog::ZERO );
             }
             else if ( eventHandler.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 showStandardTextMessage( _( "Cancel" ), _( "Return to the previous menu." ), Dialog::ZERO );
@@ -420,16 +463,16 @@ namespace fheroes2
         return false;
     }
 
-    AutoGameplay & AutoGameplay::instance()
+    AutoPlaytest & AutoPlaytest::instance()
     {
-        static AutoGameplay gameplay;
-        return gameplay;
+        static AutoPlaytest playtest;
+        return playtest;
     }
 
-    void interruptAutoGameplay()
+    void interruptAutoPlaytest()
     {
         Settings & conf = Settings::Get();
-        assert( conf.IsGameType( Game::TYPE_AUTO_GAMEPLAY ) );
+        assert( conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) );
 
         Player * currentPlayer = conf.GetPlayers().GetCurrent();
         if ( currentPlayer == nullptr ) {
@@ -441,11 +484,11 @@ namespace fheroes2
             return;
         }
 
-        const auto & autoGameplay = AutoGameplay::instance();
+        const auto & autoPlaytest = AutoPlaytest::instance();
 
-        std::string title{ _( "Auto gameplay\n(round %{currentRound} of %{totalRounds})" ) };
-        StringReplace( title, "%{currentRound}", autoGameplay.getResults().size() );
-        StringReplace( title, "%{totalRounds}", autoGameplay.getMaxRounds() );
+        std::string title{ _( "Auto playtest\n(playthrough %{current} of %{total})" ) };
+        StringReplace( title, "%{current}", autoPlaytest.getResults().size() );
+        StringReplace( title, "%{total}", autoPlaytest.getMaxPlaythroughs() );
 
         // We need to reset left mouse button state to avoid mis-clicking on the dialog's buttons.
         LocalEvent & eventHandler = LocalEvent::Get();
@@ -455,7 +498,7 @@ namespace fheroes2
             }
         }
 
-        if ( fheroes2::showStandardTextMessage( std::move( title ), _( "Do you want to interrupt auto gameplay? The effect will take place only on the next turn." ),
+        if ( fheroes2::showStandardTextMessage( std::move( title ), _( "Do you want to interrupt auto playtest? The effect will take place only on the next turn." ),
                                                 Dialog::YES | Dialog::NO )
              == Dialog::NO ) {
             return;

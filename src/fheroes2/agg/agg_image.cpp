@@ -1600,7 +1600,7 @@ namespace
                                                         fheroes2::getSupportedText( gettext_noop( "SAVE\nMAP" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ),
-                                                        fheroes2::getSupportedText( gettext_noop( "AUTO\nGAME-PLAY" ), buttonFontType ) },
+                                                        fheroes2::getSupportedText( gettext_noop( "AUTO\nPLAY-TEST" ), buttonFontType ) },
                                                       false, 86 );
             break;
         }

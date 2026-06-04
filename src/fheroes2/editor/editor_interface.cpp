@@ -49,7 +49,7 @@
 #include "editor_spell_selection.h"
 #include "editor_sphinx_window.h"
 #include "game.h"
-#include "game_auto_gameplay.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
@@ -1635,8 +1635,8 @@ namespace Interface
                     VERBOSE_LOG( getAllMapTexts( _mapFormat ) )
                 }
 #endif
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_AUTO_GAMEPLAY ) ) {
-                    _runAutoGameplay();
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_AUTO_PLAYTEST ) ) {
+                    _runAutoPlaytest();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
@@ -2080,7 +2080,7 @@ namespace Interface
         const fheroes2::ButtonBase & buttonSaveMap = optionButtons.button( 3 );
         const fheroes2::ButtonBase & buttonMainMenu = optionButtons.button( 4 );
         const fheroes2::ButtonBase & buttonQuit = optionButtons.button( 5 );
-        const fheroes2::ButtonBase & buttonAutoGameplay = optionButtons.button( 6 );
+        const fheroes2::ButtonBase & buttonAutoPlaytest = optionButtons.button( 6 );
 
         fheroes2::Button buttonCancel;
 
@@ -2138,8 +2138,8 @@ namespace Interface
                     return fheroes2::GameMode::NEW_STANDARD;
                 }
             }
-            else if ( le.MouseClickLeft( buttonAutoGameplay.area() ) ) {
-                if ( Get()._runAutoGameplay() ) {
+            else if ( le.MouseClickLeft( buttonAutoPlaytest.area() ) ) {
+                if ( Get()._runAutoPlaytest() ) {
                     return fheroes2::GameMode::CANCEL;
                 }
             }
@@ -2161,8 +2161,8 @@ namespace Interface
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
             }
-            else if ( le.isMouseRightButtonPressedInArea( buttonAutoGameplay.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Auto Gameplay" ), _( "Run the map in the Auto Gameplay mode." ), Dialog::ZERO );
+            else if ( le.isMouseRightButtonPressedInArea( buttonAutoPlaytest.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Auto Playtest" ), _( "Run an automatic playtest of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
@@ -3621,7 +3621,7 @@ namespace Interface
         return true;
     }
 
-    bool EditorInterface::_runAutoGameplay()
+    bool EditorInterface::_runAutoPlaytest()
     {
         if ( !_prepareMapForGameplay() ) {
             return false;

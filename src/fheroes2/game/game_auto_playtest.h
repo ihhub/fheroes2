@@ -30,7 +30,7 @@
 
 namespace fheroes2
 {
-    class AutoGameplay final
+    class AutoPlaytest final
     {
     public:
         enum class PlayerState : uint8_t
@@ -48,67 +48,77 @@ namespace fheroes2
             uint32_t dayOfState{ 1 };
         };
 
-        static AutoGameplay & instance();
+        static AutoPlaytest & instance();
 
-        void setMaxDaysInGameplay( const int32_t days )
+        void setMaxDaysInPlaythrough( const int32_t days )
         {
-            _maxDaysInGameplay = days;
+            _maxDaysInPlaythrough = std::clamp( days, 1, 1000 );
         }
 
-        int32_t getMaxDaysInGameplay() const
+        int32_t getMaxDaysInPlaythrough() const
         {
-            return _maxDaysInGameplay;
+            return _maxDaysInPlaythrough;
         }
 
-        void setMovementSpeed( const int32_t speed )
+        void setAnimationSpeed( const int32_t speed )
         {
-            _movementSpeed = std::clamp( speed, 1, 10 );
+            _animationSpeed = std::clamp( speed, 1, 9 );
         }
 
-        int32_t getMovementSpeed() const
+        int32_t getAnimationSpeed() const
         {
-            return _movementSpeed;
+            return _animationSpeed;
         }
 
-        void setMaxRounds( const int32_t roundLimit )
+        void setMaxPlaythroughs( const int32_t playthroughLimit )
         {
-            _maxRounds = std::clamp( roundLimit, 1, 100 );
+            _maxPlaythroughs = std::clamp( playthroughLimit, 1, 100 );
         }
 
-        int32_t getMaxRounds() const
+        int32_t getMaxPlaythroughs() const
         {
-            return _maxRounds;
+            return _maxPlaythroughs;
+        }
+
+        void enableAnimation( const bool enable )
+        {
+            _isAnimationEnabled = enable;
+        }
+
+        bool isAnimationEnabled() const
+        {
+            return _isAnimationEnabled;
         }
 
         void reset( const PlayerColorsSet colors )
         {
-            _roundResults.clear();
+            _playthroughResults.clear();
 
-            auto & infos = _roundResults.emplace_back();
+            auto & infos = _playthroughResults.emplace_back();
             for ( const auto color : PlayerColorsVector( colors ) ) {
                 auto & info = infos.emplace_back();
                 info.color = color;
             }
         }
 
-        void nextRound()
+        void nextPlaythrough()
         {
-            assert( !_roundResults.empty() );
+            assert( !_playthroughResults.empty() );
 
-            std::vector<PlayerInfo> lastResult = _roundResults.back();
+            std::vector<PlayerInfo> lastResult = _playthroughResults.back();
             for ( auto & state : lastResult ) {
                 state.dayOfState = 0;
                 state.state = PlayerState::WINNER;
             }
 
-            _roundResults.emplace_back( std::move( lastResult ) );
+            _playthroughResults.emplace_back( std::move( lastResult ) );
         }
 
         void setDefeatedPlayer( const PlayerColor color, const uint32_t day )
         {
-            assert( !_roundResults.empty() );
+            assert( !_playthroughResults.empty() );
 
-            for ( auto & info : _roundResults.back() ) {
+            for ( auto & info : _playthroughResults.back() ) {
                 if ( info.color == color ) {
                     info.dayOfState = day;
                     info.state = PlayerState::LOSER;
@@ -118,11 +128,11 @@ namespace fheroes2
 
         void markTimeLimit()
         {
-            assert( !_roundResults.empty() );
+            assert( !_playthroughResults.empty() );
 
-            for ( auto & info : _roundResults.back() ) {
+            for ( auto & info : _playthroughResults.back() ) {
                 if ( info.state != PlayerState::LOSER ) {
-                    info.dayOfState = _maxDaysInGameplay;
+                    info.dayOfState = _maxDaysInPlaythrough;
                     info.state = PlayerState::TIME_LIMIT;
                 }
             }
@@ -130,9 +140,9 @@ namespace fheroes2
 
         void interrupt( const uint32_t day )
         {
-            assert( !_roundResults.empty() );
+            assert( !_playthroughResults.empty() );
 
-            for ( auto & info : _roundResults.back() ) {
+            for ( auto & info : _playthroughResults.back() ) {
                 if ( info.state != PlayerState::LOSER ) {
                     info.dayOfState = day;
                     info.state = PlayerState::INTERRUPTED;
@@ -142,26 +152,27 @@ namespace fheroes2
 
         const std::vector<std::vector<PlayerInfo>> & getResults() const
         {
-            return _roundResults;
+            return _playthroughResults;
         }
 
         void popLastResults()
         {
-            _roundResults.pop_back();
+            _playthroughResults.pop_back();
         }
 
     private:
-        AutoGameplay() = default;
-        ~AutoGameplay() = default;
+        AutoPlaytest() = default;
+        ~AutoPlaytest() = default;
 
-        int32_t _maxRounds{ 1 };
-        int32_t _maxDaysInGameplay{ 365 };
-        int32_t _movementSpeed{ 10 };
+        std::vector<std::vector<PlayerInfo>> _playthroughResults;
 
-        std::vector<std::vector<PlayerInfo>> _roundResults;
+        int32_t _maxPlaythroughs{ 1 };
+        int32_t _maxDaysInPlaythrough{ 365 };
+        int32_t _animationSpeed{ 9 };
+        bool _isAnimationEnabled{ true };
     };
 
     bool openMapAutoPlayTest();
 
-    void interruptAutoGameplay();
+    void interruptAutoPlaytest();
 }

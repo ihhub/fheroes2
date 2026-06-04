@@ -45,7 +45,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
-#include "game_auto_gameplay.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
@@ -733,7 +733,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
-    const bool isAutoGameplay{ conf.IsGameType( Game::TYPE_AUTO_GAMEPLAY ) };
+    const bool isAutoPlaytest{ conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) };
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
         // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
@@ -766,8 +766,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
         for ( Player * player : sortedPlayers ) {
             world.ClearFog( player->GetColor() );
 
-            if ( isAutoGameplay ) {
-                // Every player for auto gameplay mode is being set as Human player controlled by AI.
+            if ( isAutoPlaytest ) {
+                // Every player for auto playtest mode is being set as Human player controlled by AI.
                 player->SetControl( CONTROL_HUMAN );
                 player->setAIAutoControlMode( true );
             }
@@ -791,10 +791,10 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             break;
         }
 
-        if ( isAutoGameplay ) {
-            fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
-            if ( static_cast<int32_t>( world.CountDay() ) > autoGameplay.getMaxDaysInGameplay() ) {
-                autoGameplay.markTimeLimit();
+        if ( isAutoPlaytest ) {
+            auto & autoPlaytest = fheroes2::AutoPlaytest::instance();
+            if ( static_cast<int32_t>( world.CountDay() ) > autoPlaytest.getMaxDaysInPlaythrough() ) {
+                autoPlaytest.markTimeLimit();
                 res = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
@@ -901,7 +901,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
-                    if ( isHotSeatGame || isAutoGameplay ) {
+                    if ( isHotSeatGame || isAutoPlaytest ) {
                         Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 
@@ -912,7 +912,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     kingdom.ActionBeforeTurn();
 
 #if defined( WITH_DEBUG )
-                    if ( !isAutoGameplay && !isLoadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                    if ( !isAutoPlaytest && !isLoadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                         // This is a human player which gave control to AI so we need to do autosave here.
                         Game::AutoSave();
                     }
@@ -923,14 +923,14 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     assert( res != fheroes2::GameMode::CANCEL );
 
 #if defined( WITH_DEBUG )
-                    if ( !isAutoGameplay && !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                    if ( !isAutoPlaytest && !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                         // This is a human player which gave control to AI so we need to do autosave here.
                         Game::AutoSave();
                     }
 #endif
-                    if ( isAutoGameplay && kingdom.GetControl() != CONTROL_AI ) {
-                        fheroes2::AutoGameplay & autoGameplay = fheroes2::AutoGameplay::instance();
-                        autoGameplay.interrupt( world.CountDay() );
+                    if ( isAutoPlaytest && kingdom.GetControl() != CONTROL_AI ) {
+                        auto & autoPlaytest = fheroes2::AutoPlaytest::instance();
+                        autoPlaytest.interrupt( world.CountDay() );
                         res = fheroes2::GameMode::MAIN_MENU;
                         break;
                     }

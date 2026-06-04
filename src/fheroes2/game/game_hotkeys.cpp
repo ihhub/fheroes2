@@ -168,8 +168,8 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_AUTO_GAMEPLAY )]
-            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|auto gameplay" ), fheroes2::Key::KEY_A };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_AUTO_PLAYTEST )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|auto playtest" ), fheroes2::Key::KEY_A };
 
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE )]

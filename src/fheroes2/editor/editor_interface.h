@@ -206,7 +206,7 @@ namespace Interface
 
         bool _prepareMapForGameplay();
 
-        bool _runAutoGameplay();
+        bool _runAutoPlaytest();
 
         EditorPanel _editorPanel;
 

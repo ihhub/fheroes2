@@ -129,7 +129,7 @@
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
     <ClCompile Include="src\fheroes2\game\game.cpp" />
-    <ClCompile Include="src\fheroes2\game\game_auto_gameplay.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_auto_playtest.cpp" />
     <ClCompile Include="src\fheroes2\game\game_campaign.cpp" />
     <ClCompile Include="src\fheroes2\game\game_credits.cpp" />
     <ClCompile Include="src\fheroes2\game\game_delays.cpp" />
@@ -350,7 +350,7 @@
     <ClInclude Include="src\fheroes2\editor\history_manager.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
-    <ClInclude Include="src\fheroes2\game\game_auto_gameplay.h" />
+    <ClInclude Include="src\fheroes2\game\game_auto_playtest.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
     <ClInclude Include="src\fheroes2\game\game_delays.h" />
     <ClInclude Include="src\fheroes2\game\game_exit.h" />
