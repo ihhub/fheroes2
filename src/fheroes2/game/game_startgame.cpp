@@ -980,8 +980,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     Game::setDisplayFadeIn();
 
-    // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
-    if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
+    // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next
+    // or when running in auto playtest mode.
+    if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD && !isAutoPlaytest ) {
         fheroes2::fadeOutDisplay();
     }
 
