@@ -896,6 +896,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                         _radar.SetHide( false );
                         _radar.SetRedraw( REDRAW_RADAR );
 
+                        // We also update the state of castles and heroes to have better visibility of the kingdom state.
                         _iconsPanel.showIcons( ICON_ANY );
                         _iconsPanel.setRedraw();
                     }
