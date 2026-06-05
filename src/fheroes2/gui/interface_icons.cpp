@@ -446,9 +446,13 @@ void Interface::IconsPanel::select( Castle * const castle )
 
 void Interface::IconsPanel::resetIcons( const HeroesCastlesIcons type )
 {
-    Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+    const PlayerColor color = Settings::Get().CurrentColor();
+    Kingdom & kingdom = world.GetKingdom( color );
 
-    if ( !kingdom.isControlAI() ) {
+    Player * player = Players::Get( color );
+    assert( player != nullptr );
+
+    if ( !kingdom.isControlAI() || player->isAIAutoControlMode() ) {
         const int icnscroll = Settings::Get().isEvilInterfaceEnabled() ? ICN::SCROLLE : ICN::SCROLL;
 
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
