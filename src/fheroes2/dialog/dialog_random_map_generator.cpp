@@ -78,9 +78,9 @@ namespace
 
             constexpr int32_t sliderLength{ 187 };
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, sliderLength, 1, static_cast<int32_t>( maxIndex + 1 ),
-                                                                                       { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
-            _scrollbar.setImage( scrollbarSlider );
+            fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, sliderLength, 1, static_cast<int32_t>( maxIndex + 1 ),
+                                                                                 { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
+            _scrollbar.setImage( std::move( scrollbarSlider ) );
             _scrollbar.setArea( { position.x + buttonWidth + 9, position.y + 3, sliderLength, 11 } );
             _scrollbar.setRange( minIndex, maxIndex );
             _scrollbar.moveToIndex( currentIndex );

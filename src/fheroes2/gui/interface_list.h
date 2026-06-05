@@ -122,9 +122,9 @@ namespace Interface
             _scrollbar.setArea( area );
         }
 
-        void setScrollBarImage( const fheroes2::Image & image )
+        void setScrollBarImage( fheroes2::Image image )
         {
-            _scrollbar.setImage( image );
+            _scrollbar.setImage( std::move( image ) );
         }
 
         void updateScrollBarImage()

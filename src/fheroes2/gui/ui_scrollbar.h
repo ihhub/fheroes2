@@ -42,13 +42,9 @@ namespace fheroes2
         }
 
         // The original resources do not support proper scrollbar slider scaling. Use generateScrollbarSlider() function to generate needed image.
-        void setImage( const Image & image )
+        void setImage( Image image )
         {
-            if ( image.singleLayer() ) {
-                _disableTransformLayer();
-            }
-
-            Copy( image, *this );
+            Image::operator=( std::move( image ) );
         }
 
         void setArea( const Rect & area )
