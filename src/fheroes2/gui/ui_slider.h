@@ -22,6 +22,7 @@
 
 #include <cstdint>
 
+#include "image.h"
 #include "math_base.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
