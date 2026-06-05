@@ -90,15 +90,12 @@ namespace fheroes2
         _buttonRight.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( _buttonRight.area() ) );
 
         if ( le.isMouseLeftButtonPressedInArea( _scrollbar.getArea() ) ) {
+            const int32_t prevValue{ _scrollbar.currentIndex() };
             const int prevPosX = _scrollbar.x();
             _scrollbar.moveToPos( le.getMouseCursorPos() );
 
             // Return true only if the slider position has changed.
-            return ( prevPosX != _scrollbar.x() );
-        }
-
-        if ( _scrollbar.updatePosition() ) {
-            return true;
+            return ( prevPosX != _scrollbar.x() ) || ( prevValue != _scrollbar.currentIndex() );
         }
 
         if ( le.MouseClickLeft( _buttonLeft.area() ) || le.isMouseWheelDownInArea( _scrollbar.getArea() ) || _timedButtonLeft.isDelayPassed() ) {
