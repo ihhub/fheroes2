@@ -934,8 +934,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
                     if ( isAutoPlaytest && kingdom.GetControl() != CONTROL_AI ) {
-                        auto & autoPlaytest = fheroes2::AutoPlaytest::instance();
-                        autoPlaytest.interrupt( world.CountDay() );
                         res = fheroes2::GameMode::MAIN_MENU;
                         break;
                     }

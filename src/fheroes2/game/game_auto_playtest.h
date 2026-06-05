@@ -154,6 +154,19 @@ namespace fheroes2
             }
         }
 
+        bool isInterrupted() const
+        {
+            assert( !_playthroughResults.empty() );
+
+            for ( auto & info : _playthroughResults.back() ) {
+                if ( info.state == PlayerState::INTERRUPTED ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         const std::vector<std::vector<PlayerInfo>> & getResults() const
         {
             return _playthroughResults;

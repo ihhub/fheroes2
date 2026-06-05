@@ -501,7 +501,14 @@ namespace fheroes2
             return;
         }
 
-        const auto & autoPlaytest = AutoPlaytest::instance();
+        auto & autoPlaytest = AutoPlaytest::instance();
+        // Check if the game has been interrupted.
+        if ( autoPlaytest.isInterrupted() ) {
+            // Nothing we need to do. Just wait.
+            return;
+        }
+
+        autoPlaytest.interrupt( world.CountDay() );
 
         std::string title{ _( "Auto playtest\n(playthrough %{current} of %{total})" ) };
         StringReplace( title, "%{current}", autoPlaytest.getResults().size() );
