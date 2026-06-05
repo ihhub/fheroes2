@@ -457,6 +457,13 @@ namespace fheroes2
                 display.render( window.activeArea() );
             }
             else if ( eventHandler.MouseClickLeft( animationCheckboxArea ) ) {
+                if ( autoPlaytest.isAnimationEnabled() ) {
+                    speedCountSlider.disable();
+                }
+                else {
+                    speedCountSlider.enable();
+                }
+
                 autoPlaytest.enableAnimation( !autoPlaytest.isAnimationEnabled() );
                 renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface );
                 display.render( window.activeArea() );

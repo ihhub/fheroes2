@@ -49,10 +49,16 @@ namespace fheroes2
 
         bool processEvents( LocalEvent & le );
 
+        void disable();
+
+        void enable();
+
     private:
         Scrollbar _scrollbar;
         Button _buttonLeft;
         Button _buttonRight;
+
+        Image _scrollbarBackup;
 
         TimedEventValidator _timedButtonLeft;
         TimedEventValidator _timedButtonRight;

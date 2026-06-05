@@ -28,6 +28,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "pal.h"
 #include "screen.h"
 #include "settings.h"
 
@@ -117,5 +118,32 @@ namespace fheroes2
         }
 
         return false;
+    }
+
+    void HorizontalSlider::disable()
+    {
+        _buttonLeft.disable();
+        _buttonRight.disable();
+
+        _buttonLeft.draw();
+        _buttonRight.draw();
+
+        _scrollbarBackup = _scrollbar;
+        ApplyPalette( _scrollbar, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        _scrollbar.redraw();
+    }
+
+    void HorizontalSlider::enable()
+    {
+        _buttonLeft.enable();
+        _buttonRight.enable();
+
+        _buttonLeft.draw();
+        _buttonRight.draw();
+
+        if ( !_scrollbarBackup.empty() ) {
+            _scrollbar.setImage( _scrollbarBackup );
+            _scrollbar.redraw();
+        }
     }
 }
