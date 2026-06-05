@@ -158,7 +158,7 @@ namespace fheroes2
         {
             assert( !_playthroughResults.empty() );
 
-            for ( auto & info : _playthroughResults.back() ) {
+            for ( const auto & info : _playthroughResults.back() ) {
                 if ( info.state == PlayerState::INTERRUPTED ) {
                     return true;
                 }
