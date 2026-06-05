@@ -128,7 +128,7 @@ namespace fheroes2
         _buttonLeft.draw();
         _buttonRight.draw();
 
-        _scrollbarBackup = _scrollbar;
+        Copy( _scrollbar, _scrollbarBackup );
         ApplyPalette( _scrollbar, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         _scrollbar.redraw();
     }
