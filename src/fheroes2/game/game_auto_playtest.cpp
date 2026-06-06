@@ -354,7 +354,7 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        StandardWindow window( 550, 320, true, display );
+        StandardWindow window( 550, 345, true, display );
         const Rect activeArea( window.activeArea() );
 
         const Settings & conf = Settings::Get();
@@ -413,6 +413,13 @@ namespace fheroes2
         TextRestorer speedCountValue{ display, { valuePositionX, positionY + 2 } };
         speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), AutoPlaytest::animationLimit ) );
 
+        positionY += 30;
+
+        const Rect soundsCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface ) };
+
+        text.set( _( "autoPlaytest|Enable environment sounds" ), FontType::normalWhite() );
+        text.draw( soundsCheckboxArea.x + soundsCheckboxArea.width + 5, soundsCheckboxArea.y + 2, display );
+
         positionY += ySpacing;
         text.set( _( "Left clicking at any point will interrupt the playtest." ), FontType::normalYellow() );
         text.draw( positionX, positionY, activeArea.width, display );
@@ -467,6 +474,12 @@ namespace fheroes2
                 autoPlaytest.enableAnimation( !autoPlaytest.isAnimationEnabled() );
                 renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface );
                 display.render( window.activeArea() );
+            }
+            else if ( eventHandler.MouseClickLeft( soundsCheckboxArea ) ) {
+                autoPlaytest.enableSounds( !autoPlaytest.areEnvironmentSoundsEnabled() );
+
+                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface );
+                display.render( soundsCheckboxArea );
             }
 
             if ( eventHandler.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {

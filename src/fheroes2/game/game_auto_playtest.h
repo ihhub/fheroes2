@@ -94,6 +94,16 @@ namespace fheroes2
             return _isAnimationEnabled;
         }
 
+        void enableSounds( const bool enable )
+        {
+            _playEnvironmentSounds = enable;
+        }
+
+        bool areEnvironmentSoundsEnabled() const
+        {
+            return _playEnvironmentSounds;
+        }
+
         void reset( const PlayerColorsSet colors )
         {
             _playthroughResults.clear();
@@ -187,6 +197,7 @@ namespace fheroes2
         int32_t _maxDaysInPlaythrough{ 365 };
         int32_t _animationSpeed{ animationLimit };
         bool _isAnimationEnabled{ true };
+        bool _playEnvironmentSounds{ true };
     };
 
     bool openMapAutoPlayTest();

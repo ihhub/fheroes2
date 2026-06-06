@@ -798,6 +798,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 res = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
+
+            Game::SetUpdateSoundsOnFocusUpdate( autoPlaytest.areEnvironmentSoundsEnabled() );
         }
 
         res = fheroes2::GameMode::END_TURN;
