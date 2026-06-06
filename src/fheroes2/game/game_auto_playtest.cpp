@@ -414,7 +414,7 @@ namespace fheroes2
         speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), AutoPlaytest::animationLimit ) );
 
         positionY += ySpacing;
-        text.set( _( "Left clicking at any point will interrupt the playtest." ), FontType::normalWhite() );
+        text.set( _( "Left clicking at any point will interrupt the playtest." ), FontType::normalYellow() );
         text.draw( positionX, positionY, activeArea.width, display );
 
         Button buttonCancel;
