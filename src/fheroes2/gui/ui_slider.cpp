@@ -65,8 +65,8 @@ namespace fheroes2
         _buttonRight.draw( display );
 
         const Sprite & originalSlider = AGG::GetICN( tradpostIcnId, 2 );
-        const Image scrollbarSlider = generateScrollbarSlider( originalSlider, true, width, 1, static_cast<int32_t>( maxIndex + 1 ), { 0, 0, 2, originalSlider.height() },
-                                                               { 2, 0, 8, originalSlider.height() } );
+        const Image scrollbarSlider = generateScrollbarSlider( originalSlider, true, width, 1, static_cast<int32_t>( maxIndex - minIndex + 1 ),
+                                                               { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
         _scrollbar.setImage( scrollbarSlider );
         _scrollbar.setArea( { position.x + leftOffset, position.y + 3, width, 11 } );
         _scrollbar.setRange( minIndex, maxIndex );
@@ -77,8 +77,8 @@ namespace fheroes2
 
     void HorizontalSlider::setRange( const int minIndex, const int maxIndex )
     {
-        _scrollbar.setImage( generateScrollbarSlider( _scrollbar, true, _scrollbar.getArea().width, 1, maxIndex + 1, { 0, 0, 2, _scrollbar.height() },
-                                                      { 2, 0, 8, _scrollbar.height() } ) );
+        _scrollbar.setImage( generateScrollbarSlider( _scrollbar, true, _scrollbar.getArea().width, 1, static_cast<int32_t>( maxIndex - minIndex + 1 ),
+                                                      { 0, 0, 2, _scrollbar.height() }, { 2, 0, 8, _scrollbar.height() } ) );
 
         const int currentIndex = std::min( _scrollbar.currentIndex(), maxIndex );
         _scrollbar.setRange( minIndex, maxIndex );
