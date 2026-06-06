@@ -522,7 +522,7 @@ namespace fheroes2
             }
         }
 
-        if ( showStandardTextMessage( std::move( title ), _( "Do you want to interrupt auto playtest? The effect will take place only on the next turn." ),
+        if ( showStandardTextMessage( std::move( title ), _( "Do you want to interrupt the automatic playtest? The effect will take place only on the next turn." ),
                                       Dialog::YES | Dialog::NO )
              == Dialog::NO ) {
             return;
