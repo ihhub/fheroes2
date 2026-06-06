@@ -255,7 +255,7 @@ namespace
         listBox.Redraw();
 
         RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
-        
+
         fheroes2::Text title( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
         if ( title.width() > listRoi.width ) {
             // Make sure that the title isn't going beyond the dialog's borders.
