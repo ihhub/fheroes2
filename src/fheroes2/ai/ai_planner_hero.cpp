@@ -2947,6 +2947,8 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
 
                 // Verify that the movement bonus is still applicable.
                 slowestTroop = heroArmy.GetSlowestTroop();
+                assert( slowestTroop != nullptr );
+
                 speedDifference = slowestTroop->GetSpeed() - slowestSpeed;
                 if ( speedDifference * 100U >= hero.GetMovePoints() ) {
                     hero.SetModes( Heroes::SLEEPER );
