@@ -532,8 +532,6 @@ namespace fheroes2
             return;
         }
 
-        autoPlaytest.interrupt( world.CountDay() );
-
         std::string title{ _( "Auto playtest\n(playthrough %{current} of %{total})" ) };
         StringReplace( title, "%{current}", autoPlaytest.getResults().size() );
         StringReplace( title, "%{total}", autoPlaytest.getMaxPlaythroughs() );
@@ -554,5 +552,7 @@ namespace fheroes2
 
         // Switch off AI auto control mode for all players.
         currentPlayer->setAIAutoControlMode( false );
+
+        autoPlaytest.interrupt( world.CountDay() );
     }
 }
