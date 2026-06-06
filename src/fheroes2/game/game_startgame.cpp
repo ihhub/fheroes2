@@ -767,7 +767,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             world.ClearFog( player->GetColor() );
 
             if ( isAutoPlaytest ) {
-                // Every player for auto playtest mode is being set as Human player controlled by AI.
+                // Every player for auto playtest mode is set as human player controlled by AI.
                 player->SetControl( CONTROL_HUMAN );
                 player->setAIAutoControlMode( true );
             }
