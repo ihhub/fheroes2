@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -198,11 +198,11 @@ void Interface::CastleIcons::setPos( const int32_t px, const int32_t py )
     VecCastles & castles = world.GetKingdom( Settings::Get().CurrentColor() ).GetCastles();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
-    const fheroes2::Image scrollbarSlider
+    fheroes2::Image scrollbarSlider
         = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _iconsCount - 38, _iconsCount, static_cast<int32_t>( castles.size() ),
                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
-    setScrollBarImage( scrollbarSlider );
+    setScrollBarImage( std::move( scrollbarSlider ) );
     SetScrollButtonUp( icnscroll, 0, 1, { px + iconsCursorWidth + 1, py + 1 } );
     SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + _iconsCount * iconsCursorHeight - 15 } );
     SetAreaMaxItems( _iconsCount );
@@ -311,11 +311,11 @@ void Interface::HeroesIcons::setPos( const int32_t px, const int32_t py )
     VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
-    const fheroes2::Image scrollbarSlider
+    fheroes2::Image scrollbarSlider
         = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _iconsCount - 38, _iconsCount, static_cast<int32_t>( heroes.size() ),
                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
-    setScrollBarImage( scrollbarSlider );
+    setScrollBarImage( std::move( scrollbarSlider ) );
     SetScrollButtonUp( icnscroll, 0, 1, { px + iconsCursorWidth + 1, py + 1 } );
     SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + _iconsCount * iconsCursorHeight - 15 } );
     SetAreaMaxItems( _iconsCount );
@@ -454,10 +454,10 @@ void Interface::IconsPanel::resetIcons( const HeroesCastlesIcons type )
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
 
         if ( type & ICON_HEROES ) {
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _heroesIcons.getIconsCount() - 38,
-                                                                                       _heroesIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetHeroes().size() ),
-                                                                                       { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-            _heroesIcons.setScrollBarImage( scrollbarSlider );
+            fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _heroesIcons.getIconsCount() - 38,
+                                                                                 _heroesIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetHeroes().size() ),
+                                                                                 { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+            _heroesIcons.setScrollBarImage( std::move( scrollbarSlider ) );
             _heroesIcons.SetListContent( kingdom.GetHeroes() );
 
             // SetListContent() selects the first item (hero) in the list. We reset it by unselecting.
@@ -465,10 +465,10 @@ void Interface::IconsPanel::resetIcons( const HeroesCastlesIcons type )
         }
 
         if ( type & ICON_CASTLES ) {
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _castleIcons.getIconsCount() - 38,
-                                                                                       _castleIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetCastles().size() ),
-                                                                                       { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-            _castleIcons.setScrollBarImage( scrollbarSlider );
+            fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * _castleIcons.getIconsCount() - 38,
+                                                                                 _castleIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetCastles().size() ),
+                                                                                 { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+            _castleIcons.setScrollBarImage( std::move( scrollbarSlider ) );
             _castleIcons.SetListContent( kingdom.GetCastles() );
 
             // SetListContent() selects the first item (castle/town) in the list. We reset it by unselecting.

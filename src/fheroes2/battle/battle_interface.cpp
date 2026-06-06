@@ -829,11 +829,11 @@ namespace Battle
             setScrollBarArea( { ax + 5, buttonPgUpArea.y + buttonPgUpArea.height + 3, 12, _scrollbarSliderAreaLength } );
 
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
-            const fheroes2::Image scrollbarSlider
+            fheroes2::Image scrollbarSlider
                 = fheroes2::generateScrollbarSlider( originalSlider, false, _scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( _messages.size() ),
                                                      { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
 
-            setScrollBarImage( scrollbarSlider );
+            setScrollBarImage( std::move( scrollbarSlider ) );
             _scrollbar.hide();
             SetAreaItems( { area.x, area.y, area.width - 16, area.height + battleLogLastElementOffset } );
             SetListContent( _messages );
@@ -897,10 +897,10 @@ namespace Battle
 
             // Update the scrollbar image.
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
-            const fheroes2::Image scrollbarSlider
+            fheroes2::Image scrollbarSlider
                 = fheroes2::generateScrollbarSlider( originalSlider, false, _scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( _messages.size() ),
                                                      { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
-            setScrollBarImage( scrollbarSlider );
+            setScrollBarImage( std::move( scrollbarSlider ) );
             SetCurrent( _messages.size() - 1 );
         }
 

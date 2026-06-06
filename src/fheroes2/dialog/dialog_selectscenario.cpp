@@ -362,9 +362,9 @@ void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected
 void ScenarioListBox::SelectMapSize( MapsFileInfoList & mapsList, const int selectedSize_ )
 {
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-    const fheroes2::Image updatedScrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( mapsList.size() ),
-                                                                                      { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-    setScrollBarImage( updatedScrollbarSlider );
+    fheroes2::Image updatedScrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( mapsList.size() ),
+                                                                                { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+    setScrollBarImage( std::move( updatedScrollbarSlider ) );
     Maps::FileInfo currentScenario;
 
     if ( _size() > 0 ) {
