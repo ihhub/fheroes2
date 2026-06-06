@@ -256,9 +256,15 @@ namespace
 
         RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
 
-        const fheroes2::Text title( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
-        const int x = ( title.width() > listRoi.width ) ? roi.x + ( roi.width - title.width() ) / 2 : listRoi.x + ( listRoi.width - title.width() ) / 2;
-        title.draw( x, roi.y + 16, display );
+
+        fheroes2::Text title( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
+        if ( title.width() > listRoi.width ) {
+            // Make sure that the title isn't going beyond the dialog's borders.
+            title.fitToOneRow( roi.width - 10);
+            title.draw( roi.x, roi.y + 16, roi.width, display );
+        } else {
+            title.draw( listRoi.x, roi.y + 16, listRoi.width, display );
+        }
 
         display.render( background.totalArea() );
 
