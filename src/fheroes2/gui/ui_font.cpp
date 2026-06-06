@@ -4087,6 +4087,56 @@ namespace
             font[195].setPosition( font[65].x(), font[65].y() - 3 );
             updateNormalFontLetterShadow( font[195] );
 
+            // A with diaeresis.
+            font[196].resize( font[65].width(), font[65].height() + 3 );
+            font[196].reset();
+            fheroes2::Copy( font[65], 0, 0, font[196], 0, 3, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[196], 3, 1 + 3, font[196], 4, 0, 1, 1 );
+            fheroes2::Copy( font[196], 4, 1 + 3, font[196], 5, 0, 1, 1 );
+            fheroes2::Copy( font[196], 4, 0, font[196], 9, 0, 2, 1 );
+            font[196].setPosition( font[65].x(), font[65].y() - 3 );
+            updateNormalFontLetterShadow( font[196] );
+
+            // A with circle on top.
+            font[197].resize( font[65].width(), font[65].height() + 2 );
+            font[197].reset();
+            fheroes2::Copy( font[65], 0, 3, font[197], 0, 5, font[65].width(), font[65].height() );
+            fheroes2::FillTransform( font[197], 2, 5, 3, 3, 1 );
+            fheroes2::Copy( font[112], 5, 6, font[197], 7, 4, 4, 1 );
+            fheroes2::Copy( font[112], 5, 6, font[197], 7, 0, 4, 1 );
+            fheroes2::Copy( font[112], 5, 6, font[197], 7, 2, 4, 1 );
+            fheroes2::Copy( font[116], 1, 0, font[197], 7, 1, 1, 1 );
+            fheroes2::Copy( font[116], 1, 0, font[197], 10, 1, 1, 1 );
+            font[197].setPosition( font[65].x(), font[65].y() - 2 );
+            updateNormalFontLetterShadow( font[197] );
+
+            // A attached to E.
+            font[198].resize( font[65].width() + 3, font[65].height() );
+            font[198].reset();
+            fheroes2::Copy( font[65], 0, 0, font[198], 0, 0, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[69], 6, 0, font[198], 12, 0, 6, 4 );
+            fheroes2::Copy( font[69], 5, 0, font[198], 10, 0, 2, 2 );
+            fheroes2::Copy( font[69], 6, 4, font[198], 12, 4, 3, 2 );
+            fheroes2::Copy( font[69], 6, 4, font[198], 15, 4, 1, 2 );
+            fheroes2::Copy( font[69], 8, 9, font[198], 14, 9, 3, 2 );
+            font[198].setPosition( font[65].x(), font[65].y() );
+            updateNormalFontLetterShadow( font[198] );
+
+            // C with cedilla.
+            font[199].resize( font[67].width(), font[67].height() + 3 );
+            font[199].reset();
+            fheroes2::Copy( font[67], 0, 0, font[199], 0, 0, font[67].width(), font[67].height() );
+            fheroes2::Copy( font[99], 2, 1, font[199], 7, 11, 1, 1 );
+            fheroes2::Copy( font[99], 5, 6, font[199], 8, 11, 1, 1 );
+            fheroes2::Copy( font[99], 2, 6, font[199], 9, 11, 1, 1 );
+            fheroes2::Copy( font[99], 2, 1, font[199], 8, 12, 1, 1 );
+            fheroes2::Copy( font[99], 5, 6, font[199], 9, 12, 1, 1 );
+            fheroes2::Copy( font[99], 2, 1, font[199], 7, 13, 1, 1 );
+            fheroes2::Copy( font[99], 5, 6, font[199], 8, 13, 1, 1 );
+            fheroes2::Copy( font[99], 3, 0, font[199], 9, 13, 1, 1 );
+            font[199].setPosition( font[67].x(), font[67].y() );
+            updateNormalFontLetterShadow( font[199] );
+
             // E with grave accent `.
             font[200].resize( font[69].width(), font[69].height() + 3 );
             font[200].reset();
@@ -4238,6 +4288,9 @@ namespace
             font[240] = font[100];
 
             // [242] COMBINING DOT BELOW.
+            // The most appropriate solution should be to put this symbol centered below a previous symbol.
+            // However, this would require logical changes in rendering which we want to avoid.
+            font[242].setPosition( font[242].x() - font[242].width(), font[242].y() + 3 );
 
             // o with acute accent.
             font[243].resize( font[111].width(), font[111].height() + 3 );
@@ -4325,6 +4378,46 @@ namespace
             fheroes2::Copy( font[65], 3, 0, font[195], 6, 0, 1, 1 );
             font[195].setPosition( font[65].x(), font[65].y() - 3 );
             updateSmallFontLetterShadow( font[195] );
+
+            // A with diaeresis. Generate for later use.
+            font[196].resize( font[65].width(), font[65].height() + 2 );
+            font[196].reset();
+            fheroes2::Copy( font[65], 0, 0, font[196], 0, 2, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[196], 3, 0 + 2, font[196], 4, 0, 1, 1 );
+            fheroes2::Copy( font[196], 3, 0 + 2, font[196], 6, 0, 1, 1 );
+            font[196].setPosition( font[65].x(), font[65].y() - 2 );
+            updateSmallFontLetterShadow( font[196] );
+
+            // A with circle on top.
+            font[197].resize( font[65].width(), font[65].height() + 4 );
+            font[197].reset();
+            fheroes2::Copy( font[65], 0, 0, font[197], 0, 2, font[65].width(), font[65].height() );
+            fheroes2::FillTransform( font[197], 3, 2, 3, 1, 1 );
+            fheroes2::FillTransform( font[197], 1, 2, 3, 3, 1 );
+            // Generate circle for further use.
+            fheroes2::Copy( font[101], 2, 0, font[197], 5, 0, 1, 1 );
+            fheroes2::Copy( font[101], 2, 0, font[197], 6, 1, 1, 1 );
+            fheroes2::Copy( font[101], 2, 0, font[197], 5, 2, 1, 1 );
+            fheroes2::Copy( font[101], 2, 0, font[197], 4, 1, 1, 1 );
+            font[197].setPosition( font[65].x(), font[65].y() - 2 );
+            updateSmallFontLetterShadow( font[197] );
+
+            // A attached to E.
+            font[198].resize( font[65].width() + 3, font[65].height() );
+            font[198].reset();
+            fheroes2::Copy( font[65], 0, 0, font[198], 0, 0, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[69], 3, 0, font[198], 6, 0, 5, 4 );
+            fheroes2::Copy( font[69], 1, 0, font[198], 9, 5, 2, 2 );
+            font[198].setPosition( font[65].x(), font[65].y() );
+            updateSmallFontLetterShadow( font[198] );
+
+            // C with cedilla.
+            font[199].resize( font[67].width(), font[67].height() + 3 );
+            font[199].reset();
+            fheroes2::Copy( font[67], 0, 0, font[199], 0, 0, font[67].width(), font[67].height() );
+            fheroes2::Copy( font[67], 1, 1, font[199], 3, 7, 2, 2 );
+            font[199].setPosition( font[67].x(), font[67].y() );
+            updateSmallFontLetterShadow( font[199] );
 
             // E with grave accent `.
             font[200].resize( font[69].width(), font[69].height() + 4 );
@@ -4475,6 +4568,9 @@ namespace
             font[240] = font[100];
 
             // [242] COMBINING DOT BELOW.
+            // The most appropriate solution should be to put this symbol centered below a previous symbol.
+            // However, this would require logical changes in rendering which we want to avoid.
+            font[242].setPosition( font[242].x() - font[242].width(), font[242].y() + 2 );
 
             // o with acute accent.
             font[243].resize( font[111].width(), font[111].height() + 3 );
