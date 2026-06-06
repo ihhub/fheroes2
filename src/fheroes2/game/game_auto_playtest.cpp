@@ -272,26 +272,24 @@ namespace
             Game::StartGame();
 
 #if defined( WITH_DEBUG )
-            for ( const auto & infos : autoPlaytest.getResults() ) {
-                VERBOSE_LOG( "----- Playthrough " << playthroughId + 1 << " -----" )
-                for ( const auto & info : infos ) {
-                    switch ( info.state ) {
-                    case fheroes2::AutoPlaytest::PlayerState::WINNER:
-                        VERBOSE_LOG( "Player " << Color::String( info.color ) << " won" )
-                        break;
-                    case fheroes2::AutoPlaytest::PlayerState::LOSER:
-                        VERBOSE_LOG( "Player " << Color::String( info.color ) << " lost on " << info.dayOfState << " day" )
-                        break;
-                    case fheroes2::AutoPlaytest::PlayerState::TIME_LIMIT:
-                        VERBOSE_LOG( "Player " << Color::String( info.color ) << " hit time limit on " << info.dayOfState << " day" )
-                        break;
-                    case fheroes2::AutoPlaytest::PlayerState::INTERRUPTED:
-                        VERBOSE_LOG( "Player " << Color::String( info.color ) << " interrupted on " << info.dayOfState << " day" )
-                        break;
-                    default:
-                        assert( 0 );
-                        break;
-                    }
+            VERBOSE_LOG( "----- Playthrough " << autoPlaytest.getResults().size() << " -----" )
+            for ( const auto & info : autoPlaytest.getResults().back() ) {
+                switch ( info.state ) {
+                case fheroes2::AutoPlaytest::PlayerState::WINNER:
+                    VERBOSE_LOG( "Player " << Color::String( info.color ) << " won" )
+                    break;
+                case fheroes2::AutoPlaytest::PlayerState::LOSER:
+                    VERBOSE_LOG( "Player " << Color::String( info.color ) << " lost on " << info.dayOfState << " day" )
+                    break;
+                case fheroes2::AutoPlaytest::PlayerState::TIME_LIMIT:
+                    VERBOSE_LOG( "Player " << Color::String( info.color ) << " hit time limit on " << info.dayOfState << " day" )
+                    break;
+                case fheroes2::AutoPlaytest::PlayerState::INTERRUPTED:
+                    VERBOSE_LOG( "Player " << Color::String( info.color ) << " interrupted on " << info.dayOfState << " day" )
+                    break;
+                default:
+                    assert( 0 );
+                    break;
                 }
             }
 #endif
