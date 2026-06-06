@@ -891,7 +891,6 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     conf.SetCurrentColor( playerColor );
 
                     _statusPanel.Reset();
-                    _statusPanel.SetState( StatusType::STATUS_AITURN );
 
                     if ( player->isAIAutoControlMode() ) {
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
@@ -902,6 +901,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                         _iconsPanel.resetIcons( ICON_ANY );
                         _iconsPanel.showIcons( ICON_ANY );
                         _iconsPanel.setRedraw();
+                    }
+                    else {
+                        _statusPanel.SetState( StatusType::STATUS_AITURN );
                     }
 
                     redraw( 0 );
