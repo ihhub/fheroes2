@@ -2940,8 +2940,8 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
             uint32_t speedDifference{ fastestTroop->GetSpeed() - slowestSpeed };
             if ( speedDifference * 100U >= hero.GetMovePoints() ) {
                 // Seems like leaving all slow units in the castle might give a movement boost next day.
-                const Troops castleBackup{ castle->GetArmy() };
-                const Troops heroBackup{ heroArmy };
+                const Troops castleBackup{ castle->GetArmy().getTroops() };
+                const Troops heroBackup{ heroArmy.getTroops() };
 
                 transferSlowestTroopsToGarrison( &hero, castle );
 
