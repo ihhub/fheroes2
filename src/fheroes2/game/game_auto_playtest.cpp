@@ -115,15 +115,15 @@ namespace
 
         for ( const auto & result : playtest.getResults() ) {
             // Check that everyone either lost of won.
-            bool isTimeLimitPlaythrough{ false };
+            bool isTimeLimitedPlaythrough{ false };
             for ( const auto & info : result ) {
                 if ( info.state == fheroes2::AutoPlaytest::PlayerState::TIME_LIMIT ) {
-                    isTimeLimitPlaythrough = true;
+                    isTimeLimitedPlaythrough = true;
                     break;
                 }
             }
 
-            if ( isTimeLimitPlaythrough ) {
+            if ( isTimeLimitedPlaythrough ) {
                 ++playthroughByTimeLimit;
                 continue;
             }
