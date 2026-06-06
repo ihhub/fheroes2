@@ -101,6 +101,7 @@ public:
     Troop * GetFirstValid() const;
     Troop * GetWeakestTroop() const;
     Troop * GetSlowestTroop() const;
+    Troop * GetFastestTroop() const;
 
     void SortStrongest();
 

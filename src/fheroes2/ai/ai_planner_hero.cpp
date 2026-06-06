@@ -2923,6 +2923,41 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
             }
 
             reinforceCastle( *castle );
+
+            // If the hero has very little movement points, we can check whether it is worth keeping him in the castle for the next turn.
+            //
+            // Each step in monster speed gives 100 movement points (see Heroes::GetMaxMovePoints() method).
+            // So, we need to get the difference in speed between slowest and fastest units, and compare it with movement points left for this turn.
+            Army & heroArmy = hero.GetArmy();
+            const Troop * slowestTroop = heroArmy.GetSlowestTroop();
+            const Troop * fastestTroop = heroArmy.GetFastestTroop();
+
+            assert( slowestTroop != nullptr );
+            assert( fastestTroop != nullptr );
+
+            const uint32_t slowestSpeed{ slowestTroop->GetSpeed() };
+
+            uint32_t speedDifference{ fastestTroop->GetSpeed() - slowestSpeed };
+            if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                // Seems like leaving all slow units in the castle might give a movement boost next day.
+                Troops castleBackup{ castle->GetArmy() };
+                Troops heroBackup{ heroArmy };
+
+                transferSlowestTroopsToGarrison( &hero, castle );
+
+                // Verify that the movement bonus is still applicable.
+                slowestTroop = heroArmy.GetSlowestTroop();
+                speedDifference = slowestTroop->GetSpeed() - slowestSpeed;
+                if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                    hero.SetModes( Heroes::SLEEPER );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << " stays in " << castle->GetName() << " castle till the next turn to get movement boost." )
+                }
+                else {
+                    // Nope. We can't get the movement bonus.
+                    castle->GetArmy().Assign( castleBackup );
+                    heroArmy.Assign( heroBackup );
+                }
+            }
         }
         else {
             OptimizeTroopsOrder( hero.GetArmy() );
