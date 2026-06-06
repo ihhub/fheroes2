@@ -406,9 +406,13 @@ namespace fheroes2
 
         positionY += 30;
 
-        text.set( _( "autoPlaytest|Animation speed:" ), FontType::normalWhite() );
+        text.set( _( "autoPlaytest|Animation speed:" ), autoPlaytest.isAnimationEnabled() ? FontType::normalWhite() : FontType{ FontSize::NORMAL, FontColor::GRAY } );
         text.fitToOneRow( optionTextMaxWidth );
-        text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
+
+        const Point animationTextOffset{ positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1 };
+
+        auto animationTextAreaRestorer = std::make_unique<ImageRestorer>( display, animationTextOffset.x, animationTextOffset.y, text.width(), text.height() );
+        text.draw( animationTextOffset.x, animationTextOffset.y, display );
         HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::animationLimit, autoPlaytest.getAnimationSpeed() };
         TextRestorer speedCountValue{ display, { valuePositionX, positionY + 2 } };
         speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), AutoPlaytest::animationLimit ) );
@@ -472,6 +476,13 @@ namespace fheroes2
                 }
 
                 autoPlaytest.enableAnimation( !autoPlaytest.isAnimationEnabled() );
+
+                animationTextAreaRestorer->restore();
+                text.set( _( "autoPlaytest|Animation speed:" ),
+                          autoPlaytest.isAnimationEnabled() ? FontType::normalWhite() : FontType{ FontSize::NORMAL, FontColor::GRAY } );
+                text.fitToOneRow( optionTextMaxWidth );
+                text.draw( animationTextOffset.x, animationTextOffset.y, display );
+
                 renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface );
                 display.render( window.activeArea() );
             }
