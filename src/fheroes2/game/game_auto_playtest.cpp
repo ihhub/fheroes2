@@ -401,7 +401,7 @@ namespace fheroes2
 
         const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface ) };
 
-        text.set( _( "autoPlaytest|Enable animation" ), FontType::normalWhite() );
+        text.set( _( "autoPlaytest|Animation" ), FontType::normalWhite() );
         text.draw( animationCheckboxArea.x + animationCheckboxArea.width + 5, animationCheckboxArea.y + 2, display );
 
         positionY += 30;
