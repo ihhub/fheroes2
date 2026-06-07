@@ -160,7 +160,7 @@ namespace
         Copy( titleBox, 0, 0, display, titleBoxRoi );
         addGradientShadow( titleBox, display, titleBoxRoi.getPosition(), { -5, 5 } );
 
-        fheroes2::Text text( _( "Auto Playtest results" ), fheroes2::FontType::normalWhite() );
+        fheroes2::Text text( _( "Auto Playtest Results" ), fheroes2::FontType::normalWhite() );
         text.fitToOneRow( titleTextRoi.width );
         text.drawInRoi( titleTextRoi.x, titleTextRoi.y + 3, titleTextRoi.width, display, titleTextRoi );
 
