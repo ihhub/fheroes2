@@ -50,7 +50,7 @@ namespace fheroes2
 
         static constexpr int32_t playthroughLimit{ 100 };
         static constexpr int32_t dayLimit{ 1000 };
-        static constexpr int32_t animationLimit{ 9 };
+        static constexpr int32_t animationLimit{ 10 };
 
         static AutoPlaytest & instance();
 

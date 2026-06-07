@@ -734,6 +734,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     Settings & conf = Settings::Get();
 
     const bool isAutoPlaytest{ conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) };
+    const bool isAutoPlaytestAnimationEnabled{ fheroes2::AutoPlaytest::instance().isAnimationEnabled() };
+
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
         // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
@@ -777,6 +779,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     if ( !isHotSeatGame ) {
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
+    }
+
+    if ( isAutoPlaytest && !isAutoPlaytestAnimationEnabled ) {
+        // Move the game area to the center of the map and render it once only. We don't need to render the fog again.
+        _gameArea.SetCenter( fheroes2::Point{ world.w() / 2, world.h() / 2 } );
+        _gameArea.redrawOnlyFog( fheroes2::Display::instance() );
     }
 
     while ( res == fheroes2::GameMode::END_TURN ) {
@@ -892,7 +900,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     _statusPanel.Reset();
 
-                    if ( player->isAIAutoControlMode() ) {
+                    if ( player->isAIAutoControlMode() && ( !isAutoPlaytest || isAutoPlaytestAnimationEnabled ) ) {
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
                         _radar.SetHide( false );
                         _radar.SetRedraw( REDRAW_RADAR );
@@ -910,7 +918,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
-                    if ( isHotSeatGame || isAutoPlaytest ) {
+                    if ( isHotSeatGame || ( isAutoPlaytest && isAutoPlaytestAnimationEnabled ) ) {
                         Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 

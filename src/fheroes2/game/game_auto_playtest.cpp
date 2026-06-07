@@ -256,7 +256,7 @@ namespace
             conf.SetAIMoveSpeed( autoPlaytest.getAnimationSpeed() );
         }
         else {
-            conf.SetAIMoveSpeed( 10 );
+            conf.SetAIMoveSpeed( 0 );
         }
 
         Game::UpdateGameSpeed();

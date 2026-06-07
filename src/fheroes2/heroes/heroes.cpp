@@ -44,6 +44,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_auto_playtest.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "ground.h"
@@ -1757,7 +1758,7 @@ void Heroes::Scout( const int tileIndex ) const
 
     // If player gave control to AI we need to update the radar image after every 'ClearFog()' call as in this mode we don't
     // do any optimizations.
-    if ( player->isAIAutoControlMode() ) {
+    if ( player->isAIAutoControlMode() && ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) ) {
         // We redraw the radar map fully as there is no need to make a code for rendering optimizations for AI debug tracking.
         // As AI don't waste time for thinking between hero moves we don't need to force radar update in other places.
         ScoutRadar();

@@ -47,6 +47,7 @@
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
@@ -3733,7 +3734,7 @@ void Heroes::ScoutRadar() const
 
         // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we
         // don't call 'SetRenderArea()'.
-        if ( !player->isAIAutoControlMode() ) {
+        if ( !player->isAIAutoControlMode() && ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) ) {
             I.getRadar().SetRenderArea( GetScoutRoi() );
         }
     }
@@ -3768,7 +3769,8 @@ void Heroes::Action( const int tileIndex )
 
     const bool isAIAutoControlMode = player->isAIAutoControlMode();
 
-    if ( !GetKingdom().isControlAI() || isAIAutoControlMode ) {
+    if ( !GetKingdom().isControlAI() || ( isAIAutoControlMode &&
+            ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) ) ) {
         focusUpdater = std::make_unique<FocusUpdater>();
 
         if ( isAIAutoControlMode ) {

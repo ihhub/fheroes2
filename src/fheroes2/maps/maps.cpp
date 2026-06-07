@@ -470,7 +470,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
     const Kingdom & kingdom = world.GetKingdom( playerColor );
 
     const bool isAIPlayer = kingdom.isControlAI();
-    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() ) || Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST );
+    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );
