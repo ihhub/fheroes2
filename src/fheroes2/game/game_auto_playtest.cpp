@@ -261,6 +261,8 @@ namespace
 
         Game::UpdateGameSpeed();
 
+        fheroes2::GameInterfaceTypeRestorer interfaceRestorer{ conf.isEvilInterfaceEnabled() ? InterfaceType::EVIL : InterfaceType::GOOD };
+
         for ( int32_t playthroughId = 0; playthroughId < autoPlaytest.getMaxPlaythroughs(); ++playthroughId ) {
             if ( !prepareMap() ) {
                 fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to prepare the map for auto playtest." ), Dialog::ZERO );
