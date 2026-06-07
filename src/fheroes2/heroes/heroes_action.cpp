@@ -3769,8 +3769,8 @@ void Heroes::Action( const int tileIndex )
 
     const bool isAIAutoControlMode = player->isAIAutoControlMode();
 
-    if ( !GetKingdom().isControlAI() || ( isAIAutoControlMode &&
-            ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) ) ) {
+    if ( !GetKingdom().isControlAI()
+         || ( isAIAutoControlMode && ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) ) ) {
         focusUpdater = std::make_unique<FocusUpdater>();
 
         if ( isAIAutoControlMode ) {
