@@ -414,6 +414,9 @@ namespace fheroes2
         HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::animationLimit, autoPlaytest.getAnimationSpeed() };
         TextRestorer speedCountValue{ display, { valuePositionX, positionY + 2 } };
         speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), AutoPlaytest::animationLimit ) );
+        if ( !autoPlaytest.isAnimationEnabled() ) {
+            speedCountSlider.disable();
+        }
 
         positionY += 30;
 
