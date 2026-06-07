@@ -216,13 +216,13 @@ namespace
             constexpr double avgNumOfAtackers = 2.0;
             // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
             constexpr double avgBattleTurns = 5.0;
-            const double ressurectK = 1
+            const double powerRatio = 1
                                       + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAtackers, 0.0 )
                                             // *0.5 to get average hit points of the troop in the battle
                                             / ( attacker.GetHitPoints() * 0.5 );
-            const double killTimeK = 1 / ressurectK;
-            assert( killTimeK <= 1 );
-            attackValue += ( allEnemiesThreat / avgNumOfAtackers ) * avgBattleTurns * ( 1 - killTimeK );
+            const double killTimeRatio = 1 / powerRatio;
+            assert( killTimeRatio <= 1 );
+            attackValue += ( allEnemiesThreat / avgNumOfAtackers ) * avgBattleTurns * ( 1 - killTimeRatio );
         }
 
         return attackValue;
