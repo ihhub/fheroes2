@@ -424,7 +424,7 @@ namespace fheroes2
 
         const Rect soundsCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface ) };
 
-        text.set( _( "autoPlaytest|Play sounds" ), FontType::normalWhite() );
+        text.set( _( "autoPlaytest|Sound Effects" ), FontType::normalWhite() );
         text.draw( soundsCheckboxArea.x + soundsCheckboxArea.width + 5, soundsCheckboxArea.y + 2, display );
 
         positionY += ySpacing;
