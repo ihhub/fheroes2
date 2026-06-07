@@ -203,7 +203,7 @@ namespace
             }
             else {
                 ressurectPoints = killed * target.Monster::GetHitPoints();
-                ressurectPoints = std::min( ressurectPoints, ( attacker.GetMaxCount() * attacker.Monster::GetHitPoints() - attacker.GetHitPoints() ) );
+                ressurectPoints = std::min( ressurectPoints, attacker.GetMissingHitPoints() );
             }
 
             // first effect: target will need to kill this ressurected creatures
