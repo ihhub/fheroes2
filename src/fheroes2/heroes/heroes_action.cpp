@@ -530,6 +530,8 @@ namespace
             Kingdom & enemyKingdom = castle->GetKingdom();
             enemyKingdom.RemoveCastle( castle );
             hero.GetKingdom().AddCastle( castle );
+            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
+
             world.CaptureObject( dstIndex, hero.GetColor() );
 
             castle->Scout();

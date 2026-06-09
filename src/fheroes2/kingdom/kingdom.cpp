@@ -312,11 +312,6 @@ void Kingdom::AddCastle( Castle * castle )
         if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) ) {
             castles.push_back( castle );
         }
-
-        const Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) ) {
-            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
-        }
     }
 
     lost_town_days = Game::GetLostTownDays() + 1;
