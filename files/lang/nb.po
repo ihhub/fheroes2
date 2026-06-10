@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -192,6 +192,11 @@ msgstr "OMSTART"
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 #, fuzzy
@@ -4627,24 +4632,6 @@ msgstr ""
 "Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
 "kartet vil gå tapt.)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Start på nytt"
@@ -4678,6 +4665,13 @@ msgstr "Lagre det nåværende kartet."
 
 msgid "Quit out of the map editor."
 msgstr "Forlat karttegneren"
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Spilltestere"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 #, fuzzy
 msgid "Return to the game's Main Menu."
@@ -4762,6 +4756,24 @@ msgstr ""
 #, fuzzy
 msgid "Failed to save the map."
 msgstr "Lagringsfil:"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5561,6 +5573,66 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Umulig"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Spilltestere"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Lagringsfil:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Underleggelse"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Underleggelse"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Vil du gi styringen til datamaskinen? Dette vil først tre i kraft den neste "
+"runden."
+
 msgid "and more..."
 msgstr "og mer..."
 
@@ -5979,6 +6051,10 @@ msgstr "Menyen for nye kart"
 #, fuzzy
 msgid "hotkey|toggle passability"
 msgstr "Slå av/på status"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Venstre"
 
 #, fuzzy
 msgid "hotkey|re-generate random map"

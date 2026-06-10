@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -224,6 +224,11 @@ msgstr ""
 "ГАЛОЎ-\n"
 "НАЕ\n"
 "МЕНЮ"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4486,24 +4491,6 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid "Unsaved Changes"
-msgstr "Незахаваныя змяненні"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 msgid "Start Map"
 msgstr ""
 
@@ -4532,6 +4519,13 @@ msgstr "Захаваць бягучую мапу."
 
 msgid "Quit out of the map editor."
 msgstr "Выйсці з рэдактара мап."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Тэставальнікі"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Вярнуцца ў галоўнае меню гульні."
@@ -4605,6 +4599,24 @@ msgid "Map saved to: "
 msgstr " "
 
 msgid "Failed to save the map."
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr "Незахаваныя змяненні"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -5305,6 +5317,66 @@ msgstr "Вельмі цяжкая"
 msgid "difficulty|Impossible"
 msgstr "Немагчымая"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Тэставальнікі"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Націсніце, каб захаваць чуткі."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+msgid "Failed to prepare the map for auto playtest."
+msgstr ""
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Анімацыя"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Анімацыя"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Націсніце, каб вярнуцца ў галоўнае меню."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Хочаце вярнуць кіраванне гульнёй? ШІ перадасць вам кіраванне толькі на "
+"наступным ходзе."
+
 msgid "and more..."
 msgstr "і г. д."
 
@@ -5707,6 +5779,10 @@ msgstr "адкрыць галоўнае меню гульні"
 
 msgid "hotkey|toggle passability"
 msgstr "паказ праходнасці (укл./выкл.)"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "улева"
 
 msgid "hotkey|re-generate random map"
 msgstr ""

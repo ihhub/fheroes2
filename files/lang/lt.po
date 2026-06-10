@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -172,6 +172,11 @@ msgstr ""
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 msgid ""
@@ -4272,24 +4277,6 @@ msgstr ""
 "Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
 "prarastas, jei neįrašėte)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Įkelti žaidimą"
@@ -4323,6 +4310,12 @@ msgid "Save the current map."
 msgstr ""
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Auto Playtest"
+msgstr ""
+
+msgid "Run an automatic playtest of the map."
 msgstr ""
 
 #, fuzzy
@@ -4403,6 +4396,24 @@ msgstr ""
 #, fuzzy
 msgid "Failed to save the map."
 msgstr "Įrašyti į failą:"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5136,6 +5147,61 @@ msgstr ""
 msgid "difficulty|Impossible"
 msgstr ""
 
+msgid "Auto Playtest Results"
+msgstr ""
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Rodyti kitą miestą"
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Įrašyti į failą:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "autoPlaytest|Animation"
+msgstr ""
+
+msgid "autoPlaytest|Animation speed:"
+msgstr ""
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Rodyti kitą miestą"
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+
 msgid "and more..."
 msgstr ""
 
@@ -5536,6 +5602,10 @@ msgstr "Rodyti kitą miestą"
 
 msgid "hotkey|toggle passability"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Turgus"
 
 #, fuzzy
 msgid "hotkey|re-generate random map"
