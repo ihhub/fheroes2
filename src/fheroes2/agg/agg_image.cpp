@@ -1564,7 +1564,7 @@ namespace
             break;
         }
         case ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD: {
-            _icnVsSprite[id].resize( 12 );
+            _icnVsSprite[id].resize( 14 );
 
             if ( useOriginalResources() ) {
                 const int buttonIcnID = ICN::ECPANEL;
@@ -1582,6 +1582,8 @@ namespace
                                              buttonSize, false, ICN::STONEBAK );
                 fheroes2::makeButtonSprites( _icnVsSprite[id][8], _icnVsSprite[id][9], fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
                                              buttonSize, false, ICN::STONEBAK );
+                fheroes2::makeButtonSprites( _icnVsSprite[id][12], _icnVsSprite[id][13], fheroes2::getSupportedText( gettext_noop( "AUTO\nPLAY-TEST" ), buttonFontType ),
+                                             buttonSize, false, ICN::STONEBAK );
 
                 // Quit
                 _icnVsSprite[id][10] = fheroes2::AGG::GetICN( buttonIcnID, 6U );
@@ -1597,7 +1599,8 @@ namespace
                                                         fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "SAVE\nMAP" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
-                                                        fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ) },
+                                                        fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ),
+                                                        fheroes2::getSupportedText( gettext_noop( "AUTO\nPLAY-TEST" ), buttonFontType ) },
                                                       false, 86 );
             break;
         }

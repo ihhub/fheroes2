@@ -120,7 +120,7 @@ void Interface::StatusPanel::_redraw() const
     else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
         _drawDayInfo();
 
-        if ( Players::HumanColors() & conf.CurrentColor() ) {
+        if ( ( Players::HumanColors() & conf.CurrentColor() ) || conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) ) {
             _drawKingdomInfo( stonHeight + 5 );
 
             if ( _state != StatusType::STATUS_RESOURCE ) {

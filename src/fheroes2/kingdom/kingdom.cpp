@@ -37,10 +37,8 @@
 #include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
-#include "game_interface.h"
 #include "game_io.h"
 #include "game_static.h"
-#include "interface_icons.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -311,11 +309,6 @@ void Kingdom::AddCastle( Castle * castle )
     if ( castle ) {
         if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) ) {
             castles.push_back( castle );
-        }
-
-        const Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) ) {
-            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
         }
     }
 

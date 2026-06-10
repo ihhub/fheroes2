@@ -58,6 +58,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "til.h"
 #include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
@@ -794,6 +795,36 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     updateObjectAnimationInfo();
+}
+
+void Interface::GameArea::redrawOnlyFog( fheroes2::Image & dst ) const
+{
+    const fheroes2::Rect & tileROI = GetVisibleTileROI();
+
+    const int32_t maxX = tileROI.x + tileROI.width;
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.h();
+
+    for ( int32_t y = 0; y < tileROI.height; ++y ) {
+        fheroes2::Point offset( tileROI.x, tileROI.y + y );
+
+        if ( offset.y < 0 || offset.y >= worldHeight ) {
+            for ( ; offset.x < maxX; ++offset.x ) {
+                Maps::redrawEmptyTile( dst, offset, *this );
+            }
+        }
+        else {
+            for ( ; offset.x < maxX; ++offset.x ) {
+                if ( offset.x < 0 || offset.x >= worldWidth ) {
+                    Maps::redrawEmptyTile( dst, offset, *this );
+                }
+                else {
+                    const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( offset.x + offset.y ) % 4, 0 );
+                    DrawTile( dst, sf, offset );
+                }
+            }
+        }
+    }
 }
 
 void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile, const bool isActionObject ) const

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -38,6 +38,7 @@
 #include "icn.h"
 #include "interface_base.h"
 #include "kingdom.h"
+#include "players.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
@@ -446,9 +447,13 @@ void Interface::IconsPanel::select( Castle * const castle )
 
 void Interface::IconsPanel::resetIcons( const HeroesCastlesIcons type )
 {
-    Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+    const PlayerColor color = Settings::Get().CurrentColor();
+    Kingdom & kingdom = world.GetKingdom( color );
 
-    if ( !kingdom.isControlAI() ) {
+    Player * player = Players::Get( color );
+    assert( player != nullptr );
+
+    if ( !kingdom.isControlAI() || player->isAIAutoControlMode() ) {
         const int icnscroll = Settings::Get().isEvilInterfaceEnabled() ? ICN::SCROLLE : ICN::SCROLL;
 
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );

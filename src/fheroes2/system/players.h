@@ -201,7 +201,6 @@ public:
 
     void setHandicapStatus( const HandicapStatus status );
 
-#if defined( WITH_DEBUG )
     bool isAIAutoControlMode() const
     {
         return _isAIAutoControlMode;
@@ -213,7 +212,6 @@ public:
     // Turns the planned value of whether a given human player is controlled by AI into the actual value.
     // Should be called only if this mode is actually enabled.
     void commitAIAutoControlMode();
-#endif
 
 protected:
     friend OStreamBase & operator<<( OStreamBase & stream, const Player & player );
@@ -228,14 +226,12 @@ protected:
     PlayerColorsSet _friendsColors;
     HandicapStatus _handicapStatus{ HandicapStatus::NONE };
 
-#if defined( WITH_DEBUG )
     // These members should not be saved anywhere
 
     // Actual value of whether a given human player is controlled by AI
     bool _isAIAutoControlMode{ false };
     // Planned value of whether a given human player is controlled by AI (will become actual upon committing it)
     bool _isAIAutoControlModePlanned{ false };
-#endif
 };
 
 class Players : public std::vector<Player *>
