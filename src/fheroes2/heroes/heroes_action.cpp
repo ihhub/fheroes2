@@ -416,6 +416,16 @@ namespace
             else {
                 fheroes2::showStandardTextMessage( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Dialog::OK );
             }
+        } else if ( join.reason == NeutralMonsterJoiningCondition::Reason::NotEnoughGold ) {
+            fheroes2::showStandardTextMessage(
+                "",
+                _( "The creatures are willing to join your army, but you do not have enough gold." ),
+                Dialog::OK );
+        } else if ( join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot ) {
+            fheroes2::showStandardTextMessage(
+                "",
+                _( "The creatures are willing to join your army, but you have no free army slot available." ),
+                Dialog::OK );
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, troop.GetName() << " run away from " << hero.GetName() )
