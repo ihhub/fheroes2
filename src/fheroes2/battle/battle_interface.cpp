@@ -6078,7 +6078,7 @@ void Battle::Interface::_redrawActionBloodLustSpell( const Unit & target )
 }
 
 void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
- {
+{
     LocalEvent & le = LocalEvent::Get();
 
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
