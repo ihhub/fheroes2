@@ -1682,6 +1682,8 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
     const double armyStrengthRatio = Troops( hero.GetArmy().getTroops() ).GetStrength() / troop.GetStrength();
 
+    NeutralMonsterJoiningCondition::Reason blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::None;
+
     const bool canPotentiallyJoin = [&hero, &tile, armyStrengthRatio]() {
         if ( armyStrengthRatio <= 2 ) {
             return false;
@@ -1703,7 +1705,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             }
 
             if ( hero.isControlHuman() ) {
-                return { NeutralMonsterJoiningCondition::Reason::NoFreeSlot, 0, nullptr, nullptr };
+                blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::NoFreeSlot;
             }
         }
 
@@ -1714,7 +1716,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
             if ( amountToJoin > 0 ) {
                 if ( !canJoinArmy ) {
                     if ( hero.isControlHuman() ) {
-                        return { NeutralMonsterJoiningCondition::Reason::NoFreeSlot, 0, nullptr, nullptr };
+                        blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::NoFreeSlot;
                     }
                 }
                 // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance with
@@ -1723,13 +1725,27 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
                     return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
                 }
                 else if ( hero.isControlHuman() ) {
-                    return { NeutralMonsterJoiningCondition::Reason::NotEnoughGold, 0, nullptr, nullptr };
+                    blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::NotEnoughGold;
                 }
             }
         }
     }
 
-    if ( armyStrengthRatio > 5 && !hero.isControlAI() ) {
+    const bool willRunAway = armyStrengthRatio > 5 && !hero.isControlAI();
+
+    if ( blockedJoiningReason != NeutralMonsterJoiningCondition::Reason::None ) {
+        if ( willRunAway ) {
+            if ( blockedJoiningReason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot ) {
+                return { NeutralMonsterJoiningCondition::Reason::NoFreeSlotAndRunAway, 0, nullptr, nullptr };
+            }
+
+            return { NeutralMonsterJoiningCondition::Reason::NotEnoughGoldAndRunAway, 0, nullptr, nullptr };
+        }
+
+        return { blockedJoiningReason, 0, nullptr, nullptr };
+    }
+
+    if ( willRunAway ) {
         // ... will surely flee before us
         return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }

@@ -148,7 +148,9 @@ struct NeutralMonsterJoiningCondition final
         Alliance,
         Bane,
         NotEnoughGold,
-        NoFreeSlot
+        NoFreeSlot,
+        NotEnoughGoldAndRunAway,
+        NoFreeSlotAndRunAway
     };
 
     Reason reason{ Reason::None };
