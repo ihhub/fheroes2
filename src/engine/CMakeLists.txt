@@ -55,9 +55,17 @@ target_link_libraries(
 	xmp
 	modplug
 	atomic
-	ogg
-	opus 
-	opusfile
+    modplug
+    sndfile
+    FLAC
+    ogg
+    vorbis
+	vorbisenc
+    vorbisfile
+    opus
+    opusfile
+    fluidsynth
+    atomic
 	)
 else()
 target_link_libraries(

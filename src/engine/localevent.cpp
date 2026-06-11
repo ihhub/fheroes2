@@ -1363,7 +1363,7 @@ void LocalEvent::onTouchFingerEvent( const TouchFingerEventType eventType, const
     if ( eventFingerId == _fingerIds.first ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined(__PS2__)
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
         // TODO: verify where it is even needed to do such weird woodoo magic for these targets.
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
