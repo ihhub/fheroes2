@@ -73,6 +73,7 @@ namespace Battle
         uint32_t damage = 0;
         uint32_t killed = 0;
         bool resist = false;
+        bool isHalvingAttack = false;
 
         TargetInfo() = default;
 

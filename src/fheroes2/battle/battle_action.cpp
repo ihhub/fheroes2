@@ -890,6 +890,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
             if ( halvingDamage > res.damage && Rand::GetWithGen( 1, 100, _randomGenerator ) <= abilityIter->percentage ) {
                 // Replaces damage, not adds extra damage
                 res.damage = std::min( defender.GetHitPoints(), halvingDamage );
+                res.isHalvingAttack = true;
 
                 Interface * iface = GetInterface();
                 if ( iface ) {
@@ -903,6 +904,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     }
 
     targets.push_back( res );
+
+    res.isHalvingAttack = false;
 
     std::set<const Unit *> consideredTargets{ &defender };
 

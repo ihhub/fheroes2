@@ -4145,6 +4145,12 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
         attacker.SwitchAnimation( attackStart );
     }
 
+    for ( const TargetInfo & target : targets ) {
+        if ( target.defender != nullptr && target.isHalvingAttack ) {
+            _redrawActionStoneSpell( *target.defender, true );
+        }
+    }
+
     // targets damage animation
     _redrawActionWincesKills( targets, &attacker, &defender );
     RedrawTroopDefaultDelay( attacker );
@@ -6071,14 +6077,14 @@ void Battle::Interface::_redrawActionBloodLustSpell( const Unit & target )
     _spriteInsteadCurrentUnit = nullptr;
 }
 
-void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
+void Battle::Interface::_redrawActionStoneSpell( const Unit & target, const bool usePurplePalette )
 {
     LocalEvent & le = LocalEvent::Get();
 
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
-    fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+    fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( usePurplePalette ? PAL::PaletteType::PURPLE : PAL::PaletteType::GRAY ) );
 
     fheroes2::Sprite mixSprite;
 
