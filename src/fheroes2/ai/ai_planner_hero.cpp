@@ -986,7 +986,7 @@ namespace
         return 1.0;
     }
 
-    double scaleWithDistanceAndTime( const double value, const uint32_t distance, const MP2::MapObjectType objectType )
+    double scaleWithDistanceAndTime( const double value, const uint32_t distance, const MP2::MapObjectType objectType, const bool limitDistanceEvaluation )
     {
         if ( distance == 0 ) {
             return value;
@@ -1000,8 +1000,11 @@ namespace
         const double timeCorrectionCoeff = 1 - std::min( 0.5, world.CountDay() * 0.0001 );
         correctedDistance *= timeCorrectionCoeff;
 
-        // Scale non-linearly (more value lost as distance increases)
-        return value - ( correctedDistance * std::log10( correctedDistance ) );
+        // We scale non-linearly (more value lost as distance increases)
+        // Force quadratic growth on easier game difficulties instead of logarithmic one to confine AI
+        const double modifier = limitDistanceEvaluation ? correctedDistance : std::log10( correctedDistance );
+
+        return value - ( correctedDistance * modifier );
     }
 
     double getFogDiscoveryValue( const Heroes & hero )
@@ -2487,75 +2490,77 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     ObjectValidator objectValidator( hero, _pathfinder, *this );
     ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
+    const bool limitDistanceValue = Difficulty::isAIStrategicPlanningLimited( Game::getDifficulty() );
 
-    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator,
-                                 &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
-        // Dimension door path does not include any objects on the way.
-        if ( !isDimensionDoor ) {
-            for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
-                const bool isValidObject = objectValidator.isCurrentlyValid( pair.first );
-                const int32_t dayToBecomeValid = objectValidator.whenGoingToBeValidInDays( pair.first );
+    const auto getObjectValue
+        = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator, &valueStorage,
+           &limitDistanceValue]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
+              // Dimension door path does not include any objects on the way.
+              if ( !isDimensionDoor ) {
+                  for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
+                      const bool isValidObject = objectValidator.isCurrentlyValid( pair.first );
+                      const int32_t dayToBecomeValid = objectValidator.whenGoingToBeValidInDays( pair.first );
 
-                if ( !isValidObject && dayToBecomeValid < 1 ) {
-                    // This is not a valid object and it is not going to be valid in the future.
-                    continue;
-                }
+                      if ( !isValidObject && dayToBecomeValid < 1 ) {
+                          // This is not a valid object and it is not going to be valid in the future.
+                          continue;
+                      }
 
-                if ( const auto iter = _mapActionObjects.find( pair.first ); iter == _mapActionObjects.end() || iter->second != pair.second ) {
-                    continue;
-                }
+                      if ( const auto iter = _mapActionObjects.find( pair.first ); iter == _mapActionObjects.end() || iter->second != pair.second ) {
+                          continue;
+                      }
 
-                double extraValue = 0;
+                      double extraValue = 0;
 
-                if ( isValidObject ) {
-                    extraValue = valueStorage.value( pair, 0 );
-                }
-                else {
-                    const auto path = _pathfinder.buildPath( pair.first, false );
-                    assert( !path.empty() );
-                    assert( path.back().GetIndex() == pair.first );
+                      if ( isValidObject ) {
+                          extraValue = valueStorage.value( pair, 0 );
+                      }
+                      else {
+                          const auto path = _pathfinder.buildPath( pair.first, false );
+                          assert( !path.empty() );
+                          assert( path.back().GetIndex() == pair.first );
 
-                    const int32_t daysToReachObject = completedDaysToTarget( path, hero );
-                    if ( daysToReachObject < dayToBecomeValid ) {
-                        extraValue = valueStorage.futureValue( pair, 0 );
-                    }
-                }
+                          const int32_t daysToReachObject = completedDaysToTarget( path, hero );
+                          if ( daysToReachObject < dayToBecomeValid ) {
+                              extraValue = valueStorage.futureValue( pair, 0 );
+                          }
+                      }
 
-                if ( extraValue > 0 ) {
-                    // There is no need to reduce the quality of the object even if the path has others.
-                    value += extraValue;
-                }
-            }
-        }
+                      if ( extraValue > 0 ) {
+                          // There is no need to reduce the quality of the object even if the path has others.
+                          value += extraValue;
+                      }
+                  }
+              }
 
-        const uint32_t heroMovePoints = hero.GetMovePoints();
+              const uint32_t heroMovePoints = hero.GetMovePoints();
 
-        const double enemyThreatPenalty = [&hero, &enemyThreatPenalties, destination, distance, type, heroMovePoints]() {
-            if ( type == MP2::OBJ_CASTLE ) {
-                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-                assert( castle != nullptr );
+              const double enemyThreatPenalty = [&hero, &enemyThreatPenalties, destination, distance, type, heroMovePoints]() {
+                  if ( type == MP2::OBJ_CASTLE ) {
+                      const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+                      assert( castle != nullptr );
 
-                // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat
-                // penalties should not apply if our hero is able to reach the castle within one turn.
-                if ( castle->GetColor() == hero.GetColor() && distance <= heroMovePoints ) {
-                    return 0.0;
-                }
-            }
+                      // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat
+                      // penalties should not apply if our hero is able to reach the castle within one turn.
+                      if ( castle->GetColor() == hero.GetColor() && distance <= heroMovePoints ) {
+                          return 0.0;
+                      }
+                  }
 
-            assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
+                  assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
 
-            return enemyThreatPenalties[destination];
-        }();
+                  return enemyThreatPenalties[destination];
+              }();
 
-        value -= enemyThreatPenalty;
+              value -= enemyThreatPenalty;
 
-        // Distant object which is out of reach for the current turn must have lower priority.
-        if ( distance > heroMovePoints ) {
-            distance = heroMovePoints + ( distance - heroMovePoints ) * 2;
-        }
+              // Distant object which is out of reach for the current turn must have lower priority.
+              if ( distance > heroMovePoints ) {
+                  distance = heroMovePoints + ( distance - heroMovePoints ) * 2;
+              }
 
-        value = scaleWithDistanceAndTime( value, distance, type );
-    };
+              value = scaleWithDistanceAndTime( value, distance, type, limitDistanceValue );
+          };
 
     // Set baseline target if it's a special role
     if ( hero.getAIRole() == Heroes::Role::COURIER ) {
