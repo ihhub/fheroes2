@@ -52,6 +52,30 @@ std::string Morale::String( int morale )
     return "Unknown";
 }
 
+std::string Morale::Percent( int morale )
+{
+    switch ( morale ) {
+    case Morale::TREASON:
+        return _( "morale|25%" );
+    case Morale::AWFUL:
+        return _( "morale|16.7%" );
+    case Morale::POOR:
+        return _( "morale|8.3%" );
+    case Morale::NORMAL:
+        return _( "morale|0%" );
+    case Morale::GOOD:
+        return _( "morale|4.2%" );
+    case Morale::GREAT:
+        return _( "morale|8.3%" );
+    case Morale::BLOOD:
+        return _( "morale|12.5%" );
+    default:
+        break;
+    }
+
+    return "Unknown";
+}
+
 std::string Morale::Description( int morale )
 {
     std::string msg;
@@ -60,7 +84,7 @@ std::string Morale::Description( int morale )
     case Morale::TREASON:
     case Morale::AWFUL:
     case Morale::POOR:
-        msg = _( "%{morale-type} morale may cause the hero's units to freeze in combat." );
+        msg = _( "%{morale-type} morale may cause the hero's units to freeze in combat.\nChance: %{morale-percent}" );
         break;
     case Morale::NORMAL:
         msg = _( "%{morale-type} morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
@@ -68,7 +92,7 @@ std::string Morale::Description( int morale )
     case Morale::GOOD:
     case Morale::GREAT:
     case Morale::BLOOD:
-        msg = _( "%{morale-type} morale may give the hero's units extra attacks in combat." );
+        msg = _( "%{morale-type} morale may give the hero's units extra attacks in combat.\nChance: %{morale-percent}" );
         break;
     default:
         return "Unknown";
@@ -80,6 +104,8 @@ std::string Morale::Description( int morale )
     else {
         StringReplace( msg, "%{morale-type}", Morale::String( morale ) );
     }
+
+    StringReplace( msg, "%{morale-percent}", Morale::Percent( morale ) );
 
     return msg;
 }

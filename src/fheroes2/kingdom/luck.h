@@ -40,6 +40,7 @@ namespace Luck
     };
 
     std::string String( int );
+    std::string Percent( int );
     std::string Description( int );
     int Normalize( const int luck );
 }
