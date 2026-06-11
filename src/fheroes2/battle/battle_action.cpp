@@ -887,7 +887,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         if ( const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbilityType::ENEMY_HALVING );
              abilityIter != attackerAbilities.end() ) {
             const uint32_t halvingDamage = ( defender.GetCount() / 2 + defender.GetCount() % 2 ) * defender.Monster::GetHitPoints();
-            if ( halvingDamage > res.damage && Rand::GetWithGen( 1, 100, _randomGenerator ) <= abilityIter->percentage ) {
+            if ( halvingDamage > res.damage && Rand::GetWithGen( 1, 2, _randomGenerator ) <= abilityIter->percentage ) {
                 // Replaces damage, not adds extra damage
                 res.damage = std::min( defender.GetHitPoints(), halvingDamage );
                 res.isHalvingAttack = true;

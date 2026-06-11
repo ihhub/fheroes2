@@ -4147,7 +4147,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
 
     for ( const TargetInfo & target : targets ) {
         if ( target.defender != nullptr && target.isHalvingAttack ) {
-            _redrawActionStoneSpell( *target.defender, true );
+            _redrawActionGenieHalvingAttack( *target.defender );
         }
     }
 
@@ -6077,14 +6077,14 @@ void Battle::Interface::_redrawActionBloodLustSpell( const Unit & target )
     _spriteInsteadCurrentUnit = nullptr;
 }
 
-void Battle::Interface::_redrawActionStoneSpell( const Unit & target, const bool usePurplePalette )
-{
+void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
+ {
     LocalEvent & le = LocalEvent::Get();
 
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
-    fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( usePurplePalette ? PAL::PaletteType::PURPLE : PAL::PaletteType::GRAY ) );
+    fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::PaletteType::GRAY ) );
 
     fheroes2::Sprite mixSprite;
 
@@ -6127,6 +6127,71 @@ void Battle::Interface::_redrawActionStoneSpell( const Unit & target, const bool
         }
         else if ( _needRedraw ) {
             // Avoid making the game to freeze while sound is still being played.
+            Redraw();
+            _needRedraw = false;
+        }
+    }
+
+    _currentUnit = nullptr;
+    _spriteInsteadCurrentUnit = nullptr;
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( true );
+    }
+}
+
+void Battle::Interface::_redrawActionGenieHalvingAttack( const Unit & target )
+{
+    LocalEvent & le = LocalEvent::Get();
+
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+
+    fheroes2::Sprite halvingEffect( unitSprite );
+    fheroes2::ApplyPalette( halvingEffect, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+    fheroes2::Sprite mixSprite;
+
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
+    // Don't highlight the cursor position.
+    _currentCellIndex = -1;
+
+    // Don't highlight movement area cells while animating the effect.
+    Settings & conf = Settings::Get();
+    const bool showMoveShadowState = conf.BattleShowMoveShadow();
+    if ( showMoveShadowState ) {
+        conf.SetBattleMovementShaded( false );
+    }
+
+    _currentUnit = &target;
+    _spriteInsteadCurrentUnit = &mixSprite;
+
+    const uint32_t genieHalvingDelay = 1800 / 20;
+
+    AudioManager::PlaySound( M82::STONESKI );
+
+    uint8_t alpha = 0;
+    uint32_t frame = 0;
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( genieHalvingDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( genieHalvingDelay ) );
+
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( genieHalvingDelay ) || Game::isDelayNeeded( _commonAnimationsDelays ) ) && frame < 20 ) {
+        _checkGlobalEvents( le );
+
+        // To smoothly render the software mouse cursor by `le.HandleEvents()` we need to reset all passed delays.
+        const bool needSpellAnimation = Game::validateCustomAnimationDelay( genieHalvingDelay );
+        if ( needSpellAnimation ) {
+            mixSprite = unitSprite;
+            fheroes2::AlphaBlit( halvingEffect, mixSprite, alpha );
+            Redraw();
+            _needRedraw = false;
+
+            alpha += ( frame < 10 ) ? 20 : -20;
+            ++frame;
+        }
+        else if ( _needRedraw ) {
             Redraw();
             _needRedraw = false;
         }

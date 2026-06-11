@@ -444,7 +444,8 @@ namespace Battle
         void _redrawActionHolyShoutSpell( const uint8_t strength );
         void _redrawActionLightningBoltSpell( const Unit & target );
         void _redrawActionResurrectSpell( Unit & target, const Spell & spell );
-        void _redrawActionStoneSpell( const Unit & target, const bool usePurplePalette = false );
+        void _redrawActionStoneSpell( const Unit & target );
+        void _redrawActionGenieHalvingAttack( const Unit & target );
         void _redrawActionSummonElementalSpell( Unit & target );
         void _redrawActionTeleportSpell( Unit & target, const int32_t dst );
         void _redrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr, const Unit * defender = nullptr );
