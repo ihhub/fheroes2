@@ -422,7 +422,7 @@ namespace
             fheroes2::showStandardTextMessage(
                 "",
                 join.reason == NeutralMonsterJoiningCondition::Reason::NotEnoughGold
-                    ? _( "The creatures would join your army, but you do not have enough gold. \nThey prepare to fight." )
+                    ? _( "The creatures would join your army, but you do not have enough gold.\nThey prepare to fight." )
                     : _( "The creatures would join your army, but you do not have enough gold." ),
                 Dialog::OK );
 
@@ -440,7 +440,7 @@ namespace
             fheroes2::showStandardTextMessage(
                 "",
                 join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot
-                    ? _( "The creatures would join your army, but your army has no room for them. \nThey prepare to fight." )
+                    ? _( "The creatures would join your army, but your army has no room for them.\nThey prepare to fight." )
                     : _( "The creatures would join your army, but your army has no room for them." ),
                 Dialog::OK );
 
