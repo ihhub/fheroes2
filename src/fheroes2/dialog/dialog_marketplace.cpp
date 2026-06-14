@@ -365,6 +365,16 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     TradeWindowGUI gui( pos_rt );
 
+     if ( !fromTradingPost ) {
+        std::string marketplaceCountText = _( "Owned Marketplaces: %{count}" );
+        StringReplace( marketplaceCountText, "%{count}", kingdom.GetCountMarketplace() );
+
+        text.set( marketplaceCountText, fheroes2::FontType::smallWhite() );
+        dst_pt.x = pos_rt.x + ( pos_rt.width - text.width() ) / 2;
+        dst_pt.y = pos_rt.y + 125;
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
+    }
+
     Funds fundsFrom = kingdom.GetFunds();
     int resourceFrom = 0;
     const fheroes2::Point pt1( pos_rt.x, pos_rt.y + 190 );
