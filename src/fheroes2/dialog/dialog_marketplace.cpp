@@ -438,7 +438,12 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         const int32_t marketplaceCountElementHeight = std::max( marketplaceIcon.height(), marketplaceCountText.height() );
 
         const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - marketplaceIcon.width() - marketplaceCountText.width() - 2 ) / 2;
-        const int32_t iconOffsetY = pt1.y + 74 + ( 34 - marketplaceCountElementHeight ) / 2 + 4;
+
+        const fheroes2::Rect & leftGoldRoi = rectsFrom.back();
+        const fheroes2::Rect & rightGoldRoi = rectsTo.back();
+
+        const int32_t goldIconsBottomY = std::max( leftGoldRoi.y + leftGoldRoi.height, rightGoldRoi.y + rightGoldRoi.height );
+        const int32_t iconOffsetY = goldIconsBottomY - marketplaceCountElementHeight;
 
         fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
 
