@@ -435,16 +435,18 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         const fheroes2::Text marketplaceCountText( std::string( "x" ) + std::to_string( marketplaceEquivalentCount ), fheroes2::FontType::smallWhite() );
 
+        const int32_t marketplaceCountElementHeight = std::max( marketplaceIcon.height(), marketplaceCountText.height() );
+
         const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - marketplaceIcon.width() - marketplaceCountText.width() - 2 ) / 2;
-        const int32_t iconOffsetY = pt1.y + 74 + ( 34 - marketplaceIcon.height() ) / 2;
+        const int32_t iconOffsetY = pt1.y + 74 + ( 34 - marketplaceCountElementHeight ) / 2 + 4;
 
         fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
 
         marketplaceCountText.draw( iconOffsetX + marketplaceIcon.width() + 2,
-                                   iconOffsetY + ( marketplaceIcon.height() - marketplaceCountText.height() ) / 2,
+                                   iconOffsetY + ( marketplaceCountElementHeight - marketplaceCountText.height() ) / 2,
                                    display );
 
-        marketplaceCountRoi = { iconOffsetX, iconOffsetY, marketplaceIcon.width() + marketplaceCountText.width() + 2, marketplaceIcon.height() };
+        marketplaceCountRoi = { iconOffsetX, iconOffsetY, marketplaceIcon.width() + marketplaceCountText.width() + 2, marketplaceCountElementHeight };
     }
 
     uint32_t count_sell = 0;
