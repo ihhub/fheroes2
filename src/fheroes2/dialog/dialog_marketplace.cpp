@@ -46,6 +46,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
@@ -355,7 +356,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     Dialog::FrameBox box( 297, true );
 
     const fheroes2::Rect & pos_rt = box.GetArea();
+
     fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
+    fheroes2::Rect marketplaceCountRoi;
+
+    const uint32_t marketplaceEquivalentCount = fromTradingPost ? 3 : kingdom.GetCountMarketplace();
 
     // header
     fheroes2::Text text{ header, fheroes2::FontType::normalYellow() };
@@ -363,17 +368,45 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     dst_pt.y = pos_rt.y;
     text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-    TradeWindowGUI gui( pos_rt );
+    {
+        const int32_t tileSize = 32;
 
-     if ( !fromTradingPost ) {
-        std::string marketplaceCountText = _( "Owned Marketplaces: %{count}" );
-        StringReplace( marketplaceCountText, "%{count}", kingdom.GetCountMarketplace() );
+        const fheroes2::Sprite & tradingPostLeft = fheroes2::AGG::GetICN( ICN::OBJNMULT, 104 );
+        const fheroes2::Sprite & tradingPostRight = fheroes2::AGG::GetICN( ICN::OBJNMULT, 111 );
 
-        text.set( marketplaceCountText, fheroes2::FontType::smallWhite() );
-        dst_pt.x = pos_rt.x + ( pos_rt.width - text.width() ) / 2;
-        dst_pt.y = pos_rt.y + 125;
-        text.draw( dst_pt.x, dst_pt.y + 2, display );
+        fheroes2::Image fullTradingPostIcon( tileSize * 2, tileSize );
+        fullTradingPostIcon.reset();
+
+        fheroes2::Blit( tradingPostLeft, fullTradingPostIcon, 0, 0 );
+        fheroes2::Blit( tradingPostRight, fullTradingPostIcon, tileSize, 0 );
+
+        uint8_t * transform = fullTradingPostIcon.transform();
+        const int32_t transformSize = fullTradingPostIcon.width() * fullTradingPostIcon.height();
+
+        for ( int32_t i = 0; i < transformSize; ++i ) {
+            if ( transform[i] >= 2 && transform[i] <= 5 ) {
+                transform[i] = 1;
+            }
+        }
+
+        fheroes2::Image marketplaceIcon( 40, 20 );
+        fheroes2::Resize( fullTradingPostIcon, marketplaceIcon );
+
+        const fheroes2::Text marketplaceCountText( std::string( "x" ) + std::to_string( marketplaceEquivalentCount ), fheroes2::FontType::smallWhite() );
+
+        const int32_t iconOffsetX = pos_rt.x + pos_rt.width - marketplaceIcon.width() - marketplaceCountText.width() - 10;
+        const int32_t iconOffsetY = pos_rt.y + 4;
+
+        fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
+
+        marketplaceCountText.draw( iconOffsetX + marketplaceIcon.width() + 2,
+                                   iconOffsetY + ( marketplaceIcon.height() - marketplaceCountText.height() ) / 2,
+                                   display );
+
+        marketplaceCountRoi = { iconOffsetX, iconOffsetY, marketplaceIcon.width() + marketplaceCountText.width() + 2, marketplaceIcon.height() };
     }
+
+    TradeWindowGUI gui( pos_rt );
 
     Funds fundsFrom = kingdom.GetFunds();
     int resourceFrom = 0;
@@ -469,9 +502,31 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
-
+        
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
+
+        if ( marketplaceCountRoi.width > 0 && le.isMouseRightButtonPressedInArea( marketplaceCountRoi ) ) {
+            std::string marketplaceCountInfo;
+
+            if ( fromTradingPost ) {
+                marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} Marketplaces." );
+            }
+            else if ( marketplaceEquivalentCount == 1 ) {
+                marketplaceCountInfo = _( "You own %{count} Marketplace.\nMore Marketplaces improve resource exchange rates." );
+            }
+            else {
+                marketplaceCountInfo = _( "You own %{count} Marketplaces.\nMore Marketplaces improve resource exchange rates." );
+            }
+
+            StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
+
+            fheroes2::showStandardTextMessage( _( "Exchange Rate" ), marketplaceCountInfo, Dialog::ZERO );
+
+            display.render();
+            continue;
+        }
+
 
         // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
@@ -481,7 +536,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
                 cursorTo.hide();
-                cursorFrom.hide();
+                cursorFrom.hide();  
 
                 fundsFrom = kingdom.GetFunds();
                 RedrawFromResource( pt1, fundsFrom );
