@@ -288,6 +288,14 @@ void Dialog::ThievesGuild( const bool oracle )
     fheroes2::Text text;
     fheroes2::Point offset( startOffsetX, dialogRoi.y + 3 );
 
+    if ( !oracle ) {
+        std::string thievesGuildCountText = _( "Owned Thieves' Guilds: %{count}" );
+        StringReplace( thievesGuildCountText, "%{count}", thievesGuildCount );
+
+        text.set( thievesGuildCountText, fheroes2::FontType::smallWhite() );
+        text.draw( textOffsetX - text.width(), dialogRoi.y + 16, display );
+    }
+
     for ( size_t player = 0; player < playersCount; ++player ) {
         text.set( getPlayerOrderString( player ), fheroes2::FontType::normalWhite() );
         text.draw( offset.x - text.width() / 2, offset.y, display );
