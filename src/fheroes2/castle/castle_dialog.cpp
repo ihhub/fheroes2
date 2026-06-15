@@ -508,7 +508,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         bool needRedraw = false;
         bool needFadeIn = false;
 
-        if ( alphaHero < 255 && fadeBuilding.isFadeDone() && ( le.isMouseLeftButtonPressedInArea( dialogRoi ) || le.isMouseRightButtonPressedInArea( dialogRoi ) ) ) {
+        constexpr int32_t minimumHeroRecruitAnimationAlphaBeforeSkipping = 80;
+
+        const bool isHeroRecruitAnimationSkippable = alphaHero >= minimumHeroRecruitAnimationAlphaBeforeSkipping && alphaHero < 255 && fadeBuilding.isFadeDone();
+        const bool isMouseButtonPressedInDialog = le.isMouseLeftButtonPressedInArea( dialogRoi ) || le.isMouseRightButtonPressedInArea( dialogRoi );
+
+        if ( isHeroRecruitAnimationSkippable && isMouseButtonPressedInDialog ) {
             finishHeroRecruitAnimation();
         }
 
