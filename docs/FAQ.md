@@ -79,4 +79,3 @@ be used for the future improvements of the project.
 ## Q: I have save files from the original Heroes of Might and Magic II. Does fheroes2 support them?
 
 Unfortunately, no. fheroes2 does not support saves from the original game.
-
