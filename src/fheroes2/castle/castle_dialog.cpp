@@ -508,8 +508,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         bool needRedraw = false;
         bool needFadeIn = false;
 
-        if ( alphaHero < 255 && fadeBuilding.isFadeDone()
-             && ( le.MouseClickLeft( dialogRoi ) || le.MouseClickRight( dialogRoi ) ) ) {
+        if ( alphaHero < 255 && fadeBuilding.isFadeDone() && ( le.MouseClickLeft( dialogRoi ) || le.MouseClickRight( dialogRoi ) ) ) {
             finishHeroRecruitAnimation();
 
             continue;
