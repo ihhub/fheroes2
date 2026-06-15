@@ -19,11 +19,11 @@ Yes, absolutely. It is a free open source project.
 
 ## Q: Where can I download fheroes2?
 
-Please use the \[Installation Guide](INSTALL.md) to download the latest stable release for your platform. Precompiled packages are available for several platforms.
+Please use the [Installation Guide](https://ihhub.github.io/fheroes2/INSTALL.html) to download the latest stable release for your platform. Precompiled packages are available for several platforms.
 
 ## Q: Which platforms are supported?
 
-fheroes2 provides release builds or installation instructions for Windows, macOS, Linux, Android, PlayStation Vita and Nintendo Switch. Availability and installation steps may differ between platforms, so please check the Installation Guide for details.
+fheroes2 provides release builds or installation instructions for Windows, macOS, Linux, Android, PlayStation Vita and Nintendo Switch. Availability and installation steps may differ between platforms, so please check the [Installation Guide](https://ihhub.github.io/fheroes2/INSTALL.html) for details.
 
 ## Q: How is fheroes2 different from the original Heroes of Might and Magic II?
 
@@ -39,15 +39,15 @@ AI opponents in fheroes2 were written from scratch and are designed to make smar
 
 ## Q: Can I create and share maps for fheroes2?
 
-Yes. fheroes2 includes an improved map editor which can be used to create new maps and scenarios. The community also shares, downloads and discusses maps on the fheroes2 Discord server, where players can give feedback and discover new user-made content.
+Yes. fheroes2 includes an improved map editor which can be used to create new maps and scenarios. The community also shares, downloads and discusses maps on the fheroes2 [Discord server](https://discord.gg/xF85vbZ), where players can give feedback and discover new user-made content.
 
 ## Q: Where can I ask questions or suggest ideas?
 
-General questions, feedback and feature ideas can be discussed on the project's GitHub Discussions page or on the fheroes2 Discord server. GitHub Issues should usually be used for confirmed bugs or clearly defined tasks.
+General questions, feedback and feature ideas can be discussed on the project's GitHub [Discussions page](https://github.com/ihhub/fheroes2/discussions) or on the fheroes2 [Discord server](https://discord.gg/xF85vbZ). GitHub Issues should usually be used for confirmed bugs or clearly defined tasks.
 
 ## Q: Where should I report a bug?
 
-Please report bugs on the project's GitHub Issues page. When opening a bug report, include your fheroes2 version, operating system, a clear description of the problem, steps to reproduce it and, if possible, screenshots, logs or a save file.
+Please report bugs on the project's GitHub [Issues page](https://github.com/ihhub/fheroes2/issues). When opening a bug report, include your fheroes2 version, operating system, a clear description of the problem, steps to reproduce it and, if possible, screenshots, logs or a save file.
 
 ## Q: How can I contribute to the project?
 
