@@ -78,8 +78,8 @@ namespace
         }
     }
 
-    void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections,
-                               const bool isAllSelected, const Game::HotKeyCategory selectedCategory ) 
+    void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections, const bool isAllSelected,
+                               const Game::HotKeyCategory selectedCategory )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -285,7 +285,8 @@ namespace fheroes2
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( categoryLength + keyDescriptionLength + hotKeyLength + 8 + 75, std::min<int32_t>( display.height() - 100, 520 ), true, display );
+        fheroes2::StandardWindow background( categoryLength + keyDescriptionLength + hotKeyLength + 8 + 75, std::min<int32_t>( display.height() - 100, 520 ), true,
+                                             display );
 
         const fheroes2::Rect roi( background.activeArea() );
         const fheroes2::Rect listRoi( roi.x + 24, roi.y + 50, categoryLength + keyDescriptionLength + hotKeyLength + 8, roi.height - 88 );
