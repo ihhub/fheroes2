@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-05-18 00:45+0200\n"
+"PO-Revision-Date: 2026-06-16 11:23+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
@@ -219,6 +219,8 @@ msgid ""
 "AUTO\n"
 "PLAY-TEST"
 msgstr ""
+"AUTO\n"
+"JÁTÉK-TESZT"
 
 msgid ""
 "NEW\n"
@@ -4381,21 +4383,19 @@ msgstr "Cselekmény objektumokat tiszta területre kell elhelyezni."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximum %{count} %{objects} helyezhető el a térképen."
 
-#, fuzzy
 msgid ""
 "To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Biztos hogy benne hogy új térképet töltesz be? (A jelenlegi térkép "
-"változtatásai el fognak veszni.)"
+"Az fheroes2-ből való kilépéshez nyomd meg a Home gombot vagy csúsztass "
+"felfelé. (A jelenlegi térkép változtatásai el fognak veszni.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to quit? (Any unsaved changes to the current map will "
 "be lost.)"
 msgstr ""
-"Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
-"változtatásai el fognak veszni.)"
+"Biztos hogy ki akarsz lépni? (A jelenlegi térkép változtatásai el fognak "
+"veszni.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Nem lehetséges térkép generálása a megadott paraméterekkel."
@@ -4464,12 +4464,11 @@ msgstr "Az aktuális térkép mentése."
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
-#, fuzzy
 msgid "Auto Playtest"
-msgstr "Tesztelők"
+msgstr "Automatikus játékteszt"
 
 msgid "Run an automatic playtest of the map."
-msgstr ""
+msgstr "Lefuttat egy automatikus játéktesztet a térképen."
 
 msgid "Return to the game's Main Menu."
 msgstr "Visszatérés a játék főmenüjébe."
@@ -5285,65 +5284,61 @@ msgstr "Szakértő"
 msgid "difficulty|Impossible"
 msgstr "Lehetetlen"
 
-#, fuzzy
 msgid "Auto Playtest Results"
-msgstr "Tesztelők"
+msgstr "Automatikus játékteszt eredmények"
 
 msgid "1 playthrough"
 msgid_plural "%{count} playthroughs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 végigjátszás"
+msgstr[1] "%{count} végigjátszás"
 
 msgid " playthrough(s) reached the specified time limit"
-msgstr ""
+msgstr " a végigjátszás elérte a meghatározott időkorlátot"
 
-#, fuzzy
 msgid "Click to close the dialog."
-msgstr "Kattints a szín kiválasztásához."
+msgstr "Kattints a dialógusablak bezárásához."
 
 msgid "Won %{percent}% of playthroughs."
-msgstr ""
+msgstr "Győzelem a végigjátszások %{percent}%-ában."
 
-#, fuzzy
 msgid "Failed to prepare the map for auto playtest."
-msgstr "Térkép mentése sikertelen."
+msgstr "A térkép előkészítése az automatikus játéktesztre sikertelen."
 
 msgid "autoPlaytest|Number of playthroughs:"
-msgstr ""
+msgstr "Végigjátszások száma:"
 
 msgid "autoPlaytest|Max days per playthrough:"
-msgstr ""
+msgstr "Max. napszám végigjátszásonként:"
 
-#, fuzzy
 msgid "autoPlaytest|Animation"
-msgstr "Sebesség"
+msgstr "Animáció"
 
-#, fuzzy
 msgid "autoPlaytest|Animation speed:"
-msgstr "Sebesség"
+msgstr "Animáció sebesség:"
 
 msgid "autoPlaytest|Sound Effects"
-msgstr ""
+msgstr "Hangeffektek"
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
+"A bal egérgomb lenyomása bármikor megszakítja az automatikus játéktesztet."
 
-#, fuzzy
 msgid "Click to run an automated map playtest."
-msgstr "Kattints a főmenübe való visszatéréshez."
+msgstr "Kattints egy automatikus játékteszt indításához."
 
 msgid ""
 "Auto playtest\n"
 "(playthrough %{current} of %{total})"
 msgstr ""
+"Automatikus játékteszt\n"
+"(végigjátszás %{current}/%{total})"
 
-#, fuzzy
 msgid ""
 "Do you want to interrupt the automatic playtest? The effect will take place "
 "only on the next turn."
 msgstr ""
-"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
-"lesz érvényes."
+"Szeretnéd megszakítani az automatikus játéktesztet? Ez csak a következő "
+"körben lesz érvényes."
 
 msgid "and more..."
 msgstr "és egyebek..."
@@ -5753,9 +5748,8 @@ msgstr "főmenü megnyitása"
 msgid "hotkey|toggle passability"
 msgstr "átjárhatóság kapcsoló"
 
-#, fuzzy
 msgid "hotkey|auto playtest"
-msgstr "balra"
+msgstr "automatikus játékteszt"
 
 msgid "hotkey|re-generate random map"
 msgstr "véletlenszerű térkép újragenerálása"
