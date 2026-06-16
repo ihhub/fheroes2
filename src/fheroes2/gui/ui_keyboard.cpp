@@ -68,6 +68,17 @@ namespace
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
 
+    std::string getSingleLineInputText( std::string text )
+    {
+        for ( char & ch : text ) {
+            if ( ch == '\n' ) {
+                ch = ' ';
+            }
+        }
+
+        return text;
+    }
+
     bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
     {
         switch ( language ) {
@@ -196,7 +207,7 @@ namespace
                 = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
                                                                               inputAreaSize.width - 2 * inputAreaBorders, inputAreaSize.height - 2 * inputAreaBorders },
                                                               false, false, _output );
-            _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
+            _textUI->draw( getSingleLineInputText( _info ), static_cast<int32_t>( _cursorPosition ) );
 
             return true;
         }
@@ -326,7 +337,7 @@ namespace
         void _renderInputArea()
         {
             if ( _textUI ) {
-                _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
+                _textUI->draw( getSingleLineInputText( _info ), static_cast<int32_t>( _cursorPosition ) );
                 _output.render( _textUI->getOverallArea() );
             }
         }
