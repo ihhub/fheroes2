@@ -447,8 +447,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
 
-        marketplaceCountText.draw( iconOffsetX + marketplaceIcon.width() + 2,
-                                   iconOffsetY + ( marketplaceCountElementHeight - marketplaceCountText.height() ) / 2,
+        marketplaceCountText.draw( iconOffsetX + marketplaceIcon.width() + 2, iconOffsetY + ( marketplaceCountElementHeight - marketplaceCountText.height() ) / 2,
                                    display );
 
         marketplaceCountRoi = { iconOffsetX, iconOffsetY, marketplaceIcon.width() + marketplaceCountText.width() + 2, marketplaceCountElementHeight };
@@ -509,7 +508,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
-        
+
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
@@ -555,7 +554,6 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             continue;
         }
 
-
         // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
             if ( Dialog::MakeGiftResource( kingdom ) == Dialog::OK ) {
@@ -564,7 +562,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, 0, 0, 0, 0, fromTradingPost, firstExchange );
 
                 cursorTo.hide();
-                cursorFrom.hide();  
+                cursorFrom.hide();
 
                 fundsFrom = kingdom.GetFunds();
                 RedrawFromResource( pt1, fundsFrom );
