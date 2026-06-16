@@ -439,7 +439,7 @@ namespace Battle
         void _redrawActionColdRaySpell( Unit & target );
         void _redrawActionColdRingSpell( const int32_t dst, const TargetsInfo & targets );
         void _redrawActionDeathWaveSpell( const int32_t strength );
-        void _redrawActionDisruptingRaySpell( Unit & target );  
+        void _redrawActionDisruptingRaySpell( Unit & target );
         void _redrawActionElementalStormSpell( const TargetsInfo & targets );
         void _redrawActionHolyShoutSpell( const uint8_t strength );
         void _redrawActionLightningBoltSpell( const Unit & target );
