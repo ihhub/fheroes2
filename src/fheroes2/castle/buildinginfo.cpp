@@ -96,25 +96,6 @@ namespace
         return nullptr;
     }
 
-    // swap archery range sprite with upg. archery range
-    int getBuildingSpriteIndex( const int race, const BuildingType buildingType )
-    {
-        if ( race == Race::KNGT ) {
-            switch ( buildingType ) {
-            case DWELLING_MONSTER2:
-                return fheroes2::getIndexBuildingSprite( DWELLING_UPGRADE2 );
-
-            case DWELLING_UPGRADE2:
-                return fheroes2::getIndexBuildingSprite( DWELLING_MONSTER2 );
-
-            default:
-                break;
-            }
-        }
-
-        return fheroes2::getIndexBuildingSprite( buildingType );
-    }
-
     struct BuildingStats final
     {
         uint32_t type{ BUILD_NOTHING };
@@ -373,7 +354,7 @@ void BuildingInfo::Redraw() const
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int index = getBuildingSpriteIndex( castle.GetRace(), static_cast<BuildingType>( _buildingType ) );
+    const int index = fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     fheroes2::Blit( buildingFrame, display, area.x, area.y );
@@ -506,7 +487,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
 
     const fheroes2::Sprite & buildingImage
-        = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( castle.GetRace() ), getBuildingSpriteIndex( castle.GetRace(), static_cast<BuildingType>( _buildingType ) ) );
+        = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) ) );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingImage.width() ) / 2;
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
