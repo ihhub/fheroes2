@@ -386,7 +386,7 @@ namespace
         size_t _cursorPosition{ 0 };
         size_t _textViewBeginPosition{ 0 };
         fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
-        const bool _isMultiLineText{ false };
+        bool _isMultiLineText{ false };
         const bool _isEvilInterface{ false };
 
         int32_t _getInputAreaRowCount() const
