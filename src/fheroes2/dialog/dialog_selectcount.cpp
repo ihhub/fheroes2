@@ -346,10 +346,10 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             if ( textLanguage.has_value() ) {
                 // `textLanguage` certainly contains a value so we can simply access it without calling the `.value()` method.
                 const fheroes2::LanguageSwitcher switcher( *textLanguage );
-                fheroes2::openVirtualKeyboard( result, charLimit );
+                fheroes2::openVirtualKeyboard( result, charLimit, isMultiLine );
             }
             else {
-                fheroes2::openVirtualKeyboard( result, charLimit );
+                fheroes2::openVirtualKeyboard( result, charLimit, isMultiLine );
             }
 
             if ( charLimit > 0 && result.size() > charLimit ) {
