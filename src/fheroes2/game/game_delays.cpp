@@ -105,8 +105,7 @@ void Game::AnimateDelaysInitialize()
     setDelay( DelayType::MAPS_DELAY, 250 );
     setDelay( DelayType::CASTLE_TAVERN_DELAY, 75 );
     setDelay( DelayType::CASTLE_AROUND_DELAY, 200 );
-    setDelay( DelayType::CASTLE_BUYHERO_DELAY, 60 );
-    setDelay( DelayType::CASTLE_BUILD_DELAY, 100 );
+    setDelay( DelayType::CASTLE_ITEM_UPDATE_DELAY, 60 );
     setDelay( DelayType::CASTLE_UNIT_DELAY, 150 );
     setDelay( DelayType::HEROES_FADE_DELAY, 32 );
     setDelay( DelayType::HEROES_PICKUP_DELAY, 40 );
