@@ -5648,6 +5648,13 @@ namespace
             }
             break;
         }
+        case ICN::CSTLKNGT:
+            if ( _icnVsSprite[id].size() > 30 ) {
+                // Knight castle construction images for Archery are swapped.
+                // We have to fix it in the resources.
+                std::swap( _icnVsSprite[id][20], _icnVsSprite[id][25] );
+            }
+            break;
         default:
             break;
         }
