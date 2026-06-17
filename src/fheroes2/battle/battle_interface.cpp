@@ -4145,9 +4145,8 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
         attacker.SwitchAnimation( attackStart );
     }
 
-    const auto halvingTargetIter = std::find_if( targets.begin(), targets.end(), []( const TargetInfo & target ) {
-        return target.defender != nullptr && target.isHalvingAttack;
-    } );
+    const auto halvingTargetIter
+        = std::find_if( targets.begin(), targets.end(), []( const TargetInfo & target ) { return target.defender != nullptr && target.isHalvingAttack; } );
 
     if ( halvingTargetIter != targets.end() ) {
         // Finish the Genie's attack animation first, so the special effect does not freeze the attacker mid-animation.
