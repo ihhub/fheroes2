@@ -34,7 +34,7 @@ fheroes2 recreates the Heroes of Might and Magic II game engine from scratch whi
 user interface improvements, higher resolution support, improved AI behavior and other enhancements. A more detailed list of changes can be found on the
 project's features and enhancements page.
 
-## Q: Does fheroes2 try to change the balance of the original game?
+## Q: Are there any rebalancing in fheroes2?
 
 No. fheroes2 does not aim to change the balance of Heroes of Might and Magic II or redesign its factions, creatures, spells or core gameplay.
 The project focuses on recreating the original game engine while fixing bugs and adding quality-of-life improvements.
@@ -42,9 +42,8 @@ The project focuses on recreating the original game engine while fixing bugs and
 ## Q: Are AI opponents improved in fheroes2?
 
 AI opponents in fheroes2 were written from scratch and are designed to make smarter and more reactive decisions than in the original game.
-They do not simply reproduce the original AI's artificial advantages, such as seeing the whole map without vision or receiving bigger weekly
-creature growth. Depending on the difficulty level, some bonuses or restrictions may still differ, but the main improvement is better
-decision-making rather than relying mainly on hidden advantages.
+Unlike the original AI, fheroes2 AI does not have artificial advantages such as seeing the whole map without vision or receiving increased
+weekly creature growth. The main improvement comes from better decision-making rather than from reproducing these hidden advantages.
 
 ## Q: Can I create and share maps for fheroes2?
 
@@ -59,7 +58,7 @@ or on the fheroes2 [Discord server](https://discord.gg/xF85vbZ). GitHub Issues s
 ## Q: Where should I report a bug?
 
 Please report bugs on the project's GitHub [Issues page](https://github.com/ihhub/fheroes2/issues). When opening a bug report,
-include your fheroes2 version, operating system, a clear description of the problem, steps to reproduce it and, if possible, screenshots, logs or a save file.
+include your fheroes2 version, operating system, a clear description of the problem, steps to reproduce it and, if possible, screenshots or a save file.
 
 ## Q: How can I contribute to the project?
 
