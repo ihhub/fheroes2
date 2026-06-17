@@ -64,19 +64,55 @@ namespace
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
     const fheroes2::Size inputAreaSize{ 268, 21 };
     const int32_t inputAreaBorders{ 2 };
+    const int32_t multiLineInputAreaMaxRows{ 3 };
+    fheroes2::Size getInputAreaSize( const int32_t rowCount )
+    {
+        return { inputAreaSize.width, inputAreaBorders * 2 + rowCount * ( inputAreaSize.height - 2 * inputAreaBorders ) };
+    }
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
 
-    std::string getSingleLineInputText( std::string text )
+    struct VirtualKeyboardTextView
     {
-        for ( char & ch : text ) {
-            if ( ch == '\n' ) {
-                ch = ' ';
+        std::string text;
+        size_t beginPosition{ 0 };
+        int32_t rowCount{ 1 };
+    };
+
+    VirtualKeyboardTextView getVirtualKeyboardTextView( const std::string & text, const size_t cursorPosition )
+    {
+        std::vector<size_t> lineStartPositions{ 0 };
+
+        for ( size_t i = 0; i < text.size(); ++i ) {
+            if ( text[i] == '\n' ) {
+                lineStartPositions.emplace_back( i + 1 );
             }
         }
 
-        return text;
+        if ( lineStartPositions.size() <= static_cast<size_t>( multiLineInputAreaMaxRows ) ) {
+            return { text, 0, static_cast<int32_t>( lineStartPositions.size() ) };
+        }
+
+        const size_t safeCursorPosition = std::min( cursorPosition, text.size() );
+
+        size_t currentLine = 0;
+        for ( size_t i = 1; i < lineStartPositions.size(); ++i ) {
+            if ( lineStartPositions[i] > safeCursorPosition ) {
+                break;
+            }
+
+            currentLine = i;
+        }
+
+        const size_t firstVisibleLine
+            = currentLine >= static_cast<size_t>( multiLineInputAreaMaxRows ) ? currentLine - static_cast<size_t>( multiLineInputAreaMaxRows ) + 1 : 0;
+        const size_t beginPosition = lineStartPositions[firstVisibleLine];
+
+        const size_t nextLineAfterView = firstVisibleLine + static_cast<size_t>( multiLineInputAreaMaxRows );
+        const size_t endPosition = nextLineAfterView < lineStartPositions.size() ? lineStartPositions[nextLineAfterView] - 1 : text.size();
+
+        return { text.substr( beginPosition, endPosition - beginPosition ), beginPosition, multiLineInputAreaMaxRows };
     }
 
     bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
@@ -138,11 +174,12 @@ namespace
     class KeyboardRenderer final
     {
     public:
-        KeyboardRenderer( fheroes2::Display & output, std::string & info, const size_t lengthLimit, const bool evilInterface )
+        KeyboardRenderer( fheroes2::Display & output, std::string & info, const size_t lengthLimit, const bool isMultiLineText, const bool evilInterface )
             : _output( output )
             , _info( info )
             , _lengthLimit( lengthLimit )
             , _cursorPosition( info.size() )
+            , _isMultiLineText( isMultiLineText )
             , _isEvilInterface( evilInterface )
         {
             // Do nothing.
@@ -169,6 +206,11 @@ namespace
             return _isEvilInterface;
         }
 
+        int32_t getInputAreaHeightIncrease() const
+        {
+            return _getInputAreaSize().height - inputAreaSize.height;
+        }
+
         // Returns true if keyboard dialog resize was made.
         bool resize( const fheroes2::Size & size )
         {
@@ -178,6 +220,8 @@ namespace
             }
 
             assert( size.width > 0 && size.height > 0 );
+
+            const fheroes2::Size currentInputAreaSize = _getInputAreaSize();
 
             const fheroes2::Point defaultOffset{ ( _output.width() - size.width ) / 2, ( _output.height() - defaultWindowHeight ) / 2 };
             const fheroes2::Point offset{ defaultOffset.x, defaultOffset.y - ( size.height - defaultWindowHeight ) };
@@ -191,23 +235,32 @@ namespace
             _window->render();
 
             const fheroes2::Rect & windowRoi = _window->activeArea();
-            _textInputArea.x = windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2;
+            _textInputArea.x = windowRoi.x + ( windowRoi.width - currentInputAreaSize.width ) / 2;
             _textInputArea.y = windowRoi.y + inputAreaOffsetFromWindowTop;
+            _textInputArea.width = currentInputAreaSize.width;
+            _textInputArea.height = currentInputAreaSize.height;
 
             // Draw the text input background.
-            const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-            fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
+            if ( _isMultiLineText ) {
+                fheroes2::StandardWindow::applyTextBackgroundShading( _output, _textInputArea );
+            }
+            else {
+                const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
+                fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
 
-            if ( _isEvilInterface ) {
-                fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
-                                        _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                if ( _isEvilInterface ) {
+                    fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
+                                            _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                }
             }
 
-            _textUI
-                = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
-                                                                              inputAreaSize.width - 2 * inputAreaBorders, inputAreaSize.height - 2 * inputAreaBorders },
-                                                              false, false, _output );
-            _textUI->draw( getSingleLineInputText( _info ), static_cast<int32_t>( _cursorPosition ) );
+            _textUI = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
+                                                                                  currentInputAreaSize.width - 2 * inputAreaBorders,
+                                                                                  currentInputAreaSize.height - 2 * inputAreaBorders },
+                                                                  _isMultiLineText, false, _output );
+            const std::string textToDraw = _getTextToDraw();
+
+            _textUI->draw( textToDraw, static_cast<int32_t>( _cursorPosition - _textViewBeginPosition ) );
 
             return true;
         }
@@ -278,7 +331,7 @@ namespace
         void setCursorPosition( const fheroes2::Point & clickPosition )
         {
             if ( _textUI ) {
-                const size_t newPos = _textUI->getCursorInTextPosition( clickPosition );
+                const size_t newPos = std::min( _textViewBeginPosition + _textUI->getCursorInTextPosition( clickPosition ), _info.size() );
                 if ( _cursorPosition != newPos ) {
                     _cursorPosition = newPos;
                     _renderInputArea();
@@ -331,13 +384,44 @@ namespace
         std::unique_ptr<fheroes2::StandardWindow> _window;
         std::unique_ptr<fheroes2::TextInputField> _textUI;
         size_t _cursorPosition{ 0 };
+        size_t _textViewBeginPosition{ 0 };
         fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
+        const bool _isMultiLineText{ false };
         const bool _isEvilInterface{ false };
+
+        int32_t _getInputAreaRowCount() const
+        {
+            if ( !_isMultiLineText ) {
+                return 1;
+            }
+
+            return getVirtualKeyboardTextView( _info, _cursorPosition ).rowCount;
+        }
+
+        fheroes2::Size _getInputAreaSize() const
+        {
+            return getInputAreaSize( _getInputAreaRowCount() );
+        }
+
+        std::string _getTextToDraw()
+        {
+            if ( !_isMultiLineText ) {
+                _textViewBeginPosition = 0;
+                return _info;
+            }
+
+            const VirtualKeyboardTextView textView = getVirtualKeyboardTextView( _info, _cursorPosition );
+            _textViewBeginPosition = textView.beginPosition;
+
+            return textView.text;
+        }
 
         void _renderInputArea()
         {
             if ( _textUI ) {
-                _textUI->draw( getSingleLineInputText( _info ), static_cast<int32_t>( _cursorPosition ) );
+                const std::string textToDraw = _getTextToDraw();
+
+                _textUI->draw( textToDraw, static_cast<int32_t>( _cursorPosition - _textViewBeginPosition ) );
                 _output.render( _textUI->getOverallArea() );
             }
         }
@@ -1044,21 +1128,25 @@ namespace
 
         const int32_t windowWidth = isNumericOnlyLayout ? numpadWindowWidth : defaultWindowWidth;
 
-        const bool isResized = renderer.resize(
-            { windowWidth, defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
+        const int32_t inputAreaHeightIncrease = renderer.getInputAreaHeightIncrease();
+
+        const bool isResized
+            = renderer.resize( { windowWidth, defaultWindowHeight + inputAreaHeightIncrease
+                                                  + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
 
         const bool isEvilInterface = renderer.isEvilInterface();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
         addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported );
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
-        const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders, windowWidth );
+        const fheroes2::Point buttonsOffset{ windowRoi.x + offsetFromWindowBorders.x, windowRoi.y + offsetFromWindowBorders.y + inputAreaHeightIncrease };
+        const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, buttonsOffset, windowWidth );
         const fheroes2::Rect & textRoi = renderer.getTextRoi();
 
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
 
-        renderButtons( buttons, windowRoi.getPosition() + offsetFromWindowBorders, display, windowWidth );
+        renderButtons( buttons, buttonsOffset, display, windowWidth );
 
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         const fheroes2::Sprite & okayButtonReleasedImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
@@ -1113,7 +1201,7 @@ namespace
 
 namespace fheroes2
 {
-    void openVirtualKeyboard( std::string & output, size_t lengthLimit )
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit, const bool isMultiLineText )
     {
         if ( lengthLimit == 0 ) {
             // A string longer than 64KB is extremely impossible.
@@ -1129,7 +1217,7 @@ namespace fheroes2
             language = lastSelectedLanguage;
         }
 
-        KeyboardRenderer renderer( Display::instance(), output, lengthLimit, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( Display::instance(), output, lengthLimit, isMultiLineText, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
@@ -1177,7 +1265,7 @@ namespace fheroes2
         DialogAction action = DialogAction::DoNothing;
 
         // Lets limit to 11 digits: minus and 10 digits for INT32_MIN
-        KeyboardRenderer renderer( Display::instance(), strValue, 10, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( Display::instance(), strValue, 10, false, Settings::Get().isEvilInterfaceEnabled() );
 
         const LayoutType layoutType = ( minValue < 0 ) ? LayoutType::SignedNumeric : LayoutType::UnsignedNumeric;
 
