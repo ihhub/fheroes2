@@ -436,8 +436,8 @@ namespace
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot || join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlotAndRunAway ) {
             fheroes2::showStandardTextMessage( "",
-                                               join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot 
-                                                   ? _( "The creatures would join your army, but your army has no room for them.\nThey prepare to fight." ) 
+                                               join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot
+                                                   ? _( "The creatures would join your army, but your army has no room for them.\nThey prepare to fight." )
                                                    : _( "The creatures would join your army, but your army has no room for them." ),
                                                Dialog::OK );
 

@@ -1719,8 +1719,8 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
                         blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::NoFreeSlot;
                     }
                 }
-                // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance with
-                // the mechanics of the original game
+                // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance
+                // with the mechanics of the original game
                 else if ( hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                     return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
                 }
