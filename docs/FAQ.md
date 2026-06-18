@@ -42,7 +42,7 @@ The project focuses on recreating the original game engine while fixing bugs and
 ## Q: Are AI opponents improved in fheroes2?
 
 AI opponents in fheroes2 were written from scratch and are designed to make smarter and more reactive decisions than in the original game.
-Unlike the original AI, fheroes2 AI does not have artificial advantages such as seeing the whole map without vision or receiving increased
+Unlike the original AI, the fheroes2 AI does not have artificial advantages such as seeing the whole map without vision or receiving increased
 weekly creature growth. The main improvement comes from better decision-making rather than from reproducing these hidden advantages.
 
 ## Q: Can I create and share maps for fheroes2?
