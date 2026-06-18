@@ -835,7 +835,7 @@ namespace
         switch ( objectType ) {
         case MP2::OBJ_WINDMILL:
             msg = funds.GetValidItemsCount() > 0
-                      ? _( 
+                      ? _(
                           "The keeper of the mill announces:\n\"Milord, I have been working very hard to provide you with these resources, come back next week for more.\"" )
                       : _( "The keeper of the mill announces:\n\"Milord, I am sorry, there are no resources currently available. Please try again next week.\"" );
             break;
@@ -853,9 +853,9 @@ namespace
 
         case MP2::OBJ_MAGIC_GARDEN:
             msg = funds.GetValidItemsCount() > 0
-                      ? _( 
+                      ? _(
                           "You catch a leprechaun foolishly sleeping amidst a cluster of magic mushrooms.\nIn exchange for his freedom, he guides you to a small pot filled with precious things." )
-                      : _( 
+                      : _(
                           "You've found a magic garden, the kind of place that leprechauns and faeries like to cavort in, but there is no one here today.\nPerhaps you should try again next week." );
             break;
 
@@ -1154,7 +1154,7 @@ namespace
             break;
 
         case MP2::OBJ_IDOL:
-            msg = visited ? _( 
+            msg = visited ? _(
                       "You've found an ancient and weathered stone idol.\nIt is supposed to grant luck to visitors, but since the stars are already smiling upon you, it does nothing." )
                           : _( "You've found an ancient and weathered stone idol.\nKissing it is supposed to be lucky, so you do. The stone is very cold to the touch." );
             break;
@@ -1162,7 +1162,7 @@ namespace
         case MP2::OBJ_MERMAID:
             msg = visited
                       ? _( "The mermaids silently entice you to return later and be blessed again." )
-                      : _( 
+                      : _(
                           "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids' charms bless you with increased luck for your next combat." );
             break;
 
@@ -1337,9 +1337,9 @@ namespace
 
         case MP2::OBJ_MERCENARY_CAMP:
             skill = Skill::Primary::ATTACK;
-            msg = visited ? _( 
+            msg = visited ? _(
                       "You've come upon a mercenary camp practicing their tactics. \"You're too advanced for us,\" the mercenary captain says. \"We can teach nothing more.\"" )
-                          : _( 
+                          : _(
                               "You've come upon a mercenary camp practicing their tactics. The mercenaries welcome you and your troops and invite you to train with them." );
             break;
 
@@ -1347,13 +1347,13 @@ namespace
             skill = Skill::Primary::KNOWLEDGE;
             msg = visited
                       ? _( "\"Go 'way!\", the witch doctor barks, \"you know all I know.\"" )
-                      : _( 
+                      : _(
                           "An Orcish witch doctor living in the hut deepens your knowledge of magic by showing you how to cast stones, read portents, and decipher the intricacies of chicken entrails." );
             break;
 
         case MP2::OBJ_STANDING_STONES:
             skill = Skill::Primary::POWER;
-            msg = visited ? _( 
+            msg = visited ? _(
                       "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, the Druids turn you away, indicating they have nothing new to teach you." )
                           : _( "You've found a group of Druids worshipping at one of their strange stone edifices. Silently, they teach you new ways to cast spells." );
             break;
@@ -1511,7 +1511,7 @@ namespace
             break;
 
         case MP2::OBJ_WATERING_HOLE:
-            msg = visited ? _( 
+            msg = visited ? _(
                       "The drink at the watering hole is refreshing, but offers no further benefit. The watering hole might help again if you fought a battle first." )
                           : _( "A drink at the watering hole fills your troops with strength and lifts their spirits. You can travel a bit further today." );
             move = GameStatic::getMovementPointBonus( MP2::OBJ_WATERING_HOLE );
@@ -1522,7 +1522,7 @@ namespace
                           : _( "A visit and a prayer at the temple raises the morale of your troops." );
             break;
 
-        default:
+        default:    
             return;
         }
 
