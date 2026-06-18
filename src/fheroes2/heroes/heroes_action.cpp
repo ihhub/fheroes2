@@ -830,7 +830,7 @@ namespace
         const Funds funds = getFundsFromTile( tile );
 
         std::string msg;
-        std::string caption = MP2::StringObject( objectType );  
+        std::string caption = MP2::StringObject( objectType );
 
         switch ( objectType ) {
         case MP2::OBJ_WINDMILL:
@@ -1522,7 +1522,7 @@ namespace
                           : _( "A visit and a prayer at the temple raises the morale of your troops." );
             break;
 
-        default:    
+        default:
             return;
         }
 
