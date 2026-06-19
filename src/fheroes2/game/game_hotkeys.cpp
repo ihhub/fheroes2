@@ -168,6 +168,8 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_AUTO_PLAYTEST )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|auto playtest" ), fheroes2::Key::KEY_A };
 
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE )]
@@ -550,7 +552,7 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 
             const RecursionGuard recursionGuard( recursiveCall );
 
-            Player * player = Settings::Get().GetPlayers().GetCurrent();
+            Player * player = conf.GetPlayers().GetCurrent();
 
             // Do not allow to transfer control to/from AI during battle
             if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) && Battle::GetArena() == nullptr ) {

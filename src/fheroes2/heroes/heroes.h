@@ -438,6 +438,7 @@ public:
     // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
     uint32_t GetMaxMovePoints( const bool onWater ) const;
 
+    // Returns the movement points for the current turn.
     uint32_t GetMovePoints() const
     {
         return _movePoints;

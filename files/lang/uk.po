@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2026-05-16 09:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -220,6 +220,11 @@ msgid ""
 msgstr ""
 "ГОЛОВНЕ\n"
 "МЕНЮ"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4443,30 +4448,6 @@ msgstr ""
 "Бажаєте повернутися у головне меню гри? Будь-які незбережені зміни у "
 "поточній мапі будуть втрачені."
 
-msgid "Unsaved Changes"
-msgstr "Незбережені зміни"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Ця мапа має або зміни місцевості, або історії відкату, або ще не була "
-"збережена у файл.\n"
-"\n"
-"Ви бажаєте зберегти поточну мапу?"
-
-msgid "Unplayable Map"
-msgstr "Неграбельна мапа"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"На цій мапі не можна грати. Вам потрібен принаймні один гравець-людина, щоб "
-"мапа стала грабельною."
-
 msgid "Start Map"
 msgstr "Почати мапу"
 
@@ -4497,6 +4478,13 @@ msgstr "Зберегти поточну мапу."
 
 msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Тестувальники"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Повернутися до головного меню."
@@ -4570,6 +4558,30 @@ msgstr "Мапу збережено в: "
 
 msgid "Failed to save the map."
 msgstr "Не вдалося зберегти мапу."
+
+msgid "Unsaved Changes"
+msgstr "Незбережені зміни"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Ця мапа має або зміни місцевості, або історії відкату, або ще не була "
+"збережена у файл.\n"
+"\n"
+"Ви бажаєте зберегти поточну мапу?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"На цій мапі не можна грати. Вам потрібен принаймні один гравець-людина, щоб "
+"мапа стала грабельною."
+
+msgid "Unplayable Map"
+msgstr "Неграбельна мапа"
 
 msgid "Used to place %{object}."
 msgstr "Використовується для розміщення %{object}."
@@ -5287,6 +5299,67 @@ msgstr "Експертна"
 msgid "difficulty|Impossible"
 msgstr "Неможлива"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Тестувальники"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Тицьніть, щоб вибрати колір."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Не вдалося зберегти мапу."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Швидкість"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Швидкість"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Тицьніть для повернення до головного меню."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Хочете повернутися на ручний контроль? Ефект відбудеться лише на наступний "
+"хід."
+
 msgid "and more..."
 msgstr "і не тільки..."
 
@@ -5694,6 +5767,10 @@ msgstr "відкрити головне меню гри"
 
 msgid "hotkey|toggle passability"
 msgstr "відобразити прохідність"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "ліворуч"
 
 msgid "hotkey|re-generate random map"
 msgstr "перегенерувати випадкову мапу"

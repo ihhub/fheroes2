@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2026-03-06 18:49-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -214,6 +214,11 @@ msgid ""
 msgstr ""
 "MENU\n"
 "PRINCIPAL"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4463,30 +4468,6 @@ msgstr ""
 "Deseja retornar ao Menu Principal do jogo? (Quaisquer alterações não salvas "
 "no mapa atual serão perdidas.)"
 
-msgid "Unsaved Changes"
-msgstr "Alterações Não Salvas"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Este mapa possui alterações de terreno, histórico de desfazer ou ainda não "
-"foi salvo em um arquivo.\n"
-"\n"
-"Deseja salvar o mapa atual?"
-
-msgid "Unplayable Map"
-msgstr "Mapa Injogável"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Este mapa não é jogável. Você precisa de pelo menos um jogador humano para "
-"que o mapa seja jogável."
-
 msgid "Start Map"
 msgstr "Iniciar Mapa"
 
@@ -4517,6 +4498,13 @@ msgstr "Salvar o mapa atual."
 
 msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Testadores"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Retornar ao Menu Principal do jogo."
@@ -4591,6 +4579,30 @@ msgstr "Mapa salvo em: "
 
 msgid "Failed to save the map."
 msgstr "Falha ao salvar o mapa."
+
+msgid "Unsaved Changes"
+msgstr "Alterações Não Salvas"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Este mapa possui alterações de terreno, histórico de desfazer ou ainda não "
+"foi salvo em um arquivo.\n"
+"\n"
+"Deseja salvar o mapa atual?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Este mapa não é jogável. Você precisa de pelo menos um jogador humano para "
+"que o mapa seja jogável."
+
+msgid "Unplayable Map"
+msgstr "Mapa Injogável"
 
 msgid "Used to place %{object}."
 msgstr "Usado para colocar %{object}."
@@ -5308,6 +5320,66 @@ msgstr "Experiente"
 msgid "difficulty|Impossible"
 msgstr "Impossível"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testadores"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Clique para selecionar a cor."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Falha ao salvar o mapa."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Velocidade"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Velocidade"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Clique para retornar ao menu principal."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Você deseja recuperar o controle da IA? O efeito ocorrerá somente no próximo "
+"turno."
+
 msgid "and more..."
 msgstr "e mais..."
 
@@ -5716,6 +5788,10 @@ msgstr "abrir menu principal do jogo"
 
 msgid "hotkey|toggle passability"
 msgstr "alternar transitabilidade"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "padrão para a esquerda"
 
 msgid "hotkey|re-generate random map"
 msgstr "gerar novo mapa aleatório"

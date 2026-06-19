@@ -576,7 +576,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
     if ( !( flags & BUTTONS ) ) {
         // This is when this dialog is called by a right mouse button press.
-
         display.render( restorer.rect() );
 
         while ( le.HandleEvents( true ) ) {
@@ -584,6 +583,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
                 break;
             }
         }
+
+        restorer.restore();
+        display.render( restorer.rect() );
 
         return Dialog::ZERO;
     }
