@@ -196,33 +196,39 @@ namespace
         }
 
         if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) || attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
-            const uint32_t killed = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
-            uint32_t ressurectPoints;
+            const uint32_t futureKilled = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
+
+            uint32_t ressurectPoints{ 0 };
             if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
-                ressurectPoints = killed * attacker.Monster::GetHitPoints();
+                ressurectPoints = futureKilled * attacker.Monster::GetHitPoints();
             }
             else {
-                ressurectPoints = killed * target.Monster::GetHitPoints();
+                // If this assertion blows up then you changed the above logic without changing it here.
+                assert( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) );
+
+                ressurectPoints = futureKilled * target.Monster::GetHitPoints();
                 ressurectPoints = std::min( ressurectPoints, attacker.GetMissingHitPoints() );
             }
 
             // first effect: target will need to kill this ressurected creatures
             // average number of powerful troops in target's army
-            constexpr double avgNumberOfPowerfulTargets = 1.5;
+            constexpr double avgNumberOfPowerfulTargets{ 1.5 };
             attackValue += ressurectPoints / avgNumberOfPowerfulTargets;
 
             // second effect: attacker troop becomes more powerful and can kill enemies faster
-            // average number of troops like atacker in atacker's army
-            constexpr double avgNumOfAtackers = 2.0;
+            // average number of troops like attacker in attacker's army
+            constexpr double avgNumOfAttackers{ 2.0 };
+
             // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
-            constexpr double avgBattleTurns = 5.0;
+            constexpr double avgBattleTurns{ 5.0 };
             const double powerRatio = 1
-                                      + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAtackers, 0.0 )
+                                      + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAttackers, 0.0 )
                                             // *0.5 to get average hit points of the troop in the battle
                                             / ( attacker.GetHitPoints() * 0.5 );
             const double killTimeRatio = 1 / powerRatio;
             assert( killTimeRatio <= 1 );
-            attackValue += ( allEnemiesThreat / avgNumOfAtackers ) * avgBattleTurns * ( 1 - killTimeRatio );
+
+            attackValue += ( allEnemiesThreat / avgNumOfAttackers ) * avgBattleTurns * ( 1 - killTimeRatio );
         }
 
         return attackValue;
