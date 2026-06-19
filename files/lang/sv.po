@@ -5278,7 +5278,7 @@ msgid "difficulty|Impossible"
 msgstr "Omöjligt"
 
 msgid "Auto Playtest Results"
-msgstr "Automatiskt Testsköringsresultat"
+msgstr "Automatiskt Testkörningsresultat"
 
 msgid "1 playthrough"
 msgid_plural "%{count} playthroughs"
@@ -9331,7 +9331,7 @@ msgid ""
 "their attacks to only do half damage."
 msgstr ""
 "%{morale-type} drabbar ibland hjältens trupper i strid, som får de att bara "
-"gör hälften i skada."
+"ger hälften i skada."
 
 msgid ""
 "%{luck-type} luck means the hero's units will never get lucky or unlucky "
