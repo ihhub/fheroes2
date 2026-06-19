@@ -306,6 +306,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
     if ( !_backupCompleted || !allowBackup ) {
         armyInfo[0].hero = world.GetHeroes( Heroes::LORDKILBURN );
         armyInfo[0].isHeroPresent = true;
+
+        _terrainType = Maps::Ground::UNKNOWN;
     }
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
