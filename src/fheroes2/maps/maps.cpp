@@ -472,7 +472,7 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
 
     const bool isAIPlayer = kingdom.isControlAI();
     const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() ) ||
-                                      ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() );
+                                      ( Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) && fheroes2::AutoPlaytest::instance().isAnimationEnabled() );
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );
