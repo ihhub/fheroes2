@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
-"PO-Revision-Date: 2026-01-31 15:48+0200\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
+"PO-Revision-Date: 2026-05-16 09:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -220,6 +220,11 @@ msgid ""
 msgstr ""
 "ГОЛОВНЕ\n"
 "МЕНЮ"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -1077,10 +1082,10 @@ msgid "Perish: %{min} - %{max}"
 msgstr "Загине %{min} - %{max}"
 
 msgid "battle_turn_order|Top"
-msgstr "Верх"
+msgstr "Вгорі"
 
 msgid "battle_turn_order|Bottom"
-msgstr "Низ"
+msgstr "Внизу"
 
 msgid "Turn Order"
 msgstr "Порядок ходів"
@@ -4178,9 +4183,8 @@ msgstr "Гарнізон замку"
 msgid "Town Army"
 msgstr "Гарнізон міста"
 
-#, fuzzy
 msgid "You have unsaved changes. Do you wish to proceed?"
-msgstr "Скільки істот бажаєте перемістити?"
+msgstr "Ви маєте незбережені зміни. Бажаєте продовжити?"
 
 msgid "Click to change the Castle name."
 msgstr "Тицьніть, щоб змінити назву замку."
@@ -4382,15 +4386,30 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr "%{objects} мусять бути розміщені на воді."
 
-#, fuzzy
 msgid "Action objects cannot be placed outside the map."
-msgstr "Неможливо розмістити об'єкт поза мапою."
+msgstr "Неможливо розмістити об'єкти дії поза мапою."
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Об'єкти дії мають бути розміщені на чистому просторі."
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} %{objects}."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Ви певні, що хочете завантажити іншу мапу? (Всі незбережені зміни у поточній "
+"мапі будуть втрачені.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Ви певні, що хочете створити нову мапу? (Всі незбережені зміни у поточній "
+"мапі будуть втрачені.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Неможливо створити мапу з заданими параметрами."
@@ -4429,30 +4448,6 @@ msgstr ""
 "Бажаєте повернутися у головне меню гри? Будь-які незбережені зміни у "
 "поточній мапі будуть втрачені."
 
-msgid "Unsaved Changes"
-msgstr "Незбережені зміни"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Ця мапа має або зміни місцевості, або історії відкату, або ще не була "
-"збережена у файл.\n"
-"\n"
-"Ви бажаєте зберегти поточну мапу?"
-
-msgid "Unplayable Map"
-msgstr "Неграбельна мапа"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"На цій мапі не можна грати. Вам потрібен принаймні один гравець-людина, щоб "
-"мапа стала грабельною."
-
 msgid "Start Map"
 msgstr "Почати мапу"
 
@@ -4483,6 +4478,13 @@ msgstr "Зберегти поточну мапу."
 
 msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Тестувальники"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Повернутися до головного меню."
@@ -4533,9 +4535,8 @@ msgstr "На мапі можна розмістити лише один випа
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "На мапі можна розмістити максимум %{count} обелісків."
 
-#, fuzzy
 msgid "The same object exists on the tile."
-msgstr "Ця відповідь є у списку."
+msgstr "Цей самий об'єкт є на плитці."
 
 msgid "The map is corrupted."
 msgstr "Мапа пошкоджена."
@@ -4557,6 +4558,30 @@ msgstr "Мапу збережено в: "
 
 msgid "Failed to save the map."
 msgstr "Не вдалося зберегти мапу."
+
+msgid "Unsaved Changes"
+msgstr "Незбережені зміни"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Ця мапа має або зміни місцевості, або історії відкату, або ще не була "
+"збережена у файл.\n"
+"\n"
+"Ви бажаєте зберегти поточну мапу?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"На цій мапі не можна грати. Вам потрібен принаймні один гравець-людина, щоб "
+"мапа стала грабельною."
+
+msgid "Unplayable Map"
+msgstr "Неграбельна мапа"
 
 msgid "Used to place %{object}."
 msgstr "Використовується для розміщення %{object}."
@@ -4613,33 +4638,26 @@ msgstr "Герої"
 msgid "Towns"
 msgstr "Міста"
 
-#, fuzzy
 msgid "editorDetailMode|Edit"
-msgstr "Деталізація"
+msgstr "Редагувати"
 
-#, fuzzy
 msgid "editorDetailMode|Move"
-msgstr "Деталізація"
+msgstr "Перемістити"
 
-#, fuzzy
 msgid "editorDetailMode|Copy"
-msgstr "Деталізація"
+msgstr "Копіювати"
 
-#, fuzzy
 msgid "editorErasure|Mountains"
-msgstr "Монстри"
+msgstr "Гори"
 
-#, fuzzy
 msgid "editorErasure|Rocks"
-msgstr "Дороги"
+msgstr "Скелі"
 
-#, fuzzy
 msgid "editorErasure|Trees"
-msgstr "Герої"
+msgstr "Дерева"
 
-#, fuzzy
 msgid "editorErasure|Miscellaneous and Water landscape objects"
-msgstr "Ландшафтні об'єкти"
+msgstr "Різне та об'єкти водного ландшафту"
 
 msgid "editorErasure|Adventure non pickable objects"
 msgstr "Пригодницькі статичні об'єкти"
@@ -4711,13 +4729,13 @@ msgid "No special modifiers."
 msgstr "Ніяких спеціальних модифікаторів."
 
 msgid "Edit objects on the Adventure Map."
-msgstr ""
+msgstr "Редагувати об’єкти на мапі пригод."
 
 msgid "Move objects on the Adventure Map."
-msgstr ""
+msgstr "Переміщати об’єкти на мапі пригод."
 
 msgid "Copy objects on the Adventure Map."
-msgstr ""
+msgstr "Копіювати об’єкти на мапі пригод."
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Видалити %{type}."
@@ -4759,9 +4777,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Деталізація"
 
-#, fuzzy
 msgid "Used for moving or customizing objects."
-msgstr "Використовується для спеціального редагування об'єктів дії."
+msgstr "Використовується для переміщення або редагування об'єктів."
 
 msgid "Adventure Objects Mode"
 msgstr "Пригодницькі об'єкти"
@@ -5282,6 +5299,67 @@ msgstr "Експертна"
 msgid "difficulty|Impossible"
 msgstr "Неможлива"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Тестувальники"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Тицьніть, щоб вибрати колір."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Не вдалося зберегти мапу."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Швидкість"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Швидкість"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Тицьніть для повернення до головного меню."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Хочете повернутися на ручний контроль? Ефект відбудеться лише на наступний "
+"хід."
+
 msgid "and more..."
 msgstr "і не тільки..."
 
@@ -5690,6 +5768,10 @@ msgstr "відкрити головне меню гри"
 msgid "hotkey|toggle passability"
 msgstr "відобразити прохідність"
 
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "ліворуч"
+
 msgid "hotkey|re-generate random map"
 msgstr "перегенерувати випадкову мапу"
 
@@ -5917,13 +5999,11 @@ msgstr "екран будівництва"
 msgid "hotkey|buy all monsters in well"
 msgstr "придбати усіх монстрів у колодязі"
 
-#, fuzzy
 msgid "hotkey|merge troops with hero"
-msgstr "наступний герой"
+msgstr "об'єднати війська з героєм"
 
-#, fuzzy
 msgid "hotkey|merge troops with garrison"
-msgstr "повторити останню дію"
+msgstr "об'єднати війська з гарнізоном"
 
 msgid "hotkey|split stack by half"
 msgstr "розділити загін навпіл"
@@ -8743,9 +8823,8 @@ msgstr ""
 msgid "Click to enable hero's patrol mode."
 msgstr "Тицьніть для увімкнення патрулювання героєм."
 
-#, fuzzy
 msgid "Do you want to save the changes made?"
-msgstr "Тицьніть, щоб прийняти внесені зміни."
+msgstr "Ви хочете зберегти внесені зміни?"
 
 msgid "Blood Morale"
 msgstr "Кровожерлива мораль"

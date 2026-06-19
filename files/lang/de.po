@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -214,6 +214,11 @@ msgid ""
 msgstr ""
 "HAUPT-\n"
 "MENÜ"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4453,6 +4458,22 @@ msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 "Maximal %{count} %{objects} kann/können auf der Karte platziert werden."
 
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Wollt Ihr wirklich eine neue Karte laden? (Nicht gespeicherte Änderungen an "
+"der aktuellen Karte gehen verloren)."
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Seid Ihr sicher, dass Ihr eine neue Karte erstellen wollt? (Alle nicht "
+"gespeicherten Änderungen an der aktuellen Karte gehen verloren)."
+
 msgid "Not able to generate a map with given parameters."
 msgstr "Karte mit den angegebenen Parametern kann nicht generiert werden."
 
@@ -4490,30 +4511,6 @@ msgstr ""
 "Möchtet Ihr zum Hauptmenü des Spiels zurückkehren? (Alle nicht gespeicherten "
 "Änderungen an der aktuellen Karte gehen verloren)."
 
-msgid "Unsaved Changes"
-msgstr "Ungespeicherte Änderungen"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Diese Karte hat entweder Geländeänderungen, eine Rückgängig-Historie oder "
-"wurde noch nicht in einer Datei gespeichert.\n"
-"\n"
-"Möchtet Ihr die aktuelle Karte speichern?"
-
-msgid "Unplayable Map"
-msgstr "Nicht spielbare Karte"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Diese Karte ist nicht spielbar. Ihr benötigt mindestens einen menschlichen "
-"Spieler, damit die Karte spielbar ist."
-
 msgid "Start Map"
 msgstr "Karte starten"
 
@@ -4544,6 +4541,13 @@ msgstr "Speichern der aktuellen Karte."
 
 msgid "Quit out of the map editor."
 msgstr "Den Editor verlassen."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Spieltester"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Zum Hauptmenü zurückkehren."
@@ -4627,6 +4631,30 @@ msgstr "Karte gespeichert in: "
 
 msgid "Failed to save the map."
 msgstr "Speichern der Karte fehlgeschlagen."
+
+msgid "Unsaved Changes"
+msgstr "Ungespeicherte Änderungen"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Diese Karte hat entweder Geländeänderungen, eine Rückgängig-Historie oder "
+"wurde noch nicht in einer Datei gespeichert.\n"
+"\n"
+"Möchtet Ihr die aktuelle Karte speichern?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Diese Karte ist nicht spielbar. Ihr benötigt mindestens einen menschlichen "
+"Spieler, damit die Karte spielbar ist."
+
+msgid "Unplayable Map"
+msgstr "Nicht spielbare Karte"
 
 msgid "Used to place %{object}."
 msgstr "Wird verwendet, um %{object} zu platzieren."
@@ -5365,6 +5393,66 @@ msgstr "Experte"
 msgid "difficulty|Impossible"
 msgstr "Unmögl."
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Spieltester"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klickt, um die Farbe auszuwählen."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Speichern der Karte fehlgeschlagen."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Animation"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Animation"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Möchtet Ihr die Kontrolle über die KI zurückgewinnen? Der Effekt tritt erst "
+"in der nächsten Runde ein."
+
 msgid "and more..."
 msgstr "und mehr..."
 
@@ -5774,6 +5862,10 @@ msgstr "Spiel-Hauptmenü öffnen"
 
 msgid "hotkey|toggle passability"
 msgstr "Begehbarkeit ein-/ausschalten"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Standard: Links"
 
 msgid "hotkey|re-generate random map"
 msgstr "Zufällige Karte neu generieren"

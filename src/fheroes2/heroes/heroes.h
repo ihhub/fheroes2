@@ -438,6 +438,7 @@ public:
     // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
     uint32_t GetMaxMovePoints( const bool onWater ) const;
 
+    // Returns the movement points for the current turn.
     uint32_t GetMovePoints() const
     {
         return _movePoints;
@@ -698,6 +699,11 @@ public:
     uint8_t getAlphaValue() const
     {
         return static_cast<uint8_t>( _alphaValue );
+    }
+
+    void setAlphaValue( const uint8_t alphaValue )
+    {
+        _alphaValue = alphaValue;
     }
 
     double getAIMinimumJoiningArmyStrength() const;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-07-06 12:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -212,6 +212,11 @@ msgstr "COMENZAR"
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 #, fuzzy
@@ -4493,6 +4498,22 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Se pueden colocar un máximo de %{count} obeliscos en el mapa."
 
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"¿Estás seguro de que quieres cargar una nueva partida? (Tu partida actual se "
+"perderá)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"¿Estás seguro de que quieres cargar una nueva partida? (Tu partida actual se "
+"perderá)"
+
 msgid "Not able to generate a map with given parameters."
 msgstr ""
 
@@ -4534,24 +4555,6 @@ msgstr ""
 "¿Estás seguro de que quieres cargar una nueva partida? (Tu partida actual se "
 "perderá)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Comenzar"
@@ -4588,6 +4591,13 @@ msgstr "Guardar la partida en curso."
 
 msgid "Quit out of the map editor."
 msgstr "Salir del editor de mapas."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "2 jugadores"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 #, fuzzy
 msgid "Return to the game's Main Menu."
@@ -4674,6 +4684,24 @@ msgstr "Mapa guardado en: "
 #, fuzzy
 msgid "Failed to save the map."
 msgstr "Archivo a Guardar:"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5454,6 +5482,66 @@ msgstr "Experto"
 msgid "difficulty|Impossible"
 msgstr "Imposible"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "2 jugadores"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Archivo a Guardar:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Anexión"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Anexión"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Haz clic para volver al menú principal."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"¿Quieres recuperar el control de la IA? El efecto sólo tendrá efecto en\n"
+"el siguiente turno."
+
 msgid "and more..."
 msgstr ""
 
@@ -5881,6 +5969,10 @@ msgstr "Mostrar el siguiente héroe"
 
 msgid "hotkey|toggle passability"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Mercado"
 
 #, fuzzy
 msgid "hotkey|re-generate random map"

@@ -2162,7 +2162,7 @@ namespace Maps
                 int32_t fogDataIndex = x + fogCenterDataOffsetY;
 
                 if ( fogData[fogDataIndex] == 0 ) {
-                    // For the tile is without fog we set the UNKNOWN direction.
+                    // For the tile without fog we set the UNKNOWN direction.
                     tile.setFogDirection( Direction::UNKNOWN );
                 }
                 else {

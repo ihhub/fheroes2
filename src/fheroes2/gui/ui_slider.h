@@ -20,12 +20,48 @@
 
 #pragma once
 
+#include <cstdint>
+
+#include "image.h"
+#include "math_base.h"
+#include "ui_button.h"
+#include "ui_scrollbar.h"
+#include "ui_tool.h"
+
+class LocalEvent;
+
 namespace fheroes2
 {
-    enum class GameMode : int;
-}
+    class HorizontalSlider final
+    {
+    public:
+        ~HorizontalSlider() = default;
+        HorizontalSlider( const HorizontalSlider & ) = delete;
+        HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
-namespace Game
-{
-    fheroes2::GameMode processExitEvent();
+        HorizontalSlider( const int32_t width, const Point position, const int minIndex, const int maxIndex, const int currentIndex );
+
+        int getCurrentValue() const
+        {
+            return _scrollbar.currentIndex();
+        }
+
+        void setRange( const int minIndex, const int maxIndex );
+
+        bool processEvents( LocalEvent & le );
+
+        void disable();
+
+        void enable();
+
+    private:
+        Scrollbar _scrollbar;
+        Button _buttonLeft;
+        Button _buttonRight;
+
+        Image _scrollbarBackup;
+
+        TimedEventValidator _timedButtonLeft;
+        TimedEventValidator _timedButtonRight;
+    };
 }

@@ -221,8 +221,10 @@ namespace
     void markNodeIndexAsType( Maps::Random_Generator::MapStateManager & data, const int32_t index, const Maps::Random_Generator::NodeType type )
     {
         auto & node = data.getNodeToUpdate( index );
-        // Never override border types (no assert needed; can happen when placing overlapping obstacles)
-        if ( node.type != Maps::Random_Generator::NodeType::BORDER && node.type != Maps::Random_Generator::NodeType::ACTION ) {
+        // Never override border types (no assert needed; can happen when placing overlapping obstacles),
+        // action types and do not put path though an obstacle.
+        if ( node.type != Maps::Random_Generator::NodeType::BORDER && node.type != Maps::Random_Generator::NodeType::ACTION
+             && ( type != Maps::Random_Generator::NodeType::PATH || node.type != Maps::Random_Generator::NodeType::OBSTACLE ) ) {
             node.type = type;
         }
     }
@@ -722,8 +724,15 @@ namespace Maps::Random_Generator
     }
 
     // Wouldn't render correctly but will speed up placement
-    void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
+    void forceTempRoadOnTile( Maps::Random_Generator::MapStateManager & data, Map_Format::MapFormat & mapFormat, const int32_t tileIndex )
     {
+        if ( data.getNode( tileIndex ).type == NodeType::OBSTACLE ) {
+            // Roads should not be placed under the obstacles.
+            return;
+        }
+
+        markNodeIndexAsType( data, tileIndex, NodeType::PATH );
+
         auto & tile = mapFormat.tiles[tileIndex];
         if ( Maps::doesContainRoad( tile ) ) {
             return;
@@ -802,8 +811,7 @@ namespace Maps::Random_Generator
 
             if ( putObjectOnMap( mapFormat, tile, groupType, type ) ) {
                 for ( const auto & step : roadToObject ) {
-                    markNodeIndexAsType( data, step, NodeType::PATH );
-                    forceTempRoadOnTile( mapFormat, step );
+                    forceTempRoadOnTile( data, mapFormat, step );
                 }
                 transaction.commit();
                 return true;
@@ -879,9 +887,8 @@ namespace Maps::Random_Generator
         // Force roads coming from the castle
         const int32_t nextIndex = Maps::GetDirectionIndex( bottomIndex, Direction::BOTTOM );
         if ( Maps::isValidAbsIndex( nextIndex ) ) {
-            markNodeIndexAsType( data, bottomIndex, NodeType::PATH );
-            forceTempRoadOnTile( mapFormat, bottomIndex );
-            forceTempRoadOnTile( mapFormat, nextIndex );
+            forceTempRoadOnTile( data, mapFormat, bottomIndex );
+            forceTempRoadOnTile( data, mapFormat, nextIndex );
         }
 
         return true;
@@ -1134,8 +1141,7 @@ namespace Maps::Random_Generator
                 }
 
                 for ( const auto & step : routeToGroup ) {
-                    markNodeIndexAsType( data, step, NodeType::PATH );
-                    forceTempRoadOnTile( mapFormat, step );
+                    forceTempRoadOnTile( data, mapFormat, step );
                 }
                 transaction.commit();
 
@@ -1169,7 +1175,7 @@ namespace Maps::Random_Generator
         }
     }
 
-    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const std::vector<DecorationSet> & decorations,
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Region & region, const std::vector<DecorationSet> & decorations,
                            Rand::PCG32 & randomGenerator )
     {
         if ( decorations.empty() ) {

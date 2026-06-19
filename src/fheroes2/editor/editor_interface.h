@@ -34,6 +34,7 @@
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "map_random_generator.h"
+#include "math_base.h"
 #include "timing.h"
 
 enum class PlayerColor : uint8_t;
@@ -115,6 +116,8 @@ namespace Interface
         void openMapSpecificationsDialog();
 
         bool updateRandomMapConfiguration( const int32_t mapWidth );
+
+        static fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType );
 
     private:
         class WarningMessage final
@@ -200,6 +203,10 @@ namespace Interface
         void _resetMovableObjectInfo();
 
         void _removeObjectsAsAction( std::set<uint32_t> objectUIDs, const std::set<Maps::ObjectGroup> & groups );
+
+        bool _prepareMapForGameplay();
+
+        bool _runAutoPlaytest();
 
         EditorPanel _editorPanel;
 

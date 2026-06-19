@@ -943,16 +943,10 @@ const Heroes * World::GetHeroesCondLoss() const
 
 bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 {
-#ifndef NDEBUG
-#if defined( WITH_DEBUG )
     const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
     assert( kingdomPlayer != nullptr );
 
     const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
-#else
-    const bool isKingdomInAIAutoControlMode = false;
-#endif // WITH_DEBUG
-#endif // !NDEBUG
 
     const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
@@ -1013,16 +1007,10 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
 bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 {
-#ifndef NDEBUG
-#if defined( WITH_DEBUG )
     const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
     assert( kingdomPlayer != nullptr );
 
     const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
-#else
-    const bool isKingdomInAIAutoControlMode = false;
-#endif // WITH_DEBUG
-#endif // !NDEBUG
 
     // This method should only be called for a human-controlled kingdom
     assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
@@ -1051,14 +1039,10 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
             return true;
         }
 
-#if defined( WITH_DEBUG )
         const Player * heroPlayer = Players::Get( hero->GetColor() );
         assert( heroPlayer != nullptr );
 
         const bool isHeroInAIAutoControlMode = heroPlayer->isAIAutoControlMode();
-#else
-        const bool isHeroInAIAutoControlMode = false;
-#endif
 
         // .. or be hired by an AI-controlled kingdom
         if ( GetKingdom( hero->GetColor() ).isControlAI() && !isHeroInAIAutoControlMode ) {
@@ -1085,16 +1069,10 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 
 uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
-#ifndef NDEBUG
-#if defined( WITH_DEBUG )
     const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
     assert( kingdomPlayer != nullptr );
 
     const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
-#else
-    const bool isKingdomInAIAutoControlMode = false;
-#endif // WITH_DEBUG
-#endif // !NDEBUG
 
     // This method should only be called for a human-controlled kingdom
     assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
@@ -1123,16 +1101,10 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
 uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
-#ifndef NDEBUG
-#if defined( WITH_DEBUG )
     const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
     assert( kingdomPlayer != nullptr );
 
     const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
-#else
-    const bool isKingdomInAIAutoControlMode = false;
-#endif // WITH_DEBUG
-#endif // !NDEBUG
 
     // This method should only be called for a human-controlled kingdom
     assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );

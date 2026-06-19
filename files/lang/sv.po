@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2026-02-24 17:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -216,6 +216,11 @@ msgid ""
 msgstr ""
 "HUVUD-\n"
 "MENY"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -494,9 +499,8 @@ msgstr "Kan ej flytta sista truppen"
 msgid "Move the %{name}"
 msgstr "Flytta %{name}"
 
-#, fuzzy
 msgid "Set %{monster} Count:"
-msgstr "Ange antal %{monster}"
+msgstr "Ange antal %{monster}:"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -544,11 +548,9 @@ msgstr ""
 "Vallgraven sänker en varelses Försvar med %{count} och avbryter dennes "
 "rörelser genom vallgraven."
 
-#, fuzzy
 msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
 
-#, fuzzy
 msgid "battleAnimation|Speed"
 msgstr "Animering"
 
@@ -1060,10 +1062,10 @@ msgid "Perish: %{min} - %{max}"
 msgstr "Stupar: %{min} - %{max}"
 
 msgid "battle_turn_order|Top"
-msgstr ""
+msgstr "Över"
 
 msgid "battle_turn_order|Bottom"
-msgstr ""
+msgstr "Under"
 
 msgid "Turn Order"
 msgstr "Turordning"
@@ -1111,7 +1113,6 @@ msgstr ""
 "Välj om skuggmarkör skall vara aktiverat. Muspekaren visar en skugga på "
 "stridsfältets rutnät."
 
-#, fuzzy
 msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 "Aktivera eller inaktivera visning av förflyttningsområdet för en markerad "
@@ -1163,17 +1164,16 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
 
-#, fuzzy
 msgid "Click to select a hero."
-msgstr "Klicka för att välja färg."
+msgstr "Klicka för att välja en Hjälte."
 
 msgid "Hero"
 msgstr "Hjälte"
 
-#, fuzzy
 msgid ""
 "If this checkbox is checked, the defending hero is going be human-controlled."
-msgstr "Klicka för att ange denna hjälte som spelarkontrollerad."
+msgstr ""
+"Om denna rutan är ikryssad så är den försvarande hjälten spelarkontrollerad."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} mot %{race2} %{name2}"
@@ -3243,9 +3243,8 @@ msgstr ""
 msgid "About"
 msgstr "Om"
 
-#, fuzzy
 msgid "Click to read notes from the map creator."
-msgstr "Klicka för att gå tillbaka till huvudmenyn."
+msgstr "Klicka för att läsa anteckningar från kartkreatören."
 
 msgid "Map Description"
 msgstr "Kartbeskrivning"
@@ -3546,27 +3545,21 @@ msgstr "Outforskat Område"
 msgid "Random Map Generator"
 msgstr "Slumpkartgenerator"
 
-#, fuzzy
 msgid "rmg|Player count:"
-msgstr "Spelarantal"
+msgstr "Spelarantal:"
 
-#, fuzzy
 msgid "rmg|Map layout:"
-msgstr "Kartplan"
+msgstr "Kartplan:"
 
-#, fuzzy
 msgid "rmg|Water percentage:"
-msgstr "Havsprocent"
+msgstr "Havsprocent:"
 
-#, fuzzy
 msgid "rmg|Monster strength:"
-msgstr "Varelsestyrka"
+msgstr "Varelsestyrka:"
 
-#, fuzzy
 msgid "rmg|Resource availability:"
-msgstr "Resurstillgänglighet"
+msgstr "Resurstillgänglighet:"
 
-#, fuzzy
 msgid "rmg|Map seed:"
 msgstr "Kartseed"
 
@@ -3764,9 +3757,8 @@ msgstr "Välj Hjälte:"
 msgid "Select Monsters:"
 msgstr "Välj Varelser:"
 
-#, fuzzy
 msgid "Select Artifacts:"
-msgstr "Välj Artefakt:"
+msgstr "Välj Artefakter:"
 
 msgid "race|Random"
 msgstr "Slumpad"
@@ -3792,9 +3784,8 @@ msgstr "Välj Skatt:"
 msgid "Select Ocean Object:"
 msgstr "Välj Havsföremål:"
 
-#, fuzzy
 msgid "Castle/town placing:"
-msgstr "Borg/stadsplacering"
+msgstr "Borg/stadsplacering:"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
@@ -3826,9 +3817,8 @@ msgstr "Välj Bostad:"
 msgid "Select Landscape Object:"
 msgstr "Välj Landskapsföremål:"
 
-#, fuzzy
 msgid "Mine placing:"
-msgstr "Gruvplacering"
+msgstr "Gruvplacering:"
 
 msgid ""
 "Resource\n"
@@ -3859,7 +3849,6 @@ msgstr "Välj Kraftökningsföremål:"
 msgid "Select Adventure Object:"
 msgstr "Välj Äventyrsföremål:"
 
-#, fuzzy
 msgid "Select color:"
 msgstr "Välj Färg:"
 
@@ -4179,16 +4168,14 @@ msgstr "Borgarmé"
 msgid "Town Army"
 msgstr "Stadsarmé"
 
-#, fuzzy
 msgid "You have unsaved changes. Do you wish to proceed?"
-msgstr "Hur många varelser vill du flytta?"
+msgstr "Du har osparade ändringar. Vill du fortsätta?"
 
 msgid "Click to change the Castle name."
 msgstr "Klicka för att ändra Borgens namn."
 
-#, fuzzy
 msgid "Enter Castle name:"
-msgstr "Skriv Borgnamn"
+msgstr "Skriv Borgnamn:"
 
 msgid "Reset the Castle name."
 msgstr "Återställ Borgens namn."
@@ -4263,9 +4250,8 @@ msgstr ""
 "Om denna checkruta är ifylld så kommer händelsen bara aktiveras för %{color} "
 "spelare om de är styrda av datorn."
 
-#, fuzzy
 msgid "Set %{resource-type} Count:"
-msgstr "Ange Antal %{resource-type}"
+msgstr "Ange Antal %{resource-type}:"
 
 msgid "Message:"
 msgstr "Meddelande:"
@@ -4291,9 +4277,8 @@ msgstr "Händelsetext"
 msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
-#, fuzzy
 msgid "Daily events:"
-msgstr "Dagliga Händelser"
+msgstr "Dagliga Händelser:"
 
 msgid "Click to save the events."
 msgstr "Klicka för att spara händelserna."
@@ -4328,9 +4313,8 @@ msgstr "Avbryt händelse efter första besök"
 msgid "Computer colors allowed to get the event:"
 msgstr "Datorfärger som kan få händelsen:"
 
-#, fuzzy
 msgid "Set Experience value:"
-msgstr "Ange erfarenhetspoäng"
+msgstr "Ange Erfarenhetspoäng:"
 
 msgid "Artifact"
 msgstr "Artefakt"
@@ -4385,15 +4369,30 @@ msgstr "Den Främsta Artefakten kan endast placeras på grävbar terräng."
 msgid "%{objects} must be placed on water."
 msgstr "%{objects}  måste placeras på vatten."
 
-#, fuzzy
 msgid "Action objects cannot be placed outside the map."
-msgstr "Föremål kan inte placeras utanför kartan."
+msgstr "Händelseföremål kan inte placeras utanför kartan."
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Händelseföremål måste placeras på fria rutor."
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Maximalt %{count} %{objects} kan placeras på kartan."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Är du säker på att du vill ladda en ny karta? (Osparade ändringar för din "
+"nuvarande karta kommer försvinna.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Är du säker på att du vill skapa en ny karta? (Osparade ändringar för din "
+"nuvarande karta kommer försvinna.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Kan inte skapa karta med de givna parametrarna."
@@ -4431,30 +4430,6 @@ msgid ""
 msgstr ""
 "Vill du återvända till Huvudmenyn? (Osparade ändringar kommer att försvinna.)"
 
-msgid "Unsaved Changes"
-msgstr "Osparade ändringar"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Denna karta har antingen terrängändringar, ångra-historik eller har inte "
-"sparats till en fil.\n"
-"\n"
-"Vill du spara nuvarande karta?"
-
-msgid "Unplayable Map"
-msgstr "Ospelbar karta"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Denna kartan är inte spelbar. Du behöver minst en mänsklig spelare för "
-"kartan skall vara spelbar."
-
 msgid "Start Map"
 msgstr "Starta Karta"
 
@@ -4486,19 +4461,24 @@ msgstr "Spara nuvarande karta."
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Testspelare"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
+
 msgid "Return to the game's Main Menu."
 msgstr "Återgå till Huvudmenyn."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Lämna Redigaren och spela kartan i Solospelsläge."
 
-#, fuzzy
 msgid "Input %{object} text:"
-msgstr "Skriv in %{object} text"
+msgstr "Skriv in %{object} text:"
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius:"
-msgstr "Ange slumpad radie för Främsta artefakt"
+msgstr "Ange slumpad radie för Främsta artefakt:"
 
 msgid "%{object} has no properties to change."
 msgstr "%{object} har inga ändringsbara egenskaper."
@@ -4539,9 +4519,8 @@ msgstr "Endast en Slumpad Främsta Artefakt kan placeras på kartan."
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Maximalt %{count} obelisker kan placeras på kartan."
 
-#, fuzzy
 msgid "The same object exists on the tile."
-msgstr "Detta svar finns i listan."
+msgstr "Samma föremål finns redan i rutan."
 
 msgid "The map is corrupted."
 msgstr "Kartan är korrupt."
@@ -4563,6 +4542,30 @@ msgstr "Kartan sparades i:"
 
 msgid "Failed to save the map."
 msgstr "Misslyckades att spara kartan."
+
+msgid "Unsaved Changes"
+msgstr "Osparade ändringar"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Denna karta har antingen terrängändringar, ångra-historik eller har inte "
+"sparats till en fil.\n"
+"\n"
+"Vill du spara nuvarande karta?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Denna kartan är inte spelbar. Du behöver minst en mänsklig spelare för "
+"kartan skall vara spelbar."
+
+msgid "Unplayable Map"
+msgstr "Ospelbar karta"
 
 msgid "Used to place %{object}."
 msgstr "Används för att placera %{object}."
@@ -4623,33 +4626,26 @@ msgstr "Hjältar"
 msgid "Towns"
 msgstr "Städer"
 
-#, fuzzy
 msgid "editorDetailMode|Edit"
-msgstr "Detaljläge"
+msgstr "Redigera"
 
-#, fuzzy
 msgid "editorDetailMode|Move"
-msgstr "Detaljläge"
+msgstr "Flytta"
 
-#, fuzzy
 msgid "editorDetailMode|Copy"
-msgstr "Detaljläge"
+msgstr "Kopiera"
 
-#, fuzzy
 msgid "editorErasure|Mountains"
-msgstr "Varelser"
+msgstr "Berg"
 
-#, fuzzy
 msgid "editorErasure|Rocks"
-msgstr "Vägar"
+msgstr "Stenblock"
 
-#, fuzzy
 msgid "editorErasure|Trees"
-msgstr "Hjältar"
+msgstr "Träd"
 
-#, fuzzy
 msgid "editorErasure|Miscellaneous and Water landscape objects"
-msgstr "Landskapsföremål"
+msgstr "Övriga och Havsföremål"
 
 msgid "editorErasure|Adventure non pickable objects"
 msgstr "Ej tagbara äventyrsföremål"
@@ -4721,13 +4717,13 @@ msgid "No special modifiers."
 msgstr "Ger inget förflyttningsstraff."
 
 msgid "Edit objects on the Adventure Map."
-msgstr ""
+msgstr "Redigera föremål på Äventyrskartan."
 
 msgid "Move objects on the Adventure Map."
-msgstr ""
+msgstr "Flytta föremål på Äventyrskartan."
 
 msgid "Copy objects on the Adventure Map."
-msgstr ""
+msgstr "Kopiera föremål på Äventyrskartan."
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Aktivera raderingen av %{type}."
@@ -4767,9 +4763,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Detaljläge"
 
-#, fuzzy
 msgid "Used for moving or customizing objects."
-msgstr "Används för särskild redigering av händelseföremål."
+msgstr "Används för att flytta och redigera föremål."
 
 msgid "Adventure Objects Mode"
 msgstr "Äventyrsföremålsläge"
@@ -4850,9 +4845,8 @@ msgid "View the editor system options, which let you customize the editor."
 msgstr ""
 "Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
-#, fuzzy
 msgid "Supported languages:"
-msgstr "Stödda språk"
+msgstr "Stödda språk:"
 
 msgid "Language"
 msgstr "Språk"
@@ -5037,19 +5031,15 @@ msgstr "HÄNDELSER"
 msgid "LANGUAGE"
 msgstr "SPRÅK"
 
-#, fuzzy
 msgid "map|ABOUT"
 msgstr "OM"
 
-#, fuzzy
 msgid "Change Map Name:"
-msgstr "Ändra Kartnamn"
+msgstr "Ändra Kartnamn:"
 
-#, fuzzy
 msgid "Change Map Description:"
-msgstr "Ändra Kartbeskrivning"
+msgstr "Ändra Kartbeskrivning:"
 
-#, fuzzy
 msgid "map|About"
 msgstr "Om"
 
@@ -5129,9 +5119,8 @@ msgstr "Aktivera animationen för föremålen."
 msgid "Toggle display of objects' passability."
 msgstr "Visa föremålens framkomlighet."
 
-#, fuzzy
 msgid "Rumors:"
-msgstr "Rykten"
+msgstr "Rykten:"
 
 msgid "Rumor:"
 msgstr "Rykte:"
@@ -5288,6 +5277,66 @@ msgstr "Professionell"
 
 msgid "difficulty|Impossible"
 msgstr "Omöjligt"
+
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testspelare"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klicka för att välja färg."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Misslyckades att spara kartan."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Animering"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Animering"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klicka för att gå tillbaka till huvudmenyn."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Vill du återta kontrollen från AI:n? Denna effekt gäller bara under nästa "
+"runda."
 
 msgid "and more..."
 msgstr "och mer..."
@@ -5695,6 +5744,10 @@ msgstr "öppna spelets huvudmeny"
 msgid "hotkey|toggle passability"
 msgstr "Aktivera framkomlighet"
 
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Standard: Vänster"
+
 msgid "hotkey|re-generate random map"
 msgstr "Återgenerera slumpad karta"
 
@@ -5923,13 +5976,11 @@ msgstr "Byggvy"
 msgid "hotkey|buy all monsters in well"
 msgstr "Rekrytera alla varelser i brunnen"
 
-#, fuzzy
 msgid "hotkey|merge troops with hero"
-msgstr "Nästa hjälte"
+msgstr "Flytta trupper till hjälten"
 
-#, fuzzy
 msgid "hotkey|merge troops with garrison"
-msgstr "Gör om senaste åtgärden"
+msgstr "Flytta trupper till garnisonen"
 
 msgid "hotkey|split stack by half"
 msgstr "Dela truppen till hälften"
@@ -6752,9 +6803,8 @@ msgid ""
 "value"
 msgstr "Standardvärde"
 
-#, fuzzy
 msgid "Set %{skill} Skill:"
-msgstr "Ange %{skill}sförmåga"
+msgstr "Ange %{skill}sförmåga:"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
@@ -6774,44 +6824,37 @@ msgid "The available values range from %{min} to %{max}."
 msgstr "De möjliga värdena går från och med %{min} till och med %{max}."
 
 msgid "Uppercase"
-msgstr ""
+msgstr "Versaler"
 
-#, fuzzy
 msgid "Click to switch to uppercase letters."
-msgstr "Klicka för att spara Händelseegenskaperna."
+msgstr "Klicka för att växla till versaler."
 
 msgid "Keyboard|123"
 msgstr "123"
 
-#, fuzzy
 msgid "Keyboard type"
-msgstr "123"
+msgstr "Tangentbordstyp"
 
 msgid "Click to switch between keyboard types."
-msgstr ""
+msgstr "Klicka för att växla mellan tangentbordstyper."
 
 msgid "Keyboard|SPACE"
 msgstr "MELLANSLAG"
 
-#, fuzzy
 msgid "Change language"
-msgstr "Ändra Kartnamn"
+msgstr "Ändra Språk"
 
-#, fuzzy
 msgid "Click to switch between languages."
-msgstr "Klicka för att anta valt språk."
+msgstr "Klicka för växla mellan språk."
 
-#, fuzzy
 msgid "Backspace"
-msgstr "Tillbaka"
+msgstr "Backstegstangent"
 
-#, fuzzy
 msgid "Click to remove characters."
-msgstr "Klicka här för att lämna stridsresultaten."
+msgstr "Klicka för att ta bort bokstäver och siffror."
 
-#, fuzzy
 msgid "Lowercase"
-msgstr "Blommor"
+msgstr "Gemener"
 
 #, fuzzy
 msgid "Click to switch to lowercase letters."
@@ -6914,7 +6957,7 @@ msgid "Greek"
 msgstr "Grekiska"
 
 msgid "Esperanto"
-msgstr ""
+msgstr "Esperanto"
 
 msgid "Slow"
 msgstr "Långsam"
@@ -8659,20 +8702,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 "Ändra besvärjelsepoängen. Högerklicka för att återställa till standard."
 
-#, fuzzy
 msgid "Set Spell Points value:"
-msgstr "Ange Besvärjelsepoäng"
+msgstr "Ange Besvärjelsepoäng:"
 
 msgid "View Spell Points Info"
 msgstr "Visa information för besvärjelsepoäng"
 
-#, fuzzy
 msgid "Set patrol radius in tiles:"
-msgstr "Ange patrullradie i antal rutor"
+msgstr "Ange patrullradie i antal rutor:"
 
-#, fuzzy
 msgid "Enter hero's name:"
-msgstr "Ange hjältens namn"
+msgstr "Ange hjältens namn:"
 
 msgid "Click to change class."
 msgstr "Klicka för byta klass."
@@ -8740,9 +8780,8 @@ msgstr ""
 msgid "Click to enable hero's patrol mode."
 msgstr "Klicka här för att aktivera hjältens patrulläge."
 
-#, fuzzy
 msgid "Do you want to save the changes made?"
-msgstr "Klicka för att acceptera ändringarna."
+msgstr "Vill du spara de gjorda ändringarna?"
 
 msgid "Blood Morale"
 msgstr "Blodtörst"
