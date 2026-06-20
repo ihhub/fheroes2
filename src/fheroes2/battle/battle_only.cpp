@@ -306,6 +306,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
     if ( !_backupCompleted || !allowBackup ) {
         armyInfo[0].hero = world.GetHeroes( Heroes::LORDKILBURN );
         armyInfo[0].isHeroPresent = true;
+
+        _terrainType = Maps::Ground::UNKNOWN;
+    }
+    else {
+        _terrainType = _backupTerrainType;
     }
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -704,6 +709,8 @@ void Battle::Only::StartBattle()
         armyInfo[idx].monster.GetTroop( 0 )->Set( defaultMonster );
         armyInfo[idx].monsterBackup.Assign( armyInfo[idx].monster );
     }
+
+    _backupTerrainType = _terrainType;
 
     _backupCompleted = true;
 
