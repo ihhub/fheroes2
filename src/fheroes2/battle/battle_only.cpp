@@ -309,6 +309,9 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
 
         _terrainType = Maps::Ground::UNKNOWN;
     }
+    else {
+        _terrainType = _backupTerrainType;
+    }
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     prepareBackround( display, windowOffset, isEvilInterface );
@@ -706,6 +709,8 @@ void Battle::Only::StartBattle()
         armyInfo[idx].monster.GetTroop( 0 )->Set( defaultMonster );
         armyInfo[idx].monsterBackup.Assign( armyInfo[idx].monster );
     }
+
+    _backupTerrainType = _terrainType;
 
     _backupCompleted = true;
 
