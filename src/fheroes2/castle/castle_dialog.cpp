@@ -397,20 +397,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     buttonNextCastle.draw();
     buttonExit.draw();
 
-    auto finishHeroRecruitAnimation = [&]() {
-        if ( alphaHero >= 255 || hero == nullptr ) {
-            return;
-        }
-
-        alphaHero = 255;
-
-        // Hero fade-in animation is finished, we can set up his army bar.
-        bottomArmyBar.SetArmy( &hero->GetArmy() );
-
-        fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
-        display.render( dialogRoi );
-    };
-
     std::string statusMessage;
     LocalEvent & le = LocalEvent::Get();
     auto updateStatusBar = [&]() {
