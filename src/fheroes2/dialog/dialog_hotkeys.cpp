@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -55,8 +56,7 @@ namespace
 
     struct CategorySelection
     {
-        bool isAll;
-        Game::HotKeyCategory category;
+        std::optional<Game::HotKeyCategory> category;
         fheroes2::Rect roi;
     };
 
@@ -78,8 +78,8 @@ namespace
         }
     }
 
-    void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections, const bool isAllSelected,
-                               const Game::HotKeyCategory selectedCategory )
+    void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections,
+                               const std::optional<Game::HotKeyCategory> selectedCategory )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -87,24 +87,24 @@ namespace
 
         int32_t offsetY = categoryRoi.y + 4;
 
-        const fheroes2::FontType allFontType = isAllSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+        const fheroes2::FontType allFontType = selectedCategory ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow();
         const fheroes2::Text allText( _( "All" ), allFontType );
         allText.draw( categoryRoi.x + 4, offsetY, display );
 
-        categorySelections.push_back( { true, Game::HotKeyCategory::DEFAULT, { categoryRoi.x, offsetY, categoryRoi.width, allText.height() + 4 } } );
+        categorySelections.push_back( { std::nullopt, { categoryRoi.x, offsetY, categoryRoi.width, allText.height() + 4 } } );
 
         offsetY += allText.height() + 4;
 
         for ( uint8_t i = static_cast<uint8_t>( Game::HotKeyCategory::DEFAULT ); i <= static_cast<uint8_t>( Game::HotKeyCategory::EDITOR ); ++i ) {
             const auto category = static_cast<Game::HotKeyCategory>( i );
 
-            const bool isSelected = !isAllSelected && category == selectedCategory;
+            const bool isSelected = selectedCategory && category == *selectedCategory;
             const fheroes2::FontType fontType = isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
             const fheroes2::Text categoryText( _( getHotKeyCategoryDisplayName( category ) ), fontType );
             categoryText.draw( categoryRoi.x + 4, offsetY, display );
 
-            categorySelections.push_back( { false, category, { categoryRoi.x, offsetY, categoryRoi.width, categoryText.height() + 4 } } );
+            categorySelections.push_back( { category, { categoryRoi.x, offsetY, categoryRoi.width, categoryText.height() + 4 } } );
 
             offsetY += categoryText.height() + 4;
         }
@@ -117,6 +117,7 @@ namespace
             : _restorer( output, 0, 0, 0, 0 )
             , _key( key )
         {
+            // Text always occupies the whole width of the dialog.
             _area = { fheroes2::boxAreaWidthPx, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) };
         }
 
@@ -329,11 +330,10 @@ namespace fheroes2
         std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> hotKeyEvents = Game::getAllHotKeyEvents();
         std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> displayedHotKeyEvents = hotKeyEvents;
 
-        bool isAllSelected = true;
-        Game::HotKeyCategory selectedCategory = Game::HotKeyCategory::DEFAULT;
+        std::optional<Game::HotKeyCategory> selectedCategory;
 
         std::vector<CategorySelection> categorySelections;
-        drawHotKeyCategories( categoryRoi, categorySelections, isAllSelected, selectedCategory );
+        drawHotKeyCategories( categoryRoi, categorySelections, selectedCategory );
 
         listbox.SetListContent( displayedHotKeyEvents );
         listbox.updateScrollBarImage();
@@ -347,31 +347,28 @@ namespace fheroes2
 
             listbox.QueueEventProcessing();
 
+            std::optional<Game::HotKeyCategory> clickedCategory;
             bool isCategoryClicked = false;
-            bool clickedIsAll = false;
-            Game::HotKeyCategory clickedCategory = Game::HotKeyCategory::DEFAULT;
 
             for ( const CategorySelection & selection : categorySelections ) {
                 if ( le.MouseClickLeft( selection.roi ) ) {
                     isCategoryClicked = true;
-                    clickedIsAll = selection.isAll;
                     clickedCategory = selection.category;
                     break;
                 }
             }
 
-            if ( isCategoryClicked && ( clickedIsAll != isAllSelected || ( !clickedIsAll && clickedCategory != selectedCategory ) ) ) {
-                isAllSelected = clickedIsAll;
+            if ( isCategoryClicked && clickedCategory != selectedCategory ) {
                 selectedCategory = clickedCategory;
 
                 displayedHotKeyEvents.clear();
 
-                if ( isAllSelected ) {
+                if ( !selectedCategory ) {
                     displayedHotKeyEvents = hotKeyEvents;
                 }
                 else {
                     for ( const auto & hotKeyEvent : hotKeyEvents ) {
-                        if ( hotKeyEvent.second == selectedCategory ) {
+                        if ( hotKeyEvent.second == *selectedCategory ) {
                             displayedHotKeyEvents.push_back( hotKeyEvent );
                         }
                     }
@@ -379,7 +376,7 @@ namespace fheroes2
 
                 listbox.SetListContent( displayedHotKeyEvents );
 
-                drawHotKeyCategories( categoryRoi, categorySelections, isAllSelected, selectedCategory );
+                drawHotKeyCategories( categoryRoi, categorySelections, selectedCategory );
 
                 listbox.updateScrollBarImage();
                 listbox.Redraw();
