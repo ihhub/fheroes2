@@ -65,7 +65,7 @@ namespace
     const fheroes2::Size inputAreaSize{ 268, 21 };
     const int32_t inputAreaBorders{ 2 };
     const int32_t multiLineInputAreaRows{ 5 };
-    const fheroes2::Size multiLineInputAreaSize{ inputAreaSize.width, inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) };
+    const fheroes2::Size multiLineInputAreaSize{ inputAreaSize.width, inputAreaBorders * 2 + multiLineInputAreaRows *( inputAreaSize.height - 2 * inputAreaBorders ) };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
