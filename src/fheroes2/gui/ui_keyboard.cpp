@@ -64,56 +64,11 @@ namespace
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
     const fheroes2::Size inputAreaSize{ 268, 21 };
     const int32_t inputAreaBorders{ 2 };
-    const int32_t multiLineInputAreaMaxRows{ 3 };
-    fheroes2::Size getInputAreaSize( const int32_t rowCount )
-    {
-        return { inputAreaSize.width, inputAreaBorders * 2 + rowCount * ( inputAreaSize.height - 2 * inputAreaBorders ) };
-    }
+    const int32_t multiLineInputAreaRows{ 5 };
+    const fheroes2::Size multiLineInputAreaSize{ inputAreaSize.width, inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
-
-    struct VirtualKeyboardTextView
-    {
-        std::string text;
-        size_t beginPosition{ 0 };
-        int32_t rowCount{ 1 };
-    };
-
-    VirtualKeyboardTextView getVirtualKeyboardTextView( const std::string & text, const size_t cursorPosition )
-    {
-        std::vector<size_t> lineStartPositions{ 0 };
-
-        for ( size_t i = 0; i < text.size(); ++i ) {
-            if ( text[i] == '\n' ) {
-                lineStartPositions.emplace_back( i + 1 );
-            }
-        }
-
-        if ( lineStartPositions.size() <= static_cast<size_t>( multiLineInputAreaMaxRows ) ) {
-            return { text, 0, static_cast<int32_t>( lineStartPositions.size() ) };
-        }
-
-        const size_t safeCursorPosition = std::min( cursorPosition, text.size() );
-
-        size_t currentLine = 0;
-        for ( size_t i = 1; i < lineStartPositions.size(); ++i ) {
-            if ( lineStartPositions[i] > safeCursorPosition ) {
-                break;
-            }
-
-            currentLine = i;
-        }
-
-        const size_t firstVisibleLine
-            = currentLine >= static_cast<size_t>( multiLineInputAreaMaxRows ) ? currentLine - static_cast<size_t>( multiLineInputAreaMaxRows ) + 1 : 0;
-        const size_t beginPosition = lineStartPositions[firstVisibleLine];
-
-        const size_t nextLineAfterView = firstVisibleLine + static_cast<size_t>( multiLineInputAreaMaxRows );
-        const size_t endPosition = nextLineAfterView < lineStartPositions.size() ? lineStartPositions[nextLineAfterView] - 1 : text.size();
-
-        return { text.substr( beginPosition, endPosition - beginPosition ), beginPosition, multiLineInputAreaMaxRows };
-    }
 
     bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
     {
@@ -208,7 +163,7 @@ namespace
 
         int32_t getInputAreaHeightIncrease() const
         {
-            return _getInputAreaSize().height - inputAreaSize.height;
+            return ( _isMultiLineText ? multiLineInputAreaSize.height : inputAreaSize.height ) - inputAreaSize.height;
         }
 
         // Returns true if keyboard dialog resize was made.
@@ -221,7 +176,7 @@ namespace
 
             assert( size.width > 0 && size.height > 0 );
 
-            const fheroes2::Size currentInputAreaSize = _getInputAreaSize();
+            const fheroes2::Size currentInputAreaSize = _isMultiLineText ? multiLineInputAreaSize : inputAreaSize;
 
             const fheroes2::Point defaultOffset{ ( _output.width() - size.width ) / 2, ( _output.height() - defaultWindowHeight ) / 2 };
             const fheroes2::Point offset{ defaultOffset.x, defaultOffset.y - ( size.height - defaultWindowHeight ) };
@@ -258,9 +213,7 @@ namespace
                                                                                   currentInputAreaSize.width - 2 * inputAreaBorders,
                                                                                   currentInputAreaSize.height - 2 * inputAreaBorders },
                                                                   _isMultiLineText, false, _output );
-            const std::string textToDraw = _getTextToDraw();
-
-            _textUI->draw( textToDraw, static_cast<int32_t>( _cursorPosition - _textViewBeginPosition ) );
+            _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
 
             return true;
         }
@@ -331,7 +284,7 @@ namespace
         void setCursorPosition( const fheroes2::Point & clickPosition )
         {
             if ( _textUI ) {
-                const size_t newPos = std::min( _textViewBeginPosition + _textUI->getCursorInTextPosition( clickPosition ), _info.size() );
+                const size_t newPos = _textUI->getCursorInTextPosition( clickPosition );
                 if ( _cursorPosition != newPos ) {
                     _cursorPosition = newPos;
                     _renderInputArea();
@@ -384,44 +337,14 @@ namespace
         std::unique_ptr<fheroes2::StandardWindow> _window;
         std::unique_ptr<fheroes2::TextInputField> _textUI;
         size_t _cursorPosition{ 0 };
-        size_t _textViewBeginPosition{ 0 };
         fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
         bool _isMultiLineText{ false };
         const bool _isEvilInterface{ false };
 
-        int32_t _getInputAreaRowCount() const
-        {
-            if ( !_isMultiLineText ) {
-                return 1;
-            }
-
-            return getVirtualKeyboardTextView( _info, _cursorPosition ).rowCount;
-        }
-
-        fheroes2::Size _getInputAreaSize() const
-        {
-            return getInputAreaSize( _getInputAreaRowCount() );
-        }
-
-        std::string _getTextToDraw()
-        {
-            if ( !_isMultiLineText ) {
-                _textViewBeginPosition = 0;
-                return _info;
-            }
-
-            const VirtualKeyboardTextView textView = getVirtualKeyboardTextView( _info, _cursorPosition );
-            _textViewBeginPosition = textView.beginPosition;
-
-            return textView.text;
-        }
-
         void _renderInputArea()
         {
             if ( _textUI ) {
-                const std::string textToDraw = _getTextToDraw();
-
-                _textUI->draw( textToDraw, static_cast<int32_t>( _cursorPosition - _textViewBeginPosition ) );
+                _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
                 _output.render( _textUI->getOverallArea() );
             }
         }
@@ -1201,7 +1124,7 @@ namespace
 
 namespace fheroes2
 {
-    void openVirtualKeyboard( std::string & output, size_t lengthLimit, const bool isMultiLineText )
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit, bool isMultiLineText )
     {
         if ( lengthLimit == 0 ) {
             // A string longer than 64KB is extremely impossible.
