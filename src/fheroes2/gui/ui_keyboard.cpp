@@ -62,10 +62,11 @@ namespace
     const int32_t defaultLetterRows{ 3 };
     const fheroes2::Point buttonShadowOffset{ -5, 5 };
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
-    const fheroes2::Size inputAreaSize{ 268, 21 };
-    const int32_t inputAreaBorders{ 2 };
-    const int32_t multiLineInputAreaRows{ 5 };
-    const fheroes2::Size multiLineInputAreaSize{ inputAreaSize.width, inputAreaBorders * 2 + multiLineInputAreaRows *( inputAreaSize.height - 2 * inputAreaBorders ) };
+    constexpr fheroes2::Size inputAreaSize{ 268, 21 };
+    constexpr int32_t inputAreaBorders{ 2 };
+    constexpr int32_t multiLineInputAreaRows{ 5 };
+    constexpr fheroes2::Size multiLineInputAreaSize{ inputAreaSize.width,
+                                                     inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
@@ -163,7 +164,7 @@ namespace
 
         int32_t getInputAreaHeightIncrease() const
         {
-            return ( _isMultiLineText ? multiLineInputAreaSize.height : inputAreaSize.height ) - inputAreaSize.height;
+            return _isMultiLineText ? multiLineInputAreaSize.height - inputAreaSize.height : 0;
         }
 
         // Returns true if keyboard dialog resize was made.
@@ -1124,7 +1125,7 @@ namespace
 
 namespace fheroes2
 {
-    void openVirtualKeyboard( std::string & output, size_t lengthLimit, bool isMultiLineText )
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit, const bool isMultiLineText )
     {
         if ( lengthLimit == 0 ) {
             // A string longer than 64KB is extremely impossible.
