@@ -48,6 +48,9 @@ namespace fheroes2
     // This function returns an array of supported languages. If the array contains only one language it must be English.
     std::vector<SupportedLanguage> getSupportedLanguages();
 
+    // Returns true if the current build and runtime resources can display this language.
+    bool isLanguageSupportedForRendering( const SupportedLanguage language );
+
     // Return name of the language. Call this function only within the scope of LanguageSwitcher object.
     const char * getLanguageName( const SupportedLanguage language );
 

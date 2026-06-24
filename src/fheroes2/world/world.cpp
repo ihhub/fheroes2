@@ -47,6 +47,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
+#include "maps_text.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
@@ -1633,7 +1634,7 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
         colors |= PlayerColor::PURPLE;
     }
 
-    message = dataStream.getString();
+    message = Maps::decodeLegacyChineseTextForDisplay( dataStream.getString() );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }

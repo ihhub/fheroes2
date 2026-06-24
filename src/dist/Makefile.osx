@@ -28,3 +28,7 @@ ifdef FHEROES2_MACOS_APP_BUNDLE
 CCFLAGS := $(CCFLAGS) -DMACOS_APP_BUNDLE
 LDFLAGS := $(LDFLAGS) -framework CoreFoundation
 endif
+
+ifdef FHEROES2_WITH_ICONV
+ICONV_LIBS ?= -liconv
+endif

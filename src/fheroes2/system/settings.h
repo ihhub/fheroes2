@@ -156,6 +156,11 @@ public:
         return _loadedFileLanguage;
     }
 
+    const std::string & getCjkFontPath() const
+    {
+        return _cjkFontPath;
+    }
+
     const fheroes2::Point & PosRadar() const
     {
         return pos_radr;
@@ -447,6 +452,7 @@ private:
     std::string _programPath;
 
     std::string _gameLanguage;
+    std::string _cjkFontPath;
     // Not saved in the config file or savefile
     std::string _loadedFileLanguage;
 

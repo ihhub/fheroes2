@@ -6788,6 +6788,10 @@ namespace fheroes2
         case CodePage::ISO8859_3:
             generateISO8859_3Alphabet( icnVsSprite );
             break;
+        case CodePage::UTF8:
+            // UTF-8 languages such as Traditional Chinese are rendered through the runtime fallback font path.
+            // Keep the restored base alphabet for ASCII characters and avoid forcing it into an 8-bit code page.
+            break;
         default:
             // Add new code page generation code!
             assert( 0 );
@@ -6813,6 +6817,7 @@ namespace fheroes2
 
         switch ( codePage ) {
         case CodePage::ASCII:
+        case CodePage::UTF8:
             // Do nothing since the ASCII is the base font.
             break;
         case CodePage::CP1250:

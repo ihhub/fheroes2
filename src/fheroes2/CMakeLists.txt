@@ -112,3 +112,13 @@ target_link_libraries(
 	engine
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}main
 	)
+
+if(FHEROES2_CJK_TEXT_AVAILABLE)
+	target_compile_definitions(fheroes2 PRIVATE WITH_CJK_TEXT)
+	target_link_libraries(fheroes2 ${USE_SDL_VERSION}_ttf::${USE_SDL_VERSION}_ttf)
+endif(FHEROES2_CJK_TEXT_AVAILABLE)
+
+if(Iconv_FOUND)
+	target_compile_definitions(fheroes2 PRIVATE WITH_ICONV)
+	target_link_libraries(fheroes2 Iconv::Iconv)
+endif(Iconv_FOUND)

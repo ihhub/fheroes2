@@ -172,6 +172,13 @@ bool Settings::Read( const std::string & filePath )
         _gameLanguage = sval;
     }
 
+    // Optional CJK fallback font path. The file is not bundled by default, so users may point to
+    // a redistributable font or to a local system font without copying it into the repository.
+    sval = config.StrParams( "cjk_font_path" );
+    if ( !sval.empty() ) {
+        _cjkFontPath = sval;
+    }
+
     // music source
     _musicType = MUSIC_EXTERNAL;
     sval = config.StrParams( "music" );
@@ -548,6 +555,9 @@ std::string Settings::String() const
     os << std::endl << "# Game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
 
+    os << std::endl << "# Optional CJK font file path for UTF-8 languages such as zh_CN and zh_TW" << std::endl;
+    os << "cjk_font_path = " << _cjkFontPath << std::endl;
+
     os << std::endl << "# Controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
@@ -605,9 +615,15 @@ void Settings::setCurrentMapInfo( Maps::FileInfo fi )
 
 bool Settings::setGameLanguage( const std::string & language )
 {
-    fheroes2::updateAlphabet( language );
+    fheroes2::SupportedLanguage supportedLanguage = fheroes2::getLanguageFromAbbreviation( language );
+    if ( !fheroes2::isLanguageSupportedForRendering( supportedLanguage ) ) {
+        supportedLanguage = fheroes2::SupportedLanguage::English;
+    }
+    const std::string languageToSet = fheroes2::getLanguageAbbreviation( supportedLanguage );
 
-    _gameLanguage = language;
+    fheroes2::updateAlphabet( languageToSet );
+
+    _gameLanguage = languageToSet;
 
     if ( _gameLanguage.empty() ) {
         Translation::reset();
@@ -615,7 +631,7 @@ bool Settings::setGameLanguage( const std::string & language )
     }
 
     // First, let's see if the translation for the requested language is already cached
-    if ( const auto [isCached, isSet] = Translation::setLanguage( language ); isCached ) {
+    if ( const auto [isCached, isSet] = Translation::setLanguage( _gameLanguage ); isCached ) {
         return isSet;
     }
 
@@ -631,7 +647,7 @@ bool Settings::setGameLanguage( const std::string & language )
     }
 
     // If the translation for this language could not be loaded, it will still remain in the cache as invalid
-    return Translation::setLanguage( language, translations.empty() ? std::string_view{} : translations.back() );
+    return Translation::setLanguage( _gameLanguage, translations.empty() ? std::string_view{} : translations.back() );
 }
 
 void Settings::setEditorAnimation( const bool enable )

@@ -38,6 +38,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 #
 option(ENABLE_IMAGE "Enable the use of SDL_image (requires libpng)" OFF)
 option(ENABLE_TOOLS "Enable the build of additional tools" OFF)
+option(ENABLE_CJK_TEXT "Enable UTF-8 CJK text rendering through SDL_ttf when SDL_ttf is available" ON)
 
 # Available only on macOS
 cmake_dependent_option(MACOS_APP_BUNDLE "Create a Mac app bundle" OFF "APPLE" OFF)
@@ -58,11 +59,25 @@ find_package(${USE_SDL_VERSION} REQUIRED)
 find_package(${USE_SDL_VERSION}_mixer REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads)
+if(NOT WIN32)
+	find_package(Iconv QUIET)
+	if(NOT Iconv_FOUND)
+		message(WARNING "Iconv was not found. Legacy GBK/Big5 map text decoding will be disabled, but the game will still build.")
+	endif()
+endif(NOT WIN32)
 
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
 	find_package(PNG REQUIRED)
 endif(ENABLE_IMAGE)
+if(ENABLE_CJK_TEXT)
+	find_package(${USE_SDL_VERSION}_ttf QUIET)
+	if(TARGET ${USE_SDL_VERSION}_ttf::${USE_SDL_VERSION}_ttf)
+		set(FHEROES2_CJK_TEXT_AVAILABLE ON)
+	else()
+		message(WARNING "SDL_ttf was not found. UTF-8 CJK text rendering will be disabled, but the game will still build.")
+	endif()
+endif(ENABLE_CJK_TEXT)
 
 #
 # Source files
@@ -70,6 +85,17 @@ endif(ENABLE_IMAGE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(src)
+
+set(FHEROES2_FONT_FILES)
+if(EXISTS "${CMAKE_SOURCE_DIR}/files/fonts")
+	file(
+		GLOB FHEROES2_FONT_FILES
+		CONFIGURE_DEPENDS
+		"${CMAKE_SOURCE_DIR}/files/fonts/*.ttf"
+		"${CMAKE_SOURCE_DIR}/files/fonts/*.ttc"
+		"${CMAKE_SOURCE_DIR}/files/fonts/*.otf"
+		)
+endif()
 
 #
 # Translation files
@@ -113,11 +139,26 @@ if(MACOS_APP_BUNDLE)
 		DEPENDS translations
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/lang
 		)
+	if(FHEROES2_FONT_FILES)
+		add_custom_target(
+			app_bundle_fonts
+			ALL
+			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/files/fonts"
+			COMMAND ${CMAKE_COMMAND} -E copy ${FHEROES2_FONT_FILES} "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/files/fonts"
+			DEPENDS fheroes2
+			)
+	else()
+		add_custom_target(
+			app_bundle_fonts
+			ALL
+			DEPENDS fheroes2
+			)
+	endif()
 	add_custom_target(
 		run_dylibbundler
 		ALL
 		COMMAND dylibbundler -od -b -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/MacOS/${PROJECT_NAME} -d ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/libs
-		DEPENDS fheroes2 app_bundle_fh2m_maps app_bundle_h2d_files app_bundle_translations
+		DEPENDS fheroes2 app_bundle_fh2m_maps app_bundle_h2d_files app_bundle_translations app_bundle_fonts
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
 endif(MACOS_APP_BUNDLE)
@@ -132,6 +173,16 @@ if(NOT MACOS_APP_BUNDLE)
 		FILES_MATCHING
 		PATTERN *.h2d
 		)
+	if(FHEROES2_FONT_FILES)
+		install(
+			DIRECTORY files/fonts/
+			DESTINATION ${FHEROES2_DATA}/files/fonts
+			FILES_MATCHING
+			PATTERN *.ttf
+			PATTERN *.ttc
+			PATTERN *.otf
+			)
+	endif()
 	install(
 		DIRECTORY maps/
 		DESTINATION ${FHEROES2_DATA}/maps

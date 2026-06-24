@@ -35,6 +35,7 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -69,7 +70,20 @@ namespace
             { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
             { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese },
             { "el", fheroes2::SupportedLanguage::Greek },      { "greek", fheroes2::SupportedLanguage::Greek },
-            { "eo", fheroes2::SupportedLanguage::Esperanto },  { "esperanto", fheroes2::SupportedLanguage::Esperanto } };
+            { "eo", fheroes2::SupportedLanguage::Esperanto },  { "esperanto", fheroes2::SupportedLanguage::Esperanto },
+            { "zh_cn", fheroes2::SupportedLanguage::SimplifiedChinese },
+            { "zh-cn", fheroes2::SupportedLanguage::SimplifiedChinese },
+            { "simplified chinese", fheroes2::SupportedLanguage::SimplifiedChinese },
+            { "chinese simplified", fheroes2::SupportedLanguage::SimplifiedChinese },
+            { "zh_tw", fheroes2::SupportedLanguage::TraditionalChinese },
+            { "zh-tw", fheroes2::SupportedLanguage::TraditionalChinese },
+            { "traditional chinese", fheroes2::SupportedLanguage::TraditionalChinese },
+            { "chinese traditional", fheroes2::SupportedLanguage::TraditionalChinese } };
+
+    bool isChineseLanguage( const fheroes2::SupportedLanguage language )
+    {
+        return language == fheroes2::SupportedLanguage::SimplifiedChinese || language == fheroes2::SupportedLanguage::TraditionalChinese;
+    }
 }
 
 namespace fheroes2
@@ -111,13 +125,22 @@ namespace fheroes2
         return *language;
     }
 
+    bool isLanguageSupportedForRendering( const SupportedLanguage language )
+    {
+        if ( !isChineseLanguage( language ) ) {
+            return true;
+        }
+
+        return fheroes2::isCjkTextRenderingAvailable();
+    }
+
     std::vector<SupportedLanguage> getSupportedLanguages()
     {
         // We need to group languages by code pages to avoid recreating font related resources while switching languages.
         std::map<CodePage, std::vector<SupportedLanguage>> supportedLanguges;
 
         const SupportedLanguage resourceLanguage = getResourceLanguage();
-        if ( resourceLanguage != SupportedLanguage::English ) {
+        if ( resourceLanguage != SupportedLanguage::English && isLanguageSupportedForRendering( resourceLanguage ) ) {
             supportedLanguges[getCodePage( resourceLanguage )].emplace_back( resourceLanguage );
         }
 
@@ -128,10 +151,11 @@ namespace fheroes2
                                                              SupportedLanguage::Swedish,    SupportedLanguage::Turkish,    SupportedLanguage::Dutch,
                                                              SupportedLanguage::Hungarian,  SupportedLanguage::Czech,      SupportedLanguage::Danish,
                                                              SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese, SupportedLanguage::Greek,
-                                                             SupportedLanguage::Esperanto };
+                                                             SupportedLanguage::Esperanto,  SupportedLanguage::SimplifiedChinese,
+                                                             SupportedLanguage::TraditionalChinese };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
-            if ( language != resourceLanguage ) {
+            if ( language != resourceLanguage && isLanguageSupportedForRendering( language ) ) {
                 supportedLanguges[getCodePage( language )].emplace_back( language );
             }
         }
@@ -208,6 +232,10 @@ namespace fheroes2
             return _( "Greek" );
         case SupportedLanguage::Esperanto:
             return _( "Esperanto" );
+        case SupportedLanguage::SimplifiedChinese:
+            return _( "Simplified Chinese" );
+        case SupportedLanguage::TraditionalChinese:
+            return _( "Traditional Chinese" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -264,6 +292,10 @@ namespace fheroes2
             return "el";
         case SupportedLanguage::Esperanto:
             return "eo";
+        case SupportedLanguage::SimplifiedChinese:
+            return "zh_CN";
+        case SupportedLanguage::TraditionalChinese:
+            return "zh_TW";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -312,7 +344,8 @@ namespace fheroes2
 
     SupportedLanguage getCurrentLanguage()
     {
-        return fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+        const SupportedLanguage language = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+        return isLanguageSupportedForRendering( language ) ? language : SupportedLanguage::English;
     }
 
     CodePage getCodePage( const SupportedLanguage language )
@@ -350,6 +383,9 @@ namespace fheroes2
             return CodePage::ISO8859_16;
         case SupportedLanguage::Esperanto:
             return CodePage::ISO8859_3;
+        case SupportedLanguage::SimplifiedChinese:
+        case SupportedLanguage::TraditionalChinese:
+            return CodePage::UTF8;
         default:
             // Add new language handling code!
             assert( 0 );

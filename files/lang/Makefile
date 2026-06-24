@@ -21,6 +21,7 @@
 ICONV  = iconv
 # TODO: consider converting game fonts and texts to UTF-8 in the engine instead
 MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | $(ICONV) -f utf-8 -t $(1) | if msgfmt --help | grep -q no-convert >/dev/null 2>/dev/null; then msgfmt - -o $@ --no-convert; else msgfmt - -o $@; fi
+UTF8_MSGFMT = if msgfmt --help | grep -q no-convert >/dev/null 2>/dev/null; then msgfmt $< -o $@ --no-convert; else msgfmt $< -o $@; fi
 
 .PHONY: all clean merge
 
@@ -58,6 +59,13 @@ lt.mo: lt.po
 # Vietnamese uses CP1258
 vi.mo: vi.po
 	$(call MSGFMT,CP1258)
+
+# Simplified and Traditional Chinese stay UTF-8 and are rendered through the runtime CJK fallback font path.
+zh_CN.mo: zh_CN.po
+	$(UTF8_MSGFMT)
+
+zh_TW.mo: zh_TW.po
+	$(UTF8_MSGFMT)
 
 # Romanian uses ISO-8859-16
 ro.mo: ro.po

@@ -40,7 +40,6 @@ CPPFLAGS := $(CPPFLAGS)
 LDFLAGS := $(LDFLAGS) -pthread
 # Flags for additional libraries
 LDLIBS := $(LDLIBS)
-
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -O0 -g
 else
@@ -86,6 +85,19 @@ endif
 
 include Makefile.$(PLATFORM)
 
+SDL_TTF_AVAILABLE := $(shell pkg-config --exists SDL2_ttf 2>/dev/null && echo yes)
+ifeq ($(origin FHEROES2_WITH_CJK_TEXT),undefined)
+ifneq ($(SDL_TTF_AVAILABLE),)
+FHEROES2_WITH_CJK_TEXT := 1
+endif
+endif
+CJK_TEXT_ENABLED :=
+ifneq ($(FHEROES2_WITH_CJK_TEXT),0)
+ifdef FHEROES2_WITH_CJK_TEXT
+CJK_TEXT_ENABLED := 1
+endif
+endif
+
 #
 # Build options for third-party libraries
 #
@@ -116,6 +128,12 @@ endif
 ifdef FHEROES2_WITH_IMAGE
 CCFLAGS := $(CCFLAGS) -DWITH_IMAGE
 endif
+ifdef CJK_TEXT_ENABLED
+CCFLAGS := $(CCFLAGS) -DWITH_CJK_TEXT
+endif
+ifdef FHEROES2_WITH_ICONV
+CCFLAGS := $(CCFLAGS) -DWITH_ICONV
+endif
 ifdef FHEROES2_DATA
 CCFLAGS := $(CCFLAGS) -DFHEROES2_DATA="$(FHEROES2_DATA)"
 endif
@@ -135,12 +153,21 @@ endif
 # SDL-related build options
 #
 
+ifdef CJK_TEXT_ENABLED
+ifeq ($(SDL_TTF_AVAILABLE),)
+$(error FHEROES2_WITH_CJK_TEXT requires SDL2_ttf development files discoverable by pkg-config)
+endif
+endif
+
 # SDL_FLAGS can already be defined in a platform-specific Makefile
 ifeq ($(origin SDL_FLAGS),undefined)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 
 ifdef FHEROES2_WITH_IMAGE
 SDL_FLAGS := $(SDL_FLAGS) $(shell libpng-config --cflags)
+endif
+ifdef CJK_TEXT_ENABLED
+SDL_FLAGS := $(SDL_FLAGS) $(shell pkg-config --cflags SDL2_ttf)
 endif
 endif
 
@@ -151,9 +178,16 @@ SDL_LIBS := -lSDL2_mixer $(shell sdl2-config --libs)
 ifdef FHEROES2_WITH_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
 endif
+ifdef CJK_TEXT_ENABLED
+SDL_LIBS := $(SDL_LIBS) $(shell pkg-config --libs SDL2_ttf)
+endif
 endif
 
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
+ifdef FHEROES2_WITH_ICONV
+CCFLAGS := $(CCFLAGS) $(ICONV_FLAGS)
+LIBS := $(LIBS) $(ICONV_LIBS)
+endif
 LIBS := $(SDL_LIBS) $(LIBS)
 
 export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS TARGET

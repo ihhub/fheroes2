@@ -168,7 +168,9 @@ namespace
         LOCALE_SV,
         LOCALE_TR,
         LOCALE_UK,
-        LOCALE_VI
+        LOCALE_VI,
+        LOCALE_ZH_CN,
+        LOCALE_ZH_TW
     };
 
     LocaleType langToLocale( const std::string_view langName )
@@ -286,7 +288,18 @@ namespace
                                                                                   { "ukrainian", LocaleType::LOCALE_UK },
                                                                                   // Vietnamese
                                                                                   { "vi", LocaleType::LOCALE_VI },
-                                                                                  { "vietnamese", LocaleType::LOCALE_VI } };
+                                                                                  { "vietnamese", LocaleType::LOCALE_VI },
+                                                                                  // Simplified Chinese
+                                                                                  { "zh_CN", LocaleType::LOCALE_ZH_CN },
+                                                                                  { "zh_cn", LocaleType::LOCALE_ZH_CN },
+                                                                                  { "zh-cn", LocaleType::LOCALE_ZH_CN },
+                                                                                  { "simplified chinese", LocaleType::LOCALE_ZH_CN },
+                                                                                  { "chinese simplified", LocaleType::LOCALE_ZH_CN },
+                                                                                  // Traditional Chinese
+                                                                                  { "zh_TW", LocaleType::LOCALE_ZH_TW },
+                                                                                  { "zh_tw", LocaleType::LOCALE_ZH_TW },
+                                                                                  { "zh-tw", LocaleType::LOCALE_ZH_TW },
+                                                                                  { "traditional chinese", LocaleType::LOCALE_ZH_TW } };
 
         const auto iter = langLocale.find( langName );
         if ( iter == langLocale.end() ) {
@@ -634,6 +647,9 @@ const char * Translation::ngettext( const char * str, const char * plural, const
 {
     if ( current ) {
         switch ( current->getLocale() ) {
+        case LocaleType::LOCALE_ZH_CN:
+        case LocaleType::LOCALE_ZH_TW:
+            return current->ngettext( str, 0 );
         case LocaleType::LOCALE_AF:
         case LocaleType::LOCALE_BG:
         case LocaleType::LOCALE_DA:

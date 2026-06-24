@@ -25,6 +25,8 @@
 # FHEROES2_WITH_ASAN: build with UB Sanitizer and Address Sanitizer (small runtime overhead, incompatible with FHEROES2_WITH_TSAN)
 # FHEROES2_WITH_TSAN: build with UB Sanitizer and Thread Sanitizer (large runtime overhead, incompatible with FHEROES2_WITH_ASAN)
 # FHEROES2_WITH_IMAGE: build with SDL_image (requires libpng)
+# FHEROES2_WITH_CJK_TEXT: build with SDL_ttf-based UTF-8 CJK text rendering (auto-detected by default, set to 0 to disable)
+# FHEROES2_WITH_ICONV: build with iconv-based legacy GBK/Big5 map text decoding
 # FHEROES2_WITH_SYSTEM_SMACKER: build with an external libsmacker instead of the bundled one
 # FHEROES2_WITH_TOOLS: build additional tools
 # FHEROES2_MACOS_APP_BUNDLE: create a Mac app bundle (only valid when building on macOS)
@@ -46,6 +48,7 @@ ifdef FHEROES2_MACOS_APP_BUNDLE
 	cp files/data/*.h2d fheroes2.app/Contents/Resources/h2d
 	cp files/lang/*.mo fheroes2.app/Contents/Resources/translations
 	cp maps/*.fh2m fheroes2.app/Contents/Resources/maps
+	if [ -d files/fonts ]; then mkdir -p fheroes2.app/Contents/Resources/files/fonts; find files/fonts -type f \( -name '*.ttf' -o -name '*.ttc' -o -name '*.otf' \) -exec cp {} fheroes2.app/Contents/Resources/files/fonts \; ; fi
 	cp src/dist/fheroes2/fheroes2 fheroes2.app/Contents/MacOS
 	cp src/resources/fheroes2.icns fheroes2.app/Contents/Resources
 	sed -e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/$(PROJECT_NAME)/" \

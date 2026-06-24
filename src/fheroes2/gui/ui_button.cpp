@@ -865,8 +865,8 @@ namespace fheroes2
         const int32_t textHeight = releasedText.height( textAreaWidth );
         assert( textHeight > 0 );
 
-        // Add extra y-margin for multi-lined texts on normal buttons.
-        if ( ( emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON || emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON ) && textHeight > 17 ) {
+        // Add extra vertical padding only for real multi-line captions.
+        if ( ( emptyButtonIcnID == ICN::EMPTY_EVIL_BUTTON || emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON ) && releasedText.rows( textAreaWidth ) > 1 ) {
             textAreaMargins.y += 16;
         }
         const int32_t borderedTextHeight = textHeight + textAreaMargins.y;
@@ -932,12 +932,14 @@ namespace fheroes2
         const int32_t finalWidth = std::clamp( maxWidth + 6, minWidth, maxAllowedWidth );
 
         int32_t maxHeight = 0;
+        bool hasMultiLineText = false;
         for ( const auto & text : buttonTexts ) {
             maxHeight = std::max( maxHeight, text.height( finalWidth ) );
+            hasMultiLineText = hasMultiLineText || text.rows( finalWidth ) > 1;
         }
 
-        // Add extra vertical margin depending on how many lines of text there are.
-        if ( maxHeight > getFontHeight( buttonFontType.size ) ) {
+        // Use taller buttons only for real multi-line captions.
+        if ( hasMultiLineText ) {
             const int32_t maxAllowedHeight = 200;
             maxHeight = std::clamp<int32_t>( maxHeight, 56, maxAllowedHeight );
         }

@@ -53,6 +53,8 @@ To assist with the graphical asset efforts of the project, please look at our [*
 
 If you would like to help translating the project, please read the [**translation guide**](docs/TRANSLATION.md).
 
+For Simplified/Traditional Chinese rendering and legacy map text decoding, see the [**Chinese support guide**](docs/CHINESE_SUPPORT.md).
+
 ### Developing fheroes2 documentation site
 
 To build the [website](https://ihhub.github.io/fheroes2/) from source, please follow

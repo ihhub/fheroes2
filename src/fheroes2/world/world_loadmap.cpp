@@ -55,6 +55,7 @@
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
+#include "maps_text.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -671,7 +672,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 //
                 // - string
                 //    Null terminated string of the rumor.
-                std::string rumor( reinterpret_cast<const char *>( pblock.data() ) + 8 );
+                std::string rumor = Maps::decodeLegacyChineseTextForDisplay( reinterpret_cast<const char *>( pblock.data() ) + 8 );
 
                 if ( !rumor.empty() ) {
                     _customRumors.emplace_back( std::move( rumor ) );
@@ -719,16 +720,23 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
+    fheroes2::SupportedLanguage loadedMapLanguage = map.mainLanguage;
     const auto currentLanguage = fheroes2::getCurrentLanguage();
-    if ( !Maps::loadTranslation( map, currentLanguage ) ) {
+    if ( Maps::loadTranslation( map, currentLanguage ) ) {
+        loadedMapLanguage = currentLanguage;
+    }
+    else {
         // The current game language is not supported by the map.
         // Try to set the default language - English.
         // Even if it fails, the first language of the map is going to be used.
         if ( currentLanguage != fheroes2::SupportedLanguage::English ) {
-            Maps::loadTranslation( map, fheroes2::SupportedLanguage::English );
+            if ( Maps::loadTranslation( map, fheroes2::SupportedLanguage::English ) ) {
+                loadedMapLanguage = fheroes2::SupportedLanguage::English;
+            }
         }
     }
 
+    // FH2 map text uses the language that was loaded for gameplay.
     width = map.width;
     height = map.width;
 
@@ -966,7 +974,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     eventObject->isComputerPlayerAllowed = ( computerColors != 0 );
                     eventObject->colors = humanColors | computerColors;
-                    eventObject->message = std::move( eventInfo.message );
+                    eventObject->message = Maps::decodeLegacyChineseTextForDisplay( std::move( eventInfo.message ), loadedMapLanguage );
                     eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
                     eventObject->secondarySkill = { eventInfo.secondarySkill, eventInfo.secondarySkillLevel };
                     eventObject->experience = eventInfo.experience;
@@ -1028,13 +1036,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                     auto & signInfo = map.signMetadata[object.id];
 
                     auto signObject = std::make_unique<MapSign>();
-                    signObject->message.text = std::move( signInfo.message );
+                    signObject->message.text = Maps::decodeLegacyChineseTextForDisplay( std::move( signInfo.message ), loadedMapLanguage );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     if ( signObject->message.text.empty() ) {
                         signObject->setDefaultMessage();
                     }
                     else {
-                        signObject->message.language = map.mainLanguage;
+                        signObject->message.language = loadedMapLanguage;
                     }
 
                     map_objects.add( std::move( signObject ) );
@@ -1050,11 +1058,11 @@ bool World::loadResurrectionMap( const std::string & filename )
                     auto & sphinxInfo = map.sphinxMetadata[object.id];
 
                     auto sphinxObject = std::make_unique<MapSphinx>();
-                    sphinxObject->riddle = std::move( sphinxInfo.riddle );
+                    sphinxObject->riddle = Maps::decodeLegacyChineseTextForDisplay( std::move( sphinxInfo.riddle ), loadedMapLanguage );
 
                     for ( auto & answer : sphinxInfo.answers ) {
                         if ( !answer.empty() ) {
-                            sphinxObject->answers.push_back( std::move( answer ) );
+                            sphinxObject->answers.push_back( Maps::decodeLegacyChineseTextForDisplay( std::move( answer ), loadedMapLanguage ) );
                         }
                         else {
                             // How is it even possible?
@@ -1126,13 +1134,13 @@ bool World::loadResurrectionMap( const std::string & filename )
                     auto & signInfo = map.signMetadata[object.id];
 
                     auto signObject = std::make_unique<MapSign>();
-                    signObject->message.text = std::move( signInfo.message );
+                    signObject->message.text = Maps::decodeLegacyChineseTextForDisplay( std::move( signInfo.message ), loadedMapLanguage );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     if ( signObject->message.text.empty() ) {
                         signObject->setDefaultMessage();
                     }
                     else {
-                        signObject->message.language = map.mainLanguage;
+                        signObject->message.language = loadedMapLanguage;
                     }
 
                     map_objects.add( std::move( signObject ) );
@@ -1341,7 +1349,7 @@ bool World::loadResurrectionMap( const std::string & filename )
         // TODO: modify EventDate structure to have more flexibility.
         auto & newEvent = vec_eventsday.emplace_back();
 
-        newEvent.message = std::move( event.message );
+        newEvent.message = Maps::decodeLegacyChineseTextForDisplay( std::move( event.message ), loadedMapLanguage );
         newEvent.colors = ( humanColors | computerColors );
         newEvent.isApplicableForAIPlayers = ( computerColors != 0 );
 
@@ -1353,7 +1361,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     // Load rumors.
     for ( auto & rumor : map.rumors ) {
         if ( !rumor.empty() ) {
-            _customRumors.emplace_back( std::move( rumor ) );
+            _customRumors.emplace_back( Maps::decodeLegacyChineseTextForDisplay( std::move( rumor ), loadedMapLanguage ) );
         }
     }
 

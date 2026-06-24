@@ -21,3 +21,7 @@
 AR := ar
 CXX := g++
 LDFLAGS := $(LDFLAGS) -L/usr/local/lib
+
+ifdef FHEROES2_WITH_ICONV
+ICONV_LIBS ?= -liconv
+endif

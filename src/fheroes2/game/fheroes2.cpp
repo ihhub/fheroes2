@@ -80,6 +80,7 @@
 #include "settings.h"
 #include "system.h"
 #include "timing.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -216,6 +217,10 @@ namespace
 
         ~DisplayInitializer()
         {
+            // Release CJK font resources (and shut SDL_ttf down) here, while SDL is still alive: this initializer
+            // outlives CoreInitializer, which owns SDL_Quit.
+            fheroes2::releaseCjkTextResources();
+
             fheroes2::RenderProcessor::instance().unregisterRenderers();
 
             fheroes2::Display & display = fheroes2::Display::instance();

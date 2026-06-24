@@ -217,7 +217,9 @@ void Dialog::GameInfo()
 
         if ( isCreatorInfoPresent ) {
             if ( le.MouseClickLeft( buttonAbout.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "About" ), mapInfo.creatorNotes, Dialog::OK );
+                const fheroes2::Text header( _( "About" ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( mapInfo.creatorNotes, fheroes2::FontType::normalWhite(), mapLanguage );
+                fheroes2::showMessage( header, body, Dialog::OK );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonAbout.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "About" ), _( "Click to read notes from the map creator." ), Dialog::ZERO );

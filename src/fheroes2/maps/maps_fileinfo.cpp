@@ -44,6 +44,7 @@
 #include "map_format_info.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "maps_text.h"
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
@@ -326,9 +327,10 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
         }
     }
 
+    // MP2 maps do not store a reliable text language, so decoding falls back to the current UI language.
     // Map name
     fs.seek( 58 );
-    name = fs.getString( mapNameLength );
+    name = Maps::decodeLegacyChineseTextForDisplay( fs.getString( mapNameLength ) );
     if ( name.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain a name." )
         return false;
@@ -336,7 +338,7 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 
     // Map description
     fs.seek( 118 );
-    description = fs.getString( mapDescriptionLength );
+    description = Maps::decodeLegacyChineseTextForDisplay( fs.getString( mapDescriptionLength ) );
 
     // Alliances of kingdoms
     if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
@@ -426,8 +428,9 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
     width = static_cast<uint16_t>( map.width );
     height = static_cast<uint16_t>( map.width );
 
-    name = map.name;
-    description = map.description;
+    // FH2 maps carry the selected map language, which can guide legacy text decoding when needed.
+    name = Maps::decodeLegacyChineseTextForDisplay( map.name, map.mainLanguage );
+    description = Maps::decodeLegacyChineseTextForDisplay( map.description, map.mainLanguage );
 
     assert( ( map.availablePlayerColors & map.humanPlayerColors ) == map.humanPlayerColors );
     assert( ( map.availablePlayerColors & map.computerPlayerColors ) == map.computerPlayerColors );
@@ -534,7 +537,7 @@ bool Maps::FileInfo::loadResurrectionMap( const Map_Format::BaseMapFormat & map,
         translations.emplace_back( language );
     }
 
-    creatorNotes = map.creatorNotes;
+    creatorNotes = Maps::decodeLegacyChineseTextForDisplay( map.creatorNotes, map.mainLanguage );
 
     return true;
 }

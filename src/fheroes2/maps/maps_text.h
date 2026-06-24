@@ -1,6 +1,9 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2026                                             *
+ *   Copyright (C) 2026                                                    *
+ *                                                                         *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,53 +23,13 @@
 
 #pragma once
 
-#include <cstdint>
+#include <optional>
+#include <string>
 
-namespace fheroes2
+#include "game_language.h"
+
+namespace Maps
 {
-    enum class SupportedLanguage : uint8_t
-    {
-        English = 0, // default language for all versions of the game.
-        French, // GOG version
-        Polish, // GOG version
-        German, // GOG version
-        Russian, // Buka and XXI Vek versions
-        Italian, // Rare version?
-        Czech, // Local release occurred in 2002 by CD Projekt
-        Spanish, // Published by Proein. Only Succession Wars
-
-        // All languages listed below are original to fheroes2.
-        Belarusian,
-        Bulgarian,
-        Danish,
-        Dutch,
-        Esperanto,
-        Greek,
-        Hungarian,
-        Norwegian,
-        Portuguese,
-        Romanian,
-        Slovak,
-        Swedish,
-        Turkish,
-        Ukrainian,
-        Vietnamese,
-        SimplifiedChinese,
-        TraditionalChinese
-    };
-
-    enum class CodePage : uint8_t
-    {
-        NONE,
-        ASCII,
-        CP1250,
-        CP1251,
-        CP1252,
-        CP1253,
-        CP1254,
-        CP1258,
-        ISO8859_16,
-        ISO8859_3,
-        UTF8,
-    };
+    // Convert legacy GBK/Big5 Chinese map text to UTF-8 when the language context allows it.
+    std::string decodeLegacyChineseTextForDisplay( std::string text, const std::optional<fheroes2::SupportedLanguage> language = std::nullopt );
 }

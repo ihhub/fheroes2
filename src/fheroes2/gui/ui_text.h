@@ -415,6 +415,12 @@ namespace fheroes2
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string_view text, const FontType fontType );
 
+    // Returns true if UTF-8 CJK text rendering has both SDL_ttf support and a usable font.
+    bool isCjkTextRenderingAvailable();
+
+    // Releases all CJK font resources and shuts SDL_ttf down. Call this during engine shutdown, before SDL_Quit.
+    void releaseCjkTextResources();
+
     // This function will return the width in pixels of the truncation symbol for the given font type.
     int32_t getTruncationSymbolWidth( const FontType fontType );
 

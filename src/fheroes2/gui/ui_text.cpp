@@ -21,15 +21,46 @@
 #include "ui_text.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
+#include <cctype>
 #include <cstdlib>
 #include <map>
 #include <memory>
 #include <numeric>
+#include <string>
+#include <utility>
+#include <vector>
+
+#if defined( WITH_CJK_TEXT )
+#include <filesystem>
+#include <set>
+#include <system_error>
+
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
+
+#include <SDL_ttf.h>
+
+#if SDL_TTF_VERSION_ATLEAST( 2, 0, 18 )
+#define FHEROES2_SDL_TTF_HAS_32BIT_GLYPHS
+#endif
+
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 #include "agg_image.h"
+#include "game_language.h"
 #include "icn.h"
+#include "logging.h"
+#include "settings.h"
+#include "system.h"
 #include "ui_language.h"
 
 namespace
@@ -55,6 +86,1462 @@ namespace
     }
 
     const fheroes2::Sprite errorImage;
+
+    constexpr uint32_t unicodeReplacementGlyph{ 0x25A1 };
+
+    struct Utf8Character
+    {
+        uint32_t codePoint{ 0 };
+        size_t byteOffset{ 0 };
+        size_t byteCount{ 0 };
+    };
+
+    bool isCjkCodePoint( const uint32_t codePoint )
+    {
+        return ( codePoint >= 0x3400 && codePoint <= 0x4DBF ) || ( codePoint >= 0x4E00 && codePoint <= 0x9FFF )
+               || ( codePoint >= 0xF900 && codePoint <= 0xFAFF ) || ( codePoint >= 0x3040 && codePoint <= 0x30FF )
+               || ( codePoint >= 0x3100 && codePoint <= 0x312F ) || ( codePoint >= 0x20000 && codePoint <= 0x2A6DF )
+               || ( codePoint >= 0x2A700 && codePoint <= 0x2B73F ) || ( codePoint >= 0x2B740 && codePoint <= 0x2B81F )
+               || ( codePoint >= 0x2B820 && codePoint <= 0x2EBEF ) || ( codePoint >= 0x2F800 && codePoint <= 0x2FA1F )
+               || ( codePoint >= 0x30000 && codePoint <= 0x323AF );
+    }
+
+    bool decodeUtf8( const std::string_view text, std::vector<Utf8Character> & output, bool & hasNonAscii )
+    {
+        output.clear();
+        hasNonAscii = false;
+
+        bool isValid = true;
+
+        for ( size_t offset = 0; offset < text.size(); ) {
+            const auto firstByte = static_cast<uint8_t>( text[offset] );
+            uint32_t codePoint = unicodeReplacementGlyph;
+            size_t byteCount = 1;
+            bool isSequenceValid = true;
+
+            if ( firstByte < 0x80 ) {
+                codePoint = firstByte;
+            }
+            else if ( ( firstByte & 0xE0 ) == 0xC0 && offset + 1 < text.size() ) {
+                const auto secondByte = static_cast<uint8_t>( text[offset + 1] );
+                isSequenceValid = ( secondByte & 0xC0 ) == 0x80;
+                codePoint = ( static_cast<uint32_t>( firstByte & 0x1F ) << 6 ) | static_cast<uint32_t>( secondByte & 0x3F );
+                byteCount = 2;
+
+                if ( codePoint < 0x80 ) {
+                    isSequenceValid = false;
+                }
+            }
+            else if ( ( firstByte & 0xF0 ) == 0xE0 && offset + 2 < text.size() ) {
+                const auto secondByte = static_cast<uint8_t>( text[offset + 1] );
+                const auto thirdByte = static_cast<uint8_t>( text[offset + 2] );
+                isSequenceValid = ( ( secondByte & 0xC0 ) == 0x80 ) && ( ( thirdByte & 0xC0 ) == 0x80 );
+                codePoint = ( static_cast<uint32_t>( firstByte & 0x0F ) << 12 ) | ( static_cast<uint32_t>( secondByte & 0x3F ) << 6 )
+                            | static_cast<uint32_t>( thirdByte & 0x3F );
+                byteCount = 3;
+
+                if ( codePoint < 0x800 || ( codePoint >= 0xD800 && codePoint <= 0xDFFF ) ) {
+                    isSequenceValid = false;
+                }
+            }
+            else if ( ( firstByte & 0xF8 ) == 0xF0 && offset + 3 < text.size() ) {
+                const auto secondByte = static_cast<uint8_t>( text[offset + 1] );
+                const auto thirdByte = static_cast<uint8_t>( text[offset + 2] );
+                const auto fourthByte = static_cast<uint8_t>( text[offset + 3] );
+                isSequenceValid
+                    = ( ( secondByte & 0xC0 ) == 0x80 ) && ( ( thirdByte & 0xC0 ) == 0x80 ) && ( ( fourthByte & 0xC0 ) == 0x80 );
+                codePoint = ( static_cast<uint32_t>( firstByte & 0x07 ) << 18 ) | ( static_cast<uint32_t>( secondByte & 0x3F ) << 12 )
+                            | ( static_cast<uint32_t>( thirdByte & 0x3F ) << 6 ) | static_cast<uint32_t>( fourthByte & 0x3F );
+                byteCount = 4;
+
+                if ( codePoint < 0x10000 || codePoint > 0x10FFFF ) {
+                    isSequenceValid = false;
+                }
+            }
+            else {
+                isSequenceValid = false;
+            }
+
+            if ( firstByte >= 0x80 ) {
+                hasNonAscii = true;
+            }
+
+            if ( !isSequenceValid ) {
+                isValid = false;
+                codePoint = unicodeReplacementGlyph;
+                byteCount = 1;
+            }
+
+            output.push_back( { codePoint, offset, byteCount } );
+            offset += byteCount;
+        }
+
+        return isValid;
+    }
+
+    bool isChineseLanguage( const fheroes2::SupportedLanguage language )
+    {
+        return language == fheroes2::SupportedLanguage::SimplifiedChinese || language == fheroes2::SupportedLanguage::TraditionalChinese;
+    }
+
+    bool hasHighBitByte( const std::string_view text )
+    {
+        return std::any_of( text.begin(), text.end(), []( const char character ) { return static_cast<uint8_t>( character ) >= 0x80; } );
+    }
+
+    bool isUnicodeTextCandidate( const std::string_view text, const std::optional<fheroes2::SupportedLanguage> & language )
+    {
+        if ( text.empty() ) {
+            return false;
+        }
+
+        // Pure ASCII text (the vast majority of rendered strings) can never be a CJK candidate.
+        // Skip the full UTF-8 decode and its allocation in that very common case.
+        if ( !hasHighBitByte( text ) ) {
+            return false;
+        }
+
+        std::vector<Utf8Character> characters;
+        bool hasNonAscii = false;
+        if ( !decodeUtf8( text, characters, hasNonAscii ) || !hasNonAscii ) {
+            return false;
+        }
+
+        const fheroes2::SupportedLanguage textLanguage = language.value_or( fheroes2::getCurrentLanguage() );
+        if ( isChineseLanguage( textLanguage ) ) {
+            return true;
+        }
+
+        return std::any_of( characters.begin(), characters.end(), []( const Utf8Character & character ) { return isCjkCodePoint( character.codePoint ); } );
+    }
+
+    void removeLastUtf8Character( std::string & text )
+    {
+        if ( text.empty() ) {
+            return;
+        }
+
+        size_t newSize = text.size() - 1;
+        while ( newSize > 0 && ( static_cast<uint8_t>( text[newSize] ) & 0xC0 ) == 0x80 ) {
+            --newSize;
+        }
+
+        text.resize( newSize );
+    }
+
+#if defined( WITH_CJK_TEXT )
+    // Button captions are part of low-resolution assets and need dedicated CJK font tuning.
+    bool isButtonFontSize( const fheroes2::FontSize fontSize )
+    {
+        return fontSize == fheroes2::FontSize::BUTTON_RELEASED || fontSize == fheroes2::FontSize::BUTTON_PRESSED;
+    }
+
+    bool isUnicodeLineSeparator( const uint32_t codePoint )
+    {
+        return codePoint == '\n';
+    }
+
+    bool isUnicodeSpace( const uint32_t codePoint )
+    {
+        return codePoint == ' ' || codePoint == '\t' || codePoint == 0x3000;
+    }
+
+    bool isCjkPunctuation( const uint32_t codePoint )
+    {
+        return ( codePoint >= 0x3000 && codePoint <= 0x303F ) || ( codePoint >= 0xFF00 && codePoint <= 0xFFEF );
+    }
+
+    bool isLineStartProhibitedPunctuation( const uint32_t codePoint )
+    {
+        switch ( codePoint ) {
+        case 0x3001: // Ideographic comma.
+        case 0x3002: // Ideographic full stop.
+        case 0xFF0C: // Fullwidth comma.
+        case 0xFF0E: // Fullwidth full stop.
+        case 0xFF1A: // Fullwidth colon.
+        case 0xFF1B: // Fullwidth semicolon.
+        case 0xFF01: // Fullwidth exclamation mark.
+        case 0xFF1F: // Fullwidth question mark.
+        case 0xFF09: // Fullwidth right parenthesis.
+        case 0xFF3D: // Fullwidth right square bracket.
+        case 0xFF5D: // Fullwidth right curly bracket.
+        case 0x3009: // Right angle bracket.
+        case 0x300B: // Right double angle bracket.
+        case 0x300D: // Right corner bracket.
+        case 0x300F: // Right white corner bracket.
+        case 0x3011: // Right black lenticular bracket.
+        case 0x3015: // Right tortoise shell bracket.
+        case 0x3017: // Right white lenticular bracket.
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    bool isUnicodeBreakAllowedAfter( const uint32_t currentCodePoint, const uint32_t nextCodePoint )
+    {
+        if ( isUnicodeSpace( currentCodePoint ) || currentCodePoint == '-' ) {
+            return true;
+        }
+
+        if ( isCjkCodePoint( currentCodePoint ) || isCjkPunctuation( currentCodePoint ) ) {
+            return !isLineStartProhibitedPunctuation( nextCodePoint );
+        }
+
+        return false;
+    }
+
+    int32_t getFallbackSpaceWidth( const fheroes2::FontSize fontSize )
+    {
+        switch ( fontSize ) {
+        case fheroes2::FontSize::SMALL:
+            return 4;
+        case fheroes2::FontSize::NORMAL:
+            return 6;
+        case fheroes2::FontSize::LARGE:
+        case fheroes2::FontSize::BUTTON_RELEASED:
+        case fheroes2::FontSize::BUTTON_PRESSED:
+            return 8;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
+
+    constexpr uint32_t unicodeQuestionMark{ '?' };
+
+    struct GlyphCacheKey
+    {
+        fheroes2::FontSize size{ fheroes2::FontSize::NORMAL };
+        fheroes2::FontColor color{ fheroes2::FontColor::WHITE };
+        size_t fontIndex{ 0 };
+        uint32_t codePoint{ 0 };
+        uint32_t renderableCodePoint{ 0 };
+
+        bool operator<( const GlyphCacheKey & other ) const
+        {
+            if ( size != other.size ) {
+                return static_cast<uint8_t>( size ) < static_cast<uint8_t>( other.size );
+            }
+
+            if ( color != other.color ) {
+                return static_cast<uint8_t>( color ) < static_cast<uint8_t>( other.color );
+            }
+
+            if ( fontIndex != other.fontIndex ) {
+                return fontIndex < other.fontIndex;
+            }
+
+            if ( codePoint != other.codePoint ) {
+                return codePoint < other.codePoint;
+            }
+
+            return renderableCodePoint < other.renderableCodePoint;
+        }
+    };
+
+    struct FontCacheKey
+    {
+        size_t fontIndex{ 0 };
+        fheroes2::FontSize size{ fheroes2::FontSize::NORMAL };
+
+        bool operator<( const FontCacheKey & other ) const
+        {
+            if ( fontIndex != other.fontIndex ) {
+                return fontIndex < other.fontIndex;
+            }
+
+            return static_cast<uint8_t>( size ) < static_cast<uint8_t>( other.size );
+        }
+    };
+
+    struct RenderableGlyph
+    {
+        size_t fontIndex{ static_cast<size_t>( -1 ) };
+        uint32_t codePoint{ 0 };
+        bool isValid{ false };
+    };
+
+    struct CjkGlyph
+    {
+        fheroes2::Sprite sprite;
+        int32_t advance{ 0 };
+    };
+
+    struct TtfFontDeleter
+    {
+        void operator()( TTF_Font * font ) const
+        {
+            if ( font != nullptr ) {
+                TTF_CloseFont( font );
+            }
+        }
+    };
+
+    std::string toLowerAscii( std::string str )
+    {
+        std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return static_cast<char>( std::tolower( c ) ); } );
+        return str;
+    }
+
+    bool hasFontExtension( const std::string & fileName )
+    {
+        const std::string lowerName = toLowerAscii( fileName );
+
+        return lowerName.size() > 4
+               && ( lowerName.compare( lowerName.size() - 4, 4, ".ttf" ) == 0 || lowerName.compare( lowerName.size() - 4, 4, ".ttc" ) == 0
+                    || lowerName.compare( lowerName.size() - 4, 4, ".otf" ) == 0 );
+    }
+
+    int32_t getCjkFontNamePriority( const std::string & fileName )
+    {
+        const std::string lowerName = toLowerAscii( fileName );
+
+        if ( lowerName.find( "serif" ) != std::string::npos ) {
+            return 3;
+        }
+
+        if ( lowerName.find( "noto" ) != std::string::npos || lowerName.find( "sourcehan" ) != std::string::npos
+             || lowerName.find( "source han" ) != std::string::npos || lowerName.find( "wqy" ) != std::string::npos
+             || lowerName.find( "wenquanyi" ) != std::string::npos ) {
+            return 0;
+        }
+
+        if ( lowerName.find( "msjh" ) != std::string::npos || lowerName.find( "msyh" ) != std::string::npos || lowerName.find( "simhei" ) != std::string::npos
+             || lowerName.find( "deng" ) != std::string::npos || lowerName.find( "pingfang" ) != std::string::npos
+             || lowerName.find( "hiragino" ) != std::string::npos || lowerName.find( "heiti" ) != std::string::npos ) {
+            return 1;
+        }
+
+        if ( lowerName.find( "mingliu" ) != std::string::npos || lowerName.find( "simsun" ) != std::string::npos ) {
+            return 2;
+        }
+
+        return 5;
+    }
+
+    // Button labels have limited space, so prefer fonts that fit compact UI controls.
+    int32_t getCjkButtonFontNamePriority( const std::string & fileName )
+    {
+        const std::string lowerName = toLowerAscii( fileName );
+
+        if ( lowerName.find( "kaiti" ) != std::string::npos || lowerName.find( "stkaiti" ) != std::string::npos || lowerName.find( "ukai" ) != std::string::npos
+             || lowerName.find( " kai" ) != std::string::npos || lowerName.find( "-kai" ) != std::string::npos ) {
+            return 0;
+        }
+
+        if ( lowerName.find( "mingliu" ) != std::string::npos || lowerName.find( "simsun" ) != std::string::npos || lowerName.find( "songti" ) != std::string::npos
+             || lowerName.find( "sourcehanserif" ) != std::string::npos || lowerName.find( "source han serif" ) != std::string::npos
+             || lowerName.find( "notoserif" ) != std::string::npos || lowerName.find( "noto serif" ) != std::string::npos
+             || lowerName.find( "uming" ) != std::string::npos || lowerName.find( "serif" ) != std::string::npos ) {
+            return 1;
+        }
+
+        return 2;
+    }
+
+    bool isPreferredCjkFontName( const std::string & fileName )
+    {
+        return getCjkFontNamePriority( fileName ) < 5;
+    }
+
+    const std::vector<std::string> & getKnownCjkFontFileNames()
+    {
+        static const std::vector<std::string> fontNames{ "NotoSansCJK-Regular.ttc",     "NotoSansCJKtc-Regular.otf", "NotoSansTC-Regular.otf",
+                                                         "NotoSansSC-Regular.otf",      "SourceHanSans-Regular.ttc", "SourceHanSansTC-Regular.otf",
+                                                         "SourceHanSansCN-Regular.otf", "wqy-microhei.ttc",          "wqy-zenhei.ttc",
+                                                         "msjh.ttc",                    "msyh.ttc",                  "simhei.ttf",
+                                                         "mingliu.ttc",                 "simsun.ttc",                "Songti.ttc",
+                                                         "Kaiti.ttc",                   "Hiragino Sans GB.ttc",      "PingFang.ttc",
+                                                         "STHeiti Medium.ttc",          "STHeiti Light.ttc",
+                                                         "Arial Unicode.ttf",           "NotoSerifCJK-Regular.ttc",  "NotoSerifTC-Regular.otf",
+                                                         "SourceHanSerifTC-Regular.otf" };
+
+        return fontNames;
+    }
+
+    void appendFontPathIfExists( std::vector<std::string> & fontPaths, const std::string & path )
+    {
+        if ( path.empty() || !System::IsFile( path ) ) {
+            return;
+        }
+
+        if ( std::find( fontPaths.begin(), fontPaths.end(), path ) == fontPaths.end() ) {
+            fontPaths.emplace_back( path );
+        }
+    }
+
+    void appendFontPathsByPriority( std::vector<std::string> & fontPaths, std::vector<std::string> candidatePaths )
+    {
+        std::sort( candidatePaths.begin(), candidatePaths.end(), []( const std::string & lhs, const std::string & rhs ) {
+            const int32_t leftPriority = getCjkFontNamePriority( lhs );
+            const int32_t rightPriority = getCjkFontNamePriority( rhs );
+            if ( leftPriority != rightPriority ) {
+                return leftPriority < rightPriority;
+            }
+
+            return toLowerAscii( lhs ) < toLowerAscii( rhs );
+        } );
+
+        for ( const std::string & candidatePath : candidatePaths ) {
+            appendFontPathIfExists( fontPaths, candidatePath );
+        }
+    }
+
+    void appendKnownFontsInDirectory( std::vector<std::string> & fontPaths, const std::string & directory )
+    {
+        if ( !System::IsDirectory( directory ) ) {
+            return;
+        }
+
+        for ( const std::string & fontName : getKnownCjkFontFileNames() ) {
+            appendFontPathIfExists( fontPaths, System::concatPath( directory, fontName ) );
+        }
+    }
+
+    void appendFontsInDirectory( std::vector<std::string> & fontPaths, const std::string & directory, const bool requirePreferredName )
+    {
+        if ( !System::IsDirectory( directory ) ) {
+            return;
+        }
+
+        std::vector<std::string> candidatePaths;
+        std::error_code ec;
+        for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( directory, ec ) ) {
+            if ( !entry.is_regular_file( ec ) ) {
+                continue;
+            }
+
+            const std::string fileName = System::fsPathToString( entry.path().filename() );
+            if ( !hasFontExtension( fileName ) || ( requirePreferredName && !isPreferredCjkFontName( fileName ) ) ) {
+                continue;
+            }
+
+            candidatePaths.emplace_back( System::fsPathToString( entry.path() ) );
+        }
+
+        appendFontPathsByPriority( fontPaths, std::move( candidatePaths ) );
+    }
+
+    void appendPortableCjkFontPaths( std::vector<std::string> & fontPaths )
+    {
+        for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+            for ( const std::string & fontDirectoryName : { std::string( "files/fonts" ), std::string( "fonts" ), std::string( "Fonts" ) } ) {
+                const std::string fontDirectory = System::concatPath( rootDir, fontDirectoryName );
+
+                appendKnownFontsInDirectory( fontPaths, fontDirectory );
+                appendFontsInDirectory( fontPaths, fontDirectory, false );
+            }
+        }
+    }
+
+    std::vector<std::string> findCjkFontPaths()
+    {
+        std::vector<std::string> fontPaths;
+
+        const std::string & configuredFontPath = Settings::Get().getCjkFontPath();
+        if ( !configuredFontPath.empty() ) {
+            if ( System::IsFile( configuredFontPath ) ) {
+                appendFontPathIfExists( fontPaths, configuredFontPath );
+            }
+            else {
+                ERROR_LOG( "Configured CJK font file was not found: " << configuredFontPath )
+            }
+        }
+
+        appendPortableCjkFontPaths( fontPaths );
+
+#if defined( _WIN32 )
+        for ( const std::string & fontPath : { std::string( "C:/Windows/Fonts/msjh.ttc" ), std::string( "C:/Windows/Fonts/msjhbd.ttc" ),
+                                               std::string( "C:/Windows/Fonts/msyh.ttc" ), std::string( "C:/Windows/Fonts/msyhbd.ttc" ),
+                                               std::string( "C:/Windows/Fonts/simhei.ttf" ), std::string( "C:/Windows/Fonts/mingliu.ttc" ),
+                                               std::string( "C:/Windows/Fonts/simsun.ttc" ) } ) {
+            appendFontPathIfExists( fontPaths, fontPath );
+        }
+#elif defined( __APPLE__ ) && !defined( __IPHONEOS__ )
+        for ( const std::string & fontPath : { std::string( "/System/Library/Fonts/Hiragino Sans GB.ttc" ),
+                                               std::string( "/System/Library/Fonts/Supplemental/Hiragino Sans GB.ttc" ),
+                                               std::string( "/System/Library/Fonts/STHeiti Light.ttc" ),
+                                               std::string( "/System/Library/Fonts/Supplemental/STHeiti Light.ttc" ),
+                                               std::string( "/System/Library/Fonts/Supplemental/Songti.ttc" ),
+                                               std::string( "/System/Library/Fonts/Supplemental/Kaiti.ttc" ),
+                                               std::string( "/System/Library/Fonts/Supplemental/Arial Unicode.ttf" ),
+                                               std::string( "/System/Library/Fonts/PingFang.ttc" ) } ) {
+            appendFontPathIfExists( fontPaths, fontPath );
+        }
+#elif defined( __linux__ ) && !defined( ANDROID )
+        for ( const std::string & fontPath :
+              { std::string( "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc" ),
+                std::string( "/usr/share/fonts/opentype/noto/NotoSansCJKtc-Regular.otf" ),
+                std::string( "/usr/share/fonts/opentype/noto/NotoSansTC-Regular.otf" ),
+                std::string( "/usr/share/fonts/opentype/noto/NotoSansSC-Regular.otf" ),
+                std::string( "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc" ),
+                std::string( "/usr/share/fonts/opentype/source-han-sans/SourceHanSans-Regular.ttc" ),
+                std::string( "/usr/share/fonts/opentype/source-han-sans/SourceHanSansTC-Regular.otf" ),
+                std::string( "/usr/share/fonts/opentype/source-han-sans/SourceHanSansCN-Regular.otf" ),
+                std::string( "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc" ),
+                std::string( "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc" ),
+                std::string( "/usr/share/fonts/wenquanyi/wqy-microhei/wqy-microhei.ttc" ),
+                std::string( "/usr/share/fonts/wenquanyi/wqy-zenhei/wqy-zenhei.ttc" ) } ) {
+            appendFontPathIfExists( fontPaths, fontPath );
+        }
+
+        auto appendPreferredFontsRecursively = []( std::vector<std::string> & fontPaths, const std::string & directory ) {
+            if ( !System::IsDirectory( directory ) ) {
+                return;
+            }
+
+            std::vector<std::string> candidatePaths;
+            std::error_code ec;
+            for ( const std::filesystem::directory_entry & entry : std::filesystem::recursive_directory_iterator( directory, ec ) ) {
+                if ( !entry.is_regular_file( ec ) ) {
+                    continue;
+                }
+
+                const std::string fileName = System::fsPathToString( entry.path().filename() );
+                if ( hasFontExtension( fileName ) && isPreferredCjkFontName( fileName ) ) {
+                    candidatePaths.emplace_back( System::fsPathToString( entry.path() ) );
+                }
+            }
+
+            appendFontPathsByPriority( fontPaths, std::move( candidatePaths ) );
+        };
+
+        std::vector<std::string> linuxFontDirectories{ "/usr/share/fonts", "/usr/local/share/fonts" };
+        if ( const char * homePath = getenv( "HOME" ); homePath != nullptr ) {
+            linuxFontDirectories.emplace_back( System::concatPath( System::concatPath( homePath, ".local" ), "share/fonts" ) );
+        }
+
+        for ( const std::string & fontDirectory : linuxFontDirectories ) {
+            appendPreferredFontsRecursively( fontPaths, fontDirectory );
+        }
+#endif
+
+        return fontPaths;
+    }
+
+    // Map game font slots to CJK TTF pixel sizes so CJK text fits the low-resolution UI.
+    int32_t getTtfPixelSize( const fheroes2::FontSize fontSize )
+    {
+        switch ( fontSize ) {
+        case fheroes2::FontSize::SMALL:
+            return 10;
+        case fheroes2::FontSize::NORMAL:
+            return 13;
+        case fheroes2::FontSize::LARGE:
+            return 24;
+        case fheroes2::FontSize::BUTTON_RELEASED:
+        case fheroes2::FontSize::BUTTON_PRESSED:
+            return 14;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return 16;
+    }
+
+    uint8_t getCjkGlyphOutlineColor( const fheroes2::FontType fontType )
+    {
+        if ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) {
+            return 10;
+        }
+
+        return 0;
+    }
+
+    // Non-button white CJK glyphs keep the original white-to-gray brightness ramp.
+    uint8_t getWhiteCjkGlyphColor( const uint8_t alpha )
+    {
+        if ( alpha > 224 ) {
+            return 10;
+        }
+        if ( alpha > 184 ) {
+            return 12;
+        }
+        if ( alpha > 144 ) {
+            return 14;
+        }
+        if ( alpha > 104 ) {
+            return 16;
+        }
+
+        return 21;
+    }
+
+    // Non-button yellow CJK glyphs use the main yellow and golden palette range.
+    uint8_t getYellowCjkGlyphColor( const uint8_t alpha )
+    {
+        if ( alpha > 224 ) {
+            return 219;
+        }
+        if ( alpha > 184 ) {
+            return 115;
+        }
+        if ( alpha > 144 ) {
+            return 117;
+        }
+        if ( alpha > 104 ) {
+            return 118;
+        }
+
+        return 120;
+    }
+
+    // Non-button gray CJK glyphs keep the disabled-state look without near-black edges.
+    uint8_t getGrayCjkGlyphColor( const uint8_t alpha )
+    {
+        if ( alpha > 224 ) {
+            return 17;
+        }
+        if ( alpha > 184 ) {
+            return 19;
+        }
+        if ( alpha > 144 ) {
+            return 21;
+        }
+        if ( alpha > 104 ) {
+            return 23;
+        }
+
+        return 25;
+    }
+
+    // Button glyphs need harder pixel edges, so filter more TTF antialiasing.
+    uint8_t getCjkGlyphAlphaThreshold( const fheroes2::FontType fontType )
+    {
+        return isButtonFontSize( fontType.size ) ? 128 : 72;
+    }
+
+    // CJK button captions keep a small extra advance to avoid cramped horizontal text.
+    int32_t getCjkGlyphExtraAdvance( const fheroes2::FontType fontType, const uint32_t codePoint )
+    {
+        return isButtonFontSize( fontType.size ) && isCjkCodePoint( codePoint ) ? 2 : 0;
+    }
+
+    // Map SDL_ttf antialiasing alpha to the game palette while preserving button colors.
+    uint8_t getCjkGlyphColor( const fheroes2::FontType fontType, const uint8_t alpha )
+    {
+        if ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED ) {
+            return fontType.color == fheroes2::FontColor::GRAY ? 30 : 56;
+        }
+
+        if ( fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) {
+            return fontType.color == fheroes2::FontColor::GRAY ? 36 : 62;
+        }
+
+        switch ( fontType.color ) {
+        case fheroes2::FontColor::YELLOW:
+        case fheroes2::FontColor::GOLDEN_GRADIENT:
+            return getYellowCjkGlyphColor( alpha );
+        case fheroes2::FontColor::GRAY:
+            return getGrayCjkGlyphColor( alpha );
+        case fheroes2::FontColor::WHITE:
+        case fheroes2::FontColor::SILVER_GRADIENT:
+            return getWhiteCjkGlyphColor( alpha );
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return 36;
+    }
+
+    uint8_t getSurfaceAlpha( const SDL_Surface & surface, const int32_t x, const int32_t y )
+    {
+        // Glyphs are always produced by TTF_RenderGlyph(32)_Blended, which yields a 32-bit ARGB surface.
+        assert( surface.format->BytesPerPixel == 4 );
+
+        const auto * pixel = static_cast<const uint8_t *>( surface.pixels ) + y * surface.pitch + x * surface.format->BytesPerPixel;
+        const uint32_t pixelValue = *reinterpret_cast<const uint32_t *>( pixel );
+
+        uint8_t red = 0;
+        uint8_t green = 0;
+        uint8_t blue = 0;
+        uint8_t alpha = 0;
+        SDL_GetRGBA( pixelValue, surface.format, &red, &green, &blue, &alpha );
+
+        return alpha;
+    }
+
+    // Some CJK glyph bounding boxes sit low, so use a stable anchor for vertical placement.
+    int32_t getCjkGlyphVerticalOffset( TTF_Font * font, const uint32_t codePoint, const int32_t maxY, const int32_t paddingTop )
+    {
+        int32_t anchorMaxY = maxY;
+        if ( isCjkCodePoint( codePoint ) || isCjkPunctuation( codePoint ) ) {
+            anchorMaxY = std::max( anchorMaxY, TTF_FontAscent( font ) - 2 );
+        }
+
+        return TTF_FontAscent( font ) - anchorMaxY - paddingTop;
+    }
+
+    void addCjkButtonOffsetContour( fheroes2::Sprite & input, const fheroes2::Point & contourOffset, const uint8_t colorId )
+    {
+        if ( input.empty() || input.singleLayer() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() )
+             || ( contourOffset.y >= input.height() ) ) {
+            return;
+        }
+
+        fheroes2::Sprite output = input;
+
+        const int32_t imageWidth = output.width();
+        const int32_t width = imageWidth + contourOffset.x;
+        const int32_t height = output.height() - contourOffset.y;
+
+        const int32_t offsetY = imageWidth * contourOffset.y;
+        uint8_t * imageOutY = output.image() + offsetY;
+        const uint8_t * transformInY = input.transform() - contourOffset.x;
+        uint8_t * transformOutY = output.transform() + offsetY;
+        const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
+
+        for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth, imageOutY += imageWidth ) {
+            uint8_t * imageOutX = imageOutY;
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformOutXEnd = transformOutX + width;
+
+            for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX, ++imageOutX ) {
+                if ( *transformOutX == 1 && ( *transformInX == 0 || ( *( transformInX + contourOffset.x ) == 0 && *( transformInX + offsetY ) == 0 ) ) ) {
+                    *imageOutX = colorId;
+                    *transformOutX = 0;
+                }
+            }
+        }
+
+        input = std::move( output );
+    }
+
+    // CJK strokes are denser than bitmap Latin glyphs; button states use minimal effects.
+    void applyCjkButtonGlyphEffects( fheroes2::Sprite & glyph, const fheroes2::FontType fontType )
+    {
+        if ( !isButtonFontSize( fontType.size ) ) {
+            fheroes2::updateShadow( glyph, { -1, fontType.size == fheroes2::FontSize::SMALL ? 1 : 2 }, 2, false );
+            return;
+        }
+
+        if ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED ) {
+            fheroes2::updateShadow( glyph, { 1, -1 }, 2, true );
+            addCjkButtonOffsetContour( glyph, { -1, 1 }, getCjkGlyphOutlineColor( fontType ) );
+            return;
+        }
+
+        fheroes2::updateShadow( glyph, { 1, -1 }, 2, true );
+        fheroes2::updateShadow( glyph, { -1, 1 }, 7, true );
+    }
+
+    class CjkFontRenderer
+    {
+    public:
+        // Initialize SDL_ttf and build a font chain for per-glyph fallback.
+        bool isReady()
+        {
+            if ( _initializationAttempted ) {
+                return _isReady;
+            }
+
+            _initializationAttempted = true;
+
+            if ( TTF_WasInit() == 0 && TTF_Init() != 0 ) {
+                ERROR_LOG( "Unable to initialize SDL_ttf for CJK text rendering: " << TTF_GetError() )
+                return false;
+            }
+
+            _fontPaths = findCjkFontPaths();
+            if ( _fontPaths.empty() ) {
+                ERROR_LOG( "CJK font was not found. Set cjk_font_path or place a CJK TTF/TTC/OTF font under files/fonts/." )
+                return false;
+            }
+
+            _isReady = true;
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Using CJK font chain with " << _fontPaths.size() << " entries. Primary font: " << _fontPaths.front() )
+
+            return true;
+        }
+
+        int32_t getLineHeight( const fheroes2::FontSize fontSize )
+        {
+            if ( isButtonFontSize( fontSize ) ) {
+                return fheroes2::getFontHeight( fontSize );
+            }
+
+            for ( const size_t fontIndex : getFontSearchOrder( fontSize ) ) {
+                if ( TTF_Font * font = getFont( fontIndex, fontSize ); font != nullptr ) {
+                    return std::max( fheroes2::getFontHeight( fontSize ), TTF_FontLineSkip( font ) );
+                }
+            }
+
+            return fheroes2::getFontHeight( fontSize );
+        }
+
+        int32_t getSpaceWidth( const fheroes2::FontSize fontSize )
+        {
+            for ( const size_t fontIndex : getFontSearchOrder( fontSize ) ) {
+                TTF_Font * font = getFont( fontIndex, fontSize );
+                if ( font == nullptr ) {
+                    continue;
+                }
+
+                int minX = 0;
+                int maxX = 0;
+                int minY = 0;
+                int maxY = 0;
+                int advance = 0;
+                if ( getGlyphMetrics( font, ' ', &minX, &maxX, &minY, &maxY, &advance ) && advance > 0 ) {
+                    return advance;
+                }
+            }
+
+            return getFallbackSpaceWidth( fontSize );
+        }
+
+        const CjkGlyph & getGlyph( const fheroes2::FontType fontType, const uint32_t codePoint )
+        {
+            const RenderableGlyph renderableGlyph = getRenderableGlyph( fontType.size, codePoint );
+            const GlyphCacheKey key{ fontType.size, fontType.color, renderableGlyph.fontIndex, codePoint, renderableGlyph.codePoint };
+            if ( const auto iter = _glyphCache.find( key ); iter != _glyphCache.end() ) {
+                return iter->second;
+            }
+
+            // The full CJK repertoire across several font sizes and colors would let the cache grow without bound.
+            // Glyphs are cheap to rebuild and have a high reuse rate, so a coarse flush keeps memory in check without
+            // the bookkeeping of an LRU. The returned reference is consumed immediately by the caller, so clearing
+            // before the insertion below is safe.
+            if ( _glyphCache.size() >= glyphCacheLimit ) {
+                _glyphCache.clear();
+                _missingGlyphs.clear();
+            }
+
+            auto [iter, inserted] = _glyphCache.emplace( key, buildGlyph( fontType, codePoint, renderableGlyph ) );
+            (void)inserted;
+            assert( inserted );
+
+            return iter->second;
+        }
+
+        // Drop all cached fonts and glyphs and shut SDL_ttf down. Must run while SDL is still alive.
+        void release()
+        {
+            _glyphCache.clear();
+            _missingGlyphs.clear();
+            _fonts.clear();
+
+            if ( TTF_WasInit() != 0 ) {
+                TTF_Quit();
+            }
+
+            _initializationAttempted = false;
+            _isReady = false;
+        }
+
+    private:
+        using TtfFontPtr = std::unique_ptr<TTF_Font, TtfFontDeleter>;
+
+        std::vector<size_t> getFontSearchOrder( const fheroes2::FontSize fontSize ) const
+        {
+            std::vector<size_t> order( _fontPaths.size() );
+            std::iota( order.begin(), order.end(), size_t{ 0 } );
+
+            if ( !isButtonFontSize( fontSize ) ) {
+                return order;
+            }
+
+            const std::string & configuredFontPath = Settings::Get().getCjkFontPath();
+            std::stable_sort( order.begin(), order.end(), [this, &configuredFontPath]( const size_t lhs, const size_t rhs ) {
+                const bool isLeftConfigured = !configuredFontPath.empty() && _fontPaths[lhs] == configuredFontPath;
+                const bool isRightConfigured = !configuredFontPath.empty() && _fontPaths[rhs] == configuredFontPath;
+                if ( isLeftConfigured != isRightConfigured ) {
+                    return isLeftConfigured;
+                }
+
+                const int32_t leftPriority = getCjkButtonFontNamePriority( _fontPaths[lhs] );
+                const int32_t rightPriority = getCjkButtonFontNamePriority( _fontPaths[rhs] );
+                if ( leftPriority != rightPriority ) {
+                    return leftPriority < rightPriority;
+                }
+
+                return lhs < rhs;
+            } );
+
+            return order;
+        }
+
+        TTF_Font * getFont( const size_t fontIndex, const fheroes2::FontSize fontSize )
+        {
+            if ( !isReady() || fontIndex >= _fontPaths.size() ) {
+                return nullptr;
+            }
+
+            const FontCacheKey key{ fontIndex, fontSize };
+            auto [iter, inserted] = _fonts.try_emplace( key );
+            if ( inserted ) {
+                iter->second.reset( TTF_OpenFont( _fontPaths[fontIndex].c_str(), getTtfPixelSize( fontSize ) ) );
+                if ( !iter->second ) {
+                    ERROR_LOG( "Unable to open CJK font " << _fontPaths[fontIndex] << ": " << TTF_GetError() )
+                }
+                else {
+                    // Text keeps normal hinting, while button glyphs snap harder to the pixel grid.
+                    TTF_SetFontHinting( iter->second.get(), isButtonFontSize( fontSize ) ? TTF_HINTING_MONO : TTF_HINTING_NORMAL );
+                }
+            }
+
+            return iter->second.get();
+        }
+
+        bool isGlyphProvided( TTF_Font * font, const uint32_t codePoint ) const
+        {
+            if ( font == nullptr ) {
+                return false;
+            }
+
+#if defined( FHEROES2_SDL_TTF_HAS_32BIT_GLYPHS )
+            return TTF_GlyphIsProvided32( font, codePoint ) != 0;
+#else
+            return codePoint <= 0xFFFF && TTF_GlyphIsProvided( font, static_cast<Uint16>( codePoint ) ) != 0;
+#endif
+        }
+
+        bool getGlyphMetrics( TTF_Font * font, const uint32_t codePoint, int * minX, int * maxX, int * minY, int * maxY, int * advance ) const
+        {
+            if ( font == nullptr ) {
+                return false;
+            }
+
+#if defined( FHEROES2_SDL_TTF_HAS_32BIT_GLYPHS )
+            return TTF_GlyphMetrics32( font, codePoint, minX, maxX, minY, maxY, advance ) == 0;
+#else
+            return codePoint <= 0xFFFF && TTF_GlyphMetrics( font, static_cast<Uint16>( codePoint ), minX, maxX, minY, maxY, advance ) == 0;
+#endif
+        }
+
+        SDL_Surface * renderGlyph( TTF_Font * font, const uint32_t codePoint, const SDL_Color color ) const
+        {
+            if ( font == nullptr ) {
+                return nullptr;
+            }
+
+#if defined( FHEROES2_SDL_TTF_HAS_32BIT_GLYPHS )
+            return TTF_RenderGlyph32_Blended( font, codePoint, color );
+#else
+            if ( codePoint > 0xFFFF ) {
+                return nullptr;
+            }
+
+            return TTF_RenderGlyph_Blended( font, static_cast<Uint16>( codePoint ), color );
+#endif
+        }
+
+        RenderableGlyph getRenderableGlyph( const fheroes2::FontSize fontSize, const uint32_t codePoint )
+        {
+            // Try the original code point across the font chain before falling back.
+            for ( const size_t fontIndex : getFontSearchOrder( fontSize ) ) {
+                if ( isGlyphProvided( getFont( fontIndex, fontSize ), codePoint ) ) {
+                    return { fontIndex, codePoint, true };
+                }
+            }
+
+            if ( _missingGlyphs.insert( codePoint ).second ) {
+                ERROR_LOG( "CJK font chain does not provide glyph for Unicode code point " << codePoint << ". A fallback glyph will be used." )
+            }
+
+            for ( const uint32_t fallbackCodePoint : { unicodeReplacementGlyph, unicodeQuestionMark } ) {
+                for ( const size_t fontIndex : getFontSearchOrder( fontSize ) ) {
+                    if ( isGlyphProvided( getFont( fontIndex, fontSize ), fallbackCodePoint ) ) {
+                        return { fontIndex, fallbackCodePoint, true };
+                    }
+                }
+            }
+
+            return {};
+        }
+
+        CjkGlyph buildGlyph( const fheroes2::FontType fontType, const uint32_t codePoint, const RenderableGlyph renderableGlyph )
+        {
+            CjkGlyph glyph;
+
+            if ( isUnicodeSpace( codePoint ) ) {
+                glyph.advance = getSpaceWidth( fontType.size );
+                return glyph;
+            }
+
+            if ( isUnicodeLineSeparator( codePoint ) ) {
+                return glyph;
+            }
+
+            TTF_Font * font = getFont( renderableGlyph.fontIndex, fontType.size );
+            if ( font == nullptr || !renderableGlyph.isValid ) {
+                glyph.advance = getFallbackSpaceWidth( fontType.size );
+                return glyph;
+            }
+
+            int minX = 0;
+            int maxX = 0;
+            int minY = 0;
+            int maxY = 0;
+            int advance = 0;
+            if ( !getGlyphMetrics( font, renderableGlyph.codePoint, &minX, &maxX, &minY, &maxY, &advance ) || advance <= 0 ) {
+                advance = getFallbackSpaceWidth( fontType.size );
+            }
+
+            const SDL_Color color{ 255, 255, 255, 255 };
+            std::unique_ptr<SDL_Surface, decltype( &SDL_FreeSurface )> surface( renderGlyph( font, renderableGlyph.codePoint, color ), SDL_FreeSurface );
+            if ( !surface ) {
+                ERROR_LOG( "Unable to render CJK glyph " << codePoint << ": " << TTF_GetError() )
+                glyph.advance = advance;
+                return glyph;
+            }
+
+            const int32_t paddingLeft = 2;
+            const int32_t paddingTop = isButtonFontSize( fontType.size ) ? 2 : 1;
+            const int32_t paddingRight = 2;
+            const int32_t paddingBottom = 3;
+
+            glyph.sprite.resize( surface->w + paddingLeft + paddingRight, surface->h + paddingTop + paddingBottom );
+            glyph.sprite.reset();
+
+            if ( SDL_MUSTLOCK( surface.get() ) && SDL_LockSurface( surface.get() ) != 0 ) {
+                ERROR_LOG( "Unable to lock CJK glyph surface: " << SDL_GetError() )
+                glyph.advance = advance;
+                return glyph;
+            }
+
+            for ( int32_t y = 0; y < surface->h; ++y ) {
+                for ( int32_t x = 0; x < surface->w; ++x ) {
+                    const uint8_t alpha = getSurfaceAlpha( *surface, x, y );
+                    if ( alpha <= getCjkGlyphAlphaThreshold( fontType ) ) {
+                        continue;
+                    }
+
+                    const int32_t outputX = x + paddingLeft;
+                    const int32_t outputY = y + paddingTop;
+                    const int32_t outputOffset = outputY * glyph.sprite.width() + outputX;
+
+                    glyph.sprite.image()[outputOffset] = getCjkGlyphColor( fontType, alpha );
+                    glyph.sprite.transform()[outputOffset] = 0;
+                }
+            }
+
+            if ( SDL_MUSTLOCK( surface.get() ) ) {
+                SDL_UnlockSurface( surface.get() );
+            }
+
+            glyph.sprite.setPosition( minX - paddingLeft, getCjkGlyphVerticalOffset( font, codePoint, maxY, paddingTop ) );
+            applyCjkButtonGlyphEffects( glyph.sprite, fontType );
+
+            glyph.advance = advance + getCjkGlyphExtraAdvance( fontType, codePoint );
+            return glyph;
+        }
+
+        // Upper bound for the glyph cache. Sized to comfortably hold a full screen of distinct CJK characters across
+        // the handful of font size and color combinations used in the UI, while bounding worst-case memory growth.
+        static constexpr size_t glyphCacheLimit{ 4096 };
+
+        std::vector<std::string> _fontPaths;
+        std::map<FontCacheKey, TtfFontPtr> _fonts;
+        std::map<GlyphCacheKey, CjkGlyph> _glyphCache;
+        std::set<uint32_t> _missingGlyphs;
+        bool _initializationAttempted{ false };
+        bool _isReady{ false };
+    };
+
+    CjkFontRenderer & getCjkFontRenderer()
+    {
+        static CjkFontRenderer renderer;
+        return renderer;
+    }
+
+    bool shouldUseUnicodeTextPath( const std::string_view text, const std::optional<fheroes2::SupportedLanguage> & language, const fheroes2::FontType fontType )
+    {
+        (void)fontType;
+
+        return isUnicodeTextCandidate( text, language ) && getCjkFontRenderer().isReady();
+    }
+
+    // The Unicode path still uses the original bitmap font for ASCII characters.
+    bool isBitmapFontCodePoint( const uint32_t codePoint, const fheroes2::FontCharHandler & charHandler )
+    {
+        return codePoint <= 0x7F && charHandler.isAvailable( static_cast<uint8_t>( codePoint ) );
+    }
+
+    void mergeTextArea( fheroes2::Rect & area, bool & hasArea, const fheroes2::Rect & glyphArea )
+    {
+        if ( hasArea ) {
+            const int32_t left = std::min( area.x, glyphArea.x );
+            const int32_t top = std::min( area.y, glyphArea.y );
+            const int32_t right = std::max( area.x + area.width, glyphArea.x + glyphArea.width );
+            const int32_t bottom = std::max( area.y + area.height, glyphArea.y + glyphArea.height );
+            area = { left, top, right - left, bottom - top };
+            return;
+        }
+
+        area = glyphArea;
+        hasArea = true;
+    }
+
+    int32_t getUnicodeCodePointWidth( const fheroes2::FontType fontType, const uint32_t codePoint, const fheroes2::FontCharHandler & charHandler )
+    {
+        if ( isBitmapFontCodePoint( codePoint, charHandler ) ) {
+            return charHandler.getWidth( static_cast<uint8_t>( codePoint ) );
+        }
+
+        if ( isUnicodeLineSeparator( codePoint ) ) {
+            return 0;
+        }
+
+        if ( isUnicodeSpace( codePoint ) ) {
+            return getCjkFontRenderer().getSpaceWidth( fontType.size );
+        }
+
+        return getCjkFontRenderer().getGlyph( fontType, codePoint ).advance;
+    }
+
+    int32_t renderBitmapCodePoint( const uint32_t codePoint, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::Rect & imageRoi,
+                                   const fheroes2::FontCharHandler & charHandler )
+    {
+        const auto character = static_cast<uint8_t>( codePoint );
+        if ( isSpaceChar( character ) ) {
+            return x + charHandler.getWidth( character );
+        }
+
+        if ( isLineSeparator( character ) ) {
+            return x;
+        }
+
+        const fheroes2::Sprite & charSprite = charHandler.getSprite( character );
+        const fheroes2::Rect charRoi{ x + charSprite.x(), y + charSprite.y(), charSprite.width(), charSprite.height() };
+        const fheroes2::Rect overlappedRoi = imageRoi ^ charRoi;
+
+        fheroes2::Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
+                        overlappedRoi.height );
+
+        return x + charHandler.getWidth( character );
+    }
+
+    int32_t getUnicodeFontHeight( const fheroes2::FontSize fontSize )
+    {
+        return getCjkFontRenderer().getLineHeight( fontSize );
+    }
+
+    int32_t getUnicodeLineWidth( const std::string_view text, const fheroes2::FontType fontType, const bool keepTrailingSpaces )
+    {
+        std::vector<Utf8Character> characters;
+        bool hasNonAscii = false;
+        decodeUtf8( text, characters, hasNonAscii );
+        const fheroes2::FontCharHandler charHandler( fontType );
+
+        int32_t width = 0;
+        int32_t trailingSpaceWidth = 0;
+
+        for ( const Utf8Character & character : characters ) {
+            const int32_t characterWidth = getUnicodeCodePointWidth( fontType, character.codePoint, charHandler );
+            if ( isUnicodeSpace( character.codePoint ) ) {
+                trailingSpaceWidth += characterWidth;
+                width += keepTrailingSpaces ? characterWidth : 0;
+            }
+            else if ( !isUnicodeLineSeparator( character.codePoint ) ) {
+                if ( !keepTrailingSpaces ) {
+                    width += trailingSpaceWidth;
+                    trailingSpaceWidth = 0;
+                }
+                width += characterWidth;
+            }
+        }
+
+        return width;
+    }
+
+    int32_t getUnicodeMaxByteCount( const std::string_view text, const fheroes2::FontType fontType, const int32_t maxWidth )
+    {
+        std::vector<Utf8Character> characters;
+        bool hasNonAscii = false;
+        decodeUtf8( text, characters, hasNonAscii );
+        const fheroes2::FontCharHandler charHandler( fontType );
+
+        int32_t width = 0;
+        for ( const Utf8Character & character : characters ) {
+            width += getUnicodeCodePointWidth( fontType, character.codePoint, charHandler );
+            if ( width > maxWidth ) {
+                return static_cast<int32_t>( character.byteOffset );
+            }
+        }
+
+        return static_cast<int32_t>( text.size() );
+    }
+
+    int32_t getUnicodeMaxWordWidth( const std::string_view text, const fheroes2::FontType fontType )
+    {
+        std::vector<Utf8Character> characters;
+        bool hasNonAscii = false;
+        decodeUtf8( text, characters, hasNonAscii );
+        const fheroes2::FontCharHandler charHandler( fontType );
+
+        int32_t maxWidth = 1;
+        int32_t width = 0;
+
+        for ( size_t i = 0; i < characters.size(); ++i ) {
+            const Utf8Character & character = characters[i];
+            const uint32_t nextCodePoint = ( i + 1 < characters.size() ) ? characters[i + 1].codePoint : 0;
+
+            if ( isUnicodeSpace( character.codePoint ) || isUnicodeLineSeparator( character.codePoint ) ) {
+                maxWidth = std::max( maxWidth, width == 0 ? getUnicodeCodePointWidth( fontType, character.codePoint, charHandler ) : width );
+                width = 0;
+                continue;
+            }
+
+            width += getUnicodeCodePointWidth( fontType, character.codePoint, charHandler );
+            if ( isUnicodeBreakAllowedAfter( character.codePoint, nextCodePoint ) ) {
+                maxWidth = std::max( maxWidth, width );
+                width = 0;
+            }
+        }
+
+        return std::max( maxWidth, width );
+    }
+
+    fheroes2::Rect getUnicodeTextLineArea( const std::string_view text, const fheroes2::FontType fontType )
+    {
+        std::vector<Utf8Character> characters;
+        bool hasNonAscii = false;
+        decodeUtf8( text, characters, hasNonAscii );
+        const fheroes2::FontCharHandler charHandler( fontType );
+
+        fheroes2::Rect area;
+        bool hasArea = false;
+        int32_t offsetX = 0;
+
+        for ( const Utf8Character & character : characters ) {
+            if ( isBitmapFontCodePoint( character.codePoint, charHandler ) ) {
+                const auto asciiCharacter = static_cast<uint8_t>( character.codePoint );
+                if ( !isSpaceChar( asciiCharacter ) && !isLineSeparator( asciiCharacter ) ) {
+                    const fheroes2::Sprite & sprite = charHandler.getSprite( asciiCharacter );
+                    mergeTextArea( area, hasArea, { offsetX + sprite.x(), sprite.y(), sprite.width(), sprite.height() } );
+                }
+
+                offsetX += charHandler.getWidth( asciiCharacter );
+                continue;
+            }
+
+            if ( isUnicodeSpace( character.codePoint ) ) {
+                offsetX += getUnicodeCodePointWidth( fontType, character.codePoint, charHandler );
+                continue;
+            }
+
+            if ( isUnicodeLineSeparator( character.codePoint ) ) {
+                continue;
+            }
+
+            const CjkGlyph & glyph = getCjkFontRenderer().getGlyph( fontType, character.codePoint );
+            const fheroes2::Sprite & sprite = glyph.sprite;
+
+            if ( !sprite.empty() ) {
+                const fheroes2::Rect glyphArea{ offsetX + sprite.x(), sprite.y(), sprite.width(), sprite.height() };
+                mergeTextArea( area, hasArea, glyphArea );
+            }
+
+            offsetX += glyph.advance;
+        }
+
+        if ( !hasArea ) {
+            area.width = offsetX;
+            area.height = getUnicodeFontHeight( fontType.size );
+        }
+
+        return area;
+    }
+
+    int32_t renderUnicodeSingleLine( const std::string_view text, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::Rect & imageRoi,
+                                     const fheroes2::FontType fontType )
+    {
+        assert( !output.empty() );
+
+        std::vector<Utf8Character> characters;
+        bool hasNonAscii = false;
+        decodeUtf8( text, characters, hasNonAscii );
+        const fheroes2::FontCharHandler charHandler( fontType );
+
+        int32_t offsetX = x;
+
+        for ( const Utf8Character & character : characters ) {
+            if ( isBitmapFontCodePoint( character.codePoint, charHandler ) ) {
+                offsetX = renderBitmapCodePoint( character.codePoint, offsetX, y, output, imageRoi, charHandler );
+                continue;
+            }
+
+            if ( isUnicodeSpace( character.codePoint ) ) {
+                offsetX += getUnicodeCodePointWidth( fontType, character.codePoint, charHandler );
+                continue;
+            }
+
+            if ( isUnicodeLineSeparator( character.codePoint ) ) {
+                continue;
+            }
+
+            const CjkGlyph & glyph = getCjkFontRenderer().getGlyph( fontType, character.codePoint );
+            const fheroes2::Sprite & sprite = glyph.sprite;
+
+            if ( !sprite.empty() ) {
+                const fheroes2::Rect charRoi{ offsetX + sprite.x(), y + sprite.y(), sprite.width(), sprite.height() };
+                const fheroes2::Rect overlappedRoi = imageRoi ^ charRoi;
+
+                fheroes2::Blit( sprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
+                                overlappedRoi.height );
+            }
+
+            offsetX += glyph.advance;
+        }
+
+        return offsetX;
+    }
+
+    void getUnicodeTextLineInfos( std::vector<fheroes2::TextLineInfo> & textLineInfos, const std::string_view text, const fheroes2::FontType fontType,
+                                  const int32_t maxWidth, const int32_t rowHeight, const bool keepLineTrailingSpaces, const bool keepTextTrailingSpaces )
+    {
+        std::vector<Utf8Character> characters;
+        bool hasNonAscii = false;
+        decodeUtf8( text, characters, hasNonAscii );
+        const fheroes2::FontCharHandler charHandler( fontType );
+
+        const int32_t firstLineOffsetX = textLineInfos.empty() ? 0 : textLineInfos.back().lineWidth;
+        int32_t offsetX = firstLineOffsetX;
+        int32_t offsetY = textLineInfos.empty() ? 0 : textLineInfos.back().offsetY;
+
+        if ( maxWidth < 1 ) {
+            const int32_t lineWidth = firstLineOffsetX + getUnicodeLineWidth( text, fontType, keepLineTrailingSpaces || keepTextTrailingSpaces );
+            textLineInfos.emplace_back( firstLineOffsetX, offsetY, lineWidth, static_cast<int32_t>( text.size() ) );
+            return;
+        }
+
+        size_t lineStartIndex = 0;
+        size_t characterIndex = 0;
+        int32_t lineWidth = firstLineOffsetX;
+        int32_t trailingSpaceWidth = 0;
+        size_t lastBreakIndex = std::string_view::npos;
+        int32_t lastBreakWidth = 0;
+
+        auto appendLine = [&]( const size_t endIndex, const int32_t width ) {
+            const size_t lineStartByte = lineStartIndex < characters.size() ? characters[lineStartIndex].byteOffset : text.size();
+            const size_t lineEndByte = endIndex < characters.size() ? characters[endIndex].byteOffset : text.size();
+            textLineInfos.emplace_back( offsetX, offsetY, width, static_cast<int32_t>( lineEndByte - lineStartByte ) );
+
+            offsetX = 0;
+            offsetY += rowHeight;
+            lineStartIndex = endIndex;
+            characterIndex = endIndex;
+            lineWidth = 0;
+            trailingSpaceWidth = 0;
+            lastBreakIndex = std::string_view::npos;
+            lastBreakWidth = 0;
+        };
+
+        while ( characterIndex < characters.size() ) {
+            const Utf8Character & character = characters[characterIndex];
+
+            if ( isUnicodeLineSeparator( character.codePoint ) ) {
+                const int32_t width = keepLineTrailingSpaces ? lineWidth : lineWidth - trailingSpaceWidth;
+                appendLine( characterIndex + 1, width );
+                continue;
+            }
+
+            const int32_t characterWidth = getUnicodeCodePointWidth( fontType, character.codePoint, charHandler );
+
+            if ( lineWidth != 0 && lineWidth + characterWidth > maxWidth ) {
+                if ( lastBreakIndex != std::string_view::npos && lastBreakIndex > lineStartIndex ) {
+                    appendLine( lastBreakIndex, lastBreakWidth );
+                    continue;
+                }
+
+                if ( characterIndex > lineStartIndex ) {
+                    appendLine( characterIndex, keepLineTrailingSpaces ? lineWidth : lineWidth - trailingSpaceWidth );
+                    continue;
+                }
+            }
+
+            lineWidth += characterWidth;
+
+            if ( isUnicodeSpace( character.codePoint ) ) {
+                trailingSpaceWidth += characterWidth;
+            }
+            else {
+                trailingSpaceWidth = 0;
+            }
+
+            const uint32_t nextCodePoint = ( characterIndex + 1 < characters.size() ) ? characters[characterIndex + 1].codePoint : 0;
+            if ( isUnicodeBreakAllowedAfter( character.codePoint, nextCodePoint ) ) {
+                lastBreakIndex = characterIndex + 1;
+                lastBreakWidth = keepLineTrailingSpaces ? lineWidth : lineWidth - trailingSpaceWidth;
+            }
+
+            ++characterIndex;
+        }
+
+        const int32_t finalWidth = ( keepLineTrailingSpaces || keepTextTrailingSpaces ) ? lineWidth : lineWidth - trailingSpaceWidth;
+        textLineInfos.emplace_back( offsetX, offsetY, finalWidth, static_cast<int32_t>( text.size() - ( lineStartIndex < characters.size() ? characters[lineStartIndex].byteOffset : text.size() ) ) );
+    }
+#else
+    bool shouldUseUnicodeTextPath( const std::string_view text, const std::optional<fheroes2::SupportedLanguage> & language, const fheroes2::FontType fontType )
+    {
+        (void)fontType;
+
+        if ( isUnicodeTextCandidate( text, language ) ) {
+            static bool isLogged = false;
+            if ( !isLogged ) {
+                ERROR_LOG( "UTF-8 CJK text rendering is disabled because the game was built without SDL_ttf support." )
+                isLogged = true;
+            }
+        }
+
+        return false;
+    }
+
+    int32_t getUnicodeFontHeight( const fheroes2::FontSize fontSize )
+    {
+        return fheroes2::getFontHeight( fontSize );
+    }
+
+    int32_t getUnicodeLineWidth( const std::string_view, const fheroes2::FontType, const bool )
+    {
+        return 0;
+    }
+
+    int32_t getUnicodeMaxByteCount( const std::string_view, const fheroes2::FontType, const int32_t )
+    {
+        return 0;
+    }
+
+    int32_t getUnicodeMaxWordWidth( const std::string_view, const fheroes2::FontType )
+    {
+        return 1;
+    }
+
+    fheroes2::Rect getUnicodeTextLineArea( const std::string_view, const fheroes2::FontType )
+    {
+        return {};
+    }
+
+    int32_t renderUnicodeSingleLine( const std::string_view, const int32_t x, const int32_t, fheroes2::Image &, const fheroes2::Rect &, const fheroes2::FontType )
+    {
+        return x;
+    }
+
+    void getUnicodeTextLineInfos( std::vector<fheroes2::TextLineInfo> &, const std::string_view, const fheroes2::FontType, const int32_t, const int32_t, const bool,
+                                  const bool )
+    {
+        // Do nothing.
+    }
+#endif
+
+    int32_t getUnicodeTextVerticalOffset( const fheroes2::FontType fontType )
+    {
+#if defined( WITH_CJK_TEXT )
+        // Button labels use bitmap-style vertical placement, while TTF CJK glyphs sit lower by default.
+        return isButtonFontSize( fontType.size ) ? -1 : 0;
+#else
+        (void)fontType;
+
+        return 0;
+#endif
+    }
 
     const fheroes2::Sprite & getChar( const uint8_t character, const fheroes2::FontType & fontType )
     {
@@ -351,6 +1838,10 @@ namespace fheroes2
     int32_t Text::width() const
     {
         const auto languageSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            return getUnicodeLineWidth( _text, _fontType, _keepLineTrailingSpaces );
+        }
+
         const FontCharHandler charHandler( _fontType );
 
         return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler, _keepLineTrailingSpaces );
@@ -360,6 +1851,10 @@ namespace fheroes2
     int32_t Text::height() const
     {
         const auto languageSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            return getUnicodeFontHeight( _fontType.size );
+        }
+
         return getFontHeight( _fontType.size );
     }
 
@@ -371,6 +1866,7 @@ namespace fheroes2
 
         const auto languageSwitcher = getLanguageSwitcher( *this );
         const int32_t fontHeight = height();
+        const bool useUnicodeTextPath = shouldUseUnicodeTextPath( _text, _language, _fontType );
 
         std::vector<TextLineInfo> lineInfos;
         _getTextLineInfos( lineInfos, maxWidth, fontHeight, false );
@@ -387,7 +1883,8 @@ namespace fheroes2
         }
 
         // This is a multi-line message. Optimize it to fit the text evenly to the same number of lines.
-        int32_t startWidth = getMaxWordWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
+        int32_t startWidth = useUnicodeTextPath ? getUnicodeMaxWordWidth( _text, _fontType )
+                                                : getMaxWordWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
         int32_t endWidth = maxWidth;
 
         while ( startWidth + 1 < endWidth ) {
@@ -441,6 +1938,10 @@ namespace fheroes2
         }
 
         const auto languageSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            return getUnicodeTextLineArea( _text, _fontType );
+        }
+
         const FontCharHandler charHandler( _fontType );
 
         return getTextLineArea( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), charHandler );
@@ -454,6 +1955,11 @@ namespace fheroes2
         }
 
         const auto languageSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            renderUnicodeSingleLine( _text, x, y + getUnicodeTextVerticalOffset( _fontType ), output, imageRoi, _fontType );
+            return;
+        }
+
         const FontCharHandler charHandler( _fontType );
 
         renderSingleLine( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, output, imageRoi, charHandler );
@@ -472,6 +1978,7 @@ namespace fheroes2
         }
 
         const auto languageSwitcher = getLanguageSwitcher( *this );
+        const bool useUnicodeTextPath = shouldUseUnicodeTextPath( _text, _language, _fontType );
 
         std::vector<TextLineInfo> lineInfos;
         _getTextLineInfos( lineInfos, maxWidth, height(), false );
@@ -485,7 +1992,13 @@ namespace fheroes2
                 // TODO: Implement text alignment setting to allow multi-line left aligned text for editor's warning messages.
                 const int32_t offsetX = info.offsetX + ( maxWidth - info.lineWidth ) / 2;
 
-                renderSingleLine( data, info.characterCount, x + offsetX, y + info.offsetY, output, imageRoi, charHandler );
+                if ( useUnicodeTextPath ) {
+                    renderUnicodeSingleLine( std::string_view( reinterpret_cast<const char *>( data ), static_cast<size_t>( info.characterCount ) ), x + offsetX,
+                                             y + info.offsetY + getUnicodeTextVerticalOffset( _fontType ), output, imageRoi, _fontType );
+                }
+                else {
+                    renderSingleLine( data, info.characterCount, x + offsetX, y + info.offsetY, output, imageRoi, charHandler );
+                }
             }
 
             data += info.characterCount;
@@ -505,6 +2018,17 @@ namespace fheroes2
         }
 
         const auto languageSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            const int32_t originalTextWidth = getUnicodeLineWidth( _text, _fontType, _keepLineTrailingSpaces );
+            if ( originalTextWidth <= maxWidth ) {
+                return;
+            }
+
+            _text.resize( getUnicodeMaxByteCount( _text, _fontType, maxWidth - getTruncationSymbolWidth( _fontType ) ) );
+            _text += truncationSymbol;
+            return;
+        }
+
         const FontCharHandler charHandler( _fontType );
 
         const int32_t originalTextWidth
@@ -534,6 +2058,7 @@ namespace fheroes2
         }
 
         const auto languageSwitcher = getLanguageSwitcher( *this );
+        const bool useUnicodeTextPath = shouldUseUnicodeTextPath( _text, _language, _fontType );
         const FontCharHandler charHandler( _fontType );
 
         if ( height( maxWidth ) <= maxHeight ) {
@@ -542,7 +2067,12 @@ namespace fheroes2
         }
 
         while ( !_text.empty() && ( height( maxWidth ) > maxHeight ) ) {
-            _text.pop_back();
+            if ( useUnicodeTextPath ) {
+                removeLastUtf8Character( _text );
+            }
+            else {
+                _text.pop_back();
+            }
         }
 
         // We need to add truncation symbol.
@@ -553,7 +2083,12 @@ namespace fheroes2
                 _text.pop_back();
             }
 
-            _text.pop_back();
+            if ( useUnicodeTextPath ) {
+                removeLastUtf8Character( _text );
+            }
+            else {
+                _text.pop_back();
+            }
 
             _text += truncationSymbol;
         }
@@ -562,6 +2097,11 @@ namespace fheroes2
     void Text::_getTextLineInfos( std::vector<TextLineInfo> & textLineInfos, const int32_t maxWidth, const int32_t rowHeight, const bool keepTextTrailingSpaces ) const
     {
         assert( !_text.empty() );
+
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            getUnicodeTextLineInfos( textLineInfos, _text, _fontType, maxWidth, rowHeight, _keepLineTrailingSpaces, keepTextTrailingSpaces );
+            return;
+        }
 
         const uint8_t * data = reinterpret_cast<const uint8_t *>( _text.data() );
 
@@ -711,6 +2251,23 @@ namespace fheroes2
         }
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            const std::string_view visibleText( _text.data() + _visibleTextBeginPos, static_cast<size_t>( _visibleTextLength ) );
+            const int32_t textWidth = getUnicodeLineWidth( visibleText, _fontType, _keepLineTrailingSpaces );
+
+            const bool isTextTruncatedAtBegin = ( _visibleTextBeginPos != 0 );
+            const bool isTextTruncatedAtEnd = ( _visibleTextLength + _visibleTextBeginPos < static_cast<int32_t>( _text.size() ) );
+
+            if ( isTextTruncatedAtBegin && isTextTruncatedAtEnd ) {
+                return textWidth + 2 * getTruncationSymbolWidth( _fontType );
+            }
+            if ( isTextTruncatedAtBegin || isTextTruncatedAtEnd ) {
+                return textWidth + getTruncationSymbolWidth( _fontType );
+            }
+
+            return textWidth;
+        }
+
         const FontCharHandler charHandler( _fontType );
 
         const int32_t textWidth
@@ -742,6 +2299,26 @@ namespace fheroes2
         }
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            int32_t offsetX = x;
+
+            if ( _visibleTextBeginPos != 0 ) {
+                offsetX = renderUnicodeSingleLine( truncationSymbol, x, y, output, imageRoi, _fontType );
+            }
+
+            offsetX = renderUnicodeSingleLine( std::string_view( _text.data() + _visibleTextBeginPos,
+                                                                 _visibleTextLength == 0
+                                                                     ? static_cast<size_t>( static_cast<int32_t>( _text.size() ) - _visibleTextBeginPos )
+                                                                     : static_cast<size_t>( _visibleTextLength ) ),
+                                               offsetX, y, output, imageRoi, _fontType );
+
+            if ( _visibleTextLength + _visibleTextBeginPos < static_cast<int32_t>( _text.size() ) ) {
+                renderUnicodeSingleLine( truncationSymbol, offsetX, y, output, imageRoi, _fontType );
+            }
+
+            return;
+        }
+
         const FontCharHandler charHandler( _fontType );
 
         int32_t offsetX = x;
@@ -834,6 +2411,19 @@ namespace fheroes2
         }
 
         const auto langugeSwitcher = getLanguageSwitcher( *this );
+        if ( shouldUseUnicodeTextPath( _text, _language, _fontType ) ) {
+            _visibleTextBeginPos = 0;
+            _visibleTextLength = static_cast<int32_t>( _text.size() );
+
+            const int32_t originalTextWidth = getUnicodeLineWidth( _text, _fontType, true );
+            if ( originalTextWidth < maxWidth ) {
+                return;
+            }
+
+            _visibleTextLength = getUnicodeMaxByteCount( _text, _fontType, maxWidth - getTruncationSymbolWidth( _fontType ) );
+            return;
+        }
+
         const FontCharHandler charHandler( _fontType );
         const uint8_t * textData = reinterpret_cast<const uint8_t *>( _text.data() );
         _visibleTextLength = static_cast<int32_t>( _text.size() );
@@ -1198,11 +2788,18 @@ namespace fheroes2
         int32_t offsetX = x;
         for ( const Text & text : _texts ) {
             const auto languageSwitcher = getLanguageSwitcher( text );
-            const int32_t fontHeight = getFontHeight( text._fontType.size );
-            const FontCharHandler charHandler( text._fontType );
+            const bool useUnicodeTextPath = shouldUseUnicodeTextPath( text._text, text._language, text._fontType );
+            const int32_t fontHeight = useUnicodeTextPath ? getUnicodeFontHeight( text._fontType.size ) : getFontHeight( text._fontType.size );
 
-            offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), offsetX,
-                                        y + ( maxFontHeight - fontHeight ) / 2, output, imageRoi, charHandler );
+            if ( useUnicodeTextPath ) {
+                offsetX = renderUnicodeSingleLine( text._text, offsetX, y + ( maxFontHeight - fontHeight ) / 2 + getUnicodeTextVerticalOffset( text._fontType ),
+                                                   output, imageRoi, text._fontType );
+            }
+            else {
+                const FontCharHandler charHandler( text._fontType );
+                offsetX = renderSingleLine( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), offsetX,
+                                            y + ( maxFontHeight - fontHeight ) / 2, output, imageRoi, charHandler );
+            }
         }
     }
 
@@ -1247,13 +2844,21 @@ namespace fheroes2
 
             const uint8_t * dataEnd = data + singleText._text.size();
 
+            const bool useUnicodeTextPath = shouldUseUnicodeTextPath( singleText._text, singleText._language, singleText._fontType );
             const FontCharHandler charHandler( singleText._fontType );
 
             while ( data < dataEnd ) {
                 if ( infoIter->characterCount > 0 ) {
                     const int32_t offsetX = x + ( maxWidth > 0 ? ( maxWidth - *widthIter ) / 2 : 0 );
 
-                    renderSingleLine( data, infoIter->characterCount, offsetX + infoIter->offsetX, y + infoIter->offsetY, output, imageRoi, charHandler );
+                    if ( useUnicodeTextPath ) {
+                        renderUnicodeSingleLine( std::string_view( reinterpret_cast<const char *>( data ), static_cast<size_t>( infoIter->characterCount ) ),
+                                                 offsetX + infoIter->offsetX, y + infoIter->offsetY + getUnicodeTextVerticalOffset( singleText._fontType ), output,
+                                                 imageRoi, singleText._fontType );
+                    }
+                    else {
+                        renderSingleLine( data, infoIter->characterCount, offsetX + infoIter->offsetX, y + infoIter->offsetY, output, imageRoi, charHandler );
+                    }
                 }
 
                 data += infoIter->characterCount;
@@ -1273,10 +2878,13 @@ namespace fheroes2
         for ( size_t i = 0; i < _texts.size(); ++i ) {
             const auto languageSwitcher = getLanguageSwitcher( _texts[i] );
 
+            const bool useUnicodeTextPath = shouldUseUnicodeTextPath( _texts[i]._text, _texts[i]._language, _texts[i]._fontType );
             const FontCharHandler charHandler( _texts[i]._fontType );
 
-            const int32_t originalTextWidth
-                = getLineWidth( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), charHandler, true );
+            const int32_t originalTextWidth = useUnicodeTextPath
+                                                  ? getUnicodeLineWidth( _texts[i]._text, _texts[i]._fontType, true )
+                                                  : getLineWidth( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ),
+                                                                  static_cast<int32_t>( _texts[i]._text.size() ), charHandler, true );
 
             if ( ( i + 1 == _texts.size() ) && originalTextWidth <= widthLeft ) {
                 // This is the last text and all texts fit the given width.
@@ -1288,8 +2896,10 @@ namespace fheroes2
             if ( originalTextWidth > correctedWidthLeft ) {
                 // The text does not fit the given width.
 
-                const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ),
-                                                                        static_cast<int32_t>( _texts[i]._text.size() ), charHandler, correctedWidthLeft );
+                const int32_t maxCharacterCount
+                    = useUnicodeTextPath ? getUnicodeMaxByteCount( _texts[i]._text, _texts[i]._fontType, correctedWidthLeft )
+                                         : getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ),
+                                                                 static_cast<int32_t>( _texts[i]._text.size() ), charHandler, correctedWidthLeft );
 
                 // Remove the characters that do not fit the given width.
                 _texts[i]._text.resize( maxCharacterCount );
@@ -1401,13 +3011,39 @@ namespace fheroes2
             return true;
         }
 
+        if ( shouldUseUnicodeTextPath( text, std::nullopt, fontType ) ) {
+            return true;
+        }
+
         const FontCharHandler charHandler( fontType );
 
         return std::all_of( text.begin(), text.end(), [&charHandler]( const int8_t character ) { return charHandler.isAvailable( character ); } );
     }
 
+    bool isCjkTextRenderingAvailable()
+    {
+#if defined( WITH_CJK_TEXT )
+        return getCjkFontRenderer().isReady();
+#else
+        return false;
+#endif
+    }
+
+    void releaseCjkTextResources()
+    {
+#if defined( WITH_CJK_TEXT )
+        // Release the fonts and shut SDL_ttf down explicitly so that it happens while SDL is still alive,
+        // instead of relying on the destruction order of the function-local renderer singleton at program exit.
+        getCjkFontRenderer().release();
+#endif
+    }
+
     int32_t getTruncationSymbolWidth( const FontType fontType )
     {
+        if ( shouldUseUnicodeTextPath( truncationSymbol, std::nullopt, fontType ) ) {
+            return getUnicodeLineWidth( truncationSymbol, fontType, true );
+        }
+
         // Symbol width depends on font size and not on its color.
         static std::map<FontSize, int32_t> truncationSymbolWidth;
 

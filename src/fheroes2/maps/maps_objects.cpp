@@ -32,6 +32,7 @@
 #include "color.h"
 #include "game_io.h"
 #include "logging.h"
+#include "maps_text.h"
 #include "mp2.h"
 #include "rand.h"
 #include "save_format_version.h"
@@ -156,7 +157,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
         colors |= PlayerColor::PURPLE;
     }
 
-    message = dataStream.getString();
+    message = Maps::decodeLegacyChineseTextForDisplay( dataStream.getString() );
 
     setUIDAndIndex( index );
 
@@ -249,7 +250,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 
     // Get all possible answers.
     for ( uint32_t i = 0; i < 8; ++i ) {
-        const std::string answer = dataStream.getString( 13 );
+        const std::string answer = Maps::decodeLegacyChineseTextForDisplay( dataStream.getString( 13 ) );
 
         if ( answerCount > 0 ) {
             --answerCount;
@@ -259,7 +260,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
         }
     }
 
-    riddle = dataStream.getString();
+    riddle = Maps::decodeLegacyChineseTextForDisplay( dataStream.getString() );
     if ( riddle.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx at tile index " << tileIndex << " does not have questions. Marking it as visited." )
         return;
@@ -301,7 +302,7 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
 
     ROStreamBuf dataStream( data );
     dataStream.skip( 9 );
-    message.text = dataStream.getString();
+    message.text = Maps::decodeLegacyChineseTextForDisplay( dataStream.getString() );
 
     if ( message.text.empty() ) {
         setDefaultMessage();

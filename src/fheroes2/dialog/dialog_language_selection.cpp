@@ -275,6 +275,20 @@ namespace
 
         display.render( background.totalArea() );
 
+        const auto updateChosenLanguage = [&chosenLanguage, isGameLanguage, &conf]( const fheroes2::SupportedLanguage newChosenLanguage ) {
+            if ( newChosenLanguage == chosenLanguage ) {
+                return false;
+            }
+
+            chosenLanguage = newChosenLanguage;
+
+            if ( isGameLanguage ) {
+                conf.setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+            }
+
+            return true;
+        };
+
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             if ( buttonOk.isEnabled() ) {
@@ -290,6 +304,8 @@ namespace
             const int listId = listBox.getCurrentId();
             listBox.QueueEventProcessing();
             const bool needRedraw = listId != listBox.getCurrentId();
+            // A double-click also confirms the selected row, so commit the row before returning.
+            const bool isLanguageChanged = needRedraw && updateChosenLanguage( listBox.GetCurrent() );
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                  || listBox.isDoubleClicked() ) {
@@ -311,21 +327,12 @@ namespace
                 continue;
             }
 
-            if ( needRedraw ) {
-                const fheroes2::SupportedLanguage newChosenLanguage = listBox.GetCurrent();
-                if ( newChosenLanguage != chosenLanguage ) {
-                    chosenLanguage = newChosenLanguage;
-
-                    if ( isGameLanguage ) {
-                        conf.setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
-                    }
-
-                    titleBackground.restore();
-                    selectedLangBackground.restore();
-                    redrawDialogInfo( listRoi, chosenLanguage, isGameLanguage );
-                    buttonsBackground.restore();
-                    background.renderOkayCancelButtons( buttonOk, buttonCancel );
-                }
+            if ( isLanguageChanged ) {
+                titleBackground.restore();
+                selectedLangBackground.restore();
+                redrawDialogInfo( listRoi, chosenLanguage, isGameLanguage );
+                buttonsBackground.restore();
+                background.renderOkayCancelButtons( buttonOk, buttonCancel );
             }
 
             listBox.Redraw( chosenLanguage );
@@ -349,6 +356,9 @@ namespace fheroes2
 
         if ( languages.size() == 1 ) {
             Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( languages.front() ) );
+            if ( isGameLanguage ) {
+                Settings::Get().Save( Settings::configFileName );
+            }
             return languages.front();
         }
 
@@ -366,6 +376,12 @@ namespace fheroes2
             }
 
             return currentLanguage;
+        }
+
+        if ( isGameLanguage ) {
+            Settings & conf = Settings::Get();
+            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+            conf.Save( Settings::configFileName );
         }
 
         return chosenLanguage;
