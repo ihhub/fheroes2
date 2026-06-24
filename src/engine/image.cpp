@@ -347,7 +347,7 @@ namespace
         return Verify( inX, inY, outX, outY, width, height, in.width(), in.height(), out.width(), out.height() );
     }
 
-#ifdef WITH_DEBUG
+#if defined( GENERATE_COLOR_TABLE )
     // This function is only used when generating a new compressed color conversion table.
     void generateColorConversionTable( uint8_t * rgbToId, const size_t size )
     {
