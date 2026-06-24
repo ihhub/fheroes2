@@ -27,6 +27,8 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "exception.h"
+#include "image_color_conversion.h"
 #include "image_palette.h"
 
 namespace
@@ -345,6 +347,67 @@ namespace
         return Verify( inX, inY, outX, outY, width, height, in.width(), in.height(), out.width(), out.height() );
     }
 
+#ifdef WITH_DEBUG
+    // This function is only used when generating a new compressed color conversion table.
+    void generateColorConversionTable( uint8_t * rgbToId, const size_t size )
+    {
+        assert( rgbToId != nullptr );
+
+        const uint8_t * gamePalette = fheroes2::getGamePalette();
+
+        // Use the "No cycle" palette.
+        // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
+        // Plus we exclude all repeated colors.
+        constexpr uint32_t colorCount{ 219 };
+        const std::array<uint8_t, colorCount> nonCyclingUniqueColorPos{ 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
+                                                                        29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+                                                                        48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64,  65,  66,
+                                                                        67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,
+                                                                        86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99,  100, 101, 102, 103, 104,
+                                                                        105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123,
+                                                                        124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
+                                                                        143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161,
+                                                                        162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180,
+                                                                        181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
+                                                                        200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 222, 223, 224, 225, 226,
+                                                                        227, 228, 229, 230, 236, 237, 242, 243, 244, 245 };
+
+        const uint8_t * correctorY = nonCyclingUniqueColorPos.data();
+
+        for ( uint32_t id = 0; id < size; ++id ) {
+            const int32_t r = static_cast<int32_t>( id & 63 );
+            const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
+            const int32_t b = static_cast<int32_t>( id >> 12 );
+            int32_t minDistance = INT32_MAX;
+            uint8_t bestPos = 0;
+
+            const uint8_t * correctorX = correctorY;
+            const uint8_t * correctorXEnd = correctorX + colorCount;
+
+            for ( ; correctorX != correctorXEnd; ++correctorX ) {
+                const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
+
+                const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
+                const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
+                ++palette;
+                const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
+                ++palette;
+                const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
+
+                // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
+                const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
+                                         + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
+                if ( minDistance > distance ) {
+                    minDistance = distance;
+                    bestPos = *correctorX;
+                }
+            }
+
+            rgbToId[id] = bestPos;
+        }
+    }
+#endif
+
     uint8_t GetPALColorId( const uint8_t red, const uint8_t green, const uint8_t blue )
     {
         constexpr uint32_t size = 64 * 64 * 64;
@@ -353,58 +416,14 @@ namespace
         if ( !isInitialized ) {
             isInitialized = true;
 
-            const uint8_t * gamePalette = fheroes2::getGamePalette();
+            const auto table = getColorConversionTable();
 
-            // Use the "No cycle" palette.
-            // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
-            // Plus we exclude all repeated colors.
-            constexpr uint32_t colorCount{ 219 };
-            const std::array<uint8_t, colorCount> nonCyclingUniqueColorPos{ 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
-                                                                            29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-                                                                            48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64,  65,  66,
-                                                                            67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,
-                                                                            86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99,  100, 101, 102, 103, 104,
-                                                                            105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123,
-                                                                            124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
-                                                                            143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161,
-                                                                            162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180,
-                                                                            181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
-                                                                            200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 222, 223, 224, 225, 226,
-                                                                            227, 228, 229, 230, 236, 237, 242, 243, 244, 245 };
-
-            const uint8_t * correctorY = nonCyclingUniqueColorPos.data();
-
-            for ( uint32_t id = 0; id < size; ++id ) {
-                const int32_t r = static_cast<int32_t>( id & 63 );
-                const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
-                const int32_t b = static_cast<int32_t>( id >> 12 );
-                int32_t minDistance = INT32_MAX;
-                uint8_t bestPos = 0;
-
-                const uint8_t * correctorX = correctorY;
-                const uint8_t * correctorXEnd = correctorX + colorCount;
-
-                for ( ; correctorX != correctorXEnd; ++correctorX ) {
-                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
-
-                    const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
-                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
-                    ++palette;
-                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
-                    ++palette;
-                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
-
-                    // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
-                    const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
-                                             + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
-                    if ( minDistance > distance ) {
-                        minDistance = distance;
-                        bestPos = *correctorX;
-                    }
-                }
-
-                rgbToId[id] = bestPos;
+            if ( table.size() != size ) {
+                assert( table.size() == size );
+                throw fheroes2::CorruptedExecutable{ "Application is corrupted." };
             }
+
+            memcpy( rgbToId, table.data(), size );
         }
 
         return rgbToId[red + ( green << 6U ) + ( blue << 12U )];

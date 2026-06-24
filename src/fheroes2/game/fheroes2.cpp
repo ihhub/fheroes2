@@ -387,6 +387,10 @@ int main( int argc, char ** argv )
             displayMissingResourceWindow();
             return EXIT_FAILURE;
         }
+        catch ( const fheroes2::CorruptedExecutable & ex ) {
+            ERROR_LOG( ex.what() )
+            return EXIT_FAILURE;
+        }
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occurred during application runtime." )
