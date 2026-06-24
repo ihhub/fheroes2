@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
-
 #include "image_color_conversion.h"
 
 #include <array>
@@ -29,7 +27,7 @@
 namespace
 {
     constexpr size_t size{ 31153 };
-    constexpr size_t originalSize{ 64 * 64 * 64 };
+    constexpr size_t originalSize{ 64U * 64U * 64U };
 
     const std::array<uint8_t, size>
         rgbConversion{ 0x78, 0xda, 0xd4, 0xdd, 0x59, 0xa0, 0x96, 0xe5, 0x79, 0xff, 0xfb, 0xf3, 0xbf, 0x8a, 0x13, 0x02, 0x8e, 0xa8, 0x69, 0xe2, 0x80, 0x8a, 0x21, 0x06,
