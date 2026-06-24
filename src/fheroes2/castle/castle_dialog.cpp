@@ -783,7 +783,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         if ( alphaHero < 255 ) {
             bool isHeroAnimationUpdated = false;
 
-            if ( le.MouseClickLeft( dialogRoi ) || le.MouseClickRight( dialogRoi ) ) {
+            if ( le.MouseClickLeft( dialogRoi ) || le.MouseClickRight( dialogRoi ) || le.isAnyKeyPressed() ) {
                 alphaHero = 255;
                 isHeroAnimationUpdated = true;
             }
