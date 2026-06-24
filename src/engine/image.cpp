@@ -21,7 +21,6 @@
 #include "image.h"
 
 #include <algorithm>
-#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -30,6 +29,10 @@
 #include "exception.h"
 #include "image_color_conversion.h"
 #include "image_palette.h"
+
+#if defined( GENERATE_COLOR_TABLE )
+#include <array>
+#endif
 
 namespace
 {

@@ -21,6 +21,7 @@
 #include "image_color_conversion.h"
 
 #include <array>
+#include <cstddef>
 
 #include "zzlib.h"
 
