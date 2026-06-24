@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="..\engine\agg_file.cpp" />
     <ClCompile Include="..\engine\image.cpp" />
+    <ClCompile Include="..\engine\image_color_conversion.cpp" />
     <ClCompile Include="..\engine\image_palette.cpp" />
     <ClCompile Include="..\engine\image_tool.cpp" />
     <ClCompile Include="..\engine\logging.cpp" />
@@ -13,6 +14,7 @@
   <ItemGroup>
     <ClInclude Include="..\engine\agg_file.h" />
     <ClInclude Include="..\engine\image.h" />
+    <ClInclude Include="..\engine\image_color_conversion.h" />
     <ClInclude Include="..\engine\image_palette.h" />
     <ClInclude Include="..\engine\image_tool.h" />
     <ClInclude Include="..\engine\logging.h" />
