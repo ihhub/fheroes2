@@ -23,4 +23,4 @@
 #include <cstdint>
 #include <vector>
 
-std::vector<uint8_t> getColorConversionTable();
+bool getColorConversionTable( uint8_t * table, const size_t tableSize );

@@ -1332,7 +1332,11 @@ namespace
                        0x00 };
 }
 
-std::vector<uint8_t> getColorConversionTable()
+bool getColorConversionTable( uint8_t * table, const size_t tableSize )
 {
-    return Compression::unzipData( rgbConversion.data(), rgbConversion.size(), originalSize );
+    if ( tableSize != originalSize ) {
+        return false;
+    }
+
+    return Compression::unzipData( rgbConversion.data(), rgbConversion.size(), table, tableSize );
 }

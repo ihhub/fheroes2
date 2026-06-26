@@ -419,14 +419,9 @@ namespace
         if ( !isInitialized ) {
             isInitialized = true;
 
-            const auto table = getColorConversionTable();
-
-            if ( table.size() != size ) {
-                assert( table.size() == size );
+            if ( !getColorConversionTable( rgbToId, size ) ) {
                 throw fheroes2::CorruptedExecutable{ "Application is corrupted." };
             }
-
-            memcpy( rgbToId, table.data(), size );
         }
 
         return rgbToId[red + ( green << 6U ) + ( blue << 12U )];
