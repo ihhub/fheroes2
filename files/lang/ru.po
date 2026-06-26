@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2026-05-17 17:48+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -218,6 +218,11 @@ msgid ""
 msgstr ""
 "ГЛАВНОЕ\n"
 "МЕНЮ"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4465,30 +4470,6 @@ msgstr ""
 "Вы действительно хотите вернуться в главное меню игры? (Любые несохранённые "
 "изменения данной карты будут потеряны.)"
 
-msgid "Unsaved Changes"
-msgstr "Несохранённые изменения"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"На текущей карте могут быть изменения рельефа, объектов и их свойств, либо "
-"карта ещё не сохранена в файл.\n"
-"\n"
-"Вы желаете сохранить текущую карту?"
-
-msgid "Unplayable Map"
-msgstr "Неиграбельная карта"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"В данную карту невозможно сыграть. Для игры на карте следует иметь хотя бы "
-"одного игрока-человека."
-
 msgid "Start Map"
 msgstr "Играть карту"
 
@@ -4519,6 +4500,13 @@ msgstr "Сохранить текущую карту."
 
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Тестеры игры"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Возврат в главное меню игры."
@@ -4593,6 +4581,30 @@ msgstr "Карта сохранена в: "
 
 msgid "Failed to save the map."
 msgstr "Не удалось сохранить карту."
+
+msgid "Unsaved Changes"
+msgstr "Несохранённые изменения"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"На текущей карте могут быть изменения рельефа, объектов и их свойств, либо "
+"карта ещё не сохранена в файл.\n"
+"\n"
+"Вы желаете сохранить текущую карту?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"В данную карту невозможно сыграть. Для игры на карте следует иметь хотя бы "
+"одного игрока-человека."
+
+msgid "Unplayable Map"
+msgstr "Неиграбельная карта"
 
 msgid "Used to place %{object}."
 msgstr "Используется для размещения объектов типа %{object}."
@@ -5311,6 +5323,67 @@ msgstr "Эксперт"
 msgid "difficulty|Impossible"
 msgstr "Невозможная"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Тестеры игры"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Нажмите, чтобы выбрать этот цвет."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Не удалось сохранить карту."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Скорость"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Скорость"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Нажмите для возврата в главное меню."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Хотите ли Вы вернуть себе управление игрой? Возврат вступит в силу со "
+"следующего хода."
+
 msgid "and more..."
 msgstr "и т.д."
 
@@ -5721,6 +5794,10 @@ msgstr "открыть главное меню"
 
 msgid "hotkey|toggle passability"
 msgstr "переключить отображение проходимости"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "клавиша влево"
 
 msgid "hotkey|re-generate random map"
 msgstr "заново генерировать случайную карту"

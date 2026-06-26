@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -216,6 +216,11 @@ msgid ""
 msgstr ""
 "HLAVNÍ\n"
 "MENU"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4447,29 +4452,6 @@ msgstr ""
 "Přejete si vrátit se do hlavního menu hry? (Všechny neuložené změny na "
 "aktuální mapě budou ztraceny.)"
 
-msgid "Unsaved Changes"
-msgstr "Neuložené změny"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Tato mapa obsahuje změny terénu, historii akcí nebo ještě nebyla uložena do "
-"souboru.\n"
-"\n"
-"Přejete si uložit aktuální mapu?"
-
-msgid "Unplayable Map"
-msgstr "Nehratelná mapa"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Tato mapa není hratelná. Pro její spuštění je potřeba alespoň jeden člověk."
-
 msgid "Start Map"
 msgstr "Spustit mapu"
 
@@ -4500,6 +4482,13 @@ msgstr "Uložit aktuální mapu."
 
 msgid "Quit out of the map editor."
 msgstr "Ukončit editor map."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Testeři"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Vrátit se do hlavního menu hry."
@@ -4576,6 +4565,29 @@ msgstr "Mapa uložena do: "
 
 msgid "Failed to save the map."
 msgstr "Uložení mapy se nezdařilo."
+
+msgid "Unsaved Changes"
+msgstr "Neuložené změny"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Tato mapa obsahuje změny terénu, historii akcí nebo ještě nebyla uložena do "
+"souboru.\n"
+"\n"
+"Přejete si uložit aktuální mapu?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Tato mapa není hratelná. Pro její spuštění je potřeba alespoň jeden člověk."
+
+msgid "Unplayable Map"
+msgstr "Nehratelná mapa"
 
 msgid "Used to place %{object}."
 msgstr "Používá se k umístění %{object}."
@@ -5317,6 +5329,66 @@ msgstr "Expert"
 msgid "difficulty|Impossible"
 msgstr "Nehratelná"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testeři"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Kliknout pro výběr barvy."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Uložení mapy se nezdařilo."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Animace"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Animace"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klikni pro návrat do hlavního menu."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Chcete převzít kontrolu zpět od AI? Změna se projeví až v příštím tahu."
+
 msgid "and more..."
 msgstr "a víc..."
 
@@ -5722,6 +5794,10 @@ msgstr "Otevřít hlavní menu hry"
 
 msgid "hotkey|toggle passability"
 msgstr "Přepnout průchodnost"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Vlevo"
 
 #, fuzzy
 msgid "hotkey|re-generate random map"

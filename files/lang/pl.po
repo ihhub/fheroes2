@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2026-04-07 19:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -218,6 +218,11 @@ msgid ""
 msgstr ""
 "MENU\n"
 "GŁÓWNE"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4452,30 +4457,6 @@ msgstr ""
 "Czy chcesz wrócić do głównego menu? (Wszelkie niezapisane zmiany w bieżącej "
 "mapie zostaną utracone.)"
 
-msgid "Unsaved Changes"
-msgstr "Niezapisane zmiany"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Ta mapa zawiera zmiany terenu, historię cofania lub nie została jeszcze "
-"zapisana do pliku.\n"
-"\n"
-"Czy chcesz zapisać bieżącą mapę?"
-
-msgid "Unplayable Map"
-msgstr "Niegrywalna mapa"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Ta mapa nie jest grywalna. Na mapie musi być przynajmniej jeden gracz-"
-"człowiek."
-
 msgid "Start Map"
 msgstr "Uruchom mapę"
 
@@ -4506,6 +4487,13 @@ msgstr "Zapisz obecną mapę."
 
 msgid "Quit out of the map editor."
 msgstr "Wyjdź z edytora map."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Testerzy gry"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Wróć do głównego menu gry."
@@ -4581,6 +4569,30 @@ msgstr "Mapa zapisana do: "
 
 msgid "Failed to save the map."
 msgstr "Nie udało się zapisać mapy."
+
+msgid "Unsaved Changes"
+msgstr "Niezapisane zmiany"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Ta mapa zawiera zmiany terenu, historię cofania lub nie została jeszcze "
+"zapisana do pliku.\n"
+"\n"
+"Czy chcesz zapisać bieżącą mapę?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Ta mapa nie jest grywalna. Na mapie musi być przynajmniej jeden gracz-"
+"człowiek."
+
+msgid "Unplayable Map"
+msgstr "Niegrywalna mapa"
 
 msgid "Used to place %{object}."
 msgstr "Umieść %{object}."
@@ -5288,6 +5300,67 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Niemożliwy"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testerzy gry"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Kliknij, aby wybrać kolor."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Nie udało się zapisać mapy."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Szybkość"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Szybkość"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Kliknij, aby wrócić do głównego menu."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Czy chcesz odzyskać kontrolę z rąk AI? Efekt zadziała tylko w następnej "
+"turze."
+
 msgid "and more..."
 msgstr "i więcej..."
 
@@ -5694,6 +5767,10 @@ msgstr "otwórz główne menu gry"
 
 msgid "hotkey|toggle passability"
 msgstr "pokaż/ukryj przejezdność"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "w lewo"
 
 msgid "hotkey|re-generate random map"
 msgstr "zregeneruj losową mapę"

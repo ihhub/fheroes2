@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2026                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,17 +20,48 @@
 
 #pragma once
 
-#include <stdexcept>
+#include <cstdint>
+
+#include "image.h"
+#include "math_base.h"
+#include "ui_button.h"
+#include "ui_scrollbar.h"
+#include "ui_tool.h"
+
+class LocalEvent;
 
 namespace fheroes2
 {
-    class InvalidDataResources : public std::logic_error
+    class HorizontalSlider final
     {
-        using std::logic_error::logic_error;
-    };
+    public:
+        ~HorizontalSlider() = default;
+        HorizontalSlider( const HorizontalSlider & ) = delete;
+        HorizontalSlider & operator=( const HorizontalSlider & ) = delete;
 
-    class CorruptedExecutable : public std::logic_error
-    {
-        using std::logic_error::logic_error;
+        HorizontalSlider( const int32_t width, const Point position, const int minIndex, const int maxIndex, const int currentIndex );
+
+        int getCurrentValue() const
+        {
+            return _scrollbar.currentIndex();
+        }
+
+        void setRange( const int minIndex, const int maxIndex );
+
+        bool processEvents( LocalEvent & le );
+
+        void disable();
+
+        void enable();
+
+    private:
+        Scrollbar _scrollbar;
+        Button _buttonLeft;
+        Button _buttonRight;
+
+        Image _scrollbarBackup;
+
+        TimedEventValidator _timedButtonLeft;
+        TimedEventValidator _timedButtonRight;
     };
 }

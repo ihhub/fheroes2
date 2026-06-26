@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -214,6 +214,11 @@ msgid ""
 msgstr ""
 "HAUPT-\n"
 "MENÜ"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -3023,7 +3028,7 @@ msgid ""
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
-"Ihr betretet die Arena und stehet einem Rudel bösartiger Löwen gegenüber. "
+"Ihr betretet die Arena und steht einem Rudel bösartiger Löwen gegenüber. "
 "Unter jubelndem Beifall der Menge besiegt Ihr sie mit Leichtigkeit. "
 "Beeindruckt von Euren Fähigkeiten, erklärt sich der alte Gladiatorentrainer "
 "bereit, Euch in einer Fertigkeit Eurer Wahl zu unterrichten."
@@ -4506,30 +4511,6 @@ msgstr ""
 "Möchtet Ihr zum Hauptmenü des Spiels zurückkehren? (Alle nicht gespeicherten "
 "Änderungen an der aktuellen Karte gehen verloren)."
 
-msgid "Unsaved Changes"
-msgstr "Ungespeicherte Änderungen"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Diese Karte hat entweder Geländeänderungen, eine Rückgängig-Historie oder "
-"wurde noch nicht in einer Datei gespeichert.\n"
-"\n"
-"Möchtet Ihr die aktuelle Karte speichern?"
-
-msgid "Unplayable Map"
-msgstr "Nicht spielbare Karte"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Diese Karte ist nicht spielbar. Ihr benötigt mindestens einen menschlichen "
-"Spieler, damit die Karte spielbar ist."
-
 msgid "Start Map"
 msgstr "Karte starten"
 
@@ -4560,6 +4541,13 @@ msgstr "Speichern der aktuellen Karte."
 
 msgid "Quit out of the map editor."
 msgstr "Den Editor verlassen."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Spieltester"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Zum Hauptmenü zurückkehren."
@@ -4643,6 +4631,30 @@ msgstr "Karte gespeichert in: "
 
 msgid "Failed to save the map."
 msgstr "Speichern der Karte fehlgeschlagen."
+
+msgid "Unsaved Changes"
+msgstr "Ungespeicherte Änderungen"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Diese Karte hat entweder Geländeänderungen, eine Rückgängig-Historie oder "
+"wurde noch nicht in einer Datei gespeichert.\n"
+"\n"
+"Möchtet Ihr die aktuelle Karte speichern?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Diese Karte ist nicht spielbar. Ihr benötigt mindestens einen menschlichen "
+"Spieler, damit die Karte spielbar ist."
+
+msgid "Unplayable Map"
+msgstr "Nicht spielbare Karte"
 
 msgid "Used to place %{object}."
 msgstr "Wird verwendet, um %{object} zu platzieren."
@@ -5381,6 +5393,66 @@ msgstr "Experte"
 msgid "difficulty|Impossible"
 msgstr "Unmögl."
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Spieltester"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klickt, um die Farbe auszuwählen."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Speichern der Karte fehlgeschlagen."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Animation"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Animation"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Möchtet Ihr die Kontrolle über die KI zurückgewinnen? Der Effekt tritt erst "
+"in der nächsten Runde ein."
+
 msgid "and more..."
 msgstr "und mehr..."
 
@@ -5790,6 +5862,10 @@ msgstr "Spiel-Hauptmenü öffnen"
 
 msgid "hotkey|toggle passability"
 msgstr "Begehbarkeit ein-/ausschalten"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Standard: Links"
 
 msgid "hotkey|re-generate random map"
 msgstr "Zufällige Karte neu generieren"
@@ -7605,8 +7681,8 @@ msgstr ""
 
 msgid "The soldiers living in the fort teach you a few new defensive tricks."
 msgstr ""
-"Die im Fort lebenden Soldaten geben Euch einige wertvolle Verteidigungstips "
-"bei."
+"Die im Fort lebenden Soldaten bringen Euch einige wertvolle "
+"Verteidigungstricks bei."
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
@@ -9383,8 +9459,8 @@ msgstr ""
 msgid ""
 "The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
-"Euer Held verfügt über Ländereien, welche Euch jeden Tag X Goldstücke in "
-"Steuereinnahmen einbringen."
+"Euer Held verfügt über Ländereien, welche Euch jeden Tag %{count} Goldstücke "
+"in Steuereinnahmen einbringen."
 
 msgid "Blue"
 msgstr "Blau"
@@ -10511,7 +10587,7 @@ msgid "Titan"
 msgstr "Titan"
 
 msgid "Titans"
-msgstr "Titane"
+msgstr "Titanen"
 
 msgid "Skeletons"
 msgstr "Skelette"
@@ -12996,19 +13072,3 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
-
-#~ msgid ""
-#~ "Cell\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Zellen-\n"
-#~ "Details"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "und viele, viele andere Mitwirkende und Unterstützer!"
-
-#~ msgid "AI"
-#~ msgstr "KI"
-
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Klickt, dass dieser Held KI-gesteuert ist."

@@ -204,6 +204,10 @@ namespace Interface
 
         void _removeObjectsAsAction( std::set<uint32_t> objectUIDs, const std::set<Maps::ObjectGroup> & groups );
 
+        bool _prepareMapForGameplay();
+
+        bool _runAutoPlaytest();
+
         EditorPanel _editorPanel;
 
         int32_t _areaSelectionStartTileId{ -1 };
