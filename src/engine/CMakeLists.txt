@@ -67,6 +67,7 @@ target_link_libraries(
     fluidsynth
     atomic
 	)
+add_definitions(-DGENERATE_COLOR_TABLE)
 else()
 target_link_libraries(
 	engine

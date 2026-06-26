@@ -23,19 +23,11 @@ set(
 	-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wdouble-promotion -Wfloat-conversion -Wfloat-equal
 	-Wredundant-decls -Wshadow -Wswitch-default -Wundef -Wunused
 	)
-if(PS2)
-set(
-	GNU_CXX_WARN_OPTS
-	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Wold-style-cast
-	-Woverloaded-virtual -Wsuggest-override -fpermissive # TODO: Fix -fpermissive errors
-	)
-else()
 set(
 	GNU_CXX_WARN_OPTS
 	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Wextra-semi -Wmissing-declarations -Wold-style-cast
 	-Woverloaded-virtual -Wsuggest-override
 	)
-endif()
 set(
 	MSVC_CC_WARN_OPTS
 	/W4

@@ -908,11 +908,11 @@ namespace
             sema.option = 0;
             _vsync_sema_id = CreateSema(&sema);
 
-            _texture = calloc(1, sizeof(GSTEXTURE));
+            _texture = reinterpret_cast<GSTEXTURE*>(calloc(1, sizeof(GSTEXTURE)));
 
             _gsglobal = gsKit_init_global();  
-            _gsglobal->Width = (int)resolutionInfo.gameWidth;
-            _gsglobal->Height = (int)resolutionInfo.gameHeight;
+            _gsglobal->Width = static_cast<int>(resolutionInfo.gameWidth);
+            _gsglobal->Height = static_cast<int>(resolutionInfo.gameHeight);
 	        _gsglobal->PSM = GS_PSM_CT24;
 	        _gsglobal->PSMZ = GS_PSMZ_16S;
             _gsglobal->ZBuffering = GS_SETTING_OFF;
@@ -931,11 +931,11 @@ namespace
             gsKit_add_vsync_handler(vsync_handler);
 
             
-            _texture->Width = (int)resolutionInfo.gameWidth;
-            _texture->Height = (int)resolutionInfo.gameHeight;
-            _texture->PSM      = GS_PSM_T8;
-            _texture->ClutPSM  = GS_PSM_CT32;
-            _texture->Mem = memalign(128, gsKit_texture_size_ee(_texture->Width, _texture->Height, _texture->PSM));
+            _texture->Width = static_cast<int>(resolutionInfo.gameWidth);
+            _texture->Height = static_cast<int>(resolutionInfo.gameHeight);
+            _texture->PSM      = GS_PSM_CT32;
+            _texture->ClutPSM  = 0;
+            _texture->Mem = reinterpret_cast<u32*>(memalign(128, gsKit_texture_size_ee(_texture->Width, _texture->Height, _texture->PSM)));
             _texture->Filter = isNearestScaling() ? GS_FILTER_NEAREST : GS_FILTER_LINEAR;
             _texture->Delayed  = 0;
             _texture->Vram     = 0;
@@ -1804,6 +1804,7 @@ namespace fheroes2
     void Display::release()
     {
         _engine->clear();
+        _engine.reset();
         _cursor.reset();
         clear();
 
