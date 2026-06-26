@@ -20,7 +20,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
-#include <vector>
 
 bool getColorConversionTable( uint8_t * table, const size_t tableSize );
