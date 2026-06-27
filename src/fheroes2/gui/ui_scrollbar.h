@@ -47,6 +47,11 @@ namespace fheroes2
             Image::operator=( std::move( image ) );
         }
 
+        void setImage( Sprite image )
+        {
+            Image::operator=( std::move( image ) );
+        }
+
         void setArea( const Rect & area )
         {
             _area = area;

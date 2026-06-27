@@ -127,6 +127,11 @@ namespace Interface
             _scrollbar.setImage( std::move( image ) );
         }
 
+        void setScrollBarImage( fheroes2::Sprite image )
+        {
+            _scrollbar.setImage( std::move( image ) );
+        }
+
         void updateScrollBarImage()
         {
             const int32_t scrollBarWidth = _scrollbar.width();
