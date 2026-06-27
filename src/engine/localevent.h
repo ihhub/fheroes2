@@ -183,7 +183,7 @@ namespace fheroes2
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 }
 
-class LocalEvent
+class LocalEvent final
 {
 public:
     friend class EventProcessing::EventEngine;
@@ -516,6 +516,8 @@ private:
     static void onRenderDeviceResetEvent();
 
     LocalEvent();
+
+    ~LocalEvent() = default;
 
     void onMouseMotionEvent( fheroes2::Point position );
     void onMouseButtonEvent( const bool isPressed, const MouseButtonType buttonType, fheroes2::Point position );
