@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <utility>
 
 #include "image.h"
 #include "math_base.h"

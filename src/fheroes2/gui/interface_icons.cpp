@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
