@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-05-17 17:48+0300\n"
+"PO-Revision-Date: 2026-06-27 19:00+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -223,6 +223,8 @@ msgid ""
 "AUTO\n"
 "PLAY-TEST"
 msgstr ""
+"АВТО ТЕСТ\n"
+"КАРТЫ"
 
 msgid ""
 "NEW\n"
@@ -4417,21 +4419,19 @@ msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 "На карте можно разместить не более %{count} объектов типа \"%{objects}\"."
 
-#, fuzzy
 msgid ""
 "To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Вы действительно хотите загрузить новую карту? (Любые несохранённые "
-"изменения данной карты будут потеряны.)"
+"Для выхода из fheroes2, нажмите кнопку \\\"Домой\\\" или проведите пальцем "
+"вверх. (Любые несохранённые изменения данной карты будут потеряны.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to quit? (Any unsaved changes to the current map will "
 "be lost.)"
 msgstr ""
-"Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
-"данной карты будут потеряны.)"
+"Вы уверены, что хотите выйти? (Любые несохранённые изменения данной карты "
+"будут потеряны.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Не удалось создать карту с указанными параметрами."
@@ -4501,12 +4501,11 @@ msgstr "Сохранить текущую карту."
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
-#, fuzzy
 msgid "Auto Playtest"
-msgstr "Тестеры игры"
+msgstr "Авто тестирование игры на карте"
 
 msgid "Run an automatic playtest of the map."
-msgstr ""
+msgstr "Запустить авто тестирование игры на карте."
 
 msgid "Return to the game's Main Menu."
 msgstr "Возврат в главное меню игры."
@@ -5323,66 +5322,61 @@ msgstr "Эксперт"
 msgid "difficulty|Impossible"
 msgstr "Невозможная"
 
-#, fuzzy
 msgid "Auto Playtest Results"
-msgstr "Тестеры игры"
+msgstr "Результаты тестирования карты"
 
 msgid "1 playthrough"
 msgid_plural "%{count} playthroughs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{count} прогон"
+msgstr[1] "%{count} прогона"
+msgstr[2] "%{count} прогонов"
 
 msgid " playthrough(s) reached the specified time limit"
-msgstr ""
+msgstr " превышений заданного ограничения времени прогона."
 
-#, fuzzy
 msgid "Click to close the dialog."
-msgstr "Нажмите, чтобы выбрать этот цвет."
+msgstr "Нажмите, чтобы закрыть диалоговое окно."
 
 msgid "Won %{percent}% of playthroughs."
-msgstr ""
+msgstr "Выиграл %{percent}% прогонов."
 
-#, fuzzy
 msgid "Failed to prepare the map for auto playtest."
-msgstr "Не удалось сохранить карту."
+msgstr "Ошибка подготовки карты для авто тестирования."
 
 msgid "autoPlaytest|Number of playthroughs:"
-msgstr ""
+msgstr "Количество прогонов:"
 
 msgid "autoPlaytest|Max days per playthrough:"
-msgstr ""
+msgstr "Максимум дней на прогон:"
 
-#, fuzzy
 msgid "autoPlaytest|Animation"
-msgstr "Скорость"
+msgstr "Анимация"
 
-#, fuzzy
 msgid "autoPlaytest|Animation speed:"
-msgstr "Скорость"
+msgstr "Скорость анимации:"
 
 msgid "autoPlaytest|Sound Effects"
-msgstr ""
+msgstr "Звуковые эффекты"
 
 msgid "Left-clicking at any point will interrupt the playtest."
-msgstr ""
+msgstr "Нажатие левой кнопки мыши в любой момент прервёт тестирование."
 
-#, fuzzy
 msgid "Click to run an automated map playtest."
-msgstr "Нажмите для возврата в главное меню."
+msgstr "Нажмите, чтобы запустить авто тестирование игры на карте."
 
 msgid ""
 "Auto playtest\n"
 "(playthrough %{current} of %{total})"
 msgstr ""
+"Авто тестирование карты\n"
+"(прогон %{current} из %{total})"
 
-#, fuzzy
 msgid ""
 "Do you want to interrupt the automatic playtest? The effect will take place "
 "only on the next turn."
 msgstr ""
-"Хотите ли Вы вернуть себе управление игрой? Возврат вступит в силу со "
-"следующего хода."
+"Хотите ли Вы прервать авто тестирование игры на карте? Тестирование "
+"прервётся только на следующем ходу."
 
 msgid "and more..."
 msgstr "и т.д."
@@ -5795,9 +5789,8 @@ msgstr "открыть главное меню"
 msgid "hotkey|toggle passability"
 msgstr "переключить отображение проходимости"
 
-#, fuzzy
 msgid "hotkey|auto playtest"
-msgstr "клавиша влево"
+msgstr "авто тестирование игры на карте"
 
 msgid "hotkey|re-generate random map"
 msgstr "заново генерировать случайную карту"
