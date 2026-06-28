@@ -210,17 +210,24 @@ namespace
                 ressurectPoints = std::min( ressurectPoints, attacker.GetMissingHitPoints() );
             }
 
-            // first effect: target will need to kill this ressurected creatures
+            // The ressurection affects the course of the battle in two ways:
+            // 1. In this turn target (and other powerful troops) will need to spend
+            // part of it's atack to kill this ressurected creatures
+
             // average number of powerful troops in target's army
             constexpr double avgNumberOfPowerfulTargets{ 1.5 };
+
             attackValue += ressurectPoints / avgNumberOfPowerfulTargets;
 
-            // second effect: attacker troop becomes more powerful and can kill enemies faster
+            // 2. Attacker troop becomes more powerful and in next turns will kill enemies faster.
+            // As result target's army will do less turns
+
             // average number of troops like attacker in attacker's army
             constexpr double avgNumOfAttackers{ 2.0 };
 
             // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
             constexpr double avgBattleTurns{ 5.0 };
+
             const double powerRatio = 1
                                       + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAttackers, 0.0 )
                                             // *0.5 to get average hit points of the troop in the battle
