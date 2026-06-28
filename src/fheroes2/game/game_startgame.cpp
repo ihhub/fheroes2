@@ -1324,7 +1324,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 _gameArea.QueueEventProcessing();
             }
             else {
-                if ( fheroes2::cursor().isFocusActive() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                if ( fheroes2::Cursor::isFocusActive() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                     int scrollDirection = SCROLL_NONE;
 
                     if ( isScrollLeft( le.getMouseCursorPos() ) ) {

@@ -629,10 +629,10 @@ namespace fheroes2
             return *this;
         }
 
-        Image::operator=( std::move( sprite ) );
-
         std::swap( _x, sprite._x );
         std::swap( _y, sprite._y );
+
+        Image::operator=( std::move( sprite ) );
 
         return *this;
     }
