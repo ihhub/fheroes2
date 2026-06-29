@@ -60,10 +60,10 @@
 #endif
 
 #ifdef __PS2__
+#include <dmaKit.h>
+#include <gsKit.h>
 #include <kernel.h>
 #include <malloc.h>
-#include <gsKit.h>
-#include <dmaKit.h>
 #endif
 
 #include "image_palette.h"
@@ -113,7 +113,7 @@ namespace
         return resolutions[id];
     }
 
-#if !defined( TARGET_PS_VITA ) && !defined(__PS2__)
+#if !defined( TARGET_PS_VITA ) && !defined( __PS2__ )
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
         return value.gameWidth < fheroes2::Display::DEFAULT_WIDTH || value.gameHeight < fheroes2::Display::DEFAULT_HEIGHT;
@@ -273,7 +273,7 @@ namespace
     const uint8_t * currentPalette = PALPalette();
 
 // If SDL library is used
-#if !defined( TARGET_PS_VITA ) && !defined(__PS2__)
+#if !defined( TARGET_PS_VITA ) && !defined( __PS2__ )
     class BaseSDLRenderer
     {
     protected:
@@ -805,13 +805,12 @@ namespace
             }
         }
     };
-#elif defined(__PS2__)
+#elif defined( __PS2__ )
     static int _vsync_sema_id = 0;
 
-
-    int vsync_handler(int reason)
+    int vsync_handler( int reason )
     {
-        iSignalSema(_vsync_sema_id);
+        iSignalSema( _vsync_sema_id );
 
         ExitHandler();
         return 0;
@@ -862,8 +861,8 @@ namespace
 
     private:
         SDL_Window * _window{ nullptr };
-        GSGLOBAL *_gsglobal{nullptr};
-        GSTEXTURE *_texture{ nullptr };
+        GSGLOBAL * _gsglobal{ nullptr };
+        GSTEXTURE * _texture{ nullptr };
         fheroes2::Rect _destRect;
         uint32_t _palette[256];
 
@@ -875,21 +874,19 @@ namespace
             PS2_FULLSCREEN_HEIGHT = 480,
         };
 
-
         void clear() override
         {
             if ( _texture != nullptr ) {
-                gsKit_TexManager_free(_gsglobal, _texture);
+                gsKit_TexManager_free( _gsglobal, _texture );
 
-                gsKit_vram_clear(_gsglobal);
-                gsKit_deinit_global(_gsglobal);
-                SDL_free(_texture->Mem);
-                SDL_free(_texture);
+                gsKit_vram_clear( _gsglobal );
+                gsKit_deinit_global( _gsglobal );
+                SDL_free( _texture->Mem );
+                SDL_free( _texture );
 
                 _texture = nullptr;
             }
         }
-
 
         bool allocate( fheroes2::ResolutionInfo & resolutionInfo, bool isFullScreen ) override
         {
@@ -906,92 +903,82 @@ namespace
             sema.init_count = 0;
             sema.max_count = 1;
             sema.option = 0;
-            _vsync_sema_id = CreateSema(&sema);
+            _vsync_sema_id = CreateSema( &sema );
 
-            _texture = reinterpret_cast<GSTEXTURE*>(calloc(1, sizeof(GSTEXTURE)));
+            _texture = reinterpret_cast<GSTEXTURE *>( calloc( 1, sizeof( GSTEXTURE ) ) );
 
-            _gsglobal = gsKit_init_global();  
-            _gsglobal->Width = static_cast<int>(resolutionInfo.gameWidth);
-            _gsglobal->Height = static_cast<int>(resolutionInfo.gameHeight);
-	        _gsglobal->PSM = GS_PSM_CT24;
-	        _gsglobal->PSMZ = GS_PSMZ_16S;
+            _gsglobal = gsKit_init_global();
+            _gsglobal->Width = static_cast<int>( resolutionInfo.gameWidth );
+            _gsglobal->Height = static_cast<int>( resolutionInfo.gameHeight );
+            _gsglobal->PSM = GS_PSM_CT24;
+            _gsglobal->PSMZ = GS_PSMZ_16S;
             _gsglobal->ZBuffering = GS_SETTING_OFF;
             _gsglobal->Dithering = GS_SETTING_OFF;
-            
-            dmaKit_init(D_CTRL_RELE_OFF, D_CTRL_MFD_OFF, D_CTRL_STS_UNSPEC, D_CTRL_STD_OFF, D_CTRL_RCYC_8, 1 << DMA_CHANNEL_GIF);
-    
-            dmaKit_chan_init(DMA_CHANNEL_GIF);
-    
-            gsKit_init_screen(_gsglobal);
 
-            gsKit_mode_switch(_gsglobal, GS_ONESHOT);   // queue + flip every frame
+            dmaKit_init( D_CTRL_RELE_OFF, D_CTRL_MFD_OFF, D_CTRL_STS_UNSPEC, D_CTRL_STD_OFF, D_CTRL_RCYC_8, 1 << DMA_CHANNEL_GIF );
 
-            gsKit_TexManager_init(_gsglobal);
+            dmaKit_chan_init( DMA_CHANNEL_GIF );
 
-            gsKit_add_vsync_handler(vsync_handler);
+            gsKit_init_screen( _gsglobal );
 
-            
-            _texture->Width = static_cast<int>(resolutionInfo.gameWidth);
-            _texture->Height = static_cast<int>(resolutionInfo.gameHeight);
-            _texture->PSM      = GS_PSM_CT32;
-            _texture->ClutPSM  = 0;
-            _texture->Mem = reinterpret_cast<u32*>(memalign(128, gsKit_texture_size_ee(_texture->Width, _texture->Height, _texture->PSM)));
+            gsKit_mode_switch( _gsglobal, GS_ONESHOT ); // queue + flip every frame
+
+            gsKit_TexManager_init( _gsglobal );
+
+            gsKit_add_vsync_handler( vsync_handler );
+
+            _texture->Width = static_cast<int>( resolutionInfo.gameWidth );
+            _texture->Height = static_cast<int>( resolutionInfo.gameHeight );
+            _texture->PSM = GS_PSM_CT32;
+            _texture->ClutPSM = 0;
+            _texture->Mem = reinterpret_cast<u32 *>( memalign( 128, gsKit_texture_size_ee( _texture->Width, _texture->Height, _texture->PSM ) ) );
             _texture->Filter = isNearestScaling() ? GS_FILTER_NEAREST : GS_FILTER_LINEAR;
-            _texture->Delayed  = 0;
-            _texture->Vram     = 0;
+            _texture->Delayed = 0;
+            _texture->Vram = 0;
             _texture->VramClut = 0;
             return true;
         }
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
-            const uint8_t *src = display.image();
+            const uint8_t * src = display.image();
 
-            uint32_t *dst = (uint32_t*)_texture->Mem;
+            uint32_t * dst = (uint32_t *)_texture->Mem;
 
             const int pixels = display.width() * display.height();
-        
-            for (int i = 0; i < pixels; ++i) {
+
+            for ( int i = 0; i < pixels; ++i ) {
                 dst[i] = _palette[src[i]];
             }
 
-            gsKit_clear(_gsglobal, GS_SETREG_RGBAQ(0x00, 0x00, 0x00, 0x00, 0x00)); // Clean the previous texture
-            gsKit_TexManager_invalidate(_gsglobal, _texture);
-            gsKit_TexManager_bind(_gsglobal, _texture);
+            gsKit_clear( _gsglobal, GS_SETREG_RGBAQ( 0x00, 0x00, 0x00, 0x00, 0x00 ) ); // Clean the previous texture
+            gsKit_TexManager_invalidate( _gsglobal, _texture );
+            gsKit_TexManager_bind( _gsglobal, _texture );
 
-            gsKit_texture_upload(_gsglobal, _texture);
-            gsKit_prim_sprite_texture(
-                _gsglobal,
-                _texture,
-                0, 0,
-                0, 0,
-                _gsglobal->Width, _gsglobal->Height,
-                _texture->Width, _texture->Height,
-                0,
-                GS_SETREG_RGBAQ(0xFF,0xFF,0xFF,0xFF,0)
-            );
+            gsKit_texture_upload( _gsglobal, _texture );
+            gsKit_prim_sprite_texture( _gsglobal, _texture, 0, 0, 0, 0, _gsglobal->Width, _gsglobal->Height, _texture->Width, _texture->Height, 0,
+                                       GS_SETREG_RGBAQ( 0xFF, 0xFF, 0xFF, 0xFF, 0 ) );
 
-            gsKit_queue_exec(_gsglobal);
+            gsKit_queue_exec( _gsglobal );
             gsKit_finish();
 
             gsKit_vsync_wait();
-            gsKit_sync_flip(_gsglobal);
-            gsKit_TexManager_nextFrame(_gsglobal);
+            gsKit_sync_flip( _gsglobal );
+            gsKit_TexManager_nextFrame( _gsglobal );
         }
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if (colorIds.size() != 256 || _texture == nullptr )
+            if ( colorIds.size() != 256 || _texture == nullptr )
                 return;
 
-            for (size_t i = 0; i < 256; ++i) {
-                const uint8_t* value = currentPalette + colorIds[i] * 3;
+            for ( size_t i = 0; i < 256; ++i ) {
+                const uint8_t * value = currentPalette + colorIds[i] * 3;
 
-                    uint32_t c = (0x80 << 24) | (value[0] << 16) | (value[1] << 8) | value[2];
+                uint32_t c = ( 0x80 << 24 ) | ( value[0] << 16 ) | ( value[1] << 8 ) | value[2];
 
-                    _palette[i] = (c & 0xFF00FF00) | ((c & 0x00FF0000) >> 16) | ((c & 0x000000FF) << 16);
+                _palette[i] = ( c & 0xFF00FF00 ) | ( ( c & 0x00FF0000 ) >> 16 ) | ( ( c & 0x000000FF ) << 16 );
             }
-
         }
 
         bool isMouseCursorActive() const override
@@ -1537,7 +1524,7 @@ namespace
                 return;
 
             generatePalette( colorIds, _surface );
-            
+
             if ( _surface->format->BitsPerPixel == 8 ) {
                 const int returnCode = SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
                 if ( returnCode < 0 ) {

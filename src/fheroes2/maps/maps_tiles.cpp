@@ -612,7 +612,7 @@ int32_t Maps::Tile::getTileIndependentPassability() const
 
         if ( type == MP2::OBJ_REEFS ) {
             // Reefs are inaccessible.
-            return static_cast<int32_t>(0);
+            return static_cast<int32_t>( 0 );
         }
 
         if ( !part.isPassabilityTransparent() && !isObjectPartShadow( part ) ) {
@@ -889,8 +889,7 @@ std::string Maps::Tile::String() const
     const MP2::MapObjectType objectType = getMainObjectType();
 
     os << "******* Tile info *******" << std::endl
-       << "index           : " << _index << ", "
-       << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
+       << "index           : " << _index << ", " << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
        << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
        << "region Id       : " << _region << std::endl
        << "ground type     : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
