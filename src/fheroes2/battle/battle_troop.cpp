@@ -1623,7 +1623,7 @@ fheroes2::Point Battle::Unit::GetBackPoint() const
 
 fheroes2::Point Battle::Unit::GetCenterPoint() const
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite(), GetFrame() );
+    const fheroes2::Sprite & sprite = GameResource::getImage( GetMonsterSprite(), GetFrame() );
 
     const fheroes2::Rect & pos = _position.GetRect();
     const int32_t centerY = pos.y + pos.height + sprite.y() / 2 - 10;

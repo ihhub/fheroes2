@@ -2058,7 +2058,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
     if ( isValidId( heroId ) )
         switch ( portraitType ) {
         case PORT_BIG:
-            return fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroId ), 0 );
+            return GameResource::getImage( ICN::getHeroPortraitIcnId( heroId ), 0 );
         case PORT_MEDIUM: {
             // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
             // TODO: find a better way to store these images, ideally in agg_image.cpp file.
@@ -2068,7 +2068,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
                 return iter->second;
             }
 
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroId ), 0 );
+            const fheroes2::Sprite & original = GameResource::getImage( ICN::getHeroPortraitIcnId( heroId ), 0 );
             fheroes2::Sprite output( 50, 47 );
             fheroes2::Resize( original, output );
 
@@ -2076,16 +2076,16 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
         }
         case PORT_SMALL:
             if ( heroId == Heroes::DEBUG_HERO ) {
-                return fheroes2::AGG::GetICN( ICN::MINIPORT, BRAX - 1 );
+                return GameResource::getImage( ICN::MINIPORT, BRAX - 1 );
             }
 
             // Since hero IDs start from 1 we have to deduct 1 from the ID.
-            return fheroes2::AGG::GetICN( ICN::MINIPORT, heroId - 1 );
+            return GameResource::getImage( ICN::MINIPORT, heroId - 1 );
         default:
             break;
         }
 
-    return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
+    return GameResource::getImage( ICN::UNKNOWN, 0 );
 }
 
 void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
@@ -2104,9 +2104,9 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
-            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::PORTXTRA, 0 );
-            const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
-            const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, getManaIndexSprite() );
+            const fheroes2::Sprite & background = GameResource::getImage( ICN::PORTXTRA, 0 );
+            const fheroes2::Sprite & mobility = GameResource::getImage( ICN::MOBILITY, GetMobilityIndexSprite() );
+            const fheroes2::Sprite & mana = GameResource::getImage( ICN::MANA, getManaIndexSprite() );
 
             const int barw = 7;
 
@@ -2132,7 +2132,7 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
     }
 
     if ( Modes( Heroes::SLEEPER ) ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC4, 14 );
+        const fheroes2::Sprite & sprite = GameResource::getImage( ICN::MISC4, 14 );
         fheroes2::Image sleeperBG( sprite.width() - 4, sprite.height() - 4 );
         sleeperBG.fill( 0 );
 

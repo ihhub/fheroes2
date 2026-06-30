@@ -57,7 +57,7 @@ namespace Interface
     {
         const CursorRestorer cursorRestorer( false );
 
-        const fheroes2::Sprite & windowImage = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
+        const fheroes2::Sprite & windowImage = GameResource::getImage( ICN::QWIKINFO, 0 );
 
         LocalEvent & le = LocalEvent::Get();
         const fheroes2::Rect windowRoi = Interface::getPopupWindowPosition( le.getMouseCursorPos(), interfaceArea, { windowImage.width(), windowImage.height() } );

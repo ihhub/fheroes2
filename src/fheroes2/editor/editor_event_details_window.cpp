@@ -86,7 +86,7 @@ namespace Editor
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         if ( isDefaultScreenSize ) {
-            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+            const fheroes2::Sprite & backgroundImage = GameResource::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
             fheroes2::Copy( backgroundImage, 0, 0, display, dialogRoi );
         }
 
@@ -137,7 +137,7 @@ namespace Editor
 
         const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 17 );
+        const fheroes2::Sprite & buttonImage = GameResource::getImage( minibuttonIcnId, 17 );
         const int32_t buttonWidth = buttonImage.width();
 
         fheroes2::Button buttonDeleteArtifact( artifactRoi.x + ( artifactRoi.width - buttonWidth ) / 2, artifactRoi.y + artifactRoi.height + 5, minibuttonIcnId, 17, 18 );
@@ -391,7 +391,7 @@ namespace Editor
                 eventMetadata.artifact = 0;
                 eventMetadata.artifactMetadata = 0;
 
-                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( eventMetadata.artifact ).IndexSprite64() );
+                const fheroes2::Sprite & artifactImage = GameResource::getImage( ICN::ARTIFACT, Artifact( eventMetadata.artifact ).IndexSprite64() );
                 fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
 
                 display.render( artifactRoi );

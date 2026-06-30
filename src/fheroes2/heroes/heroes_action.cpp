@@ -2708,7 +2708,7 @@ namespace
             // composite sprite
             int32_t offsetX = 0;
             int32_t offsetY = 0;
-            const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+            const fheroes2::Sprite & border = GameResource::getImage( ICN::STRIP, 12 );
 
             const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
 

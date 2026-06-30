@@ -97,7 +97,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             }
         }
 
-        const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
+        const fheroes2::Sprite & monster = GameResource::getImage( ICN::MONS32, troop->GetSpriteIndex() );
         const fheroes2::Text text( std::move( monstersCountRepresentation ), fheroes2::FontType::smallWhite() );
 
         const int32_t posX = isRightToLeftRender ? ( cx + static_cast<int32_t>( chunk * ( count - 1 ) ) ) : ( cx - static_cast<int32_t>( chunk * count ) );

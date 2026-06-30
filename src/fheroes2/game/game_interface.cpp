@@ -195,7 +195,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
             Dialog::FrameBorder::RenderRegular( radarRect );
         }
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 ), display, radarArea.x, radarArea.y );
+        fheroes2::Blit( GameResource::getImage( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 ), display, radarArea.x, radarArea.y );
 
         buttonExit.draw();
     };

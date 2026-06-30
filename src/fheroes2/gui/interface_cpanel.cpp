@@ -57,8 +57,8 @@ void Interface::ControlPanel::ResetTheme()
 {
     const int icn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    _buttons.reset( new Buttons( fheroes2::AGG::GetICN( icn, 4 ), fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 12 ), fheroes2::AGG::GetICN( icn, 10 ),
-                                 fheroes2::AGG::GetICN( icn, 8 ) ) );
+    _buttons.reset( new Buttons( GameResource::getImage( icn, 4 ), GameResource::getImage( icn, 0 ), GameResource::getImage( icn, 12 ), GameResource::getImage( icn, 10 ),
+                                 GameResource::getImage( icn, 8 ) ) );
 }
 
 void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )

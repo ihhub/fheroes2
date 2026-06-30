@@ -807,8 +807,8 @@ namespace fheroes2
         fheroes2::Image racePortrait( portPos.width, portPos.height );
 
         auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex, const bool applyRandomPalette ) {
-            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
-            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
+            fheroes2::SubpixelResize( GameResource::getImage( ICN::STRIP, bkgIndex ), racePortrait );
+            const fheroes2::Sprite & heroSprite = GameResource::getImage( icnId, 1 );
             if ( applyRandomPalette ) {
                 fheroes2::Sprite tmp = heroSprite;
                 fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );

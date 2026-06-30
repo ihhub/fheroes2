@@ -106,7 +106,7 @@ namespace
         const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
 
         const fheroes2::Rect & dialogRoi = dialogFrame.GetArea();
-        const fheroes2::Sprite & buttonLearnImage = fheroes2::AGG::GetICN( buttonLearnIcnID, 0 );
+        const fheroes2::Sprite & buttonLearnImage = GameResource::getImage( buttonLearnIcnID, 0 );
 
         fheroes2::Point offset;
         offset.x = dialogRoi.x + dialogRoi.width / 2 - buttonLearnImage.width() - 20;
@@ -142,7 +142,7 @@ namespace
 
         const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
         fheroes2::ButtonSprite buttonHero
-            = fheroes2::makeButtonWithBackground( offset.x, offset.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
+            = fheroes2::makeButtonWithBackground( offset.x, offset.y, GameResource::getImage( icnHeroes, 0 ), GameResource::getImage( icnHeroes, 1 ), display );
 
         const fheroes2::Text text{ std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ),
                                    fheroes2::FontType::normalWhite() };

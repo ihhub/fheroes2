@@ -52,13 +52,13 @@ namespace fheroes2
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
 
-        const Sprite & shadowTop = AGG::GetICN( ICN::OBJNMUL2, 60 );
-        const Sprite & shadowMiddle = AGG::GetICN( ICN::OBJNMUL2, 71 );
-        const Sprite & shadowBottom = AGG::GetICN( ICN::OBJNMUL2, 72 );
-        const Sprite & lighthouseTop = AGG::GetICN( ICN::OBJNMUL2, 59 );
-        const Sprite & lighthouseMiddle = AGG::GetICN( ICN::OBJNMUL2, 61 );
-        const Sprite & lighthouseBottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
-        const Sprite & lighthouseLight = AGG::GetICN( ICN::OBJNMUL2, 62 );
+        const Sprite & shadowTop = GameResource::getImage( ICN::OBJNMUL2, 60 );
+        const Sprite & shadowMiddle = GameResource::getImage( ICN::OBJNMUL2, 71 );
+        const Sprite & shadowBottom = GameResource::getImage( ICN::OBJNMUL2, 72 );
+        const Sprite & lighthouseTop = GameResource::getImage( ICN::OBJNMUL2, 59 );
+        const Sprite & lighthouseMiddle = GameResource::getImage( ICN::OBJNMUL2, 61 );
+        const Sprite & lighthouseBottom = GameResource::getImage( ICN::OBJNMUL2, 73 );
+        const Sprite & lighthouseLight = GameResource::getImage( ICN::OBJNMUL2, 62 );
 
         const int32_t topOffset = fheroes2::tileWidthPx - lighthouseTop.height();
 

@@ -40,13 +40,13 @@ namespace
 
     int32_t topHeight( const bool isEvilInterface )
     {
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 0 );
+        const fheroes2::Sprite & image = GameResource::getImage( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 0 );
         return image.height();
     }
 
     int32_t bottomHeight( const bool isEvilInterface )
     {
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 2 );
+        const fheroes2::Sprite & image = GameResource::getImage( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 2 );
         return image.height();
     }
 
@@ -54,9 +54,9 @@ namespace
     {
         const int icnId = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
 
-        const fheroes2::Sprite & image3 = fheroes2::AGG::GetICN( icnId, 3 );
-        const fheroes2::Sprite & image4 = fheroes2::AGG::GetICN( icnId, 4 );
-        const fheroes2::Sprite & image5 = fheroes2::AGG::GetICN( icnId, 5 );
+        const fheroes2::Sprite & image3 = GameResource::getImage( icnId, 3 );
+        const fheroes2::Sprite & image4 = GameResource::getImage( icnId, 4 );
+        const fheroes2::Sprite & image5 = GameResource::getImage( icnId, 5 );
 
         int32_t widthLeft = image3.width();
         widthLeft = std::max( widthLeft, image4.width() );
@@ -69,9 +69,9 @@ namespace
     {
         const int icnId = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
 
-        const fheroes2::Sprite & image0 = fheroes2::AGG::GetICN( icnId, 0 );
-        const fheroes2::Sprite & image1 = fheroes2::AGG::GetICN( icnId, 1 );
-        const fheroes2::Sprite & image2 = fheroes2::AGG::GetICN( icnId, 2 );
+        const fheroes2::Sprite & image0 = GameResource::getImage( icnId, 0 );
+        const fheroes2::Sprite & image1 = GameResource::getImage( icnId, 1 );
+        const fheroes2::Sprite & image2 = GameResource::getImage( icnId, 2 );
 
         int32_t widthRight = image0.width();
         widthRight = std::max( widthRight, image1.width() );
@@ -132,9 +132,9 @@ void Dialog::NonFixedFrameBox::redraw()
     const int32_t overallLeftWidth = leftWidth( isEvilInterface );
 
     // right-top
-    const fheroes2::Sprite & part0 = fheroes2::AGG::GetICN( buybuild, 0 );
+    const fheroes2::Sprite & part0 = GameResource::getImage( buybuild, 0 );
     // left-top
-    const fheroes2::Sprite & part4 = fheroes2::AGG::GetICN( buybuild, 4 );
+    const fheroes2::Sprite & part4 = GameResource::getImage( buybuild, 4 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -148,11 +148,11 @@ void Dialog::NonFixedFrameBox::redraw()
     for ( uint32_t i = 0; i < _middleFragmentCount; ++i ) {
         const int32_t chunkHeight = middleLeftHeight >= activeAreaHeight ? activeAreaHeight : middleLeftHeight;
         // left-middle
-        const fheroes2::Sprite & sl = fheroes2::AGG::GetICN( buybuild, 5 );
+        const fheroes2::Sprite & sl = GameResource::getImage( buybuild, 5 );
         fheroes2::Blit( sl, 0, 10, display, _position.x + overallLeftWidth - sl.width(), _position.y, sl.width(), chunkHeight );
 
         // right-middle
-        const fheroes2::Sprite & sr = fheroes2::AGG::GetICN( buybuild, 1 );
+        const fheroes2::Sprite & sr = GameResource::getImage( buybuild, 1 );
         fheroes2::Blit( sr, 0, 10, display, _position.x + overallLeftWidth, _position.y, sr.width(), chunkHeight );
 
         middleLeftHeight -= chunkHeight;
@@ -162,9 +162,9 @@ void Dialog::NonFixedFrameBox::redraw()
     _position.y = posBeforeMiddle + _middleFragmentHeight;
 
     // right-bottom
-    const fheroes2::Sprite & part2 = fheroes2::AGG::GetICN( buybuild, 2 );
+    const fheroes2::Sprite & part2 = GameResource::getImage( buybuild, 2 );
     // left-bottom
-    const fheroes2::Sprite & part6 = fheroes2::AGG::GetICN( buybuild, 6 );
+    const fheroes2::Sprite & part6 = GameResource::getImage( buybuild, 6 );
 
     fheroes2::Blit( part6, display, _position.x + overallLeftWidth - part6.width(), _position.y );
     fheroes2::Blit( part2, display, _position.x + overallLeftWidth, _position.y );

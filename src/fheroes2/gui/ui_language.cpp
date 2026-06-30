@@ -297,7 +297,7 @@ namespace fheroes2
         // In the engine we use CP1252 for these characters.
         if ( ( language == SupportedLanguage::English ) && ( resourceLanguage == SupportedLanguage::French ) ) {
             // Force generate CP1252 alphabet when English language is selected for French assets.
-            AGG::updateLanguageDependentResources( SupportedLanguage::French, false );
+            GameResource::updateLanguageDependentResources( SupportedLanguage::French, false );
         }
         else {
             // To generate CP1252 alphabet for French assets we must assume that these assets are not original.
@@ -306,7 +306,7 @@ namespace fheroes2
                 = ( language == SupportedLanguage::English )
                   || ( language == resourceLanguage && resourceLanguage != SupportedLanguage::French && resourceLanguage != SupportedLanguage::Russian );
 
-            AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+            GameResource::updateLanguageDependentResources( language, isOriginalResourceLanguage );
         }
     }
 

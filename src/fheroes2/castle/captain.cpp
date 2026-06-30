@@ -206,8 +206,8 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
             return {};
         }
 
-        fheroes2::Sprite portrait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
-        const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::getFlagIcnId( GetColor() ), 0 );
+        fheroes2::Sprite portrait = GameResource::getImage( portraitIcnId, 0 );
+        const fheroes2::Image & flag = GameResource::getImage( ICN::getFlagIcnId( GetColor() ), 0 );
 
         const fheroes2::Point & offset = GetFlagOffset( GetRace() );
         fheroes2::Blit( flag, portrait, offset.x, offset.y );
@@ -217,17 +217,17 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
     case PORT_SMALL:
         switch ( GetRace() ) {
         case Race::KNGT:
-            return fheroes2::AGG::GetICN( ICN::MINICAPT, 0 );
+            return GameResource::getImage( ICN::MINICAPT, 0 );
         case Race::BARB:
-            return fheroes2::AGG::GetICN( ICN::MINICAPT, 1 );
+            return GameResource::getImage( ICN::MINICAPT, 1 );
         case Race::SORC:
-            return fheroes2::AGG::GetICN( ICN::MINICAPT, 2 );
+            return GameResource::getImage( ICN::MINICAPT, 2 );
         case Race::WRLK:
-            return fheroes2::AGG::GetICN( ICN::MINICAPT, 3 );
+            return GameResource::getImage( ICN::MINICAPT, 3 );
         case Race::WZRD:
-            return fheroes2::AGG::GetICN( ICN::MINICAPT, 4 );
+            return GameResource::getImage( ICN::MINICAPT, 4 );
         case Race::NECR:
-            return fheroes2::AGG::GetICN( ICN::MINICAPT, 5 );
+            return GameResource::getImage( ICN::MINICAPT, 5 );
         default:
             break;
         }
@@ -238,7 +238,7 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
 
     // We shouldn't even reach this code!
     assert( 0 );
-    return fheroes2::AGG::GetICN( -1, 0 );
+    return GameResource::getImage( -1, 0 );
 }
 
 void Captain::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
@@ -252,7 +252,7 @@ void Captain::PortraitRedraw( const int32_t px, const int32_t py, const Portrait
         return;
     }
 
-    const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, getManaIndexSprite() );
+    const fheroes2::Sprite & mana = GameResource::getImage( ICN::MANA, getManaIndexSprite() );
 
     const int iconWidth = Interface::IconsBar::getItemWidth();
     const int iconHeight = Interface::IconsBar::getItemHeight();
