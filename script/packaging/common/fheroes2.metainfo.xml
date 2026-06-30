@@ -42,6 +42,7 @@
       <description>
         <p>Changes in v1.1.17 (30 June 2026):</p>
         <ul>
+          <li>update the Russian translation</li>
           <li>greatly speed up application startup</li>
           <li>update the German translation</li>
           <li>update the Ukrainian translation</li>
