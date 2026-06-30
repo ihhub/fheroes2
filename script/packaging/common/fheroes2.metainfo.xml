@@ -54,7 +54,7 @@
           <li>fix assertion hit for AI battle during Teleport spell evaluation</li>
           <li>make AI heroes stay in castles if they get a movement bonus the next day</li>
           <li>fix the title alignment in the resolution window</li>
-          <li>add initial version of Auto Play-test feature for the Editor</li>
+          <li>add an initial version of the Auto Playtest feature for the Editor</li>
           <li>fix validation issue when updating enemy army in Battle Only mode</li>
           <li>update the Swedish translation</li>
           <li>remove assertion as it leads to a crash while loading a map</li>
