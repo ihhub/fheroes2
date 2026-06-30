@@ -236,7 +236,7 @@ namespace
         listBox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listBox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listBox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        listBox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listBox.setScrollBarImage( GameResource::getImage( listIcnId, 4 ) );
         listBox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
         listBox.SetListContent( resolutions );
         listBox.updateScrollBarImage();

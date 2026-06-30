@@ -99,7 +99,7 @@ namespace
             heroSpeedIconId = 4;
         }
 
-        const fheroes2::Sprite & heroSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, heroSpeedIconId );
+        const fheroes2::Sprite & heroSpeedIcon = GameResource::getImage( ICN::SPANEL, heroSpeedIconId );
         std::string value;
         if ( heroSpeed == 10 ) {
             value = _( "Jump" );
@@ -123,7 +123,7 @@ namespace
             aiSpeedIconId = 4;
         }
 
-        const fheroes2::Sprite & aiSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, aiSpeedIconId );
+        const fheroes2::Sprite & aiSpeedIcon = GameResource::getImage( ICN::SPANEL, aiSpeedIconId );
 
         std::string value;
         if ( aiSpeed == 0 ) {
@@ -142,7 +142,7 @@ namespace
     void drawInterfaceSettings( const fheroes2::Rect & optionRoi )
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
+        const fheroes2::Sprite & interfaceThemeIcon = GameResource::getImage( ICN::SPANEL, isEvilInterface ? 17 : 16 );
 
         fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
@@ -154,11 +154,11 @@ namespace
             const bool spellcast = conf.BattleAutoSpellcast();
             std::string value = spellcast ? _( "Auto Resolve" ) : _( "Auto, No Spells" );
 
-            const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
+            const fheroes2::Sprite & autoBattleIcon = GameResource::getImage( ICN::CSPANEL, spellcast ? 7 : 6 );
             fheroes2::drawOption( optionRoi, autoBattleIcon, _( "Battles" ), std::move( value ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
+            const fheroes2::Sprite & autoBattleIcon = GameResource::getImage( ICN::SPANEL, 18 );
             fheroes2::drawOption( optionRoi, autoBattleIcon, _( "Battles" ), _( "combatMode|Manual" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }

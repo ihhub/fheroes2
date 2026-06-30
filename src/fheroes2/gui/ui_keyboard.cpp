@@ -184,7 +184,7 @@ namespace
             _textInputArea.y = windowRoi.y + inputAreaOffsetFromWindowTop;
 
             // Draw the text input background.
-            const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
+            const fheroes2::Sprite & initialWindow = GameResource::getImage( ICN::REQBKG, 0 );
             fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
 
             if ( _isEvilInterface ) {
@@ -1050,8 +1050,8 @@ namespace
         renderButtons( buttons, windowRoi.getPosition() + offsetFromWindowBorders, display, windowWidth );
 
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const fheroes2::Sprite & okayButtonReleasedImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
-        const fheroes2::Sprite & okayButtonPressedImage = fheroes2::AGG::GetICN( buttonIcnId, 1 );
+        const fheroes2::Sprite & okayButtonReleasedImage = GameResource::getImage( buttonIcnId, 0 );
+        const fheroes2::Sprite & okayButtonPressedImage = GameResource::getImage( buttonIcnId, 1 );
 
         const fheroes2::Point okayButtonPosition{ windowRoi.x + ( windowRoi.width - okayButtonReleasedImage.width() ) / 2, windowRoi.y + windowRoi.height - 35 };
 

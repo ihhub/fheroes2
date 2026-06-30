@@ -44,7 +44,7 @@ int Dialog::BuyBoat( bool enable )
 
     Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), fheroes2::boxAreaWidthPx );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATWIND, 0 );
+    const fheroes2::Sprite & sprite = GameResource::getImage( ICN::BOATWIND, 0 );
     fheroes2::Text text{ _( "Build a new ship:" ), fheroes2::FontType::normalWhite() };
     const int spacer = 10;
 

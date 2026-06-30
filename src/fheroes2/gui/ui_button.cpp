@@ -450,12 +450,12 @@ namespace fheroes2
 
     const Sprite & Button::_getPressed() const
     {
-        return AGG::GetICN( _icnId, _pressedIndex );
+        return GameResource::getImage( _icnId, _pressedIndex );
     }
 
     const Sprite & Button::_getReleased() const
     {
-        return AGG::GetICN( _icnId, _releasedIndex );
+        return GameResource::getImage( _icnId, _releasedIndex );
     }
 
     const Sprite & ButtonSprite::_getPressed() const
@@ -490,8 +490,8 @@ namespace fheroes2
 
         switch ( buttonTypes ) {
         case Dialog::YES | Dialog::NO: {
-            const Sprite & yesButtonSprite = AGG::GetICN( buttonYesIcnID, 0 );
-            const Sprite & noButtonSprite = AGG::GetICN( buttonNoIcnID, 0 );
+            const Sprite & yesButtonSprite = GameResource::getImage( buttonYesIcnID, 0 );
+            const Sprite & noButtonSprite = GameResource::getImage( buttonNoIcnID, 0 );
 
             const int32_t horizontalFreeSpace = area.width - yesButtonSprite.width() - noButtonSprite.width();
             const int32_t padding = horizontalFreeSpace / 4;
@@ -508,8 +508,8 @@ namespace fheroes2
         }
 
         case Dialog::OK | Dialog::CANCEL: {
-            const Sprite & okayButtonSprite = AGG::GetICN( buttonOkayIcnID, 0 );
-            const Sprite & cancelButtonSprite = AGG::GetICN( buttonCancelIcnID, 0 );
+            const Sprite & okayButtonSprite = GameResource::getImage( buttonOkayIcnID, 0 );
+            const Sprite & cancelButtonSprite = GameResource::getImage( buttonCancelIcnID, 0 );
             const int32_t horizontalFreeSpace = area.width - okayButtonSprite.width() - cancelButtonSprite.width();
             const int32_t padding = horizontalFreeSpace / 4;
             assert( horizontalFreeSpace > 0 );
@@ -525,7 +525,7 @@ namespace fheroes2
         }
 
         case Dialog::OK: {
-            const Sprite & okayButtonSprite = AGG::GetICN( buttonOkayIcnID, 0 );
+            const Sprite & okayButtonSprite = GameResource::getImage( buttonOkayIcnID, 0 );
 
             offset.x = area.x + ( area.width - okayButtonSprite.width() ) / 2;
             offset.y = area.y + area.height - okayButtonSprite.height();
@@ -534,7 +534,7 @@ namespace fheroes2
         }
 
         case Dialog::CANCEL: {
-            const Sprite & cancelButtonSprite = AGG::GetICN( buttonCancelIcnID, 0 );
+            const Sprite & cancelButtonSprite = GameResource::getImage( buttonCancelIcnID, 0 );
 
             offset.x = area.x + ( area.width - cancelButtonSprite.width() ) / 2;
             offset.y = area.y + area.height - cancelButtonSprite.height();
@@ -563,7 +563,7 @@ namespace fheroes2
     ButtonGroup::ButtonGroup( const int icnID )
     {
         // Button ICNs contain released and pressed states so we divide by two to find the number of buttons they correspond to.
-        const int32_t buttonCount = static_cast<int32_t>( fheroes2::AGG::GetICNCount( icnID ) ) / 2;
+        const int32_t buttonCount = static_cast<int32_t>( GameResource::getImageCount( icnID ) ) / 2;
         for ( int32_t i = 0; i < buttonCount; ++i ) {
             createButton( 0, 0, icnID, i * 2, i * 2 + 1, i );
         }
@@ -718,7 +718,7 @@ namespace fheroes2
     void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID )
     {
         // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-        const Sprite & background = AGG::GetICN( backgroundIcnID, 0 );
+        const Sprite & background = GameResource::getImage( backgroundIcnID, 0 );
         // you are trying to apply transform on an image that is single-layered
         assert( !pressed.singleLayer() && !released.singleLayer() );
         const uint8_t * releasedTransform = released.transform();
@@ -824,8 +824,8 @@ namespace fheroes2
 
         const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
 
-        const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
-        const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
+        const Sprite & originalReleased = GameResource::getImage( icnId, 0 );
+        const Sprite & originalPressed = GameResource::getImage( icnId, 1 );
 
         released = resizeButton( originalReleased, buttonSize );
         pressed = resizeButton( originalPressed, buttonSize );
@@ -878,8 +878,8 @@ namespace fheroes2
 
         assert( buttonSize.height > 0 );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), buttonSize );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), buttonSize );
+        released = resizeButton( GameResource::getImage( emptyButtonIcnID, 0 ), buttonSize );
+        pressed = resizeButton( GameResource::getImage( emptyButtonIcnID, 1 ), buttonSize );
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );

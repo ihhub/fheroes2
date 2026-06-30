@@ -57,7 +57,7 @@ void Cursor::SetThemes( const int theme, const bool force /* = false */ )
     default:
         break;
     }
-    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & theme );
+    const fheroes2::Sprite & spr = GameResource::getImage( icnID, 0xFF & theme );
     SetOffset( theme, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
 
     fheroes2::Cursor & cursor = fheroes2::cursor();

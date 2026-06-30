@@ -241,7 +241,7 @@ namespace
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
 
                 // Verify that the font is present and it is not corrupted.
-                fheroes2::AGG::GetICN( ICN::FONT, 0 );
+                GameResource::getImage( ICN::FONT, 0 );
             }
             catch ( ... ) {
                 displayMissingResourceWindow();

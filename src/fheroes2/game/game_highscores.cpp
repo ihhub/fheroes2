@@ -112,8 +112,8 @@ namespace
 
         // Animation frames: 0 - static part, 1-6 - animation, 7 and 8 - attacking sprite. We analyze and render here only 0-6 frames.
         for ( uint32_t i = 0; i < 7; ++i ) {
-            const fheroes2::Sprite & topMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animationIndex.front() + i );
-            const fheroes2::Sprite & bottomMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animationIndex.back() + i );
+            const fheroes2::Sprite & topMonsterSprite = GameResource::getImage( ICN::MINIMON, animationIndex.front() + i );
+            const fheroes2::Sprite & bottomMonsterSprite = GameResource::getImage( ICN::MINIMON, animationIndex.back() + i );
 
             // We search for the most top sprite offset of the top monster sprite, the most bottom offset of the bottom monster.
             int32_t offset = topMonsterSprite.y();
@@ -128,7 +128,7 @@ namespace
             }
 
             for ( const uint32_t index : animationIndex ) {
-                const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, index + i );
+                const fheroes2::Sprite & monsterSprite = GameResource::getImage( ICN::MINIMON, index + i );
 
                 offset = monsterSprite.x();
                 if ( offset < roi.x ) {
@@ -168,7 +168,7 @@ namespace
             const uint32_t monsterAnimationId
                 = monsterAnimationSequence[( position.x + offsetY + data.dayCount + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
             const uint32_t secondaryMonsterAnimationIndex = getMonster( data.rating ).GetSpriteIndex() * 9 + 1 + monsterAnimationId;
-            const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
+            const fheroes2::Sprite & secondaryMonsterSprite = GameResource::getImage( ICN::MINIMON, secondaryMonsterAnimationIndex );
             fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + position.x + monsterOffsetX,
                             secondaryMonsterSprite.y() + offsetY + monsterOffsetY );
 
@@ -194,9 +194,9 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Draw background.
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
+        const fheroes2::Sprite & background = GameResource::getImage( ICN::HSBKG, 0 );
         fheroes2::Copy( background, 0, 0, display, position.x, position.y, background.width(), background.height() );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, titleImageIndex ), display, position.x + 50, position.y + 31 );
+        fheroes2::Blit( GameResource::getImage( ICN::HISCORE, titleImageIndex ), display, position.x + 50, position.y + 31 );
 
         fheroes2::Text text( "", fheroes2::FontType::normalWhite() );
 
@@ -226,7 +226,7 @@ namespace
             // Render static part of monster animation.
             const Monster monster = getMonster( data.rating );
             const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
-            const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
+            const fheroes2::Sprite & baseMonsterSprite = GameResource::getImage( ICN::MINIMON, baseMonsterAnimationIndex );
             fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + position.x + 554, baseMonsterSprite.y() + offsetY + 91 );
 
             offsetY += highScoreEntryStepY;
@@ -343,7 +343,7 @@ namespace
 
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
+        const fheroes2::Sprite & back = GameResource::getImage( ICN::HSBKG, 0 );
 
         const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
 
