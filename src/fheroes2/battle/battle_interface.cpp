@@ -2715,7 +2715,8 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
 
 void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
 {
-    const fheroes2::Sprite & sprite = GameResource::getImage( ICN::getCastleIcnId( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
+    const fheroes2::Sprite & sprite
+        = GameResource::getImage( ICN::getCastleIcnId( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
 
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
@@ -3983,7 +3984,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     }
     else {
         missile = GameResource::getImage( static_cast<int>( Monster::GetMissileICN( monsterID ) ),
-                                         static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+                                          static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
 
         // The projectile has to hit the target but not go through it so its end position is shifted in the direction to the shooter.
         endPosShift.x = reverse ? ( missile.width() / 2 ) : -( missile.width() / 2 );
