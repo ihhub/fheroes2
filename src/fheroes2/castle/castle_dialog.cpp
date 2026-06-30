@@ -780,19 +780,31 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         }
 
-        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_ITEM_UPDATE_DELAY ) ) {
-            alphaHero += 9;
-            if ( alphaHero >= 255 ) {
-                alphaHero = 255;
+        if ( alphaHero < 255 ) {
+            bool isHeroAnimationUpdated = false;
 
-                // Hero fade-in animation is finished, we can set up his army bar.
-                bottomArmyBar.SetArmy( &hero->GetArmy() );
+            if ( le.MouseClickLeft( dialogRoi ) || le.MouseClickRight( dialogRoi ) || le.isAnyKeyPressed() ) {
+                alphaHero = 255;
+                isHeroAnimationUpdated = true;
+            }
+            else if ( Game::validateAnimationDelay( Game::DelayType::CASTLE_ITEM_UPDATE_DELAY ) ) {
+                alphaHero += 9;
+                isHeroAnimationUpdated = true;
             }
 
-            fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
+            if ( isHeroAnimationUpdated ) {
+                if ( alphaHero >= 255 ) {
+                    alphaHero = 255;
 
-            if ( !needRedraw ) {
-                display.render( dialogRoi );
+                    // Hero fade-in animation is finished, we can set up his army bar.
+                    bottomArmyBar.SetArmy( &hero->GetArmy() );
+                }
+
+                fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
+
+                if ( !needRedraw ) {
+                    display.render( dialogRoi );
+                }
             }
         }
 
