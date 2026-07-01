@@ -785,7 +785,9 @@ namespace
         case MP2::OBJ_ARTESIAN_SPRING:
         case MP2::OBJ_BARROW_MOUNDS:
         case MP2::OBJ_CAVE:
+        case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_EXCAVATION:
@@ -795,8 +797,10 @@ namespace
         case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_PEASANT_HUT:
         case MP2::OBJ_RUINS:
+        case MP2::OBJ_STABLES:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_WATER_ALTAR:
@@ -2254,7 +2258,9 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_ARTESIAN_SPRING:
     case MP2::OBJ_BARROW_MOUNDS:
     case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
     case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_EARTH_ALTAR:
     case MP2::OBJ_EXCAVATION:
@@ -2264,8 +2270,10 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_MAGIC_GARDEN:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_RUINS:
+    case MP2::OBJ_STABLES:
     case MP2::OBJ_TREE_CITY:
     case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_TROLL_BRIDGE:
     case MP2::OBJ_WAGON_CAMP:
     case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_WATER_ALTAR:
