@@ -24,6 +24,7 @@
 #include "game_static.h"
 
 #include <array>
+#include <limits>
 
 #include "heroes.h"
 #include "mp2.h"
