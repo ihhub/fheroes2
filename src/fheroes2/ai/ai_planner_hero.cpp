@@ -2488,13 +2488,15 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     ObjectValidator objectValidator( hero, _pathfinder, *this );
     ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator,
+    const bool isFutureObjectPredictionAllowed{ Difficulty::isFutureObjectPredictionAllowedForAI( Game::getDifficulty() ) };
+
+    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator, isFutureObjectPredictionAllowed,
                                  &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
         // Dimension door path does not include any objects on the way.
         if ( !isDimensionDoor ) {
             for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
                 const bool isValidObject = objectValidator.isCurrentlyValid( pair.first );
-                const int32_t dayToBecomeValid = objectValidator.whenGoingToBeValidInDays( pair.first );
+                const int32_t dayToBecomeValid = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( pair.first ) : 0;
 
                 if ( !isValidObject && dayToBecomeValid < 1 ) {
                     // This is not a valid object and it is not going to be valid in the future.
@@ -2511,6 +2513,8 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                     extraValue = valueStorage.value( pair, 0 );
                 }
                 else {
+                    assert( isFutureObjectPredictionAllowed );
+
                     const auto path = _pathfinder.buildPath( pair.first, false );
                     assert( !path.empty() );
                     assert( path.back().GetIndex() == pair.first );
@@ -2577,7 +2581,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     for ( const auto & [idx, objType] : _mapActionObjects ) {
         const bool isCurrentlyValid = objectValidator.isCurrentlyValid( idx );
-        const int32_t daysToBeAvailable = objectValidator.whenGoingToBeValidInDays( idx );
+        const int32_t daysToBeAvailable = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( idx ) : 0;
 
         if ( !isCurrentlyValid && daysToBeAvailable < 1 ) {
             // This is not a valid object and it is not going to be valid in the future.
@@ -2611,6 +2615,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             value = valueStorage.value( { idx, objType }, dist );
         }
         else {
+            assert( isFutureObjectPredictionAllowed );
             value = valueStorage.futureValue( { idx, objType }, dist );
         }
 
