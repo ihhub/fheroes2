@@ -25,7 +25,11 @@ file(STRINGS ${CMAKE_SOURCE_DIR}/version.txt FHEROES2_VERSION LIMIT_COUNT 1 REGE
 
 project(fheroes2 VERSION ${FHEROES2_VERSION} LANGUAGES C CXX)
 
+if(PS2)
+set(CMAKE_CXX_STANDARD 23)
+else()
 set(CMAKE_CXX_STANDARD 17)
+endif()
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(CMakeDependentOption)
@@ -56,7 +60,9 @@ set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL2)
 #
 find_package(${USE_SDL_VERSION} REQUIRED)
 find_package(${USE_SDL_VERSION}_mixer REQUIRED)
+if(NOT PS2)
 find_package(ZLIB REQUIRED)
+endif()
 find_package(Threads)
 
 if(ENABLE_IMAGE)

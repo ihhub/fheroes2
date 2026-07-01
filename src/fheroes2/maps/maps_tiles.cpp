@@ -580,7 +580,7 @@ int Maps::Tile::getBoatDirection() const
     return Direction::UNKNOWN;
 }
 
-int Maps::Tile::getTileIndependentPassability() const
+int32_t Maps::Tile::getTileIndependentPassability() const
 {
     // Tile-independent passability is based purely on object parts located on this tile.
     // We need to run through all object parts on the ground level to calculate the resulting passability.
@@ -594,7 +594,7 @@ int Maps::Tile::getTileIndependentPassability() const
     // In other words, we have to go through object parts in the reverse order as they are being rendered.
     //
     // Top object parts do not affect passability.
-    int passability = DIRECTION_ALL;
+    int32_t passability = DIRECTION_ALL;
 
     const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
         if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
@@ -612,7 +612,7 @@ int Maps::Tile::getTileIndependentPassability() const
 
         if ( type == MP2::OBJ_REEFS ) {
             // Reefs are inaccessible.
-            return 0;
+            return static_cast<int32_t>( 0 );
         }
 
         if ( !part.isPassabilityTransparent() && !isObjectPartShadow( part ) ) {
@@ -889,8 +889,7 @@ std::string Maps::Tile::String() const
     const MP2::MapObjectType objectType = getMainObjectType();
 
     os << "******* Tile info *******" << std::endl
-       << "index           : " << _index << ", "
-       << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
+       << "index           : " << _index << ", " << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
        << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
        << "region Id       : " << _region << std::endl
        << "ground type     : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl

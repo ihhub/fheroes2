@@ -162,7 +162,7 @@ namespace
         }
     }
 
-    bool setNextObjectInGroup( int & objectIndex, const Maps::ObjectGroup group )
+    bool setNextObjectInGroup( int32_t & objectIndex, const Maps::ObjectGroup group )
     {
         if ( objectIndex < 0 ) {
             return false;
@@ -179,7 +179,7 @@ namespace
         return true;
     }
 
-    bool setPreviousObjectInGroup( int & objectIndex )
+    bool setPreviousObjectInGroup( int32_t & objectIndex )
     {
         if ( objectIndex < 0 ) {
             return false;

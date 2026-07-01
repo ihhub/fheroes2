@@ -812,7 +812,7 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
     return isPickupObject( objectType );
 }
 
-int MP2::getActionObjectDirection( const MapObjectType objectType )
+int32_t MP2::getActionObjectDirection( const MapObjectType objectType )
 {
     switch ( objectType ) {
     case OBJ_ARTIFACT:
