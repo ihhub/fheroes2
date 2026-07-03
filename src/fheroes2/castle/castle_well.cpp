@@ -357,13 +357,21 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
     std::string textString = _( "Available" );
     textString += ':';
 
-    fheroes2::Text text( std::move( textString ), fheroes2::FontType::smallWhite() );
-    const int32_t availableTextLength{ text.width() };
-    const int32_t availableTextOffset{ offset.x + std::min( ( 137 - availableTextLength ) / 2, 24 ) };
-    text.draw( availableTextOffset, offset.y + 2, background );
+    fheroes2::Text text( std::to_string( population ), fheroes2::FontType::normalYellow() );
+    const int32_t populationOffsetX{ 109 - text.width() / 2 };
+    text.draw( offset.x + populationOffsetX, offset.y, background );
 
-    text.set( std::to_string( population ), fheroes2::FontType::normalYellow() );
-    text.draw( std::max( availableTextOffset + availableTextLength + 5, offset.x + 109 - text.width() / 2 ), offset.y, background );
+    const int32_t textLength{ 102 };
+    const int32_t allowedTextLength{ std::min( populationOffsetX, textLength ) };
+
+    text.set( std::move( textString ), fheroes2::FontType::smallWhite() );
+    if ( text.width() > allowedTextLength ) {
+        text.fitToOneRow( allowedTextLength );
+        text.draw( offset.x, offset.y + 2, background );
+    }
+    else {
+        text.draw( offset.x + ( textLength - text.width() ) / 2, offset.y + 2, background );
+    }
 }
 
 void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
