@@ -361,7 +361,7 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
     const int32_t populationOffsetX{ 109 - text.width() / 2 };
     text.draw( offset.x + populationOffsetX, offset.y, background );
 
-    const int32_t textLength{ 102 };
+    const int32_t textLength{ 106 };
     const int32_t allowedTextLength{ std::min( populationOffsetX, textLength ) };
 
     text.set( std::move( textString ), fheroes2::FontType::smallWhite() );
