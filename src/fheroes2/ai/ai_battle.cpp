@@ -196,6 +196,11 @@ namespace
         }
 
         if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) || attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+            const bool isExtraLogicAllowed = Difficulty::isBasicAIBattleLogicApplicable( Game::getDifficulty(), attacker.isControlHuman() );
+            if ( !isExtraLogicAllowed ) {
+                return attackValue;
+            }
+
             const uint32_t futureKilled = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
 
             uint32_t ressurectPoints{ 0 };
@@ -210,28 +215,23 @@ namespace
                 ressurectPoints = std::min( ressurectPoints, attacker.GetMissingHitPoints() );
             }
 
-            // The ressurection affects the course of the battle in two ways:
-            // 1. In this turn target (and other powerful troops) will need to spend
-            // part of it's atack to kill this ressurected creatures
-
-            // average number of powerful troops in target's army
+            // The Soul Eater and HP Drain abilities affect the course of the battle in two ways:
+            // 1. During the turn, the target (and other powerful troops) would need to
+            //    attack the current monster (attacker) that is going to be resurrected.
             constexpr double avgNumberOfPowerfulTargets{ 1.5 };
-
             attackValue += ressurectPoints / avgNumberOfPowerfulTargets;
 
-            // 2. Attacker troop becomes more powerful and in next turns will kill enemies faster.
-            // As result target's army will do less turns
+            // 2. The attacker would become stronger and during the next turn would be able to make more damage.
+            //    As a result, the defender's army would make less turns.
 
-            // average number of troops like attacker in attacker's army
+            // Average number of troops like attacker in attacker's army.
             constexpr double avgNumOfAttackers{ 2.0 };
 
-            // average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns)
+            // Average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns).
             constexpr double avgBattleTurns{ 5.0 };
 
-            const double powerRatio = 1
-                                      + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAttackers, 0.0 )
-                                            // *0.5 to get average hit points of the troop in the battle
-                                            / ( attacker.GetHitPoints() * 0.5 );
+            // *0.5 is to get average hit points of the troop in the battle.
+            const double powerRatio = 1 + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAttackers, 0.0 ) / ( attacker.GetHitPoints() * 0.5 );
             const double killTimeRatio = 1 / powerRatio;
             assert( killTimeRatio <= 1 );
 
