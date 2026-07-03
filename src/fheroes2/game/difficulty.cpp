@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -248,15 +248,15 @@ int32_t Difficulty::getGuardianSpellMultiplier( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return 20;
+        return 16;
     case Difficulty::NORMAL:
-        return 18;
-    case Difficulty::HARD:
         return 14;
-    case Difficulty::EXPERT:
+    case Difficulty::HARD:
         return 12;
-    case Difficulty::IMPOSSIBLE:
+    case Difficulty::EXPERT:
         return 10;
+    case Difficulty::IMPOSSIBLE:
+        return 8;
     default:
         // Did you add a new difficulty level? Add the logic above!
         assert( 0 );
@@ -303,6 +303,31 @@ bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool 
     case Difficulty::EASY:
         // Only the construction of the corresponding dwelling is limited, but not its upgrade
         return isCampaign || ( building != DWELLING_MONSTER6 && building != BUILD_MAGEGUILD5 );
+    default:
+        break;
+    }
+
+    return true;
+}
+
+bool Difficulty::isBasicAIBattleLogicApplicable( const int32_t difficulty, const bool isControlledByHuman )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return isControlledByHuman;
+    default:
+        break;
+    }
+
+    return !isControlledByHuman;
+}
+
+bool Difficulty::isArtifactSortingAllowedForAI( const int32_t difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
     default:
         break;
     }

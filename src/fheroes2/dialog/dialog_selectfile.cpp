@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -334,13 +334,13 @@ namespace
         // If we don't have many save files, we reduce the maximum dialog height,
         // but not less than enough for 11 elements.
         // We also limit the maximum list height to 22 lines.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 )
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp<int32_t>( static_cast<int32_t>( lists.size() ), 11, 22 )
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( maxFileNameWidth + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
+        fheroes2::StandardWindow background( maxFileNameWidth + 204, std::min<int32_t>( display.height() - 100, maxDialogHeight ), true, display );
 
         const fheroes2::Rect dialogArea( background.activeArea() );
         const fheroes2::Rect listRoi( dialogArea.x + 24, dialogArea.y + 57, dialogArea.width - 75, dialogArea.height - listHeightDeduction );

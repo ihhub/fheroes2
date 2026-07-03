@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -38,7 +38,6 @@
 #include "battle_arena.h"
 #include "dialog.h"
 #include "game_interface.h"
-#include "game_language.h"
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
@@ -50,7 +49,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_language.h"
 
 namespace
 {
@@ -113,6 +111,8 @@ namespace
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
 #endif
 
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_APP_QUIT )] = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
+
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|new game" ), fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )]
@@ -129,7 +129,6 @@ namespace
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|multi-player game" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SETTINGS )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|settings" ), fheroes2::Key::KEY_T };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_QUIT )] = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|select map" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL )]
@@ -169,12 +168,16 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_AUTO_PLAYTEST )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|auto playtest" ), fheroes2::Key::KEY_A };
 
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-generate random map" ), fheroes2::Key::KEY_F5 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_RECONFIGURE )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|re-configure random map" ), fheroes2::Key::KEY_F6 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_OUTPUT_ALL_TEXT )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|output all text" ), fheroes2::Key::KEY_F2 };
 #endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
@@ -324,6 +327,10 @@ namespace
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|construction screen" ), fheroes2::Key::KEY_B };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL_BUY_ALL )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|buy all monsters in well" ), fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_HERO )]
+            = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|merge troops with hero" ), fheroes2::Key::KEY_DOWN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_GARRISON )]
+            = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|merge troops with garrison" ), fheroes2::Key::KEY_UP };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF )]
             = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|split stack by half" ), fheroes2::Key::KEY_LEFT_SHIFT };
@@ -336,7 +343,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS )]
             = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss hero or troop" ), fheroes2::Key::KEY_D };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SWAP )]
-            = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|exchange all troops" ), fheroes2::Key::KEY_S };
+            = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|exchange all troops" ), fheroes2::Key::KEY_X };
     }
 
     std::string getHotKeyFileContent()
@@ -346,22 +353,21 @@ namespace
         os << std::endl;
 
         Game::HotKeyCategory currentCategory = hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1].category;
-        os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
+        os << "# " << Translation::getNonTranslated( getHotKeyCategoryName( currentCategory ) ) << ':' << std::endl;
 
 #if defined( WITH_DEBUG )
         std::set<const char *> duplicationStringVerifier;
 #endif
 
-        const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::SupportedLanguage::English );
-
         for ( int32_t eventId = hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( Game::HotKeyEvent::NO_EVENT ); ++eventId ) {
             if ( currentCategory != hotKeyEventInfo[eventId].category ) {
                 currentCategory = hotKeyEventInfo[eventId].category;
                 os << std::endl;
-                os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
+                os << "# " << Translation::getNonTranslated( getHotKeyCategoryName( currentCategory ) ) << ':' << std::endl;
             }
 
-            const char * eventName = _( hotKeyEventInfo[eventId].name );
+            // Use the original name without translation to keep the configuration file consistent for all languages.
+            const char * eventName = Translation::getNonTranslated( hotKeyEventInfo[eventId].name );
             assert( strlen( eventName ) > 0 );
 #if defined( WITH_DEBUG )
             const bool isUnique = duplicationStringVerifier.emplace( eventName ).second;
@@ -445,10 +451,9 @@ void Game::HotKeysLoad( const std::string & filename )
                 nameToKey.try_emplace( StringUpper( KeySymGetName( key ) ), key );
             }
 
-            const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::SupportedLanguage::English );
-
             for ( int eventId = hotKeyEventToInt( HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( HotKeyEvent::NO_EVENT ); ++eventId ) {
-                const char * eventName = _( hotKeyEventInfo[eventId].name );
+                // Load the original name without using translation.
+                const char * eventName = Translation::getNonTranslated( hotKeyEventInfo[eventId].name );
                 std::string value = config.StrParams( eventName );
                 if ( value.empty() ) {
                     // TODO: remove this temporary workaround
@@ -547,7 +552,7 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 
             const RecursionGuard recursionGuard( recursiveCall );
 
-            Player * player = Settings::Get().GetPlayers().GetCurrent();
+            Player * player = conf.GetPlayers().GetCurrent();
 
             // Do not allow to transfer control to/from AI during battle
             if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) && Battle::GetArena() == nullptr ) {

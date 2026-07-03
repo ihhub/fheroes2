@@ -68,7 +68,7 @@ public:
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
-    static Funds GetCost( uint32_t, int );
+    static Funds GetCost( const uint32_t buildingType, const int race );
 
 private:
     void RedrawCaptain() const;

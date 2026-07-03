@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -833,7 +833,12 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
                 return;
             }
 
-            actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            if ( bestSpell.destinationCell >= 0 ) {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell, bestSpell.destinationCell );
+            }
+            else {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            }
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                        arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
@@ -869,7 +874,12 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
         const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, false );
 
         if ( bestSpell.spellID != -1 ) {
-            actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            if ( bestSpell.destinationCell >= 0 ) {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell, bestSpell.destinationCell );
+            }
+            else {
+                actions.emplace_back( Battle::Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+            }
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                        arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
@@ -1167,7 +1177,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
     // Assess the current threat level and decide whether to retreat to another position
-    const int32_t retreatPositionIndex = [&arena, &currentUnit, &enemies]() {
+    const int32_t retreatPositionIndex = [&arena, &currentUnit, &enemies]() -> int32_t {
         // There is no point in trying to retreat from flying units regardless of their speed
         if ( std::any_of( enemies.begin(), enemies.end(), []( const Battle::Unit * enemy ) {
                  assert( enemy != nullptr );
@@ -1310,7 +1320,7 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
 
             // If the current position is not in danger, then nothing special should be done
             if ( characteristics.threateningEnemiesIndexes.empty() ) {
-                return -1;
+                return static_cast<int32_t>( -1 );
             }
 
             const uint32_t currentUnitSpeed = currentUnit.GetSpeed();
@@ -1400,20 +1410,9 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                 continue;
             }
 
-            const int32_t archerMeleeDmg = [&currentUnit, enemy]() {
-                if ( currentUnit.Modes( Battle::SP_CURSE ) ) {
-                    return currentUnit.CalculateMinDamage( *enemy );
-                }
-
-                if ( currentUnit.Modes( Battle::SP_BLESS ) ) {
-                    return currentUnit.CalculateMaxDamage( *enemy );
-                }
-
-                return ( currentUnit.CalculateMinDamage( *enemy ) + currentUnit.CalculateMaxDamage( *enemy ) ) / 2;
-            }();
-
-            const int32_t retaliatoryDmg = enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
-            const int32_t damageDiff = archerMeleeDmg - retaliatoryDmg;
+            const uint32_t archerMeleeDmg = currentUnit.getPotentialDamage( *enemy );
+            const uint32_t retaliatoryDmg = enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
+            const int32_t damageDiff = static_cast<int32_t>( archerMeleeDmg ) - static_cast<int32_t>( retaliatoryDmg );
             if ( bestOutcome < damageDiff ) {
                 bestOutcome = damageDiff;
 
@@ -1429,10 +1428,12 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " in melee, outcome: " << bestOutcome )
         }
     }
-    // Archers are able to shoot
     else {
+        // Archers are able to shoot.
         BattleTargetPair target;
         double highestPriority = std::numeric_limits<double>::lowest();
+
+        const bool isAreaShotAbilityPresent = currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
@@ -1448,8 +1449,8 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                 }
             };
 
-            if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
-                const auto calculateAreaShotAttackPriority = [&arena, &currentUnit, enemy]( const int32_t targetIdx ) {
+            if ( isAreaShotAbilityPresent ) {
+                const auto calculateAreaShotAttackPriority = [&arena, &currentUnit, enemy]( const int32_t targetIdx, bool & isDangerousMove ) {
                     double result = 0.0;
 
                     // Indexes of the head cells of the units are used instead of pointers because the exact result of adding several
@@ -1467,11 +1468,33 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                         affectedUnitsIndexes.insert( unit->GetHeadIndex() );
                     }
 
+                    double enemyDamageHitPoints{ 0 };
+                    double friendDamageHitPoints{ 0 };
+                    const bool isExtraLogicAllowed = Difficulty::isBasicAIBattleLogicApplicable( Game::getDifficulty(), currentUnit.isControlHuman() );
+
                     for ( const int32_t unitIdx : affectedUnitsIndexes ) {
                         const Battle::Unit * unit = arena.GetTroopBoard( unitIdx );
                         assert( unit != nullptr );
 
+                        if ( isExtraLogicAllowed ) {
+                            const uint32_t damageHitPoints = std::min( unit->GetHitPoints(), currentUnit.getPotentialDamage( *unit ) );
+                            if ( currentUnit.GetColor() == unit->GetCurrentColor() ) {
+                                friendDamageHitPoints += damageHitPoints;
+                            }
+                            else {
+                                enemyDamageHitPoints += damageHitPoints;
+                            }
+                        }
+
                         result += unit->evaluateThreatForUnit( currentUnit );
+                    }
+
+                    if ( isExtraLogicAllowed ) {
+                        // If we would kill friendly units by 3 or time times than the enemy, then we shouldn't do this.
+                        isDangerousMove = ( friendDamageHitPoints >= 3 * enemyDamageHitPoints );
+                    }
+                    else {
+                        isDangerousMove = false;
                     }
 
                     return result;
@@ -1480,13 +1503,21 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
                 const int32_t enemyHeadIdx = enemy->GetHeadIndex();
                 assert( enemyHeadIdx != -1 );
 
-                updateBestTarget( calculateAreaShotAttackPriority( enemyHeadIdx ), enemyHeadIdx );
+                bool isDangerousMove{ false };
+                double priority = calculateAreaShotAttackPriority( enemyHeadIdx, isDangerousMove );
+                if ( !isDangerousMove ) {
+                    updateBestTarget( priority, enemyHeadIdx );
+                }
 
                 if ( enemy->isWide() ) {
                     const int32_t enemyTailIdx = enemy->GetTailIndex();
                     assert( enemyTailIdx != -1 );
 
-                    updateBestTarget( calculateAreaShotAttackPriority( enemyTailIdx ), enemyTailIdx );
+                    priority = calculateAreaShotAttackPriority( enemyTailIdx, isDangerousMove );
+
+                    if ( !isDangerousMove ) {
+                        updateBestTarget( priority, enemyTailIdx );
+                    }
                 }
 
                 continue;
@@ -1505,38 +1536,45 @@ Battle::Actions AI::BattlePlanner::archerDecision( Battle::Arena & arena, const 
     return actions;
 }
 
-AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const
+double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget )
 {
-    BattleTargetPair target;
-
     const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
+    MeleeAttackOutcome bestOutcome;
+
+    for ( const Battle::Unit * enemy : enemies ) {
+        assert( enemy != nullptr );
+
+        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+
+        if ( !outcome.canAttackImmediately ) {
+            continue;
+        }
+
+        if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
+            bestOutcome = outcome;
+
+            bestTarget.cell = outcome.fromIndex;
+            bestTarget.unit = enemy;
+
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                       "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue << ", position value: " << outcome.positionValue )
+        }
+    }
+
+    return bestOutcome.attackValue;
+}
+
+AI::BattleTargetPair AI::BattlePlanner::meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const
+{
     // Current unit can be under the influence of the Hypnotize spell
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
+    BattleTargetPair target;
+
     // 1. Choose the best target within reach, if any
     {
-        MeleeAttackOutcome bestOutcome;
-
-        for ( const Battle::Unit * enemy : enemies ) {
-            assert( enemy != nullptr );
-
-            const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
-
-            if ( !outcome.canAttackImmediately ) {
-                continue;
-            }
-
-            if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
-                bestOutcome = outcome;
-
-                target.cell = outcome.fromIndex;
-                target.unit = enemy;
-
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                           "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue << ", position value: " << outcome.positionValue )
-            }
-        }
+        getMeleeBestOutcome( arena, currentUnit, enemies, target );
 
         if ( target.unit ) {
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )

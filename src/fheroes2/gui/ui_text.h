@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -380,7 +380,7 @@ namespace fheroes2
         std::vector<Text> _texts;
     };
 
-    class FontCharHandler
+    class FontCharHandler final
     {
     public:
         explicit FontCharHandler( const FontType fontType );

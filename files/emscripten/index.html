@@ -86,9 +86,9 @@
     });
     const canvas = document.querySelector('canvas');
     canvas.oncontextmenu = event => event.preventDefault();
-    Object.assign(window, { Module: {
+    Object.assign(globalThis, { Module: {
             preRun: [
-                () => Object.assign(window.ENV, {
+                () => Object.assign(globalThis.ENV, {
                     FHEROES2_DATA: `/fheroes2/data`,
                     HOME: '/fheroes2'
                 }),

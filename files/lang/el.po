@@ -1,45 +1,55 @@
 # Greek translation of fheroes2
-# Copyright (C) 2022-2025 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2025-2026 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
-"PO-Revision-Date: 2025-05-19 07:06+0200\n"
-"Last-Translator: PlatoHero <platozp@gmail.com>\n"
-"Language-Team: platozp@gmail.com\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
+"PO-Revision-Date: 2026-04-01 14:30+0100\n"
+"Last-Translator: Yannis Anthymidis <yannis-foss@anth.me.uk>\n"
+"Language-Team: Greek\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ΕΠΙΛΟΓΗ"
 
+# η λέξη «ΠΛΗΡΟΦΟΡΙΕΣ» είναι πιο σωστή, αλλά ήταν υπερβολικά μεγάλη
+msgid "ABOUT"
+msgstr "ΣΧΕΤΙΚΑ"
+
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
 msgid "S"
-msgstr ""
+msgstr "S"
 
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
 msgid "M"
-msgstr ""
+msgstr "M"
 
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
 msgid "L"
-msgstr ""
+msgstr "L"
 
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
 msgid "X-L"
-msgstr ""
+msgstr "X-L"
 
+# (οι χάρτες)
 msgid "ALL"
-msgstr ""
+msgstr "ΟΛΟΙ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ΕΞΟΔΟΣ"
 
+# ΕΞΟΔΟΣ δεν χωράει για έναν χαρακτήρα. Μπορούμε εναλλακτικά να το γράψουμε ως ΤΕΛΟΣ, αλλά αυτό χάνει το θεματικό στοιχείο του κουμπιού, επείδη π.χ. «παίρνεις την έξοδο» του κάστρου
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "ΕΞΟΔ."
 
 msgid "OKAY"
 msgstr "ΕΝΤΑΞΕΙ"
@@ -55,7 +65,7 @@ msgstr ""
 "ΚΑΣΤΡΑ"
 
 msgid "CANCEL"
-msgstr "ΑΚΥΡΩΣΗ"
+msgstr "ΑΚΥΡΟ"
 
 msgid "ACCEPT"
 msgstr "ΑΠΟΔΟΧΗ"
@@ -76,22 +86,24 @@ msgid "NO"
 msgstr "ΟΧΙ"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "ΑΠΟΛΥΣΗ"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "ΑΝΑΒΑΘΜΙΣΗ"
 
+# εναλλακτικά «ΠΡΟΣΦΟΡΑ», αλλά επέλεξα δώρο επειδή δεν χρειάζεται να την αποδεχτεί ο παραλήπτης
 msgid "GIFT"
-msgstr ""
+msgstr "ΔΩΡΟ"
 
+# ταιριάζει με «ΕΝΑΡΞΗ»
 msgid "RESTART"
-msgstr ""
+msgstr "ΕΠΑΝΕΝΑΡΞΗ"
 
 msgid "MAX"
-msgstr ""
+msgstr "ΜΕΓ"
 
 msgid "MIN"
-msgstr ""
+msgstr "ΕΛΑΧ"
 
 msgid ""
 "D\n"
@@ -102,6 +114,13 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"Α\n"
+"Π\n"
+"Ο\n"
+"Λ\n"
+"Υ\n"
+"Σ\n"
+"Η"
 
 msgid ""
 "E\n"
@@ -109,6 +128,12 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"Ε\n"
+"Ξ\n"
+"Ο\n"
+"Δ\n"
+"Ο\n"
+"Σ"
 
 msgid ""
 "C\n"
@@ -120,6 +145,13 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"Ι\n"
+"Σ\n"
+"Τ\n"
+"Ο\n"
+"Ρ\n"
+"Ι\n"
+"Α"
 
 msgid ""
 "S\n"
@@ -131,137 +163,189 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"Κ\n"
+"Α\n"
+"Ν\n"
+"Ο\n"
+"Ν\n"
+"Ι\n"
+"Κ\n"
+"Ο"
 
 msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"ΝΕΟ\n"
+"ΠΑΙΧΝΙΔΙ"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"ΦΟΡΤΩΣΗ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
 
+# ταιριάζει με «ΕΝΑΡΞΗ»
 msgid ""
 "RESTART\n"
 "GAME"
 msgstr ""
+"ΕΠΑΝΕΝΑΡΞΗ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"ΑΠΟΘΗΚΕΥΣΗ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
 
 msgid ""
 "QUICK\n"
 "SAVE"
 msgstr ""
+"ΓΡΗΓΟΡΗ\n"
+"ΑΠΟΘΗΚΕΥΣΗ"
 
 msgid "QUIT"
-msgstr ""
+msgstr "ΕΓΚΑΤΑΛΕΙΨΗ"
 
 msgid ""
 "START\n"
 "MAP"
 msgstr ""
+"ΠΑΙΞΕ\n"
+"ΣΤΟΝ\n"
+"ΧΑΡΤΗ"
 
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+"ΚΥΡΙΟ\n"
+"ΜΕΝΟΥ"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
+"ΝΕΟΣ\n"
+"ΧΑΡΤΗΣ"
 
 msgid ""
 "LOAD\n"
 "MAP"
 msgstr ""
+"ΦΟΡΤΩΣΗ\n"
+"ΧΑΡΤΗ"
 
 msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
+"ΑΠΟΘΗΚΕΥΣΗ\n"
+"ΧΑΡΤΗ"
 
 msgid "INFO"
-msgstr ""
+msgstr "ΠΛΗΡΟΦΟΡΙΕΣ"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
+"ΜΟΝΟ\n"
+"ΜΑΧΗ"
 
 msgid "SETTINGS"
-msgstr ""
+msgstr "ΡΥΘΜΙΣΕΙΣ"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"ΚΑΝΟΝΙΚΟ\n"
+"ΠΑΙΧΝΙΔΙ"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"ΙΣΤΟΡΙΑ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"ΠΑΙΧΝΙΔΙ\n"
+"ΠΟΛΛΩΝ\n"
+"ΠΑΙΚΤΩΝ"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "ΤΟΠΙΚΟ ΠΑΙΧΝΙΔΙ"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 ΠΑΙΚΤΕΣ"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 ΠΑΙΚΤΕΣ"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 ΠΑΙΚΤΕΣ"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 ΠΑΙΚΤΕΣ"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 ΠΑΙΚΤΕΣ"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ΑΡΧΙΚΗ\n"
+"ΙΣΤΟΡΙΑ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"ΙΣΤΟΡΙΑ\n"
+"ΕΠΕΚΤΑΣΗΣ"
 
 msgid "editorMainMenu|BACK"
-msgstr ""
+msgstr "ΕΠΙΣΤΡΟΦΗ"
 
 msgid ""
 "newMap|FROM\n"
 "SCRATCH"
 msgstr ""
+"ΑΠΟ\n"
+"ΤΗΝ ΑΡΧΗ"
 
+# Η επόμενη οθόνη ξεκαθαρίζει πως μιλάμε για γεννήτρια χαρτών, επομένως επέλεξα «τυχαίος»
 msgid "newMap|RANDOM"
-msgstr ""
+msgstr "ΤΥΧΑΙΟΣ"
 
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "ΔΥΣΚΟΛΙΑ"
 
+# ΠΡΟΒΟΛΗ ΕΙΣΑΓΩΓΗΣ ήταν σε δύο γραμμές επομένως πρέπει αναγκαστικά να το μειώσουμε
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "ΕΙΣΑΓΩΓΗ"
 
 msgid "RESET"
-msgstr ""
+msgstr "ΕΠΑΝΑΦΟΡΑ"
 
 msgid "START"
-msgstr ""
+msgstr "ΕΝΑΡΞΗ"
 
 msgid ""
 "P\n"
@@ -271,6 +355,15 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"Π\n"
+"Ε\n"
+"Ρ\n"
+"Ι\n"
+"Π\n"
+"Ο\n"
+"Λ\n"
+"Ι\n"
+"Α"
 
 msgid "army|Few"
 msgstr ""
@@ -402,7 +495,7 @@ msgstr ""
 msgid "Move the %{name}"
 msgstr ""
 
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr ""
 
 msgid "%{name} destroys half the enemy troops!"
@@ -446,10 +539,19 @@ msgid ""
 "troops present in it by %{count}."
 msgstr ""
 
-msgid "Speed: %{speed}"
+msgid "battleAnimation|Speed: %{speed}"
 msgstr ""
 
-msgid "Speed"
+msgid "battleAnimation|Speed"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Auto Spell Casting"
 msgstr ""
 
 msgid "Off"
@@ -458,40 +560,13 @@ msgstr ""
 msgid "On"
 msgstr ""
 
-msgid "Turn Order"
-msgstr ""
-
-msgid "Auto Spell Casting"
-msgstr ""
-
-msgid "Grid"
-msgstr ""
-
-msgid "Shadow Movement"
-msgstr ""
-
-msgid "Shadow Cursor"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
-msgid "Damage Info"
-msgstr ""
-
 msgid "Set the speed of combat actions and animations."
 msgstr ""
 
-msgid "Toggle to display the turn order during the battle."
+msgid "Change the interface settings of the game."
+msgstr ""
+
+msgid "Interface Settings"
 msgstr ""
 
 msgid ""
@@ -500,18 +575,7 @@ msgid ""
 "way, nor does it affect quick combat.)"
 msgstr ""
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
+msgid "Audio"
 msgstr ""
 
 msgid "Change the audio settings of the game."
@@ -520,7 +584,7 @@ msgstr ""
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
-msgid "Toggle to display damage information during the battle."
+msgid "Hot Keys"
 msgstr ""
 
 msgid "Exit this menu."
@@ -786,11 +850,15 @@ msgid ""
 "AUTO\n"
 "COMBAT"
 msgstr ""
+"ΑΥΤΟΜΑΤΗ\n"
+"ΜΑΧΗ"
 
 msgid ""
 "QUICK\n"
 "COMBAT"
 msgstr ""
+"ΓΡΗΓΟΡΗ\n"
+"ΜΑΧΗ"
 
 msgid "The computer continues the combat for you."
 msgstr ""
@@ -956,6 +1024,53 @@ msgstr ""
 msgid "Perish: %{min} - %{max}"
 msgstr ""
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
+msgid "Turn Order"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "Damage Info"
+msgstr ""
+
+msgid "Shadow Movement"
+msgstr ""
+
+msgid "Shadow Cursor"
+msgstr ""
+
+msgid "Movement Area"
+msgstr ""
+
+msgid "Toggle to display the turn order during the battle."
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+
+msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
@@ -964,7 +1079,10 @@ msgstr ""
 msgid "Human"
 msgstr ""
 
-msgid "AI"
+msgid "Terrain"
+msgstr ""
+
+msgid "Battle Only"
 msgstr ""
 
 msgid "Start"
@@ -982,7 +1100,27 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
+msgstr ""
+
+msgid "Click to select a hero."
+msgstr ""
+
+msgid "Hero"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2577,6 +2715,9 @@ msgstr ""
 msgid "HP"
 msgstr ""
 
+msgid "Speed"
+msgstr ""
+
 msgid "Growth"
 msgstr ""
 
@@ -2779,24 +2920,6 @@ msgstr ""
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
-msgid "Language"
-msgstr ""
-
-msgid "Graphics"
-msgstr ""
-
-msgid "Black & White"
-msgstr ""
-
-msgid "Mouse Cursor"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Text Support"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2806,7 +2929,22 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
+msgid "Graphics"
+msgstr ""
+
+msgid "Mouse Cursor"
+msgstr ""
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Text Support"
 msgstr ""
 
 msgid ""
@@ -2844,6 +2982,12 @@ msgstr ""
 msgid ""
 "Loss\n"
 "Conditions"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "Click to read notes from the map creator."
 msgstr ""
 
 msgid "Map Description"
@@ -2891,6 +3035,15 @@ msgstr ""
 msgid "System Info"
 msgstr ""
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr ""
 
@@ -2898,6 +3051,13 @@ msgid "Select Game Resolution"
 msgstr ""
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -2926,9 +3086,6 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "Interface"
-msgstr ""
-
 msgid "Army Estimation"
 msgstr ""
 
@@ -2936,12 +3093,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -3117,6 +3268,33 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+msgid "Random Map Generator"
+msgstr ""
+
+msgid "rmg|Player count:"
+msgstr ""
+
+msgid "rmg|Map layout:"
+msgstr ""
+
+msgid "rmg|Water percentage:"
+msgstr ""
+
+msgid "rmg|Monster strength:"
+msgstr ""
+
+msgid "rmg|Resource availability:"
+msgstr ""
+
+msgid "rmg|Map seed:"
+msgstr ""
+
+msgid "Click to generate a new map."
+msgstr ""
+
+msgid "Return to the previous menu."
+msgstr ""
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3239,6 +3417,12 @@ msgstr ""
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3254,22 +3438,40 @@ msgstr ""
 msgid "Disable All Items"
 msgstr ""
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
+msgstr ""
+
+msgid "There are no spells to select."
 msgstr ""
 
 msgid "Select Spell:"
 msgstr ""
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr ""
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 msgid "Select Monster:"
+msgstr ""
+
+msgid "There are no heroes to select from."
 msgstr ""
 
 msgid "Select Hero:"
 msgstr ""
 
 msgid "Select Monsters:"
+msgstr ""
+
+msgid "Select Artifacts:"
 msgstr ""
 
 msgid "race|Random"
@@ -3296,17 +3498,17 @@ msgstr ""
 msgid "Select Ocean Object:"
 msgstr ""
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "TOWN"
-msgstr ""
+msgstr "ΠΟΛΗ"
 
 msgid "CASTLE"
-msgstr ""
+msgstr "ΚΑΣΤΡΟ"
 
 msgid "Click to start placing the selected castle/town."
 msgstr ""
@@ -3329,7 +3531,7 @@ msgstr ""
 msgid "Select Landscape Object:"
 msgstr ""
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3361,7 +3563,7 @@ msgstr ""
 msgid "Select Adventure Object:"
 msgstr ""
 
-msgid "Select color"
+msgid "Select color:"
 msgstr ""
 
 msgid "Players Icon"
@@ -3382,17 +3584,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid "Map Type"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-msgid "Map Type:\n"
-msgstr ""
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3402,10 +3593,19 @@ msgstr ""
 msgid "Resurrection"
 msgstr ""
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid "Map Type:\n"
+msgstr ""
+
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -3537,12 +3737,6 @@ msgid ""
 "computer movement at all."
 msgstr ""
 
-msgid "Change the interface settings of the game."
-msgstr ""
-
-msgid "Interface Settings"
-msgstr ""
-
 msgid "Toggle instant battle mode."
 msgstr ""
 
@@ -3631,7 +3825,7 @@ msgid "Random Town Name"
 msgstr ""
 
 msgid "BANNED SPELLS"
-msgstr ""
+msgstr "ΑΠΟΚΛΕΙΣΜΕΝΑ ΞΟΡΚΙΑ"
 
 msgid "Click to accept the changes made."
 msgstr ""
@@ -3649,7 +3843,7 @@ msgid "Select spells that will appear in the Mage Guild."
 msgstr ""
 
 msgid "SET SPELLS"
-msgstr ""
+msgstr "ΟΡΙΣΤΕ ΞΟΡΚΙΑ"
 
 msgid "Allow Castle build"
 msgstr ""
@@ -3657,8 +3851,9 @@ msgstr ""
 msgid "Default Buildings"
 msgstr ""
 
+# ΠΕΡΙΟΡΙΣΜΟΣ δεν χωράει ενώ «ΠΕΡΙΟΡΙΣΗ» είναι αρχαία (και αγγράματη!) λέξη
 msgid "RESTRICT"
-msgstr ""
+msgstr "ΑΠΟΚΛΙΣΗ"
 
 msgid "Default Army"
 msgstr ""
@@ -3669,10 +3864,13 @@ msgstr ""
 msgid "Town Army"
 msgstr ""
 
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr ""
+
 msgid "Click to change the Castle name."
 msgstr ""
 
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr ""
 
 msgid "Reset the Castle name."
@@ -3742,6 +3940,9 @@ msgid ""
 "if they are controlled by a computer."
 msgstr ""
 
+msgid "Set %{resource-type} Count:"
+msgstr ""
+
 msgid "Message:"
 msgstr ""
 
@@ -3766,7 +3967,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 msgid "Click to save the events."
@@ -3802,7 +4003,7 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr ""
 
 msgid "Artifact"
@@ -3855,13 +4056,23 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
 msgstr ""
 
 msgid "Not able to generate a map with given parameters."
@@ -3893,24 +4104,6 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 msgid "Start Map"
 msgstr ""
 
@@ -3940,16 +4133,22 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Auto Playtest"
+msgstr ""
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
+
 msgid "Return to the game's Main Menu."
 msgstr ""
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -3988,13 +4187,7 @@ msgstr ""
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
+msgid "The same object exists on the tile."
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4018,6 +4211,24 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr ""
 
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
 msgid "Used to place %{object}."
 msgstr ""
 
@@ -4032,11 +4243,6 @@ msgstr ""
 msgid ""
 "Click here to\n"
 "select another monster."
-msgstr ""
-
-msgid ""
-"Cell\n"
-"Details"
 msgstr ""
 
 msgid "Erase"
@@ -4078,7 +4284,26 @@ msgstr ""
 msgid "Towns"
 msgstr ""
 
-msgid "editorErasure|Landscape objects"
+msgid "editorDetailMode|Edit"
+msgstr ""
+
+msgid "editorDetailMode|Move"
+msgstr ""
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "ΕΠΙΣΤΡΟΦΗ"
+
+msgid "editorErasure|Mountains"
+msgstr ""
+
+msgid "editorErasure|Rocks"
+msgstr ""
+
+msgid "editorErasure|Trees"
+msgstr ""
+
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr ""
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4144,6 +4369,15 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
+
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -4175,7 +4409,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -4249,6 +4483,33 @@ msgid ""
 msgstr ""
 
 msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Supported languages:"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+msgid "Click to apply changes."
+msgstr ""
+
+msgid "Add Language"
+msgstr ""
+
+msgid "Add an additional language."
+msgstr ""
+
+msgid "Delete Language"
+msgstr ""
+
+msgid "Delete an existing language."
 msgstr ""
 
 msgid "Failed to generate a random map with given parameters."
@@ -4397,30 +4658,26 @@ msgid "Map Difficulty"
 msgstr ""
 
 msgid "RUMORS"
-msgstr ""
+msgstr "ΦΗΜΕΣ"
 
 msgid "EVENTS"
-msgstr ""
+msgstr "ΣΥΜΒΑΝΤΑ"
 
 msgid "LANGUAGE"
+msgstr "ΓΛΩΣΣΑ"
+
+# η λέξη «ΠΛΗΡΟΦΟΡΙΕΣ» είναι πιο σωστή, αλλά ήταν υπερβολικά μεγάλη
+#, fuzzy
+msgid "map|ABOUT"
+msgstr "ΣΧΕΤΙΚΑ"
+
+msgid "Change Map Name:"
 msgstr ""
 
-msgid "ABOUT"
+msgid "Change Map Description:"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-
-msgid "Change Map Name"
-msgstr ""
-
-msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
+msgid "map|About"
 msgstr ""
 
 msgid "Click to edit custom rumors."
@@ -4490,6 +4747,9 @@ msgstr ""
 msgid "Toggle display of objects' passability."
 msgstr ""
 
+msgid "Rumors:"
+msgstr ""
+
 msgid "Rumor:"
 msgstr ""
 
@@ -4518,6 +4778,12 @@ msgid "Delete Rumor"
 msgstr ""
 
 msgid "Delete an existing rumor."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
 msgstr ""
 
 msgid ""
@@ -4631,6 +4897,57 @@ msgstr ""
 msgid "difficulty|Impossible"
 msgstr ""
 
+msgid "Auto Playtest Results"
+msgstr ""
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+msgid "Click to close the dialog."
+msgstr ""
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+msgid "Failed to prepare the map for auto playtest."
+msgstr ""
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "autoPlaytest|Animation"
+msgstr ""
+
+msgid "autoPlaytest|Animation speed:"
+msgstr ""
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+msgid "Click to run an automated map playtest."
+msgstr ""
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+
 msgid "and more..."
 msgstr ""
 
@@ -4730,7 +5047,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -4742,7 +5059,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many-many other contributors and supporters!"
+msgid "and all the people who have helped make the project possible!"
 msgstr ""
 
 msgid "Support us at"
@@ -4877,6 +5194,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr ""
+
 msgid "High Scores"
 msgstr ""
 
@@ -4925,6 +5248,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -4947,9 +5273,6 @@ msgid "hotkey|multi-player game"
 msgstr ""
 
 msgid "hotkey|settings"
-msgstr ""
-
-msgid "hotkey|quit"
 msgstr ""
 
 msgid "hotkey|select map"
@@ -5009,10 +5332,16 @@ msgstr ""
 msgid "hotkey|toggle passability"
 msgstr ""
 
+msgid "hotkey|auto playtest"
+msgstr ""
+
 msgid "hotkey|re-generate random map"
 msgstr ""
 
 msgid "hotkey|re-configure random map"
+msgstr ""
+
+msgid "hotkey|output all text"
 msgstr ""
 
 msgid "hotkey|roland campaign"
@@ -5231,6 +5560,12 @@ msgstr ""
 msgid "hotkey|buy all monsters in well"
 msgstr ""
 
+msgid "hotkey|merge troops with hero"
+msgstr ""
+
+msgid "hotkey|merge troops with garrison"
+msgstr ""
+
 msgid "hotkey|split stack by half"
 msgstr ""
 
@@ -5400,9 +5735,6 @@ msgstr ""
 msgid ""
 "A multi-player game, with several human players competing against each other "
 "on a single map."
-msgstr ""
-
-msgid "Battle Only"
 msgstr ""
 
 msgid "Setup and play a battle without loading any map."
@@ -5809,11 +6141,16 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
-msgid ""
-"One or more heroes may still move, are you sure you want to end your turn?"
+msgid "Hero Movement Points"
 msgstr ""
 
-msgid "Are you sure you want to quit?"
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
+msgid ""
+"One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
@@ -5933,7 +6270,7 @@ msgid ""
 "value"
 msgstr ""
 
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr ""
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -5950,13 +6287,50 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+msgid "Click to switch to uppercase letters."
+msgstr ""
+
 msgid "Keyboard|123"
+msgstr "123"
+
+#, fuzzy
+msgid "Keyboard type"
+msgstr "123"
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
+msgstr "ΚΕΝΟ"
+
+msgid "Change language"
+msgstr ""
+
+msgid "Click to switch between languages."
+msgstr ""
+
+msgid "Backspace"
+msgstr ""
+
+msgid "Click to remove characters."
+msgstr ""
+
+msgid "Lowercase"
+msgstr ""
+
+msgid "Click to switch to lowercase letters."
 msgstr ""
 
 msgid "Keyboard|ABC"
+msgstr "ΑΒΓ"
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6042,6 +6416,9 @@ msgstr ""
 msgid "Greek"
 msgstr "Ελληνικά"
 
+msgid "Esperanto"
+msgstr ""
+
 msgid "Slow"
 msgstr ""
 
@@ -6058,6 +6435,15 @@ msgid "Good"
 msgstr ""
 
 msgid "Evil"
+msgstr ""
+
+msgid "Black & White"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Configure"
 msgstr ""
 
 msgid ", FPS: "
@@ -7266,10 +7652,10 @@ msgstr ""
 msgid "This hero is not able to cast adventure spells."
 msgstr ""
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell cannot be cast on a boat."
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell can only be cast near an ocean."
@@ -7361,16 +7747,16 @@ msgstr ""
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr ""
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 msgid "Click to change class."
@@ -7429,6 +7815,9 @@ msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
 
 msgid "Click to enable hero's patrol mode."
+msgstr ""
+
+msgid "Do you want to save the changes made?"
 msgstr ""
 
 msgid "Blood Morale"
@@ -7945,17 +8334,17 @@ msgid "luck|Irish"
 msgstr ""
 
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 
@@ -7980,15 +8369,19 @@ msgstr ""
 msgid "morale|Blood!"
 msgstr ""
 
-msgid "Negative morale may cause the hero's units to freeze in combat."
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr ""
 
 msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr ""
 
-msgid "Positive morale may give the hero's units extra attacks in combat."
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
+msgstr ""
+
+msgid "Blood"
 msgstr ""
 
 msgid "Knight"
@@ -8177,6 +8570,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
@@ -8378,9 +8807,6 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
-msgstr ""
-
-msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"

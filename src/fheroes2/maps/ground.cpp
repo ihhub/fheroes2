@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,27 +30,27 @@
 #include "skill.h"
 #include "translations.h"
 
-uint16_t Maps::Ground::getTerrainStartImageIndex( const int groundId )
+uint16_t Maps::Ground::getTerrainStartImageIndex( const int32_t groundId )
 {
     switch ( groundId ) {
     case WATER:
-        return 0U;
+        return WATER_START_IMAGE_INDEX;
     case GRASS:
-        return 30U;
+        return GRASS_START_IMAGE_INDEX;
     case SNOW:
-        return 92U;
+        return SNOW_START_IMAGE_INDEX;
     case SWAMP:
-        return 146U;
+        return SWAMP_START_IMAGE_INDEX;
     case LAVA:
-        return 208U;
+        return LAVA_START_IMAGE_INDEX;
     case DESERT:
-        return 262U;
+        return DESERT_START_IMAGE_INDEX;
     case DIRT:
-        return 321U;
+        return DIRT_START_IMAGE_INDEX;
     case WASTELAND:
-        return 361U;
+        return WASTELAND_START_IMAGE_INDEX;
     case BEACH:
-        return 415U;
+        return BEACH_START_IMAGE_INDEX;
     default:
         // Have you added a new ground? Add the logic above!
         assert( 0 );
@@ -58,33 +58,33 @@ uint16_t Maps::Ground::getTerrainStartImageIndex( const int groundId )
     }
 }
 
-int Maps::Ground::getGroundByImageIndex( const uint16_t terrainImageIndex )
+int32_t Maps::Ground::getGroundByImageIndex( const uint16_t terrainImageIndex )
 {
-    if ( 30U > terrainImageIndex ) {
+    if ( GRASS_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::WATER;
     }
-    if ( 92U > terrainImageIndex ) {
+    if ( SNOW_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::GRASS;
     }
-    if ( 146U > terrainImageIndex ) {
+    if ( SWAMP_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::SNOW;
     }
-    if ( 208U > terrainImageIndex ) {
+    if ( LAVA_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::SWAMP;
     }
-    if ( 262U > terrainImageIndex ) {
+    if ( DESERT_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::LAVA;
     }
-    if ( 321U > terrainImageIndex ) {
+    if ( DIRT_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::DESERT;
     }
-    if ( 361U > terrainImageIndex ) {
+    if ( WASTELAND_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::DIRT;
     }
-    if ( 415U > terrainImageIndex ) {
+    if ( BEACH_START_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::WASTELAND;
     }
-    if ( 432U > terrainImageIndex ) {
+    if ( MAX_IMAGE_INDEX > terrainImageIndex ) {
         return Maps::Ground::BEACH;
     }
 
@@ -140,7 +140,7 @@ bool Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( const uint16_t t
     }
 }
 
-const char * Maps::Ground::String( int groundId )
+const char * Maps::Ground::String( const int32_t groundId )
 {
     switch ( groundId ) {
     case DESERT:
@@ -166,7 +166,7 @@ const char * Maps::Ground::String( int groundId )
     }
 }
 
-uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
+uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, const uint32_t pathfindingLevel )
 {
     //              none   basc   advd   expr
     //    Desert    2.00   1.75   1.50   1.00
@@ -184,7 +184,7 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
 
     switch ( tile.GetGround() ) {
     case DESERT:
-        switch ( level ) {
+        switch ( pathfindingLevel ) {
         case Skill::Level::EXPERT:
             break;
         case Skill::Level::ADVANCED:
@@ -200,7 +200,7 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
         break;
 
     case SWAMP:
-        switch ( level ) {
+        switch ( pathfindingLevel ) {
         case Skill::Level::EXPERT:
             break;
         case Skill::Level::ADVANCED:
@@ -216,7 +216,7 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
         break;
 
     case SNOW:
-        switch ( level ) {
+        switch ( pathfindingLevel ) {
         case Skill::Level::EXPERT:
         case Skill::Level::ADVANCED:
             break;
@@ -231,7 +231,7 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
 
     case WASTELAND:
     case BEACH:
-        result += ( Skill::Level::NONE == level ? 25 : 0 );
+        result += ( Skill::Level::NONE == pathfindingLevel ? 25 : 0 );
         break;
 
     default:
@@ -241,7 +241,7 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tile & tile, uint32_t level )
     return result;
 }
 
-uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId, const bool allowEmbeddedObjectsAppearOnTerrain )
+uint16_t Maps::Ground::getRandomTerrainImageIndex( const int32_t groundId, const bool allowEmbeddedObjectsAppearOnTerrain )
 {
     if ( groundId == WATER ) {
         return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U + getTerrainStartImageIndex( groundId );

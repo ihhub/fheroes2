@@ -8,20 +8,22 @@ subdirectory of the project source tree. The current instruction is designed for
 ![Belarusian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_be.json)
 ![Bulgarian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_bg.json)
 ![Czech](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_cs.json)
+![Danish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_da.json)
+![Dutch](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_nl.json)
+![Esperanto](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_eo.json)
 ![German](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_de.json)
-![Danish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_dk.json)
-![Spanish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_es.json)
+![Greek](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_el.json)
 ![French](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_fr.json)
 ![Hungarian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_hu.json)
 ![Italian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_it.json)
 ![Lithuanian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_lt.json)
 ![Norwegian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_nb.json)
-![Dutch](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_nl.json)
 ![Polish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_pl.json)
 ![Brazilian Portuguese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_pt.json)
 ![Romanian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_ro.json)
 ![Russian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_ru.json)
 ![Slovak](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_sk.json)
+![Spanish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_es.json)
 ![Swedish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_sv.json)
 ![Turkish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_tr.json)
 ![Ukrainian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_uk.json)
@@ -117,9 +119,7 @@ How to [**create a pull request from your fork**](https://docs.github.com/en/pul
 The pull request title has to be something human-understandable. This allows the team to quickly identify the purpose of
 your work, I.E. "Update the Slovak translation".
 
-<details>
-
-<summary>Pull request restrictions - Please read</summary>
+### Pull request restrictions - Please read
 
 The fheroes2 team has set a maximum of 400 total modified lines for any pull request for translations. For contributors wanting to
 add translated lines to a new language this has a maximum of 30 total modified lines for that first pull request.
@@ -133,8 +133,6 @@ or less complete, less than this amount can be accepted.
 
 Preferably a pull request should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
 example creature names or castle buildings.
-
-</details>
 
 ## Updating PO Templates and Translatable Strings in PO Files
 

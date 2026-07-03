@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                                    *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@
 #include <utility>
 #include <vector>
 
+#include "ai_common.h"
 #include "army.h"
 #include "heroes.h"
 #include "kingdom.h"
@@ -36,17 +37,11 @@
 #include "resource.h"
 #include "route.h"
 #include "world.h"
-#include "world_pathfinding.h"
 
 AI::Planner & AI::Planner::Get()
 {
     static Planner ai;
     return ai;
-}
-
-void AI::Planner::resetPathfinder()
-{
-    _pathfinder.reset();
 }
 
 void AI::Planner::revealFog( const Maps::Tile & tile, const Kingdom & kingdom )
@@ -56,7 +51,7 @@ void AI::Planner::revealFog( const Maps::Tile & tile, const Kingdom & kingdom )
         return;
     }
 
-    updateMapActionObjectCache( tile.GetIndex() );
+    updateMapActionObjectCache( kingdom, tile.GetIndex() );
     updatePriorityAttackTarget( kingdom, tile );
 
     // If this is an action object and one of AI heroes is moving,
@@ -177,11 +172,11 @@ double AI::Planner::getFundsValueBasedOnPriority( const Funds & funds ) const
     return value;
 }
 
-void AI::Planner::updateMapActionObjectCache( const int mapIndex )
+void AI::Planner::updateMapActionObjectCache( const Kingdom & kingdom, const int mapIndex )
 {
     const MP2::MapObjectType objectType = world.getTile( mapIndex ).getMainObjectType();
 
-    if ( !MP2::isInGameActionObject( objectType ) ) {
+    if ( !isValuableAdventureMapObject( kingdom, objectType, mapIndex ) ) {
         _mapActionObjects.erase( mapIndex );
 
         return;

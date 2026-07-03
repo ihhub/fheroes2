@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -126,12 +126,10 @@ std::string Player::GetName() const
 
 int Player::GetControl() const
 {
-#if defined( WITH_DEBUG )
     if ( _isAIAutoControlMode ) {
         assert( ( _control & CONTROL_HUMAN ) == CONTROL_HUMAN );
         return CONTROL_AI;
     }
-#endif
 
     return _control;
 }
@@ -178,7 +176,6 @@ void Player::setHandicapStatus( const HandicapStatus status )
     _handicapStatus = status;
 }
 
-#if defined( WITH_DEBUG )
 void Player::setAIAutoControlMode( const bool enable )
 {
     assert( ( _control & CONTROL_HUMAN ) == CONTROL_HUMAN );
@@ -204,7 +201,6 @@ void Player::commitAIAutoControlMode()
 
     _isAIAutoControlMode = _isAIAutoControlModePlanned;
 }
-#endif
 
 OStreamBase & operator<<( OStreamBase & stream, const Focus & focus )
 {
@@ -269,8 +265,8 @@ IStreamBase & operator>>( IStreamBase & stream, Player & player )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int playerColor;
-        int friendsColors;
+        int32_t playerColor;
+        int32_t friendsColors;
 
         stream >> playerColor >> player._race >> friendsColors;
 
@@ -574,8 +570,8 @@ IStreamBase & operator>>( IStreamBase & stream, Players & players )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int colorsTemp{ 0 };
-        int currentTemp{ 0 };
+        int32_t colorsTemp{ 0 };
+        int32_t currentTemp{ 0 };
 
         stream >> colorsTemp >> currentTemp;
 

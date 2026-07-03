@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -62,10 +62,10 @@ enum
     FOCUS_CASTLE = 2
 };
 
-struct Focus : std::pair<int, void *>
+struct Focus : std::pair<int32_t, void *>
 {
     Focus()
-        : std::pair<int, void *>( FOCUS_UNSEL, nullptr )
+        : std::pair<int32_t, void *>( FOCUS_UNSEL, nullptr )
     {}
 
     void Reset()
@@ -201,7 +201,6 @@ public:
 
     void setHandicapStatus( const HandicapStatus status );
 
-#if defined( WITH_DEBUG )
     bool isAIAutoControlMode() const
     {
         return _isAIAutoControlMode;
@@ -213,7 +212,6 @@ public:
     // Turns the planned value of whether a given human player is controlled by AI into the actual value.
     // Should be called only if this mode is actually enabled.
     void commitAIAutoControlMode();
-#endif
 
 protected:
     friend OStreamBase & operator<<( OStreamBase & stream, const Player & player );
@@ -222,20 +220,18 @@ protected:
     std::string _name;
     Focus _focus;
     AI::Personality _aiPersonality{ AI::Personality::NONE };
-    int _control{ CONTROL_NONE };
-    int _race{ Race::NONE };
+    int32_t _control{ CONTROL_NONE };
+    int32_t _race{ Race::NONE };
     PlayerColor _color;
     PlayerColorsSet _friendsColors;
     HandicapStatus _handicapStatus{ HandicapStatus::NONE };
 
-#if defined( WITH_DEBUG )
     // These members should not be saved anywhere
 
     // Actual value of whether a given human player is controlled by AI
     bool _isAIAutoControlMode{ false };
     // Planned value of whether a given human player is controlled by AI (will become actual upon committing it)
     bool _isAIAutoControlModePlanned{ false };
-#endif
 };
 
 class Players : public std::vector<Player *>

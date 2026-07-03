@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -73,12 +74,18 @@ namespace fheroes2
 
         uint8_t * transform()
         {
-            return _data.get() + width() * height();
+            // Why do you want to get transform layer from the single-layer image?
+            assert( !_singleLayer );
+
+            return _singleLayer ? nullptr : _data.get() + width() * height();
         }
 
         const uint8_t * transform() const
         {
-            return _data.get() + width() * height();
+            // Why do you want to get transform layer from the single-layer image?
+            assert( !_singleLayer );
+
+            return _singleLayer ? nullptr : _data.get() + width() * height();
         }
 
         bool empty() const
@@ -325,11 +332,7 @@ namespace fheroes2
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( const uint8_t red, const uint8_t green, const uint8_t blue );
 
-    std::vector<uint8_t> getTransformTable( const Image & in, const Image & out, int32_t x, int32_t y, int32_t width, int32_t height );
-
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
-
-    void MaskTransformLayer( const Image & mask, int32_t maskX, int32_t maskY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // This function does NOT check transform layer. If you intent to replace few colors at the same image please use ApplyPalette to be more efficient.
     void ReplaceColorId( Image & image, const uint8_t oldColorId, const uint8_t newColorId );

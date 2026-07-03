@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "SEÇ"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -201,6 +204,11 @@ msgstr "BAŞLA"
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 msgid ""
@@ -484,7 +492,8 @@ msgstr "Son birlik hareket ettirilemiyor"
 msgid "Move the %{name}"
 msgstr "%{name} 'i hareket ettir"
 
-msgid "Set %{monster} Count"
+#, fuzzy
+msgid "Set %{monster} Count:"
 msgstr "%{monster} sayısını ayarla"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -535,11 +544,21 @@ msgstr ""
 "Hendek savunma becerisi herhangi bir birimin savunma becerisi ve hareket "
 "hızını %{count} düşürüyor."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hız: %{speed}"
 
-msgid "Speed"
-msgstr "Hız"
+msgid "battleAnimation|Speed"
+msgstr ""
+
+msgid "Interface"
+msgstr "Arayüz"
+
+msgid "Settings"
+msgstr "Ayarlar"
+
+msgid "Auto Spell Casting"
+msgstr "Otomatik Büyü Yapma"
 
 msgid "Off"
 msgstr "Kapalı"
@@ -547,41 +566,14 @@ msgstr "Kapalı"
 msgid "On"
 msgstr "Açık"
 
-msgid "Turn Order"
-msgstr "Sıra sırası"
-
-msgid "Auto Spell Casting"
-msgstr "Otomatik Büyü Yapma"
-
-msgid "Grid"
-msgstr "Izgara"
-
-msgid "Shadow Movement"
-msgstr "Gölge Hareketi"
-
-msgid "Shadow Cursor"
-msgstr "Gölge İmleci"
-
-msgid "Audio"
-msgstr "Ses"
-
-msgid "Settings"
-msgstr "Ayarlar"
-
-msgid "Configure"
-msgstr "Ayarla"
-
-msgid "Hot Keys"
-msgstr "Kısayollar"
-
-msgid "Damage Info"
-msgstr "Hasar Bilgisi"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Savaş eylemlerinin ve animasyonların hızını ayarlayın."
 
-msgid "Toggle to display the turn order during the battle."
-msgstr "Savaş sırasında sıra sırasını görüntülemek için aktif edin."
+msgid "Change the interface settings of the game."
+msgstr ""
+
+msgid "Interface Settings"
+msgstr ""
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -592,26 +584,8 @@ msgstr ""
 "değiştirin.(Not: Bu, bilgisayar oyuncuları için büyü yapmayı hiçbir şekilde "
 "etkilemez ve hızlı savaşı etkilemez.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Altıgen ızgarayı aç veya kapat.Altıgen ızgara, kapatılsa bile her zaman "
-"hareketin temelini oluşturur. Bu anahtar yalnızca ızgaranın görünür olup "
-"olmadığını belirler."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Yaratıklarınızın nereye hareket edip saldırabileceğini gösteren gölgeleri "
-"açın veya kapatın."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Fare imlecinin mevcut altıgen konumunu gösteren bir gölgeyi açın veya "
-"kapatın."
+msgid "Audio"
+msgstr "Ses"
 
 msgid "Change the audio settings of the game."
 msgstr "Oyunun ses ayarını değiştir."
@@ -619,8 +593,8 @@ msgstr "Oyunun ses ayarını değiştir."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Oyunda bulunan tüm kısayol tuşlarını kontrol edin ve yapılandırın."
 
-msgid "Toggle to display damage information during the battle."
-msgstr "Savaş sırasında hasar bilgisini görüntülemek için akif edin."
+msgid "Hot Keys"
+msgstr "Kısayollar"
 
 msgid "Exit this menu."
 msgstr "Bu menüden çık."
@@ -1077,6 +1051,61 @@ msgstr "Yok oldu: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Yok oldu: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
+msgid "Turn Order"
+msgstr "Sıra sırası"
+
+msgid "Grid"
+msgstr "Izgara"
+
+msgid "Damage Info"
+msgstr "Hasar Bilgisi"
+
+msgid "Shadow Movement"
+msgstr "Gölge Hareketi"
+
+msgid "Shadow Cursor"
+msgstr "Gölge İmleci"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Gölge Hareketi"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr "Savaş sırasında sıra sırasını görüntülemek için aktif edin."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Altıgen ızgarayı aç veya kapat.Altıgen ızgara, kapatılsa bile her zaman "
+"hareketin temelini oluşturur. Bu anahtar yalnızca ızgaranın görünür olup "
+"olmadığını belirler."
+
+msgid "Toggle to display damage information during the battle."
+msgstr "Savaş sırasında hasar bilgisini görüntülemek için akif edin."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Yaratıklarınızın nereye hareket edip saldırabileceğini gösteren gölgeleri "
+"açın veya kapatın."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Fare imlecinin mevcut altıgen konumunu gösteren bir gölgeyi açın veya "
+"kapatın."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
@@ -1086,8 +1115,11 @@ msgstr ""
 msgid "Human"
 msgstr "İnsan"
 
-msgid "AI"
-msgstr "Bilgisayar"
+msgid "Terrain"
+msgstr ""
+
+msgid "Battle Only"
+msgstr "Sadece Savaş"
 
 msgid "Start"
 msgstr "Başla"
@@ -1104,8 +1136,29 @@ msgstr "Sıfırla"
 msgid "Reset to default settings."
 msgstr "Varsayılan ayarlara sıfırla."
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
+
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Hero"
+msgstr ""
+
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr ""
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2813,6 +2866,9 @@ msgstr ""
 msgid "HP"
 msgstr ""
 
+msgid "Speed"
+msgstr "Hız"
+
 msgid "Growth"
 msgstr ""
 
@@ -3019,24 +3075,6 @@ msgstr "Çıkış"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Heroes of Might and Magic II'den çık."
 
-msgid "Language"
-msgstr "Dil"
-
-msgid "Graphics"
-msgstr "Grafikler"
-
-msgid "Black & White"
-msgstr "Siyah & Beyaz"
-
-msgid "Mouse Cursor"
-msgstr "Fare İmleci"
-
-msgid "Color"
-msgstr "Renkli"
-
-msgid "Text Support"
-msgstr "Yazı Desteği"
-
 msgid "Change the language of the game."
 msgstr "Oyunun dilini değiştir."
 
@@ -3046,8 +3084,23 @@ msgstr "Oyunun dilini seç"
 msgid "Change the graphics settings of the game."
 msgstr "Oyunun grafik ayarlarını değiş."
 
+msgid "Graphics"
+msgstr "Grafikler"
+
+msgid "Mouse Cursor"
+msgstr "Fare İmleci"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Renkli imleci aç ya da kapat. Bu sadece estetik bir seçimdir."
+
+msgid "Interface Type"
+msgstr "Arayüz Tipi"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
+
+msgid "Text Support"
+msgstr "Yazı Desteği"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3096,6 +3149,13 @@ msgstr ""
 "Yenilgi\n"
 "Şartları"
 
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
+
 msgid "Map Description"
 msgstr ""
 
@@ -3142,6 +3202,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Sistem Bilgisi"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Oyunun çözünürlüğünü değiş."
 
@@ -3150,6 +3219,13 @@ msgstr "Oyunun çözünürlüğünü seç"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Tam ve pencereli ekran arasında geçiş yap."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3177,9 +3253,6 @@ msgstr "Gizle"
 msgid "Show"
 msgstr "Göster"
 
-msgid "Interface"
-msgstr "Arayüz"
-
 msgid "Army Estimation"
 msgstr ""
 
@@ -3188,12 +3261,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Arayüz Tipi"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Kullanmak istediğiniz arayüz türünü değiştirin."
 
 msgid "Toggle interface visibility."
 msgstr "Arayüz görünürlüğünü değiştirin."
@@ -3376,6 +3443,35 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+msgid "Random Map Generator"
+msgstr ""
+
+msgid "rmg|Player count:"
+msgstr ""
+
+msgid "rmg|Map layout:"
+msgstr ""
+
+msgid "rmg|Water percentage:"
+msgstr ""
+
+msgid "rmg|Monster strength:"
+msgstr ""
+
+msgid "rmg|Resource availability:"
+msgstr ""
+
+msgid "rmg|Map seed:"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Savaşa geri dön."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3501,6 +3597,12 @@ msgstr ""
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3520,16 +3622,32 @@ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 msgid "Disable All Items"
 msgstr "Yapılan Büyü"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Yapılacak büyü yok."
+
 msgid "Select Spell:"
+msgstr ""
+
+msgid "There are no artifacts to select from."
 msgstr ""
 
 msgid "Select Artifact:"
 msgstr ""
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 msgid "Select Monster:"
+msgstr ""
+
+msgid "There are no heroes to select from."
 msgstr ""
 
 msgid "Select Hero:"
@@ -3538,6 +3656,10 @@ msgstr ""
 #, fuzzy
 msgid "Select Monsters:"
 msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Defineyi seç:"
 
 msgid "race|Random"
 msgstr ""
@@ -3563,7 +3685,7 @@ msgstr "Defineyi seç:"
 msgid "Select Ocean Object:"
 msgstr "Okyanus Hedefini Seç:"
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3598,7 +3720,7 @@ msgstr "Büyü hedefini seç"
 msgid "Select Landscape Object:"
 msgstr "Büyü hedefini seç"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3637,8 +3759,9 @@ msgstr "Büyü hedefini seç"
 msgid "Select Adventure Object:"
 msgstr "Büyü hedefini seç"
 
-msgid "Select color"
-msgstr ""
+#, fuzzy
+msgid "Select color:"
+msgstr "Büyü hedefini seç"
 
 msgid "Players Icon"
 msgstr ""
@@ -3658,17 +3781,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid "Map Type"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-msgid "Map Type:\n"
-msgstr ""
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3678,10 +3790,19 @@ msgstr ""
 msgid "Resurrection"
 msgstr ""
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid "Map Type:\n"
+msgstr ""
+
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -3815,12 +3936,6 @@ msgid ""
 "computer movement at all."
 msgstr ""
 
-msgid "Change the interface settings of the game."
-msgstr ""
-
-msgid "Interface Settings"
-msgstr ""
-
 msgid "Toggle instant battle mode."
 msgstr ""
 
@@ -3951,12 +4066,16 @@ msgstr ""
 msgid "Town Army"
 msgstr "Kahraman Ekranı"
 
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr ""
+
 #, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
-msgid "Enter Castle name"
-msgstr ""
+#, fuzzy
+msgid "Enter Castle name:"
+msgstr "Savaşa geri dön."
 
 #, fuzzy
 msgid "Reset the Castle name."
@@ -4030,6 +4149,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "%{monster} sayısını ayarla"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Mesaj Çubuğu"
 
@@ -4056,7 +4179,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4096,8 +4219,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Büyü Puanları"
 
 msgid "Artifact"
 msgstr ""
@@ -4150,13 +4274,23 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
 msgstr ""
 
 msgid "Not able to generate a map with given parameters."
@@ -4186,24 +4320,6 @@ msgstr ""
 msgid ""
 "Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
 "current map will be lost.)"
-msgstr ""
-
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
 msgstr ""
 
 #, fuzzy
@@ -4236,6 +4352,12 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Auto Playtest"
+msgstr ""
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
+
 #, fuzzy
 msgid "Return to the game's Main Menu."
 msgstr "Savaşa geri dön."
@@ -4243,10 +4365,10 @@ msgstr "Savaşa geri dön."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4285,13 +4407,7 @@ msgstr ""
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
+msgid "The same object exists on the tile."
 msgstr ""
 
 #, fuzzy
@@ -4317,6 +4433,24 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr ""
 
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
 msgid "Used to place %{object}."
 msgstr ""
 
@@ -4334,11 +4468,6 @@ msgid ""
 "Click here to\n"
 "select another monster."
 msgstr "Lütfen başka bir kahraman seç."
-
-msgid ""
-"Cell\n"
-"Details"
-msgstr ""
 
 msgid "Erase"
 msgstr ""
@@ -4379,8 +4508,29 @@ msgstr ""
 msgid "Towns"
 msgstr ""
 
+msgid "editorDetailMode|Edit"
+msgstr ""
+
+msgid "editorDetailMode|Move"
+msgstr ""
+
+msgid "editorDetailMode|Copy"
+msgstr ""
+
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Büyü hedefini seç"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4446,6 +4596,15 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
+
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -4477,7 +4636,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -4553,6 +4712,38 @@ msgstr ""
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
+
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Dil Seç:"
+
+msgid "Language"
+msgstr "Dil"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Dil"
+
+msgid "Add an additional language."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Dil Seç:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Oyunun dilini seç"
 
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
@@ -4726,22 +4917,18 @@ msgstr "ETKİNLİKLER"
 msgid "LANGUAGE"
 msgstr "DİL"
 
-msgid "ABOUT"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
+#, fuzzy
+msgid "Change Map Name:"
+msgstr "Oyunun dilini değiştir."
 
-msgid "Change Map Name"
-msgstr ""
+#, fuzzy
+msgid "Change Map Description:"
+msgstr "Oyunun çözünürlüğünü seç"
 
-msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4818,6 +5005,9 @@ msgstr ""
 msgid "Toggle display of objects' passability."
 msgstr ""
 
+msgid "Rumors:"
+msgstr ""
+
 msgid "Rumor:"
 msgstr ""
 
@@ -4847,6 +5037,12 @@ msgid "Delete Rumor"
 msgstr ""
 
 msgid "Delete an existing rumor."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
 msgstr ""
 
 msgid ""
@@ -4970,6 +5166,63 @@ msgstr ""
 msgid "difficulty|Impossible"
 msgstr ""
 
+msgid "Auto Playtest Results"
+msgstr ""
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+msgid "Failed to prepare the map for auto playtest."
+msgstr ""
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "autoPlaytest|Animation"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Hız: %{speed}"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Bilgisayardan kontrolü yeniden kazanmak istiyor musunuz? Etki bir sonraki "
+"tur'da gerçekleşecek."
+
 msgid "and more..."
 msgstr ""
 
@@ -5070,7 +5323,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -5082,7 +5335,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many-many other contributors and supporters!"
+msgid "and all the people who have helped make the project possible!"
 msgstr ""
 
 msgid "Support us at"
@@ -5217,6 +5470,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Çıkmak istediğine emin misin?"
+
 msgid "High Scores"
 msgstr ""
 
@@ -5265,6 +5524,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5287,9 +5549,6 @@ msgid "hotkey|multi-player game"
 msgstr ""
 
 msgid "hotkey|settings"
-msgstr ""
-
-msgid "hotkey|quit"
 msgstr ""
 
 msgid "hotkey|select map"
@@ -5353,11 +5612,19 @@ msgstr "Sistem seçeneklerini özelleştirin"
 msgid "hotkey|toggle passability"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Sistem seçeneklerini özelleştirin"
+
 msgid "hotkey|re-generate random map"
 msgstr ""
 
 msgid "hotkey|re-configure random map"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -5579,6 +5846,13 @@ msgstr ""
 msgid "hotkey|buy all monsters in well"
 msgstr ""
 
+msgid "hotkey|merge troops with hero"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Sistem seçeneklerini özelleştirin"
+
 msgid "hotkey|split stack by half"
 msgstr ""
 
@@ -5754,9 +6028,6 @@ msgid ""
 "A multi-player game, with several human players competing against each other "
 "on a single map."
 msgstr ""
-
-msgid "Battle Only"
-msgstr "Sadece Savaş"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
@@ -6165,12 +6436,18 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Gölge Hareketi"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
-
-msgid "Are you sure you want to quit?"
-msgstr "Çıkmak istediğine emin misin?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
@@ -6290,7 +6567,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Saldırı Becerisini Ayarla"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6307,13 +6584,54 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Oyunun dilini değiştir."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Seçili dili seçmek için tıklayın."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
+
+msgid "Lowercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6400,6 +6718,9 @@ msgstr "Görünüm %{name}"
 msgid "Greek"
 msgstr ""
 
+msgid "Esperanto"
+msgstr ""
+
 msgid "Slow"
 msgstr "Yavaş"
 
@@ -6417,6 +6738,15 @@ msgstr "İyi"
 
 msgid "Evil"
 msgstr "Şeytani"
+
+msgid "Black & White"
+msgstr "Siyah & Beyaz"
+
+msgid "Color"
+msgstr "Renkli"
+
+msgid "Configure"
+msgstr "Ayarla"
 
 msgid ", FPS: "
 msgstr ""
@@ -7625,10 +7955,10 @@ msgstr ""
 msgid "This hero is not able to cast adventure spells."
 msgstr ""
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell cannot be cast on a boat."
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell can only be cast near an ocean."
@@ -7724,16 +8054,16 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Büyü Puanları"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 #, fuzzy
@@ -7794,6 +8124,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "Blood Morale"
@@ -8311,17 +8645,17 @@ msgid "luck|Irish"
 msgstr ""
 
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 
@@ -8347,17 +8681,23 @@ msgid "morale|Blood!"
 msgstr ""
 
 #, fuzzy
-msgid "Negative morale may cause the hero's units to freeze in combat."
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr "Düşük moral %{monster}'ın panikten donmasına yol açtı."
-
-msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
-msgstr ""
 
 #, fuzzy
-msgid "Positive morale may give the hero's units extra attacks in combat."
+msgid ""
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr "Düşük moral %{monster}'ın panikten donmasına yol açtı."
+
+#, fuzzy
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
+msgstr "Düşük moral %{monster}'ın panikten donmasına yol açtı."
+
+#, fuzzy
+msgid "Blood"
+msgstr "İlk Kan"
 
 msgid "Knight"
 msgstr ""
@@ -8545,6 +8885,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
@@ -8746,9 +9122,6 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
-msgstr ""
-
-msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"
@@ -11311,9 +11684,9 @@ msgstr ""
 msgid "An unknown force is being resurrected..."
 msgstr ""
 
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Uyarı"
+#~ msgid "AI"
+#~ msgstr "Bilgisayar"
 
-#~ msgid "CONFIG"
-#~ msgstr "AYARLAR"
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"

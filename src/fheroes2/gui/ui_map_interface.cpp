@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,8 +47,8 @@ namespace Interface
                                         - ( windowSize.height / 2 ) };
 
         // Clamp area to the edges of the area.
-        windowsPos.x = std::clamp( windowsPos.x, fheroes2::borderWidthPx, ( interfaceArea.width - windowSize.width ) + fheroes2::borderWidthPx );
-        windowsPos.y = std::clamp( windowsPos.y, fheroes2::borderWidthPx, ( interfaceArea.height - windowSize.height ) + fheroes2::borderWidthPx );
+        windowsPos.x = std::clamp<int32_t>( windowsPos.x, fheroes2::borderWidthPx, ( interfaceArea.width - windowSize.width ) + fheroes2::borderWidthPx );
+        windowsPos.y = std::clamp<int32_t>( windowsPos.y, fheroes2::borderWidthPx, ( interfaceArea.height - windowSize.height ) + fheroes2::borderWidthPx );
 
         return { windowsPos.x, windowsPos.y, windowSize.width, windowSize.height };
     }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -172,7 +172,7 @@ namespace
 
         const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
         dst_pt.x = pos.x + 64 + smon.x() - ( monster.isWide() ? 22 : 0 );
-        const int32_t monsterExtraOffsetY = std::max( 0, smon.height() - 96 );
+        const int32_t monsterExtraOffsetY = std::max<int32_t>( 0, smon.height() - 96 );
         dst_pt.y = pos.y + 119 - smon.height() + monsterExtraOffsetY;
 
         if ( monsterId == Monster::CHAMPION ) {
@@ -212,7 +212,7 @@ namespace
         str = _( "Available: %{count}" );
         StringReplace( str, "%{count}", available );
         text.set( std::move( str ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + 64 - text.width() / 2, pos.y + 120 + std::max( monsterExtraOffsetY, 2 ), display );
+        text.draw( pos.x + 64 - text.width() / 2, pos.y + 120 + std::max<int32_t>( monsterExtraOffsetY, 2 ), display );
 
         if ( showTotalSum ) {
             text.set( _( "Number to buy:" ), fheroes2::FontType::smallWhite() );

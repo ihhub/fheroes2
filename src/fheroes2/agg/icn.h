@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,7 +29,7 @@ enum class PlayerColor : uint8_t;
 
 namespace ICN
 {
-    enum : int
+    enum : int32_t
     {
         UNKNOWN,
         ADVBORDE,
@@ -1060,6 +1060,7 @@ namespace ICN
         BUTTON_RESET_GOOD,
         BUTTON_RESET_EVIL,
         BUTTON_START_GOOD,
+        BUTTON_START_EVIL,
 
         BUTTON_VIRTUAL_KEYBOARD_GOOD,
         BUTTON_VIRTUAL_KEYBOARD_EVIL,
@@ -1089,6 +1090,9 @@ namespace ICN
         BUTTON_MAP_SELECT_GOOD,
         BUTTON_MAP_SELECT_EVIL,
 
+        BUTTON_MAP_ABOUT_GOOD,
+        BUTTON_MAP_ABOUT_EVIL,
+
         BUTTON_GUILDWELL_EXIT,
         BUTTON_VIEWWORLD_EXIT_GOOD,
         BUTTON_VIEWWORLD_EXIT_EVIL,
@@ -1096,9 +1100,12 @@ namespace ICN
         BUTTON_VERTICAL_DISMISS,
         BUTTON_VERTICAL_EXIT,
         BUTTON_VERTICAL_PATROL,
-        BUTTON_HSCORES_VERTICAL_CAMPAIGN,
-        BUTTON_HSCORES_VERTICAL_EXIT,
-        BUTTON_HSCORES_VERTICAL_STANDARD,
+        BUTTON_HSCORES_VERTICAL_CAMPAIGN_GOOD,
+        BUTTON_HSCORES_VERTICAL_CAMPAIGN_EVIL,
+        BUTTON_HSCORES_VERTICAL_EXIT_GOOD,
+        BUTTON_HSCORES_VERTICAL_EXIT_EVIL,
+        BUTTON_HSCORES_VERTICAL_STANDARD_GOOD,
+        BUTTON_HSCORES_VERTICAL_STANDARD_EVIL,
 
         BUTTON_SELECT_GOOD,
         BUTTON_SELECT_EVIL,

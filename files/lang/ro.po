@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -20,6 +20,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "SELECTEAZĂ"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "S"
@@ -204,6 +207,11 @@ msgstr "START"
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 #, fuzzy
@@ -479,7 +487,7 @@ msgid "Move the %{name}"
 msgstr "Mută %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Trage în %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -535,11 +543,22 @@ msgstr ""
 "Șanțul reduce cu -%{count} abilitatea de apărare a oricărei unități și "
 "reduce la jumătate viteza de mișcare."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Viteză: %{speed}"
 
-msgid "Speed"
-msgstr "Viteză"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Anexare"
+
+msgid "Interface"
+msgstr "Interfață"
+
+msgid "Settings"
+msgstr "Setări"
+
+msgid "Auto Spell Casting"
+msgstr "Aruncarea vrăjilor automata"
 
 msgid "Off"
 msgstr "Oprit"
@@ -547,43 +566,14 @@ msgstr "Oprit"
 msgid "On"
 msgstr "Pornit"
 
-#, fuzzy
-msgid "Turn Order"
-msgstr "Ordin al armatei"
-
-msgid "Auto Spell Casting"
-msgstr "Aruncarea vrăjilor automata"
-
-msgid "Grid"
-msgstr "Grilă"
-
-msgid "Shadow Movement"
-msgstr "Mișcare a umbrelor"
-
-msgid "Shadow Cursor"
-msgstr "Cursor de umbră"
-
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Settings"
-msgstr "Setări"
-
-msgid "Configure"
-msgstr "Configurare"
-
-msgid "Hot Keys"
-msgstr "Scurtături"
-
-msgid "Damage Info"
-msgstr ""
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Setează viteza acțiunilor de luptă și a animațiilor."
 
-#, fuzzy
-msgid "Toggle to display the turn order during the battle."
-msgstr "Comută pentru a afișa ordinea armatei în timpul bătăliei."
+msgid "Change the interface settings of the game."
+msgstr ""
+
+msgid "Interface Settings"
+msgstr "Setări interfață"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -595,26 +585,8 @@ msgstr ""
 "aruncarea de vrăji pentru jucătorii computerului și nici nu afectează lupta "
 "rapidă)."
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Activează sau dezactivează grila hexagonală. Grila hexagonală se află "
-"întotdeauna la baza mișcării, chiar dacă este dezactivată. Acest comutator "
-"determină doar dacă grila este vizibilă."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Activează sau dezactivează umbrele care arată unde se pot mișca și ataca "
-"creaturile tale."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Activează sau dezactivează o umbră care arată locația hexagonală curentă a "
-"cursorului mouse-ului."
+msgid "Audio"
+msgstr "Audio"
 
 msgid "Change the audio settings of the game."
 msgstr ""
@@ -622,9 +594,8 @@ msgstr ""
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
-#, fuzzy
-msgid "Toggle to display damage information during the battle."
-msgstr "Comută pentru a afișa ordinea armatei în timpul bătăliei."
+msgid "Hot Keys"
+msgstr "Scurtături"
 
 msgid "Exit this menu."
 msgstr ""
@@ -1109,6 +1080,64 @@ msgstr "Fatalități: %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Fatalități: %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Ordin al armatei"
+
+msgid "Grid"
+msgstr "Grilă"
+
+msgid "Damage Info"
+msgstr ""
+
+msgid "Shadow Movement"
+msgstr "Mișcare a umbrelor"
+
+msgid "Shadow Cursor"
+msgstr "Cursor de umbră"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Mișcare a umbrelor"
+
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
+msgstr "Comută pentru a afișa ordinea armatei în timpul bătăliei."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Activează sau dezactivează grila hexagonală. Grila hexagonală se află "
+"întotdeauna la baza mișcării, chiar dacă este dezactivată. Acest comutator "
+"determină doar dacă grila este vizibilă."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Comută pentru a afișa ordinea armatei în timpul bătăliei."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Activează sau dezactivează umbrele care arată unde se pot mișca și ataca "
+"creaturile tale."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Activează sau dezactivează o umbră care arată locația hexagonală curentă a "
+"cursorului mouse-ului."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
@@ -1119,8 +1148,11 @@ msgstr ""
 msgid "Human"
 msgstr "Om"
 
-msgid "AI"
-msgstr "AI"
+msgid "Terrain"
+msgstr ""
+
+msgid "Battle Only"
+msgstr ""
 
 msgid "Start"
 msgstr ""
@@ -1138,8 +1170,29 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Te rog selectează un alt erou."
+
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Hero"
+msgstr "Erou"
+
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr ""
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2795,6 +2848,9 @@ msgstr ""
 msgid "HP"
 msgstr ""
 
+msgid "Speed"
+msgstr "Viteză"
+
 msgid "Growth"
 msgstr ""
 
@@ -2999,24 +3055,6 @@ msgstr "Închide"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
-msgid "Language"
-msgstr "Limbă"
-
-msgid "Graphics"
-msgstr "Grafică"
-
-msgid "Black & White"
-msgstr "Alb & Negru"
-
-msgid "Mouse Cursor"
-msgstr "Cursor Mouse"
-
-msgid "Color"
-msgstr "Colorat"
-
-msgid "Text Support"
-msgstr "Suport Text"
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -3026,8 +3064,23 @@ msgstr "Selectați Limba"
 msgid "Change the graphics settings of the game."
 msgstr ""
 
+msgid "Graphics"
+msgstr "Grafică"
+
+msgid "Mouse Cursor"
+msgstr "Cursor Mouse"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
+
+msgid "Interface Type"
+msgstr "Tipul interfeței"
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Text Support"
+msgstr "Suport Text"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3065,6 +3118,13 @@ msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
 
 #, fuzzy
 msgid "Map Description"
@@ -3113,6 +3173,15 @@ msgstr ""
 msgid "System Info"
 msgstr "Informații Sistem"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr ""
 
@@ -3120,6 +3189,13 @@ msgid "Select Game Resolution"
 msgstr ""
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3148,9 +3224,6 @@ msgstr "Ascunde"
 msgid "Show"
 msgstr "Arată"
 
-msgid "Interface"
-msgstr "Interfață"
-
 #, fuzzy
 msgid "Army Estimation"
 msgstr "Anexare"
@@ -3159,12 +3232,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr "Tipul interfeței"
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -3342,6 +3409,36 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+msgid "Random Map Generator"
+msgstr ""
+
+msgid "rmg|Player count:"
+msgstr ""
+
+msgid "rmg|Map layout:"
+msgstr ""
+
+msgid "rmg|Water percentage:"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Monster strength:"
+msgstr "Normal"
+
+msgid "rmg|Resource availability:"
+msgstr ""
+
+msgid "rmg|Map seed:"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Întoarce-te la luptă."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3468,6 +3565,12 @@ msgstr "Încarcă fișierul:"
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3487,16 +3590,32 @@ msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 msgid "Disable All Items"
 msgstr "Vrajă aleatorie"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Nicio vrajă disponibilă."
+
 msgid "Select Spell:"
+msgstr ""
+
+msgid "There are no artifacts to select from."
 msgstr ""
 
 msgid "Select Artifact:"
 msgstr ""
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 msgid "Select Monster:"
+msgstr ""
+
+msgid "There are no heroes to select from."
 msgstr ""
 
 msgid "Select Hero:"
@@ -3505,6 +3624,10 @@ msgstr ""
 #, fuzzy
 msgid "Select Monsters:"
 msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Artifact"
 
 msgid "race|Random"
 msgstr "Aleatorie"
@@ -3533,7 +3656,7 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Ocean Object:"
 msgstr "Selectați ținta vrăjii"
 
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr ""
 
 msgid "doubleLinedRace|Neutral"
@@ -3568,7 +3691,7 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Landscape Object:"
 msgstr "Selectați ținta vrăjii"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 msgid ""
@@ -3609,8 +3732,9 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Adventure Object:"
 msgstr "Selectați ținta vrăjii"
 
-msgid "Select color"
-msgstr ""
+#, fuzzy
+msgid "Select color:"
+msgstr "Selectați ținta vrăjii"
 
 msgid "Players Icon"
 msgstr ""
@@ -3630,17 +3754,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-msgid "Map Type"
-msgstr ""
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-msgid "Map Type:\n"
-msgstr ""
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3650,11 +3763,20 @@ msgstr ""
 msgid "Resurrection"
 msgstr ""
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr ""
+
+msgid "Map Type:\n"
+msgstr ""
+
 #, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr "Limbă"
 
 msgid "Lose all your heroes and towns."
@@ -3789,12 +3911,6 @@ msgid ""
 "computer movement at all."
 msgstr ""
 
-msgid "Change the interface settings of the game."
-msgstr ""
-
-msgid "Interface Settings"
-msgstr "Setări interfață"
-
 msgid "Toggle instant battle mode."
 msgstr ""
 
@@ -3926,12 +4042,16 @@ msgstr ""
 msgid "Town Army"
 msgstr "Oraș"
 
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr ""
+
 #, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
-msgid "Enter Castle name"
-msgstr ""
+#, fuzzy
+msgid "Enter Castle name:"
+msgstr "Întoarce-te la luptă."
 
 #, fuzzy
 msgid "Reset the Castle name."
@@ -4005,6 +4125,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Trage în %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Bara de mesaje"
 
@@ -4032,7 +4156,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Ziua: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4072,8 +4196,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Puncte de vrajă"
 
 msgid "Artifact"
 msgstr "Artifact"
@@ -4127,13 +4252,23 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
 msgstr ""
 
 msgid "Not able to generate a map with given parameters."
@@ -4163,24 +4298,6 @@ msgstr ""
 msgid ""
 "Do you wish to return to the game's Main Menu? (Any unsaved changes to the "
 "current map will be lost.)"
-msgstr ""
-
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
 msgstr ""
 
 #, fuzzy
@@ -4214,16 +4331,23 @@ msgid "Quit out of the map editor."
 msgstr ""
 
 #, fuzzy
+msgid "Auto Playtest"
+msgstr "Testori"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
+
+#, fuzzy
 msgid "Return to the game's Main Menu."
 msgstr "Întoarce-te la luptă."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr ""
 
 msgid "%{object} has no properties to change."
@@ -4263,13 +4387,7 @@ msgstr ""
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
+msgid "The same object exists on the tile."
 msgstr ""
 
 #, fuzzy
@@ -4295,6 +4413,24 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr ""
 
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
 msgid "Used to place %{object}."
 msgstr ""
 
@@ -4312,11 +4448,6 @@ msgid ""
 "Click here to\n"
 "select another monster."
 msgstr "Te rog selectează un alt erou."
-
-msgid ""
-"Cell\n"
-"Details"
-msgstr ""
 
 msgid "Erase"
 msgstr ""
@@ -4357,8 +4488,29 @@ msgstr ""
 msgid "Towns"
 msgstr ""
 
+msgid "editorDetailMode|Edit"
+msgstr ""
+
+msgid "editorDetailMode|Move"
+msgstr ""
+
+msgid "editorDetailMode|Copy"
+msgstr ""
+
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Selectați ținta vrăjii"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4424,6 +4576,15 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
+
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -4455,7 +4616,7 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr ""
 
 msgid "Adventure Objects Mode"
@@ -4531,6 +4692,39 @@ msgstr ""
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
+
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Sprijiniți-ne pe"
+
+msgid "Language"
+msgstr "Limbă"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Limbă"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Programare suplimentară"
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Selectați Limba:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Selectați Limba"
 
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
@@ -4707,22 +4901,18 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
+#, fuzzy
+msgid "Change Map Name:"
+msgstr "Limbă"
 
-msgid "Change Map Name"
-msgstr ""
+#, fuzzy
+msgid "Change Map Description:"
+msgstr "Designeri de hărți"
 
-msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4799,6 +4989,9 @@ msgstr ""
 msgid "Toggle display of objects' passability."
 msgstr ""
 
+msgid "Rumors:"
+msgstr ""
+
 msgid "Rumor:"
 msgstr ""
 
@@ -4831,6 +5024,13 @@ msgstr ""
 
 msgid "Delete an existing rumor."
 msgstr ""
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Limbă"
 
 msgid ""
 "\n"
@@ -4954,6 +5154,66 @@ msgstr "Expert"
 msgid "difficulty|Impossible"
 msgstr "Imposibil"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testori"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+msgid "Failed to prepare the map for auto playtest."
+msgstr ""
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Anexare"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Anexare"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Dorești să recâștigi controlul de la AI? Efectul va avea loc doar în "
+"următoarea rundă."
+
 msgid "and more..."
 msgstr ""
 
@@ -5054,8 +5314,8 @@ msgstr "Coordonare de Proiect și Dezvoltare"
 msgid "Development"
 msgstr "Dezvoltare"
 
-msgid "Visit us at "
-msgstr "Vizitați-ne la "
+msgid "Visit us at"
+msgstr "Vizitați-ne la"
 
 msgid "QA and Support"
 msgstr "QA și Suport"
@@ -5066,8 +5326,8 @@ msgstr "Dezvoltare și Suport"
 msgid "Special Thanks to"
 msgstr "Mulțumiri speciale către"
 
-msgid "and many-many other contributors and supporters!"
-msgstr "și mulți alți contributori și suporteri!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Sprijiniți-ne pe"
@@ -5201,6 +5461,12 @@ msgstr "Designeri de hărți"
 msgid "Package Design"
 msgstr "Design de ambalaj"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Sigur vreți să închideți?"
+
 msgid "High Scores"
 msgstr ""
 
@@ -5249,6 +5515,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5271,9 +5540,6 @@ msgid "hotkey|multi-player game"
 msgstr ""
 
 msgid "hotkey|settings"
-msgstr ""
-
-msgid "hotkey|quit"
 msgstr ""
 
 msgid "hotkey|select map"
@@ -5337,11 +5603,19 @@ msgstr "Personalizează opțiunile sistemului"
 msgid "hotkey|toggle passability"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Personalizează opțiunile sistemului"
+
 msgid "hotkey|re-generate random map"
 msgstr ""
 
 msgid "hotkey|re-configure random map"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Personalizează opțiunile sistemului"
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -5563,6 +5837,13 @@ msgstr ""
 msgid "hotkey|buy all monsters in well"
 msgstr ""
 
+msgid "hotkey|merge troops with hero"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Personalizează opțiunile sistemului"
+
 msgid "hotkey|split stack by half"
 msgstr ""
 
@@ -5745,9 +6026,6 @@ msgstr ""
 msgid ""
 "A multi-player game, with several human players competing against each other "
 "on a single map."
-msgstr ""
-
-msgid "Battle Only"
 msgstr ""
 
 msgid "Setup and play a battle without loading any map."
@@ -6159,14 +6437,20 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Mișcare a umbrelor"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Unul sau mai mulți dintre eroi se mai poate mișca, sigur doriți să vă "
 "terminați tura?"
-
-msgid "Are you sure you want to quit?"
-msgstr "Sigur vreți să închideți?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
@@ -6286,7 +6570,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Setează abilitățile de atac"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6303,13 +6587,55 @@ msgstr ""
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Limbă"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+msgid "Lowercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Designeri de hărți"
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6397,6 +6723,9 @@ msgstr "Vezi %{name}"
 msgid "Greek"
 msgstr "Verde"
 
+msgid "Esperanto"
+msgstr ""
+
 msgid "Slow"
 msgstr "Încet"
 
@@ -6414,6 +6743,15 @@ msgstr "Bun"
 
 msgid "Evil"
 msgstr "Rău"
+
+msgid "Black & White"
+msgstr "Alb & Negru"
+
+msgid "Color"
+msgstr "Colorat"
+
+msgid "Configure"
+msgstr "Configurare"
 
 msgid ", FPS: "
 msgstr ""
@@ -7626,10 +7964,10 @@ msgstr ""
 msgid "This hero is not able to cast adventure spells."
 msgstr ""
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell cannot be cast on a boat."
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell can only be cast near an ocean."
@@ -7728,16 +8066,16 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Puncte de vrajă"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr ""
 
 #, fuzzy
@@ -7799,6 +8137,10 @@ msgstr ""
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
 msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Blood Morale"
 msgstr ""
@@ -8320,17 +8662,17 @@ msgid "luck|Irish"
 msgstr ""
 
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 
@@ -8356,17 +8698,22 @@ msgid "morale|Blood!"
 msgstr ""
 
 #, fuzzy
-msgid "Negative morale may cause the hero's units to freeze in combat."
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
-
-msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
-msgstr ""
 
 #, fuzzy
-msgid "Positive morale may give the hero's units extra attacks in combat."
+msgid ""
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
+
+#, fuzzy
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
+msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
+
+msgid "Blood"
+msgstr ""
 
 msgid "Knight"
 msgstr "Cavaler"
@@ -8556,6 +8903,43 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normal"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
@@ -8761,9 +9145,6 @@ msgstr ""
 
 msgid "Random Monster - very strong"
 msgstr ""
-
-msgid "Hero"
-msgstr "Erou"
 
 msgid "Nothing Special"
 msgstr ""
@@ -11324,9 +11705,12 @@ msgstr ""
 msgid "An unknown force is being resurrected..."
 msgstr ""
 
-#, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Atenție"
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "și mulți alți contributori și suporteri!"
 
-#~ msgid "CONFIG"
-#~ msgstr "CONFIG"
+#~ msgid "AI"
+#~ msgstr "AI"
+
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Dați click pentru a reîncepe bătălia în mod manual."

@@ -1,3 +1,196 @@
+version 1.1.17 (30 June 2026)
+- update the Russian translation
+- greatly speed up application startup
+- update the German translation
+- update the Ukrainian translation
+- fix terrain reset on exit for the Battle Only mode
+- fix New Creature Week right-click delay
+- fix status window layout alignment on the Adventure Map
+- swap Archery Range Building sprites to match the colors of units
+- match castle's hero/building fade animation delay to classic H2
+- fix assertion hit for AI battle during Teleport spell evaluation
+- make AI heroes stay in castles if they get a movement bonus the next day
+- fix the title alignment in the resolution window
+- add an initial version of the Auto Playtest feature for the Editor
+- fix validation issue when updating enemy army in Battle Only mode
+- update the Swedish translation
+- remove assertion as it leads to a crash while loading a map
+- do not allow to start a battle in Battle Only mode if the START button is disabled
+- update the application exiting confirmation dialog in the Editor to include potential unsaved map changes
+- allow scrolling among all objects in a group using the mouse wheel in the Editor
+- fix spell sprite position in the first spell animation frame on the battlefield
+- improve AI decision making when using damage spells for Mirror Image monsters
+- speed up object evaluation for AI on the Adventure Map
+- do not allow placing Adventure Map Events on other objects
+- add "?" to the random terrain icon in Battle Only mode
+- show object highlighted area while moving or copying it
+- update the Hungarian translation
+- do not place roads under the obstacles in Random Map Generator
+- keep hero sprite invisible after hero fade-out animation
+- add Adventure Map smooth scrolling option
+- add the ability to directly extract all assets from the GOG installer on Android
+
+version 1.1.16 (17 May 2026)
+- update the Brazilian Portuguese translation
+- update the Russian translation
+- update the Polish translation
+- update castle mound after new terrain being placed in the Editor
+- fix missing tile passability update while removing objects in the Editor
+- allow to select certain artifacts to be buried as Ultimate Artifact in the Editor
+- fix the first editing of the hero when cancelling in the Editor
+- expand detail mode in the Editor to support editing, moving and copying brushes
+- add separate hotkeys to merge troops in castle
+- display all maps, even duplicates for both the game and the Editor
+- sort maps alphabetically by file name in the Editor
+- make hero turning animation depend on the animation speed
+- reduce application resources usage for object update actions in the Editor
+- make Eraser tool in the Editor more granular
+- fix castle entrance road update on placing/erasing a castle in the Editor
+- speed up eraser functionality in case of no objects to be erased in the Editor
+- add a popup dialog to confirm unsaved changes for hero in the Editor
+- allow placement of non-action objects over the edges of the map in the Editor
+- add ability to move an object in the Editor
+- update the Ukrainian translation
+- add drag-to-draw ability to Roads and Streams in the Editor
+- add a confirmation window while exiting castle's window in the Editor
+- add application exiting logic for the Editor's Main Menu
+- reduce the application startup time
+- add Esperanto translation
+
+version 1.1.15 (12 April 2026)
+- fix inconsistency in the Editor's window titles
+- add "Ravenhold" map to the fheroes2 bundle
+- add "Apocalypse" map to the fheroes2 bundle
+- add "Final Invasion" map to the fheroes2 bundle
+- update the Ukrainian translation
+- update the Russian translation
+- consolidate all translated versions of the "Eruption" map into a single map file
+- add ability to show Turn Order window below the battlefield
+- add popup windows for all buttons for the Virtual Keyboard
+- rework Battle Only interface
+- add ability to select artifacts for Random Artifact objects in the Editor
+- fix rendering deadlock for vertical text when a character width is bigger than the maximum width
+- fix issues for the text input window
+- consolidate all translated versions of the "7 deserts" map into a single map file
+- add NBSP character to all fonts
+- update the Greek translation
+- update the Belarusian translation
+- make the ABOUT button available from the scenario info during gameplay
+- speed up engine loading and language switching
+- recalculate hero path after "Dimension Door" spell usage
+- fix rendering of dead monsters during Resurrection spell animation
+- make AI heroes sort artifacts from worst to best to minimize losses on defeat
+- separate battle animation Speed string from monster Speed
+- add Brazilian Portuguese language support for the Virtual Keyboard
+- remove death monster animation in the castle's well dialog
+- adjust castle image and castle name in Town's dialog
+- add Norwegian language support for the Virtual Keyboard
+- add Swedish language support for the Virtual Keyboard
+- add Hungarian language support for the Virtual Keyboard
+- add Spanish language support to Virtual Keyboard
+- add Bulgarian language support for the Virtual Keyboard
+- update CP-1253 fonts for the Greek language
+- loosen the conditions for action object placement in the Editor
+- improve adventure map spells message order
+- move scrollbar only to discrete positions corresponding to the list items
+- avoid terrain objects being placed under road objects in the Random Map Generator
+- update object passabilities after the Random Map Generator finishes generating map
+- compress fheroes2 assets data in h2d file
+- add Timidity PAT files to PS Vita package
+- generate new sprites for diagonal road crossings
+- update the Portuguese Translation
+- adjust morale and luck descriptions
+- update the Polish translation
+- show water percentage limit in Random Generator
+- fix vertical offset for small monster images
+- make it possible to change terrain type in the Battle Only mode with the mouse wheel
+- fix animation freezing while playing the sound of Petrification spell
+- set 'exchange all troops' default hotkey to 'X' to avoid conflicting with Mage Guild
+- update the Swedish translation
+
+version 1.1.14 (24 February 2026)
+- fix hero removal leftovers from the map in the Editor
+- add new variants of Abandoned Mines
+- enable several hardware buttons for all Virtual Keyboards
+- fix an assertion crash while viewing a Puzzle with The Succession Wars resources
+- update the Russian translation
+- add a battle option to highlight the creature's movement area
+- update the Polish translation
+- properly render the moat water effect for troops during a castle siege
+- fix invalid logic for future value of objects on the Adventure Map
+- add an extra check for Navigation skill in Witch's Hut to avoid AI heroes wasting resources
+- modify the check for Well to take into account days to reach it, rather than assuming it takes one day
+- do not allow the random map generator to place more than one action object on a tile
+- add all possible road directions using original assets
+- add multi-language support for maps
+- place free pickup objects during random map generation
+- add Evil interface buttons to the High Scores dialog
+- fix the direct attacking up and down cursor offset in battles
+- add missing translation of some texts
+- disable the Standard/Campaign button in the High Score dialog for the demo version of the game or when campaign files aren't present
+- speed up AI computations
+- speed up the check whether a tile contains water terrain
+- speed up game type switching in High Scores dialog
+- make AI heroes not move around blindly if they are on patrol
+- fill empty areas with decorative/flavour objects on randomly generated maps
+- make Liches avoid wasting friendly units while under AI control
+- update the Hungarian translation
+- AI no longer wastes spells on mirrored monsters while retreating
+- add ability to select terrain type for Battle Only mode
+- fix the inability to save files on iOS
+- do not do screen fading within the High Scores dialog
+- update the German translation
+- fix an assertion failed crash in the German version when line breaking after hyphens
+- show damage info dialog popup when targeting enemy unit with damage spells
+- adjust Guardian Spell usage by AI
+- add Screen Scaling Type to the graphics settings dialog and Interface Type to the game settings dialog
+- update the Ukrainian translation
+- fix two bad pixels on Jezebel's portrait
+- reduce memory usage for single-layer images
+
+version 1.1.13 (21 December 2025)
+- update the Russian translation
+- add several missing letters for the CP-1251 code page
+- improve the use of certain battle spells by the AI
+- fix several iOS-related issues and bring the iOS build into a playable state
+- improve road network and verify object placement immediately for the random map generator
+- set starting hero and player information for RMG maps
+- update the Hungarian translation
+- show a dialog when there are no items to select to avoid a crash after pressing OK in the empty list
+- reduce overall RAM usage by the engine
+- speed up the CRC32 algorithm to improve translation file loading times
+- fix an assertion issue with original corrupted maps
+- add a UI screen to configure the random map generator
+- add drag-to-draw functionality to the Terrain and Erase brushes
+- add missing popups for the second hero control in Battle Only mode
+- display Traveller's Tent and Barrier colors in popups in the Editor
+- avoid using Shield spell by AI when it has no effect
+- document compilation steps for iOS
+- significantly reduce RAM usage by the Editor when doing actions
+- show map type explicitly, as icons are too small to differentiate for some players
+- make the interactive area for each building in the Castle window consist of multiple rectangles
+- fully render the FPS text on the screen on every frame render call
+- make AI use the Earthquake spell in battles
+- speed up several instances of button generation
+- truncate text within the Monster Info dialog to avoid incorrect rendering
+- truncate building names for building image within the Castle window to avoid incorrect rendering
+- do not show troop counter during elementals' summoning animation
+- teach the AI how to use the Teleport spell
+- improve random map generator consistency and treasure distribution
+- update the Swedish translation
+- speed up the AI pathfinder algorithm
+- update the Belarusian translation
+- fix "E with 2 dots on top" letter for CP-1251 small font
+- do not react to world scroll keys when scrolling is disabled
+- fix status bar flickering in the main Castle Window when switching castles
+- move the Adventure Map view area to the center of the map in hot-seat mode
+- fix rendering while toggling the Turn Order option during battles
+- fix a case when AI was not using the Disrupting Ray spell when the enemy defense value is equal to 2
+- update FPS counter and color cycling synchronization logic
+- implement custom monster levels for the random map generation
+- update the Ukrainian translation
+- fix an assertion when opening map info for maps with defeat hero condition or capture/lose castle condition
+
 version 1.1.12 (09 November 2025)
 - add a hot key modifier to move hero portrait to the top of the heroes list
 - increase the limit for event messages, map description and about section, Sphinx riddle and Sign text to 999

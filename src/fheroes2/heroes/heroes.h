@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -327,7 +327,7 @@ public:
     const Army & GetArmy() const override;
     Army & GetArmy() override;
 
-    int GetID() const
+    int32_t GetID() const
     {
         return _id;
     }
@@ -438,6 +438,7 @@ public:
     // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
     uint32_t GetMaxMovePoints( const bool onWater ) const;
 
+    // Returns the movement points for the current turn.
     uint32_t GetMovePoints() const
     {
         return _movePoints;
@@ -572,7 +573,9 @@ public:
 
     void Action( const int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
-    void ActionSpellCast( const Spell & spell );
+
+    // Returns true if the spell is casted successfully.
+    bool ActionSpellCast( const Spell & spell );
 
     // Update map in the scout area around the Hero on radar (mini-map).
     void ScoutRadar() const;
@@ -698,6 +701,11 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
+    void setAlphaValue( const uint8_t alphaValue )
+    {
+        _alphaValue = alphaValue;
+    }
+
     double getAIMinimumJoiningArmyStrength() const;
 
     uint32_t getDailyRestoredSpellPoints() const;
@@ -768,11 +776,11 @@ private:
     Army _army{ this };
 
     // Hero ID
-    int _id{ UNKNOWN };
+    int32_t _id{ UNKNOWN };
     // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
     // ID of this hero, unless a custom portrait is applied.
-    int _portrait{ UNKNOWN };
-    int _race{ Race::NONE };
+    int32_t _portrait{ UNKNOWN };
+    int32_t _race{ Race::NONE };
 
     MP2::MapObjectType _objectTypeUnderHero{ MP2::OBJ_NONE };
 
@@ -781,9 +789,9 @@ private:
     std::list<IndexObject> _visitedObjects;
 
     // Hero's direction on adventure map.
-    int _direction{ Direction::RIGHT };
+    int32_t _direction{ Direction::RIGHT };
     // Hero's sprite index on adventure map.
-    int _spriteIndex{ 18 };
+    int32_t _spriteIndex{ 18 };
     // Hero's sprite offset on adventure map, used only during hero's movement.
     fheroes2::Point _offset;
 
@@ -802,6 +810,9 @@ private:
 
     // This value should NOT be saved in save file as it's dynamically set during AI turn.
     Role _aiRole{ Role::HUNTER };
+
+    // Used to freeze the rotation animation for N frames to match the rotation animation with movement speed.
+    int8_t _skippedFramesForAngleStep{ 0 };
 };
 
 struct VecHeroes final : public std::vector<Heroes *>

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -160,7 +160,7 @@ public:
         return id != m.id;
     }
 
-    int GetID() const
+    int32_t GetID() const
     {
         return id;
     }
@@ -296,7 +296,7 @@ public:
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
 
-    int ICNMonh() const;
+    int32_t ICNMonh() const;
 
     uint32_t GetSpriteIndex() const
     {
@@ -327,5 +327,5 @@ protected:
 
     static Monster FromDwelling( int race, uint32_t dw );
 
-    int id;
+    int32_t id;
 };

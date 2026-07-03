@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -589,7 +589,7 @@ void AI::Planner::removePriorityAttackTarget( const int32_t tileIndex )
         }
 
         // check if a secondary task still present
-        std::set<int> & defenseSecondaries = defenseTask->second.secondaryTaskTileId;
+        std::set<int32_t> & defenseSecondaries = defenseTask->second.secondaryTaskTileId;
         defenseSecondaries.erase( tileIndex );
         if ( defenseSecondaries.empty() ) {
             // if no one else was threatening this then we no longer have to defend
@@ -622,7 +622,6 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
 
 fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 {
-#if defined( WITH_DEBUG )
     class AIAutoControlModeCommitter
     {
     public:
@@ -649,7 +648,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
     };
 
     const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
-#endif
 
     _mapActionObjects.clear();
     _priorityTargets.clear();
@@ -717,7 +715,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     for ( int idx = 0; idx < mapSize; ++idx ) {
         const Maps::Tile & tile = world.getTile( idx );
-        MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const uint32_t regionID = tile.GetRegion();
         if ( regionID >= _regions.size() ) {
@@ -725,12 +722,14 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             continue;
         }
 
-        RegionStats & stats = _regions[regionID];
         if ( !isUnderViewSpell && tile.isFog( myColor ) ) {
             continue;
         }
 
-        if ( !MP2::isInGameActionObject( objectType ) ) {
+        MP2::MapObjectType objectType = tile.getMainObjectType();
+        // Remove useless objects for AI heroes as they bring no value.
+        // It is good to exclude them here to avoid unnecessary calculations.
+        if ( !isValuableAdventureMapObject( kingdom, objectType, idx ) ) {
             continue;
         }
 
@@ -738,6 +737,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             assert( 0 );
         }
 
+        RegionStats & stats = _regions[regionID];
         if ( objectType == MP2::OBJ_HERO ) {
             const Heroes * hero = tile.getHero();
             assert( hero != nullptr );
@@ -848,8 +848,8 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
         // If AI has less than three heroes at the start of the turn we assume
         // that he will buy another one in this turn and allow progress to increase only for 2 points.
-        uint32_t const endProgressValue
-            = ( currentProgressValue == 1 ) ? std::min( static_cast<uint32_t>( heroes.size() ) * 2U + 1U, 8U ) : std::min( currentProgressValue + 2U, 9U );
+        const uint32_t endProgressValue = ( currentProgressValue == 1 ) ? std::min<uint32_t>( ( static_cast<uint32_t>( heroes.size() ) * 2U ) + 1U, 8U )
+                                                                        : std::min<uint32_t>( currentProgressValue + 2U, 9U );
 
         bool moreTaskForHeroes = false;
         const fheroes2::GameMode gameState = HeroesTurn( heroes, currentProgressValue, endProgressValue, moreTaskForHeroes );
@@ -860,7 +860,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
             assert( !heroes.empty() && heroes.back() != nullptr );
 
-            updateMapActionObjectCache( heroes.back()->GetIndex() );
+            updateMapActionObjectCache( heroes.back()->GetKingdom(), heroes.back()->GetIndex() );
 
             ++availableHeroCount;
 

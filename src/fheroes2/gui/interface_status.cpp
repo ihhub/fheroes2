@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -120,7 +120,7 @@ void Interface::StatusPanel::_redraw() const
     else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
         _drawDayInfo();
 
-        if ( Players::HumanColors() & conf.CurrentColor() ) {
+        if ( ( Players::HumanColors() & conf.CurrentColor() ) || conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) ) {
             _drawKingdomInfo( stonHeight + 5 );
 
             if ( _state != StatusType::STATUS_RESOURCE ) {
@@ -154,18 +154,20 @@ void Interface::StatusPanel::_redraw() const
         }
     }
     else {
+        const int32_t offsetY = pos.height > stonHeight ? ( pos.height - stonHeight ) / 2 : 0;
+
         switch ( _state ) {
         case StatusType::STATUS_DAY:
             _drawDayInfo();
             break;
         case StatusType::STATUS_FUNDS:
-            _drawKingdomInfo();
+            _drawKingdomInfo( offsetY );
             break;
         case StatusType::STATUS_ARMY:
-            _drawArmyInfo();
+            _drawArmyInfo( offsetY );
             break;
         case StatusType::STATUS_RESOURCE:
-            _drawResourceInfo();
+            _drawResourceInfo( offsetY );
             break;
         case StatusType::STATUS_UNKNOWN:
         case StatusType::STATUS_AITURN:
@@ -262,8 +264,8 @@ void Interface::StatusPanel::_drawDayInfo( const int32_t offsetY ) const
 {
     const fheroes2::Rect & pos = GetArea();
 
-    const int dayOfWeek = world.GetDay();
-    const int weekOfMonth = world.GetWeek();
+    const uint32_t dayOfWeek = world.GetDay();
+    const uint32_t weekOfMonth = world.GetWeek();
     const uint32_t month = world.GetMonth();
     const int icnType = Settings::Get().isEvilInterfaceEnabled() ? ICN::SUNMOONE : ICN::SUNMOON;
 
@@ -495,7 +497,7 @@ void Interface::StatusPanel::drawAITurnProgress( const uint32_t progressValue )
     LocalEvent::Get().HandleEvents( false );
 
     const bool updateProgress = ( progressValue != _aiTurnProgress );
-    const bool isMapAnimation = Game::validateAnimationDelay( Game::MAPS_DELAY );
+    const bool isMapAnimation = Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY );
 
     if ( !updateProgress && !isMapAnimation ) {
         return;

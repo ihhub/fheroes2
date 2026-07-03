@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ namespace fheroes2
         return monsterAnimationSequence;
     }
 
-    RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
+    RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster, const bool includeDeathAnimation )
         : _reference( monster.GetID() )
         , _icnID( fheroes2::getMonsterData( monster.GetID() ).icnId )
         , _frameId( 0 )
@@ -56,8 +56,11 @@ namespace fheroes2
         _addValidMove( Monster_Info::RANG_BOT );
         _addValidMove( Monster_Info::MOVING );
         _addValidMove( Monster_Info::MOVING );
-        _addValidMove( Monster_Info::WNCE );
-        _addValidMove( Monster_Info::KILL );
+        if ( includeDeathAnimation ) {
+            // Getting a hit or death animation.
+            _addValidMove( Monster_Info::WNCE );
+            _addValidMove( Monster_Info::KILL );
+        }
 
         increment();
     }

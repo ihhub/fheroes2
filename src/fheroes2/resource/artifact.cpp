@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -431,13 +431,13 @@ int32_t Artifact::getSpellId() const
     return Spell::NONE;
 }
 
-int Artifact::Rand( ArtLevel lvl )
+int32_t Artifact::Rand( ArtLevel lvl )
 {
-    std::vector<int> v;
+    std::vector<int32_t> v;
     v.reserve( 25 );
 
     // if possibly: make unique on map
-    for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+    for ( int32_t art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
         const Artifact artifact{ art };
 
         if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) ) {
@@ -446,7 +446,7 @@ int Artifact::Rand( ArtLevel lvl )
     }
 
     if ( v.empty() ) {
-        for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+        for ( int32_t art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
             const Artifact artifact{ art };
 
             if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) ) {
@@ -455,7 +455,7 @@ int Artifact::Rand( ArtLevel lvl )
         }
     }
 
-    int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
+    const int32_t res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
     artifactGlobalStatus[res] |= ART_RNDUSED;
 
     return res;
@@ -1399,8 +1399,9 @@ std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 
             // At this point, we have confirmed that all the artifact parts are present
             // so remove the parts and then add the assembled artifact to BagArtifacts
-            for ( const int artifactId : setData.second )
+            for ( const int artifactId : setData.second ) {
                 RemoveArtifact( artifactId );
+            }
 
             assembledArtifactSets.insert( setData.first );
             PushArtifact( setData.first._assembledArtifactID );
@@ -1408,6 +1409,23 @@ std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
     }
 
     return assembledArtifactSets;
+}
+
+void BagArtifacts::sortFromWorstToBest()
+{
+    if ( size() < 2 ) {
+        // Nothing to do here.
+        return;
+    }
+
+    std::sort( begin(), end(), []( const auto & left, const auto & right ) {
+        // No sorting should be done for Magic Book.
+        if ( left == Artifact::MAGIC_BOOK || right == Artifact::MAGIC_BOOK ) {
+            return false;
+        }
+
+        return left.getArtifactValue() < right.getArtifactValue();
+    } );
 }
 
 bool ArtifactSetData::operator<( const ArtifactSetData & other ) const

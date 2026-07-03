@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -467,15 +467,20 @@ CastleDialog::BuildingsRenderQueue::BuildingsRenderQueue( const Castle & castle,
     const std::vector<BuildingType> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castleRace, Settings::Get().getCurrentMapInfo().version );
 
     for ( const BuildingType buildingId : ordersBuildings ) {
-        emplace_back( buildingId, fheroes2::getCastleBuildingArea( castleRace, buildingId ) + top );
+        auto areas = fheroes2::getCastleBuildingArea( castleRace, buildingId );
+        for ( auto & area : areas ) {
+            area = area + top;
+        }
+
+        emplace_back( buildingId, std::move( areas ) );
     }
 }
 
 bool CastleDialog::FadeBuilding::updateFadeAlpha()
 {
-    if ( _alpha < 255 && Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
-        if ( _alpha < 255 - 15 ) {
-            _alpha += 15;
+    if ( _alpha < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_ITEM_UPDATE_DELAY ) ) {
+        if ( _alpha < 255 - 9 ) {
+            _alpha += 9;
         }
         else {
             _alpha = 255;

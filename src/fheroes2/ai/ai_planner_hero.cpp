@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -308,10 +308,8 @@ namespace
     {
         // TODO: All these spells are not used by AI at the moment.
         switch ( spellId ) {
-        case Spell::EARTHQUAKE:
         case Spell::HAUNT:
         case Spell::IDENTIFYHERO:
-        case Spell::TELEPORT:
         case Spell::VIEWARTIFACTS:
         case Spell::VIEWHEROES:
         case Spell::VIEWMINES:
@@ -352,7 +350,7 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
         case MP2::OBJ_MAGELLANS_MAPS:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
+            return !kingdom.isVisited( objectType ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
@@ -387,13 +385,13 @@ namespace
             assert( art.isValid() );
 
             if ( art.GetID() == Artifact::MAGIC_BOOK && hero.HaveSpellBook() ) {
+                // Heroes cannot have more than 1 Magic Book.
                 return false;
             }
 
             const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
-            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
-                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+            if ( condition >= Maps::ArtifactCaptureCondition::PAY_2000_GOLD && condition <= Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
                 return kingdom.AllowPayment( getArtifactResourceRequirement( tile ) );
             }
 
@@ -417,13 +415,13 @@ namespace
         }
 
         case MP2::OBJ_OBELISK:
-            return !kingdom.isVisited( tile );
+            return !kingdom.isVisited( index, objectType );
 
         case MP2::OBJ_BARRIER:
-            return kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_TRAVELLER_TENT:
-            return !kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return !kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
@@ -444,7 +442,7 @@ namespace
                 return false;
             }
 
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+            if ( !kingdom.isVisited( index, objectType ) ) {
                 // This shrine has not been visited by any hero. It's worth to do it.
                 return true;
             }
@@ -482,7 +480,7 @@ namespace
                 return false;
             }
 
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+            if ( !kingdom.isVisited( index, objectType ) ) {
                 // The AI heroes should not have prior knowledge what skill this object has.
                 return true;
             }
@@ -491,13 +489,21 @@ namespace
                 return false;
             }
 
-            if ( army.AllTroopsAreUndead() && skillType == Skill::Secondary::LEADERSHIP ) {
+            if ( ( skillType == Skill::Secondary::LEADERSHIP ) && army.AllTroopsAreUndead() ) {
                 // For undead army it's pointless to have Leadership skill.
                 return false;
             }
 
-            if ( !hero.HaveSpellBook() && ( skillType == Skill::Secondary::MYSTICISM || skillType == Skill::Secondary::EAGLE_EYE ) ) {
+            if ( ( skillType == Skill::Secondary::MYSTICISM || skillType == Skill::Secondary::EAGLE_EYE ) && !hero.HaveSpellBook() ) {
                 // It's useless to have Mysticism with no magic book in hands.
+                return false;
+            }
+
+            if ( ( skillType == Skill::Secondary::NAVIGATION ) && world.getWaterPercentage() < 1 ) {
+                // If this is the Navigation skill and then amount of water on the map is less than 1% then it is a useless skill.
+                //
+                // For example, on the biggest map of 144 x 144 tiles, 1% of water corresponds to 207 tiles.
+                // It is going to be highly unlikely to use this skill for the whole map.
                 return false;
             }
 
@@ -507,7 +513,7 @@ namespace
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
                 const Funds & rc = getTreeOfKnowledgeRequirement( tile );
-                // If the payment is required do not waste all resources from the kingdom. Use them wisely.
+                // If the payment is required, do not waste all resources from the kingdom. Use them wisely.
                 if ( rc.GetValidItemsCount() == 0 || kingdom.AllowPayment( rc * 5 ) ) {
                     return true;
                 }
@@ -555,10 +561,20 @@ namespace
                 return false;
             }
 
-            if ( distance > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
-                // The Well is located at a distance which cannot be reached by the hero at the current turn.
-                // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
-                return false;
+            if ( distance > hero.GetMovePoints() ) {
+                const auto path = pathfinder.buildPath( index, false );
+                assert( !path.empty() );
+                assert( path.back().GetIndex() == index );
+
+                const int32_t daysToTarget = completedDaysToTarget( path, hero );
+                // If this assertion blows up then the above logic is invalid.
+                assert( daysToTarget > 0 );
+
+                if ( ( static_cast<uint32_t>( daysToTarget ) * hero.getDailyRestoredSpellPoints() ) + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                    // The Well is located at a distance which cannot be reached by the hero at the current turn.
+                    // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
+                    return false;
+                }
             }
 
             return true;
@@ -642,7 +658,7 @@ namespace
                 return false;
             }
 
-            const int daysActive = numOfDaysPerWeek - world.GetDay() + 1;
+            const uint32_t daysActive = numOfDaysPerWeek - world.GetDay() + 1;
             const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
 
             return movementBonus > 0;
@@ -652,14 +668,14 @@ namespace
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+            if ( !kingdom.isVisited( index, objectType ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && isHeroStrongerThan( tile, ai, heroArmyStrength, 2 );
             }
             break;
 
         case MP2::OBJ_PYRAMID:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+            if ( !kingdom.isVisited( index, objectType ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
                        && isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
@@ -712,7 +728,7 @@ namespace
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUT_OF_MAGI:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
+            return !kingdom.isVisited( objectType ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
 
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
@@ -725,24 +741,28 @@ namespace
             return kingdom.AllowPayment( payment );
         }
 
+        // TODO: AI has no brains to handle Sirens object.
+        case MP2::OBJ_SIRENS:
+        // TODO: AI doesn't know how it use Sphinx object properly.
+        case MP2::OBJ_SPHINX:
+        // TODO: AI doesn't know how it use Trading Post object properly.
+        case MP2::OBJ_TRADING_POST:
+            return false;
+
+        // The following objects must never be analyzed.
         // AI should never consider a boat as a destination point. It uses them only to make a path.
         case MP2::OBJ_BOAT:
         // Eye of Magi is not an action object at all.
         case MP2::OBJ_EYE_OF_MAGI:
         // No use of these object for AI.
         case MP2::OBJ_ORACLE:
-        // AI has no brains to do anything from sign messages.
+        // AI doesn't read messages.
         case MP2::OBJ_SIGN:
-        // AI has no brains to handle Sirens object.
-        case MP2::OBJ_SIRENS:
-        // TODO: AI doesn't know how it use Sphinx object properly.
-        case MP2::OBJ_SPHINX:
         // AI should never consider a stone lith as a destination point. It uses them only to make a path.
         case MP2::OBJ_STONE_LITHS:
-        // TODO: AI doesn't know how it use Trading Post object properly.
-        case MP2::OBJ_TRADING_POST:
         // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
         case MP2::OBJ_WHIRLPOOL:
+            assert( 0 );
             return false;
 
         default:
@@ -1614,7 +1634,7 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
         return 100;
     }
     case MP2::OBJ_STABLES: {
-        const int daysActive = numOfDaysPerWeek - world.GetDay() + 1;
+        const uint32_t daysActive = numOfDaysPerWeek - world.GetDay() + 1;
         double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
 
         const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
@@ -2491,7 +2511,11 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                     extraValue = valueStorage.value( pair, 0 );
                 }
                 else {
-                    const int32_t daysToReachObject = completedDaysToTarget( _pathfinder.buildPath( pair.first ), hero );
+                    const auto path = _pathfinder.buildPath( pair.first, false );
+                    assert( !path.empty() );
+                    assert( path.back().GetIndex() == pair.first );
+
+                    const int32_t daysToReachObject = completedDaysToTarget( path, hero );
                     if ( daysToReachObject < dayToBecomeValid ) {
                         extraValue = valueStorage.futureValue( pair, 0 );
                     }
@@ -2571,7 +2595,11 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
         }
 
         if ( !isCurrentlyValid ) {
-            const int32_t daysToReachObject = completedDaysToTarget( _pathfinder.buildPath( idx ), hero );
+            const auto path = _pathfinder.buildPath( idx, false );
+            assert( !path.empty() );
+            assert( path.back().GetIndex() == idx );
+
+            const int32_t daysToReachObject = completedDaysToTarget( path, hero );
             if ( daysToReachObject < daysToBeAvailable ) {
                 // Only objects that are not reachable at the moment can be predicted.
                 continue;
@@ -2877,8 +2905,9 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( formerBoatIdx );
-    updateMapActionObjectCache( nextTileIdx );
+    const auto & kingdom = hero.GetKingdom();
+    updateMapActionObjectCache( kingdom, formerBoatIdx );
+    updateMapActionObjectCache( kingdom, nextTileIdx );
 }
 
 void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
@@ -2894,6 +2923,43 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
             }
 
             reinforceCastle( *castle );
+
+            // If the hero has very little movement points, we can check whether it is worth keeping him in the castle for the next turn.
+            //
+            // Each step in monster speed gives 100 movement points (see Heroes::GetMaxMovePoints() method).
+            // So, we need to get the difference in speed between slowest and fastest units, and compare it with movement points left for this turn.
+            Army & heroArmy = hero.GetArmy();
+            const Troop * slowestTroop = heroArmy.GetSlowestTroop();
+            const Troop * fastestTroop = heroArmy.GetFastestTroop();
+
+            assert( slowestTroop != nullptr );
+            assert( fastestTroop != nullptr );
+
+            const uint32_t slowestSpeed{ slowestTroop->GetSpeed() };
+
+            uint32_t speedDifference{ fastestTroop->GetSpeed() - slowestSpeed };
+            if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                // Seems like leaving all slow units in the castle might give a movement boost next day.
+                const Troops castleBackup{ castle->GetArmy().getTroops() };
+                const Troops heroBackup{ heroArmy.getTroops() };
+
+                transferSlowestTroopsToGarrison( &hero, castle );
+
+                // Verify that the movement bonus is still applicable.
+                slowestTroop = heroArmy.GetSlowestTroop();
+                assert( slowestTroop != nullptr );
+
+                speedDifference = slowestTroop->GetSpeed() - slowestSpeed;
+                if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                    hero.SetModes( Heroes::SLEEPER );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << " stays in " << castle->GetName() << " castle till the next turn to get movement boost." )
+                }
+                else {
+                    // Nope. We can't get the movement bonus.
+                    castle->GetArmy().Assign( castleBackup );
+                    heroArmy.Assign( heroBackup );
+                }
+            }
         }
         else {
             OptimizeTroopsOrder( hero.GetArmy() );
@@ -2904,7 +2970,7 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
 
     updatePriorityTargets( hero, tileIndex, objectType );
 
-    updateMapActionObjectCache( tileIndex );
+    updateMapActionObjectCache( hero.GetKingdom(), tileIndex );
 }
 
 void AI::Planner::HeroesActionNewPosition( Heroes & hero )
@@ -2979,8 +3045,9 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( formerBoatIdx );
-    updateMapActionObjectCache( nextTileIdx );
+    const auto & kingdom = hero.GetKingdom();
+    updateMapActionObjectCache( kingdom, formerBoatIdx );
+    updateMapActionObjectCache( kingdom, nextTileIdx );
 }
 
 bool AI::Planner::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
@@ -3090,6 +3157,12 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                     continue;
                 }
 
+                if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolCenter() == hero->GetCenter() ) ) {
+                    // Heroes on patrol are restricted in movement so it is assumed that they aren't blocking the way.
+                    // They actually could block the way but this is done deliberately by the map maker.
+                    continue;
+                }
+
                 const int targetIndex = _pathfinder.getNearestTileToMove( *hero );
                 if ( targetIndex != -1 ) {
                     bestTargetIndex = targetIndex;
@@ -3133,15 +3206,16 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
                     assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
 
-                    updateMapActionObjectCache( prevHeroPosition );
-                    updateMapActionObjectCache( bestHero->GetIndex() );
+                    const auto & kingdom = bestHero->GetKingdom();
+                    updateMapActionObjectCache( kingdom, prevHeroPosition );
+                    updateMapActionObjectCache( kingdom, bestHero->GetIndex() );
 
                     prevHeroPosition = bestHero->GetIndex();
                 }
 
                 if ( dimensionDoorDist > 0 ) {
                     // The rest of the path the hero should do by foot.
-                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
+                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex, true ) );
 
                     const fheroes2::GameMode gameState = HeroesMove( *bestHero );
                     if ( gameState != fheroes2::GameMode::END_TURN ) {
@@ -3151,7 +3225,7 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                 }
             }
             else {
-                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
+                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex, true ) );
 
                 const fheroes2::GameMode gameState = HeroesMove( *bestHero );
                 if ( gameState != fheroes2::GameMode::END_TURN ) {
@@ -3162,12 +3236,13 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
         }
 
         if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {
+            const auto & kingdom = bestHero->GetKingdom();
             // The hero died or moved to another position. We have to update the action object cache.
-            updateMapActionObjectCache( prevHeroPosition );
+            updateMapActionObjectCache( kingdom, prevHeroPosition );
 
             if ( bestHero->isActive() ) {
                 // Hero moved to another position and is still alive.
-                updateMapActionObjectCache( bestHero->GetIndex() );
+                updateMapActionObjectCache( kingdom, bestHero->GetIndex() );
             }
         }
 

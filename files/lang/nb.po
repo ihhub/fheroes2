@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -19,6 +19,9 @@ msgstr ""
 
 msgid "SELECT"
 msgstr "ENDRE"
+
+msgid "ABOUT"
+msgstr ""
 
 msgid "S"
 msgstr "L"
@@ -189,6 +192,11 @@ msgstr "OMSTART"
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 #, fuzzy
@@ -468,7 +476,7 @@ msgid "Move the %{name}"
 msgstr "Flytt %{name}"
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Skyt på %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -519,11 +527,24 @@ msgstr ""
 "Vollgraven reduserer forsvarsevnen til krigere som befinner seg i den med "
 "%{count} og halverer skrittene deres."
 
-msgid "Speed: %{speed}"
+#, fuzzy
+msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
-msgid "Speed"
-msgstr "Hurtighet"
+#, fuzzy
+msgid "battleAnimation|Speed"
+msgstr "Underleggelse"
+
+msgid "Interface"
+msgstr "Grensesnitt"
+
+msgid "Settings"
+msgstr "Innstillinger"
+
+msgid "Auto Spell Casting"
+msgstr ""
+"Auto-\n"
+"trylling"
 
 msgid "Off"
 msgstr "Av"
@@ -531,52 +552,16 @@ msgstr "Av"
 msgid "On"
 msgstr "På"
 
-#, fuzzy
-msgid "Turn Order"
-msgstr ""
-"Tur-\n"
-"rekkefølge"
-
-msgid "Auto Spell Casting"
-msgstr ""
-"Auto-\n"
-"trylling"
-
-msgid "Grid"
-msgstr "Rutenett"
-
-msgid "Shadow Movement"
-msgstr ""
-"Uthevd\n"
-"rekkevidde"
-
-msgid "Shadow Cursor"
-msgstr ""
-"Rute-\n"
-"markør"
-
-msgid "Audio"
-msgstr "Lyd"
-
-msgid "Settings"
-msgstr "Innstillinger"
-
-msgid "Configure"
-msgstr "Konfigurer"
-
-msgid "Hot Keys"
-msgstr "Hurtigtaster"
-
-msgid "Damage Info"
-msgstr "Skadeinfo"
-
 msgid "Set the speed of combat actions and animations."
 msgstr "Juster hastigheten til handlingene og animasjonene i kamp."
 
 #, fuzzy
-msgid "Toggle to display the turn order during the battle."
-msgstr ""
-"Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
+msgid "Change the interface settings of the game."
+msgstr "Endre bildeinnstillingene til spillet."
+
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Spillinnstillinger"
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -587,25 +572,8 @@ msgstr ""
 "Dette påvirker ikke magibruken til datamaskinspillere på noen som helst "
 "måte, og det påvirker heller ikke hurtigkamp.)"
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-"Velg om rutenettet for slagmarken skal være synlig eller ikke. Det er de "
-"samme rutene man kan flytte seg til enten rutenettet vises eller ikke."
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-"Velg om rekkevidden for hvor krigerene dine kan flytte seg skal utheves ved "
-"å gjøres mørkere."
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
-msgstr ""
-"Velg om den ruten du peker på med markøren din skal utheves ved å gjøres "
-"mørkere."
+msgid "Audio"
+msgstr "Lyd"
 
 msgid "Change the audio settings of the game."
 msgstr "Endre lydinnstillingene til spillet."
@@ -613,10 +581,8 @@ msgstr "Endre lydinnstillingene til spillet."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Kontroller og endre alle hurtigtastene i spillet."
 
-msgid "Toggle to display damage information during the battle."
-msgstr ""
-"Skru på dette for å vise et vindu som forklarer hvor mye skade du kommer til "
-"å gjøre."
+msgid "Hot Keys"
+msgstr "Hurtigtaster"
 
 msgid "Exit this menu."
 msgstr "Forlat denne menyen."
@@ -1095,6 +1061,73 @@ msgstr "Dødstall : %{max}"
 msgid "Perish: %{min} - %{max}"
 msgstr "Dødstall : %{min} - %{max}"
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
+#, fuzzy
+msgid "Turn Order"
+msgstr ""
+"Tur-\n"
+"rekkefølge"
+
+msgid "Grid"
+msgstr "Rutenett"
+
+msgid "Damage Info"
+msgstr "Skadeinfo"
+
+msgid "Shadow Movement"
+msgstr ""
+"Uthevd\n"
+"rekkevidde"
+
+msgid "Shadow Cursor"
+msgstr ""
+"Rute-\n"
+"markør"
+
+#, fuzzy
+msgid "Movement Area"
+msgstr ""
+"Uthevd\n"
+"rekkevidde"
+
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
+msgstr ""
+"Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Velg om rutenettet for slagmarken skal være synlig eller ikke. Det er de "
+"samme rutene man kan flytte seg til enten rutenettet vises eller ikke."
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Skru på dette for å vise et vindu som forklarer hvor mye skade du kommer til "
+"å gjøre."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Velg om rekkevidden for hvor krigerene dine kan flytte seg skal utheves ved "
+"å gjøres mørkere."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Velg om den ruten du peker på med markøren din skal utheves ved å gjøres "
+"mørkere."
+
+msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
@@ -1105,8 +1138,12 @@ msgstr ""
 msgid "Human"
 msgstr "Menneske"
 
-msgid "AI"
-msgstr "Datamaskin"
+#, fuzzy
+msgid "Terrain"
+msgstr "Terrengmodus"
+
+msgid "Battle Only"
+msgstr "Kampmodus"
 
 #, fuzzy
 msgid "Start"
@@ -1125,8 +1162,31 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Vennligst velg en annen helt."
+
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Hero"
+msgstr "Helter"
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2974,6 +3034,9 @@ msgstr "Skade"
 msgid "HP"
 msgstr "Liv"
 
+msgid "Speed"
+msgstr "Hurtighet"
+
 msgid "Growth"
 msgstr "Vekst"
 
@@ -3204,24 +3267,6 @@ msgstr "Avslutt"
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Forlat Heroes of Might and Magic II."
 
-msgid "Language"
-msgstr "Språk"
-
-msgid "Graphics"
-msgstr "Bilde"
-
-msgid "Black & White"
-msgstr "Svart-hvit"
-
-msgid "Mouse Cursor"
-msgstr "Markør"
-
-msgid "Color"
-msgstr "Farget"
-
-msgid "Text Support"
-msgstr "Tekstmodus"
-
 msgid "Change the language of the game."
 msgstr "Endre språket til spillet."
 
@@ -3231,8 +3276,23 @@ msgstr "Velg spillspråk"
 msgid "Change the graphics settings of the game."
 msgstr "Endre bildeinnstillingene til spillet."
 
+msgid "Graphics"
+msgstr "Bilde"
+
+msgid "Mouse Cursor"
+msgstr "Markør"
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Skru farget markør av eller på. Dette er kun et estetisk valg."
+
+msgid "Interface Type"
+msgstr "Grensesnitt"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Velg den typen grensesnitt du ønsker."
+
+msgid "Text Support"
+msgstr "Tekstmodus"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3287,6 +3347,13 @@ msgstr ""
 "Taps-\n"
 "vilkår"
 
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
 #, fuzzy
 msgid "Map Description"
 msgstr ""
@@ -3337,6 +3404,15 @@ msgstr "FPS"
 msgid "System Info"
 msgstr "Systeminfo"
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr "Endre oppløsningen til spillet."
 
@@ -3345,6 +3421,13 @@ msgstr "Velg spilloppløsning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Velg mellom fullskjerm og vindusskjerm."
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
+msgstr ""
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3375,9 +3458,6 @@ msgstr "Løs"
 msgid "Show"
 msgstr "Bundet"
 
-msgid "Interface"
-msgstr "Grensesnitt"
-
 #, fuzzy
 msgid "Army Estimation"
 msgstr "Underleggelse"
@@ -3387,12 +3467,6 @@ msgstr ""
 
 msgid "Numeric"
 msgstr ""
-
-msgid "Interface Type"
-msgstr "Grensesnitt"
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Velg den typen grensesnitt du ønsker."
 
 msgid "Toggle interface visibility."
 msgstr "Skift synlighet for grensesnittet."
@@ -3579,6 +3653,40 @@ msgstr "Skritt:"
 msgid "Uncharted Territory"
 msgstr "Ikke kartlagt område"
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Tilfeldig monster"
+
+#, fuzzy
+msgid "rmg|Player count:"
+msgstr "Spillerikon"
+
+#, fuzzy
+msgid "rmg|Map layout:"
+msgstr "Spillerikon"
+
+#, fuzzy
+msgid "rmg|Water percentage:"
+msgstr "Vannånd"
+
+#, fuzzy
+msgid "rmg|Monster strength:"
+msgstr "Tilfeldig monster - sterk"
+
+msgid "rmg|Resource availability:"
+msgstr ""
+
+msgid "rmg|Map seed:"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
 msgid "Cost per troop:"
 msgstr "Pris per kriger:"
 
@@ -3716,6 +3824,13 @@ msgstr "Lastingsfil:"
 msgid "Terrain object"
 msgstr "Terrengmodus"
 
+msgid "There is nothing to select from."
+msgstr ""
+
+#, fuzzy
+msgid "There are no castles to select from."
+msgstr "Navnet til det utvalgte kartet."
+
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."
 
@@ -3735,17 +3850,35 @@ msgstr "Trykk for å bruke den valgte oppløsningen."
 msgid "Disable All Items"
 msgstr "Vis trolldommer"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
+
+#, fuzzy
+msgid "There are no spells to select."
+msgstr "Ingen trolldommer tilgjengelige."
 
 msgid "Select Spell:"
 msgstr "Velg trolldom:"
 
+msgid "There are no artifacts to select from."
+msgstr ""
+
 msgid "Select Artifact:"
 msgstr "Velg en skatt:"
 
+#, fuzzy
+msgid "There are no monsters to select from."
+msgstr "Navnet til det utvalgte kartet."
+
 msgid "Select Monster:"
 msgstr "Velg monster:"
+
+#, fuzzy
+msgid "There are no heroes to select from."
+msgstr "Navnet til det utvalgte kartet."
 
 msgid "Select Hero:"
 msgstr "Velg helt:"
@@ -3753,6 +3886,10 @@ msgstr "Velg helt:"
 #, fuzzy
 msgid "Select Monsters:"
 msgstr "Velg monster:"
+
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Velg en skatt:"
 
 msgid "race|Random"
 msgstr "Tilfeldig"
@@ -3785,7 +3922,7 @@ msgid "Select Ocean Object:"
 msgstr "Sjøting"
 
 #, fuzzy
-msgid "Castle/town placing"
+msgid "Castle/town placing:"
 msgstr "Borgvalg"
 
 msgid "doubleLinedRace|Neutral"
@@ -3827,7 +3964,7 @@ msgstr "Velg trolldom:"
 msgid "Select Landscape Object:"
 msgstr "Sjøting"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3869,7 +4006,7 @@ msgid "Select Adventure Object:"
 msgstr "Sjøting"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Velg monster:"
 
 msgid "Players Icon"
@@ -3897,19 +4034,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr "Størrelsesikon"
 
-msgid "Map Type"
-msgstr "Kart-type"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-"Viser om kartet er laget for spillutgaven \"Tronekrigene\" eller \"Prisen "
-"for lojalitet\"."
-
-msgid "Map Type:\n"
-msgstr "Kart-type:\n"
-
 msgid "The Succession Wars"
 msgstr "Tronekrigene"
 
@@ -3922,11 +4046,20 @@ msgstr ""
 "Gjen-\n"
 "opplivning"
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Kart-type"
+
+msgid "Map Type:\n"
+msgstr "Kart-type:\n"
+
 #, fuzzy
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr "Språk"
 
 msgid "Lose all your heroes and towns."
@@ -4071,14 +4204,6 @@ msgstr ""
 "Justerer hvor fort datamaskinspillere flytter seg rundt på kartet. Du kan "
 "også velge å ikke vise hva de gjør i det hele tatt."
 
-#, fuzzy
-msgid "Change the interface settings of the game."
-msgstr "Endre bildeinnstillingene til spillet."
-
-#, fuzzy
-msgid "Interface Settings"
-msgstr "Spillinnstillinger"
-
 msgid "Toggle instant battle mode."
 msgstr "Skift modus for hurtigkamp."
 
@@ -4217,11 +4342,15 @@ msgid "Town Army"
 msgstr "By"
 
 #, fuzzy
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr "Flytt hvor mange styrker?"
+
+#, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Klikk for å vise neste by."
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Mist helten kalt %{name}."
 
 #, fuzzy
@@ -4298,6 +4427,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Skyt på %{monster}"
+
+#, fuzzy
 msgid "Message:"
 msgstr "Kamplogg"
 
@@ -4325,7 +4458,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4372,7 +4505,7 @@ msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Experience value"
+msgid "Set Experience value:"
 msgstr "Erfaringspoeng"
 
 msgid "Artifact"
@@ -4433,7 +4566,7 @@ msgid "%{objects} must be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
@@ -4443,6 +4576,22 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 #, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Er du sikker på at du ønsker å laste inn et nytt kart?\n"
+"(Alt som er ulagret i dette kartet vil gå tapt.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
+"kartet vil gå tapt.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr ""
@@ -4483,24 +4632,6 @@ msgstr ""
 "Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
 "kartet vil gå tapt.)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Start på nytt"
@@ -4536,17 +4667,24 @@ msgid "Quit out of the map editor."
 msgstr "Forlat karttegneren"
 
 #, fuzzy
+msgid "Auto Playtest"
+msgstr "Spilltestere"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
+
+#, fuzzy
 msgid "Return to the game's Main Menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
 
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Tilfeldig sjeldneste skatt"
 
 msgid "%{object} has no properties to change."
@@ -4590,14 +4728,7 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
-#, fuzzy
-msgid "Pick player count"
-msgstr "Spillerikon"
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
+msgid "The same object exists on the tile."
 msgstr ""
 
 #, fuzzy
@@ -4626,6 +4757,24 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "Lagringsfil:"
 
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
 #, fuzzy
 msgid "Used to place %{object}."
 msgstr "Brukes til å plassere en helt."
@@ -4645,11 +4794,6 @@ msgid ""
 "Click here to\n"
 "select another monster."
 msgstr "Vennligst velg en annen helt."
-
-msgid ""
-"Cell\n"
-"Details"
-msgstr ""
 
 #, fuzzy
 msgid "Erase"
@@ -4697,7 +4841,31 @@ msgid "Towns"
 msgstr "Byer"
 
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorDetailMode|Edit"
+msgstr "Detaljemodus"
+
+#, fuzzy
+msgid "editorDetailMode|Move"
+msgstr "Detaljemodus"
+
+#, fuzzy
+msgid "editorDetailMode|Copy"
+msgstr "Detaljemodus"
+
+#, fuzzy
+msgid "editorErasure|Mountains"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Sjøting"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4769,6 +4937,15 @@ msgstr "Kan kun overfares med skip."
 msgid "No special modifiers."
 msgstr "Ingen spesielle påvirkninger."
 
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
+
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -4806,7 +4983,7 @@ msgid "Detail Mode"
 msgstr "Detaljemodus"
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Brukes for spesielle tilpasninger av monster, helter eller byer."
 
 #, fuzzy
@@ -4896,6 +5073,39 @@ msgstr ""
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis karttegnerens systeminnstillinger der den kan skreddersys."
+
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Støtt oss på"
+
+msgid "Language"
+msgstr "Språk"
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Språk"
+
+#, fuzzy
+msgid "Add an additional language."
+msgstr "Øvrig programmering"
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Velg språk:"
+
+#, fuzzy
+msgid "Delete an existing language."
+msgstr "Last inn et eksisterende kart."
 
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
@@ -5088,23 +5298,20 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
-msgstr ""
-
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
-msgstr ""
-
-msgid "Change Map Name"
+msgid "map|ABOUT"
 msgstr ""
 
 #, fuzzy
-msgid "Change Map Description"
+msgid "Change Map Name:"
+msgstr ""
+"Kartets\n"
+"størrelse"
+
+#, fuzzy
+msgid "Change Map Description:"
 msgstr "Kartbeskrivelse"
 
-msgid "About"
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -5195,6 +5402,9 @@ msgstr ""
 msgid "Toggle display of objects' passability."
 msgstr ""
 
+msgid "Rumors:"
+msgstr ""
+
 msgid "Rumor:"
 msgstr ""
 
@@ -5228,6 +5438,13 @@ msgstr ""
 #, fuzzy
 msgid "Delete an existing rumor."
 msgstr "Last inn et eksisterende kart."
+
+#, fuzzy
+msgid ""
+"\n"
+"\n"
+"Language:\n"
+msgstr "Språk"
 
 msgid ""
 "\n"
@@ -5356,6 +5573,66 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Umulig"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Spilltestere"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Lagringsfil:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Underleggelse"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Underleggelse"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Vil du gi styringen til datamaskinen? Dette vil først tre i kraft den neste "
+"runden."
+
 msgid "and more..."
 msgstr "og mer..."
 
@@ -5483,8 +5760,8 @@ msgstr ""
 msgid "Development"
 msgstr "Programvareutvikling"
 
-msgid "Visit us at "
-msgstr "Treff oss på "
+msgid "Visit us at"
+msgstr "Treff oss på"
 
 msgid "QA and Support"
 msgstr "Kvalitetssikring og støtte"
@@ -5495,9 +5772,8 @@ msgstr "Utvikling og støtte"
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
 
-#, fuzzy
-msgid "and many-many other contributors and supporters!"
-msgstr "og mange flere bidragsytere!"
+msgid "and all the people who have helped make the project possible!"
+msgstr ""
 
 msgid "Support us at"
 msgstr "Støtt oss på"
@@ -5631,6 +5907,12 @@ msgstr "Karttegnere"
 msgid "Package Design"
 msgstr "Innpakningsdesign"
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr "Er du sikker på at du vil avslutte?"
+
 msgid "High Scores"
 msgstr "Rekordtavle"
 
@@ -5680,6 +5962,9 @@ msgstr "Tekstmodus"
 msgid "hotkey|toggle developer mode"
 msgstr "Tekstmodus"
 
+msgid "hotkey|quit"
+msgstr "Avslutt"
+
 msgid "hotkey|new game"
 msgstr "Nytt parti"
 
@@ -5704,9 +5989,6 @@ msgstr "Flerspillermodus"
 
 msgid "hotkey|settings"
 msgstr "Innstillinger"
-
-msgid "hotkey|quit"
-msgstr "Avslutt"
 
 msgid "hotkey|select map"
 msgstr "Velg kart"
@@ -5771,12 +6053,20 @@ msgid "hotkey|toggle passability"
 msgstr "Slå av/på status"
 
 #, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Venstre"
+
+#, fuzzy
 msgid "hotkey|re-generate random map"
 msgstr "Nytt automatisk kart"
 
 #, fuzzy
 msgid "hotkey|re-configure random map"
 msgstr "Nytt automatisk kart"
+
+#, fuzzy
+msgid "hotkey|output all text"
+msgstr "Panorer til venstre"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
@@ -6000,6 +6290,14 @@ msgstr "Byggeskjerm"
 msgid "hotkey|buy all monsters in well"
 msgstr "Kjøp alle krigere fra brønnen"
 
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Neste helt"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Standard handling"
+
 msgid "hotkey|split stack by half"
 msgstr "Del tropper i to"
 
@@ -6196,9 +6494,6 @@ msgid ""
 msgstr ""
 "Et flerspillerparti hvor flere menneskelige spillere konkurrerer mot "
 "hverandre på et enkelt kart."
-
-msgid "Battle Only"
-msgstr "Kampmodus"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Sett opp og spill en kamp uten å laste inn et kart."
@@ -6681,14 +6976,22 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Hent fram menyen for systeminnstillinger og skreddersy spillet."
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr ""
+"Uthevd\n"
+"rekkevidde"
+
+msgid ""
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
+msgstr ""
+
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 "Én eller flere helter kan fortsatt forflytte seg. Vil du likevel avslutte "
 "turen din?"
-
-msgid "Are you sure you want to quit?"
-msgstr "Er du sikker på at du vil avslutte?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
@@ -6842,7 +7145,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Spesifiser angrepsevne"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6860,13 +7163,56 @@ msgstr "Forsvar"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Klikk for å lagre det nåværende spillet."
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "MELLOMROM"
 
+#, fuzzy
+msgid "Change language"
+msgstr "Endre språket til spillet."
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Trykk for å velge et språk."
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Lowercase"
+msgstr "Blomster"
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Klikk for å lagre det nåværende spillet."
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+#, fuzzy
+msgid "Swap sign"
+msgstr "Karttegnere"
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6955,6 +7301,9 @@ msgstr ""
 msgid "Greek"
 msgstr "Grønn"
 
+msgid "Esperanto"
+msgstr ""
+
 msgid "Slow"
 msgstr "Treg"
 
@@ -6972,6 +7321,15 @@ msgstr "God"
 
 msgid "Evil"
 msgstr "Ond"
+
+msgid "Black & White"
+msgstr "Svart-hvit"
+
+msgid "Color"
+msgstr "Farget"
+
+msgid "Configure"
+msgstr "Konfigurer"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -8608,13 +8966,13 @@ msgstr "Kun helter kan bruke denne trolldommen."
 msgid "This hero is not able to cast adventure spells."
 msgstr "Denne helten er ikke i stand til å bruke kartmagi."
 
+msgid "This spell cannot be cast on a boat."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Din helt er for sliten til å bruke denne trolldommen i dag. Prøv igjen i "
 "morgen."
-
-msgid "This spell cannot be cast on a boat."
-msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "This spell can only be cast near an ocean."
 msgstr "Denne trolldommen kan kun bli brukt i nærheten av sjø."
@@ -8734,17 +9092,17 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Mana"
 
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
 #, fuzzy
-msgid "Enter hero's name"
+msgid "Enter hero's name:"
 msgstr "Mist helten kalt %{name}."
 
 #, fuzzy
@@ -8812,6 +9170,10 @@ msgstr ""
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
+msgstr "Klikk for å vise neste by."
 
 msgid "Blood Morale"
 msgstr "Blodskampånd"
@@ -9401,23 +9763,23 @@ msgstr "Heldiggris"
 
 #, fuzzy
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 "Uflaks kan av og til føre til at styrkene dine kun skader halvparten av det "
 "vanlige."
 
 #, fuzzy
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 "Nøytral flaks gjør at styrkene dine aldri vil få heldige eller uheldige slag "
 "når de angriper fienden."
 
 #, fuzzy
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "Positiv flaks gjør at styrkene dine av og til gjør heldige slag (dobbel "
@@ -9445,21 +9807,26 @@ msgid "morale|Blood!"
 msgstr "Blod!"
 
 #, fuzzy
-msgid "Negative morale may cause the hero's units to freeze in combat."
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr ""
 "Negativ kampånd kan føre til at styrkene dine stivner til av panikk i kamp."
 
 #, fuzzy
 msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr ""
 "Nøytral kampånd betyr at styrkene dine aldri verken vil bli velsignet med en "
 "ekstra tur eller stivne til av panikk i kamp."
 
 #, fuzzy
-msgid "Positive morale may give the hero's units extra attacks in combat."
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
 msgstr "Positiv kampånd kan av og til gi styrkene dine en ekstra tur i kamp."
+
+#, fuzzy
+msgid "Blood"
+msgstr "Bloddømme"
 
 msgid "Knight"
 msgstr "Ridder"
@@ -9675,6 +10042,43 @@ msgstr "Gress"
 msgid "Ocean"
 msgstr "Sjø"
 
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+#, fuzzy
+msgid "monster_strength|Normal"
+msgstr "Normal"
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
+msgstr ""
+
 msgid "maps|Small"
 msgstr "Liten"
 
@@ -9881,10 +10285,6 @@ msgstr "Tilfeldig monster - sterk"
 
 msgid "Random Monster - very strong"
 msgstr "Tilfeldig monster - veldig sterk"
-
-#, fuzzy
-msgid "Hero"
-msgstr "Helter"
 
 msgid "Nothing Special"
 msgstr "Ingenting spesielt"
@@ -12969,54 +13369,12 @@ msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
 
 #, fuzzy
-#~ msgid "Warning!"
-#~ msgstr "Advarsel"
+#~ msgid "and many-many other contributors and supporters!"
+#~ msgstr "og mange flere bidragsytere!"
 
-#~ msgid "The description of the currently selected map."
-#~ msgstr "Beskrivelse av det utvalgte kartet."
+#~ msgid "AI"
+#~ msgstr "Datamaskin"
 
-#~ msgid "Castle Options"
-#~ msgstr "Borgvalg"
-
-#~ msgid "Click to show next town."
-#~ msgstr "Klikk for å vise neste by."
-
-#~ msgid "Click to show previous town."
-#~ msgstr "Klikk for å vise forrige by."
-
-#~ msgid "Returns the caster to any town or castle currently owned."
-#~ msgstr ""
-#~ "Sender helten til en hvilken som helst by eller borg i heltens nåværende "
-#~ "besittelse."
-
-#~ msgid "Always retaliates"
-#~ msgstr "Tar alltid igjen"
-
-#~ msgid "CONFIG"
-#~ msgstr "VALG"
-
-#~ msgid "Cancel back to the New Map menu."
-#~ msgstr "Avbryt og dra tilbake til menyen for nye kart."
-
-#~ msgid "Cancel back to the Map Editor main menu."
-#~ msgstr "Avbryt og dra tilbake til karttegnerens hovedmeny."
-
-#~ msgid "Host"
-#~ msgstr "Vert"
-
-#~ msgid ""
-#~ "The host sets up the game options. There can only be one host per network "
-#~ "game."
-#~ msgstr ""
-#~ "Verten fyller ut spillvalgene. Det kan kun være én vert per "
-#~ "nettverksspill."
-
-#~ msgid "Guest"
-#~ msgstr "Gjest"
-
-#~ msgid ""
-#~ "The guest waits for the host to set up the game, then is automatically "
-#~ "added in. There can be multiple guests for TCP/IP games."
-#~ msgstr ""
-#~ "Gjesten venter på at verten setter opp partiet og blir deretter "
-#~ "automatisk lagt til. Det kan være flere gjester for TCP/IP-parti."
+#, fuzzy
+#~ msgid "Click to set this hero to be AI-controlled."
+#~ msgstr "Klikk her for å velge hvilket kart du vil spille."

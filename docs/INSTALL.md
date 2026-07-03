@@ -75,7 +75,7 @@ You can download it using the following URLs:
 | Windows Version | C++ Package |
 | --- | --- |
 | For 64-bit x64 fheroes2 builds | [**https://aka.ms/vs/17/release/vc_redist.x64.exe**](https://aka.ms/vs/17/release/vc_redist.x64.exe) |
-| for 32-bit x86 fheroes2 builds | [**https://aka.ms/vs/17/release/vc_redist.x86.exe**](https://aka.ms/vs/17/release/vc_redist.x86.exe) |
+| For 32-bit x86 fheroes2 builds | [**https://aka.ms/vs/17/release/vc_redist.x86.exe**](https://aka.ms/vs/17/release/vc_redist.x86.exe) |
 
 ## macOS
 
@@ -149,7 +149,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 
   | Installation Method | Destination |
   | --- | --- |
-  | built from source using the [**macOS native app**](#macos-native-app) | `~/Library/Application Support/fheroes2` |
+  | Built from source using the [**macOS native app**](#macos-native-app) | `~/Library/Application Support/fheroes2` |
   | All other cases | `~/.fheroes2` |
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
@@ -333,8 +333,8 @@ You can download the precompiled binaries of the latest commit (snapshot)
 
 | Platform Version | Release                                                                                                   |
 |------------------|-----------------------------------------------------------------------------------------------------------|
-| Windows x64 SDL2 | [fheroes2-windows-x64-SDL2](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL2)     |
-| Windows x86 SDL2 | [fheroes2-windows-x86-SDL2](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL2)     |
+| Windows x64      | [fheroes2-windows-x64-SDL2](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL2)     |
+| Windows x86      | [fheroes2-windows-x86-SDL2](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL2)     |
 | macOS x86-64     | [fheroes2-osx-sdl2_dev](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev)             |
 | Ubuntu x86-64    | [fheroes2-linux-sdl2_dev](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev)         |
 | Ubuntu ARM       | [fheroes2-linux-arm-sdl2_dev](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl2_dev) |

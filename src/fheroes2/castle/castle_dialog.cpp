@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -414,10 +414,24 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
         // In this case we must revert the queue and finding the first suitable building.
         for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
-            if ( isBuild( it->id ) && le.isMouseCursorPosInArea( it->coord ) ) {
-                statusMessage = buildingStatusMessage( _race, it->id );
-                break;
+            if ( !isBuild( it->id ) ) {
+                continue;
             }
+
+            bool isMouseInArea{ false };
+            for ( const auto & area : it->areas ) {
+                if ( le.isMouseCursorPosInArea( area ) ) {
+                    isMouseInArea = true;
+                    break;
+                }
+            }
+
+            if ( !isMouseInArea ) {
+                continue;
+            }
+
+            statusMessage = buildingStatusMessage( _race, it->id );
+            break;
         }
 
         if ( le.isMouseCursorPosInArea( buttonExit.area() ) ) {
@@ -474,7 +488,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     // This variable must be declared out of the loop for performance reasons.
     uint32_t castleAnimationIndex = 1;
 
-    Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
+    Game::passAnimationDelay( Game::DelayType::CASTLE_AROUND_DELAY );
 
     while ( le.HandleEvents() && result == CastleDialogReturnValue::DoNothing ) {
         bool needRedraw = false;
@@ -564,11 +578,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     keep = bottomArmyBar.GetSelectedItem();
                 }
 
-                if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DOWN ) ) {
+                if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_HERO ) ) {
                     hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_UP ) ) {
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_GARRISON ) ) {
                     GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
@@ -608,7 +622,15 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 const uint32_t monsterDwelling = GetActualDwelling( it->id );
                 const bool isMonsterDwelling = ( monsterDwelling != BUILD_NOTHING );
 
-                if ( le.isMouseRightButtonPressedInArea( it->coord ) ) {
+                bool isRightButtonInArea{ false };
+                for ( const auto & area : it->areas ) {
+                    if ( le.isMouseRightButtonPressedInArea( area ) ) {
+                        isRightButtonInArea = true;
+                        break;
+                    }
+                }
+
+                if ( isRightButtonInArea ) {
                     // Check mouse right click.
                     if ( isMonsterDwelling ) {
                         Dialog::DwellingInfo( Monster( _race, it->id ), getMonstersInDwelling( it->id ) );
@@ -623,7 +645,17 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
 
-                if ( le.MouseClickLeft( it->coord ) || hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) ) {
+                bool isBuildingClicked = ( hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) );
+                if ( !isBuildingClicked ) {
+                    for ( const auto & area : it->areas ) {
+                        if ( le.MouseClickLeft( area ) ) {
+                            isBuildingClicked = true;
+                            break;
+                        }
+                    }
+                }
+
+                if ( isBuildingClicked ) {
                     if ( topArmyBar.isSelected() ) {
                         topArmyBar.ResetSelected();
                     }
@@ -748,8 +780,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         }
 
-        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
-            alphaHero += 10;
+        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_ITEM_UPDATE_DELAY ) ) {
+            alphaHero += 9;
             if ( alphaHero >= 255 ) {
                 alphaHero = 255;
 
@@ -810,7 +842,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         }
 
         // Castle dialog animation.
-        if ( Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) || needRedraw ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CASTLE_AROUND_DELAY ) || needRedraw ) {
             CastleDialog::redrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
 
             display.render( dialogRoi );

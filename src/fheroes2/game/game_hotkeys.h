@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,6 +51,8 @@ namespace Game
         GLOBAL_TOGGLE_DEVELOPER_MODE,
 #endif
 
+        GLOBAL_APP_QUIT,
+
         MAIN_MENU_NEW_GAME,
         MAIN_MENU_LOAD_GAME,
         MAIN_MENU_HIGHSCORES,
@@ -59,7 +61,6 @@ namespace Game
         MAIN_MENU_CAMPAIGN,
         MAIN_MENU_MULTI,
         MAIN_MENU_SETTINGS,
-        MAIN_MENU_QUIT,
         MAIN_MENU_SELECT_MAP,
         MAIN_MENU_MAP_SIZE_SMALL,
         MAIN_MENU_MAP_SIZE_MEDIUM,
@@ -80,12 +81,14 @@ namespace Game
         EDITOR_REDO_LAST_ACTION,
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
+        EDITOR_AUTO_PLAYTEST,
 
 #if defined( WITH_DEBUG )
         // These hotkeys are temporary and going to be removed once random map generator is good enough.
         // TODO: remove these hotkeys when the time is right.
         EDITOR_RANDOM_MAP_REGENERATE,
         EDITOR_RANDOM_MAP_RECONFIGURE,
+        EDITOR_OUTPUT_ALL_TEXT,
 #endif
 
         CAMPAIGN_ROLAND,
@@ -172,6 +175,8 @@ namespace Game
         // Also used to build a castle in the town.
         TOWN_CONSTRUCTION,
         TOWN_WELL_BUY_ALL,
+        TOWN_MERGE_TROOPS_WITH_HERO,
+        TOWN_MERGE_TROOPS_WITH_GARRISON,
 
         ARMY_SPLIT_STACK_BY_HALF,
         ARMY_SPLIT_STACK_BY_ONE,

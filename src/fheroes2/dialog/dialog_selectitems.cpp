@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -67,7 +67,7 @@
 
 namespace
 {
-    const int32_t dialogHeightDeduction = 150;
+    constexpr int32_t dialogHeightDeduction{ 150 };
 
     fheroes2::Sprite renderMonsterOnBackground( const fheroes2::Sprite & monsterSprite )
     {
@@ -88,6 +88,46 @@ namespace
         return townRace * 2 + ( isCastle ? 0 : 1 );
     }
 
+    class MultiItemSelectionBase
+    {
+    public:
+        std::vector<int32_t> getSelected() const
+        {
+            return { _selected.begin(), _selected.end() };
+        }
+
+    protected:
+        std::vector<int32_t> _ids;
+        std::set<int32_t> _selected;
+
+        void _setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
+        {
+            _ids = std::move( allowed );
+
+            for ( const int32_t id : selected ) {
+                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
+                    _selected.emplace( id );
+                }
+            }
+
+            if ( _selected.empty() ) {
+                _selected.insert( _ids.begin(), _ids.end() );
+            }
+        }
+
+        void _updateSelected( const int32_t id )
+        {
+            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
+
+            if ( _selected.count( id ) == 0 ) {
+                _selected.emplace( id );
+            }
+            else {
+                _selected.erase( id );
+            }
+        }
+    };
+
     class SelectEnumMonster : public Dialog::ItemSelectionWindow
     {
     public:
@@ -99,12 +139,12 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             renderItem( getImage( index ), Monster{ index }.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             const Monster monster( index );
             if ( !monster.isValid() ) {
@@ -126,47 +166,32 @@ namespace
         }
     };
 
-    class MultiMonsterSelection final : public SelectEnumMonster
+    class MultiMonsterSelection final : public SelectEnumMonster, public MultiItemSelectionBase
     {
     public:
         using SelectEnumMonster::SelectEnumMonster;
 
-        using Interface::ListBox<int>::ActionListDoubleClick;
-        using Interface::ListBox<int>::ActionListSingleClick;
-        using Interface::ListBox<int>::ActionListPressRight;
+        using Interface::ListBox<int32_t>::ActionListDoubleClick;
+        using Interface::ListBox<int32_t>::ActionListSingleClick;
+        using Interface::ListBox<int32_t>::ActionListPressRight;
 
-        void setup( std::vector<int> allowed, const std::vector<int> & selected )
+        void setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
         {
-            _ids = std::move( allowed );
-
-            for ( const int id : selected ) {
-                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
-                    _selected.emplace( id );
-                }
-            }
-
-            if ( _selected.empty() ) {
-                _selected.insert( _ids.begin(), _ids.end() );
-            }
+            _setup( std::move( allowed ), selected );
 
             SetListContent( _ids );
             // For multi-selection we don't have any current item.
-            SetCurrent( 0 );
+            SetCurrent( static_cast<int32_t>( 0 ) );
 
             enableToggleButtons();
         }
 
-        std::vector<int> getSelected() const
-        {
-            return { _selected.begin(), _selected.end() };
-        }
-
-        void ActionListSingleClick( int & id ) override
+        void ActionListSingleClick( int32_t & id ) override
         {
             updateStatus( id );
         }
 
-        void ActionListDoubleClick( int & id ) override
+        void ActionListDoubleClick( int32_t & id ) override
         {
             updateStatus( id );
         }
@@ -176,7 +201,7 @@ namespace
         {
             _selected = {};
 
-            for ( const int id : _ids ) {
+            for ( const int32_t id : _ids ) {
                 _selected.emplace( id );
             }
 
@@ -191,19 +216,9 @@ namespace
         }
 
     private:
-        std::vector<int> _ids;
-        std::set<int> _selected;
-
-        void updateStatus( const int id )
+        void updateStatus( const int32_t id )
         {
-            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
-
-            if ( _selected.count( id ) == 0 ) {
-                _selected.emplace( id );
-            }
-            else {
-                _selected.erase( id );
-            }
+            _updateSelected( id );
 
             setButtonOkayStatus( !_selected.empty() );
         }
@@ -227,6 +242,113 @@ namespace
         }
     };
 
+    class SelectEnumArtifact : public Dialog::ItemSelectionWindow
+    {
+    public:
+        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
+
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
+
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            renderItem( getImage( index ), Artifact( index ).GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int32_t & index ) override
+        {
+            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
+        }
+
+    protected:
+        virtual fheroes2::Sprite getImage( const int index )
+        {
+            const Artifact art( index );
+            return fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+        }
+
+    private:
+        static const int32_t _offsetY{ 42 };
+    };
+
+    class MultiArtifactSelection final : public SelectEnumArtifact, public MultiItemSelectionBase
+    {
+    public:
+        using SelectEnumArtifact::SelectEnumArtifact;
+
+        using Interface::ListBox<int32_t>::ActionListDoubleClick;
+        using Interface::ListBox<int32_t>::ActionListSingleClick;
+        using Interface::ListBox<int32_t>::ActionListPressRight;
+
+        void setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
+        {
+            _setup( std::move( allowed ), selected );
+
+            SetListContent( _ids );
+            // For multi-selection we don't have any current item.
+            SetCurrent( static_cast<int32_t>( 0 ) );
+
+            enableToggleButtons();
+        }
+
+        void ActionListSingleClick( int32_t & id ) override
+        {
+            updateStatus( id );
+        }
+
+        void ActionListDoubleClick( int32_t & id ) override
+        {
+            updateStatus( id );
+        }
+
+    protected:
+        void onToggleOn() override
+        {
+            _selected = {};
+
+            for ( const int32_t id : _ids ) {
+                _selected.emplace( id );
+            }
+
+            setButtonOkayStatus( true );
+        }
+
+        void onToggleOff() override
+        {
+            _selected = {};
+
+            setButtonOkayStatus( false );
+        }
+
+    private:
+        void updateStatus( const int32_t id )
+        {
+            _updateSelected( id );
+
+            setButtonOkayStatus( !_selected.empty() );
+        }
+
+        bool isDoubleClicked() override
+        {
+            return false;
+        }
+
+        fheroes2::Sprite getImage( const int index ) override
+        {
+            const Artifact art( index );
+            fheroes2::Sprite image = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+
+            if ( _selected.count( index ) == 0 ) {
+                fheroes2::ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+
+            return image;
+        }
+    };
+
     class SelectEnumHeroes final : public Dialog::ItemSelectionWindow
     {
     public:
@@ -238,48 +360,20 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
             renderItem( port, Heroes::getDefaultName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             Dialog::QuickInfo( *world.GetHeroes( index ) );
         }
 
     private:
         static const int32_t _offsetY{ 35 };
-    };
-
-    class SelectEnumArtifact final : public Dialog::ItemSelectionWindow
-    {
-    public:
-        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
-            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
-        {
-            SetAreaMaxItems( rtAreaItems.height / _offsetY );
-        }
-
-        using Dialog::ItemSelectionWindow::ActionListPressRight;
-
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
-        {
-            const Artifact art( index );
-            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
-
-            renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-        }
-
-        void ActionListPressRight( int & index ) override
-        {
-            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
-        }
-
-    private:
-        static const int32_t _offsetY{ 42 };
     };
 
     class SelectEnumSpell final : public Dialog::ItemSelectionWindow
@@ -293,7 +387,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             const Spell spell( index );
             const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
@@ -301,7 +395,7 @@ namespace
             renderItem( spellSprite, spell.GetName(), { dstx, dsty }, 75 / 2, 80, _offsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             fheroes2::SpellDialogElement( Spell( index ), nullptr ).showPopup( Dialog::ZERO );
         }
@@ -331,7 +425,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
             const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
@@ -339,7 +433,7 @@ namespace
             renderItem( skillSprite, skill.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() )
                 .showPopup( Dialog::ZERO );
@@ -361,7 +455,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
@@ -373,7 +467,7 @@ namespace
             renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, itemsOffsetY / 2, current );
         }
 
-        void ActionListPressRight( int & index ) override
+        void ActionListPressRight( int32_t & index ) override
         {
             Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), getBackgroundArea() );
         }
@@ -401,7 +495,7 @@ namespace
 
         using Dialog::ItemSelectionWindow::ActionListPressRight;
 
-        void RedrawItem( const int & objectId, int32_t posX, int32_t posY, bool isSelected ) override
+        void RedrawItem( const int32_t & objectId, int32_t posX, int32_t posY, bool isSelected ) override
         {
             // If this assertion blows up then you are setting different number of items.
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
@@ -422,7 +516,7 @@ namespace
             }
         }
 
-        void ActionListPressRight( int & objectId ) override
+        void ActionListPressRight( int32_t & objectId ) override
         {
             // If this assertion blows up then you are setting different number of items.
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
@@ -668,16 +762,21 @@ namespace
         }
     };
 
-    int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection )
+    int selectObjectType( const int32_t objectType, const size_t objectCount, ObjectTypeSelection & objectSelection )
     {
-        std::vector<int> objects( objectCount, 0 );
+        if ( objectCount == 0 ) {
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "There is nothing to select from." ), Dialog::OK );
+            return -1;
+        }
+
+        std::vector<int32_t> objects( objectCount, 0 );
         std::iota( objects.begin(), objects.end(), 0 );
         objectSelection.SetListContent( objects );
 
-        objectSelection.SetCurrent( std::max( objectType, 0 ) );
+        objectSelection.SetCurrent( std::max<int32_t>( objectType, 0 ) );
 
         const int32_t result = objectSelection.selectItemsEventProcessing();
-        return result == Dialog::OK ? objectSelection.GetCurrent() : -1;
+        return result == Dialog::OK && objectSelection.IsValid() ? objectSelection.GetCurrent() : -1;
     }
 
     class MineTypeList final : public Interface::ListBox<Maps::ObjectInfo>
@@ -775,6 +874,11 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
         castles.push_back( castle->GetIndex() );
     }
 
+    if ( castles.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no castles to select from." ), Dialog::OK );
+        return -1;
+    }
+
     const int32_t maxHeight = std::min( 100 + SelectKingdomCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - dialogHeightDeduction );
     const int32_t itemsHeight = std::max( 100 + SelectKingdomCastle::itemsOffsetY * static_cast<int32_t>( castles.size() ), 100 + SelectKingdomCastle::itemsOffsetY * 5 );
     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
@@ -788,7 +892,7 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? listbox.GetCurrent() : -1;
+    return ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : -1;
 }
 
 namespace Dialog
@@ -976,15 +1080,20 @@ namespace Dialog
     }
 }
 
-Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
+Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int32_t skillId /* = Skill::Secondary::UNKNOWN */ )
 {
-    std::vector<int> skills;
+    std::vector<int32_t> skills;
     skills.reserve( static_cast<size_t>( Skill::numOfSecondarySkills ) * 3 );
 
     for ( int i = 0; i < Skill::numOfSecondarySkills * 3; ++i ) {
         if ( !hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( i ) ) ) {
             skills.push_back( i );
         }
+    }
+
+    if ( skills.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no secondary skills to select from." ), Dialog::OK );
+        return {};
     }
 
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Skill:" ) );
@@ -996,7 +1105,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    if ( result == Dialog::OK ) {
+    if ( result == Dialog::OK && listbox.IsValid() ) {
         const int skillIndex = listbox.GetCurrent();
         return { SelectEnumSecSkill::getSkillFromListIndex( skillIndex ), SelectEnumSecSkill::getLevelFromListIndex( skillIndex ) };
     }
@@ -1004,10 +1113,10 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
     return {};
 }
 
-Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList /* = {} */,
+Spell Dialog::selectSpell( const int32_t spellId, const bool includeRandomSpells, const std::set<int32_t> & excludeSpellsList /* = {} */,
                            const int32_t spellsLevel /* = -1 */ )
 {
-    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, excludeSpellsList );
+    std::vector<int32_t> spells = Spell::getAllSpellIdsSuitableForSpellBook( spellsLevel, excludeSpellsList );
 
     if ( includeRandomSpells ) {
         // We add random spell items to the end of the list.
@@ -1021,6 +1130,11 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, co
         }
     }
 
+    if ( spells.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no spells to select." ), Dialog::OK );
+        return { Spell::NONE };
+    }
+
     SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Spell:" ) );
 
     listbox.SetListContent( spells );
@@ -1030,12 +1144,12 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells, co
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Spell::NONE };
 }
 
-Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryConditions )
+Artifact Dialog::selectArtifact( const int32_t artifactId, const bool isForVictoryConditions )
 {
-    std::vector<int> artifacts;
+    std::vector<int32_t> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 2 );
 
     const GameVersion version = Settings::Get().getCurrentMapInfo().version;
@@ -1070,6 +1184,11 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
         artifacts.emplace_back( id );
     }
 
+    if ( artifacts.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no artifacts to select from." ), Dialog::OK );
+        return { Artifact::UNKNOWN };
+    }
+
     SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifact:" ) );
 
     listbox.SetListContent( artifacts );
@@ -1079,16 +1198,21 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool isForVictoryCo
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Artifact::UNKNOWN };
 }
 
-Monster Dialog::selectMonster( const int monsterId )
+Monster Dialog::selectMonster( const int32_t monsterId )
 {
-    std::vector<int> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
+    std::vector<int32_t> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
 
     // Skip Monster::UNKNOWN and start from the next one.
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
+
+    if ( monsters.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no monsters to select from." ), Dialog::OK );
+        return { Monster::UNKNOWN };
+    }
 
     SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monster:" ) );
 
@@ -1099,15 +1223,20 @@ Monster Dialog::selectMonster( const int monsterId )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
+    return { ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Monster::UNKNOWN };
 }
 
-int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
+int Dialog::selectHeroes( const int32_t heroId /* = Heroes::UNKNOWN */ )
 {
     const GameVersion version = Settings::Get().getCurrentMapInfo().version;
     const bool isPoLHeroesAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
 
-    std::vector<int> heroes( static_cast<int>( isPoLHeroesAllowed ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
+    std::vector<int32_t> heroes( static_cast<int>( isPoLHeroesAllowed ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
+
+    if ( heroes.empty() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "There are no heroes to select from." ), Dialog::OK );
+        return Heroes::UNKNOWN;
+    }
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
@@ -1120,10 +1249,10 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     const int32_t result = listbox.selectItemsEventProcessing();
 
-    return ( result == Dialog::OK ) ? listbox.GetCurrent() : Heroes::UNKNOWN;
+    return ( result == Dialog::OK && listbox.IsValid() ) ? listbox.GetCurrent() : Heroes::UNKNOWN;
 }
 
-void Dialog::multiSelectMonsters( std::vector<int> allowed, std::vector<int> & selected )
+void Dialog::multiSelectMonsters( std::vector<int32_t> allowed, std::vector<int32_t> & selected )
 {
     MultiMonsterSelection monsterList( { 380, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Monsters:" ) );
     monsterList.setup( std::move( allowed ), selected );
@@ -1131,6 +1260,17 @@ void Dialog::multiSelectMonsters( std::vector<int> allowed, std::vector<int> & s
     const int32_t result = monsterList.selectItemsEventProcessing();
     if ( result == Dialog::OK ) {
         selected = monsterList.getSelected();
+    }
+}
+
+void Dialog::multiSelectArtifact( std::vector<int32_t> allowed, std::vector<int32_t> & selected )
+{
+    MultiArtifactSelection artifactList( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifacts:" ) );
+    artifactList.setup( std::move( allowed ), selected );
+
+    const int32_t result = artifactList.selectItemsEventProcessing();
+    if ( result == Dialog::OK ) {
+        selected = artifactList.getSelected();
     }
 }
 
@@ -1362,14 +1502,14 @@ int Dialog::selectLandscapeOceanObjectType( const int objectType )
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
 
-void Dialog::selectTownType( int & type, int & color )
+void Dialog::selectTownType( int32_t & type, int32_t & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 520, 370, true, display );
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Castle/town placing" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Castle/town placing:" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // Render color and race selection sprites.
@@ -1637,7 +1777,7 @@ int32_t Dialog::selectMineType( const int32_t type )
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Mine placing" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Mine placing:" ), fheroes2::FontType::normalYellow() );
     int32_t offsetY = area.y + 10;
     text.draw( area.x + ( area.width - text.width() ) / 2, offsetY, display );
 
@@ -1783,8 +1923,14 @@ int32_t Dialog::selectMineType( const int32_t type )
     auto updateListContent = [&listbox, &objectInfo, &allObjectInfo, &objectInfoIndexes, &listIcnId, &getObjectTypeByResource]( const uint32_t resourceId ) {
         const MP2::MapObjectType objectType = getObjectTypeByResource( resourceId );
 
-        // Mine appearance is the same for different mine resources so we keep the selection.
-        const bool keepSelection = ( objectType == MP2::OBJ_MINE ) && !objectInfo.empty() && ( objectInfo.front().objectType == MP2::OBJ_MINE );
+        // Mine and Abandoned Mine appearance is the same for different mine resources so we keep the selection.
+        bool keepSelection = !objectInfo.empty();
+        if ( keepSelection ) {
+            const bool isMineObject = ( objectType == MP2::OBJ_MINE ) || ( objectType == MP2::OBJ_ABANDONED_MINE );
+            const bool isMineObjectPart = ( objectInfo.front().objectType == MP2::OBJ_MINE ) || ( objectInfo.front().objectType == MP2::OBJ_ABANDONED_MINE );
+            keepSelection = isMineObject && isMineObjectPart;
+        }
+
         const int selectedId = keepSelection ? listbox.getCurrentId() : 0;
         const int topId = keepSelection ? listbox.getTopId() : 0;
 
@@ -1972,7 +2118,7 @@ PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t av
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Select color" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Select color:" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // Render color selection sprites.

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -115,4 +115,9 @@ bool AGG::AGGInitializer::init()
     Settings::Get().EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
 
     return true;
+}
+
+bool AGG::isPoLResourceFilePresent()
+{
+    return heroes2x_agg.isGood();
 }

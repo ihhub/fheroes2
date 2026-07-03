@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -328,12 +328,12 @@ namespace fheroes2
     int32_t getMineObjectInfoId( const int resourceType, const int groundType )
     {
         // 8 terrains and 5 resources:
-        // - 2 abandoned mines: Grass and Dirt
+        // - 8 Abandoned Mines
         // - 6 Sawmills for different terrains: Grass/Swamp, Snow, Lava, Desert, Dirt, Wasteland
-        // - 2 alchemists labs: regular and Snow
+        // - 2 Alchemists Labs: regular and Snow
 
         // If you add new mine type update this logic!
-        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() == 50 );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() == 56 );
 
         const int groundIndex = mineIndexFromGroundType( groundType );
 
@@ -349,12 +349,12 @@ namespace fheroes2
         case Resource::GOLD:
             return groundIndex * 5 + 4;
         case Resource::WOOD:
-            return 5 * 8 + 2 + sawmillIndexFromGroundType( groundType );
+            return 48 + sawmillIndexFromGroundType( groundType );
         case Resource::MERCURY:
-            return ( groundType == Maps::Ground::SNOW ) ? 49 : 48;
+            return ( groundType == Maps::Ground::SNOW ) ? 55 : 54;
         case Resource::UNKNOWN:
             // Must be an abandoned mine.
-            return ( groundType == Maps::Ground::GRASS ) ? 40 : 41;
+            return 40 + mineIndexFromGroundType( groundType );
         default:
             // Have you added a new resource type?!
             assert( 0 );

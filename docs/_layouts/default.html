@@ -42,14 +42,20 @@
       href="{{ '/assets/css/fonts.css?v=' | append: site.github.build_revision | relative_url }}"
       rel="preload"
       as="style"
-      onload="this.rel='stylesheet';this.removeAttribute('onload');"
+      onload="
+        this.rel = 'stylesheet';
+        this.removeAttribute('onload');
+      "
     />
 
     <link
       href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}"
       rel="preload"
       as="style"
-      onload="this.rel='stylesheet';this.removeAttribute('onload');"
+      onload="
+        this.rel = 'stylesheet';
+        this.removeAttribute('onload');
+      "
     />
 
     <!-- Scripts -->

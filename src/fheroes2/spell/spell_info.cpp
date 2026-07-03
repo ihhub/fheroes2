@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -158,10 +158,8 @@ namespace fheroes2
         return resurrectionPoints;
     }
 
-    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
+    uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower )
     {
-        (void)hero;
-
         assert( spellPower > 0 );
 
         return spell.ExtraValue() * spellPower;
@@ -272,7 +270,7 @@ namespace fheroes2
                 return spell.GetDescription();
             }
 
-            const uint32_t guardianCount = getGuardianMonsterCount( spell, hero->GetPower(), hero );
+            const uint32_t guardianCount = getGuardianMonsterCount( spell, hero->GetPower() );
 
             description += "\n\n";
             description += _( "This spell summons %{count} %{monster} to guard the mine." );
@@ -401,14 +399,10 @@ namespace fheroes2
 
                      // On original HoMM2 maps, neutral boats can only be summoned by human players
                      {
-#if defined( WITH_DEBUG )
                          const Player * player = Players::Get( heroColor );
                          assert( player != nullptr );
 
                          const bool isAIAutoControlMode = player->isAIAutoControlMode();
-#else
-                         const bool isAIAutoControlMode = false;
-#endif
 
                          return hero.isControlAI() && !isAIAutoControlMode;
                      }

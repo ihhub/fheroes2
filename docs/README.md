@@ -6,7 +6,7 @@ This open source multiplatform project, written from scratch, is designed to rep
 improvements in gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes
 and user interface improvements), breathing new life into one of the most addictive turn-based strategy games.
 
-You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
+You can find a complete list of all of our changes and enhancements in [**this page**](GAME_IMPROVEMENTS.md).
 
 <!-- markdownlint-disable MD033 -->
 <div class="image-showcase">
@@ -43,7 +43,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Contribution and Development
 
-This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
+This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](FAQ.md#q-how-can-i-contribute-to-the-project).
 
 ### Developing fheroes2 engine
 
@@ -94,4 +94,4 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 
 ## Frequently Asked Questions (FAQ)
 
-You can find answers to the most commonly asked questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).
+You can find answers to the most commonly asked questions on our [**F.A.Q. page**](FAQ.md).

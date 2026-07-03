@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,7 +33,14 @@ class OStreamBase;
 class MapPosition
 {
 public:
-    explicit MapPosition( const fheroes2::Point & = fheroes2::Point( -1, -1 ) );
+    MapPosition() = default;
+
+    explicit MapPosition( const fheroes2::Point & pos )
+        : center( pos )
+    {
+        // Do nothing.
+    }
+
     MapPosition( const MapPosition & ) = delete;
 
     virtual ~MapPosition() = default;
@@ -47,7 +54,11 @@ public:
 
     int32_t GetIndex() const;
 
-    void SetCenter( const fheroes2::Point & );
+    void SetCenter( const fheroes2::Point & pos )
+    {
+        center = pos;
+    }
+
     void SetIndex( const int32_t index );
 
     virtual bool isPosition( const fheroes2::Point & pt ) const
@@ -59,5 +70,5 @@ protected:
     friend OStreamBase & operator<<( OStreamBase & stream, const MapPosition & st );
     friend IStreamBase & operator>>( IStreamBase & stream, MapPosition & st );
 
-    fheroes2::Point center;
+    fheroes2::Point center{ -1, -1 };
 };

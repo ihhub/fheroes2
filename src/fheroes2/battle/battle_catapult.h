@@ -47,7 +47,7 @@ namespace Battle
 
         Catapult & operator=( const Catapult & ) = delete;
 
-        static const std::vector<CastleDefenseStructure> & getAllowedTargets();
+        static std::vector<CastleDefenseStructure> getAllowedTargets();
         static CastleDefenseStructure GetTarget( const std::map<CastleDefenseStructure, int> & stateOfCatapultTargets, Rand::PCG32 & randomGenerator );
         static fheroes2::Point GetTargetPosition( const CastleDefenseStructure target, const bool hit );
 

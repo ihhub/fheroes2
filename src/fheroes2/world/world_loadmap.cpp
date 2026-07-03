@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -719,6 +719,16 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
+    const auto currentLanguage = fheroes2::getCurrentLanguage();
+    if ( !Maps::loadTranslation( map, currentLanguage ) ) {
+        // The current game language is not supported by the map.
+        // Try to set the default language - English.
+        // Even if it fails, the first language of the map is going to be used.
+        if ( currentLanguage != fheroes2::SupportedLanguage::English ) {
+            Maps::loadTranslation( map, fheroes2::SupportedLanguage::English );
+        }
+    }
+
     width = map.width;
     height = map.width;
 
@@ -1084,7 +1094,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                             return false;
                         }
 
-                        const std::vector<int32_t> & skills = GameStatic::getSecondarySkillsForWitchsHut();
+                        const std::vector<int32_t> skills = GameStatic::getSecondarySkillsForWitchsHut();
 
                         return std::all_of( metadata.selectedItems.begin(), metadata.selectedItems.end(),
                                             [&skills]( const int32_t skillId ) { return std::find( skills.begin(), skills.end(), skillId ) != skills.end(); } );
@@ -1141,8 +1151,49 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( object.index < artifactObjects.size() );
                 const auto & objectInfo = artifactObjects[object.index];
 
-                if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
-                    tileData[0] = static_cast<uint32_t>( artifactInfo.radius );
+                if ( objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_TREASURE
+                     || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MINOR || objectInfo.objectType == MP2::OBJ_RANDOM_ARTIFACT_MAJOR
+                     || objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                    auto & selected = artifactInfo.selected;
+                    if ( !selected.empty() ) {
+                        // Verify that the input data is correct.
+                        int32_t allowedArtifactLevel{ Artifact::ART_NONE };
+                        switch ( objectInfo.objectType ) {
+                        case MP2::OBJ_RANDOM_ARTIFACT:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_ALL_NORMAL;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_TREASURE;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_MINOR;
+                            break;
+                        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+                            allowedArtifactLevel = Artifact::ART_LEVEL_MAJOR;
+                            break;
+                        case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+                            allowedArtifactLevel = Artifact::ART_ULTIMATE;
+                            break;
+                        default:
+                            assert( 0 );
+                            break;
+                        }
+
+                        selected.erase( std::remove_if( selected.begin(), selected.end(),
+                                                        [allowedArtifactLevel]( const int value ) {
+                                                            const Artifact temp{ value };
+                                                            return !temp.isValid() || ( temp.Level() & allowedArtifactLevel ) == 0;
+                                                        } ),
+                                        selected.end() );
+
+                        if ( !artifactInfo.selected.empty() ) {
+                            tileData[1] = Rand::Get( artifactInfo.selected );
+                        }
+                    }
+
+                    if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                        tileData[0] = static_cast<uint32_t>( artifactInfo.radius );
+                    }
                 }
                 else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
                     assert( artifactInfo.selected.size() == 1 );
@@ -1574,6 +1625,8 @@ void World::setUltimateArtifact()
     int32_t tileId = -1;
     int32_t radius = 0;
 
+    Artifact artifact{ Artifact::UNKNOWN };
+
     const auto existingUltimateArtIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const auto & tile ) { return tile.getMainObjectType() == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT; } );
     if ( existingUltimateArtIter != vec_tiles.end() ) {
@@ -1587,6 +1640,7 @@ void World::setUltimateArtifact()
 
         tileId = existingUltimateArtIter->GetIndex();
         radius = static_cast<int32_t>( existingUltimateArtIter->metadata()[0] );
+        artifact = static_cast<int32_t>( existingUltimateArtIter->metadata()[1] );
 
         assert( radius >= 0 );
 
@@ -1631,7 +1685,7 @@ void World::setUltimateArtifact()
         if ( !pool.empty() ) {
             const int32_t pos = Rand::Get( pool );
 
-            ultimate_artifact.Set( pos, getUltimateArtifact() );
+            _ultimateArtifact.Set( pos, artifact.isValid() ? artifact : getUltimateArtifact() );
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact has been placed at tile " << pos )
         }
@@ -1667,7 +1721,7 @@ void World::setUltimateArtifact()
         }
     }
 
-    ultimate_artifact.Set( pos, getUltimateArtifact() );
+    _ultimateArtifact.Set( pos, artifact.isValid() ? artifact : getUltimateArtifact() );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Predefined Ultimate Artifact tile index: " << tileId << ", radius: " << radius << ", final tile index: " << pos )
 }

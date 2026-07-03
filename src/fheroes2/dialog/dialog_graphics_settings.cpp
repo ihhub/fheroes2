@@ -48,19 +48,21 @@ namespace
         Configuration,
         Resolution,
         Mode,
+        ScreenScalingType,
         VSync,
         SystemInfo,
         Exit
     };
 
-    const fheroes2::Size offsetBetweenOptions{ 118, 110 };
-    const fheroes2::Point optionOffset{ 53, 31 };
-    const int32_t optionWindowSize{ 65 };
+    const fheroes2::Rect resolutionRoi{ fheroes2::threeOptionsOffsetX, fheroes2::optionsOffsetY, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect modeRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+                                  fheroes2::optionIconSize };
+    const fheroes2::Rect screenScalingTypeRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY, fheroes2::optionIconSize,
+                                               fheroes2::optionIconSize };
 
-    const fheroes2::Rect resolutionRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect modeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect vSyncRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect vSyncRoi{ fheroes2::twoOptionsOffsetX, fheroes2::optionsOffsetY + fheroes2::optionsStepY, fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect systemInfoRoi{ fheroes2::twoOptionsOffsetX + fheroes2::twoOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
+                                        fheroes2::optionIconSize, fheroes2::optionIconSize };
 
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
@@ -78,7 +80,7 @@ namespace
         }
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::RESOLUTION_ICON, 0 ), _( "Resolution" ), std::move( resolutionName ),
-                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawMode( const fheroes2::Rect & optionRoi )
@@ -89,10 +91,10 @@ namespace
             fheroes2::Sprite icon = originalIcon;
             fheroes2::Resize( originalIcon, 6, 6, 53, 53, icon, 2, 2, 61, 61 );
 
-            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
@@ -121,11 +123,23 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
+    void drawScreenScalingTypeOptions( const fheroes2::Rect & optionRoi, const bool isScreenScalingTypeNearest )
+    {
+        if ( isScreenScalingTypeNearest ) {
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 3 ), _( "Screen Scaling Type" ), _( "Nearest" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        }
+        else {
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 2 ), _( "Screen Scaling Type" ), _( "Linear" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        }
+    }
+
     SelectedWindow showConfigurationWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::StandardWindow background( 289, 272, true, display );
+        fheroes2::StandardWindow background( 289, fheroes2::optionsStepY * 2 + 52, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
@@ -140,12 +154,14 @@ namespace
 
         const fheroes2::Rect windowResolutionRoi( resolutionRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowScreenScalingTypeRoi( screenScalingTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
+        const auto drawOptions = [&conf, &windowResolutionRoi, &windowModeRoi, &windowScreenScalingTypeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
+            drawScreenScalingTypeOptions( windowScreenScalingTypeRoi, conf.isScreenScalingTypeNearest() );
             drawVSync( windowVSyncRoi );
             drawSystemInfo( windowSystemInfoRoi );
         };
@@ -169,6 +185,9 @@ namespace
             if ( le.MouseClickLeft( windowModeRoi ) ) {
                 return SelectedWindow::Mode;
             }
+            if ( le.MouseClickLeft( windowScreenScalingTypeRoi ) ) {
+                return SelectedWindow::ScreenScalingType;
+            }
             if ( le.MouseClickLeft( windowVSyncRoi ) ) {
                 return SelectedWindow::VSync;
             }
@@ -181,6 +200,12 @@ namespace
             }
             else if ( le.isMouseRightButtonPressedInArea( windowModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "window|Mode" ), _( "Toggle between fullscreen and windowed modes." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowScreenScalingTypeRoi ) ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Screen Scaling Type" ),
+                    _( "Toggle the type of screen scaling you want to use. Linear scaling makes the resized screen image blurry while nearest scaling preserves the sharpness of the original game. The nearest scaling looks best on integer scales, for example 2.0x or 3.0x." ),
+                    0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( windowVSyncRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
@@ -234,6 +259,13 @@ namespace fheroes2
                 conf.setFullScreen( !conf.FullScreen() );
                 saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::ScreenScalingType:
+                conf.setScreenScalingTypeNearest( !conf.isScreenScalingTypeNearest() );
+                saveConfiguration = true;
+                windowType = SelectedWindow::Configuration;
+
+                fheroes2::Display::instance().resetRenderer();
                 break;
             case SelectedWindow::VSync:
                 conf.setVSync( !conf.isVSyncEnabled() );

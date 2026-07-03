@@ -98,6 +98,10 @@ android/app/src/main/assets/
 ios/*/xcuserdata
 ios/**/xcuserdata
 
+# Third-party packages for XCode
+ios/SDL2/
+ios/SDL2_mixer/
+
 # Mac magic folders
 .DS_Store
 

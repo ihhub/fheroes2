@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -217,10 +217,14 @@ uint32_t Spell::spellPoints( const HeroBase * hero ) const
     return static_cast<uint32_t>( spellCost );
 }
 
-double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const
+double Spell::getStrategicValue( const double armyStrength, const uint32_t currentSpellPoints, const int spellPower ) const
 {
     const uint32_t spellCost = spellPoints();
-    const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
+    const uint32_t casts = spellCost ? std::min<uint32_t>( 10U, currentSpellPoints / spellCost ) : 0;
+    if ( casts == 0 ) {
+        // The spell cannot be casted.
+        return 0;
+    }
 
     // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
     const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
@@ -524,7 +528,7 @@ Spell Spell::getRandomSpell( const int level )
     return validSpells.empty() ? Spell::NONE : Spell( Rand::Get( validSpells ) );
 }
 
-std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */, const std::set<int32_t> & spellsToExclude /* = {} */ )
+std::vector<int32_t> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */, const std::set<int32_t> & spellsToExclude /* = {} */ )
 {
     if ( spellLevel < -1 || spellLevel == 0 || spellLevel > 5 ) {
         // Have you add a new spell level? Check your logic!
@@ -533,7 +537,7 @@ std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel
         return {};
     }
 
-    std::vector<int> result;
+    std::vector<int32_t> result;
     if ( spellLevel == -1 ) {
         // Reserve memory only for vector with all spells.
         result.reserve( SPELL_COUNT );

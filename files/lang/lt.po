@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 14:21+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -21,6 +21,9 @@ msgstr ""
 "X-Generator: Poedit 3.1.1\n"
 
 msgid "SELECT"
+msgstr ""
+
+msgid "ABOUT"
 msgstr ""
 
 msgid "S"
@@ -169,6 +172,11 @@ msgstr ""
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 msgid ""
@@ -412,7 +420,7 @@ msgid "Move the %{name}"
 msgstr "Prarasti miestą '%{name}'."
 
 #, fuzzy
-msgid "Set %{monster} Count"
+msgid "Set %{monster} Count:"
 msgstr "Pulti %{monster}"
 
 msgid "%{name} destroys half the enemy troops!"
@@ -459,11 +467,20 @@ msgid ""
 "troops present in it by %{count}."
 msgstr ""
 
-msgid "Speed: %{speed}"
+msgid "battleAnimation|Speed: %{speed}"
 msgstr ""
 
-msgid "Speed"
-msgstr "Greitis"
+msgid "battleAnimation|Speed"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Auto Spell Casting"
+msgstr ""
 
 msgid "Off"
 msgstr ""
@@ -471,40 +488,13 @@ msgstr ""
 msgid "On"
 msgstr ""
 
-msgid "Turn Order"
-msgstr ""
-
-msgid "Auto Spell Casting"
-msgstr ""
-
-msgid "Grid"
-msgstr ""
-
-msgid "Shadow Movement"
-msgstr ""
-
-msgid "Shadow Cursor"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
-msgid "Damage Info"
-msgstr ""
-
 msgid "Set the speed of combat actions and animations."
 msgstr ""
 
-msgid "Toggle to display the turn order during the battle."
+msgid "Change the interface settings of the game."
+msgstr ""
+
+msgid "Interface Settings"
 msgstr ""
 
 msgid ""
@@ -513,18 +503,7 @@ msgid ""
 "way, nor does it affect quick combat.)"
 msgstr ""
 
-msgid ""
-"Toggle the hex grid on or off. The hex grid always underlies movement, even "
-"if turned off. This switch only determines if the grid is visible."
-msgstr ""
-
-msgid ""
-"Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
-
-msgid ""
-"Toggle on or off a shadow showing the current hex location of the mouse "
-"cursor."
+msgid "Audio"
 msgstr ""
 
 msgid "Change the audio settings of the game."
@@ -533,7 +512,7 @@ msgstr ""
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
-msgid "Toggle to display damage information during the battle."
+msgid "Hot Keys"
 msgstr ""
 
 #, fuzzy
@@ -997,6 +976,54 @@ msgstr ""
 msgid "Perish: %{min} - %{max}"
 msgstr ""
 
+msgid "battle_turn_order|Top"
+msgstr ""
+
+msgid "battle_turn_order|Bottom"
+msgstr ""
+
+msgid "Turn Order"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "Damage Info"
+msgstr ""
+
+msgid "Shadow Movement"
+msgstr ""
+
+msgid "Shadow Cursor"
+msgstr ""
+
+#, fuzzy
+msgid "Movement Area"
+msgstr "Greitis"
+
+msgid "Toggle to display the turn order during the battle."
+msgstr ""
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+
+msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
@@ -1005,7 +1032,10 @@ msgstr ""
 msgid "Human"
 msgstr ""
 
-msgid "AI"
+msgid "Terrain"
+msgstr ""
+
+msgid "Battle Only"
 msgstr ""
 
 msgid "Start"
@@ -1025,8 +1055,30 @@ msgstr ""
 msgid "Reset to default settings."
 msgstr ""
 
+msgid ""
+"The battle will take place on a randomly selected terrain. Click to change "
+"the terrain type."
+msgstr ""
+
+msgid ""
+"The battle will take place on %{terrain-type} terrain. Click to change the "
+"terrain type."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr ""
+
+#, fuzzy
+msgid "Click to select a hero."
+msgstr "Rodyti kitą miestą"
+
+msgid "Hero"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"If this checkbox is checked, the defending hero is going be human-controlled."
+msgstr "Rodyti kitą miestą"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2725,6 +2777,9 @@ msgstr ""
 msgid "HP"
 msgstr ""
 
+msgid "Speed"
+msgstr "Greitis"
+
 msgid "Growth"
 msgstr ""
 
@@ -2932,25 +2987,6 @@ msgstr ""
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
-msgid "Language"
-msgstr ""
-
-msgid "Graphics"
-msgstr ""
-
-#, fuzzy
-msgid "Black & White"
-msgstr "Tiltas"
-
-msgid "Mouse Cursor"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Text Support"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2960,7 +2996,22 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
+msgid "Graphics"
+msgstr ""
+
+msgid "Mouse Cursor"
+msgstr ""
+
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
+msgstr ""
+
+msgid "Interface Type"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Text Support"
 msgstr ""
 
 msgid ""
@@ -3005,6 +3056,13 @@ msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+
+msgid "About"
+msgstr ""
+
+#, fuzzy
+msgid "Click to read notes from the map creator."
+msgstr "Rodyti kitą miestą"
 
 msgid "Map Description"
 msgstr ""
@@ -3053,6 +3111,15 @@ msgstr ""
 msgid "System Info"
 msgstr ""
 
+msgid "Nearest"
+msgstr ""
+
+msgid "Screen Scaling Type"
+msgstr ""
+
+msgid "Linear"
+msgstr ""
+
 msgid "Change the resolution of the game."
 msgstr ""
 
@@ -3060,6 +3127,13 @@ msgid "Select Game Resolution"
 msgstr ""
 
 msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"Toggle the type of screen scaling you want to use. Linear scaling makes the "
+"resized screen image blurry while nearest scaling preserves the sharpness of "
+"the original game. The nearest scaling looks best on integer scales, for "
+"example 2.0x or 3.0x."
 msgstr ""
 
 msgid ""
@@ -3088,9 +3162,6 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "Interface"
-msgstr ""
-
 msgid "Army Estimation"
 msgstr ""
 
@@ -3098,12 +3169,6 @@ msgid "Canonical"
 msgstr ""
 
 msgid "Numeric"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
@@ -3288,6 +3353,37 @@ msgstr ""
 msgid "Uncharted Territory"
 msgstr ""
 
+#, fuzzy
+msgid "Random Map Generator"
+msgstr "Atsitiktinė pilis"
+
+msgid "rmg|Player count:"
+msgstr ""
+
+msgid "rmg|Map layout:"
+msgstr ""
+
+msgid "rmg|Water percentage:"
+msgstr ""
+
+#, fuzzy
+msgid "rmg|Monster strength:"
+msgstr "Atsitiktinė pilis"
+
+msgid "rmg|Resource availability:"
+msgstr ""
+
+msgid "rmg|Map seed:"
+msgstr ""
+
+#, fuzzy
+msgid "Click to generate a new map."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Return to the previous menu."
+msgstr "Grįžti į mūšį."
+
 msgid "Cost per troop:"
 msgstr ""
 
@@ -3414,6 +3510,12 @@ msgstr "Failas įkėlimui:"
 msgid "Terrain object"
 msgstr ""
 
+msgid "There is nothing to select from."
+msgstr ""
+
+msgid "There are no castles to select from."
+msgstr ""
+
 msgid "Accept the choice made."
 msgstr ""
 
@@ -3433,20 +3535,35 @@ msgstr "Rodyti kitą miestą"
 msgid "Disable All Items"
 msgstr "Atsitiktinis miestas"
 
+msgid "There are no secondary skills to select from."
+msgstr ""
+
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Gynybos įgūdis"
 
+msgid "There are no spells to select."
+msgstr ""
+
 msgid "Select Spell:"
+msgstr ""
+
+msgid "There are no artifacts to select from."
 msgstr ""
 
 #, fuzzy
 msgid "Select Artifact:"
 msgstr "Magiškas artefaktas"
 
+msgid "There are no monsters to select from."
+msgstr ""
+
 #, fuzzy
 msgid "Select Monster:"
 msgstr "Pasirinkti %{name}"
+
+msgid "There are no heroes to select from."
+msgstr ""
 
 #, fuzzy
 msgid "Select Hero:"
@@ -3455,6 +3572,10 @@ msgstr "Pasirinkti %{name}"
 #, fuzzy
 msgid "Select Monsters:"
 msgstr "Pasirinkti %{name}"
+
+#, fuzzy
+msgid "Select Artifacts:"
+msgstr "Magiškas artefaktas"
 
 msgid "race|Random"
 msgstr ""
@@ -3484,8 +3605,9 @@ msgstr "Pasirinkti %{name}"
 msgid "Select Ocean Object:"
 msgstr "Magiškas artefaktas"
 
-msgid "Castle/town placing"
-msgstr ""
+#, fuzzy
+msgid "Castle/town placing:"
+msgstr "Rodyti kitą miestą"
 
 msgid "doubleLinedRace|Neutral"
 msgstr ""
@@ -3520,7 +3642,7 @@ msgstr "Gynybos įgūdis"
 msgid "Select Landscape Object:"
 msgstr "Magiškas artefaktas"
 
-msgid "Mine placing"
+msgid "Mine placing:"
 msgstr ""
 
 #, fuzzy
@@ -3560,7 +3682,7 @@ msgid "Select Adventure Object:"
 msgstr "Magiškas artefaktas"
 
 #, fuzzy
-msgid "Select color"
+msgid "Select color:"
 msgstr "Pasirinkti %{name}"
 
 msgid "Players Icon"
@@ -3581,19 +3703,6 @@ msgstr ""
 msgid "Size Icon"
 msgstr ""
 
-#, fuzzy
-msgid "Map Type"
-msgstr "Pasaulio dydis"
-
-msgid ""
-"Indicates whether the map is made for \"The Succession Wars\", \"The Price "
-"of Loyalty\" or \"Resurrection\" version of the game."
-msgstr ""
-
-#, fuzzy
-msgid "Map Type:\n"
-msgstr "Pasaulio dydis"
-
 msgid "The Succession Wars"
 msgstr ""
 
@@ -3603,10 +3712,21 @@ msgstr ""
 msgid "Resurrection"
 msgstr ""
 
+msgid "This map is made for \"%{game-version}\" version of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Map Type"
+msgstr "Pasaulio dydis"
+
+#, fuzzy
+msgid "Map Type:\n"
+msgstr "Pasaulio dydis"
+
 msgid ""
 "\n"
 "\n"
-"Language:\n"
+"Supported languages:\n"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -3743,12 +3863,6 @@ msgstr ""
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
-msgstr ""
-
-msgid "Change the interface settings of the game."
-msgstr ""
-
-msgid "Interface Settings"
 msgstr ""
 
 msgid "Toggle instant battle mode."
@@ -3889,12 +4003,15 @@ msgstr "Pilis"
 msgid "Town Army"
 msgstr "Miestelis"
 
+msgid "You have unsaved changes. Do you wish to proceed?"
+msgstr ""
+
 #, fuzzy
 msgid "Click to change the Castle name."
 msgstr "Rodyti kitą miestą"
 
 #, fuzzy
-msgid "Enter Castle name"
+msgid "Enter Castle name:"
 msgstr "Išeiti iš pilies"
 
 #, fuzzy
@@ -3968,6 +4085,10 @@ msgid ""
 "if they are controlled by a computer."
 msgstr ""
 
+#, fuzzy
+msgid "Set %{resource-type} Count:"
+msgstr "Pulti %{monster}"
+
 msgid "Message:"
 msgstr ""
 
@@ -3995,7 +4116,7 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr ""
 
-msgid "Daily Events"
+msgid "Daily events:"
 msgstr ""
 
 #, fuzzy
@@ -4033,8 +4154,9 @@ msgstr ""
 msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Set Experience value"
-msgstr ""
+#, fuzzy
+msgid "Set Experience value:"
+msgstr "Burtų galia"
 
 msgid "Artifact"
 msgstr "Magiškas artefaktas"
@@ -4089,7 +4211,7 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr ""
 
-msgid "Objects cannot be placed outside the map."
+msgid "Action objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Action objects must be placed on clear tiles."
@@ -4097,6 +4219,22 @@ msgstr ""
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
+"prarastas, jei neįrašėte)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
+"prarastas, jei neįrašėte)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr ""
@@ -4139,24 +4277,6 @@ msgstr ""
 "Ar tikrai norite įkelti anksčiau įrašytą žaidimą? (Dabartinis žaidimas bus "
 "prarastas, jei neįrašėte)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Įkelti žaidimą"
@@ -4192,6 +4312,12 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Auto Playtest"
+msgstr ""
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
+
 #, fuzzy
 msgid "Return to the game's Main Menu."
 msgstr "Grįžti į mūšį."
@@ -4199,11 +4325,11 @@ msgstr "Grįžti į mūšį."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr ""
 
-msgid "Input %{object} text"
+msgid "Input %{object} text:"
 msgstr ""
 
 #, fuzzy
-msgid "Set Random Ultimate Artifact Radius"
+msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Rasti magišką artefaktą '%{name}'"
 
 msgid "%{object} has no properties to change."
@@ -4243,13 +4369,7 @@ msgstr ""
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr ""
 
-msgid "Pick player count"
-msgstr ""
-
-msgid "Set water percentage"
-msgstr ""
-
-msgid "Set map seed (set 0 to make the seed random)"
+msgid "The same object exists on the tile."
 msgstr ""
 
 msgid "The map is corrupted."
@@ -4277,6 +4397,24 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "Įrašyti į failą:"
 
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
+
 #, fuzzy
 msgid "Used to place %{object}."
 msgstr "Rasti magišką artefaktą '%{name}'"
@@ -4296,11 +4434,6 @@ msgid ""
 "Click here to\n"
 "select another monster."
 msgstr "Rodyti kitą miestą"
-
-msgid ""
-"Cell\n"
-"Details"
-msgstr ""
 
 msgid "Erase"
 msgstr ""
@@ -4342,8 +4475,29 @@ msgstr ""
 msgid "Towns"
 msgstr "Miestelis"
 
+msgid "editorDetailMode|Edit"
+msgstr ""
+
+msgid "editorDetailMode|Move"
+msgstr ""
+
+msgid "editorDetailMode|Copy"
+msgstr ""
+
 #, fuzzy
-msgid "editorErasure|Landscape objects"
+msgid "editorErasure|Mountains"
+msgstr "Magiškas artefaktas"
+
+#, fuzzy
+msgid "editorErasure|Rocks"
+msgstr "Magiškas artefaktas"
+
+#, fuzzy
+msgid "editorErasure|Trees"
+msgstr "Magiškas artefaktas"
+
+#, fuzzy
+msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Magiškas artefaktas"
 
 msgid "editorErasure|Adventure non pickable objects"
@@ -4412,6 +4566,15 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
+msgid "Edit objects on the Adventure Map."
+msgstr ""
+
+msgid "Move objects on the Adventure Map."
+msgstr ""
+
+msgid "Copy objects on the Adventure Map."
+msgstr ""
+
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -4444,7 +4607,7 @@ msgid "Detail Mode"
 msgstr ""
 
 #, fuzzy
-msgid "Used for special editing of action objects."
+msgid "Used for moving or customizing objects."
 msgstr "Nugalėti visus priešų herojus bei miestus."
 
 msgid "Adventure Objects Mode"
@@ -4521,6 +4684,37 @@ msgid ""
 msgstr ""
 
 msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+#, fuzzy
+msgid "Supported languages:"
+msgstr "Pasirinkti %{name}"
+
+msgid "Language"
+msgstr ""
+
+msgid "This language already exists in the list."
+msgstr ""
+
+msgid "A map should have at least one language."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply changes."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Add Language"
+msgstr "Pasirinkti %{name}"
+
+msgid "Add an additional language."
+msgstr ""
+
+#, fuzzy
+msgid "Delete Language"
+msgstr "Pasirinkti %{name}"
+
+msgid "Delete an existing language."
 msgstr ""
 
 msgid "Failed to generate a random map with given parameters."
@@ -4698,22 +4892,19 @@ msgstr ""
 msgid "LANGUAGE"
 msgstr ""
 
-msgid "ABOUT"
+msgid "map|ABOUT"
 msgstr ""
 
-msgid ""
-"You are about to change the map's language from %{oldLanguage} to "
-"%{newLanguage}. Some texts might not be displayed properly after this. Do "
-"you want to proceed?"
+#, fuzzy
+msgid "Change Map Name:"
+msgstr ""
+"Pasaulio\n"
+"dydis"
+
+msgid "Change Map Description:"
 msgstr ""
 
-msgid "Change Map Name"
-msgstr ""
-
-msgid "Change Map Description"
-msgstr ""
-
-msgid "About"
+msgid "map|About"
 msgstr ""
 
 #, fuzzy
@@ -4794,6 +4985,9 @@ msgstr ""
 msgid "Toggle display of objects' passability."
 msgstr ""
 
+msgid "Rumors:"
+msgstr ""
+
 msgid "Rumor:"
 msgstr ""
 
@@ -4823,6 +5017,12 @@ msgid "Delete Rumor"
 msgstr ""
 
 msgid "Delete an existing rumor."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Language:\n"
 msgstr ""
 
 msgid ""
@@ -4947,6 +5147,61 @@ msgstr ""
 msgid "difficulty|Impossible"
 msgstr ""
 
+msgid "Auto Playtest Results"
+msgstr ""
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Rodyti kitą miestą"
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Įrašyti į failą:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "autoPlaytest|Animation"
+msgstr ""
+
+msgid "autoPlaytest|Animation speed:"
+msgstr ""
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Rodyti kitą miestą"
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+
 msgid "and more..."
 msgstr ""
 
@@ -5055,7 +5310,7 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
-msgid "Visit us at "
+msgid "Visit us at"
 msgstr ""
 
 msgid "QA and Support"
@@ -5067,7 +5322,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many-many other contributors and supporters!"
+msgid "and all the people who have helped make the project possible!"
 msgstr ""
 
 msgid "Support us at"
@@ -5203,6 +5458,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
+msgid "To exit fheroes2, press the Home button or swipe up."
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr ""
+
 msgid "High Scores"
 msgstr "Geriausi rezultatai"
 
@@ -5251,6 +5512,9 @@ msgstr ""
 msgid "hotkey|toggle developer mode"
 msgstr ""
 
+msgid "hotkey|quit"
+msgstr ""
+
 msgid "hotkey|new game"
 msgstr ""
 
@@ -5274,9 +5538,6 @@ msgid "hotkey|multi-player game"
 msgstr ""
 
 msgid "hotkey|settings"
-msgstr ""
-
-msgid "hotkey|quit"
 msgstr ""
 
 msgid "hotkey|select map"
@@ -5343,11 +5604,19 @@ msgid "hotkey|toggle passability"
 msgstr ""
 
 #, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Turgus"
+
+#, fuzzy
 msgid "hotkey|re-generate random map"
 msgstr "Rodyti kitą miestą"
 
 #, fuzzy
 msgid "hotkey|re-configure random map"
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "hotkey|output all text"
 msgstr "Rodyti kitą miestą"
 
 msgid "hotkey|roland campaign"
@@ -5581,6 +5850,14 @@ msgstr ""
 msgid "hotkey|buy all monsters in well"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|merge troops with hero"
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "hotkey|merge troops with garrison"
+msgstr "Rodyti kitą miestą"
+
 msgid "hotkey|split stack by half"
 msgstr ""
 
@@ -5751,9 +6028,6 @@ msgstr ""
 msgid ""
 "A multi-player game, with several human players competing against each other "
 "on a single map."
-msgstr ""
-
-msgid "Battle Only"
 msgstr ""
 
 msgid "Setup and play a battle without loading any map."
@@ -6177,11 +6451,17 @@ msgstr ""
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
+#, fuzzy
+msgid "Hero Movement Points"
+msgstr "Greitis"
+
 msgid ""
-"One or more heroes may still move, are you sure you want to end your turn?"
+"The hero's army cannot move anymore today. The movement points will be "
+"refilled tomorrow after you end your turn."
 msgstr ""
 
-msgid "Are you sure you want to quit?"
+msgid ""
+"One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
 
 #, fuzzy
@@ -6312,7 +6592,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Set %{skill} Skill"
+msgid "Set %{skill} Skill:"
 msgstr "Puolimo įgūdis"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
@@ -6330,13 +6610,54 @@ msgstr "Gynybos įgūdis"
 msgid "The available values range from %{min} to %{max}."
 msgstr ""
 
+msgid "Uppercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to uppercase letters."
+msgstr "Rodyti kitą miestą"
+
 msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard type"
+msgstr ""
+
+msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr ""
 
+#, fuzzy
+msgid "Change language"
+msgstr "Pasirinkti %{name}"
+
+#, fuzzy
+msgid "Click to switch between languages."
+msgstr "Rodyti kitą miestą"
+
+msgid "Backspace"
+msgstr ""
+
+#, fuzzy
+msgid "Click to remove characters."
+msgstr "Rodyti kitą miestą"
+
+msgid "Lowercase"
+msgstr ""
+
+#, fuzzy
+msgid "Click to switch to lowercase letters."
+msgstr "Rodyti kitą miestą"
+
 msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "Swap sign"
+msgstr ""
+
+msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
 
 msgid "The entered value is invalid."
@@ -6423,6 +6744,9 @@ msgstr "Žiūrėti %{name}"
 msgid "Greek"
 msgstr ""
 
+msgid "Esperanto"
+msgstr ""
+
 msgid "Slow"
 msgstr ""
 
@@ -6439,6 +6763,16 @@ msgid "Good"
 msgstr ""
 
 msgid "Evil"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Tiltas"
+
+msgid "Color"
+msgstr ""
+
+msgid "Configure"
 msgstr ""
 
 msgid ", FPS: "
@@ -7668,10 +8002,10 @@ msgstr ""
 msgid "This hero is not able to cast adventure spells."
 msgstr ""
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell cannot be cast on a boat."
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell can only be cast near an ocean."
@@ -7766,17 +8100,18 @@ msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
 
 #, fuzzy
-msgid "Set Spell Points value"
+msgid "Set Spell Points value:"
 msgstr "Burtų galia"
 
 msgid "View Spell Points Info"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
+msgid "Set patrol radius in tiles:"
 msgstr ""
 
-msgid "Enter hero's name"
-msgstr ""
+#, fuzzy
+msgid "Enter hero's name:"
+msgstr "Išeiti iš pilies"
 
 #, fuzzy
 msgid "Click to change class."
@@ -7838,6 +8173,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Click to enable hero's patrol mode."
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Do you want to save the changes made?"
 msgstr "Rodyti kitą miestą"
 
 msgid "Blood Morale"
@@ -8374,17 +8713,17 @@ msgid "luck|Irish"
 msgstr ""
 
 msgid ""
-"Negative luck sometimes falls on the hero's units in combat, causing their "
-"attacks to only do half damage."
+"%{luck-type} luck sometimes falls on the hero's units in combat, causing "
+"their attacks to only do half damage."
 msgstr ""
 
 msgid ""
-"Neutral luck means the hero's units will never get lucky or unlucky attacks "
-"on the enemy."
+"%{luck-type} luck means the hero's units will never get lucky or unlucky "
+"attacks on the enemy."
 msgstr ""
 
 msgid ""
-"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 
@@ -8409,15 +8748,19 @@ msgstr ""
 msgid "morale|Blood!"
 msgstr ""
 
-msgid "Negative morale may cause the hero's units to freeze in combat."
+msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr ""
 
 msgid ""
-"Neutral morale means the hero's units will never be blessed with extra "
-"attacks or freeze in combat."
+"%{morale-type} morale means the hero's units will never be blessed with "
+"extra attacks or freeze in combat."
 msgstr ""
 
-msgid "Positive morale may give the hero's units extra attacks in combat."
+msgid ""
+"%{morale-type} morale may give the hero's units extra attacks in combat."
+msgstr ""
+
+msgid "Blood"
 msgstr ""
 
 msgid "Knight"
@@ -8608,6 +8951,42 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
+msgstr ""
+
+msgid "map_layout|Mirrored"
+msgstr ""
+
+msgid "map_layout|Balanced"
+msgstr ""
+
+msgid "map_layout|Islands"
+msgstr ""
+
+msgid "map_layout|Pyramid"
+msgstr ""
+
+msgid "map_layout|Quest"
+msgstr ""
+
+msgid "resource_density|Scarce"
+msgstr ""
+
+msgid "resource_density|Normal"
+msgstr ""
+
+msgid "resource_density|Abundant"
+msgstr ""
+
+msgid "monster_strength|Weak"
+msgstr ""
+
+msgid "monster_strength|Normal"
+msgstr ""
+
+msgid "monster_strength|Strong"
+msgstr ""
+
+msgid "monster_strength|Deadly"
 msgstr ""
 
 msgid "maps|Small"
@@ -8821,9 +9200,6 @@ msgstr "Atsitiktinė pilis"
 #, fuzzy
 msgid "Random Monster - very strong"
 msgstr "Atsitiktinė pilis"
-
-msgid "Hero"
-msgstr ""
 
 msgid "Nothing Special"
 msgstr ""
@@ -11433,9 +11809,5 @@ msgid "An unknown force is being resurrected..."
 msgstr ""
 
 #, fuzzy
-#~ msgid "Click to show next town."
+#~ msgid "Click to set this hero to be AI-controlled."
 #~ msgstr "Rodyti kitą miestą"
-
-#, fuzzy
-#~ msgid "Click to show previous town."
-#~ msgstr "Rodyti ankstesnį miestą"

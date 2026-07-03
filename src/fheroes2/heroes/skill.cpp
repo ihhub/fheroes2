@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -96,7 +96,7 @@ namespace
         return 0;
     }
 
-    int SecondaryPriorityFromRace( const int race, const std::unordered_set<int> & blacklist, const uint32_t seed )
+    int32_t SecondaryPriorityFromRace( const int race, const std::unordered_set<int> & blacklist, const uint32_t seed )
     {
         Rand::Queue parts( Skill::numOfSecondarySkills );
 
@@ -350,11 +350,11 @@ std::string Skill::Level::StringWithBonus( const Heroes & hero, const Secondary 
 }
 
 Skill::Secondary::Secondary()
-    : std::pair<int, int>( UNKNOWN, Level::NONE )
+    : std::pair<int32_t, int32_t>( UNKNOWN, Level::NONE )
 {}
 
-Skill::Secondary::Secondary( int skill, int level )
-    : std::pair<int, int>( UNKNOWN, Level::NONE )
+Skill::Secondary::Secondary( int32_t skill, int32_t level )
+    : std::pair<int32_t, int32_t>( UNKNOWN, Level::NONE )
 {
     SetSkill( skill );
     SetLevel( level );
@@ -372,12 +372,12 @@ void Skill::Secondary::Set( const Secondary & skill )
     second = skill.second;
 }
 
-void Skill::Secondary::SetSkill( int skill )
+void Skill::Secondary::SetSkill( int32_t skill )
 {
     first = ( skill >= UNKNOWN && skill <= ESTATES ) ? skill : UNKNOWN;
 }
 
-void Skill::Secondary::SetLevel( int level )
+void Skill::Secondary::SetLevel( int32_t level )
 {
     second = ( level >= Level::NONE && level <= Level::EXPERT ) ? level : Level::NONE;
 }
@@ -884,7 +884,7 @@ uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
     const uint32_t shrineCount = world.GetKingdom( hero.GetColor() ).GetCountNecromancyShrineBuild();
     const uint32_t artifactEffect = hero.GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NECROMANCY_SKILL ) ? 1 : 0;
     // cap bonus at 7
-    return std::min( 7u, shrineCount + artifactEffect );
+    return std::min<uint32_t>( 7U, shrineCount + artifactEffect );
 }
 
 uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
@@ -892,7 +892,7 @@ uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
     uint32_t percent = hero.GetSecondarySkillValue( Skill::Secondary::NECROMANCY );
     percent += 10 * GetNecromancyBonus( hero );
     // cap at 100% bonus
-    return std::min( percent, 100u );
+    return std::min<uint32_t>( percent, 100U );
 }
 
 uint32_t Skill::GetDiplomacySurrenderCostDiscount( const int level )

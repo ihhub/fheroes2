@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,17 +20,18 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 #include "castle.h"
 #include "math_base.h"
 
-enum class GameVersion : int;
+enum class GameVersion : int32_t;
 
 namespace fheroes2
 {
-    Rect getCastleBuildingArea( const int race, const BuildingType buildingId );
+    std::vector<Rect> getCastleBuildingArea( const int race, const BuildingType buildingId );
 
     const char * getBuildingName( const int race, const BuildingType buildingId );
 

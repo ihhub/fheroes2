@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "battle_cell.h"
@@ -91,6 +92,15 @@ namespace Battle
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo();
+        static fheroes2::Rect GetMoatCellMask( const Cell & cell );
+
+        // Check the unit's current and next cells following the movement direction
+        // Return pair of Cell pointers if any of the cells are valid moat cells:
+        // { nullptr, nullptr } => unit is not on moat tile nor moving to moat tile
+        // { Cell * , nullptr } => unit is entering a moat tile
+        // { nullptr, Cell *  } => unit is leaving a moat tile
+        // { Cell * , Cell *  } => unit is either standing in the moat, or moving from one moat tile to another
+        static std::pair<const Cell *, const Cell *> GetMoatCellsForUnit( const Unit & unit, const CellDirection movementDirection );
 
         static Cell * GetCell( const int32_t position );
         static Cell * GetCell( const int32_t position, const CellDirection dir );
@@ -113,6 +123,7 @@ namespace Battle
 
         static CellDirection GetReflectDirection( const CellDirection dir );
         static Battle::CellDirection GetDirection( const int32_t index1, const int32_t index2 );
+        static Battle::CellDirection GetDirectionFromDelta( const int32_t moveX, const int32_t moveY );
 
         // Returns the distance to the cell with the given index from the given edge of the battlefield along the X axis. The
         // distance from the edges of the battlefield to the cells closest to them is counted as one.

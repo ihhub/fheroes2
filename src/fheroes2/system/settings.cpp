@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -70,10 +70,10 @@ namespace
         GAME_3D_AUDIO = 0x00010000,
         GAME_SYSTEM_INFO = 0x00020000,
         GAME_CURSOR_SOFT_EMULATION = 0x00040000,
-        UNUSED_GAME_EVIL_INTERFACE = 0x00080000,
+        GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
-        GAME_BATTLE_SHOW_TURN_ORDER = 0x00400000,
+        UNUSED = 0x00400000,
         GAME_BATTLE_SHOW_GRID = 0x00800000,
         GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GAME_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -135,6 +135,9 @@ Settings::Settings()
 
         // Adventure Map scrolling is disabled by default for handheld devices as it is very hard to navigate on small screens. Use drag and move logic.
         scroll_speed = SCROLL_SPEED_NONE;
+
+        // Smooth scrolling (inertia) feels natural on touch devices and is enabled by default.
+        _isMapSmoothScrollingEnabled = true;
     }
 
     // The Price of Loyalty is not supported by default.
@@ -207,6 +210,10 @@ bool Settings::Read( const std::string & filePath )
     // scroll speed
     SetScrollSpeed( config.IntParams( "scroll speed" ) );
 
+    if ( config.Exists( "map smooth scrolling" ) ) {
+        setMapSmoothScrolling( config.StrParams( "map smooth scrolling" ) != "off" );
+    }
+
     if ( config.Exists( "battle speed" ) ) {
         SetBattleSpeed( config.IntParams( "battle speed" ) );
     }
@@ -223,6 +230,10 @@ bool Settings::Read( const std::string & filePath )
         SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
     }
 
+    if ( config.Exists( "highlight movement area" ) ) {
+        setHighlightBattleMovementArea( config.StrParams( "highlight movement area" ) == "on" );
+    }
+
     if ( config.Exists( "battle show damage" ) ) {
         setBattleDamageInfo( config.StrParams( "battle show damage" ) == "on" );
     }
@@ -236,7 +247,17 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "battle turn order" ) ) {
-        setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
+        const std::string state = config.StrParams( "battle turn order" );
+        if ( ( state == "on" ) || ( state == "top" ) ) {
+            // "on" value is a legacy value and we fallback to top for it.
+            setBattleTurnOrderState( BattleTurnOrderState::TOP );
+        }
+        else if ( state == "bottom" ) {
+            setBattleTurnOrderState( BattleTurnOrderState::BOTTOM );
+        }
+        else {
+            setBattleTurnOrderState( BattleTurnOrderState::OFF );
+        }
     }
 
     // This code handles a configuration file's parameter made by older versions of the engine.
@@ -453,6 +474,9 @@ std::string Settings::String() const
     os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
+    os << std::endl << "# Smooth scrolling when panning the Adventure Map by dragging: on/off" << std::endl;
+    os << "map smooth scrolling = " << ( _isMapSmoothScrollingEnabled ? "on" : "off" ) << std::endl;
+
     os << std::endl << "# Toggle battle grid: on/off" << std::endl;
     os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
@@ -461,6 +485,9 @@ std::string Settings::String() const
 
     os << std::endl << "# Show battle shadow cursor: on/off" << std::endl;
     os << "battle shadow cursor = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# Highlight battle movement area: on/off" << std::endl;
+    os << "highlight movement area = " << ( _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Show battle damage information: on/off" << std::endl;
     os << "battle show damage = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
@@ -472,7 +499,20 @@ std::string Settings::String() const
     os << "auto spell casting = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Show turn order during battle: on/off" << std::endl;
-    os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
+    switch ( _battleTurnOrderState ) {
+    case BattleTurnOrderState::OFF:
+        os << "battle turn order = off" << std::endl;
+        break;
+    case BattleTurnOrderState::TOP:
+        os << "battle turn order = top" << std::endl;
+        break;
+    case BattleTurnOrderState::BOTTOM:
+        os << "battle turn order = bottom" << std::endl;
+        break;
+    default:
+        assert( 0 );
+        break;
+    }
 
     os << std::endl << "# Interface type: good/evil/dynamic" << std::endl;
     switch ( _interfaceType ) {
@@ -767,16 +807,6 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
-void Settings::setBattleShowTurnOrder( const bool enable )
-{
-    if ( enable ) {
-        _gameOptions.SetModes( GAME_BATTLE_SHOW_TURN_ORDER );
-    }
-    else {
-        _gameOptions.ResetModes( GAME_BATTLE_SHOW_TURN_ORDER );
-    }
-}
-
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -896,11 +926,23 @@ void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
         _gameOptions.SetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( true );
     }
     else {
         _gameOptions.ResetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
-        fheroes2::engine().setNearestScaling( false );
+    }
+
+    if ( enable != fheroes2::engine().isNearestScaling() ) {
+        fheroes2::engine().setNearestScaling( enable );
+    }
+}
+
+void Settings::setHighlightBattleMovementArea( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
     }
 }
 
@@ -954,6 +996,11 @@ bool Settings::isArmyEstimationViewNumeric() const
     return _gameOptions.Modes( GAME_NUMERIC_ARMY_ESTIMATION_VIEW );
 }
 
+bool Settings::isScreenScalingTypeNearest() const
+{
+    return _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST );
+}
+
 bool Settings::isEvilInterfaceEnabled() const
 {
     switch ( _interfaceType ) {
@@ -985,6 +1032,41 @@ bool Settings::isEvilInterfaceEnabled() const
     }
 
     return false;
+}
+
+bool Settings::isBattleMovementAreaHighlightEnabled() const
+{
+    return _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
+}
+
+void Settings::switchToNextInterfaceType()
+{
+    switch ( _interfaceType ) {
+    case InterfaceType::DYNAMIC:
+        _interfaceType = InterfaceType::GOOD;
+        break;
+    case InterfaceType::GOOD:
+        _interfaceType = InterfaceType::EVIL;
+        break;
+    default:
+        _interfaceType = InterfaceType::DYNAMIC;
+        break;
+    }
+}
+
+void Settings::switchToNextBattleTurnOrderState()
+{
+    switch ( _battleTurnOrderState ) {
+    case BattleTurnOrderState::OFF:
+        _battleTurnOrderState = BattleTurnOrderState::TOP;
+        break;
+    case BattleTurnOrderState::TOP:
+        _battleTurnOrderState = BattleTurnOrderState::BOTTOM;
+        break;
+    default:
+        _battleTurnOrderState = BattleTurnOrderState::OFF;
+        break;
+    }
 }
 
 bool Settings::isEditorAnimationEnabled() const
@@ -1045,11 +1127,6 @@ bool Settings::BattleAutoResolve() const
 bool Settings::BattleAutoSpellcast() const
 {
     return _gameOptions.Modes( GAME_BATTLE_AUTO_SPELLCAST );
-}
-
-bool Settings::BattleShowTurnOrder() const
-{
-    return _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER );
 }
 
 void Settings::setDebug( int debug )
@@ -1205,7 +1282,7 @@ IStreamBase & operator>>( IStreamBase & stream, Settings & conf )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1101_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1101_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
     }
 

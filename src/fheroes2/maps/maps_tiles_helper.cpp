@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -98,23 +98,31 @@ namespace
     {
         Artifact art;
 
-        switch ( tile.getMainObjectType() ) {
-        case MP2::OBJ_RANDOM_ARTIFACT:
-            art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
-            break;
-        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
-            art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
-            break;
-        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
-            art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
-            break;
-        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
-            art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
-            break;
-        default:
-            // Did you add another random artifact type? Add the logic above!
-            assert( 0 );
-            return;
+        if ( tile.metadata()[1] != Artifact::UNKNOWN ) {
+            // This metadata is only set for fh2 map format.
+            art = static_cast<int32_t>( tile.metadata()[1] );
+
+            tile.metadata()[1] = 0;
+        }
+        else {
+            switch ( tile.getMainObjectType() ) {
+            case MP2::OBJ_RANDOM_ARTIFACT:
+                art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
+                break;
+            case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+                art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
+                break;
+            case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+                art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
+                break;
+            case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+                art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
+                break;
+            default:
+                // Did you add another random artifact type? Add the logic above!
+                assert( 0 );
+                return;
+            }
         }
 
         if ( !art.isValid() ) {
@@ -206,26 +214,29 @@ namespace
         // Verify that the object is allowed to be placed.
         const fheroes2::Point mainTilePos = tile.GetCenter();
 
-        for ( const auto & partInfo : info.groundLevelParts ) {
-            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadows and terrain objects do not affect on passability so it is fine to ignore them not being rendered.
-                continue;
+        const bool isActionObject = MP2::isOffGameActionObject( info.objectType );
+        if ( isActionObject ) {
+            for ( const auto & partInfo : info.groundLevelParts ) {
+                if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+                    // Shadows and terrain objects do not affect on passability so it is fine to ignore them not being rendered.
+                    continue;
+                }
+
+                const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+                if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                    // This shouldn't happen as the object must be verified before placement.
+                    assert( 0 );
+                    return false;
+                }
             }
 
-            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
-                return false;
-            }
-        }
-
-        for ( const auto & partInfo : info.topLevelParts ) {
-            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
-                return false;
+            for ( const auto & partInfo : info.topLevelParts ) {
+                const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+                if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                    // This shouldn't happen as the object must be verified before placement.
+                    assert( 0 );
+                    return false;
+                }
             }
         }
 
@@ -235,7 +246,7 @@ namespace
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
                 // Make sure that the above condition about object placement is correct.
-                assert( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER );
+                assert( !isActionObject || ( partInfo.layerType == Maps::SHADOW_LAYER ) || ( partInfo.layerType == Maps::TERRAIN_LAYER ) );
 
                 // Ignore this tile since it is out of the map.
                 continue;
@@ -317,8 +328,9 @@ namespace
         for ( const auto & partInfo : info.topLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
+                // If this assertion blows up then the object verification before was incorrect.
+                assert( !isActionObject );
+
                 continue;
             }
 
@@ -1359,11 +1371,11 @@ namespace Maps
                 // On original map "Alteris 2" there is a treasure chest placed on the water and there might be other maps with such bug.
                 // If there is a bug then remove of the MP2::OBJ_TREASURE_CHEST will return 'true' and we can replace it with a Sea Chest object.
                 if ( removeObjectFromTileByType( tile, MP2::OBJ_TREASURE_CHEST ) ) {
-                    const auto & objects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
+                    const auto & objects = getObjectsByGroup( ObjectGroup::ADVENTURE_WATER );
 
                     for ( size_t i = 0; i < objects.size(); ++i ) {
                         if ( objects[i].objectType == MP2::OBJ_SEA_CHEST ) {
-                            const auto & objectInfo = Maps::getObjectInfo( Maps::ObjectGroup::ADVENTURE_WATER, static_cast<int32_t>( i ) );
+                            const auto & objectInfo = getObjectInfo( ObjectGroup::ADVENTURE_WATER, static_cast<int32_t>( i ) );
                             setObjectOnTile( tile, objectInfo, true );
 
                             break;
@@ -1736,7 +1748,7 @@ namespace Maps
     {
         tile.setMainObjectType( MP2::OBJ_MONSTER );
 
-        Maps::ObjectPart & mainObjectPart = tile.getMainObjectPart();
+        ObjectPart & mainObjectPart = tile.getMainObjectPart();
 
         if ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_MONS32 ) {
             if ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
@@ -1940,8 +1952,8 @@ namespace Maps
         };
 
         const auto restoreMineObjectType = [&tile]( int directionVector ) {
-            if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
-                Tile & mineTile = world.getTile( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
+            if ( isValidDirection( tile.GetIndex(), directionVector ) ) {
+                Tile & mineTile = world.getTile( GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.getMainObjectType() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
                      && ( mineTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid || mineTile.getGroundObjectPart( tile.getMainObjectPart()._uid )
                           || mineTile.getTopObjectPart( tile.getMainObjectPart()._uid ) ) ) {
@@ -1963,8 +1975,8 @@ namespace Maps
             }
         }
 
-        if ( Maps::isValidDirection( tile.GetIndex(), Direction::RIGHT ) ) {
-            Tile & rightTile = world.getTile( Maps::GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
+        if ( isValidDirection( tile.GetIndex(), Direction::RIGHT ) ) {
+            Tile & rightTile = world.getTile( GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
 
             if ( rightTile.getMainObjectPart()._uid == tile.getMainObjectPart()._uid ) {
                 objectIcnTypeTemp = rightTile.getMainObjectPart().icnType;
@@ -2001,13 +2013,13 @@ namespace Maps
         // Verify that this tile indeed contains an object with given object type.
         uint32_t objectUID = 0;
 
-        if ( Maps::getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
+        if ( getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
             objectUID = tile.getMainObjectPart()._uid;
         }
 
         if ( objectUID == 0 ) {
             for ( auto iter = tile.getTopObjectParts().rbegin(); iter != tile.getTopObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
                 }
@@ -2016,7 +2028,7 @@ namespace Maps
 
         if ( objectUID == 0 ) {
             for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
-                if ( Maps::getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
                     objectUID = iter->_uid;
                     break;
                 }
@@ -2049,7 +2061,7 @@ namespace Maps
 
             if ( world.getTile( tiles[currentId] ).removeObjectPartsByUID( objectUID ) ) {
                 // This tile has the object. Get neighboring tiles to see if they have the same.
-                const Maps::Indexes tileIndices = Maps::getAroundIndexes( tiles[currentId], 1 );
+                const Indexes tileIndices = getAroundIndexes( tiles[currentId], 1 );
                 for ( const int32_t tileIndex : tileIndices ) {
                     if ( tileIndex < 0 ) {
                         // Invalid tile index.
@@ -2083,8 +2095,8 @@ namespace Maps
             break;
         }
 
-        if ( ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getMainObjectPart().layerType == Maps::SHADOW_LAYER )
-             || ( tile.getMainObjectPart().layerType == Maps::TERRAIN_LAYER ) ) {
+        if ( ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getMainObjectPart().layerType == SHADOW_LAYER )
+             || ( tile.getMainObjectPart().layerType == TERRAIN_LAYER ) ) {
             return !MP2::isInGameActionObject( objectType, tile.isWater() );
         }
 
@@ -2099,17 +2111,17 @@ namespace Maps
         const int32_t worldHeight = world.w();
 
         // Do not get over the world borders.
-        const int32_t minX = std::max( minPos.x, 0 );
-        const int32_t minY = std::max( minPos.y, 0 );
+        const int32_t minX = std::max<int32_t>( minPos.x, 0 );
+        const int32_t minY = std::max<int32_t>( minPos.y, 0 );
         // Add extra 1 to reach the given maxPos point.
-        const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
-        const int32_t maxY = std::min( maxPos.y + 1, worldHeight );
+        const int32_t maxX = std::min<int32_t>( maxPos.x + 1, worldWidth );
+        const int32_t maxY = std::min<int32_t>( maxPos.y + 1, worldHeight );
 
         // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
-        const int32_t fogMinX = std::max( minX - 1, 0 );
-        const int32_t fogMinY = std::max( minY - 1, 0 );
-        const int32_t fogMaxX = std::min( maxX + 1, worldWidth );
-        const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
+        const int32_t fogMinX = std::max<int32_t>( minX - 1, 0 );
+        const int32_t fogMinY = std::max<int32_t>( minY - 1, 0 );
+        const int32_t fogMaxX = std::min<int32_t>( maxX + 1, worldWidth );
+        const int32_t fogMaxY = std::min<int32_t>( maxY + 1, worldHeight );
 
         const int32_t fogDataWidth = maxX - minX + 2;
         const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );
@@ -2145,12 +2157,12 @@ namespace Maps
             const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
 
             for ( int32_t x = minX; x < maxX; ++x ) {
-                Maps::Tile & tile = world.getTile( x, y );
+                Tile & tile = world.getTile( x, y );
 
                 int32_t fogDataIndex = x + fogCenterDataOffsetY;
 
                 if ( fogData[fogDataIndex] == 0 ) {
-                    // For the tile is without fog we set the UNKNOWN direction.
+                    // For the tile without fog we set the UNKNOWN direction.
                     tile.setFogDirection( Direction::UNKNOWN );
                 }
                 else {
@@ -2315,14 +2327,17 @@ namespace Maps
         for ( int32_t y = startY; y <= endY; ++y ) {
             const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
-                const Maps::Tile & currentTile = world.getTile( x + tileOffset );
+                const Tile & currentTile = world.getTile( x + tileOffset );
 
-                if ( currentTile.getMainObjectPart()._uid != 0 && ( currentTile.getMainObjectPart().layerType != SHADOW_LAYER ) ) {
-                    objectsUids.insert( currentTile.getMainObjectPart()._uid );
+                const ObjectPart & mainObjectPart = currentTile.getMainObjectPart();
+                if ( mainObjectPart._uid != 0 && mainObjectPart.layerType != SHADOW_LAYER
+                     && ( mainObjectPart.icnType != MP2::OBJ_ICN_TYPE_ROAD || Tile::isSpriteRoad( mainObjectPart.icnType, mainObjectPart.icnIndex ) ) ) {
+                    objectsUids.insert( mainObjectPart._uid );
                 }
 
-                for ( const auto & part : currentTile.getGroundObjectParts() ) {
-                    if ( part._uid != 0 && ( part.layerType != SHADOW_LAYER ) && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
+                for ( const ObjectPart & part : currentTile.getGroundObjectParts() ) {
+                    if ( part._uid != 0 && part.layerType != SHADOW_LAYER && part.icnType != MP2::OBJ_ICN_TYPE_FLAG32
+                         && ( part.icnType != MP2::OBJ_ICN_TYPE_ROAD || Tile::isSpriteRoad( part.icnType, part.icnIndex ) ) ) {
                         objectsUids.insert( part._uid );
                     }
                 }

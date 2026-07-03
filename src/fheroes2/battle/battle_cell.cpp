@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -173,6 +173,12 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             return {};
         };
 
+        Position headPos = tryHead();
+
+        if ( headPos.GetHead() != nullptr && headPos.GetTail() != nullptr ) {
+            return headPos;
+        }
+
         const auto tryTail = [&unit, dst, &checkCells]() -> Position {
             const CellDirection headDirection = unit.isReflect() ? CellDirection::LEFT : CellDirection::RIGHT;
 
@@ -185,12 +191,6 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
 
             return {};
         };
-
-        Position headPos = tryHead();
-
-        if ( headPos.GetHead() != nullptr && headPos.GetTail() != nullptr ) {
-            return headPos;
-        }
 
         return tryTail();
     }

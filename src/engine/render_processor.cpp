@@ -24,13 +24,6 @@
 
 #include "pal.h"
 
-namespace
-{
-    // The maximum FPS the engine can handle is 125.
-    // This means that a frame should be generated only every 8 ms.
-    const uint64_t frameHalfInterval{ 4 };
-}
-
 namespace fheroes2
 {
     RenderProcessor & RenderProcessor::instance()
@@ -54,9 +47,19 @@ namespace fheroes2
             _preRenderer();
         }
 
-        if ( _cyclingTimer.getMs() < ( _cyclingInterval - frameHalfInterval ) ) {
+        const uint64_t cyclingTime = _previousCyclingInterval + _cyclingTimer.getMs();
+        if ( cyclingTime < ( _cyclingInterval * 2 - _frameHalfInterval ) ) {
             // If the current timer is less than cycling internal minus half of the frame generation then nothing is needed.
             return false;
+        }
+
+        _previousCyclingInterval = cyclingTime - _cyclingInterval;
+
+        if ( _previousCyclingInterval > _cyclingInterval + _frameHalfInterval * 2 ) {
+            // The cycling delay was more than assumed frame synchronization interval.
+            // It can be because of some small engine hang after doing some massive computations.
+            // So let's reset the synchronization then.
+            _previousCyclingInterval = _cyclingInterval;
         }
 
         // TODO: here we need to deduct possible time difference from the current time to have consistent FPS.

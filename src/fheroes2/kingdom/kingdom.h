@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -210,8 +210,6 @@ public:
     bool isVisited( const Maps::Tile & ) const;
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const;
-
     bool opponentsCanRecruitMoreHeroes() const;
     bool opponentsHaveHeroes() const;
 
@@ -222,8 +220,15 @@ public:
         return puzzle_maps;
     }
 
-    void SetVisitTravelersTent( const int barrierColor );
-    bool IsVisitTravelersTent( const int barrierColor ) const;
+    void markTravellerTentVisited( const int barrierColor )
+    {
+        _visitedTentsColors |= ( 1 << barrierColor );
+    }
+
+    bool isTravellerTentVisited( const int barrierColor ) const
+    {
+        return ( _visitedTentsColors & ( 1 << barrierColor ) ) != 0;
+    }
 
     void LossPostActions();
 
@@ -252,11 +257,11 @@ private:
     std::list<IndexObject> visit_object;
 
     Puzzle puzzle_maps;
-    int _visitedTentsColors{ 0 };
+    int32_t _visitedTentsColors{ 0 };
 
     // Used to remember which item was selected in Kingdom View dialog.
-    int _topCastleInKingdomView{ -1 };
-    int _topHeroInKingdomView{ -1 };
+    int32_t _topCastleInKingdomView{ -1 };
+    int32_t _topHeroInKingdomView{ -1 };
 };
 
 class Kingdoms

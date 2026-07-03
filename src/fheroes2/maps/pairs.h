@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -107,7 +107,7 @@ inline IStreamBase & operator>>( IStreamBase & stream, ObjectColor & objectColor
                    "Remove this operator completely. It will be automatically replaced by IStreamBase & operator>>( std::pair<> & )" );
 
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int temp;
+        int32_t temp;
         stream >> temp;
 
         objectColor.second = static_cast<PlayerColor>( temp );

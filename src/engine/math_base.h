@@ -116,35 +116,6 @@ namespace fheroes2
             return !( *this == size );
         }
 
-        constexpr bool operator<( const SizeBase2D & size ) const
-        {
-            return width < size.width || ( width == size.width && height < size.height );
-        }
-
-        constexpr SizeBase2D & operator+=( const SizeBase2D & size )
-        {
-            width += size.width;
-            height += size.height;
-            return *this;
-        }
-
-        constexpr SizeBase2D & operator-=( const SizeBase2D & size )
-        {
-            width -= size.width;
-            height -= size.height;
-            return *this;
-        }
-
-        constexpr SizeBase2D operator+( const SizeBase2D & size ) const
-        {
-            return SizeBase2D( width + size.width, height + size.height );
-        }
-
-        constexpr SizeBase2D operator-( const SizeBase2D & size ) const
-        {
-            return SizeBase2D( width - size.width, height - size.height );
-        }
-
         _Type width;
         _Type height;
     };
@@ -211,12 +182,6 @@ namespace fheroes2
         constexpr bool operator&( const PointBase2D<_TypePoint> & point ) const
         {
             return point.x >= x && point.y >= y && point.x < ( x + width ) && point.y < ( y + height );
-        }
-
-        // Check whether rectangles are intersecting each other
-        constexpr bool operator&( const RectBase2D & rect ) const
-        {
-            return x <= rect.x + rect.width && rect.x <= x + width && y <= rect.y + rect.height && rect.y <= y + height;
         }
 
         // Find intersection rectangle

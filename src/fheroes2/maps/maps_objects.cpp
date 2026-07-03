@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -330,7 +330,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapBaseObject & obj )
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1103_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1103_RELEASE ) {
-        int dummy;
+        int32_t dummy;
 
         stream >> dummy >> obj.uid >> static_cast<MapPosition &>( obj );
     }
@@ -353,7 +353,7 @@ IStreamBase & operator>>( IStreamBase & stream, MapEvent & obj )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1109_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1109_RELEASE ) {
-        int colors;
+        int32_t colors;
         stream >> colors;
         obj.colors = static_cast<PlayerColorsSet>( colors );
     }

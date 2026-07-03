@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include "world_pathfinding.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
@@ -28,6 +29,7 @@
 #include <tuple>
 #include <utility>
 
+#include "ai_common.h"
 #include "army.h"
 #include "artifact.h"
 #include "castle.h"
@@ -184,7 +186,7 @@ namespace
 
         // AI may have the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER ) {
-            return world.GetKingdom( color ).IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return world.GetKingdom( color ).isTravellerTentVisited( getBarrierColorFromTile( tile ) );
         }
 
         // AI can use boats to overcome water obstacles
@@ -372,7 +374,7 @@ void WorldPathfinder::reset()
     if ( const size_t worldSize = world.getSize(); _cache.size() != worldSize ) {
         _cache.resize( worldSize );
 
-        const Directions & directions = Direction::All();
+        const auto & directions = Direction::allNeighboringDirections;
         _mapOffset.resize( directions.size() );
 
         for ( size_t i = 0; i < directions.size(); ++i ) {
@@ -406,7 +408,7 @@ void WorldPathfinder::processWorldMap()
 
 void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, const int currentNodeIdx )
 {
-    const Directions & directions = Direction::All();
+    const auto & directions = Direction::allNeighboringDirections;
     const WorldNode & currentNode = _cache[currentNodeIdx];
     const uint32_t maxMovePoints = getMaxMovePoints( world.getTile( currentNodeIdx ).isWater() );
 
@@ -584,7 +586,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     // need to reserve SP can be neglected.
     const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor );
 
-    const int32_t townGateCastleIndex = [this, &hero]() {
+    const int32_t townGateCastleIndex = [this, &hero]() -> int32_t {
         static const Spell townGate( Spell::TOWNGATE );
 
         if ( !hero.CanCastSpell( townGate ) ) {
@@ -886,7 +888,7 @@ std::pair<int32_t, bool> AIWorldPathfinder::getFogDiscoveryTile( const Heroes & 
     reEvaluateIfNeeded( hero );
 
     const auto findBestTile = [this, scoutingDistance = hero.GetScoutingDistance()]( const auto nearbyTilePredicate ) {
-        const Directions & directions = Direction::All();
+        const auto & directions = Direction::allNeighboringDirections;
 
         struct TileCharacteristics
         {
@@ -970,9 +972,9 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 
     const int start = hero.GetIndex();
 
-    Directions directions = Direction::All();
+    auto directions{ Direction::allNeighboringDirections };
     // We have to shuffle directions to avoid cases when heroes repeat the same steps again and again.
-    Rand::Shuffle( directions );
+    Rand::shuffle( directions.begin(), directions.end(), Rand::CurrentThreadRandomDevice() );
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( !Maps::isValidDirection( start, directions[i] ) ) {
@@ -1171,11 +1173,15 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     const Kingdom & kingdom = world.GetKingdom( _color );
     std::set<int> uniqueIndices;
 
-    const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index ) {
-        const MP2::MapObjectType objectType = world.getTile( index ).getMainObjectType();
+    const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( const int index ) {
+        // std::set insert returns a pair, second value is true if it was unique.
+        if ( !uniqueIndices.insert( index ).second ) {
+            return;
+        }
 
-        // std::set insert returns a pair, second value is true if it was unique
-        if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObject( world.getTile( index ), objectType ) ) {
+        const auto & tile = world.getTile( index );
+        const MP2::MapObjectType objectType = tile.getMainObjectType();
+        if ( AI::isValuableAdventureMapObject( kingdom, objectType, index ) ) {
             result.emplace_back( index, objectType );
         }
     };
@@ -1263,7 +1269,7 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
     const bool isHeroOnWater = world.getTile( _pathStart ).isWater();
     const int32_t distanceLimit = Spell::CalculateDimensionDoorDistance() / 2;
     const uint32_t maxCasts = std::min( { remainingSpellPoints / _dimensionDoorSPCost, _remainingMovePoints / dimensionDoorMovementCost, difficultyLimit } );
-    const Directions & directions = Direction::All();
+    const auto & directions = Direction::allNeighboringDirections;
 
     std::list<Route::Step> path;
 
@@ -1336,7 +1342,7 @@ std::list<Route::Step> AIWorldPathfinder::buildDimensionDoorPath( const int targ
     return {};
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex ) const
+std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool accountNearestObject ) const
 {
     assert( _cache.size() == world.getSize() && Maps::isValidAbsIndex( _pathStart ) && Maps::isValidAbsIndex( targetIndex ) );
 
@@ -1359,7 +1365,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex ) con
     while ( currentNode != _pathStart ) {
         assert( currentNode != -1 );
 
-        if ( !isTileAvailableForWalkThrough( currentNode, fromWater ) ) {
+        if ( accountNearestObject && !isTileAvailableForWalkThrough( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
         }
 

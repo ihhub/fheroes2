@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,7 @@ namespace fheroes2
         Bulgarian,
         Danish,
         Dutch,
+        Esperanto,
         Greek,
         Hungarian,
         Norwegian,
@@ -63,5 +64,6 @@ namespace fheroes2
         CP1254,
         CP1258,
         ISO8859_16,
+        ISO8859_3,
     };
 }

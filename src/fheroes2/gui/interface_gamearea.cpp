@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <deque>
+#include <functional>
 #include <list>
 #include <map>
 #include <ostream>
@@ -57,6 +58,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "til.h"
 #include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
@@ -443,8 +445,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    const int32_t minX = std::max( tileROI.x, 0 );
-    const int32_t minY = std::max( tileROI.y, 0 );
+    const int32_t minX = std::max<int32_t>( tileROI.x, 0 );
+    const int32_t minY = std::max<int32_t>( tileROI.y, 0 );
     maxX = std::min( maxX, worldWidth );
     maxY = std::min( maxY, worldHeight );
 
@@ -482,8 +484,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Run through all visible tiles and find all tile-unfit objects.
     // Also cover extra tiles from right and bottom sides because these objects are usually bigger than 1x1 tiles.
-    const int32_t roiToRenderMinX = std::max( minX - 1, 0 );
-    const int32_t roiToRenderMinY = std::max( minY - 1, 0 );
+    const int32_t roiToRenderMinX = std::max<int32_t>( minX - 1, 0 );
+    const int32_t roiToRenderMinY = std::max<int32_t>( minY - 1, 0 );
     const int32_t roiToRenderMaxX = std::min( maxX + 2, worldWidth );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, worldHeight );
 
@@ -795,6 +797,36 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     updateObjectAnimationInfo();
 }
 
+void Interface::GameArea::redrawOnlyFog( fheroes2::Image & dst ) const
+{
+    const fheroes2::Rect & tileROI = GetVisibleTileROI();
+
+    const int32_t maxX = tileROI.x + tileROI.width;
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.h();
+
+    for ( int32_t y = 0; y < tileROI.height; ++y ) {
+        fheroes2::Point offset( tileROI.x, tileROI.y + y );
+
+        if ( offset.y < 0 || offset.y >= worldHeight ) {
+            for ( ; offset.x < maxX; ++offset.x ) {
+                Maps::redrawEmptyTile( dst, offset, *this );
+            }
+        }
+        else {
+            for ( ; offset.x < maxX; ++offset.x ) {
+                if ( offset.x < 0 || offset.x >= worldWidth ) {
+                    Maps::redrawEmptyTile( dst, offset, *this );
+                }
+                else {
+                    const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( offset.x + offset.y ) % 4, 0 );
+                    DrawTile( dst, sf, offset );
+                }
+            }
+        }
+    }
+}
+
 void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile, const bool isActionObject ) const
 {
     if ( startTile < 0 || endTile < 0 ) {
@@ -812,8 +844,8 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
     const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    const int32_t limitedLineWidth = std::min( 2, overlappedRoi.width );
-    const int32_t limitedLineHeight = std::min( 2, overlappedRoi.height );
+    const int32_t limitedLineWidth = std::min<int32_t>( 2, overlappedRoi.width );
+    const int32_t limitedLineHeight = std::min<int32_t>( 2, overlappedRoi.height );
 
     const uint8_t color = ( isActionObject ? 115 : 181 );
 
@@ -927,6 +959,11 @@ void Interface::GameArea::SetScroll( const int direction )
 {
     assert( !isDragScroll() );
 
+    // Do not allow edge scrolling while inertial scrolling is active.
+    if ( _inertiaHandler.isActive() ) {
+        return;
+    }
+
     if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {
             scrollDirection |= direction;
@@ -1029,8 +1066,12 @@ void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mousePosition = le.getMouseCursorPos();
+    const Settings & conf = Settings::Get();
 
     if ( !le.isMouseLeftButtonPressed() ) {
+        if ( _mouseDraggingMovement && conf.isMapSmoothScrollingEnabled() ) {
+            _inertiaHandler.commitRelease();
+        }
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
@@ -1039,6 +1080,7 @@ void Interface::GameArea::QueueEventProcessing()
         if ( !_mouseDraggingInitiated ) {
             _mouseDraggingInitiated = true;
             _lastMouseDragPosition = mousePosition;
+            _inertiaHandler.reset();
         }
         else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
@@ -1051,9 +1093,15 @@ void Interface::GameArea::QueueEventProcessing()
             _needRedrawByMouseDragging = false;
         }
         else {
+            const fheroes2::Point delta = _lastMouseDragPosition - mousePosition;
+
+            if ( conf.isMapSmoothScrollingEnabled() ) {
+                _inertiaHandler.addMovementStep( delta );
+            }
+
             // Update the center coordinates and redraw the adventure map only if the mouse was moved.
             _needRedrawByMouseDragging = true;
-            SetCenterInPixels( getCurrentCenterInPixels() + _lastMouseDragPosition - mousePosition );
+            SetCenterInPixels( getCurrentCenterInPixels() + delta );
             _lastMouseDragPosition = mousePosition;
         }
 
@@ -1074,7 +1122,6 @@ void Interface::GameArea::QueueEventProcessing()
         return;
     }
 
-    const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
@@ -1105,6 +1152,11 @@ void Interface::GameArea::QueueEventProcessing()
         _prevIndexPos = index;
         updateCursor = false;
     }
+}
+
+bool Interface::GameArea::updateInertia()
+{
+    return _inertiaHandler.update( [this]() { return getCurrentCenterInPixels(); }, [this]( const fheroes2::Point & pos ) { SetCenterInPixels( pos ); } );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
@@ -1208,8 +1260,8 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
     fheroes2::Display & display = fheroes2::Display::instance();
     Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
-        if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::HEROES_PICKUP_DELAY ) ) {
             adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
             display.render();
         }

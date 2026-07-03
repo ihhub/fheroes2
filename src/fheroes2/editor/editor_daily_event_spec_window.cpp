@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -71,7 +71,7 @@ namespace Editor
         eventMetadata.computerPlayerColors = eventMetadata.computerPlayerColors & computerPlayerColors;
 
         // First occurrence day logically has no limits but we still have to check it for some human logical value.
-        eventMetadata.firstOccurrenceDay = std::clamp( eventMetadata.firstOccurrenceDay, 1U, static_cast<uint32_t>( lastDayForEvents ) );
+        eventMetadata.firstOccurrenceDay = std::clamp<uint32_t>( eventMetadata.firstOccurrenceDay, 1U, static_cast<uint32_t>( lastDayForEvents ) );
 
         eventMetadata.repeatPeriodInDays = std::min( eventMetadata.repeatPeriodInDays, static_cast<uint32_t>( daysInYear ) );
 
@@ -84,7 +84,7 @@ namespace Editor
 
         int32_t offsetY = dialogRoi.y + elementOffset;
 
-        const fheroes2::Text title( MP2::StringObject( MP2::OBJ_EVENT ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( std::string( MP2::StringObject( MP2::OBJ_EVENT ) ) + ':', fheroes2::FontType::normalYellow() );
         title.draw( dialogRoi.x + ( dialogRoi.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;
@@ -313,7 +313,7 @@ namespace Editor
 
                     const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
 
-                    std::string message = _( "Set %{resource-type} Count" );
+                    std::string message = _( "Set %{resource-type} Count:" );
                     StringReplace( message, "%{resource-type}", Resource::String( resourceType ) );
 
                     if ( Dialog::SelectCount( std::move( message ), -99999, 999999, temp, 1, &resourceUI ) ) {

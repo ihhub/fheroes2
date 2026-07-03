@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,7 +33,7 @@ namespace Battle
 {
     class Unit;
 
-    class Graveyard : public std::map<int32_t, std::vector<Unit *>>
+    class Graveyard final : public std::map<int32_t, std::vector<Unit *>>
     {
     public:
         Graveyard() = default;
@@ -49,6 +49,9 @@ namespace Battle
         void removeUnit( Unit * unit );
 
         Unit * getLastUnit( const int32_t index ) const;
+
+        // In case of spells applied on dead monsters we have to put this monster on top of others to have proper animation.
+        void moveToLastIfPresent( Unit * unit );
 
         std::vector<Unit *> getUnits( const int32_t index ) const;
     };

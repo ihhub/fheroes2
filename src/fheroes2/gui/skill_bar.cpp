@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,9 +40,10 @@ namespace
 {
     fheroes2::Image GetBarBackgroundSprite()
     {
-        fheroes2::Image icon( 34, 34 );
+        fheroes2::Image icon;
         // Sprite ( ICN::HSICONS, 0 ) has no transparency so we can say that 'icon' will also have no transparency.
         icon._disableTransformLayer();
+        icon.resize( 34, 34 );
         icon.reset();
         fheroes2::DrawBorder( icon, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
         fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HSICONS, 0 ), 26, 21, icon, 1, 1, 32, 32 );
@@ -205,7 +206,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 
     // The case when we are in Editor mode.
     auto primarySkillEditDialog = [skill]( int32_t & skillValue ) {
-        std::string header = _( "Set %{skill} Skill" );
+        std::string header = _( "Set %{skill} Skill:" );
         StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
 
         const auto [min, max] = Skill::Primary::getSkillValueRange( skill );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -145,7 +145,7 @@ uint32_t HeroBase::getManaIndexSprite() const
     const uint32_t value = _spellPoints / 5U + 1U;
 
     // Valid sprite index range is (0 - 25).
-    return std::min( value, 25U );
+    return std::min<uint32_t>( value, 25U );
 }
 
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const
@@ -357,8 +357,13 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 
 double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 {
-    const SpellStorage spells = getAllSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
+    if ( currentSpellPoints == 0 ) {
+        // The enemy's hero has no spell points so they can't cast anything.
+        return 0;
+    }
+
+    const SpellStorage spells = getAllSpells();
     const int spellPower = GetPower();
 
     double bestValue = 0;
@@ -424,16 +429,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
-        if ( !haveMovePoints( spell ) ) {
-            if ( res ) {
-                *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
+        if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
+            if ( res != nullptr ) {
+                *res = _( "This spell cannot be cast on a boat." );
             }
             return false;
         }
 
-        if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
-            if ( res != nullptr ) {
-                *res = _( "This spell cannot be cast on a boat." );
+        if ( !haveMovePoints( spell ) ) {
+            if ( res ) {
+                *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
             }
             return false;
         }
@@ -469,19 +474,15 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             }
         }
 
-        if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
-            const VecCastles & castles = hero->GetKingdom().GetCastles();
-            const bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
-            if ( !hasCastles ) {
+        if ( spell == Spell::TOWNGATE ) {
+            const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
+            if ( castle == nullptr ) {
                 if ( res != nullptr ) {
                     *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
                 }
                 return false;
             }
-        }
 
-        if ( spell == Spell::TOWNGATE ) {
-            const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
             assert( castle != nullptr );
 
             if ( castle->GetIndex() == hero->GetIndex() ) {
@@ -497,6 +498,17 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                     *res = _( "The nearest town is %{town}.\n\nThis town is occupied by your hero %{hero}." );
                     StringReplace( *res, "%{town}", castle->GetName() );
                     StringReplace( *res, "%{hero}", townHero->GetName() );
+                }
+                return false;
+            }
+        }
+
+        if ( spell == Spell::TOWNPORTAL ) {
+            const VecCastles & castles = hero->GetKingdom().GetCastles();
+            const bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
+            if ( !hasCastles ) {
+                if ( res != nullptr ) {
+                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
                 }
                 return false;
             }
@@ -568,7 +580,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 return false;
             }
             if ( spell != Spell::HAUNT ) {
-                const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
+                const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower() );
                 const uint32_t currentCount = troop.GetCount();
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {

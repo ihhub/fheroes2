@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -380,11 +380,18 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
                 }
                 charInsertPos = newPos;
             }
+            else if ( ( le.getPressedKeyValue() == fheroes2::Key::KEY_DELETE ) || ( le.getPressedKeyValue() == fheroes2::Key::KEY_BACKSPACE ) ) {
+                // Character deletion shouldn't check any length as we are reducing the existing text.
+                // This is useful when the text is actually bigger that the text window and it is not possible to enter anything
+                // but we have to allow to delete characters.
+                charInsertPos = InsertKeySym( result, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
+            }
             else {
                 // We should verify the height of the text before allowing to enter one more line.
                 std::string tmp = result;
                 const size_t tempCharInsertPos = InsertKeySym( tmp, charInsertPos, le.getPressedKeyValue(), LocalEvent::getCurrentKeyModifiers() );
-                if ( textInput.height( tmp ) <= textInputArea.height ) {
+
+                if ( !isMultiLine || ( textInput.height( tmp ) <= textInputArea.height ) ) {
                     result = std::move( tmp );
                     charInsertPos = tempCharInsertPos;
                 }
@@ -456,7 +463,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const int32_t redistributeMin = std::min( 1, redistributeMax );
+    const int32_t redistributeMin = std::min<int32_t>( 1, redistributeMax );
     const int spacer = 10;
     const fheroes2::Text header( troopName, fheroes2::FontType::normalYellow() );
     const int32_t headerHeight = header.height() + 6;

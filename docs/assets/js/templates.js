@@ -23,7 +23,7 @@
  */
 
 // Create the fheroes2 namespace if it doesn't exist
-window.fheroes2 = window.fheroes2 || {};
+globalThis.fheroes2 = globalThis.fheroes2 || {};
 
 // Template for the live region
 const liveRegionTemplate = `
@@ -41,12 +41,12 @@ const codeCopyButtonTemplate = `
 `;
 
 // Export the templates to the fheroes2 namespace
-window.fheroes2.HeadingCopyTemplates = {
+globalThis.fheroes2.HeadingCopyTemplates = {
     liveRegionTemplate,
     headingAnchorTemplate
 };
 
-window.fheroes2.CodeCopyTemplates = {
+globalThis.fheroes2.CodeCopyTemplates = {
     liveRegionTemplate,
     codeCopyButtonTemplate
 };
