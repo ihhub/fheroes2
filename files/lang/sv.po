@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-02-24 17:38+0100\n"
+"PO-Revision-Date: 2026-06-19 17:29+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -4461,12 +4461,11 @@ msgstr "Spara nuvarande karta."
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
-#, fuzzy
 msgid "Auto Playtest"
-msgstr "Testspelare"
+msgstr "Automatisk Testkörning"
 
 msgid "Run an automatic playtest of the map."
-msgstr ""
+msgstr "Kör en automatiskt testkörning av kartan."
 
 msgid "Return to the game's Main Menu."
 msgstr "Återgå till Huvudmenyn."
@@ -5278,65 +5277,58 @@ msgstr "Professionell"
 msgid "difficulty|Impossible"
 msgstr "Omöjligt"
 
-#, fuzzy
 msgid "Auto Playtest Results"
-msgstr "Testspelare"
+msgstr "Automatiskt Testkörningsresultat"
 
 msgid "1 playthrough"
 msgid_plural "%{count} playthroughs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 genomkörning"
+msgstr[1] "%{count} genomkörningar"
 
 msgid " playthrough(s) reached the specified time limit"
 msgstr ""
 
-#, fuzzy
 msgid "Click to close the dialog."
-msgstr "Klicka för att välja färg."
+msgstr "Klicka för stänga dialogen."
 
 msgid "Won %{percent}% of playthroughs."
-msgstr ""
+msgstr "%{percent}% vunna testkörningar."
 
-#, fuzzy
 msgid "Failed to prepare the map for auto playtest."
-msgstr "Misslyckades att spara kartan."
+msgstr "Misslyckades att förbereda kartan för automatiskt testkörning."
 
 msgid "autoPlaytest|Number of playthroughs:"
-msgstr ""
+msgstr "Antal testkörningar:"
 
 msgid "autoPlaytest|Max days per playthrough:"
-msgstr ""
+msgstr "Maximalt antal dagar per testkörning:"
 
-#, fuzzy
 msgid "autoPlaytest|Animation"
 msgstr "Animering"
 
-#, fuzzy
 msgid "autoPlaytest|Animation speed:"
-msgstr "Animering"
+msgstr "Animeringshastighet:"
 
 msgid "autoPlaytest|Sound Effects"
-msgstr ""
+msgstr "Ljudeffekter"
 
 msgid "Left-clicking at any point will interrupt the playtest."
-msgstr ""
+msgstr "Vänsterklickning kommer att avbryta testkörningen."
 
-#, fuzzy
 msgid "Click to run an automated map playtest."
-msgstr "Klicka för att gå tillbaka till huvudmenyn."
+msgstr "Klicka för köra en karta med automatiskt testkörning."
 
 msgid ""
 "Auto playtest\n"
 "(playthrough %{current} of %{total})"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Do you want to interrupt the automatic playtest? The effect will take place "
 "only on the next turn."
 msgstr ""
-"Vill du återta kontrollen från AI:n? Denna effekt gäller bara under nästa "
-"runda."
+"Vill du avbryta den automatiska testkörningen? Effekten kommer att ske nästa "
+"tur."
 
 msgid "and more..."
 msgstr "och mer..."
@@ -5472,7 +5464,7 @@ msgid "Special Thanks to"
 msgstr "Extra Tack till"
 
 msgid "and all the people who have helped make the project possible!"
-msgstr ""
+msgstr " och alla människor som hjälpt till att genomföra projektet!"
 
 msgid "Support us at"
 msgstr "Stöd oss på"
@@ -5744,9 +5736,8 @@ msgstr "öppna spelets huvudmeny"
 msgid "hotkey|toggle passability"
 msgstr "Aktivera framkomlighet"
 
-#, fuzzy
 msgid "hotkey|auto playtest"
-msgstr "Standard: Vänster"
+msgstr "Automatisk testkörning"
 
 msgid "hotkey|re-generate random map"
 msgstr "Återgenerera slumpad karta"
@@ -5754,9 +5745,8 @@ msgstr "Återgenerera slumpad karta"
 msgid "hotkey|re-configure random map"
 msgstr "Återkonfigurera slumpad karta"
 
-#, fuzzy
 msgid "hotkey|output all text"
-msgstr "Skrolla vänster"
+msgstr "visa all text"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -6856,16 +6846,14 @@ msgstr "Klicka för att ta bort bokstäver och siffror."
 msgid "Lowercase"
 msgstr "Gemener"
 
-#, fuzzy
 msgid "Click to switch to lowercase letters."
-msgstr "Klicka för att spara Händelseegenskaperna."
+msgstr "Klicka för att växla till gemener."
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
 
-#, fuzzy
 msgid "Swap sign"
-msgstr "Kartkreatörer"
+msgstr "Växla skylt"
 
 msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
@@ -9338,28 +9326,26 @@ msgstr "Fantastisk"
 msgid "luck|Irish"
 msgstr "Irländsk"
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes falls on the hero's units in combat, causing "
 "their attacks to only do half damage."
 msgstr ""
-"Otur drabbar ibland hjältens trupper i strid, som får de att bara gör "
-"hälften i skada."
+"%{morale-type} drabbar ibland hjältens trupper i strid, som får de att bara "
+"ger hälften i skada."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck means the hero's units will never get lucky or unlucky "
 "attacks on the enemy."
 msgstr ""
-"Normal tur innebär att hjältens trupper kommer varken att få lyckosamma "
-"eller oturliga attacker."
+"%{morale-type} tur innebär att hjältens trupper kommer varken att få "
+"lyckosamma eller oturliga attacker."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
-"Tursamhet låter hjältens trupper få tursamma attacker (dubbel styrka) ibland."
+"%{morale-type} låter hjältens trupper få tursamma attacker (dubbel styrka) "
+"ibland."
 
 msgid "morale|Treason"
 msgstr "Förräderi"
@@ -9382,22 +9368,21 @@ msgstr "Fantastisk"
 msgid "morale|Blood!"
 msgstr "Blod!"
 
-#, fuzzy
 msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
-msgstr "Låg stridsmoral kan få hjältens trupper att låsa sig i strid."
+msgstr ""
+"%{morale-type} stridsmoral kan få hjältens trupper att låsa sig i strid."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale means the hero's units will never be blessed with "
 "extra attacks or freeze in combat."
 msgstr ""
-"Neutral stridsmoral innebär att hjältens arméer aldrig kommer att bli "
+"%{morale-type} stridsmoral innebär att hjältens arméer aldrig kommer att bli "
 "välsignade eller låsta i strid."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale may give the hero's units extra attacks in combat."
-msgstr "Hög stridsmoral kan ge hjältens trupper extra attacker i strid."
+msgstr ""
+"%{morale-type} stridsmoral kan ge hjältens trupper extra attacker i strid."
 
 #, fuzzy
 msgid "Blood"

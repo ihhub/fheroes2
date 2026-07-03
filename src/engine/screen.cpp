@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -381,7 +381,7 @@ namespace
             }
         }
 
-        SDL_Surface * generateIconSurface( const fheroes2::Image & icon )
+        static SDL_Surface * generateIconSurface( const fheroes2::Image & icon )
         {
             if ( icon.empty() || icon.singleLayer() ) {
                 // What are you trying to do? Icon should have not empty both image and transform layers.
@@ -1223,7 +1223,7 @@ namespace
                 const uint32_t requiredFlags = SDL_RENDERER_ACCELERATED;
 
                 for ( int driverId = 0; driverId < driverCount; ++driverId ) {
-                    int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
+                    const int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
                     if ( returnCode < 0 ) {
                         ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
                         continue;
@@ -1609,7 +1609,7 @@ namespace fheroes2
         _engine->updatePalette( StandardPaletteIndexes() );
     }
 
-    bool Cursor::isFocusActive() const
+    bool Cursor::isFocusActive()
     {
         return engine().isMouseCursorActive();
     }

@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <functional>
+#include <utility>
 
 #include "agg_image.h"
 #include "icn.h"
@@ -65,9 +66,9 @@ namespace fheroes2
         _buttonRight.draw( display );
 
         const Sprite & originalSlider = AGG::GetICN( tradpostIcnId, 2 );
-        const Image scrollbarSlider = generateScrollbarSlider( originalSlider, true, width, 1, static_cast<int32_t>( maxIndex - minIndex + 1 ),
-                                                               { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
-        _scrollbar.setImage( scrollbarSlider );
+        Image scrollbarSlider = generateScrollbarSlider( originalSlider, true, width, 1, static_cast<int32_t>( maxIndex - minIndex + 1 ),
+                                                         { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
+        _scrollbar.setImage( std::move( scrollbarSlider ) );
         _scrollbar.setArea( { position.x + leftOffset, position.y + 3, width, 11 } );
         _scrollbar.setRange( minIndex, maxIndex );
         _scrollbar.moveToIndex( currentIndex );

@@ -37,6 +37,44 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2026-06-30" version="v1.1.17">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.17</url>
+      <description>
+        <p>Changes in v1.1.17 (30 June 2026):</p>
+        <ul>
+          <li>update the Russian translation</li>
+          <li>greatly speed up application startup</li>
+          <li>update the German translation</li>
+          <li>update the Ukrainian translation</li>
+          <li>fix terrain reset on exit for the Battle Only mode</li>
+          <li>fix New Creature Week right-click delay</li>
+          <li>fix status window layout alignment on the Adventure Map</li>
+          <li>swap Archery Range Building sprites to match the colors of units</li>
+          <li>match castle's hero/building fade animation delay to classic H2</li>
+          <li>fix assertion hit for AI battle during Teleport spell evaluation</li>
+          <li>make AI heroes stay in castles if they get a movement bonus the next day</li>
+          <li>fix the title alignment in the resolution window</li>
+          <li>add an initial version of the Auto Playtest feature for the Editor</li>
+          <li>fix validation issue when updating enemy army in Battle Only mode</li>
+          <li>update the Swedish translation</li>
+          <li>remove assertion as it leads to a crash while loading a map</li>
+          <li>do not allow to start a battle in Battle Only mode if the START button is disabled</li>
+          <li>update the application exiting confirmation dialog in the Editor to include potential unsaved map changes</li>
+          <li>allow scrolling among all objects in a group using the mouse wheel in the Editor</li>
+          <li>fix spell sprite position in the first spell animation frame on the battlefield</li>
+          <li>improve AI decision making when using damage spells for Mirror Image monsters</li>
+          <li>speed up object evaluation for AI on the Adventure Map</li>
+          <li>do not allow placing Adventure Map Events on other objects</li>
+          <li>add "?" to the random terrain icon in Battle Only mode</li>
+          <li>show object highlighted area while moving or copying it</li>
+          <li>update the Hungarian translation</li>
+          <li>do not place roads under the obstacles in Random Map Generator</li>
+          <li>keep hero sprite invisible after hero fade-out animation</li>
+          <li>add Adventure Map smooth scrolling option</li>
+          <li>add the ability to directly extract all assets from the GOG installer on Android</li>
+        </ul>
+      </description>
+    </release>
     <release date="2026-05-17" version="v1.1.16">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.16</url>
       <description>

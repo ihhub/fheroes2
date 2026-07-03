@@ -87,7 +87,7 @@ namespace
         }
         fheroes2::Point placement;
         if ( isSingleColumn ) {
-            const fheroes2::Sprite mainMenuBackground = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+            const fheroes2::Sprite & mainMenuBackground = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
             const int32_t panelXPos = output.width() - mainMenuBackground.x() - ( dialogWidth + fheroes2::borderWidthPx ) - 8;
             const int32_t panelYPos = mainMenuBackground.y() + fheroes2::borderWidthPx + 8;
             placement.x = panelXPos;
