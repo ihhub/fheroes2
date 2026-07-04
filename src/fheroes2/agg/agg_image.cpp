@@ -3812,15 +3812,15 @@ namespace
             const fheroes2::Sprite & resurrectionIcon = fheroes2::AGG::GetICN( ICN::ARTFX, 101 );
 
             if ( !successionWarsIcon.empty() ) {
-                SubpixelResize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
+                Resize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
             }
 
             if ( !priceOfLoyaltyIcon.empty() ) {
-                SubpixelResize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
+                Resize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
             }
 
             if ( !resurrectionIcon.empty() ) {
-                SubpixelResize( resurrectionIcon, 0, 0, resurrectionIcon.width(), resurrectionIcon.height(), _icnVsSprite[id][2], 1, 1, 15, 15 );
+                Resize( resurrectionIcon, 0, 0, resurrectionIcon.width(), resurrectionIcon.height(), _icnVsSprite[id][2], 1, 1, 15, 15 );
             }
 
             break;
@@ -5795,7 +5795,7 @@ namespace
             resizedIcn.resize( resizedWidth, resizedHeight );
             resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
                                     static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
-            SubpixelResize( originalIcn, resizedIcn );
+            Resize( originalIcn, resizedIcn );
         }
         else {
             // No need to resize but we have to update the offset.
