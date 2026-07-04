@@ -310,7 +310,8 @@ bool GameStatic::isHeroWorthyToVisitXanadu( const Heroes & hero )
 uint32_t GameStatic::getNeutralMonsterLimit( const bool isResurrectionMap )
 {
     if ( isResurrectionMap ) {
-        // As of now, Resurrection maps have no limits on neutral monster growth.
+        // Resurrection maps have a limit of 4,000,000 on neutral monster growth.
+        // There is no reason to go beyond that.
         return 4000000U;
     }
 
