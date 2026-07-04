@@ -120,7 +120,7 @@ void Interface::StatusPanel::_redraw() const
     else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
         _drawDayInfo();
 
-        if ( Players::HumanColors() & conf.CurrentColor() ) {
+        if ( ( Players::HumanColors() & conf.CurrentColor() ) || conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) ) {
             _drawKingdomInfo( stonHeight + 5 );
 
             if ( _state != StatusType::STATUS_RESOURCE ) {
@@ -154,18 +154,20 @@ void Interface::StatusPanel::_redraw() const
         }
     }
     else {
+        const int32_t offsetY = pos.height > stonHeight ? ( pos.height - stonHeight ) / 2 : 0;
+
         switch ( _state ) {
         case StatusType::STATUS_DAY:
             _drawDayInfo();
             break;
         case StatusType::STATUS_FUNDS:
-            _drawKingdomInfo();
+            _drawKingdomInfo( offsetY );
             break;
         case StatusType::STATUS_ARMY:
-            _drawArmyInfo();
+            _drawArmyInfo( offsetY );
             break;
         case StatusType::STATUS_RESOURCE:
-            _drawResourceInfo();
+            _drawResourceInfo( offsetY );
             break;
         case StatusType::STATUS_UNKNOWN:
         case StatusType::STATUS_AITURN:

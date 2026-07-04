@@ -780,8 +780,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         }
 
-        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_BUYHERO_DELAY ) ) {
-            alphaHero += 10;
+        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_ITEM_UPDATE_DELAY ) ) {
+            alphaHero += 9;
             if ( alphaHero >= 255 ) {
                 alphaHero = 255;
 

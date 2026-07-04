@@ -58,6 +58,18 @@
             android:text="@string/activity_toolset_extract_homm2_assets_btn_text" />
 
         <Button
+            android:id="@+id/activity_toolset_import_gog_exe_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:enabled="false"
+            android:minWidth="256dp"
+            android:onClick="importGogExeButtonClicked"
+            android:padding="8dp"
+            android:text="@string/activity_toolset_import_gog_exe_btn_text" />
+
+        <Button
             android:id="@+id/activity_toolset_download_homm2_demo_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

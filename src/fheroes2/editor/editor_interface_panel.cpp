@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
@@ -82,37 +83,6 @@ namespace
         const fheroes2::Sprite & image = getObjectImage( group, type );
 
         Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
-    }
-
-    fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
-    {
-        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            // TODO: make occupied area calculation for complex objects.
-            return { -2, -3, 5, 5 };
-        }
-
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
-            assert( 0 );
-            return { 0, 0, 1, 1 };
-        }
-
-        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
-        if ( offsets.size() < 2 ) {
-            return { 0, 0, 1, 1 };
-        }
-
-        fheroes2::Point minPos{ offsets.front() };
-        fheroes2::Point maxPos{ offsets.front() };
-
-        for ( const auto & offset : offsets ) {
-            minPos.x = std::min( minPos.x, offset.x );
-            minPos.y = std::min( minPos.y, offset.y );
-            maxPos.x = std::max( maxPos.x, offset.x );
-            maxPos.y = std::max( maxPos.y, offset.y );
-        }
-
-        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
     }
 
     fheroes2::Image makeInstrumentPanelBackground( const int32_t width, const int32_t height )
@@ -191,6 +161,37 @@ namespace
             drawInstrumentName( output, ObjectTypeNamePosition, getObjectTypeName( objectId ) );
         }
     }
+
+    bool setNextObjectInGroup( int & objectIndex, const Maps::ObjectGroup group )
+    {
+        if ( objectIndex < 0 ) {
+            return false;
+        }
+
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        assert( static_cast<size_t>( objectIndex ) < objectInfo.size() );
+
+        ++objectIndex;
+        if ( static_cast<size_t>( objectIndex ) >= objectInfo.size() ) {
+            objectIndex = static_cast<int32_t>( objectInfo.size() ) - 1;
+        }
+
+        return true;
+    }
+
+    bool setPreviousObjectInGroup( int & objectIndex )
+    {
+        if ( objectIndex < 0 ) {
+            return false;
+        }
+
+        --objectIndex;
+        if ( objectIndex < 0 ) {
+            objectIndex = 0;
+        }
+
+        return true;
+    }
 }
 
 namespace Interface
@@ -240,7 +241,7 @@ namespace Interface
             if ( objectType >= 0 ) {
                 const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
 
-                return getObjectOccupiedArea( objectGroup, objectType );
+                return EditorInterface::getObjectOccupiedArea( objectGroup, objectType );
             }
 
             return {};
@@ -674,6 +675,84 @@ namespace Interface
             // Why are you trying to get type for the non-object instrument. Check your logic!
             assert( 0 );
             return -1;
+        }
+    }
+
+    bool EditorPanel::setNextSelectedObjectType()
+    {
+        switch ( _selectedInstrument ) {
+        case Instrument::MONSTERS:
+            return setNextObjectInGroup( _selectedMonsterType, Maps::ObjectGroup::MONSTERS );
+        case Instrument::LANDSCAPE_OBJECTS:
+            if ( _selectedLandscapeObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedLandscapeObject ) < _selectedLandscapeObjectType.size() );
+            return setNextObjectInGroup( _selectedLandscapeObjectType[_selectedLandscapeObject], _selectedLandscapeObjectGroup[_selectedLandscapeObject] );
+        case Instrument::ADVENTURE_OBJECTS:
+            if ( _selectedAdventureObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedAdventureObject ) < _selectedAdventureObjectType.size() );
+            return setNextObjectInGroup( _selectedAdventureObjectType[_selectedAdventureObject], _selectedAdventureObjectGroup[_selectedAdventureObject] );
+        case Instrument::KINGDOM_OBJECTS:
+            if ( _selectedKingdomObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedKingdomObject ) < _selectedKingdomObjectType.size() );
+            if ( _selectedKingdomObjectGroup[_selectedKingdomObject] == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                if ( _selectedKingdomObjectType[_selectedKingdomObject] < 0 ) {
+                    return false;
+                }
+
+                const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+
+                ++_selectedKingdomObjectType[_selectedKingdomObject];
+                const int32_t objectCount{ static_cast<int32_t>( townObjects.size() ) * ( Color::Count( Color::allPlayerColors() ) + 1 ) };
+
+                if ( _selectedKingdomObjectType[_selectedKingdomObject] >= objectCount ) {
+                    _selectedKingdomObjectType[_selectedKingdomObject] = objectCount - 1;
+                }
+                return true;
+            }
+
+            return setNextObjectInGroup( _selectedKingdomObjectType[_selectedKingdomObject], _selectedKingdomObjectGroup[_selectedKingdomObject] );
+        default:
+            return false;
+        }
+    }
+
+    bool EditorPanel::setPreviousSelectedObjectType()
+    {
+        switch ( _selectedInstrument ) {
+        case Instrument::MONSTERS:
+            return setPreviousObjectInGroup( _selectedMonsterType );
+        case Instrument::LANDSCAPE_OBJECTS:
+            if ( _selectedLandscapeObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedLandscapeObject ) < _selectedLandscapeObjectType.size() );
+            return setPreviousObjectInGroup( _selectedLandscapeObjectType[_selectedLandscapeObject] );
+        case Instrument::ADVENTURE_OBJECTS:
+            if ( _selectedAdventureObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedAdventureObject ) < _selectedAdventureObjectType.size() );
+            return setPreviousObjectInGroup( _selectedAdventureObjectType[_selectedAdventureObject] );
+        case Instrument::KINGDOM_OBJECTS:
+            if ( _selectedKingdomObject < 0 ) {
+                return false;
+            }
+
+            assert( static_cast<size_t>( _selectedKingdomObject ) < _selectedKingdomObjectType.size() );
+            return setPreviousObjectInGroup( _selectedKingdomObjectType[_selectedKingdomObject] );
+        default:
+            return false;
         }
     }
 

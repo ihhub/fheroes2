@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
-"PO-Revision-Date: 2026-05-02 23:44+0200\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
+"PO-Revision-Date: 2026-05-16 20:33+0200\n"
 "Last-Translator: Kaffeino <kaffeino@posteo.co.uk>\n"
 "Language-Team: Esperanto <kaffeino@posteo.co.uk>\n"
 "Language: eo\n"
@@ -214,6 +214,11 @@ msgid ""
 "MAIN\n"
 "MENU"
 msgstr "ĈEFMENUO"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -569,7 +574,7 @@ msgid "Exit this menu."
 msgstr ""
 
 msgid "Okay"
-msgstr ""
+msgstr "Bone"
 
 msgid "The enemy has surrendered!"
 msgstr ""
@@ -670,7 +675,7 @@ msgid "Surrender"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Nuligi"
 
 msgid "Hero Screen"
 msgstr ""
@@ -1107,16 +1112,16 @@ msgid "N/A"
 msgstr ""
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Maldekstra pafturo"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Dekstra pafturo"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} pafas kun potenco de %{count} Arkistoj"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "ĉiu kun +%{attack} aldonita al scipovo de atako."
 
 msgid "The %{name} is destroyed."
 msgstr ""
@@ -1898,37 +1903,37 @@ msgid "Descendants"
 msgstr ""
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Ne povas konstrui. Vi jam konstruis tie ĉi hodiaŭ."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr ""
+msgstr "Por tiu ĉi ago necesas unue konstrui kastelon."
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "%{building} ebligas varbadon de %{monster}."
 
 msgid "Requires:"
-msgstr ""
+msgstr "Bezonas:"
 
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Eliri el ĉi tiu menuo farinte nenion."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
-msgstr ""
+msgstr "Ne konstrueblas %{name}. La kastelo estas tro malproksima de oceano."
 
 msgid "This building has been disabled."
-msgstr ""
+msgstr "Ĉi tiu konstruaĵo estas malŝaltita."
 
 msgid "Cannot afford the %{name}."
-msgstr ""
+msgstr "Mankas rimedoj por %{name}."
 
 msgid "The %{name} is already built."
-msgstr ""
+msgstr "%{name} estas jam konstruita."
 
 msgid "Cannot build the %{name}."
-msgstr ""
+msgstr "Ne konstrueblas %{name}."
 
 msgid "Build %{name}."
-msgstr ""
+msgstr "Konstruado de %{name}."
 
 msgid "Blackridge"
 msgstr ""
@@ -2147,391 +2152,406 @@ msgid "Sheltemburg"
 msgstr ""
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
+msgstr "Ne povas varbi - jam estas heroo en tiu ĉi urbo."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
+msgstr "Ne povas varbi - vi havas tro multajn heroojn."
 
 msgid "Cannot afford a Hero."
-msgstr ""
+msgstr "Mankas rimedoj por heroo."
 
 msgid "There is no room in the garrison for this army."
-msgstr ""
+msgstr "Ne estas spaco en la defendontaro por tiu ĉi armeo."
 
 msgid "Fortifications"
-msgstr ""
+msgstr "Remparoj"
 
 msgid "Farm"
-msgstr ""
+msgstr "Bieno"
 
 msgid "Thatched Hut"
-msgstr ""
+msgstr "Pajla kabano"
 
 msgid "Archery Range"
-msgstr ""
+msgstr "Pafarkejo"
 
 msgid "Upg. Archery Range"
-msgstr ""
+msgstr "Alt. Pafarkejo"
 
 msgid "Blacksmith"
-msgstr ""
+msgstr "Forĝejo"
 
 msgid "Upg. Blacksmith"
-msgstr ""
+msgstr "Alt. Forĝejo"
 
 msgid "Armory"
-msgstr ""
+msgstr "Armejo"
 
 msgid "Upg. Armory"
-msgstr ""
+msgstr "Alt. Armejo"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Turnirejo"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Alt. Turnirejo"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Katedralo"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Alt. Katedralo"
 
 msgid "Coliseum"
-msgstr ""
+msgstr "Amfiteatro"
 
 msgid "Garbage Heap"
-msgstr ""
+msgstr "Rubejo"
 
 msgid "Hut"
-msgstr ""
+msgstr "Kabano"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Ligna kabano"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Alt. Ligna kabano"
 
 msgid "Den"
-msgstr ""
+msgstr "Kuŝejo"
 
 msgid "Adobe"
-msgstr ""
+msgstr "Sunbrika kabano"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Alt. Sunbrika kabano"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Ponto"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Alt. Ponto"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Piramido"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Ĉielarko"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Kristala ĝardeno"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Arbodomo"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Dometo"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Alt. Dometo"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Ŝtoncirklo"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Alt. Ŝtoncirklo"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Barilita herbejo"
 
 msgid "sorceress|Red Tower"
-msgstr ""
+msgstr "Ruĝa turo"
 
 msgid "Dungeon"
-msgstr ""
+msgstr "Forgeskelo"
 
 msgid "Waterfall"
-msgstr ""
+msgstr "Falakvo"
 
 msgid "Cave"
-msgstr ""
+msgstr "Kaverno"
 
 msgid "Crypt"
-msgstr ""
+msgstr "Tombokelo"
 
 msgid "Nest"
-msgstr ""
+msgstr "Nesto"
 
 msgid "Maze"
-msgstr ""
+msgstr "Vagejo"
 
 msgid "Upg. Maze"
-msgstr ""
+msgstr "Alt. Vagejo"
 
 msgid "Swamp"
-msgstr ""
+msgstr "Marĉo"
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Verda turo"
 
 msgid "warlock|Red Tower"
-msgstr ""
+msgstr "Ruĝa turo"
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Nigra turo"
 
 msgid "Library"
-msgstr ""
+msgstr "Biblioteko"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Fruktarbaro"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Loĝejo"
 
 msgid "Pen"
-msgstr ""
+msgstr "Stalo"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Fandejo"
 
 msgid "Upg. Foundry"
-msgstr ""
+msgstr "Alt. Fandejo"
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Roka nesto"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Ebura turo"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Alt. Ebura turo"
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Nuba kastelo"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Alt. Nuba kastelo"
 
 msgid "Storm"
-msgstr ""
+msgstr "Ŝtormo"
 
 msgid "Skull Pile"
-msgstr ""
+msgstr "Ostarkaparo"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Elfosejo"
 
 msgid "Graveyard"
-msgstr ""
+msgstr "Tombejo"
 
 msgid "Upg. Graveyard"
-msgstr ""
+msgstr "Alt. Tombejo"
 
 msgid "Upg. Pyramid"
-msgstr ""
+msgstr "Alt. Piramido"
 
 msgid "Mansion"
-msgstr ""
+msgstr "Domego"
 
 msgid "Upg. Mansion"
-msgstr ""
+msgstr "Alt. Domego"
 
 msgid "Mausoleum"
-msgstr ""
+msgstr "Maŭzoleo"
 
 msgid "Upg. Mausoleum"
-msgstr ""
+msgstr "Alt. Maŭzoleo"
 
 msgid "Laboratory"
-msgstr ""
+msgstr "Laboratorio"
 
 msgid "Shrine"
-msgstr ""
+msgstr "Malsanktejo"
 
 msgid "Special"
-msgstr ""
+msgstr "Speciala"
 
 msgid "Horde Building"
-msgstr ""
+msgstr "Amasiga konstruaĵo"
 
 msgid "Dwelling 1"
-msgstr ""
+msgstr "Loĝejo 1"
 
 msgid "Dwelling 2"
-msgstr ""
+msgstr "Loĝejo 2"
 
 msgid "Upg. Dwelling 2"
-msgstr ""
+msgstr "Alt. Loĝejo 2"
 
 msgid "Dwelling 3"
-msgstr ""
+msgstr "Loĝejo 3"
 
 msgid "Upg. Dwelling 3"
-msgstr ""
+msgstr "Alt. Loĝejo 3"
 
 msgid "Dwelling 4"
-msgstr ""
+msgstr "Loĝejo 4"
 
 msgid "Upg. Dwelling 4"
-msgstr ""
+msgstr "Alt. Loĝejo 4"
 
 msgid "Dwelling 5"
-msgstr ""
+msgstr "Loĝejo 5"
 
 msgid "Upg. Dwelling 5"
-msgstr ""
+msgstr "Alt. Loĝejo 5"
 
 msgid "Dwelling 6"
-msgstr ""
+msgstr "Loĝejo 6"
 
 msgid "Upg. Dwelling 6"
-msgstr ""
+msgstr "Alt. Loĝejo 6"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "2-oble Alt. Loĝejo 6"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
+"Remparoj altigas fortikecon de muroj, kaj tiel la tempon, kiun oni bezonas "
+"por ilin faligi."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
+msgstr "Bieno altigas kreskadon de Kamparanoj je %{count} semajne."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"Amfiteatro prezentas inspirajn spektaklojn al defendantaj soldatoj, "
+"altigante ilian moralon je du dum batalo."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
+msgstr "Rubejo altigas kreskadon de Koboldoj je %{count} semajne."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
+msgstr "Ĉielarko altigas bonŝancon de defendantoj je du."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
+msgstr "Kristala ĝardeno altigas kreskadon de Feetoj je %{count} semajne."
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr ""
+msgstr "Forgeskelo altigas enspezon de la urbo je %{count} ormoneroj tage."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
+msgstr "Falakvo altigas kreskadon de Ĉevalviroj je %{count} semajne."
 
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
+"Biblioteko altigas kvanton de sorĉoj en la Asocio je unu por ĉiu nivelo de "
+"la asocio."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
+msgstr "Fruktarbaro altigas kreskadon de Duonuloj je %{count} semajne."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
+msgstr "Ŝtormo aldonas +2 al potenco de sorĉoj de defendanta sorĉisto."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
+msgstr "Ostarkaparo altigas kreskadon de Ostaroj je %{count} semajne."
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
 msgstr ""
+"Speciala konstruaĵo donas specifan avantaĝon al la elektita speco de kastelo."
 
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
 msgstr ""
+"Amasiga konstruaĵo altigas kreskadon de la unuanivelaj soldatoj je 8 semajne."
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Ŝtelista asocio"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Drinkejo"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Haveno"
 
 msgid "Well"
-msgstr ""
+msgstr "Puto"
 
 msgid "Statue"
-msgstr ""
+msgstr "Statuo"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Bazaro"
 
 msgid "Moat"
-msgstr ""
+msgstr "Fosaĵo"
 
 msgid "Castle"
-msgstr ""
+msgstr "Kastelo"
 
 msgid "Tent"
-msgstr ""
+msgstr "Tendo"
 
 msgid "Captain's Quarters"
-msgstr ""
+msgstr "Kapitanejo"
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Sorĉista asocio, n. 1"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Sorĉista asocio, n. 2"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Sorĉista asocio, n. 3"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Sorĉista asocio, n. 4"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Sorĉista asocio, n. 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
+"Malsanktejo altigas scipovon de mortsorĉado por ĉiuj viaj mortsorĉistoj je "
+"10 elcentoj."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
+"Ŝtelista asocio donas informojn pri malamikaj ludantoj. Ŝtelista asocio "
+"ankaŭ povas informi pri malamikaj urboj. Pli da asocioj donas pli da "
+"informoj."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr ""
+msgstr "Drinkejo altigas moralon por soldatoj defendantaj la kastelon."
 
 msgid "The Shipyard allows ships to be built."
-msgstr ""
+msgstr "Haveno ebligas konstruadon de ŝipoj."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
-msgstr ""
+msgstr "Puto altigas kreskon de ĉiuj loĝejoj je %{count} loĝantoj semajne."
 
 msgid "The Statue increases the town's income by %{count} gold per day."
-msgstr ""
+msgstr "Statuo altigas enspezon de urbo je %{count} ormoneroj tage."
 
 msgid "The Left Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Maldekstra pafturo donas ekstran subtenon dum defendado de kastelo."
 
 msgid "The Right Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Dekstra pafturo donas ekstran subtenon dum defendado de kastelo."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
+"Bazaro povas transmeti unu rimedon al alia. Ju pli da bazaroj vi havas, des "
+"pli justa la interŝanĝo estos."
 
 msgid ""
 "The Moat slows and weakens attacking units. Any walking unit entering the "
@@ -2539,97 +2559,111 @@ msgid ""
 "time. Any creature present in the moat will have its defense skill reduced "
 "by %{count}."
 msgstr ""
+"Fosaĵo malrapidigas kaj malfortigas atakantajn soldatojn. Ĉiu marŝanta "
+"soldato eniranta la fosaĵon devas fini sian vicon tie kaj povos moviĝi tra "
+"la fosaĵo nur po unu kampo. Ĉiu soldato en la fosaĵo perdos %{count} "
+"poentojn de sia defendo."
 
 msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
 msgstr ""
+"Kastelo plibonigas defendon de la urbo kaj altigas ĝian enspezon al %{count} "
+"ormoneroj tage."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
+"Tendo provizas laboristojn por konstrui kastelon, se sufiĉaj rimedoj kaj "
+"ormoneroj estas disponeblaj."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
+"Kapitanejo provizas kapitanon por helpi defendi la kastelon, kiam ne ĉeestas "
+"heroo."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
+"Sorĉista asocio permesas al herooj lerni sorĉojn kaj reakiri perditajn "
+"sorĉpoentojn."
 
 msgid "Recruit %{name}"
-msgstr ""
+msgstr "Varbado de %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Monato: %{month}, Semajno: %{week}, Tago: %{day}"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
+"Vi devas aĉeti sorĉlibron por uzi la sorĉistan asocion, sed vi nun ne havas "
+"spacon por sorĉlibro. Provu doni iun el viaj antikvaĵoj al alia heroo."
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Eliri el kastelo"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Eliri el urbo"
 
 msgid "Show Income"
-msgstr ""
+msgstr "Montri enspezon"
 
 msgid "Show previous town"
-msgstr ""
+msgstr "Montri antaŭan urbon"
 
 msgid "Show next town"
-msgstr ""
+msgstr "Montri sekvan urbon"
 
 msgid "View Hero"
-msgstr ""
+msgstr "Montri heroon"
 
 msgid "Click to show the next town."
-msgstr ""
+msgstr "Klaku por montri la sekvan urbon."
 
 msgid "Click to show the previous town."
-msgstr ""
+msgstr "Klaku por montri la antaŭan urbon."
 
 msgid "This town may not be upgraded to a castle."
-msgstr ""
+msgstr "Ĉi tiu urbo ne altigeblas al kastelo."
 
 msgid "Town"
-msgstr ""
+msgstr "Urbo"
 
 msgid "The above spells are available here."
-msgstr ""
+msgstr "La ĉi-supraj sorĉoj estas haveblaj tie ĉi."
 
 msgid "The spells the hero can learn have been added to their book."
-msgstr ""
+msgstr "La sorĉoj, kiujn la heroo povas lerni, aldoniĝis al ĝia sorĉlibro."
 
 msgid "Exit Mage Guild"
-msgstr ""
+msgstr "Eliri el sorĉista asocio"
 
 msgid "A generous tip for the barkeep yields the following rumor:"
-msgstr ""
+msgstr "Malavara krompago al drinkejestro venigas la jenan onidiron:"
 
 msgid "Recruit Hero"
-msgstr ""
+msgstr "Varbado de heroo"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr ""
+msgstr "%{name} estas %{race} de nivelo %{value} "
 
 msgid "with %{count} artifacts."
-msgstr ""
+msgstr "kun %{count} antikvaĵoj."
 
 msgid "with 1 artifact."
-msgstr ""
+msgstr "kun 1 antikvaĵo."
 
 msgid "without artifacts."
-msgstr ""
+msgstr "sen antikvaĵoj."
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Varbado de %{name}, la %{race}"
 
 msgid ""
 "'Spread' combat formation spreads the castle's units from the top to the "
@@ -2642,7 +2676,7 @@ msgid ""
 msgstr ""
 
 msgid "Castle Options. Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Elektoj de kastelo. Monato: %{month}, Semajno: %{week}, Tago: %{day}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2651,7 +2685,7 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Eliri el elektoj de kastelo"
 
 msgid "Spread Formation"
 msgstr ""
@@ -2660,25 +2694,25 @@ msgid "Grouped Formation"
 msgstr ""
 
 msgid "Not enough resources to recruit creatures."
-msgstr ""
+msgstr "Ne sufiĉas rimedoj por varbado de soldatoj."
 
 msgid "You are unable to recruit at this time, your ranks are full."
-msgstr ""
+msgstr "Vi ne povas varbi nun; ĉiu spaco estas jam okupata."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Neniuj soldatoj estas varbeblaj nun."
 
 msgid "Recruit Creatures"
-msgstr ""
+msgstr "Varbado de soldatoj"
 
 msgid "Hire all creatures in the town."
-msgstr ""
+msgstr "Varbi ĉiujn soldatojn en la urbo."
 
 msgid "Max"
-msgstr ""
+msgstr "Maks"
 
 msgid "Available"
-msgstr ""
+msgstr "Haveblaj"
 
 msgid "Town Population Information and Statistics"
 msgstr ""
@@ -3267,25 +3301,25 @@ msgid "Click to generate a new map."
 msgstr ""
 
 msgid "Return to the previous menu."
-msgstr ""
+msgstr "Reiri al la antaŭa menuo."
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Kosto por unu:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Haveblaj: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Aĉetotaj:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Varbi elektitajn soldatojn."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Elekti maksimuman kvanton de varbeblaj soldatoj."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Elekti nur unu soldaton por varbi."
 
 msgid "Select this game resolution."
 msgstr ""
@@ -3325,31 +3359,37 @@ msgid "Open Virtual Keyboard"
 msgstr ""
 
 msgid "How many creatures do you wish to move?"
-msgstr ""
+msgstr "Kiom da soldatoj vi deziras movi?"
 
 msgid "Select how many units to separate into:"
-msgstr ""
+msgstr "Elektu, kiom da soldatoj vi volas apartigi:"
 
 msgid "Map: "
-msgstr ""
+msgstr "Mapo: "
 
 msgid ""
 "\n"
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Monato: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Semajno: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Tago: "
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Loko: "
 
 msgid "saveLoadDialog|Name"
 msgstr ""
@@ -4038,6 +4078,16 @@ msgstr ""
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+
 msgid "Not able to generate a map with given parameters."
 msgstr ""
 
@@ -4067,24 +4117,6 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 msgid "Start Map"
 msgstr ""
 
@@ -4112,6 +4144,12 @@ msgid "Save the current map."
 msgstr ""
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Auto Playtest"
+msgstr ""
+
+msgid "Run an automatic playtest of the map."
 msgstr ""
 
 msgid "Return to the game's Main Menu."
@@ -4184,6 +4222,24 @@ msgid "Map saved to: "
 msgstr ""
 
 msgid "Failed to save the map."
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -4837,7 +4893,7 @@ msgid "Delete an artifact from the reward."
 msgstr ""
 
 msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
+msgstr "Tago: %{day} Semajno: %{week} Monato: %{month}"
 
 msgid "difficulty|Easy"
 msgstr ""
@@ -4852,6 +4908,58 @@ msgid "difficulty|Expert"
 msgstr ""
 
 msgid "difficulty|Impossible"
+msgstr ""
+
+msgid "Auto Playtest Results"
+msgstr ""
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klaku por montri la sekvan urbon."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+msgid "Failed to prepare the map for auto playtest."
+msgstr ""
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "autoPlaytest|Animation"
+msgstr ""
+
+msgid "autoPlaytest|Animation speed:"
+msgstr ""
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+msgid "Click to run an automated map playtest."
+msgstr ""
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
 msgstr ""
 
 msgid "and more..."
@@ -5236,6 +5344,9 @@ msgid "hotkey|open game main menu"
 msgstr ""
 
 msgid "hotkey|toggle passability"
+msgstr ""
+
+msgid "hotkey|auto playtest"
 msgstr ""
 
 msgid "hotkey|re-generate random map"
@@ -6097,7 +6208,7 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Monato: %{month} Semajno: %{week}"
 
 msgid ""
 "You find a small\n"
@@ -6244,10 +6355,10 @@ msgid ""
 msgstr ""
 
 msgid "Kingdom Income"
-msgstr ""
+msgstr "Enspezo de regno"
 
 msgid "Kingdom Income per day."
-msgstr ""
+msgstr "Enspezo de regno, tage."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""

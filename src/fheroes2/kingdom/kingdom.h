@@ -210,8 +210,6 @@ public:
     bool isVisited( const Maps::Tile & ) const;
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
-    bool isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const;
-
     bool opponentsCanRecruitMoreHeroes() const;
     bool opponentsHaveHeroes() const;
 
@@ -222,8 +220,15 @@ public:
         return puzzle_maps;
     }
 
-    void SetVisitTravelersTent( const int barrierColor );
-    bool IsVisitTravelersTent( const int barrierColor ) const;
+    void markTravellerTentVisited( const int barrierColor )
+    {
+        _visitedTentsColors |= ( 1 << barrierColor );
+    }
+
+    bool isTravellerTentVisited( const int barrierColor ) const
+    {
+        return ( _visitedTentsColors & ( 1 << barrierColor ) ) != 0;
+    }
 
     void LossPostActions();
 

@@ -369,8 +369,9 @@ Battle::Result Battle::Loader( Army & attackingArmy, Army & defendingArmy, const
         if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
             showBattle = true;
         }
-        // ... or when any of the participating human players are controlled by AI
-        else {
+        // ... or when any of the participating human players are controlled by AI.
+        // Never show battle during auto playtest mode.
+        else if ( !conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) ) {
             const Player * attackingPlayer = Players::Get( attackingArmy.GetColor() );
             const Player * defendingPlayer = Players::Get( defendingArmy.GetColor() );
 

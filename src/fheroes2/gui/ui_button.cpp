@@ -738,7 +738,7 @@ namespace fheroes2
 
     ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background )
     {
-        const Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
+        Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
 
         Sprite releasedWithBackground;
         Sprite pressedWithBackground;
@@ -759,7 +759,8 @@ namespace fheroes2
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Copy( croppedBackground, disabledWithBackground );
+        // Don't create a copy of the image. Just move it.
+        disabledWithBackground = std::move( croppedBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x(), disabled.y() );
 
@@ -793,7 +794,8 @@ namespace fheroes2
         Sprite disabled( released );
         ApplyPalette( disabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-        Copy( croppedBackground, disabledWithBackground );
+        // Don't create a copy of the image. Just move it.
+        disabledWithBackground = std::move( croppedBackground );
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 

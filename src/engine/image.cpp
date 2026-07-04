@@ -21,14 +21,19 @@
 #include "image.h"
 
 #include <algorithm>
-#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
 
+#include "exception.h"
+#include "image_color_conversion.h"
 #include "image_palette.h"
 #include "pal.h"
+
+#if defined( GENERATE_COLOR_TABLE )
+#include <array>
+#endif
 
 namespace
 {
@@ -346,15 +351,13 @@ namespace
         return Verify( inX, inY, outX, outY, width, height, in.width(), in.height(), out.width(), out.height() );
     }
 
-    uint8_t GetPALColorId( const uint8_t red, const uint8_t green, const uint8_t blue )
+#if defined( GENERATE_COLOR_TABLE )
+    // This function is only used when generating a new compressed color conversion table.
+    void generateColorConversionTable( uint8_t * rgbToId, const size_t size )
     {
-        constexpr uint32_t size = 64 * 64 * 64;
-        static uint8_t rgbToId[size];
-        static bool isInitialized = false;
-        if ( !isInitialized ) {
-            isInitialized = true;
+        assert( rgbToId != nullptr );
 
-            const uint8_t * gamePalette = fheroes2::getGamePalette();
+        const uint8_t * gamePalette = fheroes2::getGamePalette();
 
             // Use the "No cycle" palette.
             // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
@@ -376,38 +379,52 @@ namespace
                                                                             200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 222, 223, 224, 225, 226,
                                                                             227, 228, 229, 230, 236, 237, 242, 243, 244, 245, 231, 232, 233, 235, 214, 215, 216, 217 };
 
-            const uint8_t * correctorY = nonCyclingUniqueColorPos.data();
+        const uint8_t * correctorY = nonCyclingUniqueColorPos.data();
 
-            for ( uint32_t id = 0; id < size; ++id ) {
-                const int32_t r = static_cast<int32_t>( id & 63 );
-                const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
-                const int32_t b = static_cast<int32_t>( id >> 12 );
-                int32_t minDistance = INT32_MAX;
-                uint8_t bestPos = 0;
+        for ( uint32_t id = 0; id < size; ++id ) {
+            const int32_t r = static_cast<int32_t>( id & 63 );
+            const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
+            const int32_t b = static_cast<int32_t>( id >> 12 );
+            int32_t minDistance = INT32_MAX;
+            uint8_t bestPos = 0;
 
-                const uint8_t * correctorX = correctorY;
-                const uint8_t * correctorXEnd = correctorX + colorCount;
+            const uint8_t * correctorX = correctorY;
+            const uint8_t * correctorXEnd = correctorX + colorCount;
 
-                for ( ; correctorX != correctorXEnd; ++correctorX ) {
-                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
+            for ( ; correctorX != correctorXEnd; ++correctorX ) {
+                const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
-                    const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
-                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
-                    ++palette;
-                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
-                    ++palette;
-                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
+                const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
+                const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
+                ++palette;
+                const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
+                ++palette;
+                const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
 
-                    // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
-                    const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
-                                             + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
-                    if ( minDistance > distance ) {
-                        minDistance = distance;
-                        bestPos = *correctorX;
-                    }
+                // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
+                const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
+                                         + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
+                if ( minDistance > distance ) {
+                    minDistance = distance;
+                    bestPos = *correctorX;
                 }
+            }
 
-                rgbToId[id] = transformTable[256 * 15 + bestPos];
+            rgbToId[id] = transformTable[256 * 15 + bestPos];
+        }
+    }
+#endif
+
+    uint8_t GetPALColorId( const uint8_t red, const uint8_t green, const uint8_t blue )
+    {
+        constexpr uint32_t size = 64 * 64 * 64;
+        static uint8_t rgbToId[size];
+        static bool isInitialized = false;
+        if ( !isInitialized ) {
+            isInitialized = true;
+
+            if ( !getColorConversionTable( rgbToId, size ) ) {
+                throw fheroes2::CorruptedExecutable{ "Application is corrupted." };
             }
         }
 
@@ -616,10 +633,10 @@ namespace fheroes2
             return *this;
         }
 
-        Image::operator=( std::move( sprite ) );
-
         std::swap( _x, sprite._x );
         std::swap( _y, sprite._y );
+
+        Image::operator=( std::move( sprite ) );
 
         return *this;
     }

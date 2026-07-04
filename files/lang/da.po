@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-04-19 17:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -211,6 +211,11 @@ msgid ""
 msgstr ""
 "HOVED-\n"
 "MENU"
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
+msgstr ""
 
 msgid ""
 "NEW\n"
@@ -4469,6 +4474,22 @@ msgstr "Handlingsobjekter skal placeres på rene felter."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} %{objects} på kortet."
 
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Er du sikker på, at du vil indlæse et nyt kort? (Alle ikke-gemte ændringer "
+"på det nuværende kort, vil gå tabt.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
+"af det nuværende kort, vil gå tabt.)"
+
 msgid "Not able to generate a map with given parameters."
 msgstr ""
 
@@ -4506,30 +4527,6 @@ msgstr ""
 "Ønsker du at vende tilbage til spillets hovedmenu? (Alle ikke-gemte "
 "ændringer af det aktuelle kort vil gå tabt.)"
 
-msgid "Unsaved Changes"
-msgstr "Ikke-gemte ændringer"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Dette kort har enten terrænændringer, fortrydelseshistorik eller er endnu "
-"ikke blevet gemt i en fil.\n"
-"\n"
-"Ønsker du at gemme det aktuelle kort?"
-
-msgid "Unplayable Map"
-msgstr "Uspilleligt kort"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Dette kort kan ikke spilles. Du skal have mindst én menneskelig spiller, for "
-"at kortet kan spilles."
-
 msgid "Start Map"
 msgstr "Start kort"
 
@@ -4560,6 +4557,13 @@ msgstr "Gem nuværende kort."
 
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Spiltestere"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Vend tilbage til spillets hovedmenu."
@@ -4637,6 +4641,30 @@ msgstr "Kortet er gemt i: "
 
 msgid "Failed to save the map."
 msgstr "Kunne ikke gemme kortet."
+
+msgid "Unsaved Changes"
+msgstr "Ikke-gemte ændringer"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Dette kort har enten terrænændringer, fortrydelseshistorik eller er endnu "
+"ikke blevet gemt i en fil.\n"
+"\n"
+"Ønsker du at gemme det aktuelle kort?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Dette kort kan ikke spilles. Du skal have mindst én menneskelig spiller, for "
+"at kortet kan spilles."
+
+msgid "Unplayable Map"
+msgstr "Uspilleligt kort"
 
 msgid "Used to place %{object}."
 msgstr "Bruges til at placere %{object}."
@@ -5379,6 +5407,66 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Umulig"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Spiltestere"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klik for at vælge farven."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Kunne ikke gemme kortet."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Animation"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Animation"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klik her for at vende tilbage til hovedmenuen."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Vil du genoptage kontrollen fra AI'en? Dette vil kun have effekt på næste "
+"tur."
+
 msgid "and more..."
 msgstr "og mere..."
 
@@ -5784,6 +5872,10 @@ msgstr "Åben spillets hovedmenu"
 
 msgid "hotkey|toggle passability"
 msgstr "Fremkommelighed (til/fra)"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Venstre"
 
 #, fuzzy
 msgid "hotkey|re-generate random map"
