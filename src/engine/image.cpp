@@ -3006,15 +3006,12 @@ namespace fheroes2
         const uint8_t * imageInY = in.image() + offsetInY;
         uint8_t * imageOutY = out.image() + offsetOutY;
 
-        const float stepX = static_cast<float>( widthRoiIn ) / static_cast<float>( widthRoiOut );
-        const float stepY = static_cast<float>( heightRoiIn ) / static_cast<float>( heightRoiOut );
+        // Using "corner alignment" resize to bilinear resize the image without repeated columns/rows at the end
+        // and with higher sharpness on integer scaling factors than using pixel center alignment (startPos = 0.5 * (step - 1.)).
+        const float stepX = static_cast<float>( widthRoiIn - 1 ) / static_cast<float>( widthRoiOut - 1 );
+        const float stepY = static_cast<float>( heightRoiIn - 1 ) / static_cast<float>( heightRoiOut - 1 );
 
-        // Let's assume that the image starts at the top-left edge of the top-left pixel.
-        // This means that the center of this pixel is offset from the border by half the pixel size.
-        // After resizing this offset is different and it is
-        const float startPosX = 0.5F * ( stepX - 1.0F );
-        const float startPosY = 0.5F * ( stepY - 1.0F );
-
+        // Axis data to precache resize positions calculations.
         struct AxisData
         {
             float pos;
@@ -3035,14 +3032,10 @@ namespace fheroes2
         std::vector<AxisData> axisX;
         axisX.reserve( widthRoiOut );
         for ( int32_t x = 0; x < widthRoiOut; ++x ) {
-            const float pos = startPosX + static_cast<float>( x ) * stepX;
+            const float pos = static_cast<float>( x ) * stepX;
             const int32_t start = static_cast<int32_t>( pos );
             const float fraction = pos - static_cast<float>( start );
             axisX.emplace_back( pos, fraction, start );
-        }
-        if ( axisX[0].pos < 0.0F ) {
-            axisX[0].coeffToRight = 0.0F;
-            axisX[0].coeffToLeft = 1.0F;
         }
 
         const auto maxPosX = static_cast<float>( widthRoiIn - 1 );
@@ -3062,11 +3055,11 @@ namespace fheroes2
                 }
             }
 
-            float posY = startPosY;
+            float posY = 0.0F;
 
             for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut, posY += stepY ) {
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
-                const float coeffToBottomY = posY > 0.0F ? posY - static_cast<float>( static_cast<int32_t>( posY ) ) : 0.0F;
+                const float coeffToBottomY = posY - static_cast<float>( static_cast<int32_t>( posY ) );
                 const float coeffToTopY = 1.0F - coeffToBottomY;
 
                 uint8_t * imageOutX = imageOutY;
@@ -3129,7 +3122,7 @@ namespace fheroes2
             const uint8_t blackColor = GetPALColorId( 0, 0, 0 );
 
             for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
-                const float posY = startPosY + static_cast<float>( y ) * stepY;
+                const float posY = static_cast<float>( y ) * stepY;
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
                 const float coeffToBottomY = posY > 0.0F ? posY - static_cast<float>( static_cast<int32_t>( posY ) ) : 0.0F;
                 const float coeffToTopY = 1.0F - coeffToBottomY;
@@ -3183,8 +3176,8 @@ namespace fheroes2
                         addPixel( *imageInX, 1.0F, *transformInX );
                     }
 
-                    // The output pixel is non-transparent if its weight is not less than 1/3.
-                    if ( outWeight >= 1.0F / 3.0F ) {
+                    // The output pixel is non-transparent if its weight is not less than 0.5.
+                    if ( outWeight >= 0.5F ) {
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red / outWeight + 0.5F ), static_cast<uint8_t>( green / outWeight + 0.5F ),
                                                     static_cast<uint8_t>( blue / outWeight + 0.5F ) );
 
