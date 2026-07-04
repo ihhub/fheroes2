@@ -1710,11 +1710,20 @@ namespace Maps
         }
 
         const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( beforeTroopCount % 7 ) ) ? 1 : 0;
-        uint32_t afterTroopCount{ beforeTroopCount * 8 / 7 + bonusUnit };
-        if ( beforeTroopCount > afterTroopCount ) {
-            // We reached unsigned integer limit. We shouldn't increase the number of monsters.
+        const uint32_t troopGrowth{ beforeTroopCount / 7 + bonusUnit };
+
+        uint32_t afterTroopCount{ 0 };
+
+        if ( ( std::numeric_limits<uint32_t>::max() - beforeTroopCount ) < troopGrowth ) {
+            // We've reached unsigned integer limit. We shouldn't increase the number of monsters.
             afterTroopCount = std::numeric_limits<uint32_t>::max();
         }
+        else {
+            afterTroopCount = beforeTroopCount + troopGrowth;
+            assert( beforeTroopCount * 8 / 7 + bonusUnit == afterTroopCount );
+        }
+
+        assert( afterTroopCount >= beforeTroopCount );
 
         if ( afterTroopCount > monsterLimit ) {
             afterTroopCount = monsterLimit;
