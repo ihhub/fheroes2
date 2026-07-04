@@ -3122,7 +3122,7 @@ namespace fheroes2
                 }
 
                 // The output bottom-right pixel is a copy of the input bottom-right pixel.
-                const uint8_t * imageInX = imageInY + widthIn * heightRoiIn - 1;
+                const uint8_t * imageInX = imageInY + static_cast<ptrdiff_t>( widthIn ) * heightRoiIn - 1;
                 *imageOutX = *imageInX;
             }
         }
@@ -3196,8 +3196,17 @@ namespace fheroes2
 
                     // The output pixel is non-transparent if its weight is not less than 0.5.
                     if ( outWeight >= 0.5F ) {
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red / outWeight + 0.5F ), static_cast<uint8_t>( green / outWeight + 0.5F ),
-                                                    static_cast<uint8_t>( blue / outWeight + 0.5F ) );
+                        // Normalize color channels.
+                        red /= outWeight;
+                        green /= outWeight;
+                        blue /= outWeight;
+
+                        // To round positive values faster than using std::round(), we add 0.5 and discard the fractional part.
+                        red += 0.5F;
+                        green += 0.5F;
+                        blue += 0.5F;
+
+                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
 
                         if ( isOutNotSingleLayer ) {
                             *transformOutX = 0;
