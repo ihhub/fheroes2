@@ -3008,8 +3008,8 @@ namespace fheroes2
 
         // Using "corner alignment" resize to bilinear resize the image without repeated columns/rows at the end
         // and with higher sharpness on integer scaling factors than using pixel center alignment (startPos = 0.5 * (step - 1.)).
-        const float stepX = static_cast<float>( widthRoiIn - 1 ) / static_cast<float>( widthRoiOut - 1 );
-        const float stepY = static_cast<float>( heightRoiIn - 1 ) / static_cast<float>( heightRoiOut - 1 );
+        const double stepX = static_cast<double>( widthRoiIn - 1 ) / static_cast<double>( widthRoiOut - 1 );
+        const double stepY = static_cast<double>( heightRoiIn - 1 ) / static_cast<double>( heightRoiOut - 1 );
 
         // Axis data to precache resize positions calculations.
         struct AxisData
@@ -3032,7 +3032,7 @@ namespace fheroes2
         std::vector<AxisData> axisX;
         axisX.reserve( widthRoiOut );
         for ( int32_t x = 0; x < widthRoiOut; ++x ) {
-            const float pos = static_cast<float>( x ) * stepX;
+            const float pos = static_cast<float>( x * stepX );
             const int32_t start = static_cast<int32_t>( pos );
             const float fraction = pos - static_cast<float>( start );
 
@@ -3056,9 +3056,8 @@ namespace fheroes2
             const int32_t preLastOutX = widthRoiOut - 1;
             const int32_t preLastOutY = heightRoiOut - 1;
 
-            float posY = 0.0F;
-
-            for ( int32_t y = 0; y < preLastOutY; ++y, imageOutY += widthOut, posY += stepY ) {
+            for ( int32_t y = 0; y < preLastOutY; ++y, imageOutY += widthOut ) {
+                const float posY = static_cast<float>( y * stepY );
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
                 const float coeffToBottomY = posY - static_cast<float>( static_cast<int32_t>( posY ) );
                 const float coeffToTopY = 1.0F - coeffToBottomY;
@@ -3106,7 +3105,7 @@ namespace fheroes2
 
             // The last row of the image: interpolate only horizontally.
             {
-                const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
+                const int32_t startY = static_cast<int32_t>( preLastOutY * stepY ) * widthIn;
                 uint8_t * imageOutX = imageOutY;
 
                 for ( int32_t x = 0; x < preLastOutX; ++x, ++imageOutX ) {
@@ -3137,9 +3136,8 @@ namespace fheroes2
 
             const uint8_t blackColor = GetPALColorId( 0, 0, 0 );
 
-            float posY = 0;
-
-            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut, posY += stepY ) {
+            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
+                const float posY = static_cast<float>( y * stepY );
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
                 const float coeffToBottomY = posY - static_cast<float>( static_cast<int32_t>( posY ) );
                 const float coeffToTopY = 1.0F - coeffToBottomY;
