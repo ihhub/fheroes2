@@ -3055,63 +3055,78 @@ namespace fheroes2
                 }
             }
 
+            const int32_t preLastOutX = widthRoiOut - 1;
+            const int32_t preLastOutY = heightRoiOut - 1;
+
             float posY = 0.0F;
 
-            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut, posY += stepY ) {
+            for ( int32_t y = 0; y < preLastOutY; ++y, imageOutY += widthOut, posY += stepY ) {
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
                 const float coeffToBottomY = posY - static_cast<float>( static_cast<int32_t>( posY ) );
                 const float coeffToTopY = 1.0F - coeffToBottomY;
 
                 uint8_t * imageOutX = imageOutY;
 
-                for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
+                for ( int32_t x = 0; x < preLastOutX; ++x, ++imageOutX ) {
                     const int32_t offsetIn = startY + axisX[x].start;
 
                     const uint8_t * imageInX = imageInY + offsetIn;
 
-                    if ( axisX[x].pos < maxPosX && posY < maxPosY ) {
-                        const float coeffTopLeft = axisX[x].coeffToLeft * coeffToTopY;
-                        const float coeffTopRight = axisX[x].coeffToRight * coeffToTopY;
-                        const float coeffBottomLeft = axisX[x].coeffToLeft * coeffToBottomY;
-                        const float coeffBottomRight = axisX[x].coeffToRight * coeffToBottomY;
+                    const float coeffTopLeft = axisX[x].coeffToLeft * coeffToTopY;
+                    const float coeffTopRight = axisX[x].coeffToRight * coeffToTopY;
+                    const float coeffBottomLeft = axisX[x].coeffToLeft * coeffToBottomY;
+                    const float coeffBottomRight = axisX[x].coeffToRight * coeffToBottomY;
 
-                        const uint8_t * topLeft = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                        const uint8_t * topRight = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
-                        const uint8_t * bottomLeft = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
-                        const uint8_t * bottomRight = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
+                    const uint8_t * topLeft = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                    const uint8_t * topRight = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+                    const uint8_t * bottomLeft = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+                    const uint8_t * bottomRight = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
 
-                        const float red = *topLeft * coeffTopLeft + *topRight * coeffTopRight + *bottomLeft * coeffBottomLeft + *bottomRight * coeffBottomRight + 0.5F;
-                        const float green = *( topLeft + 1 ) * coeffTopLeft + *( topRight + 1 ) * coeffTopRight + *( bottomLeft + 1 ) * coeffBottomLeft
-                                            + *( bottomRight + 1 ) * coeffBottomRight + 0.5F;
-                        const float blue = *( topLeft + 2 ) * coeffTopLeft + *( topRight + 2 ) * coeffTopRight + *( bottomLeft + 2 ) * coeffBottomLeft
-                                           + *( bottomRight + 2 ) * coeffBottomRight + 0.5F;
+                    const float red = *topLeft * coeffTopLeft + *topRight * coeffTopRight + *bottomLeft * coeffBottomLeft + *bottomRight * coeffBottomRight + 0.5F;
+                    const float green = *( topLeft + 1 ) * coeffTopLeft + *( topRight + 1 ) * coeffTopRight + *( bottomLeft + 1 ) * coeffBottomLeft
+                                        + *( bottomRight + 1 ) * coeffBottomRight + 0.5F;
+                    const float blue = *( topLeft + 2 ) * coeffTopLeft + *( topRight + 2 ) * coeffTopRight + *( bottomLeft + 2 ) * coeffBottomLeft
+                                       + *( bottomRight + 2 ) * coeffBottomRight + 0.5F;
 
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                    }
-                    else if ( posY < maxPosY ) {
-                        const uint8_t * top = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                        const uint8_t * bottom = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
-
-                        const float red = *top * coeffToTopY + *bottom * coeffToBottomY + 0.5F;
-                        const float green = *( top + 1 ) * coeffToTopY + *( bottom + 1 ) * coeffToBottomY + 0.5F;
-                        const float blue = *( top + 2 ) * coeffToTopY + *( bottom + 2 ) * coeffToBottomY + 0.5F;
-
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                    }
-                    else if ( axisX[x].pos < maxPosX ) {
-                        const uint8_t * left = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                        const uint8_t * right = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
-
-                        const float red = *left * axisX[x].coeffToLeft + *right * axisX[x].coeffToRight + 0.5F;
-                        const float green = *( left + 1 ) * axisX[x].coeffToLeft + *( right + 1 ) * axisX[x].coeffToRight + 0.5F;
-                        const float blue = *( left + 2 ) * axisX[x].coeffToLeft + *( right + 2 ) * axisX[x].coeffToRight + 0.5F;
-
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                    }
-                    else {
-                        *imageOutX = *imageInX;
-                    }
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                 }
+
+                // The last column of the image: interpolate only vertically.
+                {
+                    const uint8_t * imageInX = imageInY + startY + widthRoiIn - 1;
+
+                    const uint8_t * top = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                    const uint8_t * bottom = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+
+                    const float red = *top * coeffToTopY + *bottom * coeffToBottomY + 0.5F;
+                    const float green = *( top + 1 ) * coeffToTopY + *( bottom + 1 ) * coeffToBottomY + 0.5F;
+                    const float blue = *( top + 2 ) * coeffToTopY + *( bottom + 2 ) * coeffToBottomY + 0.5F;
+
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                }
+            }
+
+            // The last row of the image: interpolate only horizontally.
+            {
+                const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
+                uint8_t * imageOutX = imageOutY;
+
+                for ( int32_t x = 0; x < preLastOutX; ++x, ++imageOutX ) {
+                    const uint8_t * imageInX = imageInY + startY + axisX[x].start;
+
+                    const uint8_t * left = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                    const uint8_t * right = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+
+                    const float red = *left * axisX[x].coeffToLeft + *right * axisX[x].coeffToRight + 0.5F;
+                    const float green = *( left + 1 ) * axisX[x].coeffToLeft + *( right + 1 ) * axisX[x].coeffToRight + 0.5F;
+                    const float blue = *( left + 2 ) * axisX[x].coeffToLeft + *( right + 2 ) * axisX[x].coeffToRight + 0.5F;
+
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                }
+
+                // The output bottom-right pixel is a copy of the input bottom-right pixel.
+                const uint8_t * imageInX = imageInY + widthIn * heightRoiIn - 1;
+                *imageOutX = *imageInX;
             }
         }
         else {
