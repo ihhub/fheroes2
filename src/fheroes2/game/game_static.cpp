@@ -312,7 +312,7 @@ uint32_t GameStatic::getNeutralMonsterLimit( const bool isResurrectionMap )
 {
     if ( isResurrectionMap ) {
         // As of now, Resurrection maps have no limits on neutral monster growth.
-        return std::numeric_limits<uint32_t>::max();
+        return 4000000U;
     }
 
     // The original maps limit neutral monsters to 4000.
