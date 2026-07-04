@@ -3015,9 +3015,34 @@ namespace fheroes2
         const float startPosX = 0.5F * ( stepX - 1.0F );
         const float startPosY = 0.5F * ( stepY - 1.0F );
 
-        std::vector<float> positionX( widthRoiOut );
+        struct AxisData
+        {
+            float pos;
+            float coeffToRight;
+            float coeffToLeft;
+            int32_t start;
+
+            AxisData( const float pos_, const float coeffToRight_, const int32_t start_ )
+                : pos( pos_ )
+                , coeffToRight( coeffToRight_ )
+                , coeffToLeft( 1.0F - coeffToRight_ )
+                , start( start_ )
+            {
+                // Do nothing.
+            }
+        };
+
+        std::vector<AxisData> axisX;
+        axisX.reserve( widthRoiOut );
         for ( int32_t x = 0; x < widthRoiOut; ++x ) {
-            positionX[x] = startPosX + static_cast<float>( x ) * stepX;
+            const float pos = startPosX + static_cast<float>( x ) * stepX;
+            const int32_t start = static_cast<int32_t>( pos );
+            const float fraction = pos - static_cast<float>( start );
+            axisX.emplace_back( pos, fraction, start );
+        }
+        if ( axisX[0].pos < 0.0F ) {
+            axisX[0].coeffToRight = 0.0F;
+            axisX[0].coeffToLeft = 1.0F;
         }
 
         const auto maxPosX = static_cast<float>( widthRoiIn - 1 );
@@ -3037,8 +3062,9 @@ namespace fheroes2
                 }
             }
 
-            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
-                const float posY = startPosY + static_cast<float>( y ) * stepY;
+            float posY = startPosY;
+
+            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut, posY += stepY ) {
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
                 const float coeffToBottomY = posY > 0.0F ? posY - static_cast<float>( static_cast<int32_t>( posY ) ) : 0.0F;
                 const float coeffToTopY = 1.0F - coeffToBottomY;
@@ -3046,18 +3072,15 @@ namespace fheroes2
                 uint8_t * imageOutX = imageOutY;
 
                 for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
-                    const float posX = positionX[x];
-                    const auto startX = static_cast<int32_t>( posX );
-                    const int32_t offsetIn = startY + startX;
+                    const int32_t offsetIn = startY + axisX[x].start;
 
                     const uint8_t * imageInX = imageInY + offsetIn;
 
-                    if ( posX < maxPosX && posY < maxPosY ) {
-                        const float coeffToRightX = posX > 0.0F ? posX - static_cast<float>( startX ) : 0.0F;
-                        const float coeffTopLeft = ( 1.0F - coeffToRightX ) * coeffToTopY;
-                        const float coeffTopRight = coeffToRightX * coeffToTopY;
-                        const float coeffBottomLeft = ( 1.0F - coeffToRightX ) * coeffToBottomY;
-                        const float coeffBottomRight = coeffToRightX * coeffToBottomY;
+                    if ( axisX[x].pos < maxPosX && posY < maxPosY ) {
+                        const float coeffTopLeft = axisX[x].coeffToLeft * coeffToTopY;
+                        const float coeffTopRight = axisX[x].coeffToRight * coeffToTopY;
+                        const float coeffBottomLeft = axisX[x].coeffToLeft * coeffToBottomY;
+                        const float coeffBottomRight = axisX[x].coeffToRight * coeffToBottomY;
 
                         const uint8_t * topLeft = gamePalette + static_cast<size_t>( *imageInX ) * 3;
                         const uint8_t * topRight = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
@@ -3082,16 +3105,13 @@ namespace fheroes2
 
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                     }
-                    else if ( posX < maxPosX ) {
-                        const float coeffToRightX = posX > 0.0F ? posX - static_cast<float>( startX ) : 0.0F;
-                        const float coeffToLeftX = ( 1.0F - coeffToRightX );
-
+                    else if ( axisX[x].pos < maxPosX ) {
                         const uint8_t * left = gamePalette + static_cast<size_t>( *imageInX ) * 3;
                         const uint8_t * right = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
 
-                        const float red = *left * coeffToLeftX + *right * coeffToRightX + 0.5F;
-                        const float green = *( left + 1 ) * coeffToLeftX + *( right + 1 ) * coeffToRightX + 0.5F;
-                        const float blue = *( left + 2 ) * coeffToLeftX + *( right + 2 ) * coeffToRightX + 0.5F;
+                        const float red = *left * axisX[x].coeffToLeft + *right * axisX[x].coeffToRight + 0.5F;
+                        const float green = *( left + 1 ) * axisX[x].coeffToLeft + *( right + 1 ) * axisX[x].coeffToRight + 0.5F;
+                        const float blue = *( left + 2 ) * axisX[x].coeffToLeft + *( right + 2 ) * axisX[x].coeffToRight + 0.5F;
 
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                     }
@@ -3118,9 +3138,7 @@ namespace fheroes2
                 uint8_t * transformOutX = transformOutY;
 
                 for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
-                    const float posX = positionX[x];
-                    const auto startX = static_cast<int32_t>( posX );
-                    const int32_t offsetIn = startY + startX;
+                    const int32_t offsetIn = startY + axisX[x].start;
 
                     const uint8_t * imageInX = imageInY + offsetIn;
                     const uint8_t * transformInX = transformInY + offsetIn;
@@ -3142,13 +3160,11 @@ namespace fheroes2
                         }
                     };
 
-                    if ( posX < maxPosX && posY < maxPosY ) {
-                        const float coeffToRightX = posX > 0.0F ? posX - static_cast<float>( startX ) : 0.0F;
-
-                        const float coeffTopLeft = ( 1.0F - coeffToRightX ) * coeffToTopY;
-                        const float coeffTopRight = coeffToRightX * coeffToTopY;
-                        const float coeffBottomLeft = ( 1.0F - coeffToRightX ) * coeffToBottomY;
-                        const float coeffBottomRight = coeffToRightX * coeffToBottomY;
+                    if ( axisX[x].pos < maxPosX && posY < maxPosY ) {
+                        const float coeffTopLeft = axisX[x].coeffToLeft * coeffToTopY;
+                        const float coeffTopRight = axisX[x].coeffToRight * coeffToTopY;
+                        const float coeffBottomLeft = axisX[x].coeffToLeft * coeffToBottomY;
+                        const float coeffBottomRight = axisX[x].coeffToRight * coeffToBottomY;
 
                         addPixel( *imageInX, coeffTopLeft, *transformInX );
                         addPixel( *( imageInX + 1 ), coeffTopRight, *( transformInX + 1 ) );
@@ -3159,12 +3175,9 @@ namespace fheroes2
                         addPixel( *imageInX, coeffToTopY, *transformInX );
                         addPixel( *( imageInX + widthIn ), coeffToBottomY, *( transformInX + widthIn ) );
                     }
-                    else if ( posX < maxPosX ) {
-                        const float coeffToRightX = posX > 0.0F ? posX - static_cast<float>( startX ) : 0.0F;
-                        const float coeffToLeftX = ( 1.0F - coeffToRightX );
-
-                        addPixel( *imageInX, coeffToLeftX, *transformInX );
-                        addPixel( *( imageInX + 1 ), coeffToRightX, *( transformInX + 1 ) );
+                    else if ( axisX[x].pos < maxPosX ) {
+                        addPixel( *imageInX, axisX[x].coeffToLeft, *transformInX );
+                        addPixel( *( imageInX + 1 ), axisX[x].coeffToRight, *( transformInX + 1 ) );
                     }
                     else {
                         addPixel( *imageInX, 1.0F, *transformInX );
