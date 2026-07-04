@@ -3035,11 +3035,9 @@ namespace fheroes2
             const float pos = static_cast<float>( x ) * stepX;
             const int32_t start = static_cast<int32_t>( pos );
             const float fraction = pos - static_cast<float>( start );
+
             axisX.emplace_back( pos, fraction, start );
         }
-
-        const auto maxPosX = static_cast<float>( widthRoiIn - 1 );
-        const auto maxPosY = static_cast<float>( heightRoiIn - 1 );
 
         const uint8_t * gamePalette = getGamePalette();
 
@@ -3134,12 +3132,16 @@ namespace fheroes2
             const bool isOutNotSingleLayer = !out.singleLayer();
             uint8_t * transformOutY = isOutNotSingleLayer ? ( out.transform() + offsetOutY ) : nullptr;
 
+            const auto maxPosX = static_cast<float>( widthRoiIn - 1 );
+            const auto maxPosY = static_cast<float>( heightRoiIn - 1 );
+
             const uint8_t blackColor = GetPALColorId( 0, 0, 0 );
 
-            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
-                const float posY = static_cast<float>( y ) * stepY;
+            float posY = 0;
+
+            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut, posY += stepY ) {
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
-                const float coeffToBottomY = posY > 0.0F ? posY - static_cast<float>( static_cast<int32_t>( posY ) ) : 0.0F;
+                const float coeffToBottomY = posY - static_cast<float>( static_cast<int32_t>( posY ) );
                 const float coeffToTopY = 1.0F - coeffToBottomY;
 
                 uint8_t * imageOutX = imageOutY;
@@ -3180,14 +3182,17 @@ namespace fheroes2
                         addPixel( *( imageInX + widthIn + 1 ), coeffBottomRight, *( transformInX + widthIn + 1 ) );
                     }
                     else if ( posY < maxPosY ) {
+                        // The last column of the image: interpolate only vertically.
                         addPixel( *imageInX, coeffToTopY, *transformInX );
                         addPixel( *( imageInX + widthIn ), coeffToBottomY, *( transformInX + widthIn ) );
                     }
                     else if ( axisX[x].pos < maxPosX ) {
+                        // The last row of the image: interpolate only horizontally.
                         addPixel( *imageInX, axisX[x].coeffToLeft, *transformInX );
                         addPixel( *( imageInX + 1 ), axisX[x].coeffToRight, *( transformInX + 1 ) );
                     }
                     else {
+                        // The output bottom-right pixel is a copy of the input bottom-right pixel.
                         addPixel( *imageInX, 1.0F, *transformInX );
                     }
 
