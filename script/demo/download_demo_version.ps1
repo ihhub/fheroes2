@@ -133,7 +133,7 @@ try {
 
     $result = Get-SHA256HashForFile -Path "$demoPath\h2demo.zip"
 
-    if (-not ($result -Is [Boolean]) -And ($result -ne $h2DemoSHA256)) {
+    if (-not ($result -is [Boolean]) -and ($result -ne $h2DemoSHA256)) {
         Write-Host -ForegroundColor Red (-join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
                                                "Expected:`t$h2DemoSHA256`r`n", `
                                                "Got:`t`t$result`r`n", `
