@@ -228,7 +228,7 @@ msgstr ""
 
 msgid ""
 "AUTO\n"
-"PLAY-TEST"
+"PLAYTEST"
 msgstr ""
 
 msgid ""
