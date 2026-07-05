@@ -267,12 +267,12 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        if ( !_isFirstPage() && ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) ) {
+        if ( !_isFirstPage() && ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || le.isMouseWheelDown() ) ) {
             _startSpellIndex -= spellsPerPage * 2;
             redraw = true;
         }
         else if ( !_isLastPage( displayedSpells.size(), spellsPerPage * 2 )
-                  && ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) ) {
+                  && ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || le.isMouseWheelUp() ) ) {
             _startSpellIndex += spellsPerPage * 2;
             redraw = true;
         }
