@@ -1717,7 +1717,7 @@ namespace Maps
 
         const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( beforeTroopCount % 7 ) ) ? 1 : 0;
         uint32_t troopGrowth{ beforeTroopCount / 7 + bonusUnit };
-        troopGrowth = std::min( troopGrowth, monsterLimit - beforeTroopCount  );
+        troopGrowth = std::min( troopGrowth, monsterLimit - beforeTroopCount );
 
         const uint32_t afterTroopCount{ beforeTroopCount + troopGrowth };
 
