@@ -111,7 +111,7 @@ Dialog::ResizableFrameBox::ResizableFrameBox( int width, int height, int startYP
     _middleFragmentHeight = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
     const int32_t height_top_bottom = topHeight( evil ) + bottomHeight( evil );
 
-    area.width = fheroes2::boxAreaWidthPx;
+    area.width = width;
     area.height = activeAreaHeight + activeAreaHeight + _middleFragmentHeight;
 
     fheroes2::Display & display = fheroes2::Display::instance();
