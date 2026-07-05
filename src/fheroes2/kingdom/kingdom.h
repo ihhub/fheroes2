@@ -244,6 +244,11 @@ public:
         }
     }
 
+    void addMonsterUnderVisionSpell( const int32_t monsterIndex )
+    {
+        _monstersUnderVision.emplace( monsterIndex );
+    }
+
     bool isMonsterUnderVisionSpell( const int32_t monsterIndex ) const
     {
         return _monstersUnderVision.count( monsterIndex ) > 0;
