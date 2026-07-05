@@ -3900,7 +3900,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
     }
 }
 
-void Battle::Interface::_animateOpponents( OpponentSprite * hero )
+void Battle::Interface::_animateOpponents( const OpponentSprite * hero )
 {
     if ( hero == nullptr ) {
         return;
