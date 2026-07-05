@@ -55,13 +55,13 @@ namespace
     {
         const int icnId = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
 
-        const fheroes2::Sprite & image3 = fheroes2::AGG::GetICN( icnId, 3 );
         const fheroes2::Sprite & image4 = fheroes2::AGG::GetICN( icnId, 4 );
         const fheroes2::Sprite & image5 = fheroes2::AGG::GetICN( icnId, 5 );
+        const fheroes2::Sprite & image6 = fheroes2::AGG::GetICN( icnId, 6 );
 
-        int32_t widthLeft = image3.width();
-        widthLeft = std::max( widthLeft, image4.width() );
+        int32_t widthLeft = image4.width();
         widthLeft = std::max( widthLeft, image5.width() );
+        widthLeft = std::max( widthLeft, image6.width() );
 
         return widthLeft;
     }
@@ -139,29 +139,26 @@ void Dialog::ResizableFrameBox::redraw()
 
     const int32_t overallLeftWidth = leftWidth( isEvilInterface );
 
-    // right-top
-    const fheroes2::Sprite & part0 = fheroes2::AGG::GetICN( buybuild, 0 );
-    // left-top
-    const fheroes2::Sprite & part4 = fheroes2::AGG::GetICN( buybuild, 4 );
+    const fheroes2::Sprite & rightTop = fheroes2::AGG::GetICN( buybuild, 0 );
+    const fheroes2::Sprite & leftTop = fheroes2::AGG::GetICN( buybuild, 4 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Blit( part4, display, _position.x + overallLeftWidth - part4.width(), _position.y );
-    fheroes2::Blit( part0, display, _position.x + overallLeftWidth, _position.y );
+    fheroes2::Blit( leftTop, display, _position.x + overallLeftWidth - leftTop.width(), _position.y );
+    fheroes2::Blit( rightTop, display, _position.x + overallLeftWidth, _position.y );
 
-    _position.y += part4.height();
+    _position.y += leftTop.height();
 
     const int32_t posBeforeMiddle = _position.y;
     int32_t middleLeftHeight = _middleFragmentHeight;
     for ( uint32_t i = 0; i < _middleFragmentCount; ++i ) {
         const int32_t chunkHeight = middleLeftHeight >= activeAreaHeight ? activeAreaHeight : middleLeftHeight;
-        // left-middle
-        const fheroes2::Sprite & sl = fheroes2::AGG::GetICN( buybuild, 5 );
-        fheroes2::Blit( sl, 0, 10, display, _position.x + overallLeftWidth - sl.width(), _position.y, sl.width(), chunkHeight );
 
-        // right-middle
-        const fheroes2::Sprite & sr = fheroes2::AGG::GetICN( buybuild, 1 );
-        fheroes2::Blit( sr, 0, 10, display, _position.x + overallLeftWidth, _position.y, sr.width(), chunkHeight );
+        const fheroes2::Sprite & leftMiddle = fheroes2::AGG::GetICN( buybuild, 5 );
+        fheroes2::Blit( leftMiddle, 0, 10, display, _position.x + overallLeftWidth - leftMiddle.width(), _position.y, leftMiddle.width(), chunkHeight );
+
+        const fheroes2::Sprite & rightMiddle = fheroes2::AGG::GetICN( buybuild, 1 );
+        fheroes2::Blit( rightMiddle, 0, 10, display, _position.x + overallLeftWidth, _position.y, rightMiddle.width(), chunkHeight );
 
         middleLeftHeight -= chunkHeight;
         _position.y += chunkHeight;
@@ -169,13 +166,11 @@ void Dialog::ResizableFrameBox::redraw()
 
     _position.y = posBeforeMiddle + _middleFragmentHeight;
 
-    // right-bottom
-    const fheroes2::Sprite & part2 = fheroes2::AGG::GetICN( buybuild, 2 );
-    // left-bottom
-    const fheroes2::Sprite & part6 = fheroes2::AGG::GetICN( buybuild, 6 );
+    const fheroes2::Sprite & rightBottom = fheroes2::AGG::GetICN( buybuild, 2 );
+    const fheroes2::Sprite & leftBottom = fheroes2::AGG::GetICN( buybuild, 6 );
 
-    fheroes2::Blit( part6, display, _position.x + overallLeftWidth - part6.width(), _position.y );
-    fheroes2::Blit( part2, display, _position.x + overallLeftWidth, _position.y );
+    fheroes2::Blit( leftBottom, display, _position.x + overallLeftWidth - leftBottom.width(), _position.y );
+    fheroes2::Blit( rightBottom, display, _position.x + overallLeftWidth, _position.y );
 }
 
 Dialog::ResizableFrameBox::~ResizableFrameBox()
