@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,9 +34,10 @@
 
 namespace
 {
-    const int32_t windowWidth = 288; // this is measured value
-    const int32_t buttonHeight = 40;
-    const int32_t activeAreaHeight = 35;
+    constexpr int32_t offsetFromBorder{ 6 };
+    constexpr int32_t windowWidth = fheroes2::boxAreaWidthPx + ( fheroes2::borderWidthPx + offsetFromBorder ) * 2;
+    constexpr int32_t buttonHeight = 40;
+    constexpr int32_t activeAreaHeight = 35;
 
     int32_t topHeight( const bool isEvilInterface )
     {
@@ -91,12 +92,19 @@ namespace
     }
 }
 
-Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool showButtons )
+Dialog::ResizableFrameBox::ResizableFrameBox( int width, int height, int startYPos, const bool showButtons )
     : _middleFragmentCount( 0 )
     , _middleFragmentHeight( 0 )
 {
-    if ( showButtons )
+    if ( showButtons ) {
         height += buttonHeight;
+    }
+
+    // TODO: add support for wider windows.
+    if ( width != fheroes2::boxAreaWidthPx ) {
+        // We don't generate windows narrower than the original game.
+        width = fheroes2::boxAreaWidthPx;
+    }
 
     const bool evil = Settings::Get().isEvilInterfaceEnabled();
     _middleFragmentCount = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / activeAreaHeight );
@@ -118,13 +126,13 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
 
     _restorer.reset( new fheroes2::ImageRestorer( display, _position.x, _position.y, overallWidth( evil ), height_top_bottom + _middleFragmentHeight ) );
 
-    area.x = _position.x + ( windowWidth - fheroes2::boxAreaWidthPx ) / 2 + leftSideOffset;
+    area.x = _position.x + ( windowWidth - area.width ) / 2 + leftSideOffset;
     area.y = _position.y + ( topHeight( evil ) - activeAreaHeight );
 
     redraw();
 }
 
-void Dialog::NonFixedFrameBox::redraw()
+void Dialog::ResizableFrameBox::redraw()
 {
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buybuild = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
@@ -170,14 +178,14 @@ void Dialog::NonFixedFrameBox::redraw()
     fheroes2::Blit( part2, display, _position.x + overallLeftWidth, _position.y );
 }
 
-Dialog::NonFixedFrameBox::~NonFixedFrameBox()
+Dialog::ResizableFrameBox::~ResizableFrameBox()
 {
     _restorer->restore();
 
     fheroes2::Display::instance().render( _restorer->rect() );
 }
 
-int32_t Dialog::NonFixedFrameBox::getButtonAreaHeight()
+int32_t Dialog::ResizableFrameBox::getButtonAreaHeight()
 {
     return buttonHeight;
 }
