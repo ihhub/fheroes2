@@ -29,6 +29,7 @@
 #include <functional>
 #include <list>
 #include <set>
+#include <vector>
 
 #include "bitmodes.h"
 #include "castle.h"

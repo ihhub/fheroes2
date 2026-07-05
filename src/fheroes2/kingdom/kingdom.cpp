@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <initializer_list>
 #include <ostream>
 #include <string>
 #include <vector>
