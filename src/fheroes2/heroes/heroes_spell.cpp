@@ -316,7 +316,7 @@ namespace
             }
 
             fheroes2::MonsterDialogElement monsterUI( troop );
-            std::vector<const fheroes2::DialogElement *> uiElements{ &monsterUI };
+            const std::vector<const fheroes2::DialogElement *> uiElements{ &monsterUI };
 
             fheroes2::showStandardTextMessage( hdr, msg, Dialog::OK, uiElements );
         }
