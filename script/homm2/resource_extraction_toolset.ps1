@@ -63,7 +63,7 @@ try {
             $randName = [System.IO.Path]::GetRandomFileName()
             $tempPath = "$DestPath\$randName"
 
-            if (-Not (Test-Path -Path $tempPath)) {
+            if (-not (Test-Path -Path $tempPath)) {
                 [void](New-Item -Path $tempPath -ItemType "directory")
 
                 break
@@ -84,20 +84,20 @@ try {
             $randName = [System.IO.Path]::GetRandomFileName()
             $tmpMusicPath = "$DestPath\$randName"
 
-            if (-Not (Test-Path -Path $tmpMusicPath)) {
+            if (-not (Test-Path -Path $tmpMusicPath)) {
                 [void](New-Item -Path $tmpMusicPath -ItemType "directory")
 
                 break
             }
         }
 
-        if (-Not (Test-Path -Path $tmpMusicPath -PathType Container)) {
+        if (-not (Test-Path -Path $tmpMusicPath -PathType Container)) {
             [void](New-Item -Path $tmpMusicPath -ItemType "directory")
         }
-        if (-Not (Test-Path -Path "$tmpMusicPath\pol" -PathType Container)) {
+        if (-not (Test-Path -Path "$tmpMusicPath\pol" -PathType Container)) {
             [void](New-Item -Path "$tmpMusicPath\pol" -ItemType "directory")
         }
-        if (-Not (Test-Path -Path "$tmpMusicPath\sw" -PathType Container)) {
+        if (-not (Test-Path -Path "$tmpMusicPath\sw" -PathType Container)) {
             [void](New-Item -Path "$tmpMusicPath\sw" -ItemType "directory")
         }
 
@@ -162,7 +162,7 @@ try {
                     $dirName = "music$musicType.$uniqId"
                 }
 
-                if (-Not (Test-Path -Path "$DestPath\$dirName")) {
+                if (-not (Test-Path -Path "$DestPath\$dirName")) {
                     break
                 }
 
@@ -283,7 +283,7 @@ try {
 
     [System.Windows.Forms.Application]::Run($mainForm)
 
-    if ($null -Ne $commandToRun) {
+    if ($null -ne $commandToRun) {
         & $commandToRun
     }
 } catch {

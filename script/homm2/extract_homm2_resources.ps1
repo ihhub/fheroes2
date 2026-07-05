@@ -63,7 +63,7 @@ try {
             }
         }
     } catch {
-        if ($null -Eq $Env:APPDATA) {
+        if ($null -eq $Env:APPDATA) {
             Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine the destination directory"
 
             return

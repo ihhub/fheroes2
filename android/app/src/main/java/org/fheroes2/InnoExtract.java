@@ -696,7 +696,7 @@ final class InnoExtract
         }
         System.arraycopy( stripped, 5, lzmaAlone, 13, stripped.length - 5 );
 
-        try ( final InputStream lzmaStream = new java.io.ByteArrayInputStream( lzmaAlone ) ) {
+        try ( final InputStream lzmaStream = new ByteArrayInputStream( lzmaAlone ) ) {
             try ( final org.tukaani.xz.LZMAInputStream decoder = new org.tukaani.xz.LZMAInputStream( lzmaStream ) ) {
                 return readAllBytes( decoder );
             }
@@ -719,7 +719,7 @@ final class InnoExtract
             dictSize = ( 2 | ( dictProp & 1 ) ) << ( dictProp / 2 + 11 );
         }
 
-        try ( final InputStream bis = new java.io.ByteArrayInputStream( data, 1, data.length - 1 ) ) {
+        try ( final InputStream bis = new ByteArrayInputStream( data, 1, data.length - 1 ) ) {
             try ( final org.tukaani.xz.LZMA2InputStream decoder = new org.tukaani.xz.LZMA2InputStream( bis, dictSize ) ) {
                 return readAllBytes( decoder );
             }
