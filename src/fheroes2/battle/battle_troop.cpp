@@ -259,7 +259,7 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
     const uint32_t totalHitPoints = _maxCount * Monster::GetHitPoints();
-    assert( totalHitPoints > _hitPoints );
+    assert( totalHitPoints >= _hitPoints );
     return totalHitPoints - _hitPoints;
 }
 
