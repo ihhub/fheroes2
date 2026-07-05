@@ -273,6 +273,8 @@ namespace
 
         assert( !monsters.empty() );
 
+        hero.GetKingdom().addMonstersUnderVisionSpell( monsters );
+
         for ( const int32_t monsterIndex : monsters ) {
             const Maps::Tile & tile = world.getTile( monsterIndex );
 

@@ -459,7 +459,7 @@ namespace
 
         switch ( objectType ) {
         case MP2::OBJ_MONSTER:
-            return showMonsterInfo( tile, kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) );
+            return showMonsterInfo( tile, kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) || kingdom.isMonsterUnderVisionSpell( tile.GetIndex() ) );
 
         case MP2::OBJ_COAST:
         case MP2::OBJ_EVENT:
