@@ -267,12 +267,12 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        if ( !_isFirstPage() && ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || le.isMouseWheelDown() ) ) {
+        if ( !_isFirstPage() && ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || le.isMouseWheelUp() ) ) {
             _startSpellIndex -= spellsPerPage * 2;
             redraw = true;
         }
         else if ( !_isLastPage( displayedSpells.size(), spellsPerPage * 2 )
-                  && ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || le.isMouseWheelUp() ) ) {
+                  && ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || le.isMouseWheelDown() ) ) {
             _startSpellIndex += spellsPerPage * 2;
             redraw = true;
         }
@@ -441,11 +441,12 @@ void SpellBook::Edit( const HeroBase & hero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( le.MouseClickLeft( previousPageRoi ) && firstSpellOnPageIndex ) {
+        if ( ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || le.isMouseWheelUp() ) && firstSpellOnPageIndex ) {
             firstSpellOnPageIndex -= twoPagesSpells;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( nextPageRoi ) && size() > ( firstSpellOnPageIndex + twoPagesSpells ) ) {
+        else if ( ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || le.isMouseWheelDown() )
+                  && size() > ( firstSpellOnPageIndex + twoPagesSpells ) ) {
             firstSpellOnPageIndex += twoPagesSpells;
             redraw = true;
         }
