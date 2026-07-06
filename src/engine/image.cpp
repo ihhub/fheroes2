@@ -32,12 +32,6 @@
 
 #if defined( GENERATE_COLOR_TABLE )
 #include <array>
-#include <iomanip>
-#include <iostream>
-#include <mutex>
-
-#include "logging.h"
-#include "zzlib.h"
 #endif
 
 namespace
@@ -428,28 +422,9 @@ namespace
         if ( !isInitialized ) {
             isInitialized = true;
 
-#if defined( GENERATE_COLOR_TABLE )
-            generateColorConversionTable( rgbToId, size );
-
-            auto compressed = Compression::zipData( rgbToId, size, true );
-
-            {
-                // Output the compressed data to 'fheroes2.log' file in format that allows just to copy-paste to 'image_color_conversion.cpp'.
-                const std::scoped_lock<std::mutex> l( Logging::logMutex );
-
-                Logging::logFile << "rgbConversion table size: " << compressed.size() << ", data:\n";
-
-                for ( const auto & byte : compressed ) {
-                    Logging::logFile << "0x" << std::hex << std::setw( 2 ) << std::setfill( '0' ) << static_cast<int>( byte ) << ", ";
-                }
-
-                Logging::logFile << std::endl;
-            }
-#else
             if ( !getColorConversionTable( rgbToId, size ) ) {
                 throw fheroes2::CorruptedExecutable{ "Application is corrupted." };
             }
-#endif
         }
 
         return rgbToId[red + ( green << 6U ) + ( blue << 12U )];
