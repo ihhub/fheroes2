@@ -641,7 +641,6 @@ namespace
         }
 
     private:
-        SDL_Window * _window{ nullptr };
         SDL_Surface * _surface{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
@@ -658,11 +657,6 @@ namespace
 
         void clear() override
         {
-            if ( _window != nullptr ) {
-                SDL_DestroyWindow( _window );
-                _window = nullptr;
-            }
-
             if ( _surface != nullptr ) {
                 SDL_FreeSurface( _surface );
                 _surface = nullptr;
@@ -687,15 +681,6 @@ namespace
             }
 
             vita2d_init();
-
-            _window = SDL_CreateWindow( "", 0, 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, 0 );
-            if ( _window == nullptr ) {
-                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
-                                                                        << " size. The error: " << SDL_GetError() )
-
-                clear();
-                return false;
-            }
 
             _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
 
@@ -746,6 +731,7 @@ namespace
 
             for ( size_t i = 0; i < 256u; ++i ) {
                 const uint8_t * value = currentPalette + colorIds[i] * 3;
+                // TODO: here we don't need to use SDL_MapRGBA() and directly create 32-bit values from the given RGB values.
                 palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
             }
 
