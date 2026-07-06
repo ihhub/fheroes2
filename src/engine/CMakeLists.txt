@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2025                                             #
+#   Copyright (C) 2022 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -48,9 +48,10 @@ target_link_libraries(
 	smacker
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}
 	${USE_SDL_VERSION}_mixer
-	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image>
-	$<$<BOOL:${ENABLE_IMAGE}>:PNG::PNG>
+	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}_image>
+	$<$<BOOL:${ENABLE_IMAGE}>:png>
 	Threads::Threads
+	mpg123
 	z
 	xmp
 	modplug
