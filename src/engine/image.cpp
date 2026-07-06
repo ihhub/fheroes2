@@ -1173,7 +1173,7 @@ namespace fheroes2
 
     void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alpha )
     {
-        std::vector<uint8_t> palette( 256 );
+        std::vector<uint8_t> palette( 256, 0 );
 
         const uint8_t * gamePalette = getGamePalette();
 
