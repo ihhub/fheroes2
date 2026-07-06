@@ -269,18 +269,6 @@ const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
         for ( size_t i = 0; i < paletteSize; ++i ) {
             standard[i] = static_cast<uint8_t>( i );
         }
-
-        // To allow usage of unique cycling colors we make a virtual non-cycling copy of them:
-        // - water cycling colors: link 231, 232, 233 and 235 colors to 246 - 249 positions (color 234 has already non-cycling copy at 236),
-        // - lava cycling colors: link 214 - 217 colors to 250 - 253 position.
-        standard[246] = 231;
-        standard[247] = 232;
-        standard[248] = 233;
-        standard[249] = 235;
-        standard[250] = 214;
-        standard[251] = 215;
-        standard[252] = 216;
-        standard[253] = 217;
     }
 
     return standard;

@@ -29,7 +29,6 @@
 #include "exception.h"
 #include "image_color_conversion.h"
 #include "image_palette.h"
-#include "pal.h"
 
 #if defined( GENERATE_COLOR_TABLE )
 #include <array>
@@ -1011,7 +1010,6 @@ namespace fheroes2
         const uint8_t behindValue = 255 - alphaValue;
 
         const uint8_t * gamePalette = getGamePalette();
-        const std::vector<uint8_t> & standardPalette = PAL::GetPalette( PAL::PaletteType::STANDARD );
 
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
@@ -1028,8 +1026,8 @@ namespace fheroes2
                     const uint8_t * imageOutXEnd = imageOutX + width;
 
                     for ( ; imageOutX != imageOutXEnd; --imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( standardPalette[*imageInX] ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( standardPalette[*imageOutX] ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -1052,13 +1050,13 @@ namespace fheroes2
                             continue;
                         }
 
-                        uint8_t inValue = standardPalette[*imageInX];
+                        uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
                             inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
                         }
 
                         const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( standardPalette[*imageOutX] ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -1082,8 +1080,8 @@ namespace fheroes2
                     const uint8_t * imageInXEnd = imageInX + width;
 
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( standardPalette[*imageInX] ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( standardPalette[*imageOutX] ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -1106,13 +1104,13 @@ namespace fheroes2
                             continue;
                         }
 
-                        uint8_t inValue = standardPalette[*imageInX];
+                        uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
                             inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
                         }
 
                         const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( standardPalette[*imageOutX] ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -1175,16 +1173,11 @@ namespace fheroes2
     {
         std::vector<uint8_t> palette( 256, 0 );
 
-        const uint8_t * gamePalette = getGamePalette();
+        const uint8_t * value = getGamePalette();
 
-        // Use `standardPalette` that includes all original palette colors including cycling colors
-        // and extra linked non-cycling virtual copies of some unique cycling colors.
-        const std::vector<uint8_t> & standardPalette = PAL::GetPalette( PAL::PaletteType::STANDARD );
-
-        // The first 10 colors are undefined in the original palette. Colors 254 and 255 are also unused in `standardPalette`.
+        // The first 10 colors are undefined in the original palette. Colors 254 and 255 are also unused in game palette.
+        value += 10 * 3;
         for ( uint32_t i = 10; i < 254; ++i ) {
-            const uint8_t * value = gamePalette + static_cast<ptrdiff_t>( standardPalette[i] ) * 3;
-
             const uint32_t red = static_cast<uint32_t>( *value ) * alpha / 255;
             ++value;
             const uint32_t green = static_cast<uint32_t>( *value ) * alpha / 255;
