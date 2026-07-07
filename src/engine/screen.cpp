@@ -363,12 +363,24 @@ namespace
                     }
                 }
                 else {
+#if SDL_VERSION_ATLEAST( 2, 30, 0 )
                     if ( surface->format->format == SDL_PIXELFORMAT_RGBX32 ) {
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+                    if ( surface->format->format == SDL_PIXELFORMAT_XRGB8888 ) {
+#else
+                    if ( surface->format->format == SDL_PIXELFORMAT_XBGR8888 ) {
+#endif
                         for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
                             _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBX();
                         }
                     }
+#if SDL_VERSION_ATLEAST( 2, 30, 0 )
                     else if ( surface->format->format == SDL_PIXELFORMAT_BGRX32 ) {
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+                    if ( surface->format->format == SDL_PIXELFORMAT_XBGR8888 ) {
+#else
+                    if ( surface->format->format == SDL_PIXELFORMAT_XRGB8888 ) {
+#endif
                         for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
                             _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRX();
                         }
