@@ -846,28 +846,31 @@ namespace
     private:
         GSGLOBAL * _gsglobal{ nullptr };
         GSTEXTURE * _texture{ nullptr };
-        fheroes2::Rect _destRect;
         uint32_t _palette[256];
 
         RenderEngine() = default;
 
         void clear() override
         {
-            if ( _texture != nullptr ) {
-                gsKit_TexManager_free( _gsglobal, _texture );
-
+            if ( _gsglobal != nullptr ) {
                 gsKit_vram_clear( _gsglobal );
                 gsKit_deinit_global( _gsglobal );
-                SDL_free( _texture->Mem );
-                SDL_free( _texture );
+                _gsglobal = nullptr;
+            }
 
+            if ( _texture != nullptr ) {
+                if ( _texture->Mem != nullptr ) {
+                    free( _texture->Mem );
+                    _texture->Mem = nullptr;
+                }
+
+                free( _texture );
                 _texture = nullptr;
             }
         }
 
         bool allocate( fheroes2::ResolutionInfo & resolutionInfo, bool isFullScreen ) override
         {
-            ee_sema_t sema;
             clear();
 
             const std::vector<fheroes2::ResolutionInfo> resolutions = getAvailableResolutions();
@@ -913,8 +916,6 @@ namespace
         {
             memcpy( _texture->Mem, display.image(), gsKit_texture_size_ee( _texture->Width, _texture->Height, _texture->PSM ) );
 
-            gsKit_clear( _gsglobal, GS_SETREG_RGBAQ( 0x00, 0x00, 0x00, 0x00, 0x00 ) ); // Clean the previous texture
-
             gsKit_texture_upload( _gsglobal, _texture );
             gsKit_prim_sprite_texture( _gsglobal, _texture, 0, 0, 0, 0, _gsglobal->Width, _gsglobal->Height, _texture->Width, _texture->Height, 0,
                                        GS_SETREG_RGBAQ( 0xFF, 0xFF, 0xFF, 0xFF, 0 ) );
@@ -924,7 +925,6 @@ namespace
 
             gsKit_vsync_wait();
             gsKit_sync_flip( _gsglobal );
-            gsKit_TexManager_nextFrame( _gsglobal );
         }
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
