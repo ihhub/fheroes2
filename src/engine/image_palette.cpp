@@ -21,7 +21,6 @@
 #include "image_palette.h"
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 
 namespace
