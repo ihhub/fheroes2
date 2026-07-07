@@ -108,7 +108,7 @@ namespace Video
         }
 
         // Stop any cycling animation.
-        const fheroes2::ScreenPaletteRestorer screenRestorer;
+        fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::vector<std::pair<VideoState, std::unique_ptr<SMKVideoSequence>>> sequences;
         // Minimal delay for playback in milliseconds.

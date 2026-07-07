@@ -34,6 +34,7 @@ namespace fheroes2
 {
     class Cursor;
     class Display;
+    struct RGB;
 
     struct ResolutionInfo
     {
@@ -251,7 +252,7 @@ namespace fheroes2
 
         // Change the whole color representation on the screen. Make sure that palette exists all the time!!!
         // nullptr input parameter is used to reset palette to default one.
-        void changePalette( const uint8_t * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
+        void changePalette( const RGB * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
 
         Size screenSize() const
         {
