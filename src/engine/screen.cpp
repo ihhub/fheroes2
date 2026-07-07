@@ -752,12 +752,12 @@ namespace
 
             uint32_t palette32Bit[fheroes2::RGBPaletteSize];
 
-            if ( surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
+            if ( _surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
                 for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
                     palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
                 }
             }
-            else if ( surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
+            else if ( _surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
                 for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
                     palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
                 }
