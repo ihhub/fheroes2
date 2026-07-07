@@ -37,10 +37,10 @@ namespace fheroes2
 
         RGB() = default;
 
-        RGB( const uint8_t r, const uint8_t g, const uint8_t b )
-            : r( r )
-            , g( g )
-            , b( b )
+        RGB( const uint8_t red, const uint8_t green, const uint8_t blue )
+            : r( red )
+            , g( green )
+            , b( blue )
         {
             // Do nothing.
         }
