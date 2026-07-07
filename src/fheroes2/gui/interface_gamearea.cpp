@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <deque>
+#include <functional>
 #include <list>
 #include <map>
 #include <ostream>
@@ -57,6 +58,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "til.h"
 #include "ui_constants.h"
 #include "ui_object_rendering.h"
 #include "world.h"
@@ -795,6 +797,36 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     updateObjectAnimationInfo();
 }
 
+void Interface::GameArea::redrawOnlyFog( fheroes2::Image & dst ) const
+{
+    const fheroes2::Rect & tileROI = GetVisibleTileROI();
+
+    const int32_t maxX = tileROI.x + tileROI.width;
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.h();
+
+    for ( int32_t y = 0; y < tileROI.height; ++y ) {
+        fheroes2::Point offset( tileROI.x, tileROI.y + y );
+
+        if ( offset.y < 0 || offset.y >= worldHeight ) {
+            for ( ; offset.x < maxX; ++offset.x ) {
+                Maps::redrawEmptyTile( dst, offset, *this );
+            }
+        }
+        else {
+            for ( ; offset.x < maxX; ++offset.x ) {
+                if ( offset.x < 0 || offset.x >= worldWidth ) {
+                    Maps::redrawEmptyTile( dst, offset, *this );
+                }
+                else {
+                    const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( offset.x + offset.y ) % 4, 0 );
+                    DrawTile( dst, sf, offset );
+                }
+            }
+        }
+    }
+}
+
 void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile, const bool isActionObject ) const
 {
     if ( startTile < 0 || endTile < 0 ) {
@@ -927,6 +959,11 @@ void Interface::GameArea::SetScroll( const int direction )
 {
     assert( !isDragScroll() );
 
+    // Do not allow edge scrolling while inertial scrolling is active.
+    if ( _inertiaHandler.isActive() ) {
+        return;
+    }
+
     if ( ( direction & SCROLL_LEFT ) == SCROLL_LEFT ) {
         if ( _topLeftTileOffset.x > _minLeftOffset ) {
             scrollDirection |= direction;
@@ -1029,8 +1066,12 @@ void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mousePosition = le.getMouseCursorPos();
+    const Settings & conf = Settings::Get();
 
     if ( !le.isMouseLeftButtonPressed() ) {
+        if ( _mouseDraggingMovement && conf.isMapSmoothScrollingEnabled() ) {
+            _inertiaHandler.commitRelease();
+        }
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
         _needRedrawByMouseDragging = false;
@@ -1039,6 +1080,7 @@ void Interface::GameArea::QueueEventProcessing()
         if ( !_mouseDraggingInitiated ) {
             _mouseDraggingInitiated = true;
             _lastMouseDragPosition = mousePosition;
+            _inertiaHandler.reset();
         }
         else if ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) {
@@ -1051,9 +1093,15 @@ void Interface::GameArea::QueueEventProcessing()
             _needRedrawByMouseDragging = false;
         }
         else {
+            const fheroes2::Point delta = _lastMouseDragPosition - mousePosition;
+
+            if ( conf.isMapSmoothScrollingEnabled() ) {
+                _inertiaHandler.addMovementStep( delta );
+            }
+
             // Update the center coordinates and redraw the adventure map only if the mouse was moved.
             _needRedrawByMouseDragging = true;
-            SetCenterInPixels( getCurrentCenterInPixels() + _lastMouseDragPosition - mousePosition );
+            SetCenterInPixels( getCurrentCenterInPixels() + delta );
             _lastMouseDragPosition = mousePosition;
         }
 
@@ -1074,7 +1122,6 @@ void Interface::GameArea::QueueEventProcessing()
         return;
     }
 
-    const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.isMouseCursorPosInArea( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
     }
@@ -1105,6 +1152,11 @@ void Interface::GameArea::QueueEventProcessing()
         _prevIndexPos = index;
         updateCursor = false;
     }
+}
+
+bool Interface::GameArea::updateInertia()
+{
+    return _inertiaHandler.update( [this]() { return getCurrentCenterInPixels(); }, [this]( const fheroes2::Point & pos ) { SetCenterInPixels( pos ); } );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const

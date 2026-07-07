@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -27,22 +27,22 @@ try {
             [string]$AllowedExtension
         )
 
-        if ($FileDropList.Count -Ne 1) {
+        if ($FileDropList.Count -ne 1) {
             return $false
         }
-        if (-Not (Test-Path -Path $FileDropList[0] -PathType Leaf)) {
+        if (-not (Test-Path -Path $FileDropList[0] -PathType Leaf)) {
             return $false
         }
 
         $fileExtension = (Get-ChildItem $FileDropList[0]).Extension
 
-        if ($null -Eq $fileExtension) {
+        if ($null -eq $fileExtension) {
             return $false
         }
 
         $fileExtension = $fileExtension.ToLower()
 
-        if ($fileExtension -Ne $AllowedExtension) {
+        if ($fileExtension -ne $AllowedExtension) {
             return $false
         }
 
@@ -63,7 +63,7 @@ try {
             $randName = [System.IO.Path]::GetRandomFileName()
             $tempPath = "$DestPath\$randName"
 
-            if (-Not (Test-Path -Path $tempPath)) {
+            if (-not (Test-Path -Path $tempPath)) {
                 [void](New-Item -Path $tempPath -ItemType "directory")
 
                 break
@@ -84,20 +84,20 @@ try {
             $randName = [System.IO.Path]::GetRandomFileName()
             $tmpMusicPath = "$DestPath\$randName"
 
-            if (-Not (Test-Path -Path $tmpMusicPath)) {
+            if (-not (Test-Path -Path $tmpMusicPath)) {
                 [void](New-Item -Path $tmpMusicPath -ItemType "directory")
 
                 break
             }
         }
 
-        if (-Not (Test-Path -Path $tmpMusicPath -PathType Container)) {
+        if (-not (Test-Path -Path $tmpMusicPath -PathType Container)) {
             [void](New-Item -Path $tmpMusicPath -ItemType "directory")
         }
-        if (-Not (Test-Path -Path "$tmpMusicPath\pol" -PathType Container)) {
+        if (-not (Test-Path -Path "$tmpMusicPath\pol" -PathType Container)) {
             [void](New-Item -Path "$tmpMusicPath\pol" -ItemType "directory")
         }
-        if (-Not (Test-Path -Path "$tmpMusicPath\sw" -PathType Container)) {
+        if (-not (Test-Path -Path "$tmpMusicPath\sw" -PathType Container)) {
             [void](New-Item -Path "$tmpMusicPath\sw" -ItemType "directory")
         }
 
@@ -113,17 +113,17 @@ try {
 
             $fileExtension = (Get-ChildItem $item.FullName).Extension
 
-            if ($null -Eq $fileExtension) {
+            if ($null -eq $fileExtension) {
                 continue
             }
 
             $fileExtension = $fileExtension.ToLower()
 
-            if ($fileExtension -Eq ".flac") {
+            if ($fileExtension -eq ".flac") {
                 $musicType = $fileExtension
-            } elseif ($fileExtension -Eq ".mp3") {
+            } elseif ($fileExtension -eq ".mp3") {
                 # An archive with FLAC can contain some MP3 files
-                if ($null -Eq $musicType) {
+                if ($null -eq $musicType) {
                     $musicType = $fileExtension
                 }
             } else {
@@ -147,7 +147,7 @@ try {
 
         Remove-Item -Path $tempPath -Recurse
 
-        if ($null -Eq $musicType) {
+        if ($null -eq $musicType) {
             Remove-Item -Path $tmpMusicPath -Recurse
 
             Write-Host -ForegroundColor Yellow "WARNING: No soundtracks were found"
@@ -156,13 +156,13 @@ try {
             $uniqId = 0
 
             while ($true) {
-                if ($uniqId -Eq 0) {
+                if ($uniqId -eq 0) {
                     $dirName = "music$musicType"
                 } else {
                     $dirName = "music$musicType.$uniqId"
                 }
 
-                if (-Not (Test-Path -Path "$DestPath\$dirName")) {
+                if (-not (Test-Path -Path "$DestPath\$dirName")) {
                     break
                 }
 
@@ -171,7 +171,7 @@ try {
 
             Rename-Item -Path $tmpMusicPath -NewName $dirName
 
-            Write-Host -ForegroundColor Green (-Join("GOG OST directory: ", (Resolve-Path "$DestPath\$dirName").Path))
+            Write-Host -ForegroundColor Green (-join("GOG OST directory: ", (Resolve-Path "$DestPath\$dirName").Path))
         }
     }
 
@@ -189,14 +189,14 @@ try {
     }
 
     try {
-        if ($null -Eq $destPath) {
+        if ($null -eq $destPath) {
             throw
         }
 
         while ($true) {
             $randName = [System.IO.Path]::GetRandomFileName()
 
-            if (-Not (Test-Path -Path "$destPath\$randName")) {
+            if (-not (Test-Path -Path "$destPath\$randName")) {
                 [void](New-Item -Path "$destPath\$randName" -ItemType "directory")
                 Remove-Item -Path "$destPath\$randName"
 
@@ -204,7 +204,7 @@ try {
             }
         }
     } catch {
-        if ($null -Eq $Env:APPDATA) {
+        if ($null -eq $Env:APPDATA) {
             Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine the destination directory"
 
             return
@@ -212,12 +212,12 @@ try {
 
         $destPath = "$Env:APPDATA\fheroes2"
 
-        if (-Not (Test-Path -Path $destPath -PathType Container)) {
+        if (-not (Test-Path -Path $destPath -PathType Container)) {
             [void](New-Item -Path $destPath -ItemType "directory")
         }
     }
 
-    Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
+    Write-Host -ForegroundColor Green (-join("Destination directory: ", (Resolve-Path $destPath).Path))
 
     Write-Host "[2/2] running the resource extraction toolset"
 
@@ -243,7 +243,7 @@ try {
     $gogOSTExtractionGroupBox.add_DragDrop({
         $fileDropList = $_.Data.GetFileDropList()
 
-        if (-Not (Test-DragDropFile -FileDropList $fileDropList -AllowedExtension ".zip")) {
+        if (-not (Test-DragDropFile -FileDropList $fileDropList -AllowedExtension ".zip")) {
             return
         }
 
@@ -264,7 +264,7 @@ try {
 
         [void]$fileDialog.ShowDialog()
 
-        if ($fileDialog.FileName -Eq "") {
+        if ($fileDialog.FileName -eq "") {
             return
         }
 
@@ -283,11 +283,11 @@ try {
 
     [System.Windows.Forms.Application]::Run($mainForm)
 
-    if ($null -Ne $commandToRun) {
+    if ($null -ne $commandToRun) {
         & $commandToRun
     }
 } catch {
-    Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", ($_ | Out-String)))
+    Write-Host -ForegroundColor Red (-join("FATAL ERROR: ", ($_ | Out-String)))
 } finally {
     Write-Host "Press any key to exit..."
 

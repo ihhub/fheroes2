@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -84,22 +84,29 @@ namespace
         COUT( info )
     }
 
-    class RadarUpdater
+    class RadarUpdater final
     {
     public:
         RadarUpdater( const bool performUpdate, const fheroes2::Point & updatedPosition, const fheroes2::Rect & areaToRestore )
             : _performUpdate( performUpdate )
-            , _updatedPosition( updatedPosition )
             , _prevPosition( Interface::AdventureMap::Get().getGameArea().getCurrentCenterInPixels() )
-            , _restorer( fheroes2::Display::instance(), areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height )
+            , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
         {
-            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+            if ( !_performUpdate ) {
+                // Nothing to do. Don't waste resources for rendering.
                 return;
             }
 
             Interface::AdventureMap & iface = Interface::AdventureMap::Get();
-
             iface.getGameArea().SetCenter( updatedPosition );
+            if ( iface.getGameArea().getCurrentCenterInPixels() == _prevPosition ) {
+                // The position hasn't changed. Don't render anything.
+                _performUpdate = false;
+                return;
+            }
+
+            _restorer.update( areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height );
+
             iface.redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
@@ -107,7 +114,7 @@ namespace
 
         void restore()
         {
-            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+            if ( !_performUpdate ) {
                 return;
             }
 
@@ -120,8 +127,7 @@ namespace
         }
 
     private:
-        const bool _performUpdate;
-        const fheroes2::Point _updatedPosition;
+        bool _performUpdate;
         const fheroes2::Point _prevPosition;
         fheroes2::ImageRestorer _restorer;
     };
@@ -374,7 +380,7 @@ namespace
         const int32_t barrierColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getBarrierColorName( barrierColor ) );
 
-        if ( kingdom.IsVisitTravelersTent( barrierColor ) ) {
+        if ( kingdom.isTravellerTentVisited( barrierColor ) ) {
             str.append( "\n\n" );
             str.append( _( "(tent visited)" ) );
         }
@@ -388,7 +394,7 @@ namespace
         const int32_t tentColor = getBarrierColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
-        if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
+        if ( kingdom.isTravellerTentVisited( tentColor ) ) {
             str.append( "\n\n" );
             str.append( _( "(already visited)" ) );
         }

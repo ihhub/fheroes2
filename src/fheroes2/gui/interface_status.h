@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -90,10 +90,10 @@ namespace Interface
         void _redraw() const;
 
     private:
-        void _drawKingdomInfo( const int32_t offsetY = 0 ) const;
+        void _drawKingdomInfo( const int32_t offsetY ) const;
         void _drawDayInfo( const int32_t offsetY = 0 ) const;
-        void _drawArmyInfo( const int32_t offsetY = 0 ) const;
-        void _drawResourceInfo( const int32_t offsetY = 0 ) const;
+        void _drawArmyInfo( const int32_t offsetY ) const;
+        void _drawResourceInfo( const int32_t offsetY ) const;
         void _drawBackground() const;
         void _drawAITurns() const;
 

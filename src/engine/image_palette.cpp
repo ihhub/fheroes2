@@ -27,7 +27,7 @@
 
 namespace
 {
-    const size_t paletteSize = 768;
+    constexpr size_t paletteSize = 256 * 3;
 
     struct PaletteHolder
     {
@@ -94,6 +94,16 @@ namespace fheroes2
             return;
         }
 
-        std::copy_n( palette.begin(), paletteSize, PaletteHolder::instance().gamePalette.begin() );
+        auto & gamePalette = PaletteHolder::instance().gamePalette;
+
+        std::copy_n( palette.begin(), paletteSize, gamePalette.begin() );
+
+        // Make a copy of cycling colors to use them without cycling.
+        // Water cycling colors. Color 234 has already non-cycling copy: 236. Copy 231, 232, 233 and 235 to 246 - 249.
+        std::copy_n( palette.begin() + 231 * 3, 3 * 3, gamePalette.begin() + 246 * 3 );
+        std::copy_n( palette.begin() + 235 * 3, 1 * 3, gamePalette.begin() + 249 * 3 );
+
+        // Lava cycling colors. Copy 214 - 217 to 250 - 253.
+        std::copy_n( palette.begin() + 214 * 3, 4 * 3, gamePalette.begin() + 250 * 3 );
     }
 }

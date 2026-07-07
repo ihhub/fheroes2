@@ -134,7 +134,7 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
             checkSelectBestSpell( spell, spellDragonSlayerValue( spell, friendly, enemies ) );
         }
         else if ( spell == Spell::TELEPORT ) {
-            checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, enemies ) );
+            checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, trueEnemies ) );
         }
         else if ( spell == Spell::EARTHQUAKE ) {
             checkSelectBestSpell( spell, spellEarthquakeValue( arena, spell, friendly ) );
@@ -164,7 +164,7 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
 
     const uint32_t spellDamage = fheroes2::getSpellDamage( spell, _commander->GetPower(), _commander );
 
-    const auto damageHeuristic = [this, spellDamage, &spell, retreating]( const Battle::Unit * unit, const double armyStrength, const double armySpeed ) {
+    const auto damageHeuristic = [this, spellDamage, &spell, retreating, &enemies]( const Battle::Unit * unit, const double armyStrength, const double armySpeed ) {
         const uint32_t damage = spellDamage * ( 100 - unit->GetMagicResist( spell, _commander ) ) / 100;
 
         // If the unit is immune to this spell, then no one will be killed, no strength will be lost and the unit will not be woken up if it is disabled
@@ -183,16 +183,26 @@ AI::SpellcastOutcome AI::BattlePlanner::spellDamageValue( const Spell & spell, B
         }
 
         // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack.
-        // TODO: we also need to take into an account additional stack of Mirror Image if the creatures have one.
-        //       Killing the original monsters will destroy the Mirror Image stack as well.
-        const uint32_t hitpoints = unit->Modes( Battle::CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
-        if ( damage >= hitpoints ) {
+        const uint32_t hitPoints = unit->Modes( Battle::CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
+        if ( damage >= hitPoints ) {
+            double overallStrength = unit->GetStrength();
             const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
-            return unit->GetStrength() + armyStrength * bonus;
+
+            if ( unit->Modes( Battle::CAP_MIRROROWNER ) ) {
+                // This monster has Mirror Image copies.
+                // Add an additional bonus to it.
+                for ( const auto * enemyUnit : enemies ) {
+                    if ( enemyUnit->Modes( Battle::CAP_MIRRORIMAGE ) && ( enemyUnit->GetMirror() == unit ) ) {
+                        overallStrength += enemyUnit->GetStrength();
+                    }
+                }
+            }
+
+            return overallStrength + armyStrength * bonus;
         }
 
         // Otherwise use the amount of strength lost (% of the total unit's strength)
-        double unitPercentageLost = std::min( static_cast<double>( damage ) / hitpoints, 1.0 );
+        double unitPercentageLost = std::min( static_cast<double>( damage ) / hitPoints, 1.0 );
 
         // Penalty for waking up disabled unit (if you kill only 30%, the remaining 70% is your penalty)
         if ( unit->isImmovable() ) {
@@ -841,6 +851,11 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
                                                             const Battle::Units & enemies ) const
 {
     assert( spell == Spell::TELEPORT );
+
+    if ( currentUnit.Modes( Battle::SP_HYPNOTIZE ) ) {
+        // TODO: implement Teleport for Hypnotized units.
+        return {};
+    }
 
     // Teleport spell is useful in many cases. The current implementation focuses only on offensive movements for melee units.
 

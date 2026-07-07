@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -209,6 +209,11 @@ msgstr "РЕСТАРТ"
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 #, fuzzy
@@ -4527,6 +4532,22 @@ msgstr "Това заклинание не може да се направи н�
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Чудовищата не могат да се поставят върху вода."
 
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да заредиш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
 msgid "Not able to generate a map with given parameters."
 msgstr ""
 
@@ -4566,24 +4587,6 @@ msgstr ""
 "Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Рестарт"
@@ -4617,6 +4620,13 @@ msgstr "Запазете текущата карта."
 
 msgid "Quit out of the map editor."
 msgstr "Излез от редактора на карти."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Тестери на играта"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 #, fuzzy
 msgid "Return to the game's Main Menu."
@@ -4699,6 +4709,24 @@ msgstr ""
 #, fuzzy
 msgid "Failed to save the map."
 msgstr "Файл за запазване:"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5501,6 +5529,64 @@ msgstr "Експертна"
 msgid "difficulty|Impossible"
 msgstr "Невъзможна"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Тестери на играта"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Файл за запазване:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Анексирам"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Анексирам"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Кликни, за да се върнеш към главното меню."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
+
 msgid "and more..."
 msgstr "и още..."
 
@@ -5914,6 +6000,10 @@ msgstr "ново меню на карта"
 #, fuzzy
 msgid "hotkey|toggle passability"
 msgstr "превключи състояние"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "ляво по подразбиране"
 
 #, fuzzy
 msgid "hotkey|re-generate random map"

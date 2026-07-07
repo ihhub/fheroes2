@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-03-12 23:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -209,6 +209,11 @@ msgstr "REŠTART"
 msgid ""
 "MAIN\n"
 "MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAY-TEST"
 msgstr ""
 
 #, fuzzy
@@ -4502,6 +4507,22 @@ msgstr "Toto kúzlo nemožno použiť na lodi."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Určite chceš načítať novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
+"stratia.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
+"stratia.)"
+
 msgid "Not able to generate a map with given parameters."
 msgstr ""
 
@@ -4541,24 +4562,6 @@ msgstr ""
 "Určite chceš vytvoriť novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
 "stratia.)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Reštart"
@@ -4592,6 +4595,13 @@ msgstr "Uložiť aktuálnu mapu."
 
 msgid "Quit out of the map editor."
 msgstr "Ukončiť prácu v editore máp."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Testovanie hry"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 #, fuzzy
 msgid "Return to the game's Main Menu."
@@ -4676,6 +4686,24 @@ msgstr ""
 #, fuzzy
 msgid "Failed to save the map."
 msgstr "Uložiť súbor:"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5463,6 +5491,65 @@ msgstr "Expertná"
 msgid "difficulty|Impossible"
 msgstr "Nemožná"
 
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testovanie hry"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Uložiť súbor:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Anexia"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Anexia"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr "Chceš prevziať kontrolu nad hráčom? Efekt sa prejaví v ďalšom kole."
+
 msgid "and more..."
 msgstr "a viac..."
 
@@ -5876,6 +5963,10 @@ msgstr "nová mapa"
 #, fuzzy
 msgid "hotkey|toggle passability"
 msgstr "prepni status"
+
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "predvolené vľavo"
 
 #, fuzzy
 msgid "hotkey|re-generate random map"

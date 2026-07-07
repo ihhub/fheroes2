@@ -350,7 +350,7 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
         case MP2::OBJ_MAGELLANS_MAPS:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
+            return !kingdom.isVisited( objectType ) && kingdom.AllowPayment( PaymentConditions::getMagellansMapsPurchasePrice() );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
@@ -415,13 +415,13 @@ namespace
         }
 
         case MP2::OBJ_OBELISK:
-            return !kingdom.isVisited( tile );
+            return !kingdom.isVisited( index, objectType );
 
         case MP2::OBJ_BARRIER:
-            return kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_TRAVELLER_TENT:
-            return !kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) );
+            return !kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
@@ -442,7 +442,7 @@ namespace
                 return false;
             }
 
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+            if ( !kingdom.isVisited( index, objectType ) ) {
                 // This shrine has not been visited by any hero. It's worth to do it.
                 return true;
             }
@@ -480,7 +480,7 @@ namespace
                 return false;
             }
 
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+            if ( !kingdom.isVisited( index, objectType ) ) {
                 // The AI heroes should not have prior knowledge what skill this object has.
                 return true;
             }
@@ -668,14 +668,14 @@ namespace
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+            if ( !kingdom.isVisited( index, objectType ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && isHeroStrongerThan( tile, ai, heroArmyStrength, 2 );
             }
             break;
 
         case MP2::OBJ_PYRAMID:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+            if ( !kingdom.isVisited( index, objectType ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
                        && isHeroStrongerThan( tile, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
@@ -728,7 +728,7 @@ namespace
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUT_OF_MAGI:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
+            return !kingdom.isVisited( objectType ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
 
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
@@ -741,26 +741,30 @@ namespace
             return kingdom.AllowPayment( payment );
         }
 
+        // TODO: AI has no brains to handle Sirens object.
+        case MP2::OBJ_SIRENS:
+        // TODO: AI doesn't know how it use Sphinx object properly.
+        case MP2::OBJ_SPHINX:
+        // TODO: AI doesn't know how it use Trading Post object properly.
+        case MP2::OBJ_TRADING_POST:
+            return false;
+
+        // The following objects must never be analyzed.
         // AI should never consider a boat as a destination point. It uses them only to make a path.
         case MP2::OBJ_BOAT:
         // Eye of Magi is not an action object at all.
         case MP2::OBJ_EYE_OF_MAGI:
         // No use of these object for AI.
         case MP2::OBJ_ORACLE:
-        // AI has no brains to do anything from sign messages.
+        // AI doesn't read messages.
         case MP2::OBJ_SIGN:
-        // AI has no brains to handle Sirens object.
-        case MP2::OBJ_SIRENS:
-        // TODO: AI doesn't know how it use Sphinx object properly.
-        case MP2::OBJ_SPHINX:
         // AI should never consider a stone lith as a destination point. It uses them only to make a path.
         case MP2::OBJ_STONE_LITHS:
-        // TODO: AI doesn't know how it use Trading Post object properly.
-        case MP2::OBJ_TRADING_POST:
         // TODO: Add AI logic for visiting Maelstrom object.
         case MP2::OBJ_MAELSTROM:
         // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
         case MP2::OBJ_WHIRLPOOL:
+            assert( 0 );
             return false;
 
         default:
@@ -783,7 +787,9 @@ namespace
         case MP2::OBJ_ARTESIAN_SPRING:
         case MP2::OBJ_BARROW_MOUNDS:
         case MP2::OBJ_CAVE:
+        case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_EXCAVATION:
@@ -793,8 +799,10 @@ namespace
         case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_PEASANT_HUT:
         case MP2::OBJ_RUINS:
+        case MP2::OBJ_STABLES:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_WATER_ALTAR:
@@ -2256,7 +2264,9 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_ARTESIAN_SPRING:
     case MP2::OBJ_BARROW_MOUNDS:
     case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
     case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_EARTH_ALTAR:
     case MP2::OBJ_EXCAVATION:
@@ -2266,8 +2276,10 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_MAGIC_GARDEN:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_RUINS:
+    case MP2::OBJ_STABLES:
     case MP2::OBJ_TREE_CITY:
     case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_TROLL_BRIDGE:
     case MP2::OBJ_WAGON_CAMP:
     case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_WATER_ALTAR:
@@ -2490,13 +2502,15 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     ObjectValidator objectValidator( hero, _pathfinder, *this );
     ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator,
+    const bool isFutureObjectPredictionAllowed{ Difficulty::isFutureObjectPredictionAllowedForAI( Game::getDifficulty() ) };
+
+    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator, isFutureObjectPredictionAllowed,
                                  &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
         // Dimension door path does not include any objects on the way.
         if ( !isDimensionDoor ) {
             for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
                 const bool isValidObject = objectValidator.isCurrentlyValid( pair.first );
-                const int32_t dayToBecomeValid = objectValidator.whenGoingToBeValidInDays( pair.first );
+                const int32_t dayToBecomeValid = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( pair.first ) : 0;
 
                 if ( !isValidObject && dayToBecomeValid < 1 ) {
                     // This is not a valid object and it is not going to be valid in the future.
@@ -2513,6 +2527,8 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                     extraValue = valueStorage.value( pair, 0 );
                 }
                 else {
+                    assert( isFutureObjectPredictionAllowed );
+
                     const auto path = _pathfinder.buildPath( pair.first, false );
                     assert( !path.empty() );
                     assert( path.back().GetIndex() == pair.first );
@@ -2579,7 +2595,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     for ( const auto & [idx, objType] : _mapActionObjects ) {
         const bool isCurrentlyValid = objectValidator.isCurrentlyValid( idx );
-        const int32_t daysToBeAvailable = objectValidator.whenGoingToBeValidInDays( idx );
+        const int32_t daysToBeAvailable = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( idx ) : 0;
 
         if ( !isCurrentlyValid && daysToBeAvailable < 1 ) {
             // This is not a valid object and it is not going to be valid in the future.
@@ -2613,6 +2629,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             value = valueStorage.value( { idx, objType }, dist );
         }
         else {
+            assert( isFutureObjectPredictionAllowed );
             value = valueStorage.futureValue( { idx, objType }, dist );
         }
 
@@ -2907,8 +2924,9 @@ void AI::Planner::HeroesBeginMovement( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( formerBoatIdx );
-    updateMapActionObjectCache( nextTileIdx );
+    const auto & kingdom = hero.GetKingdom();
+    updateMapActionObjectCache( kingdom, formerBoatIdx );
+    updateMapActionObjectCache( kingdom, nextTileIdx );
 }
 
 void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
@@ -2924,6 +2942,43 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
             }
 
             reinforceCastle( *castle );
+
+            // If the hero has very little movement points, we can check whether it is worth keeping him in the castle for the next turn.
+            //
+            // Each step in monster speed gives 100 movement points (see Heroes::GetMaxMovePoints() method).
+            // So, we need to get the difference in speed between slowest and fastest units, and compare it with movement points left for this turn.
+            Army & heroArmy = hero.GetArmy();
+            const Troop * slowestTroop = heroArmy.GetSlowestTroop();
+            const Troop * fastestTroop = heroArmy.GetFastestTroop();
+
+            assert( slowestTroop != nullptr );
+            assert( fastestTroop != nullptr );
+
+            const uint32_t slowestSpeed{ slowestTroop->GetSpeed() };
+
+            uint32_t speedDifference{ fastestTroop->GetSpeed() - slowestSpeed };
+            if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                // Seems like leaving all slow units in the castle might give a movement boost next day.
+                const Troops castleBackup{ castle->GetArmy().getTroops() };
+                const Troops heroBackup{ heroArmy.getTroops() };
+
+                transferSlowestTroopsToGarrison( &hero, castle );
+
+                // Verify that the movement bonus is still applicable.
+                slowestTroop = heroArmy.GetSlowestTroop();
+                assert( slowestTroop != nullptr );
+
+                speedDifference = slowestTroop->GetSpeed() - slowestSpeed;
+                if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                    hero.SetModes( Heroes::SLEEPER );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << " stays in " << castle->GetName() << " castle till the next turn to get movement boost." )
+                }
+                else {
+                    // Nope. We can't get the movement bonus.
+                    castle->GetArmy().Assign( castleBackup );
+                    heroArmy.Assign( heroBackup );
+                }
+            }
         }
         else {
             OptimizeTroopsOrder( hero.GetArmy() );
@@ -2934,7 +2989,7 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
 
     updatePriorityTargets( hero, tileIndex, objectType );
 
-    updateMapActionObjectCache( tileIndex );
+    updateMapActionObjectCache( hero.GetKingdom(), tileIndex );
 }
 
 void AI::Planner::HeroesActionNewPosition( Heroes & hero )
@@ -3009,8 +3064,9 @@ void AI::Planner::HeroesActionNewPosition( Heroes & hero )
 
     const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
-    updateMapActionObjectCache( formerBoatIdx );
-    updateMapActionObjectCache( nextTileIdx );
+    const auto & kingdom = hero.GetKingdom();
+    updateMapActionObjectCache( kingdom, formerBoatIdx );
+    updateMapActionObjectCache( kingdom, nextTileIdx );
 }
 
 bool AI::Planner::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
@@ -3169,8 +3225,9 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
                     assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
 
-                    updateMapActionObjectCache( prevHeroPosition );
-                    updateMapActionObjectCache( bestHero->GetIndex() );
+                    const auto & kingdom = bestHero->GetKingdom();
+                    updateMapActionObjectCache( kingdom, prevHeroPosition );
+                    updateMapActionObjectCache( kingdom, bestHero->GetIndex() );
 
                     prevHeroPosition = bestHero->GetIndex();
                 }
@@ -3198,12 +3255,13 @@ fheroes2::GameMode AI::Planner::HeroesTurn( VecHeroes & heroes, uint32_t & curre
         }
 
         if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {
+            const auto & kingdom = bestHero->GetKingdom();
             // The hero died or moved to another position. We have to update the action object cache.
-            updateMapActionObjectCache( prevHeroPosition );
+            updateMapActionObjectCache( kingdom, prevHeroPosition );
 
             if ( bestHero->isActive() ) {
                 // Hero moved to another position and is still alive.
-                updateMapActionObjectCache( bestHero->GetIndex() );
+                updateMapActionObjectCache( kingdom, bestHero->GetIndex() );
             }
         }
 

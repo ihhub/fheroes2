@@ -171,6 +171,9 @@ namespace
         if ( terrainType == Maps::Ground::UNKNOWN ) {
             fheroes2::ApplyPalette( output, offset.x + 1, offset.y + 1, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height,
                                     PAL::GetPalette( PAL::PaletteType::PURPLE ) );
+
+            const fheroes2::Text unknownTerrainText{ "?", fheroes2::FontType::normalYellow() };
+            unknownTerrainText.draw( offset.x + terrainIconSize.width / 2 - 4, offset.y + terrainIconSize.height / 2 - 5, output );
         }
     }
 
@@ -303,6 +306,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
     if ( !_backupCompleted || !allowBackup ) {
         armyInfo[0].hero = world.GetHeroes( Heroes::LORDKILBURN );
         armyInfo[0].isHeroPresent = true;
+
+        _terrainType = Maps::Ground::UNKNOWN;
+    }
+    else {
+        _terrainType = _backupTerrainType;
     }
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -352,6 +360,23 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonStartIcn, 0 ), display, buttonStart.area().getPosition(), shadowOffset );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonExitIcn, 0 ), display, buttonExit.area().getPosition(), shadowOffset );
 
+    auto updateStartButton = [&buttonStart]( const Army & first, const Army & second ) {
+        const bool isArmyValid = ( first.isValid() && second.isValid() );
+        if ( isArmyValid && !buttonStart.isEnabled() ) {
+            buttonStart.enable();
+            buttonStart.draw();
+            return true;
+        }
+
+        if ( !isArmyValid && buttonStart.isEnabled() ) {
+            buttonStart.disable();
+            buttonStart.draw();
+            return true;
+        }
+
+        return false;
+    };
+
     buttonStart.draw();
     buttonExit.draw();
     buttonReset.draw();
@@ -382,7 +407,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
             buttonReset.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonReset.area() ) );
         }
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( buttonStart.isEnabled() && ( le.MouseClickLeft( buttonStart.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
             result = true;
 
             break;
@@ -447,6 +472,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
                     }
 
                     updateHero( first, windowOffset );
+
+                    needRender = needRender || updateStartButton( first.monster, second.monster );
                 }
 
                 titleRoiRestorer.restore();
@@ -491,17 +518,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
 
                 armyInfo[firstId].needRedraw = true;
 
-                const bool isArmyValid = ( armyInfo[firstId].monster.isValid() && armyInfo[secondId].monster.isValid() );
-                if ( isArmyValid && !buttonStart.isEnabled() ) {
-                    buttonStart.enable();
-                    buttonStart.draw();
-                    needRender = true;
-                }
-                else if ( !isArmyValid && buttonStart.isEnabled() ) {
-                    buttonStart.disable();
-                    buttonStart.draw();
-                    needRender = true;
-                }
+                needRender = needRender || updateStartButton( armyInfo[firstId].monster, armyInfo[secondId].monster );
             }
             else if ( firstUI.artifact != nullptr && le.isMouseCursorPosInArea( firstUI.artifact->GetArea() ) && firstUI.artifact->QueueEventProcessing() ) {
                 if ( firstUI.army != nullptr && firstUI.army->isSelected() ) {
@@ -606,6 +623,9 @@ void Battle::Only::updateHero( ArmyInfo & info, const fheroes2::Point & offset )
         return;
     }
 
+    info.monster.Reset();
+    info.monster.GetTroop( 0 )->Set( defaultMonster );
+
     updateArmyUI( info.ui, info.hero, offset, info.armyId );
 }
 
@@ -689,6 +709,8 @@ void Battle::Only::StartBattle()
         armyInfo[idx].monster.GetTroop( 0 )->Set( defaultMonster );
         armyInfo[idx].monsterBackup.Assign( armyInfo[idx].monster );
     }
+
+    _backupTerrainType = _terrainType;
 
     _backupCompleted = true;
 

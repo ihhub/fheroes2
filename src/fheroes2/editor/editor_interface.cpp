@@ -49,8 +49,8 @@
 #include "editor_spell_selection.h"
 #include "editor_sphinx_window.h"
 #include "game.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
-#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
 #include "ground.h"
@@ -76,6 +76,7 @@
 #include "render_processor.h"
 #include "resource.h"
 #include "screen.h"
+#include "serialize.h"
 #include "settings.h"
 #include "spell.h"
 #include "system.h"
@@ -101,6 +102,8 @@
 namespace fheroes2
 {
     class Image;
+
+    enum class SupportedLanguage : uint8_t;
 }
 
 namespace
@@ -240,6 +243,46 @@ namespace
         return obeliskCount;
     }
 
+    void replaceTownBasement( const uint32_t townUID, const uint32_t oldIndex, const uint32_t newIndex, const fheroes2::Point mainTilePos )
+    {
+        if ( oldIndex == newIndex ) {
+            // No need to replace.
+            return;
+        }
+
+        const auto & basements = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS );
+        assert( oldIndex < basements.size() );
+        assert( newIndex < basements.size() );
+
+        const auto & oldObject = basements[oldIndex];
+        const auto & newObject = basements[newIndex];
+
+        assert( oldObject.groundLevelParts.size() == newObject.groundLevelParts.size() );
+        assert( oldObject.topLevelParts.size() == newObject.topLevelParts.size() );
+
+        for ( size_t i = 0; i < oldObject.groundLevelParts.size(); ++i ) {
+            const fheroes2::Point pos{ mainTilePos + oldObject.groundLevelParts[i].tileOffset };
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                continue;
+            }
+
+            world.getTile( pos.x, pos.y )
+                .replaceObject( townUID, oldObject.groundLevelParts[i].icnType, newObject.groundLevelParts[i].icnType,
+                                static_cast<uint8_t>( oldObject.groundLevelParts[i].icnIndex ), static_cast<uint8_t>( newObject.groundLevelParts[i].icnIndex ) );
+        }
+
+        for ( size_t i = 0; i < oldObject.topLevelParts.size(); ++i ) {
+            const fheroes2::Point pos{ mainTilePos + oldObject.topLevelParts[i].tileOffset };
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                continue;
+            }
+
+            world.getTile( pos.x, pos.y )
+                .replaceObject( townUID, oldObject.topLevelParts[i].icnType, newObject.topLevelParts[i].icnType,
+                                static_cast<uint8_t>( oldObject.topLevelParts[i].icnIndex ), static_cast<uint8_t>( newObject.topLevelParts[i].icnIndex ) );
+        }
+    }
+
     fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
         if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
@@ -328,6 +371,7 @@ namespace
                 case MP2::OBJ_BARRIER:
                 case MP2::OBJ_BOTTLE:
                 case MP2::OBJ_CAMPFIRE:
+                case MP2::OBJ_EVENT:
                 case MP2::OBJ_FLOTSAM:
                 case MP2::OBJ_HERO:
                 case MP2::OBJ_GENIE_LAMP:
@@ -467,6 +511,10 @@ namespace
                     assert( mapFormat.castleMetadata.find( objectId ) != mapFormat.castleMetadata.end() );
                     mapFormat.castleMetadata.erase( objectId );
 
+                    for ( auto & [language, info] : mapFormat.translationInfo ) {
+                        info.castleMetadata.erase( objectId );
+                    }
+
                     // Remove the castle from `world` castles vector.
                     world.removeCastle( Maps::GetPoint( static_cast<int32_t>( mapTileIndex ) ) );
 
@@ -504,6 +552,10 @@ namespace
                     assert( mapFormat.heroMetadata.find( objectIter->id ) != mapFormat.heroMetadata.end() );
                     mapFormat.heroMetadata.erase( objectIter->id );
 
+                    for ( auto & [language, info] : mapFormat.translationInfo ) {
+                        info.heroMetadata.erase( objectIter->id );
+                    }
+
                     // Properly remove hero object from the `world` tile.
                     world.getTile( static_cast<int32_t>( mapTileIndex ) ).setHero( nullptr );
 
@@ -524,6 +576,10 @@ namespace
                     case MP2::OBJ_EVENT:
                         assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
                         mapFormat.adventureMapEventMetadata.erase( objectIter->id );
+
+                        for ( auto & [language, info] : mapFormat.translationInfo ) {
+                            info.adventureMapEventMetadata.erase( objectIter->id );
+                        }
                         break;
                     case MP2::OBJ_PYRAMID:
                         mapFormat.selectionObjectMetadata.erase( objectIter->id );
@@ -531,10 +587,18 @@ namespace
                     case MP2::OBJ_SIGN:
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
                         mapFormat.signMetadata.erase( objectIter->id );
+
+                        for ( auto & [language, info] : mapFormat.translationInfo ) {
+                            info.signMetadata.erase( objectIter->id );
+                        }
                         break;
                     case MP2::OBJ_SPHINX:
                         assert( mapFormat.sphinxMetadata.find( objectIter->id ) != mapFormat.sphinxMetadata.end() );
                         mapFormat.sphinxMetadata.erase( objectIter->id );
+
+                        for ( auto & [language, info] : mapFormat.translationInfo ) {
+                            info.sphinxMetadata.erase( objectIter->id );
+                        }
                         break;
                     case MP2::OBJ_WITCHS_HUT:
                         mapFormat.selectionObjectMetadata.erase( objectIter->id );
@@ -906,7 +970,7 @@ namespace
         }
     }
 
-    bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, const int32_t tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
+    bool getMovableObjectInfo( const Maps::Map_Format::MapFormat & mapFormat, int32_t & tileId, int32_t & type, Maps::ObjectGroup & group, uint32_t & objectUID )
     {
         // Check which object we really need to move.
         // The logic should be aligned with placeObjectOnTile() function from maps_tiles_helper.cpp file.
@@ -923,18 +987,28 @@ namespace
         // First, find all possible objects in the area around the tile.
         const fheroes2::Point tilePos{ tileId % mapFormat.width, tileId / mapFormat.width };
 
+        struct LocalObjectInfo final
+        {
+            const Maps::Map_Format::TileObjectInfo * object{ nullptr };
+            int32_t tileIndex{ -1 };
+        };
+
         const int32_t minX = std::max( 0, tilePos.x - Maps::maxObjectDimensions.width );
         const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxObjectDimensions.width + 1 );
         const int32_t minY = std::max( 0, tilePos.y - Maps::maxObjectDimensions.height );
         const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxObjectDimensions.height + 1 );
 
-        std::map<uint32_t, const Maps::Map_Format::TileObjectInfo *> potentialObjects;
+        std::map<uint32_t, LocalObjectInfo> potentialObjects;
         for ( int32_t y = minY; y < maxY; ++y ) {
             const int32_t tileOffsetY{ y * mapFormat.width };
             for ( int32_t x = minX; x < maxX; ++x ) {
                 for ( const auto & object : mapFormat.tiles[x + tileOffsetY].objects ) {
                     if ( isObjectMovable( object.group ) ) {
-                        potentialObjects.emplace( object.id, &object );
+                        LocalObjectInfo info;
+                        info.object = &object;
+                        info.tileIndex = x + tileOffsetY;
+
+                        potentialObjects.emplace( object.id, info );
                     }
                 }
             }
@@ -1024,74 +1098,20 @@ namespace
         }
 
         // The object has been found.
-        assert( foundObjectIter->second != nullptr );
-        const Maps::Map_Format::TileObjectInfo & object = *( foundObjectIter->second );
+        const auto & objectInfo = foundObjectIter->second;
 
-        type = static_cast<int32_t>( object.index );
-        if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            // Castles and towns store their colors inside flags.
-            // The chosen tile might not be the main tile of the castle.
-            // We need to get flag information from the main tile.
-            int32_t mainTileIndex = tileId;
+        assert( objectInfo.object != nullptr );
+        assert( objectInfo.tileIndex >= 0 );
+        tileId = objectInfo.tileIndex;
+        type = static_cast<int32_t>( objectInfo.object->index );
+        group = objectInfo.object->group;
+        objectUID = objectInfo.object->id;
 
-            if ( !MP2::isOffGameActionObject( tile.getMainObjectType( false ) ) ) {
-                // This is not the main castle / town tile and also it could be a random castle.
-                // Maps::Tile::getIndexOfMainTile() simply won't work for this case.
-                // So, we need to do our own optimized logic.
-
-                const int32_t foundMainIndex = [tileId, &mapFormat, objectUID = object.id]() -> int32_t {
-                    // Maximum castle size in tile is 5 x 5 and the main tile in not at the bottom.
-                    // So the furthest point from to the center is 3.
-                    constexpr int32_t radiusOfSearch{ 3 };
-                    for ( int32_t y = radiusOfSearch; y >= -1; --y ) {
-                        const int32_t offsetX = tileId + y * mapFormat.width;
-                        for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
-                            const int32_t index = offsetX + x;
-                            if ( !Maps::isValidAbsIndex( index ) ) {
-                                continue;
-                            }
-
-                            const Maps::Tile & foundTile = world.getTile( index );
-                            const MP2::MapObjectType tileObjectType{ foundTile.getMainObjectType( false ) };
-                            // Check that the tile is indeed the main entrance of the castle.
-                            if ( tileObjectType != MP2::OBJ_CASTLE && tileObjectType != MP2::OBJ_RANDOM_CASTLE && tileObjectType != MP2::OBJ_RANDOM_TOWN ) {
-                                continue;
-                            }
-
-                            // Make sure that the object part is also the main entrance of the castle and to the same castle.
-                            const auto & mainObjectPart = foundTile.getMainObjectPart();
-                            if ( objectUID == mainObjectPart._uid ) {
-                                const auto objectPartType = Maps::getObjectTypeByIcn( mainObjectPart.icnType, mainObjectPart.icnIndex );
-                                if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
-                                    return index;
-                                }
-                            }
-
-                            for ( const auto & objectPart : foundTile.getGroundObjectParts() ) {
-                                if ( objectPart._uid == objectUID ) {
-                                    const auto objectPartType = Maps::getObjectTypeByIcn( objectPart.icnType, objectPart.icnIndex );
-                                    if ( objectPartType == MP2::OBJ_CASTLE || objectPartType == MP2::OBJ_RANDOM_CASTLE || objectPartType == MP2::OBJ_RANDOM_TOWN ) {
-                                        return index;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    return -1;
-                }();
-
-                if ( foundMainIndex >= 0 ) {
-                    mainTileIndex = foundMainIndex;
-                }
-            }
-
-            const int color = Maps::getTownColorIndex( mapFormat, mainTileIndex, object.id );
+        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            const int color = Maps::getTownColorIndex( mapFormat, tileId, objectUID );
             type = Interface::EditorPanel::generateTownObjectProperties( type, color );
         }
 
-        group = object.group;
-        objectUID = object.id;
         return true;
     }
 
@@ -1143,6 +1163,108 @@ namespace
 
         copyMetadataIfAvailable( originalObjectUID, newObjectUID, mapFormat.resourceMetadata );
     }
+
+    template <typename T>
+    void preseveMetadata( const uint32_t objectUID, const std::map<uint32_t, T> & allObjectsMetadata, std::unique_ptr<T> & metadata )
+    {
+        auto iter = allObjectsMetadata.find( objectUID );
+        if ( iter != allObjectsMetadata.end() ) {
+            metadata = std::make_unique<T>( iter->second );
+        }
+    }
+
+    template <typename T>
+    void restoreMetadata( const uint32_t objectUID, std::map<uint32_t, T> & allObjectsMetadata, std::unique_ptr<T> & metadata )
+    {
+        if ( !metadata ) {
+            return;
+        }
+
+        // Overwrite any metadata existed before.
+        allObjectsMetadata[objectUID] = std::move( *metadata.release() );
+    }
+
+    struct MovableTranslationFormat final
+    {
+        void preserve( const Maps::Map_Format::TranslationFormat & translationFormat, const uint32_t objectUID )
+        {
+            preseveMetadata( objectUID, translationFormat.castleMetadata, castleMetadata );
+            preseveMetadata( objectUID, translationFormat.heroMetadata, heroMetadata );
+            preseveMetadata( objectUID, translationFormat.sphinxMetadata, sphinxMetadata );
+            preseveMetadata( objectUID, translationFormat.signMetadata, signMetadata );
+            preseveMetadata( objectUID, translationFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+        }
+
+        void restore( Maps::Map_Format::TranslationFormat & translationFormat, const uint32_t objectUID )
+        {
+            restoreMetadata( objectUID, translationFormat.castleMetadata, castleMetadata );
+            restoreMetadata( objectUID, translationFormat.heroMetadata, heroMetadata );
+            restoreMetadata( objectUID, translationFormat.sphinxMetadata, sphinxMetadata );
+            restoreMetadata( objectUID, translationFormat.signMetadata, signMetadata );
+            restoreMetadata( objectUID, translationFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+        }
+
+        std::unique_ptr<std::string> castleMetadata;
+        std::unique_ptr<std::string> heroMetadata;
+        std::unique_ptr<Maps::Map_Format::TranslationSphinxMetadata> sphinxMetadata;
+        std::unique_ptr<std::string> signMetadata;
+        std::unique_ptr<std::string> adventureMapEventMetadata;
+    };
+
+    struct MovableObjectMetadata final
+    {
+        void preserve( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t objectUID )
+        {
+            preseveMetadata( objectUID, mapFormat.castleMetadata, castleMetadata );
+            preseveMetadata( objectUID, mapFormat.heroMetadata, heroMetadata );
+            preseveMetadata( objectUID, mapFormat.sphinxMetadata, sphinxMetadata );
+            preseveMetadata( objectUID, mapFormat.signMetadata, signMetadata );
+            preseveMetadata( objectUID, mapFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+            preseveMetadata( objectUID, mapFormat.selectionObjectMetadata, selectionObjectMetadata );
+            preseveMetadata( objectUID, mapFormat.capturableObjectsMetadata, capturableObjectsMetadata );
+            preseveMetadata( objectUID, mapFormat.monsterMetadata, monsterMetadata );
+            preseveMetadata( objectUID, mapFormat.artifactMetadata, artifactMetadata );
+            preseveMetadata( objectUID, mapFormat.resourceMetadata, resourceMetadata );
+
+            for ( const auto & [language, originalInfo] : mapFormat.translationInfo ) {
+                MovableTranslationFormat info;
+                info.preserve( originalInfo, objectUID );
+
+                translationInfo.try_emplace( language, std::move( info ) );
+            }
+        }
+
+        void restore( Maps::Map_Format::MapFormat & mapFormat, const uint32_t objectUID )
+        {
+            restoreMetadata( objectUID, mapFormat.castleMetadata, castleMetadata );
+            restoreMetadata( objectUID, mapFormat.heroMetadata, heroMetadata );
+            restoreMetadata( objectUID, mapFormat.sphinxMetadata, sphinxMetadata );
+            restoreMetadata( objectUID, mapFormat.signMetadata, signMetadata );
+            restoreMetadata( objectUID, mapFormat.adventureMapEventMetadata, adventureMapEventMetadata );
+            restoreMetadata( objectUID, mapFormat.selectionObjectMetadata, selectionObjectMetadata );
+            restoreMetadata( objectUID, mapFormat.capturableObjectsMetadata, capturableObjectsMetadata );
+            restoreMetadata( objectUID, mapFormat.monsterMetadata, monsterMetadata );
+            restoreMetadata( objectUID, mapFormat.artifactMetadata, artifactMetadata );
+            restoreMetadata( objectUID, mapFormat.resourceMetadata, resourceMetadata );
+
+            for ( auto & [language, originalInfo] : mapFormat.translationInfo ) {
+                translationInfo[language].restore( originalInfo, objectUID );
+            }
+        }
+
+        std::unique_ptr<Maps::Map_Format::CastleMetadata> castleMetadata;
+        std::unique_ptr<Maps::Map_Format::HeroMetadata> heroMetadata;
+        std::unique_ptr<Maps::Map_Format::SphinxMetadata> sphinxMetadata;
+        std::unique_ptr<Maps::Map_Format::SignMetadata> signMetadata;
+        std::unique_ptr<Maps::Map_Format::AdventureMapEventMetadata> adventureMapEventMetadata;
+        std::unique_ptr<Maps::Map_Format::SelectionObjectMetadata> selectionObjectMetadata;
+        std::unique_ptr<Maps::Map_Format::CapturableObjectMetadata> capturableObjectsMetadata;
+        std::unique_ptr<Maps::Map_Format::MonsterMetadata> monsterMetadata;
+        std::unique_ptr<Maps::Map_Format::ArtifactMetadata> artifactMetadata;
+        std::unique_ptr<Maps::Map_Format::ResourceMetadata> resourceMetadata;
+
+        std::map<fheroes2::SupportedLanguage, MovableTranslationFormat> translationInfo;
+    };
 
 #if defined( WITH_DEBUG )
     int32_t getObjectIndex( const Maps::Map_Format::MapFormat & mapFormat, const uint32_t uid, const Maps::ObjectGroup group )
@@ -1264,6 +1386,24 @@ namespace
         return os.str();
     }
 #endif
+
+    fheroes2::GameMode processEditorExitEvent()
+    {
+#if defined( __IPHONEOS__ )
+        // iOS discourages to exit a running application.
+        fheroes2::showStandardTextMessage( _( "Quit" ),
+                                           _( "To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to the current map will be lost.)" ),
+                                           Dialog::OK );
+#else
+        if ( Dialog::YES
+             & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit? (Any unsaved changes to the current map will be lost.)" ),
+                                                  Dialog::YES | Dialog::NO ) ) {
+            return fheroes2::GameMode::QUIT_GAME;
+        }
+#endif
+
+        return fheroes2::GameMode::CANCEL;
+    }
 }
 
 namespace Interface
@@ -1335,7 +1475,13 @@ namespace Interface
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
             if ( _editorPanel.showAreaSelectRect() && ( _tileUnderCursor > -1 ) ) {
-                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+                fheroes2::Rect brushSize;
+                if ( _movableObjectInfo.groupType != Maps::ObjectGroup::NONE ) {
+                    brushSize = getObjectOccupiedArea( _movableObjectInfo.groupType, _movableObjectInfo.objectType );
+                }
+                else {
+                    brushSize = _editorPanel.getBrushArea();
+                }
 
                 if ( brushSize.width > 0 && brushSize.height > 0 ) {
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
@@ -1424,7 +1570,7 @@ namespace Interface
 
         while ( res == fheroes2::GameMode::CANCEL ) {
             if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( processEditorExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     res = fheroes2::GameMode::QUIT_GAME;
 
                     break;
@@ -1438,7 +1584,7 @@ namespace Interface
             // Hotkeys' press event processing.
             if ( le.isAnyKeyPressed() ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                    res = Game::processExitEvent();
+                    res = processEditorExitEvent();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                     res = eventNewMap();
@@ -1489,6 +1635,9 @@ namespace Interface
                     VERBOSE_LOG( getAllMapTexts( _mapFormat ) )
                 }
 #endif
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_AUTO_PLAYTEST ) ) {
+                    _runAutoPlaytest();
+                }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     if ( !_gameArea.isDragScroll() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                         _gameArea.SetScroll( SCROLL_LEFT );
@@ -1557,7 +1706,7 @@ namespace Interface
                 _gameArea.QueueEventProcessing();
             }
             else {
-                if ( fheroes2::cursor().isFocusActive() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                if ( fheroes2::Cursor::isFocusActive() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                     int scrollDirection = SCROLL_NONE;
 
                     if ( isScrollLeft( le.getMouseCursorPos() ) ) {
@@ -1782,6 +1931,12 @@ namespace Interface
                             _resetMovableObjectInfo();
                         }
                     }
+                    else if ( ( le.isMouseWheelUp() && _editorPanel.setPreviousSelectedObjectType() )
+                              || ( le.isMouseWheelDown() && _editorPanel.setNextSelectedObjectType() ) ) {
+                        _editorPanel.setObjectBasedCursor( _editorPanel.getSelectedObjectType(), _editorPanel.getSelectedObjectGroup() );
+                        updateCursor( _tileUnderCursor );
+                        _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                    }
                 }
                 else if ( _areaSelectionStartTileId != -1 ) {
                     assert( _editorPanel.showAreaSelectRect() && isBrushEmpty );
@@ -1848,7 +2003,7 @@ namespace Interface
 
                 setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
-            else if ( _gameArea.needDragScrollRedraw() ) {
+            else if ( _gameArea.needDragScrollRedraw() || _gameArea.updateInertia() ) {
                 setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
 
@@ -1925,6 +2080,7 @@ namespace Interface
         const fheroes2::ButtonBase & buttonSaveMap = optionButtons.button( 3 );
         const fheroes2::ButtonBase & buttonMainMenu = optionButtons.button( 4 );
         const fheroes2::ButtonBase & buttonQuit = optionButtons.button( 5 );
+        const fheroes2::ButtonBase & buttonAutoPlaytest = optionButtons.button( 6 );
 
         fheroes2::Button buttonCancel;
 
@@ -1958,7 +2114,7 @@ namespace Interface
             }
 
             if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
-                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( processEditorExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     return fheroes2::GameMode::QUIT_GAME;
                 }
             }
@@ -1971,36 +2127,20 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonStartMap.area() ) ) {
-                bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
-                if ( isNameEmpty
-                     && fheroes2::showStandardTextMessage(
-                            _( "Unsaved Changes" ),
-                            _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
-                            Dialog::YES | Dialog::NO )
-                            == Dialog::NO ) {
+                if ( !Get()._prepareMapForGameplay() ) {
                     continue;
                 }
-                if ( isNameEmpty ) {
-                    Get().saveMapToFile();
-                    isNameEmpty = conf.getCurrentMapInfo().name.empty();
-                    if ( isNameEmpty ) {
-                        // Saving was aborted.
-                        display.render( background.totalArea() );
-                        continue;
-                    }
+
+                if ( fheroes2::showStandardTextMessage( _( "Start Map" ),
+                                                        _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
+                                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    return fheroes2::GameMode::NEW_STANDARD;
                 }
-                if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
-                    fheroes2::showStandardTextMessage( _( "Unplayable Map" ),
-                                                       _( "This map is not playable. You need at least one human player for the map to be playable." ), Dialog::OK );
-                }
-                else {
-                    if ( fheroes2::
-                             showStandardTextMessage( _( "Start Map" ),
-                                                      _( "Do you wish to leave the Editor and start the map? (Any unsaved changes to the current map will be lost.)" ),
-                                                      Dialog::YES | Dialog::NO )
-                         == Dialog::YES ) {
-                        return fheroes2::GameMode::NEW_STANDARD;
-                    }
+            }
+            else if ( le.MouseClickLeft( buttonAutoPlaytest.area() ) ) {
+                if ( Get()._runAutoPlaytest() ) {
+                    return fheroes2::GameMode::CANCEL;
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
@@ -2020,6 +2160,9 @@ namespace Interface
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonAutoPlaytest.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Auto Playtest" ), _( "Run an automatic playtest of the map." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonMainMenu.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Main Menu" ), _( "Return to the game's Main Menu." ), Dialog::ZERO );
@@ -2604,7 +2747,7 @@ namespace Interface
                 assert( 0 );
             }
 
-            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+            if ( isNewObject && !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
             }
         }
@@ -2693,7 +2836,7 @@ namespace Interface
                 return false;
             }
 
-            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+            if ( isNewObject && !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
             }
         }
@@ -2848,55 +2991,53 @@ namespace Interface
 
         Maps::Tile & tile = world.getTile( destinationTile );
 
-        // Since we want to preserve the object UID (and not to break translations)
-        // we need to temporary set the last object UID here and then reset it back to what it should be before the changes.
-        const uint32_t originalLastObjectUID = Maps::getLastObjectUID();
-
-        // Some objects have metadata. We need to save it before removing objects.
-        // Ideally, we should save only the object's metadata but to make things easier, let's save everything for now.
-        // TODO: save only the current object metadata.
-        std::map<uint32_t, Maps::Map_Format::CastleMetadata> castleMetadata = _mapFormat.castleMetadata;
-        std::map<uint32_t, Maps::Map_Format::HeroMetadata> heroMetadata = _mapFormat.heroMetadata;
-        std::map<uint32_t, Maps::Map_Format::SphinxMetadata> sphinxMetadata = _mapFormat.sphinxMetadata;
-        std::map<uint32_t, Maps::Map_Format::SignMetadata> signMetadata = _mapFormat.signMetadata;
-        std::map<uint32_t, Maps::Map_Format::AdventureMapEventMetadata> adventureMapEventMetadata = _mapFormat.adventureMapEventMetadata;
-        std::map<uint32_t, Maps::Map_Format::SelectionObjectMetadata> selectionObjectMetadata = _mapFormat.selectionObjectMetadata;
-        std::map<uint32_t, Maps::Map_Format::CapturableObjectMetadata> capturableObjectsMetadata = _mapFormat.capturableObjectsMetadata;
-        std::map<uint32_t, Maps::Map_Format::MonsterMetadata> monsterMetadata = _mapFormat.monsterMetadata;
-        std::map<uint32_t, Maps::Map_Format::ArtifactMetadata> artifactMetadata = _mapFormat.artifactMetadata;
-        std::map<uint32_t, Maps::Map_Format::ResourceMetadata> resourceMetadata = _mapFormat.resourceMetadata;
+        MovableObjectMetadata objectMetadata;
+        objectMetadata.preserve( _mapFormat, movableObjectInfo.objectUID );
 
         auto action = std::make_unique<fheroes2::ActionCreator>( _historyManager, _mapFormat );
         removeObjects( _mapFormat, { movableObjectInfo.objectUID }, { movableObjectInfo.groupType }, false );
 
-        Maps::setLastObjectUID( movableObjectInfo.objectUID - 1 );
-
         if ( _tryToPlaceObject( tile, movableObjectInfo.objectType, movableObjectInfo.groupType, false, action ) ) {
             assert( action.get() != nullptr );
 
-            // If this assertion blows up then the code is invalid.
-            assert( Maps::getLastObjectUID() == movableObjectInfo.objectUID );
+            const uint32_t objectNewUID{ Maps::getLastObjectUID() };
+            objectMetadata.restore( _mapFormat, objectNewUID );
 
-            _mapFormat.castleMetadata = std::move( castleMetadata );
-            _mapFormat.heroMetadata = std::move( heroMetadata );
-            _mapFormat.sphinxMetadata = std::move( sphinxMetadata );
-            _mapFormat.signMetadata = std::move( signMetadata );
-            _mapFormat.adventureMapEventMetadata = std::move( adventureMapEventMetadata );
-            _mapFormat.selectionObjectMetadata = std::move( selectionObjectMetadata );
-            _mapFormat.capturableObjectsMetadata = std::move( capturableObjectsMetadata );
-            _mapFormat.monsterMetadata = std::move( monsterMetadata );
-            _mapFormat.artifactMetadata = std::move( artifactMetadata );
-            _mapFormat.resourceMetadata = std::move( resourceMetadata );
-
-            const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( movableObjectInfo.objectUID );
+            const auto capturableObjectIter = _mapFormat.capturableObjectsMetadata.find( objectNewUID );
             if ( capturableObjectIter != _mapFormat.capturableObjectsMetadata.end() ) {
                 world.CaptureObject( destinationTile, capturableObjectIter->second.ownerColor );
             }
 
+            const auto heroObjectIter = _mapFormat.heroMetadata.find( objectNewUID );
+            if ( heroObjectIter != _mapFormat.heroMetadata.end() ) {
+                // A hero was moved. Fix victory and loss conditions.
+                if ( _mapFormat.victoryConditionType == Maps::FileInfo::VICTORY_KILL_HERO
+                     && _mapFormat.victoryConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+
+                if ( _mapFormat.lossConditionType == Maps::FileInfo::LOSS_HERO
+                     && _mapFormat.lossConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.lossConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+            }
+
+            const auto castleObjectIter = _mapFormat.castleMetadata.find( objectNewUID );
+            if ( castleObjectIter != _mapFormat.castleMetadata.end() ) {
+                // A castle was moved. Fix victory and loss conditions.
+                if ( _mapFormat.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN
+                     && _mapFormat.victoryConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.victoryConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+
+                if ( _mapFormat.lossConditionType == Maps::FileInfo::LOSS_TOWN
+                     && _mapFormat.lossConditionMetadata[0] == static_cast<uint32_t>( movableObjectInfo.tileIndex ) ) {
+                    _mapFormat.lossConditionMetadata[0] = static_cast<uint32_t>( destinationTile );
+                }
+            }
+
             action->commit();
         }
-
-        Maps::setLastObjectUID( originalLastObjectUID );
     }
 
     void EditorInterface::_tryToCopyObject( const MovableObjectInfo & movableObjectInfo, const int32_t destinationTile )
@@ -3232,9 +3373,12 @@ namespace Interface
         for ( size_t i = 0; i < _mapFormat.tiles.size(); ++i ) {
             for ( auto & object : _mapFormat.tiles[i].objects ) {
                 if ( object.group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
-                    const auto & worldTile = world.getTile( static_cast<int32_t>( i ) );
-                    const int groundType = Maps::Ground::getGroundByImageIndex( worldTile.getTerrainImageIndex() );
+                    const int groundType = Maps::Ground::getGroundByImageIndex( _mapFormat.tiles[i].terrainIndex );
                     const int32_t basementId = fheroes2::getTownBasementId( groundType );
+
+                    const fheroes2::Point pos{ static_cast<int32_t>( i ) % _mapFormat.width, static_cast<int32_t>( i ) / _mapFormat.width };
+                    replaceTownBasement( object.id, object.index, static_cast<uint32_t>( basementId ), pos );
+
                     object.index = static_cast<uint32_t>( basementId );
                 }
             }
@@ -3354,6 +3498,15 @@ namespace Interface
             ++objectsReplaced;
         }
 
+        // Update translations.
+        for ( auto & [language, info] : _mapFormat.translationInfo ) {
+            replaceKey( info.castleMetadata, object.id, newObjectUID );
+            replaceKey( info.heroMetadata, object.id, newObjectUID );
+            replaceKey( info.sphinxMetadata, object.id, newObjectUID );
+            replaceKey( info.signMetadata, object.id, newObjectUID );
+            replaceKey( info.adventureMapEventMetadata, object.id, newObjectUID );
+        }
+
         assert( objectsReplaced == 0 || objectsReplaced == 1 );
     }
 
@@ -3403,5 +3556,109 @@ namespace Interface
             action.commit();
             _redraw |= mapUpdateFlags;
         }
+    }
+
+    fheroes2::Rect EditorInterface::getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
+    {
+        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            // TODO: make occupied area calculation for complex objects.
+            return { -2, -3, 5, 5 };
+        }
+
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+            assert( 0 );
+            return { 0, 0, 1, 1 };
+        }
+
+        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
+        if ( offsets.size() < 2 ) {
+            return { 0, 0, 1, 1 };
+        }
+
+        fheroes2::Point minPos{ offsets.front() };
+        fheroes2::Point maxPos{ offsets.front() };
+
+        for ( const auto & offset : offsets ) {
+            minPos.x = std::min( minPos.x, offset.x );
+            minPos.y = std::min( minPos.y, offset.y );
+            maxPos.x = std::max( maxPos.x, offset.x );
+            maxPos.y = std::max( maxPos.y, offset.y );
+        }
+
+        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
+    }
+
+    bool EditorInterface::_prepareMapForGameplay()
+    {
+        const auto & conf = Settings::Get();
+
+        bool isNameEmpty = conf.getCurrentMapInfo().name.empty();
+        if ( isNameEmpty
+             && fheroes2::showStandardTextMessage(
+                    _( "Unsaved Changes" ),
+                    _( "This map has either terrain changes, undo history or has not yet been saved to a file.\n\nDo you wish to save the current map?" ),
+                    Dialog::YES | Dialog::NO )
+                    == Dialog::NO ) {
+            return false;
+        }
+
+        if ( isNameEmpty ) {
+            saveMapToFile();
+            isNameEmpty = conf.getCurrentMapInfo().name.empty();
+            if ( isNameEmpty ) {
+                // File save I/O operation failed.
+                return false;
+            }
+        }
+
+        if ( conf.getCurrentMapInfo().colorsAvailableForHumans == 0 ) {
+            fheroes2::showStandardTextMessage( _( "Unplayable Map" ), _( "This map is not playable. You need at least one human player for the map to be playable." ),
+                                               Dialog::OK );
+            return false;
+        }
+
+        return true;
+    }
+
+    bool EditorInterface::_runAutoPlaytest()
+    {
+        if ( !_prepareMapForGameplay() ) {
+            return false;
+        }
+
+        // Make a copy of the current map.
+        Settings & conf = Settings::Get();
+        Maps::FileInfo mapInfo = conf.getCurrentMapInfo();
+
+        RWStreamBuf _beforeMapFormat;
+        if ( !Maps::Map_Format::saveMap( _beforeMapFormat, _mapFormat ) ) {
+            assert( 0 );
+            return false;
+        }
+
+        const uint32_t _latestObjectUIDBefore{ Maps::getLastObjectUID() };
+
+        if ( fheroes2::openMapAutoPlayTest() ) {
+            // Restore the map.
+            if ( !Maps::Map_Format::loadMap( _beforeMapFormat, _mapFormat ) ) {
+                assert( 0 );
+            }
+
+            if ( !Maps::readMapInEditor( _mapFormat ) ) {
+                // If this assertion blows up then something is really wrong with the Editor.
+                assert( 0 );
+            }
+
+            Maps::setLastObjectUID( _latestObjectUIDBefore );
+            conf.setCurrentMapInfo( std::move( mapInfo ) );
+
+            // Make sure to redraw everything as we are switching from the game into the Editor.
+            setRedraw( REDRAW_ALL );
+
+            return true;
+        }
+
+        return false;
     }
 }

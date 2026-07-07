@@ -46,6 +46,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_mode.h"
@@ -1715,7 +1716,7 @@ namespace
         Maps::Tile & tile = world.getTile( dst_index );
         const Kingdom & kingdom = hero.GetKingdom();
 
-        if ( kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) ) ) {
+        if ( kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) ) ) {
             removeMainObjectFromTile( tile );
             resetObjectMetadata( tile );
         }
@@ -1728,7 +1729,7 @@ namespace
         const Maps::Tile & tile = world.getTile( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
 
-        kingdom.SetVisitTravelersTent( getBarrierColorFromTile( tile ) );
+        kingdom.markTravellerTentVisited( getBarrierColorFromTile( tile ) );
     }
 
     void AIToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -2269,6 +2270,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
     Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
     const Settings & conf = Settings::Get();
+    const bool isAutoPlaytest{ conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) };
 
     const PlayerColorsSet colors = AIGetAllianceColors();
     bool recenterNeeded = true;
@@ -2286,6 +2288,10 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+        if ( isAutoPlaytest && le.isMouseLeftButtonPressed() ) {
+            fheroes2::interruptAutoPlaytest();
+        }
+
         if ( !hero.isActive() || !hero.isMoveEnabled() ) {
             break;
         }

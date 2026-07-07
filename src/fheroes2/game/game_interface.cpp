@@ -30,6 +30,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -132,7 +133,9 @@ void Interface::AdventureMap::redraw( const uint32_t force )
     const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
-        _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+        if ( !conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) {
+            _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+        }
 
         if ( hideInterface && conf.ShowControlPanel() ) {
             _controlPanel._redraw();

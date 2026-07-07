@@ -67,7 +67,7 @@ namespace Maps
         uint8_t animationFrames{ 0 };
     };
 
-    struct LayeredObjectPartInfo : public ObjectPartInfo
+    struct LayeredObjectPartInfo final : public ObjectPartInfo
     {
         LayeredObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point & offset, const MP2::MapObjectType type,
                                const ObjectLayerType layer )
