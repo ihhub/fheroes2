@@ -351,13 +351,27 @@ namespace
                 _palette32Bit.resize( fheroes2::RGBPaletteSize );
 
                 if ( surface->format->Amask > 0 ) {
-                    for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
-                        _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
+                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
+                        }
+                    }
+                    else if ( surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
+                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
+                        }
                     }
                 }
                 else {
-                    for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
-                        _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGR();
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBX32 ) {
+                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBX();
+                        }
+                    }
+                    else if ( surface->format->format == SDL_PIXELFORMAT_BGRX32 ) {
+                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRX();
+                        }
                     }
                 }
             }
@@ -386,7 +400,7 @@ namespace
                 return nullptr;
             }
 
-            SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat( 0, icon.width(), icon.height(), 32, SDL_PIXELFORMAT_RGBA32 );
+            SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == nullptr ) {
                 ERROR_LOG( "Failed to create a surface of " << icon.width() << " x " << icon.height() << " size for cursor. The error: " << SDL_GetError() )
                 return nullptr;
@@ -410,7 +424,7 @@ namespace
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        *out = currentRGBPalette[*in].getRGB();
+                        *out = currentRGBPalette[*in].getRGBX();
                     }
                     else {
                         *out = 0;
@@ -456,7 +470,7 @@ namespace
             return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
-        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        void update( const fheroes2::Image & image, const int32_t offsetX, const int32_t offsetY ) override
         {
             if ( image.empty() || image.singleLayer() ) {
                 // What are you trying to do? Set an invisible cursor? Use hide() method!
@@ -469,7 +483,7 @@ namespace
                 return;
             }
 
-            SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat( 0, image.width(), image.height(), 32, SDL_PIXELFORMAT_RGBA32 );
+            SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == nullptr ) {
                 ERROR_LOG( "Failed to create a surface of " << image.width() << " x " << image.height() << " size for cursor. The error: " << SDL_GetError() )
                 return;
@@ -499,7 +513,7 @@ namespace
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        *out = currentRGBPalette[*in].getRGB();
+                        *out = currentRGBPalette[*in].getRGBX();
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -738,11 +752,18 @@ namespace
 
             uint32_t palette32Bit[fheroes2::RGBPaletteSize];
 
-            for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
-                palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
+            if ( surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
+                for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                    palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
+                }
+            }
+            else if ( surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
+                for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                    palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
+                }
             }
 
-            memcpy( vita2d_texture_get_palette( _texBuffer ), palette32Bit, sizeof( uint32_t ) * 256 );
+            memcpy( vita2d_texture_get_palette( _texBuffer ), palette32Bit, sizeof( uint32_t ) * fheroes2::RGBPaletteSize );
         }
 
         bool isMouseCursorActive() const override

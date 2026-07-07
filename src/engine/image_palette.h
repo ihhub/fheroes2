@@ -55,12 +55,12 @@ namespace fheroes2
             return ( 255U << 24U ) + ( static_cast<uint32_t>( b ) << 16U ) + ( static_cast<uint32_t>( g ) << 8U ) + static_cast<uint32_t>( r );
         }
 
-        uint32_t getBGR() const
+        uint32_t getBGRX() const
         {
             return ( static_cast<uint32_t>( r ) << 16U ) + ( static_cast<uint32_t>( g ) << 8U ) + static_cast<uint32_t>( b );
         }
 
-        uint32_t getRGB() const
+        uint32_t getRGBX() const
         {
             return ( static_cast<uint32_t>( b ) << 16U ) + ( static_cast<uint32_t>( g ) << 8U ) + static_cast<uint32_t>( r );
         }
