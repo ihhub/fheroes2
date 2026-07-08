@@ -641,7 +641,6 @@ namespace
         }
 
     private:
-        SDL_Surface * _surface{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
         fheroes2::Rect _destRect;
@@ -657,11 +656,6 @@ namespace
 
         void clear() override
         {
-            if ( _surface != nullptr ) {
-                SDL_FreeSurface( _surface );
-                _surface = nullptr;
-            }
-
             vita2d_fini();
 
             if ( _texBuffer != nullptr ) {
@@ -681,15 +675,6 @@ namespace
             }
 
             vita2d_init();
-
-            _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
-
-            if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
-                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
-
-                clear();
-                return false;
-            }
 
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( resolutionInfo.gameWidth, resolutionInfo.gameHeight, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
@@ -724,18 +709,24 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( _surface == nullptr || colorIds.size() != 256 || _texBuffer == nullptr )
+            if ( colorIds.size() != 256U || _texBuffer == nullptr )
                 return;
 
-            uint32_t palette32Bit[256u];
+            auto * palette32Bit = reinterpret_cast<uint32_t *>( vita2d_texture_get_palette( _texBuffer ) );
 
-            for ( size_t i = 0; i < 256u; ++i ) {
+            for ( size_t i = 0; i < 256U; ++i ) {
                 const uint8_t * value = currentPalette + colorIds[i] * 3;
-                // TODO: here we don't need to use SDL_MapRGBA() and directly create 32-bit values from the given RGB values.
-                palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                // Red.
+                palette32Bit[i] = *value;
+                ++value;
+                // Green.
+                palette32Bit[i] += static_cast<uint32_t>( *value ) << 8U;
+                ++value;
+                // Blue.
+                palette32Bit[i] += static_cast<uint32_t>( *value ) << 16U;
+                // Alpha channel. Always non-transparent.
+                palette32Bit[i] += ( 255U << 24U );
             }
-
-            memcpy( vita2d_texture_get_palette( _texBuffer ), palette32Bit, sizeof( uint32_t ) * 256 );
         }
 
         bool isMouseCursorActive() const override
