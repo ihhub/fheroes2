@@ -729,6 +729,9 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
+            if ( colorIds.size() != fheroes2::RGBPaletteSize || _texBuffer == nullptr )
+                return;
+
             auto * palette32Bit = reinterpret_cast<uint32_t *>( vita2d_texture_get_palette( _texBuffer ) );
 
             for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
