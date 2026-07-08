@@ -56,6 +56,8 @@
 #pragma GCC diagnostic pop
 #endif
 
+#define TARGET_PS_VITA
+
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
@@ -661,8 +663,6 @@ namespace
         }
 
     private:
-        SDL_Window * _window{ nullptr };
-        SDL_Surface * _surface{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
         fheroes2::Rect _destRect;
@@ -678,16 +678,6 @@ namespace
 
         void clear() override
         {
-            if ( _window != nullptr ) {
-                SDL_DestroyWindow( _window );
-                _window = nullptr;
-            }
-
-            if ( _surface != nullptr ) {
-                SDL_FreeSurface( _surface );
-                _surface = nullptr;
-            }
-
             vita2d_fini();
 
             if ( _texBuffer != nullptr ) {
@@ -707,24 +697,6 @@ namespace
             }
 
             vita2d_init();
-
-            _window = SDL_CreateWindow( "", 0, 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, 0 );
-            if ( _window == nullptr ) {
-                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
-                                                                        << " size. The error: " << SDL_GetError() )
-
-                clear();
-                return false;
-            }
-
-            _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
-
-            if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
-                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
-
-                clear();
-                return false;
-            }
 
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( resolutionInfo.gameWidth, resolutionInfo.gameHeight, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
@@ -759,23 +731,11 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( _surface == nullptr || colorIds.size() != fheroes2::RGBPaletteSize || _texBuffer == nullptr )
-                return;
+            auto * palette32Bit = reinterpret_cast<uint32_t *>( vita2d_texture_get_palette( _texBuffer ) );
 
-            uint32_t palette32Bit[fheroes2::RGBPaletteSize];
-
-            if ( _surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
-                for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
-                    palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
-                }
+            for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
             }
-            else if ( _surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
-                for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
-                    palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
-                }
-            }
-
-            memcpy( vita2d_texture_get_palette( _texBuffer ), palette32Bit, sizeof( uint32_t ) * fheroes2::RGBPaletteSize );
         }
 
         bool isMouseCursorActive() const override
