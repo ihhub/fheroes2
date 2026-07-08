@@ -56,8 +56,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-#define TARGET_PS_VITA
-
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
