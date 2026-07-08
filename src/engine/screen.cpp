@@ -39,6 +39,14 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+
+#if defined( TARGET_PS_VITA )
+#include <vita2d.h>
+#else
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_hints.h>
@@ -50,14 +58,6 @@
 #include <SDL_surface.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
-
-// Managing compiler warnings for SDL headers
-#if defined( __GNUC__ )
-#pragma GCC diagnostic pop
-#endif
-
-#if defined( TARGET_PS_VITA )
-#include <vita2d.h>
 #endif
 
 #include "image_palette.h"
@@ -426,7 +426,6 @@ namespace
             return surface;
         }
     };
-#endif
 
     class RenderCursor final : public fheroes2::Cursor
     {
@@ -442,7 +441,7 @@ namespace
 
         void show( const bool enable ) override
         {
-            fheroes2::Cursor::show( enable );
+            Cursor::show( enable );
 
             if ( !_emulation ) {
                 const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -455,10 +454,10 @@ namespace
         bool isVisible() const override
         {
             if ( _emulation ) {
-                return fheroes2::Cursor::isVisible();
+                return Cursor::isVisible();
             }
 
-            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            return Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
@@ -470,7 +469,7 @@ namespace
             }
 
             if ( _emulation ) {
-                fheroes2::Cursor::update( image, offsetX, offsetY );
+                Cursor::update( image, offsetX, offsetY );
                 return;
             }
 
@@ -589,8 +588,59 @@ namespace
             }
         }
     };
+#endif
 
 #if defined( TARGET_PS_VITA )
+    class RenderCursor final : public fheroes2::Cursor
+    {
+    public:
+        RenderCursor( const RenderCursor & ) = delete;
+
+        ~RenderCursor() override {}
+
+        RenderCursor & operator=( const RenderCursor & ) = delete;
+
+        void show( const bool enable ) override
+        {
+            Cursor::show( enable );
+        }
+
+        bool isVisible() const override
+        {
+            return Cursor::isVisible();
+        }
+
+        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        {
+            if ( image.empty() || image.singleLayer() ) {
+                // What are you trying to do? Set an invisible cursor? Use hide() method!
+                assert( 0 );
+                return;
+            }
+
+            Cursor::update( image, offsetX, offsetY );
+        }
+
+        void enableSoftwareEmulation( const bool /* unused */ ) override
+        {
+            if ( _cursorUpdater != nullptr ) {
+                _cursorUpdater();
+            }
+        }
+
+        static RenderCursor * create()
+        {
+            return new RenderCursor;
+        }
+
+    private:
+        RenderCursor()
+        {
+            // PS Vita supports only software cursor.
+            _emulation = true;
+        }
+    };
+
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
@@ -697,7 +747,7 @@ namespace
             const int32_t width = display.width();
             const int32_t height = display.height();
 
-            SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+            memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
             vita2d_draw_rectangle( 0, 0, VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 0xff000000 );
