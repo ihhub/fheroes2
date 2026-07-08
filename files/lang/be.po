@@ -4499,7 +4499,8 @@ msgid ""
 "the current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -4917,10 +4918,6 @@ msgid "Delete an existing language."
 msgstr "Выдаліць існуючую мову."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "Exit the Editor and return to the game's Main Menu."
