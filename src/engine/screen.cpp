@@ -18,11 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "screen.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cmath>
-#include <cstdint>
 #include <cstring>
 #include <iterator>
 #include <optional>
@@ -63,7 +64,6 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "math_tools.h"
-#include "screen.h"
 #include "system.h"
 
 namespace
@@ -366,7 +366,7 @@ namespace
 #if SDL_VERSION_ATLEAST( 2, 30, 0 )
                     if ( surface->format->format == SDL_PIXELFORMAT_RGBX32 ) {
 #elif SDL_BYTEORDER == SDL_BIG_ENDIAN
-                    if ( surface->format->format == SDL_PIXELFORMAT_XRGB8888 ) {
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBX8888 ) {
 #else
                     if ( surface->format->format == SDL_PIXELFORMAT_XBGR8888 ) {
 #endif
@@ -377,7 +377,7 @@ namespace
 #if SDL_VERSION_ATLEAST( 2, 30, 0 )
                     else if ( surface->format->format == SDL_PIXELFORMAT_BGRX32 ) {
 #elif SDL_BYTEORDER == SDL_BIG_ENDIAN
-                    if ( surface->format->format == SDL_PIXELFORMAT_XBGR8888 ) {
+                    if ( surface->format->format == SDL_PIXELFORMAT_BGRX8888 ) {
 #else
                     if ( surface->format->format == SDL_PIXELFORMAT_XRGB8888 ) {
 #endif
