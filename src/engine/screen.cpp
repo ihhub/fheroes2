@@ -30,6 +30,9 @@
 #include <set>
 #include <utility>
 
+#if defined( TARGET_PS_VITA )
+#include <vita2d.h>
+#else
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
 #pragma GCC diagnostic push
@@ -39,14 +42,6 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
-// Managing compiler warnings for SDL headers
-#if defined( __GNUC__ )
-#pragma GCC diagnostic pop
-#endif
-
-#if defined( TARGET_PS_VITA )
-#include <vita2d.h>
-#else
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_hints.h>
@@ -58,6 +53,11 @@
 #include <SDL_surface.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
+
+// Managing compiler warnings for SDL headers
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 #include "image_palette.h"
