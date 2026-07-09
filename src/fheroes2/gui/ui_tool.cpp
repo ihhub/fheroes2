@@ -364,6 +364,8 @@ namespace fheroes2
             return;
         }
 
+        const auto * paletteRGB = reinterpret_cast<const RGB *>( palette.data() );
+
         // The biggest problem here is that the palette could be different from the one in the game.
         // Since we want to do color fading to grayscale colors we take the original palette and
         // find the nearest colors in video's palette to grayscale colors of the original palette.
@@ -372,39 +374,36 @@ namespace fheroes2
 
         std::array<RGB, RGBPaletteSize> normalizedPalette = getNormalizedRGBGamePalette();
 
-        // Yes, these values are hardcoded. There are ways to do it programmatically.
-        const int32_t startGrayScaleColorId = 10;
-        const int32_t endGrayScaleColorId = 36;
+        std::vector<uint8_t> assignedValue( RGBPaletteSize );
 
-        // The game's palette has 256 color indexes.
-        const size_t paletteIndexes = RGBPaletteSize;
-
-        std::vector<uint8_t> assignedValue( paletteIndexes );
-
-        for ( size_t id = 0; id < paletteIndexes; ++id ) {
+        for ( size_t id = 0; id < RGBPaletteSize; ++id ) {
             int32_t nearestDistance = INT32_MAX;
 
+            // Yes, these values are hardcoded. There are ways to do it programmatically.
+            constexpr uint8_t startGrayScaleColorId = 10;
+            constexpr uint8_t endGrayScaleColorId = 36;
+
             for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
-                const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( normalizedPalette[colorId].r );
-                const int32_t greenDiff = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( normalizedPalette[colorId].g );
-                const int32_t blueDiff = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( normalizedPalette[colorId].b );
+                const int32_t redDiff = static_cast<int32_t>( paletteRGB[id].r ) - static_cast<int32_t>( normalizedPalette[colorId].r );
+                const int32_t greenDiff = static_cast<int32_t>( paletteRGB[id].g ) - static_cast<int32_t>( normalizedPalette[colorId].g );
+                const int32_t blueDiff = static_cast<int32_t>( paletteRGB[id].b ) - static_cast<int32_t>( normalizedPalette[colorId].b );
 
                 const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
                 if ( nearestDistance > distance ) {
                     nearestDistance = distance;
                     assignedValue[id] = colorId;
+
+                    if ( distance == 0 ) {
+                        break;
+                    }
                 }
             }
         }
 
         std::array<uint8_t, paletteSizeBytes> endPalette{ 0 };
-        for ( size_t i = 0; i < paletteIndexes; ++i ) {
-            // Red color.
-            endPalette[i * 3] = normalizedPalette[assignedValue[i]].r;
-            // Green color.
-            endPalette[i * 3 + 1] = normalizedPalette[assignedValue[i]].g;
-            // Blue color.
-            endPalette[i * 3 + 2] = normalizedPalette[assignedValue[i]].b;
+        auto * endPaletteRGB = reinterpret_cast<RGB *>( endPalette.data() );
+        for ( size_t i = 0; i < RGBPaletteSize; ++i ) {
+            endPaletteRGB[i] = normalizedPalette[assignedValue[i]];
         }
 
         const uint32_t delay = static_cast<uint32_t>( std::round( 1000.0 / fps ) );
