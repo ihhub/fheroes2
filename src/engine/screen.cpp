@@ -694,6 +694,7 @@ namespace
         }
 
     private:
+        // SDL capture touchscreen events only in SDL_Window rectangle. We create SDL_Window on PS Vita only for this purpose.
         SDL_Window * _window{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
