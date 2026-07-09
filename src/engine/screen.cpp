@@ -691,6 +691,7 @@ namespace
         }
 
     private:
+        SDL_Window * _window{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
         fheroes2::Rect _destRect;
@@ -706,6 +707,11 @@ namespace
 
         void clear() override
         {
+            if ( _window != nullptr ) {
+                SDL_DestroyWindow( _window );
+                _window = nullptr;
+            }
+
             vita2d_fini();
 
             if ( _texBuffer != nullptr ) {
@@ -725,6 +731,15 @@ namespace
             }
 
             vita2d_init();
+
+            _window = SDL_CreateWindow( "", 0, 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, 0 );
+            if ( _window == nullptr ) {
+                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight
+                                                                        << " size. The error: " << SDL_GetError() )
+
+                clear();
+                return false;
+            }
 
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( resolutionInfo.gameWidth, resolutionInfo.gameHeight, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
