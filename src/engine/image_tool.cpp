@@ -73,7 +73,7 @@ namespace
     bool SaveImage( const fheroes2::Image & image, std::string path )
 #endif
     {
-        const std::array<fheroes2::RGB, fheroes2::RGBPaletteSize> & palette = fheroes2::getNormalizedRGBGamePalette();
+        const std::array<fheroes2::RGB, fheroes2::paletteSize> & palette = fheroes2::getNormalizedRGBGamePalette();
         const fheroes2::RGB * currentPalette = palette.data();
 
         const int32_t width = image.width();
@@ -87,8 +87,8 @@ namespace
 
         assert( surface->format->BitsPerPixel == 8 );
 
-        std::array<SDL_Color, fheroes2::RGBPaletteSize> paletteSDL{};
-        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+        std::array<SDL_Color, fheroes2::paletteSize> paletteSDL{};
+        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
             const auto & value = currentPalette[i];
             SDL_Color & col = paletteSDL[i];
 
@@ -98,7 +98,7 @@ namespace
             col.a = 255;
         }
 
-        SDL_SetPaletteColors( surface->format->palette, paletteSDL.data(), 0, fheroes2::RGBPaletteSize );
+        SDL_SetPaletteColors( surface->format->palette, paletteSDL.data(), 0, fheroes2::paletteSize );
 
         if ( surface->pitch != width ) {
             const uint8_t * imageIn = image.image();

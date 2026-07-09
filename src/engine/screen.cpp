@@ -197,8 +197,8 @@ namespace
 
     std::vector<uint8_t> StandardPaletteIndexes()
     {
-        std::vector<uint8_t> indexes( fheroes2::RGBPaletteSize );
-        for ( uint32_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+        std::vector<uint8_t> indexes( fheroes2::paletteSize );
+        for ( uint32_t i = 0; i < fheroes2::paletteSize; ++i ) {
             indexes[i] = static_cast<uint8_t>( i );
         }
         return indexes;
@@ -206,7 +206,7 @@ namespace
 
     const fheroes2::RGB * RGBPalette( const bool forceDefaultPaletteUpdate = false )
     {
-        static std::array<fheroes2::RGB, fheroes2::RGBPaletteSize> palette;
+        static std::array<fheroes2::RGB, fheroes2::paletteSize> palette;
         static bool paletteInitialized = false;
         if ( forceDefaultPaletteUpdate || !paletteInitialized ) {
             palette = fheroes2::getNormalizedRGBGamePalette();
@@ -348,16 +348,16 @@ namespace
             assert( surface != nullptr );
 
             if ( surface->format->BitsPerPixel == 32 ) {
-                _palette32Bit.resize( fheroes2::RGBPaletteSize );
+                _palette32Bit.resize( fheroes2::paletteSize );
 
                 if ( surface->format->Amask > 0 ) {
                     if ( surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
-                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
                             _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
                         }
                     }
                     else if ( surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
-                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
                             _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
                         }
                     }
@@ -370,7 +370,7 @@ namespace
 #else
                     if ( surface->format->format == SDL_PIXELFORMAT_XBGR8888 ) {
 #endif
-                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
                             _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBX();
                         }
                     }
@@ -381,15 +381,15 @@ namespace
 #else
                     if ( surface->format->format == SDL_PIXELFORMAT_XRGB8888 ) {
 #endif
-                        for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
                             _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRX();
                         }
                     }
                 }
             }
             else if ( surface->format->BitsPerPixel == 8 ) {
-                _palette8Bit.resize( fheroes2::RGBPaletteSize );
-                for ( uint32_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+                _palette8Bit.resize( fheroes2::paletteSize );
+                for ( uint32_t i = 0; i < fheroes2::paletteSize; ++i ) {
                     const auto & pal = currentRGBPalette[colorIds[i]];
                     SDL_Color & col = _palette8Bit[i];
 
@@ -744,12 +744,12 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( colorIds.size() != fheroes2::RGBPaletteSize || _texBuffer == nullptr )
+            if ( colorIds.size() != fheroes2::paletteSize || _texBuffer == nullptr )
                 return;
 
             auto * palette32Bit = reinterpret_cast<uint32_t *>( vita2d_texture_get_palette( _texBuffer ) );
 
-            for ( size_t i = 0; i < fheroes2::RGBPaletteSize; ++i ) {
+            for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
                 palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
             }
         }

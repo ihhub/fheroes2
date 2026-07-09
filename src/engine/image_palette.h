@@ -27,7 +27,7 @@
 
 namespace fheroes2
 {
-    constexpr size_t RGBPaletteSize = 256;
+    constexpr size_t paletteSize = 256;
 
     struct RGB final
     {
@@ -71,13 +71,16 @@ namespace fheroes2
         }
     };
 
+    // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
+    constexpr size_t paletteSizeBytes = paletteSize * sizeof( RGB );
+
     const uint8_t * getGamePalette();
 
     // Get the original game palette with color data in range: 0-63.
     const RGB * getRGBGamePalette();
 
     // Get the normalized game palette with color data in range: 0-255.
-    std::array<RGB, RGBPaletteSize> getNormalizedRGBGamePalette();
+    std::array<RGB, paletteSize> getNormalizedRGBGamePalette();
 
     // This function must be called only at the start of the application after loading AGG file content.
     void setGamePalette( const std::vector<uint8_t> & palette );

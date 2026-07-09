@@ -34,8 +34,8 @@ namespace
             return paletteHolder;
         }
 
-        static_assert( fheroes2::RGBPaletteSize * sizeof( fheroes2::RGB ) == 768, "Palette format has changed! Check your logic." );
-        std::array<uint8_t, fheroes2::RGBPaletteSize * sizeof( fheroes2::RGB )> gamePalette{ 0 };
+        static_assert( fheroes2::paletteSizeBytes == 768, "Palette format has changed! Check your logic." );
+        std::array<uint8_t, fheroes2::paletteSizeBytes> gamePalette{ 0 };
 
     private:
         PaletteHolder()
@@ -89,14 +89,12 @@ namespace fheroes2
         return reinterpret_cast<const RGB *>( PaletteHolder::instance().gamePalette.data() );
     }
 
-    std::array<RGB, RGBPaletteSize> getNormalizedRGBGamePalette()
+    std::array<RGB, paletteSize> getNormalizedRGBGamePalette()
     {
-        std::array<RGB, RGBPaletteSize> palette;
+        std::array<RGB, paletteSize> palette;
 
         const uint8_t * originalPalette = PaletteHolder::instance().gamePalette.data();
         auto * normalizedPalette = reinterpret_cast<uint8_t *>( palette.data() );
-
-        constexpr size_t paletteSizeBytes = RGBPaletteSize * sizeof( RGB );
 
         for ( size_t i = 0; i < paletteSizeBytes; ++i ) {
             normalizedPalette[i] = static_cast<uint8_t>( originalPalette[i] << 2 );
@@ -107,7 +105,6 @@ namespace fheroes2
 
     void setGamePalette( const std::vector<uint8_t> & palette )
     {
-        constexpr size_t paletteSizeBytes = RGBPaletteSize * sizeof( RGB );
         assert( palette.size() == paletteSizeBytes );
         if ( palette.size() != paletteSizeBytes ) {
             return;

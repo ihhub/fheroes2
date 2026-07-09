@@ -45,7 +45,6 @@
 
 namespace
 {
-    constexpr size_t validPaletteSize = 768;
     constexpr uint8_t imageBackground = 142;
 
     bool isH2DImageItem( const std::string_view name )
@@ -78,8 +77,8 @@ namespace
         }
 
         const std::vector<uint8_t> palette = paletteStream.getRaw( 0 );
-        if ( palette.size() != validPaletteSize ) {
-            std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
+        if ( palette.size() != fheroes2::paletteSizeBytes ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of " << fheroes2::paletteSizeBytes << std::endl;
             return false;
         }
 

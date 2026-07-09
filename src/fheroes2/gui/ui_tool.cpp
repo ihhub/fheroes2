@@ -357,8 +357,6 @@ namespace fheroes2
     {
         assert( fps > 0 );
 
-        // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
-        constexpr size_t paletteSizeBytes = RGBPaletteSize * sizeof( RGB );
         // Do a color fade only for valid palette.
         if ( palette.size() != paletteSizeBytes ) {
             return;
@@ -372,11 +370,11 @@ namespace fheroes2
         // Then we gradually change the current palette to be only grayscale and after reaching the
         // last frame change all colors of the frame to be only grayscale colors of the original palette.
 
-        std::array<RGB, RGBPaletteSize> normalizedPalette = getNormalizedRGBGamePalette();
+        std::array<RGB, paletteSize> normalizedPalette = getNormalizedRGBGamePalette();
 
-        std::vector<uint8_t> assignedValue( RGBPaletteSize );
+        std::vector<uint8_t> assignedValue( paletteSize );
 
-        for ( size_t id = 0; id < RGBPaletteSize; ++id ) {
+        for ( size_t id = 0; id < paletteSize; ++id ) {
             int32_t nearestDistance = INT32_MAX;
 
             // Yes, these values are hardcoded. There are ways to do it programmatically.
@@ -402,7 +400,7 @@ namespace fheroes2
 
         std::array<uint8_t, paletteSizeBytes> endPalette{ 0 };
         auto * endPaletteRGB = reinterpret_cast<RGB *>( endPalette.data() );
-        for ( size_t i = 0; i < RGBPaletteSize; ++i ) {
+        for ( size_t i = 0; i < paletteSize; ++i ) {
             endPaletteRGB[i] = normalizedPalette[assignedValue[i]];
         }
 
