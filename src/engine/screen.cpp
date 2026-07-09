@@ -29,27 +29,6 @@
 #include <ostream>
 #include <set>
 #include <utility>
-#define TARGET_PS_VITA
-#if defined( TARGET_PS_VITA )
-// Managing compiler warnings for SDL headers
-#if defined( __GNUC__ )
-#pragma GCC diagnostic push
-
-#pragma GCC diagnostic ignored "-Wdouble-promotion"
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#pragma GCC diagnostic ignored "-Wswitch-default"
-#endif
-
-#include <SDL_video.h>
-
-// Managing compiler warnings for SDL headers
-#if defined( __GNUC__ )
-#pragma GCC diagnostic pop
-#endif
-
-#include <vita2d.h>
-
-#else
 
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
@@ -60,6 +39,7 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
+#if !defined( TARGET_PS_VITA )
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_hints.h>
@@ -70,6 +50,8 @@
 #include <SDL_stdinc.h>
 #include <SDL_surface.h>
 #include <SDL_version.h>
+#endif
+
 #include <SDL_video.h>
 
 // Managing compiler warnings for SDL headers
@@ -77,6 +59,9 @@
 #pragma GCC diagnostic pop
 #endif
 
+
+#if defined( TARGET_PS_VITA )
+#include <vita2d.h>
 #endif
 
 #include "image_palette.h"
