@@ -2148,9 +2148,7 @@ namespace Interface
             }
 
             if ( le.isMouseRightButtonPressedInArea( buttonNewMap.area() ) ) {
-                // TODO: update this text once random map generator is ready.
-                //       The original text should be "Create a new map, either from scratch or using the random map generator."
-                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map from scratch." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map, either from scratch or using the random map generator." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonLoadMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );

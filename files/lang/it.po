@@ -4397,7 +4397,8 @@ msgstr ""
 "Sei sicuro di voler cominciare una nuova partita? (La partita attuale andrà "
 "perduta.)"
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -4843,10 +4844,6 @@ msgid "Delete an existing language."
 msgstr "Scegli lingua del gioco"
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy

@@ -4510,8 +4510,9 @@ msgstr ""
 "¿Desea salir del editor y comenzar con el mapa? (Se perderán los cambios no "
 "guardados en el mapa actual)."
 
-msgid "Create a new map from scratch."
-msgstr "Crea un nuevo mapa desde cero."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Nuevo mapa"
@@ -12966,6 +12967,9 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Crea un nuevo mapa desde cero."
 
 #~ msgid ""
 #~ "Cell\n"
