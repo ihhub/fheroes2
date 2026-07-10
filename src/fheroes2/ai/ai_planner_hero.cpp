@@ -2283,7 +2283,7 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
 
         Maps::Tile & tile = world.getTile( index );
         const TileRestorer restorer( tile );
-        Maps::updateObjectInfoTile( tile, false );
+        Maps::updateObjectInfoTile( tile );
 
         return getObjectValue( hero, index, objectType, valueToIgnore, distanceToObject );
     }
