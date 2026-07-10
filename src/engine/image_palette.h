@@ -64,11 +64,6 @@ namespace fheroes2
         {
             return ( static_cast<uint32_t>( b ) << 16U ) + ( static_cast<uint32_t>( g ) << 8U ) + static_cast<uint32_t>( r );
         }
-
-        RGB operator<<( const uint8_t bits ) const
-        {
-            return { static_cast<uint8_t>( r << bits ), static_cast<uint8_t>( g << bits ), static_cast<uint8_t>( b << bits ) };
-        }
     };
 
     // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
