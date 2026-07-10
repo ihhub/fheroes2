@@ -1566,32 +1566,6 @@ namespace
         case ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD: {
             _icnVsSprite[id].resize( 14 );
 
-            if ( useOriginalResources() ) {
-                const int buttonIcnID = ICN::ECPANEL;
-                // We don't add all the ICN buttons in original order because when we render the buttons we want a different order.
-                for ( uint32_t i = 0; i < 4; ++i ) {
-                    _icnVsSprite[id][i] = fheroes2::AGG::GetICN( buttonIcnID, i );
-                }
-                // Save Map
-                _icnVsSprite[id][6] = fheroes2::AGG::GetICN( buttonIcnID, 4U );
-                _icnVsSprite[id][7] = fheroes2::AGG::GetICN( buttonIcnID, 5U );
-                // Add generated buttons.
-                const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
-                const fheroes2::Size buttonSize{ _icnVsSprite[id][0].width() - 10, _icnVsSprite[id][0].height() };
-                fheroes2::makeButtonSprites( _icnVsSprite[id][4], _icnVsSprite[id][5], fheroes2::getSupportedText( gettext_noop( "START\nMAP" ), buttonFontType ),
-                                             buttonSize, false, ICN::STONEBAK );
-                fheroes2::makeButtonSprites( _icnVsSprite[id][8], _icnVsSprite[id][9], fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
-                                             buttonSize, false, ICN::STONEBAK );
-                fheroes2::makeButtonSprites( _icnVsSprite[id][12], _icnVsSprite[id][13], fheroes2::getSupportedText( gettext_noop( "AUTO\nPLAY-TEST" ), buttonFontType ),
-                                             buttonSize, false, ICN::STONEBAK );
-
-                // Quit
-                _icnVsSprite[id][10] = fheroes2::AGG::GetICN( buttonIcnID, 6U );
-                _icnVsSprite[id][11] = fheroes2::AGG::GetICN( buttonIcnID, 7U );
-
-                break;
-            }
-
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id],
                                                       { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
@@ -1600,7 +1574,7 @@ namespace
                                                         fheroes2::getSupportedText( gettext_noop( "SAVE\nMAP" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
                                                         fheroes2::getSupportedText( gettext_noop( "QUIT" ), buttonFontType ),
-                                                        fheroes2::getSupportedText( gettext_noop( "AUTO\nPLAY-TEST" ), buttonFontType ) },
+                                                        fheroes2::getSupportedText( gettext_noop( "AUTO\nPLAYTEST" ), buttonFontType ) },
                                                       false, 86 );
             break;
         }

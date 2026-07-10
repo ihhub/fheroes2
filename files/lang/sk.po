@@ -202,22 +202,6 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"START\n"
-"MAP"
-msgstr "REŠTART"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -235,11 +219,27 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"START\n"
+"MAP"
+msgstr "REŠTART"
+
+#, fuzzy
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "ULOŽIŤ\n"
 "HRU"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFO"
