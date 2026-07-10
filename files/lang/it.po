@@ -163,7 +163,22 @@ msgid "QUIT"
 msgstr ""
 
 msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+
+msgid ""
 "START\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"SAVE\n"
 "MAP"
 msgstr ""
 
@@ -175,21 +190,6 @@ msgstr ""
 msgid ""
 "AUTO\n"
 "PLAYTEST"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"SAVE\n"
-"MAP"
 msgstr ""
 
 msgid "INFO"
