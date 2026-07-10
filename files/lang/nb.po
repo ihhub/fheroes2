@@ -185,22 +185,6 @@ msgstr "AVSLUTT"
 
 #, fuzzy
 msgid ""
-"START\n"
-"MAP"
-msgstr "OMSTART"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -218,11 +202,27 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"START\n"
+"MAP"
+msgstr "OMSTART"
+
+#, fuzzy
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "LAGRE\n"
 "PARTI"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFO"

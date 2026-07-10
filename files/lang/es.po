@@ -205,22 +205,6 @@ msgstr "SALIR"
 
 #, fuzzy
 msgid ""
-"START\n"
-"MAP"
-msgstr "COMENZAR"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -238,12 +222,28 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"START\n"
+"MAP"
+msgstr "COMENZAR"
+
+#, fuzzy
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "GUARD.\n"
 "PAR-\n"
 "TIDA"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFO"
