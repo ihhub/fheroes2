@@ -29,6 +29,7 @@
 #include <functional>
 #include <list>
 #include <set>
+#include <vector>
 
 #include "bitmodes.h"
 #include "castle.h"
@@ -236,6 +237,23 @@ public:
     // bonus (for example, a Crystal Ball)
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
+    void addMonstersUnderVisionSpell( const std::vector<int32_t> & monsters )
+    {
+        for ( const int32_t monsterIndex : monsters ) {
+            _monstersUnderVision.emplace( monsterIndex );
+        }
+    }
+
+    void addMonsterUnderVisionSpell( const int32_t monsterIndex )
+    {
+        _monstersUnderVision.emplace( monsterIndex );
+    }
+
+    bool isMonsterUnderVisionSpell( const int32_t monsterIndex ) const
+    {
+        return _monstersUnderVision.count( monsterIndex ) > 0;
+    }
+
     static uint32_t GetMaxHeroes();
 
 private:
@@ -262,6 +280,10 @@ private:
     // Used to remember which item was selected in Kingdom View dialog.
     int32_t _topCastleInKingdomView{ -1 };
     int32_t _topHeroInKingdomView{ -1 };
+
+    // A set of monsters under Vision spell.
+    // This list is going to be cleared every day for now.
+    std::set<int32_t> _monstersUnderVision;
 };
 
 class Kingdoms
