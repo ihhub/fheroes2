@@ -221,7 +221,7 @@ msgstr ""
 
 msgid ""
 "AUTO\n"
-"PLAY-TEST"
+"PLAYTEST"
 msgstr ""
 "АВТО ТЕСТ\n"
 "КАРТЫ"

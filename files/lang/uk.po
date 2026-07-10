@@ -223,7 +223,7 @@ msgstr ""
 
 msgid ""
 "AUTO\n"
-"PLAY-TEST"
+"PLAYTEST"
 msgstr ""
 "АВТО\n"
 "ТЕСТУВАННЯ"
