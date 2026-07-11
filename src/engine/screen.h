@@ -318,10 +318,9 @@ namespace fheroes2
             _image.setPosition( x, y );
         }
 
-        // Default implementation of Cursor uses software emulation.
-        virtual void enableSoftwareEmulation( const bool /*unused*/ )
+        virtual void enableSoftwareEmulation( const bool enable )
         {
-            // Do nothing.
+            _emulation = enable;
         }
 
         bool isSoftwareEmulation() const

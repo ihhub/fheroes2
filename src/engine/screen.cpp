@@ -587,39 +587,14 @@ namespace
 #endif
 
 #if defined( TARGET_PS_VITA )
-    class RenderCursor final : public fheroes2::Cursor
+    struct RenderCursor final
     {
-    public:
-        ~RenderCursor() override {}
-
-        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        static fheroes2::Cursor * create()
         {
-            if ( image.empty() || image.singleLayer() ) {
-                // What are you trying to do? Set an invisible cursor? Use hide() method!
-                assert( 0 );
-                return;
-            }
+            auto * cursor = new fheroes2::Cursor;
+            cursor->enableSoftwareEmulation( true );
 
-            Cursor::update( image, offsetX, offsetY );
-        }
-
-        void enableSoftwareEmulation( const bool /* unused */ ) override
-        {
-            if ( _cursorUpdater != nullptr ) {
-                _cursorUpdater();
-            }
-        }
-
-        static RenderCursor * create()
-        {
-            return new RenderCursor;
-        }
-
-    private:
-        RenderCursor()
-        {
-            // PS Vita supports only software cursor.
-            _emulation = true;
+            return cursor;
         }
     };
 
