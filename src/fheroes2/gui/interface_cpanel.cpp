@@ -57,8 +57,8 @@ void Interface::ControlPanel::ResetTheme()
 {
     const int icn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    _buttons.reset(
-        new Buttons( Assets::getImage( icn, 4 ), Assets::getImage( icn, 0 ), Assets::getImage( icn, 12 ), Assets::getImage( icn, 10 ), Assets::getImage( icn, 8 ) ) );
+    _buttons = std::make_unique<Buttons>(
+        Assets::getImage( icn, 4 ), Assets::getImage( icn, 0 ), Assets::getImage( icn, 12 ), Assets::getImage( icn, 10 ), Assets::getImage( icn, 8 ) );
 }
 
 void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )

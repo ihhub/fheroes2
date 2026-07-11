@@ -6828,7 +6828,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const int32_t dst, cons
 
     AudioManager::PlaySound( m82 );
 
-    uint32_t frameCount = Assets::getImageCount( icn );
+    const uint32_t frameCount = Assets::getImageCount( icn );
 
     const std::vector<Game::DelayType> allDelays = _mergeWithCommonAnimationsDelays( { Game::DelayType::BATTLE_SPELL_DELAY } );
 
