@@ -39,7 +39,6 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
-#if !defined( TARGET_PS_VITA )
 #include <SDL_error.h>
 #include <SDL_events.h>
 #include <SDL_hints.h>
@@ -50,8 +49,6 @@
 #include <SDL_stdinc.h>
 #include <SDL_surface.h>
 #include <SDL_version.h>
-#endif
-
 #include <SDL_video.h>
 
 // Managing compiler warnings for SDL headers
