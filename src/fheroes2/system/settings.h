@@ -247,8 +247,6 @@ public:
         return _musicType == MUSIC_MIDI_ORIGINAL || _musicType == MUSIC_MIDI_EXPANSION;
     }
 
-    bool isShowIntro() const;
-
     bool isVSyncEnabled() const;
 
     bool isFirstGameRun() const;
