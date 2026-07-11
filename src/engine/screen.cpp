@@ -589,6 +589,7 @@ namespace
 #if defined( TARGET_PS_VITA )
     class RenderCursor final : public fheroes2::Cursor
     {
+    public:
         static RenderCursor * create()
         {
             auto * cursor = new RenderCursor;
