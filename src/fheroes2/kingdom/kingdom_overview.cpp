@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -224,10 +225,10 @@ namespace
         setScrollBarArea( { offsetX + 2, offset.y + 18, back.width(), backHeight - 2 } );
 
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
-        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, backHeight - 2, 4, static_cast<int32_t>( heroes.size() ),
-                                                                                   { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+        fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, backHeight - 2, 4, static_cast<int32_t>( heroes.size() ),
+                                                                             { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
-        setScrollBarImage( scrollbarSlider );
+        setScrollBarImage( std::move( scrollbarSlider ) );
         SetScrollButtonUp( ICN::SCROLL, 0, 1, { offsetX, offset.y } );
         SetScrollButtonDn( ICN::SCROLL, 2, 3, { offsetX, offset.y + 20 + backHeight } );
         SetAreaMaxItems( 4 );
@@ -254,9 +255,9 @@ namespace
         if ( heroes.size() != contentSize ) {
             const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( heroes.size() ),
-                                                                                       { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-            setScrollBarImage( scrollbarSlider );
+            fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( heroes.size() ),
+                                                                                 { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+            setScrollBarImage( std::move( scrollbarSlider ) );
 
             SetContent( heroes );
 
@@ -506,10 +507,10 @@ namespace
         setScrollBarArea( { offsetX + 2, offset.y + 18, back.width(), backHeight - 2 } );
 
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
-        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( castles.size() ),
-                                                                                   { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+        fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( castles.size() ),
+                                                                             { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
-        setScrollBarImage( scrollbarSlider );
+        setScrollBarImage( std::move( scrollbarSlider ) );
         SetScrollButtonUp( ICN::SCROLL, 0, 1, { offsetX, offset.y } );
         SetScrollButtonDn( ICN::SCROLL, 2, 3, { offsetX, offset.y + 20 + backHeight } );
         SetAreaMaxItems( 4 );

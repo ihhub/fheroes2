@@ -163,21 +163,6 @@ msgid "QUIT"
 msgstr ""
 
 msgid ""
-"START\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -188,8 +173,23 @@ msgid ""
 msgstr ""
 
 msgid ""
+"START\n"
+"MAP"
+msgstr ""
+
+msgid ""
 "SAVE\n"
 "MAP"
+msgstr ""
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
 msgstr ""
 
 msgid "INFO"
@@ -4397,7 +4397,8 @@ msgstr ""
 "Sei sicuro di voler cominciare una nuova partita? (La partita attuale andrà "
 "perduta.)"
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -4843,10 +4844,6 @@ msgid "Delete an existing language."
 msgstr "Scegli lingua del gioco"
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy

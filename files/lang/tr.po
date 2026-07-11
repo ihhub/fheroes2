@@ -195,22 +195,6 @@ msgstr ""
 msgid "QUIT"
 msgstr "ÇIKIŞ"
 
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "BAŞLA"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
 msgid ""
 "NEW\n"
 "MAP"
@@ -225,12 +209,28 @@ msgstr ""
 "HARİTAYI\n"
 "YÜKLE"
 
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "BAŞLA"
+
 msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "HARİTAYI\n"
 "KAYDET"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "BİLGİ"
@@ -4331,7 +4331,8 @@ msgid ""
 "the current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -4746,10 +4747,6 @@ msgid "Delete an existing language."
 msgstr "Oyunun dilini seç"
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy

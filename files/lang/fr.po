@@ -208,23 +208,6 @@ msgstr ""
 "TER"
 
 msgid ""
-"START\n"
-"MAP"
-msgstr "LANCER"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"MENU\n"
-"PRINCI."
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -239,11 +222,28 @@ msgstr ""
 "GER"
 
 msgid ""
+"START\n"
+"MAP"
+msgstr "LANCER"
+
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "SAUVE-\n"
 "GARDER"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"MENU\n"
+"PRINCI."
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFOS"
@@ -4570,8 +4570,9 @@ msgstr ""
 "Voulez-vous vraiment charger une carte ? (Toutes les modifications non "
 "enregistrées seront perdues.)"
 
-msgid "Create a new map from scratch."
-msgstr "Créer une carte vierge."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Nouvelle carte"
@@ -5024,10 +5025,6 @@ msgid "Delete an existing language."
 msgstr "Supprimer un événement existant."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -13125,6 +13122,9 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Créer une carte vierge."
 
 #~ msgid ""
 #~ "Cell\n"

@@ -481,7 +481,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
     const int boxHeight = freeSlots > 1 ? 63 + spacer + titleHeight + bodyHeight : 45;
     const int boxYPosition = defaultYPosition + ( ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2 ) - boxHeight;
 
-    const NonFixedFrameBox box( boxHeight, boxYPosition, true );
+    const ResizableFrameBox box( fheroes2::boxAreaWidthPx, boxHeight, boxYPosition, true );
 
     const fheroes2::Rect & pos = box.GetArea();
     const int center = pos.x + pos.width / 2;

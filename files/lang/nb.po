@@ -185,22 +185,6 @@ msgstr "AVSLUTT"
 
 #, fuzzy
 msgid ""
-"START\n"
-"MAP"
-msgstr "OMSTART"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -218,11 +202,27 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"START\n"
+"MAP"
+msgstr "OMSTART"
+
+#, fuzzy
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "LAGRE\n"
 "PARTI"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFO"
@@ -4644,9 +4644,9 @@ msgstr ""
 "Er du sikker på at du ønsker å laste inn et nytt kart?\n"
 "(Alt som er ulagret i dette kartet vil gå tapt.)"
 
-#, fuzzy
-msgid "Create a new map from scratch."
-msgstr "Nytt kart fra bunnen av"
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Nytt kart"
@@ -5108,10 +5108,6 @@ msgid "Delete an existing language."
 msgstr "Last inn et eksisterende kart."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -13367,6 +13363,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#, fuzzy
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Nytt kart fra bunnen av"
 
 #, fuzzy
 #~ msgid "and many-many other contributors and supporters!"

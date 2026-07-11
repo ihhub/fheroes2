@@ -202,22 +202,6 @@ msgstr "ИЗХОД"
 
 #, fuzzy
 msgid ""
-"START\n"
-"MAP"
-msgstr "РЕСТАРТ"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -234,11 +218,27 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"START\n"
+"MAP"
+msgstr "РЕСТАРТ"
+
+#, fuzzy
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "ЗАПАЗИ\n"
 "ИГРА"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "ИНФО"
@@ -4599,9 +4599,9 @@ msgstr ""
 "Сигурен ли си, че искаш да заредиш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
 
-#, fuzzy
-msgid "Create a new map from scratch."
-msgstr "нова карта от начало"
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Нова Карта"
@@ -5070,10 +5070,6 @@ msgid "Delete an existing language."
 msgstr "Зареди съществуваща карта."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -13148,6 +13144,10 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#, fuzzy
+#~ msgid "Create a new map from scratch."
+#~ msgstr "нова карта от начало"
 
 #, fuzzy
 #~ msgid "and many-many other contributors and supporters!"

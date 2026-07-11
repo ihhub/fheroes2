@@ -785,7 +785,9 @@ namespace
         case MP2::OBJ_ARTESIAN_SPRING:
         case MP2::OBJ_BARROW_MOUNDS:
         case MP2::OBJ_CAVE:
+        case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_EXCAVATION:
@@ -795,8 +797,10 @@ namespace
         case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_PEASANT_HUT:
         case MP2::OBJ_RUINS:
+        case MP2::OBJ_STABLES:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_WATER_ALTAR:
@@ -2254,7 +2258,9 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_ARTESIAN_SPRING:
     case MP2::OBJ_BARROW_MOUNDS:
     case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
     case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_EARTH_ALTAR:
     case MP2::OBJ_EXCAVATION:
@@ -2264,8 +2270,10 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_MAGIC_GARDEN:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_RUINS:
+    case MP2::OBJ_STABLES:
     case MP2::OBJ_TREE_CITY:
     case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_TROLL_BRIDGE:
     case MP2::OBJ_WAGON_CAMP:
     case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_WATER_ALTAR:
@@ -2275,7 +2283,7 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
 
         Maps::Tile & tile = world.getTile( index );
         const TileRestorer restorer( tile );
-        Maps::updateObjectInfoTile( tile, false );
+        Maps::updateObjectInfoTile( tile );
 
         return getObjectValue( hero, index, objectType, valueToIgnore, distanceToObject );
     }
@@ -2488,13 +2496,15 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     ObjectValidator objectValidator( hero, _pathfinder, *this );
     ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator,
+    const bool isFutureObjectPredictionAllowed{ Difficulty::isFutureObjectPredictionAllowedForAI( Game::getDifficulty() ) };
+
+    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator, isFutureObjectPredictionAllowed,
                                  &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
         // Dimension door path does not include any objects on the way.
         if ( !isDimensionDoor ) {
             for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
                 const bool isValidObject = objectValidator.isCurrentlyValid( pair.first );
-                const int32_t dayToBecomeValid = objectValidator.whenGoingToBeValidInDays( pair.first );
+                const int32_t dayToBecomeValid = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( pair.first ) : 0;
 
                 if ( !isValidObject && dayToBecomeValid < 1 ) {
                     // This is not a valid object and it is not going to be valid in the future.
@@ -2511,6 +2521,8 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                     extraValue = valueStorage.value( pair, 0 );
                 }
                 else {
+                    assert( isFutureObjectPredictionAllowed );
+
                     const auto path = _pathfinder.buildPath( pair.first, false );
                     assert( !path.empty() );
                     assert( path.back().GetIndex() == pair.first );
@@ -2577,7 +2589,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     for ( const auto & [idx, objType] : _mapActionObjects ) {
         const bool isCurrentlyValid = objectValidator.isCurrentlyValid( idx );
-        const int32_t daysToBeAvailable = objectValidator.whenGoingToBeValidInDays( idx );
+        const int32_t daysToBeAvailable = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( idx ) : 0;
 
         if ( !isCurrentlyValid && daysToBeAvailable < 1 ) {
             // This is not a valid object and it is not going to be valid in the future.
@@ -2611,6 +2623,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             value = valueStorage.value( { idx, objType }, dist );
         }
         else {
+            assert( isFutureObjectPredictionAllowed );
             value = valueStorage.futureValue( { idx, objType }, dist );
         }
 

@@ -204,25 +204,6 @@ msgid "QUIT"
 msgstr "KONEC"
 
 msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"SPUSTIT\n"
-"MAPU"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HLAVNÍ\n"
-"MENU"
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -237,11 +218,30 @@ msgstr ""
 "HRU"
 
 msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"SPUSTIT\n"
+"MAPU"
+
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "ULOŽIT\n"
 "HRU"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HLAVNÍ\n"
+"MENU"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFO"
@@ -4462,8 +4462,9 @@ msgstr ""
 "Přejete si opustit editor a spustit mapu? (Všechny neuložené změny na "
 "aktuální mapě budou ztraceny.)"
 
-msgid "Create a new map from scratch."
-msgstr "Vytvořit novou mapu od základu."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Nová mapa"
@@ -4909,10 +4910,6 @@ msgid "Delete an existing language."
 msgstr "Smazat stávající událost."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -12779,6 +12776,9 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Vytvořit novou mapu od základu."
 
 #~ msgid ""
 #~ "Cell\n"

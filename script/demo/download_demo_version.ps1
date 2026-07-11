@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2024                                             #
+#   Copyright (C) 2021 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -33,7 +33,7 @@ try {
         try {
             Invoke-WebRequest -Uri $URL -OutFile $FilePath
         } catch [System.Management.Automation.CommandNotFoundException] {
-            if ($_.Exception.CommandName -Eq "Invoke-WebRequest") {
+            if ($_.Exception.CommandName -eq "Invoke-WebRequest") {
                 $webClient = New-Object System.Net.WebClient
 
                 $webClient.DownloadFile($URL, $FilePath)
@@ -51,7 +51,7 @@ try {
         try {
             return (Get-FileHash -Path $Path -Algorithm SHA256).Hash
         } catch [System.Management.Automation.CommandNotFoundException] {
-            if ($_.Exception.CommandName -Eq "Get-FileHash") {
+            if ($_.Exception.CommandName -eq "Get-FileHash") {
                 try {
                     $output = certutil.exe -hashfile $Path sha256 2>&1
 
@@ -59,8 +59,8 @@ try {
                 } catch {
                     Write-Host -ForegroundColor Yellow "WARNING: Neither the Get-FileHash cmdlet nor certutil.exe is supported on this system, the hash of the downloaded file cannot be verified"
 
-                    if ($null -Ne $output) {
-                        Write-Host -ForegroundColor Yellow (-Join("certutil.exe output: ", ($output | Out-String)))
+                    if ($null -ne $output) {
+                        Write-Host -ForegroundColor Yellow (-join("certutil.exe output: ", ($output | Out-String)))
                     }
 
                     return $false
@@ -72,11 +72,11 @@ try {
     }
 
     # Reserve space for the Invoke-WebRequest progress indicator
-    for ($i = 0; $i -Le 7; $i++) {
+    for ($i = 0; $i -le 7; $i++) {
         Write-Host ""
     }
 
-    Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
+    Write-Host -ForegroundColor Green (-join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
                                              "It may take a few minutes, please wait...`r`n"))
 
     Write-Host "[1/4] determining the destination directory"
@@ -91,14 +91,14 @@ try {
     }
 
     try {
-        if ($null -Eq $destPath) {
+        if ($null -eq $destPath) {
             throw
         }
 
         while ($true) {
             $randName = [System.IO.Path]::GetRandomFileName()
 
-            if (-Not (Test-Path -Path "$destPath\$randName")) {
+            if (-not (Test-Path -Path "$destPath\$randName")) {
                 [void](New-Item -Path "$destPath\$randName" -ItemType "directory")
                 Remove-Item -Path "$destPath\$randName"
 
@@ -106,7 +106,7 @@ try {
             }
         }
     } catch {
-        if ($null -Eq $Env:APPDATA) {
+        if ($null -eq $Env:APPDATA) {
             Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine the destination directory"
 
             return
@@ -114,18 +114,18 @@ try {
 
         $destPath = "$Env:APPDATA\fheroes2"
 
-        if (-Not (Test-Path -Path $destPath -PathType Container)) {
+        if (-not (Test-Path -Path $destPath -PathType Container)) {
             [void](New-Item -Path $destPath -ItemType "directory")
         }
     }
 
-    Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
+    Write-Host -ForegroundColor Green (-join("Destination directory: ", (Resolve-Path $destPath).Path))
 
     Write-Host "[2/4] downloading the demo version"
 
     $demoPath = "$destPath\demo"
 
-    if (-Not (Test-Path -Path $demoPath -PathType Container)) {
+    if (-not (Test-Path -Path $demoPath -PathType Container)) {
         [void](New-Item -Path $demoPath -ItemType "directory")
     }
 
@@ -133,8 +133,8 @@ try {
 
     $result = Get-SHA256HashForFile -Path "$demoPath\h2demo.zip"
 
-    if (-Not ($result -Is [Boolean]) -And ($result -Ne $h2DemoSHA256)) {
-        Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
+    if (-not ($result -is [Boolean]) -and ($result -ne $h2DemoSHA256)) {
+        Write-Host -ForegroundColor Red (-join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
                                                "Expected:`t$h2DemoSHA256`r`n", `
                                                "Got:`t`t$result`r`n", `
                                                "Installation aborted"))
@@ -157,10 +157,10 @@ try {
     $dataPath = "$destPath\data"
     $mapsPath = "$destPath\maps"
 
-    if (-Not (Test-Path -Path $dataPath -PathType Container)) {
+    if (-not (Test-Path -Path $dataPath -PathType Container)) {
         [void](New-Item -Path $dataPath -ItemType "directory")
     }
-    if (-Not (Test-Path -Path $mapsPath -PathType Container)) {
+    if (-not (Test-Path -Path $mapsPath -PathType Container)) {
         [void](New-Item -Path $mapsPath -ItemType "directory")
     }
 
@@ -174,7 +174,7 @@ try {
         $shell.Namespace((Resolve-Path $mapsPath).Path).CopyHere($item, 0x14)
     }
 } catch {
-    Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", ($_ | Out-String)))
+    Write-Host -ForegroundColor Red (-join("FATAL ERROR: ", ($_ | Out-String)))
 } finally {
     Write-Host "Press any key to exit..."
 
