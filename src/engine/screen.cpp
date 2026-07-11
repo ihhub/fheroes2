@@ -587,11 +587,11 @@ namespace
 #endif
 
 #if defined( TARGET_PS_VITA )
-    struct RenderCursor final
+    class RenderCursor final : public fheroes2::Cursor
     {
-        static fheroes2::Cursor * create()
+        static RenderCursor * create()
         {
-            auto * cursor = new fheroes2::Cursor;
+            auto * cursor = new RenderCursor;
             cursor->enableSoftwareEmulation( true );
 
             return cursor;
