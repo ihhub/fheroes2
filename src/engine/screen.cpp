@@ -433,14 +433,10 @@ namespace
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
-        RenderCursor( const RenderCursor & ) = delete;
-
         ~RenderCursor() override
         {
             clear();
         }
-
-        RenderCursor & operator=( const RenderCursor & ) = delete;
 
         void show( const bool enable ) override
         {
@@ -597,21 +593,7 @@ namespace
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
-        RenderCursor( const RenderCursor & ) = delete;
-
         ~RenderCursor() override {}
-
-        RenderCursor & operator=( const RenderCursor & ) = delete;
-
-        void show( const bool enable ) override
-        {
-            Cursor::show( enable );
-        }
-
-        bool isVisible() const override
-        {
-            return Cursor::isVisible();
-        }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {

@@ -289,6 +289,11 @@ namespace fheroes2
     {
     public:
         friend Display;
+
+        Cursor( const Cursor & ) = delete;
+
+        Cursor & operator=( const Cursor & ) = delete;
+
         virtual ~Cursor() = default;
 
         virtual void show( const bool enable )
