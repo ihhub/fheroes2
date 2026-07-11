@@ -273,8 +273,8 @@ int Dialog::MakeGiftResource( Kingdom & kingdom )
                                                         Assets::getImage( okIcnId, 1 ), display ),
                         Dialog::OK );
     btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelSprite.width(),
-                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite,
-                                                        Assets::getImage( cancelIcnId, 1 ), display ),
+                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite, Assets::getImage( cancelIcnId, 1 ),
+                                                        display ),
                         Dialog::CANCEL );
     btnGroup.button( 0 ).disable();
 

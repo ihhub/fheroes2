@@ -28,8 +28,8 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "difficulty.h"
-#include "game_assets.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_over.h"
 #include "icn.h"

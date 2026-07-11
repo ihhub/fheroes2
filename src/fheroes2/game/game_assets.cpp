@@ -2180,8 +2180,8 @@ namespace
                 // Clean up 'NN'
                 Fill( out, offsetXD + offsetXO + offsetXN + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0 ) );
                 // Add 'ER'
-                Copy( Assets::getImage( ICN::CAMPXTRG, 2 + i ), 75 - ( 8 * i ), 5, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY,
-                      23, 15 );
+                Copy( Assets::getImage( ICN::CAMPXTRG, 2 + i ), 75 - ( 8 * i ), 5, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY, 23,
+                      15 );
                 // Restore button ornament
                 Copy( Assets::getImage( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
                       offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, 1, 1 );
@@ -3697,10 +3697,8 @@ namespace
 
             populateCursorIcons( _icnVsSprite[id], Assets::getImage( originalCursorId, 4 ), digits,
                                  isColorCursor ? fheroes2::Point( -2, 1 ) : fheroes2::Point( -4, -6 ) );
-            populateCursorIcons( _icnVsSprite[id], Assets::getImage( originalCursorId, 5 ), digits,
-                                 isColorCursor ? fheroes2::Point( 1, 1 ) : fheroes2::Point( -6, -6 ) );
-            populateCursorIcons( _icnVsSprite[id], Assets::getImage( originalCursorId, 6 ), digits,
-                                 isColorCursor ? fheroes2::Point( 0, 1 ) : fheroes2::Point( -8, -7 ) );
+            populateCursorIcons( _icnVsSprite[id], Assets::getImage( originalCursorId, 5 ), digits, isColorCursor ? fheroes2::Point( 1, 1 ) : fheroes2::Point( -6, -6 ) );
+            populateCursorIcons( _icnVsSprite[id], Assets::getImage( originalCursorId, 6 ), digits, isColorCursor ? fheroes2::Point( 0, 1 ) : fheroes2::Point( -8, -7 ) );
             populateCursorIcons( _icnVsSprite[id], Assets::getImage( originalCursorId, 7 ), digits,
                                  isColorCursor ? fheroes2::Point( -2, 1 ) : fheroes2::Point( -15, -8 ) );
             populateCursorIcons( _icnVsSprite[id], Assets::getImage( originalCursorId, 8 ), digits,

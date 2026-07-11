@@ -251,8 +251,7 @@ void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & ds
     else {
         if ( can_change && !_saveLastTroop && _army->GetOccupiedSlotCount() == 0 ) {
             // If none of army's slot is set within the Editor, then a default army will be applied at the game start.
-            fheroes2::ApplyPalette( Assets::getImage( ICN::STRIP, 2 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
-                                    PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+            fheroes2::ApplyPalette( Assets::getImage( ICN::STRIP, 2 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
             const fheroes2::Text text( _( "Default\ntroop" ), fheroes2::FontType::normalWhite() );
             text.drawInRoi( pos.x, pos.y + pos.height / 2 - 17, pos.width, dstsf, pos );

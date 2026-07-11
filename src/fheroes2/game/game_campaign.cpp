@@ -1342,8 +1342,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const int32_t spaceBetweenViewIntroAndCancel = cancelPlacement - endOfViewIntroPlacement;
     const int32_t difficultyButtonWidth = Assets::getImage( buttonIconID, 8 ).width();
     const uint32_t okayRestartIndex = allowToRestart ? 2 : 4;
-    const int32_t middleButtonsMargin
-        = ( spaceBetweenViewIntroAndCancel - difficultyButtonWidth - ( Assets::getImage( buttonIconID, okayRestartIndex ).width() ) ) / 3;
+    const int32_t middleButtonsMargin = ( spaceBetweenViewIntroAndCancel - difficultyButtonWidth - ( Assets::getImage( buttonIconID, okayRestartIndex ).width() ) ) / 3;
     const int32_t difficultyPlacement = endOfViewIntroPlacement + middleButtonsMargin;
     const int32_t okRestartPlacement = difficultyPlacement + difficultyButtonWidth + middleButtonsMargin;
 
