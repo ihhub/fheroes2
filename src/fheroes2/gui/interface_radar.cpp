@@ -26,9 +26,9 @@
 #include <cassert>
 #include <cstring>
 
-#include "agg_image.h"
 #include "castle.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
@@ -231,7 +231,7 @@ void Interface::Radar::_redraw( const bool redrawMapObjects )
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Rect & rect = GetArea();
     if ( _hide ) {
-        fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
+        fheroes2::Blit( Assets::getImage( ( conf.isEvilInterfaceEnabled() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
 
         // Force set radar ROI for the whole world to be prepared to fully update radar when it will be shown.
         _roi = { 0, 0, world.w(), world.h() };

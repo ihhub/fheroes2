@@ -28,16 +28,16 @@ namespace fheroes2
     class Sprite;
 
     enum class SupportedLanguage : uint8_t;
+}
 
-    namespace AGG
-    {
-        const Sprite & GetICN( int icnId, uint32_t index );
-        uint32_t GetICNCount( int icnId );
+namespace Assets
+{
+    const fheroes2::Sprite & getImage( int icnId, uint32_t index );
+    uint32_t getImageCount( int icnId );
 
-        // shapeId could be 0, 1, 2 or 3 only
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
+    // shapeId could be 0, 1, 2 or 3 only
+    const fheroes2::Image & getTileImage( int tilId, uint32_t index, uint32_t shapeId );
 
-        // This function must be called only at the time of setting up a new language.
-        void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
-    }
+    // This function must be called only at the time of setting up a new language.
+    void updateLanguageDependentResources( const fheroes2::SupportedLanguage language, const bool loadOriginalAlphabet );
 }

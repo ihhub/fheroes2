@@ -30,8 +30,8 @@
 #include <string>
 #include <type_traits>
 
-#include "agg_image.h"
 #include "cursor.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image_palette.h"
@@ -807,8 +807,8 @@ namespace fheroes2
         fheroes2::Image racePortrait( portPos.width, portPos.height );
 
         auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex, const bool applyRandomPalette ) {
-            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
-            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
+            fheroes2::SubpixelResize( Assets::getImage( ICN::STRIP, bkgIndex ), racePortrait );
+            const fheroes2::Sprite & heroSprite = Assets::getImage( icnId, 1 );
             if ( applyRandomPalette ) {
                 fheroes2::Sprite tmp = heroSprite;
                 fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );

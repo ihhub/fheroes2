@@ -30,7 +30,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
@@ -39,6 +38,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h" // IWYU pragma: associated
 #include "heroes_base.h"
@@ -63,8 +63,8 @@ namespace
 {
     fheroes2::ButtonSprite createMoveButton( const int32_t icnId, const int32_t offsetX, const int32_t offsetY, const fheroes2::Image & display )
     {
-        const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
-        const fheroes2::Sprite & originalPressedImage = fheroes2::AGG::GetICN( icnId, 1 );
+        const fheroes2::Sprite & originalReleasedImage = Assets::getImage( icnId, 0 );
+        const fheroes2::Sprite & originalPressedImage = Assets::getImage( icnId, 1 );
 
         const int32_t minX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
         const int32_t minY = std::min( originalReleasedImage.y(), originalPressedImage.y() );
@@ -175,7 +175,7 @@ public:
 
         const fheroes2::Text text( std::to_string( troop.GetCount() ), fheroes2::FontType::smallWhite() );
 
-        const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+        const fheroes2::Sprite & mons32 = Assets::getImage( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
         if ( mons32.width() > roi.width ) {
@@ -237,7 +237,7 @@ public:
         if ( !arifact.isValid() )
             return;
 
-        const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, arifact.IndexSprite32() );
+        const fheroes2::Sprite & artifactSprite = Assets::getImage( ICN::ARTFX, arifact.IndexSprite32() );
         fheroes2::Blit( artifactSprite, image, roi.x + 1, roi.y + 1 );
 
         if ( isSelected ) {
@@ -289,7 +289,7 @@ public:
         if ( !skill.isValid() )
             return;
 
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::MINISS, skill.GetIndexSprite2() );
         fheroes2::Blit( sprite, image, roi.x + ( roi.width - sprite.width() ) / 2, roi.y + ( roi.height - sprite.height() ) / 2 );
 
         const fheroes2::Text text( std::to_string( skill.Level() ), fheroes2::FontType::smallWhite() );
@@ -308,7 +308,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // Game Area event processor will change it to the appropriate one after this dialog is closed.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    const fheroes2::Sprite & backSprite = Assets::getImage( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
     fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
 
@@ -421,7 +421,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     secskill_bar2.setRenderingOffset( { cur_pt.x + 353, cur_pt.y + 199 } );
     secskill_bar2.Redraw( display );
 
-    const fheroes2::Sprite & moveButtonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+    const fheroes2::Sprite & moveButtonBackground = Assets::getImage( ICN::STONEBAK, 0 );
     fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
 
     // The original resources do not have such animated buttons so we have to create those.

@@ -21,9 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -44,7 +44,7 @@ int Dialog::BuyBoat( bool enable )
 
     Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), fheroes2::boxAreaWidthPx );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATWIND, 0 );
+    const fheroes2::Sprite & sprite = Assets::getImage( ICN::BOATWIND, 0 );
     fheroes2::Text text{ _( "Build a new ship:" ), fheroes2::FontType::normalWhite() };
     const int spacer = 10;
 

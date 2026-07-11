@@ -27,10 +27,10 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -48,9 +48,9 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
 {
     clear();
 
-    const fheroes2::Sprite & playerTypeImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 3 );
-    const fheroes2::Sprite & classImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51 );
-    const fheroes2::Sprite & handicapImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 0 );
+    const fheroes2::Sprite & playerTypeImage = Assets::getImage( ICN::NGEXTRA, 3 );
+    const fheroes2::Sprite & classImage = Assets::getImage( ICN::NGEXTRA, 51 );
+    const fheroes2::Sprite & handicapImage = Assets::getImage( ICN::NGEXTRA, 0 );
 
     const int32_t playerCount = static_cast<int32_t>( players.size() ); // safe to cast as the number of players <= 8.
 
@@ -200,8 +200,8 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         // wide sprite offset
         playerTypeIcnIndex += 24;
 
-        const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 60 );
-        const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, playerTypeIcnIndex );
+        const fheroes2::Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 60 );
+        const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, playerTypeIcnIndex );
 
         fheroes2::Blit( playerIconShadow, display, info.playerTypeRoi.x - 5, info.playerTypeRoi.y + 3 );
 
@@ -224,8 +224,8 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         // 2. redraw class
         const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : mapInfo.AllowChangeRace( info.player->GetColor() );
 
-        const fheroes2::Sprite & classIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( info.player->GetRace(), isActivePlayer ) );
-        const fheroes2::Sprite & classIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+        const fheroes2::Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( info.player->GetRace(), isActivePlayer ) );
+        const fheroes2::Sprite & classIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
 
         fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
         fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y );
@@ -267,8 +267,8 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
             handicapIcnIndex = 78;
         }
 
-        const fheroes2::Sprite & handicapIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, handicapIcnIndex );
-        const fheroes2::Sprite & handicapIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 59 );
+        const fheroes2::Sprite & handicapIcon = Assets::getImage( ICN::NGEXTRA, handicapIcnIndex );
+        const fheroes2::Sprite & handicapIconShadow = Assets::getImage( ICN::NGEXTRA, 59 );
 
         fheroes2::Blit( handicapIconShadow, display, info.handicapRoi.x - 5, info.handicapRoi.y + 3 );
         fheroes2::Blit( handicapIcon, display, info.handicapRoi.x, info.handicapRoi.y );

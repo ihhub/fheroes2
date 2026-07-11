@@ -23,8 +23,8 @@
 
 #include <cstdint>
 
-#include "agg_image.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -64,7 +64,7 @@ void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, int32_t encw,
 
 void Dialog::FrameBorder::RenderRegular( const fheroes2::Rect & dstrt )
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
+    const fheroes2::Sprite & sprite = Assets::getImage( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
     const fheroes2::Image renderedImage = fheroes2::Stretch( sprite, fheroes2::shadowWidthPx, 0, sprite.width() - fheroes2::shadowWidthPx,
                                                              sprite.height() - fheroes2::shadowWidthPx, dstrt.width, dstrt.height );
     fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );

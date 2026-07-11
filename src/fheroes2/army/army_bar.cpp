@@ -29,12 +29,12 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
 #include "castle.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -187,7 +187,7 @@ namespace
 }
 
 ArmyBar::ArmyBar( Army * ptr, const bool miniSprites, const bool readOnly, const bool isEditMode /* false */, const bool saveLastTroop /* true */ )
-    : spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
+    : spcursor( Assets::getImage( ICN::STRIP, 1 ) )
     , use_mini_sprite( miniSprites )
     , read_only( readOnly )
     , can_change( isEditMode )
@@ -196,7 +196,7 @@ ArmyBar::ArmyBar( Army * ptr, const bool miniSprites, const bool readOnly, const
     if ( use_mini_sprite )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
     else {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::STRIP, 2 );
         setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 
@@ -251,14 +251,14 @@ void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & ds
     else {
         if ( can_change && !_saveLastTroop && _army->GetOccupiedSlotCount() == 0 ) {
             // If none of army's slot is set within the Editor, then a default army will be applied at the game start.
-            fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
+            fheroes2::ApplyPalette( Assets::getImage( ICN::STRIP, 2 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
                                     PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
             const fheroes2::Text text( _( "Default\ntroop" ), fheroes2::FontType::normalWhite() );
             text.drawInRoi( pos.x, pos.y + pos.height / 2 - 17, pos.width, dstsf, pos );
         }
         else {
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
+            fheroes2::Copy( Assets::getImage( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
         }
     }
 }
@@ -273,7 +273,7 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
     const fheroes2::Text text( std::to_string( troop.GetCount() ), use_mini_sprite ? fheroes2::FontType::smallWhite() : fheroes2::FontType::normalWhite() );
 
     if ( use_mini_sprite ) {
-        const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+        const fheroes2::Sprite & mons32 = Assets::getImage( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
         if ( mons32.width() > pos.width ) {

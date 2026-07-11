@@ -25,10 +25,10 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -69,7 +69,7 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, dialogOffset.x, dialogOffset.y );
+    fheroes2::Blit( Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, dialogOffset.x, dialogOffset.y );
 
     // Create Previous Castle button.
     fheroes2::Button buttonPrevCastle( bottomUIOffset.x, bottomUIOffset.y, ICN::SMALLBAR, 1, 2 );
@@ -77,16 +77,16 @@ Castle::MageGuildDialogResult Castle::_openMageGuild( const Heroes * hero ) cons
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
     // Exit button.
-    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    const int32_t exitWidth = Assets::getImage( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
     fheroes2::Button buttonExit( bottomUIOffset.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth, bottomUIOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
     // Create Next Castle button.
-    fheroes2::Button buttonNextCastle( buttonExit.area().x - fheroes2::AGG::GetICN( ICN::SMALLBAR, 3 ).width(), bottomUIOffset.y, ICN::SMALLBAR, 3, 4 );
+    fheroes2::Button buttonNextCastle( buttonExit.area().x - Assets::getImage( ICN::SMALLBAR, 3 ).width(), bottomUIOffset.y, ICN::SMALLBAR, 3, 4 );
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
 
     // Create the status bar UI element.
-    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const fheroes2::Sprite & bottomBar = Assets::getImage( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
     const fheroes2::Point bottonBarOffset{ buttonPrevCastle.area().x + buttonPrevCastle.area().width, bottomUIOffset.y };
     const int32_t bottomBarWidth{ fheroes2::Display::DEFAULT_WIDTH - exitWidth - buttonNextCastle.area().width - buttonPrevCastle.area().width };

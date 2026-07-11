@@ -26,9 +26,9 @@
 #include <initializer_list>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -77,7 +77,7 @@ namespace
             // Calculate all areas where we are going to render skills.
             _skillRoi.reserve( _skills.size() );
 
-            const fheroes2::Sprite & frameImage = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
+            const fheroes2::Sprite & frameImage = Assets::getImage( ICN::SECSKILL, 15 );
 
             const int32_t lastRowColumns = static_cast<int32_t>( _skills.size() % _skillsPerRow );
             const int32_t lastRowOffsetX = ( lastRowColumns > 0 ) ? ( static_cast<int32_t>( _skillsPerRow ) - lastRowColumns ) * skillItemWidth / 2 : 0;
@@ -99,7 +99,7 @@ namespace
 
         void draw( fheroes2::Image & output )
         {
-            const fheroes2::Sprite & frameImage = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
+            const fheroes2::Sprite & frameImage = Assets::getImage( ICN::SECSKILL, 15 );
 
             fheroes2::Sprite inactiveFrameImage( frameImage );
             fheroes2::ApplyPalette( inactiveFrameImage, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -107,7 +107,7 @@ namespace
             for ( size_t i = 0; i < _skills.size(); ++i ) {
                 const Skill::Secondary & skill = _skills[i].first;
 
-                const fheroes2::Sprite & skillImage = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
+                const fheroes2::Sprite & skillImage = Assets::getImage( ICN::SECSKILL, skill.GetIndexSprite1() );
                 const fheroes2::Point skillImagePos( _skillRoi[i].x + 3, _skillRoi[i].y + 3 );
 
                 fheroes2::Copy( skillImage, 0, 0, output, skillImagePos.x, skillImagePos.y, skillImage.width(), skillImage.height() );
@@ -138,8 +138,8 @@ namespace
             if ( _skills[_skillToRedraw].second ) {
                 const Skill::Secondary & skill = _skills[_skillToRedraw].first;
 
-                const fheroes2::Sprite & frameImage = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
-                const fheroes2::Sprite & skillImage = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
+                const fheroes2::Sprite & frameImage = Assets::getImage( ICN::SECSKILL, 15 );
+                const fheroes2::Sprite & skillImage = Assets::getImage( ICN::SECSKILL, skill.GetIndexSprite1() );
                 const int32_t skillImageOffsetX = roi.x + 3;
 
                 fheroes2::Blit( frameImage, output, roi.x, roi.y );
@@ -241,7 +241,7 @@ namespace Editor
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         if ( isDefaultScreenSize ) {
-            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+            const fheroes2::Sprite & backgroundImage = Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
             fheroes2::Copy( backgroundImage, 0, 0, display, activeArea );
         }
 

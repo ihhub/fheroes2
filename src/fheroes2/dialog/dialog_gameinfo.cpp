@@ -25,10 +25,10 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "difficulty.h"
+#include "game_assets.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "game_over.h"
@@ -90,7 +90,7 @@ void Dialog::GameInfo()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-    const fheroes2::Sprite & window = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SCENIBKG_EVIL : ICN::SCENIBKG, 0 );
+    const fheroes2::Sprite & window = Assets::getImage( isEvilInterface ? ICN::SCENIBKG_EVIL : ICN::SCENIBKG, 0 );
 
     const fheroes2::Point dialogOffset( ( display.width() - window.width() - DIALOG_SHADOW_OFFSET_X ) / 2, ( display.height() - window.height() ) / 2 );
     const fheroes2::Point shadowOffset( dialogOffset.x + DIALOG_SHADOW_OFFSET_X, dialogOffset.y + DIALOG_SHADOW_OFFSET_Y / 2 );
@@ -99,7 +99,7 @@ void Dialog::GameInfo()
 
     fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
-    const int32_t buttonAboutWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_ABOUT_GOOD, 0 ).width();
+    const int32_t buttonAboutWidth = Assets::getImage( ICN::BUTTON_MAP_ABOUT_GOOD, 0 ).width();
 
     fheroes2::Button buttonAbout( dialogOffset.x + 401 - buttonAboutWidth, dialogOffset.y + 36, isEvilInterface ? ICN::BUTTON_MAP_ABOUT_EVIL : ICN::BUTTON_MAP_ABOUT_GOOD,
                                   0, 1 );
@@ -196,7 +196,7 @@ void Dialog::GameInfo()
     conditionsText->draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
     const int buttonOkIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-    fheroes2::Button buttonOk( shadowOffset.x + OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 0 ).width() / 2, shadowOffset.y + 426, buttonOkIcnId, 0, 1 );
+    fheroes2::Button buttonOk( shadowOffset.x + OK_BUTTON_OFFSET - Assets::getImage( buttonOkIcnId, 0 ).width() / 2, shadowOffset.y + 426, buttonOkIcnId, 0, 1 );
 
     buttonOk.draw();
 

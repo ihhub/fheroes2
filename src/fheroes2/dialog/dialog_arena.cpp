@@ -24,9 +24,9 @@
 #include <cstdint>
 #include <string>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -46,9 +46,9 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 ), display, rect1.x, rect1.y );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 1 ), display, rect2.x, rect2.y );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
+        fheroes2::Blit( Assets::getImage( ICN::XPRIMARY, 0 ), display, rect1.x, rect1.y );
+        fheroes2::Blit( Assets::getImage( ICN::XPRIMARY, 1 ), display, rect2.x, rect2.y );
+        fheroes2::Blit( Assets::getImage( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
     }
 
     void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3 )
@@ -57,13 +57,13 @@ namespace
 
         switch ( skill ) {
         case Skill::Primary::ATTACK:
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 4 ), display, rect1.x, rect1.y );
+            fheroes2::Blit( Assets::getImage( ICN::XPRIMARY, 4 ), display, rect1.x, rect1.y );
             break;
         case Skill::Primary::DEFENSE:
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 5 ), display, rect2.x, rect2.y );
+            fheroes2::Blit( Assets::getImage( ICN::XPRIMARY, 5 ), display, rect2.x, rect2.y );
             break;
         case Skill::Primary::POWER:
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 6 ), display, rect3.x, rect3.y );
+            fheroes2::Blit( Assets::getImage( ICN::XPRIMARY, 6 ), display, rect3.x, rect3.y );
             break;
         default:
             break;
@@ -112,7 +112,7 @@ int Dialog::SelectSkillFromArena()
     fheroes2::Text textbox(
         _( "You enter the arena and face a pack of vicious lions. You handily defeat them, to the wild cheers of the crowd. Impressed by your skill, the aged trainer of gladiators agrees to train you in a skill of your choice." ),
         fheroes2::FontType::normalWhite() );
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
+    const fheroes2::Sprite & sprite = Assets::getImage( ICN::XPRIMARY, 0 );
     const int spacer = 10;
 
     const Dialog::FrameBox box( title.height( fheroes2::boxAreaWidthPx ) + textbox.height( fheroes2::boxAreaWidthPx ) + 2 * spacer + sprite.height() + 15, true );
@@ -156,8 +156,8 @@ int Dialog::SelectSkillFromArena()
     text.draw( dst_pt.x, dst_pt.y + 2, skillTextWidth, display );
 
     // buttons
-    dst_pt.x = box_rt.x + ( box_rt.width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
+    dst_pt.x = box_rt.x + ( box_rt.width - Assets::getImage( system, 1 ).width() ) / 2;
+    dst_pt.y = box_rt.y + box_rt.height - Assets::getImage( system, 1 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     LocalEvent & le = LocalEvent::Get();

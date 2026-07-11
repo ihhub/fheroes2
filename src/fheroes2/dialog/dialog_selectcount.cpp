@@ -29,9 +29,9 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image.h"
@@ -242,7 +242,7 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     const int32_t titleHeight = hasTitle ? title.height( fheroes2::boxAreaWidthPx ) + 10 : 0;
     const int32_t keyBoardButtonExtraHeight = 20;
 
-    const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+    const fheroes2::Sprite & inputArea = Assets::getImage( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const int32_t inputAreaWidth = isMultiLine ? 226 : inputArea.width();
     const int32_t inputAreaHeight = isMultiLine ? 265 : inputArea.height();
@@ -285,18 +285,18 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
     dst_pt.x = frameBoxArea.x;
-    dst_pt.y = frameBoxArea.y + frameBoxArea.height - fheroes2::AGG::GetICN( okayButtonICNID, 0 ).height();
+    dst_pt.y = frameBoxArea.y + frameBoxArea.height - Assets::getImage( okayButtonICNID, 0 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, okayButtonICNID, 0, 1 );
 
     const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
-    const fheroes2::Sprite & cancelButtonIcn = fheroes2::AGG::GetICN( cancelButtonIcnID, 0 );
+    const fheroes2::Sprite & cancelButtonIcn = Assets::getImage( cancelButtonIcnID, 0 );
 
     dst_pt.x = frameBoxArea.x + frameBoxArea.width - cancelButtonIcn.width();
     dst_pt.y = frameBoxArea.y + frameBoxArea.height - cancelButtonIcn.height();
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
 
     const int buttonVirtualKBIcnID = isEvilInterface ? ICN::BUTTON_VIRTUAL_KEYBOARD_EVIL : ICN::BUTTON_VIRTUAL_KEYBOARD_GOOD;
-    const fheroes2::Sprite & buttonVirtualKBIcn = fheroes2::AGG::GetICN( buttonVirtualKBIcnID, 0 );
+    const fheroes2::Sprite & buttonVirtualKBIcn = Assets::getImage( buttonVirtualKBIcnID, 0 );
 
     dst_pt.x = frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBIcn.width() ) / 2;
     dst_pt.y -= 30;
@@ -508,7 +508,7 @@ int Dialog::ArmySplitTroop( const int32_t freeSlots, const int32_t redistributeM
         const int deltaXStart = ( freeSlots - 2 ) * -5;
 
         for ( int32_t i = 0; i < freeSlots - 1; ++i ) {
-            sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx );
+            sprites[i] = Assets::getImage( ICN::REQUESTS, spriteIconIdx );
             ++spriteIconIdx;
 
             const int spriteWidth = sprites[i].width();

@@ -32,10 +32,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "game_string.h"
@@ -142,11 +142,11 @@ namespace
         fileNameText.draw( posX + 44, posY + 2, display );
 
         const uint32_t racesCountIcnIndex = static_cast<uint32_t>( Color::Count( info.kingdomColors ) + 19 );
-        const fheroes2::Sprite & racesCount = fheroes2::AGG::GetICN( ICN::REQUESTS, racesCountIcnIndex );
+        const fheroes2::Sprite & racesCount = Assets::getImage( ICN::REQUESTS, racesCountIcnIndex );
         fheroes2::Copy( racesCount, 0, 0, display, posX + 6, posY, racesCount.width(), racesCount.height() );
 
         const uint32_t mapSizeIcnIndex = static_cast<uint32_t>( info.width / Maps::SMALL + 25 );
-        const fheroes2::Sprite & mapSize = fheroes2::AGG::GetICN( ICN::REQUESTS, mapSizeIcnIndex );
+        const fheroes2::Sprite & mapSize = Assets::getImage( ICN::REQUESTS, mapSizeIcnIndex );
         fheroes2::Copy( mapSize, 0, 0, display, posX + 25, posY, mapSize.width(), mapSize.height() );
     }
 
@@ -256,7 +256,7 @@ namespace Editor
         listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listbox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listbox.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         listbox.SetAreaMaxItems( listItems );
         listbox.SetListContent( lists );
         listbox.updateScrollBarImage();
