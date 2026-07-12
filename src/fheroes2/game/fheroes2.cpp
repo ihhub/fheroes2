@@ -57,7 +57,6 @@
 #endif
 
 #include "agg.h"
-#include "agg_image.h"
 #include "audio_manager.h"
 #include "core.h"
 #include "cursor.h"
@@ -65,6 +64,7 @@
 #include "embedded_image.h"
 #include "exception.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_logo.h"
 #include "game_video.h"
 #include "game_video_type.h"
@@ -241,7 +241,7 @@ namespace
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
 
                 // Verify that the font is present and it is not corrupted.
-                fheroes2::AGG::GetICN( ICN::FONT, 0 );
+                Assets::getImage( ICN::FONT, 0 );
             }
             catch ( ... ) {
                 displayMissingResourceWindow();

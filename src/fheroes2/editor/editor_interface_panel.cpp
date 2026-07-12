@@ -27,13 +27,13 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "editor_interface.h"
 #include "editor_options.h"
+#include "game_assets.h"
 #include "ground.h"
 #include "icn.h"
 #include "image.h"
@@ -117,7 +117,7 @@ namespace
 
     void drawInstrumentName( fheroes2::Image & output, const fheroes2::Point & pos, std::string text )
     {
-        const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
+        const fheroes2::Sprite & originalPanel = Assets::getImage( ICN::EDITPANL, 0 );
 
         const int32_t nameBackgroundOffsetX{ 7 };
         const int32_t nameBackgroundOffsetY{ 104 };
@@ -137,7 +137,7 @@ namespace
 
     void drawObjectTypeSelectionRect( fheroes2::Image & output, const fheroes2::Point & pos )
     {
-        const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
+        const fheroes2::Sprite & selection = Assets::getImage( ICN::TERRAINS, 9 );
         fheroes2::Blit( selection, 0, 0, output, pos.x - 2, pos.y - 2, selection.width(), selection.height() );
     }
 
@@ -330,7 +330,7 @@ namespace Interface
         const fheroes2::Display & display = fheroes2::Display::instance();
         const int32_t instrumentPanelWidth = display.width() - displayX - fheroes2::borderWidthPx;
         const int32_t bottomBorderOffset = ( display.height() > fheroes2::Display::DEFAULT_HEIGHT + fheroes2::borderWidthPx ) ? fheroes2::borderWidthPx : 0;
-        const int32_t instrumentPanelHeight = display.height() - displayY - fheroes2::AGG::GetICN( ICN::EDITBTNS, 0 ).height() * 5 - bottomBorderOffset;
+        const int32_t instrumentPanelHeight = display.height() - displayY - Assets::getImage( ICN::EDITBTNS, 0 ).height() * 5 - bottomBorderOffset;
 
         _instrumentPanelBackground = makeInstrumentPanelBackground( instrumentPanelWidth, instrumentPanelHeight );
 
@@ -495,7 +495,7 @@ namespace Interface
 
         if ( _selectedInstrument == Instrument::TERRAIN ) {
             // We use terrain images from the original terrain instrument panel sprite.
-            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
+            const fheroes2::Sprite & originalPanel = Assets::getImage( ICN::EDITPANL, 0 );
             for ( size_t i = 0; i < TerrainBrush::TERRAIN_COUNT; ++i ) {
                 const int32_t originalOffsetX = 30 + static_cast<int32_t>( i % 3 ) * 29;
                 const int32_t originalOffsetY = 11 + static_cast<int32_t>( i / 3 ) * 29;
@@ -513,7 +513,7 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
             // Landscape objects buttons.
             for ( uint32_t i = 0; i < LandscapeObjectBrush::LANDSCAPE_COUNT; ++i ) {
-                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 6 ), 0, 0, display, _landscapeObjectButtonsRect[i] );
+                fheroes2::Copy( Assets::getImage( ICN::EDITPANL, i + 6 ), 0, 0, display, _landscapeObjectButtonsRect[i] );
             }
 
             updateObjectTypeSelection( _selectedLandscapeObject, _landscapeObjectButtonsRect, _getLandscapeObjectTypeName,
@@ -522,7 +522,7 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::DETAIL ) {
             // Detail mode types.
             for ( uint32_t i = 0; i < DetailBrushType::DETAIL_MODE_COUNT; ++i ) {
-                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 18 ), 0, 0, display, _detailModeButtonsRect[i] );
+                fheroes2::Copy( Assets::getImage( ICN::EDITPANL, i + 18 ), 0, 0, display, _detailModeButtonsRect[i] );
             }
 
             updateObjectTypeSelection( static_cast<int8_t>( _selectedDetailBrushType ), _detailModeButtonsRect, _getDetailModeTypeName,
@@ -530,18 +530,18 @@ namespace Interface
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             // Adventure objects buttons.
-            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
+            const fheroes2::Sprite & originalPanel = Assets::getImage( ICN::EDITPANL, 1 );
             const int32_t originalArtifactsImageOffsetX{ 15 };
             const int32_t originalTreasuresImageOffsetX{ 102 };
             const int32_t originalImagesOffsetY{ 96 };
 
             fheroes2::Copy( originalPanel, originalArtifactsImageOffsetX, originalImagesOffsetY, display, _adventureObjectButtonsRect[AdventureObjectBrush::ARTIFACTS] );
             for ( uint32_t i = AdventureObjectBrush::DWELLINGS; i < AdventureObjectBrush::TREASURES; ++i ) {
-                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 10 ), 0, 0, display, _adventureObjectButtonsRect[i] );
+                fheroes2::Copy( Assets::getImage( ICN::EDITPANL, i + 10 ), 0, 0, display, _adventureObjectButtonsRect[i] );
             }
             fheroes2::Copy( originalPanel, originalTreasuresImageOffsetX, originalImagesOffsetY, display, _adventureObjectButtonsRect[AdventureObjectBrush::TREASURES] );
             for ( uint32_t i = AdventureObjectBrush::WATER_ADVENTURE; i < AdventureObjectBrush::ADVENTURE_COUNT; ++i ) {
-                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 9 ), 0, 0, display, _adventureObjectButtonsRect[i] );
+                fheroes2::Copy( Assets::getImage( ICN::EDITPANL, i + 9 ), 0, 0, display, _adventureObjectButtonsRect[i] );
             }
 
             updateObjectTypeSelection( _selectedAdventureObject, _adventureObjectButtonsRect, _getAdventureObjectTypeName,
@@ -549,7 +549,7 @@ namespace Interface
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             // Kingdom objects buttons.
-            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
+            const fheroes2::Sprite & originalPanel = Assets::getImage( ICN::EDITPANL, 1 );
             const int32_t originalHeroesImageOffsetX{ 102 };
             const int32_t originalTownsImageOffsetX{ 44 };
             const int32_t originalImagesOffsetY{ 68 };
@@ -594,7 +594,7 @@ namespace Interface
             instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
             // Object type to erase buttons.
-            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
+            const fheroes2::Sprite & originalPanel = Assets::getImage( ICN::EDITPANL, 1 );
             const int32_t originalTownsImageOffsetX{ 44 };
             const int32_t originalMonstersImageOffsetX{ 73 };
             const int32_t originalHeroesTreasuresImageOffsetX{ 102 };
@@ -602,15 +602,15 @@ namespace Interface
             const int32_t originalArtifactsTreasresOffsetY{ 96 };
 
             // Mountains icon.
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 6 ), 0, 0, display, _eraseButtonsRect[0] );
+            fheroes2::Copy( Assets::getImage( ICN::EDITPANL, 6 ), 0, 0, display, _eraseButtonsRect[0] );
             // Rocks icon.
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 7 ), 0, 0, display, _eraseButtonsRect[1] );
+            fheroes2::Copy( Assets::getImage( ICN::EDITPANL, 7 ), 0, 0, display, _eraseButtonsRect[1] );
             // Trees icon.
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 8 ), 0, 0, display, _eraseButtonsRect[2] );
+            fheroes2::Copy( Assets::getImage( ICN::EDITPANL, 8 ), 0, 0, display, _eraseButtonsRect[2] );
             // Landscape objects icon.
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 10 ), 0, 0, display, _eraseButtonsRect[3] );
+            fheroes2::Copy( Assets::getImage( ICN::EDITPANL, 10 ), 0, 0, display, _eraseButtonsRect[3] );
             // Adventure non pickable objects icon.
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 13 ), 0, 0, display, _eraseButtonsRect[4] );
+            fheroes2::Copy( Assets::getImage( ICN::EDITPANL, 13 ), 0, 0, display, _eraseButtonsRect[4] );
             // Castle objects icon.
             fheroes2::Copy( originalPanel, originalTownsImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[5] );
             // Adventure pickable objects icon.
@@ -620,12 +620,12 @@ namespace Interface
             // Hero objects icon.
             fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[8] );
             // Road objects icon.
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 16 ), 0, 0, display, _eraseButtonsRect[9] );
+            fheroes2::Copy( Assets::getImage( ICN::EDITPANL, 16 ), 0, 0, display, _eraseButtonsRect[9] );
             // Stream objects icon.
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 17 ), 0, 0, display, _eraseButtonsRect[10] );
+            fheroes2::Copy( Assets::getImage( ICN::EDITPANL, 17 ), 0, 0, display, _eraseButtonsRect[10] );
 
             // Object type to erase selection marks.
-            const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
+            const fheroes2::Sprite & selectionMark = Assets::getImage( ICN::TOWNWIND, 11 );
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
                 if ( _eraseButtonObjectTypes[i] & _eraseTypes ) {
                     fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 10, _eraseButtonsRect[i].y + 11, selectionMark.width(),
@@ -992,7 +992,7 @@ namespace Interface
         case Maps::ObjectGroup::KINGDOM_HEROES:
             _interface.setCursorUpdater( [type]( const int32_t /*tileIndex*/ ) {
                 // TODO: render ICN::MINIHERO from the existing hero images.
-                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
+                const fheroes2::Sprite & image = Assets::getImage( ICN::MINIHERO, type );
 
                 // Mini-hero images contain a pole with a flag.
                 // This causes a situation that a selected tile does not properly correspond to current position of the cursor.

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,11 +28,11 @@
 #include <cstring>
 #include <utility>
 
-#include "agg_image.h"
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -334,7 +334,7 @@ namespace
 
                 const int32_t icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
                 const uint32_t flagIndex = ( icnFlagsBase == ICN::FLAG32 ) ? ( 2 * icnIndex + 1 ) : icnIndex;
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnFlagsBase, flagIndex );
+                const fheroes2::Sprite & sprite = Assets::getImage( icnFlagsBase, flagIndex );
 
                 const int32_t dstx = posX * tileSize + ( tileSize - sprite.width() ) / 2;
                 const int32_t dsty = posY * tileSize + ( tileSize - sprite.height() ) / 2 + 1;
@@ -352,7 +352,7 @@ namespace
                 const int32_t dstx = posX * tileSize + tileSize / 2;
                 const int32_t dsty = posY * tileSize + tileSize / 2;
 
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnPerZoomLevel[zoomLevelId], icnIndex );
+                const fheroes2::Sprite & sprite = Assets::getImage( icnPerZoomLevel[zoomLevelId], icnIndex );
                 fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
             }
         };
@@ -371,9 +371,9 @@ namespace
                 const int32_t dstx = posX * tileSize + tileSize / 2;
                 const int32_t dsty = posY * tileSize + tileSize / 2;
 
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnPerZoomLevel[zoomLevelId], icnIndex );
+                const fheroes2::Sprite & sprite = Assets::getImage( icnPerZoomLevel[zoomLevelId], icnIndex );
                 fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
-                const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterPerZoomLevel[zoomLevelId], letterIndex );
+                const fheroes2::Sprite & letter = Assets::getImage( icnLetterPerZoomLevel[zoomLevelId], letterIndex );
                 fheroes2::Blit( letter, cache.cachedImages[zoomLevelId], dstx - letter.width() / 2, dsty - letter.height() / 2 );
             }
         };
@@ -488,7 +488,7 @@ namespace
         dstY += cutHeight;
 
         if ( display.height() > fheroes2::Display::DEFAULT_HEIGHT ) {
-            const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONBAKE : ICN::STONBACK, 0 );
+            const fheroes2::Sprite & icnston = Assets::getImage( isEvilInterface ? ICN::STONBAKE : ICN::STONBACK, 0 );
             const int32_t startY = 11;
             const int32_t copyHeight = 46;
             const int32_t repeatHeight = display.height() - fheroes2::borderWidthPx - dstY - ( viewWorldSprite.height() - cutHeight );
@@ -656,7 +656,7 @@ void ViewWorld::ViewWorldWindow( const PlayerColor color, const ViewWorldMode mo
     }
     else if ( display.height() == fheroes2::Display::DEFAULT_HEIGHT ) {
         // Fix borders for Editor if screen height is 480 pixels.
-        const fheroes2::Sprite & borderSprite = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+        const fheroes2::Sprite & borderSprite = Assets::getImage( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
 
         const int32_t offsetX = 480;
         const int32_t stepY = 304;
@@ -680,7 +680,7 @@ void ViewWorld::ViewWorldWindow( const PlayerColor color, const ViewWorldMode mo
     radar.RedrawForViewWorld( currentROI, mode, true );
 
     // "View world" sprite
-    const fheroes2::Sprite & viewWorldSprite = fheroes2::AGG::GetICN( GetSpriteResource( mode, isEvilInterface ), 0 );
+    const fheroes2::Sprite & viewWorldSprite = Assets::getImage( GetSpriteResource( mode, isEvilInterface ), 0 );
     drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
 
     // Zoom button

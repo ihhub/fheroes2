@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,10 +25,10 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
 #include "game.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "ui_text.h"
@@ -97,7 +97,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             }
         }
 
-        const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
+        const fheroes2::Sprite & monster = Assets::getImage( ICN::MONS32, troop->GetSpriteIndex() );
         const fheroes2::Text text( std::move( monstersCountRepresentation ), fheroes2::FontType::smallWhite() );
 
         const int32_t posX = isRightToLeftRender ? ( cx + static_cast<int32_t>( chunk * ( count - 1 ) ) ) : ( cx - static_cast<int32_t>( chunk * count ) );

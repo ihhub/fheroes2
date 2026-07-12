@@ -33,11 +33,11 @@
 #include <ostream>
 #include <type_traits>
 
-#include "agg_image.h"
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "direction.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "ground.h"
@@ -297,7 +297,7 @@ namespace
     {
         for ( const auto & [offset, imgInfo] : images ) {
             for ( const auto & info : imgInfo ) {
-                area.BlitOnTile( output, fheroes2::AGG::GetICN( info.icnId, info.icnIndex ), info.area, info.imageOffset.x, info.imageOffset.y, offset, info.isFlipped,
+                area.BlitOnTile( output, Assets::getImage( info.icnId, info.icnIndex ), info.area, info.imageOffset.x, info.imageOffset.y, offset, info.isFlipped,
                                  info.alphaValue );
             }
         }
@@ -747,7 +747,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
             }
 
-            const fheroes2::Sprite & routeSprite = fheroes2::AGG::GetICN( ( ( greenColorSteps < 0 ) ? ICN::ROUTERED : ICN::ROUTE ), routeSpriteIndex );
+            const fheroes2::Sprite & routeSprite = Assets::getImage( ( ( greenColorSteps < 0 ) ? ICN::ROUTERED : ICN::ROUTE ), routeSpriteIndex );
             BlitOnTile( dst, routeSprite, routeSprite.x() - 12, routeSprite.y() + 2, mp, false, 255 );
         }
     }
@@ -819,7 +819,7 @@ void Interface::GameArea::redrawOnlyFog( fheroes2::Image & dst ) const
                     Maps::redrawEmptyTile( dst, offset, *this );
                 }
                 else {
-                    const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( offset.x + offset.y ) % 4, 0 );
+                    const fheroes2::Image & sf = Assets::getTileImage( TIL::CLOF32, ( offset.x + offset.y ) % 4, 0 );
                     DrawTile( dst, sf, offset );
                 }
             }
@@ -919,7 +919,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
 
     gamearea.Redraw( result, LEVEL_OBJECTS, true );
 
-    const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
+    const fheroes2::Sprite & marker = Assets::getImage( ICN::ROUTE, 0 );
     const fheroes2::Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - fheroes2::Point( gamearea._windowROI.x, gamearea._windowROI.y )
                                      + fheroes2::Point( result.width() / 2, result.height() / 2 ) );
 

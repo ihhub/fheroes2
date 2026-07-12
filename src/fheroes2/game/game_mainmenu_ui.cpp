@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,8 +24,8 @@
 #include <cassert>
 #include <cstdint>
 
-#include "agg_image.h"
 #include "game.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -37,7 +37,7 @@ namespace
 {
     void drawSprite( fheroes2::Image & output, const int icnId, const uint32_t index )
     {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnId, index );
+        const fheroes2::Sprite & sprite = Assets::getImage( icnId, index );
         fheroes2::Blit( sprite, 0, 0, output, sprite.x(), sprite.y(), sprite.width(), sprite.height() );
     }
 
@@ -50,7 +50,7 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+        const fheroes2::Sprite & background = Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
 
         const int32_t stepX = ( roi.width + background.width() ) / background.width();
         const int32_t stepY = ( roi.height + background.height() ) / background.height();
@@ -93,7 +93,7 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        const Sprite & mainMenuBackground = AGG::GetICN( ICN::HEROES, 0 );
+        const Sprite & mainMenuBackground = Assets::getImage( ICN::HEROES, 0 );
         Copy( mainMenuBackground, 0, 0, display, mainMenuBackground.x(), mainMenuBackground.y(), mainMenuBackground.width(), mainMenuBackground.height() );
 
         drawSprite( display, ICN::BTNSHNGL, 1 );
@@ -109,7 +109,7 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        const Sprite & background = AGG::GetICN( ICN::EDITOR, 0 );
+        const Sprite & background = Assets::getImage( ICN::EDITOR, 0 );
         Copy( background, 0, 0, display, background.x(), background.y(), background.width(), background.height() );
 
         fillScreenBorders( display, { background.x(), background.y(), background.width(), background.height() } );
