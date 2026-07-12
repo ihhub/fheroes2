@@ -807,6 +807,18 @@ namespace
         }
     };
 #elif defined( __PS2__ )
+    class RenderCursor final : public fheroes2::Cursor
+    {
+    public:
+        static RenderCursor * create()
+        {
+            auto * cursor = new RenderCursor;
+            cursor->enableSoftwareEmulation( false );
+
+            return cursor;
+        }
+    };
+
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
@@ -874,12 +886,6 @@ namespace
         {
             clear();
 
-            const std::vector<fheroes2::ResolutionInfo> resolutions = getAvailableResolutions();
-            assert( !resolutions.empty() );
-            if ( !resolutions.empty() ) {
-                resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
-            }
-
             _texture = reinterpret_cast<GSTEXTURE *>( calloc( 1, sizeof( GSTEXTURE ) ) );
 
             _gsglobal = gsKit_init_global();
@@ -935,10 +941,16 @@ namespace
 
             for ( size_t i = 0; i < 256; ++i ) {
                 const uint8_t * value = currentPalette + colorIds[i] * 3;
-
-                uint32_t c = ( 0x80 << 24 ) | ( value[0] << 16 ) | ( value[1] << 8 ) | value[2];
-
-                _palette[i] = ( c & 0xFF00FF00 ) | ( ( c & 0x00FF0000 ) >> 16 ) | ( ( c & 0x000000FF ) << 16 );
+                // Red.
+                _palette[i] = *value;
+                ++value;
+                // Green.
+                _palette[i] += static_cast<uint32_t>( *value ) << 8U;
+                ++value;
+                // Blue.
+                _palette[i] += static_cast<uint32_t>( *value ) << 16U;
+                // Alpha channel. Always non-transparent.
+                _palette[i] += ( 255U << 24U );
             }
 
             // Swap the texture to have the CSM1 mode requirements
