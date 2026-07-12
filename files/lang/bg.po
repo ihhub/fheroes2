@@ -17,331 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-msgid "SELECT"
-msgstr "ИЗБЕРИ"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr ""
-
-msgid "M"
-msgstr ""
-
-msgid "L"
-msgstr ""
-
-msgid "X-L"
-msgstr ""
-
-msgid "ALL"
-msgstr ""
-
-msgid "EXIT"
-msgstr "ИЗХОД"
-
-msgid "smallerButton|EXIT"
-msgstr "ИЗХОД"
-
-msgid "OKAY"
-msgstr "ДОБРЕ"
-
-msgid "HEROES"
-msgstr "ГЕРОЙ"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"ГРАДОВЕ/\n"
-"ЗАМЪЦИ"
-
-msgid "CANCEL"
-msgstr "ОТКАЗ"
-
-msgid "ACCEPT"
-msgstr "ПРИЕМАМ"
-
-msgid "DECLINE"
-msgstr "ОТКАЗВАМ"
-
-msgid "LEARN"
-msgstr "НАУЧИ"
-
-msgid "TRADE"
-msgstr "СДЕЛКА"
-
-msgid "YES"
-msgstr "ДА"
-
-msgid "NO"
-msgstr "НЕ"
-
-msgid "DISMISS"
-msgstr "ОТПРАТИ"
-
-msgid "UPGRADE"
-msgstr "ЗАСИЛИ"
-
-msgid "GIFT"
-msgstr "ДАРИ"
-
-msgid "RESTART"
-msgstr "РЕСТАРТ"
-
-msgid "MAX"
-msgstr "МАКС"
-
-msgid "MIN"
-msgstr "МИН"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"О\n"
-"Т\n"
-"П\n"
-"Р\n"
-"А\n"
-"Т\n"
-"И"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"И\n"
-"З\n"
-"Х\n"
-"О\n"
-"Д"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"К\n"
-"А\n"
-"М\n"
-"П\n"
-"А\n"
-"Н\n"
-"И\n"
-"Я"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"С\n"
-"Т\n"
-"А\n"
-"Н\n"
-"Д\n"
-"А\n"
-"Р\n"
-"Т\n"
-"Е\n"
-"Н"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"НОВА\n"
-"ИГРА"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"ЗАРЕДИ\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "РЕСТАРТ"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ЗАПАЗИ\n"
-"ИГРА"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "ИЗХОД"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"НОВА\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАРЕДИ\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "РЕСТАРТ"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗАПАЗИ\n"
-"ИГРА"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-msgid "INFO"
-msgstr "ИНФО"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"САМО\n"
-"БИТКА"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"НОРМАЛНА\n"
-"ИГРА"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"ИГРАЙ\n"
-"ИСТОРИЯ"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"ИГРА С\n"
-"ПОВЕЧЕ\n"
-"ИГРАЧИ"
-
-msgid "HOT SEAT"
-msgstr "ОБЩ СТОЛ"
-
-msgid "2 PLAYERS"
-msgstr "2 ИГРАЧА"
-
-msgid "3 PLAYERS"
-msgstr "3 ИГРАЧА"
-
-msgid "4 PLAYERS"
-msgstr "4 ИГРАЧА"
-
-msgid "5 PLAYERS"
-msgstr "5 ИГРАЧА"
-
-msgid "6 PLAYERS"
-msgstr "6 ИГРАЧА"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"НАЧАЛНА\n"
-"ИСТОРИЯ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr "ЕКСПАНЗИЯ"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "ТРУДНОСТ"
-
-msgid "VIEW INTRO"
-msgstr "ВИЖ ИНТРО"
-
-msgid "RESET"
-msgstr ""
-
-#, fuzzy
-msgid "START"
-msgstr "РЕСТАРТ"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "Малко"
-
 msgid "Warrior"
 msgstr "Войн"
 
@@ -422,6 +97,9 @@ msgid ""
 msgstr ""
 "Легион от\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Малко"
 
 msgid "army|Several"
 msgstr "Няколко"
@@ -3655,8 +3333,14 @@ msgstr "Покупка на:"
 msgid "Recruit selected monsters."
 msgstr "Вербувай избраните чудовища."
 
+msgid "MAX"
+msgstr "МАКС"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Избери максимален брой чудовища, които да бъдат наети."
+
+msgid "MIN"
+msgstr "МИН"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Избери само 1 чудовище, което да бъде наето."
@@ -4505,6 +4189,9 @@ msgstr ""
 #, fuzzy
 msgid "Click to make selection."
 msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+msgid "SELECT"
+msgstr "ИЗБЕРИ"
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -5524,6 +5211,319 @@ msgstr "Експертна"
 
 msgid "difficulty|Impossible"
 msgstr "Невъзможна"
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid "EXIT"
+msgstr "ИЗХОД"
+
+msgid "smallerButton|EXIT"
+msgstr "ИЗХОД"
+
+msgid "OKAY"
+msgstr "ДОБРЕ"
+
+msgid "HEROES"
+msgstr "ГЕРОЙ"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"ГРАДОВЕ/\n"
+"ЗАМЪЦИ"
+
+msgid "CANCEL"
+msgstr "ОТКАЗ"
+
+msgid "ACCEPT"
+msgstr "ПРИЕМАМ"
+
+msgid "DECLINE"
+msgstr "ОТКАЗВАМ"
+
+msgid "LEARN"
+msgstr "НАУЧИ"
+
+msgid "TRADE"
+msgstr "СДЕЛКА"
+
+msgid "YES"
+msgstr "ДА"
+
+msgid "NO"
+msgstr "НЕ"
+
+msgid "DISMISS"
+msgstr "ОТПРАТИ"
+
+msgid "UPGRADE"
+msgstr "ЗАСИЛИ"
+
+msgid "GIFT"
+msgstr "ДАРИ"
+
+msgid "RESTART"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"О\n"
+"Т\n"
+"П\n"
+"Р\n"
+"А\n"
+"Т\n"
+"И"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"И\n"
+"З\n"
+"Х\n"
+"О\n"
+"Д"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"К\n"
+"А\n"
+"М\n"
+"П\n"
+"А\n"
+"Н\n"
+"И\n"
+"Я"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"С\n"
+"Т\n"
+"А\n"
+"Н\n"
+"Д\n"
+"А\n"
+"Р\n"
+"Т\n"
+"Е\n"
+"Н"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "ИЗХОД"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "РЕСТАРТ"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "ИНФО"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"САМО\n"
+"БИТКА"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"НОРМАЛНА\n"
+"ИГРА"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"ИГРАЙ\n"
+"ИСТОРИЯ"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"ИГРА С\n"
+"ПОВЕЧЕ\n"
+"ИГРАЧИ"
+
+msgid "HOT SEAT"
+msgstr "ОБЩ СТОЛ"
+
+msgid "2 PLAYERS"
+msgstr "2 ИГРАЧА"
+
+msgid "3 PLAYERS"
+msgstr "3 ИГРАЧА"
+
+msgid "4 PLAYERS"
+msgstr "4 ИГРАЧА"
+
+msgid "5 PLAYERS"
+msgstr "5 ИГРАЧА"
+
+msgid "6 PLAYERS"
+msgstr "6 ИГРАЧА"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"НАЧАЛНА\n"
+"ИСТОРИЯ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr "ЕКСПАНЗИЯ"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "ТРУДНОСТ"
+
+msgid "VIEW INTRO"
+msgstr "ВИЖ ИНТРО"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 #, fuzzy
 msgid "Auto Playtest Results"

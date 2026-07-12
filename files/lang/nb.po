@@ -17,315 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-msgid "SELECT"
-msgstr "ENDRE"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "L"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "S"
-
-msgid "X-L"
-msgstr "XS"
-
-msgid "ALL"
-msgstr "ALT"
-
-msgid "EXIT"
-msgstr "UT"
-
-msgid "smallerButton|EXIT"
-msgstr "UT"
-
-msgid "OKAY"
-msgstr "OK"
-
-msgid "HEROES"
-msgstr "HELTER"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"BYER/\n"
-"BORGER"
-
-msgid "CANCEL"
-msgstr "AVBRYT"
-
-msgid "ACCEPT"
-msgstr "GODTA"
-
-msgid "DECLINE"
-msgstr "AVSLÅ"
-
-msgid "LEARN"
-msgstr "LÆR"
-
-msgid "TRADE"
-msgstr "BYTT"
-
-msgid "YES"
-msgstr "JA"
-
-msgid "NO"
-msgstr "NEI"
-
-msgid "DISMISS"
-msgstr "BORTVIS"
-
-msgid "UPGRADE"
-msgstr "OPPGRAD."
-
-msgid "GIFT"
-msgstr "SEND"
-
-msgid "RESTART"
-msgstr "OMSTART"
-
-msgid "MAX"
-msgstr "MAKS"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"B\n"
-"O\n"
-"R\n"
-"T\n"
-"V\n"
-"I\n"
-"S"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"F\n"
-"O\n"
-"R\n"
-"L\n"
-"A\n"
-"T"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NYTT\n"
-"PARTI"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"LAST INN\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "OMSTART"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"LAGRE\n"
-"PARTI"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "AVSLUTT"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NYTT\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"LAST\n"
-"INN\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "OMSTART"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"LAGRE\n"
-"PARTI"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "KAMP"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"ENKELT\n"
-"PARTI"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "FELTTOG"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"FLER-\n"
-"SPILLER"
-
-msgid "HOT SEAT"
-msgstr ""
-"BYTTE-\n"
-"SPILLING"
-
-msgid "2 PLAYERS"
-msgstr "2 SPILLERE"
-
-msgid "3 PLAYERS"
-msgstr "3 SPILLERE"
-
-msgid "4 PLAYERS"
-msgstr "4 SPILLERE"
-
-msgid "5 PLAYERS"
-msgstr "5 SPILLERE"
-
-msgid "6 PLAYERS"
-msgstr "6 SPILLERE"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"TRONE-\n"
-"KRIGENE"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"PRISEN\n"
-"FOR\n"
-"LOJALITET"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "FELTTOGSNIVÅ"
-
-msgid "VIEW INTRO"
-msgstr "VIS VIDEO"
-
-msgid "RESET"
-msgstr ""
-
-#, fuzzy
-msgid "START"
-msgstr "OMSTART"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "Få"
-
 msgid "Warrior"
 msgstr "Kriger"
 
@@ -406,6 +97,9 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Få"
 
 msgid "army|Several"
 msgstr "Flere"
@@ -3699,8 +3393,14 @@ msgstr "Antall valgt:"
 msgid "Recruit selected monsters."
 msgstr "Verv det utvalgte antall krigere."
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Velg maksimalt antall vervbare krigere."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Velg kun én kriger til å verves."
@@ -4550,6 +4250,9 @@ msgstr ""
 #, fuzzy
 msgid "Click to make selection."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+msgid "SELECT"
+msgstr "ENDRE"
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -5568,6 +5271,303 @@ msgstr "Ekspert"
 
 msgid "difficulty|Impossible"
 msgstr "Umulig"
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "L"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "S"
+
+msgid "X-L"
+msgstr "XS"
+
+msgid "ALL"
+msgstr "ALT"
+
+msgid "EXIT"
+msgstr "UT"
+
+msgid "smallerButton|EXIT"
+msgstr "UT"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "HEROES"
+msgstr "HELTER"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"BYER/\n"
+"BORGER"
+
+msgid "CANCEL"
+msgstr "AVBRYT"
+
+msgid "ACCEPT"
+msgstr "GODTA"
+
+msgid "DECLINE"
+msgstr "AVSLÅ"
+
+msgid "LEARN"
+msgstr "LÆR"
+
+msgid "TRADE"
+msgstr "BYTT"
+
+msgid "YES"
+msgstr "JA"
+
+msgid "NO"
+msgstr "NEI"
+
+msgid "DISMISS"
+msgstr "BORTVIS"
+
+msgid "UPGRADE"
+msgstr "OPPGRAD."
+
+msgid "GIFT"
+msgstr "SEND"
+
+msgid "RESTART"
+msgstr "OMSTART"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"B\n"
+"O\n"
+"R\n"
+"T\n"
+"V\n"
+"I\n"
+"S"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"F\n"
+"O\n"
+"R\n"
+"L\n"
+"A\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NYTT\n"
+"PARTI"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"LAST INN\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OMSTART"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"LAGRE\n"
+"PARTI"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "AVSLUTT"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYTT\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"LAST\n"
+"INN\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "OMSTART"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LAGRE\n"
+"PARTI"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "KAMP"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"ENKELT\n"
+"PARTI"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr "FELTTOG"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"FLER-\n"
+"SPILLER"
+
+msgid "HOT SEAT"
+msgstr ""
+"BYTTE-\n"
+"SPILLING"
+
+msgid "2 PLAYERS"
+msgstr "2 SPILLERE"
+
+msgid "3 PLAYERS"
+msgstr "3 SPILLERE"
+
+msgid "4 PLAYERS"
+msgstr "4 SPILLERE"
+
+msgid "5 PLAYERS"
+msgstr "5 SPILLERE"
+
+msgid "6 PLAYERS"
+msgstr "6 SPILLERE"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"TRONE-\n"
+"KRIGENE"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"PRISEN\n"
+"FOR\n"
+"LOJALITET"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "FELTTOGSNIVÅ"
+
+msgid "VIEW INTRO"
+msgstr "VIS VIDEO"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "OMSTART"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 #, fuzzy
 msgid "Auto Playtest Results"
