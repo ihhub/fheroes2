@@ -5795,7 +5795,7 @@ namespace
             resizedIcn.resize( resizedWidth, resizedHeight );
             resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
                                     static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
-            SubpixelResize( originalIcn, resizedIcn );
+            Resize( originalIcn, resizedIcn );
         }
         else {
             // No need to resize but we have to update the offset.
