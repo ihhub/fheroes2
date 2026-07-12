@@ -63,6 +63,7 @@ jobs:
         repository: ${{ env.PR_HEAD_REPO }}
         ref: ${{ env.PR_HEAD_SHA }}
         persist-credentials: false
+        allow-unsafe-pr-checkout: true
     - name: Redownload analysis results
       uses: actions/github-script@v9
       with:
