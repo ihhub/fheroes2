@@ -21,6 +21,7 @@
 #include "screen.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -196,23 +197,21 @@ namespace
 
     std::vector<uint8_t> StandardPaletteIndexes()
     {
-        std::vector<uint8_t> indexes( 256 );
-        for ( uint32_t i = 0; i < 256; ++i ) {
+        std::vector<uint8_t> indexes( fheroes2::paletteSize );
+        for ( uint32_t i = 0; i < fheroes2::paletteSize; ++i ) {
             indexes[i] = static_cast<uint8_t>( i );
         }
         return indexes;
     }
 
-    const uint8_t * PALPalette( const bool forceDefaultPaletteUpdate = false )
+    const fheroes2::RGB * RGBPalette( const bool forceDefaultPaletteUpdate = false )
     {
-        static std::vector<uint8_t> palette;
-        if ( palette.empty() || forceDefaultPaletteUpdate ) {
-            const uint8_t * gamePalette = fheroes2::getGamePalette();
+        static std::array<fheroes2::RGB, fheroes2::paletteSize> palette;
+        static bool paletteInitialized = false;
+        if ( forceDefaultPaletteUpdate || !paletteInitialized ) {
+            palette = fheroes2::getNormalizedRGBGamePalette();
 
-            palette.resize( 256 * 3 );
-            for ( size_t i = 0; i < palette.size(); ++i ) {
-                palette[i] = gamePalette[i] << 2;
-            }
+            paletteInitialized = true;
         }
 
         return palette.data();
@@ -263,7 +262,7 @@ namespace
         return true;
     }
 
-    const uint8_t * currentPalette = PALPalette();
+    const fheroes2::RGB * currentRGBPalette = RGBPalette();
 
 // If SDL library is used
 #if !defined( TARGET_PS_VITA )
@@ -349,30 +348,54 @@ namespace
             assert( surface != nullptr );
 
             if ( surface->format->BitsPerPixel == 32 ) {
-                _palette32Bit.resize( 256u );
+                _palette32Bit.resize( fheroes2::paletteSize );
 
                 if ( surface->format->Amask > 0 ) {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
+                        }
+                    }
+                    else if ( surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
+                        }
                     }
                 }
                 else {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+#if SDL_VERSION_ATLEAST( 2, 30, 0 )
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBX32 ) {
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBX8888 ) {
+#else
+                    if ( surface->format->format == SDL_PIXELFORMAT_XBGR8888 ) {
+#endif
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBX();
+                        }
+                    }
+#if SDL_VERSION_ATLEAST( 2, 30, 0 )
+                    else if ( surface->format->format == SDL_PIXELFORMAT_BGRX32 ) {
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+                    if ( surface->format->format == SDL_PIXELFORMAT_BGRX8888 ) {
+#else
+                    if ( surface->format->format == SDL_PIXELFORMAT_XRGB8888 ) {
+#endif
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRX();
+                        }
                     }
                 }
             }
             else if ( surface->format->BitsPerPixel == 8 ) {
-                _palette8Bit.resize( 256 );
-                for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint8_t * value = currentPalette + colorIds[i] * 3;
+                _palette8Bit.resize( fheroes2::paletteSize );
+                for ( uint32_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                    const auto & pal = currentRGBPalette[colorIds[i]];
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = *value;
-                    col.g = *( value + 1 );
-                    col.b = *( value + 2 );
+                    col.r = pal.r;
+                    col.g = pal.g;
+                    col.b = pal.b;
                 }
             }
             else {
@@ -406,19 +429,17 @@ namespace
             if ( surface->format->Amask > 0 ) {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                        *out = currentRGBPalette[*in].getRGBA();
                     }
                 }
             }
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+                        *out = currentRGBPalette[*in].getRGBX();
                     }
                     else {
-                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
+                        *out = 0;
                     }
                 }
             }
@@ -456,7 +477,7 @@ namespace
             return Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
-        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        void update( const fheroes2::Image & image, const int32_t offsetX, const int32_t offsetY ) override
         {
             if ( image.empty() || image.singleLayer() ) {
                 // What are you trying to do? Set an invisible cursor? Use hide() method!
@@ -486,21 +507,20 @@ namespace
             if ( surface->format->Amask > 0 ) {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                        *out = currentRGBPalette[*in].getRGBA();
                     }
-                    else if ( *transform > 1 ) {
+                    else if ( *transform > 1 && *transform < 6 ) {
                         // SDL2 uses RGBA image on OS level separately from frame rendering.
                         // Here we are trying to simulate cursor's shadow as close as possible to the original game.
-                        *out = SDL_MapRGBA( surface->format, 0, 0, 0, 64 );
+                        // Shadow strength in transform layer is: from 5 (light) to 2 (strong).
+                        *out = 8U << ( ( 5U - *transform ) + 24U );
                     }
                 }
             }
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+                        *out = currentRGBPalette[*in].getRGBX();
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -733,23 +753,13 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( colorIds.size() != 256U || _texBuffer == nullptr )
+            if ( colorIds.size() != fheroes2::paletteSize || _texBuffer == nullptr )
                 return;
 
             auto * palette32Bit = reinterpret_cast<uint32_t *>( vita2d_texture_get_palette( _texBuffer ) );
 
-            for ( size_t i = 0; i < 256U; ++i ) {
-                const uint8_t * value = currentPalette + colorIds[i] * 3;
-                // Red.
-                palette32Bit[i] = *value;
-                ++value;
-                // Green.
-                palette32Bit[i] += static_cast<uint32_t>( *value ) << 8U;
-                ++value;
-                // Blue.
-                palette32Bit[i] += static_cast<uint32_t>( *value ) << 16U;
-                // Alpha channel. Always non-transparent.
-                palette32Bit[i] += ( 255U << 24U );
+            for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
             }
         }
 
@@ -1600,12 +1610,12 @@ namespace fheroes2
         _prevRoi = {};
     }
 
-    void Display::changePalette( const uint8_t * palette, const bool forceDefaultPaletteUpdate ) const
+    void Display::changePalette( const RGB * palette, const bool forceDefaultPaletteUpdate ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() && !forceDefaultPaletteUpdate ) )
+        if ( currentRGBPalette == palette || ( palette == nullptr && !forceDefaultPaletteUpdate && currentRGBPalette == RGBPalette() ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPalette( forceDefaultPaletteUpdate ) : palette;
+        currentRGBPalette = ( palette == nullptr ) ? RGBPalette( forceDefaultPaletteUpdate ) : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

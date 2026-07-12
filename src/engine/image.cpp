@@ -40,7 +40,7 @@ namespace
     // Mirror palette was modified as it was containing 238, 238, 239, 240 values instead of 238, 239, 240, 241
     // !!! WARNING !!!
     // If you modify "No cycle" part of the table make sure to update nonCyclingUniqueColorPos variable below (see GetPALColorId() function).
-    const uint8_t transformTable[256 * 16] = {
+    const uint8_t transformTable[fheroes2::paletteSize * 16] = {
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
@@ -356,7 +356,7 @@ namespace
     {
         assert( rgbToId != nullptr );
 
-        const uint8_t * gamePalette = fheroes2::getGamePalette();
+        const fheroes2::RGB * gamePalette = fheroes2::getRGBGamePalette();
 
         // Use the "No cycle" palette.
         // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
@@ -391,14 +391,12 @@ namespace
             const uint8_t * correctorXEnd = correctorX + colorCount;
 
             for ( ; correctorX != correctorXEnd; ++correctorX ) {
-                const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
+                const fheroes2::RGB & palette = gamePalette[*correctorX];
 
-                const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
-                const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
-                ++palette;
-                const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
-                ++palette;
-                const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
+                const int32_t sumRed = static_cast<int32_t>( palette.r ) + r;
+                const int32_t offsetRed = static_cast<int32_t>( palette.r ) - r;
+                const int32_t offsetGreen = static_cast<int32_t>( palette.g ) - g;
+                const int32_t offsetBlue = static_cast<int32_t>( palette.b ) - b;
 
                 // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
                 const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
@@ -406,10 +404,14 @@ namespace
                 if ( minDistance > distance ) {
                     minDistance = distance;
                     bestPos = *correctorX;
+
+                    if ( distance == 0 ) {
+                        break;
+                    }
                 }
             }
 
-            rgbToId[id] = transformTable[256 * 15 + bestPos];
+            rgbToId[id] = transformTable[fheroes2::paletteSize * 15 + bestPos];
         }
     }
 #endif
@@ -422,9 +424,13 @@ namespace
         if ( !isInitialized ) {
             isInitialized = true;
 
+#if defined( GENERATE_COLOR_TABLE )
+            generateColorConversionTable( rgbToId, size );
+#else
             if ( !getColorConversionTable( rgbToId, size ) ) {
                 throw fheroes2::CorruptedExecutable{ "Application is corrupted." };
             }
+#endif
         }
 
         return rgbToId[red + ( green << 6U ) + ( blue << 12U )];
@@ -890,7 +896,7 @@ namespace fheroes2
                     if ( *transformOutX == 0 ) {
                         // Apply shadow transform to the out image.
                         uint8_t * imageOutX = imageOut + outOffset;
-                        *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                        *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ paletteSize } + *imageOutX );
                     }
                     else if ( *transformOutX > 1 && *transformOutX < 6 ) {
                         // Out image transform layer already has shadow data. We add the shadow strength by subtract the 'transformTableId', limited to 2.
@@ -903,7 +909,7 @@ namespace fheroes2
                 else {
                     // For single-layer 'out' image apply shadow transform to the image data.
                     uint8_t * imageOutX = imageOut + outOffset;
-                    *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                    *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ paletteSize } + *imageOutX );
                 }
             }
         }
@@ -982,9 +988,9 @@ namespace fheroes2
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
-        const uint8_t behindValue = 255 - alphaValue;
+        const uint32_t behindValue = 255U - alphaValue;
 
-        const uint8_t * gamePalette = getGamePalette();
+        const RGB * gamePalette = getRGBGamePalette();
 
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
@@ -1001,13 +1007,13 @@ namespace fheroes2
                     const uint8_t * imageOutXEnd = imageOutX + width;
 
                     for ( ; imageOutX != imageOutXEnd; --imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[*imageInX];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
+                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255U ), static_cast<uint8_t>( green / 255U ), static_cast<uint8_t>( blue / 255U ) );
                     }
                 }
             }
@@ -1027,15 +1033,15 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * paletteSize + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[inValue];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                     }
                 }
@@ -1055,12 +1061,12 @@ namespace fheroes2
                     const uint8_t * imageInXEnd = imageInX + width;
 
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[*imageInX];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                     }
                 }
@@ -1081,15 +1087,15 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * paletteSize + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[inValue];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                     }
                 }
@@ -1104,7 +1110,7 @@ namespace fheroes2
 
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette )
     {
-        if ( palette.size() != 256 ) {
+        if ( palette.size() != paletteSize ) {
             return;
         }
 
@@ -1122,7 +1128,7 @@ namespace fheroes2
             return;
         }
 
-        ApplyRawPalette( in, 0, 0, out, 0, 0, in.width(), in.height(), transformTable + paletteId * 256 );
+        ApplyRawPalette( in, 0, 0, out, 0, 0, in.width(), in.height(), transformTable + paletteId * paletteSize );
     }
 
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t paletteId )
@@ -1131,13 +1137,13 @@ namespace fheroes2
             return;
         }
 
-        ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, transformTable + paletteId * 256 );
+        ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, transformTable + paletteId * paletteSize );
     }
 
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
                        const std::vector<uint8_t> & palette )
     {
-        if ( palette.size() != 256 ) {
+        if ( palette.size() != paletteSize ) {
             return;
         }
 
@@ -1146,19 +1152,15 @@ namespace fheroes2
 
     void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alpha )
     {
-        std::vector<uint8_t> palette( 256, 0 );
+        std::vector<uint8_t> palette( paletteSize, 0 );
 
-        const uint8_t * value = getGamePalette();
+        const RGB * gamePalette = getRGBGamePalette();
 
         // The first 10 colors are undefined in the original palette. Colors 254 and 255 are also unused in game palette.
-        value += 10 * 3;
-        for ( uint32_t i = 10; i < 254; ++i ) {
-            const uint32_t red = static_cast<uint32_t>( *value ) * alpha / 255;
-            ++value;
-            const uint32_t green = static_cast<uint32_t>( *value ) * alpha / 255;
-            ++value;
-            const uint32_t blue = static_cast<uint32_t>( *value ) * alpha / 255;
-            ++value;
+        for ( size_t i = 10; i < 254; ++i ) {
+            const uint32_t red = gamePalette[i].r * alpha / 255U;
+            const uint32_t green = gamePalette[i].g * alpha / 255U;
+            const uint32_t blue = gamePalette[i].b * alpha / 255U;
             palette[i] = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
         }
 
@@ -1176,7 +1178,7 @@ namespace fheroes2
         uint8_t * imageY = image.image() + y * imageWidth + x;
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
-        const uint32_t transformOffset = transformId * 256;
+        const uint32_t transformOffset = transformId * paletteSize;
 
         if ( image.singleLayer() ) {
             for ( ; imageY != imageYEnd; imageY += imageWidth ) {
@@ -1259,7 +1261,7 @@ namespace fheroes2
                     for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1284,7 +1286,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;
@@ -1314,7 +1316,7 @@ namespace fheroes2
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1339,7 +1341,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;
@@ -2835,7 +2837,7 @@ namespace fheroes2
                     if ( *transformIn > 0 ) {
                         if ( *transformIn != 1 ) {
                             // Apply a transformation.
-                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformIn ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformIn ) * paletteSize + *imageOutX );
                         }
                     }
                     else {
@@ -3165,7 +3167,7 @@ namespace fheroes2
                         }
                         else if ( *transformInX != 1 ) {
                             // Apply a transformation.
-                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * paletteSize + *imageOutX );
                         }
                     }
 
