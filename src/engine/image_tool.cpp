@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstring>
@@ -66,26 +67,14 @@ namespace
         return path.size() >= pngExtension.size() && ( path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 );
     }
 
-    std::vector<uint8_t> PALPalette()
-    {
-        const uint8_t * gamePalette = fheroes2::getGamePalette();
-
-        std::vector<uint8_t> palette( 256 * 3 );
-        for ( size_t i = 0; i < palette.size(); ++i ) {
-            palette[i] = gamePalette[i] << 2;
-        }
-
-        return palette;
-    }
-
 #if defined( WITH_IMAGE )
     bool SaveImage( const fheroes2::Image & image, const std::string & path )
 #else
     bool SaveImage( const fheroes2::Image & image, std::string path )
 #endif
     {
-        const std::vector<uint8_t> & palette = PALPalette();
-        const uint8_t * currentPalette = palette.data();
+        const std::array<fheroes2::RGB, fheroes2::paletteSize> & palette = fheroes2::getNormalizedRGBGamePalette();
+        const fheroes2::RGB * currentPalette = palette.data();
 
         const int32_t width = image.width();
         const int32_t height = image.height();
@@ -98,19 +87,18 @@ namespace
 
         assert( surface->format->BitsPerPixel == 8 );
 
-        std::vector<SDL_Color> paletteSDL;
-        paletteSDL.resize( 256 );
-        for ( int32_t i = 0; i < 256; ++i ) {
-            const uint8_t * value = currentPalette + i * 3;
+        std::array<SDL_Color, fheroes2::paletteSize> paletteSDL{};
+        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+            const auto & value = currentPalette[i];
             SDL_Color & col = paletteSDL[i];
 
-            col.r = *value;
-            col.g = *( value + 1 );
-            col.b = *( value + 2 );
+            col.r = value.r;
+            col.g = value.g;
+            col.b = value.b;
             col.a = 255;
         }
 
-        SDL_SetPaletteColors( surface->format->palette, paletteSDL.data(), 0, 256 );
+        SDL_SetPaletteColors( surface->format->palette, paletteSDL.data(), 0, fheroes2::paletteSize );
 
         if ( surface->pitch != width ) {
             const uint8_t * imageIn = image.image();

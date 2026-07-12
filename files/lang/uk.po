@@ -18,349 +18,6 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-msgid "SELECT"
-msgstr "ОБРАТИ"
-
-msgid "ABOUT"
-msgstr "ПРО МАПУ"
-
-msgid "S"
-msgstr "М"
-
-msgid "M"
-msgstr "С"
-
-msgid "L"
-msgstr "В"
-
-msgid "X-L"
-msgstr "НВ"
-
-msgid "ALL"
-msgstr "ВСІ"
-
-msgid "EXIT"
-msgstr "ВИХІД"
-
-msgid "smallerButton|EXIT"
-msgstr "ВИХІД"
-
-# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
-msgid "OKAY"
-msgstr "ГАРАЗД"
-
-msgid "HEROES"
-msgstr "ГЕРОЇ"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"МІСТА/\n"
-"ЗАМКИ"
-
-# Скасувати - правильний варіант перекладу слова CANCEL
-# Відміна - відміняють лише дієслова як частину мови.
-msgid "CANCEL"
-msgstr "СКАСУВАТИ"
-
-msgid "ACCEPT"
-msgstr "ПРИЙНЯТИ"
-
-# Відхилити - є правильним перкладом. Дієслово, що позначає неприйняття пропозиції, змін тощо.
-# Відмінити - стосується лише відміни дієслів як частини мови.
-msgid "DECLINE"
-msgstr "ВІДХИЛИТИ"
-
-msgid "LEARN"
-msgstr "ВИВЧИТИ"
-
-msgid "TRADE"
-msgstr "ОБМІНЯТИ"
-
-msgid "YES"
-msgstr "ТАК"
-
-msgid "NO"
-msgstr "НІ"
-
-msgid "DISMISS"
-msgstr "ЗВІЛЬНИТИ"
-
-msgid "UPGRADE"
-msgstr "ПОКРАЩИТИ"
-
-msgid "GIFT"
-msgstr "ДАРУНОК"
-
-msgid "RESTART"
-msgstr "РЕСТАРТ"
-
-msgid "MAX"
-msgstr "МАКС"
-
-msgid "MIN"
-msgstr "МІН"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"З\n"
-"В\n"
-"І\n"
-"Л\n"
-"Ь\n"
-"Н."
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"В\n"
-"И\n"
-"Х\n"
-"І\n"
-"Д"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"К\n"
-"А\n"
-"М\n"
-"П\n"
-"А\n"
-"Н\n"
-"І\n"
-"Я"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"С\n"
-"Т\n"
-"А\n"
-"Н\n"
-"Д\n"
-"А\n"
-"Р\n"
-"Т"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"НОВА\n"
-"ГРА"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"ЗАВАН-\n"
-"ТАЖИТИ\n"
-"ГРУ"
-
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr ""
-"ПЕРЕЗАПУСК\n"
-"ГРИ"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ЗАПИС\n"
-"ГРИ"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"ШВИДКИЙ\n"
-"ЗАПИС"
-
-msgid "QUIT"
-msgstr "ВИЙТИ"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"ПОЧАТИ\n"
-"МАПУ"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"ГОЛОВНЕ\n"
-"МЕНЮ"
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-"АВТО\n"
-"ТЕСТУВАННЯ"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"НОВА\n"
-"МАПА"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАВАН-\n"
-"ТАЖИТИ\n"
-"МАПУ"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗБЕРЕГТИ\n"
-"МАПУ"
-
-msgid "INFO"
-msgstr "ІНФО"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"ЛИШЕ\n"
-"БИТВА"
-
-msgid "SETTINGS"
-msgstr "НАЛАШТУВАННЯ"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"ЗВИЧАЙНА\n"
-"ГРА"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "КАМПАНІЯ"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"ДЕКІЛЬКА\n"
-"ГРАВЦІВ"
-
-msgid "HOT SEAT"
-msgstr ""
-"ГАРЯЧИЙ \n"
-"СТІЛЕЦЬ"
-
-msgid "2 PLAYERS"
-msgstr "2 ГРАВЦІ"
-
-msgid "3 PLAYERS"
-msgstr "3 ГРАВЦЯ"
-
-msgid "4 PLAYERS"
-msgstr "4 ГРАВЦЯ"
-
-msgid "5 PLAYERS"
-msgstr "5 ГРАВЦІВ"
-
-msgid "6 PLAYERS"
-msgstr "6 ГРАВЦІВ"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ОРИГІНАЛЬНА\n"
-"КАМПАНІЯ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"КАМПАНІЇ\n"
-"ДОПОВНЕННЯ"
-
-msgid "editorMainMenu|BACK"
-msgstr "НАЗАД"
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-"ЧИСТИЙ\n"
-"АРКУШ"
-
-msgid "newMap|RANDOM"
-msgstr "ВИПАДКОВО"
-
-msgid "DIFFICULTY"
-msgstr "СКЛАДНІСТЬ"
-
-msgid "VIEW INTRO"
-msgstr "ПОВТОР ІНТРО"
-
-msgid "RESET"
-msgstr "СКИНУТИ"
-
-msgid "START"
-msgstr "ПОЧАТИ"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"П\n"
-"А\n"
-"Т\n"
-"Р\n"
-"У\n"
-"Л\n"
-"Ь"
-
-msgid "army|Few"
-msgstr "Мало"
-
 msgid "Warrior"
 msgstr "Воїн"
 
@@ -442,6 +99,9 @@ msgid ""
 msgstr ""
 "Легіон\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Мало"
 
 msgid "army|Several"
 msgstr "Кілька"
@@ -3599,8 +3259,14 @@ msgstr "Скільки придбати:"
 msgid "Recruit selected monsters."
 msgstr "Найняти обраних монстрів."
 
+msgid "MAX"
+msgstr "МАКС"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Вибрати максимально доступну для найму кількість монстрів."
+
+msgid "MIN"
+msgstr "МІН"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Вибрати лише одного монстра для найму."
@@ -4375,6 +4041,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Тицьніть, щоб зробити вибір."
 
+msgid "SELECT"
+msgstr "ОБРАТИ"
+
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} неможливо розмістити на воді."
 
@@ -4458,8 +4127,10 @@ msgstr ""
 "Ви бажаєте вийти з редактора і запустити мапу? (Будь-які незбережені зміни у "
 "поточній мапі будуть втрачені.)"
 
-msgid "Create a new map from scratch."
-msgstr "Створити нову мапу з чистого аркуша."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+"Створіть нову мапу, або з нуля, або використавуючи генератор випадкових мап."
 
 msgid "New Map"
 msgstr "Нова мапа"
@@ -4890,11 +4561,6 @@ msgstr "Видалити існуючу мову."
 msgid "Failed to generate a random map with given parameters."
 msgstr "Не вдалося створити випадкову мапу з заданими параметрами."
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Створіть нову мапу, або з нуля, або використавуючи генератор випадкових мап."
-
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Вийти з редактора та повернутися до головного меню."
 
@@ -5297,6 +4963,337 @@ msgstr "Експертна"
 
 msgid "difficulty|Impossible"
 msgstr "Неможлива"
+
+msgid "ABOUT"
+msgstr "ПРО МАПУ"
+
+msgid "S"
+msgstr "М"
+
+msgid "M"
+msgstr "С"
+
+msgid "L"
+msgstr "В"
+
+msgid "X-L"
+msgstr "НВ"
+
+msgid "ALL"
+msgstr "ВСІ"
+
+msgid "EXIT"
+msgstr "ВИХІД"
+
+msgid "smallerButton|EXIT"
+msgstr "ВИХІД"
+
+# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
+msgid "OKAY"
+msgstr "ГАРАЗД"
+
+msgid "HEROES"
+msgstr "ГЕРОЇ"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"МІСТА/\n"
+"ЗАМКИ"
+
+# Скасувати - правильний варіант перекладу слова CANCEL
+# Відміна - відміняють лише дієслова як частину мови.
+msgid "CANCEL"
+msgstr "СКАСУВАТИ"
+
+msgid "ACCEPT"
+msgstr "ПРИЙНЯТИ"
+
+# Відхилити - є правильним перкладом. Дієслово, що позначає неприйняття пропозиції, змін тощо.
+# Відмінити - стосується лише відміни дієслів як частини мови.
+msgid "DECLINE"
+msgstr "ВІДХИЛИТИ"
+
+msgid "LEARN"
+msgstr "ВИВЧИТИ"
+
+msgid "TRADE"
+msgstr "ОБМІНЯТИ"
+
+msgid "YES"
+msgstr "ТАК"
+
+msgid "NO"
+msgstr "НІ"
+
+msgid "DISMISS"
+msgstr "ЗВІЛЬНИТИ"
+
+msgid "UPGRADE"
+msgstr "ПОКРАЩИТИ"
+
+msgid "GIFT"
+msgstr "ДАРУНОК"
+
+msgid "RESTART"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"З\n"
+"В\n"
+"І\n"
+"Л\n"
+"Ь\n"
+"Н."
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"В\n"
+"И\n"
+"Х\n"
+"І\n"
+"Д"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"К\n"
+"А\n"
+"М\n"
+"П\n"
+"А\n"
+"Н\n"
+"І\n"
+"Я"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"С\n"
+"Т\n"
+"А\n"
+"Н\n"
+"Д\n"
+"А\n"
+"Р\n"
+"Т"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"НОВА\n"
+"ГРА"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"ЗАВАН-\n"
+"ТАЖИТИ\n"
+"ГРУ"
+
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+"ПЕРЕЗАПУСК\n"
+"ГРИ"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ЗАПИС\n"
+"ГРИ"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"ШВИДКИЙ\n"
+"ЗАПИС"
+
+msgid "QUIT"
+msgstr "ВИЙТИ"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВА\n"
+"МАПА"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАВАН-\n"
+"ТАЖИТИ\n"
+"МАПУ"
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"ПОЧАТИ\n"
+"МАПУ"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗБЕРЕГТИ\n"
+"МАПУ"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"ГОЛОВНЕ\n"
+"МЕНЮ"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+"АВТО\n"
+"ТЕСТУВАННЯ"
+
+msgid "INFO"
+msgstr "ІНФО"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"ЛИШЕ\n"
+"БИТВА"
+
+msgid "SETTINGS"
+msgstr "НАЛАШТУВАННЯ"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"ЗВИЧАЙНА\n"
+"ГРА"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr "КАМПАНІЯ"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"ДЕКІЛЬКА\n"
+"ГРАВЦІВ"
+
+msgid "HOT SEAT"
+msgstr ""
+"ГАРЯЧИЙ \n"
+"СТІЛЕЦЬ"
+
+msgid "2 PLAYERS"
+msgstr "2 ГРАВЦІ"
+
+msgid "3 PLAYERS"
+msgstr "3 ГРАВЦЯ"
+
+msgid "4 PLAYERS"
+msgstr "4 ГРАВЦЯ"
+
+msgid "5 PLAYERS"
+msgstr "5 ГРАВЦІВ"
+
+msgid "6 PLAYERS"
+msgstr "6 ГРАВЦІВ"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ОРИГІНАЛЬНА\n"
+"КАМПАНІЯ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"КАМПАНІЇ\n"
+"ДОПОВНЕННЯ"
+
+msgid "editorMainMenu|BACK"
+msgstr "НАЗАД"
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+"ЧИСТИЙ\n"
+"АРКУШ"
+
+msgid "newMap|RANDOM"
+msgstr "ВИПАДКОВО"
+
+msgid "DIFFICULTY"
+msgstr "СКЛАДНІСТЬ"
+
+msgid "VIEW INTRO"
+msgstr "ПОВТОР ІНТРО"
+
+msgid "RESET"
+msgstr "СКИНУТИ"
+
+msgid "START"
+msgstr "ПОЧАТИ"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"П\n"
+"А\n"
+"Т\n"
+"Р\n"
+"У\n"
+"Л\n"
+"Ь"
 
 msgid "Auto Playtest Results"
 msgstr "Результати автоматичного тестування гри"
@@ -12809,6 +12806,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Створити нову мапу з чистого аркуша."
 
 #~ msgid ""
 #~ "Cell\n"

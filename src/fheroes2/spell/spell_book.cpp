@@ -30,10 +30,10 @@
 #include <set>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -60,11 +60,11 @@ namespace
 
     fheroes2::Size getSpellBookSize( const SpellBook::Filter displayableSpells )
     {
-        const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
-        const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
-        const fheroes2::Sprite & bookmark_advn = fheroes2::AGG::GetICN( ICN::BOOK, 3 );
-        const fheroes2::Sprite & bookmark_cmbt = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
-        const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
+        const fheroes2::Sprite & bookPage = Assets::getImage( ICN::BOOK, 0 );
+        const fheroes2::Sprite & bookmark_info = Assets::getImage( ICN::BOOK, 6 );
+        const fheroes2::Sprite & bookmark_advn = Assets::getImage( ICN::BOOK, 3 );
+        const fheroes2::Sprite & bookmark_cmbt = Assets::getImage( ICN::BOOK, 4 );
+        const fheroes2::Sprite & bookmark_clos = Assets::getImage( ICN::BOOK, 5 );
 
         const bool isAdventureTabPresent = displayableSpells != SpellBook::Filter::CMBT;
         const bool isCombatTabPresent = displayableSpells != SpellBook::Filter::ADVN;
@@ -103,7 +103,7 @@ namespace
             // If casting spells is prohibited in principle, it makes no sense to check whether this hero can cast them and highlight them in gray if not
             const bool isAvailable = !canCastSpell || hero.CanCastSpell( spell );
 
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            const fheroes2::Sprite & icon = Assets::getImage( ICN::SPELLS, spell.IndexSprite() );
             const int32_t vertOffset = std::min<int32_t>( 6, 49 - icon.height() );
             fheroes2::Rect rect( px + ox - ( icon.width() + icon.width() % 2 ) / 2, py + oy - icon.height() - vertOffset + 2, icon.width(), icon.height() + 10 );
             fheroes2::Blit( icon, output, rect.x, rect.y );
@@ -148,12 +148,12 @@ namespace
         fheroes2::Sprite output( spellBookSize.width, spellBookSize.height );
         output.reset();
 
-        const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
+        const fheroes2::Sprite & bookPage = Assets::getImage( ICN::BOOK, 0 );
 
         // Left page.
         fheroes2::Blit( bookPage, 0, 0, output, 0, 0, bookPage.width(), bookPage.height(), true );
         if ( index == 0 ) {
-            const fheroes2::Sprite & straightCorner = fheroes2::AGG::GetICN( ICN::BOOK, 7 );
+            const fheroes2::Sprite & straightCorner = Assets::getImage( ICN::BOOK, 7 );
             fheroes2::Blit( straightCorner, 0, 0, output, bookPage.width() - straightCorner.x() - straightCorner.width(), straightCorner.y(), straightCorner.width(),
                             straightCorner.height(), true );
         }
@@ -161,23 +161,23 @@ namespace
         // Right page.
         fheroes2::Blit( bookPage, 0, 0, output, bookPage.width(), 0, bookPage.width(), bookPage.height() );
         if ( spells.size() <= ( index + ( spellsPerPage * 2 ) ) ) {
-            const fheroes2::Sprite & straightCorner = fheroes2::AGG::GetICN( ICN::BOOK, 7 );
+            const fheroes2::Sprite & straightCorner = Assets::getImage( ICN::BOOK, 7 );
             fheroes2::Blit( straightCorner, 0, 0, output, bookPage.width() + straightCorner.x(), straightCorner.y(), straightCorner.width(), straightCorner.height() );
         }
 
-        const fheroes2::Sprite & bookmarkSpellPoints = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
+        const fheroes2::Sprite & bookmarkSpellPoints = Assets::getImage( ICN::BOOK, 6 );
         fheroes2::Blit( bookmarkSpellPoints, output, bookmarkInfoOffset.x, bookmarkInfoOffset.y );
 
         if ( displayableSpells != SpellBook::Filter::CMBT ) {
-            const fheroes2::Sprite & bookmarkAdvantureSpells = fheroes2::AGG::GetICN( ICN::BOOK, 3 );
+            const fheroes2::Sprite & bookmarkAdvantureSpells = Assets::getImage( ICN::BOOK, 3 );
             fheroes2::Blit( bookmarkAdvantureSpells, output, bookmarkAdvOffset.x, bookmarkAdvOffset.y );
         }
         if ( displayableSpells != SpellBook::Filter::ADVN ) {
-            const fheroes2::Sprite & bookmarkCombatSpells = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
+            const fheroes2::Sprite & bookmarkCombatSpells = Assets::getImage( ICN::BOOK, 4 );
             fheroes2::Blit( bookmarkCombatSpells, output, bookmarkCombatoOffset.x, bookmarkCombatoOffset.y );
         }
 
-        const fheroes2::Sprite & bookmarkClose = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
+        const fheroes2::Sprite & bookmarkClose = Assets::getImage( ICN::BOOK, 5 );
         fheroes2::Blit( bookmarkClose, output, bookmarkCloseOffset.x, bookmarkCloseOffset.y );
 
         SpellBookRedrawManaPoints( bookmarkInfoOffset, spellPoints, output );
@@ -222,12 +222,12 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
+    const fheroes2::Sprite & bookPage = Assets::getImage( ICN::BOOK, 0 );
 
-    const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
-    const fheroes2::Sprite & bookmark_advn = fheroes2::AGG::GetICN( ICN::BOOK, 3 );
-    const fheroes2::Sprite & bookmark_cmbt = fheroes2::AGG::GetICN( ICN::BOOK, 4 );
-    const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
+    const fheroes2::Sprite & bookmark_info = Assets::getImage( ICN::BOOK, 6 );
+    const fheroes2::Sprite & bookmark_advn = Assets::getImage( ICN::BOOK, 3 );
+    const fheroes2::Sprite & bookmark_cmbt = Assets::getImage( ICN::BOOK, 4 );
+    const fheroes2::Sprite & bookmark_clos = Assets::getImage( ICN::BOOK, 5 );
 
     const fheroes2::Size spellBookSize = getSpellBookSize( displayableSpells );
 
@@ -267,12 +267,12 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        if ( !_isFirstPage() && ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) ) {
+        if ( !_isFirstPage() && ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || le.isMouseWheelUp() ) ) {
             _startSpellIndex -= spellsPerPage * 2;
             redraw = true;
         }
         else if ( !_isLastPage( displayedSpells.size(), spellsPerPage * 2 )
-                  && ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) ) {
+                  && ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || le.isMouseWheelDown() ) ) {
             _startSpellIndex += spellsPerPage * 2;
             redraw = true;
         }
@@ -413,9 +413,9 @@ void SpellBook::Edit( const HeroBase & hero )
     size_t firstSpellOnPageIndex = 0;
     SpellStorage displayedSpells = SetFilter( Filter::ALL, &hero );
 
-    const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
+    const fheroes2::Sprite & bookmark_clos = Assets::getImage( ICN::BOOK, 5 );
 
-    const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
+    const fheroes2::Sprite & bookPage = Assets::getImage( ICN::BOOK, 0 );
 
     const fheroes2::Size spellBookSize = getSpellBookSize( Filter::ALL );
 
@@ -441,11 +441,12 @@ void SpellBook::Edit( const HeroBase & hero )
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( le.MouseClickLeft( previousPageRoi ) && firstSpellOnPageIndex ) {
+        if ( ( le.MouseClickLeft( previousPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || le.isMouseWheelUp() ) && firstSpellOnPageIndex ) {
             firstSpellOnPageIndex -= twoPagesSpells;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( nextPageRoi ) && size() > ( firstSpellOnPageIndex + twoPagesSpells ) ) {
+        else if ( ( le.MouseClickLeft( nextPageRoi ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || le.isMouseWheelDown() )
+                  && size() > ( firstSpellOnPageIndex + twoPagesSpells ) ) {
             firstSpellOnPageIndex += twoPagesSpells;
             redraw = true;
         }

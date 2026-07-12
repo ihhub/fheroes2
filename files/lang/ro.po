@@ -18,327 +18,6 @@ msgstr ""
 "n%100<=19) ? 1 : 2);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-msgid "SELECT"
-msgstr "SELECTEAZĂ"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "TOT"
-
-msgid "EXIT"
-msgstr "EXIT"
-
-msgid "smallerButton|EXIT"
-msgstr "EXIT"
-
-msgid "OKAY"
-msgstr "OKAY"
-
-msgid "HEROES"
-msgstr "EROI"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"ORAȘE/\n"
-"CASTELE"
-
-msgid "CANCEL"
-msgstr "RENUNȚĂ"
-
-msgid "ACCEPT"
-msgstr "ACCEPTĂ"
-
-msgid "DECLINE"
-msgstr "REFUZĂ"
-
-msgid "LEARN"
-msgstr "ÎNVAȚĂ"
-
-msgid "TRADE"
-msgstr "TROC"
-
-msgid "YES"
-msgstr "DA"
-
-msgid "NO"
-msgstr "NU"
-
-msgid "DISMISS"
-msgstr "RENUNȚĂ"
-
-msgid "UPGRADE"
-msgstr "AMELIOREAZĂ"
-
-msgid "GIFT"
-msgstr "OFERĂ"
-
-msgid "RESTART"
-msgstr "RESTART"
-
-msgid "MAX"
-msgstr "MAX"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"R\n"
-"E\n"
-"N\n"
-"U\n"
-"N\n"
-"Ț\n"
-"Ă"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"N\n"
-"I\n"
-"E"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"JOC\n"
-"NOU"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"ÎNCARCĂ\n"
-"JOCUL"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "RESTART"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"SALVEAZĂ\n"
-"JOCUL"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "ÎNCHIDE"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "START"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"JOC\n"
-"NOU"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ÎNCARCĂ\n"
-"JOCUL"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"SALVEAZĂ\n"
-"JOCUL"
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"DOAR\n"
-"BĂTĂLIE"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"JOC\n"
-"STANDARD"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "CAMPANIE"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"JOC\n"
-"MULTI-\n"
-"PLAYER"
-
-msgid "HOT SEAT"
-msgstr ""
-
-msgid "2 PLAYERS"
-msgstr "2 JUCĂTORI"
-
-msgid "3 PLAYERS"
-msgstr "3 JUCĂTORI"
-
-msgid "4 PLAYERS"
-msgstr "4 JUCĂTORI"
-
-msgid "5 PLAYERS"
-msgstr "5 JUCĂTORI"
-
-msgid "6 PLAYERS"
-msgstr "6 JUCĂTORI"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPANIE\n"
-"ORIGINALĂ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPANIE\n"
-"EXPANSIUNE"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "DIFICULTATE"
-
-msgid "VIEW INTRO"
-msgstr "VEZI INTRO"
-
-msgid "RESET"
-msgstr "RESET"
-
-msgid "START"
-msgstr "START"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "(1-4)"
-
 msgid "Warrior"
 msgstr "Războinic"
 
@@ -419,6 +98,9 @@ msgid ""
 msgstr ""
 "O legiune de\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "(1-4)"
 
 msgid "army|Several"
 msgstr "(4-9)"
@@ -3451,8 +3133,14 @@ msgstr ""
 msgid "Recruit selected monsters."
 msgstr ""
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "Select maximum monsters to be recruited."
 msgstr ""
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr ""
@@ -4241,6 +3929,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
+msgid "SELECT"
+msgstr "SELECTEAZĂ"
+
 msgid "%{objects} cannot be placed on water."
 msgstr ""
 
@@ -4309,7 +4000,8 @@ msgid ""
 "the current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -4727,10 +4419,6 @@ msgid "Delete an existing language."
 msgstr "Selectați Limba"
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -5153,6 +4841,315 @@ msgstr "Expert"
 
 msgid "difficulty|Impossible"
 msgstr "Imposibil"
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "TOT"
+
+msgid "EXIT"
+msgstr "EXIT"
+
+msgid "smallerButton|EXIT"
+msgstr "EXIT"
+
+msgid "OKAY"
+msgstr "OKAY"
+
+msgid "HEROES"
+msgstr "EROI"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"ORAȘE/\n"
+"CASTELE"
+
+msgid "CANCEL"
+msgstr "RENUNȚĂ"
+
+msgid "ACCEPT"
+msgstr "ACCEPTĂ"
+
+msgid "DECLINE"
+msgstr "REFUZĂ"
+
+msgid "LEARN"
+msgstr "ÎNVAȚĂ"
+
+msgid "TRADE"
+msgstr "TROC"
+
+msgid "YES"
+msgstr "DA"
+
+msgid "NO"
+msgstr "NU"
+
+msgid "DISMISS"
+msgstr "RENUNȚĂ"
+
+msgid "UPGRADE"
+msgstr "AMELIOREAZĂ"
+
+msgid "GIFT"
+msgstr "OFERĂ"
+
+msgid "RESTART"
+msgstr "RESTART"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"R\n"
+"E\n"
+"N\n"
+"U\n"
+"N\n"
+"Ț\n"
+"Ă"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"N\n"
+"I\n"
+"E"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"JOC\n"
+"NOU"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"ÎNCARCĂ\n"
+"JOCUL"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "RESTART"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"SALVEAZĂ\n"
+"JOCUL"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "ÎNCHIDE"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"JOC\n"
+"NOU"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ÎNCARCĂ\n"
+"JOCUL"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "START"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"SALVEAZĂ\n"
+"JOCUL"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"DOAR\n"
+"BĂTĂLIE"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"JOC\n"
+"STANDARD"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr "CAMPANIE"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"JOC\n"
+"MULTI-\n"
+"PLAYER"
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr "2 JUCĂTORI"
+
+msgid "3 PLAYERS"
+msgstr "3 JUCĂTORI"
+
+msgid "4 PLAYERS"
+msgstr "4 JUCĂTORI"
+
+msgid "5 PLAYERS"
+msgstr "5 JUCĂTORI"
+
+msgid "6 PLAYERS"
+msgstr "6 JUCĂTORI"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"CAMPANIE\n"
+"ORIGINALĂ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"CAMPANIE\n"
+"EXPANSIUNE"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "DIFICULTATE"
+
+msgid "VIEW INTRO"
+msgstr "VEZI INTRO"
+
+msgid "RESET"
+msgstr "RESET"
+
+msgid "START"
+msgstr "START"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 #, fuzzy
 msgid "Auto Playtest Results"

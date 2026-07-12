@@ -18,10 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "screen.h"
+
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
-#include <cstdint>
 #include <cstring>
 #include <iterator>
 #include <optional>
@@ -62,7 +64,6 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "math_tools.h"
-#include "screen.h"
 #include "system.h"
 
 namespace
@@ -196,23 +197,21 @@ namespace
 
     std::vector<uint8_t> StandardPaletteIndexes()
     {
-        std::vector<uint8_t> indexes( 256 );
-        for ( uint32_t i = 0; i < 256; ++i ) {
+        std::vector<uint8_t> indexes( fheroes2::paletteSize );
+        for ( uint32_t i = 0; i < fheroes2::paletteSize; ++i ) {
             indexes[i] = static_cast<uint8_t>( i );
         }
         return indexes;
     }
 
-    const uint8_t * PALPalette( const bool forceDefaultPaletteUpdate = false )
+    const fheroes2::RGB * RGBPalette( const bool forceDefaultPaletteUpdate = false )
     {
-        static std::vector<uint8_t> palette;
-        if ( palette.empty() || forceDefaultPaletteUpdate ) {
-            const uint8_t * gamePalette = fheroes2::getGamePalette();
+        static std::array<fheroes2::RGB, fheroes2::paletteSize> palette;
+        static bool paletteInitialized = false;
+        if ( forceDefaultPaletteUpdate || !paletteInitialized ) {
+            palette = fheroes2::getNormalizedRGBGamePalette();
 
-            palette.resize( 256 * 3 );
-            for ( size_t i = 0; i < palette.size(); ++i ) {
-                palette[i] = gamePalette[i] << 2;
-            }
+            paletteInitialized = true;
         }
 
         return palette.data();
@@ -263,7 +262,7 @@ namespace
         return true;
     }
 
-    const uint8_t * currentPalette = PALPalette();
+    const fheroes2::RGB * currentRGBPalette = RGBPalette();
 
 // If SDL library is used
 #if !defined( TARGET_PS_VITA )
@@ -349,30 +348,54 @@ namespace
             assert( surface != nullptr );
 
             if ( surface->format->BitsPerPixel == 32 ) {
-                _palette32Bit.resize( 256u );
+                _palette32Bit.resize( fheroes2::paletteSize );
 
                 if ( surface->format->Amask > 0 ) {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBA32 ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
+                        }
+                    }
+                    else if ( surface->format->format == SDL_PIXELFORMAT_BGRA32 ) {
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRA();
+                        }
                     }
                 }
                 else {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+#if SDL_VERSION_ATLEAST( 2, 30, 0 )
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBX32 ) {
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+                    if ( surface->format->format == SDL_PIXELFORMAT_RGBX8888 ) {
+#else
+                    if ( surface->format->format == SDL_PIXELFORMAT_XBGR8888 ) {
+#endif
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBX();
+                        }
+                    }
+#if SDL_VERSION_ATLEAST( 2, 30, 0 )
+                    else if ( surface->format->format == SDL_PIXELFORMAT_BGRX32 ) {
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+                    if ( surface->format->format == SDL_PIXELFORMAT_BGRX8888 ) {
+#else
+                    if ( surface->format->format == SDL_PIXELFORMAT_XRGB8888 ) {
+#endif
+                        for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                            _palette32Bit[i] = currentRGBPalette[colorIds[i]].getBGRX();
+                        }
                     }
                 }
             }
             else if ( surface->format->BitsPerPixel == 8 ) {
-                _palette8Bit.resize( 256 );
-                for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint8_t * value = currentPalette + colorIds[i] * 3;
+                _palette8Bit.resize( fheroes2::paletteSize );
+                for ( uint32_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                    const auto & pal = currentRGBPalette[colorIds[i]];
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = *value;
-                    col.g = *( value + 1 );
-                    col.b = *( value + 2 );
+                    col.r = pal.r;
+                    col.g = pal.g;
+                    col.b = pal.b;
                 }
             }
             else {
@@ -406,19 +429,17 @@ namespace
             if ( surface->format->Amask > 0 ) {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                        *out = currentRGBPalette[*in].getRGBA();
                     }
                 }
             }
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+                        *out = currentRGBPalette[*in].getRGBX();
                     }
                     else {
-                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
+                        *out = 0;
                     }
                 }
             }
@@ -426,23 +447,18 @@ namespace
             return surface;
         }
     };
-#endif
 
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
-        RenderCursor( const RenderCursor & ) = delete;
-
         ~RenderCursor() override
         {
             clear();
         }
 
-        RenderCursor & operator=( const RenderCursor & ) = delete;
-
         void show( const bool enable ) override
         {
-            fheroes2::Cursor::show( enable );
+            Cursor::show( enable );
 
             if ( !_emulation ) {
                 const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -455,13 +471,13 @@ namespace
         bool isVisible() const override
         {
             if ( _emulation ) {
-                return fheroes2::Cursor::isVisible();
+                return Cursor::isVisible();
             }
 
-            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            return Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
-        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        void update( const fheroes2::Image & image, const int32_t offsetX, const int32_t offsetY ) override
         {
             if ( image.empty() || image.singleLayer() ) {
                 // What are you trying to do? Set an invisible cursor? Use hide() method!
@@ -470,7 +486,7 @@ namespace
             }
 
             if ( _emulation ) {
-                fheroes2::Cursor::update( image, offsetX, offsetY );
+                Cursor::update( image, offsetX, offsetY );
                 return;
             }
 
@@ -491,21 +507,20 @@ namespace
             if ( surface->format->Amask > 0 ) {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                        *out = currentRGBPalette[*in].getRGBA();
                     }
-                    else if ( *transform > 1 ) {
+                    else if ( *transform > 1 && *transform < 6 ) {
                         // SDL2 uses RGBA image on OS level separately from frame rendering.
                         // Here we are trying to simulate cursor's shadow as close as possible to the original game.
-                        *out = SDL_MapRGBA( surface->format, 0, 0, 0, 64 );
+                        // Shadow strength in transform layer is: from 5 (light) to 2 (strong).
+                        *out = 8U << ( ( 5U - *transform ) + 24U );
                     }
                 }
             }
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+                        *out = currentRGBPalette[*in].getRGBX();
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -589,8 +604,21 @@ namespace
             }
         }
     };
+#endif
 
 #if defined( TARGET_PS_VITA )
+    class RenderCursor final : public fheroes2::Cursor
+    {
+    public:
+        static RenderCursor * create()
+        {
+            auto * cursor = new RenderCursor;
+            cursor->enableSoftwareEmulation( true );
+
+            return cursor;
+        }
+    };
+
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
@@ -641,8 +669,8 @@ namespace
         }
 
     private:
+        // SDL capture touchscreen events only in SDL_Window rectangle. We create SDL_Window on PS Vita only for this purpose.
         SDL_Window * _window{ nullptr };
-        SDL_Surface * _surface{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
         fheroes2::Rect _destRect;
@@ -661,11 +689,6 @@ namespace
             if ( _window != nullptr ) {
                 SDL_DestroyWindow( _window );
                 _window = nullptr;
-            }
-
-            if ( _surface != nullptr ) {
-                SDL_FreeSurface( _surface );
-                _surface = nullptr;
             }
 
             vita2d_fini();
@@ -697,15 +720,6 @@ namespace
                 return false;
             }
 
-            _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
-
-            if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
-                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
-
-                clear();
-                return false;
-            }
-
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( resolutionInfo.gameWidth, resolutionInfo.gameHeight, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
             _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
@@ -727,7 +741,7 @@ namespace
             const int32_t width = display.width();
             const int32_t height = display.height();
 
-            SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+            memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
             vita2d_draw_rectangle( 0, 0, VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 0xff000000 );
@@ -739,17 +753,14 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( _surface == nullptr || colorIds.size() != 256 || _texBuffer == nullptr )
+            if ( colorIds.size() != fheroes2::paletteSize || _texBuffer == nullptr )
                 return;
 
-            uint32_t palette32Bit[256u];
+            auto * palette32Bit = reinterpret_cast<uint32_t *>( vita2d_texture_get_palette( _texBuffer ) );
 
-            for ( size_t i = 0; i < 256u; ++i ) {
-                const uint8_t * value = currentPalette + colorIds[i] * 3;
-                palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+            for ( size_t i = 0; i < fheroes2::paletteSize; ++i ) {
+                palette32Bit[i] = currentRGBPalette[colorIds[i]].getRGBA();
             }
-
-            memcpy( vita2d_texture_get_palette( _texBuffer ), palette32Bit, sizeof( uint32_t ) * 256 );
         }
 
         bool isMouseCursorActive() const override
@@ -1599,12 +1610,12 @@ namespace fheroes2
         _prevRoi = {};
     }
 
-    void Display::changePalette( const uint8_t * palette, const bool forceDefaultPaletteUpdate ) const
+    void Display::changePalette( const RGB * palette, const bool forceDefaultPaletteUpdate ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() && !forceDefaultPaletteUpdate ) )
+        if ( currentRGBPalette == palette || ( palette == nullptr && !forceDefaultPaletteUpdate && currentRGBPalette == RGBPalette() ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPalette( forceDefaultPaletteUpdate ) : palette;
+        currentRGBPalette = ( palette == nullptr ) ? RGBPalette( forceDefaultPaletteUpdate ) : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

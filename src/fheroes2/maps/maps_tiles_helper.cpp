@@ -58,20 +58,6 @@
 
 namespace
 {
-    void updateMonsterPopulationOnTile( Maps::Tile & tile )
-    {
-        const Troop & troop = getTroopFromTile( tile );
-        const uint32_t troopCount = troop.GetCount();
-
-        if ( troopCount == 0 ) {
-            Maps::setMonsterCountOnTile( tile, troop.GetRNDSize() );
-        }
-        else {
-            const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
-            Maps::setMonsterCountOnTile( tile, troopCount * 8 / 7 + bonusUnit );
-        }
-    }
-
     void updateRandomResource( Maps::Tile & tile )
     {
         assert( tile.getMainObjectType() == MP2::OBJ_RANDOM_RESOURCE );
@@ -946,7 +932,6 @@ namespace Maps
         const MP2::MapObjectType objectType = tile.getMainObjectType( false );
 
         switch ( objectType ) {
-        // join monsters
         case MP2::OBJ_HALFLING_HOLE:
             count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 5, 10 );
             break;
@@ -1027,12 +1012,10 @@ namespace Maps
         setMonsterCountOnTile( tile, count );
     }
 
-    void updateObjectInfoTile( Tile & tile, const bool isFirstLoad )
+    void setInitialObjectInfo( Tile & tile )
     {
         switch ( tile.getMainObjectType( false ) ) {
         case MP2::OBJ_WITCHS_HUT:
-            assert( isFirstLoad );
-
             static_assert( Skill::Secondary::UNKNOWN == 0, "You are breaking the logic by changing the Skill::Secondary::UNKNOWN value!" );
             if ( tile.metadata()[0] != Skill::Secondary::UNKNOWN ) {
                 // The skill has been set externally.
@@ -1043,8 +1026,6 @@ namespace Maps
             break;
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-            assert( isFirstLoad );
-
             static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
             if ( tile.metadata()[0] != Spell::NONE ) {
                 // The spell has been set externally.
@@ -1055,8 +1036,6 @@ namespace Maps
             break;
 
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-            assert( isFirstLoad );
-
             static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
             if ( tile.metadata()[0] != Spell::NONE ) {
                 // The spell has been set externally.
@@ -1067,8 +1046,6 @@ namespace Maps
             break;
 
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-            assert( isFirstLoad );
-
             static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
             if ( tile.metadata()[0] != Spell::NONE ) {
                 // The spell has been set externally.
@@ -1079,8 +1056,6 @@ namespace Maps
             break;
 
         case MP2::OBJ_SKELETON: {
-            assert( isFirstLoad );
-
             Rand::Queue percents( 2 );
             // 80%: empty
             percents.Push( 0, 80 );
@@ -1097,8 +1072,6 @@ namespace Maps
         }
 
         case MP2::OBJ_WAGON: {
-            assert( isFirstLoad );
-
             resetObjectMetadata( tile );
 
             Rand::Queue percents( 3 );
@@ -1124,8 +1097,6 @@ namespace Maps
         }
 
         case MP2::OBJ_ARTIFACT: {
-            assert( isFirstLoad );
-
             uint8_t artifactSpriteIndex = Artifact::UNKNOWN;
             if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
                 artifactSpriteIndex = tile.getMainObjectPart().icnIndex;
@@ -1180,8 +1151,6 @@ namespace Maps
         }
 
         case MP2::OBJ_RESOURCE: {
-            assert( isFirstLoad );
-
             int resourceType = Resource::UNKNOWN;
 
             if ( tile.getMainObjectPart().icnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
@@ -1237,46 +1206,16 @@ namespace Maps
 
         case MP2::OBJ_BARREL:
         case MP2::OBJ_CAMPFIRE:
-            assert( isFirstLoad );
-
             // 4-6 random resource and + 400-600 gold
             setResourceOnTile( tile, Resource::Rand( false ), Rand::Get( 4, 6 ) );
             break;
 
-        case MP2::OBJ_MAGIC_GARDEN:
-            // 5 gems or 500 gold
-            if ( Rand::Get( 1 ) )
-                setResourceOnTile( tile, Resource::GEMS, 5 );
-            else
-                setResourceOnTile( tile, Resource::GOLD, 500 );
-            break;
-
-        case MP2::OBJ_WATER_WHEEL:
-            // first week 500 gold, next week 1000 gold
-            setResourceOnTile( tile, Resource::GOLD, ( 0 == world.CountDay() ? 500 : 1000 ) );
-            break;
-
-        case MP2::OBJ_WINDMILL: {
-            int res = Resource::WOOD;
-            while ( res == Resource::WOOD ) {
-                res = Resource::Rand( false );
-            }
-
-            // 2 pieces of random resources.
-            setResourceOnTile( tile, res, 2 );
-            break;
-        }
-
         case MP2::OBJ_LEAN_TO:
-            assert( isFirstLoad );
-
             // 1-4 pieces of random resources.
             setResourceOnTile( tile, Resource::Rand( false ), Rand::Get( 1, 4 ) );
             break;
 
         case MP2::OBJ_FLOTSAM: {
-            assert( isFirstLoad );
-
             switch ( Rand::Get( 1, 4 ) ) {
             // 25%: 500 gold + 10 wood
             case 1:
@@ -1300,8 +1239,6 @@ namespace Maps
         }
 
         case MP2::OBJ_SHIPWRECK_SURVIVOR: {
-            assert( isFirstLoad );
-
             Rand::Queue percents( 3 );
             // 55%: artifact 1
             percents.Push( 1, 55 );
@@ -1330,8 +1267,6 @@ namespace Maps
         }
 
         case MP2::OBJ_SEA_CHEST: {
-            assert( isFirstLoad );
-
             Rand::Queue percents( 3 );
             // 20% - empty
             percents.Push( 0, 20 );
@@ -1365,8 +1300,6 @@ namespace Maps
         }
 
         case MP2::OBJ_TREASURE_CHEST:
-            assert( isFirstLoad );
-
             if ( tile.isWater() ) {
                 // On original map "Alteris 2" there is a treasure chest placed on the water and there might be other maps with such bug.
                 // If there is a bug then remove of the MP2::OBJ_TREASURE_CHEST will return 'true' and we can replace it with a Sea Chest object.
@@ -1386,7 +1319,7 @@ namespace Maps
                     tile.setMainObjectType( MP2::OBJ_SEA_CHEST );
                 }
 
-                updateObjectInfoTile( tile, isFirstLoad );
+                setInitialObjectInfo( tile );
                 return;
             }
 
@@ -1429,14 +1362,10 @@ namespace Maps
             break;
 
         case MP2::OBJ_DERELICT_SHIP:
-            assert( isFirstLoad );
-
             setResourceOnTile( tile, Resource::GOLD, 5000 );
             break;
 
         case MP2::OBJ_SHIPWRECK: {
-            assert( isFirstLoad );
-
             Rand::Queue percents( 4 );
             // 40% - 10ghost(1000g)
             percents.Push( 1, 40 );
@@ -1477,15 +1406,11 @@ namespace Maps
         }
 
         case MP2::OBJ_GRAVEYARD:
-            assert( isFirstLoad );
-
             tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
             tile.metadata()[1] = 1000;
             break;
 
-        case MP2::OBJ_PYRAMID: {
-            assert( isFirstLoad );
-
+        case MP2::OBJ_PYRAMID:
             static_assert( Spell::NONE == 0, "You are breaking the logic by changing the Spell::NONE value!" );
             if ( tile.metadata()[0] != Spell::NONE ) {
                 // The spell has been set externally.
@@ -1495,11 +1420,8 @@ namespace Maps
             // Random spell of level 5.
             setSpellOnTile( tile, Spell::getRandomSpell( 5 ).GetID() );
             break;
-        }
 
-        case MP2::OBJ_DAEMON_CAVE: {
-            assert( isFirstLoad );
-
+        case MP2::OBJ_DAEMON_CAVE:
             // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
             tile.metadata()[2] = Rand::Get( 1, 4 );
             switch ( static_cast<DaemonCaveCaptureBonus>( tile.metadata()[2] ) ) {
@@ -1527,11 +1449,8 @@ namespace Maps
                 break;
             }
             break;
-        }
 
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
-            assert( isFirstLoad );
-
             // variant: 10 gems, 2000 gold or free
             switch ( Rand::Get( 1, 3 ) ) {
             case 1:
@@ -1546,20 +1465,14 @@ namespace Maps
             break;
 
         case MP2::OBJ_BARRIER:
-            assert( isFirstLoad );
-
             setBarrierColorOnTile( tile, getColorFromBarrierSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
             break;
 
         case MP2::OBJ_TRAVELLER_TENT:
-            assert( isFirstLoad );
-
             setBarrierColorOnTile( tile, getColorFromTravellerTentSprite( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) );
             break;
 
         case MP2::OBJ_ALCHEMIST_LAB: {
-            assert( isFirstLoad );
-
             const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::MERCURY ).mercury );
             assert( resourceCount.has_value() && resourceCount > 0U );
 
@@ -1568,8 +1481,6 @@ namespace Maps
         }
 
         case MP2::OBJ_SAWMILL: {
-            assert( isFirstLoad );
-
             const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::WOOD ).wood );
             assert( resourceCount.has_value() && resourceCount > 0U );
 
@@ -1578,8 +1489,6 @@ namespace Maps
         }
 
         case MP2::OBJ_MINE: {
-            assert( isFirstLoad );
-
             // Mines must have an object part of OBJ_ICN_TYPE_EXTRAOVR type on top.
             // However, some mines do not follow this rule so we need to fix it!
             if ( tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
@@ -1644,14 +1553,10 @@ namespace Maps
 
         case MP2::OBJ_ABANDONED_MINE:
             // The number of Ghosts is set only when loading the map and does not change anymore.
-            if ( isFirstLoad ) {
-                setMonsterCountOnTile( tile, Rand::Get( 30, 60 ) );
-            }
+            setMonsterCountOnTile( tile, Rand::Get( 30, 60 ) );
             break;
 
         case MP2::OBJ_BOAT:
-            assert( isFirstLoad );
-
             // This is a special case. Boats are different in the original editor.
             tile.getMainObjectPart().icnType = MP2::OBJ_ICN_TYPE_BOAT32;
             tile.getMainObjectPart().icnIndex = 18;
@@ -1661,42 +1566,45 @@ namespace Maps
         case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
         case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
         case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
-            assert( isFirstLoad );
-
             updateRandomArtifact( tile );
-            updateObjectInfoTile( tile, isFirstLoad );
+            setInitialObjectInfo( tile );
             return;
 
         case MP2::OBJ_RANDOM_RESOURCE:
-            assert( isFirstLoad );
-
             updateRandomResource( tile );
-            updateObjectInfoTile( tile, isFirstLoad );
+            setInitialObjectInfo( tile );
             return;
-
-        case MP2::OBJ_MONSTER:
-            if ( world.CountWeek() > 1 )
-                updateMonsterPopulationOnTile( tile );
-            else
-                updateMonsterInfoOnTile( tile );
-            break;
 
         case MP2::OBJ_RANDOM_MONSTER:
         case MP2::OBJ_RANDOM_MONSTER_WEAK:
         case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
         case MP2::OBJ_RANDOM_MONSTER_STRONG:
         case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
-            assert( isFirstLoad );
-
             updateRandomMonster( tile );
-            updateObjectInfoTile( tile, isFirstLoad );
+            setInitialObjectInfo( tile );
             return;
 
         case MP2::OBJ_GENIE_LAMP:
             // The number of Genies is set when loading the map and does not change anymore
-            if ( isFirstLoad ) {
-                setMonsterCountOnTile( tile, Rand::Get( 2, 4 ) );
-            }
+            setMonsterCountOnTile( tile, Rand::Get( 2, 4 ) );
+            break;
+
+        case MP2::OBJ_EVENT:
+            // Event should be invisible on Adventure Map.
+            tile.resetMainObjectPart();
+            resetObjectMetadata( tile );
+            break;
+
+        case MP2::OBJ_MONSTER: {
+            const Monster mons = Monster( tile.getMainObjectPart().icnIndex + 1 ); // ICN::MONS32 start from PEASANT
+            setMonsterOnTile( tile, mons, tile.metadata()[0] );
+            break;
+        }
+
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL:
+            updateObjectInfoTile( tile );
             break;
 
         case MP2::OBJ_AIR_ALTAR:
@@ -1720,28 +1628,100 @@ namespace Maps
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_WATER_ALTAR:
-            updateDwellingPopulationOnTile( tile, isFirstLoad );
-            break;
-
-        case MP2::OBJ_EVENT:
-            assert( isFirstLoad );
-            // Event should be invisible on Adventure Map.
-            tile.resetMainObjectPart();
-            resetObjectMetadata( tile );
+            updateDwellingPopulationOnTile( tile, true );
             break;
 
         default:
-            if ( isFirstLoad ) {
-                resetObjectMetadata( tile );
-            }
+            // All other objects shall not have metadata.
+            resetObjectMetadata( tile );
             break;
         }
     }
 
-    void updateMonsterInfoOnTile( Tile & tile )
+    void updateObjectInfoTile( Tile & tile )
     {
-        const Monster mons = Monster( tile.getMainObjectPart().icnIndex + 1 ); // ICN::MONS32 start from PEASANT
-        setMonsterOnTile( tile, mons, tile.metadata()[0] );
+        switch ( tile.getMainObjectType( false ) ) {
+        case MP2::OBJ_MAGIC_GARDEN:
+            // 5 gems or 500 gold
+            if ( Rand::Get( 1 ) )
+                setResourceOnTile( tile, Resource::GEMS, 5 );
+            else
+                setResourceOnTile( tile, Resource::GOLD, 500 );
+            break;
+
+        case MP2::OBJ_WATER_WHEEL:
+            // first week 500 gold, next week 1000 gold
+            setResourceOnTile( tile, Resource::GOLD, ( 0 == world.CountDay() ? 500 : 1000 ) );
+            break;
+
+        case MP2::OBJ_WINDMILL: {
+            int res = Resource::WOOD;
+            while ( res == Resource::WOOD ) {
+                res = Resource::Rand( false );
+            }
+
+            // 2 pieces of random resources.
+            setResourceOnTile( tile, res, 2 );
+            break;
+        }
+
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_CAVE:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_DRAGON_CITY:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_EXCAVATION:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_RUINS:
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_TROLL_BRIDGE:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_WATCH_TOWER:
+        case MP2::OBJ_WATER_ALTAR:
+            updateDwellingPopulationOnTile( tile, false );
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    void updateMonstersOnTile( Tile & tile, const uint32_t monsterLimit )
+    {
+        if ( tile.getMainObjectType( false ) != MP2::OBJ_MONSTER ) {
+            // This is not a monster object!
+            return;
+        }
+
+        const Troop & troop = getTroopFromTile( tile );
+        const uint32_t beforeTroopCount = troop.GetCount();
+
+        if ( beforeTroopCount == 0 ) {
+            // How is it possible? Monster cannot be 0!
+            return;
+        }
+
+        if ( beforeTroopCount >= monsterLimit ) {
+            // The monsters have reached the limit.
+            // It could happen when a player uses an old save before the introduced checks.
+            return;
+        }
+
+        const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( beforeTroopCount % 7 ) ) ? 1 : 0;
+        uint32_t troopGrowth{ beforeTroopCount / 7 + bonusUnit };
+        troopGrowth = std::min( troopGrowth, monsterLimit - beforeTroopCount );
+
+        const uint32_t afterTroopCount{ beforeTroopCount + troopGrowth };
+
+        setMonsterCountOnTile( tile, afterTroopCount );
     }
 
     void setMonsterOnTile( Tile & tile, const Monster & mons, const uint32_t count )

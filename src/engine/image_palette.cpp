@@ -21,15 +21,11 @@
 #include "image_palette.h"
 
 #include <algorithm>
-#include <array>
 #include <cassert>
-#include <cstddef>
 
 namespace
 {
-    constexpr size_t paletteSize = 256 * 3;
-
-    struct PaletteHolder
+    class PaletteHolder
     {
     public:
         static PaletteHolder & instance()
@@ -38,7 +34,8 @@ namespace
             return paletteHolder;
         }
 
-        std::array<uint8_t, paletteSize> gamePalette;
+        static_assert( fheroes2::paletteSizeBytes == 768, "Palette format has changed! Check your logic." );
+        std::array<uint8_t, fheroes2::paletteSizeBytes> gamePalette{ 0 };
 
     private:
         PaletteHolder()
@@ -87,16 +84,35 @@ namespace fheroes2
         return PaletteHolder::instance().gamePalette.data();
     }
 
+    const RGB * getRGBGamePalette()
+    {
+        return reinterpret_cast<const RGB *>( PaletteHolder::instance().gamePalette.data() );
+    }
+
+    std::array<RGB, paletteSize> getNormalizedRGBGamePalette()
+    {
+        std::array<RGB, paletteSize> palette;
+
+        const uint8_t * originalPalette = PaletteHolder::instance().gamePalette.data();
+        auto * normalizedPalette = reinterpret_cast<uint8_t *>( palette.data() );
+
+        for ( size_t i = 0; i < paletteSizeBytes; ++i ) {
+            normalizedPalette[i] = static_cast<uint8_t>( originalPalette[i] << 2 );
+        }
+
+        return palette;
+    }
+
     void setGamePalette( const std::vector<uint8_t> & palette )
     {
-        assert( palette.size() == paletteSize );
-        if ( palette.size() != paletteSize ) {
+        assert( palette.size() == paletteSizeBytes );
+        if ( palette.size() != paletteSizeBytes ) {
             return;
         }
 
         auto & gamePalette = PaletteHolder::instance().gamePalette;
 
-        std::copy_n( palette.begin(), paletteSize, gamePalette.begin() );
+        std::copy_n( palette.begin(), paletteSizeBytes, gamePalette.begin() );
 
         // Make a copy of cycling colors to use them without cycling.
         // Water cycling colors. Color 234 has already non-cycling copy: 236. Copy 231, 232, 233 and 235 to 246 - 249.

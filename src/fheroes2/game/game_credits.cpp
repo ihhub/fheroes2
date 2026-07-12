@@ -28,10 +28,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image.h"
@@ -152,7 +152,7 @@ namespace
 
     fheroes2::Sprite generateHeader()
     {
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
+        const fheroes2::Sprite & background = Assets::getImage( ICN::CBKGLAVA, 0 );
         assert( background.height() < fheroes2::Display::DEFAULT_HEIGHT );
 
         fheroes2::Sprite output;
@@ -181,7 +181,7 @@ namespace
 
     fheroes2::Sprite generateResurrectionCreditsFirstPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGLAVA, 0 );
         output._disableTransformLayer();
 
         const int32_t columnStep = 210;
@@ -194,7 +194,7 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Project Coordination and Core Development" ), "Ihar Hubchyk" );
         offsetY += 10;
 
-        const fheroes2::Sprite & blackDragon = fheroes2::AGG::GetICN( ICN::DRAGBLAK, 5 );
+        const fheroes2::Sprite & blackDragon = Assets::getImage( ICN::DRAGBLAK, 5 );
         fheroes2::Blit( blackDragon, output, ( columnStep - blackDragon.width() ) / 2, offsetY );
         offsetY += blackDragon.height() + 50;
 
@@ -203,7 +203,7 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Sergei Ivanov" );
         offsetY += 10;
 
-        const fheroes2::Sprite & minotaur = fheroes2::AGG::GetICN( ICN::MINOTAUR, 14 );
+        const fheroes2::Sprite & minotaur = Assets::getImage( ICN::MINOTAUR, 14 );
         fheroes2::Blit( minotaur, output, ( columnStep - minotaur.width() ) / 2, offsetY );
         offsetY += minotaur.height();
 
@@ -220,7 +220,7 @@ namespace
         websiteInto.draw( websiteOffsetX, offsetY, output );
         website.draw( websiteOffsetX + websiteIntoWidth, offsetY, output );
 
-        const fheroes2::Sprite & missile = fheroes2::AGG::GetICN( ICN::ARCH_MSL, 4 );
+        const fheroes2::Sprite & missile = Assets::getImage( ICN::ARCH_MSL, 4 );
         fheroes2::Blit( missile, output, websiteOffsetX - 10 - missile.width(), offsetY + websiteHeight / 2 - missile.height() / 2 );
         fheroes2::Blit( missile, output, websiteOffsetX + websiteIntoWidth + websiteWidth + 10, offsetY + websiteHeight / 2 - missile.height() / 2, true );
 
@@ -230,7 +230,7 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "QA and Support" ), "Igor Tsivilko" );
         offsetY += 10;
 
-        const fheroes2::Sprite & cyclop = fheroes2::AGG::GetICN( ICN::CYCLOPS, 38 );
+        const fheroes2::Sprite & cyclop = Assets::getImage( ICN::CYCLOPS, 38 );
         fheroes2::Blit( cyclop, output, offsetX + ( columnStep - cyclop.width() ) / 2, offsetY );
 
         offsetY = secondAuthorLayerY;
@@ -238,7 +238,7 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Ivan Shibanov" );
         offsetY += 10;
 
-        const fheroes2::Sprite & crusader = fheroes2::AGG::GetICN( ICN::PALADIN2, 23 );
+        const fheroes2::Sprite & crusader = Assets::getImage( ICN::PALADIN2, 23 );
         fheroes2::Blit( crusader, output, offsetX + ( columnStep - crusader.width() ) / 2, offsetY );
 
         offsetY = textInitialOffsetY;
@@ -247,7 +247,7 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Oleg Derevenetz" );
         offsetY += 10;
 
-        const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );
+        const fheroes2::Sprite & mage = Assets::getImage( ICN::MAGE1, 24 );
         fheroes2::Blit( mage, output, offsetX + ( columnStep - mage.width() ) / 2, offsetY );
 
         offsetY = secondAuthorLayerY;
@@ -255,10 +255,10 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Dev and Support" ), "Zense" );
         offsetY += 10;
 
-        const fheroes2::Sprite & phoenix = fheroes2::AGG::GetICN( ICN::PHOENIX, 4 );
+        const fheroes2::Sprite & phoenix = Assets::getImage( ICN::PHOENIX, 4 );
         fheroes2::Blit( phoenix, output, offsetX + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
 
-        const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
+        const fheroes2::Sprite & goblin = Assets::getImage( ICN::GOBLIN, 27 );
         fheroes2::Blit( goblin, output, output.width() - goblin.width() * 2, output.height() - goblin.height() - 10, true );
 
         return output;
@@ -266,7 +266,7 @@ namespace
 
     fheroes2::Sprite generateResurrectionCreditsSecondPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGLAVA, 0 );
         output._disableTransformLayer();
 
         const int32_t columnStep = 210;
@@ -345,7 +345,7 @@ namespace
         name.set( _( "and all the people who have helped make the project possible!" ), fheroes2::FontType::normalWhite() );
         name.draw( output.width() / 2 - name.width() / 2, offsetY, output );
 
-        const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
+        const fheroes2::Sprite & hydra = Assets::getImage( ICN::HYDRA, 11 );
 
         offsetY = output.height() - hydra.height() - 40;
 
@@ -356,7 +356,7 @@ namespace
 
     fheroes2::Sprite generateResurrectionCreditsThirdPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGSWMP, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGSWMP, 0 );
         output._disableTransformLayer();
 
         const int32_t textInitialOffsetX = output.width() / 2;
@@ -369,7 +369,7 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Support us at" ), _( "local-donation-platform|https://www.patreon.com/fheroes2" ) );
         offsetY += 30;
 
-        const fheroes2::Sprite & wizard = fheroes2::AGG::GetICN( ICN::CMBTCAPZ, 4 );
+        const fheroes2::Sprite & wizard = Assets::getImage( ICN::CMBTCAPZ, 4 );
         fheroes2::Blit( wizard, output, ( textInitialOffsetX - wizard.width() ) / 2, offsetY );
         offsetY += wizard.height() + 20;
 
@@ -377,7 +377,7 @@ namespace
             += renderText( output, offsetX, offsetY, textWidth - 10, _( "Connect with us at" ), _( "local-social-network|https://www.facebook.com/groups/fheroes2" ) );
         offsetY += 20;
 
-        const fheroes2::Sprite & vampireLord = fheroes2::AGG::GetICN( ICN::VAMPIRE2, 22 );
+        const fheroes2::Sprite & vampireLord = Assets::getImage( ICN::VAMPIRE2, 22 );
         fheroes2::Blit( vampireLord, output, ( textInitialOffsetX - vampireLord.width() ) / 2, offsetY );
 
         offsetY = textInitialOffsetY;
@@ -386,7 +386,7 @@ namespace
         offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Need help with the game?" ), "https://discord.com/servers/fheroes2-733093692860137523" );
         offsetY += 10;
 
-        fheroes2::Sprite labyrinth = fheroes2::AGG::GetICN( ICN::TWNWUP_3, 0 );
+        fheroes2::Sprite labyrinth = Assets::getImage( ICN::TWNWUP_3, 0 );
         fheroes2::ApplyPalette( labyrinth, 2 );
         fheroes2::Blit( labyrinth, output, textInitialOffsetX + ( textInitialOffsetX - labyrinth.width() ) / 2, offsetY );
 
@@ -400,7 +400,7 @@ namespace
         name.set( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", fheroes2::FontType::smallWhite() );
         name.draw( offsetX, offsetY, textWidth - 10, output );
 
-        fheroes2::Sprite creature = fheroes2::AGG::GetICN( ICN::MAGE2, 4 );
+        fheroes2::Sprite creature = Assets::getImage( ICN::MAGE2, 4 );
         transformToBlack( creature );
 
         const int32_t creatureOffsetY = output.height() - 95;
@@ -413,7 +413,7 @@ namespace
 
     fheroes2::Sprite generateSuccessionWarsCreditsFirstPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGWATR, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
@@ -476,7 +476,7 @@ namespace
 
     fheroes2::Sprite generateSuccessionWarsCreditsSecondPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGWATR, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
@@ -536,7 +536,7 @@ namespace
 
     fheroes2::Sprite generatePriceOfLoyaltyCreditsFirstPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGGRAV, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
@@ -587,7 +587,7 @@ namespace
 
     fheroes2::Sprite generatePriceOfLoyaltyCreditsSecondPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGGRAV, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
@@ -647,7 +647,7 @@ namespace
 
     fheroes2::Sprite generatePriceOfLoyaltyCreditsThirdPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
+        fheroes2::Sprite output = Assets::getImage( ICN::CBKGGRAV, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
@@ -701,7 +701,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
 {
     // Credits are shown in the place of Main Menu background which is correctly resized.
     // We get the Main Menu background ROI to use it for credits ROI and leave borders unchanged.
-    const fheroes2::Sprite & mainMenuBackground = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+    const fheroes2::Sprite & mainMenuBackground = Assets::getImage( ICN::HEROES, 0 );
     const fheroes2::Rect creditsRoi( mainMenuBackground.x(), mainMenuBackground.y(), mainMenuBackground.width(), mainMenuBackground.height() );
 
     // Hide mouse cursor.
