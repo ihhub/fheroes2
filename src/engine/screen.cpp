@@ -447,23 +447,18 @@ namespace
             return surface;
         }
     };
-#endif
 
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
-        RenderCursor( const RenderCursor & ) = delete;
-
         ~RenderCursor() override
         {
             clear();
         }
 
-        RenderCursor & operator=( const RenderCursor & ) = delete;
-
         void show( const bool enable ) override
         {
-            fheroes2::Cursor::show( enable );
+            Cursor::show( enable );
 
             if ( !_emulation ) {
                 const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -476,10 +471,10 @@ namespace
         bool isVisible() const override
         {
             if ( _emulation ) {
-                return fheroes2::Cursor::isVisible();
+                return Cursor::isVisible();
             }
 
-            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            return Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, const int32_t offsetX, const int32_t offsetY ) override
@@ -491,7 +486,7 @@ namespace
             }
 
             if ( _emulation ) {
-                fheroes2::Cursor::update( image, offsetX, offsetY );
+                Cursor::update( image, offsetX, offsetY );
                 return;
             }
 
@@ -609,8 +604,21 @@ namespace
             }
         }
     };
+#endif
 
 #if defined( TARGET_PS_VITA )
+    class RenderCursor final : public fheroes2::Cursor
+    {
+    public:
+        static RenderCursor * create()
+        {
+            auto * cursor = new RenderCursor;
+            cursor->enableSoftwareEmulation( true );
+
+            return cursor;
+        }
+    };
+
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
@@ -661,6 +669,7 @@ namespace
         }
 
     private:
+        // SDL capture touchscreen events only in SDL_Window rectangle. We create SDL_Window on PS Vita only for this purpose.
         SDL_Window * _window{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
@@ -732,7 +741,7 @@ namespace
             const int32_t width = display.width();
             const int32_t height = display.height();
 
-            SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+            memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
             vita2d_draw_rectangle( 0, 0, VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 0xff000000 );

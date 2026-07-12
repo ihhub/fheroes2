@@ -199,22 +199,6 @@ msgstr "RỜI KHỎI"
 
 #, fuzzy
 msgid ""
-"START\n"
-"MAP"
-msgstr "LÀM LẠI"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -231,11 +215,27 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"START\n"
+"MAP"
+msgstr "LÀM LẠI"
+
+#, fuzzy
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "LƯU\n"
 "GAME"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "THÔNG TIN"
@@ -4575,9 +4575,9 @@ msgstr ""
 "Ngươi có chắc chắn muốn tải bản đồ mới không? (Mọi thay đổi chưa được lưu "
 "đối với bản đồ hiện tại sẽ bị mất.)"
 
-#, fuzzy
-msgid "Create a new map from scratch."
-msgstr "bắt đầu bản đồ mới"
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Bản đồ Mới"
@@ -5037,10 +5037,6 @@ msgid "Delete an existing language."
 msgstr "Tải một bản đồ đã có."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -13181,6 +13177,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid "Create a new map from scratch."
+#~ msgstr "bắt đầu bản đồ mới"
 
 #, fuzzy
 #~ msgid "and many-many other contributors and supporters!"

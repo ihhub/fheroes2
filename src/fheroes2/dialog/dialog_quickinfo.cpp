@@ -461,11 +461,17 @@ namespace
             return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );
         }
 
-        const Kingdom & kingdom = world.GetKingdom( playerColor );
+        Kingdom & kingdom = world.GetKingdom( playerColor );
 
         switch ( objectType ) {
-        case MP2::OBJ_MONSTER:
-            return showMonsterInfo( tile, kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) );
+        case MP2::OBJ_MONSTER: {
+            const bool isVisibleFromCrystalBall{ kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) };
+            if ( isVisibleFromCrystalBall ) {
+                kingdom.addMonsterUnderVisionSpell( tile.GetIndex() );
+            }
+
+            return showMonsterInfo( tile, isVisibleFromCrystalBall || kingdom.isMonsterUnderVisionSpell( tile.GetIndex() ) );
+        }
 
         case MP2::OBJ_COAST:
         case MP2::OBJ_EVENT:

@@ -202,22 +202,6 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"START\n"
-"MAP"
-msgstr "REŠTART"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -235,11 +219,27 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"START\n"
+"MAP"
+msgstr "REŠTART"
+
+#, fuzzy
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "ULOŽIŤ\n"
 "HRU"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFO"
@@ -4574,9 +4574,9 @@ msgstr ""
 "Určite chceš načítať novú mapu? (Všetky neuložené zmeny v aktuálnej mape sa "
 "stratia.)"
 
-#, fuzzy
-msgid "Create a new map from scratch."
-msgstr "nová mapa, od nuly"
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Nová mapa"
@@ -5032,10 +5032,6 @@ msgid "Delete an existing language."
 msgstr "Načítať existujúcu mapu."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -13051,6 +13047,10 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#, fuzzy
+#~ msgid "Create a new map from scratch."
+#~ msgstr "nová mapa, od nuly"
 
 #, fuzzy
 #~ msgid "and many-many other contributors and supporters!"

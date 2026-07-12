@@ -56,7 +56,7 @@ namespace
     enum GameOptions : uint32_t
     {
         GAME_FIRST_RUN = 0x00000001,
-        GAME_SHOW_INTRO = 0x00000002,
+        UNUSED_1 = 0x00000002,
         GAME_PRICELOYALTY = 0x00000004,
         GAME_RENDER_VSYNC = 0x00000008,
         GAME_TEXT_SUPPORT_MODE = 0x00000010,
@@ -73,7 +73,7 @@ namespace
         GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
-        UNUSED = 0x00400000,
+        UNUSED_2 = 0x00400000,
         GAME_BATTLE_SHOW_GRID = 0x00800000,
         GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GAME_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -115,7 +115,6 @@ Settings::Settings()
     , game_type( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
-    _gameOptions.SetModes( GAME_SHOW_INTRO );
 
     _gameOptions.SetModes( GAME_SHOW_RADAR );
     _gameOptions.SetModes( GAME_SHOW_ICONS );
@@ -322,15 +321,6 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "first time game run" ) && config.StrParams( "first time game run" ) == "off" ) {
         resetFirstGameRun();
-    }
-
-    if ( config.Exists( "show game intro" ) ) {
-        if ( config.StrParams( "show game intro" ) == "on" ) {
-            _gameOptions.SetModes( GAME_SHOW_INTRO );
-        }
-        else {
-            _gameOptions.ResetModes( GAME_SHOW_INTRO );
-        }
     }
 
     if ( config.Exists( "v-sync" ) ) {
@@ -553,9 +543,6 @@ std::string Settings::String() const
 
     os << std::endl << "# First time game run (show additional hints): on/off" << std::endl;
     os << "first time game run = " << ( _gameOptions.Modes( GAME_FIRST_RUN ) ? "on" : "off" ) << std::endl;
-
-    os << std::endl << "# Show game intro (splash screen and video): on/off" << std::endl;
-    os << "show game intro = " << ( _gameOptions.Modes( GAME_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
     os << "v-sync = " << ( _gameOptions.Modes( GAME_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
@@ -1259,11 +1246,6 @@ bool Settings::isVSyncEnabled() const
 bool Settings::isFirstGameRun() const
 {
     return _gameOptions.Modes( GAME_FIRST_RUN );
-}
-
-bool Settings::isShowIntro() const
-{
-    return _gameOptions.Modes( GAME_SHOW_INTRO );
 }
 
 void Settings::resetFirstGameRun()

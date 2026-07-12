@@ -163,21 +163,6 @@ msgid "QUIT"
 msgstr ""
 
 msgid ""
-"START\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -188,8 +173,23 @@ msgid ""
 msgstr ""
 
 msgid ""
+"START\n"
+"MAP"
+msgstr ""
+
+msgid ""
 "SAVE\n"
 "MAP"
+msgstr ""
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
 msgstr ""
 
 msgid "INFO"
@@ -4374,7 +4374,8 @@ msgid ""
 "the current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -4790,10 +4791,6 @@ msgid "Delete an existing language."
 msgstr ""
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy

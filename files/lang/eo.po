@@ -204,23 +204,6 @@ msgid "QUIT"
 msgstr "ELIRI"
 
 msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"KOMENCI\n"
-"MAPON"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr "ĈEFMENUO"
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-msgid ""
 "NEW\n"
 "MAP"
 msgstr ""
@@ -235,11 +218,28 @@ msgstr ""
 "MAPON"
 
 msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"KOMENCI\n"
+"MAPON"
+
+msgid ""
 "SAVE\n"
 "MAP"
 msgstr ""
 "KONSERVI\n"
 "MAPON"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr "ĈEFMENUO"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
 
 msgid "INFO"
 msgstr "INFORMOJ"
@@ -4125,7 +4125,8 @@ msgid ""
 "the current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -4526,10 +4527,6 @@ msgid "Delete an existing language."
 msgstr ""
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "Exit the Editor and return to the game's Main Menu."
