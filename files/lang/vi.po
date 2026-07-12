@@ -17,329 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.4.2\n"
 
-msgid "SELECT"
-msgstr "CHỌN"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "TẤT CẢ"
-
-msgid "EXIT"
-msgstr "THOÁT"
-
-msgid "smallerButton|EXIT"
-msgstr "THOÁT"
-
-msgid "OKAY"
-msgstr "ĐƯỢC"
-
-msgid "HEROES"
-msgstr "TƯỚNG"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"THỊ TRẤN/\n"
-"LÂU ĐÀI"
-
-msgid "CANCEL"
-msgstr "TỪ BỎ"
-
-msgid "ACCEPT"
-msgstr "ĐỒNG Ý"
-
-msgid "DECLINE"
-msgstr "TỪ CHỐI"
-
-msgid "LEARN"
-msgstr "HỌC TẬP"
-
-msgid "TRADE"
-msgstr "TRAO ĐỔI"
-
-msgid "YES"
-msgstr "CÓ"
-
-msgid "NO"
-msgstr "KHÔNG"
-
-msgid "DISMISS"
-msgstr "GIẢI TÁN"
-
-msgid "UPGRADE"
-msgstr "NÂNG CẤP"
-
-msgid "GIFT"
-msgstr "QUÀ"
-
-msgid "RESTART"
-msgstr "LÀM LẠI"
-
-msgid "MAX"
-msgstr "MAX"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"G\n"
-"I\n"
-"Ả\n"
-"I\n"
-"T\n"
-"Á\n"
-"N"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"T\n"
-"H\n"
-"O\n"
-"Á\n"
-"T"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"C\n"
-"H\n"
-"I\n"
-"Ế\n"
-"N\n"
-"D\n"
-"Ị\n"
-"C\n"
-"H"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"T\n"
-"H\n"
-"Ư\n"
-"Ờ\n"
-"N\n"
-"G"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"TẠO\n"
-"GAME"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"TẢI\n"
-"GAME"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "LÀM LẠI"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"LƯU\n"
-"GAME"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "RỜI KHỎI"
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"TẠO\n"
-"GAME"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"TẢI\n"
-"GAME"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "LÀM LẠI"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"LƯU\n"
-"GAME"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-msgid "INFO"
-msgstr "THÔNG TIN"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"CHỈ\n"
-"CHIẾN ĐẤU"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"GAME\n"
-"THƯỜNG"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"CHIẾN\n"
-"DỊCH"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"CHƠI\n"
-"NHIỀU\n"
-"NGƯỜI"
-
-msgid "HOT SEAT"
-msgstr "GHẾ NÓNG"
-
-msgid "2 PLAYERS"
-msgstr "2 NGƯỜI CHƠI"
-
-msgid "3 PLAYERS"
-msgstr "3 NGƯỜI CHƠI"
-
-msgid "4 PLAYERS"
-msgstr "4 NGƯỜI CHƠI"
-
-msgid "5 PLAYERS"
-msgstr "5 NGƯỜI CHƠI"
-
-msgid "6 PLAYERS"
-msgstr "6 NGƯỜI CHƠI"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"CHIẾN DỊCH\n"
-"THƯỜNG"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"CHIẾN DỊCH\n"
-"MỞ RỘNG"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "ĐỘ KHÓ"
-
-msgid "VIEW INTRO"
-msgstr "XEM GIỚI THIỆU"
-
-msgid "RESET"
-msgstr "CÀI LẠI"
-
-msgid "START"
-msgstr "LÀM LẠI"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "Một vài"
-
 msgid "Warrior"
 msgstr "Chiến binh"
 
@@ -420,6 +97,9 @@ msgid ""
 msgstr ""
 "Quân đoàn\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Một vài"
 
 msgid "army|Several"
 msgstr "Một số"
@@ -3646,8 +3326,14 @@ msgstr "Số lượng mua:"
 msgid "Recruit selected monsters."
 msgstr "Chiêu mộ quái vật đã chọn."
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Chọn tối đa quá vật để chiêu mộ."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Chỉ chọn 1 quái vật để chiêu mộ."
@@ -4481,6 +4167,9 @@ msgstr ""
 #, fuzzy
 msgid "Click to make selection."
 msgstr "Nhấp để chọn màu này."
+
+msgid "SELECT"
+msgstr "CHỌN"
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -5491,6 +5180,317 @@ msgstr "Chuyên gia"
 
 msgid "difficulty|Impossible"
 msgstr "Bất khả thi"
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "TẤT CẢ"
+
+msgid "EXIT"
+msgstr "THOÁT"
+
+msgid "smallerButton|EXIT"
+msgstr "THOÁT"
+
+msgid "OKAY"
+msgstr "ĐƯỢC"
+
+msgid "HEROES"
+msgstr "TƯỚNG"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"THỊ TRẤN/\n"
+"LÂU ĐÀI"
+
+msgid "CANCEL"
+msgstr "TỪ BỎ"
+
+msgid "ACCEPT"
+msgstr "ĐỒNG Ý"
+
+msgid "DECLINE"
+msgstr "TỪ CHỐI"
+
+msgid "LEARN"
+msgstr "HỌC TẬP"
+
+msgid "TRADE"
+msgstr "TRAO ĐỔI"
+
+msgid "YES"
+msgstr "CÓ"
+
+msgid "NO"
+msgstr "KHÔNG"
+
+msgid "DISMISS"
+msgstr "GIẢI TÁN"
+
+msgid "UPGRADE"
+msgstr "NÂNG CẤP"
+
+msgid "GIFT"
+msgstr "QUÀ"
+
+msgid "RESTART"
+msgstr "LÀM LẠI"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"G\n"
+"I\n"
+"Ả\n"
+"I\n"
+"T\n"
+"Á\n"
+"N"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"T\n"
+"H\n"
+"O\n"
+"Á\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"C\n"
+"H\n"
+"I\n"
+"Ế\n"
+"N\n"
+"D\n"
+"Ị\n"
+"C\n"
+"H"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"T\n"
+"H\n"
+"Ư\n"
+"Ờ\n"
+"N\n"
+"G"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"TẠO\n"
+"GAME"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"TẢI\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "LÀM LẠI"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"LƯU\n"
+"GAME"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "RỜI KHỎI"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"TẠO\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"TẢI\n"
+"GAME"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "LÀM LẠI"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LƯU\n"
+"GAME"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "THÔNG TIN"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"CHỈ\n"
+"CHIẾN ĐẤU"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"GAME\n"
+"THƯỜNG"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"CHIẾN\n"
+"DỊCH"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"CHƠI\n"
+"NHIỀU\n"
+"NGƯỜI"
+
+msgid "HOT SEAT"
+msgstr "GHẾ NÓNG"
+
+msgid "2 PLAYERS"
+msgstr "2 NGƯỜI CHƠI"
+
+msgid "3 PLAYERS"
+msgstr "3 NGƯỜI CHƠI"
+
+msgid "4 PLAYERS"
+msgstr "4 NGƯỜI CHƠI"
+
+msgid "5 PLAYERS"
+msgstr "5 NGƯỜI CHƠI"
+
+msgid "6 PLAYERS"
+msgstr "6 NGƯỜI CHƠI"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"CHIẾN DỊCH\n"
+"THƯỜNG"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"CHIẾN DỊCH\n"
+"MỞ RỘNG"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "ĐỘ KHÓ"
+
+msgid "VIEW INTRO"
+msgstr "XEM GIỚI THIỆU"
+
+msgid "RESET"
+msgstr "CÀI LẠI"
+
+msgid "START"
+msgstr "LÀM LẠI"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 #, fuzzy
 msgid "Auto Playtest Results"

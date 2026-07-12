@@ -31,7 +31,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
@@ -41,6 +40,7 @@
 #include "dialog_resolution.h"
 #include "editor_mainmenu.h"
 #include "game.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
@@ -266,10 +266,10 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
     fheroes2::Button buttonEditor( 0, 0, ICN::BTNSHNGL, EDITOR_DEFAULT, EDITOR_DEFAULT + 2 );
     fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
-    const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
+    const fheroes2::Sprite & lantern10 = Assets::getImage( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
 
-    const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, 0 ) );
+    const fheroes2::Sprite & lantern11 = Assets::getImage( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, 0 ) );
     fheroes2::Blit( lantern11, display, lantern11.x(), lantern11.y() );
 
     buttonNewGame.draw();
@@ -305,11 +305,11 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
     }
 
     for ( size_t i = 0; le.hasMouseMoved() && i < buttons.size(); ++i ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
     }
 
-    fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
+    fheroes2::Sprite highlightDoor = Assets::getImage( ICN::SHNGANIM, 18 );
     fheroes2::ApplyPalette( highlightDoor, 8 );
 
     while ( true ) {
@@ -340,7 +340,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
                 if ( !redrawScreen ) {
                     redrawScreen = true;
                 }
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, frame );
+                const fheroes2::Sprite & sprite = Assets::getImage( ICN::BTNSHNGL, frame );
                 fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
             }
         }
@@ -406,7 +406,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         }
 
         if ( validateAnimationDelay( DelayType::MAIN_MENU_DELAY ) ) {
-            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, lantern_frame ) );
+            const fheroes2::Sprite & lantern12 = Assets::getImage( ICN::SHNGANIM, ICN::getAnimatedIcnIndex( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.isMouseCursorPosInArea( settingsArea ) ) {

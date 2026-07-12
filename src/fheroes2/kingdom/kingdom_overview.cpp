@@ -30,7 +30,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army_bar.h"
 #include "artifact.h"
 #include "buildinginfo.h"
@@ -39,6 +38,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
@@ -95,12 +95,12 @@ namespace
     void redrawCommonBackground( const fheroes2::Point & dst, const int visibleItems, fheroes2::Image & output )
     {
         // Scrollbar background.
-        const fheroes2::Sprite & scrollbar = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+        const fheroes2::Sprite & scrollbar = Assets::getImage( ICN::OVERVIEW, 13 );
         fheroes2::Copy( scrollbar, 0, 0, output, dst.x + scrollbarOffset + 1, dst.y + 17, scrollbar.width(), scrollbar.height() );
 
         // Items background.
-        const fheroes2::Sprite & itemsBack = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
-        const fheroes2::Sprite & overback = fheroes2::AGG::GetICN( ICN::OVERBACK, 0 );
+        const fheroes2::Sprite & itemsBack = Assets::getImage( ICN::OVERVIEW, 8 );
+        const fheroes2::Sprite & overback = Assets::getImage( ICN::OVERBACK, 0 );
         const int32_t itemsBackWidth = itemsBack.width();
         const int32_t itemsBackHeight = itemsBack.height();
         const int32_t offsetX = dst.x + 30;
@@ -217,14 +217,14 @@ namespace
         : Interface::ListBox<HeroRow>( offset )
         , _windowArea( windowArea )
     {
-        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+        const fheroes2::Sprite & back = Assets::getImage( ICN::OVERVIEW, 13 );
         const int32_t backHeight = back.height();
 
         SetTopLeft( offset );
         const int32_t offsetX = offset.x + scrollbarOffset;
         setScrollBarArea( { offsetX + 2, offset.y + 18, back.width(), backHeight - 2 } );
 
-        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
+        const fheroes2::Sprite & originalSlider = Assets::getImage( ICN::SCROLL, 4 );
         fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, backHeight - 2, 4, static_cast<int32_t>( heroes.size() ),
                                                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
@@ -253,8 +253,8 @@ namespace
         const size_t contentSize = content.size();
 
         if ( heroes.size() != contentSize ) {
-            const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
-            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
+            const fheroes2::Sprite & back = Assets::getImage( ICN::OVERVIEW, 13 );
+            const fheroes2::Sprite & originalSlider = Assets::getImage( ICN::SCROLL, 4 );
             fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( heroes.size() ),
                                                                                  { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
             setScrollBarImage( std::move( scrollbarSlider ) );
@@ -332,7 +332,7 @@ namespace
         }
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), display, dstx, dsty );
+        fheroes2::Blit( Assets::getImage( ICN::OVERVIEW, 10 ), display, dstx, dsty );
 
         // base info
         Interface::redrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
@@ -376,7 +376,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 6 );
+        const fheroes2::Sprite & header = Assets::getImage( ICN::OVERVIEW, 6 );
         fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
         const int32_t offsetY = dst.y + 3;
@@ -499,14 +499,14 @@ namespace
         : Interface::ListBox<CstlRow>( offset )
         , _windowArea( windowArea )
     {
-        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+        const fheroes2::Sprite & back = Assets::getImage( ICN::OVERVIEW, 13 );
         const int32_t backHeight = back.height();
 
         SetTopLeft( offset );
         const int32_t offsetX = offset.x + scrollbarOffset;
         setScrollBarArea( { offsetX + 2, offset.y + 18, back.width(), backHeight - 2 } );
 
-        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
+        const fheroes2::Sprite & originalSlider = Assets::getImage( ICN::SCROLL, 4 );
         fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( castles.size() ),
                                                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
@@ -618,7 +618,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), display, dstx, dsty );
+        fheroes2::Blit( Assets::getImage( ICN::OVERVIEW, 11 ), display, dstx, dsty );
 
         // base info
         Interface::redrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
@@ -667,7 +667,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 7 );
+        const fheroes2::Sprite & header = Assets::getImage( ICN::OVERVIEW, 7 );
         fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
         const int32_t offsetY = dst.y + 3;
@@ -718,7 +718,7 @@ namespace
         int32_t offsetY = pt.y + 450;
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, display, pt.x + 4, pt.y + 422, 530, 56 );
+        fheroes2::Blit( Assets::getImage( ICN::OVERBACK, 0 ), 4, 422, display, pt.x + 4, pt.y + 422, 530, 56 );
 
         fheroes2::Text text( std::to_string( funds.wood ), fheroes2::FontType::smallWhite() );
         text.draw( pt.x + 56 - text.width() / 2, offsetY, display );
@@ -755,7 +755,7 @@ namespace
         text.set( std::to_string( lighthouseCount ), fheroes2::FontType::smallWhite() );
         text.draw( pt.x + 105, offsetY, display );
 
-        const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+        const fheroes2::Sprite & lighthouse = Assets::getImage( ICN::OVERVIEW, 14 );
         fheroes2::Blit( lighthouse, 0, 0, display, pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
     }
 }
@@ -780,7 +780,7 @@ void Kingdom::openOverviewDialog()
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( Assets::getImage( ICN::OVERBACK, 0 ), display, dst_pt.x, dst_pt.y );
 
     RedrawIncomeInfo( cur_pt, *this );
     RedrawFundsInfo( cur_pt, *this );
@@ -802,7 +802,7 @@ void Kingdom::openOverviewDialog()
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
     const fheroes2::Rect rectGoldPerDay( cur_pt.x + 124, cur_pt.y + 459, 289, 16 );
 
-    const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+    const fheroes2::Sprite & lighthouse = Assets::getImage( ICN::OVERVIEW, 14 );
     const fheroes2::Rect rectLighthouse( cur_pt.x + 100 - lighthouse.width(), cur_pt.y + 459, lighthouse.width() + 10, lighthouse.height() );
 
     Interface::ListBasic * listStats = nullptr;

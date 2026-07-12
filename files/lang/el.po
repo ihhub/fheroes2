@@ -17,357 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.9\n"
 
-msgid "SELECT"
-msgstr "ΕΠΙΛΟΓΗ"
-
-# η λέξη «ΠΛΗΡΟΦΟΡΙΕΣ» είναι πιο σωστή, αλλά ήταν υπερβολικά μεγάλη
-msgid "ABOUT"
-msgstr "ΣΧΕΤΙΚΑ"
-
-# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
-msgid "S"
-msgstr "S"
-
-# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
-msgid "M"
-msgstr "M"
-
-# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
-msgid "L"
-msgstr "L"
-
-# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
-msgid "X-L"
-msgstr "X-L"
-
-# (οι χάρτες)
-msgid "ALL"
-msgstr "ΟΛΟΙ"
-
-msgid "EXIT"
-msgstr "ΕΞΟΔΟΣ"
-
-# ΕΞΟΔΟΣ δεν χωράει για έναν χαρακτήρα. Μπορούμε εναλλακτικά να το γράψουμε ως ΤΕΛΟΣ, αλλά αυτό χάνει το θεματικό στοιχείο του κουμπιού, επείδη π.χ. «παίρνεις την έξοδο» του κάστρου
-msgid "smallerButton|EXIT"
-msgstr "ΕΞΟΔ."
-
-msgid "OKAY"
-msgstr "ΕΝΤΑΞΕΙ"
-
-msgid "HEROES"
-msgstr "ΗΡΩΕΣ"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"ΠΟΛΕΙΣ/\n"
-"ΚΑΣΤΡΑ"
-
-msgid "CANCEL"
-msgstr "ΑΚΥΡΟ"
-
-msgid "ACCEPT"
-msgstr "ΑΠΟΔΟΧΗ"
-
-msgid "DECLINE"
-msgstr "ΑΠΟΡΡΙΨΗ"
-
-msgid "LEARN"
-msgstr "ΜΑΘΗΣΗ"
-
-msgid "TRADE"
-msgstr "ΕΜΠΟΡΙΟ"
-
-msgid "YES"
-msgstr "ΝΑΙ"
-
-msgid "NO"
-msgstr "ΟΧΙ"
-
-msgid "DISMISS"
-msgstr "ΑΠΟΛΥΣΗ"
-
-msgid "UPGRADE"
-msgstr "ΑΝΑΒΑΘΜΙΣΗ"
-
-# εναλλακτικά «ΠΡΟΣΦΟΡΑ», αλλά επέλεξα δώρο επειδή δεν χρειάζεται να την αποδεχτεί ο παραλήπτης
-msgid "GIFT"
-msgstr "ΔΩΡΟ"
-
-# ταιριάζει με «ΕΝΑΡΞΗ»
-msgid "RESTART"
-msgstr "ΕΠΑΝΕΝΑΡΞΗ"
-
-msgid "MAX"
-msgstr "ΜΕΓ"
-
-msgid "MIN"
-msgstr "ΕΛΑΧ"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"Α\n"
-"Π\n"
-"Ο\n"
-"Λ\n"
-"Υ\n"
-"Σ\n"
-"Η"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"Ε\n"
-"Ξ\n"
-"Ο\n"
-"Δ\n"
-"Ο\n"
-"Σ"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"Ι\n"
-"Σ\n"
-"Τ\n"
-"Ο\n"
-"Ρ\n"
-"Ι\n"
-"Α"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"Κ\n"
-"Α\n"
-"Ν\n"
-"Ο\n"
-"Ν\n"
-"Ι\n"
-"Κ\n"
-"Ο"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"ΝΕΟ\n"
-"ΠΑΙΧΝΙΔΙ"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"ΦΟΡΤΩΣΗ\n"
-"ΠΑΙΧΝΙΔΙΟΥ"
-
-# ταιριάζει με «ΕΝΑΡΞΗ»
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr ""
-"ΕΠΑΝΕΝΑΡΞΗ\n"
-"ΠΑΙΧΝΙΔΙΟΥ"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ΑΠΟΘΗΚΕΥΣΗ\n"
-"ΠΑΙΧΝΙΔΙΟΥ"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"ΓΡΗΓΟΡΗ\n"
-"ΑΠΟΘΗΚΕΥΣΗ"
-
-msgid "QUIT"
-msgstr "ΕΓΚΑΤΑΛΕΙΨΗ"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"ΝΕΟΣ\n"
-"ΧΑΡΤΗΣ"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ΦΟΡΤΩΣΗ\n"
-"ΧΑΡΤΗ"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"ΠΑΙΞΕ\n"
-"ΣΤΟΝ\n"
-"ΧΑΡΤΗ"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ΑΠΟΘΗΚΕΥΣΗ\n"
-"ΧΑΡΤΗ"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"ΚΥΡΙΟ\n"
-"ΜΕΝΟΥ"
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-msgid "INFO"
-msgstr "ΠΛΗΡΟΦΟΡΙΕΣ"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"ΜΟΝΟ\n"
-"ΜΑΧΗ"
-
-msgid "SETTINGS"
-msgstr "ΡΥΘΜΙΣΕΙΣ"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"ΚΑΝΟΝΙΚΟ\n"
-"ΠΑΙΧΝΙΔΙ"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"ΙΣΤΟΡΙΑ\n"
-"ΠΑΙΧΝΙΔΙΟΥ"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"ΠΑΙΧΝΙΔΙ\n"
-"ΠΟΛΛΩΝ\n"
-"ΠΑΙΚΤΩΝ"
-
-msgid "HOT SEAT"
-msgstr "ΤΟΠΙΚΟ ΠΑΙΧΝΙΔΙ"
-
-msgid "2 PLAYERS"
-msgstr "2 ΠΑΙΚΤΕΣ"
-
-msgid "3 PLAYERS"
-msgstr "3 ΠΑΙΚΤΕΣ"
-
-msgid "4 PLAYERS"
-msgstr "4 ΠΑΙΚΤΕΣ"
-
-msgid "5 PLAYERS"
-msgstr "5 ΠΑΙΚΤΕΣ"
-
-msgid "6 PLAYERS"
-msgstr "6 ΠΑΙΚΤΕΣ"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ΑΡΧΙΚΗ\n"
-"ΙΣΤΟΡΙΑ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"ΙΣΤΟΡΙΑ\n"
-"ΕΠΕΚΤΑΣΗΣ"
-
-msgid "editorMainMenu|BACK"
-msgstr "ΕΠΙΣΤΡΟΦΗ"
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-"ΑΠΟ\n"
-"ΤΗΝ ΑΡΧΗ"
-
-# Η επόμενη οθόνη ξεκαθαρίζει πως μιλάμε για γεννήτρια χαρτών, επομένως επέλεξα «τυχαίος»
-msgid "newMap|RANDOM"
-msgstr "ΤΥΧΑΙΟΣ"
-
-msgid "DIFFICULTY"
-msgstr "ΔΥΣΚΟΛΙΑ"
-
-# ΠΡΟΒΟΛΗ ΕΙΣΑΓΩΓΗΣ ήταν σε δύο γραμμές επομένως πρέπει αναγκαστικά να το μειώσουμε
-msgid "VIEW INTRO"
-msgstr "ΕΙΣΑΓΩΓΗ"
-
-msgid "RESET"
-msgstr "ΕΠΑΝΑΦΟΡΑ"
-
-msgid "START"
-msgstr "ΕΝΑΡΞΗ"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"Π\n"
-"Ε\n"
-"Ρ\n"
-"Ι\n"
-"Π\n"
-"Ο\n"
-"Λ\n"
-"Ι\n"
-"Α"
-
-msgid "army|Few"
-msgstr ""
-
 msgid "Warrior"
 msgstr ""
 
@@ -428,6 +77,9 @@ msgstr ""
 msgid ""
 "A legion of\n"
 "%{monster}"
+msgstr ""
+
+msgid "army|Few"
 msgstr ""
 
 msgid "army|Several"
@@ -3307,8 +2959,14 @@ msgstr ""
 msgid "Recruit selected monsters."
 msgstr ""
 
+msgid "MAX"
+msgstr "ΜΕΓ"
+
 msgid "Select maximum monsters to be recruited."
 msgstr ""
+
+msgid "MIN"
+msgstr "ΕΛΑΧ"
 
 msgid "Select only 1 monster to be recruited."
 msgstr ""
@@ -4044,6 +3702,9 @@ msgstr ""
 
 msgid "Click to make selection."
 msgstr ""
+
+msgid "SELECT"
+msgstr "ΕΠΙΛΟΓΗ"
 
 msgid "%{objects} cannot be placed on water."
 msgstr ""
@@ -4893,6 +4554,345 @@ msgstr ""
 
 msgid "difficulty|Impossible"
 msgstr ""
+
+# η λέξη «ΠΛΗΡΟΦΟΡΙΕΣ» είναι πιο σωστή, αλλά ήταν υπερβολικά μεγάλη
+msgid "ABOUT"
+msgstr "ΣΧΕΤΙΚΑ"
+
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
+msgid "S"
+msgstr "S"
+
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
+msgid "M"
+msgstr "M"
+
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
+msgid "L"
+msgstr "L"
+
+# δεν υπάρχει ελληνικό αντίστοιχο, και S, M, L, X-L είναι πλήρως κατανοητά
+msgid "X-L"
+msgstr "X-L"
+
+# (οι χάρτες)
+msgid "ALL"
+msgstr "ΟΛΟΙ"
+
+msgid "EXIT"
+msgstr "ΕΞΟΔΟΣ"
+
+# ΕΞΟΔΟΣ δεν χωράει για έναν χαρακτήρα. Μπορούμε εναλλακτικά να το γράψουμε ως ΤΕΛΟΣ, αλλά αυτό χάνει το θεματικό στοιχείο του κουμπιού, επείδη π.χ. «παίρνεις την έξοδο» του κάστρου
+msgid "smallerButton|EXIT"
+msgstr "ΕΞΟΔ."
+
+msgid "OKAY"
+msgstr "ΕΝΤΑΞΕΙ"
+
+msgid "HEROES"
+msgstr "ΗΡΩΕΣ"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"ΠΟΛΕΙΣ/\n"
+"ΚΑΣΤΡΑ"
+
+msgid "CANCEL"
+msgstr "ΑΚΥΡΟ"
+
+msgid "ACCEPT"
+msgstr "ΑΠΟΔΟΧΗ"
+
+msgid "DECLINE"
+msgstr "ΑΠΟΡΡΙΨΗ"
+
+msgid "LEARN"
+msgstr "ΜΑΘΗΣΗ"
+
+msgid "TRADE"
+msgstr "ΕΜΠΟΡΙΟ"
+
+msgid "YES"
+msgstr "ΝΑΙ"
+
+msgid "NO"
+msgstr "ΟΧΙ"
+
+msgid "DISMISS"
+msgstr "ΑΠΟΛΥΣΗ"
+
+msgid "UPGRADE"
+msgstr "ΑΝΑΒΑΘΜΙΣΗ"
+
+# εναλλακτικά «ΠΡΟΣΦΟΡΑ», αλλά επέλεξα δώρο επειδή δεν χρειάζεται να την αποδεχτεί ο παραλήπτης
+msgid "GIFT"
+msgstr "ΔΩΡΟ"
+
+# ταιριάζει με «ΕΝΑΡΞΗ»
+msgid "RESTART"
+msgstr "ΕΠΑΝΕΝΑΡΞΗ"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"Α\n"
+"Π\n"
+"Ο\n"
+"Λ\n"
+"Υ\n"
+"Σ\n"
+"Η"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"Ε\n"
+"Ξ\n"
+"Ο\n"
+"Δ\n"
+"Ο\n"
+"Σ"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"Ι\n"
+"Σ\n"
+"Τ\n"
+"Ο\n"
+"Ρ\n"
+"Ι\n"
+"Α"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"Κ\n"
+"Α\n"
+"Ν\n"
+"Ο\n"
+"Ν\n"
+"Ι\n"
+"Κ\n"
+"Ο"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"ΝΕΟ\n"
+"ΠΑΙΧΝΙΔΙ"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"ΦΟΡΤΩΣΗ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
+
+# ταιριάζει με «ΕΝΑΡΞΗ»
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+"ΕΠΑΝΕΝΑΡΞΗ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ΑΠΟΘΗΚΕΥΣΗ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"ΓΡΗΓΟΡΗ\n"
+"ΑΠΟΘΗΚΕΥΣΗ"
+
+msgid "QUIT"
+msgstr "ΕΓΚΑΤΑΛΕΙΨΗ"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"ΝΕΟΣ\n"
+"ΧΑΡΤΗΣ"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ΦΟΡΤΩΣΗ\n"
+"ΧΑΡΤΗ"
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"ΠΑΙΞΕ\n"
+"ΣΤΟΝ\n"
+"ΧΑΡΤΗ"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ΑΠΟΘΗΚΕΥΣΗ\n"
+"ΧΑΡΤΗ"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"ΚΥΡΙΟ\n"
+"ΜΕΝΟΥ"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "ΠΛΗΡΟΦΟΡΙΕΣ"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"ΜΟΝΟ\n"
+"ΜΑΧΗ"
+
+msgid "SETTINGS"
+msgstr "ΡΥΘΜΙΣΕΙΣ"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"ΚΑΝΟΝΙΚΟ\n"
+"ΠΑΙΧΝΙΔΙ"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"ΙΣΤΟΡΙΑ\n"
+"ΠΑΙΧΝΙΔΙΟΥ"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"ΠΑΙΧΝΙΔΙ\n"
+"ΠΟΛΛΩΝ\n"
+"ΠΑΙΚΤΩΝ"
+
+msgid "HOT SEAT"
+msgstr "ΤΟΠΙΚΟ ΠΑΙΧΝΙΔΙ"
+
+msgid "2 PLAYERS"
+msgstr "2 ΠΑΙΚΤΕΣ"
+
+msgid "3 PLAYERS"
+msgstr "3 ΠΑΙΚΤΕΣ"
+
+msgid "4 PLAYERS"
+msgstr "4 ΠΑΙΚΤΕΣ"
+
+msgid "5 PLAYERS"
+msgstr "5 ΠΑΙΚΤΕΣ"
+
+msgid "6 PLAYERS"
+msgstr "6 ΠΑΙΚΤΕΣ"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ΑΡΧΙΚΗ\n"
+"ΙΣΤΟΡΙΑ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"ΙΣΤΟΡΙΑ\n"
+"ΕΠΕΚΤΑΣΗΣ"
+
+msgid "editorMainMenu|BACK"
+msgstr "ΕΠΙΣΤΡΟΦΗ"
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+"ΑΠΟ\n"
+"ΤΗΝ ΑΡΧΗ"
+
+# Η επόμενη οθόνη ξεκαθαρίζει πως μιλάμε για γεννήτρια χαρτών, επομένως επέλεξα «τυχαίος»
+msgid "newMap|RANDOM"
+msgstr "ΤΥΧΑΙΟΣ"
+
+msgid "DIFFICULTY"
+msgstr "ΔΥΣΚΟΛΙΑ"
+
+# ΠΡΟΒΟΛΗ ΕΙΣΑΓΩΓΗΣ ήταν σε δύο γραμμές επομένως πρέπει αναγκαστικά να το μειώσουμε
+msgid "VIEW INTRO"
+msgstr "ΕΙΣΑΓΩΓΗ"
+
+msgid "RESET"
+msgstr "ΕΠΑΝΑΦΟΡΑ"
+
+msgid "START"
+msgstr "ΕΝΑΡΞΗ"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"Π\n"
+"Ε\n"
+"Ρ\n"
+"Ι\n"
+"Π\n"
+"Ο\n"
+"Λ\n"
+"Ι\n"
+"Α"
 
 msgid "Auto Playtest Results"
 msgstr ""

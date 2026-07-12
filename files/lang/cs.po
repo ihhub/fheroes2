@@ -18,339 +18,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
 
-msgid "SELECT"
-msgstr "ZVOLIT"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "VŠE"
-
-msgid "EXIT"
-msgstr "PRYČ"
-
-msgid "smallerButton|EXIT"
-msgstr "ZPĚT"
-
-msgid "OKAY"
-msgstr "OK"
-
-msgid "HEROES"
-msgstr "HRDINOVÉ"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"MĚSTA/\n"
-"HRADY"
-
-msgid "CANCEL"
-msgstr "ZRUŠIT"
-
-msgid "ACCEPT"
-msgstr "PŘIJMI"
-
-msgid "DECLINE"
-msgstr "ZRUŠIT"
-
-msgid "LEARN"
-msgstr "UČIT"
-
-msgid "TRADE"
-msgstr "VYMĚŇ"
-
-msgid "YES"
-msgstr "ANO"
-
-msgid "NO"
-msgstr "NE"
-
-msgid "DISMISS"
-msgstr "PROPUSŤ"
-
-msgid "UPGRADE"
-msgstr "VYLEPŠIT"
-
-msgid "GIFT"
-msgstr "DARUJ"
-
-msgid "RESTART"
-msgstr "OPAKOVAT"
-
-msgid "MAX"
-msgstr "MAX"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"P\n"
-"R\n"
-"O\n"
-"P\n"
-"U\n"
-"S\n"
-"Ť"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"O\n"
-"D\n"
-"E\n"
-"J\n"
-"Í\n"
-"T"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"K\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"Ň"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D\n"
-"N\n"
-"Í"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"NAHRÁT\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "OPAKOVAT"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ULOŽIT\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"RYCHLÝ\n"
-"BOJ"
-
-msgid "QUIT"
-msgstr "KONEC"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"NAHRÁT\n"
-"HRU"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"SPUSTIT\n"
-"MAPU"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ULOŽIT\n"
-"HRU"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HLAVNÍ\n"
-"MENU"
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "VOLNÝ BOJ"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"STANDARDNÍ\n"
-"HRA"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"HRÁT\n"
-"KAMPAŇ"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"HRA PRO\n"
-"VÍCE HRÁČŮ"
-
-msgid "HOT SEAT"
-msgstr ""
-"HORKÉ\n"
-"KŘESLO"
-
-msgid "2 PLAYERS"
-msgstr "2 HRÁČI"
-
-msgid "3 PLAYERS"
-msgstr "3 HRÁČI"
-
-msgid "4 PLAYERS"
-msgstr "4 HRÁČI"
-
-msgid "5 PLAYERS"
-msgstr "5 HRÁČŮ"
-
-msgid "6 PLAYERS"
-msgstr "6 HRÁČŮ"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORIGINÁLNÍ\n"
-"KAMPAŇ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPAŇ\n"
-"DATADISKU"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "OBTÍŽNOST"
-
-msgid "VIEW INTRO"
-msgstr "ZOBRAZIT ÚVOD"
-
-msgid "RESET"
-msgstr "RESET"
-
-msgid "START"
-msgstr "START"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"H\n"
-"L\n"
-"Í\n"
-"D\n"
-"K\n"
-"A"
-
-msgid "army|Few"
-msgstr "Málo"
-
 msgid "Warrior"
 msgstr "Válečník"
 
@@ -431,6 +98,9 @@ msgid ""
 msgstr ""
 "Legie\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Málo"
 
 msgid "army|Several"
 msgstr "Několik"
@@ -3572,8 +3242,14 @@ msgstr "Nakoupit:"
 msgid "Recruit selected monsters."
 msgstr "Najmout vybrané jednotky."
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Vybrat maximální počet k najmutí."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Vybrat pouze 1 jednotku k najmutí."
@@ -4376,6 +4052,9 @@ msgstr ""
 #, fuzzy
 msgid "Click to make selection."
 msgstr "Kliknout pro výběr barvy."
+
+msgid "SELECT"
+msgstr "ZVOLIT"
 
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} nelze umístit na vodu."
@@ -5325,6 +5004,327 @@ msgstr "Expert"
 
 msgid "difficulty|Impossible"
 msgstr "Nehratelná"
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "VŠE"
+
+msgid "EXIT"
+msgstr "PRYČ"
+
+msgid "smallerButton|EXIT"
+msgstr "ZPĚT"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "HEROES"
+msgstr "HRDINOVÉ"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"MĚSTA/\n"
+"HRADY"
+
+msgid "CANCEL"
+msgstr "ZRUŠIT"
+
+msgid "ACCEPT"
+msgstr "PŘIJMI"
+
+msgid "DECLINE"
+msgstr "ZRUŠIT"
+
+msgid "LEARN"
+msgstr "UČIT"
+
+msgid "TRADE"
+msgstr "VYMĚŇ"
+
+msgid "YES"
+msgstr "ANO"
+
+msgid "NO"
+msgstr "NE"
+
+msgid "DISMISS"
+msgstr "PROPUSŤ"
+
+msgid "UPGRADE"
+msgstr "VYLEPŠIT"
+
+msgid "GIFT"
+msgstr "DARUJ"
+
+msgid "RESTART"
+msgstr "OPAKOVAT"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"P\n"
+"R\n"
+"O\n"
+"P\n"
+"U\n"
+"S\n"
+"Ť"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"O\n"
+"D\n"
+"E\n"
+"J\n"
+"Í\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"Ň"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D\n"
+"N\n"
+"Í"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"NAHRÁT\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OPAKOVAT"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ULOŽIT\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"RYCHLÝ\n"
+"BOJ"
+
+msgid "QUIT"
+msgstr "KONEC"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NAHRÁT\n"
+"HRU"
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"SPUSTIT\n"
+"MAPU"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ULOŽIT\n"
+"HRU"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HLAVNÍ\n"
+"MENU"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "VOLNÝ BOJ"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"STANDARDNÍ\n"
+"HRA"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"HRÁT\n"
+"KAMPAŇ"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"HRA PRO\n"
+"VÍCE HRÁČŮ"
+
+msgid "HOT SEAT"
+msgstr ""
+"HORKÉ\n"
+"KŘESLO"
+
+msgid "2 PLAYERS"
+msgstr "2 HRÁČI"
+
+msgid "3 PLAYERS"
+msgstr "3 HRÁČI"
+
+msgid "4 PLAYERS"
+msgstr "4 HRÁČI"
+
+msgid "5 PLAYERS"
+msgstr "5 HRÁČŮ"
+
+msgid "6 PLAYERS"
+msgstr "6 HRÁČŮ"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORIGINÁLNÍ\n"
+"KAMPAŇ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"KAMPAŇ\n"
+"DATADISKU"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "OBTÍŽNOST"
+
+msgid "VIEW INTRO"
+msgstr "ZOBRAZIT ÚVOD"
+
+msgid "RESET"
+msgstr "RESET"
+
+msgid "START"
+msgstr "START"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"H\n"
+"L\n"
+"Í\n"
+"D\n"
+"K\n"
+"A"
 
 #, fuzzy
 msgid "Auto Playtest Results"

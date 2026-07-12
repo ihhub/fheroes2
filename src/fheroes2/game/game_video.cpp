@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -108,7 +108,7 @@ namespace Video
         }
 
         // Stop any cycling animation.
-        const fheroes2::ScreenPaletteRestorer screenRestorer;
+        fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::vector<std::pair<VideoState, std::unique_ptr<SMKVideoSequence>>> sequences;
         // Minimal delay for playback in milliseconds.

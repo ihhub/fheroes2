@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,7 @@
 
 #include "ui_monster.h"
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "monster.h"
@@ -32,29 +32,29 @@ namespace fheroes2
     {
         switch ( monster.GetRace() ) {
         case Race::KNGT:
-            Blit( AGG::GetICN( ICN::STRIP, 4 ), output, offset.x, offset.y );
+            Blit( Assets::getImage( ICN::STRIP, 4 ), output, offset.x, offset.y );
             break;
         case Race::BARB:
-            Blit( AGG::GetICN( ICN::STRIP, 5 ), output, offset.x, offset.y );
+            Blit( Assets::getImage( ICN::STRIP, 5 ), output, offset.x, offset.y );
             break;
         case Race::SORC:
-            Blit( AGG::GetICN( ICN::STRIP, 6 ), output, offset.x, offset.y );
+            Blit( Assets::getImage( ICN::STRIP, 6 ), output, offset.x, offset.y );
             break;
         case Race::WRLK:
-            Blit( AGG::GetICN( ICN::STRIP, 7 ), output, offset.x, offset.y );
+            Blit( Assets::getImage( ICN::STRIP, 7 ), output, offset.x, offset.y );
             break;
         case Race::WZRD:
-            Blit( AGG::GetICN( ICN::STRIP, 8 ), output, offset.x, offset.y );
+            Blit( Assets::getImage( ICN::STRIP, 8 ), output, offset.x, offset.y );
             break;
         case Race::NECR:
-            Blit( AGG::GetICN( ICN::STRIP, 9 ), output, offset.x, offset.y );
+            Blit( Assets::getImage( ICN::STRIP, 9 ), output, offset.x, offset.y );
             break;
         default:
-            Blit( AGG::GetICN( ICN::STRIP, 10 ), output, offset.x, offset.y );
+            Blit( Assets::getImage( ICN::STRIP, 10 ), output, offset.x, offset.y );
             break;
         }
 
-        const fheroes2::Sprite & monsterImage = fheroes2::AGG::GetICN( monster.ICNMonh(), 0 );
+        const fheroes2::Sprite & monsterImage = Assets::getImage( monster.ICNMonh(), 0 );
         fheroes2::Blit( monsterImage, output, offset.x + monsterImage.x(), offset.y + monsterImage.y() );
     }
 }

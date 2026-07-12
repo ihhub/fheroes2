@@ -28,7 +28,6 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
@@ -41,6 +40,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -133,14 +133,14 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), display, pt.x, pt.y + 256 );
+        fheroes2::Blit( Assets::getImage( ICN::STRIP, 0 ), display, pt.x, pt.y + 256 );
 
         if ( castle.isBuild( BUILD_CAPTAIN ) ) {
             const fheroes2::Sprite & captainImage = castle.GetCaptain().GetPortrait( PORT_BIG );
             fheroes2::Copy( captainImage, 0, 0, display, pt.x + 5, pt.y + 262, captainImage.width(), captainImage.height() );
         }
         else {
-            const fheroes2::Sprite & crestImage = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
+            const fheroes2::Sprite & crestImage = Assets::getImage( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
             fheroes2::Copy( crestImage, 0, 0, display, pt.x + 5, pt.y + 262, crestImage.width(), crestImage.height() );
         }
 
@@ -148,8 +148,8 @@ namespace
             hero->PortraitRedraw( pt.x + 5, pt.y + 361, PORT_BIG, display );
         }
         else {
-            const fheroes2::Sprite & heroImage = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
-            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::STRIP, 11 );
+            const fheroes2::Sprite & heroImage = Assets::getImage( ICN::STRIP, 3 );
+            const fheroes2::Sprite & backgroundImage = Assets::getImage( ICN::STRIP, 11 );
             fheroes2::Copy( heroImage, 0, 0, display, pt.x + 5, pt.y + 361, heroImage.width(), heroImage.height() );
             fheroes2::Copy( backgroundImage, 0, 0, display, pt.x + 112, pt.y + 361, backgroundImage.width(), backgroundImage.height() );
         }
@@ -205,7 +205,7 @@ namespace
             image.reset();
         }
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, image, 0, 0, 552, 107 );
+        fheroes2::Blit( Assets::getImage( ICN::STRIP, 0 ), 0, 100, image, 0, 0, 552, 107 );
         const fheroes2::Sprite & port = hero->GetPortrait( PORT_BIG );
         fheroes2::Copy( port, 0, 0, image, 5, 5, port.width(), port.height() );
 
@@ -334,7 +334,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     statusBarPosition.x += buttonPrevCastle.area().width;
 
     // Status bar at the bottom of dialog.
-    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const fheroes2::Sprite & bar = Assets::getImage( ICN::SMALLBAR, 0 );
     fheroes2::Copy( bar, 0, 0, display, statusBarPosition.x, statusBarPosition.y, bar.width(), bar.height() );
 
     StatusBar statusBar;
@@ -347,7 +347,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     buttonNextCastle.subscribe( &timedButtonNextCastle );
 
     // Position of the captain/crest and hero portrait to the left of army bars.
-    const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
+    const fheroes2::Sprite & crest = Assets::getImage( ICN::CREST, Color::GetIndex( GetColor() ) );
     const fheroes2::Rect rectSign1( dialogRoi.x + 5, dialogRoi.y + 262, crest.width(), crest.height() );
     const fheroes2::Rect rectSign2( rectSign1.x, dialogRoi.y + 361, 100, 92 );
 
@@ -835,7 +835,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         }
         else if ( fadeBuilding.getBuilding() == BUILD_CAPTAIN ) {
             // Fade-in the captain image while fading-in his quarters.
-            const fheroes2::Sprite & crestImage = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
+            const fheroes2::Sprite & crestImage = Assets::getImage( ICN::CREST, Color::GetIndex( GetColor() ) );
             fheroes2::Copy( crestImage, 0, 0, display, rectSign1.x, rectSign1.y, crestImage.width(), crestImage.height() );
             const fheroes2::Sprite & captainImage = GetCaptain().GetPortrait( PORT_BIG );
             fheroes2::AlphaBlit( captainImage, display, rectSign1.x, rectSign1.y, fadeBuilding.getAlpha() );

@@ -31,12 +31,12 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army_troop.h"
 #include "battle.h"
 #include "battle_cell.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -288,40 +288,40 @@ namespace
     {
         switch ( mod ) {
         case Battle::SP_BLOODLUST:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 9 );
+            return Assets::getImage( ICN::SPELLINL, 9 );
         case Battle::SP_BLESS:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 3 );
+            return Assets::getImage( ICN::SPELLINL, 3 );
         case Battle::SP_HASTE:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 0 );
+            return Assets::getImage( ICN::SPELLINL, 0 );
         case Battle::SP_SHIELD:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 10 );
+            return Assets::getImage( ICN::SPELLINL, 10 );
         case Battle::SP_STONESKIN:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 13 );
+            return Assets::getImage( ICN::SPELLINL, 13 );
         case Battle::SP_DRAGONSLAYER:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 8 );
+            return Assets::getImage( ICN::SPELLINL, 8 );
         case Battle::SP_STEELSKIN:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 14 );
+            return Assets::getImage( ICN::SPELLINL, 14 );
         case Battle::SP_ANTIMAGIC:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 12 );
+            return Assets::getImage( ICN::SPELLINL, 12 );
         case Battle::SP_CURSE:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 4 );
+            return Assets::getImage( ICN::SPELLINL, 4 );
         case Battle::SP_SLOW:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 1 );
+            return Assets::getImage( ICN::SPELLINL, 1 );
         case Battle::SP_BERSERKER:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 5 );
+            return Assets::getImage( ICN::SPELLINL, 5 );
         case Battle::SP_HYPNOTIZE:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 7 );
+            return Assets::getImage( ICN::SPELLINL, 7 );
         case Battle::SP_BLIND:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 2 );
+            return Assets::getImage( ICN::SPELLINL, 2 );
         case Battle::SP_PARALYZE:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 6 );
+            return Assets::getImage( ICN::SPELLINL, 6 );
         case Battle::SP_STONE:
-            return fheroes2::AGG::GetICN( ICN::SPELLINL, 11 );
+            return Assets::getImage( ICN::SPELLINL, 11 );
         default:
             break;
         }
 
-        return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
+        return Assets::getImage( ICN::UNKNOWN, 0 );
     }
 
     std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
@@ -484,7 +484,7 @@ namespace
     void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                       const fheroes2::Rect & roi )
     {
-        const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );
+        const fheroes2::Sprite & monsterSprite = Assets::getImage( monsterAnimation.icnFile(), monsterAnimation.frameId() );
         fheroes2::Point monsterPos( offset.x, offset.y + monsterSprite.y() );
         if ( isReflected )
             monsterPos.x -= monsterSprite.x() - ( troop.isWide() ? Battle::Cell::widthPx / 2 : 0 ) - monsterAnimation.offset() + monsterSprite.width();
@@ -525,8 +525,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int viewarmy = isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY;
-    const fheroes2::Sprite & sprite_dialog = fheroes2::AGG::GetICN( viewarmy, 0 );
-    const fheroes2::Sprite & spriteDialogShadow = fheroes2::AGG::GetICN( viewarmy, 7 );
+    const fheroes2::Sprite & sprite_dialog = Assets::getImage( viewarmy, 0 );
+    const fheroes2::Sprite & spriteDialogShadow = Assets::getImage( viewarmy, 7 );
 
     // setup cursor
     const CursorRestorer cursorRestorer( ( flags & BUTTONS ) != 0, Cursor::POINTER );
@@ -594,16 +594,16 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     std::unique_ptr<fheroes2::Button> buttonDismiss;
 
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
-    const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
+    const int32_t exitWidth = Assets::getImage( exitButtonIcnID, 0 ).width();
     const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
     fheroes2::Button buttonExit( pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment, pos_rt.y + 221, exitButtonIcnID, 0, 1 );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( Assets::getImage( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
     if ( flags & UPGRADE ) {
         const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
         const fheroes2::Point upgradeButtonPosition{ pos_rt.x + 280, pos_rt.y + 192 };
         buttonUpgrade = std::make_unique<fheroes2::Button>( upgradeButtonPosition.x, upgradeButtonPosition.y, upgradeButtonIcnID, 0, 1 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( upgradeButtonIcnID, 0 ), display, upgradeButtonPosition, { -5, 5 } );
+        fheroes2::addGradientShadow( Assets::getImage( upgradeButtonIcnID, 0 ), display, upgradeButtonPosition, { -5, 5 } );
 
         buttonUpgrade->draw();
     }
@@ -612,7 +612,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
         const fheroes2::Point dismissButtonPosition{ pos_rt.x + 280, pos_rt.y + 221 };
         buttonDismiss = std::make_unique<fheroes2::Button>( dismissButtonPosition.x, dismissButtonPosition.y, dismissButtonIcnID, 0, 1 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( dismissButtonIcnID, 0 ), display, dismissButtonPosition, { -5, 5 } );
+        fheroes2::addGradientShadow( Assets::getImage( dismissButtonIcnID, 0 ), display, dismissButtonPosition, { -5, 5 } );
 
         buttonDismiss->draw();
     }
@@ -699,17 +699,17 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
             // TODO: Remove these extra shadow drawings once the dialog has been reworked and proper restorers are in place.
             if ( buttonUpgrade ) {
-                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_UPGRADE_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 192 }, { -5, 5 } );
+                fheroes2::addGradientShadow( Assets::getImage( ICN::BUTTON_SMALL_UPGRADE_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 192 }, { -5, 5 } );
                 buttonUpgrade->draw();
             }
 
             if ( buttonDismiss ) {
-                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_DISMISS_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 221 }, { -5, 5 } );
+                fheroes2::addGradientShadow( Assets::getImage( ICN::BUTTON_SMALL_DISMISS_GOOD, 0 ), display, { pos_rt.x + 280, pos_rt.y + 221 }, { -5, 5 } );
                 buttonDismiss->draw();
             }
 
             if ( buttonExit.isEnabled() ) {
-                fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+                fheroes2::addGradientShadow( Assets::getImage( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
                 buttonExit.draw();
             }
 
@@ -760,7 +760,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
 
     fheroes2::Text textbox( message, fheroes2::FontType::normalWhite() );
     const int buttons = Dialog::YES | Dialog::NO;
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
+    const fheroes2::Sprite & sprite = Assets::getImage( ICN::RESOURCE, 6 );
     int posy = 0;
 
     message = _( "(Rate: %{percent})" );
