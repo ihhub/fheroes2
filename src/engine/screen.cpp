@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "screen.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <cstdint>
 #include <cstring>
 #include <iterator>
 #include <optional>
@@ -62,7 +63,6 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "math_tools.h"
-#include "screen.h"
 #include "system.h"
 
 namespace
@@ -426,23 +426,18 @@ namespace
             return surface;
         }
     };
-#endif
 
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
-        RenderCursor( const RenderCursor & ) = delete;
-
         ~RenderCursor() override
         {
             clear();
         }
 
-        RenderCursor & operator=( const RenderCursor & ) = delete;
-
         void show( const bool enable ) override
         {
-            fheroes2::Cursor::show( enable );
+            Cursor::show( enable );
 
             if ( !_emulation ) {
                 const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -455,10 +450,10 @@ namespace
         bool isVisible() const override
         {
             if ( _emulation ) {
-                return fheroes2::Cursor::isVisible();
+                return Cursor::isVisible();
             }
 
-            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            return Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
@@ -470,7 +465,7 @@ namespace
             }
 
             if ( _emulation ) {
-                fheroes2::Cursor::update( image, offsetX, offsetY );
+                Cursor::update( image, offsetX, offsetY );
                 return;
             }
 
@@ -589,8 +584,21 @@ namespace
             }
         }
     };
+#endif
 
 #if defined( TARGET_PS_VITA )
+    class RenderCursor final : public fheroes2::Cursor
+    {
+    public:
+        static RenderCursor * create()
+        {
+            auto * cursor = new RenderCursor;
+            cursor->enableSoftwareEmulation( true );
+
+            return cursor;
+        }
+    };
+
     class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
@@ -641,8 +649,8 @@ namespace
         }
 
     private:
+        // SDL capture touchscreen events only in SDL_Window rectangle. We create SDL_Window on PS Vita only for this purpose.
         SDL_Window * _window{ nullptr };
-        SDL_Surface * _surface{ nullptr };
         vita2d_texture * _texBuffer{ nullptr };
         uint8_t * _palettedTexturePointer{ nullptr };
         fheroes2::Rect _destRect;
@@ -661,11 +669,6 @@ namespace
             if ( _window != nullptr ) {
                 SDL_DestroyWindow( _window );
                 _window = nullptr;
-            }
-
-            if ( _surface != nullptr ) {
-                SDL_FreeSurface( _surface );
-                _surface = nullptr;
             }
 
             vita2d_fini();
@@ -697,15 +700,6 @@ namespace
                 return false;
             }
 
-            _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
-
-            if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
-                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
-
-                clear();
-                return false;
-            }
-
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( resolutionInfo.gameWidth, resolutionInfo.gameHeight, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
             _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
@@ -727,7 +721,7 @@ namespace
             const int32_t width = display.width();
             const int32_t height = display.height();
 
-            SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+            memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
             vita2d_draw_rectangle( 0, 0, VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 0xff000000 );
@@ -739,17 +733,24 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( _surface == nullptr || colorIds.size() != 256 || _texBuffer == nullptr )
+            if ( colorIds.size() != 256U || _texBuffer == nullptr )
                 return;
 
-            uint32_t palette32Bit[256u];
+            auto * palette32Bit = reinterpret_cast<uint32_t *>( vita2d_texture_get_palette( _texBuffer ) );
 
-            for ( size_t i = 0; i < 256u; ++i ) {
+            for ( size_t i = 0; i < 256U; ++i ) {
                 const uint8_t * value = currentPalette + colorIds[i] * 3;
-                palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                // Red.
+                palette32Bit[i] = *value;
+                ++value;
+                // Green.
+                palette32Bit[i] += static_cast<uint32_t>( *value ) << 8U;
+                ++value;
+                // Blue.
+                palette32Bit[i] += static_cast<uint32_t>( *value ) << 16U;
+                // Alpha channel. Always non-transparent.
+                palette32Bit[i] += ( 255U << 24U );
             }
-
-            memcpy( vita2d_texture_get_palette( _texBuffer ), palette32Bit, sizeof( uint32_t ) * 256 );
         }
 
         bool isMouseCursorActive() const override

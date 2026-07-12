@@ -289,6 +289,11 @@ namespace fheroes2
     {
     public:
         friend Display;
+
+        Cursor( const Cursor & ) = delete;
+
+        Cursor & operator=( const Cursor & ) = delete;
+
         virtual ~Cursor() = default;
 
         virtual void show( const bool enable )
@@ -313,10 +318,9 @@ namespace fheroes2
             _image.setPosition( x, y );
         }
 
-        // Default implementation of Cursor uses software emulation.
-        virtual void enableSoftwareEmulation( const bool /*unused*/ )
+        virtual void enableSoftwareEmulation( const bool enable )
         {
-            // Do nothing.
+            _emulation = enable;
         }
 
         bool isSoftwareEmulation() const
