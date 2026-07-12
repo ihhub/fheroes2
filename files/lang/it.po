@@ -18,270 +18,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-10-08 00:00+0800\n"
 "X-Generator: Poedit 3.2\n"
 
-msgid "SELECT"
-msgstr ""
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr ""
-
-msgid "M"
-msgstr ""
-
-msgid "L"
-msgstr ""
-
-msgid "X-L"
-msgstr ""
-
-msgid "ALL"
-msgstr ""
-
-msgid "EXIT"
-msgstr ""
-
-msgid "smallerButton|EXIT"
-msgstr ""
-
-msgid "OKAY"
-msgstr ""
-
-msgid "HEROES"
-msgstr ""
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-
-msgid "CANCEL"
-msgstr ""
-
-msgid "ACCEPT"
-msgstr ""
-
-msgid "DECLINE"
-msgstr ""
-
-msgid "LEARN"
-msgstr ""
-
-msgid "TRADE"
-msgstr ""
-
-msgid "YES"
-msgstr ""
-
-msgid "NO"
-msgstr ""
-
-msgid "DISMISS"
-msgstr ""
-
-msgid "UPGRADE"
-msgstr ""
-
-msgid "GIFT"
-msgstr ""
-
-msgid "RESTART"
-msgstr ""
-
-msgid "MAX"
-msgstr "MAX"
-
-msgid "MIN"
-msgstr ""
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAYTEST"
-msgstr ""
-
-msgid "INFO"
-msgstr ""
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-
-msgid "HOT SEAT"
-msgstr ""
-
-msgid "2 PLAYERS"
-msgstr ""
-
-msgid "3 PLAYERS"
-msgstr ""
-
-msgid "4 PLAYERS"
-msgstr ""
-
-msgid "5 PLAYERS"
-msgstr ""
-
-msgid "6 PLAYERS"
-msgstr ""
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr ""
-
-msgid "VIEW INTRO"
-msgstr ""
-
-msgid "RESET"
-msgstr ""
-
-msgid "START"
-msgstr ""
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "Pochi/e"
-
 msgid "Warrior"
 msgstr "Lottare"
 
@@ -360,6 +96,9 @@ msgid ""
 msgstr ""
 "Una legione di\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Pochi/e"
 
 msgid "army|Several"
 msgstr "Alcuni/e"
@@ -3473,7 +3212,13 @@ msgstr "Quantità:"
 msgid "Recruit selected monsters."
 msgstr ""
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "MIN"
 msgstr ""
 
 msgid "Select only 1 monster to be recruited."
@@ -4302,6 +4047,9 @@ msgstr ""
 #, fuzzy
 msgid "Click to make selection."
 msgstr "Clicca per andare alla città succ."
+
+msgid "SELECT"
+msgstr ""
 
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
@@ -5290,6 +5038,258 @@ msgstr "Esperto"
 
 msgid "difficulty|Impossible"
 msgstr "Impossibile"
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "smallerButton|EXIT"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr ""
+
+msgid "VIEW INTRO"
+msgstr ""
+
+msgid "RESET"
+msgstr ""
+
+msgid "START"
+msgstr ""
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 #, fuzzy
 msgid "Auto Playtest Results"
