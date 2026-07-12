@@ -1443,6 +1443,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
         break;
     }
     case Maps::Ground::WATER:
+        _applyUnderwaterEffect = world.getTile( tileIndex ).getMainObjectType( false ) == MP2::OBJ_MAELSTROM;
         _battleGroundIcn = ICN::CBKGWATR;
         _borderObjectsIcn = ICN::FRNG0013;
         break;
@@ -1453,6 +1454,10 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Setup delay types for all common battlefield animations rendering.
     _commonAnimationsDelays = { Game::DelayType::BATTLE_FLAGS_DELAY, Game::DelayType::BATTLE_OPPONENTS_DELAY, Game::DelayType::BATTLE_SELECTED_UNIT_DELAY,
                                 Game::DelayType::BATTLE_IDLE_DELAY };
+
+    if ( _applyUnderwaterEffect ) {
+        _commonAnimationsDelays.push_back( Game::DelayType::BATTLEFIELD_BACKGROUND_ANIMATION_DELAY );
+    }
 
     // hexagon
     _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
@@ -2510,11 +2515,20 @@ void Battle::Interface::_redrawBattleGround()
         const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuilt() ? 4 : 3 );
         fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
+
+    if ( _applyUnderwaterEffect ) {
+        fheroes2::ApplyPalette( _battleGround, PAL::GetPalette( PAL::PaletteType::BLUISH ) );
+    }
 }
 
 void Battle::Interface::_redrawCoverStatic()
 {
     fheroes2::Copy( _battleGround, _mainSurface );
+
+    if ( _applyUnderwaterEffect ) {
+        const fheroes2::Sprite & bubbles = fheroes2::AGG::GetICN( ICN::SHIP_BATTLEFIELD_UNDERWATER_BUBBLES, _backgroundAnimationFrame % 24 );
+        fheroes2::Blit( bubbles, 0, 0, _mainSurface, 32, 0, bubbles.width(), bubbles.height() );
+    }
 
     if ( _movingUnit != nullptr ) {
         // Do not show movement area while units are in action.
@@ -2861,7 +2875,14 @@ void Battle::Interface::_redrawHighObjects( const int32_t cellId )
 
     const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
     const fheroes2::Rect & pt = cell->GetPos();
-    fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
+
+    if ( _applyUnderwaterEffect ) {
+        fheroes2::ApplyPalette( objectSprite, 0, 0, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset,
+                                objectSprite.width(), objectSprite.height(), PAL::GetPalette( PAL::PaletteType::BLUISH ) );
+    }
+    else {
+        fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
+    }
 }
 
 void Battle::Interface::RedrawKilled()
@@ -7207,6 +7228,12 @@ void Battle::Interface::_checkGlobalEvents( LocalEvent & le )
         if ( _defendingOpponent && _defendingOpponent->updateAnimationState() ) {
             _needRedraw = true;
         }
+    }
+
+    // Animation of the battlefield background.
+    if ( _applyUnderwaterEffect && Game::validateAnimationDelay( Game::DelayType::BATTLEFIELD_BACKGROUND_ANIMATION_DELAY ) ) {
+        ++_backgroundAnimationFrame;
+        _needRedraw = true;
     }
 
     // Check if auto combat interruption was requested.

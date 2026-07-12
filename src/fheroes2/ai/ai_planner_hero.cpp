@@ -760,6 +760,8 @@ namespace
         case MP2::OBJ_SIGN:
         // AI should never consider a stone lith as a destination point. It uses them only to make a path.
         case MP2::OBJ_STONE_LITHS:
+        // TODO: Add AI logic for visiting Maelstrom object.
+        case MP2::OBJ_MAELSTROM:
         // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
         case MP2::OBJ_WHIRLPOOL:
             assert( 0 );
@@ -1588,6 +1590,10 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_MAGELLANS_MAPS: {
         // Very valuable object.
         return 5000;
+    }
+    case MP2::OBJ_MAELSTROM: {
+        // TODO: Add the logic for visiting Maelstrom object and corresponding object value.
+        return -dangerousTaskPenalty;
     }
     case MP2::OBJ_BOAT:
     case MP2::OBJ_COAST:
