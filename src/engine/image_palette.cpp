@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,18 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <cstddef>
-
 #include "image_palette.h"
+
+#include <algorithm>
+#include <cassert>
 
 namespace
 {
-    const size_t paletteSize = 768;
-
-    struct PaletteHolder
+    class PaletteHolder
     {
     public:
         static PaletteHolder & instance()
@@ -38,7 +34,8 @@ namespace
             return paletteHolder;
         }
 
-        std::array<uint8_t, paletteSize> gamePalette;
+        static_assert( fheroes2::paletteSizeBytes == 768, "Palette format has changed! Check your logic." );
+        std::array<uint8_t, fheroes2::paletteSizeBytes> gamePalette{ 0 };
 
     private:
         PaletteHolder()
@@ -87,13 +84,42 @@ namespace fheroes2
         return PaletteHolder::instance().gamePalette.data();
     }
 
+    const RGB * getRGBGamePalette()
+    {
+        return reinterpret_cast<const RGB *>( PaletteHolder::instance().gamePalette.data() );
+    }
+
+    std::array<RGB, paletteSize> getNormalizedRGBGamePalette()
+    {
+        std::array<RGB, paletteSize> palette;
+
+        const uint8_t * originalPalette = PaletteHolder::instance().gamePalette.data();
+        auto * normalizedPalette = reinterpret_cast<uint8_t *>( palette.data() );
+
+        for ( size_t i = 0; i < paletteSizeBytes; ++i ) {
+            normalizedPalette[i] = static_cast<uint8_t>( originalPalette[i] << 2 );
+        }
+
+        return palette;
+    }
+
     void setGamePalette( const std::vector<uint8_t> & palette )
     {
-        assert( palette.size() == paletteSize );
-        if ( palette.size() != paletteSize ) {
+        assert( palette.size() == paletteSizeBytes );
+        if ( palette.size() != paletteSizeBytes ) {
             return;
         }
 
-        std::copy_n( palette.begin(), paletteSize, PaletteHolder::instance().gamePalette.begin() );
+        auto & gamePalette = PaletteHolder::instance().gamePalette;
+
+        std::copy_n( palette.begin(), paletteSizeBytes, gamePalette.begin() );
+
+        // Make a copy of cycling colors to use them without cycling.
+        // Water cycling colors. Color 234 has already non-cycling copy: 236. Copy 231, 232, 233 and 235 to 246 - 249.
+        std::copy_n( palette.begin() + 231 * 3, 3 * 3, gamePalette.begin() + 246 * 3 );
+        std::copy_n( palette.begin() + 235 * 3, 1 * 3, gamePalette.begin() + 249 * 3 );
+
+        // Lava cycling colors. Copy 214 - 217 to 250 - 253.
+        std::copy_n( palette.begin() + 214 * 3, 4 * 3, gamePalette.begin() + 250 * 3 );
     }
 }

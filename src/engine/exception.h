@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,11 @@
 namespace fheroes2
 {
     class InvalidDataResources : public std::logic_error
+    {
+        using std::logic_error::logic_error;
+    };
+
+    class CorruptedExecutable : public std::logic_error
     {
         using std::logic_error::logic_error;
     };

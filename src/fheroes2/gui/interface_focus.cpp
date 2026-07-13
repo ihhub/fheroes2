@@ -51,9 +51,7 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
         return;
     }
 
-    const bool isAIAutoControlMode = player->isAIAutoControlMode();
-
-    assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
+    assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
 
     Focus & focus = player->GetFocus();
 
@@ -96,9 +94,7 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
         return;
     }
 
-    const bool isAIAutoControlMode = player->isAIAutoControlMode();
-
-    assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
+    assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
 
     Focus & focus = player->GetFocus();
 

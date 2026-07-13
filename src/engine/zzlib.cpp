@@ -100,6 +100,33 @@ std::vector<uint8_t> Compression::unzipData( const uint8_t * src, const size_t s
     return res;
 }
 
+bool Compression::unzipData( const uint8_t * src, const size_t srcSize, uint8_t * dst, const size_t dstSize )
+{
+    if ( src == nullptr || srcSize == 0 || dst == nullptr || dstSize == 0 ) {
+        return false;
+    }
+
+    const uLong srcSizeULong = static_cast<uLong>( srcSize );
+    if ( srcSizeULong != srcSize ) {
+        ERROR_LOG( "The size of the compressed data is too large" )
+        return false;
+    }
+
+    uLong dstSizeULong = static_cast<uLong>( dstSize );
+    if ( dstSizeULong != dstSize ) {
+        ERROR_LOG( "The size of the decompressed data is too large" )
+        return false;
+    }
+
+    const int ret = uncompress( dst, &dstSizeULong, src, srcSizeULong );
+    if ( ret != Z_OK ) {
+        ERROR_LOG( "zlib error: " << ret )
+        return false;
+    }
+
+    return true;
+}
+
 std::vector<uint8_t> Compression::zipData( const uint8_t * src, const size_t srcSize, const bool isMaximumCompression )
 {
     if ( src == nullptr || srcSize == 0 ) {

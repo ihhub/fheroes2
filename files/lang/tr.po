@@ -18,332 +18,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
 
-msgid "SELECT"
-msgstr "SEÇ"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "HEPSİ"
-
-msgid "EXIT"
-msgstr "ÇIKIŞ"
-
-msgid "smallerButton|EXIT"
-msgstr "ÇIKIŞ"
-
-msgid "OKAY"
-msgstr "TAMAM"
-
-msgid "HEROES"
-msgstr "KAHRAMANLAR"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"KASABALAR/\n"
-"KALELER"
-
-msgid "CANCEL"
-msgstr "İPTAL"
-
-msgid "ACCEPT"
-msgstr "KABUL"
-
-msgid "DECLINE"
-msgstr "REDDET"
-
-msgid "LEARN"
-msgstr "ÖĞREN"
-
-msgid "TRADE"
-msgstr "TAKAS"
-
-msgid "YES"
-msgstr "EVET"
-
-msgid "NO"
-msgstr "HAYIR"
-
-msgid "DISMISS"
-msgstr "BIRAK"
-
-msgid "UPGRADE"
-msgstr "GELİŞTİR"
-
-msgid "GIFT"
-msgstr "HEDİYE"
-
-msgid "RESTART"
-msgstr "TEKRARLA"
-
-msgid "MAX"
-msgstr "MAKS"
-
-msgid "MIN"
-msgstr "MİN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"B\n"
-"I\n"
-"R\n"
-"A\n"
-"K"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"Ç\n"
-"I\n"
-"K\n"
-"I\n"
-"Ş"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"H\n"
-"İ\n"
-"K\n"
-"A\n"
-"Y\n"
-"E"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"T"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"YENİ\n"
-"OYUN"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"OYUNU\n"
-"YÜKLE"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "TEKRARLA"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"OYUNU\n"
-"KAYDET"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "ÇIKIŞ"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "BAŞLA"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"YENİ\n"
-"HARİTA"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"YÜKLE"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"KAYDET"
-
-msgid "INFO"
-msgstr "BİLGİ"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"SADECE\n"
-"SAVAŞ"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"STANDART\n"
-"OYUN"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"HİKAYE\n"
-"OYUNU"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"ÇOK\n"
-"OYUNCULU\n"
-"OYUN"
-
-msgid "HOT SEAT"
-msgstr ""
-"SIRAYLA\n"
-"OYNAMA"
-
-msgid "2 PLAYERS"
-msgstr "2 OYUNCU"
-
-msgid "3 PLAYERS"
-msgstr "3 OYUNCU"
-
-msgid "4 PLAYERS"
-msgstr "4 OYUNCU"
-
-msgid "5 PLAYERS"
-msgstr "5 OYUNCU"
-
-msgid "6 PLAYERS"
-msgstr "6 OYUNCU"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORİJİNAL\n"
-"HİKAYE"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"EKLENTİ\n"
-"HİKAYESİ"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "ZORLUK"
-
-msgid "VIEW INTRO"
-msgstr "İNTROYU İZLE"
-
-msgid "RESET"
-msgstr "SIFIRLA"
-
-msgid "START"
-msgstr "BAŞLA"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"D\n"
-"E\n"
-"V\n"
-"R\n"
-"İ\n"
-"Y\n"
-"E"
-
-msgid "army|Few"
-msgstr "Birkaç"
-
 msgid "Warrior"
 msgstr "Savaşçı"
 
@@ -424,6 +98,9 @@ msgid ""
 msgstr ""
 "Bir lejyon\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Birkaç"
 
 msgid "army|Several"
 msgstr "Birçok"
@@ -3484,8 +3161,14 @@ msgstr ""
 msgid "Recruit selected monsters."
 msgstr ""
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "Select maximum monsters to be recruited."
 msgstr ""
+
+msgid "MIN"
+msgstr "MİN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr ""
@@ -4263,6 +3946,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
+msgid "SELECT"
+msgstr "SEÇ"
+
 msgid "%{objects} cannot be placed on water."
 msgstr ""
 
@@ -4331,7 +4017,8 @@ msgid ""
 "the current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -4748,10 +4435,6 @@ msgstr "Oyunun dilini seç"
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Savaşa geri dön."
@@ -5165,6 +4848,320 @@ msgstr ""
 
 msgid "difficulty|Impossible"
 msgstr ""
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "HEPSİ"
+
+msgid "EXIT"
+msgstr "ÇIKIŞ"
+
+msgid "smallerButton|EXIT"
+msgstr "ÇIKIŞ"
+
+msgid "OKAY"
+msgstr "TAMAM"
+
+msgid "HEROES"
+msgstr "KAHRAMANLAR"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"KASABALAR/\n"
+"KALELER"
+
+msgid "CANCEL"
+msgstr "İPTAL"
+
+msgid "ACCEPT"
+msgstr "KABUL"
+
+msgid "DECLINE"
+msgstr "REDDET"
+
+msgid "LEARN"
+msgstr "ÖĞREN"
+
+msgid "TRADE"
+msgstr "TAKAS"
+
+msgid "YES"
+msgstr "EVET"
+
+msgid "NO"
+msgstr "HAYIR"
+
+msgid "DISMISS"
+msgstr "BIRAK"
+
+msgid "UPGRADE"
+msgstr "GELİŞTİR"
+
+msgid "GIFT"
+msgstr "HEDİYE"
+
+msgid "RESTART"
+msgstr "TEKRARLA"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"B\n"
+"I\n"
+"R\n"
+"A\n"
+"K"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"Ç\n"
+"I\n"
+"K\n"
+"I\n"
+"Ş"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"H\n"
+"İ\n"
+"K\n"
+"A\n"
+"Y\n"
+"E"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"T"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"YENİ\n"
+"OYUN"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"OYUNU\n"
+"YÜKLE"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "TEKRARLA"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"OYUNU\n"
+"KAYDET"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "ÇIKIŞ"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"YENİ\n"
+"HARİTA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"YÜKLE"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "BAŞLA"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"KAYDET"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "BİLGİ"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"SADECE\n"
+"SAVAŞ"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"STANDART\n"
+"OYUN"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"HİKAYE\n"
+"OYUNU"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"ÇOK\n"
+"OYUNCULU\n"
+"OYUN"
+
+msgid "HOT SEAT"
+msgstr ""
+"SIRAYLA\n"
+"OYNAMA"
+
+msgid "2 PLAYERS"
+msgstr "2 OYUNCU"
+
+msgid "3 PLAYERS"
+msgstr "3 OYUNCU"
+
+msgid "4 PLAYERS"
+msgstr "4 OYUNCU"
+
+msgid "5 PLAYERS"
+msgstr "5 OYUNCU"
+
+msgid "6 PLAYERS"
+msgstr "6 OYUNCU"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORİJİNAL\n"
+"HİKAYE"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"EKLENTİ\n"
+"HİKAYESİ"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "ZORLUK"
+
+msgid "VIEW INTRO"
+msgstr "İNTROYU İZLE"
+
+msgid "RESET"
+msgstr "SIFIRLA"
+
+msgid "START"
+msgstr "BAŞLA"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"D\n"
+"E\n"
+"V\n"
+"R\n"
+"İ\n"
+"Y\n"
+"E"
 
 msgid "Auto Playtest Results"
 msgstr ""

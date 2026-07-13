@@ -155,7 +155,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       if: ${{ contains( matrix.on, github.event_name ) }}
     - name: Install dependencies (Linux)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'ubuntu-' ) }}
@@ -227,13 +227,13 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install dependencies
       run: |
         sudo apt-get -y update
         sudo apt-get -y install libgcc1 gettext
     - name: Prepare Vita SDK cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: ~/.vitasdk-cache
         key: make-vitasdk-cache-${{ github.sha }}
@@ -301,7 +301,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install dependencies
       run: |
         # TODO: remove this temporary workaround
@@ -366,7 +366,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install dependencies
       run: |
         sudo apt-get -y update

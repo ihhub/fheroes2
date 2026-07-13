@@ -26,13 +26,13 @@
 #include <memory>
 #include <string>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -153,7 +153,7 @@ namespace
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        const fheroes2::Sprite & titleBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+        const fheroes2::Sprite & titleBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
         const fheroes2::Rect titleBoxRoi{ activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() };
         const fheroes2::Rect titleTextRoi{ titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 };
 
@@ -176,7 +176,7 @@ namespace
 
         const PlayerColorsVector availableColors{ playerColorSet };
 
-        const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+        const fheroes2::Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
         for ( int32_t i = 0; i < playerCount; ++i ) {
             playerRects[i].x = offsetX + i * playerStepX;
             playerRects[i].y = offsetY;
@@ -185,7 +185,7 @@ namespace
 
             const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + 3;
 
-            const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
+            const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
             playerRects[i].width = playerIcon.width();
             playerRects[i].height = playerIcon.height();
             fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
@@ -331,11 +331,11 @@ namespace
 
     fheroes2::Rect renderCheckbox( const int32_t offsetX, const int32_t offsetY, const bool isEnabled, fheroes2::Image & output, const bool isEvilInterface )
     {
-        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        const fheroes2::Sprite & cell = Assets::getImage( ICN::CELLWIN, 1 );
 
         fheroes2::Blit( cell, output, offsetX, offsetY );
         if ( isEnabled ) {
-            const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+            const fheroes2::Sprite & mark = Assets::getImage( ICN::CELLWIN, 2 );
             fheroes2::Blit( mark, output, offsetX + mark.x(), offsetY + mark.y() );
         }
 
@@ -360,7 +360,7 @@ namespace fheroes2
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        const Sprite & titleBox = AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+        const Sprite & titleBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
         const Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
         const Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
 

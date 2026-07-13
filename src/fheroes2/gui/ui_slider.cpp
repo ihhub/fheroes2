@@ -23,8 +23,9 @@
 #include <algorithm>
 #include <cassert>
 #include <functional>
+#include <utility>
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -43,7 +44,7 @@ namespace fheroes2
 
         Display & display = Display::instance();
         const int tradpostIcnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
-        const Sprite & bar = AGG::GetICN( tradpostIcnId, 1 );
+        const Sprite & bar = Assets::getImage( tradpostIcnId, 1 );
         // The original slider is 230 pixels wide with the active slider area of 187.
         constexpr int32_t buttonWidth{ 15 };
 
@@ -64,10 +65,10 @@ namespace fheroes2
         _buttonRight.subscribe( &_timedButtonRight );
         _buttonRight.draw( display );
 
-        const Sprite & originalSlider = AGG::GetICN( tradpostIcnId, 2 );
-        const Image scrollbarSlider = generateScrollbarSlider( originalSlider, true, width, 1, static_cast<int32_t>( maxIndex - minIndex + 1 ),
-                                                               { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
-        _scrollbar.setImage( scrollbarSlider );
+        const Sprite & originalSlider = Assets::getImage( tradpostIcnId, 2 );
+        Image scrollbarSlider = generateScrollbarSlider( originalSlider, true, width, 1, static_cast<int32_t>( maxIndex - minIndex + 1 ),
+                                                         { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
+        _scrollbar.setImage( std::move( scrollbarSlider ) );
         _scrollbar.setArea( { position.x + leftOffset, position.y + 3, width, 11 } );
         _scrollbar.setRange( minIndex, maxIndex );
         _scrollbar.moveToIndex( currentIndex );

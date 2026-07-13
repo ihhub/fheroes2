@@ -20,10 +20,24 @@
 
 #pragma once
 
-#define MAJOR_VERSION 1
-#define MINOR_VERSION 1
-#define INTERMEDIATE_VERSION 17
+#include <cstdint>
 
-#ifndef BUILD_VERSION
-#define BUILD_VERSION 0
-#endif
+namespace fheroes2
+{
+    class Image;
+    class Sprite;
+
+    enum class SupportedLanguage : uint8_t;
+}
+
+namespace Assets
+{
+    const fheroes2::Sprite & getImage( int icnId, uint32_t index );
+    uint32_t getImageCount( int icnId );
+
+    // shapeId could be 0, 1, 2 or 3 only
+    const fheroes2::Image & getTileImage( int tilId, uint32_t index, uint32_t shapeId );
+
+    // This function must be called only at the time of setting up a new language.
+    void updateLanguageDependentResources( const fheroes2::SupportedLanguage language, const bool loadOriginalAlphabet );
+}

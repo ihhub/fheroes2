@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-02-24 17:38+0100\n"
+"PO-Revision-Date: 2026-06-19 17:29+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -17,338 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.4.2\n"
-
-msgid "SELECT"
-msgstr "VÄLJ"
-
-msgid "ABOUT"
-msgstr "OM"
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "XL"
-
-msgid "ALL"
-msgstr "ALLA"
-
-msgid "EXIT"
-msgstr "LÄMNA"
-
-msgid "smallerButton|EXIT"
-msgstr "LÄMN."
-
-msgid "OKAY"
-msgstr "OKEJ"
-
-msgid "HEROES"
-msgstr ""
-"HJÄLT-\n"
-"AR"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"STÄDER/\n"
-"BORGAR"
-
-msgid "CANCEL"
-msgstr "AVBRYT"
-
-msgid "ACCEPT"
-msgstr "ACCEPTERA"
-
-msgid "DECLINE"
-msgstr "AVBÖJ"
-
-msgid "LEARN"
-msgstr "VÄLJ"
-
-msgid "TRADE"
-msgstr "HANDLA"
-
-msgid "YES"
-msgstr "JA"
-
-msgid "NO"
-msgstr "NEJ"
-
-msgid "DISMISS"
-msgstr "AVSKEDA"
-
-msgid "UPGRADE"
-msgstr "UPPG."
-
-msgid "GIFT"
-msgstr "GÅVA"
-
-msgid "RESTART"
-msgstr "OMSTART"
-
-msgid "MAX"
-msgstr "MAX"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"A\n"
-"V\n"
-"S\n"
-"K\n"
-"E\n"
-"D\n"
-"A"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"L\n"
-"Ä\n"
-"M\n"
-"N\n"
-"A"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"K\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"N\n"
-"J"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"O\n"
-"L\n"
-"O\n"
-"S\n"
-"P\n"
-"E\n"
-"L"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NYTT\n"
-"SPEL"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"LADDA\n"
-"SPEL"
-
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr ""
-"OMSTARTA\n"
-"SPEL"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"SPARA\n"
-"SPEL"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"SNABB-\n"
-"SPARA"
-
-msgid "QUIT"
-msgstr "AVSLUTA"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"STARTA\n"
-"KARTA"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HUVUD-\n"
-"MENY"
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NY\n"
-"KARTA"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"LADDA\n"
-"KARTA"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"SPARA\n"
-"KARTA"
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"ENDAST\n"
-"STRID"
-
-msgid "SETTINGS"
-msgstr "INSTÄLLNINGAR"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr "SOLOSPEL"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "KAMPANJ"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr "MULTISPEL"
-
-msgid "HOT SEAT"
-msgstr ""
-"HETA\n"
-"STOLEN"
-
-msgid "2 PLAYERS"
-msgstr "2 SPELARE"
-
-msgid "3 PLAYERS"
-msgstr "3 SPELARE"
-
-msgid "4 PLAYERS"
-msgstr "4 SPELARE"
-
-msgid "5 PLAYERS"
-msgstr "5 SPELARE"
-
-msgid "6 PLAYERS"
-msgstr "6 SPELARE"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORGINAL-\n"
-"KAMPANJ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"EXPANSIONS-\n"
-"KAMPANJ"
-
-msgid "editorMainMenu|BACK"
-msgstr "TILLBAKA"
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-"BLANK\n"
-"KARTA"
-
-msgid "newMap|RANDOM"
-msgstr "SLUMPAD"
-
-msgid "DIFFICULTY"
-msgstr "SVÅRIGHETSGRAD"
-
-msgid "VIEW INTRO"
-msgstr "VISA INTRO"
-
-msgid "RESET"
-msgstr "ÅTERS."
-
-msgid "START"
-msgstr "STARTA"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"U\n"
-"L\n"
-"L"
-
-msgid "army|Few"
-msgstr "Några"
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -431,6 +99,9 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Några"
 
 msgid "army|Several"
 msgstr "Flera"
@@ -3581,8 +3252,14 @@ msgstr "Antal att köpa:"
 msgid "Recruit selected monsters."
 msgstr "Rekrytera valda varelser."
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Välj maximalt antal varelser att rekrytera."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Välj endast 1 varelse att rekrytera."
@@ -4358,6 +4035,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Klicka för att göra ett val."
 
+msgid "SELECT"
+msgstr "VÄLJ"
+
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects}  kan inte placeras på vatten."
 
@@ -4440,8 +4120,11 @@ msgstr ""
 "Vill du lämna Redigeraren och spela kartan? (Osparade ändringar för din "
 "nuvarande karta kommer försvinna.)"
 
-msgid "Create a new map from scratch."
-msgstr "Skapa en ny blank karta."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+"Skapa en ny karta, antingen från en blank karta eller genom "
+"slumpkartgeneratorn."
 
 msgid "New Map"
 msgstr "Ny Karta"
@@ -4461,12 +4144,11 @@ msgstr "Spara nuvarande karta."
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
-#, fuzzy
 msgid "Auto Playtest"
-msgstr "Testspelare"
+msgstr "Automatisk Testkörning"
 
 msgid "Run an automatic playtest of the map."
-msgstr ""
+msgstr "Kör en automatiskt testkörning av kartan."
 
 msgid "Return to the game's Main Menu."
 msgstr "Återgå till Huvudmenyn."
@@ -4875,12 +4557,6 @@ msgstr "Radera ett redan existerande språk."
 msgid "Failed to generate a random map with given parameters."
 msgstr "Misslyckades att skapa en slumpad karta med givna parametrar."
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Skapa en ny karta, antingen från en blank karta eller genom "
-"slumpkartgeneratorn."
-
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Stäng Kartredigeraren och återvänd till spelets huvudmeny."
 
@@ -5278,65 +4954,378 @@ msgstr "Professionell"
 msgid "difficulty|Impossible"
 msgstr "Omöjligt"
 
-#, fuzzy
+msgid "ABOUT"
+msgstr "OM"
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "XL"
+
+msgid "ALL"
+msgstr "ALLA"
+
+msgid "EXIT"
+msgstr "LÄMNA"
+
+msgid "smallerButton|EXIT"
+msgstr "LÄMN."
+
+msgid "OKAY"
+msgstr "OKEJ"
+
+msgid "HEROES"
+msgstr ""
+"HJÄLT-\n"
+"AR"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"STÄDER/\n"
+"BORGAR"
+
+msgid "CANCEL"
+msgstr "AVBRYT"
+
+msgid "ACCEPT"
+msgstr "ACCEPTERA"
+
+msgid "DECLINE"
+msgstr "AVBÖJ"
+
+msgid "LEARN"
+msgstr "VÄLJ"
+
+msgid "TRADE"
+msgstr "HANDLA"
+
+msgid "YES"
+msgstr "JA"
+
+msgid "NO"
+msgstr "NEJ"
+
+msgid "DISMISS"
+msgstr "AVSKEDA"
+
+msgid "UPGRADE"
+msgstr "UPPG."
+
+msgid "GIFT"
+msgstr "GÅVA"
+
+msgid "RESTART"
+msgstr "OMSTART"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"A\n"
+"V\n"
+"S\n"
+"K\n"
+"E\n"
+"D\n"
+"A"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"L\n"
+"Ä\n"
+"M\n"
+"N\n"
+"A"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"N\n"
+"J"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"O\n"
+"L\n"
+"O\n"
+"S\n"
+"P\n"
+"E\n"
+"L"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NYTT\n"
+"SPEL"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"LADDA\n"
+"SPEL"
+
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+"OMSTARTA\n"
+"SPEL"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"SPARA\n"
+"SPEL"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"SNABB-\n"
+"SPARA"
+
+msgid "QUIT"
+msgstr "AVSLUTA"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NY\n"
+"KARTA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"LADDA\n"
+"KARTA"
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"STARTA\n"
+"KARTA"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"SPARA\n"
+"KARTA"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HUVUD-\n"
+"MENY"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"ENDAST\n"
+"STRID"
+
+msgid "SETTINGS"
+msgstr "INSTÄLLNINGAR"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr "SOLOSPEL"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr "KAMPANJ"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr "MULTISPEL"
+
+msgid "HOT SEAT"
+msgstr ""
+"HETA\n"
+"STOLEN"
+
+msgid "2 PLAYERS"
+msgstr "2 SPELARE"
+
+msgid "3 PLAYERS"
+msgstr "3 SPELARE"
+
+msgid "4 PLAYERS"
+msgstr "4 SPELARE"
+
+msgid "5 PLAYERS"
+msgstr "5 SPELARE"
+
+msgid "6 PLAYERS"
+msgstr "6 SPELARE"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORGINAL-\n"
+"KAMPANJ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"EXPANSIONS-\n"
+"KAMPANJ"
+
+msgid "editorMainMenu|BACK"
+msgstr "TILLBAKA"
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+"BLANK\n"
+"KARTA"
+
+msgid "newMap|RANDOM"
+msgstr "SLUMPAD"
+
+msgid "DIFFICULTY"
+msgstr "SVÅRIGHETSGRAD"
+
+msgid "VIEW INTRO"
+msgstr "VISA INTRO"
+
+msgid "RESET"
+msgstr "ÅTERS."
+
+msgid "START"
+msgstr "STARTA"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"U\n"
+"L\n"
+"L"
+
 msgid "Auto Playtest Results"
-msgstr "Testspelare"
+msgstr "Automatiskt Testkörningsresultat"
 
 msgid "1 playthrough"
 msgid_plural "%{count} playthroughs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 genomkörning"
+msgstr[1] "%{count} genomkörningar"
 
 msgid " playthrough(s) reached the specified time limit"
 msgstr ""
 
-#, fuzzy
 msgid "Click to close the dialog."
-msgstr "Klicka för att välja färg."
+msgstr "Klicka för stänga dialogen."
 
 msgid "Won %{percent}% of playthroughs."
-msgstr ""
+msgstr "%{percent}% vunna testkörningar."
 
-#, fuzzy
 msgid "Failed to prepare the map for auto playtest."
-msgstr "Misslyckades att spara kartan."
+msgstr "Misslyckades att förbereda kartan för automatiskt testkörning."
 
 msgid "autoPlaytest|Number of playthroughs:"
-msgstr ""
+msgstr "Antal testkörningar:"
 
 msgid "autoPlaytest|Max days per playthrough:"
-msgstr ""
+msgstr "Maximalt antal dagar per testkörning:"
 
-#, fuzzy
 msgid "autoPlaytest|Animation"
 msgstr "Animering"
 
-#, fuzzy
 msgid "autoPlaytest|Animation speed:"
-msgstr "Animering"
+msgstr "Animeringshastighet:"
 
 msgid "autoPlaytest|Sound Effects"
-msgstr ""
+msgstr "Ljudeffekter"
 
 msgid "Left-clicking at any point will interrupt the playtest."
-msgstr ""
+msgstr "Vänsterklickning kommer att avbryta testkörningen."
 
-#, fuzzy
 msgid "Click to run an automated map playtest."
-msgstr "Klicka för att gå tillbaka till huvudmenyn."
+msgstr "Klicka för köra en karta med automatiskt testkörning."
 
 msgid ""
 "Auto playtest\n"
 "(playthrough %{current} of %{total})"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Do you want to interrupt the automatic playtest? The effect will take place "
 "only on the next turn."
 msgstr ""
-"Vill du återta kontrollen från AI:n? Denna effekt gäller bara under nästa "
-"runda."
+"Vill du avbryta den automatiska testkörningen? Effekten kommer att ske nästa "
+"tur."
 
 msgid "and more..."
 msgstr "och mer..."
@@ -5472,7 +5461,7 @@ msgid "Special Thanks to"
 msgstr "Extra Tack till"
 
 msgid "and all the people who have helped make the project possible!"
-msgstr ""
+msgstr " och alla människor som hjälpt till att genomföra projektet!"
 
 msgid "Support us at"
 msgstr "Stöd oss på"
@@ -5744,9 +5733,8 @@ msgstr "öppna spelets huvudmeny"
 msgid "hotkey|toggle passability"
 msgstr "Aktivera framkomlighet"
 
-#, fuzzy
 msgid "hotkey|auto playtest"
-msgstr "Standard: Vänster"
+msgstr "Automatisk testkörning"
 
 msgid "hotkey|re-generate random map"
 msgstr "Återgenerera slumpad karta"
@@ -5754,9 +5742,8 @@ msgstr "Återgenerera slumpad karta"
 msgid "hotkey|re-configure random map"
 msgstr "Återkonfigurera slumpad karta"
 
-#, fuzzy
 msgid "hotkey|output all text"
-msgstr "Skrolla vänster"
+msgstr "visa all text"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -6856,16 +6843,14 @@ msgstr "Klicka för att ta bort bokstäver och siffror."
 msgid "Lowercase"
 msgstr "Gemener"
 
-#, fuzzy
 msgid "Click to switch to lowercase letters."
-msgstr "Klicka för att spara Händelseegenskaperna."
+msgstr "Klicka för att växla till gemener."
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
 
-#, fuzzy
 msgid "Swap sign"
-msgstr "Kartkreatörer"
+msgstr "Växla skylt"
 
 msgid "Click to switch between signed and unsigned numbers."
 msgstr ""
@@ -9338,28 +9323,26 @@ msgstr "Fantastisk"
 msgid "luck|Irish"
 msgstr "Irländsk"
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes falls on the hero's units in combat, causing "
 "their attacks to only do half damage."
 msgstr ""
-"Otur drabbar ibland hjältens trupper i strid, som får de att bara gör "
-"hälften i skada."
+"%{morale-type} drabbar ibland hjältens trupper i strid, som får de att bara "
+"ger hälften i skada."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck means the hero's units will never get lucky or unlucky "
 "attacks on the enemy."
 msgstr ""
-"Normal tur innebär att hjältens trupper kommer varken att få lyckosamma "
-"eller oturliga attacker."
+"%{morale-type} tur innebär att hjältens trupper kommer varken att få "
+"lyckosamma eller oturliga attacker."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
-"Tursamhet låter hjältens trupper få tursamma attacker (dubbel styrka) ibland."
+"%{morale-type} låter hjältens trupper få tursamma attacker (dubbel styrka) "
+"ibland."
 
 msgid "morale|Treason"
 msgstr "Förräderi"
@@ -9382,22 +9365,21 @@ msgstr "Fantastisk"
 msgid "morale|Blood!"
 msgstr "Blod!"
 
-#, fuzzy
 msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
-msgstr "Låg stridsmoral kan få hjältens trupper att låsa sig i strid."
+msgstr ""
+"%{morale-type} stridsmoral kan få hjältens trupper att låsa sig i strid."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale means the hero's units will never be blessed with "
 "extra attacks or freeze in combat."
 msgstr ""
-"Neutral stridsmoral innebär att hjältens arméer aldrig kommer att bli "
+"%{morale-type} stridsmoral innebär att hjältens arméer aldrig kommer att bli "
 "välsignade eller låsta i strid."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale may give the hero's units extra attacks in combat."
-msgstr "Hög stridsmoral kan ge hjältens trupper extra attacker i strid."
+msgstr ""
+"%{morale-type} stridsmoral kan ge hjältens trupper extra attacker i strid."
 
 #, fuzzy
 msgid "Blood"
@@ -12782,6 +12764,9 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Skapa en ny blank karta."
 
 #~ msgid ""
 #~ "Cell\n"

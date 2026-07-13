@@ -19,343 +19,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.2.2\n"
 
-msgid "SELECT"
-msgstr "ESCOGER"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "XL"
-
-msgid "ALL"
-msgstr "TODO"
-
-msgid "EXIT"
-msgstr "SALIR"
-
-msgid "smallerButton|EXIT"
-msgstr "SALIR"
-
-msgid "OKAY"
-msgstr "VALE"
-
-msgid "HEROES"
-msgstr "HÉROES"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"CIUDA-\n"
-"DES"
-
-msgid "CANCEL"
-msgstr "CANCELAR"
-
-msgid "ACCEPT"
-msgstr "ACEPTAR"
-
-msgid "DECLINE"
-msgstr "RECHAZAR"
-
-msgid "LEARN"
-msgstr "ESCOGE"
-
-msgid "TRADE"
-msgstr "COMERCIAR"
-
-msgid "YES"
-msgstr "SÍ"
-
-msgid "NO"
-msgstr "NO"
-
-msgid "DISMISS"
-msgstr "DESPEDIR"
-
-msgid "UPGRADE"
-msgstr "MEJORAR"
-
-msgid "GIFT"
-msgstr "DONAR"
-
-msgid "RESTART"
-msgstr "REINICIAR"
-
-msgid "MAX"
-msgstr "MÁX"
-
-msgid "MIN"
-msgstr "MÍN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"D\n"
-"E\n"
-"S\n"
-"P\n"
-"E\n"
-"D\n"
-"I\n"
-"R"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"S\n"
-"A\n"
-"L\n"
-"I\n"
-"R"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"Ñ\n"
-"A"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"E\n"
-"S\n"
-"T\n"
-"Á\n"
-"N\n"
-"D\n"
-"A\n"
-"R"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NUEVA\n"
-"PARTIDA"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"CARGAR\n"
-"PARTIDA"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "REINICIAR"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"GUARDAR\n"
-"PARTIDA"
-
-#, fuzzy
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"COMBATE\n"
-"RÁPIDO"
-
-msgid "QUIT"
-msgstr "SALIR"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "COMENZAR"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"AUTO\n"
-"PLAY-TEST"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NUEVO\n"
-"JUEGO"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"CARGAR\n"
-"PAR-\n"
-"TIDA"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"GUARD.\n"
-"PAR-\n"
-"TIDA"
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "BATALLA"
-
-msgid "SETTINGS"
-msgstr "AJUSTES"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"PARTIDA\n"
-"ESTÁNDAR"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "CAMPAÑA"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"MULTI-\n"
-"JUGADOR"
-
-msgid "HOT SEAT"
-msgstr ""
-"ASIENTO\n"
-"CALIENTE"
-
-msgid "2 PLAYERS"
-msgstr ""
-"2\n"
-"JUGADORES"
-
-msgid "3 PLAYERS"
-msgstr ""
-"3\n"
-"JUGADORES"
-
-msgid "4 PLAYERS"
-msgstr ""
-"4\n"
-"JUGADORES"
-
-msgid "5 PLAYERS"
-msgstr ""
-"5\n"
-"JUGADORES"
-
-msgid "6 PLAYERS"
-msgstr ""
-"6\n"
-"JUGADORES"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPAÑA\n"
-"ORIGINAL"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPAÑA\n"
-"DE EXPAN-\n"
-"SIÓN"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "DIFICULTAD"
-
-msgid "VIEW INTRO"
-msgstr "VER INTRO"
-
-msgid "RESET"
-msgstr "REINICIAR"
-
-msgid "START"
-msgstr "COMENZAR"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "Pocos"
-
 msgid "Warrior"
 msgstr "Guerrero"
 
@@ -436,6 +99,9 @@ msgid ""
 msgstr ""
 "Una legión de\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Pocos"
 
 msgid "army|Several"
 msgstr "Varios"
@@ -3603,8 +3269,14 @@ msgstr "Reclutar:"
 msgid "Recruit selected monsters."
 msgstr "Recluta los monstruos seleccionados."
 
+msgid "MAX"
+msgstr "MÁX"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Selecciona el máximo de monstruos que deseas reclutar."
+
+msgid "MIN"
+msgstr "MÍN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Selecciona solo 1 monstruo para reclutar."
@@ -4472,6 +4144,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 
+msgid "SELECT"
+msgstr "ESCOGER"
+
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
@@ -4567,8 +4242,9 @@ msgstr ""
 "¿Estás seguro de que quieres cargar una nueva partida? (Tu partida actual se "
 "perderá)"
 
-msgid "Create a new map from scratch."
-msgstr "Crea un nuevo mapa desde cero."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 #, fuzzy
 msgid "New Map"
@@ -5030,10 +4706,6 @@ msgstr "Eliminar un evento existente."
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-
 #, fuzzy
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Haz clic para volver al menú principal."
@@ -5481,6 +5153,331 @@ msgstr "Experto"
 
 msgid "difficulty|Impossible"
 msgstr "Imposible"
+
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "XL"
+
+msgid "ALL"
+msgstr "TODO"
+
+msgid "EXIT"
+msgstr "SALIR"
+
+msgid "smallerButton|EXIT"
+msgstr "SALIR"
+
+msgid "OKAY"
+msgstr "VALE"
+
+msgid "HEROES"
+msgstr "HÉROES"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"CIUDA-\n"
+"DES"
+
+msgid "CANCEL"
+msgstr "CANCELAR"
+
+msgid "ACCEPT"
+msgstr "ACEPTAR"
+
+msgid "DECLINE"
+msgstr "RECHAZAR"
+
+msgid "LEARN"
+msgstr "ESCOGE"
+
+msgid "TRADE"
+msgstr "COMERCIAR"
+
+msgid "YES"
+msgstr "SÍ"
+
+msgid "NO"
+msgstr "NO"
+
+msgid "DISMISS"
+msgstr "DESPEDIR"
+
+msgid "UPGRADE"
+msgstr "MEJORAR"
+
+msgid "GIFT"
+msgstr "DONAR"
+
+msgid "RESTART"
+msgstr "REINICIAR"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"D\n"
+"E\n"
+"S\n"
+"P\n"
+"E\n"
+"D\n"
+"I\n"
+"R"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"S\n"
+"A\n"
+"L\n"
+"I\n"
+"R"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"Ñ\n"
+"A"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"E\n"
+"S\n"
+"T\n"
+"Á\n"
+"N\n"
+"D\n"
+"A\n"
+"R"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NUEVA\n"
+"PARTIDA"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"CARGAR\n"
+"PARTIDA"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "REINICIAR"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"GUARDAR\n"
+"PARTIDA"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"COMBATE\n"
+"RÁPIDO"
+
+msgid "QUIT"
+msgstr "SALIR"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NUEVO\n"
+"JUEGO"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"CARGAR\n"
+"PAR-\n"
+"TIDA"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "COMENZAR"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"GUARD.\n"
+"PAR-\n"
+"TIDA"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "BATALLA"
+
+msgid "SETTINGS"
+msgstr "AJUSTES"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"PARTIDA\n"
+"ESTÁNDAR"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr "CAMPAÑA"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"MULTI-\n"
+"JUGADOR"
+
+msgid "HOT SEAT"
+msgstr ""
+"ASIENTO\n"
+"CALIENTE"
+
+msgid "2 PLAYERS"
+msgstr ""
+"2\n"
+"JUGADORES"
+
+msgid "3 PLAYERS"
+msgstr ""
+"3\n"
+"JUGADORES"
+
+msgid "4 PLAYERS"
+msgstr ""
+"4\n"
+"JUGADORES"
+
+msgid "5 PLAYERS"
+msgstr ""
+"5\n"
+"JUGADORES"
+
+msgid "6 PLAYERS"
+msgstr ""
+"6\n"
+"JUGADORES"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"CAMPAÑA\n"
+"ORIGINAL"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"CAMPAÑA\n"
+"DE EXPAN-\n"
+"SIÓN"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "DIFICULTAD"
+
+msgid "VIEW INTRO"
+msgstr "VER INTRO"
+
+msgid "RESET"
+msgstr "REINICIAR"
+
+msgid "START"
+msgstr "COMENZAR"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 #, fuzzy
 msgid "Auto Playtest Results"
@@ -12879,6 +12876,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Crea un nuevo mapa desde cero."
 
 #~ msgid ""
 #~ "Cell\n"

@@ -455,7 +455,7 @@ namespace Battle
         // Use this if a function may be called from other functions with different render delay types.
         void WaitForAllActionDelays();
 
-        void _animateOpponents( OpponentSprite * hero );
+        void _animateOpponents( const OpponentSprite * hero );
         void AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender = false );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & unit, const int icn, const int m82, const CreatureSpellAnimation animation );

@@ -29,11 +29,11 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "heroes_indicator.h"
@@ -378,18 +378,18 @@ namespace fheroes2
     ArtifactDialogElement::ArtifactDialogElement( const Artifact & artifact )
         : _artifact( artifact )
     {
-        const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
+        const Sprite & frame = Assets::getImage( ICN::RESOURCE, 7 );
         _area = { frame.width(), frame.height() };
     }
 
     void ArtifactDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & frame = AGG::GetICN( ICN::RESOURCE, 7 );
+        const Sprite & frame = Assets::getImage( ICN::RESOURCE, 7 );
         Blit( frame, 0, 0, output, offset.x, offset.y, frame.width(), frame.height() );
 
         const uint32_t icnIndex = ( _artifact.GetID() == Artifact::EDITOR_ANY_ULTIMATE_ARTIFACT || _artifact.isValid() ) ? _artifact.IndexSprite64() : 0;
 
-        const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, icnIndex );
+        const Sprite & artifact = Assets::getImage( ICN::ARTIFACT, icnIndex );
         Blit( artifact, output, offset.x + 6, offset.y + 6 );
     }
 
@@ -411,7 +411,7 @@ namespace fheroes2
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( std::move( text ) )
     {
-        const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
+        const Sprite & icn = Assets::getImage( ICN::RESOURCE, _icnIndex );
 
         if ( _text.empty() ) {
             _area = { icn.width(), icn.height() };
@@ -424,7 +424,7 @@ namespace fheroes2
 
     void ResourceDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & icn = AGG::GetICN( ICN::RESOURCE, _icnIndex );
+        const Sprite & icn = Assets::getImage( ICN::RESOURCE, _icnIndex );
 
         if ( _text.empty() ) {
             Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
@@ -510,7 +510,7 @@ namespace fheroes2
 
         const Text spellNameText( std::move( spellText ), FontType::smallWhite() );
 
-        const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
+        const Sprite & icn = Assets::getImage( ICN::SPELLS, _spell.IndexSprite() );
         _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + textOffsetFromElement + spellNameText.height() };
     }
 
@@ -523,7 +523,7 @@ namespace fheroes2
         }
 
         const Text spellNameText( std::move( spellText ), FontType::smallWhite() );
-        const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
+        const Sprite & icn = Assets::getImage( ICN::SPELLS, _spell.IndexSprite() );
 
         const int32_t maxWidth = std::max( icn.width(), spellNameText.width() );
 
@@ -548,13 +548,13 @@ namespace fheroes2
     LuckDialogElement::LuckDialogElement( const bool goodLuck )
         : _goodLuck( goodLuck )
     {
-        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = Assets::getImage( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void LuckDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
+        const Sprite & icn = Assets::getImage( ICN::EXPMRL, ( _goodLuck ? 0 : 1 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
@@ -576,13 +576,13 @@ namespace fheroes2
     MoraleDialogElement::MoraleDialogElement( const bool goodMorale )
         : _goodMorale( goodMorale )
     {
-        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = Assets::getImage( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         _area = { icn.width(), icn.height() };
     }
 
     void MoraleDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
+        const Sprite & icn = Assets::getImage( ICN::EXPMRL, ( _goodMorale ? 2 : 3 ) );
         Blit( icn, 0, 0, output, offset.x, offset.y, icn.width(), icn.height() );
     }
 
@@ -604,7 +604,7 @@ namespace fheroes2
     ExperienceDialogElement::ExperienceDialogElement( const int32_t experience )
         : _experience( experience )
     {
-        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, 4 );
+        const Sprite & icn = Assets::getImage( ICN::EXPMRL, 4 );
         if ( experience != 0 ) {
             const Text experienceText( std::to_string( _experience ), FontType::smallWhite() );
             _area = { std::max( icn.width(), experienceText.width() ), icn.height() + textOffsetFromElement + experienceText.height() };
@@ -616,7 +616,7 @@ namespace fheroes2
 
     void ExperienceDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & icn = AGG::GetICN( ICN::EXPMRL, 4 );
+        const Sprite & icn = Assets::getImage( ICN::EXPMRL, 4 );
 
         if ( _experience != 0 ) {
             const Text experienceText( std::to_string( _experience ), FontType::smallWhite() );
@@ -652,13 +652,13 @@ namespace fheroes2
     {
         assert( _skillType >= Skill::Primary::ATTACK && _skillType <= Skill::Primary::KNOWLEDGE );
 
-        const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
+        const Sprite & background = Assets::getImage( ICN::PRIMSKIL, 4 );
         _area = { background.width(), background.height() };
     }
 
     void PrimarySkillDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & background = AGG::GetICN( ICN::PRIMSKIL, 4 );
+        const Sprite & background = Assets::getImage( ICN::PRIMSKIL, 4 );
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
         uint32_t icnId = 0;
@@ -682,7 +682,7 @@ namespace fheroes2
             break;
         }
 
-        const Sprite & icn = AGG::GetICN( ICN::PRIMSKIL, icnId );
+        const Sprite & icn = Assets::getImage( ICN::PRIMSKIL, icnId );
         Blit( icn, 0, 0, output, offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
 
         const Text skillName( Skill::Primary::String( _skillType ), FontType::smallWhite() );
@@ -721,7 +721,7 @@ namespace fheroes2
 
     void SmallPrimarySkillDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & originalImage = AGG::GetICN( ICN::SWAPWIN, 0 );
+        const Sprite & originalImage = Assets::getImage( ICN::SWAPWIN, 0 );
 
         switch ( _skillType ) {
         case Skill::Primary::ATTACK:
@@ -752,24 +752,24 @@ namespace fheroes2
         : _skill( skill )
         , _hero( hero )
     {
-        const Sprite & background = AGG::GetICN( ICN::SECSKILL, 15 );
+        const Sprite & background = Assets::getImage( ICN::SECSKILL, 15 );
         _area = { background.width(), background.height() };
     }
 
     void SecondarySkillDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Sprite & background = AGG::GetICN( ICN::SECSKILL, 15 );
+        const Sprite & background = Assets::getImage( ICN::SECSKILL, 15 );
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
         if ( !_skill.isValid() ) {
-            const Sprite & icn = AGG::GetICN( ICN::SECSKILL, 0 );
+            const Sprite & icn = Assets::getImage( ICN::SECSKILL, 0 );
             const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
             Copy( icn, 0, 0, output, icnRect );
 
             return;
         }
 
-        const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
+        const Sprite & icn = Assets::getImage( ICN::SECSKILL, _skill.GetIndexSprite1() );
         const Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
         Copy( icn, 0, 0, output, icnRect );
 
@@ -805,7 +805,7 @@ namespace fheroes2
         assert( !_backgroundIndices.empty() && _delay > 0 );
 
         for ( const uint32_t index : _backgroundIndices ) {
-            const Sprite & image = AGG::GetICN( _icnId, index );
+            const Sprite & image = Assets::getImage( _icnId, index );
             _area.width = std::max( _area.width, image.width() );
             _area.height = std::max( _area.height, image.height() );
 
@@ -818,7 +818,7 @@ namespace fheroes2
         if ( _currentIndex == 0 ) {
             // Since this is the first time to draw we have to draw the background.
             for ( const uint32_t index : _backgroundIndices ) {
-                const Sprite & image = AGG::GetICN( _icnId, index );
+                const Sprite & image = Assets::getImage( _icnId, index );
                 Blit( image, 0, 0, output, offset.x + ( _area.width - image.width() ) / 2, offset.y + ( _area.height - image.height() ) / 2, image.width(),
                       image.height() );
             }
@@ -827,7 +827,7 @@ namespace fheroes2
         const uint32_t animationFrameId = ICN::getAnimatedIcnIndex( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
-        const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
+        const Sprite & animationImage = Assets::getImage( _icnId, animationFrameId );
 
         Blit( animationImage, 0, 0, output, offset.x + _internalOffset.x + animationImage.x(), offset.y + _internalOffset.y + animationImage.y(), animationImage.width(),
               animationImage.height() );
@@ -876,7 +876,7 @@ namespace fheroes2
         const uint32_t animationFrameId = ICN::getAnimatedIcnIndex( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
-        const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
+        const Sprite & animationImage = Assets::getImage( _icnId, animationFrameId );
 
         Blit( animationImage, 0, 0, output, offset.x + _animationPosition.x, offset.y + _animationPosition.y, animationImage.width(), animationImage.height() );
     }
@@ -905,13 +905,13 @@ namespace fheroes2
         : _monster( monster )
     {
         assert( _monster.isValid() );
-        const Sprite & sprite = AGG::GetICN( ICN::STRIP, 12 );
+        const Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
         _area = { sprite.width(), sprite.height() };
     }
 
     void MonsterDialogElement::draw( Image & output, const Point & offset ) const
     {
-        Sprite sprite = AGG::GetICN( ICN::STRIP, 12 );
+        Sprite sprite = Assets::getImage( ICN::STRIP, 12 );
         sprite._disableTransformLayer();
         renderMonsterFrame( _monster, sprite, { 6, 6 } );
         Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
@@ -958,8 +958,8 @@ namespace fheroes2
 
     void ValueSelectionDialogElement::setOffset( const fheroes2::Point & offset )
     {
-        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
-        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
+        const Sprite & editBoxImage = Assets::getImage( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = Assets::getImage( ICN::TOWNWIND, 5 );
 
         _area = { offset.x, offset.y, editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
 
@@ -971,7 +971,7 @@ namespace fheroes2
 
     void ValueSelectionDialogElement::draw( Image & output ) const
     {
-        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
+        const Sprite & editBoxImage = Assets::getImage( ICN::TOWNWIND, 4 );
         assert( _editBox.width == editBoxImage.width() && _editBox.height == editBoxImage.height() );
 
         Blit( editBoxImage, 0, 0, output, _editBox.x, _editBox.y, _editBox.width, _editBox.height );
@@ -1037,8 +1037,8 @@ namespace fheroes2
 
     Size ValueSelectionDialogElement::getArea()
     {
-        const Sprite & editBoxImage = AGG::GetICN( ICN::TOWNWIND, 4 );
-        const Sprite & arrowImage = AGG::GetICN( ICN::TOWNWIND, 5 );
+        const Sprite & editBoxImage = Assets::getImage( ICN::TOWNWIND, 4 );
+        const Sprite & arrowImage = Assets::getImage( ICN::TOWNWIND, 5 );
 
         return { editBoxImage.width() + 6 + arrowImage.width(), arrowImage.height() * 2 + 5 };
     }

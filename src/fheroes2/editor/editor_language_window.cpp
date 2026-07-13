@@ -30,10 +30,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_language_selection.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -166,7 +166,7 @@ namespace Editor
         languageList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, rumorsRoi.y + 1 } );
         languageList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, rumorsRoi.y + rumorsRoi.height - 15 } );
         languageList.setScrollBarArea( { scrollbarOffsetX + 2, rumorsRoi.y + topPartHeight, 10, rumorsRoi.height - 2 * topPartHeight } );
-        languageList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        languageList.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         languageList.SetAreaMaxItems( 10 );
 
         std::vector<fheroes2::SupportedLanguage> languages;
@@ -185,7 +185,7 @@ namespace Editor
 
         const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 13 );
+        const fheroes2::Sprite & buttonImage = Assets::getImage( minibuttonIcnId, 13 );
         const int32_t buttonWidth = buttonImage.width();
 
         fheroes2::Button buttonAdd( rumorsRoi.x, rumorsRoi.y + rumorsRoi.height + 5, minibuttonIcnId, 13, 14 );

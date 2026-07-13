@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -57,7 +57,6 @@
 #endif
 
 #include "agg.h"
-#include "agg_image.h"
 #include "audio_manager.h"
 #include "core.h"
 #include "cursor.h"
@@ -65,6 +64,7 @@
 #include "embedded_image.h"
 #include "exception.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_logo.h"
 #include "game_video.h"
 #include "game_video_type.h"
@@ -241,7 +241,7 @@ namespace
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
 
                 // Verify that the font is present and it is not corrupted.
-                fheroes2::AGG::GetICN( ICN::FONT, 0 );
+                Assets::getImage( ICN::FONT, 0 );
             }
             catch ( ... ) {
                 displayMissingResourceWindow();
@@ -365,11 +365,9 @@ int main( int argc, char ** argv )
         // Initialize game data.
         Game::Init();
 
-        if ( conf.isShowIntro() ) {
-            fheroes2::showTeamInfo();
-            for ( const char * logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
-                Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
-            }
+        fheroes2::showTeamInfo();
+        for ( const char * logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
+            Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
         }
 
         try {
@@ -385,6 +383,10 @@ int main( int argc, char ** argv )
         catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )
             displayMissingResourceWindow();
+            return EXIT_FAILURE;
+        }
+        catch ( const fheroes2::CorruptedExecutable & ex ) {
+            ERROR_LOG( ex.what() )
             return EXIT_FAILURE;
         }
     }

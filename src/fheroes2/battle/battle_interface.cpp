@@ -37,7 +37,6 @@
 #include <set>
 #include <type_traits>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "battle.h" // IWYU pragma: associated
@@ -53,6 +52,7 @@
 #include "bin_info.h"
 #include "castle.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "ground.h"
 #include "heroes_base.h"
@@ -266,7 +266,7 @@ namespace
         rainbow.reset();
 
         // Get the original good luck sprite, since it has a rainbow image which will be used to get line.
-        const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
+        const fheroes2::Sprite & luckSprite = Assets::getImage( ICN::EXPMRL, 0 );
 
         // Get a single rainbow line from the center of the luckSprite.
         fheroes2::Image croppedRainbow;
@@ -306,14 +306,14 @@ namespace
 
     int32_t GetAbsoluteICNHeight( int icnId )
     {
-        const uint32_t frameCount = fheroes2::AGG::GetICNCount( icnId );
+        const uint32_t frameCount = Assets::getImageCount( icnId );
         if ( frameCount == 0 ) {
             return 0;
         }
 
         int32_t height = 0;
         for ( uint32_t i = 0; i < frameCount; ++i ) {
-            const int32_t offset = -fheroes2::AGG::GetICN( icnId, i ).y();
+            const int32_t offset = -Assets::getImage( icnId, i ).y();
             if ( offset > height ) {
                 height = offset;
             }
@@ -327,7 +327,7 @@ namespace
         const fheroes2::Rect & pos = target.GetRectPosition();
 
         // Get the sprite for the first frame, so its center won't shift if the creature is animating (instead of target.GetFrame()).
-        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
+        const fheroes2::Sprite & unitSprite = Assets::getImage( target.GetMonsterSprite(), target.animation.firstFrame() );
 
         // Bottom-left corner (default) position with spell offset applied
         fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
@@ -461,7 +461,7 @@ namespace
 
     fheroes2::Image DrawHexagon( const uint8_t colorId )
     {
-        const fheroes2::Sprite & originalGrid = fheroes2::AGG::GetICN( ICN::CMBTMISC, 0 );
+        const fheroes2::Sprite & originalGrid = Assets::getImage( ICN::CMBTMISC, 0 );
 
         // Move hexagon by 1 pixel down to match the original game's grid.
         fheroes2::Image hexagonSprite( originalGrid.width(), originalGrid.height() + 1 );
@@ -828,12 +828,12 @@ namespace Battle
 
             setScrollBarArea( { ax + 5, buttonPgUpArea.y + buttonPgUpArea.height + 3, 12, _scrollbarSliderAreaLength } );
 
-            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
-            const fheroes2::Image scrollbarSlider
+            const fheroes2::Sprite & originalSlider = Assets::getImage( ICN::DROPLISL, 13 );
+            fheroes2::Image scrollbarSlider
                 = fheroes2::generateScrollbarSlider( originalSlider, false, _scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( _messages.size() ),
                                                      { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
 
-            setScrollBarImage( scrollbarSlider );
+            setScrollBarImage( std::move( scrollbarSlider ) );
             _scrollbar.hide();
             SetAreaItems( { area.x, area.y, area.width - 16, area.height + battleLogLastElementOffset } );
             SetListContent( _messages );
@@ -896,11 +896,11 @@ namespace Battle
             SetListContent( _messages );
 
             // Update the scrollbar image.
-            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
-            const fheroes2::Image scrollbarSlider
+            const fheroes2::Sprite & originalSlider = Assets::getImage( ICN::DROPLISL, 13 );
+            fheroes2::Image scrollbarSlider
                 = fheroes2::generateScrollbarSlider( originalSlider, false, _scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( _messages.size() ),
                                                      { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
-            setScrollBarImage( scrollbarSlider );
+            setScrollBarImage( std::move( scrollbarSlider ) );
             SetCurrent( _messages.size() - 1 );
         }
 
@@ -922,15 +922,15 @@ namespace Battle
             const int32_t ah = buttonPgDnAreaY - buttonPgUpBottom;
 
             const fheroes2::Rect & borderRect = _border.GetRect();
-            Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), borderRect );
+            Dialog::FrameBorder::RenderOther( Assets::getImage( ICN::TEXTBAK2, 0 ), borderRect );
 
-            const fheroes2::Sprite & sp3 = fheroes2::AGG::GetICN( ICN::DROPLISL, 11 );
+            const fheroes2::Sprite & sp3 = Assets::getImage( ICN::DROPLISL, 11 );
             for ( int32_t i = 0; i < ( ah / sp3.height() ); ++i ) {
                 fheroes2::Copy( sp3, 0, 0, display, ax, buttonPgUpBottom + ( sp3.height() * i ), sp3.width(), sp3.height() );
             }
 
-            const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
-            const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
+            const fheroes2::Sprite & sp1 = Assets::getImage( ICN::DROPLISL, 10 );
+            const fheroes2::Sprite & sp2 = Assets::getImage( ICN::DROPLISL, 12 );
 
             fheroes2::Copy( sp1, 0, 0, display, ax, buttonPgUpBottom, sp1.width(), sp1.height() );
             fheroes2::Copy( sp2, 0, 0, display, ax, buttonPgDnAreaY - sp2.height(), sp2.width(), sp2.height() );
@@ -1016,7 +1016,7 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, HeroBase * 
         break;
     }
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( _heroIcnId, _currentAnim.getFrame() );
+    const fheroes2::Sprite & sprite = Assets::getImage( _heroIcnId, _currentAnim.getFrame() );
 
     _area.width = sprite.width();
     _area.height = sprite.height();
@@ -1091,7 +1091,7 @@ fheroes2::Point Battle::OpponentSprite::GetCastPosition() const
 
 void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
 {
-    const fheroes2::Sprite & hero = fheroes2::AGG::GetICN( _heroIcnId, _currentAnim.getFrame() );
+    const fheroes2::Sprite & hero = Assets::getImage( _heroIcnId, _currentAnim.getFrame() );
 
     fheroes2::Point offset( _offset );
     if ( _heroBase->isCaptain() ) {
@@ -1136,8 +1136,8 @@ bool Battle::OpponentSprite::updateAnimationState()
 }
 
 Battle::Status::Status()
-    : _upperBackground( fheroes2::AGG::GetICN( ICN::TEXTBAR, 8 ) )
-    , _lowerBackground( fheroes2::AGG::GetICN( ICN::TEXTBAR, 9 ) )
+    : _upperBackground( Assets::getImage( ICN::TEXTBAR, 8 ) )
+    , _lowerBackground( Assets::getImage( ICN::TEXTBAR, 9 ) )
 {
     width = _upperBackground.width();
     height = _upperBackground.height() + _lowerBackground.height();
@@ -1222,11 +1222,11 @@ bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string
 void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t unitColor, fheroes2::Image & output )
 {
     // Render background.
-    const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    const fheroes2::Sprite & backgroundOriginal = Assets::getImage( ICN::SWAPWIN, 0 );
     fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, pos.width - 2, pos.height - 2 );
 
     // Draw a monster's sprite.
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    const fheroes2::Sprite & monsterSprite = Assets::getImage( ICN::MONS32, unit.GetSpriteIndex() );
     const int32_t monsterSpriteHeight = monsterSprite.height();
     if ( unit.Modes( Battle::CAP_MIRRORIMAGE ) ) {
         fheroes2::Sprite mirroredMonster = monsterSprite;
@@ -1859,7 +1859,7 @@ void Battle::Interface::RedrawArmies()
             // Render the overlay sprite for units in current cell row above all units in this and upper rows.
             for ( const Battle::UnitSpellEffectInfo * overlaySprite : troopOverlaySpriteBeforeWall ) {
                 assert( overlaySprite->icnId != ICN::UNKNOWN );
-                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                const fheroes2::Sprite & spellSprite = Assets::getImage( overlaySprite->icnId, overlaySprite->icnIndex );
                 fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
             }
 
@@ -1888,7 +1888,7 @@ void Battle::Interface::RedrawArmies()
             // Render the overlay sprite for units in current cell row above all units in this and upper rows.
             for ( const Battle::UnitSpellEffectInfo * overlaySprite : troopOverlaySpriteAfterWall ) {
                 assert( overlaySprite->icnId != ICN::UNKNOWN );
-                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                const fheroes2::Sprite & spellSprite = Assets::getImage( overlaySprite->icnId, overlaySprite->icnIndex );
                 fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
             }
         }
@@ -1959,7 +1959,7 @@ void Battle::Interface::RedrawArmies()
             // Render the overlay sprite for units in current cell row above all units in this and upper rows.
             for ( const Battle::UnitSpellEffectInfo * overlaySprite : troopOverlaySprite ) {
                 assert( overlaySprite->icnId != ICN::UNKNOWN );
-                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                const fheroes2::Sprite & spellSprite = Assets::getImage( overlaySprite->icnId, overlaySprite->icnIndex );
                 fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
             }
         }
@@ -2009,14 +2009,14 @@ void Battle::Interface::RedrawOpponentsFlags()
 
     if ( _attackingOpponent ) {
         const int icn = getFlagIcn( arena.getAttackingForce().GetColor() );
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, _flagAnimationFrameIndex ) );
+        const fheroes2::Sprite & flag = Assets::getImage( icn, ICN::getAnimatedIcnIndex( icn, 0, _flagAnimationFrameIndex ) );
         fheroes2::Blit( flag, _mainSurface, _attackingOpponent->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
                         _attackingOpponent->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
     if ( _defendingOpponent ) {
         const int icn = getFlagIcn( arena.getDefendingForce().GetColor() );
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::getAnimatedIcnIndex( icn, 0, _flagAnimationFrameIndex ) );
+        const fheroes2::Sprite & flag = Assets::getImage( icn, ICN::getAnimatedIcnIndex( icn, 0, _flagAnimationFrameIndex ) );
         fheroes2::Blit( flag, _mainSurface,
                         _defendingOpponent->Offset().x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
                         _defendingOpponent->Offset().y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
@@ -2027,7 +2027,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & unit )
 {
     const bool isCurrentMonsterAction = ( _currentUnit == &unit && _spriteInsteadCurrentUnit != nullptr );
 
-    const fheroes2::Sprite & monsterSprite = isCurrentMonsterAction ? *_spriteInsteadCurrentUnit : fheroes2::AGG::GetICN( unit.GetMonsterSprite(), unit.GetFrame() );
+    const fheroes2::Sprite & monsterSprite = isCurrentMonsterAction ? *_spriteInsteadCurrentUnit : Assets::getImage( unit.GetMonsterSprite(), unit.GetFrame() );
 
     fheroes2::Point drawnPosition;
 
@@ -2200,7 +2200,7 @@ bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const f
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
     const fheroes2::Rect & rt = unit.GetRectPosition();
-    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
+    const fheroes2::Sprite & bar = Assets::getImage( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
 
     const int32_t monsterIndex = unit.GetHeadIndex();
@@ -2268,7 +2268,7 @@ void Battle::Interface::RedrawCover()
             spriteIndex = _bridgeAnimation.currentFrameId;
         }
 
-        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::getCastleIcnId( Arena::GetCastle()->GetRace() ), spriteIndex );
+        const fheroes2::Sprite & bridgeImage = Assets::getImage( ICN::getCastleIcnId( Arena::GetCastle()->GetRace() ), spriteIndex );
         fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
@@ -2468,19 +2468,19 @@ void Battle::Interface::_redrawBattleGround()
 {
     // Battlefield background image.
     if ( _battleGroundIcn != ICN::UNKNOWN ) {
-        const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( _battleGroundIcn, 0 );
+        const fheroes2::Sprite & cbkg = Assets::getImage( _battleGroundIcn, 0 );
         fheroes2::Copy( cbkg, _battleGround );
     }
 
     // Objects near the left and right borders of the Battlefield.
     if ( _borderObjectsIcn != ICN::UNKNOWN ) {
-        const fheroes2::Sprite & frng = fheroes2::AGG::GetICN( _borderObjectsIcn, 0 );
+        const fheroes2::Sprite & frng = Assets::getImage( _borderObjectsIcn, 0 );
         fheroes2::Blit( frng, _battleGround, frng.x(), frng.y() );
     }
 
     // Big obstacles in the center of the Battlefield.
     if ( arena.GetICNCovr() != ICN::UNKNOWN ) {
-        const fheroes2::Sprite & cover = fheroes2::AGG::GetICN( arena.GetICNCovr(), 0 );
+        const fheroes2::Sprite & cover = Assets::getImage( arena.GetICNCovr(), 0 );
         fheroes2::Blit( cover, _battleGround, cover.x(), cover.y() );
     }
 
@@ -2514,12 +2514,12 @@ void Battle::Interface::_redrawBattleGround()
             break;
         }
 
-        const fheroes2::Sprite & castleBackground = fheroes2::AGG::GetICN( castleBackgroundIcnId, 1 );
+        const fheroes2::Sprite & castleBackground = Assets::getImage( castleBackgroundIcnId, 1 );
         fheroes2::Blit( castleBackground, _battleGround, castleBackground.x(), castleBackground.y() );
 
         // Moat.
         if ( castle->isBuild( BUILD_MOAT ) ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::MOATWHOL, 0 );
             fheroes2::Blit( sprite, _battleGround, sprite.x(), sprite.y() );
         }
     }
@@ -2540,7 +2540,7 @@ void Battle::Interface::_redrawBattleGround()
 
     // Castle top wall.
     if ( castle != nullptr ) {
-        const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuilt() ? 4 : 3 );
+        const fheroes2::Sprite & sprite2 = Assets::getImage( castleBackgroundIcnId, castle->isFortificationBuilt() ? 4 : 3 );
         fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
 }
@@ -2635,14 +2635,14 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
     const int castleIcnId = ICN::getCastleIcnId( castle.GetRace() );
 
     if ( Arena::CATAPULT_POS == cellId ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CATAPULT, catapult_frame );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::CATAPULT, catapult_frame );
         fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
     else if ( Arena::CASTLE_GATE_POS == cellId ) {
         const Bridge * bridge = Arena::GetBridge();
         assert( bridge != nullptr );
         if ( bridge != nullptr && !bridge->isDestroyed() ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
+            const fheroes2::Sprite & sprite = Assets::getImage( castleIcnId, 4 );
             fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
         }
     }
@@ -2701,7 +2701,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
             }
         }
 
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, index );
+        const fheroes2::Sprite & sprite = Assets::getImage( castleIcnId, index );
         fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
     }
     else if ( Arena::CASTLE_TOP_ARCHER_TOWER_POS == cellId ) {
@@ -2716,7 +2716,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
             index = 19;
         }
 
-        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
+        const fheroes2::Sprite & towerSprite = Assets::getImage( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
@@ -2731,24 +2731,24 @@ void Battle::Interface::RedrawCastle( const Castle & castle, const int32_t cellI
             index = 19;
         }
 
-        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
+        const fheroes2::Sprite & towerSprite = Assets::getImage( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 405 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
         const int index = ( Board::GetCell( cellId )->GetObject() == 1 ) ? 19 : 17;
-        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
+        const fheroes2::Sprite & towerSprite = Assets::getImage( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 237 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
         const int index = ( Board::GetCell( cellId )->GetObject() == 1 ) ? 19 : 17;
-        const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
+        const fheroes2::Sprite & towerSprite = Assets::getImage( castleIcnId, index );
         fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 321 + towerSprite.y() );
     }
 }
 
 void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::getCastleIcnId( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
+    const fheroes2::Sprite & sprite = Assets::getImage( ICN::getCastleIcnId( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
 
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
@@ -2781,7 +2781,7 @@ void Battle::Interface::_redrawGroundObjects( const int32_t cellId )
         return;
     }
 
-    const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
+    const fheroes2::Sprite & objectSprite = Assets::getImage( objectIcnId, 0 );
     const fheroes2::Rect & pt = cell->GetPos();
     fheroes2::Blit( objectSprite, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
@@ -2892,7 +2892,7 @@ void Battle::Interface::_redrawHighObjects( const int32_t cellId )
         return;
     }
 
-    const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
+    const fheroes2::Sprite & objectSprite = Assets::getImage( objectIcnId, 0 );
     const fheroes2::Rect & pt = cell->GetPos();
     fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
@@ -3933,7 +3933,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
     }
 }
 
-void Battle::Interface::_animateOpponents( OpponentSprite * hero )
+void Battle::Interface::_animateOpponents( const OpponentSprite * hero )
 {
     if ( hero == nullptr ) {
         return;
@@ -4015,8 +4015,8 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
         fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
     }
     else {
-        missile = fheroes2::AGG::GetICN( static_cast<int>( Monster::GetMissileICN( monsterID ) ),
-                                         static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+        missile = Assets::getImage( static_cast<int>( Monster::GetMissileICN( monsterID ) ),
+                                    static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
 
         // The projectile has to hit the target but not go through it so its end position is shifted in the direction to the shooter.
         endPosShift.x = reverse ? ( missile.width() / 2 ) : -( missile.width() / 2 );
@@ -4104,7 +4104,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
             Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
         }
 
-        const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite(), attacker.GetFrame() );
+        const fheroes2::Sprite & attackerSprite = Assets::getImage( attacker.GetMonsterSprite(), attacker.GetFrame() );
         const fheroes2::Point attackerPos = GetTroopPosition( attacker, attackerSprite );
 
         // For shooter position we need bottom center position of rear tile
@@ -4321,7 +4321,7 @@ void Battle::Interface::_redrawActionWincesKills( const TargetsInfo & targets, U
     SetHeroAnimationReactionToTroopDeath( deathColor );
 
     uint32_t lichCloudFrame = 0;
-    const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
+    const uint32_t lichCloudMaxFrame = Assets::getImageCount( ICN::LICHCLOD );
     // Wince animation under the Lich cloud, second part: the frame number after which the target animation will be switched to 'WNCE_UP'.
     const uint32_t wnceUpStartFrame = 1;
     // Wince animation under the Lich cloud, third part: the frame number after which the target animation will be switched to 'WNCE_DOWN'.
@@ -4345,7 +4345,7 @@ void Battle::Interface::_redrawActionWincesKills( const TargetsInfo & targets, U
 
         // Render a Lich cloud above the target unit if it is a Lich attack and if the cloud animation is not already finished.
         if ( drawLichCloud && lichCloudFrame < lichCloudMaxFrame ) {
-            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, lichCloudFrame );
+            const fheroes2::Sprite & spellSprite = Assets::getImage( ICN::LICHCLOD, lichCloudFrame );
             const fheroes2::Point & pos = CalculateSpellPosition( *defender, ICN::LICHCLOD, spellSprite );
             fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, false );
             ++lichCloudFrame;
@@ -5389,7 +5389,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
                 RedrawPartialStart();
 
                 if ( frameId < frameLimit ) {
-                    const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::CLOUDLUK, frameId );
+                    const fheroes2::Sprite & luckSprite = Assets::getImage( ICN::CLOUDLUK, frameId );
                     fheroes2::Blit( luckSprite, _mainSurface, offsetX + luckSprite.x(), offsetY + luckSprite.y() );
 
                     ++frameId;
@@ -5531,7 +5531,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseStructure 
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     uint32_t boulderFrameId = 0;
-    const uint32_t boulderFramesCount = fheroes2::AGG::GetICNCount( ICN::BOULDER );
+    const uint32_t boulderFramesCount = Assets::getImageCount( ICN::BOULDER );
 
     allDelays.front() = Game::DelayType::BATTLE_CATAPULT_BOULDER_DELAY;
 
@@ -5543,7 +5543,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseStructure 
                 ++catapult_frame;
 
             RedrawPartialStart();
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BOULDER, boulderFrameId ), _mainSurface, pnt->x, pnt->y );
+            fheroes2::Blit( Assets::getImage( ICN::BOULDER, boulderFrameId ), _mainSurface, pnt->x, pnt->y );
             RedrawPartialFinish();
             ++pnt;
             ++boulderFrameId;
@@ -5560,7 +5560,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseStructure 
     const int32_t icn = isHit ? ICN::LICHCLOD : ICN::SMALCLOD;
     uint32_t frame = 0;
     // If the building is hit, end the animation on the 5th frame to change the building state (when the smoke cloud is largest).
-    uint32_t maxFrame = isHit ? castleBuildingDestroyFrame : fheroes2::AGG::GetICNCount( icn );
+    uint32_t maxFrame = isHit ? castleBuildingDestroyFrame : Assets::getImageCount( icn );
     const bool isBridgeDestroyed = isHit && ( catapultTarget == CastleDefenseStructure::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
@@ -5580,10 +5580,10 @@ void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseStructure 
             RedrawPartialStart();
             // Start animation of the second smoke cloud only for the bridge and after 2 frames of the first smoke cloud.
             if ( isBridgeDestroyed && frame >= bridgeDestroySmokeDelay ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay );
+                const fheroes2::Sprite & sprite = Assets::getImage( icn, frame - bridgeDestroySmokeDelay );
                 fheroes2::Blit( sprite, _mainSurface, pt1.x + sprite.x(), pt1.y + sprite.y() );
             }
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame );
+            const fheroes2::Sprite & sprite = Assets::getImage( icn, frame );
             fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
             RedrawPartialFinish();
 
@@ -5606,7 +5606,7 @@ void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseStructure 
     // Continue the smoke cloud animation from the 6th frame.
     const int32_t icnId = ICN::LICHCLOD;
     uint32_t frame = castleBuildingDestroyFrame;
-    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icnId );
+    const uint32_t maxFrame = Assets::getImageCount( icnId );
     uint32_t maxAnimationFrame = maxFrame;
     const bool isBridgeDestroyed = ( catapultTarget == CastleDefenseStructure::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
@@ -5629,12 +5629,12 @@ void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseStructure 
             RedrawPartialStart();
             // Draw animation of the second smoke cloud only for the bridge.
             if ( isBridgeDestroyed ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnId, frame - bridgeDestroySmokeDelay );
+                const fheroes2::Sprite & sprite = Assets::getImage( icnId, frame - bridgeDestroySmokeDelay );
                 fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
             }
             // Don't draw the smoke cloud after its animation has ended (in case the second smoke cloud is still animating).
             if ( frame <= maxFrame ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnId, frame );
+                const fheroes2::Sprite & sprite = Assets::getImage( icnId, frame );
                 fheroes2::Blit( sprite, _mainSurface, pt1.x + sprite.x(), pt1.y + sprite.y() );
             }
             RedrawPartialFinish();
@@ -5672,7 +5672,7 @@ void Battle::Interface::_redrawActionTeleportSpell( Unit & target, const int32_t
     // Hide the counter.
     target.SwitchAnimation( Monster_Info::STAND_STILL );
 
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = Assets::getImage( target.GetMonsterSprite(), target.GetFrame() );
     fheroes2::Sprite rippleSprite;
     _spriteInsteadCurrentUnit = &rippleSprite;
     const int32_t spriteHeight = unitSprite.height();
@@ -5832,7 +5832,7 @@ void Battle::Interface::redrawActionMirrorImageSpell( const HeroBase & caster, c
     _currentUnit = &mirrorUnit;
 
     // Set custom sprite for mirrored unit to hide its contour and to have ability to change sprite position.
-    fheroes2::Sprite mirrorUnitSprite = fheroes2::AGG::GetICN( originalUnit.GetMonsterSprite(), originalUnit.GetFrame() );
+    fheroes2::Sprite mirrorUnitSprite = Assets::getImage( originalUnit.GetMonsterSprite(), originalUnit.GetFrame() );
     _spriteInsteadCurrentUnit = &mirrorUnitSprite;
 
     // Don't highlight the cursor position.
@@ -5999,13 +5999,13 @@ void Battle::Interface::_redrawLightningOnTargets( const std::vector<fheroes2::P
     fheroes2::delayforMs( 100 );
 
     uint32_t frame = 0;
-    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && frame < Assets::getImageCount( ICN::SPARKS ) ) {
         _checkGlobalEvents( le );
 
         if ( ( frame == 0 ) || Game::validateAnimationDelay( Game::DelayType::BATTLE_DISRUPTING_DELAY ) ) {
             RedrawPartialStart();
 
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SPARKS, frame );
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::SPARKS, frame );
             const int32_t spriteWidth = sprite.width();
 
             for ( size_t i = 1; i < points.size(); ++i ) {
@@ -6053,7 +6053,7 @@ void Battle::Interface::_redrawActionBloodLustSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = Assets::getImage( target.GetMonsterSprite(), target.GetFrame() );
 
     fheroes2::Sprite bloodlustEffect( unitSprite );
     fheroes2::ApplyPalette( bloodlustEffect, PAL::GetPalette( PAL::PaletteType::RED ) );
@@ -6108,7 +6108,7 @@ void Battle::Interface::_redrawActionStoneSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = Assets::getImage( target.GetMonsterSprite(), target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
     fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -6224,7 +6224,7 @@ void Battle::Interface::_redrawRaySpell( const Unit & target, const int spellICN
     const fheroes2::Point targetPos = target.GetCenterPoint();
 
     const std::vector<fheroes2::Point> path = getLinePoints( startingPos, targetPos, size );
-    const uint32_t spriteCount = fheroes2::AGG::GetICNCount( spellICN );
+    const uint32_t spriteCount = Assets::getImageCount( spellICN );
 
     cursor.SetThemes( Cursor::WAR_POINTER );
     AudioManager::PlaySound( spellSound );
@@ -6238,7 +6238,7 @@ void Battle::Interface::_redrawRaySpell( const Unit & target, const int spellICN
 
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_DISRUPTING_DELAY ) ) {
             const uint32_t frame = static_cast<uint32_t>( i * spriteCount / path.size() ); // it's safe to do such as i <= path.size()
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( spellICN, frame );
+            const fheroes2::Sprite & sprite = Assets::getImage( spellICN, frame );
             fheroes2::Blit( sprite, _mainSurface, path[i].x - sprite.width() / 2, path[i].y - sprite.height() / 2 );
             RedrawPartialFinish();
             ++i;
@@ -6256,7 +6256,7 @@ void Battle::Interface::_redrawActionDisruptingRaySpell( Unit & target )
     target.SwitchAnimation( Monster_Info::STAND_STILL );
 
     // Part 2 - ripple effect
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = Assets::getImage( target.GetMonsterSprite(), target.GetFrame() );
     fheroes2::Sprite rippleSprite;
     _spriteInsteadCurrentUnit = &rippleSprite;
 
@@ -6406,15 +6406,15 @@ void Battle::Interface::_redrawActionColdRingSpell( const int32_t dst, const Tar
 
     Game::passAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( allDelays ) ) && frame < Assets::getImageCount( icn ) ) {
         _checkGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn, frame );
+            const fheroes2::Sprite & sprite1 = Assets::getImage( icn, frame );
             fheroes2::Blit( sprite1, _mainSurface, center.x + center.width / 2 + sprite1.x(), center.y + center.height / 2 + sprite1.y() );
-            const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn, frame );
+            const fheroes2::Sprite & sprite2 = Assets::getImage( icn, frame );
             fheroes2::Blit( sprite2, _mainSurface, center.x + center.width / 2 - sprite2.width() - sprite2.x(), center.y + center.height / 2 + sprite2.y(), true );
             RedrawPartialFinish();
 
@@ -6523,12 +6523,12 @@ void Battle::Interface::_redrawActionElementalStormSpell( const TargetsInfo & ta
     const int icn = ICN::STORM;
     const int m82 = M82::FromSpell( Spell::ELEMENTALSTORM );
     const int spriteSize = 54;
-    const uint32_t icnCount = fheroes2::AGG::GetICNCount( icn );
+    const uint32_t icnCount = Assets::getImageCount( icn );
 
     std::vector<fheroes2::Sprite> spriteCache;
     spriteCache.reserve( icnCount );
     for ( uint32_t i = 0; i < icnCount; ++i ) {
-        spriteCache.push_back( fheroes2::AGG::GetICN( icn, i ) );
+        spriteCache.push_back( Assets::getImage( icn, i ) );
     }
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -6712,7 +6712,7 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
 
     // Draw buildings demolition clouds.
     const int icn = ICN::LICHCLOD;
-    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn ) / 2;
+    const uint32_t maxFrame = Assets::getImageCount( icn ) / 2;
     frame = 0;
 
     AudioManager::PlaySound( M82::CATSND02 );
@@ -6739,11 +6739,11 @@ void Battle::Interface::redrawActionEarthquakeSpellPart1( const HeroBase & caste
 
                 if ( target == CastleDefenseStructure::BRIDGE && frame >= bridgeDestroySmokeDelay ) {
                     // When a bridge is demolished, there is one additional smoke explosion at the point where the bridge falls.
-                    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay );
+                    const fheroes2::Sprite & sprite = Assets::getImage( icn, frame - bridgeDestroySmokeDelay );
                     fheroes2::Blit( sprite, _mainSurface, pt2.x + bridgeDestroySmokeOffset.x + sprite.x(), pt2.y + bridgeDestroySmokeOffset.y + sprite.y() );
                 }
 
-                const fheroes2::Sprite & spriteCloud = fheroes2::AGG::GetICN( icn, frame );
+                const fheroes2::Sprite & spriteCloud = Assets::getImage( icn, frame );
                 fheroes2::Blit( spriteCloud, _mainSurface, pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y() );
             }
 
@@ -6762,7 +6762,7 @@ void Battle::Interface::redrawActionEarthquakeSpellPart2( const std::vector<Cast
 
     LocalEvent & le = LocalEvent::Get();
     const int icn = ICN::LICHCLOD;
-    uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
+    uint32_t maxFrame = Assets::getImageCount( icn );
     uint32_t frame = maxFrame / 2;
 
     const bool isBridgeDestroyed
@@ -6790,11 +6790,11 @@ void Battle::Interface::redrawActionEarthquakeSpellPart2( const std::vector<Cast
 
                 if ( target == CastleDefenseStructure::BRIDGE ) {
                     // When a bridge is demolished, there is one additional smoke explosion at the point where the bridge falls.
-                    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay + 1 );
+                    const fheroes2::Sprite & sprite = Assets::getImage( icn, frame - bridgeDestroySmokeDelay + 1 );
                     fheroes2::Blit( sprite, _mainSurface, pt2.x + bridgeDestroySmokeOffset.x + sprite.x(), pt2.y + bridgeDestroySmokeOffset.y + sprite.y() );
                 }
 
-                const fheroes2::Sprite & spriteCloud = fheroes2::AGG::GetICN( icn, frame );
+                const fheroes2::Sprite & spriteCloud = Assets::getImage( icn, frame );
                 fheroes2::Blit( spriteCloud, _mainSurface, pt2.x + spriteCloud.x(), pt2.y + spriteCloud.y() );
             }
 
@@ -6861,7 +6861,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const int32_t dst, cons
 
     AudioManager::PlaySound( m82 );
 
-    uint32_t frameCount = fheroes2::AGG::GetICNCount( icn );
+    const uint32_t frameCount = Assets::getImageCount( icn );
 
     const std::vector<Game::DelayType> allDelays = _mergeWithCommonAnimationsDelays( { Game::DelayType::BATTLE_SPELL_DELAY } );
 
@@ -6873,7 +6873,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const int32_t dst, cons
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame );
+            const fheroes2::Sprite & sprite = Assets::getImage( icn, frame );
             fheroes2::Blit( sprite, _mainSurface, center.x + center.width / 2 + sprite.x(), center.y + center.height / 2 + sprite.y() );
             RedrawPartialFinish();
 
@@ -6961,7 +6961,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     size_t overlaySpriteCount = _unitSpellEffectInfos.size();
     _unitSpellEffectInfos.reserve( overlaySpriteCount + targets.size() );
 
-    const fheroes2::Sprite & initialSpellSprite = fheroes2::AGG::GetICN( icn, 0 );
+    const fheroes2::Sprite & initialSpellSprite = Assets::getImage( icn, 0 );
 
     for ( const Battle::TargetInfo & target : targets ) {
         if ( target.defender ) {
@@ -6976,7 +6976,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     // Set the defender wince animation state.
     bool isDefenderAnimating = wnce;
-    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
+    const uint32_t maxFrame = Assets::getImageCount( icn );
     uint32_t frame = 0;
 
     // Wait for previously set and not passed delays before rendering a new frame.
@@ -6992,7 +6992,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             if ( frame < maxFrame ) {
                 std::vector<Battle::UnitSpellEffectInfo>::iterator overlaySpriteIter = overlaySpriteBegin;
-                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
+                const fheroes2::Sprite & spellSprite = Assets::getImage( icn, frame );
 
                 for ( const Battle::TargetInfo & target : targets ) {
                     if ( target.defender ) {
@@ -7086,12 +7086,12 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, const int ic
 
     UnitSpellEffectInfo & unitSpellEffectInfo = _unitSpellEffectInfos.back();
     // Set position for the initial spell sprite.
-    unitSpellEffectInfo.position = CalculateSpellPosition( unit, icn, fheroes2::AGG::GetICN( icn, 0 ) );
+    unitSpellEffectInfo.position = CalculateSpellPosition( unit, icn, Assets::getImage( icn, 0 ) );
 
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
 
-    const uint32_t maxICNFrame = fheroes2::AGG::GetICNCount( icn );
+    const uint32_t maxICNFrame = Assets::getImageCount( icn );
 
     AudioManager::PlaySound( m82 );
 
@@ -7102,7 +7102,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, const int ic
 
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_SPELL_DELAY ) ) {
             if ( frame < maxICNFrame ) {
-                unitSpellEffectInfo.position = CalculateSpellPosition( unit, icn, fheroes2::AGG::GetICN( icn, frame ) );
+                unitSpellEffectInfo.position = CalculateSpellPosition( unit, icn, Assets::getImage( icn, frame ) );
                 unitSpellEffectInfo.icnIndex = frame;
             }
 
@@ -7504,7 +7504,7 @@ void Battle::PopupDamageInfo::_makeDamageImage()
     const bool isLeftSidePopup = ( unitRect.x + unitRect.width + w ) > _battleUIRect.width;
     const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - unitRect.width - borderWidth ) : x, y, w, h );
 
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+    const fheroes2::Sprite & backgroundImage = Assets::getImage( ICN::CELLWIN, 1 );
 
     _damageImage = fheroes2::Stretch( backgroundImage, 0, 0, backgroundImage.width(), backgroundImage.height(), borderRect.width, borderRect.height );
     _damageImage.setPosition( borderRect.x, borderRect.y );

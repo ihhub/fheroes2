@@ -34,6 +34,8 @@
 #include "army.h"
 #include "color.h"
 #include "direction.h"
+#include "game.h"
+#include "game_auto_playtest.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -43,6 +45,7 @@
 #include "players.h"
 #include "race.h"
 #include "resource.h"
+#include "settings.h"
 #include "translations.h"
 #include "world.h"
 
@@ -468,7 +471,8 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
     const Kingdom & kingdom = world.GetKingdom( playerColor );
 
     const bool isAIPlayer = kingdom.isControlAI();
-    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
+    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() )
+                                      || ( Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) && fheroes2::AutoPlaytest::instance().isAnimationEnabled() );
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );

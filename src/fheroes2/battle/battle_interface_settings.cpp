@@ -24,9 +24,9 @@
 #include <cstdint>
 #include <string>
 
-#include "agg_image.h"
 #include "battle_cell.h"
 #include "cursor.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -60,7 +60,7 @@ namespace
     void drawTurnOrder( const fheroes2::Rect & optionRoi, const bool isTurnOrderInsideWindow )
     {
         const auto state = Settings::Get().getBattleTurnOrderState();
-        const fheroes2::Sprite & turnOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, state == BattleTurnOrderState::OFF ? 3 : 4 );
+        const fheroes2::Sprite & turnOrderIcon = Assets::getImage( ICN::CSPANEL, state == BattleTurnOrderState::OFF ? 3 : 4 );
 
         std::string description;
         switch ( state ) {
@@ -84,14 +84,14 @@ namespace
     void drawGrid( const fheroes2::Rect & optionRoi )
     {
         const bool isShowBattleGridEnabled = Settings::Get().BattleShowGrid();
-        const fheroes2::Sprite & battleGridIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowBattleGridEnabled ? 9 : 8 );
+        const fheroes2::Sprite & battleGridIcon = Assets::getImage( ICN::CSPANEL, isShowBattleGridEnabled ? 9 : 8 );
         fheroes2::drawOption( optionRoi, battleGridIcon, _( "Grid" ), isShowBattleGridEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawDamageInfo( const fheroes2::Rect & optionRoi )
     {
         const bool isShowBattleDamageInfoEnabled = Settings::Get().isBattleShowDamageInfoEnabled();
-        const fheroes2::Sprite & damageInfoIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowBattleDamageInfoEnabled ? 4 : 3 );
+        const fheroes2::Sprite & damageInfoIcon = Assets::getImage( ICN::CSPANEL, isShowBattleDamageInfoEnabled ? 4 : 3 );
         fheroes2::drawOption( optionRoi, damageInfoIcon, _( "Damage Info" ), isShowBattleDamageInfoEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
@@ -99,7 +99,7 @@ namespace
     void drawShadowMovement( const fheroes2::Rect & optionRoi )
     {
         const bool isShowMoveShadowEnabled = Settings::Get().BattleShowMoveShadow();
-        const fheroes2::Sprite & moveShadowIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowMoveShadowEnabled ? 11 : 10 );
+        const fheroes2::Sprite & moveShadowIcon = Assets::getImage( ICN::CSPANEL, isShowMoveShadowEnabled ? 11 : 10 );
         fheroes2::drawOption( optionRoi, moveShadowIcon, _( "Shadow Movement" ), isShowMoveShadowEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
@@ -107,7 +107,7 @@ namespace
     void drawShadowCursor( const fheroes2::Rect & optionRoi )
     {
         const bool isShowMouseShadowEnabled = Settings::Get().BattleShowMouseShadow();
-        const fheroes2::Sprite & mouseShadowIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowMouseShadowEnabled ? 13 : 12 );
+        const fheroes2::Sprite & mouseShadowIcon = Assets::getImage( ICN::CSPANEL, isShowMouseShadowEnabled ? 13 : 12 );
         fheroes2::drawOption( optionRoi, mouseShadowIcon, _( "Shadow Cursor" ), isShowMouseShadowEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
@@ -140,7 +140,7 @@ namespace
     {
         const bool isMovementAreaEnabled = Settings::Get().isBattleMovementAreaHighlightEnabled();
 
-        fheroes2::Sprite image = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+        fheroes2::Sprite image = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
         if ( isMovementAreaEnabled ) {
             // Render the shadow area.
@@ -149,13 +149,13 @@ namespace
         }
 
         // Draw Hydra.
-        const auto & hydraIcon = fheroes2::AGG::GetICN( ICN::MONS32, 34 );
+        const auto & hydraIcon = Assets::getImage( ICN::MONS32, 34 );
         fheroes2::Blit( hydraIcon, 0, 0, image, ( image.width() - hydraIcon.width() ) / 2, ( image.height() - hydraIcon.height() ) / 2, hydraIcon.width(),
                         hydraIcon.height() );
 
         if ( isMovementAreaEnabled ) {
             // Render a cursor.
-            const auto & cursor = fheroes2::AGG::GetICN( ICN::ADVMCO, 0 );
+            const auto & cursor = Assets::getImage( ICN::ADVMCO, 0 );
             fheroes2::Blit( cursor, 0, 0, image, ( image.width() - cursor.width() ) / 2 + 10, ( image.height() - cursor.height() ) / 2 + 15, cursor.width(),
                             cursor.height() );
         }

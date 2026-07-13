@@ -31,13 +31,13 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "editor_ui_helper.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -200,7 +200,7 @@ namespace Editor
         answerList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, answerRoi.y + 1 } );
         answerList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, answerRoi.y + answerRoi.height - 15 } );
         answerList.setScrollBarArea( { scrollbarOffsetX + 2, answerRoi.y + topPartHeight, 10, answerRoi.height - 2 * topPartHeight } );
-        answerList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        answerList.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         answerList.SetAreaMaxItems( 10 );
         answerList.SetListContent( metadata.answers );
         answerList.updateScrollBarImage();
@@ -209,7 +209,7 @@ namespace Editor
 
         const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 13 );
+        const fheroes2::Sprite & buttonImage = Assets::getImage( minibuttonIcnId, 13 );
         const int32_t buttonWidth = buttonImage.width();
         const int32_t buttonOffset = ( answerArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 
@@ -227,14 +227,14 @@ namespace Editor
         text.set( _( "Reward:" ), fheroes2::FontType::normalWhite() );
         text.draw( windowArea.x + ( windowArea.width - text.width() ) / 2, offsetY, display );
 
-        const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+        const fheroes2::Sprite & artifactFrame = Assets::getImage( ICN::RESOURCE, 7 );
         const fheroes2::Rect artifactRoi{ riddleRoi.x + ( riddleRoi.width - artifactFrame.width() ) / 2, offsetY + text.height(), artifactFrame.width(),
                                           artifactFrame.height() };
 
         fheroes2::Blit( artifactFrame, display, artifactRoi.x, artifactRoi.y );
 
         auto redrawArtifactImage = [&display, &artifactRoi]( const int32_t artifactId ) {
-            const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( artifactId ).IndexSprite64() );
+            const fheroes2::Sprite & artifactImage = Assets::getImage( ICN::ARTIFACT, Artifact( artifactId ).IndexSprite64() );
             fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
         };
 
@@ -405,7 +405,7 @@ namespace Editor
                 metadata.artifact = 0;
                 metadata.artifactMetadata = 0;
 
-                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() );
+                const fheroes2::Sprite & artifactImage = Assets::getImage( ICN::ARTIFACT, Artifact( metadata.artifact ).IndexSprite64() );
                 fheroes2::Copy( artifactImage, 0, 0, display, artifactRoi.x + 6, artifactRoi.y + 6, artifactImage.width(), artifactImage.height() );
 
                 display.render( artifactRoi );

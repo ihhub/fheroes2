@@ -30,12 +30,12 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -96,7 +96,7 @@ namespace
         }
 
         for ( size_t i = 0; i < pzl.size(); ++i ) {
-            const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
+            const fheroes2::Sprite & piece = Assets::getImage( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
             fheroes2::Blit( piece, display, dstx + piece.x() - fheroes2::borderWidthPx, dsty + piece.y() - fheroes2::borderWidthPx );
         }
@@ -136,7 +136,7 @@ namespace
                 fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
                 for ( size_t i = 0; i < pzl.size(); ++i ) {
-                    const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
+                    const fheroes2::Sprite & piece = Assets::getImage( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
                     uint8_t pieceAlpha = 255;
                     if ( pzl.test( i ) )
@@ -178,13 +178,13 @@ namespace
 
         fheroes2::fadeOutDisplay( back.rect(), false );
 
-        fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+        fheroes2::Copy( Assets::getImage( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
         display.updateNextRenderRoi( radarArea );
 
         const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
         buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+        fheroes2::addGradientShadow( Assets::getImage( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         buttonExit.draw();
 
@@ -255,7 +255,7 @@ namespace
         const int exitButtonIcnID = ( isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD );
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, exitButtonIcnID, 0, 1 );
         buttonExit.setPosition( radarArea.x + ( radarArea.width - buttonExit.area().width ) / 2, buttonExit.area().y );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+        fheroes2::addGradientShadow( Assets::getImage( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
         const fheroes2::Rect & radarRect = radar.GetRect();
 
@@ -264,11 +264,11 @@ namespace
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }
 
-            fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+            fheroes2::Copy( Assets::getImage( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
             display.updateNextRenderRoi( radarArea );
 
             buttonExit.draw();
-            fheroes2::addGradientShadow( fheroes2::AGG::GetICN( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
+            fheroes2::addGradientShadow( Assets::getImage( exitButtonIcnID, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
             return radarRect;
         };

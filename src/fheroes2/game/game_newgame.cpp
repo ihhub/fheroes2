@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,7 +33,6 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "campaign_savedata.h"
@@ -41,6 +40,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
@@ -220,7 +220,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
         }
     }
 
-    const fheroes2::ScreenPaletteRestorer screenRestorer;
+    fheroes2::ScreenPaletteRestorer screenRestorer;
 
     std::vector<uint8_t> palette = video->getCurrentPalette();
     screenRestorer.changePalette( palette.data() );
@@ -303,7 +303,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     outputPriceOfLoyaltyCampaignInTextSupportMode();
 
-    const fheroes2::ScreenPaletteRestorer screenRestorer;
+    fheroes2::ScreenPaletteRestorer screenRestorer;
 
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -315,10 +315,10 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 
-    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::X_IVY, 1 );
+    const fheroes2::Sprite & background = Assets::getImage( ICN::X_IVY, 1 );
     fheroes2::Blit( background, 0, 0, display, roiOffset.x, roiOffset.y, background.width(), background.height() );
 
-    const fheroes2::Sprite & campaignChoice = fheroes2::AGG::GetICN( ICN::X_IVY, 0 );
+    const fheroes2::Sprite & campaignChoice = Assets::getImage( ICN::X_IVY, 0 );
     fheroes2::Blit( campaignChoice, 0, 0, display, roiOffset.x + campaignChoice.x(), roiOffset.y + campaignChoice.y(), campaignChoice.width(), campaignChoice.height() );
 
     display.render();

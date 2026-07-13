@@ -34,7 +34,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
@@ -46,6 +45,7 @@
 #include "dialog_selectitems.h"
 #include "editor_spell_selection.h"
 #include "editor_ui_helper.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -205,8 +205,8 @@ namespace
 
             const int buildingIcnId = ICN::getBuildingIcnId( _race );
             const fheroes2::Sprite & buildingImage = ( buildingIcnId == ICN::UNKNOWN )
-                                                         ? fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 )
-                                                         : fheroes2::AGG::GetICN( buildingIcnId, index );
+                                                         ? Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 )
+                                                         : Assets::getImage( buildingIcnId, index );
 
             const fheroes2::Rect buildingImageRoi( _area.x + 1, _area.y + 1, 135, 57 );
 
@@ -225,7 +225,7 @@ namespace
             for ( int32_t i = 0; i < maxUpgrades; ++i ) {
                 if ( _restrictedId != -1 && i >= _restrictedId ) {
                     // Render the restricted sign: gray cross.
-                    fheroes2::Sprite denySign( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ) );
+                    fheroes2::Sprite denySign( Assets::getImage( ICN::TOWNWIND, 12 ) );
                     fheroes2::ApplyPalette( denySign, PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
 
                     fheroes2::Blit( denySign, display, _area.x + _area.width - ( maxUpgrades - i ) * 20 - denySign.width() / 2, _area.y + 48 - denySign.height() / 2 );
@@ -234,21 +234,21 @@ namespace
 
                 const int icnId = ( i > _builtId ) ? ICN::CELLWIN : ICN::TOWNWIND;
                 const uint32_t icnIndex = ( i > _builtId ) ? 5 : 11;
-                const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( icnId, icnIndex );
+                const fheroes2::Sprite & mark = Assets::getImage( icnId, icnIndex );
                 fheroes2::Blit( mark, display, _area.x + _area.width - ( maxUpgrades - i ) * 20 - mark.width() / 2, _area.y + 48 - mark.height() / 2 );
             }
 
             if ( _builtId > -1 ) {
-                const fheroes2::Sprite & textBackground = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+                const fheroes2::Sprite & textBackground = Assets::getImage( ICN::BLDGXTRA, 0 );
                 fheroes2::Copy( textBackground, 0, 58, display, _area.x, _area.y + 58, _area.width, textBackground.height() );
             }
             else if ( _restrictedId != 0 ) {
-                const fheroes2::Sprite & textBackground = fheroes2::AGG::GetICN( ICN::CASLXTRA, 1 );
+                const fheroes2::Sprite & textBackground = Assets::getImage( ICN::CASLXTRA, 1 );
                 fheroes2::Copy( textBackground, 0, 0, display, _area.x, _area.y + 58, _area.width, textBackground.height() );
             }
 
             if ( _restrictedId > -1 ) {
-                fheroes2::Sprite textBackground( fheroes2::AGG::GetICN( ICN::CASLXTRA, 2 ) );
+                fheroes2::Sprite textBackground( Assets::getImage( ICN::CASLXTRA, 2 ) );
                 fheroes2::ApplyPalette( textBackground, 6, 1, textBackground, 6, 1, 125, 12,
                                         PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
 
@@ -324,8 +324,8 @@ namespace
         fheroes2::ImageRestorer backgroundRestorer( display, dialogRoi.x, dialogRoi.y, dialogRoi.width, dialogRoi.height );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const fheroes2::Sprite & backgroundSprite = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
-        const fheroes2::Sprite & statusBarSprite = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
+        const fheroes2::Sprite & backgroundSprite = Assets::getImage( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
+        const fheroes2::Sprite & statusBarSprite = Assets::getImage( ICN::CASLBAR, 0 );
         const int32_t statusBarHeight = statusBarSprite.height();
 
         fheroes2::Copy( backgroundSprite, 0, 0, display, dialogRoi.x, dialogRoi.y, dialogRoi.width, dialogRoi.height - statusBarHeight );
@@ -367,7 +367,7 @@ namespace
         buttonOkay.draw();
 
         // EXIT button.
-        const int32_t buttonExitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+        const int32_t buttonExitWidth = Assets::getImage( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
         fheroes2::Button buttonExit( statusBarOffset.x + dialogRoi.width - buttonExitWidth, statusBarOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
         buttonExit.draw();
 
@@ -390,7 +390,7 @@ namespace
 
         // The original status bar image is much longer.
         // Since we are adding 2 buttons on each side we have to copy only left and right parts of the bar.
-        const int32_t buttonOkayWidth = fheroes2::AGG::GetICN( ICN::BUTTON_OKAY_TOWN, 0 ).width();
+        const int32_t buttonOkayWidth = Assets::getImage( ICN::BUTTON_OKAY_TOWN, 0 ).width();
         const int32_t statusBarWidth = dialogRoi.width - buttonExitWidth - buttonOkayWidth;
         fheroes2::Copy( statusBarSprite, 0, 0, display, statusBarOffset.x + buttonOkayWidth, statusBarOffset.y, statusBarWidth / 2, statusBarHeight );
         const int32_t statusBarSecondPart = statusBarWidth - statusBarWidth / 2;
@@ -622,7 +622,7 @@ namespace Editor
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const fheroes2::Sprite & constructionBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 );
+        const fheroes2::Sprite & constructionBackground = Assets::getImage( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 );
         const int32_t backgroundHeight = constructionBackground.height();
 
         // Use the left part of town construction dialog.
@@ -630,14 +630,14 @@ namespace Editor
         const int32_t rightPartWidth = dialogRoi.width - rightPartOffsetX;
         fheroes2::Blit( constructionBackground, 0, 0, display, dialogRoi.x, dialogRoi.y, rightPartOffsetX, backgroundHeight );
         // Use the right part of standard background dialog.
-        fheroes2::Copy( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), rightPartOffsetX, 0, display, dialogRoi.x + rightPartOffsetX,
+        fheroes2::Copy( Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), rightPartOffsetX, 0, display, dialogRoi.x + rightPartOffsetX,
                         dialogRoi.y, rightPartWidth, backgroundHeight );
         // Add horizontal separators.
         fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 226, rightPartWidth, 4 );
         fheroes2::Copy( constructionBackground, rightPartOffsetX, 251, display, dialogRoi.x + rightPartOffsetX, dialogRoi.y + 306, rightPartWidth, 4 );
 
         // Castle name background.
-        const fheroes2::Sprite & statusBarSprite = fheroes2::AGG::GetICN( ICN::CASLBAR, 0 );
+        const fheroes2::Sprite & statusBarSprite = Assets::getImage( ICN::CASLBAR, 0 );
         const int32_t statusBarHeight = statusBarSprite.height();
         const fheroes2::Rect nameArea( dialogRoi.x + rightPartOffsetX, dialogRoi.y + 1, rightPartWidth, statusBarHeight - 2 );
         fheroes2::Copy( statusBarSprite, 17, 0, display, nameArea.x, dialogRoi.y, nameArea.width, statusBarHeight );
@@ -762,7 +762,7 @@ namespace Editor
         // Captain building.
         dstPt.x = dialogRoi.x + rightPartOffsetX + 33;
         dstPt.y = dialogRoi.y + 232;
-        const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+        const fheroes2::Sprite & buildingFrame = Assets::getImage( ICN::BLDGXTRA, 0 );
         fheroes2::Blit( buildingFrame, display, dstPt.x, dstPt.y );
         buildings.back().setPosition( dstPt.x, dstPt.y );
         buildings.back().redraw( defaultBuildingsSign.isHidden() );
@@ -784,13 +784,13 @@ namespace Editor
         buttonOkay.draw();
 
         // EXIT button.
-        const int32_t buttonExitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+        const int32_t buttonExitWidth = Assets::getImage( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
         fheroes2::Button buttonExit( statusBarOffset.x + dialogRoi.width - buttonExitWidth, statusBarOffset.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
         buttonExit.draw();
 
         // The original status bar image is much longer.
         // Since we are adding 2 buttons on each side we have to copy only left and right parts of the bar.
-        const int32_t buttonOkayWidth = fheroes2::AGG::GetICN( ICN::BUTTON_OKAY_TOWN, 0 ).width();
+        const int32_t buttonOkayWidth = Assets::getImage( ICN::BUTTON_OKAY_TOWN, 0 ).width();
         const int32_t statusBarWidth = dialogRoi.width - buttonExitWidth - buttonOkayWidth;
         fheroes2::Copy( statusBarSprite, 0, 0, display, statusBarOffset.x + buttonOkayWidth, statusBarOffset.y, statusBarWidth / 2, statusBarHeight );
         const int32_t statusBarSecondPart = statusBarWidth - statusBarWidth / 2;

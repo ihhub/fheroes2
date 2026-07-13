@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,9 +24,9 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog_resolution.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -79,13 +79,13 @@ namespace
             resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
         }
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::RESOLUTION_ICON, 0 ), _( "Resolution" ), std::move( resolutionName ),
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::RESOLUTION_ICON, 0 ), _( "Resolution" ), std::move( resolutionName ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawMode( const fheroes2::Rect & optionRoi )
     {
-        const fheroes2::Sprite & originalIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 );
+        const fheroes2::Sprite & originalIcon = Assets::getImage( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 );
 
         if ( fheroes2::engine().isFullScreen() ) {
             fheroes2::Sprite icon = originalIcon;
@@ -102,7 +102,7 @@ namespace
     {
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "On" ) : _( "Off" ),
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
@@ -110,7 +110,7 @@ namespace
     {
         const bool isSystemInfoDisplayed = Settings::Get().isSystemInfoEnabled();
 
-        fheroes2::Sprite image = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+        fheroes2::Sprite image = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
         fheroes2::Text info;
         if ( isSystemInfoDisplayed ) {
             info.set( _( "FPS" ), fheroes2::FontType( fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW ) );
@@ -126,11 +126,11 @@ namespace
     void drawScreenScalingTypeOptions( const fheroes2::Rect & optionRoi, const bool isScreenScalingTypeNearest )
     {
         if ( isScreenScalingTypeNearest ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 3 ), _( "Screen Scaling Type" ), _( "Nearest" ),
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::GAME_OPTION_ICON, 3 ), _( "Screen Scaling Type" ), _( "Nearest" ),
                                   fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 2 ), _( "Screen Scaling Type" ), _( "Linear" ),
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::GAME_OPTION_ICON, 2 ), _( "Screen Scaling Type" ), _( "Linear" ),
                                   fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }

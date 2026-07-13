@@ -17,6 +17,49 @@ files from the original game.
 
 Yes, absolutely. It is a free open source project.
 
+## Q: Where can I download fheroes2?
+
+Please use the [Installation Guide](https://ihhub.github.io/fheroes2/INSTALL.html) to download the latest stable release for your platform.
+Precompiled packages are available for several platforms.
+
+## Q: Which platforms are supported?
+
+fheroes2 provides release builds or installation instructions for Windows, macOS, Linux, Android, PlayStation Vita and Nintendo Switch.
+Availability and installation steps may differ between platforms, so please check the [Installation Guide](https://ihhub.github.io/fheroes2/INSTALL.html)
+for details.
+
+## Q: How is fheroes2 different from the original Heroes of Might and Magic II?
+
+fheroes2 recreates the Heroes of Might and Magic II game engine from scratch while preserving the spirit of the original game. It also includes many fixes,
+user interface improvements, higher resolution support, improved AI behavior and other enhancements. A more detailed list of changes can be found on the
+project's features and enhancements page.
+
+## Q: Are there any rebalancing in fheroes2?
+
+No. fheroes2 does not aim to change the balance of Heroes of Might and Magic II or redesign its factions, creatures, spells or core gameplay.
+The project focuses on recreating the original game engine while fixing bugs and adding quality-of-life improvements.
+
+## Q: Are AI opponents improved in fheroes2?
+
+AI opponents in fheroes2 were written from scratch and are designed to make smarter and more reactive decisions than in the original game.
+Unlike the original AI, the fheroes2 AI does not have artificial advantages such as seeing the whole map without vision or receiving increased
+weekly creature growth. The main improvement comes from better decision-making rather than from reproducing these hidden advantages.
+
+## Q: Can I create and share maps for fheroes2?
+
+Yes. fheroes2 includes an improved map editor which can be used to create new maps and scenarios. The community also shares, downloads and
+discusses maps on the fheroes2 [Discord server](https://discord.gg/xF85vbZ), where players can give feedback and discover new user-made content.
+
+## Q: Where can I ask questions or suggest ideas?
+
+General questions, feedback and feature ideas can be discussed on the project's GitHub [Discussions page](https://github.com/ihhub/fheroes2/discussions)
+or on the fheroes2 [Discord server](https://discord.gg/xF85vbZ). GitHub Issues should usually be used for confirmed bugs or clearly defined tasks.
+
+## Q: Where should I report a bug?
+
+Please report bugs on the project's GitHub [Issues page](https://github.com/ihhub/fheroes2/issues). When opening a bug report,
+include your fheroes2 version, operating system, a clear description of the problem, steps to reproduce it and, if possible, screenshots or a save file.
+
 ## Q: How can I contribute to the project?
 
 **fheroes2** is a collaboration project of a team of people from many areas. The team includes developers, QA engineers (testers), music/audio composers, 2D artists

@@ -31,7 +31,6 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include <string_view>
 #include <type_traits>
 #include <utility>
 
@@ -456,22 +455,7 @@ void Game::HotKeysLoad( const std::string & filename )
                 const char * eventName = Translation::getNonTranslated( hotKeyEventInfo[eventId].name );
                 std::string value = config.StrParams( eventName );
                 if ( value.empty() ) {
-                    // TODO: remove this temporary workaround
-                    if ( eventName == std::string_view( "toggle auto combat mode" ) ) {
-                        value = config.StrParams( "toggle battle auto mode" );
-                        if ( value.empty() ) {
-                            continue;
-                        }
-                    }
-                    else if ( eventName == std::string_view( "quick combat" ) ) {
-                        value = config.StrParams( "finish the battle in auto mode" );
-                        if ( value.empty() ) {
-                            continue;
-                        }
-                    }
-                    else {
-                        continue;
-                    }
+                    continue;
                 }
 
                 value = StringUpper( value );

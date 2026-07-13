@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,7 +42,6 @@
 
 namespace
 {
-    constexpr size_t validPaletteSize = 768;
     constexpr uint8_t spriteBackground = 23;
 }
 
@@ -68,8 +67,8 @@ int main( int argc, char ** argv )
         }
 
         const std::vector<uint8_t> palette = paletteStream.getRaw( 0 );
-        if ( palette.size() != validPaletteSize ) {
-            std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
+        if ( palette.size() != fheroes2::paletteSizeBytes ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of " << fheroes2::paletteSizeBytes << std::endl;
             return EXIT_FAILURE;
         }
 
