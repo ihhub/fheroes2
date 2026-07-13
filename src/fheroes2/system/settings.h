@@ -219,7 +219,11 @@ public:
     bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
     bool isBattleMovementAreaHighlightEnabled() const;
+<<<<<<< HEAD
     bool isSoftwareEmulationEnabled() const;
+=======
+    bool isBattleHitPointsBarEnabled() const;
+>>>>>>> f7e45ca8b (Add toggleable hit points bar option)
 
     void setInterfaceType( const InterfaceType type )
     {
@@ -310,6 +314,7 @@ public:
     void setNumericArmyEstimationView( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
     void setHighlightBattleMovementArea( const bool enable );
+    void setBattleHitPointsBar( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
