@@ -73,7 +73,7 @@ namespace
         GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
-        UNUSED = 0x00400000,
+        GAME_BATTLE_SHOW_HIT_POINTS_BAR = 0x00400000,
         GAME_BATTLE_SHOW_GRID = 0x00800000,
         GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GAME_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -236,6 +236,10 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "battle show damage" ) ) {
         setBattleDamageInfo( config.StrParams( "battle show damage" ) == "on" );
+    }
+
+    if ( config.Exists( "battle show hit points bar" ) ) {
+        setBattleHitPointsBar( config.StrParams( "battle show hit points bar" ) == "on" );
     }
 
     if ( config.Exists( "auto resolve battles" ) ) {
@@ -491,6 +495,9 @@ std::string Settings::String() const
 
     os << std::endl << "# Show battle damage information: on/off" << std::endl;
     os << "battle show damage = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# Show hit points bars above battle troop counters: on/off" << std::endl;
+    os << "battle show hit points bar = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_HIT_POINTS_BAR ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Enable auto resolve battles: on/off" << std::endl;
     os << "auto resolve battles = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
@@ -902,6 +909,16 @@ void Settings::setBattleDamageInfo( const bool enable )
     }
 }
 
+void Settings::setBattleHitPointsBar( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_BATTLE_SHOW_HIT_POINTS_BAR );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_BATTLE_SHOW_HIT_POINTS_BAR );
+    }
+}
+
 void Settings::setHideInterface( const bool enable )
 {
     if ( enable ) {
@@ -984,6 +1001,11 @@ bool Settings::isAutoSaveAtBeginningOfTurnEnabled() const
 bool Settings::isBattleShowDamageInfoEnabled() const
 {
     return _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE );
+}
+
+bool Settings::isBattleHitPointsBarEnabled() const
+{
+    return _gameOptions.Modes( GAME_BATTLE_SHOW_HIT_POINTS_BAR );
 }
 
 bool Settings::isHideInterfaceEnabled() const
