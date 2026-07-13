@@ -167,14 +167,14 @@ namespace
     {
         const bool isHitPointsBarEnabled = Settings::Get().isBattleHitPointsBarEnabled();
 
-        fheroes2::Sprite image = fheroes2::AGG::GetICN( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+        fheroes2::Sprite image = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
         // Draw a creature as the background subject.
-        const fheroes2::Sprite & creatureIcon = fheroes2::AGG::GetICN( ICN::MONS32, 34 );
+        const fheroes2::Sprite & creatureIcon = Assets::getImage( ICN::MONS32, 34 );
         fheroes2::Blit( creatureIcon, 0, 0, image, ( image.width() - creatureIcon.width() ) / 2, ( image.height() - creatureIcon.height() ) / 2 - 4, creatureIcon.width(),
                         creatureIcon.height() );
 
-        const fheroes2::Sprite & troopCountBar = fheroes2::AGG::GetICN( ICN::TEXTBAR, 10 );
+        const fheroes2::Sprite & troopCountBar = Assets::getImage( ICN::TEXTBAR, 10 );
 
         const int32_t troopCountBarX = ( image.width() - troopCountBar.width() ) / 2;
         const int32_t troopCountBarY = image.height() - troopCountBar.height() - 3;
