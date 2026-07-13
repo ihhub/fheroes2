@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2025                                             #
+#   Copyright (C) 2022 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -42,6 +42,34 @@ target_include_directories(
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
+if(PS2)
+target_link_libraries(
+	engine
+	smacker
+	${USE_SDL_VERSION}::${USE_SDL_VERSION}
+	${USE_SDL_VERSION}_mixer
+	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}_image>
+	$<$<BOOL:${ENABLE_IMAGE}>:png>
+	Threads::Threads
+	mpg123
+	z
+	xmp
+	modplug
+	atomic
+    modplug
+    sndfile
+    FLAC
+    ogg
+    vorbis
+	vorbisenc
+    vorbisfile
+    opus
+    opusfile
+    fluidsynth
+    atomic
+	)
+add_definitions(-DGENERATE_COLOR_TABLE)
+else()
 target_link_libraries(
 	engine
 	smacker
@@ -52,3 +80,4 @@ target_link_libraries(
 	Threads::Threads
 	ZLIB::ZLIB
 	)
+endif()

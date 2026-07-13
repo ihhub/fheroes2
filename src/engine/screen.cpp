@@ -61,6 +61,13 @@
 #include <vita2d.h>
 #endif
 
+#ifdef __PS2__
+#include <dmaKit.h>
+#include <gsKit.h>
+#include <kernel.h>
+#include <malloc.h>
+#endif
+
 #include "image_palette.h"
 #include "logging.h"
 #include "math_tools.h"
@@ -107,7 +114,7 @@ namespace
         return resolutions[id];
     }
 
-#if !defined( TARGET_PS_VITA )
+#if !defined( TARGET_PS_VITA ) && !defined( __PS2__ )
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
         return value.gameWidth < fheroes2::Display::DEFAULT_WIDTH || value.gameHeight < fheroes2::Display::DEFAULT_HEIGHT;
@@ -265,7 +272,7 @@ namespace
     const fheroes2::RGB * currentRGBPalette = RGBPalette();
 
 // If SDL library is used
-#if !defined( TARGET_PS_VITA )
+#if !defined( TARGET_PS_VITA ) && !defined( __PS2__ )
     class BaseSDLRenderer
     {
     protected:
@@ -807,6 +814,166 @@ namespace
                 _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
                 _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
             }
+        }
+    };
+#elif defined( __PS2__ )
+    class RenderCursor final : public fheroes2::Cursor
+    {
+    public:
+        static RenderCursor * create()
+        {
+            auto * cursor = new RenderCursor;
+            cursor->enableSoftwareEmulation( false );
+
+            return cursor;
+        }
+    };
+
+    class RenderEngine final : public fheroes2::BaseRenderEngine
+    {
+    public:
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
+        {
+            clear();
+        }
+
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        void toggleFullScreen() override
+        {
+            BaseRenderEngine::toggleFullScreen();
+        }
+
+        static RenderEngine * create()
+        {
+            return new RenderEngine;
+        }
+
+        fheroes2::Rect getActiveWindowROI() const override
+        {
+            return { 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
+        }
+
+        fheroes2::Size getCurrentScreenResolution() const override
+        {
+            return { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
+        }
+
+        std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
+        {
+            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
+        }
+
+    private:
+        GSGLOBAL * _gsglobal{ nullptr };
+        GSTEXTURE * _texture{ nullptr };
+        uint32_t _palette[256];
+
+        RenderEngine() = default;
+
+        void clear() override
+        {
+            if ( _gsglobal != nullptr ) {
+                gsKit_vram_clear( _gsglobal );
+                gsKit_deinit_global( _gsglobal );
+                _gsglobal = nullptr;
+            }
+
+            if ( _texture != nullptr ) {
+                if ( _texture->Mem != nullptr ) {
+                    free( _texture->Mem );
+                    _texture->Mem = nullptr;
+                }
+
+                free( _texture );
+                _texture = nullptr;
+            }
+        }
+
+        bool allocate( fheroes2::ResolutionInfo & resolutionInfo, bool isFullScreen ) override
+        {
+            clear();
+
+            _texture = reinterpret_cast<GSTEXTURE *>( calloc( 1, sizeof( GSTEXTURE ) ) );
+
+            _gsglobal = gsKit_init_global();
+            _gsglobal->Width = static_cast<int>( resolutionInfo.gameWidth );
+            _gsglobal->Height = static_cast<int>( resolutionInfo.gameHeight );
+            _gsglobal->PSM = GS_PSM_CT24;
+            _gsglobal->PSMZ = GS_PSMZ_16S;
+            _gsglobal->ZBuffering = GS_SETTING_OFF;
+            _gsglobal->Dithering = GS_SETTING_OFF;
+
+            dmaKit_init( D_CTRL_RELE_OFF, D_CTRL_MFD_OFF, D_CTRL_STS_UNSPEC, D_CTRL_STD_OFF, D_CTRL_RCYC_8, 1 << DMA_CHANNEL_GIF );
+
+            dmaKit_chan_init( DMA_CHANNEL_GIF );
+
+            gsKit_init_screen( _gsglobal );
+
+            // queue + flip every frame
+            gsKit_mode_switch( _gsglobal, GS_ONESHOT );
+
+            _texture->Width = static_cast<int>( resolutionInfo.gameWidth );
+            _texture->Height = static_cast<int>( resolutionInfo.gameHeight );
+            _texture->PSM = GS_PSM_T8;
+            _texture->Clut = reinterpret_cast<u32 *>( _palette );
+            _texture->ClutPSM = GS_PSM_CT32;
+
+            _texture->Mem = reinterpret_cast<u32 *>( memalign( 128, gsKit_texture_size_ee( _texture->Width, _texture->Height, _texture->PSM ) ) );
+            _texture->Filter = isNearestScaling() ? GS_FILTER_NEAREST : GS_FILTER_LINEAR;
+            _texture->Delayed = 0;
+            _texture->Vram = gsKit_vram_alloc( _gsglobal, gsKit_texture_size( _texture->Width, _texture->Height, _texture->PSM ), GSKIT_ALLOC_USERBUFFER );
+            _texture->VramClut = gsKit_vram_alloc( _gsglobal, gsKit_texture_size( 16, 16, GS_PSM_CT32 ), GSKIT_ALLOC_USERBUFFER );
+            return true;
+        }
+
+        void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
+        {
+            memcpy( _texture->Mem, display.image(), gsKit_texture_size_ee( _texture->Width, _texture->Height, _texture->PSM ) );
+
+            gsKit_texture_upload( _gsglobal, _texture );
+            gsKit_prim_sprite_texture( _gsglobal, _texture, 0, 0, 0, 0, _gsglobal->Width, _gsglobal->Height, _texture->Width, _texture->Height, 0,
+                                       GS_SETREG_RGBAQ( 0xFF, 0xFF, 0xFF, 0xFF, 0 ) );
+
+            gsKit_queue_exec( _gsglobal );
+            gsKit_finish();
+
+            gsKit_vsync_wait();
+            gsKit_sync_flip( _gsglobal );
+        }
+
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        {
+            if ( colorIds.size() != 256 || _texture == nullptr )
+                return;
+
+            for ( size_t i = 0; i < 256; ++i ) {
+                const uint8_t * value = currentPalette + colorIds[i] * 3;
+                // Red.
+                _palette[i] = *value;
+                ++value;
+                // Green.
+                _palette[i] += static_cast<uint32_t>( *value ) << 8U;
+                ++value;
+                // Blue.
+                _palette[i] += static_cast<uint32_t>( *value ) << 16U;
+                // Alpha channel. Always non-transparent.
+                _palette[i] += ( 255U << 24U );
+            }
+
+            // Swap the texture to have the CSM1 mode requirements
+            for ( int i = 0; i < 256; i++ ) {
+                if ( ( i & 0x18 ) == 8 ) {
+                    std::swap( _palette[i], _palette[i + 8] );
+                }
+            }
+        }
+
+        bool isMouseCursorActive() const override
+        {
+            return false;
         }
     };
 #else
@@ -1531,8 +1698,8 @@ namespace fheroes2
             Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
             if ( _cursor->_keepInScreenArea ) {
-                cursorROI.x = std::clamp( cursorROI.x, 0, width() - cursorROI.width );
-                cursorROI.y = std::clamp( cursorROI.y, 0, height() - cursorROI.height );
+                cursorROI.x = std::clamp<int32_t>( cursorROI.x, 0, width() - cursorROI.width );
+                cursorROI.y = std::clamp<int32_t>( cursorROI.y, 0, height() - cursorROI.height );
             }
 
             const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );
@@ -1604,6 +1771,7 @@ namespace fheroes2
     void Display::release()
     {
         _engine->clear();
+        _engine.reset();
         _cursor.reset();
         clear();
 

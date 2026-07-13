@@ -84,6 +84,26 @@
 #define be32toh( x ) __builtin_bswap32( x )
 #define le32toh( x ) ( x )
 
+#elif defined( __PS2__ )
+#include <ps2ip.h>
+#define BIG_ENDIAN 4321
+#define LITTLE_ENDIAN 1234
+#define BYTE_ORDER LITTLE_ENDIAN
+
+#define be16toh( x ) PP_NTOHS( x )
+#define htobe16( x ) PP_HTONS( x )
+#define htole16( x ) ( x )
+#define le16toh( x ) ( x )
+
+#define be32toh( x ) PP_NTOHL( x )
+#define htobe32( x ) PP_HTONL( x )
+#define htole32( x ) ( x )
+#define le32toh( x ) ( x )
+
+#define htobe64( x ) be64toh( x )
+#define htole64( x ) ( x )
+#define le64toh( x ) ( x )
+
 #elif defined( TARGET_NINTENDO_SWITCH )
 #include <machine/endian.h>
 #define LITTLE_ENDIAN _LITTLE_ENDIAN
