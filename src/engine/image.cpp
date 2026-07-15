@@ -3046,7 +3046,7 @@ namespace fheroes2
             axisX.emplace_back( pos, fraction, start );
         }
 
-        const uint8_t * gamePalette = getGamePalette();
+        const RGB * gamePalette = getRGBGamePalette();
 
         if ( in.singleLayer() ) {
             if ( !out.singleLayer() ) {
@@ -3081,16 +3081,14 @@ namespace fheroes2
                     const float coeffBottomLeft = axisX[x].coeffToLeft * coeffToBottomY;
                     const float coeffBottomRight = axisX[x].coeffToRight * coeffToBottomY;
 
-                    const uint8_t * topLeft = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                    const uint8_t * topRight = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
-                    const uint8_t * bottomLeft = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
-                    const uint8_t * bottomRight = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
+                    const RGB & topLeft = gamePalette[*imageInX];
+                    const RGB & topRight = gamePalette[*( imageInX + 1 )];
+                    const RGB & bottomLeft = gamePalette[*( imageInX + widthIn )];
+                    const RGB & bottomRight = gamePalette[*( imageInX + widthIn + 1 )];
 
-                    const float red = *topLeft * coeffTopLeft + *topRight * coeffTopRight + *bottomLeft * coeffBottomLeft + *bottomRight * coeffBottomRight + 0.5F;
-                    const float green = *( topLeft + 1 ) * coeffTopLeft + *( topRight + 1 ) * coeffTopRight + *( bottomLeft + 1 ) * coeffBottomLeft
-                                        + *( bottomRight + 1 ) * coeffBottomRight + 0.5F;
-                    const float blue = *( topLeft + 2 ) * coeffTopLeft + *( topRight + 2 ) * coeffTopRight + *( bottomLeft + 2 ) * coeffBottomLeft
-                                       + *( bottomRight + 2 ) * coeffBottomRight + 0.5F;
+                    const float red = topLeft.r * coeffTopLeft + topRight.r * coeffTopRight + bottomLeft.r * coeffBottomLeft + bottomRight.r * coeffBottomRight + 0.5F;
+                    const float green = topLeft.g * coeffTopLeft + topRight.g * coeffTopRight + bottomLeft.g * coeffBottomLeft + bottomRight.g * coeffBottomRight + 0.5F;
+                    const float blue = topLeft.b * coeffTopLeft + topRight.b * coeffTopRight + bottomLeft.b * coeffBottomLeft + bottomRight.b * coeffBottomRight + 0.5F;
 
                     *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                 }
@@ -3099,12 +3097,12 @@ namespace fheroes2
                 {
                     const uint8_t * imageInX = imageInY + startY + widthRoiIn - 1;
 
-                    const uint8_t * top = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                    const uint8_t * bottom = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+                    const RGB & top = gamePalette[*imageInX];
+                    const RGB & bottom = gamePalette[*( imageInX + widthIn )];
 
-                    const float red = *top * coeffToTopY + *bottom * coeffToBottomY + 0.5F;
-                    const float green = *( top + 1 ) * coeffToTopY + *( bottom + 1 ) * coeffToBottomY + 0.5F;
-                    const float blue = *( top + 2 ) * coeffToTopY + *( bottom + 2 ) * coeffToBottomY + 0.5F;
+                    const float red = top.r * coeffToTopY + bottom.r * coeffToBottomY + 0.5F;
+                    const float green = top.g * coeffToTopY + bottom.g * coeffToBottomY + 0.5F;
+                    const float blue = top.b * coeffToTopY + bottom.b * coeffToBottomY + 0.5F;
 
                     *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                 }
@@ -3118,12 +3116,12 @@ namespace fheroes2
                 for ( int32_t x = 0; x < preLastOutX; ++x, ++imageOutX ) {
                     const uint8_t * imageInX = imageInY + startY + axisX[x].start;
 
-                    const uint8_t * left = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                    const uint8_t * right = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+                    const RGB & left = gamePalette[*imageInX];
+                    const RGB & right = gamePalette[*( imageInX + 1 )];
 
-                    const float red = *left * axisX[x].coeffToLeft + *right * axisX[x].coeffToRight + 0.5F;
-                    const float green = *( left + 1 ) * axisX[x].coeffToLeft + *( right + 1 ) * axisX[x].coeffToRight + 0.5F;
-                    const float blue = *( left + 2 ) * axisX[x].coeffToLeft + *( right + 2 ) * axisX[x].coeffToRight + 0.5F;
+                    const float red = left.r * axisX[x].coeffToLeft + right.r * axisX[x].coeffToRight + 0.5F;
+                    const float green = left.g * axisX[x].coeffToLeft + right.g * axisX[x].coeffToRight + 0.5F;
+                    const float blue = left.b * axisX[x].coeffToLeft + right.b * axisX[x].coeffToRight + 0.5F;
 
                     *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                 }
@@ -3168,10 +3166,10 @@ namespace fheroes2
                     auto addPixel = [&]( const uint8_t data, const float coeff, const uint8_t transform ) {
                         if ( transform == 0 && coeff > 0.0F ) {
                             outWeight += coeff;
-                            const uint8_t * pal = gamePalette + static_cast<size_t>( data ) * 3;
-                            red += static_cast<float>( pal[0] ) * coeff;
-                            green += static_cast<float>( pal[1] ) * coeff;
-                            blue += static_cast<float>( pal[2] ) * coeff;
+                            const RGB & pal = gamePalette[data];
+                            red += static_cast<float>( pal.r ) * coeff;
+                            green += static_cast<float>( pal.g ) * coeff;
+                            blue += static_cast<float>( pal.b ) * coeff;
                         }
                     };
 

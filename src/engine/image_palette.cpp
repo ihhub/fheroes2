@@ -79,11 +79,6 @@ namespace
 
 namespace fheroes2
 {
-    const uint8_t * getGamePalette()
-    {
-        return PaletteHolder::instance().gamePalette.data();
-    }
-
     const RGB * getRGBGamePalette()
     {
         return reinterpret_cast<const RGB *>( PaletteHolder::instance().gamePalette.data() );
