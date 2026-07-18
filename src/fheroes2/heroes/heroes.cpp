@@ -1906,8 +1906,10 @@ void Heroes::_levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const in
             _secondarySkills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
         }
 
-        // Campaign-only heroes get additional experience immediately upon their creation, even while still neutral.
-        // We should not try to scout the area around such heroes.
+        // We must not scout area around a hero for 2 cases:
+        // - while loading a map as we will clear the fog at the start of every player turn;
+        // - for human's campaign-only heroes as they get additional experience immediately upon their creation,
+        //   even while still neutral.
         if ( !isMapLoading && selected.Skill() == Skill::Secondary::SCOUTING && GetColor() != PlayerColor::NONE ) {
             Scout( GetIndex() );
             if ( isControlHuman() ) {
