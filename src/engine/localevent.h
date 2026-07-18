@@ -365,7 +365,7 @@ public:
         _processQuitEventHook = std::move( hook );
     }
 
-    bool processQuitEvent()
+    bool processQuitEvent() const
     {
         if ( _processQuitEventHook ) {
             return _processQuitEventHook();
