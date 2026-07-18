@@ -35,6 +35,5 @@ namespace fheroes2
     };
 
     struct UserRequestedApplicationClosure final
-    {
-    };
+    {};
 }
