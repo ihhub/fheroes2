@@ -360,6 +360,20 @@ public:
         _mouseButtonLongPressDelay.reset();
     }
 
+    void setQuitEventProcessingHook( std::function<bool()> hook )
+    {
+        _processQuitEventHook = std::move( hook );
+    }
+
+    bool processQuitEvent()
+    {
+        if ( _processQuitEventHook ) {
+            return _processQuitEventHook();
+        }
+
+        return false;
+    }
+
 private:
     enum class MouseButtonType : uint8_t
     {
@@ -486,6 +500,8 @@ private:
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
+
+    std::function<bool()> _processQuitEventHook;
 
     fheroes2::Rect _mouseCursorRenderArea;
 
