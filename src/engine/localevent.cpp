@@ -524,7 +524,7 @@ namespace EventProcessing
                     }
 
                     if ( onQuitEvent() ) {
-                        throw ::fheroes2::UserRequestedApplicationClosure{ "User requested application closure." };
+                        throw ::fheroes2::UserRequestedApplicationClosure{};
                     }
                     processImmediately = false;
                     break;

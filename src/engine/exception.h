@@ -34,8 +34,7 @@ namespace fheroes2
         using std::logic_error::logic_error;
     };
 
-    class UserRequestedApplicationClosure : public std::logic_error
+    struct UserRequestedApplicationClosure final
     {
-        using std::logic_error::logic_error;
     };
 }
