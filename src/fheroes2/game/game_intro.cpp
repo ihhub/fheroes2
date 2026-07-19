@@ -52,7 +52,7 @@ void fheroes2::showTeamInfo()
 
     Display & display = Display::instance();
 
-    Text text( _( introText ), FontType::largeWhite() );
+    const Text text( _( introText ), FontType::largeWhite() );
     const int32_t correctedTextWidth = text.width( 500 );
 
     const Rect roi{ ( display.width() - correctedTextWidth ) / 2, ( display.height() - text.height( correctedTextWidth ) ) / 2, text.width(),
