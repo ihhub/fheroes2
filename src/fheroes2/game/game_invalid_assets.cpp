@@ -21,6 +21,7 @@
 #include "game_invalid_assets.h"
 
 #include "embedded_image.h"
+#include "image.h"
 #include "localevent.h"
 #include "screen.h"
 #include "timing.h"

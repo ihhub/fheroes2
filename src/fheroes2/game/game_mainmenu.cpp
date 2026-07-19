@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <initializer_list>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -38,6 +39,7 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "dir.h"
 #include "editor_mainmenu.h"
 #include "game.h" // IWYU pragma: associated
 #include "game_assets.h"

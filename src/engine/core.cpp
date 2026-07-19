@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <set>
 #include <stdexcept>
 
 // Managing compiler warnings for SDL headers

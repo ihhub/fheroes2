@@ -25,11 +25,9 @@
 #include <cstdlib>
 #include <exception>
 #include <functional>
-#include <initializer_list>
 #include <iostream>
 #include <list>
 #include <memory>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -68,18 +66,20 @@
 #include "game_invalid_assets.h"
 #include "h2d.h"
 #include "icn.h"
-#include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
-#include "math_base.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "timing.h"
 #include "ui_tool.h"
 #include "zzlib.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace
 {

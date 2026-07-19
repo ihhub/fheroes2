@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include <set>
-
 namespace System
 {
     enum class SystemInitializationComponent : int
