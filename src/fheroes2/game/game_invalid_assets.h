@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2026                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,40 +20,4 @@
 
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include <vector>
-
-namespace AGG
-{
-    class AGGInitializer final
-    {
-    public:
-        AGGInitializer();
-        AGGInitializer( const AGGInitializer & ) = delete;
-        AGGInitializer & operator=( const AGGInitializer & ) = delete;
-
-        ~AGGInitializer() = default;
-
-        const std::string & getOriginalAGGFilePath() const
-        {
-            return _originalAGGFilePath;
-        }
-
-        const std::string & getExpansionAGGFilePath() const
-        {
-            return _expansionAGGFilePath;
-        }
-
-    private:
-        bool init();
-
-        std::string _originalAGGFilePath;
-        std::string _expansionAGGFilePath;
-    };
-
-    std::vector<uint8_t> getDataFromAggFile( const std::string & key, const bool ignoreExpansion );
-
-    // Only for internal usage within AGG namespace.
-    bool isPoLResourceFilePresent();
-}
+void showMissingAssetsImage();

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ namespace Music
 
 namespace AudioManager
 {
-    class AudioInitializer
+    class AudioInitializer final
     {
     public:
         AudioInitializer() = delete;
@@ -57,7 +57,7 @@ namespace AudioManager
     // that was last requested to play at the time of initialization of an instance of
     // this class, which is not necessarily the same music track that was actually
     // playing at the time.
-    class MusicRestorer
+    class MusicRestorer final
     {
     public:
         MusicRestorer();
