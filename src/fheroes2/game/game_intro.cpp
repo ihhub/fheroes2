@@ -35,7 +35,7 @@
 
 namespace
 {
-    const char * introText = gettext_noop( "fheroes2 Resurrection Team presents" );
+    const char * const introText = gettext_noop( "fheroes2 Resurrection Team presents" );
 
     void outputMainMenuInTextSupportMode()
     {
