@@ -33,7 +33,7 @@
 
 namespace fheroes2
 {
-    class AGGFile
+    class AGGFile final
     {
     public:
         bool isGood() const

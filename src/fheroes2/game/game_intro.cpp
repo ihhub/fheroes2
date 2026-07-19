@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game_logo.h"
+#include "game_intro.h"
 
 #include <cassert>
 #include <cstdint>
@@ -35,10 +35,12 @@
 
 namespace
 {
+    const char * introText = gettext_noop( "fheroes2 Resurrection Team presents" );
+
     void outputMainMenuInTextSupportMode()
     {
         START_TEXT_SUPPORT_MODE
-        COUT( "fheroes2 Resurrection Team presents" )
+        COUT( introText )
     }
 }
 
@@ -50,7 +52,7 @@ void fheroes2::showTeamInfo()
 
     Display & display = Display::instance();
 
-    Text text( _( "fheroes2 Resurrection Team presents" ), FontType::largeWhite() );
+    Text text( _( introText ), FontType::largeWhite() );
     const int32_t correctedTextWidth = text.width( 500 );
 
     const Rect roi{ ( display.width() - correctedTextWidth ) / 2, ( display.height() - text.height( correctedTextWidth ) ) / 2, text.width(),

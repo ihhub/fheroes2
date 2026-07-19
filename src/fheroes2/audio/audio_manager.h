@@ -39,7 +39,7 @@ namespace Music
 
 namespace AudioManager
 {
-    class AudioInitializer
+    class AudioInitializer final
     {
     public:
         AudioInitializer() = delete;
@@ -57,7 +57,7 @@ namespace AudioManager
     // that was last requested to play at the time of initialization of an instance of
     // this class, which is not necessarily the same music track that was actually
     // playing at the time.
-    class MusicRestorer
+    class MusicRestorer final
     {
     public:
         MusicRestorer();

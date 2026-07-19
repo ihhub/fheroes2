@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,38 +18,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "game_invalid_assets.h"
 
-#include <set>
+#include "embedded_image.h"
+#include "localevent.h"
+#include "screen.h"
+#include "timing.h"
+#include "zzlib.h"
 
-namespace System
+void showMissingAssetsImage()
 {
-    enum class SystemInitializationComponent : int
-    {
-        Audio,
-        Video,
-        GameController
-    };
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = Compression::CreateImageFromZlib( 290, 190, missingGameAssets, sizeof( missingGameAssets ), false );
 
-    class HardwareInitializer final
-    {
-    public:
-        HardwareInitializer();
-        HardwareInitializer( const HardwareInitializer & ) = delete;
-        HardwareInitializer & operator=( const HardwareInitializer & ) = delete;
+    display.fill( 0 );
+    fheroes2::Resize( image, display );
 
-        ~HardwareInitializer();
-    };
+    display.render();
 
-    class CoreInitializer final
-    {
-    public:
-        explicit CoreInitializer();
-        CoreInitializer( const CoreInitializer & ) = delete;
-        CoreInitializer & operator=( const CoreInitializer & ) = delete;
+    LocalEvent & le = LocalEvent::Get();
 
-        ~CoreInitializer();
-    };
+    // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
+    const fheroes2::Time timer;
 
-    bool isComponentInitialized( const SystemInitializationComponent component );
+    bool closeWindow = false;
+
+    while ( le.HandleEvents( true, true ) ) {
+        if ( closeWindow && timer.getS() >= 5 ) {
+            break;
+        }
+
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() ) {
+            closeWindow = true;
+        }
+    }
 }
