@@ -5890,6 +5890,9 @@ msgstr "Ecranul orașului"
 msgid "Army Actions"
 msgstr ""
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Echipa fheroes2 Resurrection prezintă"
+
 msgid "The save file is corrupted."
 msgstr "Acest fișier este corupt."
 
@@ -5949,9 +5952,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr ""
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Echipa fheroes2 Resurrection prezintă"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""

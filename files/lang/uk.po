@@ -6048,6 +6048,9 @@ msgstr "Вікно міста"
 msgid "Army Actions"
 msgstr "Дії армії"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Команда fheroes2 Resurrection представляє"
+
 msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
 
@@ -6113,9 +6116,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Повернутися до головного меню."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Команда fheroes2 Resurrection представляє"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Ласкаво просимо до Героїв Меча та Магії 2 на основі рушія fheroes2!"
