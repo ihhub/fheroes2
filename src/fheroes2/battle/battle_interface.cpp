@@ -2217,6 +2217,39 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     sx += isReflected ? -xOffset : xOffset;
 
+    if ( Settings::Get().isBattleHitPointsBarEnabled() ) {
+        constexpr int32_t hitPointsBarHeight = 4;
+
+        const int32_t hitPointsBarWidth = bar.width();
+        const int32_t hitPointsBarX = sx;
+        const int32_t hitPointsBarY = sy - hitPointsBarHeight;
+
+        const int32_t innerHitPointsBarWidth = hitPointsBarWidth - 2;
+        constexpr int32_t innerHitPointsBarHeight = 2;
+
+        const uint32_t maximumCreatureHitPoints = unit.GetMonster().GetHitPoints();
+        const uint32_t remainingCreatureHitPoints = unit.GetHitPointsLeft();
+
+        assert( maximumCreatureHitPoints > 0 );
+        assert( remainingCreatureHitPoints > 0 );
+        assert( remainingCreatureHitPoints <= maximumCreatureHitPoints );
+
+        const int32_t remainingHitPointsWidth
+            = std::clamp<int32_t>( static_cast<int32_t>( static_cast<uint64_t>( remainingCreatureHitPoints ) * innerHitPointsBarWidth / maximumCreatureHitPoints ), 1,
+                                   innerHitPointsBarWidth );
+
+        const uint8_t outlineColor = bar.image()[bar.width() / 2];
+
+        static const uint8_t remainingHitPointsColor = fheroes2::GetColorId( 0, 200, 0 );
+        static const uint8_t missingHitPointsColor = fheroes2::GetColorId( 200, 0, 0 );
+
+        fheroes2::Fill( _mainSurface, hitPointsBarX, hitPointsBarY, hitPointsBarWidth, hitPointsBarHeight, outlineColor );
+
+        fheroes2::Fill( _mainSurface, hitPointsBarX + 1, hitPointsBarY + 1, innerHitPointsBarWidth, innerHitPointsBarHeight, missingHitPointsColor );
+
+        fheroes2::Fill( _mainSurface, hitPointsBarX + 1, hitPointsBarY + 1, remainingHitPointsWidth, innerHitPointsBarHeight, remainingHitPointsColor );
+    }
+
     fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
 
     const fheroes2::Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );

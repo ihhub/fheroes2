@@ -54,6 +54,8 @@ namespace
                                           fheroes2::optionIconSize, fheroes2::optionIconSize };
     const fheroes2::Rect movementAreaRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX * 2, fheroes2::optionsOffsetY + fheroes2::optionsStepY,
                                           fheroes2::optionIconSize, fheroes2::optionIconSize };
+    const fheroes2::Rect hitPointsBarRoi{ fheroes2::threeOptionsOffsetX + fheroes2::threeOptionsStepX, fheroes2::optionsOffsetY + fheroes2::optionsStepY * 2,
+                                          fheroes2::optionIconSize, fheroes2::optionIconSize };
 
     void drawTurnOrder( const fheroes2::Rect & optionRoi, const bool isTurnOrderInsideWindow )
     {
@@ -161,6 +163,52 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
+    void drawHitPointsBar( const fheroes2::Rect & optionRoi )
+    {
+        const bool isHitPointsBarEnabled = Settings::Get().isBattleHitPointsBarEnabled();
+
+        fheroes2::Sprite image = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+
+        // Draw a creature as the background subject.
+        const fheroes2::Sprite & creatureIcon = Assets::getImage( ICN::MONS32, 34 );
+        fheroes2::Blit( creatureIcon, 0, 0, image, ( image.width() - creatureIcon.width() ) / 2, ( image.height() - creatureIcon.height() ) / 2 - 4, creatureIcon.width(),
+                        creatureIcon.height() );
+
+        const fheroes2::Sprite & troopCountBar = Assets::getImage( ICN::TEXTBAR, 10 );
+
+        const int32_t troopCountBarX = ( image.width() - troopCountBar.width() ) / 2;
+        const int32_t troopCountBarY = image.height() - troopCountBar.height() - 3;
+
+        fheroes2::Blit( troopCountBar, 0, 0, image, troopCountBarX, troopCountBarY, troopCountBar.width(), troopCountBar.height() );
+
+        if ( isHitPointsBarEnabled ) {
+            constexpr int32_t hitPointsBarHeight = 4;
+
+            const int32_t hitPointsBarX = troopCountBarX;
+            const int32_t hitPointsBarY = troopCountBarY - hitPointsBarHeight;
+            const int32_t hitPointsBarWidth = troopCountBar.width();
+
+            const int32_t innerHitPointsBarWidth = hitPointsBarWidth - 2;
+            constexpr int32_t innerHitPointsBarHeight = 2;
+
+            // Display an illustrative partially wounded creature.
+            const int32_t remainingHitPointsWidth = innerHitPointsBarWidth * 2 / 3;
+
+            const uint8_t outlineColor = troopCountBar.image()[troopCountBar.width() / 2];
+
+            static const uint8_t remainingHitPointsColor = fheroes2::GetColorId( 0, 200, 0 );
+            static const uint8_t missingHitPointsColor = fheroes2::GetColorId( 200, 0, 0 );
+
+            fheroes2::Fill( image, hitPointsBarX, hitPointsBarY, hitPointsBarWidth, hitPointsBarHeight, outlineColor );
+
+            fheroes2::Fill( image, hitPointsBarX + 1, hitPointsBarY + 1, innerHitPointsBarWidth, innerHitPointsBarHeight, missingHitPointsColor );
+
+            fheroes2::Fill( image, hitPointsBarX + 1, hitPointsBarY + 1, remainingHitPointsWidth, innerHitPointsBarHeight, remainingHitPointsColor );
+        }
+
+        fheroes2::drawOption( optionRoi, image, _( "Hit Points" ), isHitPointsBarEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+    }
+
     void openInterfaceBattleOptionDialog( bool & saveConfiguration, const bool isTurnOrderInsideWindow )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -169,7 +217,7 @@ namespace
         // Battlefield event processor will set the appropriate cursor after this dialog is closed.
         Cursor::Get().SetThemes( Cursor::POINTER );
 
-        fheroes2::StandardWindow background( 289, fheroes2::optionsStepY * 2 + 52, true, display );
+        fheroes2::StandardWindow background( 289, fheroes2::optionsStepY * 3 + 52, true, display );
 
         const fheroes2::Rect windowRoi = background.activeArea();
 
@@ -188,15 +236,17 @@ namespace
         const fheroes2::Rect windowShadowMovementRoi( shadowMovementRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowShadowCursorRoi( shadowCursorRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowMovementAreaRoi( movementAreaRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowHitPointsBarRoi( hitPointsBarRoi + windowRoi.getPosition() );
 
         const auto drawOptions = [&windowTurnOrderRoi, &windowGridRoi, &windowDamageInfoRoi, &windowShadowMovementRoi, &windowShadowCursorRoi, &windowMovementAreaRoi,
-                                  isTurnOrderInsideWindow]() {
+                                  &windowHitPointsBarRoi, isTurnOrderInsideWindow]() {
             drawTurnOrder( windowTurnOrderRoi, isTurnOrderInsideWindow );
             drawGrid( windowGridRoi );
             drawDamageInfo( windowDamageInfoRoi );
             drawShadowMovement( windowShadowMovementRoi );
             drawShadowCursor( windowShadowCursorRoi );
             drawMovementArea( windowMovementAreaRoi );
+            drawHitPointsBar( windowHitPointsBarRoi );
         };
 
         drawOptions();
@@ -240,6 +290,12 @@ namespace
                 conf.setBattleDamageInfo( !conf.isBattleShowDamageInfoEnabled() );
                 redrawScreen = true;
             }
+
+            else if ( le.MouseClickLeft( windowHitPointsBarRoi ) ) {
+                conf.setBattleHitPointsBar( !conf.isBattleHitPointsBarEnabled() );
+                redrawScreen = true;
+            }
+
             else if ( le.isMouseRightButtonPressedInArea( windowTurnOrderRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Turn Order" ), _( "Toggle to display the turn order during the battle." ), 0 );
             }
@@ -260,6 +316,11 @@ namespace
             }
             else if ( le.isMouseRightButtonPressedInArea( windowMovementAreaRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Movement Area" ), _( "Toggle showing the movement area of a highlighted creature on or off." ), 0 );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( windowHitPointsBarRoi ) ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Hit Points" ),
+                    _( "Toggle the hit points bar above each troop counter. The bar shows the remaining hit points of the top creature in the stack." ), 0 );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );

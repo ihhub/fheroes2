@@ -219,6 +219,7 @@ public:
     bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
     bool isBattleMovementAreaHighlightEnabled() const;
+    bool isBattleHitPointsBarEnabled() const;
 
     void setInterfaceType( const InterfaceType type )
     {
@@ -309,6 +310,7 @@ public:
     void setNumericArmyEstimationView( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
     void setHighlightBattleMovementArea( const bool enable );
+    void setBattleHitPointsBar( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
