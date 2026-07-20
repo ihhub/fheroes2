@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -40,6 +40,7 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game_credits.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
@@ -196,6 +197,7 @@ void Game::Init()
     LocalEvent & eventHandler = LocalEvent::Get();
     eventHandler.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
     eventHandler.setGlobalKeyDownEventHook( globalKeyDownEvent );
+    eventHandler.setQuitEventProcessingHook( []() { return ( processExitEvent() == fheroes2::GameMode::QUIT_GAME ); } );
 
     AnimateDelaysInitialize();
 

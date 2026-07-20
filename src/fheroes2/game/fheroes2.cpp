@@ -327,6 +327,10 @@ int main( int argc, char ** argv )
             ERROR_LOG( ex.what() )
             return EXIT_FAILURE;
         }
+        catch ( const fheroes2::UserRequestedApplicationClosure & ) {
+            // Yes, this an evil way of doing things but our application design doesn't allow to simply propagate application closure event.
+            return EXIT_SUCCESS;
+        }
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occurred during application runtime." )

@@ -33,6 +33,8 @@
 #include "cursor.h"
 #include "game_assets.h"
 #include "game_delays.h"
+#include "game_exit.h"
+#include "game_mode.h"
 #include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -335,6 +337,16 @@ namespace fheroes2
     {
         Display::instance().changePalette( reinterpret_cast<const RGB *>( palette ) );
         _paletteChanged = true;
+    }
+
+    ApplicationClosureRestorer::ApplicationClosureRestorer()
+    {
+        LocalEvent::Get().setQuitEventProcessingHook( []() { return false; } );
+    }
+
+    ApplicationClosureRestorer::~ApplicationClosureRestorer()
+    {
+        LocalEvent::Get().setQuitEventProcessingHook( []() { return ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ); } );
     }
 
     GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const InterfaceType interfaceType_ )

@@ -274,6 +274,17 @@ namespace fheroes2
         bool _paletteChanged{ false };
     };
 
+    struct ApplicationClosureRestorer final
+    {
+        ApplicationClosureRestorer();
+
+        ApplicationClosureRestorer( const ApplicationClosureRestorer & ) = delete;
+
+        ~ApplicationClosureRestorer();
+
+        ApplicationClosureRestorer & operator=( const ApplicationClosureRestorer & ) = delete;
+    };
+
     struct GameInterfaceTypeRestorer
     {
         GameInterfaceTypeRestorer() = delete;
