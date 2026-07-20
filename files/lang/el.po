@@ -5609,6 +5609,9 @@ msgstr ""
 msgid "Army Actions"
 msgstr ""
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr ""
 
@@ -5667,9 +5670,6 @@ msgid ""
 msgstr ""
 
 msgid "Cancel back to the main menu."
-msgstr ""
-
-msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
