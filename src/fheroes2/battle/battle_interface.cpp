@@ -1691,6 +1691,15 @@ void Battle::Interface::RedrawArmies()
     // Continue the idle animation for all troops on the battlefield: update idle animation frames before rendering the troops.
     IdleTroopsAnimation();
 
+    const Unit * unitWithTopCounter = _unitToHighlight;
+
+    if ( unitWithTopCounter == nullptr ) {
+        const Cell * cellUnderCursor = Board::GetCell( _currentCellIndex );
+        if ( cellUnderCursor != nullptr ) {
+            unitWithTopCounter = cellUnderCursor->GetUnit();
+        }
+    }
+
     const Castle * castle = Arena::GetCastle();
 
     std::array<int32_t, Board::heightInCells>
@@ -1972,6 +1981,16 @@ void Battle::Interface::RedrawArmies()
 
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
+    }
+
+    if ( unitWithTopCounter != nullptr && unitWithTopCounter->isValid() && unitWithTopCounter != _movingUnit && unitWithTopCounter != _flyingUnit ) {
+        const int animationState = unitWithTopCounter->GetAnimationState();
+        const bool isStaticUnit = animationState == Monster_Info::STATIC || animationState == Monster_Info::IDLE;
+        const bool isFullyVisible = !unitWithTopCounter->Modes( CAP_SUMMONELEM ) || unitWithTopCounter->GetCustomAlpha() == 255;
+
+        if ( isStaticUnit && isFullyVisible ) {
+            RedrawTroopCount( *unitWithTopCounter );
+        }
     }
 }
 
