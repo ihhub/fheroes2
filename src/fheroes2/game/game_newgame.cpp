@@ -221,6 +221,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     }
 
     fheroes2::ScreenPaletteRestorer screenRestorer;
+    const fheroes2::ApplicationClosureRestorer closureRestorer;
 
     std::vector<uint8_t> palette = video->getCurrentPalette();
     screenRestorer.changePalette( palette.data() );
@@ -304,6 +305,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     outputPriceOfLoyaltyCampaignInTextSupportMode();
 
     fheroes2::ScreenPaletteRestorer screenRestorer;
+    const fheroes2::ApplicationClosureRestorer closureRestorer;
 
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 

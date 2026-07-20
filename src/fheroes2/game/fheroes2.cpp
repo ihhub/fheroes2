@@ -25,11 +25,9 @@
 #include <cstdlib>
 #include <exception>
 #include <functional>
-#include <initializer_list>
 #include <iostream>
 #include <list>
 #include <memory>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -65,23 +63,23 @@
 #include "exception.h"
 #include "game.h"
 #include "game_assets.h"
-#include "game_logo.h"
-#include "game_video.h"
-#include "game_video_type.h"
+#include "game_invalid_assets.h"
 #include "h2d.h"
 #include "icn.h"
-#include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
-#include "math_base.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "timing.h"
 #include "ui_tool.h"
 #include "zzlib.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace
 {
@@ -128,34 +126,6 @@ namespace
 
         // This call will also create dataDir and dataFiles
         System::MakeDirectory( dataFilesSave );
-    }
-
-    void displayMissingResourceWindow()
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = Compression::CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-        display.fill( 0 );
-        fheroes2::Resize( image, display );
-
-        display.render();
-
-        LocalEvent & le = LocalEvent::Get();
-
-        // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
-        const fheroes2::Time timer;
-
-        bool closeWindow = false;
-
-        while ( le.HandleEvents( true, true ) ) {
-            if ( closeWindow && timer.getS() >= 5 ) {
-                break;
-            }
-
-            if ( le.isAnyKeyPressed() || le.MouseClickLeft() ) {
-                closeWindow = true;
-            }
-        }
     }
 
     class DisplayInitializer final
@@ -244,7 +214,7 @@ namespace
                 Assets::getImage( ICN::FONT, 0 );
             }
             catch ( ... ) {
-                displayMissingResourceWindow();
+                showMissingAssetsImage();
 
                 throw;
             }
@@ -268,19 +238,6 @@ namespace
         std::unique_ptr<AGG::AGGInitializer> _aggInitializer;
         std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
     };
-
-    // This function checks for a possible situation when a user uses a demo version
-    // of the game. There is no 100% certain way to detect this, so assumptions are made.
-    bool isProbablyDemoVersion()
-    {
-        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
-            return false;
-        }
-
-        // The demo version of the game only has 1 map.
-        const ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
-        return maps.size() == 1;
-    }
 }
 
 int main( int argc, char ** argv )
@@ -295,7 +252,7 @@ int main( int argc, char ** argv )
 #endif
 
     try {
-        const fheroes2::HardwareInitializer hardwareInitializer;
+        const System::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
 
         COUT( GetCaption() )
@@ -307,14 +264,7 @@ int main( int argc, char ** argv )
         InitDataDir();
         ReadConfigs();
 
-        std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
-                                                                          fheroes2::SystemInitializationComponent::Video };
-
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
-        coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
-#endif
-
-        const fheroes2::CoreInitializer coreInitializer( coreComponents );
+        const System::CoreInitializer coreInitializer;
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
@@ -365,29 +315,21 @@ int main( int argc, char ** argv )
         // Initialize game data.
         Game::Init();
 
-        fheroes2::showTeamInfo();
-        for ( const char * logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
-            Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
-        }
-
         try {
-            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-            const fheroes2::Point pos = conf.getSavedWindowPos();
-            Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
-            const fheroes2::Point currentPos = display.getWindowPos();
-            if ( pos != currentPos ) {
-                conf.setStartWindowPos( currentPos );
-                conf.Save( Settings::configFileName );
-            }
+            Game::runMainGameLoop();
         }
         catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )
-            displayMissingResourceWindow();
+            showMissingAssetsImage();
             return EXIT_FAILURE;
         }
         catch ( const fheroes2::CorruptedExecutable & ex ) {
             ERROR_LOG( ex.what() )
             return EXIT_FAILURE;
+        }
+        catch ( const fheroes2::UserRequestedApplicationClosure & ) {
+            // Yes, this an evil way of doing things but our application design doesn't allow to simply propagate application closure event.
+            return EXIT_SUCCESS;
         }
     }
     catch ( const std::exception & ex ) {
