@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,9 +18,39 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "game_invalid_assets.h"
 
-namespace fheroes2
+#include "embedded_image.h"
+#include "image.h"
+#include "localevent.h"
+#include "screen.h"
+#include "timing.h"
+#include "zzlib.h"
+
+void showMissingAssetsImage()
 {
-    void showTeamInfo();
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = Compression::CreateImageFromZlib( 290, 190, missingGameAssets, sizeof( missingGameAssets ), false );
+
+    display.fill( 0 );
+    fheroes2::Resize( image, display );
+
+    display.render();
+
+    LocalEvent & le = LocalEvent::Get();
+
+    // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
+    const fheroes2::Time timer;
+
+    bool closeWindow = false;
+
+    while ( le.HandleEvents( true, true ) ) {
+        if ( closeWindow && timer.getS() >= 5 ) {
+            break;
+        }
+
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() ) {
+            closeWindow = true;
+        }
+    }
 }

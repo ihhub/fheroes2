@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <set>
 #include <stdexcept>
 
 // Managing compiler warnings for SDL headers
@@ -84,14 +85,14 @@ namespace
     }
 #endif
 
-    uint32_t convertToSDLFlag( const fheroes2::SystemInitializationComponent component )
+    uint32_t convertToSDLFlag( const System::SystemInitializationComponent component )
     {
         switch ( component ) {
-        case fheroes2::SystemInitializationComponent::Audio:
+        case System::SystemInitializationComponent::Audio:
             return SDL_INIT_AUDIO;
-        case fheroes2::SystemInitializationComponent::Video:
+        case System::SystemInitializationComponent::Video:
             return SDL_INIT_VIDEO;
-        case fheroes2::SystemInitializationComponent::GameController:
+        case System::SystemInitializationComponent::GameController:
             return SDL_INIT_GAMECONTROLLER;
         default:
             // Did you add a new component?
@@ -102,17 +103,17 @@ namespace
         return 0;
     }
 
-    uint32_t getSDLInitFlags( const std::set<fheroes2::SystemInitializationComponent> & components )
+    uint32_t getSDLInitFlags( const std::set<System::SystemInitializationComponent> & components )
     {
         uint32_t flags = 0;
-        for ( const fheroes2::SystemInitializationComponent component : components ) {
+        for ( const System::SystemInitializationComponent component : components ) {
             flags |= convertToSDLFlag( component );
         }
         return flags;
     }
 
     // For now only SDL library is supported.
-    bool initCoreInternally( const std::set<fheroes2::SystemInitializationComponent> & components )
+    bool initCoreInternally( const std::set<System::SystemInitializationComponent> & components )
     {
         const uint32_t sdlFlags = getSDLInitFlags( components );
 
@@ -121,11 +122,11 @@ namespace
             return false;
         }
 
-        if ( components.count( fheroes2::SystemInitializationComponent::Audio ) > 0 ) {
+        if ( components.count( System::SystemInitializationComponent::Audio ) > 0 ) {
             Audio::Init();
         }
 
-        if ( components.count( fheroes2::SystemInitializationComponent::GameController ) > 0 ) {
+        if ( components.count( System::SystemInitializationComponent::GameController ) > 0 ) {
             LocalEvent::Get().initController();
         }
 
@@ -136,18 +137,18 @@ namespace
 
     void freeCoreInternally()
     {
-        if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::GameController ) ) {
+        if ( System::isComponentInitialized( System::SystemInitializationComponent::GameController ) ) {
             LocalEvent::Get().CloseController();
         }
 
-        if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
+        if ( System::isComponentInitialized( System::SystemInitializationComponent::Audio ) ) {
             Audio::Quit();
         }
 
         SDL_Quit();
     }
 
-    bool isComponentInitializedInternally( const fheroes2::SystemInitializationComponent component )
+    bool isComponentInitializedInternally( const System::SystemInitializationComponent component )
     {
         const uint32_t sdlFlag = convertToSDLFlag( component );
         assert( sdlFlag != 0 );
@@ -156,7 +157,7 @@ namespace
     }
 }
 
-namespace fheroes2
+namespace System
 {
     HardwareInitializer::HardwareInitializer()
     {
@@ -168,8 +169,14 @@ namespace fheroes2
         freeHardwareInternally();
     }
 
-    CoreInitializer::CoreInitializer( const std::set<SystemInitializationComponent> & components )
+    CoreInitializer::CoreInitializer()
     {
+        std::set<SystemInitializationComponent> components{ SystemInitializationComponent::Audio, SystemInitializationComponent::Video };
+
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+        components.emplace( SystemInitializationComponent::GameController );
+#endif
+
         if ( !initCoreInternally( components ) ) {
             throw std::logic_error( "Core module initialization failed." );
         }

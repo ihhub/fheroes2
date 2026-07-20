@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <initializer_list>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -38,14 +39,18 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "dir.h"
 #include "editor_mainmenu.h"
 #include "game.h" // IWYU pragma: associated
 #include "game_assets.h"
 #include "game_delays.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
+#include "game_intro.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
+#include "game_video.h"
+#include "game_video_type.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -82,6 +87,19 @@ namespace
         EDITOR_DEFAULT = 20
     };
 
+    // This function checks for a possible situation when a user uses a demo version
+    // of the game. There is no 100% certain way to detect this, so assumptions are made.
+    bool isProbablyDemoVersion()
+    {
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
+            return false;
+        }
+
+        // The demo version of the game only has 1 map.
+        const ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
+        return maps.size() == 1;
+    }
+
     void outputMainMenuInTextSupportMode()
     {
         START_TEXT_SUPPORT_MODE
@@ -102,11 +120,23 @@ namespace
     }
 }
 
-void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
+void Game::runMainGameLoop()
 {
+    fheroes2::showTeamInfo();
+    for ( const char * logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
+        Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
+    }
+
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    const fheroes2::Point windowPosAtStartup{ Settings::Get().getSavedWindowPos() };
+
     fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
 
     bool exit = false;
+
+    bool isFirstGameRun{ Settings::Get().isFirstGameRun() };
+    bool isDemoVersion{ isProbablyDemoVersion() };
 
     while ( !exit ) {
         switch ( result ) {
@@ -118,8 +148,8 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
             isFirstGameRun = false;
             break;
         case fheroes2::GameMode::NEW_GAME:
-            result = Game::NewGame( isProbablyDemoVersion );
-            isProbablyDemoVersion = false;
+            result = Game::NewGame( isDemoVersion );
+            isDemoVersion = false;
             break;
         case fheroes2::GameMode::LOAD_GAME:
             result = Game::LoadGame();
@@ -205,6 +235,13 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
 
     // We are quitting the game, so fade-out the screen.
     fheroes2::fadeOutDisplay();
+
+    const fheroes2::Point windowPosAtClosure = fheroes2::Display::instance().getWindowPos();
+    if ( windowPosAtStartup != windowPosAtClosure ) {
+        auto & conf = Settings::Get();
+        conf.setStartWindowPos( windowPosAtClosure );
+        conf.Save( Settings::configFileName );
+    }
 }
 
 fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
