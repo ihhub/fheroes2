@@ -33,11 +33,6 @@
 
 #include <SDL_main.h> // IWYU pragma: keep
 
-// Managing compiler warnings for SDL headers
-#if defined( __GNUC__ )
-#pragma GCC diagnostic pop
-#endif
-
 #if defined( _WIN32 )
 #include <cassert>
 #endif
