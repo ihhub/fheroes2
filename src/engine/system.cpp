@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -64,7 +64,7 @@
 #include <SDL_system.h>
 #endif
 
-#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
+#if ( !defined( __linux__ ) || defined( ANDROID ) )
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
 #endif
@@ -112,11 +112,9 @@ namespace
             return System::concatPath( dataEnvPath, appName );
         }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 1 )
         if ( const std::unique_ptr<char, void ( * )( void * )> path( SDL_GetPrefPath( "", System::encLocalToUTF8( std::string{ appName } ).c_str() ), SDL_free ); path ) {
             return System::encUTF8ToLocal( path.get() );
         }
-#endif
 
         return {};
     }
