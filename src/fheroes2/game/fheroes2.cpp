@@ -151,7 +151,7 @@ namespace
             display.setResolution( bestResolution );
 
             fheroes2::engine().setTitle( GetCaption() );
-            
+
             auto & cursor = fheroes2::cursor();
             cursor.enableSoftwareEmulation( conf.isSoftwareEmulationEnabled() );
             cursor.show( false );
