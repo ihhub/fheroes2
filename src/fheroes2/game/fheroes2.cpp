@@ -40,7 +40,6 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
-#include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
 
 // Managing compiler warnings for SDL headers
