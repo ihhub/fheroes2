@@ -57,7 +57,6 @@
 #endif
 
 #include <SDL_touch.h>
-#include <SDL_version.h>
 
 #if defined( ANDROID )
 #include <SDL_error.h>
