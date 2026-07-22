@@ -45,6 +45,7 @@
 #include "translations.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "version.h"
 
 namespace
 {
@@ -160,7 +161,7 @@ namespace
         output.resize( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
         output.fill( 0 );
 
-        const fheroes2::Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", fheroes2::FontType::normalYellow() );
+        const fheroes2::Text caption( "fheroes2 engine (" ENGINE_VERSION ")", fheroes2::FontType::normalYellow() );
         caption.draw( output.width() / 2 - caption.width() / 2, 17, output );
 
         return output;

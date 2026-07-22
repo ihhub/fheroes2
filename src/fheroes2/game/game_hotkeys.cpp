@@ -48,6 +48,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "version.h"
 
 namespace
 {
@@ -348,7 +349,7 @@ namespace
     std::string getHotKeyFileContent()
     {
         std::ostringstream os;
-        os << "# fheroes2 hotkey file (saved by version " << Settings::GetVersion() << ")" << std::endl;
+        os << "# fheroes2 hotkey file (saved by version " ENGINE_VERSION ")" << std::endl;
         os << std::endl;
 
         Game::HotKeyCategory currentCategory = hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1].category;

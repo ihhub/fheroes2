@@ -71,6 +71,7 @@
 #include "settings.h"
 #include "system.h"
 #include "ui_tool.h"
+#include "version.h"
 #include "zzlib.h"
 
 namespace fheroes2
@@ -80,10 +81,7 @@ namespace fheroes2
 
 namespace
 {
-    std::string GetCaption()
-    {
-        return std::string( "fheroes2 engine, version: " + Settings::GetVersion() );
-    }
+    const char * const appCaption = "fheroes2 engine, version: " ENGINE_VERSION;
 
     void ReadConfigs()
     {
@@ -149,7 +147,7 @@ namespace
             display.setWindowPos( conf.getSavedWindowPos() );
             display.setResolution( bestResolution );
 
-            fheroes2::engine().setTitle( GetCaption() );
+            fheroes2::engine().setTitle( appCaption );
 
             auto & cursor = fheroes2::cursor();
             cursor.enableSoftwareEmulation( conf.isSoftwareEmulationEnabled() );
@@ -247,7 +245,7 @@ int main( int argc, char ** argv )
         const System::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
 
-        COUT( GetCaption() )
+        COUT( appCaption )
 
         Settings & conf = Settings::Get();
         conf.SetProgramPath( argv[0] );
