@@ -40,10 +40,7 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
-#include <SDL_error.h>
-#include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
-#include <SDL_mouse.h>
 
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
@@ -154,11 +151,9 @@ namespace
 
             fheroes2::engine().setTitle( GetCaption() );
 
-            // Hide system cursor.
-            const int returnValue = SDL_ShowCursor( SDL_DISABLE );
-            if ( returnValue < 0 ) {
-                ERROR_LOG( "Failed to hide system cursor. Error description: " << SDL_GetError() )
-            }
+            auto & cursor = fheroes2::cursor();
+            cursor.enableSoftwareEmulation( conf.isSoftwareEmulationEnabled() );
+            cursor.show( false );
 
             fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
 
@@ -173,7 +168,7 @@ namespace
             renderProcessor.startColorCycling();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
-            fheroes2::cursor().registerUpdater( Cursor::Refresh );
+            cursor.registerUpdater( Cursor::Refresh );
 
 #if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = Compression::CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
@@ -187,10 +182,7 @@ namespace
         ~DisplayInitializer()
         {
             fheroes2::RenderProcessor::instance().unregisterRenderers();
-
-            fheroes2::Display & display = fheroes2::Display::instance();
-            display.subscribe( {}, {} );
-            display.release();
+            fheroes2::Display::instance().release();
         }
 
     private:
@@ -266,7 +258,7 @@ int main( int argc, char ** argv )
 
         const System::CoreInitializer coreInitializer;
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
+        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.getOptionsString() )
 
         const DisplayInitializer displayInitializer;
         const DataInitializer dataInitializer;

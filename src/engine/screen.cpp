@@ -1603,10 +1603,15 @@ namespace fheroes2
 
     void Display::release()
     {
-        _engine->clear();
+        _preprocessing = nullptr;
+        _postprocessing = nullptr;
+
         _cursor.reset();
+        _engine->clear();
+        _engine.reset();
         clear();
 
+        _renderSurface = nullptr;
         _prevRoi = {};
     }
 
