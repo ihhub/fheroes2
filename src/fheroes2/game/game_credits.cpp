@@ -161,7 +161,7 @@ namespace
         output.resize( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
         output.fill( 0 );
 
-        const fheroes2::Text caption( "fheroes2 engine (" + std::string( ENGINE_VERSION ) + ')', fheroes2::FontType::normalYellow() );
+        const fheroes2::Text caption( "fheroes2 engine (" ENGINE_VERSION ")", fheroes2::FontType::normalYellow() );
         caption.draw( output.width() / 2 - caption.width() / 2, 17, output );
 
         return output;
