@@ -415,7 +415,7 @@ std::string Settings::String() const
         musicType = "original";
     }
 
-    os << "# fheroes2 configuration file (saved by version " << ENGINE_VERSION << ")" << std::endl;
+    os << "# fheroes2 configuration file (saved by version " ENGINE_VERSION ")" << std::endl;
     os << std::endl
        << "# !!! WARNING !!!" << std::endl
        << "# Only modify this file if you are absolutely sure of what you are doing!" << std::endl
