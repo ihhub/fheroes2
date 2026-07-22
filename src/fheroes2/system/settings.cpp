@@ -350,11 +350,9 @@ bool Settings::Read( const std::string & filePath )
     if ( config.Exists( "cursor soft rendering" ) ) {
         if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
             _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
-            fheroes2::cursor().enableSoftwareEmulation( true );
         }
         else {
             _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
-            fheroes2::cursor().enableSoftwareEmulation( false );
         }
     }
 
@@ -393,14 +391,14 @@ bool Settings::Save( const std::string_view fileName ) const
         return false;
     }
 
-    const std::string data = String();
+    const std::string data = getOptionsString();
 
     fileStream.putRaw( data.data(), data.size() );
 
     return true;
 }
 
-std::string Settings::String() const
+std::string Settings::getOptionsString() const
 {
     std::ostringstream os;
 
@@ -1016,6 +1014,11 @@ bool Settings::isEvilInterfaceEnabled() const
 bool Settings::isBattleMovementAreaHighlightEnabled() const
 {
     return _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
+}
+
+bool Settings::isSoftwareEmulationEnabled() const
+{
+    return _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION );
 }
 
 void Settings::switchToNextInterfaceType()
