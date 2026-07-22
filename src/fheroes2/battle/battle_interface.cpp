@@ -2237,14 +2237,14 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     sx += isReflected ? -xOffset : xOffset;
 
     if ( Settings::Get().isBattleHitPointsBarEnabled() ) {
-        constexpr int32_t hitPointsBarHeight = 4;
+        constexpr int32_t hitPointsBarHeight = 5;
 
         const int32_t hitPointsBarWidth = bar.width();
         const int32_t hitPointsBarX = sx;
         const int32_t hitPointsBarY = sy - hitPointsBarHeight;
 
         const int32_t innerHitPointsBarWidth = hitPointsBarWidth - 2;
-        constexpr int32_t innerHitPointsBarHeight = 2;
+        constexpr int32_t innerHitPointsBarHeight = hitPointsBarHeight - 2;;
 
         const uint32_t maximumCreatureHitPoints = unit.GetMonster().GetHitPoints();
         const uint32_t remainingCreatureHitPoints = unit.GetHitPointsLeft();
