@@ -84,10 +84,7 @@ namespace fheroes2
 
 namespace
 {
-    std::string GetCaption()
-    {
-        return std::string( "fheroes2 engine, version: " ENGINE_VERSION );
-    }
+    const char * const appCaption = "fheroes2 engine, version: " ENGINE_VERSION;
 
     void ReadConfigs()
     {
@@ -153,7 +150,7 @@ namespace
             display.setWindowPos( conf.getSavedWindowPos() );
             display.setResolution( bestResolution );
 
-            fheroes2::engine().setTitle( GetCaption() );
+            fheroes2::engine().setTitle( appCaption );
 
             // Hide system cursor.
             const int returnValue = SDL_ShowCursor( SDL_DISABLE );
@@ -256,7 +253,7 @@ int main( int argc, char ** argv )
         const System::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
 
-        COUT( GetCaption() )
+        COUT( appCaption )
 
         Settings & conf = Settings::Get();
         conf.SetProgramPath( argv[0] );
