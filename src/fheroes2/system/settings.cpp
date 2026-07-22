@@ -48,9 +48,6 @@
 #include "ui_language.h"
 #include "version.h"
 
-#define STRINGIFY( DEF ) #DEF
-#define EXPANDDEF( DEF ) STRINGIFY( DEF )
-
 namespace
 {
     enum GameOptions : uint32_t
@@ -92,11 +89,6 @@ namespace
     };
 
     const int defaultSpeedDelay{ 5 };
-}
-
-std::string Settings::GetVersion()
-{
-    return std::to_string( MAJOR_VERSION ) + '.' + std::to_string( MINOR_VERSION ) + '.' + std::to_string( INTERMEDIATE_VERSION );
 }
 
 Settings::Settings()
@@ -423,7 +415,7 @@ std::string Settings::String() const
         musicType = "original";
     }
 
-    os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
+    os << "# fheroes2 configuration file (saved by version " << ENGINE_VERSION << ")" << std::endl;
     os << std::endl
        << "# !!! WARNING !!!" << std::endl
        << "# Only modify this file if you are absolutely sure of what you are doing!" << std::endl

@@ -415,8 +415,6 @@ public:
 
     void SetProgramPath( const char * path );
 
-    static std::string GetVersion();
-
     static const std::vector<std::string> & GetRootDirs();
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
