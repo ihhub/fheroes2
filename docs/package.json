@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "prettier": "3.5.3",
-    "markdownlint-cli2": "^0.23.0"
+    "markdownlint-cli2": "^0.23.1"
   },
   "scripts": {
     "format-html-css": "prettier --write **/*.{html,scss}",
