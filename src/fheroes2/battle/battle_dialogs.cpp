@@ -473,10 +473,42 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
 // Returns true if player wants to restart the battle
 bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const
 {
+    // Setup summary texts according to results and get the corresponding animation sequence.
+    std::string surrenderText;
+    std::string outcomeText;
+    std::string title;
+    LoopedAnimationSequence sequence;
+
+    fheroes2::FontType summaryTitleFont = fheroes2::FontType::normalWhite();
+
     const bool attackerIsHuman = _attackingArmy->GetControl() & CONTROL_HUMAN;
     const bool defenderIsHuman = _defendingArmy->GetControl() & CONTROL_HUMAN;
 
-    if ( !attackerIsHuman && !defenderIsHuman ) {
+    if ( attackerIsHuman ) {
+        if ( res.attacker & RESULT_WINS ) {
+            GetSummaryParams( res.attacker, res.defender, _attackingArmy->GetCommander(), res.attackerExperience, _defendingArmy->GetSurrenderCost(), sequence, title,
+                              surrenderText, outcomeText );
+            summaryTitleFont = fheroes2::FontType::normalYellow();
+            AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
+        }
+        else {
+            GetSummaryParams( res.attacker, res.defender, _attackingArmy->GetCommander(), res.attackerExperience, 0, sequence, title, surrenderText, outcomeText );
+            AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
+        }
+    }
+    else if ( defenderIsHuman ) {
+        if ( res.defender & RESULT_WINS ) {
+            GetSummaryParams( res.defender, res.attacker, _defendingArmy->GetCommander(), res.defenderExperience, _attackingArmy->GetSurrenderCost(), sequence, title,
+                              surrenderText, outcomeText );
+            summaryTitleFont = fheroes2::FontType::normalYellow();
+            AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
+        }
+        else {
+            GetSummaryParams( res.defender, res.attacker, _defendingArmy->GetCommander(), res.defenderExperience, 0, sequence, title, surrenderText, outcomeText );
+            AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
+        }
+    }
+    else {
         // AI vs AI battle, this dialog should not be shown
         assert( 0 );
         return false;
@@ -497,34 +529,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     const fheroes2::Rect & roi( background.activeArea() );
     const fheroes2::Rect animationRoi( roi.x + ( ( roi.width - animationBorderRoi.width ) / 2 ) + 4, roi.y + 21, animationBorderRoi.width, animationBorderRoi.height );
     Copy( originalBorderImage, animationBorderRoi.x, animationBorderRoi.y, display, animationRoi.x - 4, animationRoi.y - 4, animationRoi.width, animationRoi.height );
-
-    // Setup summary texts according to results and get the corresponding animation sequence.
-    std::string surrenderText;
-    std::string outcomeText;
-    std::string title;
-    LoopedAnimationSequence sequence;
-
-    fheroes2::FontType summaryTitleFont = fheroes2::FontType::normalWhite();
-    if ( ( res.attacker & RESULT_WINS ) && attackerIsHuman ) {
-        GetSummaryParams( res.attacker, res.defender, _attackingArmy->GetCommander(), res.attackerExperience, _defendingArmy->GetSurrenderCost(), sequence, title,
-                          surrenderText, outcomeText );
-        summaryTitleFont = fheroes2::FontType::normalYellow();
-        AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
-    }
-    else if ( ( res.defender & RESULT_WINS ) && defenderIsHuman ) {
-        GetSummaryParams( res.defender, res.attacker, _defendingArmy->GetCommander(), res.defenderExperience, _attackingArmy->GetSurrenderCost(), sequence, title,
-                          surrenderText, outcomeText );
-        summaryTitleFont = fheroes2::FontType::normalYellow();
-        AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
-    }
-    else if ( attackerIsHuman ) {
-        GetSummaryParams( res.attacker, res.defender, _attackingArmy->GetCommander(), res.attackerExperience, 0, sequence, title, surrenderText, outcomeText );
-        AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
-    }
-    else if ( defenderIsHuman ) {
-        GetSummaryParams( res.defender, res.attacker, _defendingArmy->GetCommander(), res.defenderExperience, 0, sequence, title, surrenderText, outcomeText );
-        AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
-    }
 
     if ( sequence.isFinished() ) {
         // This shouldn't happen
