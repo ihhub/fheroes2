@@ -219,7 +219,11 @@ namespace
             return str;
         }
 
-        return Army::TroopSizeString( troop );
+        std::string str = Army::TroopSizeString( troop );
+
+        str.append( "\n\nDiplomacy: Blocked\n(no room in army)" );
+
+        return str;
     }
 
     std::string showDwellingInfo( const Maps::Tile & tile, const bool isOwned )
