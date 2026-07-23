@@ -400,7 +400,8 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 {
     if ( isSelected() ) {
         if ( read_only ) {
-            return false; // reset cursor
+            // reset cursor
+            return false;
         }
 
         ArmyTroop * selectedTroop = GetSelectedItem();
@@ -433,9 +434,11 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 Army::SwapTroops( troop, *selectedTroop );
         }
 
-        return false; // reset cursor
+        // reset cursor
+        return false;
     }
-    else if ( troop.isValid() ) {
+
+    if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
             if ( IsSplitHotkeyUsed( troop, _army ) )
@@ -545,7 +548,8 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
         }
     }
 
-    return false; // reset cursor
+    // reset cursor
+    return false;
 }
 
 bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
@@ -561,8 +565,10 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
     if ( &troop == troop2 ) {
         int flags = Dialog::BUTTONS;
 
+        const bool keepLastTroop = _saveLastTroop && _army->SaveLastTroop();
+
         if ( !read_only ) {
-            if ( !_saveLastTroop || !_army->SaveLastTroop() ) {
+            if ( !keepLastTroop ) {
                 flags |= Dialog::DISMISS;
             }
 
@@ -577,6 +583,11 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
                     }
                 }
             }
+        }
+
+        if ( can_change && keepLastTroop ) {
+            // This is an editing mode. We allow to dismiss monsters.
+            flags |= Dialog::DISMISS;
         }
 
         switch ( Dialog::ArmyInfo( troop, flags, false, _troopWindowOffsetY ) ) {
@@ -663,12 +674,7 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
     if ( troop.isValid() ) {
         ResetSelected();
 
-        if ( can_change && ( !_saveLastTroop || !_army->SaveLastTroop() ) ) {
-            troop.Reset();
-        }
-        else {
-            Dialog::ArmyInfo( troop, Dialog::ZERO, false, _troopWindowOffsetY );
-        }
+        Dialog::ArmyInfo( troop, Dialog::ZERO, false, _troopWindowOffsetY );
     }
 
     return true;
