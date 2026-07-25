@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 
+#include "core.h"
+
 struct ListFiles;
 
 namespace M82
@@ -39,7 +41,7 @@ namespace Music
 
 namespace AudioManager
 {
-    class AudioInitializer final
+    class AudioInitializer final : public System::ComponentInitializer
     {
     public:
         AudioInitializer() = delete;

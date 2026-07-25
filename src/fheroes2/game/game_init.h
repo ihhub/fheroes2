@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2026                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,39 +20,35 @@
 
 #pragma once
 
-namespace System
+#include <memory>
+
+#include "core.h"
+
+namespace Game
 {
-    enum class SystemInitializationComponent : int
-    {
-        Audio,
-        Video,
-        GameController
-    };
+    void initLogging();
 
-    struct ComponentInitializer
-    {
-        virtual ~ComponentInitializer() = default;
-    };
+    void initDataDir();
 
-    class HardwareInitializer final : public ComponentInitializer
-    {
-    public:
-        HardwareInitializer();
-        HardwareInitializer( const HardwareInitializer & ) = delete;
-        HardwareInitializer & operator=( const HardwareInitializer & ) = delete;
+    void initConfigDir( const char * appPath );
 
-        ~HardwareInitializer();
-    };
+    void initPalette();
 
-    class CoreInitializer final : public ComponentInitializer
-    {
-    public:
-        explicit CoreInitializer();
-        CoreInitializer( const CoreInitializer & ) = delete;
-        CoreInitializer & operator=( const CoreInitializer & ) = delete;
+    void initTranslations();
 
-        ~CoreInitializer();
-    };
+    void initEventHandler();
 
-    bool isComponentInitialized( const SystemInitializationComponent component );
+    void initAnimation();
+
+    void initHotKeys();
+
+    std::unique_ptr<System::ComponentInitializer> createHardwareComponent();
+
+    std::unique_ptr<System::ComponentInitializer> createCoreComponent();
+
+    std::unique_ptr<System::ComponentInitializer> createDisplayComponent();
+
+    std::unique_ptr<System::ComponentInitializer> createDataComponent();
+
+    std::unique_ptr<System::ComponentInitializer> createAudioComponent( const std::unique_ptr<System::ComponentInitializer> & dataComponent );
 }

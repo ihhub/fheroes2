@@ -476,7 +476,7 @@ void Game::HotKeysLoad( const std::string & filename )
 
 void Game::HotKeySave()
 {
-    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), hotkeyFileName );
 
     StreamFile fileStream;
     if ( !fileStream.open( filename, "w" ) ) {

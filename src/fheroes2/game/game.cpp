@@ -191,19 +191,6 @@ bool Game::validateDisplayFadeIn()
     return false;
 }
 
-void Game::Init()
-{
-    // set global events
-    LocalEvent & eventHandler = LocalEvent::Get();
-    eventHandler.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
-    eventHandler.setGlobalKeyDownEventHook( globalKeyDownEvent );
-    eventHandler.setQuitEventProcessingHook( []() { return ( processExitEvent() == fheroes2::GameMode::QUIT_GAME ); } );
-
-    AnimateDelaysInitialize();
-
-    HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
-}
-
 uint32_t Game::getAdventureMapAnimationIndex()
 {
     return maps_animation_frame;
