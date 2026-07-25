@@ -87,7 +87,7 @@ int main( int argc, char ** argv )
 
     try {
         auto hardwareComponent = Game::createHardwareComponent();
-        
+
         Game::initLogging();
         Game::initDataDir();
         Game::initConfigDir( argv[0] );
