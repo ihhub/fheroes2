@@ -1652,38 +1652,6 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            if ( useOriginalResources() ) {
-                for ( size_t i = 0; i < 3; ++i ) {
-                    _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
-                    _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
-                }
-                // Add generated buttons.
-                const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
-                const fheroes2::Size buttonSize{ _icnVsSprite[id][0].width() - 10, _icnVsSprite[id][0].height() };
-                fheroes2::makeButtonSprites( _icnVsSprite[id][6], _icnVsSprite[id][7], fheroes2::getSupportedText( gettext_noop( "BATTLE\nONLY" ), buttonFontType ),
-                                             buttonSize, false, ICN::STONEBAK );
-                fheroes2::makeButtonSprites( _icnVsSprite[id][8], _icnVsSprite[id][9], fheroes2::getSupportedText( gettext_noop( "SETTINGS" ), buttonFontType ),
-                                             buttonSize, false, ICN::STONEBAK );
-                // Add cancel button.
-                _icnVsSprite[id][10] = Assets::getImage( ICN::BTNNEWGM, 6 );
-                _icnVsSprite[id][11] = Assets::getImage( ICN::BTNNEWGM, 7 );
-                // Add hot seat button.
-                _icnVsSprite[id][12] = Assets::getImage( ICN::BTNMP, 0 );
-                _icnVsSprite[id][13] = Assets::getImage( ICN::BTNMP, 1 );
-                // Add player count buttons.
-                for ( size_t i = 0; i < 5; ++i ) {
-                    _icnVsSprite[id][( i + 7 ) * 2] = Assets::getImage( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 ) );
-                    _icnVsSprite[id][( i + 7 ) * 2 + 1] = Assets::getImage( ICN::BTNHOTST, static_cast<uint32_t>( i * 2 + 1 ) );
-                }
-
-                if ( isPoLPresent ) {
-                    _icnVsSprite[id][24] = Assets::getImage( ICN::X_LOADCM, 0 );
-                    _icnVsSprite[id][25] = Assets::getImage( ICN::X_LOADCM, 1 );
-                    _icnVsSprite[id][26] = Assets::getImage( ICN::X_LOADCM, 2 );
-                    _icnVsSprite[id][27] = Assets::getImage( ICN::X_LOADCM, 3 );
-                }
-                break;
-            }
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
             std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "STANDARD\nGAME" ), buttonFontType ),
                                                 fheroes2::getSupportedText( gettext_noop( "CAMPAIGN\nGAME" ), buttonFontType ),
@@ -1708,33 +1676,6 @@ namespace
         case ICN::BUTTONS_EDITOR_MENU_GOOD: {
             _icnVsSprite[id].resize( 20 );
 
-            if ( useOriginalResources() ) {
-                for ( size_t i = 0; i < 2; ++i ) {
-                    _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 ) );
-                    _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 + 1 ) );
-                }
-                // Add generated Main Menu button.
-                const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
-                const fheroes2::Size buttonSize{ _icnVsSprite[id][0].width() - 10, _icnVsSprite[id][0].height() };
-                fheroes2::makeButtonSprites( _icnVsSprite[id][4], _icnVsSprite[id][5], fheroes2::getSupportedText( gettext_noop( "MAIN\nMENU" ), buttonFontType ),
-                                             buttonSize, false, ICN::STONEBAK );
-                // Add generated Back button.
-                fheroes2::makeButtonSprites( _icnVsSprite[id][6], _icnVsSprite[id][7],
-                                             fheroes2::getSupportedText( gettext_noop( "editorMainMenu|BACK" ), buttonFontType ), buttonSize, false, ICN::STONEBAK );
-
-                // Add From Scratch and Random buttons.
-                for ( size_t i = 0; i < 2; ++i ) {
-                    _icnVsSprite[id][( i + 4 ) * 2] = Assets::getImage( ICN::BTNENEW, static_cast<uint32_t>( i * 2 ) );
-                    _icnVsSprite[id][( i + 4 ) * 2 + 1] = Assets::getImage( ICN::BTNENEW, static_cast<uint32_t>( i * 2 + 1 ) );
-                }
-                // Add map size buttons.
-                for ( size_t i = 0; i < 4; ++i ) {
-                    _icnVsSprite[id][( i + 6 ) * 2] = Assets::getImage( ICN::BTNESIZE, static_cast<uint32_t>( i * 2 ) );
-                    _icnVsSprite[id][( i + 6 ) * 2 + 1] = Assets::getImage( ICN::BTNESIZE, static_cast<uint32_t>( i * 2 + 1 ) );
-                }
-
-                break;
-            }
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
             const std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
                                                       fheroes2::getSupportedText( gettext_noop( "LOAD\nMAP" ), buttonFontType ),
