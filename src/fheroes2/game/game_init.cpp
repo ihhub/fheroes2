@@ -20,6 +20,7 @@
 
 #include "game_init.h"
 
+#include <memory>
 #include <string>
 #include <string_view>
 
@@ -110,7 +111,7 @@ namespace
         DisplayInitializer( const DisplayInitializer & ) = delete;
         DisplayInitializer & operator=( const DisplayInitializer & ) = delete;
 
-        ~DisplayInitializer()
+        ~DisplayInitializer() override
         {
             fheroes2::RenderProcessor::instance().unregisterRenderers();
             fheroes2::Display::instance().release();
@@ -129,9 +130,9 @@ namespace
             const fheroes2::ScreenPaletteRestorer screenRestorer;
 
             try {
-                _aggInitializer.reset( new AGG::AGGInitializer );
+                _aggInitializer = std::make_unique<AGG::AGGInitializer>();
 
-                _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
+                _h2dInitializer = std::make_unique<fheroes2::h2d::H2DInitializer>();
 
                 // Verify that the font is present and it is not corrupted.
                 Assets::getImage( ICN::FONT, 0 );
@@ -145,7 +146,7 @@ namespace
 
         DataInitializer( const DataInitializer & ) = delete;
         DataInitializer & operator=( const DataInitializer & ) = delete;
-        ~DataInitializer() = default;
+        ~DataInitializer() override = default;
 
         const std::string & getOriginalAGGFilePath() const
         {
