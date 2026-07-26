@@ -67,11 +67,6 @@ namespace
     uint32_t maps_animation_frame = 0;
 }
 
-namespace Game
-{
-    void AnimateDelaysInitialize();
-}
-
 bool Game::isCampaign()
 {
     return Settings::Get().isCampaignGameType();
