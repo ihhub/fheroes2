@@ -363,6 +363,9 @@ namespace fheroes2
     void SubpixelResize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out, const int32_t outX,
                          const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut );
 
+    void SubpixelPreciseResize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out,
+                                const int32_t outX, const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut );
+
     void Transpose( const Image & in, Image & out );
 
     void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId, const bool connectCorners );
