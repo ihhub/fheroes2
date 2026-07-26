@@ -471,6 +471,7 @@ void Game::HotKeysLoad( const std::string & filename )
         }
     }
 
+    // TODO: do not save this file if no changes are present.
     HotKeySave();
 }
 
