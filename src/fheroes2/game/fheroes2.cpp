@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
+#include <memory>
 
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
@@ -45,6 +46,7 @@
 #include <cassert>
 #endif
 
+#include "component_base.h"
 #include "exception.h"
 #include "game.h"
 #include "game_init.h"
