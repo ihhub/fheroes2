@@ -144,6 +144,7 @@ Settings & Settings::Get()
 
 bool Settings::Read( const std::string & filePath )
 {
+    // TODO: we shouldn't set any parameters for other classes as these class objects might not be initialized yet.
     TinyConfig config( '=', '#' );
 
     std::string sval;
