@@ -63,6 +63,7 @@ namespace fheroes2
 namespace
 {
     const std::string_view rootDir{ "fheroes2" };
+    const std::string_view filesDir{ "files" };
 
     const char * const appCaption{ "fheroes2 engine, version: " ENGINE_VERSION };
 
@@ -195,7 +196,7 @@ namespace Game
             return;
         }
 
-        const std::string dataFiles = System::concatPath( dataDir, "files" );
+        const std::string dataFiles = System::concatPath( dataDir, filesDir );
         const std::string dataFilesSave = System::concatPath( dataFiles, "save" );
 
         // This call will also create dataDir and dataFiles
@@ -288,7 +289,7 @@ namespace Game
 
         ListFiles midiSoundFonts;
         {
-            const std::string path = System::concatPath( "files", "soundfonts" );
+            const std::string path = System::concatPath( filesDir, "soundfonts" );
             midiSoundFonts.Append( Settings::FindFiles( path, ".sf2", false ) );
             midiSoundFonts.Append( Settings::FindFiles( path, ".sf3", false ) );
         }
@@ -300,7 +301,7 @@ namespace Game
 #endif
 
         const std::string timidityCfgPath = []() -> std::string {
-            if ( std::string path; Settings::findFile( System::concatPath( "files", "timidity" ), "timidity.cfg", path ) ) {
+            if ( std::string path; Settings::findFile( System::concatPath( filesDir, "timidity" ), "timidity.cfg", path ) ) {
                 return path;
             }
 
