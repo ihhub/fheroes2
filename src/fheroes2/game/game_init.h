@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#include "core.h"
+#include "component_base.h"
 
 namespace Game
 {
@@ -42,13 +42,13 @@ namespace Game
 
     void initHotKeys();
 
-    std::unique_ptr<System::ComponentInitializer> createHardwareComponent();
+    std::unique_ptr<ComponentBase> createHardwareComponent();
 
-    std::unique_ptr<System::ComponentInitializer> createCoreComponent();
+    std::unique_ptr<ComponentBase> createCoreComponent();
 
-    std::unique_ptr<System::ComponentInitializer> createDisplayComponent();
+    std::unique_ptr<ComponentBase> createDisplayComponent();
 
-    std::unique_ptr<System::ComponentInitializer> createDataComponent();
+    std::unique_ptr<ComponentBase> createDataComponent();
 
-    std::unique_ptr<System::ComponentInitializer> createAudioComponent( const System::ComponentInitializer * dataComponent );
+    std::unique_ptr<ComponentBase> createAudioComponent( const ComponentBase * dataComponent );
 }

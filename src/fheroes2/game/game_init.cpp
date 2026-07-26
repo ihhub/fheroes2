@@ -31,6 +31,7 @@
 
 #include "agg.h"
 #include "audio_manager.h"
+#include "core.h"
 #include "cursor.h"
 #include "dir.h"
 #include "embedded_image.h"
@@ -64,7 +65,7 @@ namespace
 
     const char * const appCaption{ "fheroes2 engine, version: " ENGINE_VERSION };
 
-    class DisplayInitializer final : public System::ComponentInitializer
+    class DisplayInitializer final : public ComponentBase
     {
     public:
         DisplayInitializer()
@@ -134,7 +135,7 @@ namespace
         std::unique_ptr<fheroes2::SystemInfoRenderer> _systemInfoRenderer;
     };
 
-    class DataInitializer final : public System::ComponentInitializer
+    class DataInitializer final : public ComponentBase
     {
     public:
         DataInitializer()
@@ -257,27 +258,27 @@ namespace Game
         HotKeysLoad( Settings::GetLastFile( "", hotkeyFileName ) );
     }
 
-    std::unique_ptr<System::ComponentInitializer> createHardwareComponent()
+    std::unique_ptr<ComponentBase> createHardwareComponent()
     {
         return std::make_unique<System::HardwareInitializer>();
     }
 
-    std::unique_ptr<System::ComponentInitializer> createCoreComponent()
+    std::unique_ptr<ComponentBase> createCoreComponent()
     {
         return std::make_unique<System::CoreInitializer>();
     }
 
-    std::unique_ptr<System::ComponentInitializer> createDisplayComponent()
+    std::unique_ptr<ComponentBase> createDisplayComponent()
     {
         return std::make_unique<DisplayInitializer>();
     }
 
-    std::unique_ptr<System::ComponentInitializer> createDataComponent()
+    std::unique_ptr<ComponentBase> createDataComponent()
     {
         return std::make_unique<DataInitializer>();
     }
 
-    std::unique_ptr<System::ComponentInitializer> createAudioComponent( const System::ComponentInitializer * dataComponent )
+    std::unique_ptr<ComponentBase> createAudioComponent( const ComponentBase * dataComponent )
     {
         const DataInitializer * dataInitializer = dynamic_cast<const DataInitializer *>( dataComponent );
         if ( dataInitializer == nullptr ) {
