@@ -50,5 +50,5 @@ namespace Game
 
     std::unique_ptr<System::ComponentInitializer> createDataComponent();
 
-    std::unique_ptr<System::ComponentInitializer> createAudioComponent( const std::unique_ptr<System::ComponentInitializer> & dataComponent );
+    std::unique_ptr<System::ComponentInitializer> createAudioComponent( const System::ComponentInitializer * dataComponent );
 }

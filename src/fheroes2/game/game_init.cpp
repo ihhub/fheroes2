@@ -20,13 +20,19 @@
 
 #include "game_init.h"
 
+#include <cstdint>
+#include <functional>
+#include <list>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "agg.h"
 #include "audio_manager.h"
 #include "cursor.h"
+#include "dir.h"
 #include "embedded_image.h"
 #include "game_assets.h"
 #include "game_delays.h"
@@ -40,11 +46,17 @@
 #include "localevent.h"
 #include "logging.h"
 #include "render_processor.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "ui_tool.h"
 #include "version.h"
 #include "zzlib.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace
 {
@@ -265,9 +277,9 @@ namespace Game
         return std::make_unique<DataInitializer>();
     }
 
-    std::unique_ptr<System::ComponentInitializer> createAudioComponent( const std::unique_ptr<System::ComponentInitializer> & dataComponent )
+    std::unique_ptr<System::ComponentInitializer> createAudioComponent( const System::ComponentInitializer * dataComponent )
     {
-        const DataInitializer * dataInitializer = dynamic_cast<const DataInitializer *>( dataComponent.get() );
+        const DataInitializer * dataInitializer = dynamic_cast<const DataInitializer *>( dataComponent );
         if ( dataInitializer == nullptr ) {
             return {};
         }

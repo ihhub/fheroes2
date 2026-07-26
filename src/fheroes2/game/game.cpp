@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <functional>
 #include <map>
 #include <optional>
 #include <utility>
@@ -37,15 +36,11 @@
 #include "audio_manager.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "cursor.h"
 #include "difficulty.h"
 #include "game_credits.h"
-#include "game_exit.h"
-#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
-#include "localevent.h"
 #include "m82.h"
 #include "maps.h"
 #include "maps_fileinfo.h"

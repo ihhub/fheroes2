@@ -21,15 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdint>
 #include <cstdlib>
 #include <exception>
-#include <functional>
 #include <iostream>
-#include <list>
-#include <memory>
-#include <string>
-#include <vector>
 
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
@@ -51,28 +45,11 @@
 #include <cassert>
 #endif
 
-#include "agg.h"
-#include "audio_manager.h"
-#include "core.h"
-#include "cursor.h"
-#include "dir.h"
-#include "embedded_image.h"
 #include "exception.h"
 #include "game.h"
-#include "game_assets.h"
 #include "game_init.h"
 #include "game_invalid_assets.h"
-#include "h2d.h"
-#include "icn.h"
-#include "image_palette.h"
-#include "localevent.h"
 #include "logging.h"
-#include "render_processor.h"
-#include "screen.h"
-#include "settings.h"
-#include "system.h"
-#include "ui_tool.h"
-#include "version.h"
 
 int main( int argc, char ** argv )
 {
@@ -95,7 +72,7 @@ int main( int argc, char ** argv )
         auto coreComponent = Game::createCoreComponent();
         auto displayComponent = Game::createDisplayComponent();
         auto dataComponent = Game::createDataComponent();
-        auto audioComponent = Game::createAudioComponent( dataComponent );
+        auto audioComponent = Game::createAudioComponent( dataComponent.get() );
 
         Game::initPalette();
         Game::initTranslations();
