@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2026                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,36 +20,7 @@
 
 #pragma once
 
-#include "component_base.h"
-
-namespace System
+struct ComponentBase
 {
-    enum class SystemInitializationComponent : int
-    {
-        Audio,
-        Video,
-        GameController
-    };
-
-    class HardwareInitializer final : public ComponentBase
-    {
-    public:
-        HardwareInitializer();
-        HardwareInitializer( const HardwareInitializer & ) = delete;
-        HardwareInitializer & operator=( const HardwareInitializer & ) = delete;
-
-        ~HardwareInitializer();
-    };
-
-    class CoreInitializer final : public ComponentBase
-    {
-    public:
-        explicit CoreInitializer();
-        CoreInitializer( const CoreInitializer & ) = delete;
-        CoreInitializer & operator=( const CoreInitializer & ) = delete;
-
-        ~CoreInitializer();
-    };
-
-    bool isComponentInitialized( const SystemInitializationComponent component );
-}
+    virtual ~ComponentBase() = default;
+};

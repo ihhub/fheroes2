@@ -32,6 +32,8 @@ namespace fheroes2
 
 namespace Game
 {
+    constexpr const char * hotkeyFileName{ "fheroes2.key" };
+
     enum class HotKeyEvent : int32_t
     {
         NONE,

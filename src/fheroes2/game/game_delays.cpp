@@ -91,12 +91,7 @@ namespace
     }
 }
 
-namespace Game
-{
-    void AnimateDelaysInitialize();
-}
-
-void Game::AnimateDelaysInitialize()
+void Game::initAnimateDelays()
 {
     setDelay( DelayType::SCROLL_DELAY, 20 );
     setDelay( DelayType::SCROLL_START_DELAY, 20 );

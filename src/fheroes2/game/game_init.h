@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2026                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,36 +20,39 @@
 
 #pragma once
 
+#include <memory>
+
 #include "component_base.h"
 
-namespace System
+namespace Game
 {
-    enum class SystemInitializationComponent : int
-    {
-        Audio,
-        Video,
-        GameController
-    };
+    void initLogging();
 
-    class HardwareInitializer final : public ComponentBase
-    {
-    public:
-        HardwareInitializer();
-        HardwareInitializer( const HardwareInitializer & ) = delete;
-        HardwareInitializer & operator=( const HardwareInitializer & ) = delete;
+    void initDataDir();
 
-        ~HardwareInitializer();
-    };
+    void initConfigDir( const char * appPath );
 
-    class CoreInitializer final : public ComponentBase
-    {
-    public:
-        explicit CoreInitializer();
-        CoreInitializer( const CoreInitializer & ) = delete;
-        CoreInitializer & operator=( const CoreInitializer & ) = delete;
+    void initPalette();
 
-        ~CoreInitializer();
-    };
+    // Update the fonts according to the game language set in the configuration.
+    // NOTICE: it must be done before initializing the engine to properly load all
+    // language-specific font characters for the selected language because during
+    // initialization the English language is forced to properly read the configuration files.
+    void initTranslations();
 
-    bool isComponentInitialized( const SystemInitializationComponent component );
+    void initEventHandler();
+
+    void initAnimation();
+
+    void initHotKeys();
+
+    std::unique_ptr<ComponentBase> createHardwareComponent();
+
+    std::unique_ptr<ComponentBase> createCoreComponent();
+
+    std::unique_ptr<ComponentBase> createDisplayComponent();
+
+    std::unique_ptr<ComponentBase> createDataComponent();
+
+    std::unique_ptr<ComponentBase> createAudioComponent( const ComponentBase * dataComponent );
 }

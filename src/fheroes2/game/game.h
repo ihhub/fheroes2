@@ -36,8 +36,6 @@ class Castle;
 
 namespace Game
 {
-    void Init();
-
     enum
     {
         TYPE_MENU = 0,
