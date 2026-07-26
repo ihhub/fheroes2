@@ -35,6 +35,7 @@
 #include "cursor.h"
 #include "dir.h"
 #include "embedded_image.h"
+#include "exception.h"
 #include "game_assets.h"
 #include "game_delays.h"
 #include "game_exit.h"
@@ -282,7 +283,7 @@ namespace Game
     {
         const DataInitializer * dataInitializer = dynamic_cast<const DataInitializer *>( dataComponent );
         if ( dataInitializer == nullptr ) {
-            return {};
+            throw fheroes2::InvalidDataResources{ "Data resources have not been provided." };
         }
 
         ListFiles midiSoundFonts;
