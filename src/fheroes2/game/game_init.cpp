@@ -233,10 +233,6 @@ namespace Game
 
     void initTranslations()
     {
-        // Update the fonts according to the game language set in the configuration.
-        // NOTICE: it must be done before initializing the engine to properly load all
-        // language-specific font characters for the selected language because during
-        // initialization the English language is forced to properly read the configuration files.
         Settings & conf = Settings::Get();
         conf.setGameLanguage( conf.getGameLanguage() );
     }
