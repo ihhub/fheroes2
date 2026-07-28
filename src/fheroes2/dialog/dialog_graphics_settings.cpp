@@ -268,7 +268,7 @@ namespace fheroes2
                 saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
 
-                Assets::resetScaledImages();
+                Assets::resetAllScaledImages();
                 Display::instance().resetRenderer();
 
                 // We upgrade the scaled background image.

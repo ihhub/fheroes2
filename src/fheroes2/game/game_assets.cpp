@@ -60,13 +60,13 @@
 
 namespace
 {
-    const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
+    constexpr std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 
     std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
     std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> _tilVsImage;
     const fheroes2::Sprite errorImage;
 
-    const uint32_t headerSize = 6;
+    constexpr uint32_t headerSize = 6;
 
     std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
 
@@ -181,9 +181,27 @@ namespace
                                                 ICN::BUTTON_TOGGLE_ALL_OFF_EVIL,
                                                 ICN::ARMY_ESTIMATION_ICON };
 
+    // Images that are scaled to the screen size (Main Menu and Editor backgrounds).
+    const std::set<int> scalableBackgroundIcnId{ ICN::EDITOR, ICN::HEROES, ICN::BTNSHNGL, ICN::SHNGANIM };
+
+    // Images that are scaled by Resize() or SubpixelResize() function.
+    const std::set<int> scalableIcnId{ ICN::WHITE_LARGE_FONT };
+
     bool isLanguageDependentIcnId( const int id )
     {
         return languageDependentIcnId.count( id ) > 0;
+    }
+
+    // We have few ICNs which we need to scale to the screen size, like Main Menu and Editor backgrounds.
+    bool isScaledToScreenBackgroundImage( const int icnId )
+    {
+        return scalableBackgroundIcnId.count( icnId ) > 0;
+    }
+
+    // Returns true if the image was scaled by Resize() or SubpixelResize() function.
+    bool isScaledImage( const size_t icnId )
+    {
+        return scalableIcnId.count( icnId ) > 0;
     }
 
     bool useOriginalResources()
@@ -3042,7 +3060,7 @@ namespace
                 const fheroes2::Sprite & in = original[i];
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( in.width() * 2, in.height() * 2 );
-                if (isNearestScalingType) {
+                if ( isNearestScalingType ) {
                     Resize( in, out );
                 }
                 else {
@@ -5726,31 +5744,6 @@ namespace
         return tilImages[0].size();
     }
 
-    // We have few ICNs which we need to scale like some related to main screen
-    bool isScaledToScreenBackgroundImage( const int id )
-    {
-        switch ( id ) {
-        case ICN::EDITOR:
-        case ICN::HEROES:
-        case ICN::BTNSHNGL:
-        case ICN::SHNGANIM:
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    // Returns true if the image was scaled by Resize of SubpixelResize function.
-    bool isScaledImage( const size_t icnId )
-    {
-        switch ( icnId ) {
-        case ICN::WHITE_LARGE_FONT:
-            return true;
-        default:
-            return false;
-        }
-    }
-
     const fheroes2::Sprite & GetScaledICN( const int icnId, const uint32_t index )
     {
         const fheroes2::Sprite & originalIcn = _icnVsSprite[icnId][index];
@@ -5766,7 +5759,8 @@ namespace
 
         fheroes2::Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
 
-        if (!resizedIcn.empty()) {
+        // The image is already resized.
+        if ( !resizedIcn.empty() ) {
             return resizedIcn;
         }
 
@@ -5784,23 +5778,15 @@ namespace
         const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scaleFactor ) ) / 2;
         assert( offsetX >= 0 && offsetY >= 0 );
 
-        // Resize only if needed
-        if ( resizedIcn.height() != resizedHeight || resizedIcn.width() != resizedWidth ) {
-            resizedIcn.resize( resizedWidth, resizedHeight );
-            resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
-                                    static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
+        resizedIcn.resize( resizedWidth, resizedHeight );
+        resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
+                                static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
 
-            if (Settings::Get().isScreenScalingTypeNearest()) {
-                Resize( originalIcn, resizedIcn );
-            }
-            else {
-                SubpixelResize( originalIcn, resizedIcn );
-            }
+        if ( Settings::Get().isScreenScalingTypeNearest() ) {
+            Resize( originalIcn, resizedIcn );
         }
         else {
-            // No need to resize, but we have to update the offset.
-            resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
-                                    static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
+            SubpixelResize( originalIcn, resizedIcn );
         }
 
         return resizedIcn;
@@ -5897,24 +5883,19 @@ namespace Assets
         areOriginalResourcesInUse = loadOriginalAlphabet;
     }
 
-    void resetScaledImages()
+    void resetAllScaledImages()
     {
-        for (size_t i = ICN::UNKNOWN + 1; i < _icnVsSprite.size(); ++i) {
-            if (isScaledImage( i )) {
-                _icnVsSprite[i].clear();
-            }
-            if (isScaledToScreenBackgroundImage( i )) {
-                _icnVsScaledSprite[i].clear();
-            }
+        for ( const int icnId : scalableIcnId ) {
+            _icnVsSprite[icnId].clear();
         }
+
+        resetScaledBackgroundImages();
     }
 
     void resetScaledBackgroundImages()
     {
-        for (size_t i = ICN::UNKNOWN + 1; i < _icnVsSprite.size(); ++i) {
-            if (isScaledToScreenBackgroundImage( i )) {
-                _icnVsScaledSprite[i].clear();
-            }
+        for ( const int icnId : scalableBackgroundIcnId ) {
+            _icnVsScaledSprite[icnId].clear();
         }
     }
 }

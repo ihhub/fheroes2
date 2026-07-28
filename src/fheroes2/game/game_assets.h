@@ -41,6 +41,6 @@ namespace Assets
     // This function must be called only at the time of setting up a new language.
     void updateLanguageDependentResources( const fheroes2::SupportedLanguage language, const bool loadOriginalAlphabet );
 
-    void resetScaledImages();
+    void resetAllScaledImages();
     void resetScaledBackgroundImages();
 }
