@@ -2025,7 +2025,7 @@ namespace
 
         Maps::Tile & tile = world.getTile( dstIndex );
 
-        if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
+        if ( true /* !hero.isFriends( getColorFromTile( tile ) ) */ ) { // original game allowed this
             const auto updateRadar = [objectType, dstIndex]() {
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
                 // Set the radar update ROI according to captured object size and position.
