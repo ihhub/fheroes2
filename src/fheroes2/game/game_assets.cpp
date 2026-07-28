@@ -48,6 +48,7 @@
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
+#include "settings.h"
 #include "til.h"
 #include "tools.h"
 #include "translations.h"
@@ -3036,11 +3037,17 @@ namespace
             Assets::getImage( ICN::FONT, 0 );
             const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
             _icnVsSprite[id].resize( original.size() );
+            const bool isNearestScalingType = Settings::Get().isScreenScalingTypeNearest();
             for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                 const fheroes2::Sprite & in = original[i];
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( in.width() * 2, in.height() * 2 );
-                SubpixelResize( in, out );
+                if (isNearestScalingType) {
+                    Resize( in, out );
+                }
+                else {
+                    SubpixelResize( in, out );
+                }
                 out.setPosition( in.x() * 2, in.y() * 2 );
             }
             break;
@@ -5664,7 +5671,7 @@ namespace
         }
     }
 
-    size_t GetMaximumICNIndex( int id )
+    size_t GetMaximumICNIndex( const int id )
     {
         loadICN( id );
 
@@ -5720,13 +5727,24 @@ namespace
     }
 
     // We have few ICNs which we need to scale like some related to main screen
-    bool IsScalableICN( const int id )
+    bool isScaledToScreenBackgroundImage( const int id )
     {
         switch ( id ) {
         case ICN::EDITOR:
         case ICN::HEROES:
         case ICN::BTNSHNGL:
         case ICN::SHNGANIM:
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    // Returns true if the image was scaled by Resize of SubpixelResize function.
+    bool isScaledImage( const size_t icnId )
+    {
+        switch ( icnId ) {
+        case ICN::WHITE_LARGE_FONT:
             return true;
         default:
             return false;
@@ -5748,6 +5766,10 @@ namespace
 
         fheroes2::Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
 
+        if (!resizedIcn.empty()) {
+            return resizedIcn;
+        }
+
         if ( originalIcn.singleLayer() && !resizedIcn.singleLayer() ) {
             resizedIcn._disableTransformLayer();
         }
@@ -5767,10 +5789,16 @@ namespace
             resizedIcn.resize( resizedWidth, resizedHeight );
             resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
                                     static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
-            Resize( originalIcn, resizedIcn );
+
+            if (Settings::Get().isScreenScalingTypeNearest()) {
+                Resize( originalIcn, resizedIcn );
+            }
+            else {
+                SubpixelResize( originalIcn, resizedIcn );
+            }
         }
         else {
-            // No need to resize but we have to update the offset.
+            // No need to resize, but we have to update the offset.
             resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
                                     static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
         }
@@ -5781,7 +5809,7 @@ namespace
 
 namespace Assets
 {
-    const fheroes2::Sprite & getImage( int icnId, uint32_t index )
+    const fheroes2::Sprite & getImage( const int icnId, const uint32_t index )
     {
         if ( !IsValidICNId( icnId ) ) {
             return errorImage;
@@ -5791,14 +5819,14 @@ namespace Assets
             return errorImage;
         }
 
-        if ( IsScalableICN( icnId ) ) {
+        if ( isScaledToScreenBackgroundImage( icnId ) ) {
             return GetScaledICN( icnId, index );
         }
 
         return _icnVsSprite[icnId][index];
     }
 
-    uint32_t getImageCount( int icnId )
+    uint32_t getImageCount( const int icnId )
     {
         if ( !IsValidICNId( icnId ) ) {
             return 0;
@@ -5807,7 +5835,7 @@ namespace Assets
         return static_cast<uint32_t>( GetMaximumICNIndex( icnId ) );
     }
 
-    const fheroes2::Image & getTileImage( int tilId, uint32_t index, uint32_t shapeId )
+    const fheroes2::Image & getTileImage( const int tilId, const uint32_t index, const uint32_t shapeId )
     {
         if ( shapeId > 3 ) {
             return errorImage;
@@ -5867,5 +5895,26 @@ namespace Assets
 
         currentCodePage = fheroes2::getCodePage( language );
         areOriginalResourcesInUse = loadOriginalAlphabet;
+    }
+
+    void resetScaledImages()
+    {
+        for (size_t i = ICN::UNKNOWN + 1; i < _icnVsSprite.size(); ++i) {
+            if (isScaledImage( i )) {
+                _icnVsSprite[i].clear();
+            }
+            if (isScaledToScreenBackgroundImage( i )) {
+                _icnVsScaledSprite[i].clear();
+            }
+        }
+    }
+
+    void resetScaledBackgroundImages()
+    {
+        for (size_t i = ICN::UNKNOWN + 1; i < _icnVsSprite.size(); ++i) {
+            if (isScaledToScreenBackgroundImage( i )) {
+                _icnVsScaledSprite[i].clear();
+            }
+        }
     }
 }

@@ -28,6 +28,7 @@
 #include "dialog_resolution.h"
 #include "game_assets.h"
 #include "game_hotkeys.h"
+#include "game_mainmenu_ui.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -251,8 +252,10 @@ namespace fheroes2
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
                     saveConfiguration = true;
+
+                    Assets::resetScaledBackgroundImages();
+                    updateUI();
                 }
-                updateUI();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Mode:
@@ -265,7 +268,13 @@ namespace fheroes2
                 saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
 
-                fheroes2::Display::instance().resetRenderer();
+                Assets::resetScaledImages();
+                Display::instance().resetRenderer();
+
+                // We upgrade the scaled background image.
+                if ( const auto * fn = updateUI.target<void ( * )()>(); fn != nullptr && *fn == &drawMainMenuScreen ) {
+                    updateUI();
+                }
                 break;
             case SelectedWindow::VSync:
                 conf.setVSync( !conf.isVSyncEnabled() );
