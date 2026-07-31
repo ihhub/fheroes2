@@ -198,12 +198,6 @@ namespace
         return scalableBackgroundIcnId.count( icnId ) > 0;
     }
 
-    // Returns true if the image was scaled by Resize() or SubpixelResize() function.
-    bool isScaledImage( const size_t icnId )
-    {
-        return scalableIcnId.count( icnId ) > 0;
-    }
-
     bool useOriginalResources()
     {
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
