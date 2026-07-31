@@ -228,7 +228,7 @@ namespace fheroes2
                 break;
             }
             case SelectedWindow::Graphics:
-                saveConfiguration |= openGraphicsSettingsDialog( drawMainMenuScreen);
+                saveConfiguration |= openGraphicsSettingsDialog( drawMainMenuScreen );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::AudioSettings:
