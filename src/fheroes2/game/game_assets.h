@@ -32,12 +32,15 @@ namespace fheroes2
 
 namespace Assets
 {
-    const fheroes2::Sprite & getImage( int icnId, uint32_t index );
-    uint32_t getImageCount( int icnId );
+    const fheroes2::Sprite & getImage( const int icnId, const uint32_t index );
+    uint32_t getImageCount( const int icnId );
 
     // shapeId could be 0, 1, 2 or 3 only
-    const fheroes2::Image & getTileImage( int tilId, uint32_t index, uint32_t shapeId );
+    const fheroes2::Image & getTileImage( const int tilId, const uint32_t index, const uint32_t shapeId );
 
     // This function must be called only at the time of setting up a new language.
     void updateLanguageDependentResources( const fheroes2::SupportedLanguage language, const bool loadOriginalAlphabet );
+
+    void resetAllScaledImages();
+    void resetScaledBackgroundImages();
 }
