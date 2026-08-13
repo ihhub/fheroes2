@@ -1199,7 +1199,7 @@ namespace Maps::Random_Generator
             return;
         }
 
-        const int32_t individualObjectCopies = std::max( 1, static_cast<int32_t>( openTiles.size() ) / 300 );
+        const int32_t individualObjectCopies = std::max<int32_t>( 1, static_cast<int32_t>( openTiles.size() ) / 300 );
         std::vector<int32_t> objectCount( decorations.size(), individualObjectCopies );
 
         const size_t possibilitiesCount = decorations.size() * individualObjectCopies * 3;
