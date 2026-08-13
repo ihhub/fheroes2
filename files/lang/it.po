@@ -6066,6 +6066,9 @@ msgstr "Schermata Eroe"
 msgid "Army Actions"
 msgstr ""
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Il Team di fheroes2 Resurrection presenta"
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Non esistono punti di salvataggio da caricare."
@@ -6126,9 +6129,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr ""
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Il Team di fheroes2 Resurrection presenta"
 
 #, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"

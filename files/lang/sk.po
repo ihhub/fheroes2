@@ -6259,6 +6259,9 @@ msgstr "Okno hrdinu"
 msgid "Army Actions"
 msgstr ""
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Tím fheroes2 Resurrection uvádza"
+
 msgid "The save file is corrupted."
 msgstr "Uložený súbor je poškodený."
 
@@ -6325,9 +6328,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Zrušiť a späť do hlavného menu."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Tím fheroes2 Resurrection uvádza"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vitaj v hre Heroes of Might and Magic II poháňanej enginom fheroes2!"

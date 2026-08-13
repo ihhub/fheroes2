@@ -6229,6 +6229,9 @@ msgstr "Écran de ville"
 msgid "Army Actions"
 msgstr "Actions de l'armée"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "L'équipe fheroes2 Resurrection présente"
+
 msgid "The save file is corrupted."
 msgstr "Le fichier de sauvegarde est corrompu."
 
@@ -6294,9 +6297,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Annuler et revenir au menu principal."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "L'équipe fheroes2 Resurrection présente"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""

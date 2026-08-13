@@ -195,7 +195,7 @@ namespace fheroes2
     {
         drawMainMenuScreen();
 
-        fheroes2::Display & display = fheroes2::Display::instance();
+        Display & display = Display::instance();
 
         // First we need to render the whole screen to update the rendered background image when this dialog is called from the menu.
         display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
@@ -221,15 +221,14 @@ namespace fheroes2
 
                     conf.setGameLanguage( getLanguageAbbreviation( SupportedLanguage::English ) );
 
-                    fheroes2::showStandardTextMessage( "Attention", "Your version of Heroes of Might and Magic II does not support any other languages than English.",
-                                                       Dialog::OK );
+                    showStandardTextMessage( "Attention", "Your version of Heroes of Might and Magic II does not support any other languages than English.", Dialog::OK );
                 }
 
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             }
             case SelectedWindow::Graphics:
-                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
+                saveConfiguration |= openGraphicsSettingsDialog( drawMainMenuScreen );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::AudioSettings:
@@ -237,7 +236,7 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::HotKeys:
-                fheroes2::openHotkeysDialog();
+                openHotkeysDialog();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::CursorType:

@@ -69,8 +69,6 @@ namespace fheroes2
     // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
     constexpr size_t paletteSizeBytes = paletteSize * sizeof( RGB );
 
-    const uint8_t * getGamePalette();
-
     // Get the original game palette with color data in range: 0-63.
     const RGB * getRGBGamePalette();
 

@@ -29,7 +29,7 @@
 
 namespace AGG
 {
-    class AGGInitializer
+    class AGGInitializer final
     {
     public:
         AGGInitializer();

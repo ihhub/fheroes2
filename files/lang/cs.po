@@ -6081,6 +6081,9 @@ msgstr "Obrazovka města"
 msgid "Army Actions"
 msgstr "Akce armády"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Tým fheroes2 Resurrection uvádí"
+
 msgid "The save file is corrupted."
 msgstr "Soubor je požkozen."
 
@@ -6145,9 +6148,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Zrušit a vrátit se do hlavní nabídky."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Tým fheroes2 Resurrection uvádí"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vítejte ve hře Heroes of Might and Magic II běžící na enginu fheroes2!"

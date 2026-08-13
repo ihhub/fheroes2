@@ -137,10 +137,12 @@
     <ClCompile Include="src\fheroes2\game\game_exit.cpp" />
     <ClCompile Include="src\fheroes2\game\game_highscores.cpp" />
     <ClCompile Include="src\fheroes2\game\game_hotkeys.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_init.cpp" />
     <ClCompile Include="src\fheroes2\game\game_interface.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_intro.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_invalid_assets.cpp" />
     <ClCompile Include="src\fheroes2\game\game_io.cpp" />
     <ClCompile Include="src\fheroes2\game\game_loadgame.cpp" />
-    <ClCompile Include="src\fheroes2\game\game_logo.cpp" />
     <ClCompile Include="src\fheroes2\game\game_mainmenu.cpp" />
     <ClCompile Include="src\fheroes2\game\game_mainmenu_ui.cpp" />
     <ClCompile Include="src\fheroes2\game\game_newgame.cpp" />
@@ -252,6 +254,7 @@
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
+    <ClInclude Include="src\engine\component_base.h" />
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\exception.h" />
@@ -357,9 +360,11 @@
     <ClInclude Include="src\fheroes2\game\game_delays.h" />
     <ClInclude Include="src\fheroes2\game\game_exit.h" />
     <ClInclude Include="src\fheroes2\game\game_hotkeys.h" />
+    <ClInclude Include="src\fheroes2\game\game_init.h" />
     <ClInclude Include="src\fheroes2\game\game_interface.h" />
+    <ClInclude Include="src\fheroes2\game\game_intro.h" />
+    <ClInclude Include="src\fheroes2\game\game_invalid_assets.h" />
     <ClInclude Include="src\fheroes2\game\game_io.h" />
-    <ClInclude Include="src\fheroes2\game\game_logo.h" />
     <ClInclude Include="src\fheroes2\game\game_language.h" />
     <ClInclude Include="src\fheroes2\game\game_mainmenu_ui.h" />
     <ClInclude Include="src\fheroes2\game\game_mode.h" />

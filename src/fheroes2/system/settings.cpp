@@ -48,9 +48,6 @@
 #include "ui_language.h"
 #include "version.h"
 
-#define STRINGIFY( DEF ) #DEF
-#define EXPANDDEF( DEF ) STRINGIFY( DEF )
-
 namespace
 {
     enum GameOptions : uint32_t
@@ -92,11 +89,6 @@ namespace
     };
 
     const int defaultSpeedDelay{ 5 };
-}
-
-std::string Settings::GetVersion()
-{
-    return std::to_string( MAJOR_VERSION ) + '.' + std::to_string( MINOR_VERSION ) + '.' + std::to_string( INTERMEDIATE_VERSION );
 }
 
 Settings::Settings()
@@ -152,6 +144,7 @@ Settings & Settings::Get()
 
 bool Settings::Read( const std::string & filePath )
 {
+    // TODO: we shouldn't set any parameters for other classes as these class objects might not be initialized yet.
     TinyConfig config( '=', '#' );
 
     std::string sval;
@@ -362,11 +355,9 @@ bool Settings::Read( const std::string & filePath )
     if ( config.Exists( "cursor soft rendering" ) ) {
         if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
             _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
-            fheroes2::cursor().enableSoftwareEmulation( true );
         }
         else {
             _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
-            fheroes2::cursor().enableSoftwareEmulation( false );
         }
     }
 
@@ -405,14 +396,14 @@ bool Settings::Save( const std::string_view fileName ) const
         return false;
     }
 
-    const std::string data = String();
+    const std::string data = getOptionsString();
 
     fileStream.putRaw( data.data(), data.size() );
 
     return true;
 }
 
-std::string Settings::String() const
+std::string Settings::getOptionsString() const
 {
     std::ostringstream os;
 
@@ -427,7 +418,7 @@ std::string Settings::String() const
         musicType = "original";
     }
 
-    os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
+    os << "# fheroes2 configuration file (saved by version " ENGINE_VERSION ")" << std::endl;
     os << std::endl
        << "# !!! WARNING !!!" << std::endl
        << "# Only modify this file if you are absolutely sure of what you are doing!" << std::endl
@@ -1046,6 +1037,11 @@ bool Settings::isEvilInterfaceEnabled() const
 bool Settings::isBattleMovementAreaHighlightEnabled() const
 {
     return _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
+}
+
+bool Settings::isSoftwareEmulationEnabled() const
+{
+    return _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION );
 }
 
 void Settings::switchToNextInterfaceType()

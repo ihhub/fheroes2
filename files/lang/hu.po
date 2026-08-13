@@ -6030,6 +6030,9 @@ msgstr "Város képernyő"
 msgid "Army Actions"
 msgstr "Sereg cselekvései"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "fheroes2 Resurrection Team bemutatja"
+
 msgid "The save file is corrupted."
 msgstr "A mentés fájl sérült."
 
@@ -6095,9 +6098,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Vissza a főmenübe."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "fheroes2 Resurrection Team bemutatja"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""

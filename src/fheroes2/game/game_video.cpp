@@ -110,6 +110,9 @@ namespace Video
         // Stop any cycling animation.
         fheroes2::ScreenPaletteRestorer screenRestorer;
 
+        // Do not allow users to close the application because of changed palette.
+        const fheroes2::ApplicationClosureRestorer closureRestorer;
+
         std::vector<std::pair<VideoState, std::unique_ptr<SMKVideoSequence>>> sequences;
         // Minimal delay for playback in milliseconds.
         // The framerate of each video is reasonably low so let's put 1 FPS as a start point.

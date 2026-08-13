@@ -6161,6 +6161,9 @@ msgstr "Borg-vindue"
 msgid "Army Actions"
 msgstr "Hær-handlinger"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Teamet bag fheroes2 Resurrection præsenterer"
+
 msgid "The save file is corrupted."
 msgstr "Det gemte spil er korrupt."
 
@@ -6226,9 +6229,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Afbryd og gå tilbage til hovedmenuen."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Teamet bag fheroes2 Resurrection præsenterer"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""

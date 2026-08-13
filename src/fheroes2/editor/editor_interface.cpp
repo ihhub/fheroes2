@@ -2142,6 +2142,8 @@ namespace Interface
                 if ( Get()._runAutoPlaytest() ) {
                     return fheroes2::GameMode::CANCEL;
                 }
+
+                display.render( background.totalArea() );
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
                 return fheroes2::GameMode::CANCEL;
