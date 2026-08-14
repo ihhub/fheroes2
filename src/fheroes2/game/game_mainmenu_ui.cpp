@@ -28,6 +28,7 @@
 #include "game_assets.h"
 #include "icn.h"
 #include "image.h"
+#include "korean_utf8_prototype.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
@@ -103,6 +104,10 @@ namespace fheroes2
         drawSprite( display, ICN::BTNSHNGL, 17 );
 
         fillScreenBorders( display, { mainMenuBackground.x(), mainMenuBackground.y(), mainMenuBackground.width(), mainMenuBackground.height() } );
+
+        // UTF-8 Korean rendering smoke test. Keep this isolated from the normal text engine until
+        // the prototype is validated on a real build.
+        koreanUtf8Prototype::drawMainMenuTestText( display, mainMenuBackground.x() + 250, mainMenuBackground.y() + 448 );
     }
 
     void drawEditorMainMenuScreen()
