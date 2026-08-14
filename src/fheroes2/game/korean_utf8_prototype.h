@@ -79,8 +79,8 @@ namespace fheroes2
 
         inline const Glyph * getGlyph( const uint32_t codePoint )
         {
-            // Temporary 12x12 monochrome prototype glyphs. They cover only the phrase
-            // "한국어 테스트". Full Korean support will replace these with a real glyph provider.
+            // Temporary 12x12 monochrome prototype glyphs. They cover only the Korean UTF-8
+            // smoke-test phrase. Full Korean support will replace these with a real glyph provider.
             static constexpr Glyph han{ 0x3C8, 0x008, 0xFF8, 0x008, 0x3CE, 0x268, 0x3C8, 0x008, 0x200, 0x200, 0x3FC, 0x000 };
             static constexpr Glyph guk{ 0x3F8, 0x008, 0x008, 0x008, 0xFFE, 0x040, 0x040, 0x3F8, 0x008, 0x008, 0x008, 0x000 };
             static constexpr Glyph eo{ 0x3C4, 0x644, 0x464, 0x43C, 0x424, 0x464, 0x644, 0x384, 0x004, 0x004, 0x004, 0x000 };
@@ -90,17 +90,17 @@ namespace fheroes2
             static constexpr Glyph replacement{ 0x3F0, 0x408, 0x008, 0x010, 0x020, 0x040, 0x040, 0x000, 0x040, 0x000, 0x000, 0x000 };
 
             switch ( codePoint ) {
-            case 0xD55C: // 한
+            case 0xD55C:
                 return &han;
-            case 0xAD6D: // 국
+            case 0xAD6D:
                 return &guk;
-            case 0xC5B4: // 어
+            case 0xC5B4:
                 return &eo;
-            case 0xD14C: // 테
+            case 0xD14C:
                 return &te;
-            case 0xC2A4: // 스
+            case 0xC2A4:
                 return &seu;
-            case 0xD2B8: // 트
+            case 0xD2B8:
                 return &teu;
             case 0xFFFD:
                 return &replacement;
@@ -159,7 +159,7 @@ namespace fheroes2
 
         inline void drawMainMenuTestText( Image & output, const int32_t x, const int32_t y )
         {
-            // Explicit UTF-8 byte sequences keep this prototype independent of the compiler's source-code page.
+            // Explicit UTF-8 bytes keep the prototype independent of the compiler source code page.
             constexpr std::string_view testText = "\xED\x95\x9C" "\xEA\xB5\xAD" "\xEC\x96\xB4" " " "\xED\x85\x8C" "\xEC\x8A\xA4" "\xED\x8A\xB8";
             drawText( output, x, y, testText );
         }
