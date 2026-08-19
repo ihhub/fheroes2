@@ -158,8 +158,9 @@ namespace Dialog
 
     private:
         fheroes2::Point _position;
-        uint32_t _middleFragmentCount;
-        int32_t _middleFragmentHeight;
+        uint32_t _middleVerticalFragmentCount{ 0 };
+        int32_t _middleFragmentHeight{ 0 };
+        int32_t _middleFragmentWidth{ 0 };
     };
 
     class FrameBox final : public ResizableFrameBox
