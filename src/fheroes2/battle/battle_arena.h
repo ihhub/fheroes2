@@ -152,7 +152,7 @@ namespace Battle
         const Unit * GetTroopBoard( int32_t ) const;
 
         Unit * GetTroopUID( uint32_t );
-        inline std::shared_ptr<const Units> getOrderOfUnits() const
+        std::shared_ptr<const Units> getOrderOfUnits() const
         {
             return _orderOfUnits;
         }
