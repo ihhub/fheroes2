@@ -29,6 +29,7 @@
 #include <functional>
 #include <limits>
 #include <map>
+#include <memory>
 #include <numeric>
 #include <optional>
 #include <ostream>
@@ -734,6 +735,38 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
     return false;
 }
 
+bool find_next_unit( Battle::Arena & arena, const Battle::Unit & currentUnit )
+{
+    const std::shared_ptr<const Battle::Units> order = arena.getOrderOfUnits();
+    const Battle::Units * units = order.get();
+    if ( units == nullptr ) {
+        // TODO optional
+        return false;
+    }
+
+    size_t i = 0;
+    const size_t count = units->size();
+    for ( ; i < count; i++ ) {
+        const Battle::Unit * unit = units->at( i );
+        if ( *unit == currentUnit ) {
+            break;
+        }
+    }
+    i++;
+    if ( i == count ) {
+        i = 0;
+    }
+
+    const Battle::Unit * next_unit = units->at( i );
+    assert( next_unit != nullptr );
+
+    const Army * current_army = currentUnit.GetArmy();
+    const Army * next_army = next_unit->GetArmy();
+
+    // TODO morale
+    return ( current_army != nullptr ) && ( current_army == next_army );
+}
+
 Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit )
 {
     if ( currentUnit.Modes( Battle::SP_BERSERKER ) ) {
@@ -757,7 +790,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
             Surrender
         };
 
-        const Outcome outcome = [this, &arena, actualHero]() {
+        const Outcome outcome = [this, &arena, actualHero, &currentUnit]() {
             if ( !_considerRetreat ) {
                 return Outcome::ContinueBattle;
             }
@@ -852,7 +885,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
 
             // If the hero has valuable artifacts, he should retreat so that these artifacts do not end up at the disposal of the enemy, especially in the case of an
             // alliance war
-            if ( hasValuableArtifacts ) {
+            if ( hasValuableArtifacts && !find_next_unit( arena, currentUnit ) ) {
                 return Outcome::Retreat;
             }
 
@@ -862,7 +895,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
             }
 
             // Otherwise, if this hero is relatively experienced, then he should retreat so that he can be hired again later
-            if ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) {
+            if ( ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) && !( find_next_unit( arena, currentUnit ) ) ) {
                 return Outcome::Retreat;
             }
 
