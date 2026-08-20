@@ -29,6 +29,7 @@
 #include <functional>
 #include <limits>
 #include <map>
+#include <memory>
 #include <numeric>
 #include <optional>
 #include <ostream>
@@ -733,6 +734,50 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     return false;
 }
+std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit);
+bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit);
+
+std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit )
+{
+    const std::shared_ptr<const Battle::Units> order = arena.getOrderOfUnits();
+    const Battle::Units * units = order.get();
+    if ( units == nullptr ) {
+        return std::nullopt;
+    }
+
+    size_t i = 0;
+    const size_t count = units->size();
+    for ( ; i < count; i++ ) {
+        const Battle::Unit * unit = units->at( i );
+        if ( *unit == currentUnit ) {
+            break;
+        }
+    }
+    i++;
+    if ( i == count ) {
+        i = 0;
+    }
+
+    const Battle::Unit * next_unit = units->at( i );
+    assert( next_unit != nullptr );
+    return { next_unit };
+}
+
+bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit )
+{
+    const std::optional<const Battle::Unit *> maybeNextUnit = findNextUnit( arena, currentUnit );
+    if ( !maybeNextUnit.has_value() ) {
+        return false;
+    }
+    const Battle::Unit * nextUnit = maybeNextUnit.value();
+    assert(nextUnit != nullptr);
+
+    const Army * currentArmy = currentUnit.GetArmy();
+    const Army * nextArmy = nextUnit->GetArmy();
+
+    const bool isSameArmy = ( currentArmy != nullptr ) && ( currentArmy == nextArmy );
+    return isSameArmy && ( nextUnit->GetMorale() >= 0 );
+}
 
 Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit )
 {
@@ -757,7 +802,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
             Surrender
         };
 
-        const Outcome outcome = [this, &arena, actualHero]() {
+        const Outcome outcome = [this, &arena, actualHero, &currentUnit]() {
             if ( !_considerRetreat ) {
                 return Outcome::ContinueBattle;
             }
@@ -852,7 +897,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
 
             // If the hero has valuable artifacts, he should retreat so that these artifacts do not end up at the disposal of the enemy, especially in the case of an
             // alliance war
-            if ( hasValuableArtifacts ) {
+            if ( hasValuableArtifacts && !isPostponeRetreat( arena, currentUnit ) ) {
                 return Outcome::Retreat;
             }
 
@@ -862,7 +907,7 @@ Battle::Actions AI::BattlePlanner::planUnitTurn( Battle::Arena & arena, const Ba
             }
 
             // Otherwise, if this hero is relatively experienced, then he should retreat so that he can be hired again later
-            if ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) {
+            if ( ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) && !( isPostponeRetreat( arena, currentUnit ) ) ) {
                 return Outcome::Retreat;
             }
 
