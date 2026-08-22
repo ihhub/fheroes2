@@ -72,8 +72,6 @@ jobs:
       with:
         args: >-
           -Dsonar.cfamily.compile-commands=build/compile_commands.json
-          -Dsonar.cfamily.analysisCache.mode=fs
-          -Dsonar.cfamily.analysisCache.path=.sonar-cfamily-cache
           "-Dsonar.java.binaries=android/*/build/**/classes"
           "-Dsonar.java.libraries=.sonar-android-sdk/platforms/**/*.jar,.sonar-gradle/caches/**/*.jar"
       env:
