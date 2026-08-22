@@ -1665,7 +1665,8 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            if ( useOriginalResources() ) {
+            // German game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
                 for ( size_t i = 0; i < 3; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
@@ -1697,6 +1698,7 @@ namespace
                 }
                 break;
             }
+
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
             std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "STANDARD\nGAME" ), buttonFontType ),
                                                 fheroes2::getSupportedText( gettext_noop( "CAMPAIGN\nGAME" ), buttonFontType ),
@@ -1713,6 +1715,7 @@ namespace
             if ( isPoLPresent ) {
                 texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "ORIGINAL\nCAMPAIGN" ), buttonFontType ) );
                 texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "EXPANSION\nCAMPAIGN" ), buttonFontType ) );
+                texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "RESURRECTION\nCAMPAIGN" ), buttonFontType ) );
             }
 
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 117 );
@@ -1721,7 +1724,8 @@ namespace
         case ICN::BUTTONS_EDITOR_MENU_GOOD: {
             _icnVsSprite[id].resize( 20 );
 
-            if ( useOriginalResources() ) {
+            // German game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
                 for ( size_t i = 0; i < 2; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 + 1 ) );
@@ -1748,6 +1752,7 @@ namespace
 
                 break;
             }
+
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
             const std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
                                                       fheroes2::getSupportedText( gettext_noop( "LOAD\nMAP" ), buttonFontType ),
