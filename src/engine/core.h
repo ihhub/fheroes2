@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "component_base.h"
+
 namespace System
 {
     enum class SystemInitializationComponent : int
@@ -29,7 +31,7 @@ namespace System
         GameController
     };
 
-    class HardwareInitializer final
+    class HardwareInitializer final : public ComponentBase
     {
     public:
         HardwareInitializer();
@@ -39,7 +41,7 @@ namespace System
         ~HardwareInitializer();
     };
 
-    class CoreInitializer final
+    class CoreInitializer final : public ComponentBase
     {
     public:
         explicit CoreInitializer();

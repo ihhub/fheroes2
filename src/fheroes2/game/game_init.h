@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2026                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,27 +20,39 @@
 
 #pragma once
 
-#include <cstdint>
+#include <memory>
 
-namespace fheroes2
+#include "component_base.h"
+
+namespace Game
 {
-    class Image;
-    class Sprite;
+    void initLogging();
 
-    enum class SupportedLanguage : uint8_t;
-}
+    void initDataDir();
 
-namespace Assets
-{
-    const fheroes2::Sprite & getImage( const int icnId, const uint32_t index );
-    uint32_t getImageCount( const int icnId );
+    void initConfigDir( const char * appPath );
 
-    // shapeId could be 0, 1, 2 or 3 only
-    const fheroes2::Image & getTileImage( const int tilId, const uint32_t index, const uint32_t shapeId );
+    void initPalette();
 
-    // This function must be called only at the time of setting up a new language.
-    void updateLanguageDependentResources( const fheroes2::SupportedLanguage language, const bool loadOriginalAlphabet );
+    // Update the fonts according to the game language set in the configuration.
+    // NOTICE: it must be done before initializing the engine to properly load all
+    // language-specific font characters for the selected language because during
+    // initialization the English language is forced to properly read the configuration files.
+    void initTranslations();
 
-    void resetAllScaledImages();
-    void resetScaledBackgroundImages();
+    void initEventHandler();
+
+    void initAnimation();
+
+    void initHotKeys();
+
+    std::unique_ptr<ComponentBase> createHardwareComponent();
+
+    std::unique_ptr<ComponentBase> createCoreComponent();
+
+    std::unique_ptr<ComponentBase> createDisplayComponent();
+
+    std::unique_ptr<ComponentBase> createDataComponent();
+
+    std::unique_ptr<ComponentBase> createAudioComponent( const ComponentBase * dataComponent );
 }

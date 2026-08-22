@@ -56,7 +56,7 @@ namespace fheroes2
 
         void setMaxDaysInPlaythrough( const int32_t days )
         {
-            _maxDaysInPlaythrough = std::clamp( days, 1, dayLimit );
+            _maxDaysInPlaythrough = std::clamp<int32_t>( days, 1, dayLimit );
         }
 
         int32_t getMaxDaysInPlaythrough() const
@@ -66,7 +66,7 @@ namespace fheroes2
 
         void setAnimationSpeed( const int32_t speed )
         {
-            _animationSpeed = std::clamp( speed, 1, animationLimit );
+            _animationSpeed = std::clamp<int32_t>( speed, 1, animationLimit );
         }
 
         int32_t getAnimationSpeed() const
@@ -76,7 +76,7 @@ namespace fheroes2
 
         void setMaxPlaythroughs( const int32_t playthroughCount )
         {
-            _maxPlaythroughs = std::clamp( playthroughCount, 1, playthroughLimit );
+            _maxPlaythroughs = std::clamp<int32_t>( playthroughCount, 1, playthroughLimit );
         }
 
         int32_t getMaxPlaythroughs() const

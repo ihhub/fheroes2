@@ -48,6 +48,7 @@
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
+#include "settings.h"
 #include "til.h"
 #include "tools.h"
 #include "translations.h"
@@ -59,13 +60,13 @@
 
 namespace
 {
-    const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
+    constexpr std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 
     std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
     std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> _tilVsImage;
     const fheroes2::Sprite errorImage;
 
-    const uint32_t headerSize = 6;
+    constexpr uint32_t headerSize = 6;
 
     std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
 
@@ -180,9 +181,21 @@ namespace
                                                 ICN::BUTTON_TOGGLE_ALL_OFF_EVIL,
                                                 ICN::ARMY_ESTIMATION_ICON };
 
+    // Images that are scaled to the screen size (Main Menu and Editor backgrounds).
+    const std::set<int> scalableBackgroundIcnId{ ICN::EDITOR, ICN::HEROES, ICN::BTNSHNGL, ICN::SHNGANIM };
+
+    // Images that are scaled by Resize() or SubpixelResize() function.
+    const std::set<int> scalableIcnId{ ICN::WHITE_LARGE_FONT };
+
     bool isLanguageDependentIcnId( const int id )
     {
         return languageDependentIcnId.count( id ) > 0;
+    }
+
+    // We have few ICNs which we need to scale to the screen size, like Main Menu and Editor backgrounds.
+    bool isScaledToScreenBackgroundImage( const int icnId )
+    {
+        return scalableBackgroundIcnId.count( icnId ) > 0;
     }
 
     bool useOriginalResources()
@@ -1652,7 +1665,8 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            if ( useOriginalResources() ) {
+            // German game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
                 for ( size_t i = 0; i < 3; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
@@ -1684,6 +1698,7 @@ namespace
                 }
                 break;
             }
+
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
             std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "STANDARD\nGAME" ), buttonFontType ),
                                                 fheroes2::getSupportedText( gettext_noop( "CAMPAIGN\nGAME" ), buttonFontType ),
@@ -1700,6 +1715,7 @@ namespace
             if ( isPoLPresent ) {
                 texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "ORIGINAL\nCAMPAIGN" ), buttonFontType ) );
                 texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "EXPANSION\nCAMPAIGN" ), buttonFontType ) );
+                texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "RESURRECTION\nCAMPAIGN" ), buttonFontType ) );
             }
 
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 117 );
@@ -1708,7 +1724,8 @@ namespace
         case ICN::BUTTONS_EDITOR_MENU_GOOD: {
             _icnVsSprite[id].resize( 20 );
 
-            if ( useOriginalResources() ) {
+            // German game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
                 for ( size_t i = 0; i < 2; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 + 1 ) );
@@ -1735,6 +1752,7 @@ namespace
 
                 break;
             }
+
             const fheroes2::FontType buttonFontType = fheroes2::FontType::buttonReleasedWhite();
             const std::vector<const char *> texts = { fheroes2::getSupportedText( gettext_noop( "NEW\nMAP" ), buttonFontType ),
                                                       fheroes2::getSupportedText( gettext_noop( "LOAD\nMAP" ), buttonFontType ),
@@ -3036,11 +3054,17 @@ namespace
             Assets::getImage( ICN::FONT, 0 );
             const std::vector<fheroes2::Sprite> & original = _icnVsSprite[ICN::FONT];
             _icnVsSprite[id].resize( original.size() );
+            const bool isNearestScalingType = Settings::Get().isScreenScalingTypeNearest();
             for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                 const fheroes2::Sprite & in = original[i];
                 fheroes2::Sprite & out = _icnVsSprite[id][i];
                 out.resize( in.width() * 2, in.height() * 2 );
-                SubpixelResize( in, out );
+                if ( isNearestScalingType ) {
+                    Resize( in, out );
+                }
+                else {
+                    SubpixelResize( in, out );
+                }
                 out.setPosition( in.x() * 2, in.y() * 2 );
             }
             break;
@@ -5664,7 +5688,7 @@ namespace
         }
     }
 
-    size_t GetMaximumICNIndex( int id )
+    size_t GetMaximumICNIndex( const int id )
     {
         loadICN( id );
 
@@ -5719,20 +5743,6 @@ namespace
         return tilImages[0].size();
     }
 
-    // We have few ICNs which we need to scale like some related to main screen
-    bool IsScalableICN( const int id )
-    {
-        switch ( id ) {
-        case ICN::EDITOR:
-        case ICN::HEROES:
-        case ICN::BTNSHNGL:
-        case ICN::SHNGANIM:
-            return true;
-        default:
-            return false;
-        }
-    }
-
     const fheroes2::Sprite & GetScaledICN( const int icnId, const uint32_t index )
     {
         const fheroes2::Sprite & originalIcn = _icnVsSprite[icnId][index];
@@ -5748,6 +5758,11 @@ namespace
 
         fheroes2::Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
 
+        // The image is already resized.
+        if ( !resizedIcn.empty() ) {
+            return resizedIcn;
+        }
+
         if ( originalIcn.singleLayer() && !resizedIcn.singleLayer() ) {
             resizedIcn._disableTransformLayer();
         }
@@ -5762,17 +5777,15 @@ namespace
         const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scaleFactor ) ) / 2;
         assert( offsetX >= 0 && offsetY >= 0 );
 
-        // Resize only if needed
-        if ( resizedIcn.height() != resizedHeight || resizedIcn.width() != resizedWidth ) {
-            resizedIcn.resize( resizedWidth, resizedHeight );
-            resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
-                                    static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
+        resizedIcn.resize( resizedWidth, resizedHeight );
+        resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
+                                static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
+
+        if ( Settings::Get().isScreenScalingTypeNearest() ) {
             Resize( originalIcn, resizedIcn );
         }
         else {
-            // No need to resize but we have to update the offset.
-            resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
-                                    static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
+            SubpixelResize( originalIcn, resizedIcn );
         }
 
         return resizedIcn;
@@ -5781,7 +5794,7 @@ namespace
 
 namespace Assets
 {
-    const fheroes2::Sprite & getImage( int icnId, uint32_t index )
+    const fheroes2::Sprite & getImage( const int icnId, const uint32_t index )
     {
         if ( !IsValidICNId( icnId ) ) {
             return errorImage;
@@ -5791,14 +5804,14 @@ namespace Assets
             return errorImage;
         }
 
-        if ( IsScalableICN( icnId ) ) {
+        if ( isScaledToScreenBackgroundImage( icnId ) ) {
             return GetScaledICN( icnId, index );
         }
 
         return _icnVsSprite[icnId][index];
     }
 
-    uint32_t getImageCount( int icnId )
+    uint32_t getImageCount( const int icnId )
     {
         if ( !IsValidICNId( icnId ) ) {
             return 0;
@@ -5807,7 +5820,7 @@ namespace Assets
         return static_cast<uint32_t>( GetMaximumICNIndex( icnId ) );
     }
 
-    const fheroes2::Image & getTileImage( int tilId, uint32_t index, uint32_t shapeId )
+    const fheroes2::Image & getTileImage( const int tilId, const uint32_t index, const uint32_t shapeId )
     {
         if ( shapeId > 3 ) {
             return errorImage;
@@ -5867,5 +5880,21 @@ namespace Assets
 
         currentCodePage = fheroes2::getCodePage( language );
         areOriginalResourcesInUse = loadOriginalAlphabet;
+    }
+
+    void resetAllScaledImages()
+    {
+        for ( const int icnId : scalableIcnId ) {
+            _icnVsSprite[icnId].clear();
+        }
+
+        resetScaledBackgroundImages();
+    }
+
+    void resetScaledBackgroundImages()
+    {
+        for ( const int icnId : scalableBackgroundIcnId ) {
+            _icnVsScaledSprite[icnId].clear();
+        }
     }
 }
