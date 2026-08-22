@@ -5492,6 +5492,12 @@ msgid ""
 "CAMPAIGN"
 msgstr "ЕКСПАНЗИЯ"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr "ЕКСПАНЗИЯ"
+
 msgid "editorMainMenu|BACK"
 msgstr ""
 

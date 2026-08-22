@@ -5460,6 +5460,14 @@ msgstr ""
 "CHIẾN DỊCH\n"
 "MỞ RỘNG"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"CHIẾN DỊCH\n"
+"MỞ RỘNG"
+
 msgid "editorMainMenu|BACK"
 msgstr ""
 

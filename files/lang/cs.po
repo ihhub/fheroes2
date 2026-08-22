@@ -5288,6 +5288,14 @@ msgstr ""
 "KAMPAŇ\n"
 "DATADISKU"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"KAMPAŇ\n"
+"DATADISKU"
+
 msgid "editorMainMenu|BACK"
 msgstr ""
 

@@ -4868,6 +4868,14 @@ msgstr ""
 "ALDONITA\n"
 "KAMPANJO"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"ALDONITA\n"
+"KAMPANJO"
+
 msgid "editorMainMenu|BACK"
 msgstr "REEN"
 

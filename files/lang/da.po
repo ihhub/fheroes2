@@ -5362,6 +5362,14 @@ msgstr ""
 "UDVIDELSE\n"
 "FELTTOG"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"UDVIDELSE\n"
+"FELTTOG"
+
 msgid "editorMainMenu|BACK"
 msgstr "TILBAGE"
 

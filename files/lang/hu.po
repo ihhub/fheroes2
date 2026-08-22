@@ -5240,6 +5240,14 @@ msgstr ""
 "KIEGÉSZÍTŐ\n"
 "HADJÁRAT"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"KIEGÉSZÍTŐ\n"
+"HADJÁRAT"
+
 msgid "editorMainMenu|BACK"
 msgstr "VISSZA"
 

@@ -5350,6 +5350,14 @@ msgstr ""
 "ZUSATZ\n"
 "FELDZUG"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"ZUSATZ\n"
+"FELDZUG"
+
 msgid "editorMainMenu|BACK"
 msgstr "ZURÜCK"
 

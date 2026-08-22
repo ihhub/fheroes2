@@ -5233,6 +5233,14 @@ msgstr ""
 "EXPANSIONS-\n"
 "KAMPANJ"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"EXPANSIONS-\n"
+"KAMPANJ"
+
 msgid "editorMainMenu|BACK"
 msgstr "TILLBAKA"
 

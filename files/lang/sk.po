@@ -5454,6 +5454,14 @@ msgstr ""
 "KAMPAŇ\n"
 "EXPANZIE"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"KAMPAŇ\n"
+"EXPANZIE"
+
 msgid "editorMainMenu|BACK"
 msgstr ""
 
