@@ -5274,6 +5274,14 @@ msgstr ""
 "CAMPANHA\n"
 "DA EXPANSÃO"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"CAMPANHA\n"
+"DA EXPANSÃO"
+
 msgid "editorMainMenu|BACK"
 msgstr "VOLTAR"
 

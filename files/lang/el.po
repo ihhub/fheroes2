@@ -4849,6 +4849,14 @@ msgstr ""
 "ΙΣΤΟΡΙΑ\n"
 "ΕΠΕΚΤΑΣΗΣ"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"ΙΣΤΟΡΙΑ\n"
+"ΕΠΕΚΤΑΣΗΣ"
+
 msgid "editorMainMenu|BACK"
 msgstr "ΕΠΙΣΤΡΟΦΗ"
 

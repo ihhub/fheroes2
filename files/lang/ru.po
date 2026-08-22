@@ -5282,6 +5282,14 @@ msgstr ""
 "ЦЕНА\n"
 "ВЕРНОСТИ"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"ЦЕНА\n"
+"ВЕРНОСТИ"
+
 msgid "editorMainMenu|BACK"
 msgstr "НАЗАД"
 

@@ -5119,6 +5119,14 @@ msgstr ""
 "CAMPANIE\n"
 "EXPANSIUNE"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"CAMPANIE\n"
+"EXPANSIUNE"
+
 msgid "editorMainMenu|BACK"
 msgstr ""
 

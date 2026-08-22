@@ -5270,6 +5270,14 @@ msgstr ""
 "ЦАНА\n"
 "ВЕРНАСЦІ"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"ЦАНА\n"
+"ВЕРНАСЦІ"
+
 msgid "editorMainMenu|BACK"
 msgstr "НАЗАД"
 

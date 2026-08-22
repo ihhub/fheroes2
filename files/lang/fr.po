@@ -5430,6 +5430,14 @@ msgstr ""
 "SCÉNARIO\n"
 "DISC"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"SCÉNARIO\n"
+"DISC"
+
 msgid "editorMainMenu|BACK"
 msgstr ""
 

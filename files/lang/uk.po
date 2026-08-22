@@ -5254,6 +5254,14 @@ msgstr ""
 "КАМПАНІЇ\n"
 "ДОПОВНЕННЯ"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"КАМПАНІЇ\n"
+"ДОПОВНЕННЯ"
+
 msgid "editorMainMenu|BACK"
 msgstr "НАЗАД"
 

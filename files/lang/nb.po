@@ -5536,6 +5536,15 @@ msgstr ""
 "FOR\n"
 "LOJALITET"
 
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"PRISEN\n"
+"FOR\n"
+"LOJALITET"
+
 msgid "editorMainMenu|BACK"
 msgstr ""
 
