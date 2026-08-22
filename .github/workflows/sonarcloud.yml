@@ -46,13 +46,6 @@ jobs:
     - uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v8
       env:
         SONAR_HOST_URL: https://sonarcloud.io
-    - name: Prepare SonarCloud cfamily cache
-      uses: actions/cache@v6
-      with:
-        path: ~/.sonar-cfamily-cache
-        key: sonarcloud-cfamily-cache-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
-        restore-keys: |
-          sonarcloud-cfamily-cache-
     - name: Generate version information
       run: |
         sed -i~ "s/%{version}/$(cat version.txt)/" sonar-project.properties
