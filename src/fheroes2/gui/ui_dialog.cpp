@@ -57,7 +57,9 @@ class HeroBase;
 
 namespace
 {
-    const int32_t textOffsetY = 10;
+    const int32_t textOffsetY = 2;
+
+    const int32_t headerBodySpacing = 5;
 
     const int32_t elementOffsetX = 10;
 
@@ -170,7 +172,7 @@ namespace fheroes2
 
         Display & display = Display::instance();
         header.draw( pos.x, pos.y + textOffsetY, fheroes2::boxAreaWidthPx, display );
-        body.draw( pos.x, pos.y + textOffsetY + headerHeight, fheroes2::boxAreaWidthPx, display );
+        body.draw( pos.x, pos.y + headerHeight + headerBodySpacing, fheroes2::boxAreaWidthPx, display );
 
         elementHeight = overallTextHeight + textOffsetY;
         if ( bodyTextHeight > 0 ) {
