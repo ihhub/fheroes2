@@ -596,7 +596,7 @@ int32_t Maps::Tile::getTileIndependentPassability() const
     // Top object parts do not affect passability.
     int32_t passability = DIRECTION_ALL;
 
-    const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
+    const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) -> int32_t {
         if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
             // Rivers, streams and flags are completely passable.
             return DIRECTION_ALL;
@@ -612,7 +612,7 @@ int32_t Maps::Tile::getTileIndependentPassability() const
 
         if ( type == MP2::OBJ_REEFS ) {
             // Reefs are inaccessible.
-            return static_cast<int32_t>( 0 );
+            return 0;
         }
 
         if ( !part.isPassabilityTransparent() && !isObjectPartShadow( part ) ) {
