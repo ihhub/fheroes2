@@ -66,14 +66,13 @@ jobs:
     - name: Prepare symlinks for SonarCloud sandbox
       run: |
         ln -s "$ANDROID_HOME" .sonar-android-sdk
-        ln -s ~/.sonar-cfamily-cache .sonar-cfamily-cache
         ln -s ~/.gradle .sonar-gradle
     - uses: SonarSource/sonarqube-scan-action@v8
       with:
         args: >-
           -Dsonar.cfamily.compile-commands=build/compile_commands.json
           -Dsonar.cfamily.analysisCache.mode=fs
-          -Dsonar.cfamily.analysisCache.path=.sonar-cfamily-cache
+          -Dsonar.cfamily.analysisCache.path=~/.sonar-cfamily-cache
           "-Dsonar.java.binaries=android/*/build/**/classes"
           "-Dsonar.java.libraries=.sonar-android-sdk/platforms/**/*.jar,.sonar-gradle/caches/**/*.jar"
       env:
