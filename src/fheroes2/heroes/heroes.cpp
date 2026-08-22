@@ -1962,9 +1962,13 @@ void Heroes::Dismiss( const int reason )
         return;
     }
 
-    // Reset army to default state for hero's race if hero did not surrender in battle or the army is invalid.
-    if ( ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) || !_army.isValid() ) {
+    // Reset army to default state for hero's race if hero did not surrender in battle.
+    if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
         _army.Reset( true );
+    }
+    else if ( !_army.isValid() ) {
+        // Reset empty army for surrendered hero.
+        _army.Reset( false );
     }
 
     const PlayerColor heroColor = GetColor();
