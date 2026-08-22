@@ -1966,6 +1966,10 @@ void Heroes::Dismiss( const int reason )
     if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
         _army.Reset( true );
     }
+    else if ( !_army.isValid() ) {
+        // Reset empty army for surrendered hero.
+        _army.Reset( false );
+    }
 
     const PlayerColor heroColor = GetColor();
     Kingdom & kingdom = GetKingdom();
