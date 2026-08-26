@@ -69,89 +69,6 @@ namespace
     constexpr fheroes2::Size multiLineInputAreaSize{ inputAreaSize.width, multiLineInputAreaHeight };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
-    struct VirtualKeyboardTextView
-    {
-        std::string text;
-        size_t beginPosition{ 0 };
-    };
-
-    std::vector<size_t> getLineStartPositions( const std::string & text )
-    {
-        std::vector<size_t> lineStartPositions{ 0 };
-
-        for ( size_t i = 0; i < text.size(); ++i ) {
-            if ( text[i] == '\n' ) {
-                lineStartPositions.emplace_back( i + 1 );
-            }
-        }
-
-        return lineStartPositions;
-    }
-
-    size_t getCurrentLineIndex( const std::vector<size_t> & lineStartPositions, const size_t cursorPosition )
-    {
-        size_t currentLine = 0;
-
-        for ( size_t i = 1; i < lineStartPositions.size(); ++i ) {
-            if ( lineStartPositions[i] > cursorPosition ) {
-                break;
-            }
-
-            currentLine = i;
-        }
-
-        return currentLine;
-    }
-
-    VirtualKeyboardTextView getVirtualKeyboardTextView( const std::string & text, const size_t cursorPosition )
-    {
-        const std::vector<size_t> lineStartPositions = getLineStartPositions( text );
-
-        if ( lineStartPositions.size() <= static_cast<size_t>( multiLineInputAreaRows ) ) {
-            return { text, 0 };
-        }
-
-        const size_t safeCursorPosition = std::min( cursorPosition, text.size() );
-        const size_t currentLine = getCurrentLineIndex( lineStartPositions, safeCursorPosition );
-
-        const size_t firstVisibleLine
-            = currentLine >= static_cast<size_t>( multiLineInputAreaRows ) ? currentLine - static_cast<size_t>( multiLineInputAreaRows ) + 1 : 0;
-
-        const size_t beginPosition = lineStartPositions[firstVisibleLine];
-
-        const size_t nextLineAfterView = firstVisibleLine + static_cast<size_t>( multiLineInputAreaRows );
-        const size_t endPosition = nextLineAfterView < lineStartPositions.size() ? lineStartPositions[nextLineAfterView] - 1 : text.size();
-
-        return { text.substr( beginPosition, endPosition - beginPosition ), beginPosition };
-    }
-
-    size_t getCursorPositionInAnotherLine( const std::string & text, const size_t cursorPosition, const bool moveDown )
-    {
-        const std::vector<size_t> lineStartPositions = getLineStartPositions( text );
-
-        if ( lineStartPositions.size() < 2 ) {
-            return cursorPosition;
-        }
-
-        const size_t safeCursorPosition = std::min( cursorPosition, text.size() );
-        const size_t currentLine = getCurrentLineIndex( lineStartPositions, safeCursorPosition );
-
-        if ( !moveDown && currentLine == 0 ) {
-            return cursorPosition;
-        }
-
-        if ( moveDown && currentLine + 1 >= lineStartPositions.size() ) {
-            return cursorPosition;
-        }
-
-        const size_t currentColumn = safeCursorPosition - lineStartPositions[currentLine];
-        const size_t targetLine = moveDown ? currentLine + 1 : currentLine - 1;
-        const size_t targetLineStart = lineStartPositions[targetLine];
-        const size_t targetLineEnd = targetLine + 1 < lineStartPositions.size() ? lineStartPositions[targetLine + 1] - 1 : text.size();
-
-        return std::min( targetLineStart + currentColumn, targetLineEnd );
-    }
-
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
 
     bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
@@ -299,9 +216,8 @@ namespace
                                                                                   currentInputAreaSize.width - 2 * inputAreaBorders,
                                                                                   currentInputAreaSize.height - 2 * inputAreaBorders },
                                                                   _isMultiLineText, false, _output );
-            const std::string textToDraw = _getTextToDraw();
 
-            _textUI->draw( textToDraw, static_cast<int32_t>( _cursorPosition - _textViewBeginPosition ) );
+            _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
 
             return true;
         }
@@ -372,7 +288,7 @@ namespace
         void setCursorPosition( const fheroes2::Point & clickPosition )
         {
             if ( _textUI ) {
-                const size_t newPos = std::min( _textViewBeginPosition + _textUI->getCursorInTextPosition( clickPosition ), _info.size() );
+                const size_t newPos = _textUI->getCursorInTextPosition( clickPosition );
                 if ( _cursorPosition != newPos ) {
                     _cursorPosition = newPos;
                     _renderInputArea();
@@ -402,11 +318,19 @@ namespace
 
                 break;
             case CursorPosition::PrevLine:
-                _cursorPosition = getCursorPositionInAnotherLine( _info, _cursorPosition, false );
+                if ( !_textUI ) {
+                    return;
+                }
+
+                _cursorPosition = _textUI->getCursorPositionInAdjacentLine( _cursorPosition, true );
 
                 break;
             case CursorPosition::NextLine:
-                _cursorPosition = getCursorPositionInAnotherLine( _info, _cursorPosition, true );
+                if ( !_textUI ) {
+                    return;
+                }
+
+                _cursorPosition = _textUI->getCursorPositionInAdjacentLine( _cursorPosition, false );
 
                 break;
             case CursorPosition::BegOfText:
@@ -433,30 +357,14 @@ namespace
         std::unique_ptr<fheroes2::StandardWindow> _window;
         std::unique_ptr<fheroes2::TextInputField> _textUI;
         size_t _cursorPosition{ 0 };
-        size_t _textViewBeginPosition{ 0 };
         fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
         bool _isMultiLineText{ false };
         const bool _isEvilInterface{ false };
 
-        std::string _getTextToDraw()
-        {
-            if ( !_isMultiLineText ) {
-                _textViewBeginPosition = 0;
-                return _info;
-            }
-
-            const VirtualKeyboardTextView textView = getVirtualKeyboardTextView( _info, _cursorPosition );
-            _textViewBeginPosition = textView.beginPosition;
-
-            return textView.text;
-        }
-
         void _renderInputArea()
         {
             if ( _textUI ) {
-                const std::string textToDraw = _getTextToDraw();
-
-                _textUI->draw( textToDraw, static_cast<int32_t>( _cursorPosition - _textViewBeginPosition ) );
+                _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
                 _output.render( _textUI->getOverallArea() );
             }
         }
