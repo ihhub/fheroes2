@@ -361,6 +361,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Rect marketplaceCountRoi;
 
     const uint32_t marketplaceEquivalentCount = fromTradingPost ? 3 : kingdom.GetCountMarketplace();
+    const std::string marketplaceEquivalentCountText = marketplaceEquivalentCount >= 9 ? " 9+" : " " + std::to_string( marketplaceEquivalentCount );
 
     // header
     fheroes2::Text text{ header, fheroes2::FontType::normalYellow() };
@@ -412,8 +413,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     {
         const int32_t tileSize = 32;
 
-        const fheroes2::Sprite & tradingPostLeft = fheroes2::AGG::GetICN( ICN::OBJNMULT, 104 );
-        const fheroes2::Sprite & tradingPostRight = fheroes2::AGG::GetICN( ICN::OBJNMULT, 111 );
+        const fheroes2::Sprite & tradingPostLeft = Assets::getImage( ICN::OBJNMULT, 104 );
+        const fheroes2::Sprite & tradingPostRight = Assets::getImage( ICN::OBJNMULT, 111 );
 
         fheroes2::Image fullTradingPostIcon( tileSize * 2, tileSize );
         fullTradingPostIcon.reset();
@@ -433,7 +434,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         fheroes2::Image marketplaceIcon( 40, 20 );
         fheroes2::Resize( fullTradingPostIcon, marketplaceIcon );
 
-        const fheroes2::Text marketplaceCountText( std::string( "x" ) + std::to_string( marketplaceEquivalentCount ), fheroes2::FontType::smallWhite() );
+        const fheroes2::Text marketplaceCountText( std::string( "x" ) + marketplaceEquivalentCountText, fheroes2::FontType::smallWhite() );
 
         const int32_t marketplaceCountElementHeight = std::max( marketplaceIcon.height(), marketplaceCountText.height() );
 
@@ -521,6 +522,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             else if ( marketplaceEquivalentCount == 1 ) {
                 marketplaceCountInfo = _( "You own %{count} Marketplace. More Marketplaces improve resource exchange rates." );
             }
+            else if ( marketplaceEquivalentCount >= 9 ) {
+                marketplaceCountInfo = _( "You own 9 or more Marketplaces. This is the maximum level for resource exchange rates." );
+            }
             else {
                 marketplaceCountInfo = _( "You own %{count} Marketplaces. More Marketplaces improve resource exchange rates." );
             }
@@ -541,6 +545,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             }
             else if ( marketplaceEquivalentCount == 1 ) {
                 marketplaceCountInfo = _( "You own %{count} Marketplace.\nMore Marketplaces improve resource exchange rates." );
+            }
+            else if ( marketplaceEquivalentCount >= 9 ) {
+                marketplaceCountInfo = _( "You own 9 or more Marketplaces. This is the maximum level for resource exchange rates." );
             }
             else {
                 marketplaceCountInfo = _( "You own %{count} Marketplaces.\nMore Marketplaces improve resource exchange rates." );
