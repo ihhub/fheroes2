@@ -3179,6 +3179,7 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
 
     popup.reset();
 
+    _currentCellIndex = -1;
     _currentUnit = nullptr;
     _highlightUnitMovementArea = nullptr;
 }
