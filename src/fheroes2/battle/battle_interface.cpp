@@ -2244,7 +2244,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
         const int32_t hitPointsBarY = sy - hitPointsBarHeight;
 
         const int32_t innerHitPointsBarWidth = hitPointsBarWidth - 2;
-        constexpr int32_t innerHitPointsBarHeight = hitPointsBarHeight - 2;;
+        constexpr int32_t innerHitPointsBarHeight = hitPointsBarHeight - 2;
 
         const uint32_t maximumCreatureHitPoints = unit.GetMonster().GetHitPoints();
         const uint32_t remainingCreatureHitPoints = unit.GetHitPointsLeft();
