@@ -282,7 +282,7 @@ Funds Funds::operator*( uint32_t mul ) const
     return res;
 }
 
-Funds Funds::operator/( const uint32_t div ) const
+Funds Funds::operator/( const int32_t div ) const
 {
     Funds res;
 
