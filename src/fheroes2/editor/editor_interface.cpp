@@ -2744,6 +2744,8 @@ namespace Interface
             if ( hero ) {
                 hero->SetCenter( tilePos );
                 hero->SetColor( Color::IndexToColor( static_cast<int>( color ) ) );
+                hero->SetShipMaster( tile.isWater() );
+                tile.setHero( hero );
             }
             else {
                 // How is it possible that the action was successful but no hero?

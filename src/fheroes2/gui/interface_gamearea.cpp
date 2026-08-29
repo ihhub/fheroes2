@@ -508,12 +508,22 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             switch ( objectType ) {
             case MP2::OBJ_HERO: {
                 if ( isEditor ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tileIndex, MP2::OBJ_HERO );
+                    const Heroes * hero = tile.getHero();
+                    if ( hero == nullptr || !hero->isShipMaster() ) {
+                        const uint8_t alphaValue = getObjectAlphaValue( tileIndex, MP2::OBJ_HERO );
+                
+                        auto spriteInfo = getEditorHeroSpritesPerTile( tile );
+                
+                        std::vector<fheroes2::ObjectRenderingInfo> temp;
+                        populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, { posX, posY }, alphaValue, fogDirection );
+                    }
+                    else {
+                        populateHeroObjectInfo( tileUnfit, hero, fogDirection );
 
-                    auto spriteInfo = getEditorHeroSpritesPerTile( tile );
+                        // Update object type as it could be an object under the hero.
+                        objectType = tile.getMainObjectType( false );
+                    }
 
-                    std::vector<fheroes2::ObjectRenderingInfo> temp;
-                    populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, { posX, posY }, alphaValue, fogDirection );
                     continue;
                 }
 

@@ -990,15 +990,53 @@ namespace Interface
             _interface.setCursorUpdater( [group, type]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
             return;
         case Maps::ObjectGroup::KINGDOM_HEROES:
-            _interface.setCursorUpdater( [type]( const int32_t /*tileIndex*/ ) {
-                // TODO: render ICN::MINIHERO from the existing hero images.
-                const fheroes2::Sprite & image = Assets::getImage( ICN::MINIHERO, type );
+            _interface.setCursorUpdater( [type]( const int32_t tileIndex ) {
+                if ( world.getTile( tileIndex ).isWater() ) {
+                    fheroes2::Sprite image = Assets::getImage( ICN::BOAT32, 18 );
 
-                // Mini-hero images contain a pole with a flag.
-                // This causes a situation that a selected tile does not properly correspond to current position of the cursor.
-                // We need to add a hardcoded correction.
-                constexpr int32_t heroCorrectionY{ 12 };
-                Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+                    int32_t flagIcnId{ ICN::UNKNOWN };
+                    const PlayerColor heroColor = Color::IndexToColor( type / 7 );
+                    switch ( heroColor ) {
+                    case PlayerColor::BLUE:
+                        flagIcnId = ICN::B_BFLG32;
+                        break;
+                    case PlayerColor::GREEN:
+                        flagIcnId = ICN::G_BFLG32;
+                        break;
+                    case PlayerColor::RED:
+                        flagIcnId = ICN::R_BFLG32;
+                        break;
+                    case PlayerColor::YELLOW:
+                        flagIcnId = ICN::Y_BFLG32;
+                        break;
+                    case PlayerColor::ORANGE:
+                        flagIcnId = ICN::O_BFLG32;
+                        break;
+                    case PlayerColor::PURPLE:
+                        flagIcnId = ICN::P_BFLG32;
+                        break;
+
+                    default:
+                        // Did you add a new color? Add the logic above!
+                        assert( 0 );
+                        break;
+                    }
+
+                    const fheroes2::Sprite & flagImage = Assets::getImage( flagIcnId, 18 );
+                    fheroes2::Blit( flagImage, 0, 0, image, flagImage.x() - image.x(), flagImage.y() - image.y(), flagImage.width(), flagImage.height() );
+
+                    Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
+                }
+                else {
+                    // TODO: render ICN::MINIHERO from the existing hero images.
+                    const fheroes2::Sprite & image = Assets::getImage( ICN::MINIHERO, type );
+
+                    // Mini-hero images contain a pole with a flag.
+                    // This causes a situation that a selected tile does not properly correspond to current position of the cursor.
+                    // We need to add a hardcoded correction.
+                    constexpr int32_t heroCorrectionY{ 12 };
+                    Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+                }
             } );
             return;
         case Maps::ObjectGroup::KINGDOM_TOWNS: {
