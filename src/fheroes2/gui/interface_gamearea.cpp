@@ -524,7 +524,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         objectType = tile.getMainObjectType( false );
                     }
 
-                    continue;
+                    break;
                 }
 
                 if ( !drawHeroes ) {
