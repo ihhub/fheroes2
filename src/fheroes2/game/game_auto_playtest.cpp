@@ -329,12 +329,13 @@ namespace
         return std::to_string( value ) + '/' + std::to_string( limit );
     }
 
-    fheroes2::Rect renderCheckbox( const int32_t offsetX, const int32_t offsetY, const bool isEnabled, fheroes2::Image & output, const bool isEvilInterface )
+    fheroes2::Rect renderCheckbox( const int32_t offsetX, const int32_t offsetY, const bool isEnabled, fheroes2::Image & output, const bool isEvilInterface,
+                                   const bool isActive )
     {
         const fheroes2::Sprite & cell = Assets::getImage( ICN::CELLWIN, 1 );
 
         fheroes2::Blit( cell, output, offsetX, offsetY );
-        if ( isEnabled ) {
+        if ( isEnabled && isActive ) {
             const fheroes2::Sprite & mark = Assets::getImage( ICN::CELLWIN, 2 );
             fheroes2::Blit( mark, output, offsetX + mark.x(), offsetY + mark.y() );
         }
@@ -342,6 +343,11 @@ namespace
         if ( isEvilInterface ) {
             fheroes2::ApplyPalette( output, offsetX, offsetY, output, offsetX, offsetY, cell.width(), cell.height(),
                                     PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+
+        if ( !isActive ) {
+            fheroes2::ApplyPalette( output, offsetX, offsetY, output, offsetX, offsetY, cell.width(), cell.height(),
+                                    PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         }
 
         return { offsetX, offsetY, cell.width(), cell.height() };
@@ -399,7 +405,7 @@ namespace fheroes2
 
         positionY += ySpacing;
 
-        const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface ) };
+        const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface, true ) };
 
         text.set( _( "autoPlaytest|Animation" ), FontType::normalWhite() );
         text.draw( animationCheckboxArea.x + animationCheckboxArea.width + 5, animationCheckboxArea.y + 2, display );
@@ -422,9 +428,11 @@ namespace fheroes2
 
         positionY += 30;
 
-        const Rect soundsCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface ) };
+        const Rect soundsCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface,
+                                                       autoPlaytest.isAnimationEnabled() ) };
 
         text.set( _( "autoPlaytest|Sound Effects" ), FontType::normalWhite() );
+        auto soundsTextAreaRestorer = std::make_unique<ImageRestorer>( display, soundsCheckboxArea.x, soundsCheckboxArea.y, text.width(), text.height() );
         text.draw( soundsCheckboxArea.x + soundsCheckboxArea.width + 5, soundsCheckboxArea.y + 2, display );
 
         positionY += ySpacing;
@@ -486,13 +494,23 @@ namespace fheroes2
                 text.fitToOneRow( optionTextMaxWidth );
                 text.draw( animationTextOffset.x, animationTextOffset.y, display );
 
-                renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface );
+                soundsTextAreaRestorer->restore();
+                text.set( _( "autoPlaytest|Sound Effects" ),
+                          autoPlaytest.isAnimationEnabled() ? FontType::normalWhite() : FontType{ FontSize::NORMAL, FontColor::GRAY } );
+                text.draw( soundsCheckboxArea.x + soundsCheckboxArea.width + 5, soundsCheckboxArea.y + 2, display );
+
+                renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface, true );
+
+                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(),
+                                display, isEvilInterface, autoPlaytest.isAnimationEnabled() );
+
                 display.render( window.activeArea() );
             }
-            else if ( eventHandler.MouseClickLeft( soundsCheckboxArea ) ) {
+            else if ( eventHandler.MouseClickLeft( soundsCheckboxArea ) && autoPlaytest.isAnimationEnabled() ) {
                 autoPlaytest.enableSounds( !autoPlaytest.areEnvironmentSoundsEnabled() );
 
-                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface );
+                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(),
+                                display, isEvilInterface, autoPlaytest.isAnimationEnabled() );
                 display.render( soundsCheckboxArea );
             }
 
