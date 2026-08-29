@@ -511,9 +511,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     const Heroes * hero = tile.getHero();
                     if ( hero == nullptr || !hero->isShipMaster() ) {
                         const uint8_t alphaValue = getObjectAlphaValue( tileIndex, MP2::OBJ_HERO );
-                
+
                         auto spriteInfo = getEditorHeroSpritesPerTile( tile );
-                
+
                         std::vector<fheroes2::ObjectRenderingInfo> temp;
                         populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, { posX, posY }, alphaValue, fogDirection );
                     }
