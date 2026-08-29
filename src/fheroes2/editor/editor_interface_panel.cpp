@@ -992,7 +992,8 @@ namespace Interface
         case Maps::ObjectGroup::KINGDOM_HEROES:
             _interface.setCursorUpdater( [type]( const int32_t tileIndex ) {
                 if ( world.getTile( tileIndex ).isWater() ) {
-                    fheroes2::Sprite image = Assets::getImage( ICN::BOAT32, 18 );
+                    constexpr uint32_t boatFrameId{ 18 };
+                    fheroes2::Sprite image = Assets::getImage( ICN::BOAT32, boatFrameId );
 
                     int32_t flagIcnId{ ICN::UNKNOWN };
                     const PlayerColor heroColor = Color::IndexToColor( type / 7 );
@@ -1022,7 +1023,7 @@ namespace Interface
                         break;
                     }
 
-                    const fheroes2::Sprite & flagImage = Assets::getImage( flagIcnId, 18 );
+                    const fheroes2::Sprite & flagImage = Assets::getImage( flagIcnId, boatFrameId );
                     fheroes2::Blit( flagImage, 0, 0, image, flagImage.x() - image.x(), flagImage.y() - image.y(), flagImage.width(), flagImage.height() );
 
                     Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
