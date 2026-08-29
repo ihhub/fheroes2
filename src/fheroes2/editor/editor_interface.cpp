@@ -3408,6 +3408,8 @@ namespace Interface
 
         action.commit();
 
+        _warningMessage.reset( _( "The existing object has been moved on top." ) );
+
         // TODO: so far this is the only way to update objects for rendering.
         return Maps::readMapInEditor( _mapFormat );
     }
