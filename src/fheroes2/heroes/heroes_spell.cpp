@@ -273,6 +273,8 @@ namespace
 
         assert( !monsters.empty() );
 
+        hero.GetKingdom().addMonstersUnderVisionSpell( monsters );
+
         for ( const int32_t monsterIndex : monsters ) {
             const Maps::Tile & tile = world.getTile( monsterIndex );
 
@@ -313,7 +315,10 @@ namespace
                 break;
             }
 
-            fheroes2::showStandardTextMessage( hdr, msg, Dialog::OK );
+            fheroes2::MonsterDialogElement monsterUI( troop );
+            const std::vector<const fheroes2::DialogElement *> uiElements{ &monsterUI };
+
+            fheroes2::showStandardTextMessage( hdr, msg, Dialog::OK, uiElements );
         }
 
         hero.SetModes( Heroes::VISIONS );

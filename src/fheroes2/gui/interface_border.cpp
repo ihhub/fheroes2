@@ -25,8 +25,8 @@
 
 #include <algorithm>
 
-#include "agg_image.h"
 #include "cursor.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -118,7 +118,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
 
     fheroes2::Rect srcrt;
     fheroes2::Point dstpt;
-    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+    const fheroes2::Sprite & icnadv = Assets::getImage( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
 
     // TOP BORDER
     srcrt.x = 0;

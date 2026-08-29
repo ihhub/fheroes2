@@ -30,7 +30,6 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "artifact.h"
@@ -38,6 +37,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h" // IWYU pragma: associated
@@ -110,9 +110,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
     }
 
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
+    const fheroes2::Sprite & backgroundImage = Assets::getImage( ICN::HEROBKG, 0 );
     fheroes2::Blit( backgroundImage, display, dialogRoi.x, dialogRoi.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dialogRoi.x, dialogRoi.y );
+    fheroes2::Blit( Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dialogRoi.x, dialogRoi.y );
 
     // Hero portrait.
     const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
@@ -217,18 +217,18 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // Army format spread icon.
     dst_pt.x = dialogRoi.x + 516;
     dst_pt.y = dialogRoi.y + 63;
-    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
+    const fheroes2::Sprite & sprite1 = Assets::getImage( ICN::HSICONS, 9 );
     const fheroes2::Rect rectSpreadArmyFormat( dst_pt.x, dst_pt.y, sprite1.width(), sprite1.height() );
     const fheroes2::Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // Army format grouped icon.
     dst_pt.x = dialogRoi.x + 552;
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
+    const fheroes2::Sprite & sprite2 = Assets::getImage( ICN::HSICONS, 10 );
     const fheroes2::Rect rectGroupedArmyFormat( dst_pt.x, dst_pt.y, sprite2.width(), sprite2.height() );
     const fheroes2::Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // Army format cursor.
-    fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
+    fheroes2::MovableSprite cursorFormat( Assets::getImage( ICN::HSICONS, 11 ) );
     const fheroes2::Point cursorFormatPos = _army.isSpreadFormation() ? army1_pt : army2_pt;
 
     // Do not show Army format in Editor.
@@ -268,14 +268,14 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Rect raceRect;
 
     auto redrawRace = [&raceRect, &crestRect, &display]( const int race ) {
-        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( race, true ) );
+        const fheroes2::Sprite & raceSprite = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( race, true ) );
         fheroes2::Copy( raceSprite, 0, 0, display, raceRect );
 
         // Update race text background.
         const int32_t offsetY = raceRect.y - crestRect.y + raceRect.height + 9;
         const int32_t posY = crestRect.y + offsetY;
         const int32_t sizeY = crestRect.height - offsetY;
-        fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, offsetY, display, crestRect.x, posY, crestRect.width, sizeY,
+        fheroes2::ApplyPalette( Assets::getImage( ICN::STRIP, 3 ), 0, offsetY, display, crestRect.x, posY, crestRect.width, sizeY,
                                 PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         const fheroes2::Text raceText( Race::String( race ), fheroes2::FontType::smallWhite() );
         raceText.drawInRoi( crestRect.x, posY, crestRect.width, display, { crestRect.x, posY, crestRect.width, sizeY } );
@@ -283,19 +283,19 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     if ( isEditor && Modes( JAIL ) ) {
         assert( GetColor() == PlayerColor::NONE );
-        fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, 0, display, crestRect.x, crestRect.y, crestRect.width, crestRect.height,
+        fheroes2::ApplyPalette( Assets::getImage( ICN::STRIP, 3 ), 0, 0, display, crestRect.x, crestRect.y, crestRect.width, crestRect.height,
                                 PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
         const fheroes2::Text raceText( _( "Hero class:" ), fheroes2::FontType::normalWhite() );
         raceText.drawInRoi( crestRect.x, crestRect.y + 6, crestRect.width, display, crestRect );
 
-        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( _race, true ) );
+        const fheroes2::Sprite & raceSprite = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( _race, true ) );
         raceRect.width = raceSprite.width();
         raceRect.height = raceSprite.height();
         raceRect.x = crestRect.x + ( crestRect.width - raceRect.width ) / 2;
         raceRect.y = crestRect.y + ( crestRect.height - raceRect.height ) / 2;
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 61U ), display, raceRect.x - 5, raceRect.y + 3 );
+        fheroes2::Blit( Assets::getImage( ICN::NGEXTRA, 61U ), display, raceRect.x - 5, raceRect.y + 3 );
 
         redrawRace( _race );
     }
@@ -304,7 +304,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         const PlayerColor color = GetColor();
         const uint32_t icnIndex = Color::GetIndex( color == PlayerColor::NONE ? Settings::Get().CurrentColor() : color );
 
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::CREST, icnIndex ), 0, 0, display, crestRect );
+        fheroes2::Copy( Assets::getImage( ICN::CREST, icnIndex ), 0, 0, display, crestRect );
     }
 
     // Hero's army.
@@ -329,7 +329,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // Status bar.
     dst_pt.x = dialogRoi.x + 22;
     dst_pt.y = dialogRoi.y + 460;
-    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::HSBTNS, 8 );
+    const fheroes2::Sprite & bar = Assets::getImage( ICN::HSBTNS, 8 );
     fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, bar.width(), bar.height() );
 
     StatusBar statusBar;
@@ -367,10 +367,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     std::unique_ptr<fheroes2::ButtonSprite> buttonDismiss;
 
     if ( !isEditor && !readonly && !disableDismiss ) {
-        const fheroes2::Sprite & dismissReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 );
-        buttonDismiss = std::make_unique<fheroes2::ButtonSprite>( dst_pt.x, dst_pt.y - dismissReleased.height() / 2, dismissReleased,
-                                                                  fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ),
-                                                                  fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
+        const fheroes2::Sprite & dismissReleased = Assets::getImage( ICN::BUTTON_VERTICAL_DISMISS, 0 );
+        buttonDismiss
+            = std::make_unique<fheroes2::ButtonSprite>( dst_pt.x, dst_pt.y - dismissReleased.height() / 2, dismissReleased,
+                                                        Assets::getImage( ICN::BUTTON_VERTICAL_DISMISS, 1 ), Assets::getImage( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
 
         if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
             buttonDismiss->disable();
@@ -385,9 +385,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     std::unique_ptr<fheroes2::ButtonSprite> buttonPatrol;
 
     if ( isEditor ) {
-        const fheroes2::Sprite & patrolReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 );
+        const fheroes2::Sprite & patrolReleased = Assets::getImage( ICN::BUTTON_VERTICAL_PATROL, 0 );
         buttonPatrol = std::make_unique<fheroes2::ButtonSprite>( dst_pt.x, dst_pt.y - patrolReleased.height() / 2, patrolReleased,
-                                                                 fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
+                                                                 Assets::getImage( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
 
         fheroes2::addGradientShadow( patrolReleased, display, { dialogRoi.x + 9, dst_pt.y - patrolReleased.height() / 2 }, { -3, 5 } );
 
@@ -400,8 +400,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Exit button.
     dst_pt.x = dialogRoi.x + 602;
-    const fheroes2::Sprite & exitReleased = fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 0 );
-    fheroes2::ButtonSprite buttonExit( dst_pt.x, dst_pt.y - exitReleased.height() / 2, exitReleased, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_EXIT, 1 ) );
+    const fheroes2::Sprite & exitReleased = Assets::getImage( ICN::BUTTON_VERTICAL_EXIT, 0 );
+    fheroes2::ButtonSprite buttonExit( dst_pt.x, dst_pt.y - exitReleased.height() / 2, exitReleased, Assets::getImage( ICN::BUTTON_VERTICAL_EXIT, 1 ) );
 
     LocalEvent & le = LocalEvent::Get();
 

@@ -17,7 +17,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -82,7 +82,15 @@ jobs:
     - name: Commit changes
       run: |
         git diff --name-only -z -- files/lang/*.po \
-            | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ -n "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" ]]; then git add -- "$NAME"; fi; done' dummy
+            | xargs -r0 bash -c 'set -e; for NAME in "$@"; do \
+                if [[ -n "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" ]]; then \
+                    if OLD_DATE=$(git show HEAD:"$NAME" 2>/dev/null | grep -m 1 "^\"POT-Creation-Date:"); then \
+                        OLD_DATE="${OLD_DATE//\\/\\\\}"; \
+                        sed -i "s|^\"POT-Creation-Date:.*|$OLD_DATE|" "$NAME"; \
+                    fi; \
+                    git add -- "$NAME"; \
+                fi; \
+            done' dummy
         git add -- docs/json/lang_*.json
         if git commit -m "Update translation files"; then git push origin HEAD; echo "CREATE_PR=YES" >> "$GITHUB_ENV"; fi
     - name: Create PR

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,24 +20,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
-namespace fheroes2
-{
-    class Image;
-    class Sprite;
-
-    enum class SupportedLanguage : uint8_t;
-
-    namespace AGG
-    {
-        const Sprite & GetICN( int icnId, uint32_t index );
-        uint32_t GetICNCount( int icnId );
-
-        // shapeId could be 0, 1, 2 or 3 only
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
-
-        // This function must be called only at the time of setting up a new language.
-        void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
-    }
-}
+bool getColorConversionTable( uint8_t * table, const size_t tableSize );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,9 +25,9 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -106,7 +106,7 @@ namespace
         const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
 
         const fheroes2::Rect & dialogRoi = dialogFrame.GetArea();
-        const fheroes2::Sprite & buttonLearnImage = fheroes2::AGG::GetICN( buttonLearnIcnID, 0 );
+        const fheroes2::Sprite & buttonLearnImage = Assets::getImage( buttonLearnIcnID, 0 );
 
         fheroes2::Point offset;
         offset.x = dialogRoi.x + dialogRoi.width / 2 - buttonLearnImage.width() - 20;
@@ -142,7 +142,7 @@ namespace
 
         const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
         fheroes2::ButtonSprite buttonHero
-            = fheroes2::makeButtonWithBackground( offset.x, offset.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
+            = fheroes2::makeButtonWithBackground( offset.x, offset.y, Assets::getImage( icnHeroes, 0 ), Assets::getImage( icnHeroes, 1 ), display );
 
         const fheroes2::Text text{ std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( Heroes::maxNumOfSecSkills ),
                                    fheroes2::FontType::normalWhite() };

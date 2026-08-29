@@ -27,7 +27,6 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "army.h"
 #include "artifact.h"
 #include "buildinginfo.h"
@@ -35,6 +34,7 @@
 #include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -76,7 +76,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const int32_t spacer = 10;
-    const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
+    const fheroes2::Sprite & portrait_frame = Assets::getImage( ICN::SURRENDR, 4 );
 
     const fheroes2::Text recruitHeroText( _( "Recruit Hero" ), fheroes2::FontType::normalYellow() );
 
@@ -192,7 +192,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     const Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( Assets::getImage( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
     // hide captain options
     if ( !( _constructedBuildings & BUILD_CAPTAIN ) ) {
@@ -202,7 +202,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         dst_pt.x += cur_pt.x;
         dst_pt.y += cur_pt.y;
 
-        const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+        const fheroes2::Sprite & backgroundImage = Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
         fheroes2::Copy( backgroundImage, rect.x, rect.y, display, dst_pt.x, dst_pt.y, rect.width, rect.height );
     }
 
@@ -337,8 +337,8 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     buildingCaptain.Redraw();
 
     // combat format
-    const fheroes2::Sprite & spriteSpreadArmyFormat = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
-    const fheroes2::Sprite & spriteGroupedArmyFormat = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
+    const fheroes2::Sprite & spriteSpreadArmyFormat = Assets::getImage( ICN::HSICONS, 9 );
+    const fheroes2::Sprite & spriteGroupedArmyFormat = Assets::getImage( ICN::HSICONS, 10 );
     const fheroes2::Rect rectSpreadArmyFormat( cur_pt.x + 550, cur_pt.y + 220, spriteSpreadArmyFormat.width(), spriteSpreadArmyFormat.height() );
     const fheroes2::Rect rectGroupedArmyFormat( cur_pt.x + 585, cur_pt.y + 220, spriteGroupedArmyFormat.width(), spriteGroupedArmyFormat.height() );
     const std::string descriptionSpreadArmyFormat(
@@ -350,7 +350,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     const fheroes2::Rect armyFormatRenderRect( pointSpreadArmyFormat, { rectGroupedArmyFormat.x + rectGroupedArmyFormat.width - pointSpreadArmyFormat.x + 1,
                                                                         rectGroupedArmyFormat.y + rectGroupedArmyFormat.height - pointSpreadArmyFormat.y + 1 } );
 
-    fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
+    fheroes2::MovableSprite cursorFormat( Assets::getImage( ICN::HSICONS, 11 ) );
 
     if ( isBuild( BUILD_CAPTAIN ) ) {
         const int32_t skillValueOffsetX = 90;
@@ -416,13 +416,13 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         hero1->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        const fheroes2::Sprite & noHeroBackgound = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
+        const fheroes2::Sprite & noHeroBackgound = Assets::getImage( ICN::STRIP, 3 );
         fheroes2::Copy( noHeroBackgound, 0, 0, display, rectHero1.x, rectHero1.y, rectHero1.width, rectHero1.height );
     }
 
     // indicator
     if ( !allow_buy_hero1 ) {
-        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        const fheroes2::Sprite & spriteDeny = Assets::getImage( ICN::TOWNWIND, 12 );
         fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
@@ -434,13 +434,13 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        const fheroes2::Sprite & noHeroBackgound = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
+        const fheroes2::Sprite & noHeroBackgound = Assets::getImage( ICN::STRIP, 3 );
         fheroes2::Copy( noHeroBackgound, 0, 0, display, rectHero2.x, rectHero2.y, rectHero2.width, rectHero2.height );
     }
 
     // indicator
     if ( !allow_buy_hero2 ) {
-        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        const fheroes2::Sprite & spriteDeny = Assets::getImage( ICN::TOWNWIND, 12 );
         fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
@@ -450,7 +450,7 @@ Castle::ConstructionDialogResult Castle::_openConstructionDialog( uint32_t & dwe
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
     // bottom small bar
-    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const fheroes2::Sprite & bar = Assets::getImage( ICN::SMALLBAR, 0 );
     const int32_t statusBarWidth = bar.width();
     dst_pt.x = cur_pt.x + buttonPrevCastle.area().width;
     fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, statusBarWidth, bar.height() );

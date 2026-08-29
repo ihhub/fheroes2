@@ -35,7 +35,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "ai_hero_action.h"
 #include "army.h"
 #include "army_troop.h"
@@ -47,6 +46,8 @@
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
@@ -529,6 +530,8 @@ namespace
             Kingdom & enemyKingdom = castle->GetKingdom();
             enemyKingdom.RemoveCastle( castle );
             hero.GetKingdom().AddCastle( castle );
+            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
+
             world.CaptureObject( dstIndex, hero.GetColor() );
 
             castle->Scout();
@@ -2705,7 +2708,7 @@ namespace
             // composite sprite
             int32_t offsetX = 0;
             int32_t offsetY = 0;
-            const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+            const fheroes2::Sprite & border = Assets::getImage( ICN::STRIP, 12 );
 
             const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
 
@@ -3727,22 +3730,16 @@ void Heroes::ScoutRadar() const
 {
     Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-#if defined( WITH_DEBUG )
     if ( GetColor() != PlayerColor::NONE ) {
         const Player * player = Players::Get( GetColor() );
         assert( player != nullptr );
 
         // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we
         // don't call 'SetRenderArea()'.
-        if ( !player->isAIAutoControlMode() ) {
-#endif
-
+        if ( !player->isAIAutoControlMode() && ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) ) {
             I.getRadar().SetRenderArea( GetScoutRoi() );
-
-#if defined( WITH_DEBUG )
         }
     }
-#endif
 
     I.setRedraw( Interface::REDRAW_RADAR );
 }
@@ -3769,16 +3766,13 @@ void Heroes::Action( const int tileIndex )
 
     std::unique_ptr<FocusUpdater> focusUpdater;
 
-#if defined( WITH_DEBUG )
     const Player * player = Players::Get( GetKingdom().GetColor() );
     assert( player != nullptr );
 
     const bool isAIAutoControlMode = player->isAIAutoControlMode();
-#else
-    const bool isAIAutoControlMode = false;
-#endif
 
-    if ( !GetKingdom().isControlAI() || isAIAutoControlMode ) {
+    if ( !GetKingdom().isControlAI()
+         || ( isAIAutoControlMode && ( !Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) ) ) {
         focusUpdater = std::make_unique<FocusUpdater>();
 
         if ( isAIAutoControlMode ) {

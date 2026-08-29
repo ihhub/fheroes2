@@ -80,4 +80,6 @@ namespace Difficulty
     bool isBasicAIBattleLogicApplicable( const int32_t difficulty, const bool isControlledByHuman );
 
     bool isArtifactSortingAllowedForAI( const int32_t difficulty );
+
+    bool isFutureObjectPredictionAllowedForAI( const int32_t difficulty );
 }

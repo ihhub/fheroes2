@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,13 +28,13 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
@@ -53,7 +53,7 @@ namespace
     {
         const fheroes2::Point frameOffset = { 6, 6 };
 
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+        fheroes2::Sprite output = Assets::getImage( ICN::STRIP, 12 );
         renderMonsterFrame( monster, output, frameOffset );
 
         if ( count > 0 ) {
@@ -108,7 +108,7 @@ namespace fheroes2
         }
         case Campaign::ScenarioBonusData::STARTING_RACE:
         case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
-            const CustomImageDialogElement raceUI( AGG::GetICN( ICN::getCaptainIcnId( bonusData._subType ), 1 ) );
+            const CustomImageDialogElement raceUI( Assets::getImage( ICN::getCaptainIcnId( bonusData._subType ), 1 ) );
 
             showStandardTextMessage( bonusData.getName(), bonusData.getDescription(), Dialog::ZERO, { &raceUI } );
             break;
@@ -200,8 +200,8 @@ namespace fheroes2
         }
         case Campaign::CampaignAwardData::TYPE_HIREABLE_HERO:
         case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
-            Sprite output = Crop( AGG::GetICN( ICN::HEROBKG, 0 ), 47, 29, 105, 98 );
-            const Sprite & heroPortrait = AGG::GetICN( ICN::getHeroPortraitIcnId( awardData._subType ), 0 );
+            Sprite output = Crop( Assets::getImage( ICN::HEROBKG, 0 ), 47, 29, 105, 98 );
+            const Sprite & heroPortrait = Assets::getImage( ICN::getHeroPortraitIcnId( awardData._subType ), 0 );
             Blit( heroPortrait, 0, 0, output, 2, 2, heroPortrait.width(), heroPortrait.height() );
 
             const CustomImageDialogElement heroUI( std::move( output ) );

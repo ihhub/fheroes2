@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,8 +23,8 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -67,7 +67,7 @@ namespace
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const fheroes2::Sprite & interfaceStateIcon
-            = isHiddenInterface ? fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ) : fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
+            = isHiddenInterface ? Assets::getImage( ICN::ESPANEL, 4 ) : Assets::getImage( ICN::SPANEL, isEvilInterface ? 17 : 16 );
 
         std::string value;
         if ( isHiddenInterface ) {
@@ -84,7 +84,7 @@ namespace
     {
         const bool isArmyEstimationNumeric = Settings ::Get().isArmyEstimationViewNumeric();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ARMY_ESTIMATION_ICON, isArmyEstimationNumeric ? 1 : 0 ), _( "Army Estimation" ),
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::ARMY_ESTIMATION_ICON, isArmyEstimationNumeric ? 1 : 0 ), _( "Army Estimation" ),
                               isArmyEstimationNumeric ? _( "Numeric" ) : _( "Canonical" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 

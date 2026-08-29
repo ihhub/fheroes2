@@ -32,6 +32,8 @@ namespace fheroes2
 
 namespace Game
 {
+    constexpr const char * hotkeyFileName{ "fheroes2.key" };
+
     enum class HotKeyEvent : int32_t
     {
         NONE,
@@ -81,6 +83,7 @@ namespace Game
         EDITOR_REDO_LAST_ACTION,
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
+        EDITOR_AUTO_PLAYTEST,
 
 #if defined( WITH_DEBUG )
         // These hotkeys are temporary and going to be removed once random map generator is good enough.

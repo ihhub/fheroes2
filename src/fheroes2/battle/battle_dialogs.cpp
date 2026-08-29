@@ -29,7 +29,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "artifact.h"
 #include "audio.h"
@@ -45,6 +44,7 @@
 #include "dialog_audio.h"
 #include "dialog_hotkeys.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
@@ -181,8 +181,8 @@ namespace
     void setupAnimation( fheroes2::Display & display, const fheroes2::Rect & animationRoi, LoopedAnimationSequence & sequence )
     {
         sequence.push( ICN::WINCMBT, true ); // needs specific for battle summary
-        const fheroes2::Sprite & sequenceBase = fheroes2::AGG::GetICN( sequence.id(), 0 );
-        const fheroes2::Sprite & sequenceStart = fheroes2::AGG::GetICN( sequence.id(), 1 );
+        const fheroes2::Sprite & sequenceBase = Assets::getImage( sequence.id(), 0 );
+        const fheroes2::Sprite & sequenceStart = Assets::getImage( sequence.id(), 1 );
         Copy( sequenceBase, 0, 0, display, animationRoi.x, animationRoi.y, sequenceBase.width(), sequenceBase.height() );
         fheroes2::Blit( sequenceStart, display, animationRoi.x + sequenceStart.x(), animationRoi.y + sequenceStart.y() );
     }
@@ -192,11 +192,11 @@ namespace
         if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
             if ( lastSequence != sequence.id() ) {
                 lastSequence = sequence.id();
-                const fheroes2::Sprite & base = fheroes2::AGG::GetICN( lastSequence, 0 );
+                const fheroes2::Sprite & base = Assets::getImage( lastSequence, 0 );
 
                 Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
             }
-            const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
+            const fheroes2::Sprite & sequenceCurrent = Assets::getImage( sequence.id(), sequence.frameId() );
 
             fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
             display.render( animationRoi );
@@ -237,14 +237,14 @@ namespace
             speedIcnIndex = 1;
         }
 
-        const fheroes2::Sprite & speedIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, speedIcnIndex );
+        const fheroes2::Sprite & speedIcon = Assets::getImage( ICN::CSPANEL, speedIcnIndex );
         fheroes2::drawOption( optionRoi, speedIcon, _( "battleAnimation|Speed" ), std::move( str ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawInterfaceSettings( const fheroes2::Rect & optionRoi )
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
+        const fheroes2::Sprite & interfaceThemeIcon = Assets::getImage( ICN::SPANEL, isEvilInterface ? 17 : 16 );
 
         fheroes2::drawOption( optionRoi, interfaceThemeIcon, _( "Interface" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
@@ -252,7 +252,7 @@ namespace
     void drawAutoSpellCasting( const fheroes2::Rect & optionRoi )
     {
         const bool isBattleAudoSpellCastEnabled = Settings::Get().BattleAutoSpellcast();
-        const fheroes2::Sprite & battleAutoSpellCastIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isBattleAudoSpellCastEnabled ? 7 : 6 );
+        const fheroes2::Sprite & battleAutoSpellCastIcon = Assets::getImage( ICN::CSPANEL, isBattleAudoSpellCastEnabled ? 7 : 6 );
         fheroes2::drawOption( optionRoi, battleAutoSpellCastIcon, _( "Auto Spell Casting" ), isBattleAudoSpellCastEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
@@ -491,7 +491,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const fheroes2::Sprite & originalBorderImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE, 0 );
+    const fheroes2::Sprite & originalBorderImage = Assets::getImage( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE, 0 );
     const fheroes2::Rect animationBorderRoi{ 43, 32, 231, 133 };
 
     const fheroes2::Rect & roi( background.activeArea() );
@@ -688,7 +688,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
         background.renderButton( buttonOk, buttonOkICN, 0, 1, { 0, buttonVerticalMargin }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-        const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::WINLOSEB, 0 );
+        const fheroes2::Sprite & border = Assets::getImage( ICN::WINLOSEB, 0 );
         const fheroes2::Rect artifactArea( summaryRoi.x + ( summaryRoi.width - border.width() ) / 2, casualtiesOffsetY + 38, border.width(), border.height() );
         Copy( border, 0, 0, display, artifactArea.x, artifactArea.y, artifactArea.width, artifactArea.height );
 
@@ -748,7 +748,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     needHeaderRedraw = true;
                 }
 
-                const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+                const fheroes2::Sprite & artifact = Assets::getImage( ICN::ARTIFACT, art.IndexSprite64() );
                 Copy( artifact, 0, 0, display, artifactArea.x + 8, artifactArea.y + 8, artifact.width(), artifact.height() );
 
                 artifactName.restore();
@@ -793,7 +793,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 
     // Animation border
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const fheroes2::Sprite & originalBorderImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE, 0 );
+    const fheroes2::Sprite & originalBorderImage = Assets::getImage( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE, 0 );
     const fheroes2::Rect animationBorderRoi{ 43, 32, 231, 133 };
 
     const fheroes2::Rect & roi( background.activeArea() );
@@ -819,7 +819,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     const int32_t messageWidth = roi.width - 22;
     messageBox.draw( roi.x + 11, yOffset, messageWidth, display );
 
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+    const fheroes2::Sprite & monsterSprite = Assets::getImage( ICN::MONS32, mons.GetSpriteIndex() );
     yOffset += messageBox.height( messageWidth ) + monsterSprite.height() - 2;
     fheroes2::Blit( monsterSprite, display, ( display.width() - monsterSprite.width() ) / 2, yOffset );
 
@@ -861,7 +861,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
     const PlayerColor currentColor = GetCurrentColor();
     const bool readonly = ( currentColor != hero.GetColor() || !buttons );
-    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
+    const fheroes2::Sprite & dialog = Assets::getImage( ( conf.isEvilInterfaceEnabled() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
     const fheroes2::Point dialogShadow( 15, 15 );
 
@@ -881,7 +881,7 @@ int Battle::Arena::DialogBattleHero( HeroBase & hero, const bool buttons, Status
 
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     const int col = ( PlayerColor::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
+    fheroes2::Blit( Assets::getImage( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
 
     std::string str = hero.isCaptain() ? _( "Captain of %{name}" ) : _( "%{name} the %{race}" );
     StringReplace( str, "%{name}", hero.GetName() );
@@ -1102,7 +1102,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
+    const fheroes2::Sprite & dialog = Assets::getImage( isEvilInterface ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
 
     fheroes2::Rect pos_rt( ( display.width() - dialog.width() + 16 ) / 2, ( display.height() - dialog.height() + 16 ) / 2, dialog.width(), dialog.height() );
 
@@ -1113,13 +1113,13 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
 
     fheroes2::ButtonSprite btnAccept
-        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, fheroes2::AGG::GetICN( icnAccept, 0 ), fheroes2::AGG::GetICN( icnAccept, 1 ), display );
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, Assets::getImage( icnAccept, 0 ), Assets::getImage( icnAccept, 1 ), display );
 
     fheroes2::ButtonSprite btnDecline
-        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, fheroes2::AGG::GetICN( icnDecline, 0 ), fheroes2::AGG::GetICN( icnDecline, 1 ), display );
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, Assets::getImage( icnDecline, 0 ), Assets::getImage( icnDecline, 1 ), display );
 
-    fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithShadow( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, fheroes2::AGG::GetICN( icnMarket, 0 ),
-                                                                       fheroes2::AGG::GetICN( icnMarket, 1 ), display );
+    fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithShadow( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, Assets::getImage( icnMarket, 0 ),
+                                                                       Assets::getImage( icnMarket, 1 ), display );
 
     if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
         btnAccept.disable();
@@ -1152,7 +1152,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     };
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
-    const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
+    const fheroes2::Sprite & window = Assets::getImage( icn, 4 );
     fheroes2::Blit( window, display, pos_rt.x + 55, pos_rt.y + 32 );
     hero.PortraitRedraw( pos_rt.x + 60, pos_rt.y + 38, PORT_BIG, display );
 

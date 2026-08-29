@@ -268,7 +268,21 @@ namespace fheroes2
 
         ScreenPaletteRestorer & operator=( const ScreenPaletteRestorer & ) = delete;
 
-        void changePalette( const uint8_t * palette ) const;
+        void changePalette( const uint8_t * palette );
+
+    private:
+        bool _paletteChanged{ false };
+    };
+
+    struct ApplicationClosureRestorer final
+    {
+        ApplicationClosureRestorer();
+
+        ApplicationClosureRestorer( const ApplicationClosureRestorer & ) = delete;
+
+        ~ApplicationClosureRestorer();
+
+        ApplicationClosureRestorer & operator=( const ApplicationClosureRestorer & ) = delete;
     };
 
     struct GameInterfaceTypeRestorer

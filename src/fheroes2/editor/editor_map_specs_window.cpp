@@ -33,7 +33,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "artifact.h"
 #include "castle.h"
 #include "color.h"
@@ -45,6 +44,7 @@
 #include "editor_language_window.h"
 #include "editor_rumor_window.h"
 #include "editor_ui_helper.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "game_over.h"
@@ -113,9 +113,9 @@ namespace
         // To render hero icons we use castle flags and frame.
         const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
 
-        const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
-        const fheroes2::Sprite & castleFrame = fheroes2::AGG::GetICN( townIcnId, 22 );
-        const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+        const fheroes2::Sprite & castleLeftFlag = Assets::getImage( ICN::FLAG32, flagIcnIndex );
+        const fheroes2::Sprite & castleFrame = Assets::getImage( townIcnId, 22 );
+        const fheroes2::Sprite & castleRightFlag = Assets::getImage( ICN::FLAG32, flagIcnIndex + 1 );
 
         fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
         castleIcon.reset();
@@ -125,7 +125,7 @@ namespace
         fheroes2::Blit( castleRightFlag, 0, 0, castleIcon, castleFrame.width() + castleLeftFlag.width() + 4, 5, castleRightFlag.width(), castleRightFlag.height() );
 
         if ( heroPortait > 0 ) {
-            const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::MINIPORT, heroPortait - 1 );
+            const fheroes2::Sprite & heroPortrait = Assets::getImage( ICN::MINIPORT, heroPortait - 1 );
             fheroes2::Copy( heroPortrait, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, heroPortrait.width(), heroPortrait.height() );
         }
         else {
@@ -160,7 +160,7 @@ namespace
                 break;
             }
 
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::NGEXTRA, portraitIndex ), 17, 10, castleIcon, castleLeftFlag.width() + 6, 4, 30, 22 );
+            fheroes2::Copy( Assets::getImage( ICN::NGEXTRA, portraitIndex ), 17, 10, castleIcon, castleLeftFlag.width() + 6, 4, 30, 22 );
         }
 
         return castleIcon;
@@ -170,9 +170,9 @@ namespace
     {
         const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( color );
 
-        const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
-        const fheroes2::Sprite & castleFrame = fheroes2::AGG::GetICN( townIcnId, 23 );
-        const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+        const fheroes2::Sprite & castleLeftFlag = Assets::getImage( ICN::FLAG32, flagIcnIndex );
+        const fheroes2::Sprite & castleFrame = Assets::getImage( townIcnId, 23 );
+        const fheroes2::Sprite & castleRightFlag = Assets::getImage( ICN::FLAG32, flagIcnIndex + 1 );
 
         fheroes2::Sprite castleIcon( castleFrame.width() + castleLeftFlag.width() + castleRightFlag.width() + 4, castleFrame.height() );
         castleIcon.reset();
@@ -183,7 +183,7 @@ namespace
 
         const uint32_t icnIndex = fheroes2::getCastleIcnIndex( race, !isTown );
 
-        const fheroes2::Sprite & castleImage = fheroes2::AGG::GetICN( townIcnId, icnIndex );
+        const fheroes2::Sprite & castleImage = Assets::getImage( townIcnId, icnIndex );
         fheroes2::Copy( castleImage, 0, 0, castleIcon, castleLeftFlag.width() + 6, 4, castleImage.width(), castleImage.height() );
 
         return castleIcon;
@@ -241,7 +241,7 @@ namespace
 
     fheroes2::Rect renderConditionsHeroIconAndName( const HeroInfo & heroInfo, const int32_t mapWidth, const fheroes2::Rect & roi, fheroes2::Image & output )
     {
-        const fheroes2::Sprite & heroFrame = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        const fheroes2::Sprite & heroFrame = Assets::getImage( ICN::SWAPWIN, 0 );
 
         const int32_t heroFrameWidth = 111;
         const int32_t heroFrameHeight = 105;
@@ -252,8 +252,8 @@ namespace
 
         // To render hero icons we use castle flags and frame.
         const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( heroInfo.color );
-        const fheroes2::Sprite & castleLeftFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
-        const fheroes2::Sprite & castleRightFlag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+        const fheroes2::Sprite & castleLeftFlag = Assets::getImage( ICN::FLAG32, flagIcnIndex );
+        const fheroes2::Sprite & castleRightFlag = Assets::getImage( ICN::FLAG32, flagIcnIndex + 1 );
         Blit( castleLeftFlag, 0, 0, output, selectConditionRoi.x - 21, selectConditionRoi.y + 45, castleLeftFlag.width(), castleLeftFlag.height() );
         Blit( castleRightFlag, 0, 0, output, selectConditionRoi.x + selectConditionRoi.width + 2, selectConditionRoi.y + 45, castleRightFlag.width(),
               castleRightFlag.height() );
@@ -263,7 +263,7 @@ namespace
         assert( heroMetadata != nullptr );
 
         if ( heroMetadata->customPortrait > 0 ) {
-            const fheroes2::Sprite & heroPortrait = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroMetadata->customPortrait ), 0 );
+            const fheroes2::Sprite & heroPortrait = Assets::getImage( ICN::getHeroPortraitIcnId( heroMetadata->customPortrait ), 0 );
 
             fheroes2::Copy( heroPortrait, 0, 0, output, selectConditionRoi.x + 5, selectConditionRoi.y + 6, heroPortrait.width(), heroPortrait.height() );
         }
@@ -607,7 +607,7 @@ namespace
 
     void redrawVictoryCondition( const uint8_t condition, const fheroes2::Rect & roi, const bool yellowFont, fheroes2::Image & output )
     {
-        const fheroes2::Sprite & winIcon = fheroes2::AGG::GetICN( ICN::REQUESTS, getVictoryIcnIndex( condition ) );
+        const fheroes2::Sprite & winIcon = Assets::getImage( ICN::REQUESTS, getVictoryIcnIndex( condition ) );
         fheroes2::Copy( winIcon, 0, 0, output, roi.x + 1, roi.y, winIcon.width(), winIcon.height() );
         const fheroes2::Text winText( getVictoryConditionText( condition ), yellowFont ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         winText.drawInRoi( roi.x + 20, roi.y + 2, output, roi );
@@ -615,7 +615,7 @@ namespace
 
     void redrawLossCondition( const uint8_t condition, const fheroes2::Rect & roi, const bool yellowFont, fheroes2::Image & output )
     {
-        const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::REQUESTS, getLossIcnIndex( condition ) );
+        const fheroes2::Sprite & icon = Assets::getImage( ICN::REQUESTS, getLossIcnIndex( condition ) );
         fheroes2::Copy( icon, 0, 0, output, roi.x + 1, roi.y, icon.width(), icon.height() );
         const fheroes2::Text winText( getLossConditionText( condition ), yellowFont ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         winText.drawInRoi( roi.x + 20, roi.y + 2, output, roi );
@@ -640,7 +640,7 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( dropBoxIcn, 0 );
+            const fheroes2::Sprite & image = Assets::getImage( dropBoxIcn, 0 );
 
             const int32_t topPartHeight = image.height() - 2;
             const int32_t listWidth = image.width();
@@ -1102,7 +1102,7 @@ namespace
                 if ( renderEverything ) {
                     const fheroes2::Rect roi{ _restorer.rect() };
 
-                    const fheroes2::Sprite & artifactFrame = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+                    const fheroes2::Sprite & artifactFrame = Assets::getImage( ICN::RESOURCE, 7 );
                     _selectConditionRoi = { roi.x + ( roi.width - artifactFrame.width() ) / 2, roi.y + 4, artifactFrame.width(), artifactFrame.height() };
 
                     fheroes2::Blit( artifactFrame, output, _selectConditionRoi.x, _selectConditionRoi.y );
@@ -1115,7 +1115,7 @@ namespace
                                                                            roi.y + _selectConditionRoi.height + 10, _isEvilInterface, roi.width - 5 );
                 }
 
-                const fheroes2::Sprite & artifactImage = fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
+                const fheroes2::Sprite & artifactImage = Assets::getImage( ICN::ARTIFACT, Artifact( static_cast<int>( _victoryArtifactId ) ).IndexSprite64() );
 
                 fheroes2::Copy( artifactImage, 0, 0, output, _selectConditionRoi.x + 6, _selectConditionRoi.y + 6, artifactImage.width(), artifactImage.height() );
 
@@ -2051,7 +2051,7 @@ namespace Editor
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         if ( isDefaultScreenSize ) {
-            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+            const fheroes2::Sprite & backgroundImage = Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
             fheroes2::Copy( backgroundImage, 0, 0, display, activeArea );
         }
 
@@ -2060,7 +2060,7 @@ namespace Editor
         }
 
         // Map name.
-        const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+        const fheroes2::Sprite & scenarioBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
         const fheroes2::Rect scenarioBoxRoi( activeArea.x + ( activeArea.width - scenarioBox.width() ) / 2, activeArea.y + 10, scenarioBox.width(),
                                              scenarioBox.height() );
         const fheroes2::Rect mapNameRoi( scenarioBoxRoi.x + 6, scenarioBoxRoi.y + 5, scenarioBoxRoi.width - 12, scenarioBoxRoi.height - 11 );
@@ -2080,7 +2080,7 @@ namespace Editor
         std::vector<fheroes2::Rect> playerRects( availablePlayersCount );
         const PlayerColorsVector availableColors( mapFormat.availablePlayerColors );
 
-        const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+        const fheroes2::Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
         for ( int32_t i = 0; i < availablePlayersCount; ++i ) {
             playerRects[i].x = offsetX + i * playerStepX;
             playerRects[i].y = offsetY;
@@ -2089,7 +2089,7 @@ namespace Editor
 
             const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + getPlayerIcnIndex( mapFormat, availableColors[i] );
 
-            const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
+            const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
             playerRects[i].width = playerIcon.width();
             playerRects[i].height = playerIcon.height();
             fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
@@ -2105,7 +2105,7 @@ namespace Editor
         std::array<fheroes2::Rect, 4> difficultyRects;
         offsetY += 23;
 
-        const fheroes2::Sprite & difficultyCursorSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+        const fheroes2::Sprite & difficultyCursorSprite = Assets::getImage( ICN::NGEXTRA, 62 );
         const int32_t difficultyIconSideLength = difficultyCursorSprite.width();
         const int difficultyIcnIndex = isEvilInterface ? 1 : 0;
 
@@ -2115,7 +2115,7 @@ namespace Editor
             difficultyRects[i].width = difficultyIconSideLength;
             difficultyRects[i].height = difficultyIconSideLength;
 
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::DIFFICULTY_ICON_EASY + i, difficultyIcnIndex );
+            const fheroes2::Sprite & icon = Assets::getImage( ICN::DIFFICULTY_ICON_EASY + i, difficultyIcnIndex );
             fheroes2::Copy( icon, 0, 0, display, difficultyRects[i] );
             fheroes2::addGradientShadow( icon, display, { difficultyRects[i].x, difficultyRects[i].y }, { -5, 5 } );
 
@@ -2157,7 +2157,7 @@ namespace Editor
         offsetY += 20;
 
         const int dropListIcn = isEvilInterface ? ICN::DROPLISL_EVIL : ICN::DROPLISL;
-        const fheroes2::Sprite & itemBackground = fheroes2::AGG::GetICN( dropListIcn, 0 );
+        const fheroes2::Sprite & itemBackground = Assets::getImage( dropListIcn, 0 );
         const int32_t itemBackgroundWidth = itemBackground.width();
         const int32_t itemBackgroundHeight = itemBackground.height();
         const int32_t itemBackgroundOffsetX = activeArea.width / 4 - itemBackgroundWidth / 2 - 11;
@@ -2168,8 +2168,8 @@ namespace Editor
 
         redrawVictoryCondition( mapFormat.victoryConditionType, victoryTextRoi, false, display );
 
-        const fheroes2::Sprite & dropListButtonSprite = fheroes2::AGG::GetICN( dropListIcn, 1 );
-        const fheroes2::Sprite & dropListButtonPressedSprite = fheroes2::AGG::GetICN( dropListIcn, 2 );
+        const fheroes2::Sprite & dropListButtonSprite = Assets::getImage( dropListIcn, 1 );
+        const fheroes2::Sprite & dropListButtonPressedSprite = Assets::getImage( dropListIcn, 2 );
 
         fheroes2::ButtonSprite victoryDroplistButton( offsetX + itemBackgroundWidth, offsetY, dropListButtonSprite, dropListButtonPressedSprite );
         const fheroes2::Rect victoryDroplistButtonRoi( fheroes2::getBoundaryRect( victoryDroplistButton.area(), victoryTextRoi ) );
@@ -2458,7 +2458,7 @@ namespace Editor
 
                     // Update player icon.
                     const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + getPlayerIcnIndex( mapFormat, availableColors[i] );
-                    const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
+                    const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
                     fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
 
                     renderRoi = fheroes2::getBoundaryRect( renderRoi, playerRects[i] );

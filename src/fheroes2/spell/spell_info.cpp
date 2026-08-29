@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -399,14 +399,10 @@ namespace fheroes2
 
                      // On original HoMM2 maps, neutral boats can only be summoned by human players
                      {
-#if defined( WITH_DEBUG )
                          const Player * player = Players::Get( heroColor );
                          assert( player != nullptr );
 
                          const bool isAIAutoControlMode = player->isAIAutoControlMode();
-#else
-                         const bool isAIAutoControlMode = false;
-#endif
 
                          return hero.isControlAI() && !isAIAutoControlMode;
                      }

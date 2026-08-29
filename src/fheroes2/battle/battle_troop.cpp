@@ -28,7 +28,6 @@
 #include <optional>
 #include <sstream>
 
-#include "agg_image.h"
 #include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
@@ -42,6 +41,7 @@
 #include "battle_tower.h"
 #include "castle.h"
 #include "color.h"
+#include "game_assets.h"
 #include "game_static.h"
 #include "heroes_base.h"
 #include "image.h"
@@ -259,7 +259,7 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
     const uint32_t totalHitPoints = _maxCount * Monster::GetHitPoints();
-    assert( totalHitPoints > _hitPoints );
+    assert( totalHitPoints >= _hitPoints );
     return totalHitPoints - _hitPoints;
 }
 
@@ -1623,7 +1623,7 @@ fheroes2::Point Battle::Unit::GetBackPoint() const
 
 fheroes2::Point Battle::Unit::GetCenterPoint() const
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite(), GetFrame() );
+    const fheroes2::Sprite & sprite = Assets::getImage( GetMonsterSprite(), GetFrame() );
 
     const fheroes2::Rect & pos = _position.GetRect();
     const int32_t centerY = pos.y + pos.height + sprite.y() / 2 - 10;

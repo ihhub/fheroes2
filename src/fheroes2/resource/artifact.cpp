@@ -35,9 +35,9 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game_assets.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
@@ -1110,7 +1110,7 @@ ArtifactsBar::ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const
     , _statusBar( bar )
 {
     if ( use_mini_sprite ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::HSICONS, 0 );
         const fheroes2::Rect rt( 26, 21, 32, 32 );
 
         backsf.resize( rt.width + 2, rt.height + 2 );
@@ -1126,7 +1126,7 @@ ArtifactsBar::ArtifactsBar( Heroes * hero, const bool mini, const bool ro, const
         fheroes2::DrawBorder( spcursor, 214 );
     }
     else {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::ARTIFACT, 0 );
         setSingleItemSize( { sprite.width(), sprite.height() } );
 
         spcursor.resize( 70, 70 );
@@ -1154,19 +1154,19 @@ void ArtifactsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image
     if ( use_mini_sprite )
         fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
     else
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 ), dstsf, pos.x, pos.y );
+        fheroes2::Blit( Assets::getImage( ICN::ARTIFACT, 0 ), dstsf, pos.x, pos.y );
 }
 
 void ArtifactsBar::RedrawItem( Artifact & art, const fheroes2::Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( art.isValid() ) {
         if ( use_mini_sprite ) {
-            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+            const fheroes2::Sprite & artifactSprite = Assets::getImage( ICN::ARTFX, art.IndexSprite32() );
             fheroes2::Fill( dstsf, pos.x + 1, pos.y + 1, artifactSprite.width(), artifactSprite.height(), 0 );
             fheroes2::Blit( artifactSprite, dstsf, pos.x + 1, pos.y + 1 );
         }
         else {
-            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+            const fheroes2::Sprite & artifactSprite = Assets::getImage( ICN::ARTIFACT, art.IndexSprite64() );
             fheroes2::Fill( dstsf, pos.x, pos.y, artifactSprite.width(), artifactSprite.height(), 0 );
             fheroes2::Blit( artifactSprite, dstsf, pos.x, pos.y );
         }

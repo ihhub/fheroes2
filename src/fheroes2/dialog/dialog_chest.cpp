@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,9 +24,9 @@
 #include <cstdint>
 #include <string>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
@@ -49,8 +49,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::Sprite & sprite_gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-    const fheroes2::Sprite & sprite_expr = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
+    const fheroes2::Sprite & sprite_gold = Assets::getImage( ICN::RESOURCE, 6 );
+    const fheroes2::Sprite & sprite_expr = Assets::getImage( ICN::EXPMRL, 4 );
 
     fheroes2::Text headerText( header, fheroes2::FontType::normalYellow() );
     fheroes2::Text messageText( message, fheroes2::FontType::normalWhite() );
@@ -67,7 +67,7 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
     const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
 
-    const fheroes2::Sprite & buttonYesSprite = fheroes2::AGG::GetICN( buttonYesIcnID, 0 );
+    const fheroes2::Sprite & buttonYesSprite = Assets::getImage( buttonYesIcnID, 0 );
 
     const int32_t buttonsYPosition = box.GetArea().y + box.GetArea().height - buttonYesSprite.height();
     const int32_t buttonYesXPosition = box.GetArea().x + box.GetArea().width / 2 - buttonYesSprite.width() - 20;
@@ -100,7 +100,7 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     text.draw( pos.x + sprite_gold.width() / 2 - text.width() / 2, pos.y + 4, display );
 
     // sprite2
-    pos.x = buttonNoXPosition + ( ( fheroes2::AGG::GetICN( buttonNoIcnID, 0 ).width() - sprite_expr.width() ) / 2 );
+    pos.x = buttonNoXPosition + ( ( Assets::getImage( buttonNoIcnID, 0 ).width() - sprite_expr.width() ) / 2 );
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
     text.set( std::to_string( expr ) + " (" + _( "Need: " ) + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",

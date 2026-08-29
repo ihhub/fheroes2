@@ -134,7 +134,7 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
             checkSelectBestSpell( spell, spellDragonSlayerValue( spell, friendly, enemies ) );
         }
         else if ( spell == Spell::TELEPORT ) {
-            checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, enemies ) );
+            checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, trueEnemies ) );
         }
         else if ( spell == Spell::EARTHQUAKE ) {
             checkSelectBestSpell( spell, spellEarthquakeValue( arena, spell, friendly ) );
@@ -851,6 +851,11 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
                                                             const Battle::Units & enemies ) const
 {
     assert( spell == Spell::TELEPORT );
+
+    if ( currentUnit.Modes( Battle::SP_HYPNOTIZE ) ) {
+        // TODO: implement Teleport for Hypnotized units.
+        return {};
+    }
 
     // Teleport spell is useful in many cases. The current implementation focuses only on offensive movements for melee units.
 

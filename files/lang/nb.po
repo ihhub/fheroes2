@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-03-12 23:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,310 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
-
-msgid "SELECT"
-msgstr "ENDRE"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "L"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "S"
-
-msgid "X-L"
-msgstr "XS"
-
-msgid "ALL"
-msgstr "ALT"
-
-msgid "EXIT"
-msgstr "UT"
-
-msgid "smallerButton|EXIT"
-msgstr "UT"
-
-msgid "OKAY"
-msgstr "OK"
-
-msgid "HEROES"
-msgstr "HELTER"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"BYER/\n"
-"BORGER"
-
-msgid "CANCEL"
-msgstr "AVBRYT"
-
-msgid "ACCEPT"
-msgstr "GODTA"
-
-msgid "DECLINE"
-msgstr "AVSLÅ"
-
-msgid "LEARN"
-msgstr "LÆR"
-
-msgid "TRADE"
-msgstr "BYTT"
-
-msgid "YES"
-msgstr "JA"
-
-msgid "NO"
-msgstr "NEI"
-
-msgid "DISMISS"
-msgstr "BORTVIS"
-
-msgid "UPGRADE"
-msgstr "OPPGRAD."
-
-msgid "GIFT"
-msgstr "SEND"
-
-msgid "RESTART"
-msgstr "OMSTART"
-
-msgid "MAX"
-msgstr "MAKS"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"B\n"
-"O\n"
-"R\n"
-"T\n"
-"V\n"
-"I\n"
-"S"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"F\n"
-"O\n"
-"R\n"
-"L\n"
-"A\n"
-"T"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NYTT\n"
-"PARTI"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"LAST INN\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "OMSTART"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"LAGRE\n"
-"PARTI"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "AVSLUTT"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "OMSTART"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NYTT\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"LAST\n"
-"INN\n"
-"PARTI"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"LAGRE\n"
-"PARTI"
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "KAMP"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"ENKELT\n"
-"PARTI"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "FELTTOG"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"FLER-\n"
-"SPILLER"
-
-msgid "HOT SEAT"
-msgstr ""
-"BYTTE-\n"
-"SPILLING"
-
-msgid "2 PLAYERS"
-msgstr "2 SPILLERE"
-
-msgid "3 PLAYERS"
-msgstr "3 SPILLERE"
-
-msgid "4 PLAYERS"
-msgstr "4 SPILLERE"
-
-msgid "5 PLAYERS"
-msgstr "5 SPILLERE"
-
-msgid "6 PLAYERS"
-msgstr "6 SPILLERE"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"TRONE-\n"
-"KRIGENE"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"PRISEN\n"
-"FOR\n"
-"LOJALITET"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "FELTTOGSNIVÅ"
-
-msgid "VIEW INTRO"
-msgstr "VIS VIDEO"
-
-msgid "RESET"
-msgstr ""
-
-#, fuzzy
-msgid "START"
-msgstr "OMSTART"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "Få"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -401,6 +97,9 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Få"
 
 msgid "army|Several"
 msgstr "Flere"
@@ -3694,8 +3393,14 @@ msgstr "Antall valgt:"
 msgid "Recruit selected monsters."
 msgstr "Verv det utvalgte antall krigere."
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Velg maksimalt antall vervbare krigere."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Velg kun én kriger til å verves."
@@ -4546,6 +4251,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
 
+msgid "SELECT"
+msgstr "ENDRE"
+
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
@@ -4627,24 +4335,6 @@ msgstr ""
 "Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
 "kartet vil gå tapt.)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Start på nytt"
@@ -4657,9 +4347,9 @@ msgstr ""
 "Er du sikker på at du ønsker å laste inn et nytt kart?\n"
 "(Alt som er ulagret i dette kartet vil gå tapt.)"
 
-#, fuzzy
-msgid "Create a new map from scratch."
-msgstr "Nytt kart fra bunnen av"
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Nytt kart"
@@ -4678,6 +4368,13 @@ msgstr "Lagre det nåværende kartet."
 
 msgid "Quit out of the map editor."
 msgstr "Forlat karttegneren"
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Spilltestere"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 #, fuzzy
 msgid "Return to the game's Main Menu."
@@ -4762,6 +4459,24 @@ msgstr ""
 #, fuzzy
 msgid "Failed to save the map."
 msgstr "Lagringsfil:"
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5096,10 +4811,6 @@ msgid "Delete an existing language."
 msgstr "Last inn et eksisterende kart."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -5561,6 +5272,372 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Umulig"
 
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "L"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "S"
+
+msgid "X-L"
+msgstr "XS"
+
+msgid "ALL"
+msgstr "ALT"
+
+msgid "EXIT"
+msgstr "UT"
+
+msgid "smallerButton|EXIT"
+msgstr "UT"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "HEROES"
+msgstr "HELTER"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"BYER/\n"
+"BORGER"
+
+msgid "CANCEL"
+msgstr "AVBRYT"
+
+msgid "ACCEPT"
+msgstr "GODTA"
+
+msgid "DECLINE"
+msgstr "AVSLÅ"
+
+msgid "LEARN"
+msgstr "LÆR"
+
+msgid "TRADE"
+msgstr "BYTT"
+
+msgid "YES"
+msgstr "JA"
+
+msgid "NO"
+msgstr "NEI"
+
+msgid "DISMISS"
+msgstr "BORTVIS"
+
+msgid "UPGRADE"
+msgstr "OPPGRAD."
+
+msgid "GIFT"
+msgstr "SEND"
+
+msgid "RESTART"
+msgstr "OMSTART"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"B\n"
+"O\n"
+"R\n"
+"T\n"
+"V\n"
+"I\n"
+"S"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"F\n"
+"O\n"
+"R\n"
+"L\n"
+"A\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NYTT\n"
+"PARTI"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"LAST INN\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OMSTART"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"LAGRE\n"
+"PARTI"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "AVSLUTT"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NYTT\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"LAST\n"
+"INN\n"
+"PARTI"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "OMSTART"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"LAGRE\n"
+"PARTI"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "KAMP"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"ENKELT\n"
+"PARTI"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr "FELTTOG"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"FLER-\n"
+"SPILLER"
+
+msgid "HOT SEAT"
+msgstr ""
+"BYTTE-\n"
+"SPILLING"
+
+msgid "2 PLAYERS"
+msgstr "2 SPILLERE"
+
+msgid "3 PLAYERS"
+msgstr "3 SPILLERE"
+
+msgid "4 PLAYERS"
+msgstr "4 SPILLERE"
+
+msgid "5 PLAYERS"
+msgstr "5 SPILLERE"
+
+msgid "6 PLAYERS"
+msgstr "6 SPILLERE"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"TRONE-\n"
+"KRIGENE"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"PRISEN\n"
+"FOR\n"
+"LOJALITET"
+
+#, fuzzy
+msgid ""
+"RESURRECTION\n"
+"CAMPAIGN"
+msgstr ""
+"PRISEN\n"
+"FOR\n"
+"LOJALITET"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "FELTTOGSNIVÅ"
+
+msgid "VIEW INTRO"
+msgstr "VIS VIDEO"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "OMSTART"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Spilltestere"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Lagringsfil:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Underleggelse"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Underleggelse"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Vil du gi styringen til datamaskinen? Dette vil først tre i kraft den neste "
+"runden."
+
 msgid "and more..."
 msgstr "og mer..."
 
@@ -5981,6 +6058,10 @@ msgid "hotkey|toggle passability"
 msgstr "Slå av/på status"
 
 #, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Venstre"
+
+#, fuzzy
 msgid "hotkey|re-generate random map"
 msgstr "Nytt automatisk kart"
 
@@ -6276,6 +6357,9 @@ msgstr "Heltevindu"
 msgid "Army Actions"
 msgstr ""
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Teamet bak fheroes2 Resurrection presenterer"
+
 msgid "The save file is corrupted."
 msgstr "Lagringsfilen er korrupt."
 
@@ -6341,9 +6425,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Avbryt og dra tilbake til hovedmenyen."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Teamet bak fheroes2 Resurrection presenterer"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
@@ -13291,6 +13372,10 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#, fuzzy
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Nytt kart fra bunnen av"
 
 #, fuzzy
 #~ msgid "and many-many other contributors and supporters!"

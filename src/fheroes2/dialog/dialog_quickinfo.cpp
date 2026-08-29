@@ -29,7 +29,6 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact_ultimate.h"
@@ -39,6 +38,7 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game.h"
+#include "game_assets.h"
 #include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
@@ -84,22 +84,29 @@ namespace
         COUT( info )
     }
 
-    class RadarUpdater
+    class RadarUpdater final
     {
     public:
         RadarUpdater( const bool performUpdate, const fheroes2::Point & updatedPosition, const fheroes2::Rect & areaToRestore )
             : _performUpdate( performUpdate )
-            , _updatedPosition( updatedPosition )
             , _prevPosition( Interface::AdventureMap::Get().getGameArea().getCurrentCenterInPixels() )
-            , _restorer( fheroes2::Display::instance(), areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height )
+            , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
         {
-            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+            if ( !_performUpdate ) {
+                // Nothing to do. Don't waste resources for rendering.
                 return;
             }
 
             Interface::AdventureMap & iface = Interface::AdventureMap::Get();
-
             iface.getGameArea().SetCenter( updatedPosition );
+            if ( iface.getGameArea().getCurrentCenterInPixels() == _prevPosition ) {
+                // The position hasn't changed. Don't render anything.
+                _performUpdate = false;
+                return;
+            }
+
+            _restorer.update( areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height );
+
             iface.redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
@@ -107,7 +114,7 @@ namespace
 
         void restore()
         {
-            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+            if ( !_performUpdate ) {
                 return;
             }
 
@@ -120,8 +127,7 @@ namespace
         }
 
     private:
-        const bool _performUpdate;
-        const fheroes2::Point _updatedPosition;
+        bool _performUpdate;
         const fheroes2::Point _prevPosition;
         fheroes2::ImageRestorer _restorer;
     };
@@ -455,11 +461,17 @@ namespace
             return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );
         }
 
-        const Kingdom & kingdom = world.GetKingdom( playerColor );
+        Kingdom & kingdom = world.GetKingdom( playerColor );
 
         switch ( objectType ) {
-        case MP2::OBJ_MONSTER:
-            return showMonsterInfo( tile, kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) );
+        case MP2::OBJ_MONSTER: {
+            const bool isVisibleFromCrystalBall{ kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() ) };
+            if ( isVisibleFromCrystalBall ) {
+                kingdom.addMonsterUnderVisionSpell( tile.GetIndex() );
+            }
+
+            return showMonsterInfo( tile, isVisibleFromCrystalBall || kingdom.isMonsterUnderVisionSpell( tile.GetIndex() ) );
+        }
 
         case MP2::OBJ_COAST:
         case MP2::OBJ_EVENT:
@@ -590,7 +602,7 @@ namespace
         RadarUpdater radarUpdater( showOnRadar, castle.GetCenter(), areaToRestore );
 
         // image box
-        const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
+        const fheroes2::Sprite & box = Assets::getImage( ICN::QWIKTOWN, 0 );
 
         LocalEvent & le = LocalEvent::Get();
         fheroes2::Rect cur_rt = makeRectQuickInfo( le, box, position );
@@ -610,7 +622,7 @@ namespace
 
         // castle icon
         const Settings & conf = Settings::Get();
-        const fheroes2::Sprite & castleIcon = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 23 );
+        const fheroes2::Sprite & castleIcon = Assets::getImage( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 23 );
 
         dst_pt.x = cur_rt.x + ( cur_rt.width - castleIcon.width() ) / 2;
         dst_pt.y += 10;
@@ -622,10 +634,10 @@ namespace
 
         const fheroes2::Point flagOffset( 5, 4 );
 
-        const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
+        const fheroes2::Sprite & l_flag = Assets::getImage( ICN::FLAG32, flagIcnIndex );
         fheroes2::Blit( l_flag, display, dst_pt.x - flagOffset.x - l_flag.width(), dst_pt.y + flagOffset.y );
 
-        const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+        const fheroes2::Sprite & r_flag = Assets::getImage( ICN::FLAG32, flagIcnIndex + 1 );
         fheroes2::Blit( r_flag, display, dst_pt.x + flagOffset.x + castleIcon.width(), dst_pt.y + flagOffset.y );
 
         const PlayerColor currentColor = conf.CurrentColor();
@@ -687,7 +699,7 @@ namespace
         RadarUpdater radarUpdater( showOnRadar, hero.GetCenter(), areaToRestore );
 
         // image box
-        const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKHERO, 0 );
+        const fheroes2::Sprite & box = Assets::getImage( ICN::QWIKHERO, 0 );
 
         LocalEvent & le = LocalEvent::Get();
         fheroes2::Rect cur_rt = makeRectQuickInfo( le, box, position );
@@ -738,7 +750,7 @@ namespace
         dst_pt.y = cur_rt.y + 2;
         text.draw( dst_pt.x, dst_pt.y, display );
 
-        const fheroes2::Sprite & heroPortraitFrame = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
+        const fheroes2::Sprite & heroPortraitFrame = Assets::getImage( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
 
         // mini port heroes
         const fheroes2::Sprite & port = isActiveHero ? activeHero->GetPortrait( PORT_SMALL ) : activeCaptain->GetPortrait( PORT_SMALL );
@@ -750,7 +762,7 @@ namespace
         // luck
         if ( isFullInfo ) {
             const int32_t luck = hero.GetLuck();
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
             uint32_t count = ( 0 == luck ? 1 : std::abs( luck ) );
             dst_pt.x = cur_rt.x + 120;
             dst_pt.y = cur_rt.y + ( count == 1 ? 20 : 13 );
@@ -773,7 +785,7 @@ namespace
                 spriteInx = 4;
             }
 
-            fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, spriteInx );
+            fheroes2::Sprite sprite = Assets::getImage( ICN::MINILKMR, spriteInx );
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
                 fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
                 fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
@@ -795,11 +807,11 @@ namespace
             // Use castle flags to show hero's color flags.
             const uint32_t flagIcnIndex = fheroes2::getCastleLeftFlagIcnIndex( hero.GetColor() );
 
-            const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex );
+            const fheroes2::Sprite & l_flag = Assets::getImage( ICN::FLAG32, flagIcnIndex );
             dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
             fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
 
-            const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, flagIcnIndex + 1 );
+            const fheroes2::Sprite & r_flag = Assets::getImage( ICN::FLAG32, flagIcnIndex + 1 );
             dst_pt.x = cur_rt.x + ( cur_rt.width + 40 ) / 2;
             fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
         }
