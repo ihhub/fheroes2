@@ -85,6 +85,7 @@
 #include "ui_button.h"
 #include "ui_constants.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -1762,7 +1763,13 @@ namespace Interface
                         cursor.SetThemes( Cursor::POINTER );
                     }
 
+                    const fheroes2::SupportedLanguage languageBefore = fheroes2::getCurrentLanguage();
+
                     res = _editorPanel.queueEventProcessing();
+
+                    if ( fheroes2::getCurrentLanguage() != languageBefore ) {
+                        _warningMessage.reset( {} );
+                    }
                 }
                 else if ( !_gameArea.NeedScroll() ) {
                     // Cursor is over the game area
