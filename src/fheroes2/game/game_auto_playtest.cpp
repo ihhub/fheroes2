@@ -346,8 +346,7 @@ namespace
         }
 
         if ( !isActive ) {
-            fheroes2::ApplyPalette( output, offsetX, offsetY, output, offsetX, offsetY, cell.width(), cell.height(),
-                                    PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+            fheroes2::ApplyPalette( output, offsetX, offsetY, output, offsetX, offsetY, cell.width(), cell.height(), PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         }
 
         return { offsetX, offsetY, cell.width(), cell.height() };
@@ -428,8 +427,8 @@ namespace fheroes2
 
         positionY += 30;
 
-        const Rect soundsCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface,
-                                                       autoPlaytest.isAnimationEnabled() ) };
+        const Rect soundsCheckboxArea{
+            renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface, autoPlaytest.isAnimationEnabled() ) };
 
         text.set( _( "autoPlaytest|Sound Effects" ), FontType::normalWhite() );
         auto soundsTextAreaRestorer = std::make_unique<ImageRestorer>( display, soundsCheckboxArea.x, soundsCheckboxArea.y, text.width(), text.height() );
@@ -501,16 +500,16 @@ namespace fheroes2
 
                 renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface, true );
 
-                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(),
-                                display, isEvilInterface, autoPlaytest.isAnimationEnabled() );
+                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface,
+                                autoPlaytest.isAnimationEnabled() );
 
                 display.render( window.activeArea() );
             }
             else if ( eventHandler.MouseClickLeft( soundsCheckboxArea ) && autoPlaytest.isAnimationEnabled() ) {
                 autoPlaytest.enableSounds( !autoPlaytest.areEnvironmentSoundsEnabled() );
 
-                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(),
-                                display, isEvilInterface, autoPlaytest.isAnimationEnabled() );
+                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface,
+                                autoPlaytest.isAnimationEnabled() );
                 display.render( soundsCheckboxArea );
             }
 
