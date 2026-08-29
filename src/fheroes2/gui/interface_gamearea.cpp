@@ -519,12 +519,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                     else {
                         populateHeroObjectInfo( tileUnfit, hero, fogDirection );
-
-                        // Update object type as it could be an object under the hero.
-                        objectType = tile.getMainObjectType( false );
                     }
 
-                    break;
+                    continue;
                 }
 
                 if ( !drawHeroes ) {
