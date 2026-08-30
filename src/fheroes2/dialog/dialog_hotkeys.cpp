@@ -50,9 +50,9 @@
 
 namespace
 {
-    const int32_t keyDescriptionLength = 200;
+    const int32_t keyDescriptionLength = 260;
     const int32_t hotKeyLength = 120;
-    const int32_t categoryLength = 100;
+    const int32_t categoryLength = 175;
 
     struct CategorySelection
     {
@@ -284,8 +284,7 @@ namespace fheroes2
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Dialog height is capped with the current screen height minus 100 pixels.
-        fheroes2::StandardWindow background( categoryLength + keyDescriptionLength + hotKeyLength + 8 + 75, std::min<int32_t>( display.height() - 100, 520 ), true,
-                                             display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, std::min<int32_t>( display.height() - 100, 520 ), true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
         const fheroes2::Rect listRoi( roi.x + 24, roi.y + 50, categoryLength + keyDescriptionLength + hotKeyLength + 8, roi.height - 88 );
