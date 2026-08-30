@@ -4259,6 +4259,9 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "File da Salvare:"
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr ""
 
