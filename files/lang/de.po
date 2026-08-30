@@ -4308,6 +4308,9 @@ msgstr "Karte gespeichert in: "
 msgid "Failed to save the map."
 msgstr "Speichern der Karte fehlgeschlagen."
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 

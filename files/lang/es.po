@@ -4283,6 +4283,9 @@ msgstr "Mapa guardado en: "
 msgid "Failed to save the map."
 msgstr "No se pudo guardar el mapa."
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr "Cambios no guardados"
 

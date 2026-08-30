@@ -4327,6 +4327,9 @@ msgstr "Kortet er gemt i: "
 msgid "Failed to save the map."
 msgstr "Kunne ikke gemme kortet."
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr "Ikke-gemte ændringer"
 
