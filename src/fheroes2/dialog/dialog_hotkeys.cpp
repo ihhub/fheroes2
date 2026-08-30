@@ -60,24 +60,6 @@ namespace
         fheroes2::Rect roi;
     };
 
-    const char * getHotKeyCategoryDisplayName( const Game::HotKeyCategory category )
-    {
-        switch ( category ) {
-        case Game::HotKeyCategory::DEFAULT:
-            return "Default";
-        case Game::HotKeyCategory::GLOBAL:
-            return "Global";
-        case Game::HotKeyCategory::BATTLE:
-            return "Battle";
-        case Game::HotKeyCategory::TOWN:
-            return "Town";
-        case Game::HotKeyCategory::ARMY:
-            return "Army";
-        default:
-            return Game::getHotKeyCategoryName( category );
-        }
-    }
-
     void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections,
                                const std::optional<Game::HotKeyCategory> selectedCategory )
     {
@@ -101,7 +83,7 @@ namespace
             const bool isSelected = selectedCategory && category == *selectedCategory;
             const fheroes2::FontType fontType = isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
-            const fheroes2::Text categoryText( _( getHotKeyCategoryDisplayName( category ) ), fontType );
+            const fheroes2::Text categoryText( _( Game::getHotKeyCategoryName( category ) ), fontType );
             categoryText.draw( categoryRoi.x + 4, offsetY, display );
 
             categorySelections.push_back( { category, { categoryRoi.x, offsetY, categoryRoi.width, categoryText.height() + 4 } } );
