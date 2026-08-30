@@ -127,6 +127,7 @@ namespace
             }
         }
 
+        // Never call this method as a custom image has nothing to popup.
         void showPopup( const int /*buttons*/ ) const override
         {
             assert( 0 );
@@ -190,10 +191,20 @@ namespace
             _listBackground->restore();
         }
 
-        void ActionCurrentUp() override {}
-        void ActionCurrentDn() override {}
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
 
-        void ActionListSingleClick( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & /*unused*/ ) override {}
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListSingleClick( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & /*unused*/ ) override
+        {
+            // Do nothing.
+        }
 
         void ActionListPressRight( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & hotKeyEvent ) override
         {
@@ -215,6 +226,8 @@ namespace
         {
             HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent.first ), fheroes2::Display::instance() );
 
+            // Okay and Cancel events are special cases as they are used in dialogs. By default we need to disable these events to allow to be set any key for an event.
+            // Global events (that work on all screens) must be disabled as well.
             const fheroes2::Key okayEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY );
             const fheroes2::Key cancelEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL );
             const fheroes2::Key fullscreenEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN );
@@ -240,6 +253,7 @@ namespace
             Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN, fullscreenEventKey );
             Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE, textSupportModeEventKey );
 
+            // To avoid UI issues we need to reset restorer manually.
             hotKeyUI.reset();
 
             if ( returnValue == Dialog::CANCEL ) {
@@ -264,10 +278,12 @@ namespace fheroes2
 {
     void openHotkeysDialog()
     {
+        // Setup cursor.
         const CursorRestorer cursorRestorer( true, ::Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
+        // Dialog height is capped with the current screen height minus 100 pixels.
         fheroes2::StandardWindow background( categoryLength + keyDescriptionLength + hotKeyLength + 8 + 75, std::min<int32_t>( display.height() - 100, 520 ), true,
                                              display );
 
@@ -288,6 +304,7 @@ namespace fheroes2
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
+        // Prepare OKAY button and render its shadow.
         fheroes2::Button buttonOk;
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 0, 7 }, StandardWindow::Padding::BOTTOM_CENTER );
