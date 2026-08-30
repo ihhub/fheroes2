@@ -3408,6 +3408,8 @@ namespace Interface
 
         action.commit();
 
+        _warningMessage.reset( _( "The selected object has been moved to the top layer." ) );
+
         // TODO: so far this is the only way to update objects for rendering.
         return Maps::readMapInEditor( _mapFormat );
     }
