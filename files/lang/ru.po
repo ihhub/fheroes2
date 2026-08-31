@@ -5285,14 +5285,6 @@ msgstr ""
 "ЦЕНА\n"
 "ВЕРНОСТИ"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"ЦЕНА\n"
-"ВЕРНОСТИ"
-
 msgid "editorMainMenu|BACK"
 msgstr "НАЗАД"
 
@@ -12822,6 +12814,14 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "ЦЕНА\n"
+#~ "ВЕРНОСТИ"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Создать новую карту с нуля."

@@ -5127,14 +5127,6 @@ msgstr ""
 "EKLENTİ\n"
 "HİKAYESİ"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"EKLENTİ\n"
-"HİKAYESİ"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -11691,6 +11683,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "EKLENTİ\n"
+#~ "HİKAYESİ"
 
 #~ msgid "AI"
 #~ msgstr "Bilgisayar"

@@ -5198,11 +5198,6 @@ msgid ""
 "CAMPAIGN"
 msgstr ""
 
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
