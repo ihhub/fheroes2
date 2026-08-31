@@ -1715,7 +1715,6 @@ namespace
             if ( isPoLPresent ) {
                 texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "ORIGINAL\nCAMPAIGN" ), buttonFontType ) );
                 texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "EXPANSION\nCAMPAIGN" ), buttonFontType ) );
-                texts.emplace_back( fheroes2::getSupportedText( gettext_noop( "RESURRECTION\nCAMPAIGN" ), buttonFontType ) );
             }
 
             fheroes2::makeSymmetricBackgroundSprites( _icnVsSprite[id], texts, false, 117 );
