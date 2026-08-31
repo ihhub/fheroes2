@@ -687,6 +687,10 @@ namespace
     bool verifyTerrainPlacement( const fheroes2::Point & tilePos, const Maps::ObjectGroup groupType, const int32_t objectType, std::string & errorMessage )
     {
         switch ( groupType ) {
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+            // Heroes can be placed on any terrain, including water.
+            break;
+
         case Maps::ObjectGroup::ADVENTURE_ARTIFACTS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
@@ -717,7 +721,6 @@ namespace
         case Maps::ObjectGroup::ADVENTURE_MINES:
         case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
         case Maps::ObjectGroup::ADVENTURE_TREASURES:
-        case Maps::ObjectGroup::KINGDOM_HEROES:
         case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
         case Maps::ObjectGroup::LANDSCAPE_ROCKS:
         case Maps::ObjectGroup::LANDSCAPE_TREES:
@@ -2741,6 +2744,8 @@ namespace Interface
             if ( hero ) {
                 hero->SetCenter( tilePos );
                 hero->SetColor( Color::IndexToColor( static_cast<int>( color ) ) );
+                hero->SetShipMaster( tile.isWater() );
+                tile.setHero( hero );
             }
             else {
                 // How is it possible that the action was successful but no hero?
