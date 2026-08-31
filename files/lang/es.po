@@ -5323,15 +5323,6 @@ msgstr ""
 "DE EXPAN-\n"
 "SIÓN"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPAÑA\n"
-"DE EXPAN-\n"
-"SIÓN"
-
 msgid "editorMainMenu|BACK"
 msgstr "ATRÁS"
 
@@ -12979,6 +12970,15 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "CAMPAÑA\n"
+#~ "DE EXPAN-\n"
+#~ "SIÓN"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Crea un nuevo mapa desde cero."

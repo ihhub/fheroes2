@@ -5365,14 +5365,6 @@ msgstr ""
 "UDVIDELSE\n"
 "FELTTOG"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"UDVIDELSE\n"
-"FELTTOG"
-
 msgid "editorMainMenu|BACK"
 msgstr "TILBAGE"
 
@@ -13000,6 +12992,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "UDVIDELSE\n"
+#~ "FELTTOG"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Opret et nyt kort fra bunden."

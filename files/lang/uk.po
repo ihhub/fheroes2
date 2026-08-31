@@ -5257,14 +5257,6 @@ msgstr ""
 "КАМПАНІЇ\n"
 "ДОПОВНЕННЯ"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"КАМПАНІЇ\n"
-"ДОПОВНЕННЯ"
-
 msgid "editorMainMenu|BACK"
 msgstr "НАЗАД"
 
@@ -12817,6 +12809,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "КАМПАНІЇ\n"
+#~ "ДОПОВНЕННЯ"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Створити нову мапу з чистого аркуша."

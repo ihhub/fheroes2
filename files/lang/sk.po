@@ -5457,14 +5457,6 @@ msgstr ""
 "KAMPAŇ\n"
 "EXPANZIE"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPAŇ\n"
-"EXPANZIE"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -13058,6 +13050,14 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "KAMPAŇ\n"
+#~ "EXPANZIE"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."

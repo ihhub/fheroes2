@@ -5277,14 +5277,6 @@ msgstr ""
 "CAMPANHA\n"
 "DA EXPANSÃO"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPANHA\n"
-"DA EXPANSÃO"
-
 msgid "editorMainMenu|BACK"
 msgstr "VOLTAR"
 
@@ -12911,6 +12903,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "CAMPANHA\n"
+#~ "DA EXPANSÃO"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Crie um novo mapa do zero."

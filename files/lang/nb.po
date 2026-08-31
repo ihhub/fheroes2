@@ -5539,15 +5539,6 @@ msgstr ""
 "FOR\n"
 "LOJALITET"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"PRISEN\n"
-"FOR\n"
-"LOJALITET"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -13375,6 +13366,15 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "PRISEN\n"
+#~ "FOR\n"
+#~ "LOJALITET"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."

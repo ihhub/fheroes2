@@ -5463,14 +5463,6 @@ msgstr ""
 "CHIẾN DỊCH\n"
 "MỞ RỘNG"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"CHIẾN DỊCH\n"
-"MỞ RỘNG"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -13188,6 +13180,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "CHIẾN DỊCH\n"
+#~ "MỞ RỘNG"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."

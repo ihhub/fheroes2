@@ -5262,15 +5262,6 @@ msgstr ""
 "Z ROZSZE-\n"
 "RZENIA"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPANIA\n"
-"Z ROZSZE-\n"
-"RZENIA"
-
 msgid "editorMainMenu|BACK"
 msgstr "ANULUJ"
 
@@ -12871,6 +12862,15 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "KAMPANIA\n"
+#~ "Z ROZSZE-\n"
+#~ "RZENIA"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Utwórz nową mapę od podstaw."

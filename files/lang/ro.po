@@ -5122,14 +5122,6 @@ msgstr ""
 "CAMPANIE\n"
 "EXPANSIUNE"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPANIE\n"
-"EXPANSIUNE"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -11712,6 +11704,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "CAMPANIE\n"
+#~ "EXPANSIUNE"
 
 #~ msgid "and many-many other contributors and supporters!"
 #~ msgstr "și mulți alți contributori și suporteri!"
