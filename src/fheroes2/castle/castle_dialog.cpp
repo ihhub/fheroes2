@@ -522,7 +522,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 display.render( dialogRoi );
             }
-}
+        }
 
         // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.isFadeDone() ) {
