@@ -90,17 +90,15 @@ make de.mo
 ```
 
 To make the engine use this MO, the file should be placed in the `files/lang` folder used by the fheroes2 executable.
-The exact location of this folder depends on the operating system.
+The exact location of this folder depends on the operating system:
 
-On Windows, it is usually located in the app installation directory.
-
-On Linux, it is usually located in the `/usr/share/fheroes2` or `/usr/local/share/fheroes2`.
-
-Currently for MacOS users this location is dependent on what third-party package manager is used to install fheroes2.
-
-The Flatpak version of the fheroes2 installation from Flathub, when installed as a system-wide application, is located at 
-`/var/lib/flatpak/app/io.github.ihhub.Fheroes2/current/active/files/share/fheroes2/`. When installed as a user application,
-it is at `~/.local/share/flatpak/app/io.github.ihhub.Fheroes2/current/active/files/share/fheroes2/`.
+* On Windows, it is usually located in the app installation directory.
+* On Linux, it is usually located in the `/usr/share/fheroes2` or `/usr/local/share/fheroes2`.
+* Currently for MacOS users this location is dependent on what third-party package manager is used to install fheroes2.
+* The Flatpak version of the fheroes2 installation from Flathub, when installed as a system-wide application, is located at
+  `/var/lib/flatpak/app/io.github.ihhub.Fheroes2/current/active/files/share/fheroes2/`.  
+  When installed as a user application, it is at
+  `~/.local/share/flatpak/app/io.github.ihhub.Fheroes2/current/active/files/share/fheroes2/`.
 
 For Windows users who use POEdit or a similar application, it is possible to compile the MO file using said program. However, note that
 the program will need to be set to compile the MO file in the font encoding/charset that the language that you are translating to has been
