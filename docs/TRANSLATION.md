@@ -98,7 +98,9 @@ On Linux, it is usually located in the `/usr/share/fheroes2` or `/usr/local/shar
 
 Currently for MacOS users this location is dependent on what third-party package manager is used to install fheroes2.
 
-The Flatpak version of the fheroes2 installation from Flathub is located in the `usr/.var/app/io.github.ihhub.Fheroes2` directory.
+The Flatpak version of the fheroes2 installation from Flathub, when installed as a system-wide application, is located at 
+`/var/lib/flatpak/app/io.github.ihhub.Fheroes2/current/active/files/share/fheroes2/`. When installed as a user application,
+it is at `~/.local/share/flatpak/app/io.github.ihhub.Fheroes2/current/active/files/share/fheroes2/`.
 
 For Windows users who use POEdit or a similar application, it is possible to compile the MO file using said program. However, note that
 the program will need to be set to compile the MO file in the font encoding/charset that the language that you are translating to has been
