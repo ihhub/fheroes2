@@ -7585,7 +7585,7 @@ msgstr ""
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
-"Desafortunadamente, no posees Libro de Hechizos donde registrar este hechizo."
+"Desafortunadamente, no posees el Libro de Hechizos donde registrar este hechizo."
 
 msgid ""
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
