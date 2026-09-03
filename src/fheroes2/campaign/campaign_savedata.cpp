@@ -104,8 +104,8 @@ namespace Campaign
         _carryOverTroops.clear();
         _currentScenarioInfoId = { -1, -1 };
         _currentScenarioBonusId = -1;
-        _difficulty = CampaignDifficulty::Normal;
-        _minDifficulty = CampaignDifficulty::Normal;
+        _difficulty = CampaignDifficulty::Default;
+        _minDifficulty = CampaignDifficulty::Default;
     }
 
     void CampaignSaveData::setCarryOverTroops( const Troops & troops )
@@ -126,12 +126,12 @@ namespace Campaign
     uint32_t CampaignSaveData::getCampaignDifficultyPercent() const
     {
         switch ( _minDifficulty ) {
-        case CampaignDifficulty::Easy:
+        case CampaignDifficulty::Decreased:
             return 125;
-        case CampaignDifficulty::Normal:
+        case CampaignDifficulty::Default:
             // Original campaign difficulty.
             return 100;
-        case CampaignDifficulty::Hard:
+        case CampaignDifficulty::Increased:
             return 75;
         default:
             // Did you add a new campaign difficulty? Add the logic above!
