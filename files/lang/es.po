@@ -8255,7 +8255,7 @@ msgid ""
 "famous nor diplomatic enough to be admitted to see my master,\" he sniffs. "
 "\"Come back when you think yourself worthy.\""
 msgstr ""
-"El Mayordomo abre la puerta y te mira de arriba abajo. \"Tú no eres ni "
+"El mayordomo abre la puerta y te mira de arriba abajo. \"Tú no eres ni "
 "famoso ni suficientemente letrado para llegar a ver a mi maestro\" dice con "
 "desdén. \"Vuelve cuando te consideres suficientemente válido\"."
 
@@ -12624,7 +12624,7 @@ msgid "Dragon Slayer"
 msgstr "Matadragones"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Incrementa enormemente tu habilidad de ataque contra Dragones."
+msgstr "Incrementa enormemente tu habilidad de ataque contra dragones."
 
 msgid "Blood Lust"
 msgstr "Ansia de Sangre"
