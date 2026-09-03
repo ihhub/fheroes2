@@ -897,12 +897,12 @@ namespace
     {
         switch ( difficulty ) {
         case Campaign::CampaignDifficulty::Decreased:
-            return { _( "Decreased" ) };
+            return { _( "campaignDifficulty|Decreased" ) };
         case Campaign::CampaignDifficulty::Default:
             // Original campaign difficulty.
-            return { _( "Default" ) };
+            return { _( "campaignDifficulty|Default" ) };
         case Campaign::CampaignDifficulty::Increased:
-            return { _( "Increased" ) };
+            return { _( "campaignDifficulty|Increased" ) };
         default:
             // Did you add a new campaign difficulty? Add the logic above!
             assert( 0 );
