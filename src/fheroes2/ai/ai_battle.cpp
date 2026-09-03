@@ -734,8 +734,8 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     return false;
 }
-std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit);
-bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit);
+std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit );
+bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
 std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit )
 {
@@ -770,7 +770,7 @@ bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & curren
         return false;
     }
     const Battle::Unit * nextUnit = maybeNextUnit.value();
-    assert(nextUnit != nullptr);
+    assert( nextUnit != nullptr );
 
     const Army * currentArmy = currentUnit.GetArmy();
     const Army * nextArmy = nextUnit->GetArmy();
