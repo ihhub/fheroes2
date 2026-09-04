@@ -5343,34 +5343,41 @@ msgstr ""
 msgid "and more..."
 msgstr "és egyebek..."
 
-msgid "Easy"
-msgstr "Könnyű"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Hadjárat nehézsége"
 
-msgid "Normal"
-msgstr "Normál"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Hadjárat nehézsége"
 
-msgid "Hard"
-msgstr "Nehéz"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Hadjárat nehézsége"
 
 msgid "Campaign Difficulty"
 msgstr "Hadjárat nehézsége"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Válaszd ezt a nehézséget, ha kevesebb kihívással szeretnéd végigvinni a "
 "játékot. A gép gyengébb lesz, mint a Normál nehézségi fokozaton."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Válaszd ezt a nehézséget, ha a hadjáratot az eredeti elgondolásnak "
 "megfelelően szeretnéd játszani."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Válaszd ezt a nehézséget, ha több kihívást akarsz. A gép erősebb lesz, mint "
 "a Normál nehézségi fokozaton."
@@ -6963,6 +6970,9 @@ msgstr "eszperantó"
 
 msgid "Slow"
 msgstr "Lassú"
+
+msgid "Normal"
+msgstr "Normál"
 
 msgid "Fast"
 msgstr "Gyors"
@@ -12751,6 +12761,12 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid "Easy"
+#~ msgstr "Könnyű"
+
+#~ msgid "Hard"
+#~ msgstr "Nehéz"
 
 #, fuzzy
 #~ msgid ""

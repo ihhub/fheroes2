@@ -5380,34 +5380,41 @@ msgstr ""
 msgid "and more..."
 msgstr "і г. д."
 
-msgid "Easy"
-msgstr "Лёгкая"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Складанасць кампаніі"
 
-msgid "Normal"
-msgstr "Сярэдняя"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Складанасць кампаніі"
 
-msgid "Hard"
-msgstr "Цяжкая"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Складанасць кампаніі"
 
 msgid "Campaign Difficulty"
 msgstr "Складанасць кампаніі"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Выбірайце гэты ўзровень складанасці, калі сюжэт для вас важнейшы за выклік. "
 "Камп’ютар будзе гуляць слабей, чым пры звычайным узроўні складанасці."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Выбірайце гэты ўзровень складанасці, каб спазнаць кампанію такой, якой яна "
 "задумвалася."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Выбірайце гэты ўзровень складанасці, калі шукаеце большага выкліку для сябе. "
 "Камп’ютар будзе гуляць мацней, чым пры звычайным узроўні складанасці."
@@ -7018,6 +7025,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Павольныя"
+
+msgid "Normal"
+msgstr "Сярэдняя"
 
 msgid "Fast"
 msgstr "Імклівыя"
@@ -12938,6 +12948,12 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
+
+#~ msgid "Easy"
+#~ msgstr "Лёгкая"
+
+#~ msgid "Hard"
+#~ msgstr "Цяжкая"
 
 #, fuzzy
 #~ msgid ""
