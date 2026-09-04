@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@ namespace fheroes2
     // The default language in the keyboard is English.
     //
     // If length limit is set to 0 then no limit will be applied.
-    void openVirtualKeyboard( std::string & output, size_t lengthLimit );
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit, const bool isMultiLineText );
 
     void openVirtualNumpad( int32_t & output, const int32_t minValue, const int32_t maxValue );
 }
