@@ -4871,14 +4871,6 @@ msgstr ""
 "ALDONITA\n"
 "KAMPANJO"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"ALDONITA\n"
-"KAMPANJO"
-
 msgid "editorMainMenu|BACK"
 msgstr "REEN"
 
@@ -11384,3 +11376,11 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "ALDONITA\n"
+#~ "KAMPANJO"

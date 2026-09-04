@@ -5236,14 +5236,6 @@ msgstr ""
 "EXPANSIONS-\n"
 "KAMPANJ"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"EXPANSIONS-\n"
-"KAMPANJ"
-
 msgid "editorMainMenu|BACK"
 msgstr "TILLBAKA"
 
@@ -12775,6 +12767,14 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "EXPANSIONS-\n"
+#~ "KAMPANJ"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Skapa en ny blank karta."

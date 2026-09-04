@@ -2162,7 +2162,7 @@ msgid "Stonehenge"
 msgstr "Stonehenge"
 
 msgid "Upg. Stonehenge"
-msgstr "Mej. Mejorado"
+msgstr "Mej. Stonehenge"
 
 msgid "Fenced Meadow"
 msgstr "Prado Vallado"
@@ -5323,15 +5323,6 @@ msgstr ""
 "DE EXPAN-\n"
 "SIÓN"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"CAMPAÑA\n"
-"DE EXPAN-\n"
-"SIÓN"
-
 msgid "editorMainMenu|BACK"
 msgstr "ATRÁS"
 
@@ -5383,7 +5374,7 @@ msgstr[0] "1 partida"
 msgstr[1] "%{count} partidas"
 
 msgid " playthrough(s) reached the specified time limit"
-msgstr "Las partidas alcanzaron el límite de tiempo especificado."
+msgstr " partidas alcanzaron el límite de tiempo especificado"
 
 msgid "Click to close the dialog."
 msgstr "Haz clic para cerrar el diálogo."
@@ -5422,7 +5413,7 @@ msgid ""
 "(playthrough %{current} of %{total})"
 msgstr ""
 "Prueba automática\n"
-"(Partida %{actual} de %{total})"
+"(Partida %{current} de %{total})"
 
 msgid ""
 "Do you want to interrupt the automatic playtest? The effect will take place "
@@ -7390,7 +7381,7 @@ msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Mientras buscabas entre las ropas sucias, encontraste %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
-msgstr "Mientras buscabas entre las ropas sucias, encontraste %{artifact}."
+msgstr "Mientras buscabas entre las ropas sucias, no encontraste nada."
 
 msgid ""
 "You come across an old wagon left by a trader who didn't quite make it to "
@@ -7704,7 +7695,8 @@ msgstr ""
 
 msgid ""
 "Upon defeating the Ghosts you sift through the debris and find something!"
-msgstr "¡Despúes de derrotar a los fantasmas tamizas sus restos sin premio!"
+msgstr ""
+"¡Después de derrotar a los fantasmas tamizas sus restos y encuentras algo!"
 
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
@@ -7853,7 +7845,7 @@ msgid ""
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 "Te has encontrado con una persona extraña con un sombrero y un búho "
-"dibujado. Te dice que está dispuesto a darte %{arte} si tienes %{habilidad}."
+"dibujado. Te dice que está dispuesto a darte %{art} si tienes %{skill}."
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
@@ -8548,9 +8540,8 @@ msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
 "overcome the urge to dive headlong into the sea."
 msgstr ""
-"Tan pronto como las sirenas cantan su escalofriante canción, tu pequeño "
-"ejército empieza a pensar en dejarse llevar por el impulso de tirarse de "
-"cabeza al mar."
+"Mientras las sirenas cantan su escalofriante canción, tu pequeño pero "
+"decidido ejército logra resistir el impulso de tirarse de cabeza al mar."
 
 msgid ""
 "An eerie wailing song emanates from the sirens perched upon the rocks. Many "
@@ -8801,7 +8792,7 @@ msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
 
 msgid "Random hero (Level %{level})"
-msgstr "Héroe aleatorio (Nivel %{nivel})"
+msgstr "Héroe aleatorio (Nivel %{level})"
 
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Héroe aleatorio de %{race} (Nivel %{level})"
@@ -12979,6 +12970,15 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "CAMPAÑA\n"
+#~ "DE EXPAN-\n"
+#~ "SIÓN"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Crea un nuevo mapa desde cero."

@@ -5433,14 +5433,6 @@ msgstr ""
 "SCÉNARIO\n"
 "DISC"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"SCÉNARIO\n"
-"DISC"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -13133,6 +13125,14 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "SCÉNARIO\n"
+#~ "DISC"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Créer une carte vierge."

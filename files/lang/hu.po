@@ -5243,14 +5243,6 @@ msgstr ""
 "KIEGÉSZÍTŐ\n"
 "HADJÁRAT"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"KIEGÉSZÍTŐ\n"
-"HADJÁRAT"
-
 msgid "editorMainMenu|BACK"
 msgstr "VISSZA"
 
@@ -12759,6 +12751,14 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "KIEGÉSZÍTŐ\n"
+#~ "HADJÁRAT"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Teljesen új térkép létrehozása."

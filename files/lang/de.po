@@ -5353,14 +5353,6 @@ msgstr ""
 "ZUSATZ\n"
 "FELDZUG"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"ZUSATZ\n"
-"FELDZUG"
-
 msgid "editorMainMenu|BACK"
 msgstr "ZURÜCK"
 
@@ -13080,6 +13072,14 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "ZUSATZ\n"
+#~ "FELDZUG"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Komplett neue Karte erstellen."

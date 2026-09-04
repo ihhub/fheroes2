@@ -5495,12 +5495,6 @@ msgid ""
 "CAMPAIGN"
 msgstr "ЕКСПАНЗИЯ"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr "ЕКСПАНЗИЯ"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -13153,6 +13147,12 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr "ЕКСПАНЗИЯ"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."
