@@ -5205,14 +5205,23 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-msgid "Easy"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
 msgstr ""
+"Žemėlapis\n"
+"Sudėtingumas"
 
-msgid "Normal"
+#, fuzzy
+msgid "campaignDifficulty|Default"
 msgstr ""
+"Žemėlapis\n"
+"Sudėtingumas"
 
-msgid "Hard"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
 msgstr ""
+"Žemėlapis\n"
+"Sudėtingumas"
 
 #, fuzzy
 msgid "Campaign Difficulty"
@@ -5221,17 +5230,18 @@ msgstr ""
 "Sudėtingumas"
 
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 
 msgid ""
@@ -6748,6 +6758,9 @@ msgid "Esperanto"
 msgstr ""
 
 msgid "Slow"
+msgstr ""
+
+msgid "Normal"
 msgstr ""
 
 msgid "Fast"

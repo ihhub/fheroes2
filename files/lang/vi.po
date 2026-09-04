@@ -5556,35 +5556,39 @@ msgstr ""
 msgid "and more..."
 msgstr "và hơn thế nữa..."
 
-msgid "Easy"
-msgstr "Dễ"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Độ khó Chiến dịch"
 
-msgid "Normal"
-msgstr "Thường"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Độ khó Chiến dịch"
 
-msgid "Hard"
-msgstr "Khó"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Độ khó Chiến dịch"
 
 msgid "Campaign Difficulty"
 msgstr "Độ khó Chiến dịch"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thích câu chuyện trò chơi hơn thử thách. AI "
 "yếu hơn so với độ khó bình thường."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr "Chọn độ khó này để tận hưởng chiến dịch theo thiết kế ban đầu."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thử thách. AI mạnh hơn so với độ khó bình "
 "thường."
@@ -7195,6 +7199,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Chậm"
+
+msgid "Normal"
+msgstr "Thường"
 
 msgid "Fast"
 msgstr "Nhanh"
@@ -13180,6 +13187,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Easy"
+#~ msgstr "Dễ"
+
+#~ msgid "Hard"
+#~ msgstr "Khó"
 
 #, fuzzy
 #~ msgid ""

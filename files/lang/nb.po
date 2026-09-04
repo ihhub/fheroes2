@@ -5635,37 +5635,41 @@ msgstr ""
 msgid "and more..."
 msgstr "og mer..."
 
-msgid "Easy"
-msgstr "Enkel"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Felttogsnivå"
 
-msgid "Normal"
-msgstr "Middels"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Felttogsnivå"
 
-msgid "Hard"
-msgstr "Vanskelig"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Felttogsnivå"
 
 msgid "Campaign Difficulty"
 msgstr "Felttogsnivå"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Velg dette nivået hvis du kun er ute etter å oppleve historien. Motstanderne "
 "dine vil være svakere enn ved middels nivå."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Velg dette nivået for å oppleve felttoget slik som det opprinnelig var "
 "tiltenkt."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Velg nivået hvis du ønsker en utfordring. Motstanderne dine vil være "
 "sterkere enn ved middels nivå."
@@ -7305,6 +7309,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Treg"
+
+msgid "Normal"
+msgstr "Middels"
 
 msgid "Fast"
 msgstr "Fort"
@@ -13366,6 +13373,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "Easy"
+#~ msgstr "Enkel"
+
+#~ msgid "Hard"
+#~ msgstr "Vanskelig"
 
 #, fuzzy
 #~ msgid ""

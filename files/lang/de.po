@@ -5456,35 +5456,42 @@ msgstr ""
 msgid "and more..."
 msgstr "und mehr..."
 
-msgid "Easy"
-msgstr "Leicht"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Feldzugschwierigkeit"
 
-msgid "Normal"
-msgstr "Normal"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Feldzugschwierigkeit"
 
-msgid "Hard"
-msgstr "Schwer"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Feldzugschwierigkeit"
 
 msgid "Campaign Difficulty"
 msgstr "Feldzugschwierigkeit"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, um die Geschichte des Spiels mit weniger "
 "Herausforderungen zu erleben. Die KI ist schwächer als im Schwierigkeitsgrad "
 "Normal."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, um den Feldzug so zu erleben, wie er "
 "ursprünglich konzipiert wurde."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, wenn Ihr eine größere Herausforderung "
 "sucht. Die KI ist stärker als in der normalen Schwierigkeit."
@@ -7121,6 +7128,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Langsam"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Fast"
 msgstr "Schnell"
@@ -13072,6 +13082,12 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
+
+#~ msgid "Easy"
+#~ msgstr "Leicht"
+
+#~ msgid "Hard"
+#~ msgstr "Schwer"
 
 #, fuzzy
 #~ msgid ""

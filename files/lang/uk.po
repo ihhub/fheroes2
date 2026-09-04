@@ -5358,35 +5358,48 @@ msgstr ""
 msgid "and more..."
 msgstr "і не тільки..."
 
-msgid "Easy"
-msgstr "Легко"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr ""
+"Складність\n"
+"Кампанії"
 
-msgid "Normal"
-msgstr "Звичайна"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr ""
+"Складність\n"
+"Кампанії"
 
-msgid "Hard"
-msgstr "Важко"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr ""
+"Складність\n"
+"Кампанії"
 
 msgid "Campaign Difficulty"
 msgstr ""
 "Складність\n"
 "Кампанії"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Виберіть цю складність, щоб відчути історію гри з меншими труднощами. ШІ "
 "буде слабшим ніж на звичайній складності."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Виберіть цю складність, щоб пройти кампанію відповідно до початкового задуму."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Виберіть цю складність, якщо хочете більше виклику. ШІ буде сильнішим, ніж "
 "на звичайній складності."
@@ -6993,6 +7006,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Повільно"
+
+msgid "Normal"
+msgstr "Звичайна"
 
 msgid "Fast"
 msgstr "Швидко"
@@ -12809,6 +12825,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Easy"
+#~ msgstr "Легко"
+
+#~ msgid "Hard"
+#~ msgstr "Важко"
 
 #, fuzzy
 #~ msgid ""

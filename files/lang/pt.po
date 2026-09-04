@@ -5383,35 +5383,42 @@ msgstr ""
 msgid "and more..."
 msgstr "e mais..."
 
-msgid "Easy"
-msgstr "Fácil"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Dificuldade da Campanha"
 
-msgid "Normal"
-msgstr "Normal"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Dificuldade da Campanha"
 
-msgid "Hard"
-msgstr "Difícil"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Dificuldade da Campanha"
 
 msgid "Campaign Difficulty"
 msgstr "Dificuldade da Campanha"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Escolha esta dificuldade para experimentar a história do jogo com menos "
 "desafio. A inteligência artificial será mais fraca do que na dificuldade "
 "Normal."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Escolha esta dificuldade para experimentar a campanha conforme o design "
 "original."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Escolha esta dificuldade se você deseja mais desafio. A inteligência "
 "artificial será mais forte do que na dificuldade Normal."
@@ -7020,6 +7027,9 @@ msgstr "Esperanto"
 
 msgid "Slow"
 msgstr "Lenta"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Fast"
 msgstr "Rápida"
@@ -12903,6 +12913,12 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "Easy"
+#~ msgstr "Fácil"
+
+#~ msgid "Hard"
+#~ msgstr "Difícil"
 
 #, fuzzy
 #~ msgid ""

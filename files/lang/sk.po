@@ -5552,35 +5552,39 @@ msgstr "Chceš prevziať kontrolu nad hráčom? Efekt sa prejaví v ďalšom kol
 msgid "and more..."
 msgstr "a viac..."
 
-msgid "Easy"
-msgstr "Ľahká"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Obtiažnosť kampane"
 
-msgid "Normal"
-msgstr "Normálna"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Obtiažnosť kampane"
 
-msgid "Hard"
-msgstr "Ťažká"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Obtiažnosť kampane"
 
 msgid "Campaign Difficulty"
 msgstr "Obtiažnosť kampane"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Zvoľ túto obtiažnosť pokiaľ preferuješ príbeh nad výzvou. Počítač je slabší "
 "v porovnaní s normálnou obtiažnosťou."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr "Zvoľ túto obtiažnosť pre pôžitok z pôvodne mieneného návrhu."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Zvoľ túto obtiažnosť pokiaľ chceš výzvu. Počítač je silnejší v porovnaní s "
 "normálnou obtiažnosťou."
@@ -7199,6 +7203,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Pomalá"
+
+msgid "Normal"
+msgstr "Normálna"
 
 msgid "Fast"
 msgstr "Rýchla"
@@ -13050,6 +13057,12 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#~ msgid "Easy"
+#~ msgstr "Ľahká"
+
+#~ msgid "Hard"
+#~ msgstr "Ťažká"
 
 #, fuzzy
 #~ msgid ""

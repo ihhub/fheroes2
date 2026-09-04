@@ -5226,30 +5226,34 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-msgid "Easy"
+msgid "campaignDifficulty|Decreased"
 msgstr ""
 
-msgid "Normal"
-msgstr "Normal"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr ""
+"Harita\n"
+"Zorluğu"
 
-msgid "Hard"
+msgid "campaignDifficulty|Increased"
 msgstr ""
 
 msgid "Campaign Difficulty"
 msgstr ""
 
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 
 msgid ""
@@ -6723,6 +6727,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Yavaş"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Fast"
 msgstr "Hızlı"
