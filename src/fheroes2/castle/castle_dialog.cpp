@@ -494,6 +494,36 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         bool needRedraw = false;
         bool needFadeIn = false;
 
+        const bool isMouseInteraction = le.isMouseLeftButtonPressedInArea( dialogRoi ) || le.isMouseRightButtonPressedInArea( dialogRoi );
+
+        if ( isMouseInteraction ) {
+            if ( alphaHero < 255 ) {
+                alphaHero = 255;
+
+                // Hero fade-in animation is finished, we can set up his army bar.
+                bottomArmyBar.SetArmy( &hero->GetArmy() );
+
+                fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
+            }
+
+            if ( !fadeBuilding.isFadeDone() ) {
+                const uint32_t build = fadeBuilding.getBuilding();
+
+                fadeBuilding.stopFade();
+
+                CastleDialog::redrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
+
+                if ( BUILD_CAPTAIN == build ) {
+                    RedrawIcons( *this, hero, dialogRoi.getPosition() );
+                    fheroes2::drawCastleName( *this, display, dialogRoi.getPosition() );
+                }
+
+                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
+
+                display.render( dialogRoi );
+            }
+        }
+
         // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.isFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
@@ -782,6 +812,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         if ( alphaHero < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_ITEM_UPDATE_DELAY ) ) {
             alphaHero += 9;
+
             if ( alphaHero >= 255 ) {
                 alphaHero = 255;
 
