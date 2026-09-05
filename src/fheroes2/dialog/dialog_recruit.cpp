@@ -30,11 +30,11 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army_troop.h"
 #include "bin_info.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -61,15 +61,15 @@ namespace
 {
     void drawButtonShadow( fheroes2::Image & output, const int buttonIcn, const uint32_t icnIndex, const fheroes2::Point & offset )
     {
-        const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcn, icnIndex );
+        const fheroes2::Sprite & buttonSprite = Assets::getImage( buttonIcn, icnIndex );
 
         fheroes2::addGradientShadow( buttonSprite, output, offset, { -5, 5 } );
     }
 
     void drawCostPerTroopFrame( fheroes2::Image & output, const fheroes2::Point & offset )
     {
-        const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
-        const fheroes2::Sprite & recruitWindowTitle = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+        const fheroes2::Sprite & originalBackground = Assets::getImage( ICN::RECRBKG, 0 );
+        const fheroes2::Sprite & recruitWindowTitle = Assets::getImage( ICN::BLDGXTRA, 0 );
 
         fheroes2::Sprite recruitWindow( 132, 67 );
         // Reset the transparent layer.
@@ -141,7 +141,7 @@ namespace
         // In recruit dialog (where the total sum is also shown) the resource info is shifted by 10 pixels to the right.
         const int32_t offsetX = showTotalSum ? 10 : 0;
 
-        const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceIcnIndex ) );
+        const fheroes2::Sprite & sres = Assets::getImage( ICN::RESOURCE, Resource::getIconIcnIndex( resourceIcnIndex ) );
         fheroes2::Blit( sres, fheroes2::Display::instance(), pos.x + px1 + offsetX, pos.y + py1 );
 
         const fheroes2::Text text( std::to_string( value ), fheroes2::FontType::smallWhite() );
@@ -170,7 +170,7 @@ namespace
         const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
         assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
-        const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
+        const fheroes2::Sprite & smon = Assets::getImage( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
         dst_pt.x = pos.x + 64 + smon.x() - ( monster.isWide() ? 22 : 0 );
         const int32_t monsterExtraOffsetY = std::max<int32_t>( 0, smon.height() - 96 );
         dst_pt.y = pos.y + 119 - smon.height() + monsterExtraOffsetY;
@@ -279,7 +279,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     const fheroes2::Rect windowActiveArea( window.activeArea() );
 
-    const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
+    const fheroes2::Sprite & originalBackground = Assets::getImage( ICN::RECRBKG, 0 );
 
     // Render the recruit count background from original recruit dialog ICN.
     fheroes2::Sprite background( 68, 19 );
@@ -309,13 +309,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     drawButtonShadow( display, buttonId, 0, dst_pt );
 
     buttonId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-    const int32_t buttonCancelWidth = fheroes2::AGG ::GetICN( buttonId, 0 ).width();
+    const int32_t buttonCancelWidth = Assets::getImage( buttonId, 0 ).width();
     dst_pt.x = dialogOffset.x + windowSize.width - backgroundMargin - buttonCancelWidth;
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     drawButtonShadow( display, buttonId, 0, dst_pt );
 
     buttonId = isEvilInterface ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MAX_GOOD;
-    const int32_t buttonMaxWidth = fheroes2::AGG ::GetICN( buttonId, 0 ).width();
+    const int32_t buttonMaxWidth = Assets::getImage( buttonId, 0 ).width();
     dst_pt.x = dialogOffset.x + 253 - buttonMaxWidth / 2;
     dst_pt.y = dialogOffset.y + 140;
 
@@ -347,16 +347,16 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     const bool showDowngradedMonsterSwitchButtons = allowDowngradedMonster && ( monster0.GetDowngrade() != monster0 );
 
     if ( showDowngradedMonsterSwitchButtons ) {
-        const fheroes2::Sprite & leftButtonSprite = fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 );
-        monsterSwitchLeft.setSprite( leftButtonSprite, fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
+        const fheroes2::Sprite & leftButtonSprite = Assets::getImage( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 );
+        monsterSwitchLeft.setSprite( leftButtonSprite, Assets::getImage( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
 
         dst_pt.x = dialogOffset.x + 6;
         dst_pt.y = dialogOffset.y + 64;
         monsterSwitchLeft.setPosition( dst_pt.x, dst_pt.y );
         fheroes2::addGradientShadow( leftButtonSprite, display, dst_pt, { -5, 5 } );
 
-        const fheroes2::Sprite & rightButtonSprite = fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 );
-        monsterSwitchRight.setSprite( rightButtonSprite, fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
+        const fheroes2::Sprite & rightButtonSprite = Assets::getImage( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 );
+        monsterSwitchRight.setSprite( rightButtonSprite, Assets::getImage( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
         dst_pt.x = dialogOffset.x + 105;
         monsterSwitchRight.setPosition( dst_pt.x, dst_pt.y );
         fheroes2::addGradientShadow( rightButtonSprite, display, dst_pt, { -5, 5 } );

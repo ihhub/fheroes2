@@ -102,7 +102,7 @@ public:
     bool Read( const std::string & filePath );
     bool Save( const std::string_view fileName ) const;
 
-    std::string String() const;
+    std::string getOptionsString() const;
 
     void setCurrentMapInfo( Maps::FileInfo fi );
 
@@ -219,6 +219,7 @@ public:
     bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
     bool isBattleMovementAreaHighlightEnabled() const;
+    bool isSoftwareEmulationEnabled() const;
 
     void setInterfaceType( const InterfaceType type )
     {
@@ -246,8 +247,6 @@ public:
     {
         return _musicType == MUSIC_MIDI_ORIGINAL || _musicType == MUSIC_MIDI_EXPANSION;
     }
-
-    bool isShowIntro() const;
 
     bool isVSyncEnabled() const;
 
@@ -416,8 +415,6 @@ public:
     }
 
     void SetProgramPath( const char * path );
-
-    static std::string GetVersion();
 
     static const std::vector<std::string> & GetRootDirs();
 

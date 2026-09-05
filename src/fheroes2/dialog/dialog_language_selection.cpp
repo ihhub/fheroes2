@@ -29,9 +29,9 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "icn.h"
@@ -256,7 +256,7 @@ namespace
         listBox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listBox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listBox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        listBox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listBox.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         listBox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
         std::vector<fheroes2::SupportedLanguage> temp = languages;
         listBox.SetListContent( temp );

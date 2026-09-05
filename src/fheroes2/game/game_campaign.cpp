@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -44,6 +43,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
@@ -178,7 +178,7 @@ namespace
 
     void DrawCampaignScenarioIcon( const int icnId, const uint32_t iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
     {
-        const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( icnId, iconIdx );
+        const fheroes2::Sprite & icon = Assets::getImage( icnId, iconIdx );
         fheroes2::Blit( icon, fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
@@ -228,8 +228,8 @@ namespace
 
         // available scenario (one of which should be selected)
         if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioInfo ) != availableMaps.end() ) {
-            const fheroes2::Sprite & availableIcon = fheroes2::AGG::GetICN( iconsId, iconStatusOffset + SCENARIO_ICON_AVAILABLE );
-            const fheroes2::Sprite & selectedIcon = fheroes2::AGG::GetICN( iconsId, selectedIconIdx );
+            const fheroes2::Sprite & availableIcon = Assets::getImage( iconsId, iconStatusOffset + SCENARIO_ICON_AVAILABLE );
+            const fheroes2::Sprite & selectedIcon = Assets::getImage( iconsId, selectedIconIdx );
             buttonGroup.createButton( trackOffset.x + offset.x, trackOffset.y + offset.y, availableIcon, selectedIcon, buttonId );
         }
         // cleared scenario
@@ -339,7 +339,7 @@ namespace
             return;
         }
 
-        const fheroes2::Sprite & track = fheroes2::AGG::GetICN( campaignTrack, 0 );
+        const fheroes2::Sprite & track = Assets::getImage( campaignTrack, 0 );
         const fheroes2::Point trackOffset( top.x + track.x(), top.y + track.y() );
         fheroes2::Blit( track, fheroes2::Display::instance(), trackOffset.x, trackOffset.y );
 
@@ -869,7 +869,7 @@ namespace
             return;
         }
 
-        const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::X_CMPEXT, campaignNameHeader );
+        const fheroes2::Sprite & header = Assets::getImage( ICN::X_CMPEXT, campaignNameHeader );
         fheroes2::Blit( header, output, offset.x + 24, offset.y + 25 );
     }
 
@@ -896,13 +896,13 @@ namespace
     std::string getCampaignDifficultyText( const int32_t difficulty )
     {
         switch ( difficulty ) {
-        case Campaign::CampaignDifficulty::Easy:
-            return { _( "Easy" ) };
-        case Campaign::CampaignDifficulty::Normal:
+        case Campaign::CampaignDifficulty::Decreased:
+            return { _( "campaignDifficulty|Decreased" ) };
+        case Campaign::CampaignDifficulty::Default:
             // Original campaign difficulty.
-            return { _( "Normal" ) };
-        case Campaign::CampaignDifficulty::Hard:
-            return { _( "Hard" ) };
+            return { _( "campaignDifficulty|Default" ) };
+        case Campaign::CampaignDifficulty::Increased:
+            return { _( "campaignDifficulty|Increased" ) };
         default:
             // Did you add a new campaign difficulty? Add the logic above!
             assert( 0 );
@@ -918,14 +918,14 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+        const fheroes2::Sprite & buttonSprite = Assets::getImage( buttonIcnId, 0 );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const fheroes2::Rect buttonMaxRoi( windowRoi.x + 5, windowRoi.y, windowRoi.width - 10, windowRoi.height - 5 );
         fheroes2::ButtonSprite buttonOk = fheroes2::makeButtonWithShadow( buttonMaxRoi.x + ( buttonMaxRoi.width - buttonSprite.width() ) / 2,
                                                                           buttonMaxRoi.y + buttonMaxRoi.height - buttonSprite.height(),
-                                                                          fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ), display );
+                                                                          Assets::getImage( buttonIcnId, 0 ), Assets::getImage( buttonIcnId, 1 ), display );
 
         buttonOk.draw();
 
@@ -946,7 +946,7 @@ namespace
         const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 }, fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
                                                            fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
 
-        const fheroes2::Sprite & chessIcon = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+        const fheroes2::Sprite & chessIcon = Assets::getImage( ICN::NGHSBKG, 0 );
 
         for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
             fheroes2::Copy( chessIcon, copyFromArea[i].x, copyFromArea[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
@@ -962,13 +962,16 @@ namespace
             }
         }
 
-        const fheroes2::Sprite & selectionImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+        const fheroes2::Sprite & selectionImage = Assets::getImage( ICN::NGEXTRA, 62 );
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const char * easyDescription = _( "Choose this difficulty to experience the game's story with less challenge. The AI will be weaker than at Normal difficulty." );
-        const char * normalDescription = _( "Choose this difficulty to experience the campaign as per the original design." );
-        const char * hardDescription = _( "Choose this difficulty if you want more challenge. The AI will be stronger than at Normal difficulty." );
+        const char * decreasedDifficultyDescription
+            = _( "Choose this difficulty to experience the game's story with decreased challenge. The AI will be weaker than at the default difficulty." );
+        const char * defaultDifficultyDescription
+            = _( "Choose this difficulty to experience the campaign as close to the original design as possible with the fheroes2 AI." );
+        const char * increasedDifficultyDescription
+            = _( "Choose this difficulty if you want more of a challenge. The AI will be stronger than at the default difficulty." );
 
         const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
@@ -976,16 +979,16 @@ namespace
 
         const char * currentDescription = nullptr;
         switch ( currentDifficulty ) {
-        case Campaign::CampaignDifficulty::Easy:
-            currentDescription = easyDescription;
+        case Campaign::CampaignDifficulty::Decreased:
+            currentDescription = decreasedDifficultyDescription;
             selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
             break;
-        case Campaign::CampaignDifficulty::Normal:
-            currentDescription = normalDescription;
+        case Campaign::CampaignDifficulty::Default:
+            currentDescription = defaultDifficultyDescription;
             selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
             break;
-        case Campaign::CampaignDifficulty::Hard:
-            currentDescription = hardDescription;
+        case Campaign::CampaignDifficulty::Increased:
+            currentDescription = increasedDifficultyDescription;
             selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
             break;
         default:
@@ -1002,9 +1005,9 @@ namespace
         description.setUniformVerticalAlignment( false );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
-        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
 
         easyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - easyName.width() ) / 2, difficultyArea[0].y + difficultyArea[0].height + 5, display );
         normalName.draw( difficultyArea[1].x + ( difficultyArea[1].width - normalName.width() ) / 2, difficultyArea[1].y + difficultyArea[1].height + 5, display );
@@ -1027,34 +1030,34 @@ namespace
                 updateInfo = true;
             }
             else if ( le.isMouseRightButtonPressedInArea( difficultyArea[0] ) ) {
-                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), easyDescription, Dialog::ZERO );
+                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), decreasedDifficultyDescription, Dialog::ZERO );
                 updateInfo = true;
             }
             else if ( le.isMouseRightButtonPressedInArea( difficultyArea[1] ) ) {
-                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), normalDescription, Dialog::ZERO );
+                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), defaultDifficultyDescription, Dialog::ZERO );
                 updateInfo = true;
             }
             else if ( le.isMouseRightButtonPressedInArea( difficultyArea[2] ) ) {
-                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), hardDescription, Dialog::ZERO );
+                fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), increasedDifficultyDescription, Dialog::ZERO );
                 updateInfo = true;
             }
 
             if ( le.MouseClickLeft( difficultyArea[0] ) ) {
-                currentDescription = easyDescription;
+                currentDescription = decreasedDifficultyDescription;
                 selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-                currentDifficulty = Campaign::CampaignDifficulty::Easy;
+                currentDifficulty = Campaign::CampaignDifficulty::Decreased;
                 updateInfo = true;
             }
             else if ( le.MouseClickLeft( difficultyArea[1] ) ) {
-                currentDescription = normalDescription;
+                currentDescription = defaultDifficultyDescription;
                 selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-                currentDifficulty = Campaign::CampaignDifficulty::Normal;
+                currentDifficulty = Campaign::CampaignDifficulty::Default;
                 updateInfo = true;
             }
             else if ( le.MouseClickLeft( difficultyArea[2] ) ) {
-                currentDescription = hardDescription;
+                currentDescription = increasedDifficultyDescription;
                 selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-                currentDifficulty = Campaign::CampaignDifficulty::Hard;
+                currentDifficulty = Campaign::CampaignDifficulty::Increased;
                 updateInfo = true;
             }
 
@@ -1139,7 +1142,7 @@ bool Game::isSuccessionWarsCampaignPresent()
 bool Game::isPriceOfLoyaltyCampaignPresent()
 {
     // We need to check game resources as well.
-    if ( fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 ).empty() || fheroes2::AGG::GetICN( ICN::X_IVY, 0 ).empty() ) {
+    if ( Assets::getImage( ICN::X_LOADCM, 0 ).empty() || Assets::getImage( ICN::X_IVY, 0 ).empty() ) {
         return false;
     }
 
@@ -1324,7 +1327,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         break;
     }
 
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( backgroundIconID, 0 );
+    const fheroes2::Sprite & backgroundImage = Assets::getImage( backgroundIconID, 0 );
     const int32_t backgroundImageWidth = backgroundImage.width();
     const fheroes2::Point top( ( display.width() - backgroundImageWidth ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
@@ -1337,13 +1340,12 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     // for the 3 interbutton spaces. The OKAY and RESTART buttons never appear together
     const int32_t backgroundMargin = 30;
     const int32_t viewIntroPlacement = top.x + backgroundMargin;
-    const int32_t endOfViewIntroPlacement = viewIntroPlacement + fheroes2::AGG::GetICN( buttonIconID, 0 ).width();
-    const int32_t cancelPlacement = top.x + backgroundImageWidth - backgroundMargin - fheroes2::AGG::GetICN( buttonIconID, 6 ).width();
+    const int32_t endOfViewIntroPlacement = viewIntroPlacement + Assets::getImage( buttonIconID, 0 ).width();
+    const int32_t cancelPlacement = top.x + backgroundImageWidth - backgroundMargin - Assets::getImage( buttonIconID, 6 ).width();
     const int32_t spaceBetweenViewIntroAndCancel = cancelPlacement - endOfViewIntroPlacement;
-    const int32_t difficultyButtonWidth = fheroes2::AGG::GetICN( buttonIconID, 8 ).width();
+    const int32_t difficultyButtonWidth = Assets::getImage( buttonIconID, 8 ).width();
     const uint32_t okayRestartIndex = allowToRestart ? 2 : 4;
-    const int32_t middleButtonsMargin
-        = ( spaceBetweenViewIntroAndCancel - difficultyButtonWidth - ( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ).width() ) ) / 3;
+    const int32_t middleButtonsMargin = ( spaceBetweenViewIntroAndCancel - difficultyButtonWidth - ( Assets::getImage( buttonIconID, okayRestartIndex ).width() ) ) / 3;
     const int32_t difficultyPlacement = endOfViewIntroPlacement + middleButtonsMargin;
     const int32_t okRestartPlacement = difficultyPlacement + difficultyButtonWidth + middleButtonsMargin;
 
@@ -1355,10 +1357,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Button buttonCancel( cancelPlacement, buttonOffsetY, buttonIconID, 6, 7 );
     fheroes2::Button buttonDifficulty( difficultyPlacement, buttonOffsetY, buttonIconID, 8, 9 );
 
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 0 ), display, { viewIntroPlacement, buttonOffsetY }, { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ), display, { okRestartPlacement, buttonOffsetY }, { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 6 ), display, { cancelPlacement, buttonOffsetY }, { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 8 ), display, { difficultyPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( Assets::getImage( buttonIconID, 0 ), display, { viewIntroPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( Assets::getImage( buttonIconID, okayRestartIndex ), display, { okRestartPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( Assets::getImage( buttonIconID, 6 ), display, { cancelPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( Assets::getImage( buttonIconID, 8 ), display, { difficultyPlacement, buttonOffsetY }, { -5, 5 } );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;
@@ -1370,7 +1372,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const fheroes2::Point optionButtonOffset( 590, 199 );
     const int32_t optionButtonStep = 22;
 
-    const fheroes2::Sprite & pressedButton = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 8 );
+    const fheroes2::Sprite & pressedButton = Assets::getImage( ICN::CAMPXTRG, 8 );
     fheroes2::Sprite releaseButton( pressedButton.width(), pressedButton.height(), pressedButton.x(), pressedButton.y() );
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );

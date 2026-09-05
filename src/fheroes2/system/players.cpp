@@ -126,12 +126,10 @@ std::string Player::GetName() const
 
 int Player::GetControl() const
 {
-#if defined( WITH_DEBUG )
     if ( _isAIAutoControlMode ) {
         assert( ( _control & CONTROL_HUMAN ) == CONTROL_HUMAN );
         return CONTROL_AI;
     }
-#endif
 
     return _control;
 }
@@ -178,7 +176,6 @@ void Player::setHandicapStatus( const HandicapStatus status )
     _handicapStatus = status;
 }
 
-#if defined( WITH_DEBUG )
 void Player::setAIAutoControlMode( const bool enable )
 {
     assert( ( _control & CONTROL_HUMAN ) == CONTROL_HUMAN );
@@ -204,7 +201,6 @@ void Player::commitAIAutoControlMode()
 
     _isAIAutoControlMode = _isAIAutoControlModePlanned;
 }
-#endif
 
 OStreamBase & operator<<( OStreamBase & stream, const Focus & focus )
 {

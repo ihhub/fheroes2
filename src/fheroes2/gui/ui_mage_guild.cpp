@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,8 +24,8 @@
 #include <cstddef>
 #include <string>
 
-#include "agg_image.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -68,7 +68,7 @@ namespace fheroes2
         }
 
         assert( guildLevel >= 1 && guildLevel <= 5 );
-        const Sprite & sprite = AGG::GetICN( guildIcn, guildLevel - 1 );
+        const Sprite & sprite = Assets::getImage( guildIcn, guildLevel - 1 );
 
         const Rect area = GetActiveROI( sprite );
 
@@ -96,8 +96,8 @@ namespace fheroes2
     {
         _coords.clear();
 
-        const Sprite & spellScrollOpened = AGG::GetICN( ICN::TOWNWIND, 0 );
-        const Sprite & spellScroll = AGG::GetICN( ICN::TOWNWIND, 1 );
+        const Sprite & spellScrollOpened = Assets::getImage( ICN::TOWNWIND, 0 );
+        const Sprite & spellScroll = Assets::getImage( ICN::TOWNWIND, 1 );
 
         for ( size_t i = 0; i < _spells.size(); ++i ) {
             const Spell & spell = _spells[i];
@@ -118,8 +118,8 @@ namespace fheroes2
             return;
         }
 
-        const Sprite & spellScrollOpened = AGG::GetICN( ICN::TOWNWIND, 0 );
-        const Sprite & spellScroll = AGG::GetICN( ICN::TOWNWIND, 1 );
+        const Sprite & spellScrollOpened = Assets::getImage( ICN::TOWNWIND, 0 );
+        const Sprite & spellScroll = Assets::getImage( ICN::TOWNWIND, 1 );
 
         for ( size_t i = 0; i < _spells.size(); ++i ) {
             const Spell & spell = _spells[i];
@@ -133,7 +133,7 @@ namespace fheroes2
                 // Draw scroll with a spell over it.
                 Blit( spellScrollOpened, output, dst.x, dst.y );
 
-                const Sprite & icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+                const Sprite & icon = Assets::getImage( ICN::SPELLS, spell.IndexSprite() );
                 Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
                 const Text text( spell.GetName(), FontType::smallWhite() );
@@ -153,15 +153,15 @@ namespace fheroes2
 
         if ( spell == Spell::NONE ) {
             // Draw folded scroll when there is no spell.
-            const Sprite & spellScroll = AGG::GetICN( ICN::TOWNWIND, 1 );
+            const Sprite & spellScroll = Assets::getImage( ICN::TOWNWIND, 1 );
             Blit( spellScroll, output, dst.x, dst.y );
         }
         else {
             // Draw scroll with a spell over it.
-            const Sprite & spellScrollOpened = AGG::GetICN( ICN::TOWNWIND, 0 );
+            const Sprite & spellScrollOpened = Assets::getImage( ICN::TOWNWIND, 0 );
             Blit( spellScrollOpened, output, dst.x, dst.y );
 
-            const Sprite & icon = AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            const Sprite & icon = Assets::getImage( ICN::SPELLS, spell.IndexSprite() );
             Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
             const Text text( spell.GetName(), FontType::smallWhite() );

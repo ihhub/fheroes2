@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-04-09 11:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <george.king@seznam.cz>\n"
@@ -17,334 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
-
-msgid "SELECT"
-msgstr "ZVOLIT"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "VŠE"
-
-msgid "EXIT"
-msgstr "PRYČ"
-
-msgid "smallerButton|EXIT"
-msgstr "ZPĚT"
-
-msgid "OKAY"
-msgstr "OK"
-
-msgid "HEROES"
-msgstr "HRDINOVÉ"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"MĚSTA/\n"
-"HRADY"
-
-msgid "CANCEL"
-msgstr "ZRUŠIT"
-
-msgid "ACCEPT"
-msgstr "PŘIJMI"
-
-msgid "DECLINE"
-msgstr "ZRUŠIT"
-
-msgid "LEARN"
-msgstr "UČIT"
-
-msgid "TRADE"
-msgstr "VYMĚŇ"
-
-msgid "YES"
-msgstr "ANO"
-
-msgid "NO"
-msgstr "NE"
-
-msgid "DISMISS"
-msgstr "PROPUSŤ"
-
-msgid "UPGRADE"
-msgstr "VYLEPŠIT"
-
-msgid "GIFT"
-msgstr "DARUJ"
-
-msgid "RESTART"
-msgstr "OPAKOVAT"
-
-msgid "MAX"
-msgstr "MAX"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"P\n"
-"R\n"
-"O\n"
-"P\n"
-"U\n"
-"S\n"
-"Ť"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"O\n"
-"D\n"
-"E\n"
-"J\n"
-"Í\n"
-"T"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"K\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"Ň"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D\n"
-"N\n"
-"Í"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"NAHRÁT\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "OPAKOVAT"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ULOŽIT\n"
-"HRU"
-
-#, fuzzy
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"RYCHLÝ\n"
-"BOJ"
-
-msgid "QUIT"
-msgstr "KONEC"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"SPUSTIT\n"
-"MAPU"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HLAVNÍ\n"
-"MENU"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NOVÁ\n"
-"HRA"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"NAHRÁT\n"
-"HRU"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ULOŽIT\n"
-"HRU"
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr "VOLNÝ BOJ"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"STANDARDNÍ\n"
-"HRA"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"HRÁT\n"
-"KAMPAŇ"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"HRA PRO\n"
-"VÍCE HRÁČŮ"
-
-msgid "HOT SEAT"
-msgstr ""
-"HORKÉ\n"
-"KŘESLO"
-
-msgid "2 PLAYERS"
-msgstr "2 HRÁČI"
-
-msgid "3 PLAYERS"
-msgstr "3 HRÁČI"
-
-msgid "4 PLAYERS"
-msgstr "4 HRÁČI"
-
-msgid "5 PLAYERS"
-msgstr "5 HRÁČŮ"
-
-msgid "6 PLAYERS"
-msgstr "6 HRÁČŮ"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORIGINÁLNÍ\n"
-"KAMPAŇ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPAŇ\n"
-"DATADISKU"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "OBTÍŽNOST"
-
-msgid "VIEW INTRO"
-msgstr "ZOBRAZIT ÚVOD"
-
-msgid "RESET"
-msgstr "RESET"
-
-msgid "START"
-msgstr "START"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"H\n"
-"L\n"
-"Í\n"
-"D\n"
-"K\n"
-"A"
-
-msgid "army|Few"
-msgstr "Málo"
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -426,6 +98,9 @@ msgid ""
 msgstr ""
 "Legie\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Málo"
 
 msgid "army|Several"
 msgstr "Několik"
@@ -3567,8 +3242,14 @@ msgstr "Nakoupit:"
 msgid "Recruit selected monsters."
 msgstr "Najmout vybrané jednotky."
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Vybrat maximální počet k najmutí."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Vybrat pouze 1 jednotku k najmutí."
@@ -4372,6 +4053,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Kliknout pro výběr barvy."
 
+msgid "SELECT"
+msgstr "ZVOLIT"
+
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} nelze umístit na vodu."
 
@@ -4393,6 +4077,22 @@ msgstr "Akční objekty musí být umístěny na prázdných polích."
 #, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Na mapě může být umístěno maximálně %{count} obelisků."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Opravdu si přejete načíst novou mapu? (Všechny neuložené změny na aktuální "
+"mapě budou ztraceny.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Opravdu si přejete vytvořit novou mapu? (Všechny neuložené změny na aktuální "
+"mapě budou ztraceny.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr ""
@@ -4431,29 +4131,6 @@ msgstr ""
 "Přejete si vrátit se do hlavního menu hry? (Všechny neuložené změny na "
 "aktuální mapě budou ztraceny.)"
 
-msgid "Unsaved Changes"
-msgstr "Neuložené změny"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Tato mapa obsahuje změny terénu, historii akcí nebo ještě nebyla uložena do "
-"souboru.\n"
-"\n"
-"Přejete si uložit aktuální mapu?"
-
-msgid "Unplayable Map"
-msgstr "Nehratelná mapa"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Tato mapa není hratelná. Pro její spuštění je potřeba alespoň jeden člověk."
-
 msgid "Start Map"
 msgstr "Spustit mapu"
 
@@ -4464,8 +4141,9 @@ msgstr ""
 "Přejete si opustit editor a spustit mapu? (Všechny neuložené změny na "
 "aktuální mapě budou ztraceny.)"
 
-msgid "Create a new map from scratch."
-msgstr "Vytvořit novou mapu od základu."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Nová mapa"
@@ -4484,6 +4162,13 @@ msgstr "Uložit aktuální mapu."
 
 msgid "Quit out of the map editor."
 msgstr "Ukončit editor map."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Testeři"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Vrátit se do hlavního menu hry."
@@ -4560,6 +4245,32 @@ msgstr "Mapa uložena do: "
 
 msgid "Failed to save the map."
 msgstr "Uložení mapy se nezdařilo."
+
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr "Neuložené změny"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Tato mapa obsahuje změny terénu, historii akcí nebo ještě nebyla uložena do "
+"souboru.\n"
+"\n"
+"Přejete si uložit aktuální mapu?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Tato mapa není hratelná. Pro její spuštění je potřeba alespoň jeden člověk."
+
+msgid "Unplayable Map"
+msgstr "Nehratelná mapa"
 
 msgid "Used to place %{object}."
 msgstr "Používá se k umístění %{object}."
@@ -4881,10 +4592,6 @@ msgid "Delete an existing language."
 msgstr "Smazat stávající událost."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -5301,36 +5008,424 @@ msgstr "Expert"
 msgid "difficulty|Impossible"
 msgstr "Nehratelná"
 
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "VŠE"
+
+msgid "EXIT"
+msgstr "PRYČ"
+
+msgid "smallerButton|EXIT"
+msgstr "ZPĚT"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "HEROES"
+msgstr "HRDINOVÉ"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"MĚSTA/\n"
+"HRADY"
+
+msgid "CANCEL"
+msgstr "ZRUŠIT"
+
+msgid "ACCEPT"
+msgstr "PŘIJMI"
+
+msgid "DECLINE"
+msgstr "ZRUŠIT"
+
+msgid "LEARN"
+msgstr "UČIT"
+
+msgid "TRADE"
+msgstr "VYMĚŇ"
+
+msgid "YES"
+msgstr "ANO"
+
+msgid "NO"
+msgstr "NE"
+
+msgid "DISMISS"
+msgstr "PROPUSŤ"
+
+msgid "UPGRADE"
+msgstr "VYLEPŠIT"
+
+msgid "GIFT"
+msgstr "DARUJ"
+
+msgid "RESTART"
+msgstr "OPAKOVAT"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"P\n"
+"R\n"
+"O\n"
+"P\n"
+"U\n"
+"S\n"
+"Ť"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"O\n"
+"D\n"
+"E\n"
+"J\n"
+"Í\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"Ň"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D\n"
+"N\n"
+"Í"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"NAHRÁT\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "OPAKOVAT"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ULOŽIT\n"
+"HRU"
+
+#, fuzzy
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"RYCHLÝ\n"
+"BOJ"
+
+msgid "QUIT"
+msgstr "KONEC"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"NAHRÁT\n"
+"HRU"
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"SPUSTIT\n"
+"MAPU"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ULOŽIT\n"
+"HRU"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HLAVNÍ\n"
+"MENU"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr "VOLNÝ BOJ"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"STANDARDNÍ\n"
+"HRA"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"HRÁT\n"
+"KAMPAŇ"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"HRA PRO\n"
+"VÍCE HRÁČŮ"
+
+msgid "HOT SEAT"
+msgstr ""
+"HORKÉ\n"
+"KŘESLO"
+
+msgid "2 PLAYERS"
+msgstr "2 HRÁČI"
+
+msgid "3 PLAYERS"
+msgstr "3 HRÁČI"
+
+msgid "4 PLAYERS"
+msgstr "4 HRÁČI"
+
+msgid "5 PLAYERS"
+msgstr "5 HRÁČŮ"
+
+msgid "6 PLAYERS"
+msgstr "6 HRÁČŮ"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORIGINÁLNÍ\n"
+"KAMPAŇ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"KAMPAŇ\n"
+"DATADISKU"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "OBTÍŽNOST"
+
+msgid "VIEW INTRO"
+msgstr "ZOBRAZIT ÚVOD"
+
+msgid "RESET"
+msgstr "RESET"
+
+msgid "START"
+msgstr "START"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"H\n"
+"L\n"
+"Í\n"
+"D\n"
+"K\n"
+"A"
+
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testeři"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Kliknout pro výběr barvy."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Uložení mapy se nezdařilo."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Animace"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Animace"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klikni pro návrat do hlavního menu."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Chcete převzít kontrolu zpět od AI? Změna se projeví až v příštím tahu."
+
 msgid "and more..."
 msgstr "a víc..."
 
-msgid "Easy"
-msgstr "Lehká"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Obtížnost kampaně"
 
-msgid "Normal"
-msgstr "Normální"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Obtížnost kampaně"
 
-msgid "Hard"
-msgstr "Těžká"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Obtížnost kampaně"
 
 msgid "Campaign Difficulty"
 msgstr "Obtížnost kampaně"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Zvolte tuto obtížnost, pokud si chcete užít příběh hry s menší výzvou. AI "
 "bude slabší než na normální obtížnosti."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Zvolte tuto obtížnost, abyste zažili kampaň tak, jak byla původně navržena."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Zvolte tuto obtížnost, pokud chcete větší výzvu. AI bude silnější než na "
 "normální obtížnosti."
@@ -5708,6 +5803,10 @@ msgid "hotkey|toggle passability"
 msgstr "Přepnout průchodnost"
 
 #, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Vlevo"
+
+#, fuzzy
 msgid "hotkey|re-generate random map"
 msgstr "Nová náhodná mapa"
 
@@ -5992,6 +6091,9 @@ msgstr "Obrazovka města"
 msgid "Army Actions"
 msgstr "Akce armády"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "Tým fheroes2 Resurrection uvádí"
+
 msgid "The save file is corrupted."
 msgstr "Soubor je požkozen."
 
@@ -6056,9 +6158,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Zrušit a vrátit se do hlavní nabídky."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "Tým fheroes2 Resurrection uvádí"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vítejte ve hře Heroes of Might and Magic II běžící na enginu fheroes2!"
@@ -6925,6 +7024,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Pomalá"
+
+msgid "Normal"
+msgstr "Normální"
 
 msgid "Fast"
 msgstr "Rychlá"
@@ -12687,6 +12789,23 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Easy"
+#~ msgstr "Lehká"
+
+#~ msgid "Hard"
+#~ msgstr "Těžká"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "KAMPAŇ\n"
+#~ "DATADISKU"
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Vytvořit novou mapu od základu."
 
 #~ msgid ""
 #~ "Cell\n"

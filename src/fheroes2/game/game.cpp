@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <functional>
 #include <map>
 #include <optional>
 #include <utility>
@@ -37,14 +36,11 @@
 #include "audio_manager.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "cursor.h"
 #include "difficulty.h"
 #include "game_credits.h"
-#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
-#include "localevent.h"
 #include "m82.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -69,11 +65,6 @@ namespace
     bool needFadeIn{ true };
 
     uint32_t maps_animation_frame = 0;
-}
-
-namespace Game
-{
-    void AnimateDelaysInitialize();
 }
 
 bool Game::isCampaign()
@@ -188,18 +179,6 @@ bool Game::validateDisplayFadeIn()
     }
 
     return false;
-}
-
-void Game::Init()
-{
-    // set global events
-    LocalEvent & eventHandler = LocalEvent::Get();
-    eventHandler.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
-    eventHandler.setGlobalKeyDownEventHook( globalKeyDownEvent );
-
-    AnimateDelaysInitialize();
-
-    HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
 uint32_t Game::getAdventureMapAnimationIndex()

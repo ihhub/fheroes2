@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,6 +33,7 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <set>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -246,6 +247,22 @@ public:
         return *this;
     }
 
+    template <class Type>
+    IStreamBase & operator>>( std::set<Type> & v )
+    {
+        const uint32_t size = get32();
+
+        v.clear();
+
+        for ( uint32_t i = 0; i < size; ++i ) {
+            Type temp;
+            *this >> temp;
+            v.emplace( std::move( temp ) );
+        }
+
+        return *this;
+    }
+
     template <class Type1, class Type2>
     IStreamBase & operator>>( std::map<Type1, Type2> & v )
     {
@@ -361,6 +378,16 @@ public:
 
     template <class Type>
     OStreamBase & operator<<( const std::list<Type> & v )
+    {
+        put32( static_cast<uint32_t>( v.size() ) );
+
+        std::for_each( v.begin(), v.end(), [this]( const auto & item ) { *this << item; } );
+
+        return *this;
+    }
+
+    template <class Type1, class Type2>
+    OStreamBase & operator<<( const std::set<Type1, Type2> & v )
     {
         put32( static_cast<uint32_t>( v.size() ) );
 

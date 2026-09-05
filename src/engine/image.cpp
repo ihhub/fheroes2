@@ -21,13 +21,18 @@
 #include "image.h"
 
 #include <algorithm>
-#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
 
+#include "exception.h"
+#include "image_color_conversion.h"
 #include "image_palette.h"
+
+#if defined( GENERATE_COLOR_TABLE )
+#include <array>
+#endif
 
 namespace
 {
@@ -35,7 +40,7 @@ namespace
     // Mirror palette was modified as it was containing 238, 238, 239, 240 values instead of 238, 239, 240, 241
     // !!! WARNING !!!
     // If you modify "No cycle" part of the table make sure to update nonCyclingUniqueColorPos variable below (see GetPALColorId() function).
-    const uint8_t transformTable[256 * 16] = {
+    const uint8_t transformTable[fheroes2::paletteSize * 16] = {
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
@@ -64,7 +69,7 @@ namespace
         150, 151, 151, 151, 151, 151, 151, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 174, 174, 174, 174, 174,
         174, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 197, 197, 197, 197, 197, 202, 203, 204, 205, 206,
         207, 208, 209, 210, 211, 212, 213, 213, 213, 213, 213, 214, 215, 216, 217, 218, 219, 220, 221, 225, 226, 227, 228, 229, 230, 230, 230, 230, 73,
-        75,  77,  79,  81,  76,  78,  74,  76,  78,  80,  244, 245, 245, 245, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // First
+        75,  77,  79,  81,  76,  78,  74,  76,  78,  80,  244, 245, 245, 245, 73,  75,  77,  81,  250, 251, 252, 253, 0,   0, // First
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,
         33,  34,  35,  36,  36,  36,  36,  36,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,
@@ -74,7 +79,7 @@ namespace
         148, 149, 150, 151, 151, 151, 151, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 174, 174, 174,
         174, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 197, 197, 197, 201, 202, 203, 204, 205,
         206, 207, 208, 209, 210, 211, 212, 213, 213, 213, 213, 214, 215, 216, 217, 218, 219, 220, 221, 224, 225, 226, 227, 228, 229, 230, 230, 230, 76,
-        76,  76,  76,  76,  76,  76,  76,  76,  76,  78,  244, 245, 245, 245, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // Second
+        76,  76,  76,  76,  76,  76,  76,  76,  76,  78,  244, 245, 245, 245, 76,  76,  76,  76,  250, 251, 252, 253, 0,   0, // Second
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,
         31,  32,  33,  34,  35,  36,  36,  36,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,
@@ -84,7 +89,7 @@ namespace
         147, 148, 149, 150, 151, 151, 151, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 174,
         174, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 197, 197, 200, 201, 202, 203, 204,
         205, 206, 207, 208, 209, 210, 211, 212, 213, 213, 213, 214, 215, 216, 217, 218, 219, 220, 221, 223, 224, 225, 226, 227, 228, 229, 230, 230, 76,
-        76,  76,  76,  76,  76,  76,  76,  76,  76,  76,  243, 244, 245, 245, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // Third
+        76,  76,  76,  76,  76,  76,  76,  76,  76,  76,  243, 244, 245, 245, 76,  76,  76,  76,  250, 251, 252, 253, 0,   0, // Third
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,
         30,  31,  32,  33,  34,  35,  36,  36,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,
@@ -94,7 +99,7 @@ namespace
         146, 147, 148, 149, 150, 151, 151, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174,
         174, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 197, 199, 200, 201, 202, 203,
         204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 213, 214, 215, 216, 217, 218, 219, 220, 221, 223, 224, 225, 226, 227, 228, 229, 230, 230, 75,
-        75,  75,  75,  75,  75,  75,  75,  75,  75,  75,  243, 244, 245, 245, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // Fourth
+        75,  75,  75,  75,  75,  75,  75,  75,  75,  75,  243, 244, 245, 245, 75,  75,  75,  75,  250, 251, 252, 253, 0,   0, // Fourth
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  10,  11,  11,  11,  12,  13,  13,  13,  14,  14,  15,  15,  15,  16,  17,  17,  17,  18,
         18,  19,  19,  20,  20,  20,  21,  21,  11,  37,  37,  37,  38,  38,  39,  39,  39,  40,  40,  41,  41,  41,  41,  42,  42,  19,  42,  20,  20,
@@ -104,7 +109,7 @@ namespace
         18,  136, 19,  19,  20,  20,  20,  10,  11,  11,  11,  12,  12,  13,  13,  13,  14,  15,  15,  15,  16,  17,  17,  17,  18,  18,  19,  19,  20,
         20,  11,  175, 175, 176, 176, 38,  177, 177, 178, 178, 178, 179, 179, 179, 179, 180, 180, 180, 180, 180, 180, 21,  21,  108, 108, 38,  109, 38,
         109, 39,  40,  40,  41,  41,  41,  42,  42,  42,  20,  199, 179, 180, 180, 110, 110, 40,  42,  110, 110, 86,  86,  86,  86,  18,  18,  19,  65,
-        65,  65,  66,  65,  66,  65,  152, 155, 65,  242, 15,  16,  17,  19,  0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // Fifth
+        65,  65,  66,  65,  66,  65,  152, 155, 65,  242, 15,  16,  17,  19,  65,  65,  65,  65,  199, 179, 180, 180, 0,   0, // Fifth
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  11,  12,  12,  13,  13,  14,  15,  15,  16,  16,  17,  17,  18,  19,  20,  20,  21,
         21,  22,  22,  23,  24,  24,  25,  25,  37,  37,  38,  38,  39,  39,  40,  41,  41,  41,  42,  42,  43,  43,  44,  44,  45,  45,  46,  46,  23,
@@ -114,7 +119,7 @@ namespace
         138, 243, 243, 243, 243, 243, 24,  152, 152, 153, 153, 154, 154, 155, 156, 156, 157, 158, 158, 159, 18,  19,  19,  20,  20,  21,  22,  22,  23,
         24,  37,  175, 176, 176, 177, 177, 178, 179, 179, 180, 180, 180, 181, 181, 181, 182, 182, 182, 46,  47,  47,  48,  25,  108, 109, 109, 109, 198,
         199, 199, 201, 201, 42,  43,  43,  44,  45,  46,  46,  201, 181, 182, 183, 111, 111, 202, 45,  111, 111, 87,  88,  88,  88,  88,  21,  22,  66,
-        66,  68,  68,  67,  68,  68,  152, 157, 66,  69,  16,  18,  20,  21,  0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // Sixth
+        66,  68,  68,  67,  68,  68,  152, 157, 66,  69,  16,  18,  20,  21,  66,  66,  68,  67,  201, 181, 182, 183, 0,   0, // Sixth
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  11,  12,  13,  14,  14,  15,  16,  17,  17,  18,  19,  20,  20,  21,  22,  23,  24,
         24,  25,  26,  26,  27,  28,  29,  29,  37,  37,  38,  39,  40,  40,  41,  42,  42,  43,  44,  44,  45,  46,  46,  47,  47,  48,  48,  49,  50,
@@ -124,7 +129,7 @@ namespace
         141, 141, 141, 143, 143, 245, 245, 152, 152, 153, 154, 155, 155, 156, 157, 158, 158, 159, 160, 161, 162, 163, 163, 164, 165, 165, 166, 26,  26,
         27,  175, 13,  176, 177, 178, 178, 179, 180, 181, 181, 182, 182, 183, 183, 183, 184, 184, 185, 185, 50,  50,  52,  52,  109, 109, 198, 199, 200,
         201, 201, 202, 202, 44,  45,  46,  47,  48,  48,  49,  204, 205, 185, 185, 112, 112, 204, 47,  112, 113, 88,  89,  91,  92,  93,  93,  25,  66,
-        68,  69,  69,  68,  69,  69,  153, 159, 68,  71,  18,  242, 243, 24,  0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // Seventh
+        68,  69,  69,  68,  69,  69,  153, 159, 68,  71,  18,  242, 243, 24,  66,  68,  69,  68,  204, 205, 185, 185, 0,   0, // Seventh
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  12,  13,  13,  14,  15,  16,  17,  17,  19,  19,  20,  21,  22,  23,  24,  24,  26,
         26,  27,  28,  28,  30,  30,  31,  32,  37,  38,  39,  39,  40,  41,  42,  43,  43,  44,  45,  46,  46,  47,  48,  49,  50,  50,  51,  52,  52,
@@ -134,7 +139,7 @@ namespace
         143, 143, 144, 145, 146, 147, 30,  152, 153, 153, 154, 155, 156, 157, 158, 158, 159, 160, 161, 162, 163, 164, 165, 165, 166, 167, 168, 169, 28,
         29,  175, 176, 177, 177, 178, 179, 180, 181, 182, 182, 183, 184, 185, 185, 185, 186, 186, 187, 50,  52,  52,  54,  55,  109, 198, 199, 200, 201,
         202, 202, 204, 204, 205, 207, 47,  49,  50,  51,  52,  206, 206, 187, 188, 113, 113, 118, 49,  222, 222, 223, 224, 225, 226, 95,  227, 228, 67,
-        68,  70,  71,  69,  71,  70,  153, 65,  69,  73,  242, 22,  243, 244, 0,   0,   0,   0,   0,   0,   0,   0,   0,
+        68,  70,  71,  69,  71,  70,  153, 65,  69,  73,  242, 22,  243, 244, 67,  68,  70,  69,  206, 206, 187, 188, 0,
         0, // Eighth
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  11,  12,  12,  13,  14,  14,  15,  16,  16,  17,  18,  18,  19,  20,  242, 242, 22,
@@ -145,7 +150,7 @@ namespace
         138, 138, 139, 139, 140, 141, 244, 152, 152, 153, 153, 154, 154, 155, 155, 156, 156, 157, 158, 158, 159, 242, 159, 161, 161, 243, 243, 243, 243,
         164, 11,  175, 176, 176, 177, 177, 178, 179, 179, 180, 180, 181, 181, 182, 182, 182, 182, 183, 22,  23,  23,  23,  23,  108, 38,  38,  39,  39,
         40,  40,  41,  178, 180, 42,  44,  45,  23,  23,  23,  180, 181, 181, 183, 110, 200, 42,  45,  85,  86,  87,  87,  87,  21,  22,  22,  23,  66,
-        66,  67,  68,  67,  68,  68,  153, 158, 67,  70,  64,  65,  242, 243, 159, 159, 159, 159, 159, 159, 159, 159, 159, 10, // Ninth
+        66,  67,  68,  67,  68,  68,  153, 158, 67,  70,  64,  65,  242, 243, 66,  66,  67,  67,  180, 181, 181, 183, 159, 10, // Ninth
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  11,  12,  13,  14,  14,  15,  16,  16,  17,  18,  19,  19,  20,  242, 22,  22,  243,
         243, 243, 244, 244, 244, 244, 245, 245, 37,  37,  38,  176, 39,  177, 41,  41,  42,  179, 20,  180, 45,  22,  23,  23,  24,  24,  24,  24,  25,
@@ -155,7 +160,7 @@ namespace
         139, 140, 140, 141, 141, 142, 143, 152, 152, 153, 153, 154, 155, 155, 156, 156, 157, 158, 158, 159, 159, 161, 161, 162, 162, 163, 164, 244, 244,
         244, 175, 175, 176, 177, 177, 178, 179, 179, 180, 181, 181, 182, 182, 183, 183, 183, 184, 184, 184, 25,  25,  25,  25,  108, 109, 109, 39,  40,
         41,  41,  42,  42,  43,  43,  45,  46,  47,  25,  25,  181, 182, 183, 185, 111, 111, 42,  46,  111, 87,  88,  88,  88,  22,  23,  24,  25,  66,
-        67,  68,  69,  68,  69,  69,  153, 0,   68,  71,  65,  242, 242, 243, 0,   0,   0,   0,   0,   0,   0,   0,   0,   10, // Tenth
+        67,  68,  69,  68,  69,  69,  153, 0,   68,  71,  65,  242, 242, 243, 66,  67,  68,  68,  181, 182, 183, 185, 0,   10, // Tenth
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  11,  13,  13,  14,  15,  16,  16,  17,  18,  19,  20,  21,  21,  22,  23,  243, 25,
         244, 244, 244, 28,  245, 245, 245, 31,  37,  38,  38,  39,  40,  41,  41,  42,  42,  180, 45,  46,  46,  47,  47,  25,  26,  26,  26,  26,  27,
@@ -165,7 +170,7 @@ namespace
         141, 141, 142, 143, 143, 144, 145, 152, 152, 153, 154, 155, 155, 156, 156, 158, 158, 159, 160, 160, 161, 162, 163, 164, 164, 165, 166, 166, 167,
         167, 175, 176, 176, 177, 178, 178, 179, 180, 181, 182, 182, 183, 184, 184, 184, 185, 186, 186, 50,  51,  27,  27,  27,  109, 109, 109, 40,  40,
         41,  42,  43,  43,  44,  45,  46,  47,  49,  27,  27,  182, 183, 184, 187, 112, 112, 43,  47,  112, 87,  89,  90,  91,  91,  24,  26,  26,  67,
-        68,  69,  70,  69,  70,  70,  153, 0,   0,   73,  65,  242, 243, 244, 0,   0,   0,   0,   0,   0,   0,   0,   0,
+        68,  69,  70,  69,  70,  70,  153, 0,   0,   73,  65,  242, 243, 244, 67,  68,  69,  69,  182, 183, 184, 187, 0,
         10, // Eleventh
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  12,  13,  13,  14,  15,  16,  17,  18,  19,  20,  21,  21,  23,  243, 24,  25,  244,
@@ -176,7 +181,7 @@ namespace
         142, 144, 144, 145, 145, 146, 147, 152, 153, 153, 154, 155, 156, 157, 158, 159, 159, 160, 161, 162, 163, 164, 164, 165, 166, 167, 168, 168, 168,
         169, 175, 176, 177, 177, 178, 179, 180, 181, 182, 182, 183, 184, 185, 186, 186, 187, 187, 189, 189, 193, 193, 146, 146, 109, 109, 198, 199, 201,
         201, 201, 44,  205, 45,  46,  47,  48,  50,  52,  29,  183, 185, 186, 189, 112, 112, 205, 49,  222, 88,  89,  91,  92,  93,  26,  27,  28,  67,
-        68,  70,  71,  69,  71,  71,  154, 0,   0,   75,  242, 242, 243, 244, 0,   0,   0,   0,   0,   0,   0,   0,   0,   10, // Twelfth
+        68,  70,  71,  69,  71,  71,  154, 0,   0,   75,  242, 242, 243, 244, 67,  68,  70,  69,  183, 185, 186, 189, 0,   10, // Twelfth
 
         0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  10,  10,  10,  10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,
         25,  26,  27,  28,  29,  30,  31,  32,  37,  37,  37,  37,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,
@@ -195,8 +200,8 @@ namespace
         116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144,
         145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173,
         174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202,
-        203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 188, 188, 188, 188, 118, 118, 118, 118, 222, 223, 224, 225, 226, 227, 228, 229, 230, 69,
-        69,  69,  69,  69,  236, 237, 69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255 // No cycle
+        203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 250, 251, 252, 253, 118, 118, 118, 118, 222, 223, 224, 225, 226, 227, 228, 229, 230, 246,
+        247, 248, 236, 248, 236, 237, 69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255 // No cycle
     };
 
     bool Validate( const fheroes2::Image & image, const int32_t x, const int32_t y, const int32_t width, const int32_t height )
@@ -345,6 +350,72 @@ namespace
         return Verify( inX, inY, outX, outY, width, height, in.width(), in.height(), out.width(), out.height() );
     }
 
+#if defined( GENERATE_COLOR_TABLE )
+    // This function is only used when generating a new compressed color conversion table.
+    void generateColorConversionTable( uint8_t * rgbToId, const size_t size )
+    {
+        assert( rgbToId != nullptr );
+
+        const fheroes2::RGB * gamePalette = fheroes2::getRGBGamePalette();
+
+        // Use the "No cycle" palette.
+        // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
+        // Plus we exclude all repeated colors.
+        // But to allow usage of unique cycling colors we make a virtual non-cycling copy of them:
+        // - water cycling colors: link 231, 232, 233 and 235 colors to 246 - 249 positions (color 234 has already non-cycling copy at 236),
+        // - lava cycling colors: link 214 - 217 colors to 250 - 253 position.
+        constexpr uint32_t colorCount{ 227 };
+        const std::array<uint8_t, colorCount> nonCyclingUniqueColorPos{ 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
+                                                                        29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+                                                                        48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64,  65,  66,
+                                                                        67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,
+                                                                        86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99,  100, 101, 102, 103, 104,
+                                                                        105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123,
+                                                                        124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
+                                                                        143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161,
+                                                                        162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180,
+                                                                        181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
+                                                                        200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 222, 223, 224, 225, 226,
+                                                                        227, 228, 229, 230, 236, 237, 242, 243, 244, 245, 231, 232, 233, 235, 214, 215, 216, 217 };
+
+        const uint8_t * correctorY = nonCyclingUniqueColorPos.data();
+
+        for ( uint32_t id = 0; id < size; ++id ) {
+            const int32_t r = static_cast<int32_t>( id & 63 );
+            const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
+            const int32_t b = static_cast<int32_t>( id >> 12 );
+            int32_t minDistance = INT32_MAX;
+            uint8_t bestPos = 0;
+
+            const uint8_t * correctorX = correctorY;
+            const uint8_t * correctorXEnd = correctorX + colorCount;
+
+            for ( ; correctorX != correctorXEnd; ++correctorX ) {
+                const fheroes2::RGB & palette = gamePalette[*correctorX];
+
+                const int32_t sumRed = static_cast<int32_t>( palette.r ) + r;
+                const int32_t offsetRed = static_cast<int32_t>( palette.r ) - r;
+                const int32_t offsetGreen = static_cast<int32_t>( palette.g ) - g;
+                const int32_t offsetBlue = static_cast<int32_t>( palette.b ) - b;
+
+                // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
+                const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
+                                         + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
+                if ( minDistance > distance ) {
+                    minDistance = distance;
+                    bestPos = *correctorX;
+
+                    if ( distance == 0 ) {
+                        break;
+                    }
+                }
+            }
+
+            rgbToId[id] = transformTable[fheroes2::paletteSize * 15 + bestPos];
+        }
+    }
+#endif
+
     uint8_t GetPALColorId( const uint8_t red, const uint8_t green, const uint8_t blue )
     {
         constexpr uint32_t size = 64 * 64 * 64;
@@ -353,58 +424,13 @@ namespace
         if ( !isInitialized ) {
             isInitialized = true;
 
-            const uint8_t * gamePalette = fheroes2::getGamePalette();
-
-            // Use the "No cycle" palette.
-            // The first 10 and the last 10 colors are undefined in the original palette. We skip them to avoid usage of these colors.
-            // Plus we exclude all repeated colors.
-            constexpr uint32_t colorCount{ 219 };
-            const std::array<uint8_t, colorCount> nonCyclingUniqueColorPos{ 10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
-                                                                            29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-                                                                            48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64,  65,  66,
-                                                                            67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,
-                                                                            86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99,  100, 101, 102, 103, 104,
-                                                                            105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123,
-                                                                            124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
-                                                                            143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161,
-                                                                            162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180,
-                                                                            181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
-                                                                            200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 222, 223, 224, 225, 226,
-                                                                            227, 228, 229, 230, 236, 237, 242, 243, 244, 245 };
-
-            const uint8_t * correctorY = nonCyclingUniqueColorPos.data();
-
-            for ( uint32_t id = 0; id < size; ++id ) {
-                const int32_t r = static_cast<int32_t>( id & 63 );
-                const int32_t g = static_cast<int32_t>( id >> 6 ) & 63;
-                const int32_t b = static_cast<int32_t>( id >> 12 );
-                int32_t minDistance = INT32_MAX;
-                uint8_t bestPos = 0;
-
-                const uint8_t * correctorX = correctorY;
-                const uint8_t * correctorXEnd = correctorX + colorCount;
-
-                for ( ; correctorX != correctorXEnd; ++correctorX ) {
-                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
-
-                    const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
-                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
-                    ++palette;
-                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
-                    ++palette;
-                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
-
-                    // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
-                    const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
-                                             + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
-                    if ( minDistance > distance ) {
-                        minDistance = distance;
-                        bestPos = *correctorX;
-                    }
-                }
-
-                rgbToId[id] = bestPos;
+#if defined( GENERATE_COLOR_TABLE )
+            generateColorConversionTable( rgbToId, size );
+#else
+            if ( !getColorConversionTable( rgbToId, size ) ) {
+                throw fheroes2::CorruptedExecutable{ "Application is corrupted." };
             }
+#endif
         }
 
         return rgbToId[red + ( green << 6U ) + ( blue << 12U )];
@@ -612,10 +638,10 @@ namespace fheroes2
             return *this;
         }
 
-        Image::operator=( std::move( sprite ) );
-
         std::swap( _x, sprite._x );
         std::swap( _y, sprite._y );
+
+        Image::operator=( std::move( sprite ) );
 
         return *this;
     }
@@ -870,7 +896,7 @@ namespace fheroes2
                     if ( *transformOutX == 0 ) {
                         // Apply shadow transform to the out image.
                         uint8_t * imageOutX = imageOut + outOffset;
-                        *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                        *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ paletteSize } + *imageOutX );
                     }
                     else if ( *transformOutX > 1 && *transformOutX < 6 ) {
                         // Out image transform layer already has shadow data. We add the shadow strength by subtract the 'transformTableId', limited to 2.
@@ -883,7 +909,7 @@ namespace fheroes2
                 else {
                     // For single-layer 'out' image apply shadow transform to the image data.
                     uint8_t * imageOutX = imageOut + outOffset;
-                    *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                    *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ paletteSize } + *imageOutX );
                 }
             }
         }
@@ -962,9 +988,9 @@ namespace fheroes2
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
-        const uint8_t behindValue = 255 - alphaValue;
+        const uint32_t behindValue = 255U - alphaValue;
 
-        const uint8_t * gamePalette = getGamePalette();
+        const RGB * gamePalette = getRGBGamePalette();
 
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
@@ -981,13 +1007,13 @@ namespace fheroes2
                     const uint8_t * imageOutXEnd = imageOutX + width;
 
                     for ( ; imageOutX != imageOutXEnd; --imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[*imageInX];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
+                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255U ), static_cast<uint8_t>( green / 255U ), static_cast<uint8_t>( blue / 255U ) );
                     }
                 }
             }
@@ -1007,15 +1033,15 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * paletteSize + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[inValue];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                     }
                 }
@@ -1035,12 +1061,12 @@ namespace fheroes2
                     const uint8_t * imageInXEnd = imageInX + width;
 
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[*imageInX];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                     }
                 }
@@ -1061,15 +1087,15 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * paletteSize + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
-                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
+                        const RGB & inPAL = gamePalette[inValue];
+                        const RGB & outPAL = gamePalette[*imageOutX];
 
-                        const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
-                        const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
-                        const uint32_t blue = static_cast<uint32_t>( *( inPAL + 2 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 2 ) ) * behindValue;
+                        const uint32_t red = static_cast<uint32_t>( inPAL.r ) * alphaValue + static_cast<uint32_t>( outPAL.r ) * behindValue;
+                        const uint32_t green = static_cast<uint32_t>( inPAL.g ) * alphaValue + static_cast<uint32_t>( outPAL.g ) * behindValue;
+                        const uint32_t blue = static_cast<uint32_t>( inPAL.b ) * alphaValue + static_cast<uint32_t>( outPAL.b ) * behindValue;
                         *imageOutX = GetPALColorId( static_cast<uint8_t>( red / 255 ), static_cast<uint8_t>( green / 255 ), static_cast<uint8_t>( blue / 255 ) );
                     }
                 }
@@ -1084,7 +1110,7 @@ namespace fheroes2
 
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette )
     {
-        if ( palette.size() != 256 ) {
+        if ( palette.size() != paletteSize ) {
             return;
         }
 
@@ -1102,7 +1128,7 @@ namespace fheroes2
             return;
         }
 
-        ApplyRawPalette( in, 0, 0, out, 0, 0, in.width(), in.height(), transformTable + paletteId * 256 );
+        ApplyRawPalette( in, 0, 0, out, 0, 0, in.width(), in.height(), transformTable + paletteId * paletteSize );
     }
 
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t paletteId )
@@ -1111,13 +1137,13 @@ namespace fheroes2
             return;
         }
 
-        ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, transformTable + paletteId * 256 );
+        ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, transformTable + paletteId * paletteSize );
     }
 
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
                        const std::vector<uint8_t> & palette )
     {
-        if ( palette.size() != 256 ) {
+        if ( palette.size() != paletteSize ) {
             return;
         }
 
@@ -1126,17 +1152,15 @@ namespace fheroes2
 
     void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alpha )
     {
-        std::vector<uint8_t> palette( 256 );
+        std::vector<uint8_t> palette( paletteSize, 0 );
 
-        const uint8_t * value = getGamePalette();
+        const RGB * gamePalette = getRGBGamePalette();
 
-        for ( uint32_t i = 0; i < 256; ++i ) {
-            const uint32_t red = static_cast<uint32_t>( *value ) * alpha / 255;
-            ++value;
-            const uint32_t green = static_cast<uint32_t>( *value ) * alpha / 255;
-            ++value;
-            const uint32_t blue = static_cast<uint32_t>( *value ) * alpha / 255;
-            ++value;
+        // The first 10 colors are undefined in the original palette. Colors 254 and 255 are also unused in game palette.
+        for ( size_t i = 10; i < 254; ++i ) {
+            const uint32_t red = gamePalette[i].r * alpha / 255U;
+            const uint32_t green = gamePalette[i].g * alpha / 255U;
+            const uint32_t blue = gamePalette[i].b * alpha / 255U;
             palette[i] = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
         }
 
@@ -1154,7 +1178,7 @@ namespace fheroes2
         uint8_t * imageY = image.image() + y * imageWidth + x;
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
-        const uint32_t transformOffset = transformId * 256;
+        const uint32_t transformOffset = transformId * paletteSize;
 
         if ( image.singleLayer() ) {
             for ( ; imageY != imageYEnd; imageY += imageWidth ) {
@@ -1237,7 +1261,7 @@ namespace fheroes2
                     for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1262,7 +1286,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;
@@ -1292,7 +1316,7 @@ namespace fheroes2
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1317,7 +1341,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + ( *transformInX ) * paletteSize + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;
@@ -2813,7 +2837,7 @@ namespace fheroes2
                     if ( *transformIn > 0 ) {
                         if ( *transformIn != 1 ) {
                             // Apply a transformation.
-                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformIn ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformIn ) * paletteSize + *imageOutX );
                         }
                     }
                     else {
@@ -2989,12 +3013,40 @@ namespace fheroes2
         const uint8_t * imageInY = in.image() + offsetInY;
         uint8_t * imageOutY = out.image() + offsetOutY;
 
-        std::vector<double> positionX( widthRoiOut );
+        // Using "corner alignment" resize to bilinear resize the image without repeated columns/rows at the end
+        // and with higher sharpness on integer scaling factors than using pixel center alignment (startPos = 0.5 * (step - 1.)).
+        const double stepX = static_cast<double>( widthRoiIn - 1 ) / static_cast<double>( widthRoiOut - 1 );
+        const double stepY = static_cast<double>( heightRoiIn - 1 ) / static_cast<double>( heightRoiOut - 1 );
+
+        // Axis data to precache resize positions calculations.
+        struct AxisData
+        {
+            float pos;
+            float coeffToRight;
+            float coeffToLeft;
+            int32_t start;
+
+            AxisData( const float pos_, const float coeffToRight_, const int32_t start_ )
+                : pos( pos_ )
+                , coeffToRight( coeffToRight_ )
+                , coeffToLeft( 1.0F - coeffToRight_ )
+                , start( start_ )
+            {
+                // Do nothing.
+            }
+        };
+
+        std::vector<AxisData> axisX;
+        axisX.reserve( widthRoiOut );
         for ( int32_t x = 0; x < widthRoiOut; ++x ) {
-            positionX[x] = static_cast<double>( x * widthRoiIn ) / widthRoiOut;
+            const float pos = static_cast<float>( x * stepX );
+            const int32_t start = static_cast<int32_t>( pos );
+            const float fraction = pos - static_cast<float>( start );
+
+            axisX.emplace_back( pos, fraction, start );
         }
 
-        const uint8_t * gamePalette = getGamePalette();
+        const RGB * gamePalette = getRGBGamePalette();
 
         if ( in.singleLayer() ) {
             if ( !out.singleLayer() ) {
@@ -3008,42 +3060,75 @@ namespace fheroes2
                 }
             }
 
-            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
-                const double posY = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
+            const int32_t preLastOutX = widthRoiOut - 1;
+            const int32_t preLastOutY = heightRoiOut - 1;
+
+            for ( int32_t y = 0; y < preLastOutY; ++y, imageOutY += widthOut ) {
+                const float posY = static_cast<float>( y * stepY );
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
-                const double coeffY = posY - static_cast<int32_t>( posY );
+                const float coeffToBottomY = posY - static_cast<float>( static_cast<int32_t>( posY ) );
+                const float coeffToTopY = 1.0F - coeffToBottomY;
 
                 uint8_t * imageOutX = imageOutY;
 
-                for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
-                    const double posX = positionX[x];
-                    const int32_t startX = static_cast<int32_t>( posX );
-                    const int32_t offsetIn = startY + startX;
+                for ( int32_t x = 0; x < preLastOutX; ++x, ++imageOutX ) {
+                    const int32_t offsetIn = startY + axisX[x].start;
 
                     const uint8_t * imageInX = imageInY + offsetIn;
 
-                    if ( posX < widthRoiIn - 1 && posY < heightRoiIn - 1 ) {
-                        const double coeffX = posX - startX;
-                        const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                        const double coeff2 = coeffX * ( 1 - coeffY );
-                        const double coeff3 = ( 1 - coeffX ) * coeffY;
-                        const double coeff4 = coeffX * coeffY;
+                    const float coeffTopLeft = axisX[x].coeffToLeft * coeffToTopY;
+                    const float coeffTopRight = axisX[x].coeffToRight * coeffToTopY;
+                    const float coeffBottomLeft = axisX[x].coeffToLeft * coeffToBottomY;
+                    const float coeffBottomRight = axisX[x].coeffToRight * coeffToBottomY;
 
-                        const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                        const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
-                        const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
-                        const uint8_t * id4 = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
+                    const RGB & topLeft = gamePalette[*imageInX];
+                    const RGB & topRight = gamePalette[*( imageInX + 1 )];
+                    const RGB & bottomLeft = gamePalette[*( imageInX + widthIn )];
+                    const RGB & bottomRight = gamePalette[*( imageInX + widthIn + 1 )];
 
-                        const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
-                        const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
-                        const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
+                    const float red = topLeft.r * coeffTopLeft + topRight.r * coeffTopRight + bottomLeft.r * coeffBottomLeft + bottomRight.r * coeffBottomRight + 0.5F;
+                    const float green = topLeft.g * coeffTopLeft + topRight.g * coeffTopRight + bottomLeft.g * coeffBottomLeft + bottomRight.g * coeffBottomRight + 0.5F;
+                    const float blue = topLeft.b * coeffTopLeft + topRight.b * coeffTopRight + bottomLeft.b * coeffBottomLeft + bottomRight.b * coeffBottomRight + 0.5F;
 
-                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                    }
-                    else {
-                        *imageOutX = *imageInX;
-                    }
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                 }
+
+                // The last column of the image: interpolate only vertically.
+                {
+                    const uint8_t * imageInX = imageInY + startY + widthRoiIn - 1;
+
+                    const RGB & top = gamePalette[*imageInX];
+                    const RGB & bottom = gamePalette[*( imageInX + widthIn )];
+
+                    const float red = top.r * coeffToTopY + bottom.r * coeffToBottomY + 0.5F;
+                    const float green = top.g * coeffToTopY + bottom.g * coeffToBottomY + 0.5F;
+                    const float blue = top.b * coeffToTopY + bottom.b * coeffToBottomY + 0.5F;
+
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                }
+            }
+
+            // The last row of the image: interpolate only horizontally.
+            {
+                const int32_t startY = static_cast<int32_t>( preLastOutY * stepY ) * widthIn;
+                uint8_t * imageOutX = imageOutY;
+
+                for ( int32_t x = 0; x < preLastOutX; ++x, ++imageOutX ) {
+                    const uint8_t * imageInX = imageInY + startY + axisX[x].start;
+
+                    const RGB & left = gamePalette[*imageInX];
+                    const RGB & right = gamePalette[*( imageInX + 1 )];
+
+                    const float red = left.r * axisX[x].coeffToLeft + right.r * axisX[x].coeffToRight + 0.5F;
+                    const float green = left.g * axisX[x].coeffToLeft + right.g * axisX[x].coeffToRight + 0.5F;
+                    const float blue = left.b * axisX[x].coeffToLeft + right.b * axisX[x].coeffToRight + 0.5F;
+
+                    *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                }
+
+                // The output bottom-right pixel is a copy of the input bottom-right pixel.
+                const uint8_t * imageInX = imageInY + static_cast<ptrdiff_t>( widthIn ) * heightRoiIn - 1;
+                *imageOutX = *imageInX;
             }
         }
         else {
@@ -3051,105 +3136,95 @@ namespace fheroes2
             const bool isOutNotSingleLayer = !out.singleLayer();
             uint8_t * transformOutY = isOutNotSingleLayer ? ( out.transform() + offsetOutY ) : nullptr;
 
+            const auto maxPosX = static_cast<float>( widthRoiIn - 1 );
+            const auto maxPosY = static_cast<float>( heightRoiIn - 1 );
+
+            const uint8_t blackColor = GetPALColorId( 0, 0, 0 );
+
             for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
-                const double posY = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
+                const float posY = static_cast<float>( y * stepY );
                 const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
-                const double coeffY = posY - static_cast<int32_t>( posY );
+                const float coeffToBottomY = posY - static_cast<float>( static_cast<int32_t>( posY ) );
+                const float coeffToTopY = 1.0F - coeffToBottomY;
 
                 uint8_t * imageOutX = imageOutY;
                 uint8_t * transformOutX = transformOutY;
 
                 for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
-                    const double posX = positionX[x];
-                    const int32_t startX = static_cast<int32_t>( posX );
-                    const int32_t offsetIn = startY + startX;
+                    const int32_t offsetIn = startY + axisX[x].start;
 
                     const uint8_t * imageInX = imageInY + offsetIn;
                     const uint8_t * transformInX = transformInY + offsetIn;
 
-                    if ( posX < widthRoiIn - 1 && posY < heightRoiIn - 1 && *transformInX == 0
-                         && ( *( transformInX + 1 ) == 0 || *( transformInX + widthRoiIn ) == 0 ) ) {
-                        if ( *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
-                            const double coeffX = posX - startX;
-                            const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                            const double coeff2 = coeffX * ( 1 - coeffY );
-                            const double coeff3 = ( 1 - coeffX ) * coeffY;
-                            const double coeff4 = coeffX * coeffY;
+                    // The output weight is the weight of non-transparent image data in the output pixel.
+                    float outWeight = 0.0F;
+                    float red = 0.0F;
+                    float green = 0.0F;
+                    float blue = 0.0F;
 
-                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                            const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
-                            const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
-                            const uint8_t * id4 = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
-
-                            const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
-                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
-                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
-
-                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                    // Adds the pixel from the input image to the output summarized pixel.
+                    auto addPixel = [&]( const uint8_t data, const float coeff, const uint8_t transform ) {
+                        if ( transform == 0 && coeff > 0.0F ) {
+                            outWeight += coeff;
+                            const RGB & pal = gamePalette[data];
+                            red += static_cast<float>( pal.r ) * coeff;
+                            green += static_cast<float>( pal.g ) * coeff;
+                            blue += static_cast<float>( pal.b ) * coeff;
                         }
-                        else if ( *( transformInX + 1 ) != 0 && *( transformInX + widthRoiIn ) == 0 ) {
-                            // The pixel to the right is transparent, do only vertical interpolation.
-                            const double coeff1 = 1 - coeffY;
+                    };
 
-                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                            const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+                    if ( axisX[x].pos < maxPosX && posY < maxPosY ) {
+                        const float coeffTopLeft = axisX[x].coeffToLeft * coeffToTopY;
+                        const float coeffTopRight = axisX[x].coeffToRight * coeffToTopY;
+                        const float coeffBottomLeft = axisX[x].coeffToLeft * coeffToBottomY;
+                        const float coeffBottomRight = axisX[x].coeffToRight * coeffToBottomY;
 
-                            const double red = *id1 * coeff1 + *id3 * coeffY + 0.5;
-                            const double green = *( id1 + 1 ) * coeff1 + *( id3 + 1 ) * coeffY + 0.5;
-                            const double blue = *( id1 + 2 ) * coeff1 + *( id3 + 2 ) * coeffY + 0.5;
+                        addPixel( *imageInX, coeffTopLeft, *transformInX );
+                        addPixel( *( imageInX + 1 ), coeffTopRight, *( transformInX + 1 ) );
+                        addPixel( *( imageInX + widthIn ), coeffBottomLeft, *( transformInX + widthIn ) );
+                        addPixel( *( imageInX + widthIn + 1 ), coeffBottomRight, *( transformInX + widthIn + 1 ) );
+                    }
+                    else if ( posY < maxPosY ) {
+                        // The last column of the image: interpolate only vertically.
+                        addPixel( *imageInX, coeffToTopY, *transformInX );
+                        addPixel( *( imageInX + widthIn ), coeffToBottomY, *( transformInX + widthIn ) );
+                    }
+                    else if ( axisX[x].pos < maxPosX ) {
+                        // The last row of the image: interpolate only horizontally.
+                        addPixel( *imageInX, axisX[x].coeffToLeft, *transformInX );
+                        addPixel( *( imageInX + 1 ), axisX[x].coeffToRight, *( transformInX + 1 ) );
+                    }
+                    else {
+                        // The output bottom-right pixel is a copy of the input bottom-right pixel.
+                        addPixel( *imageInX, 1.0F, *transformInX );
+                    }
 
-                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                        }
-                        else if ( *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) != 0 ) {
-                            // The pixel to the bottom is transparent, do only horizontal interpolation.
-                            const double coeff2 = posX - startX;
-                            const double coeff1 = 1 - coeff2;
+                    // The output pixel is non-transparent if its weight is not less than 0.5.
+                    if ( outWeight >= 0.5F ) {
+                        // Normalize color channels.
+                        red /= outWeight;
+                        green /= outWeight;
+                        blue /= outWeight;
 
-                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                            const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+                        // To round positive values faster than using std::round(), we add 0.5 and discard the fractional part.
+                        red += 0.5F;
+                        green += 0.5F;
+                        blue += 0.5F;
 
-                            const double red = *id1 * coeff1 + *id2 * coeff2 + 0.5;
-                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + 0.5;
-                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + 0.5;
+                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
 
-                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                        }
-                        else if ( *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) != 0 ) {
-                            // Interpolation by three pixels: current, the right one and the bottom one.
-                            const double coeffX = posX - startX;
-                            double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                            double coeff2 = coeffX * ( 1 - coeffY );
-                            double coeff3 = ( 1 - coeffX ) * coeffY;
-                            const double coeffSumm = coeff1 + coeff2 + coeff3;
-                            coeff1 /= coeffSumm;
-                            coeff2 /= coeffSumm;
-                            coeff3 /= coeffSumm;
-
-                            const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
-                            const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
-                            const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
-
-                            const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + 0.5;
-                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + 0.5;
-                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + 0.5;
-
-                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                        if ( isOutNotSingleLayer ) {
+                            *transformOutX = 0;
+                            ++transformOutX;
                         }
                     }
                     else {
-                        if ( isOutNotSingleLayer || *transformInX == 0 ) {
-                            // Output image is double-layer or single-layer with non-transparent current pixel.
-                            *imageOutX = *imageInX;
+                        // Make the output pixel transparent and for single-layer images make it black.
+                        *imageOutX = blackColor;
+                        if ( isOutNotSingleLayer ) {
+                            *transformOutX = 1;
+                            ++transformOutX;
                         }
-                        else if ( *transformInX != 1 ) {
-                            // Apply a transformation.
-                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
-                        }
-                    }
-
-                    if ( isOutNotSingleLayer ) {
-                        *transformOutX = *transformInX;
-                        ++transformOutX;
                     }
                 }
 

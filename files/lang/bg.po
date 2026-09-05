@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,326 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
-
-msgid "SELECT"
-msgstr "ИЗБЕРИ"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr ""
-
-msgid "M"
-msgstr ""
-
-msgid "L"
-msgstr ""
-
-msgid "X-L"
-msgstr ""
-
-msgid "ALL"
-msgstr ""
-
-msgid "EXIT"
-msgstr "ИЗХОД"
-
-msgid "smallerButton|EXIT"
-msgstr "ИЗХОД"
-
-msgid "OKAY"
-msgstr "ДОБРЕ"
-
-msgid "HEROES"
-msgstr "ГЕРОЙ"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"ГРАДОВЕ/\n"
-"ЗАМЪЦИ"
-
-msgid "CANCEL"
-msgstr "ОТКАЗ"
-
-msgid "ACCEPT"
-msgstr "ПРИЕМАМ"
-
-msgid "DECLINE"
-msgstr "ОТКАЗВАМ"
-
-msgid "LEARN"
-msgstr "НАУЧИ"
-
-msgid "TRADE"
-msgstr "СДЕЛКА"
-
-msgid "YES"
-msgstr "ДА"
-
-msgid "NO"
-msgstr "НЕ"
-
-msgid "DISMISS"
-msgstr "ОТПРАТИ"
-
-msgid "UPGRADE"
-msgstr "ЗАСИЛИ"
-
-msgid "GIFT"
-msgstr "ДАРИ"
-
-msgid "RESTART"
-msgstr "РЕСТАРТ"
-
-msgid "MAX"
-msgstr "МАКС"
-
-msgid "MIN"
-msgstr "МИН"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"О\n"
-"Т\n"
-"П\n"
-"Р\n"
-"А\n"
-"Т\n"
-"И"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"И\n"
-"З\n"
-"Х\n"
-"О\n"
-"Д"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"К\n"
-"А\n"
-"М\n"
-"П\n"
-"А\n"
-"Н\n"
-"И\n"
-"Я"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"С\n"
-"Т\n"
-"А\n"
-"Н\n"
-"Д\n"
-"А\n"
-"Р\n"
-"Т\n"
-"Е\n"
-"Н"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"НОВА\n"
-"ИГРА"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"ЗАРЕДИ\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "РЕСТАРТ"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ЗАПАЗИ\n"
-"ИГРА"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "ИЗХОД"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "РЕСТАРТ"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"НОВА\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"ЗАРЕДИ\n"
-"ИГРА"
-
-#, fuzzy
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ЗАПАЗИ\n"
-"ИГРА"
-
-msgid "INFO"
-msgstr "ИНФО"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"САМО\n"
-"БИТКА"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"НОРМАЛНА\n"
-"ИГРА"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"ИГРАЙ\n"
-"ИСТОРИЯ"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"ИГРА С\n"
-"ПОВЕЧЕ\n"
-"ИГРАЧИ"
-
-msgid "HOT SEAT"
-msgstr "ОБЩ СТОЛ"
-
-msgid "2 PLAYERS"
-msgstr "2 ИГРАЧА"
-
-msgid "3 PLAYERS"
-msgstr "3 ИГРАЧА"
-
-msgid "4 PLAYERS"
-msgstr "4 ИГРАЧА"
-
-msgid "5 PLAYERS"
-msgstr "5 ИГРАЧА"
-
-msgid "6 PLAYERS"
-msgstr "6 ИГРАЧА"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"НАЧАЛНА\n"
-"ИСТОРИЯ"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr "ЕКСПАНЗИЯ"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "ТРУДНОСТ"
-
-msgid "VIEW INTRO"
-msgstr "ВИЖ ИНТРО"
-
-msgid "RESET"
-msgstr ""
-
-#, fuzzy
-msgid "START"
-msgstr "РЕСТАРТ"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-
-msgid "army|Few"
-msgstr "Малко"
 
 msgid "Warrior"
 msgstr "Войн"
@@ -417,6 +97,9 @@ msgid ""
 msgstr ""
 "Легион от\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Малко"
 
 msgid "army|Several"
 msgstr "Няколко"
@@ -3650,8 +3333,14 @@ msgstr "Покупка на:"
 msgid "Recruit selected monsters."
 msgstr "Вербувай избраните чудовища."
 
+msgid "MAX"
+msgstr "МАКС"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Избери максимален брой чудовища, които да бъдат наети."
+
+msgid "MIN"
+msgstr "МИН"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Избери само 1 чудовище, което да бъде наето."
@@ -4501,6 +4190,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
+msgid "SELECT"
+msgstr "ИЗБЕРИ"
+
 #, fuzzy
 msgid "%{objects} cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
@@ -4526,6 +4218,22 @@ msgstr "Това заклинание не може да се направи н�
 #, fuzzy
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да заредиш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr ""
@@ -4566,24 +4274,6 @@ msgstr ""
 "Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Рестарт"
@@ -4596,9 +4286,9 @@ msgstr ""
 "Сигурен ли си, че искаш да заредиш нова карта? (Всички незапазени промени в "
 "текущата карта ще бъдат загубени.)"
 
-#, fuzzy
-msgid "Create a new map from scratch."
-msgstr "нова карта от начало"
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
 
 msgid "New Map"
 msgstr "Нова Карта"
@@ -4617,6 +4307,13 @@ msgstr "Запазете текущата карта."
 
 msgid "Quit out of the map editor."
 msgstr "Излез от редактора на карти."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Тестери на играта"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 #, fuzzy
 msgid "Return to the game's Main Menu."
@@ -4699,6 +4396,27 @@ msgstr ""
 #, fuzzy
 msgid "Failed to save the map."
 msgstr "Файл за запазване:"
+
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
+msgstr ""
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5042,10 +4760,6 @@ msgid "Delete an existing language."
 msgstr "Зареди съществуваща карта."
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -5501,40 +5215,415 @@ msgstr "Експертна"
 msgid "difficulty|Impossible"
 msgstr "Невъзможна"
 
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid "EXIT"
+msgstr "ИЗХОД"
+
+msgid "smallerButton|EXIT"
+msgstr "ИЗХОД"
+
+msgid "OKAY"
+msgstr "ДОБРЕ"
+
+msgid "HEROES"
+msgstr "ГЕРОЙ"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"ГРАДОВЕ/\n"
+"ЗАМЪЦИ"
+
+msgid "CANCEL"
+msgstr "ОТКАЗ"
+
+msgid "ACCEPT"
+msgstr "ПРИЕМАМ"
+
+msgid "DECLINE"
+msgstr "ОТКАЗВАМ"
+
+msgid "LEARN"
+msgstr "НАУЧИ"
+
+msgid "TRADE"
+msgstr "СДЕЛКА"
+
+msgid "YES"
+msgstr "ДА"
+
+msgid "NO"
+msgstr "НЕ"
+
+msgid "DISMISS"
+msgstr "ОТПРАТИ"
+
+msgid "UPGRADE"
+msgstr "ЗАСИЛИ"
+
+msgid "GIFT"
+msgstr "ДАРИ"
+
+msgid "RESTART"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"О\n"
+"Т\n"
+"П\n"
+"Р\n"
+"А\n"
+"Т\n"
+"И"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"И\n"
+"З\n"
+"Х\n"
+"О\n"
+"Д"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"К\n"
+"А\n"
+"М\n"
+"П\n"
+"А\n"
+"Н\n"
+"И\n"
+"Я"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"С\n"
+"Т\n"
+"А\n"
+"Н\n"
+"Д\n"
+"А\n"
+"Р\n"
+"Т\n"
+"Е\n"
+"Н"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "ИЗХОД"
+
+#, fuzzy
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "РЕСТАРТ"
+
+#, fuzzy
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "ИНФО"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"САМО\n"
+"БИТКА"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"НОРМАЛНА\n"
+"ИГРА"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"ИГРАЙ\n"
+"ИСТОРИЯ"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"ИГРА С\n"
+"ПОВЕЧЕ\n"
+"ИГРАЧИ"
+
+msgid "HOT SEAT"
+msgstr "ОБЩ СТОЛ"
+
+msgid "2 PLAYERS"
+msgstr "2 ИГРАЧА"
+
+msgid "3 PLAYERS"
+msgstr "3 ИГРАЧА"
+
+msgid "4 PLAYERS"
+msgstr "4 ИГРАЧА"
+
+msgid "5 PLAYERS"
+msgstr "5 ИГРАЧА"
+
+msgid "6 PLAYERS"
+msgstr "6 ИГРАЧА"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"НАЧАЛНА\n"
+"ИСТОРИЯ"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr "ЕКСПАНЗИЯ"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "ТРУДНОСТ"
+
+msgid "VIEW INTRO"
+msgstr "ВИЖ ИНТРО"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "РЕСТАРТ"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Тестери на играта"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Файл за запазване:"
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Анексирам"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Анексирам"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Кликни, за да се върнеш към главното меню."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
+
 msgid "and more..."
 msgstr "и още..."
 
-msgid "Easy"
-msgstr "Лесно"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Трудност на Кампанията"
 
-msgid "Normal"
-msgstr "Нормлано"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Трудност на Кампанията"
 
-msgid "Hard"
-msgstr "Трудно"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Трудност на Кампанията"
 
 msgid "Campaign Difficulty"
 msgstr "Трудност на Кампанията"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Избери тази трудност, ако предпочиташ историята на играта пред "
 "предизвикателството. И.И. е по-слаб в сравнение с нормалната трудност."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Избери тази трудност, за да се насладиш на кампанията според оригиналния "
 "дизайн."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
@@ -5916,6 +6005,10 @@ msgid "hotkey|toggle passability"
 msgstr "превключи състояние"
 
 #, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "ляво по подразбиране"
+
+#, fuzzy
 msgid "hotkey|re-generate random map"
 msgstr "нова случайна игра"
 
@@ -6207,6 +6300,9 @@ msgstr "Екран на героя"
 msgid "Army Actions"
 msgstr ""
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "fheroes2 Отбор възкрeсяване представя"
+
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -6273,9 +6369,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Отказ обратно към главното меню."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "fheroes2 Отбор възкрeсяване представя"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
@@ -7154,6 +7247,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Бавно"
+
+msgid "Normal"
+msgstr "Нормлано"
 
 msgid "Fast"
 msgstr "Бързо"
@@ -13058,6 +13154,22 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#~ msgid "Easy"
+#~ msgstr "Лесно"
+
+#~ msgid "Hard"
+#~ msgstr "Трудно"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr "ЕКСПАНЗИЯ"
+
+#, fuzzy
+#~ msgid "Create a new map from scratch."
+#~ msgstr "нова карта от начало"
 
 #, fuzzy
 #~ msgid "and many-many other contributors and supporters!"

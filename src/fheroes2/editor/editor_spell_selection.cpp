@@ -26,9 +26,9 @@
 #include <initializer_list>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -78,7 +78,7 @@ namespace
             // Calculate all areas where we are going to render spells.
             _spellRoi.reserve( _spells.size() );
 
-            const fheroes2::Sprite & scrollImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
+            const fheroes2::Sprite & scrollImage = Assets::getImage( ICN::TOWNWIND, 0 );
 
             const int32_t lastRowColumns = static_cast<int32_t>( _spells.size() % _spellsPerRow );
             const int32_t lastRowOffsetX = ( lastRowColumns > 0 ) ? ( static_cast<int32_t>( _spellsPerRow ) - lastRowColumns ) * spellItemWidth / 2 : 0;
@@ -100,7 +100,7 @@ namespace
 
         void draw( fheroes2::Image & output )
         {
-            const fheroes2::Sprite & scrollImage = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
+            const fheroes2::Sprite & scrollImage = Assets::getImage( ICN::TOWNWIND, 0 );
 
             fheroes2::Sprite inactiveScrollImage( scrollImage );
             fheroes2::ApplyPalette( inactiveScrollImage, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -114,7 +114,7 @@ namespace
                     fheroes2::Blit( scrollImage, output, _spellRoi[i].x, _spellRoi[i].y );
                 }
 
-                const fheroes2::Sprite & spellImage = fheroes2::AGG::GetICN( ICN::SPELLS, _spells[i].first.IndexSprite() );
+                const fheroes2::Sprite & spellImage = Assets::getImage( ICN::SPELLS, _spells[i].first.IndexSprite() );
 
                 if ( !_spells[i].second ) {
                     // The spell is being inactive.
@@ -216,7 +216,7 @@ namespace Editor
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         if ( isDefaultScreenSize ) {
-            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+            const fheroes2::Sprite & backgroundImage = Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
             fheroes2::Copy( backgroundImage, 0, 0, display, activeArea );
         }
 

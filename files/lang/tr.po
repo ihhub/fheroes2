@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2024-12-01 16:37+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -17,327 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
-
-msgid "SELECT"
-msgstr "SEÇ"
-
-msgid "ABOUT"
-msgstr ""
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "HEPSİ"
-
-msgid "EXIT"
-msgstr "ÇIKIŞ"
-
-msgid "smallerButton|EXIT"
-msgstr "ÇIKIŞ"
-
-msgid "OKAY"
-msgstr "TAMAM"
-
-msgid "HEROES"
-msgstr "KAHRAMANLAR"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"KASABALAR/\n"
-"KALELER"
-
-msgid "CANCEL"
-msgstr "İPTAL"
-
-msgid "ACCEPT"
-msgstr "KABUL"
-
-msgid "DECLINE"
-msgstr "REDDET"
-
-msgid "LEARN"
-msgstr "ÖĞREN"
-
-msgid "TRADE"
-msgstr "TAKAS"
-
-msgid "YES"
-msgstr "EVET"
-
-msgid "NO"
-msgstr "HAYIR"
-
-msgid "DISMISS"
-msgstr "BIRAK"
-
-msgid "UPGRADE"
-msgstr "GELİŞTİR"
-
-msgid "GIFT"
-msgstr "HEDİYE"
-
-msgid "RESTART"
-msgstr "TEKRARLA"
-
-msgid "MAX"
-msgstr "MAKS"
-
-msgid "MIN"
-msgstr "MİN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"B\n"
-"I\n"
-"R\n"
-"A\n"
-"K"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"Ç\n"
-"I\n"
-"K\n"
-"I\n"
-"Ş"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"H\n"
-"İ\n"
-"K\n"
-"A\n"
-"Y\n"
-"E"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"T"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"YENİ\n"
-"OYUN"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"OYUNU\n"
-"YÜKLE"
-
-#, fuzzy
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "TEKRARLA"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"OYUNU\n"
-"KAYDET"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-
-msgid "QUIT"
-msgstr "ÇIKIŞ"
-
-#, fuzzy
-msgid ""
-"START\n"
-"MAP"
-msgstr "BAŞLA"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"YENİ\n"
-"HARİTA"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"YÜKLE"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"HARİTAYI\n"
-"KAYDET"
-
-msgid "INFO"
-msgstr "BİLGİ"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"SADECE\n"
-"SAVAŞ"
-
-msgid "SETTINGS"
-msgstr ""
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"STANDART\n"
-"OYUN"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"HİKAYE\n"
-"OYUNU"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"ÇOK\n"
-"OYUNCULU\n"
-"OYUN"
-
-msgid "HOT SEAT"
-msgstr ""
-"SIRAYLA\n"
-"OYNAMA"
-
-msgid "2 PLAYERS"
-msgstr "2 OYUNCU"
-
-msgid "3 PLAYERS"
-msgstr "3 OYUNCU"
-
-msgid "4 PLAYERS"
-msgstr "4 OYUNCU"
-
-msgid "5 PLAYERS"
-msgstr "5 OYUNCU"
-
-msgid "6 PLAYERS"
-msgstr "6 OYUNCU"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORİJİNAL\n"
-"HİKAYE"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"EKLENTİ\n"
-"HİKAYESİ"
-
-msgid "editorMainMenu|BACK"
-msgstr ""
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-
-msgid "newMap|RANDOM"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr "ZORLUK"
-
-msgid "VIEW INTRO"
-msgstr "İNTROYU İZLE"
-
-msgid "RESET"
-msgstr "SIFIRLA"
-
-msgid "START"
-msgstr "BAŞLA"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"D\n"
-"E\n"
-"V\n"
-"R\n"
-"İ\n"
-"Y\n"
-"E"
-
-msgid "army|Few"
-msgstr "Birkaç"
 
 msgid "Warrior"
 msgstr "Savaşçı"
@@ -419,6 +98,9 @@ msgid ""
 msgstr ""
 "Bir lejyon\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Birkaç"
 
 msgid "army|Several"
 msgstr "Birçok"
@@ -3479,8 +3161,14 @@ msgstr ""
 msgid "Recruit selected monsters."
 msgstr ""
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "Select maximum monsters to be recruited."
 msgstr ""
+
+msgid "MIN"
+msgstr "MİN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr ""
@@ -4258,6 +3946,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
+msgid "SELECT"
+msgstr "SEÇ"
+
 msgid "%{objects} cannot be placed on water."
 msgstr ""
 
@@ -4276,6 +3967,16 @@ msgid "Action objects must be placed on clear tiles."
 msgstr ""
 
 msgid "A maximum of %{count} %{objects} can be placed on the map."
+msgstr ""
+
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
 msgstr ""
 
 msgid "Not able to generate a map with given parameters."
@@ -4307,24 +4008,6 @@ msgid ""
 "current map will be lost.)"
 msgstr ""
 
-msgid "Unsaved Changes"
-msgstr ""
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-
-msgid "Unplayable Map"
-msgstr ""
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-
 #, fuzzy
 msgid "Start Map"
 msgstr "Başla"
@@ -4334,7 +4017,8 @@ msgid ""
 "the current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map from scratch."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -4353,6 +4037,12 @@ msgid "Save the current map."
 msgstr ""
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Auto Playtest"
+msgstr ""
+
+msgid "Run an automatic playtest of the map."
 msgstr ""
 
 #, fuzzy
@@ -4428,6 +4118,27 @@ msgid "Map saved to: "
 msgstr ""
 
 msgid "Failed to save the map."
+msgstr ""
+
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr ""
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+
+msgid "Unplayable Map"
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -4725,10 +4436,6 @@ msgid "Delete an existing language."
 msgstr "Oyunun dilini seç"
 
 msgid "Failed to generate a random map with given parameters."
-msgstr ""
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -5145,33 +4852,408 @@ msgstr ""
 msgid "difficulty|Impossible"
 msgstr ""
 
+msgid "ABOUT"
+msgstr ""
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "HEPSİ"
+
+msgid "EXIT"
+msgstr "ÇIKIŞ"
+
+msgid "smallerButton|EXIT"
+msgstr "ÇIKIŞ"
+
+msgid "OKAY"
+msgstr "TAMAM"
+
+msgid "HEROES"
+msgstr "KAHRAMANLAR"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"KASABALAR/\n"
+"KALELER"
+
+msgid "CANCEL"
+msgstr "İPTAL"
+
+msgid "ACCEPT"
+msgstr "KABUL"
+
+msgid "DECLINE"
+msgstr "REDDET"
+
+msgid "LEARN"
+msgstr "ÖĞREN"
+
+msgid "TRADE"
+msgstr "TAKAS"
+
+msgid "YES"
+msgstr "EVET"
+
+msgid "NO"
+msgstr "HAYIR"
+
+msgid "DISMISS"
+msgstr "BIRAK"
+
+msgid "UPGRADE"
+msgstr "GELİŞTİR"
+
+msgid "GIFT"
+msgstr "HEDİYE"
+
+msgid "RESTART"
+msgstr "TEKRARLA"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"B\n"
+"I\n"
+"R\n"
+"A\n"
+"K"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"Ç\n"
+"I\n"
+"K\n"
+"I\n"
+"Ş"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"H\n"
+"İ\n"
+"K\n"
+"A\n"
+"Y\n"
+"E"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"T"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"YENİ\n"
+"OYUN"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"OYUNU\n"
+"YÜKLE"
+
+#, fuzzy
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "TEKRARLA"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"OYUNU\n"
+"KAYDET"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+
+msgid "QUIT"
+msgstr "ÇIKIŞ"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"YENİ\n"
+"HARİTA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"YÜKLE"
+
+#, fuzzy
+msgid ""
+"START\n"
+"MAP"
+msgstr "BAŞLA"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"HARİTAYI\n"
+"KAYDET"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "BİLGİ"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"SADECE\n"
+"SAVAŞ"
+
+msgid "SETTINGS"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"STANDART\n"
+"OYUN"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"HİKAYE\n"
+"OYUNU"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"ÇOK\n"
+"OYUNCULU\n"
+"OYUN"
+
+msgid "HOT SEAT"
+msgstr ""
+"SIRAYLA\n"
+"OYNAMA"
+
+msgid "2 PLAYERS"
+msgstr "2 OYUNCU"
+
+msgid "3 PLAYERS"
+msgstr "3 OYUNCU"
+
+msgid "4 PLAYERS"
+msgstr "4 OYUNCU"
+
+msgid "5 PLAYERS"
+msgstr "5 OYUNCU"
+
+msgid "6 PLAYERS"
+msgstr "6 OYUNCU"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORİJİNAL\n"
+"HİKAYE"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"EKLENTİ\n"
+"HİKAYESİ"
+
+msgid "editorMainMenu|BACK"
+msgstr ""
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+
+msgid "newMap|RANDOM"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "ZORLUK"
+
+msgid "VIEW INTRO"
+msgstr "İNTROYU İZLE"
+
+msgid "RESET"
+msgstr "SIFIRLA"
+
+msgid "START"
+msgstr "BAŞLA"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"D\n"
+"E\n"
+"V\n"
+"R\n"
+"İ\n"
+"Y\n"
+"E"
+
+msgid "Auto Playtest Results"
+msgstr ""
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+msgid "Failed to prepare the map for auto playtest."
+msgstr ""
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "autoPlaytest|Animation"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Hız: %{speed}"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Savaş sonuçlarından çıkmak için tıklayın."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Bilgisayardan kontrolü yeniden kazanmak istiyor musunuz? Etki bir sonraki "
+"tur'da gerçekleşecek."
+
 msgid "and more..."
 msgstr ""
 
-msgid "Easy"
+msgid "campaignDifficulty|Decreased"
 msgstr ""
 
-msgid "Normal"
-msgstr "Normal"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr ""
+"Harita\n"
+"Zorluğu"
 
-msgid "Hard"
+msgid "campaignDifficulty|Increased"
 msgstr ""
 
 msgid "Campaign Difficulty"
 msgstr ""
 
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 
 msgid ""
@@ -5534,6 +5616,10 @@ msgstr "Sistem seçeneklerini özelleştirin"
 msgid "hotkey|toggle passability"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Sistem seçeneklerini özelleştirin"
+
 msgid "hotkey|re-generate random map"
 msgstr ""
 
@@ -5821,6 +5907,9 @@ msgstr "Kahraman Ekranı"
 msgid "Army Actions"
 msgstr ""
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Ayna görüntüsü oluşturuldu."
@@ -5880,9 +5969,6 @@ msgid ""
 msgstr ""
 
 msgid "Cancel back to the main menu."
-msgstr ""
-
-msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
@@ -6641,6 +6727,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Yavaş"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Fast"
 msgstr "Hızlı"
@@ -11601,6 +11690,14 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "EKLENTİ\n"
+#~ "HİKAYESİ"
 
 #~ msgid "AI"
 #~ msgstr "Bilgisayar"

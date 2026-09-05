@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -305,4 +305,16 @@ bool GameStatic::isHeroWorthyToVisitXanadu( const Heroes & hero )
     const uint32_t diplomacyLevel = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
     return ( diplomacyLevel == Skill::Level::BASIC && heroLevel > 7 ) || ( diplomacyLevel == Skill::Level::ADVANCED && heroLevel > 5 )
            || ( diplomacyLevel == Skill::Level::EXPERT && heroLevel > 3 );
+}
+
+uint32_t GameStatic::getNeutralMonsterLimit( const bool isResurrectionMap )
+{
+    if ( isResurrectionMap ) {
+        // Resurrection maps have a limit of 4,000,000 on neutral monster growth.
+        // There is no reason to go beyond that.
+        return 4000000U;
+    }
+
+    // The original maps limit neutral monsters to 4000.
+    return 4000;
 }

@@ -135,6 +135,9 @@ namespace Interface
 
         int32_t getSelectedObjectType() const;
 
+        bool setNextSelectedObjectType();
+        bool setPreviousSelectedObjectType();
+
         Maps::ObjectGroup getSelectedObjectGroup() const;
 
         static const char * getObjectGroupName( const Maps::ObjectGroup groupName );

@@ -31,7 +31,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army_bar.h"
 #include "army_troop.h"
 #include "battle.h"
@@ -39,6 +38,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -91,7 +91,7 @@ namespace
 
     void prepareBackround( fheroes2::Image & output, const fheroes2::Point offset, const bool isEvilInterface )
     {
-        const auto & heroMeetingImage = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        const auto & heroMeetingImage = Assets::getImage( ICN::SWAPWIN, 0 );
 
         // Render hero portrait area.
         for ( const fheroes2::Rect & area : heroPortraitArea ) {
@@ -123,7 +123,7 @@ namespace
 
     int32_t getMaxDefendingHeroAreaWidth()
     {
-        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        const fheroes2::Sprite & cell = Assets::getImage( ICN::CELLWIN, 1 );
         fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
         text.fitToOneRow( defendingHeroTypeNameMaxWidth );
 
@@ -132,11 +132,11 @@ namespace
 
     void renderDefendingHeroTypeUI( const int heroType, const fheroes2::Point offset, const bool isEvilInterface, fheroes2::Image & output )
     {
-        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        const fheroes2::Sprite & cell = Assets::getImage( ICN::CELLWIN, 1 );
 
         fheroes2::Blit( cell, output, offset.x, offset.y );
         if ( ( heroType & CONTROL_HUMAN ) == CONTROL_HUMAN ) {
-            const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+            const fheroes2::Sprite & mark = Assets::getImage( ICN::CELLWIN, 2 );
             fheroes2::Blit( mark, output, offset.x + mark.x(), offset.y + mark.y() );
         }
 
@@ -165,7 +165,7 @@ namespace
 
         fheroes2::DrawRect( output, { offset.x, offset.y, terrainIconSize.width + 2, terrainIconSize.height + 2 }, 113 );
 
-        const auto & terrainSelectionSprite = fheroes2::AGG::GetTIL( TIL::GROUND32, imageIndex, 0 );
+        const auto & terrainSelectionSprite = Assets::getTileImage( TIL::GROUND32, imageIndex, 0 );
 
         fheroes2::Copy( terrainSelectionSprite, 0, 0, output, offset.x + 1, offset.y + 1, terrainIconSize.width, terrainIconSize.height );
         if ( terrainType == Maps::Ground::UNKNOWN ) {
@@ -306,6 +306,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
     if ( !_backupCompleted || !allowBackup ) {
         armyInfo[0].hero = world.GetHeroes( Heroes::LORDKILBURN );
         armyInfo[0].isHeroPresent = true;
+
+        _terrainType = Maps::Ground::UNKNOWN;
+    }
+    else {
+        _terrainType = _backupTerrainType;
     }
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -351,9 +356,26 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
     fheroes2::Button buttonStart( windowOffset.x + 178, windowOffset.y + buttonYOffset, buttonStartIcn, 0, 1 );
     fheroes2::Button buttonExit( windowOffset.x + 366, windowOffset.y + buttonYOffset, buttonExitIcn, 0, 1 );
 
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonResetIcn, 0 ), display, buttonReset.area().getPosition(), shadowOffset );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonStartIcn, 0 ), display, buttonStart.area().getPosition(), shadowOffset );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonExitIcn, 0 ), display, buttonExit.area().getPosition(), shadowOffset );
+    fheroes2::addGradientShadow( Assets::getImage( buttonResetIcn, 0 ), display, buttonReset.area().getPosition(), shadowOffset );
+    fheroes2::addGradientShadow( Assets::getImage( buttonStartIcn, 0 ), display, buttonStart.area().getPosition(), shadowOffset );
+    fheroes2::addGradientShadow( Assets::getImage( buttonExitIcn, 0 ), display, buttonExit.area().getPosition(), shadowOffset );
+
+    auto updateStartButton = [&buttonStart]( const Army & first, const Army & second ) {
+        const bool isArmyValid = ( first.isValid() && second.isValid() );
+        if ( isArmyValid && !buttonStart.isEnabled() ) {
+            buttonStart.enable();
+            buttonStart.draw();
+            return true;
+        }
+
+        if ( !isArmyValid && buttonStart.isEnabled() ) {
+            buttonStart.disable();
+            buttonStart.draw();
+            return true;
+        }
+
+        return false;
+    };
 
     buttonStart.draw();
     buttonExit.draw();
@@ -385,7 +407,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
             buttonReset.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonReset.area() ) );
         }
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( buttonStart.isEnabled() && ( le.MouseClickLeft( buttonStart.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) {
             result = true;
 
             break;
@@ -450,6 +472,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
                     }
 
                     updateHero( first, windowOffset );
+
+                    needRender = needRender || updateStartButton( first.monster, second.monster );
                 }
 
                 titleRoiRestorer.restore();
@@ -494,17 +518,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & resetBattleSetup )
 
                 armyInfo[firstId].needRedraw = true;
 
-                const bool isArmyValid = ( armyInfo[firstId].monster.isValid() && armyInfo[secondId].monster.isValid() );
-                if ( isArmyValid && !buttonStart.isEnabled() ) {
-                    buttonStart.enable();
-                    buttonStart.draw();
-                    needRender = true;
-                }
-                else if ( !isArmyValid && buttonStart.isEnabled() ) {
-                    buttonStart.disable();
-                    buttonStart.draw();
-                    needRender = true;
-                }
+                needRender = needRender || updateStartButton( armyInfo[firstId].monster, armyInfo[secondId].monster );
             }
             else if ( firstUI.artifact != nullptr && le.isMouseCursorPosInArea( firstUI.artifact->GetArea() ) && firstUI.artifact->QueueEventProcessing() ) {
                 if ( firstUI.army != nullptr && firstUI.army->isSelected() ) {
@@ -609,6 +623,9 @@ void Battle::Only::updateHero( ArmyInfo & info, const fheroes2::Point & offset )
         return;
     }
 
+    info.monster.Reset();
+    info.monster.GetTroop( 0 )->Set( defaultMonster );
+
     updateArmyUI( info.ui, info.hero, offset, info.armyId );
 }
 
@@ -692,6 +709,8 @@ void Battle::Only::StartBattle()
         armyInfo[idx].monster.GetTroop( 0 )->Set( defaultMonster );
         armyInfo[idx].monsterBackup.Assign( armyInfo[idx].monster );
     }
+
+    _backupTerrainType = _terrainType;
 
     _backupCompleted = true;
 

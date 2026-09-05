@@ -622,7 +622,6 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
 
 fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 {
-#if defined( WITH_DEBUG )
     class AIAutoControlModeCommitter
     {
     public:
@@ -649,7 +648,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
     };
 
     const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
-#endif
 
     _mapActionObjects.clear();
     _priorityTargets.clear();
@@ -717,7 +715,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 
     for ( int idx = 0; idx < mapSize; ++idx ) {
         const Maps::Tile & tile = world.getTile( idx );
-        MP2::MapObjectType objectType = tile.getMainObjectType();
 
         const uint32_t regionID = tile.GetRegion();
         if ( regionID >= _regions.size() ) {
@@ -725,12 +722,14 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             continue;
         }
 
-        RegionStats & stats = _regions[regionID];
         if ( !isUnderViewSpell && tile.isFog( myColor ) ) {
             continue;
         }
 
-        if ( !MP2::isInGameActionObject( objectType ) ) {
+        MP2::MapObjectType objectType = tile.getMainObjectType();
+        // Remove useless objects for AI heroes as they bring no value.
+        // It is good to exclude them here to avoid unnecessary calculations.
+        if ( !isValuableAdventureMapObject( kingdom, objectType, idx ) ) {
             continue;
         }
 
@@ -738,6 +737,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
             assert( 0 );
         }
 
+        RegionStats & stats = _regions[regionID];
         if ( objectType == MP2::OBJ_HERO ) {
             const Heroes * hero = tile.getHero();
             assert( hero != nullptr );
@@ -860,7 +860,7 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
         if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
             assert( !heroes.empty() && heroes.back() != nullptr );
 
-            updateMapActionObjectCache( heroes.back()->GetIndex() );
+            updateMapActionObjectCache( heroes.back()->GetKingdom(), heroes.back()->GetIndex() );
 
             ++availableHeroCount;
 

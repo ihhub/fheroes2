@@ -1311,6 +1311,7 @@ namespace Maps
                     if ( hero ) {
                         hero->SetCenter( { static_cast<int32_t>( tileId ) % world.w(), static_cast<int32_t>( tileId ) / world.w() } );
                         hero->SetColor( color );
+                        hero->SetShipMaster( world.getTile( static_cast<int32_t>( tileId ) ).isWater() );
                         world.getTile( static_cast<int32_t>( tileId ) ).setHero( hero );
                     }
                 }

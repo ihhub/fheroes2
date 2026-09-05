@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +23,7 @@
 #include <cassert>
 #include <utility>
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "resource.h"
@@ -37,10 +37,10 @@ namespace Editor
 {
     Checkbox::Checkbox( const int32_t x, const int32_t y, const PlayerColor boxColor, const bool checked, fheroes2::Image & output )
         : _color( boxColor )
-        , _checkmark( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ) )
+        , _checkmark( Assets::getImage( ICN::CELLWIN, 2 ) )
     {
         const int32_t icnIndex = ( _color == PlayerColor::NONE ) ? 1 : Color::GetIndex( _color ) + 43;
-        const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::CELLWIN, icnIndex );
+        const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::CELLWIN, icnIndex );
 
         _area = { x, y, playerIcon.width(), playerIcon.height() };
 
@@ -81,7 +81,7 @@ namespace Editor
     {
         assert( maxWidth > 0 );
 
-        const fheroes2::Sprite & checkboxBackground = fheroes2::AGG::GetICN( isEvil ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 1 );
+        const fheroes2::Sprite & checkboxBackground = Assets::getImage( isEvil ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 1 );
         fheroes2::Copy( checkboxBackground, 0, 0, output, posX, posY, checkboxBackground.width(), checkboxBackground.height() );
 
         fheroes2::addGradientShadow( checkboxBackground, output, { posX, posY }, { -4, 4 } );
@@ -92,7 +92,7 @@ namespace Editor
         checkboxText.fitToOneRow( maxWidth - textOffsetX );
         checkboxText.draw( posX + textOffsetX, posY + 4, output );
 
-        checkSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+        checkSprite = Assets::getImage( ICN::CELLWIN, 2 );
         checkSprite.setPosition( posX + 2, posY + 2 );
 
         return { posX, posY, textOffsetX + checkboxText.width(), checkboxBackground.height() };
@@ -119,13 +119,13 @@ namespace Editor
 
         const std::array<int32_t, 2> offsetY = { roi.y + offsetFromEdge + maxHeight, roi.y + offsetFromEdge + 2 * maxHeight + fontHeight + 2 };
 
-        const fheroes2::Sprite & woodImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
-        const fheroes2::Sprite & mercuryImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
-        const fheroes2::Sprite & oreImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
-        const fheroes2::Sprite & sulfurImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
-        const fheroes2::Sprite & crystalImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
-        const fheroes2::Sprite & gemsImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
-        const fheroes2::Sprite & goldImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
+        const fheroes2::Sprite & woodImage = Assets::getImage( ICN::RESOURCE, 0 );
+        const fheroes2::Sprite & mercuryImage = Assets::getImage( ICN::RESOURCE, 1 );
+        const fheroes2::Sprite & oreImage = Assets::getImage( ICN::RESOURCE, 2 );
+        const fheroes2::Sprite & sulfurImage = Assets::getImage( ICN::RESOURCE, 3 );
+        const fheroes2::Sprite & crystalImage = Assets::getImage( ICN::RESOURCE, 4 );
+        const fheroes2::Sprite & gemsImage = Assets::getImage( ICN::RESOURCE, 5 );
+        const fheroes2::Sprite & goldImage = Assets::getImage( ICN::RESOURCE, 6 );
 
         resourceRoi[0] = { firstColumnOffset + ( maxWidth - woodImage.width() ) / 2, offsetY[0] - woodImage.height(), woodImage.width(), woodImage.height() };
         resourceRoi[1] = { secondColumnOffset + ( maxWidth - sulfurImage.width() ) / 2, offsetY[0] - sulfurImage.height(), sulfurImage.width(), sulfurImage.height() };

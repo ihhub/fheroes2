@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +34,7 @@ namespace fheroes2
 {
     class Cursor;
     class Display;
+    struct RGB;
 
     struct ResolutionInfo
     {
@@ -104,12 +105,12 @@ namespace fheroes2
             return {};
         }
 
-        virtual void setTitle( const std::string & )
+        virtual void setTitle( const std::string & /*unused*/ )
         {
             // Do nothing.
         }
 
-        virtual void setIcon( const Image & )
+        virtual void setIcon( const Image & /*unused*/ )
         {
             // Do nothing.
         }
@@ -124,7 +125,7 @@ namespace fheroes2
             return {};
         }
 
-        virtual void setVSync( const bool )
+        virtual void setVSync( const bool /*unused*/ )
         {
             // Do nothing.
         }
@@ -150,19 +151,14 @@ namespace fheroes2
         }
 
     protected:
-        BaseRenderEngine()
-            : _isFullScreen( false )
-            , _nearestScaling( false )
-        {
-            // Do nothing.
-        }
+        BaseRenderEngine() = default;
 
         virtual void clear()
         {
             // Do nothing.
         }
 
-        virtual void render( const Display &, const Rect & )
+        virtual void render( const Display & /*unused*/, const Rect & /*unused*/ )
         {
             // Do nothing.
         }
@@ -186,9 +182,9 @@ namespace fheroes2
         void linkRenderSurface( uint8_t * surface ) const; // declaration of this method is in source file
 
     private:
-        bool _isFullScreen;
+        bool _isFullScreen{ false };
 
-        bool _nearestScaling;
+        bool _nearestScaling{ false };
     };
 
     class Display final : public Image
@@ -256,7 +252,7 @@ namespace fheroes2
 
         // Change the whole color representation on the screen. Make sure that palette exists all the time!!!
         // nullptr input parameter is used to reset palette to default one.
-        void changePalette( const uint8_t * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
+        void changePalette( const RGB * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
 
         Size screenSize() const
         {
@@ -294,6 +290,11 @@ namespace fheroes2
     {
     public:
         friend Display;
+
+        Cursor( const Cursor & ) = delete;
+
+        Cursor & operator=( const Cursor & ) = delete;
+
         virtual ~Cursor() = default;
 
         virtual void show( const bool enable )
@@ -306,7 +307,7 @@ namespace fheroes2
             return _show;
         }
 
-        bool isFocusActive() const;
+        static bool isFocusActive();
 
         virtual void update( const Image & image, int32_t offsetX, int32_t offsetY )
         {
@@ -318,10 +319,9 @@ namespace fheroes2
             _image.setPosition( x, y );
         }
 
-        // Default implementation of Cursor uses software emulation.
-        virtual void enableSoftwareEmulation( const bool )
+        virtual void enableSoftwareEmulation( const bool enable )
         {
-            // Do nothing.
+            _emulation = enable;
         }
 
         bool isSoftwareEmulation() const

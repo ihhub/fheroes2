@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <initializer_list>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -37,15 +38,12 @@
 #include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
-#include "game_interface.h"
 #include "game_io.h"
 #include "game_static.h"
-#include "interface_icons.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "payment.h"
@@ -219,6 +217,9 @@ void Kingdom::ActionNewDay()
 
     // Reset the effect of the "Identify Hero" spell
     ResetModes( IDENTIFYHERO );
+
+    // Reset all monsters under Vision spell.
+    _monstersUnderVision = {};
 }
 
 void Kingdom::ActionNewDayResourceUpdate( const std::function<void( const EventDate & event, const Funds & funds )> & displayEventDialog )
@@ -312,11 +313,6 @@ void Kingdom::AddCastle( Castle * castle )
     if ( castle ) {
         if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) ) {
             castles.push_back( castle );
-        }
-
-        const Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) ) {
-            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
         }
     }
 
@@ -421,43 +417,6 @@ void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
         visit_object.emplace_front( index, objectType );
 }
 
-bool Kingdom::isValidKingdomObject( const Maps::Tile & tile, const MP2::MapObjectType objectType ) const
-{
-    if ( !MP2::isInGameActionObject( objectType ) ) {
-        return false;
-    }
-
-    if ( isVisited( tile.GetIndex(), objectType ) ) {
-        return false;
-    }
-
-    // Check castle first to ignore guest hero (tile with both Castle and Hero)
-    if ( tile.getMainObjectType( false ) == MP2::OBJ_CASTLE ) {
-        const PlayerColor tileColor = getColorFromTile( tile );
-
-        // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
-        return _color == tileColor || !Players::isFriends( _color, static_cast<PlayerColorsSet>( tileColor ) );
-    }
-
-    // Hero object can overlay other objects when standing on top of it: force check with getMainObjectType( true )
-    if ( objectType == MP2::OBJ_HERO ) {
-        const Heroes * hero = tile.getHero();
-
-        // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
-        return hero && ( _color == hero->GetColor() || !Players::isFriends( _color, static_cast<PlayerColorsSet>( hero->GetColor() ) ) );
-    }
-
-    if ( MP2::isCaptureObject( objectType ) ) {
-        return !Players::isFriends( _color, static_cast<PlayerColorsSet>( getColorFromTile( tile ) ) );
-    }
-
-    if ( MP2::isValuableResourceObject( objectType ) ) {
-        return doesTileContainValuableItems( tile );
-    }
-
-    return true;
-}
-
 bool Kingdom::opponentsCanRecruitMoreHeroes() const
 {
     for ( const PlayerColor opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
@@ -535,18 +494,6 @@ const Recruits & Kingdom::GetRecruits()
     assert( recruits.GetID1() != recruits.GetID2() || ( recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN ) );
 
     return recruits;
-}
-
-void Kingdom::SetVisitTravelersTent( const int barrierColor )
-{
-    // visited_tents_color is a bitfield
-    _visitedTentsColors |= ( 1 << barrierColor );
-}
-
-bool Kingdom::IsVisitTravelersTent( const int barrierColor ) const
-{
-    // visited_tents_color is a bitfield
-    return ( _visitedTentsColors & ( 1 << barrierColor ) ) != 0;
 }
 
 bool Kingdom::AllowRecruitHero( bool check_payment ) const
@@ -958,7 +905,8 @@ Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
 OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom )
 {
     return stream << kingdom.modes << kingdom._color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom._visitedTentsColors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
+                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom._visitedTentsColors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView
+                  << kingdom._monstersUnderVision;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
@@ -984,7 +932,17 @@ IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
         stream >> dummy;
     }
 
-    return stream >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
+    stream >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1180_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1180_RELEASE ) {
+        kingdom._monstersUnderVision = {};
+    }
+    else {
+        stream >> kingdom._monstersUnderVision;
+    }
+
+    return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj )

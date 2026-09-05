@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,9 +29,9 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -98,15 +98,15 @@ namespace
             buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
             buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
 
-            const fheroes2::Sprite & spriteGift = fheroes2::AGG::GetICN( giftButtonIcnID, 0 );
-            const fheroes2::Sprite & spriteTrade = fheroes2::AGG::GetICN( tradeButtonIcnID, 0 );
+            const fheroes2::Sprite & spriteGift = Assets::getImage( giftButtonIcnID, 0 );
+            const fheroes2::Sprite & spriteTrade = Assets::getImage( tradeButtonIcnID, 0 );
 
             buttonGift.setPosition( pos_rt.x - 68 + ( pos_rt.width - spriteGift.width() ) / 2, pos_rt.y + pos_rt.height - spriteGift.height() );
             buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteTrade.width() ) / 2, pos_rt.y + 150 );
             buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
             buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
-            _scrollbar.setImage( fheroes2::AGG::GetICN( tradpostIcnId, 2 ) );
-            _scrollbar.setArea( { pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpostIcnId, 1 ).width() ) / 2 + 22, pos_rt.y + 131, 187, 11 } );
+            _scrollbar.setImage( Assets::getImage( tradpostIcnId, 2 ) );
+            _scrollbar.setArea( { pos_rt.x + ( pos_rt.width - Assets::getImage( tradpostIcnId, 1 ).width() ) / 2 + 22, pos_rt.y + 131, 187, 11 } );
             _scrollbar.hide();
 
             const fheroes2::Text text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ),
@@ -179,16 +179,16 @@ namespace
         else {
             back.restore();
 
-            const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( tradpostIcnId, 1 );
+            const fheroes2::Sprite & bar = Assets::getImage( tradpostIcnId, 1 );
             fheroes2::Point dst_pt( pos_rt.x + ( pos_rt.width - bar.width() ) / 2 - 2, pos_rt.y + 128 );
             fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
             const uint32_t maximumValue = ( Resource::GOLD == resourceTo ) ? max_sell : max_buy;
 
-            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, 187, 1, static_cast<int32_t>( maximumValue + 1 ),
-                                                                                       { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
-            _scrollbar.setImage( scrollbarSlider );
+            const fheroes2::Sprite & originalSlider = Assets::getImage( tradpostIcnId, 2 );
+            fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, 187, 1, static_cast<int32_t>( maximumValue + 1 ),
+                                                                                 { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
+            _scrollbar.setImage( std::move( scrollbarSlider ) );
 
             _scrollbar.setRange( 0, maximumValue );
 
@@ -209,15 +209,15 @@ namespace
             const fheroes2::Text displayMessage( std::move( message ), fheroes2::FontType::normalWhite() );
             displayMessage.draw( pos_rt.x, pos_rt.y + 32, pos_rt.width, display );
 
-            const fheroes2::Sprite & sprite_from = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceFrom ) );
+            const fheroes2::Sprite & sprite_from = Assets::getImage( ICN::RESOURCE, Resource::getIconIcnIndex( resourceFrom ) );
             dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_from.width() + 1 ) / 2 - 70;
             dst_pt.y = pos_rt.y + 115 - sprite_from.height();
             fheroes2::Blit( sprite_from, display, dst_pt.x, dst_pt.y );
-            const fheroes2::Sprite & sprite_to = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceTo ) );
+            const fheroes2::Sprite & sprite_to = Assets::getImage( ICN::RESOURCE, Resource::getIconIcnIndex( resourceTo ) );
             dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_to.width() + 1 ) / 2 + 70;
             dst_pt.y = pos_rt.y + 115 - sprite_to.height();
             fheroes2::Blit( sprite_to, display, dst_pt.x, dst_pt.y );
-            const fheroes2::Sprite & sprite_fromto = fheroes2::AGG::GetICN( tradpostIcnId, 0 );
+            const fheroes2::Sprite & sprite_fromto = Assets::getImage( tradpostIcnId, 0 );
             dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
             dst_pt.y = pos_rt.y + 90;
             fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
@@ -294,19 +294,19 @@ namespace
         const int tradpost = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
 
         // wood
-        RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 7 ), pt.x, pt.y, rs.wood );
+        RedrawResourceSprite( Assets::getImage( tradpost, 7 ), pt.x, pt.y, rs.wood );
         // mercury
-        RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 8 ), pt.x + 37, pt.y, rs.mercury );
+        RedrawResourceSprite( Assets::getImage( tradpost, 8 ), pt.x + 37, pt.y, rs.mercury );
         // ore
-        RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 9 ), pt.x + 74, pt.y, rs.ore );
+        RedrawResourceSprite( Assets::getImage( tradpost, 9 ), pt.x + 74, pt.y, rs.ore );
         // sulfur
-        RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 10 ), pt.x, pt.y + 37, rs.sulfur );
+        RedrawResourceSprite( Assets::getImage( tradpost, 10 ), pt.x, pt.y + 37, rs.sulfur );
         // crystal
-        RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 11 ), pt.x + 37, pt.y + 37, rs.crystal );
+        RedrawResourceSprite( Assets::getImage( tradpost, 11 ), pt.x + 37, pt.y + 37, rs.crystal );
         // gems
-        RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 12 ), pt.x + 74, pt.y + 37, rs.gems );
+        RedrawResourceSprite( Assets::getImage( tradpost, 12 ), pt.x + 74, pt.y + 37, rs.gems );
         // gold
-        RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 13 ), pt.x + 37, pt.y + 74, rs.gold );
+        RedrawResourceSprite( Assets::getImage( tradpost, 13 ), pt.x + 37, pt.y + 74, rs.gold );
     }
 
     void RedrawResourceSprite2( const fheroes2::Image & sf, int32_t px, int32_t py, bool show, const Kingdom & kingdom, int from, int res, bool trading )
@@ -325,19 +325,19 @@ namespace
         const int tradpost = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
 
         // wood
-        RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 7 ), pt.x, pt.y, showcost, kingdom, from_resource, Resource::WOOD, tradingPost );
+        RedrawResourceSprite2( Assets::getImage( tradpost, 7 ), pt.x, pt.y, showcost, kingdom, from_resource, Resource::WOOD, tradingPost );
         // mercury
-        RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 8 ), pt.x + 37, pt.y, showcost, kingdom, from_resource, Resource::MERCURY, tradingPost );
+        RedrawResourceSprite2( Assets::getImage( tradpost, 8 ), pt.x + 37, pt.y, showcost, kingdom, from_resource, Resource::MERCURY, tradingPost );
         // ore
-        RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 9 ), pt.x + 74, pt.y, showcost, kingdom, from_resource, Resource::ORE, tradingPost );
+        RedrawResourceSprite2( Assets::getImage( tradpost, 9 ), pt.x + 74, pt.y, showcost, kingdom, from_resource, Resource::ORE, tradingPost );
         // sulfur
-        RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 10 ), pt.x, pt.y + 37, showcost, kingdom, from_resource, Resource::SULFUR, tradingPost );
+        RedrawResourceSprite2( Assets::getImage( tradpost, 10 ), pt.x, pt.y + 37, showcost, kingdom, from_resource, Resource::SULFUR, tradingPost );
         // crystal
-        RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 11 ), pt.x + 37, pt.y + 37, showcost, kingdom, from_resource, Resource::CRYSTAL, tradingPost );
+        RedrawResourceSprite2( Assets::getImage( tradpost, 11 ), pt.x + 37, pt.y + 37, showcost, kingdom, from_resource, Resource::CRYSTAL, tradingPost );
         // gems
-        RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 12 ), pt.x + 74, pt.y + 37, showcost, kingdom, from_resource, Resource::GEMS, tradingPost );
+        RedrawResourceSprite2( Assets::getImage( tradpost, 12 ), pt.x + 74, pt.y + 37, showcost, kingdom, from_resource, Resource::GEMS, tradingPost );
         // gold
-        RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 13 ), pt.x + 37, pt.y + 74, showcost, kingdom, from_resource, Resource::GOLD, tradingPost );
+        RedrawResourceSprite2( Assets::getImage( tradpost, 13 ), pt.x + 37, pt.y + 74, showcost, kingdom, from_resource, Resource::GOLD, tradingPost );
     }
 }
 
@@ -378,7 +378,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     rectsFrom.emplace_back( pt1.x + 74, pt1.y + 37, 34, 34 ); // gems
     rectsFrom.emplace_back( pt1.x + 37, pt1.y + 74, 34, 34 ); // gold
 
-    fheroes2::MovableSprite cursorFrom( fheroes2::AGG::GetICN( tradpost, 14 ) );
+    fheroes2::MovableSprite cursorFrom( Assets::getImage( tradpost, 14 ) );
     text.set( _( "Your Resources" ), fheroes2::FontType::smallWhite() );
     dst_pt.x = pt1.x + ( 108 - text.width() ) / 2;
     dst_pt.y = pt1.y - 15;
@@ -397,7 +397,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     rectsTo.emplace_back( pt2.x + 74, pt2.y + 37, 34, 34 ); // gems
     rectsTo.emplace_back( pt2.x + 37, pt2.y + 74, 34, 34 ); // gold
 
-    fheroes2::MovableSprite cursorTo( fheroes2::AGG::GetICN( tradpost, 14 ) );
+    fheroes2::MovableSprite cursorTo( Assets::getImage( tradpost, 14 ) );
     text.set( _( "Available Trades" ), fheroes2::FontType::smallWhite() );
     dst_pt.x = pt2.x + ( 108 - text.width() ) / 2;
     dst_pt.y = pt2.y - 15;
@@ -426,7 +426,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     // button exit
     const int exitButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_EXIT_BUTTON : ICN::UNIFORM_GOOD_EXIT_BUTTON;
-    const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( exitButtonIcnID, 0 );
+    const fheroes2::Sprite & spriteExit = Assets::getImage( exitButtonIcnID, 0 );
 
     dst_pt.x = pos_rt.x + 68 + ( pos_rt.width - spriteExit.width() ) / 2;
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();

@@ -1,3 +1,35 @@
+version 1.1.17 (30 June 2026)
+- update the Russian translation
+- greatly speed up application startup
+- update the German translation
+- update the Ukrainian translation
+- fix terrain reset on exit for the Battle Only mode
+- fix New Creature Week right-click delay
+- fix status window layout alignment on the Adventure Map
+- swap Archery Range Building sprites to match the colors of units
+- match castle's hero/building fade animation delay to classic H2
+- fix assertion hit for AI battle during Teleport spell evaluation
+- make AI heroes stay in castles if they get a movement bonus the next day
+- fix the title alignment in the resolution window
+- add an initial version of the Auto Playtest feature for the Editor
+- fix validation issue when updating enemy army in Battle Only mode
+- update the Swedish translation
+- remove assertion as it leads to a crash while loading a map
+- do not allow to start a battle in Battle Only mode if the START button is disabled
+- update the application exiting confirmation dialog in the Editor to include potential unsaved map changes
+- allow scrolling among all objects in a group using the mouse wheel in the Editor
+- fix spell sprite position in the first spell animation frame on the battlefield
+- improve AI decision making when using damage spells for Mirror Image monsters
+- speed up object evaluation for AI on the Adventure Map
+- do not allow placing Adventure Map Events on other objects
+- add "?" to the random terrain icon in Battle Only mode
+- show object highlighted area while moving or copying it
+- update the Hungarian translation
+- do not place roads under the obstacles in Random Map Generator
+- keep hero sprite invisible after hero fade-out animation
+- add Adventure Map smooth scrolling option
+- add the ability to directly extract all assets from the GOG installer on Android
+
 version 1.1.16 (17 May 2026)
 - update the Brazilian Portuguese translation
 - update the Russian translation

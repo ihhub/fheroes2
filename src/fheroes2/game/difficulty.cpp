@@ -334,3 +334,8 @@ bool Difficulty::isArtifactSortingAllowedForAI( const int32_t difficulty )
 
     return true;
 }
+
+bool Difficulty::isFutureObjectPredictionAllowedForAI( const int32_t difficulty )
+{
+    return ( difficulty != Difficulty::EASY );
+}

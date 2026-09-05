@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,4 +80,6 @@ namespace GameStatic
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
 
     bool isHeroWorthyToVisitXanadu( const Heroes & hero );
+
+    uint32_t getNeutralMonsterLimit( const bool isResurrectionMap );
 }

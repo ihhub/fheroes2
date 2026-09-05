@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 14:55+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2025-03-31 15:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: felix-schneider, do-ut-des\n"
@@ -16,340 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.5\n"
-
-msgid "SELECT"
-msgstr "AUSW."
-
-msgid "ABOUT"
-msgstr "ÜBER"
-
-msgid "S"
-msgstr "S"
-
-msgid "M"
-msgstr "M"
-
-msgid "L"
-msgstr "L"
-
-msgid "X-L"
-msgstr "X-L"
-
-msgid "ALL"
-msgstr "ALLE"
-
-msgid "EXIT"
-msgstr "ENDE"
-
-msgid "smallerButton|EXIT"
-msgstr "ENDE"
-
-msgid "OKAY"
-msgstr "OK"
-
-msgid "HEROES"
-msgstr "HELDEN"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"STÄDTE/\n"
-"BURGEN"
-
-msgid "CANCEL"
-msgstr "ABBRUCH"
-
-msgid "ACCEPT"
-msgstr "AKZEPT."
-
-msgid "DECLINE"
-msgstr "ABLEHNEN"
-
-msgid "LEARN"
-msgstr "LERNEN"
-
-msgid "TRADE"
-msgstr "HANDELN"
-
-msgid "YES"
-msgstr "JA"
-
-msgid "NO"
-msgstr "NEIN"
-
-msgid "DISMISS"
-msgstr "ENTLASSEN"
-
-msgid "UPGRADE"
-msgstr "AUFRÜSTEN"
-
-msgid "GIFT"
-msgstr "SENDEN"
-
-msgid "RESTART"
-msgstr "NEUSTART"
-
-msgid "MAX"
-msgstr "MAX"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"E\n"
-"N\n"
-"T\n"
-"L\n"
-"A\n"
-"S\n"
-"S\n"
-"E\n"
-"N"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"E\n"
-"N\n"
-"D\n"
-"E"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"F\n"
-"E\n"
-"L\n"
-"D\n"
-"Z\n"
-"U\n"
-"G"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NEUES\n"
-"SPIEL"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"SPIEL\n"
-"LADEN"
-
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr ""
-"NEU\n"
-"STARTEN"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"SPIEL\n"
-"SPEICHERN"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"SCHNELL-\n"
-"SPEICHERN"
-
-msgid "QUIT"
-msgstr "BEENDEN"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"KARTE\n"
-"STARTEN"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"HAUPT-\n"
-"MENÜ"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NEUE\n"
-"KARTE"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"KARTE\n"
-"LADEN"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"KARTE\n"
-"SPEICH."
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"NUR\n"
-"KAMPF"
-
-msgid "SETTINGS"
-msgstr ""
-"EINSTEL-\n"
-"LUNGEN"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"STANDARD\n"
-"SPIEL"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-"FELDZUG\n"
-"SPIEL"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"MEHR-\n"
-"SPIELER\n"
-"SPIEL"
-
-msgid "HOT SEAT"
-msgstr ""
-"HEISSER\n"
-"STUHL"
-
-msgid "2 PLAYERS"
-msgstr "2 SPIELER"
-
-msgid "3 PLAYERS"
-msgstr "3 SPIELER"
-
-msgid "4 PLAYERS"
-msgstr "4 SPIELER"
-
-msgid "5 PLAYERS"
-msgstr "5 SPIELER"
-
-msgid "6 PLAYERS"
-msgstr "6 SPIELER"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORIGINAL\n"
-"FELDZUG"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"ZUSATZ\n"
-"FELDZUG"
-
-msgid "editorMainMenu|BACK"
-msgstr "ZURÜCK"
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr ""
-"VON GRUND\n"
-"AUF"
-
-msgid "newMap|RANDOM"
-msgstr "ZUFÄLLIG"
-
-msgid "DIFFICULTY"
-msgstr "SCHWIER."
-
-msgid "VIEW INTRO"
-msgstr "INTRO ANZEIGEN"
-
-msgid "RESET"
-msgstr "RESET"
-
-msgid "START"
-msgstr "START"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"R\n"
-"A\n"
-"D\n"
-"I\n"
-"U\n"
-"S"
-
-msgid "army|Few"
-msgstr "Wenige"
 
 msgid "Warrior"
 msgstr "Krieger"
@@ -432,6 +98,9 @@ msgid ""
 msgstr ""
 "Eine Legion\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Wenige"
 
 msgid "army|Several"
 msgstr "Einige"
@@ -3023,7 +2692,7 @@ msgid ""
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
-"Ihr betretet die Arena und stehet einem Rudel bösartiger Löwen gegenüber. "
+"Ihr betretet die Arena und steht einem Rudel bösartiger Löwen gegenüber. "
 "Unter jubelndem Beifall der Menge besiegt Ihr sie mit Leichtigkeit. "
 "Beeindruckt von Euren Fähigkeiten, erklärt sich der alte Gladiatorentrainer "
 "bereit, Euch in einer Fertigkeit Eurer Wahl zu unterrichten."
@@ -3644,8 +3313,14 @@ msgstr "Anzahl:"
 msgid "Recruit selected monsters."
 msgstr "Ausgewählte Monster rekrutieren."
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Maximale Anzahl an zu rekrutierenden Monstern wählen."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Nur 1 Monster auswählen, das rekrutiert werden soll."
@@ -4429,6 +4104,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Klickt, um die Auswahl zu treffen."
 
+msgid "SELECT"
+msgstr "AUSW."
+
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} kann/können nicht auf Wasser platziert werden."
 
@@ -4452,6 +4130,22 @@ msgstr "Aktionsobjekte müssen auf freien Feldern platziert werden."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr ""
 "Maximal %{count} %{objects} kann/können auf der Karte platziert werden."
+
+#, fuzzy
+msgid ""
+"To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
+"the current map will be lost.)"
+msgstr ""
+"Wollt Ihr wirklich eine neue Karte laden? (Nicht gespeicherte Änderungen an "
+"der aktuellen Karte gehen verloren)."
+
+#, fuzzy
+msgid ""
+"Are you sure you want to quit? (Any unsaved changes to the current map will "
+"be lost.)"
+msgstr ""
+"Seid Ihr sicher, dass Ihr eine neue Karte erstellen wollt? (Alle nicht "
+"gespeicherten Änderungen an der aktuellen Karte gehen verloren)."
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Karte mit den angegebenen Parametern kann nicht generiert werden."
@@ -4490,30 +4184,6 @@ msgstr ""
 "Möchtet Ihr zum Hauptmenü des Spiels zurückkehren? (Alle nicht gespeicherten "
 "Änderungen an der aktuellen Karte gehen verloren)."
 
-msgid "Unsaved Changes"
-msgstr "Ungespeicherte Änderungen"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Diese Karte hat entweder Geländeänderungen, eine Rückgängig-Historie oder "
-"wurde noch nicht in einer Datei gespeichert.\n"
-"\n"
-"Möchtet Ihr die aktuelle Karte speichern?"
-
-msgid "Unplayable Map"
-msgstr "Nicht spielbare Karte"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Diese Karte ist nicht spielbar. Ihr benötigt mindestens einen menschlichen "
-"Spieler, damit die Karte spielbar ist."
-
 msgid "Start Map"
 msgstr "Karte starten"
 
@@ -4524,8 +4194,11 @@ msgstr ""
 "Seid Ihr sicher, dass Ihr den Editor verlassen und die Karte spielen wollt? "
 "(Nicht gespeicherte Änderungen an der aktuellen Karte gehen verloren)."
 
-msgid "Create a new map from scratch."
-msgstr "Komplett neue Karte erstellen."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+"Erstellt eine neue Karte, entweder von Grund auf oder mit dem "
+"Zufallskartengenerator."
 
 msgid "New Map"
 msgstr "Neue Karte"
@@ -4544,6 +4217,13 @@ msgstr "Speichern der aktuellen Karte."
 
 msgid "Quit out of the map editor."
 msgstr "Den Editor verlassen."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Spieltester"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Zum Hauptmenü zurückkehren."
@@ -4627,6 +4307,33 @@ msgstr "Karte gespeichert in: "
 
 msgid "Failed to save the map."
 msgstr "Speichern der Karte fehlgeschlagen."
+
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr "Ungespeicherte Änderungen"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Diese Karte hat entweder Geländeänderungen, eine Rückgängig-Historie oder "
+"wurde noch nicht in einer Datei gespeichert.\n"
+"\n"
+"Möchtet Ihr die aktuelle Karte speichern?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Diese Karte ist nicht spielbar. Ihr benötigt mindestens einen menschlichen "
+"Spieler, damit die Karte spielbar ist."
+
+msgid "Unplayable Map"
+msgstr "Nicht spielbare Karte"
 
 msgid "Used to place %{object}."
 msgstr "Wird verwendet, um %{object} zu platzieren."
@@ -4951,12 +4658,6 @@ msgstr "Eine bestehende Sprache löschen."
 msgid "Failed to generate a random map with given parameters."
 msgstr ""
 "Fehler beim Generieren einer Zufallskarte mit den angegebenen Parametern."
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Erstellt eine neue Karte, entweder von Grund auf oder mit dem "
-"Zufallskartengenerator."
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Verlasst den Editor und kehrt zum Hauptmenü des Spiels zurück."
@@ -5365,38 +5066,432 @@ msgstr "Experte"
 msgid "difficulty|Impossible"
 msgstr "Unmögl."
 
+msgid "ABOUT"
+msgstr "ÜBER"
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "ALLE"
+
+msgid "EXIT"
+msgstr "ENDE"
+
+msgid "smallerButton|EXIT"
+msgstr "ENDE"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "HEROES"
+msgstr "HELDEN"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"STÄDTE/\n"
+"BURGEN"
+
+msgid "CANCEL"
+msgstr "ABBRUCH"
+
+msgid "ACCEPT"
+msgstr "AKZEPT."
+
+msgid "DECLINE"
+msgstr "ABLEHNEN"
+
+msgid "LEARN"
+msgstr "LERNEN"
+
+msgid "TRADE"
+msgstr "HANDELN"
+
+msgid "YES"
+msgstr "JA"
+
+msgid "NO"
+msgstr "NEIN"
+
+msgid "DISMISS"
+msgstr "ENTLASSEN"
+
+msgid "UPGRADE"
+msgstr "AUFRÜSTEN"
+
+msgid "GIFT"
+msgstr "SENDEN"
+
+msgid "RESTART"
+msgstr "NEUSTART"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"E\n"
+"N\n"
+"T\n"
+"L\n"
+"A\n"
+"S\n"
+"S\n"
+"E\n"
+"N"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"E\n"
+"N\n"
+"D\n"
+"E"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"F\n"
+"E\n"
+"L\n"
+"D\n"
+"Z\n"
+"U\n"
+"G"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NEUES\n"
+"SPIEL"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"SPIEL\n"
+"LADEN"
+
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr ""
+"NEU\n"
+"STARTEN"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"SPIEL\n"
+"SPEICHERN"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"SCHNELL-\n"
+"SPEICHERN"
+
+msgid "QUIT"
+msgstr "BEENDEN"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NEUE\n"
+"KARTE"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"KARTE\n"
+"LADEN"
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"KARTE\n"
+"STARTEN"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"KARTE\n"
+"SPEICH."
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"HAUPT-\n"
+"MENÜ"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"NUR\n"
+"KAMPF"
+
+msgid "SETTINGS"
+msgstr ""
+"EINSTEL-\n"
+"LUNGEN"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"STANDARD\n"
+"SPIEL"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"FELDZUG\n"
+"SPIEL"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"MEHR-\n"
+"SPIELER\n"
+"SPIEL"
+
+msgid "HOT SEAT"
+msgstr ""
+"HEISSER\n"
+"STUHL"
+
+msgid "2 PLAYERS"
+msgstr "2 SPIELER"
+
+msgid "3 PLAYERS"
+msgstr "3 SPIELER"
+
+msgid "4 PLAYERS"
+msgstr "4 SPIELER"
+
+msgid "5 PLAYERS"
+msgstr "5 SPIELER"
+
+msgid "6 PLAYERS"
+msgstr "6 SPIELER"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORIGINAL\n"
+"FELDZUG"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"ZUSATZ\n"
+"FELDZUG"
+
+msgid "editorMainMenu|BACK"
+msgstr "ZURÜCK"
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr ""
+"VON GRUND\n"
+"AUF"
+
+msgid "newMap|RANDOM"
+msgstr "ZUFÄLLIG"
+
+msgid "DIFFICULTY"
+msgstr "SCHWIER."
+
+msgid "VIEW INTRO"
+msgstr "INTRO ANZEIGEN"
+
+msgid "RESET"
+msgstr "RESET"
+
+msgid "START"
+msgstr "START"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"R\n"
+"A\n"
+"D\n"
+"I\n"
+"U\n"
+"S"
+
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Spieltester"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Klickt, um die Farbe auszuwählen."
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Speichern der Karte fehlgeschlagen."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Animation"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Animation"
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Möchtet Ihr die Kontrolle über die KI zurückgewinnen? Der Effekt tritt erst "
+"in der nächsten Runde ein."
+
 msgid "and more..."
 msgstr "und mehr..."
 
-msgid "Easy"
-msgstr "Leicht"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Feldzugschwierigkeit"
 
-msgid "Normal"
-msgstr "Normal"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Feldzugschwierigkeit"
 
-msgid "Hard"
-msgstr "Schwer"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Feldzugschwierigkeit"
 
 msgid "Campaign Difficulty"
 msgstr "Feldzugschwierigkeit"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, um die Geschichte des Spiels mit weniger "
 "Herausforderungen zu erleben. Die KI ist schwächer als im Schwierigkeitsgrad "
 "Normal."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, um den Feldzug so zu erleben, wie er "
 "ursprünglich konzipiert wurde."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, wenn Ihr eine größere Herausforderung "
 "sucht. Die KI ist stärker als in der normalen Schwierigkeit."
@@ -5775,6 +5870,10 @@ msgstr "Spiel-Hauptmenü öffnen"
 msgid "hotkey|toggle passability"
 msgstr "Begehbarkeit ein-/ausschalten"
 
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "Standard: Links"
+
 msgid "hotkey|re-generate random map"
 msgstr "Zufällige Karte neu generieren"
 
@@ -6061,6 +6160,9 @@ msgstr "Stadtbildschirm"
 msgid "Army Actions"
 msgstr "Armeeaktionen"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "fheroes2 Resurrection Team präsentiert"
+
 msgid "The save file is corrupted."
 msgstr "Die Speicherdatei ist beschädigt."
 
@@ -6127,9 +6229,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Abbrechen und zurück zum Hauptmenü."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "fheroes2 Resurrection Team präsentiert"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
@@ -7030,6 +7129,9 @@ msgstr ""
 msgid "Slow"
 msgstr "Langsam"
 
+msgid "Normal"
+msgstr "Normal"
+
 msgid "Fast"
 msgstr "Schnell"
 
@@ -7589,8 +7691,8 @@ msgstr ""
 
 msgid "The soldiers living in the fort teach you a few new defensive tricks."
 msgstr ""
-"Die im Fort lebenden Soldaten geben Euch einige wertvolle Verteidigungstips "
-"bei."
+"Die im Fort lebenden Soldaten bringen Euch einige wertvolle "
+"Verteidigungstricks bei."
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
@@ -9367,8 +9469,8 @@ msgstr ""
 msgid ""
 "The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
-"Euer Held verfügt über Ländereien, welche Euch jeden Tag X Goldstücke in "
-"Steuereinnahmen einbringen."
+"Euer Held verfügt über Ländereien, welche Euch jeden Tag %{count} Goldstücke "
+"in Steuereinnahmen einbringen."
 
 msgid "Blue"
 msgstr "Blau"
@@ -10495,7 +10597,7 @@ msgid "Titan"
 msgstr "Titan"
 
 msgid "Titans"
-msgstr "Titane"
+msgstr "Titanen"
 
 msgid "Skeletons"
 msgstr "Skelette"
@@ -12981,18 +13083,19 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
 
+#~ msgid "Easy"
+#~ msgstr "Leicht"
+
+#~ msgid "Hard"
+#~ msgstr "Schwer"
+
+#, fuzzy
 #~ msgid ""
-#~ "Cell\n"
-#~ "Details"
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
 #~ msgstr ""
-#~ "Zellen-\n"
-#~ "Details"
+#~ "ZUSATZ\n"
+#~ "FELDZUG"
 
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "und viele, viele andere Mitwirkende und Unterstützer!"
-
-#~ msgid "AI"
-#~ msgstr "KI"
-
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Klickt, dass dieser Held KI-gesteuert ist."
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Komplett neue Karte erstellen."

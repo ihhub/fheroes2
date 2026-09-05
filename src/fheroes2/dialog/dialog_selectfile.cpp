@@ -34,10 +34,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "dir.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "icn.h"
@@ -393,7 +393,7 @@ namespace
         listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listbox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listbox.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         listbox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
         listbox.SetListContent( lists );
         listbox.updateScrollBarImage();
@@ -451,14 +451,14 @@ namespace
 
         // Draw radio buttons for toggling between sorting methods.
         const int sortMarkIcnID = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
-        const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( sortMarkIcnID, 4 );
+        const fheroes2::Sprite & markBackground = Assets::getImage( sortMarkIcnID, 4 );
 
         const fheroes2::Rect markBackgroundNameRoi( nameHeaderRoi.x + 5, nameHeaderRoi.y + 6, markBackground.width(), markBackground.height() );
         const fheroes2::Rect markBackgroundDateRoi( dateTimeOffsetX + 5, nameHeaderRoi.y + 6, markBackground.width(), markBackground.height() );
         fheroes2::Blit( markBackground, display, markBackgroundNameRoi );
         fheroes2::Blit( markBackground, display, markBackgroundDateRoi );
 
-        const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( sortMarkIcnID, 5 );
+        const fheroes2::Sprite & mark = Assets::getImage( sortMarkIcnID, 5 );
 
         if ( fileSortingMethod == SaveFileSortingMethod::FILENAME ) {
             fheroes2::Blit( mark, display, { markBackgroundNameRoi.x + 3, markBackgroundNameRoi.y + 3, mark.width(), mark.height() } );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,11 +25,11 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -53,7 +53,7 @@ namespace
 
         // Music volume.
         const bool isMusicOn = ( Audio::isValid() && conf.MusicVolume() > 0 );
-        const fheroes2::Sprite & musicVolumeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isMusicOn ? 1 : 0 );
+        const fheroes2::Sprite & musicVolumeIcon = Assets::getImage( ICN::SPANEL, isMusicOn ? 1 : 0 );
         std::string value;
         if ( isMusicOn ) {
             value = std::to_string( conf.MusicVolume() );
@@ -66,7 +66,7 @@ namespace
 
         // Sound volume.
         const bool isAudioOn = ( Audio::isValid() && conf.SoundVolume() > 0 );
-        const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, isAudioOn ? 3 : 2 );
+        const fheroes2::Sprite & soundVolumeOption = Assets::getImage( ICN::SPANEL, isAudioOn ? 3 : 2 );
         if ( isAudioOn ) {
             value = std::to_string( conf.SoundVolume() );
         }
@@ -78,7 +78,7 @@ namespace
 
         // Music Type.
         const MusicSource musicType = conf.MusicType();
-        const fheroes2::Sprite & musicTypeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, musicType == MUSIC_EXTERNAL ? 11 : 10 );
+        const fheroes2::Sprite & musicTypeIcon = Assets::getImage( ICN::SPANEL, musicType == MUSIC_EXTERNAL ? 11 : 10 );
         if ( musicType == MUSIC_MIDI_ORIGINAL ) {
             value = _( "MIDI" );
         }
@@ -93,7 +93,7 @@ namespace
 
         // 3D Audio.
         const bool is3DAudioEnabled = conf.is3DAudioEnabled();
-        const fheroes2::Sprite & interfaceStateIcon = is3DAudioEnabled ? fheroes2::AGG::GetICN( ICN::SPANEL, 11 ) : fheroes2::AGG::GetICN( ICN::SPANEL, 10 );
+        const fheroes2::Sprite & interfaceStateIcon = is3DAudioEnabled ? Assets::getImage( ICN::SPANEL, 11 ) : Assets::getImage( ICN::SPANEL, 10 );
         if ( is3DAudioEnabled ) {
             value = _( "On" );
         }
@@ -126,7 +126,7 @@ namespace Dialog
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
-        const fheroes2::Sprite & optionSprite = fheroes2::AGG::GetICN( ICN::SPANEL, 0 );
+        const fheroes2::Sprite & optionSprite = Assets::getImage( ICN::SPANEL, 0 );
         const fheroes2::Point optionOffset( windowRoi.x + 53, windowRoi.y + 31 );
         const fheroes2::Point optionStep( 118, 110 );
 
