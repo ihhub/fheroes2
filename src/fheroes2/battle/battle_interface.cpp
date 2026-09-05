@@ -1691,6 +1691,15 @@ void Battle::Interface::RedrawArmies()
     // Continue the idle animation for all troops on the battlefield: update idle animation frames before rendering the troops.
     IdleTroopsAnimation();
 
+    const Unit * unitWithTopCounter = _unitToHighlight;
+
+    if ( unitWithTopCounter == nullptr ) {
+        const Cell * cellUnderCursor = Board::GetCell( _currentCellIndex );
+        if ( cellUnderCursor != nullptr ) {
+            unitWithTopCounter = cellUnderCursor->GetUnit();
+        }
+    }
+
     const Castle * castle = Arena::GetCastle();
 
     std::array<int32_t, Board::heightInCells>
@@ -1973,6 +1982,16 @@ void Battle::Interface::RedrawArmies()
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
     }
+
+    if ( unitWithTopCounter != nullptr && unitWithTopCounter->isValid() && unitWithTopCounter != _movingUnit && unitWithTopCounter != _flyingUnit ) {
+        const int animationState = unitWithTopCounter->GetAnimationState();
+        const bool isStaticUnit = animationState == Monster_Info::STATIC || animationState == Monster_Info::IDLE;
+        const bool isFullyVisible = !unitWithTopCounter->Modes( CAP_SUMMONELEM ) || unitWithTopCounter->GetCustomAlpha() == 255;
+
+        if ( isStaticUnit && isFullyVisible ) {
+            RedrawTroopCount( *unitWithTopCounter );
+        }
+    }
 }
 
 void Battle::Interface::RedrawOpponents()
@@ -2216,6 +2235,39 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
         xOffset = 0;
 
     sx += isReflected ? -xOffset : xOffset;
+
+    if ( Settings::Get().isBattleHitPointsBarEnabled() ) {
+        constexpr int32_t hitPointsBarHeight = 5;
+
+        const int32_t hitPointsBarWidth = bar.width();
+        const int32_t hitPointsBarX = sx;
+        const int32_t hitPointsBarY = sy - hitPointsBarHeight;
+
+        const int32_t innerHitPointsBarWidth = hitPointsBarWidth - 2;
+        constexpr int32_t innerHitPointsBarHeight = hitPointsBarHeight - 2;
+
+        const uint32_t maximumCreatureHitPoints = unit.GetMonster().GetHitPoints();
+        const uint32_t remainingCreatureHitPoints = unit.GetHitPointsLeft();
+
+        assert( maximumCreatureHitPoints > 0 );
+        assert( remainingCreatureHitPoints > 0 );
+        assert( remainingCreatureHitPoints <= maximumCreatureHitPoints );
+
+        const int32_t remainingHitPointsWidth
+            = std::clamp<int32_t>( static_cast<int32_t>( static_cast<uint64_t>( remainingCreatureHitPoints ) * innerHitPointsBarWidth / maximumCreatureHitPoints ), 1,
+                                   innerHitPointsBarWidth );
+
+        const uint8_t outlineColor = bar.image()[bar.width() / 2];
+
+        static const uint8_t remainingHitPointsColor = fheroes2::GetColorId( 0, 200, 0 );
+        static const uint8_t missingHitPointsColor = fheroes2::GetColorId( 200, 0, 0 );
+
+        fheroes2::Fill( _mainSurface, hitPointsBarX, hitPointsBarY, hitPointsBarWidth, hitPointsBarHeight, outlineColor );
+
+        fheroes2::Fill( _mainSurface, hitPointsBarX + 1, hitPointsBarY + 1, innerHitPointsBarWidth, innerHitPointsBarHeight, missingHitPointsColor );
+
+        fheroes2::Fill( _mainSurface, hitPointsBarX + 1, hitPointsBarY + 1, remainingHitPointsWidth, innerHitPointsBarHeight, remainingHitPointsColor );
+    }
 
     fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
 
