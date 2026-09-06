@@ -12778,8 +12778,10 @@ msgstr ""
 msgid "Blood Lust"
 msgstr "Soif de sang"
 
-msgid "Increases a unit's attack skill."
-msgstr "Augmente la statistique d'attaque d'une créature."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Mort-vivant"
@@ -13135,6 +13137,9 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Augmente la statistique d'attaque d'une créature."
 
 #~ msgid "Easy"
 #~ msgstr "Facile"

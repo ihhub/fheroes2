@@ -12631,8 +12631,10 @@ msgstr "Incrementa enormemente tu habilidad de ataque contra dragones."
 msgid "Blood Lust"
 msgstr "Ansia de Sangre"
 
-msgid "Increases a unit's attack skill."
-msgstr "Incrementa la habilidad de ataque de una unidad."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Animar Muertos"
@@ -12981,6 +12983,9 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Incrementa la habilidad de ataque de una unidad."
 
 #~ msgid "Easy"
 #~ msgstr "Fácil"

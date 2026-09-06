@@ -12446,8 +12446,10 @@ msgstr "Výrazně zvyšuje útočnou sílu jednotky vůči drakům."
 msgid "Blood Lust"
 msgstr "Krvežíznivost"
 
-msgid "Increases a unit's attack skill."
-msgstr "Zvyšuje útočnou sílu jednotky."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Oživení mrtvých"
@@ -12789,6 +12791,9 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Zvyšuje útočnou sílu jednotky."
 
 #~ msgid "Easy"
 #~ msgstr "Lehká"

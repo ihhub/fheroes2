@@ -12420,8 +12420,10 @@ msgstr "Az egység támadóereje jelentősen növekszik sárkányok ellen."
 msgid "Blood Lust"
 msgstr "Vérszomj"
 
-msgid "Increases a unit's attack skill."
-msgstr "Az egység támadóereje növekszik."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Feltámasztás"
@@ -12761,6 +12763,9 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Az egység támadóereje növekszik."
 
 #~ msgid "Easy"
 #~ msgstr "Könnyű"
