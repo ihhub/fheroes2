@@ -103,7 +103,8 @@ namespace
         { gettext_noop( "Death Wave" ), 10, 0, 0, 28, 10,
           gettext_noop( "Damages all living (non-undead) units in the battle. This spell is an improved version of Death Ripple." ) },
         { gettext_noop( "Dragon Slayer" ), 6, 0, 0, 32, 5, gettext_noop( "Greatly increases a unit's attack skill vs. Dragons." ) },
-        { gettext_noop( "Blood Lust" ), 3, 0, 0, 27, 3, gettext_noop( "Increases a unit's attack skill." ) },
+        { gettext_noop( "Blood Lust" ), 3, 0, 0, 27, 3,
+          gettext_noop( "Increases a unit's attack skill by 3 for the duration of 3 rounds of combat, regardless of spell power." ) },
         { gettext_noop( "Animate Dead" ), 10, 0, 0, 25, 50, gettext_noop( "Resurrects creatures from a damaged or dead undead unit permanently." ) },
         { gettext_noop( "Mirror Image" ), 25, 0, 0, 26, 0,
           gettext_noop(
