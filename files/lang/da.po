@@ -12639,8 +12639,10 @@ msgstr "Øger i høj grad en trops angrebsevne mod drager."
 msgid "Blood Lust"
 msgstr "Blodtørst"
 
-msgid "Increases a unit's attack skill."
-msgstr "Øger en trops angrebsevne."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr ""
@@ -13002,6 +13004,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Øger en trops angrebsevne."
 
 #~ msgid "Easy"
 #~ msgstr "Let"

@@ -12840,8 +12840,10 @@ msgstr "Tăng đáng kể kỹ năng tấn công của đơn vị so với Rồn
 msgid "Blood Lust"
 msgstr "Khát máu"
 
-msgid "Increases a unit's attack skill."
-msgstr "Tăng kỹ năng tấn công của một đơn vị."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Sức sống Thần chết"
@@ -13187,6 +13189,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Tăng kỹ năng tấn công của một đơn vị."
 
 #~ msgid "Easy"
 #~ msgstr "Dễ"

@@ -11775,8 +11775,10 @@ msgstr "Incrementa di tanto i danni contro i draghi."
 msgid "Blood Lust"
 msgstr "Ferocia"
 
-msgid "Increases a unit's attack skill."
-msgstr "Incrementa la capacità d'attacco di un'unità."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Anima i Morti"
@@ -12128,6 +12130,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Incrementa la capacità d'attacco di un'unità."
 
 #~ msgid "AI"
 #~ msgstr "Computer"

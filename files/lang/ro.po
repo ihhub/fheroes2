@@ -11392,7 +11392,9 @@ msgstr ""
 msgid "Blood Lust"
 msgstr ""
 
-msgid "Increases a unit's attack skill."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
 msgstr ""
 
 msgid "Animate Dead"

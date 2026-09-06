@@ -12481,8 +12481,10 @@ msgstr ""
 msgid "Blood Lust"
 msgstr "Кровожерливість"
 
-msgid "Increases a unit's attack skill."
-msgstr "Збільшує навичку атаки обраного дружнього загону."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Оживити мерців"
@@ -12825,6 +12827,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Збільшує навичку атаки обраного дружнього загону."
 
 #~ msgid "Easy"
 #~ msgstr "Легко"

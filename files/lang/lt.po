@@ -11495,8 +11495,10 @@ msgstr "Smarkiai padidina kario puolimo įgūdžius prieš drakonus."
 msgid "Blood Lust"
 msgstr ""
 
-msgid "Increases a unit's attack skill."
-msgstr "Padidina kario puolimo įgūdžius."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr ""
@@ -11820,6 +11822,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Padidina kario puolimo įgūdžius."
 
 #, fuzzy
 #~ msgid "Click to set this hero to be AI-controlled."

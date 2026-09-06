@@ -13010,8 +13010,10 @@ msgstr "En tropp får sitt angrep voldsomt forsterket mot drager."
 msgid "Blood Lust"
 msgstr "Blodlyst"
 
-msgid "Increases a unit's attack skill."
-msgstr "Øker en tropp sin angrepsevne."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr ""
@@ -13373,6 +13375,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Øker en tropp sin angrepsevne."
 
 #~ msgid "Easy"
 #~ msgstr "Enkel"

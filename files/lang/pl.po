@@ -12516,8 +12516,10 @@ msgstr "Znacznie zwiększa umiejętność ataku jednostki w walce ze smokami."
 msgid "Blood Lust"
 msgstr "Żądza Krwi"
 
-msgid "Increases a unit's attack skill."
-msgstr "Zwiększa umiejętność ataku jednostki."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Ożywienie Martwych"
@@ -12872,6 +12874,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Zwiększa umiejętność ataku jednostki."
 
 #~ msgid "Easy"
 #~ msgstr "Łatwa"
