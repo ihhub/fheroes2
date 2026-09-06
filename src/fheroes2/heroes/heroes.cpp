@@ -2111,7 +2111,6 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
         }
         else if ( PORT_SMALL == type ) {
             const fheroes2::Sprite & background = Assets::getImage( ICN::PORTXTRA, 0 );
-            const fheroes2::Sprite & mobility = Assets::getImage( ICN::MOBILITY, GetMobilityIndexSprite() );
             const fheroes2::Sprite & mana = Assets::getImage( ICN::MANA, getManaIndexSprite() );
 
             const int barw = 7;
@@ -2120,7 +2119,12 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             fheroes2::Blit( background, dstsf, px, py );
 
             // Draw mobility.
-            fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
+            const uint32_t mobilitySprite = GetMobilityIndexSprite();
+            // Don't draw this sprite if there are no movement points left.
+            if ( mobilitySprite > 0 ) {
+                const fheroes2::Sprite & mobility = Assets::getImage( ICN::MOBILITY, mobilitySprite );
+                fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
+            }
 
             // Draw hero's portrait.
             fheroes2::Copy( port, 0, 0, dstsf, px + barw + 1, py, port.width(), port.height() );
