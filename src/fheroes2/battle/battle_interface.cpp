@@ -1991,7 +1991,7 @@ void Battle::Interface::RedrawArmies()
         const bool isFullyVisible = !unitWithTopCounter->Modes( CAP_SUMMONELEM ) || unitWithTopCounter->GetCustomAlpha() == 255;
 
         if ( isStaticUnit && isFullyVisible ) {
-            constexpr uint8_t highlightedCounterAlpha = 192;
+            constexpr uint8_t highlightedCounterAlpha = 150;
             RedrawTroopCount( *unitWithTopCounter, highlightedCounterAlpha );
         }
     }
@@ -2227,7 +2227,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 void Battle::Interface::RedrawTroopCount( const Unit & unit, const uint8_t alpha )
 {
     const fheroes2::Rect & rt = unit.GetRectPosition();
-    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
+    const fheroes2::Sprite & bar = Assets::getImage( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
 
     const int32_t monsterIndex = unit.GetHeadIndex();
