@@ -194,9 +194,9 @@ namespace fheroes2
         MovableSprite _cursor;
         ImageRestorer _background;
         Rect _textInputArea;
+        int32_t _verticalTextOffset{ 0 };
         bool _isMultiLineText{ false };
         bool _isSingleLineTextCenterAligned{ false };
-        int32_t _verticalTextOffset{ 0 };
     };
 
     // Renderer of current time and FPS on screen

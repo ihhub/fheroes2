@@ -318,19 +318,14 @@ namespace
 
                 break;
             case CursorPosition::PrevLine:
-                if ( !_textUI ) {
-                    return;
-                }
-
-                _cursorPosition = _textUI->getCursorPositionInAdjacentLine( _cursorPosition, true );
-
-                break;
             case CursorPosition::NextLine:
-                if ( !_textUI ) {
+                if ( !_isMultiLineText ) {
                     return;
                 }
 
-                _cursorPosition = _textUI->getCursorPositionInAdjacentLine( _cursorPosition, false );
+                assert( _textUI );
+
+                _cursorPosition = _textUI->getCursorPositionInAdjacentLine( _cursorPosition, pos == CursorPosition::PrevLine );
 
                 break;
             case CursorPosition::BegOfText:

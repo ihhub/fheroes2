@@ -239,6 +239,7 @@ namespace fheroes2
     {
         _cursor.hide();
         _background.restore();
+
         _text.set( newText, cursorPositionInText );
 
         _verticalTextOffset = 0;
@@ -261,7 +262,9 @@ namespace fheroes2
         const int32_t offsetX = _isSingleLineTextCenterAligned ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
         const int32_t offsetY = _textInputArea.y + 2 - _verticalTextOffset;
 
-        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
+        const Rect & textRoi = _isMultiLineText ? _textInputArea : _background.rect();
+
+        _text.drawInRoi( offsetX, offsetY, _output, textRoi );
 
         _cursor.setPosition( _text.cursorArea().x + offsetX, _text.cursorArea().y + offsetY );
         _cursor.show();
