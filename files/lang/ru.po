@@ -12228,7 +12228,7 @@ msgstr "Телепорт"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
-msgstr "Телепортирует выбранный отряд в любую свободную точку на поле."
+msgstr "Телепортирует выбранный отряд в любую свободную точку на поле боя."
 
 msgid "Cure"
 msgstr "Лечение"
