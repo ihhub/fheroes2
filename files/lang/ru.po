@@ -5387,13 +5387,13 @@ msgid "and more..."
 msgstr "и т.д."
 
 msgid "campaignDifficulty|Decreased"
-msgstr "Низкая"
+msgstr "Сниженная"
 
 msgid "campaignDifficulty|Default"
 msgstr "Обычная"
 
 msgid "campaignDifficulty|Increased"
-msgstr "Высокая"
+msgstr "Повышенная"
 
 msgid "Campaign Difficulty"
 msgstr "Сложность кампании"
