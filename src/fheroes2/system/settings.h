@@ -219,11 +219,8 @@ public:
     bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
     bool isBattleMovementAreaHighlightEnabled() const;
-<<<<<<< HEAD
     bool isSoftwareEmulationEnabled() const;
-=======
     bool isBattleHitPointsBarEnabled() const;
->>>>>>> f7e45ca8b (Add toggleable hit points bar option)
 
     void setInterfaceType( const InterfaceType type )
     {

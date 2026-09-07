@@ -477,7 +477,7 @@ std::string Settings::getOptionsString() const
     os << std::endl << "# Show battle damage information: on/off" << std::endl;
     os << "battle show damage = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# Show hit points bars above battle troop counters: on/off" << std::endl;
+    os << std::endl << "# Show hit points bars below battle troop counters: on/off" << std::endl;
     os << "battle show hit points bar = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_HIT_POINTS_BAR ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Enable auto resolve battles: on/off" << std::endl;

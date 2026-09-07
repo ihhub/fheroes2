@@ -177,14 +177,14 @@ namespace
 
         const fheroes2::Sprite & troopCountBar = Assets::getImage( ICN::TEXTBAR, 10 );
 
+        constexpr int32_t hitPointsBarHeight = 4;
+
         const int32_t troopCountBarX = ( image.width() - troopCountBar.width() ) / 2;
-        const int32_t troopCountBarY = image.height() - troopCountBar.height() - 3;
+        const int32_t troopCountBarY = image.height() - troopCountBar.height() - hitPointsBarHeight - 3;
 
         fheroes2::Blit( troopCountBar, 0, 0, image, troopCountBarX, troopCountBarY, troopCountBar.width(), troopCountBar.height() );
 
         if ( isHitPointsBarEnabled ) {
-            constexpr int32_t hitPointsBarHeight = 5;
-
             // Display an illustrative creature with two thirds of its HP remaining.
             Battle::drawHitPointsBar( image, troopCountBar, { troopCountBarX, troopCountBarY }, hitPointsBarHeight, 2, 3 );
         }
