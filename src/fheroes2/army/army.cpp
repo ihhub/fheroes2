@@ -1687,14 +1687,10 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
     const double armyStrengthRatio = Troops( hero.GetArmy().getTroops() ).GetStrength() / troop.GetStrength();
 
-    const bool canJoin = [&hero, &tile, &troop, armyStrengthRatio]() {
-        if ( armyStrengthRatio <= 2 ) {
-            return false;
-        }
+    NeutralMonsterJoiningCondition::Reason blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::None;
 
-        // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a mandatory condition for their joining in accordance with the
-        // mechanics of the original game
-        if ( !hero.GetArmy().CanJoinTroop( troop ) ) {
+    const bool canPotentiallyJoin = [&hero, &tile, armyStrengthRatio]() {
+        if ( armyStrengthRatio <= 2 ) {
             return false;
         }
 
@@ -1705,24 +1701,56 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         return !Maps::isMonsterOnTileJoinConditionSkip( tile );
     }();
 
-    if ( canJoin ) {
+    if ( canPotentiallyJoin ) {
+        const bool canJoinArmy = hero.GetArmy().CanJoinTroop( troop );
+
         if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
-            return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
+            if ( canJoinArmy ) {
+                return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
+            }
+
+            if ( hero.isControlHuman() ) {
+                blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::NoFreeSlot;
+            }
         }
 
         if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
             const uint32_t amountToJoin
                 = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondarySkillValue( Skill::Secondary::DIPLOMACY ) / 100 );
 
-            // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance with
-            // the mechanics of the original game
-            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
-                return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
+            if ( amountToJoin > 0 ) {
+                if ( !canJoinArmy ) {
+                    if ( hero.isControlHuman() ) {
+                        blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::NoFreeSlot;
+                    }
+                }
+                // The ability to immediately hire the entire stack of monsters is a mandatory condition for their joining due to hero's Diplomacy skill in accordance
+                // with the mechanics of the original game
+                else if ( hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
+                    return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
+                }
+                else if ( hero.isControlHuman() ) {
+                    blockedJoiningReason = NeutralMonsterJoiningCondition::Reason::NotEnoughGold;
+                }
             }
         }
     }
 
-    if ( armyStrengthRatio > 5 && !hero.isControlAI() ) {
+    const bool willRunAway = armyStrengthRatio > 5 && !hero.isControlAI();
+
+    if ( blockedJoiningReason != NeutralMonsterJoiningCondition::Reason::None ) {
+        if ( willRunAway ) {
+            if ( blockedJoiningReason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot ) {
+                return { NeutralMonsterJoiningCondition::Reason::NoFreeSlotAndRunAway, 0, nullptr, nullptr };
+            }
+
+            return { NeutralMonsterJoiningCondition::Reason::NotEnoughGoldAndRunAway, 0, nullptr, nullptr };
+        }
+
+        return { blockedJoiningReason, 0, nullptr, nullptr };
+    }
+
+    if ( willRunAway ) {
         // ... will surely flee before us
         return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }
