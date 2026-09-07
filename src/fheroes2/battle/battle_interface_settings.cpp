@@ -25,6 +25,7 @@
 #include <string>
 
 #include "battle_cell.h"
+#include "battle_interface.h"
 #include "cursor.h"
 #include "game_assets.h"
 #include "game_hotkeys.h"
@@ -163,7 +164,7 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "Movement Area" ), isMovementAreaEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
-    void drawHitPointsBar( const fheroes2::Rect & optionRoi )
+    void drawHitPointsBarOption( const fheroes2::Rect & optionRoi )
     {
         const bool isHitPointsBarEnabled = Settings::Get().isBattleHitPointsBarEnabled();
 
@@ -182,28 +183,10 @@ namespace
         fheroes2::Blit( troopCountBar, 0, 0, image, troopCountBarX, troopCountBarY, troopCountBar.width(), troopCountBar.height() );
 
         if ( isHitPointsBarEnabled ) {
-            constexpr int32_t hitPointsBarHeight = 4;
+            constexpr int32_t hitPointsBarHeight = 5;
 
-            const int32_t hitPointsBarX = troopCountBarX;
-            const int32_t hitPointsBarY = troopCountBarY - hitPointsBarHeight;
-            const int32_t hitPointsBarWidth = troopCountBar.width();
-
-            const int32_t innerHitPointsBarWidth = hitPointsBarWidth - 2;
-            constexpr int32_t innerHitPointsBarHeight = 2;
-
-            // Display an illustrative partially wounded creature.
-            const int32_t remainingHitPointsWidth = innerHitPointsBarWidth * 2 / 3;
-
-            const uint8_t outlineColor = troopCountBar.image()[troopCountBar.width() / 2];
-
-            static const uint8_t remainingHitPointsColor = fheroes2::GetColorId( 0, 200, 0 );
-            static const uint8_t missingHitPointsColor = fheroes2::GetColorId( 200, 0, 0 );
-
-            fheroes2::Fill( image, hitPointsBarX, hitPointsBarY, hitPointsBarWidth, hitPointsBarHeight, outlineColor );
-
-            fheroes2::Fill( image, hitPointsBarX + 1, hitPointsBarY + 1, innerHitPointsBarWidth, innerHitPointsBarHeight, missingHitPointsColor );
-
-            fheroes2::Fill( image, hitPointsBarX + 1, hitPointsBarY + 1, remainingHitPointsWidth, innerHitPointsBarHeight, remainingHitPointsColor );
+            // Display an illustrative creature with two thirds of its HP remaining.
+            Battle::drawHitPointsBar( image, troopCountBar, { troopCountBarX, troopCountBarY }, hitPointsBarHeight, 2, 3 );
         }
 
         fheroes2::drawOption( optionRoi, image, _( "Hit Points" ), isHitPointsBarEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
@@ -246,7 +229,7 @@ namespace
             drawShadowMovement( windowShadowMovementRoi );
             drawShadowCursor( windowShadowCursorRoi );
             drawMovementArea( windowMovementAreaRoi );
-            drawHitPointsBar( windowHitPointsBarRoi );
+            drawHitPointsBarOption( windowHitPointsBarRoi );
         };
 
         drawOptions();
