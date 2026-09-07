@@ -1691,14 +1691,8 @@ void Battle::Interface::RedrawArmies()
     // Continue the idle animation for all troops on the battlefield: update idle animation frames before rendering the troops.
     IdleTroopsAnimation();
 
+    // `_unitToHighlight` is reset while rendering troop sprites, so preserve it for the counter redraw below.
     const Unit * unitWithTopCounter = _unitToHighlight;
-
-    if ( unitWithTopCounter == nullptr ) {
-        const Cell * cellUnderCursor = Board::GetCell( _currentCellIndex );
-        if ( cellUnderCursor != nullptr ) {
-            unitWithTopCounter = cellUnderCursor->GetUnit();
-        }
-    }
 
     const Castle * castle = Arena::GetCastle();
 
@@ -1983,13 +1977,22 @@ void Battle::Interface::RedrawArmies()
         RedrawTroopSprite( *_flyingUnit );
     }
 
+    if ( unitWithTopCounter == nullptr ) {
+        const Cell * cellUnderCursor = Board::GetCell( _currentCellIndex );
+        if ( cellUnderCursor != nullptr ) {
+            unitWithTopCounter = cellUnderCursor->GetUnit();
+        }
+    }
+
+    // Redraw troop counter for highlighted troop.
     if ( unitWithTopCounter != nullptr && unitWithTopCounter->isValid() && unitWithTopCounter != _movingUnit && unitWithTopCounter != _flyingUnit ) {
         const int animationState = unitWithTopCounter->GetAnimationState();
         const bool isStaticUnit = animationState == Monster_Info::STATIC || animationState == Monster_Info::IDLE;
         const bool isFullyVisible = !unitWithTopCounter->Modes( CAP_SUMMONELEM ) || unitWithTopCounter->GetCustomAlpha() == 255;
 
         if ( isStaticUnit && isFullyVisible ) {
-            RedrawTroopCount( *unitWithTopCounter );
+            constexpr uint8_t highlightedCounterAlpha = 192;
+            RedrawTroopCount( *unitWithTopCounter, highlightedCounterAlpha );
         }
     }
 }
@@ -2218,8 +2221,13 @@ bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const f
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
+    RedrawTroopCount( unit, 255 );
+}
+
+void Battle::Interface::RedrawTroopCount( const Unit & unit, const uint8_t alpha )
+{
     const fheroes2::Rect & rt = unit.GetRectPosition();
-    const fheroes2::Sprite & bar = Assets::getImage( ICN::TEXTBAR, GetIndexIndicator( unit ) );
+    const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
 
     const int32_t monsterIndex = unit.GetHeadIndex();
@@ -2236,10 +2244,18 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     sx += isReflected ? -xOffset : xOffset;
 
-    fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
-
     const fheroes2::Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
-    text.draw( sx + ( bar.width() - text.width() ) / 2, sy + 2, _mainSurface );
+
+    if ( alpha == 255 ) {
+        fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
+        text.draw( sx + ( bar.width() - text.width() ) / 2, sy + 2, _mainSurface );
+    }
+    else {
+        fheroes2::Sprite transparentCounter( bar );
+        text.draw( ( bar.width() - text.width() ) / 2, 2, transparentCounter );
+
+        fheroes2::AlphaBlit( transparentCounter, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height(), alpha );
+    }
 }
 
 void Battle::Interface::RedrawCover()
