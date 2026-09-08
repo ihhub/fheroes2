@@ -612,7 +612,7 @@ namespace
                 bool prepareRedraw = false;
 
                 if ( le.MouseClickLeft( buttonVirtualKB->area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputRoi ) ) ) {
-                    fheroes2::openVirtualKeyboard( filename, lengthLimit );
+                    fheroes2::openVirtualKeyboard( filename, lengthLimit, false );
 
                     charInsertPos = filename.size();
                     prepareRedraw = true;
