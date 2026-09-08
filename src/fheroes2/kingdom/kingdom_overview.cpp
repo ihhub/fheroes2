@@ -925,6 +925,13 @@ void Kingdom::openOverviewDialog()
         if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
             // Funds could be changed only after an action in the castle.
             RedrawFundsInfo( cur_pt, *this );
+            // Update adventure map status too.
+            if ( !isDefaultScreenSize ) {
+                const std::unique_ptr<fheroes2::ImageRestorer> windowsRestorer
+                    = std::make_unique<fheroes2::ImageRestorer>( display, background.windowArea().x, background.windowArea().y, background.windowArea().width,
+                                                                 background.windowArea().height );
+                Interface::AdventureMap::Get().redraw( Interface::REDRAW_STATUS );
+            }
         }
 
         if ( needFadeIn ) {

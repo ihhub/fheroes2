@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -295,18 +294,17 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
+    const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
     const VecCastles & myCastles = myKingdom.GetCastles();
     VecCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
 
-    const size_t heroCountBefore = myKingdom.GetHeroes().size();
-
     assert( it != myCastles.end() );
 
-    bool openConstructionWindow{ false };
-    bool openMageGuildWindow{ false };
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, true, renderBackgroundDialog );
+    Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
+        result = ( *it )->OpenDialog( result, false, renderBackgroundDialog );
         switch ( result ) {
         case Castle::CastleDialogReturnValue::PreviousCastle:
         case Castle::CastleDialogReturnValue::PreviousConstructionWindow:
@@ -329,56 +327,32 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
         }
 
         assert( it != myCastles.end() );
-
-        openConstructionWindow
-            = ( result == Castle::CastleDialogReturnValue::PreviousConstructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextConstructionWindow );
-
-        openMageGuildWindow
-            = ( result == Castle::CastleDialogReturnValue::PreviousMageGuildWindow ) || ( result == Castle::CastleDialogReturnValue::NextMageGuildWindow );
-
-        result = ( *it )->OpenDialog( openConstructionWindow, openMageGuildWindow, false, renderBackgroundDialog );
+        // Set selected castle and redraw adventure map only in high resolution
+        if ( updateFocus && result != Castle::CastleDialogReturnValue::DoNothing && !isDefaultScreenSize ) {
+            SetUpdateSoundsOnFocusUpdate( false );
+            adventureMapInterface.SetFocus( *it );
+            adventureMapInterface.redraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR | Interface::REDRAW_STATUS );
+        }
     }
+    restoreSoundsForCurrentFocus();
 
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
     // and there is no need update Adventure map interface at this time.
     if ( renderBackgroundDialog ) {
-        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
-
-        if ( heroCountBefore != myKingdom.GetHeroes().size() ) {
-            // A hero could be recruited in the castle or a hero could be dismissed by opening hero's dialog
-            // and switching to the other hero and dismissing this hero. We need to update the hero list scrollbar.
-            // NOTICE: we can update the scrollbar only here - after exiting the castle screen not to interfere with castle screen image.
-            adventureMapInterface.GetIconsPanel().resetIcons( ICON_HEROES );
-        }
-
         if ( updateFocus ) {
             assert( it != myCastles.end() );
 
-            // When exiting the castle, we must focus on it or on the hero visiting this castle.
+            // When exiting the castle, we must focus on the hero visiting this castle.
             Heroes * heroInCastle = world.getTile( ( *it )->GetIndex() ).getHero();
-            if ( heroInCastle == nullptr ) {
-                adventureMapInterface.SetFocus( *it );
-            }
-            else {
+            if ( heroInCastle != nullptr ) {
                 adventureMapInterface.SetFocus( heroInCastle, false );
             }
         }
-        else {
-            // If we don't update focus, we still have to restore environment sounds and terrain music theme
-            restoreSoundsForCurrentFocus();
-        }
-
-        // The castle garrison can change
-        adventureMapInterface.RedrawFocus();
 
         // Fade-in game screen only for 640x480 resolution.
-        if ( fheroes2::Display::instance().isDefaultSize() ) {
+        if ( isDefaultScreenSize ) {
             setDisplayFadeIn();
         }
-    }
-    else {
-        // If we opened the castle dialog from other dialog, we have to restore environment sounds and terrain music theme instead of the castle's music theme
-        restoreSoundsForCurrentFocus();
     }
 }
 
