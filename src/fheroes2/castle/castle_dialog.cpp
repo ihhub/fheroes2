@@ -494,8 +494,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         const bool isMouseInteraction = le.isMouseLeftButtonPressedInArea( dialogRoi ) || le.isMouseRightButtonPressedInArea( dialogRoi );
 
-        const bool isArmyBarInteraction = isMouseInteraction && ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) || ( bottomArmyBar.isValid() 
-            && le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) ) );
+        const bool isArmyBarInteraction
+            = isMouseInteraction
+              && ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) || ( bottomArmyBar.isValid() && le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) ) );
 
         if ( isMouseInteraction ) {
             if ( alphaHero < 255 ) {
