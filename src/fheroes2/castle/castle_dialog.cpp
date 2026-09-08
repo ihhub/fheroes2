@@ -399,17 +399,15 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     std::string statusMessage;
     LocalEvent & le = LocalEvent::Get();
+
+    auto processArmyBarEvents = [&]() {
+        return ( bottomArmyBar.isValid()
+                 && ( ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
+                      || ( le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
+               || ( !bottomArmyBar.isValid() && le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) );
+    };
+
     auto updateStatusBar = [&]() {
-        bool isRedrawNeeded{ false };
-
-        // Army bar events processing.
-        if ( ( bottomArmyBar.isValid()
-               && ( ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
-                    || ( le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
-             || ( !bottomArmyBar.isValid() && le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
-            isRedrawNeeded = true;
-        }
-
         // Update status bar. It doesn't depend on animation status.
         // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
         // In this case we must revert the queue and finding the first suitable building.
@@ -464,7 +462,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             display.updateNextRenderRoi( area );
         }
 
-        return isRedrawNeeded || area != fheroes2::Rect{};
+        return area != fheroes2::Rect{};
     };
 
     updateStatusBar();
@@ -496,6 +494,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         const bool isMouseInteraction = le.isMouseLeftButtonPressedInArea( dialogRoi ) || le.isMouseRightButtonPressedInArea( dialogRoi );
 
+        const bool isArmyBarInteraction = isMouseInteraction && ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) || ( bottomArmyBar.isValid() 
+            && le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) ) );
+
         if ( isMouseInteraction ) {
             if ( alphaHero < 255 ) {
                 alphaHero = 255;
@@ -506,7 +507,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
             }
 
-            if ( !fadeBuilding.isFadeDone() ) {
+            if ( !isArmyBarInteraction && !fadeBuilding.isFadeDone() ) {
                 const uint32_t build = fadeBuilding.getBuilding();
 
                 fadeBuilding.stopFade();
@@ -522,6 +523,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 display.render( dialogRoi );
             }
+        }
+
+        if ( alphaHero >= 255 ) {
+            needRedraw = needRedraw || processArmyBarEvents();
         }
 
         // During hero purchase or building construction skip any interaction with the dialog.
