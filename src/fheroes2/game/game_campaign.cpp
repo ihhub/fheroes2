@@ -919,9 +919,9 @@ namespace
 
         int32_t compensationForWideWord = 0;
         const int32_t widestWordWidth = std::max( { decreasedDifficultyName.width(), defaultDifficultyName.width(), increasedDifficultyName.width() } );
-        const int32_t difficultyIconWidth = 65;
+        const int32_t iconSize = 65;
         const int32_t iconLateralMarginWidth = 10;
-        const int32_t iconAndBordersWidth = difficultyIconWidth + iconLateralMarginWidth * 2;
+        const int32_t iconAndBordersWidth = iconSize + iconLateralMarginWidth * 2;
 
         if ( widestWordWidth > iconAndBordersWidth ) {
             compensationForWideWord = widestWordWidth - iconAndBordersWidth;
@@ -937,16 +937,17 @@ namespace
         const char * increasedDifficultyDescription
             = _( "Choose this difficulty if you want more of a challenge. The AI will be stronger than at the default difficulty." );
 
-        fheroes2::Text descriptionDecreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
-        fheroes2::Text descriptionDefault( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
-        fheroes2::Text descriptionIncreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        const fheroes2::Text descriptionDecreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        const fheroes2::Text descriptionDefault( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        const fheroes2::Text descriptionIncreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
 
         const int32_t descriptionAreaWidth = dialogWidth - 16;
-        const int32_t tallestWordBulkHeight = std::max( { descriptionDecreased.height( descriptionAreaWidth ), descriptionDefault.height( descriptionAreaWidth ),
+        const int32_t tallestDescriptionHeight = std::max( { descriptionDecreased.height( descriptionAreaWidth ), descriptionDefault.height( descriptionAreaWidth ),
                                                           descriptionIncreased.height( descriptionAreaWidth ) } );
 
-        const int32_t aboveAndBelowDescriptionAreaHeights = 141 + 40;
-        const fheroes2::StandardWindow frameborder( dialogWidth, tallestWordBulkHeight + aboveAndBelowDescriptionAreaHeights, true );
+        const int32_t areaAboveAndBelowDescription = 141 + 40;
+
+        const fheroes2::StandardWindow frameborder( dialogWidth, tallestDescriptionHeight + areaAboveAndBelowDescription, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -965,7 +966,6 @@ namespace
         const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
         caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
 
-        const int32_t iconSize = 65;
         const int32_t iconShadowSize = 4;
         const int32_t fullIconSize = iconSize + iconShadowSize;
 
