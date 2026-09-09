@@ -943,7 +943,7 @@ namespace
 
         const int32_t descriptionAreaWidth = dialogWidth - 16;
         const int32_t tallestDescriptionHeight = std::max( { descriptionDecreased.height( descriptionAreaWidth ), descriptionDefault.height( descriptionAreaWidth ),
-                                                          descriptionIncreased.height( descriptionAreaWidth ) } );
+                                                             descriptionIncreased.height( descriptionAreaWidth ) } );
 
         const int32_t areaAboveAndBelowDescription = 141 + 40;
 
