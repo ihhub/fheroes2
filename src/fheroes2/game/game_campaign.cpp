@@ -912,13 +912,13 @@ namespace
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty )
     {
-        // Adapt dialog width to translations.
-        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
+        // Adapt dialog width to translation.
+        const fheroes2::Text decreasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text defaultDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text increasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
 
         int32_t compensationForWideWord = 0;
-        const int32_t widestWordWidth = std::max( { easyName.width(), normalName.width(), hardName.width() } );
+        const int32_t widestWordWidth = std::max( { decreasedDifficultyName.width(), defaultDifficultyName.width(), increasedDifficultyName.width() } );
         const int32_t difficultyIconWidth = 65;
         const int32_t iconLateralMarginWidth = 10;
         const int32_t iconAndBordersWidth = difficultyIconWidth + iconLateralMarginWidth * 2;
@@ -929,7 +929,24 @@ namespace
 
         const int32_t dialogWidth = 300 + compensationForWideWord * 3;
 
-        const fheroes2::StandardWindow frameborder( dialogWidth, 284, true );
+        // Adapt dialog height to translation.
+        const char * decreasedDifficultyDescription
+            = _( "Choose this difficulty to experience the game's story with decreased challenge. The AI will be weaker than at the default difficulty." );
+        const char * defaultDifficultyDescription
+            = _( "Choose this difficulty to experience the campaign as close to the original design as possible with the fheroes2 AI." );
+        const char * increasedDifficultyDescription
+            = _( "Choose this difficulty if you want more of a challenge. The AI will be stronger than at the default difficulty." );
+
+        fheroes2::Text descriptionDecreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::Text descriptionDefault( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::Text descriptionIncreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+
+        const int32_t descriptionAreaWidth = dialogWidth - 16;
+        const int32_t tallestWordBulkHeight = std::max( { descriptionDecreased.height( descriptionAreaWidth ), descriptionDefault.height( descriptionAreaWidth ),
+                                                          descriptionIncreased.height( descriptionAreaWidth ) } );
+
+        const int32_t aboveAndBelowDescriptionAreaHeights = 141 + 40;
+        const fheroes2::StandardWindow frameborder( dialogWidth, tallestWordBulkHeight + aboveAndBelowDescriptionAreaHeights, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -982,13 +999,6 @@ namespace
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const char * decreasedDifficultyDescription
-            = _( "Choose this difficulty to experience the game's story with decreased challenge. The AI will be weaker than at the default difficulty." );
-        const char * defaultDifficultyDescription
-            = _( "Choose this difficulty to experience the campaign as close to the original design as possible with the fheroes2 AI." );
-        const char * increasedDifficultyDescription
-            = _( "Choose this difficulty if you want more of a challenge. The AI will be stronger than at the default difficulty." );
-
         const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[2].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
@@ -1021,9 +1031,12 @@ namespace
         description.setUniformVerticalAlignment( false );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
-        easyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - easyName.width() ) / 2, difficultyArea[0].y + difficultyArea[0].height + 5, display );
-        normalName.draw( difficultyArea[1].x + ( difficultyArea[1].width - normalName.width() ) / 2, difficultyArea[1].y + difficultyArea[1].height + 5, display );
-        hardName.draw( difficultyArea[2].x + ( difficultyArea[2].width - hardName.width() ) / 2, difficultyArea[2].y + difficultyArea[2].height + 5, display );
+        decreasedDifficultyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - decreasedDifficultyName.width() ) / 2,
+                                      difficultyArea[0].y + difficultyArea[0].height + 5, display );
+        defaultDifficultyName.draw( difficultyArea[1].x + ( difficultyArea[1].width - defaultDifficultyName.width() ) / 2,
+                                    difficultyArea[1].y + difficultyArea[1].height + 5, display );
+        increasedDifficultyName.draw( difficultyArea[2].x + ( difficultyArea[2].width - increasedDifficultyName.width() ) / 2,
+                                      difficultyArea[2].y + difficultyArea[2].height + 5, display );
 
         display.render();
 
