@@ -4284,7 +4284,7 @@ msgid "Failed to save the map."
 msgstr "No se pudo guardar el mapa."
 
 msgid "The selected object has been moved to the top layer."
-msgstr ""
+msgstr "El objeto seleccionado se ha movido a la capa superior."
 
 msgid "Unsaved Changes"
 msgstr "Cambios no guardados"
@@ -5425,43 +5425,38 @@ msgstr ""
 msgid "and more..."
 msgstr "y más..."
 
-#, fuzzy
 msgid "campaignDifficulty|Decreased"
-msgstr "Dificultad de la campaña"
+msgstr "Reducida"
 
-#, fuzzy
 msgid "campaignDifficulty|Default"
-msgstr "Dificultad de la campaña"
+msgstr "Estándar"
 
-#, fuzzy
 msgid "campaignDifficulty|Increased"
-msgstr "Dificultad de la campaña"
+msgstr "Aumentada"
 
 msgid "Campaign Difficulty"
 msgstr "Dificultad de la campaña"
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Elige esta dificultad para experimentar la historia del juego con menos "
-"desafío. La IA será más débil que en la dificultad Normal."
+"desafío. La IA será más débil que en la dificultad estándar."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the campaign as close to the original "
 "design as possible with the fheroes2 AI."
 msgstr ""
-"Elige esta dificultad para experimentar la campaña según el diseño original."
+"Elige esta dificultad para experimentar la campaña de la forma más fiel "
+"posible al diseño original con la IA de fheroes2."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty if you want more of a challenge. The AI will be "
 "stronger than at the default difficulty."
 msgstr ""
 "Elige esta dificultad si deseas un mayor desafío. La IA será más fuerte que "
-"en la dificultad Normal."
+"en la dificultad estándar."
 
 msgid ""
 "Congratulations!\n"
@@ -12635,6 +12630,8 @@ msgid ""
 "Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
 "combat, regardless of spell power."
 msgstr ""
+"Incrementa la habilidad de ataque de una unidad en 3. El efecto dura 3 "
+"rondas de combate, independientemente de la potencia de hechizo."
 
 msgid "Animate Dead"
 msgstr "Animar Muertos"
