@@ -917,17 +917,17 @@ namespace
         const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
         const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
 
-        uint32_t compensationForWideWord = 0;
-        const uint32_t widestWordWidth = std::max( { easyName.width(), normalName.width(), hardName.width() } );
-        const uint32_t difficultyIconWidth = 65;
-        const uint32_t iconLateralMarginWidth = 10;
-        const uint32_t iconAndBordersWidth = difficultyIconWidth + iconLateralMarginWidth * 2;
+        int32_t compensationForWideWord = 0;
+        const int32_t widestWordWidth = std::max( { easyName.width(), normalName.width(), hardName.width() } );
+        const int32_t difficultyIconWidth = 65;
+        const int32_t iconLateralMarginWidth = 10;
+        const int32_t iconAndBordersWidth = difficultyIconWidth + iconLateralMarginWidth * 2;
 
         if ( widestWordWidth > iconAndBordersWidth ) {
             compensationForWideWord = widestWordWidth - iconAndBordersWidth;
         }
 
-        const uint32_t dialogWidth = 300 + compensationForWideWord * 3;
+        const int32_t dialogWidth = 300 + compensationForWideWord * 3;
 
         const fheroes2::StandardWindow frameborder( dialogWidth, 284, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
