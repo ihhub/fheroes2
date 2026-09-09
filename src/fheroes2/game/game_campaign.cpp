@@ -1003,6 +1003,7 @@ namespace
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[2].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
 
+        // TODO: Rework this now that all texts are stored above
         const char * currentDescription = nullptr;
         switch ( currentDifficulty ) {
         case Campaign::CampaignDifficulty::Decreased:
@@ -1066,7 +1067,7 @@ namespace
                 fheroes2::showStandardTextMessage( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), increasedDifficultyDescription, Dialog::ZERO );
                 updateInfo = true;
             }
-
+            // TODO: Rework this
             if ( le.MouseClickLeft( difficultyArea[0] ) ) {
                 currentDescription = decreasedDifficultyDescription;
                 selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
@@ -1085,7 +1086,7 @@ namespace
                 currentDifficulty = Campaign::CampaignDifficulty::Increased;
                 updateInfo = true;
             }
-
+            // TODO: Rework this
             if ( updateInfo ) {
                 restorer.restore();
 
