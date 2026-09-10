@@ -1000,24 +1000,29 @@ namespace
 
         const fheroes2::Point textOffset{ windowRoi.x + descriptionOffsetX, windowRoi.y + descriptionOffsetY };
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, descriptionAreaWidth, tallestDescriptionHeight );
-        switch ( currentDifficulty ) {
-        case Campaign::CampaignDifficulty::Decreased:
-            descriptionDecreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
-            selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-            break;
-        case Campaign::CampaignDifficulty::Default:
-            descriptionDefault.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
-            selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-            break;
-        case Campaign::CampaignDifficulty::Increased:
-            descriptionIncreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
-            selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-            break;
-        default:
-            // Did you add a new difficulty level for campaigns? Add the logic above!
-            assert( 0 );
-            break;
-        }
+
+        auto changeDifficultyDescription = [&]() {
+            switch ( currentDifficulty ) {
+            case Campaign::CampaignDifficulty::Decreased:
+                descriptionDecreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
+                selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+                break;
+            case Campaign::CampaignDifficulty::Default:
+                descriptionDefault.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
+                selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+                break;
+            case Campaign::CampaignDifficulty::Increased:
+                descriptionIncreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
+                selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+                break;
+            default:
+                // Did you add a new difficulty level for campaigns? Add the logic above!
+                assert( 0 );
+                break;
+            }
+        };
+
+        changeDifficultyDescription();
 
         decreasedDifficultyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - decreasedDifficultyName.width() ) / 2,
                                       difficultyArea[0].y + difficultyArea[0].height + 5, display );
@@ -1073,24 +1078,7 @@ namespace
 
             if ( updateInfo ) {
                 restorer.restore();
-                switch ( currentDifficulty ) {
-                case Campaign::CampaignDifficulty::Decreased:
-                    descriptionDecreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
-                    selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-                    break;
-                case Campaign::CampaignDifficulty::Default:
-                    descriptionDefault.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
-                    selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-                    break;
-                case Campaign::CampaignDifficulty::Increased:
-                    descriptionIncreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
-                    selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-                    break;
-                default:
-                    // Did you add a new difficulty level for campaigns? Add the logic above!
-                    assert( 0 );
-                    break;
-                }
+                changeDifficultyDescription();
 
                 display.render();
             }
