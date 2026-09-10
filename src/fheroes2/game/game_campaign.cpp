@@ -966,42 +966,31 @@ namespace
         const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
         caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
 
-        const int32_t iconShadowSize = 4;
-        const int32_t fullIconSize = iconSize + iconShadowSize;
+        const int32_t pawnIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
+        const int32_t horseIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2;
+        const int32_t rookIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
 
-        const int32_t pawnIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
-        const int32_t horseIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2;
-        const int32_t rookIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
-
-        const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect{ 20, 94, fullIconSize, fullIconSize }, fheroes2::Rect{ 97, 94, fullIconSize, fullIconSize },
-                                                          fheroes2::Rect{ 173, 94, fullIconSize, fullIconSize } };
-
-        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 }, fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
+        const std::array<fheroes2::Point, 3> difficultyIconOffsets{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 }, fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
                                                            fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
 
-        const fheroes2::Sprite & chessIcon = Assets::getImage( ICN::NGHSBKG, 0 );
+        const int icnIndex = isEvilInterface ? 1 : 0;
 
-        for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
-            fheroes2::Copy( chessIcon, copyFromArea[i].x, copyFromArea[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
-                            copyFromArea[i].height );
-        }
-
-        if ( isEvilInterface ) {
-            const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
-
-            for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
-                fheroes2::ApplyPalette( display, copyToOffset[i].x, copyToOffset[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
-                                        copyFromArea[i].height, goodToEvilPalette );
-            }
+        for ( int i = 0; i < 3; ++i ) {
+            const fheroes2::Sprite & icon = Assets::getImage( ICN::DIFFICULTY_ICON_EASY + i, icnIndex );
+            fheroes2::Copy( icon, 0, 0, display, difficultyIconOffsets[i].x, difficultyIconOffsets[i].y, iconSize, iconSize );
+            fheroes2::addGradientShadow( icon, display, { difficultyIconOffsets[i].x, difficultyIconOffsets[i].y }, { -5, 5 } );
         }
 
         const fheroes2::Sprite & selectionImage = Assets::getImage( ICN::NGEXTRA, 62 );
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( copyToOffset[2].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
+        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( difficultyIconOffsets[0].x - 3, difficultyIconOffsets[0].y - 3, selectionImage.width(),
+                                                                            selectionImage.height() ),
+                                                            fheroes2::Rect( difficultyIconOffsets[1].x - 3, difficultyIconOffsets[1].y - 3, selectionImage.width(),
+                                                                            selectionImage.height() ),
+                                                            fheroes2::Rect( difficultyIconOffsets[2].x - 3, difficultyIconOffsets[2].y - 3, selectionImage.width(),
+                                                                            selectionImage.height() ) };
 
         // TODO: Rework this now that all texts are stored above
         const char * currentDescription = nullptr;
@@ -1024,13 +1013,12 @@ namespace
             break;
         }
 
-        const int32_t textWidth = windowRoi.width - 16;
         const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 140 };
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
-        fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
+        fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, descriptionAreaWidth, description.height( descriptionAreaWidth ) );
         description.setUniformVerticalAlignment( false );
-        description.draw( textOffset.x, textOffset.y, textWidth, display );
+        description.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
 
         decreasedDifficultyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - decreasedDifficultyName.width() ) / 2,
                                       difficultyArea[0].y + difficultyArea[0].height + 5, display );
@@ -1092,8 +1080,8 @@ namespace
 
                 description.set( currentDescription, fheroes2::FontType::normalWhite() );
                 restorer.reset();
-                restorer.update( textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
-                description.draw( textOffset.x, textOffset.y, textWidth, display );
+                restorer.update( textOffset.x, textOffset.y, descriptionAreaWidth, description.height( descriptionAreaWidth ) );
+                description.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
 
                 display.render();
             }
