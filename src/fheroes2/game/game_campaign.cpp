@@ -952,21 +952,15 @@ namespace
         const int32_t descriptionOffsetY = 140;
         const int32_t areaAboveAndBelowDescription = descriptionOffsetY + 40;
 
-        const fheroes2::StandardWindow frameborder( dialogWidth, tallestDescriptionHeight + areaAboveAndBelowDescription, true );
+        fheroes2::StandardWindow frameborder( dialogWidth, tallestDescriptionHeight + areaAboveAndBelowDescription, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const fheroes2::Sprite & buttonSprite = Assets::getImage( buttonIcnId, 0 );
+        fheroes2::Button buttonOk;
+        frameborder.renderButton( buttonOk, buttonIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::Rect buttonMaxRoi( windowRoi.x + 5, windowRoi.y, windowRoi.width - 10, windowRoi.height - 5 );
-        fheroes2::ButtonSprite buttonOk = fheroes2::makeButtonWithShadow( buttonMaxRoi.x + ( buttonMaxRoi.width - buttonSprite.width() ) / 2,
-                                                                          buttonMaxRoi.y + buttonMaxRoi.height - buttonSprite.height(),
-                                                                          Assets::getImage( buttonIcnId, 0 ), Assets::getImage( buttonIcnId, 1 ), display );
-
-        buttonOk.draw();
 
         const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
         caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
