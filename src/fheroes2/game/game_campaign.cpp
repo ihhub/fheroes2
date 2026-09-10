@@ -995,7 +995,7 @@ namespace
         const fheroes2::Point textOffset{ windowRoi.x + descriptionOffsetX, windowRoi.y + descriptionOffsetY };
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, descriptionAreaWidth, tallestDescriptionHeight );
 
-        auto changeDifficultyDescription = [&]() {
+        auto redrawDifficultyElements = [&]() {
             switch ( currentDifficulty ) {
             case Campaign::CampaignDifficulty::Decreased:
                 descriptionDecreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
@@ -1016,7 +1016,7 @@ namespace
             }
         };
 
-        changeDifficultyDescription();
+        redrawDifficultyElements();
 
         decreasedDifficultyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - decreasedDifficultyName.width() ) / 2,
                                       difficultyArea[0].y + difficultyArea[0].height + 5, display );
@@ -1072,7 +1072,7 @@ namespace
 
             if ( updateInfo ) {
                 restorer.restore();
-                changeDifficultyDescription();
+                redrawDifficultyElements();
 
                 display.render();
             }
