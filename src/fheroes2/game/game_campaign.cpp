@@ -63,7 +63,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mus.h"
-#include "pal.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
