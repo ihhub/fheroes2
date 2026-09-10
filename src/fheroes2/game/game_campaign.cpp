@@ -912,13 +912,9 @@ namespace
     int32_t setCampaignDifficulty( int32_t currentDifficulty )
     {
         // Adapt dialog width to translation.
-        fheroes2::Text decreasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), fheroes2::FontType::normalWhite() );
-        fheroes2::Text defaultDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
-        fheroes2::Text increasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
-
-        decreasedDifficultyName.setUniformVerticalAlignment( false );
-        defaultDifficultyName.setUniformVerticalAlignment( false );
-        increasedDifficultyName.setUniformVerticalAlignment( false );
+        const fheroes2::Text decreasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text defaultDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text increasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
 
         const int32_t widestWordWidth = std::max( { decreasedDifficultyName.width(), defaultDifficultyName.width(), increasedDifficultyName.width() } );
         const int32_t iconSize = 65;
@@ -940,9 +936,13 @@ namespace
         const char * increasedDifficultyDescription
             = _( "Choose this difficulty if you want more of a challenge. The AI will be stronger than at the default difficulty." );
 
-        const fheroes2::Text descriptionDecreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
-        const fheroes2::Text descriptionDefault( defaultDifficultyDescription, fheroes2::FontType::normalWhite() );
-        const fheroes2::Text descriptionIncreased( increasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::Text descriptionDecreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::Text descriptionDefault( defaultDifficultyDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::Text descriptionIncreased( increasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+
+        descriptionDecreased.setUniformVerticalAlignment( false );
+        descriptionDefault.setUniformVerticalAlignment( false );
+        descriptionIncreased.setUniformVerticalAlignment( false );
 
         const int32_t descriptionOffsetX = 8;
         const int32_t descriptionAreaWidth = dialogWidth - descriptionOffsetX * 2;
