@@ -976,8 +976,9 @@ namespace
         const int32_t horseIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2;
         const int32_t rookIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
 
-        const std::array<fheroes2::Point, 3> difficultyIconOffsets{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 }, fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
-                                                           fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
+        const std::array<fheroes2::Point, 3> difficultyIconOffsets{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 },
+                                                                    fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
+                                                                    fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
 
         const int icnIndex = isEvilInterface ? 1 : 0;
 
