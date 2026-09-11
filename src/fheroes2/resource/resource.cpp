@@ -282,6 +282,21 @@ Funds Funds::operator*( uint32_t mul ) const
     return res;
 }
 
+Funds Funds::operator/( const int32_t div ) const
+{
+    Funds res;
+
+    res.wood = wood / div;
+    res.mercury = mercury / div;
+    res.ore = ore / div;
+    res.sulfur = sulfur / div;
+    res.crystal = crystal / div;
+    res.gems = gems / div;
+    res.gold = gold / div;
+
+    return res;
+}
+
 Funds & Funds::operator*=( uint32_t mul )
 {
     wood *= mul;
