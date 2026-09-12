@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -73,6 +73,7 @@ namespace Battle
         uint32_t damage = 0;
         uint32_t killed = 0;
         bool resist = false;
+        bool isHalvingAttack = false;
 
         TargetInfo() = default;
 
