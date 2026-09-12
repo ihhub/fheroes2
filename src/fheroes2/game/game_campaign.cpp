@@ -63,7 +63,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mus.h"
-#include "pal.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
@@ -912,60 +911,24 @@ namespace
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty )
     {
-        // It's better to have frame border width value divisible to 2 and 3 w/o remainder.
-        const fheroes2::StandardWindow frameborder( 300, 284, true );
-        const fheroes2::Rect & windowRoi = frameborder.activeArea();
+        // Adapt dialog width to translation.
+        const fheroes2::Text decreasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text defaultDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text increasedDifficultyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const fheroes2::Sprite & buttonSprite = Assets::getImage( buttonIcnId, 0 );
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::Rect buttonMaxRoi( windowRoi.x + 5, windowRoi.y, windowRoi.width - 10, windowRoi.height - 5 );
-        fheroes2::ButtonSprite buttonOk = fheroes2::makeButtonWithShadow( buttonMaxRoi.x + ( buttonMaxRoi.width - buttonSprite.width() ) / 2,
-                                                                          buttonMaxRoi.y + buttonMaxRoi.height - buttonSprite.height(),
-                                                                          Assets::getImage( buttonIcnId, 0 ), Assets::getImage( buttonIcnId, 1 ), display );
-
-        buttonOk.draw();
-
-        const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
-        caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
-
+        const int32_t widestWordWidth = std::max( { decreasedDifficultyName.width(), defaultDifficultyName.width(), increasedDifficultyName.width() } );
         const int32_t iconSize = 65;
-        const int32_t iconShadowSize = 4;
-        const int32_t fullIconSize = iconSize + iconShadowSize;
+        const int32_t iconLateralMarginWidth = 10;
+        const int32_t iconAndBordersWidth = iconSize + iconLateralMarginWidth * 2;
 
-        const int32_t pawnIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
-        const int32_t horseIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2;
-        const int32_t rookIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
-
-        const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect{ 20, 94, fullIconSize, fullIconSize }, fheroes2::Rect{ 97, 94, fullIconSize, fullIconSize },
-                                                          fheroes2::Rect{ 173, 94, fullIconSize, fullIconSize } };
-
-        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 }, fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
-                                                           fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
-
-        const fheroes2::Sprite & chessIcon = Assets::getImage( ICN::NGHSBKG, 0 );
-
-        for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
-            fheroes2::Copy( chessIcon, copyFromArea[i].x, copyFromArea[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
-                            copyFromArea[i].height );
+        int32_t compensationForWideWord = 0;
+        if ( widestWordWidth > iconAndBordersWidth ) {
+            compensationForWideWord = widestWordWidth - iconAndBordersWidth;
         }
 
-        if ( isEvilInterface ) {
-            const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+        const int32_t dialogWidth = 300 + compensationForWideWord * 3;
 
-            for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
-                fheroes2::ApplyPalette( display, copyToOffset[i].x, copyToOffset[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
-                                        copyFromArea[i].height, goodToEvilPalette );
-            }
-        }
-
-        const fheroes2::Sprite & selectionImage = Assets::getImage( ICN::NGEXTRA, 62 );
-
-        fheroes2::MovableSprite selection( selectionImage );
-
+        // Adapt dialog height to translation.
         const char * decreasedDifficultyDescription
             = _( "Choose this difficulty to experience the game's story with decreased challenge. The AI will be weaker than at the default difficulty." );
         const char * defaultDifficultyDescription
@@ -973,45 +936,94 @@ namespace
         const char * increasedDifficultyDescription
             = _( "Choose this difficulty if you want more of a challenge. The AI will be stronger than at the default difficulty." );
 
-        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( copyToOffset[2].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
+        fheroes2::Text descriptionDecreased( decreasedDifficultyDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::Text descriptionDefault( defaultDifficultyDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::Text descriptionIncreased( increasedDifficultyDescription, fheroes2::FontType::normalWhite() );
 
-        const char * currentDescription = nullptr;
-        switch ( currentDifficulty ) {
-        case Campaign::CampaignDifficulty::Decreased:
-            currentDescription = decreasedDifficultyDescription;
-            selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-            break;
-        case Campaign::CampaignDifficulty::Default:
-            currentDescription = defaultDifficultyDescription;
-            selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-            break;
-        case Campaign::CampaignDifficulty::Increased:
-            currentDescription = increasedDifficultyDescription;
-            selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-            break;
-        default:
-            // Did you add a new difficulty level for campaigns? Add the logic above!
-            assert( 0 );
-            break;
+        descriptionDecreased.setUniformVerticalAlignment( false );
+        descriptionDefault.setUniformVerticalAlignment( false );
+        descriptionIncreased.setUniformVerticalAlignment( false );
+
+        const int32_t descriptionOffsetX = 8;
+        const int32_t descriptionAreaWidth = dialogWidth - descriptionOffsetX * 2;
+        const int32_t tallestDescriptionHeight = std::max( { descriptionDecreased.height( descriptionAreaWidth ), descriptionDefault.height( descriptionAreaWidth ),
+                                                             descriptionIncreased.height( descriptionAreaWidth ) } );
+
+        const int32_t descriptionOffsetY = 140;
+        const int32_t areaAboveAndBelowDescription = descriptionOffsetY + 40;
+
+        fheroes2::StandardWindow frameborder( dialogWidth, tallestDescriptionHeight + areaAboveAndBelowDescription, true );
+        const fheroes2::Rect & windowRoi = frameborder.activeArea();
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        fheroes2::Button buttonOk;
+        frameborder.renderButton( buttonOk, buttonIcnId, 0, 1, { 0, 5 }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
+        caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
+
+        const int32_t pawnIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
+        const int32_t horseIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2;
+        const int32_t rookIconOffsetX = windowRoi.x + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
+
+        const std::array<fheroes2::Point, 3> difficultyIconOffsets{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 },
+                                                                    fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
+                                                                    fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
+
+        const int icnIndex = isEvilInterface ? 1 : 0;
+
+        for ( int i = 0; i < 3; ++i ) {
+            const fheroes2::Sprite & icon = Assets::getImage( ICN::DIFFICULTY_ICON_EASY + i, icnIndex );
+            fheroes2::Copy( icon, 0, 0, display, difficultyIconOffsets[i].x, difficultyIconOffsets[i].y, iconSize, iconSize );
+            fheroes2::addGradientShadow( icon, display, { difficultyIconOffsets[i].x, difficultyIconOffsets[i].y }, { -5, 5 } );
         }
 
-        const int32_t textWidth = windowRoi.width - 16;
-        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 140 };
+        const fheroes2::Sprite & selectionImage = Assets::getImage( ICN::NGEXTRA, 62 );
 
-        fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
-        fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
-        description.setUniformVerticalAlignment( false );
-        description.draw( textOffset.x, textOffset.y, textWidth, display );
+        fheroes2::MovableSprite selection( selectionImage );
 
-        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Decreased ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Default ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Increased ), fheroes2::FontType::normalWhite() );
+        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( difficultyIconOffsets[0].x - 3, difficultyIconOffsets[0].y - 3, selectionImage.width(),
+                                                                            selectionImage.height() ),
+                                                            fheroes2::Rect( difficultyIconOffsets[1].x - 3, difficultyIconOffsets[1].y - 3, selectionImage.width(),
+                                                                            selectionImage.height() ),
+                                                            fheroes2::Rect( difficultyIconOffsets[2].x - 3, difficultyIconOffsets[2].y - 3, selectionImage.width(),
+                                                                            selectionImage.height() ) };
 
-        easyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - easyName.width() ) / 2, difficultyArea[0].y + difficultyArea[0].height + 5, display );
-        normalName.draw( difficultyArea[1].x + ( difficultyArea[1].width - normalName.width() ) / 2, difficultyArea[1].y + difficultyArea[1].height + 5, display );
-        hardName.draw( difficultyArea[2].x + ( difficultyArea[2].width - hardName.width() ) / 2, difficultyArea[2].y + difficultyArea[2].height + 5, display );
+        const fheroes2::Point textOffset{ windowRoi.x + descriptionOffsetX, windowRoi.y + descriptionOffsetY };
+        fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, descriptionAreaWidth, tallestDescriptionHeight );
+
+        auto redrawDifficultyElements = [&]() {
+            switch ( currentDifficulty ) {
+            case Campaign::CampaignDifficulty::Decreased:
+                descriptionDecreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
+                selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+                break;
+            case Campaign::CampaignDifficulty::Default:
+                descriptionDefault.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
+                selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+                break;
+            case Campaign::CampaignDifficulty::Increased:
+                descriptionIncreased.draw( textOffset.x, textOffset.y, descriptionAreaWidth, display );
+                selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+                break;
+            default:
+                // Did you add a new difficulty level for campaigns? Add the logic above!
+                assert( 0 );
+                break;
+            }
+        };
+
+        redrawDifficultyElements();
+
+        decreasedDifficultyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - decreasedDifficultyName.width() ) / 2,
+                                      difficultyArea[0].y + difficultyArea[0].height + 5, display );
+        defaultDifficultyName.draw( difficultyArea[1].x + ( difficultyArea[1].width - defaultDifficultyName.width() ) / 2,
+                                    difficultyArea[1].y + difficultyArea[1].height + 5, display );
+        increasedDifficultyName.draw( difficultyArea[2].x + ( difficultyArea[2].width - increasedDifficultyName.width() ) / 2,
+                                      difficultyArea[2].y + difficultyArea[2].height + 5, display );
 
         display.render();
 
@@ -1043,19 +1055,16 @@ namespace
             }
 
             if ( le.MouseClickLeft( difficultyArea[0] ) ) {
-                currentDescription = decreasedDifficultyDescription;
                 selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
                 currentDifficulty = Campaign::CampaignDifficulty::Decreased;
                 updateInfo = true;
             }
             else if ( le.MouseClickLeft( difficultyArea[1] ) ) {
-                currentDescription = defaultDifficultyDescription;
                 selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
                 currentDifficulty = Campaign::CampaignDifficulty::Default;
                 updateInfo = true;
             }
             else if ( le.MouseClickLeft( difficultyArea[2] ) ) {
-                currentDescription = increasedDifficultyDescription;
                 selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
                 currentDifficulty = Campaign::CampaignDifficulty::Increased;
                 updateInfo = true;
@@ -1063,11 +1072,7 @@ namespace
 
             if ( updateInfo ) {
                 restorer.restore();
-
-                description.set( currentDescription, fheroes2::FontType::normalWhite() );
-                restorer.reset();
-                restorer.update( textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
-                description.draw( textOffset.x, textOffset.y, textWidth, display );
+                redrawDifficultyElements();
 
                 display.render();
             }
