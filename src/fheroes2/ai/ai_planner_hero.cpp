@@ -1999,7 +1999,9 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
         const Spell & spell = getSpellFromTile( tile );
-        return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1;
+        // This value needs a cap so that in games where there is a very strong AI opponent, E.G. Price of Loyalty scenario 8, the hero's most important
+        // goal won't be to learn a level 4 spell. Thus we cap this value slightly lower than the value of a pyramid's 10000 because that has a level 5 spell.
+        return std::min( 8500.0, spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1 );
     }
     case MP2::OBJ_ARENA:
     case MP2::OBJ_FORT:
