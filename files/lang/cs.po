@@ -5323,9 +5323,6 @@ msgstr "Standardní"
 msgid "campaignDifficulty|Increased"
 msgstr "Zvýšená"
 
-msgid "Campaign Difficulty"
-msgstr "Obtížnost kampaně"
-
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
@@ -5345,6 +5342,9 @@ msgid ""
 msgstr ""
 "Zvol tuto obtížnost, pokud chceš větší výzvu. AI bude silnější, než na "
 "standardní obtížnosti."
+
+msgid "Campaign Difficulty"
+msgstr "Obtížnost kampaně"
 
 msgid ""
 "Congratulations!\n"

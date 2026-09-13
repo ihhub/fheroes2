@@ -5355,9 +5355,6 @@ msgstr "Hadjárat nehézsége"
 msgid "campaignDifficulty|Increased"
 msgstr "Hadjárat nehézsége"
 
-msgid "Campaign Difficulty"
-msgstr "Hadjárat nehézsége"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5381,6 +5378,9 @@ msgid ""
 msgstr ""
 "Válaszd ezt a nehézséget, ha több kihívást akarsz. A gép erősebb lesz, mint "
 "a Normál nehézségi fokozaton."
+
+msgid "Campaign Difficulty"
+msgstr "Hadjárat nehézsége"
 
 msgid ""
 "Congratulations!\n"

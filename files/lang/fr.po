@@ -5546,9 +5546,6 @@ msgstr "Difficulté de la campagne"
 msgid "campaignDifficulty|Increased"
 msgstr "Difficulté de la campagne"
 
-msgid "Campaign Difficulty"
-msgstr "Difficulté de la campagne"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5572,6 +5569,9 @@ msgid ""
 msgstr ""
 "Choisissez cette difficulté si vous voulez plus de challenge. L'IA sera plus "
 "forte dans ce mode de difficulté."
+
+msgid "Campaign Difficulty"
+msgstr "Difficulté de la campagne"
 
 msgid ""
 "Congratulations!\n"

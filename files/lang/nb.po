@@ -5647,9 +5647,6 @@ msgstr "Felttogsnivå"
 msgid "campaignDifficulty|Increased"
 msgstr "Felttogsnivå"
 
-msgid "Campaign Difficulty"
-msgstr "Felttogsnivå"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5673,6 +5670,9 @@ msgid ""
 msgstr ""
 "Velg nivået hvis du ønsker en utfordring. Motstanderne dine vil være "
 "sterkere enn ved middels nivå."
+
+msgid "Campaign Difficulty"
+msgstr "Felttogsnivå"
 
 msgid ""
 "Congratulations!\n"

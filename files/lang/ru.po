@@ -5395,9 +5395,6 @@ msgstr "Обычная"
 msgid "campaignDifficulty|Increased"
 msgstr "Повышенная"
 
-msgid "Campaign Difficulty"
-msgstr "Сложность кампании"
-
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
@@ -5418,6 +5415,9 @@ msgid ""
 msgstr ""
 "Выберите данный уровень сложности, если хотите серьёзных сражений. ИИ "
 "сильнее, чем обычно."
+
+msgid "Campaign Difficulty"
+msgstr "Сложность кампании"
 
 msgid ""
 "Congratulations!\n"

@@ -5468,9 +5468,6 @@ msgstr "Feldzugschwierigkeit"
 msgid "campaignDifficulty|Increased"
 msgstr "Feldzugschwierigkeit"
 
-msgid "Campaign Difficulty"
-msgstr "Feldzugschwierigkeit"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5495,6 +5492,9 @@ msgid ""
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, wenn Ihr eine größere Herausforderung "
 "sucht. Die KI ist stärker als in der normalen Schwierigkeit."
+
+msgid "Campaign Difficulty"
+msgstr "Feldzugschwierigkeit"
 
 msgid ""
 "Congratulations!\n"
