@@ -57,6 +57,8 @@ namespace fheroes2
 
 namespace Battle
 {
+    void drawHitPointsBar( fheroes2::Image & output, const fheroes2::Sprite & troopCountBar, const fheroes2::Point & troopCountBarPosition, int32_t hitPointsBarHeight,
+                           uint32_t remainingHitPoints, uint32_t maximumHitPoints );
     class Actions;
     class Arena;
     class Cell;
