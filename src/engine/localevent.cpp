@@ -383,7 +383,7 @@ namespace EventProcessing
             // On devices with touchpad/touchscreen the software-rendered mouse cursor is mandatory
             // to properly convert touch events to mouse events and render the cursor especially
             // if no hardware mouse device is present and the hardware cursor is disabled by OS.
-            fheroes2::cursor().enableSoftwareEmulation( true );
+            fheroes2::cursor().forceSoftwareEmulation();
         }
 
         void initController()
@@ -400,7 +400,7 @@ namespace EventProcessing
                     if ( _gameController != nullptr ) {
                         // We force enable the software-rendered mouse cursor to properly convert controller events to mouse events
                         // and render the cursor especially if no hardware mouse device is present and the hardware cursor is disabled by OS.
-                        fheroes2::cursor().enableSoftwareEmulation( true );
+                        fheroes2::cursor().forceSoftwareEmulation();
                         break;
                     }
 
@@ -1152,7 +1152,7 @@ namespace EventProcessing
                 if ( _gameController != nullptr ) {
                     // We force enable the software-rendered mouse cursor to properly convert controller events to mouse events
                     // and render the cursor especially if no hardware mouse device is present and the hardware cursor is disabled by OS.
-                    fheroes2::cursor().enableSoftwareEmulation( true );
+                    fheroes2::cursor().forceSoftwareEmulation();
                 }
                 else {
                     ERROR_LOG( "Failed to open a controller with ID " << event.which << ". Error description: " << SDL_GetError() )

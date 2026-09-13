@@ -64,7 +64,6 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "math_tools.h"
-#include "settings.h"
 #include "system.h"
 
 namespace
@@ -551,13 +550,13 @@ namespace
 
         void enableSoftwareEmulation( const bool enable ) override
         {
-            if ( enable == _emulation ) {
+            const bool newState = enable || isSoftwareEmulationForced();
+
+            if ( newState == _emulation ) {
                 return;
             }
 
-            Settings::Get().setCursorSoftwareEmulation( enable );
-
-            if ( enable ) {
+            if ( newState ) {
                 clear();
 
                 const int returnCode = SDL_ShowCursor( SDL_DISABLE );
@@ -616,8 +615,7 @@ namespace
         static RenderCursor * create()
         {
             auto * cursor = new RenderCursor;
-            cursor->enableSoftwareEmulation( true );
-            Settings::Get().setCursorSoftwareEmulation( true );
+            cursor->forceSoftwareEmulation();
 
             return cursor;
         }

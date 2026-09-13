@@ -72,7 +72,7 @@ namespace
     public:
         DisplayInitializer()
         {
-            const Settings & conf = Settings::Get();
+            Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
             fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
@@ -99,7 +99,13 @@ namespace
             engine.setTitle( appCaption );
 
             auto & cursor = fheroes2::cursor();
-            cursor.enableSoftwareEmulation( conf.isCursorSoftwareEmulationEnabled() );
+            if ( cursor.isSoftwareEmulationForced() ) {
+                conf.setCursorSoftwareEmulation( true );
+            }
+            else {
+                cursor.enableSoftwareEmulation( conf.isCursorSoftwareEmulationEnabled() );
+            }
+
             cursor.show( false );
 
             fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
