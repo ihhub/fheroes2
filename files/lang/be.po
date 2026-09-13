@@ -5392,9 +5392,6 @@ msgstr "Складанасць кампаніі"
 msgid "campaignDifficulty|Increased"
 msgstr "Складанасць кампаніі"
 
-msgid "Campaign Difficulty"
-msgstr "Складанасць кампаніі"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5418,6 +5415,9 @@ msgid ""
 msgstr ""
 "Выбірайце гэты ўзровень складанасці, калі шукаеце большага выкліку для сябе. "
 "Камп’ютар будзе гуляць мацней, чым пры звычайным узроўні складанасці."
+
+msgid "Campaign Difficulty"
+msgstr "Складанасць кампаніі"
 
 msgid ""
 "Congratulations!\n"

@@ -5376,9 +5376,6 @@ msgstr "Stopień trudności kampanii"
 msgid "campaignDifficulty|Increased"
 msgstr "Stopień trudności kampanii"
 
-msgid "Campaign Difficulty"
-msgstr "Stopień trudności kampanii"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5402,6 +5399,9 @@ msgid ""
 msgstr ""
 "Wybierz tę opcję jeśli jesteś gotów na wyzwanie. AI rozgrywa misje lepiej "
 "niż przy normalnym poziomie trudności."
+
+msgid "Campaign Difficulty"
+msgstr "Stopień trudności kampanii"
 
 msgid ""
 "Congratulations!\n"

@@ -5564,9 +5564,6 @@ msgstr "Obtiažnosť kampane"
 msgid "campaignDifficulty|Increased"
 msgstr "Obtiažnosť kampane"
 
-msgid "Campaign Difficulty"
-msgstr "Obtiažnosť kampane"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5588,6 +5585,9 @@ msgid ""
 msgstr ""
 "Zvoľ túto obtiažnosť pokiaľ chceš výzvu. Počítač je silnejší v porovnaní s "
 "normálnou obtiažnosťou."
+
+msgid "Campaign Difficulty"
+msgstr "Obtiažnosť kampane"
 
 msgid ""
 "Congratulations!\n"

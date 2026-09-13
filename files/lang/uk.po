@@ -5376,11 +5376,6 @@ msgstr ""
 "Складність\n"
 "Кампанії"
 
-msgid "Campaign Difficulty"
-msgstr ""
-"Складність\n"
-"Кампанії"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5403,6 +5398,11 @@ msgid ""
 msgstr ""
 "Виберіть цю складність, якщо хочете більше виклику. ШІ буде сильнішим, ніж "
 "на звичайній складності."
+
+msgid "Campaign Difficulty"
+msgstr ""
+"Складність\n"
+"Кампанії"
 
 msgid ""
 "Congratulations!\n"

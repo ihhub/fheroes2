@@ -5229,9 +5229,6 @@ msgstr "Dificultatea campaniei"
 msgid "campaignDifficulty|Increased"
 msgstr "Dificultatea campaniei"
 
-msgid "Campaign Difficulty"
-msgstr "Dificultatea campaniei"
-
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
@@ -5246,6 +5243,9 @@ msgid ""
 "Choose this difficulty if you want more of a challenge. The AI will be "
 "stronger than at the default difficulty."
 msgstr ""
+
+msgid "Campaign Difficulty"
+msgstr "Dificultatea campaniei"
 
 msgid ""
 "Congratulations!\n"
