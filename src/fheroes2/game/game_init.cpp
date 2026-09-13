@@ -99,7 +99,7 @@ namespace
             engine.setTitle( appCaption );
 
             auto & cursor = fheroes2::cursor();
-            cursor.enableSoftwareEmulation( conf.isSoftwareEmulationEnabled() );
+            cursor.enableSoftwareEmulation( conf.isCursorSoftwareEmulationEnabled() );
             cursor.show( false );
 
             fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();

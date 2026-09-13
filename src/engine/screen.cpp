@@ -64,6 +64,7 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "math_tools.h"
+#include "settings.h"
 #include "system.h"
 
 namespace
@@ -554,6 +555,8 @@ namespace
                 return;
             }
 
+            Settings::Get().setCursorSoftwareEmulation( enable );
+
             if ( enable ) {
                 clear();
 
@@ -614,6 +617,7 @@ namespace
         {
             auto * cursor = new RenderCursor;
             cursor->enableSoftwareEmulation( true );
+            Settings::Get().setCursorSoftwareEmulation( true );
 
             return cursor;
         }
