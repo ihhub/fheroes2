@@ -271,7 +271,14 @@ namespace Editor
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
+                    const fheroes2::SupportedLanguage languageBefore = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+                    const fheroes2::SupportedLanguage languageAfter = selectLanguage( supportedLanguages, languageBefore, true );
+
+                    if ( languageAfter != languageBefore ) {
+                        Interface::EditorInterface::Get().clearWarningMessage();
+                        redrawEditor();
+                        saveConfiguration = true;
+                    }
                 }
                 else {
                     assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );
@@ -282,8 +289,6 @@ namespace Editor
                                                        Dialog::OK );
                 }
 
-                redrawEditor();
-                saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
