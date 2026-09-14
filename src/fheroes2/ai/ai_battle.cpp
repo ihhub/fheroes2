@@ -70,6 +70,8 @@
 #include "spell_info.h"
 #include "spell_storage.h"
 
+class Army;
+
 namespace
 {
     const std::vector<int32_t> cellsUnderWallsIndexes = { 7, 28, 49, 72, 95 };
