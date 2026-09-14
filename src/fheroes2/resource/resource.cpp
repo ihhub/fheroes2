@@ -284,6 +284,8 @@ Funds Funds::operator*( uint32_t mul ) const
 
 Funds Funds::operator/( const int32_t div ) const
 {
+    assert( div > 0 );
+
     Funds res;
 
     res.wood = wood / div;
