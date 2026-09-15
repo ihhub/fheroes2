@@ -428,6 +428,7 @@ namespace Battle
         fheroes2::Point _drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
 
         void RedrawTroopCount( const Unit & unit );
+        void RedrawTroopCount( const Unit & unit, uint8_t alpha );
 
         bool _drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset, const fheroes2::Point & movementDelta,
                                            const CellDirection movementDirection );
