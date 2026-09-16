@@ -90,7 +90,7 @@ msgid ""
 "Zounds...\n"
 "%{monster}"
 msgstr ""
-"Ett myller av\n"
+"Attans va många\n"
 "%{monster}"
 
 msgid ""
@@ -122,7 +122,7 @@ msgid "army|Swarm"
 msgstr "Svärm"
 
 msgid "army|Zounds"
-msgstr "Myller"
+msgstr "Attans"
 
 msgid "army|Legion"
 msgstr "Legion"
