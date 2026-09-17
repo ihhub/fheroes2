@@ -9322,7 +9322,7 @@ msgid "luck|Awful"
 msgstr "Fruktansvärd"
 
 msgid "luck|Bad"
-msgstr "Oturlig"
+msgstr "Dålig"
 
 msgid "luck|Normal"
 msgstr "Normal"
