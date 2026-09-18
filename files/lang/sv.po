@@ -9316,7 +9316,7 @@ msgid "View Towns and Castles."
 msgstr "Visa Städer och Borgar"
 
 msgid "luck|Cursed"
-msgstr "Förbannad"
+msgstr "Fördömd"
 
 msgid "luck|Awful"
 msgstr "Fruktansvärd"
