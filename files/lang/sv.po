@@ -10186,7 +10186,7 @@ msgid "Dwarves"
 msgstr "Dvärgar"
 
 msgid "Battle Dwarf"
-msgstr "Stridsdvärgar"
+msgstr "Stridsdvärg"
 
 msgid "Battle Dwarves"
 msgstr "Stridsdvärgar"
