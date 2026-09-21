@@ -335,7 +335,7 @@ namespace Editor
                 {
                     // TODO: allow to use other languages once we add support of filesystem language support.
                     const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    fheroes2::openVirtualKeyboard( fileName, maxFileNameLength );
+                    fheroes2::openVirtualKeyboard( fileName, maxFileNameLength, false );
                 }
 
                 charInsertPos = fileName.size();
