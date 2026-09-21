@@ -436,6 +436,31 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
             // TODO: add the logic for the above cases.
             return 0;
         }
+
+        // A unit under the Berserker spell attacks its nearest neighbor regardless of the neighbor's color. If the nearest unit
+        // belongs to us, then the spell changes nothing: the target would have attacked us anyway.
+        Battle::Board * board = Battle::Arena::GetBoard();
+        assert( board != nullptr );
+
+        const std::vector<Battle::Unit *> nearestUnits = board->GetNearestTroops( &target, {} );
+        if ( !nearestUnits.empty() ) {
+            const uint32_t nearestDistance = Battle::Board::GetDistance( target.GetPosition(), nearestUnits.front()->GetPosition() );
+
+            // Several units can be located at the same distance and the order among them is not defined, so any of them can be attacked.
+            for ( const Battle::Unit * unit : nearestUnits ) {
+                assert( unit != nullptr );
+
+                if ( Battle::Board::GetDistance( target.GetPosition(), unit->GetPosition() ) > nearestDistance ) {
+                    break;
+                }
+
+                if ( unit->GetCurrentOrArmyColor() == _myColor ) {
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Berserker is useless for " << target.GetName() << ": the nearest unit is ours (" << unit->GetName() << ")" )
+                    return 0;
+                }
+            }
+        }
+
         ratio = 0.85;
         break;
     }
