@@ -3732,7 +3732,7 @@ msgid "Power"
 msgstr "Trollk."
 
 msgid "Knowl"
-msgstr "Kunskap"
+msgstr "Kunsk."
 
 msgid "1st"
 msgstr "1:a"
@@ -6964,7 +6964,7 @@ msgid "Fast"
 msgstr "Snabb"
 
 msgid "Very Fast"
-msgstr "Mkt. snabb"
+msgstr "Kvick"
 
 msgid "Dynamic"
 msgstr "Dynamisk"
@@ -9455,19 +9455,19 @@ msgid "speed|Crawling"
 msgstr "Krypande"
 
 msgid "speed|Very Slow"
-msgstr "Mkt. långsam"
+msgstr "Trög"
 
 msgid "speed|Slow"
 msgstr "Långsam"
 
 msgid "speed|Average"
-msgstr "Vanlig"
+msgstr "Medel"
 
 msgid "speed|Fast"
-msgstr "Snabb"
+msgstr "Rask"
 
 msgid "speed|Very Fast"
-msgstr "Mkt. snabb"
+msgstr "Kvick"
 
 msgid "speed|Ultra Fast"
 msgstr "Jättesnabb"
@@ -9476,7 +9476,7 @@ msgid "speed|Blazing"
 msgstr "Blixtsnabb"
 
 msgid "speed|Instant"
-msgstr "Ögonblicklig"
+msgstr "Omedelbar"
 
 msgid "Click this button to adjust the level of zoom."
 msgstr "Klicka här för att justera förstoringen."
