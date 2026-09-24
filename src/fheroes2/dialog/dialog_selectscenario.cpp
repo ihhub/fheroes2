@@ -85,6 +85,13 @@ namespace
         SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH = 292,
         SELECTED_SCENARIO_DESCRIPTION_HEIGHT = 90,
         SELECTED_SCENARIO_GENERAL_OFFSET_Y = 265,
+        // OK BUTTON MASK
+        OK_BUTTON_MASK_SOURCE_OFFSET_X = 70,
+        OK_BUTTON_MASK_SOURCE_Y = 423,
+        OK_BUTTON_MASK_DESTINATION_X = 130,
+        OK_BUTTON_MASK_DESTINATION_Y = 420,
+        OK_BUTTON_MASK_EXTRA_WIDTH = 20,
+        OK_BUTTON_MASK_EXTRA_HEIGHT = 10,
         // COMMON
         ICON_SIZE = 18,
         MAP_SIZE_BUTTON_OFFSET_Y = 23
@@ -540,16 +547,32 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     const fheroes2::Rect curDescription( rt.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, rt.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y,
                                          SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH, SELECTED_SCENARIO_DESCRIPTION_HEIGHT );
 
-    fheroes2::Button buttonOk( rt.x + 140, rt.y + 410, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-
+    fheroes2::Button buttonOk( rt.x + 40, rt.y + 410, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+    fheroes2::Button buttonCancel;
+    buttonCancel.setICNInfo( ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+    int const cancelWidth = buttonCancel.area().width;
+    // Different languages have different icon widths. This fixes the problem of having a bigger button while aligning it correctly
+    buttonCancel.setPosition( rt.x + rt.width - cancelWidth - 40, rt.y + 410 );
     fheroes2::Button buttonSelectSmall( rt.x + 36, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_SMALL, 0, 1 );
     fheroes2::Button buttonSelectMedium( rt.x + 98, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_MEDIUM, 0, 1 );
     fheroes2::Button buttonSelectLarge( rt.x + 160, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_LARGE, 0, 1 );
     fheroes2::Button buttonSelectXLarge( rt.x + 222, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_XLARGE, 0, 1 );
     fheroes2::Button buttonSelectAll( rt.x + 284, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::BUTTON_MAPSIZE_ALL, 0, 1 );
 
-    const auto drawAllButtons = [&buttonOk, &buttonSelectSmall, &buttonSelectMedium, &buttonSelectLarge, &buttonSelectXLarge, &buttonSelectAll]() {
+    // The below code is used to mask the ok button that exists from the image
+    const auto & okButtonMask = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+    const auto drawOkButtonMask = [&]() {
+        fheroes2::Blit( okButtonMask, ( okButtonMask.width() / 2 ) - OK_BUTTON_MASK_SOURCE_OFFSET_X, 423 - OK_BUTTON_MASK_EXTRA_HEIGHT, display,
+                        rt.x + OK_BUTTON_MASK_DESTINATION_X, rt.y + OK_BUTTON_MASK_DESTINATION_Y - OK_BUTTON_MASK_EXTRA_HEIGHT,
+                        buttonOk.area().width + OK_BUTTON_MASK_EXTRA_WIDTH, buttonOk.area().height + OK_BUTTON_MASK_EXTRA_HEIGHT );
+    };
+
+    const auto drawAllButtons = [&]() {
+        drawOkButtonMask();
         buttonOk.draw();
+        buttonCancel.draw();
+        buttonOk.drawShadow( display );
+        buttonCancel.drawShadow( display );
         buttonSelectSmall.draw();
         buttonSelectMedium.draw();
         buttonSelectLarge.draw();
@@ -622,6 +645,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
+        buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
         scenarioList.QueueEventProcessing();
 
@@ -643,7 +667,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
             return &( *it );
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return nullptr;
         }
 
@@ -814,6 +838,9 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
         }
         else if ( le.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
             ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
+            ShowToolTip( _( "Cancel" ), _( "Click to return to select map menu." ) );
         }
 
         if ( !needRedraw && !scenarioList.IsNeedRedraw() ) {
