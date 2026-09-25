@@ -127,7 +127,7 @@ namespace
         { gettext_noop( "Identify Hero" ), 3, 0, 0, 45, 0, gettext_noop( "Allows the caster to view detailed information on enemy Heroes." ) },
         { gettext_noop( "Summon Boat" ), 5, 0, 0, 46, 0,
           gettext_noop(
-              "Summons the nearest unoccupied, friendly or neutral boat to an adjacent shore location. A friendly boat is one which you just built or were the most recent player to occupy. A neutral boat is one which no player has occupied yet." ) },
+              "Summons the nearest unoccupied and either friendly or neutral boat to an adjacent shore location. A friendly boat is one which you just built or were the most recent player to occupy. A neutral boat is one which no player has occupied yet." ) },
         { gettext_noop( "Dimension Door" ), 10, 225, 69, 47, 0, gettext_noop( "Allows the caster to magically transport to a nearby location." ) },
         { gettext_noop( "Town Gate" ), 10, 225, 69, 48, 0,
           gettext_noop( "Returns the caster to the nearest town or castle currently owned. This spell cannot be cast if the hero is already in a town or a castle." ) },
