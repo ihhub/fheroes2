@@ -12591,10 +12591,12 @@ msgstr "Позволяет получить подробную информац�
 msgid "Summon Boat"
 msgstr "Призвать корабль"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Перемещает Ваш ближайший незанятый корабль в ближайшую точку побережья. "
 "Корабль считается Вашим, если Вы его только что построили, или тот на "
