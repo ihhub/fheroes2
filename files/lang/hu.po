@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-06-16 11:23+0200\n"
+"PO-Revision-Date: 2026-09-22 20:59+0200\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
@@ -4223,7 +4223,7 @@ msgid "Failed to save the map."
 msgstr "Térkép mentése sikertelen."
 
 msgid "The selected object has been moved to the top layer."
-msgstr ""
+msgstr "A kiválasztott objektum átkerült a legfelső rétegre."
 
 msgid "Unsaved Changes"
 msgstr "Nem mentett módosítások"
@@ -5343,44 +5343,39 @@ msgstr ""
 msgid "and more..."
 msgstr "és egyebek..."
 
-#, fuzzy
 msgid "campaignDifficulty|Decreased"
-msgstr "Hadjárat nehézsége"
+msgstr "Csökkentett"
 
-#, fuzzy
 msgid "campaignDifficulty|Default"
-msgstr "Hadjárat nehézsége"
+msgstr "Alapbeállítás"
 
-#, fuzzy
 msgid "campaignDifficulty|Increased"
-msgstr "Hadjárat nehézsége"
+msgstr "Növelt"
 
-msgid "Campaign Difficulty"
-msgstr "Hadjárat nehézsége"
-
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Válaszd ezt a nehézséget, ha kevesebb kihívással szeretnéd végigvinni a "
-"játékot. A gép gyengébb lesz, mint a Normál nehézségi fokozaton."
+"játékot. A mesterséges intelligencia gyengébb lesz, mint az Alapbeállítású "
+"nehézségi fokozaton."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the campaign as close to the original "
 "design as possible with the fheroes2 AI."
 msgstr ""
-"Válaszd ezt a nehézséget, ha a hadjáratot az eredeti elgondolásnak "
-"megfelelően szeretnéd játszani."
+"Válaszd ezt a nehézséget, ha a hadjáratot az eredeti elgondolásnak és "
+"mesterséges intelligenciának megfelelően szeretnéd játszani az fheroes2-t."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty if you want more of a challenge. The AI will be "
 "stronger than at the default difficulty."
 msgstr ""
-"Válaszd ezt a nehézséget, ha több kihívást akarsz. A gép erősebb lesz, mint "
-"a Normál nehézségi fokozaton."
+"Válaszd ezt a nehézséget, ha több kihívást akarsz. A mesterséges "
+"intelligencia erősebb lesz, mint az Alapbeállítású nehézségi fokozaton."
+
+msgid "Campaign Difficulty"
+msgstr "Hadjárat nehézsége"
 
 msgid ""
 "Congratulations!\n"
@@ -12424,6 +12419,8 @@ msgid ""
 "Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
 "combat, regardless of spell power."
 msgstr ""
+"3-mal növeli az egység támadóképességét. A hatás 3 körig tart, varázserőtől "
+"függetlenül."
 
 msgid "Animate Dead"
 msgstr "Feltámasztás"

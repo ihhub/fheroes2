@@ -5568,9 +5568,6 @@ msgstr "Độ khó Chiến dịch"
 msgid "campaignDifficulty|Increased"
 msgstr "Độ khó Chiến dịch"
 
-msgid "Campaign Difficulty"
-msgstr "Độ khó Chiến dịch"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5592,6 +5589,9 @@ msgid ""
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thử thách. AI mạnh hơn so với độ khó bình "
 "thường."
+
+msgid "Campaign Difficulty"
+msgstr "Độ khó Chiến dịch"
 
 msgid ""
 "Congratulations!\n"

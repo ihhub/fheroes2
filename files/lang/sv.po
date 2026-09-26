@@ -5345,9 +5345,6 @@ msgstr "Kampanjsvårighet"
 msgid "campaignDifficulty|Increased"
 msgstr "Kampanjsvårighet"
 
-msgid "Campaign Difficulty"
-msgstr "Kampanjsvårighet"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5371,6 +5368,9 @@ msgid ""
 msgstr ""
 "Välj denna svårighetsgrad om du vill ha en utmaning. Datorn är starkare i "
 "jämförelse med normal svårighetsgrad."
+
+msgid "Campaign Difficulty"
+msgstr "Kampanjsvårighet"
 
 msgid ""
 "Congratulations!\n"

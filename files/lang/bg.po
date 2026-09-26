@@ -5601,9 +5601,6 @@ msgstr "Трудност на Кампанията"
 msgid "campaignDifficulty|Increased"
 msgstr "Трудност на Кампанията"
 
-msgid "Campaign Difficulty"
-msgstr "Трудност на Кампанията"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5627,6 +5624,9 @@ msgid ""
 msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
+
+msgid "Campaign Difficulty"
+msgstr "Трудност на Кампанията"
 
 msgid ""
 "Congratulations!\n"
