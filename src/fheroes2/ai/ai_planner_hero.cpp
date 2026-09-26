@@ -447,6 +447,9 @@ namespace
                 return true;
             }
 
+            // TODO: we should check whether a hero has all the spells of the required level.
+            //       If he does, then we don't need to visit the shrine.
+
             if ( hero.HaveSpell( spell, true ) || !isSpellUsedByAI( spell.GetID() ) ) {
                 return false;
             }
