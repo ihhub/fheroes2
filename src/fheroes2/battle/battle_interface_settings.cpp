@@ -172,7 +172,7 @@ namespace
 
         // Draw a creature as the background subject.
         const fheroes2::Sprite & creatureIcon = Assets::getImage( ICN::MONS32, 34 );
-        fheroes2::Blit( creatureIcon, 0, 0, image, ( image.width() - creatureIcon.width() ) / 2, ( image.height() - creatureIcon.height() ) / 2 - 4, creatureIcon.width(),
+        fheroes2::Blit( creatureIcon, 0, 0, image, ( image.width() - creatureIcon.width() ) / 2, ( image.height() - creatureIcon.height() ) / 2 - 6, creatureIcon.width(),
                         creatureIcon.height() );
 
         const fheroes2::Sprite & troopCountBar = Assets::getImage( ICN::TEXTBAR, 10 );
@@ -180,7 +180,7 @@ namespace
         constexpr int32_t hitPointsBarHeight = 4;
 
         const int32_t troopCountBarX = ( image.width() - troopCountBar.width() ) / 2;
-        const int32_t troopCountBarY = image.height() - troopCountBar.height() - hitPointsBarHeight - 3;
+        const int32_t troopCountBarY = image.height() - troopCountBar.height() - hitPointsBarHeight - 5;
 
         fheroes2::Blit( troopCountBar, 0, 0, image, troopCountBarX, troopCountBarY, troopCountBar.width(), troopCountBar.height() );
 
@@ -273,12 +273,10 @@ namespace
                 conf.setBattleDamageInfo( !conf.isBattleShowDamageInfoEnabled() );
                 redrawScreen = true;
             }
-
             else if ( le.MouseClickLeft( windowHitPointsBarRoi ) ) {
                 conf.setBattleHitPointsBar( !conf.isBattleHitPointsBarEnabled() );
                 redrawScreen = true;
             }
-
             else if ( le.isMouseRightButtonPressedInArea( windowTurnOrderRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Turn Order" ), _( "Toggle to display the turn order during the battle." ), 0 );
             }

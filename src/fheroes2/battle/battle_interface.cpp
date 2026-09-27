@@ -2221,9 +2221,7 @@ void Battle::drawHitPointsBar( fheroes2::Image & output, const fheroes2::Sprite 
     static const uint8_t missingHitPointsColor = fheroes2::GetColorId( 200, 0, 0 );
 
     fheroes2::Fill( output, hitPointsBarX, hitPointsBarY, hitPointsBarWidth, hitPointsBarHeight, outlineColor );
-
     fheroes2::Fill( output, hitPointsBarX + 1, hitPointsBarY + 1, innerHitPointsBarWidth, innerHitPointsBarHeight, missingHitPointsColor );
-
     fheroes2::Fill( output, hitPointsBarX + 1, hitPointsBarY + 1, remainingHitPointsWidth, innerHitPointsBarHeight, remainingHitPointsColor );
 }
 
@@ -2238,7 +2236,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     const bool isValidFrontMonster = ( monsterIndex / Board::widthInCells ) == ( tileInFront == Board::widthInCells );
 
     int32_t sx = rt.x + ( isReflected ? -7 : rt.width - 13 );
-    const int32_t sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
+    int32_t sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
 
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
@@ -2249,6 +2247,8 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     if ( Settings::Get().isBattleHitPointsBarEnabled() ) {
         constexpr int32_t hitPointsBarHeight = 4;
+
+        sy = std::min( sy, _mainSurface.height() - bar.height() - hitPointsBarHeight );
 
         drawHitPointsBar( _mainSurface, bar, { sx, sy }, hitPointsBarHeight, unit.GetHitPointsLeft(), unit.GetMonster().GetHitPoints() );
     }
