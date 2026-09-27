@@ -442,10 +442,20 @@ namespace
                 return false;
             }
 
-            // TODO: we should check whether a hero has all the spells of the required level.
-            //       If he does, then we don't need to visit the shrine.
-
             if ( !kingdom.isVisited( index, objectType ) ) {
+                const uint32_t totalSpellCount = Spell::getTotalSpellsPerLevel( spell.Level() );
+
+                const auto & spells = hero.getMagicBookSpells();
+
+                const uint32_t ownedSpells = static_cast<uint32_t>( std::count_if( spells.begin(), spells.end(), [level = spell.Level()]( const Spell & spell )
+                                                                                   { return spell.Level() == level; } ) );
+                if ( ownedSpells == totalSpellCount ) {
+                    // Nothing to learn from this shrine.
+                    return false;
+                }
+
+                assert( ownedSpells < totalSpellCount );
+
                 // This shrine has not been visited by any hero. It's worth to do it.
                 return true;
             }
