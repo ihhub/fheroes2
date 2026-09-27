@@ -399,17 +399,15 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     std::string statusMessage;
     LocalEvent & le = LocalEvent::Get();
+
+    auto processArmyBarEvents = [&]() {
+        return ( bottomArmyBar.isValid()
+                 && ( ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
+                      || ( le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
+               || ( !bottomArmyBar.isValid() && le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) );
+    };
+
     auto updateStatusBar = [&]() {
-        bool isRedrawNeeded{ false };
-
-        // Army bar events processing.
-        if ( ( bottomArmyBar.isValid()
-               && ( ( le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
-                    || ( le.isMouseCursorPosInArea( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
-             || ( !bottomArmyBar.isValid() && le.isMouseCursorPosInArea( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
-            isRedrawNeeded = true;
-        }
-
         // Update status bar. It doesn't depend on animation status.
         // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
         // In this case we must revert the queue and finding the first suitable building.
@@ -464,7 +462,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             display.updateNextRenderRoi( area );
         }
 
-        return isRedrawNeeded || area != fheroes2::Rect{};
+        return area != fheroes2::Rect{};
     };
 
     updateStatusBar();
@@ -494,6 +492,140 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         bool needRedraw = false;
         bool needFadeIn = false;
 
+        const bool closeWindowHotkey = Game::HotKeyCloseWindow();
+        const bool previousCastleHotkey = HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT );
+        const bool nextCastleHotkey = HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT );
+        const bool armySwapHotkey = HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP );
+        const bool mergeTroopsWithHeroHotkey = HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_HERO );
+        const bool mergeTroopsWithGarrisonHotkey = HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_GARRISON );
+        const BuildingType hotKeyBuilding = getPressedBuildingHotkey();
+
+        bool isBuildingInteraction = false;
+
+        for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
+            if ( !isBuild( it->id ) ) {
+                continue;
+            }
+
+            const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
+            if ( hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) || ( it->id == BUILD_TENT && hotKeyBuilding == BUILD_CASTLE ) ) {
+                isBuildingInteraction = true;
+                break;
+            }
+
+            for ( const auto & area : it->areas ) {
+                if ( le.isMouseLeftButtonPressedInArea( area ) || le.isMouseRightButtonPressedInArea( area ) ) {
+                    isBuildingInteraction = true;
+                    break;
+                }
+            }
+
+            if ( isBuildingInteraction ) {
+                break;
+            }
+        }
+
+        const bool isMouseInteraction
+            = le.isMouseLeftButtonPressedInArea( resActiveArea ) || le.isMouseRightButtonPressedInArea( resActiveArea )
+              || le.isMouseLeftButtonPressedInArea( buttonExit.area() ) || le.isMouseRightButtonPressedInArea( buttonExit.area() )
+              || ( buttonPrevCastle.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonPrevCastle.area() ) )
+              || le.isMouseRightButtonPressedInArea( buttonPrevCastle.area() )
+              || ( buttonNextCastle.isEnabled() && le.isMouseLeftButtonPressedInArea( buttonNextCastle.area() ) )
+              || le.isMouseRightButtonPressedInArea( buttonNextCastle.area() ) || ( isBuild( BUILD_CAPTAIN ) && le.isMouseRightButtonPressedInArea( rectSign1 ) )
+              || ( hero && ( le.isMouseLeftButtonPressedInArea( rectSign2 ) || le.isMouseRightButtonPressedInArea( rectSign2 ) ) ) || isBuildingInteraction;
+
+        const fheroes2::Point & cursorPos = le.getMouseCursorPos();
+        const bool hasSelectedTroop = topArmyBar.isSelected() || ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() );
+
+        const ArmyTroop * topTroop = topArmyBar.GetItem( cursorPos );
+        const ArmyTroop * bottomTroop = bottomArmyBar.isValid() ? bottomArmyBar.GetItem( cursorPos ) : nullptr;
+
+        const bool isArmyBarInteraction
+            = ( le.isMouseLeftButtonPressedInArea( topArmyBar.GetArea() ) || le.isMouseRightButtonPressedInArea( topArmyBar.GetArea() )
+                || ( bottomArmyBar.isValid()
+                     && ( le.isMouseLeftButtonPressedInArea( bottomArmyBar.GetArea() ) || le.isMouseRightButtonPressedInArea( bottomArmyBar.GetArea() ) ) ) )
+              && ( ( topTroop != nullptr && topTroop->isValid() ) || ( bottomTroop != nullptr && bottomTroop->isValid() ) || hasSelectedTroop );
+
+        const bool isArmyHotkey = hero && ( armySwapHotkey || mergeTroopsWithHeroHotkey || mergeTroopsWithGarrisonHotkey );
+
+        const bool isHotkeyInteraction = closeWindowHotkey || ( buttonPrevCastle.isEnabled() && previousCastleHotkey )
+                                         || ( buttonNextCastle.isEnabled() && nextCastleHotkey ) || isBuildingInteraction || isArmyHotkey;
+
+        if ( alphaHero < 255 && ( isMouseInteraction || isArmyBarInteraction || isHotkeyInteraction ) ) {
+            alphaHero = 255;
+
+            // Hero fade-in animation is finished, we can set up his army bar.
+            bottomArmyBar.SetArmy( &hero->GetArmy() );
+
+            fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
+        }
+
+        if ( !fadeBuilding.isFadeDone() && ( isMouseInteraction || ( isHotkeyInteraction && !isArmyHotkey ) ) ) {
+            const uint32_t build = fadeBuilding.getBuilding();
+
+            fadeBuilding.stopFade();
+
+            CastleDialog::redrawAllBuildings( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
+
+            if ( BUILD_CAPTAIN == build ) {
+                RedrawIcons( *this, hero, dialogRoi.getPosition() );
+                fheroes2::drawCastleName( *this, display, dialogRoi.getPosition() );
+            }
+
+            fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
+
+            display.render( dialogRoi );
+        }
+
+        if ( alphaHero >= 255 ) {
+            needRedraw = needRedraw || processArmyBarEvents();
+        }
+
+        if ( alphaHero >= 255 && hero ) {
+            if ( armySwapHotkey && _army.isValid() ) {
+                hero->GetArmy().SwapTroops( _army );
+
+                topArmyBar.ResetSelected();
+                bottomArmyBar.ResetSelected();
+
+                topArmyBar.Redraw( display );
+                bottomArmyBar.Redraw( display );
+
+                display.render( fheroes2::getBoundaryRect( topArmyBar.GetArea(), bottomArmyBar.GetArea() ) );
+            }
+
+            bool isArmyActionPerformed = false;
+
+            const ArmyTroop * keep = nullptr;
+
+            if ( topArmyBar.isSelected() ) {
+                keep = topArmyBar.GetSelectedItem();
+            }
+            else if ( bottomArmyBar.isSelected() ) {
+                keep = bottomArmyBar.GetSelectedItem();
+            }
+
+            if ( mergeTroopsWithHeroHotkey ) {
+                hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                isArmyActionPerformed = true;
+            }
+            else if ( mergeTroopsWithGarrisonHotkey ) {
+                GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                isArmyActionPerformed = true;
+            }
+
+            if ( isArmyActionPerformed ) {
+                if ( topArmyBar.isSelected() ) {
+                    topArmyBar.ResetSelected();
+                }
+                if ( bottomArmyBar.isSelected() ) {
+                    bottomArmyBar.ResetSelected();
+                }
+
+                needRedraw = true;
+            }
+        }
+
         // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.isFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
@@ -506,7 +638,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
             // Check buttons for closing this castle's window.
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || closeWindowHotkey ) {
                 result = CastleDialogReturnValue::Close;
 
                 // Disable fast scroll for resolutions where the exit button is directly above the border.
@@ -516,13 +648,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
                 break;
             }
-            if ( buttonPrevCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+            if ( buttonPrevCastle.isEnabled() && ( le.MouseClickLeft( buttonPrevCastle.area() ) || previousCastleHotkey || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::PreviousCastle;
                 break;
             }
-            if ( buttonNextCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+            if ( buttonNextCastle.isEnabled() && ( le.MouseClickLeft( buttonNextCastle.area() ) || nextCastleHotkey || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::NextCastle;
                 break;
             }
@@ -550,55 +680,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
             }
-            else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
-                hero->GetArmy().SwapTroops( _army );
-
-                topArmyBar.ResetSelected();
-                bottomArmyBar.ResetSelected();
-
-                topArmyBar.Redraw( display );
-                bottomArmyBar.Redraw( display );
-
-                display.render( fheroes2::getBoundaryRect( topArmyBar.GetArea(), bottomArmyBar.GetArea() ) );
-            }
 
             needRedraw = needRedraw || updateStatusBar();
-
-            // Actions with hero army.
-            if ( hero ) {
-                bool isArmyActionPerformed = false;
-
-                // Preselecting of troop.
-                const ArmyTroop * keep = nullptr;
-
-                if ( topArmyBar.isSelected() ) {
-                    keep = topArmyBar.GetSelectedItem();
-                }
-                else if ( bottomArmyBar.isSelected() ) {
-                    keep = bottomArmyBar.GetSelectedItem();
-                }
-
-                if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_HERO ) ) {
-                    hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
-                    isArmyActionPerformed = true;
-                }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_GARRISON ) ) {
-                    GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
-                    isArmyActionPerformed = true;
-                }
-
-                // Reset selection and schedule dialog redraw if any action modifying armies has been made.
-                if ( isArmyActionPerformed ) {
-                    if ( topArmyBar.isSelected() ) {
-                        topArmyBar.ResetSelected();
-                    }
-                    if ( bottomArmyBar.isSelected() ) {
-                        bottomArmyBar.ResetSelected();
-                    }
-
-                    needRedraw = true;
-                }
-            }
 
             if ( hero && le.MouseClickLeft( rectSign2 ) ) {
                 // View hero.
@@ -607,9 +690,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 needFadeIn = true;
                 needRedraw = true;
             }
-
-            // Get pressed hotkey.
-            const BuildingType hotKeyBuilding = getPressedBuildingHotkey();
 
             // Interaction with buildings.
             // Animation queue starts from the lowest by Z-value buildings which means that they draw first and most likely overlap by the top buildings in the queue.
@@ -645,7 +725,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
 
-                bool isBuildingClicked = ( hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) );
+                bool isBuildingClicked
+                    = ( hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) || ( it->id == BUILD_TENT && hotKeyBuilding == BUILD_CASTLE ) );
                 if ( !isBuildingClicked ) {
                     for ( const auto & area : it->areas ) {
                         if ( le.MouseClickLeft( area ) ) {
@@ -782,6 +863,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         if ( alphaHero < 255 && Game::validateAnimationDelay( Game::DelayType::CASTLE_ITEM_UPDATE_DELAY ) ) {
             alphaHero += 9;
+
             if ( alphaHero >= 255 ) {
                 alphaHero = 255;
 
