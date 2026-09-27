@@ -221,6 +221,7 @@ public:
     bool isBattleMovementAreaHighlightEnabled() const;
     bool isSoftwareEmulationEnabled() const;
     bool isBattleHitPointsBarEnabled() const;
+    bool isCursorSoftwareEmulationEnabled() const;
 
     void setInterfaceType( const InterfaceType type )
     {
@@ -312,6 +313,7 @@ public:
     void setScreenScalingTypeNearest( const bool enable );
     void setHighlightBattleMovementArea( const bool enable );
     void setBattleHitPointsBar( const bool enable );
+    void setCursorSoftwareEmulation( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

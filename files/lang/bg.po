@@ -5601,9 +5601,6 @@ msgstr "Трудност на Кампанията"
 msgid "campaignDifficulty|Increased"
 msgstr "Трудност на Кампанията"
 
-msgid "Campaign Difficulty"
-msgstr "Трудност на Кампанията"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5627,6 +5624,9 @@ msgid ""
 msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
+
+msgid "Campaign Difficulty"
+msgstr "Трудност на Кампанията"
 
 msgid ""
 "Congratulations!\n"
@@ -12927,10 +12927,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Призови кораб"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Извиква най-близката незаета, приятелска лодка до съседно място на брега. "
 "Приятелска лодка е тази, която току-що си построил или си бил последният "

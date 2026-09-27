@@ -442,6 +442,9 @@ namespace
                 return false;
             }
 
+            // TODO: we should check whether a hero has all the spells of the required level.
+            //       If he does, then we don't need to visit the shrine.
+
             if ( !kingdom.isVisited( index, objectType ) ) {
                 // This shrine has not been visited by any hero. It's worth to do it.
                 return true;
@@ -1999,7 +2002,9 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
         const Spell & spell = getSpellFromTile( tile );
-        return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1;
+        // This value needs a cap so that in games where there is a very strong AI opponent, E.G. Price of Loyalty scenario 8, the hero's most important
+        // goal won't be to learn a level 4 spell. Thus we cap this value slightly lower than the value of a pyramid's 10000 because that has a level 5 spell.
+        return std::min( 8500.0, spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1 );
     }
     case MP2::OBJ_ARENA:
     case MP2::OBJ_FORT:

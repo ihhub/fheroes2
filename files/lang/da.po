@@ -5482,9 +5482,6 @@ msgstr "Felttogsniveau"
 msgid "campaignDifficulty|Increased"
 msgstr "Felttogsniveau"
 
-msgid "Campaign Difficulty"
-msgstr "Felttogsniveau"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5508,6 +5505,9 @@ msgid ""
 msgstr ""
 "Vælg dette niveau, for at opleve felttoget med større udfordring. AI-"
 "spillerne vil være stærkere end de vil være på 'normal'."
+
+msgid "Campaign Difficulty"
+msgstr "Felttogsniveau"
 
 msgid ""
 "Congratulations!\n"
@@ -12768,10 +12768,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Hidkald skib"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Hidkalder det nærmeste ubesatte, venlige skib til et tilstødende landsted. "
 "Et venligt skib kan være et skib, som du lige har bygget eller har været den "

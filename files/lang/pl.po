@@ -5376,9 +5376,6 @@ msgstr "Stopień trudności kampanii"
 msgid "campaignDifficulty|Increased"
 msgstr "Stopień trudności kampanii"
 
-msgid "Campaign Difficulty"
-msgstr "Stopień trudności kampanii"
-
 #, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
@@ -5402,6 +5399,9 @@ msgid ""
 msgstr ""
 "Wybierz tę opcję jeśli jesteś gotów na wyzwanie. AI rozgrywa misje lepiej "
 "niż przy normalnym poziomie trudności."
+
+msgid "Campaign Difficulty"
+msgstr "Stopień trudności kampanii"
 
 msgid ""
 "Congratulations!\n"
@@ -12636,10 +12636,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Przywołanie Łodzi"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Przywołuje najbliższą, niezajętą, własną łódź na sąsiadujący z tobą fragment "
 "wybrzeża. Własna łódź to taka, która została przez ciebie zbudowana lub "

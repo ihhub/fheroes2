@@ -89,12 +89,16 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const Kingd
             // AI at higher difficulty levels should be able to fully redeem the weekly unit growth in its castles
             result += ProfitConditions::FromMine( Resource::GOLD );
 
-            // Provide additional resources only if there are higher-level dwellings in the castle to avoid distortions in the castle's development rate
-            if ( !castle->isBuild( DWELLING_MONSTER6 ) ) {
+            // Provide additional resources only if there are higher-level dwellings in the castle to avoid distortions in the castle's development rate.
+            //
+            // If the Well is not built in the castle then the growth rate for this dwelling is just 1-2. With a normal castle's income of 1000 gold it is
+            // possible to buy all monsters from Dwelling 6 within a week.
+            if ( !castle->isBuild( DWELLING_MONSTER6 ) || !castle->isBuild( BUILD_WELL ) ) {
                 continue;
             }
 
-            switch ( castle->GetRace() ) {
+            const int race = castle->GetRace();
+            switch ( race ) {
             case Race::KNGT:
             case Race::NECR:
                 // Rare resources are not required to hire maximum-level units in these castles
@@ -113,15 +117,36 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const Kingd
                 if ( doesKingdomHaveResourceSource( Resource::SULFUR ) ) {
                     result += ProfitConditions::FromMine( Resource::SULFUR );
                 }
-                // The maximum level units in this castle are more expensive than in others
-                result += ProfitConditions::FromMine( Resource::GOLD );
+
+                // The maximum level units in this castle are more expensive than in others.
+                if ( castle->isBuild( DWELLING_UPGRADE7 ) ) {
+                    // Black Dragons need 4000 gold.
+                    result += ProfitConditions::FromBuilding( BUILD_STATUE, race ) * 3;
+                }
+                else if ( castle->isBuild( DWELLING_UPGRADE6 ) ) {
+                    // Red Dragons need 3500 gold.
+                    result += ProfitConditions::FromBuilding( BUILD_STATUE, race ) * 2;
+                }
+                else {
+                    // Green Dragons need 3000 gold.
+                    result += ProfitConditions::FromBuilding( BUILD_STATUE, race );
+                }
+
                 break;
             case Race::WZRD:
                 if ( doesKingdomHaveResourceSource( Resource::GEMS ) ) {
                     result += ProfitConditions::FromMine( Resource::GEMS );
                 }
+
                 // The maximum level units in this castle are more expensive than in others
-                result += ProfitConditions::FromMine( Resource::GOLD );
+                if ( castle->isBuild( DWELLING_UPGRADE6 ) ) {
+                    // Titans need 5000 gold.
+                    result += ProfitConditions::FromBuilding( BUILD_STATUE, race ) * 3;
+                }
+                else {
+                    // Giants need 2000 gold.
+                    result += ProfitConditions::FromBuilding( BUILD_STATUE, race );
+                }
                 break;
             default:
                 assert( 0 );
@@ -134,11 +159,11 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const Kingd
 
     switch ( difficulty ) {
     case Difficulty::HARD:
-        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 );
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 ) / 2;
     case Difficulty::EXPERT:
-        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 ) + getBonusForCastles();
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 ) + getBonusForCastles() / 2;
     case Difficulty::IMPOSSIBLE:
-        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 2 ) + getBonusForCastles();
+        return getIncomeFromSetsOfResourceMines( Resource::GOLD, 1 ) * 3 / 2 + getBonusForCastles();
     default:
         break;
     }

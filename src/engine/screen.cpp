@@ -550,11 +550,13 @@ namespace
 
         void enableSoftwareEmulation( const bool enable ) override
         {
-            if ( enable == _emulation ) {
+            const bool newState = enable || isSoftwareEmulationForced();
+
+            if ( newState == _emulation ) {
                 return;
             }
 
-            if ( enable ) {
+            if ( newState ) {
                 clear();
 
                 const int returnCode = SDL_ShowCursor( SDL_DISABLE );
@@ -613,7 +615,7 @@ namespace
         static RenderCursor * create()
         {
             auto * cursor = new RenderCursor;
-            cursor->enableSoftwareEmulation( true );
+            cursor->forceSoftwareEmulation();
 
             return cursor;
         }

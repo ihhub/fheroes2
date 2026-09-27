@@ -5238,9 +5238,6 @@ msgstr ""
 msgid "campaignDifficulty|Increased"
 msgstr ""
 
-msgid "Campaign Difficulty"
-msgstr ""
-
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
@@ -5254,6 +5251,9 @@ msgstr ""
 msgid ""
 "Choose this difficulty if you want more of a challenge. The AI will be "
 "stronger than at the default difficulty."
+msgstr ""
+
+msgid "Campaign Difficulty"
 msgstr ""
 
 msgid ""
@@ -11479,9 +11479,10 @@ msgid "Summon Boat"
 msgstr ""
 
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 
 msgid "Allows the caster to magically transport to a nearby location."
