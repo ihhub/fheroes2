@@ -447,8 +447,8 @@ namespace
 
                 const auto & spells = hero.getMagicBookSpells();
 
-                const uint32_t ownedSpells = static_cast<uint32_t>( std::count_if( spells.begin(), spells.end(), [level = spell.Level()]( const Spell & spell )
-                                                                                   { return spell.Level() == level; } ) );
+                const uint32_t ownedSpells = static_cast<uint32_t>(
+                    std::count_if( spells.begin(), spells.end(), [level = spell.Level()]( const Spell & spell ) { return spell.Level() == level; } ) );
                 if ( ownedSpells == totalSpellCount ) {
                     // Nothing to learn from this shrine.
                     return false;
