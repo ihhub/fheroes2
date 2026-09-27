@@ -786,8 +786,8 @@ uint32_t Spell::getTotalSpellsPerLevel( const int32_t level )
     static const std::array<uint32_t, 5> spellCount = []() {
         std::array<uint32_t, 5> counts = { 0 };
 
-        for ( int32_t id = NONE; id < SPELL_COUNT; ++id ) {
-            const auto spell = Spell( id );
+        for ( int32_t i = NONE; i < SPELL_COUNT; ++i ) {
+            const auto spell = Spell( i );
             if ( !spell.isValid() ) {
                 continue;
             }
