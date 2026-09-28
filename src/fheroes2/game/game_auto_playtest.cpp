@@ -232,6 +232,16 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to close the dialog." ), Dialog::ZERO );
             }
 
+            for ( size_t i = 0; i < playerRects.size(); ++i ) {
+                if ( le.isMouseRightButtonPressedInArea( playerRects[i] ) ) {
+                    std::string message = _( "%{color} player" );
+                    StringReplace( message, "%{color}", Color::String( availableColors[i] ) );
+
+                    fheroes2::showStandardTextMessage( _( "Opponents" ), std::move( message ), Dialog::ZERO );
+                    break;
+                }
+            }
+
             for ( size_t i = 0; i < availableColors.size(); ++i ) {
                 if ( le.isMouseRightButtonPressedInArea( playerRects[i] ) ) {
                     std::string playerString{ _( "Won %{percent}% of playthroughs." ) };
@@ -443,30 +453,29 @@ namespace fheroes2
         const int32_t playerCount = static_cast<int32_t>( players.size() );
         const int32_t playerOffsetX{ activeArea.x + ( activeArea.width - ( ( playerCount - 1 ) * playerStepX + 62 ) ) / 2 };
 
-        std::vector<fheroes2::Rect> playerColorRect;
-        std::vector<fheroes2::Rect> playerRaceRect;
+        std::vector<Rect> playerColorRect;
+        std::vector<Rect> playerRaceRect;
         playerColorRect.resize( playerCount );
         playerRaceRect.resize( playerCount );
 
-        const fheroes2::Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
+        const Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
 
         for ( int32_t playerId = 0; playerId < playerCount; ++playerId ) {
             const auto * player = players[playerId];
             const uint32_t icnIndex = Color::GetIndex( player->GetColor() ) + 3;
-            const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
+            const Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
 
-            playerColorRect[playerId] = fheroes2::Rect( playerOffsetX + playerId * playerStepX, positionY, playerIcon.width(), playerIcon.height() );
+            playerColorRect[playerId] = Rect( playerOffsetX + playerId * playerStepX, positionY, playerIcon.width(), playerIcon.height() );
 
-            fheroes2::Copy( playerIcon, 0, 0, display, playerColorRect[playerId].x, playerColorRect[playerId].y, playerColorRect[playerId].width,
-                            playerColorRect[playerId].height );
-            fheroes2::Blit( playerIconShadow, display, playerColorRect[playerId].x - 5, playerColorRect[playerId].y + 3 );
+            Copy( playerIcon, 0, 0, display, playerColorRect[playerId].x, playerColorRect[playerId].y, playerColorRect[playerId].width,
+                  playerColorRect[playerId].height );
+            Blit( playerIconShadow, display, playerColorRect[playerId].x - 5, playerColorRect[playerId].y + 3 );
 
-            const fheroes2::Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
+            const Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
 
-            playerRaceRect[playerId] = fheroes2::Rect( playerColorRect[playerId].x, playerColorRect[playerId].y + 60, classIcon.width(), classIcon.height() );
-            fheroes2::Copy( classIcon, 0, 0, display, playerRaceRect[playerId].x, playerRaceRect[playerId].y, playerRaceRect[playerId].width,
-                            playerRaceRect[playerId].height );
-            fheroes2::Blit( playerIconShadow, display, playerRaceRect[playerId].x - 5, playerRaceRect[playerId].y + 3 );
+            playerRaceRect[playerId] = Rect( playerColorRect[playerId].x, playerColorRect[playerId].y + 60, classIcon.width(), classIcon.height() );
+            Copy( classIcon, 0, 0, display, playerRaceRect[playerId].x, playerRaceRect[playerId].y, playerRaceRect[playerId].width, playerRaceRect[playerId].height );
+            Blit( playerIconShadow, display, playerRaceRect[playerId].x - 5, playerRaceRect[playerId].y + 3 );
         }
 
         positionY += 120;
@@ -566,8 +575,8 @@ namespace fheroes2
                     if ( eventHandler.MouseClickLeft( playerRaceRect[i] ) ) {
                         player->SetRace( Race::getNextRace( player->GetRace() ) );
 
-                        const fheroes2::Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
-                        fheroes2::Copy( classIcon, 0, 0, display, playerRaceRect[i].x, playerRaceRect[i].y, playerRaceRect[i].width, playerRaceRect[i].height );
+                        const Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
+                        Copy( classIcon, 0, 0, display, playerRaceRect[i].x, playerRaceRect[i].y, playerRaceRect[i].width, playerRaceRect[i].height );
 
                         display.render( playerRaceRect[i] );
                         break;
