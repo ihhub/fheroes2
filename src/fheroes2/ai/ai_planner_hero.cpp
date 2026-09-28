@@ -74,6 +74,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "spell_storage.h"
 #include "visit.h"
 #include "world.h"
 #include "world_pathfinding.h"
