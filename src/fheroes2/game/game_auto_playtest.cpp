@@ -64,6 +64,7 @@
 namespace
 {
     constexpr int32_t sliderWidth{ 150 };
+    constexpr int32_t playerStepX{ 80 };
 
     class TextRestorer final : public fheroes2::MovableText
     {
@@ -96,7 +97,6 @@ namespace
         }
 
         auto & players = conf.GetPlayers();
-        players.Init( conf.getCurrentMapInfo() );
         players.SetStartGame();
 
         return world.loadResurrectionMap( mapInfo.filename );
@@ -140,7 +140,6 @@ namespace
         }
 
         // Display the results.
-        constexpr int32_t playerStepX{ 80 };
         const int32_t playthroughCount{ static_cast<int32_t>( playtest.getResults().size() ) };
         const int32_t playerCount{ static_cast<int32_t>( playtest.getResults().front().size() ) };
 
@@ -359,10 +358,10 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        StandardWindow window( 550, 345, true, display );
+        StandardWindow window( 550, 440, true, display );
         const Rect activeArea( window.activeArea() );
 
-        const Settings & conf = Settings::Get();
+        Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         const Sprite & titleBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
@@ -434,7 +433,42 @@ namespace fheroes2
         auto soundsTextAreaRestorer = std::make_unique<ImageRestorer>( display, soundsCheckboxArea.x, soundsCheckboxArea.y, text.width(), text.height() );
         text.draw( soundsCheckboxArea.x + soundsCheckboxArea.width + 5, soundsCheckboxArea.y + 2, display );
 
-        positionY += ySpacing;
+        positionY += 30;
+
+        // Render players as all computers but with color names.
+        auto & players = conf.GetPlayers();
+        players.Init( conf.getCurrentMapInfo() );
+
+        const int32_t playerCount = static_cast<int32_t>( players.size() );
+        const int32_t playerOffsetX{ activeArea.x + ( activeArea.width - ( ( playerCount - 1 ) * playerStepX + 62 ) ) / 2 };
+
+        std::vector<fheroes2::Rect> playerColorRect;
+        std::vector<fheroes2::Rect> playerRaceRect;
+        playerColorRect.resize( playerCount );
+        playerRaceRect.resize( playerCount );
+
+        const fheroes2::Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
+
+        for ( int32_t playerId = 0; playerId < playerCount; ++playerId ) {
+            const auto * player = players[playerId];
+            const uint32_t icnIndex = Color::GetIndex( player->GetColor() ) + 3;
+            const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
+
+            playerColorRect[playerId] = fheroes2::Rect( playerOffsetX + playerId * playerStepX, positionY, playerIcon.width(), playerIcon.height() );
+
+            fheroes2::Copy(
+                playerIcon, 0, 0, display, playerColorRect[playerId].x, playerColorRect[playerId].y, playerColorRect[playerId].width, playerColorRect[playerId].height );
+            fheroes2::Blit( playerIconShadow, display, playerColorRect[playerId].x - 5, playerColorRect[playerId].y + 3 );
+
+            const fheroes2::Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
+
+            playerRaceRect[playerId] = fheroes2::Rect( playerColorRect[playerId].x, playerColorRect[playerId].y + 60, classIcon.width(), classIcon.height() );
+            fheroes2::Copy(
+                classIcon, 0, 0, display, playerRaceRect[playerId].x, playerRaceRect[playerId].y, playerRaceRect[playerId].width, playerRaceRect[playerId].height );
+            fheroes2::Blit( playerIconShadow, display, playerRaceRect[playerId].x - 5, playerRaceRect[playerId].y + 3 );
+        }
+
+        positionY += 120;
         text.set( _( "Left-clicking at any point will interrupt the playtest." ), FontType::normalYellow() );
         text.draw( positionX, positionY, activeArea.width, display );
 
@@ -511,6 +545,45 @@ namespace fheroes2
                 renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface,
                                 autoPlaytest.isAnimationEnabled() );
                 display.render( soundsCheckboxArea );
+            }
+            else {
+                for ( size_t i = 0; i < playerRaceRect.size(); ++i ) {
+                    auto * player = players[i];
+
+                    if ( eventHandler.isMouseRightButtonPressedInArea( playerRaceRect[i] ) ) {
+                        showStandardTextMessage(
+                            _( "Class" ),
+                            _( "This lets you change the class of a player. Classes are not always changeable. Depending on the scenario, a player may receive additional towns and/or heroes not of their primary alignment." ),
+                            Dialog::ZERO );
+                        break;
+                    }
+
+
+                    if ( !conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+                        continue;
+                    }
+                    
+                    if ( eventHandler.MouseClickLeft( playerRaceRect[i] ) ) {
+                        player->SetRace( Race::getNextRace( player->GetRace() ) );
+
+                        const fheroes2::Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
+                        fheroes2::Copy( classIcon, 0, 0, display, playerRaceRect[i].x, playerRaceRect[i].y, playerRaceRect[i].width, playerRaceRect[i].height );
+
+                        display.render( playerRaceRect[i] );
+                        break;
+                    }
+                }
+
+                for ( size_t i = 0; i < playerColorRect.size(); ++i ) {
+                    if ( eventHandler.isMouseRightButtonPressedInArea( playerColorRect[i] ) ) {
+                        auto * player = players[i];
+                        std::string message = _( "%{color} player" );
+                        StringReplace( message, "%{color}", Color::String( player->GetColor() ) );
+
+                        showStandardTextMessage( _( "Opponents" ), std::move( message ), Dialog::ZERO );
+                        break;
+                    }
+                }
             }
 
             if ( eventHandler.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
