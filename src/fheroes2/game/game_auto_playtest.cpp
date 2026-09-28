@@ -456,15 +456,15 @@ namespace fheroes2
 
             playerColorRect[playerId] = fheroes2::Rect( playerOffsetX + playerId * playerStepX, positionY, playerIcon.width(), playerIcon.height() );
 
-            fheroes2::Copy(
-                playerIcon, 0, 0, display, playerColorRect[playerId].x, playerColorRect[playerId].y, playerColorRect[playerId].width, playerColorRect[playerId].height );
+            fheroes2::Copy( playerIcon, 0, 0, display, playerColorRect[playerId].x, playerColorRect[playerId].y, playerColorRect[playerId].width,
+                            playerColorRect[playerId].height );
             fheroes2::Blit( playerIconShadow, display, playerColorRect[playerId].x - 5, playerColorRect[playerId].y + 3 );
 
             const fheroes2::Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
 
             playerRaceRect[playerId] = fheroes2::Rect( playerColorRect[playerId].x, playerColorRect[playerId].y + 60, classIcon.width(), classIcon.height() );
-            fheroes2::Copy(
-                classIcon, 0, 0, display, playerRaceRect[playerId].x, playerRaceRect[playerId].y, playerRaceRect[playerId].width, playerRaceRect[playerId].height );
+            fheroes2::Copy( classIcon, 0, 0, display, playerRaceRect[playerId].x, playerRaceRect[playerId].y, playerRaceRect[playerId].width,
+                            playerRaceRect[playerId].height );
             fheroes2::Blit( playerIconShadow, display, playerRaceRect[playerId].x - 5, playerRaceRect[playerId].y + 3 );
         }
 
@@ -558,11 +558,10 @@ namespace fheroes2
                         break;
                     }
 
-
                     if ( !conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
                         continue;
                     }
-                    
+
                     if ( eventHandler.MouseClickLeft( playerRaceRect[i] ) ) {
                         player->SetRace( Race::getNextRace( player->GetRace() ) );
 
