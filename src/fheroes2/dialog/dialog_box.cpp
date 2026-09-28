@@ -37,9 +37,10 @@ namespace
     constexpr int32_t offsetFromBorder{ 6 };
     constexpr int32_t windowWidth = fheroes2::boxAreaWidthPx + ( fheroes2::borderWidthPx + offsetFromBorder ) * 2;
     constexpr int32_t buttonHeight = 40;
-    constexpr int32_t activeAreaHeight = 35;
+    constexpr int32_t activeAreaHeight = 35; // Space for text on original top and bottom image.
+    constexpr int32_t middleAreaHeight = 44; // Original middle ICN height minus first row to better images connection.
 
-    int32_t topHeight( const bool isEvilInterface )
+    int32_t getTopHeight( const bool isEvilInterface )
     {
         const fheroes2::Sprite & image = Assets::getImage( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 0 );
         return image.height();
@@ -93,41 +94,37 @@ namespace
 }
 
 Dialog::ResizableFrameBox::ResizableFrameBox( int width, int height, int startYPos, const bool showButtons )
-    : _middleFragmentCount( 0 )
-    , _middleFragmentHeight( 0 )
 {
     if ( showButtons ) {
         height += buttonHeight;
     }
 
-    // TODO: add support for wider windows.
-    if ( width != fheroes2::boxAreaWidthPx ) {
+    // TODO: add support for narrower windows.
+    if ( width < fheroes2::boxAreaWidthPx ) {
         // We don't generate windows narrower than the original game.
         width = fheroes2::boxAreaWidthPx;
     }
 
-    const bool evil = Settings::Get().isEvilInterfaceEnabled();
-    _middleFragmentCount = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / activeAreaHeight );
+    _middleVerticalFragmentCount = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / middleAreaHeight );
     _middleFragmentHeight = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
-    const int32_t height_top_bottom = topHeight( evil ) + bottomHeight( evil );
+
+    const bool evil = Settings::Get().isEvilInterfaceEnabled();
+    const int32_t topHeight = getTopHeight( evil );
+    const int32_t topAndBottomHeight = topHeight + bottomHeight( evil );
 
     area.width = width;
-    area.height = activeAreaHeight + activeAreaHeight + _middleFragmentHeight;
+    area.height = 2 * activeAreaHeight + _middleFragmentHeight;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const int32_t leftSideOffset = leftOffset( evil );
 
     _position.x = ( display.width() - windowWidth ) / 2 - leftSideOffset;
-    _position.y = startYPos;
+    _position.y = ( startYPos < 0 ) ? ( ( display.height() - _middleFragmentHeight ) / 2 ) - topHeight : startYPos;
 
-    if ( startYPos < 0 ) {
-        _position.y = ( ( display.height() - _middleFragmentHeight ) / 2 ) - topHeight( evil );
-    }
-
-    _restorer.reset( new fheroes2::ImageRestorer( display, _position.x, _position.y, overallWidth( evil ), height_top_bottom + _middleFragmentHeight ) );
+    _restorer = std::make_unique<fheroes2::ImageRestorer>( display, _position.x, _position.y, overallWidth( evil ), topAndBottomHeight + _middleFragmentHeight );
 
     area.x = _position.x + ( windowWidth - area.width ) / 2 + leftSideOffset;
-    area.y = _position.y + ( topHeight( evil ) - activeAreaHeight );
+    area.y = _position.y + ( topHeight - activeAreaHeight );
 
     redraw();
 }
@@ -137,28 +134,30 @@ void Dialog::ResizableFrameBox::redraw()
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buybuild = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
 
-    const int32_t overallLeftWidth = leftWidth( isEvilInterface );
+    const int32_t offsetX = _position.x + leftWidth( isEvilInterface );
 
     const fheroes2::Sprite & rightTop = Assets::getImage( buybuild, 0 );
+    const fheroes2::Sprite & rightMiddle = Assets::getImage( buybuild, 1 );
+    const fheroes2::Sprite & rightBottom = Assets::getImage( buybuild, 2 );
     const fheroes2::Sprite & leftTop = Assets::getImage( buybuild, 4 );
+    const fheroes2::Sprite & leftMiddle = Assets::getImage( buybuild, 5 );
+    const fheroes2::Sprite & leftBottom = Assets::getImage( buybuild, 6 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Blit( leftTop, display, _position.x + overallLeftWidth - leftTop.width(), _position.y );
-    fheroes2::Blit( rightTop, display, _position.x + overallLeftWidth, _position.y );
+    fheroes2::Blit( leftTop, display, offsetX - leftTop.width(), _position.y );
+    fheroes2::Blit( rightTop, display, offsetX, _position.y );
 
     _position.y += leftTop.height();
 
     const int32_t posBeforeMiddle = _position.y;
     int32_t middleLeftHeight = _middleFragmentHeight;
-    for ( uint32_t i = 0; i < _middleFragmentCount; ++i ) {
-        const int32_t chunkHeight = middleLeftHeight >= activeAreaHeight ? activeAreaHeight : middleLeftHeight;
+    // TODO: Make a non-noticeable transition from middle to bottom image.
+    for ( uint32_t i = 0; i < _middleVerticalFragmentCount; ++i ) {
+        const int32_t chunkHeight = middleLeftHeight >= middleAreaHeight ? middleAreaHeight : middleLeftHeight;
 
-        const fheroes2::Sprite & leftMiddle = Assets::getImage( buybuild, 5 );
-        fheroes2::Blit( leftMiddle, 0, 10, display, _position.x + overallLeftWidth - leftMiddle.width(), _position.y, leftMiddle.width(), chunkHeight );
-
-        const fheroes2::Sprite & rightMiddle = Assets::getImage( buybuild, 1 );
-        fheroes2::Blit( rightMiddle, 0, 10, display, _position.x + overallLeftWidth, _position.y, rightMiddle.width(), chunkHeight );
+        fheroes2::Blit( leftMiddle, 0, 1, display, offsetX - leftMiddle.width(), _position.y, leftMiddle.width(), chunkHeight );
+        fheroes2::Blit( rightMiddle, 0, 1, display, offsetX, _position.y, rightMiddle.width(), chunkHeight );
 
         middleLeftHeight -= chunkHeight;
         _position.y += chunkHeight;
@@ -166,11 +165,8 @@ void Dialog::ResizableFrameBox::redraw()
 
     _position.y = posBeforeMiddle + _middleFragmentHeight;
 
-    const fheroes2::Sprite & rightBottom = Assets::getImage( buybuild, 2 );
-    const fheroes2::Sprite & leftBottom = Assets::getImage( buybuild, 6 );
-
-    fheroes2::Blit( leftBottom, display, _position.x + overallLeftWidth - leftBottom.width(), _position.y );
-    fheroes2::Blit( rightBottom, display, _position.x + overallLeftWidth, _position.y );
+    fheroes2::Blit( leftBottom, display, offsetX - leftBottom.width(), _position.y );
+    fheroes2::Blit( rightBottom, display, offsetX, _position.y );
 }
 
 Dialog::ResizableFrameBox::~ResizableFrameBox()
