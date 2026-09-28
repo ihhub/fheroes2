@@ -34,6 +34,7 @@
 #include "dialog.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "game_tools.h"
 #include "image.h"
 #include "localevent.h"
 #include "map_format_info.h"
@@ -178,7 +179,7 @@ namespace Editor
 
         fheroes2::ImageRestorer firstDateDescription( display, playerAreaOffsetX, offsetY, playerAreaWidth, 35 );
 
-        text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
+        text.set( Game::getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
         text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, text.width(), display );
 
         offsetY += 35;
@@ -223,7 +224,7 @@ namespace Editor
 
                 firstDateDescription.restore();
 
-                text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
+                text.set( Game::getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
                 text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, firstDateDescription.y(), text.width(), display );
 
                 isRedrawNeeded = true;

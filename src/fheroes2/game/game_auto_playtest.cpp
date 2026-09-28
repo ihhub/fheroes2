@@ -35,6 +35,7 @@
 #include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_tools.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -369,7 +370,7 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        StandardWindow window( 550, 440, true, display );
+        StandardWindow window( 550, 450, true, display );
         const Rect activeArea( window.activeArea() );
 
         Settings & conf = Settings::Get();
@@ -412,7 +413,16 @@ namespace fheroes2
         TextRestorer dayCountValue{ display, { valuePositionX, positionY + 2 } };
         dayCountValue.render( getValueString( autoPlaytest.getMaxDaysInPlaythrough(), AutoPlaytest::dayLimit ) );
 
-        positionY += ySpacing;
+        positionY += 30;
+
+        text.set( _( "autoPlaytest|Last day of playthrough:" ), FontType::normalWhite() );
+        text.fitToOneRow( optionTextMaxWidth );
+        text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
+
+        TextRestorer date{ display, { inputPositionX + 5, positionY } };
+        date.render( Game::getDateDescription( autoPlaytest.getMaxDaysInPlaythrough() ) );
+
+        positionY += 30;
 
         const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface, true ) };
 
@@ -514,6 +524,7 @@ namespace fheroes2
             else if ( dayCountSlider.processEvents( eventHandler ) ) {
                 autoPlaytest.setMaxDaysInPlaythrough( dayCountSlider.getCurrentValue() );
                 dayCountValue.render( getValueString( dayCountSlider.getCurrentValue(), AutoPlaytest::dayLimit ) );
+                date.render( Game::getDateDescription( autoPlaytest.getMaxDaysInPlaythrough() ) );
                 display.render( window.activeArea() );
             }
             else if ( autoPlaytest.isAnimationEnabled() && speedCountSlider.processEvents( eventHandler ) ) {
