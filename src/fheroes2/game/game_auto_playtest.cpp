@@ -43,6 +43,7 @@
 #include "mus.h"
 #include "pal.h"
 #include "players.h"
+#include "race.h"
 #include "screen.h"
 #include "settings.h"
 #include "tools.h"
