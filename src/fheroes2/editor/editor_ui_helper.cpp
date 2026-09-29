@@ -28,8 +28,6 @@
 #include "image.h"
 #include "resource.h"
 #include "screen.h"
-#include "tools.h"
-#include "translations.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
