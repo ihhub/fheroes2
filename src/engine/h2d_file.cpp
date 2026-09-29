@@ -215,7 +215,7 @@ namespace fheroes2
         return true;
     }
 
-    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
+    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image, std::string extraInfo )
     {
         assert( !image.empty() );
 
@@ -232,6 +232,6 @@ namespace fheroes2
             stream.putRaw( image.transform(), imageSize );
         }
 
-        return writer.add( name, stream.getRaw( 0 ) );
+        return writer.add( name, stream.getRaw( 0 ), std::move( extraInfo ) );
     }
 }

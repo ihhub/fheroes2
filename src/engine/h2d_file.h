@@ -79,5 +79,5 @@ namespace fheroes2
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image );
 
-    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image );
+    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image, std::string extraInfo = {} );
 }
