@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -67,7 +67,14 @@ namespace fheroes2
         bool add( H2DReader & reader );
 
     private:
-        std::map<std::string, std::vector<uint8_t>, std::less<>> _fileData;
+        struct FileInfo final
+        {
+            std::vector<uint8_t> data;
+
+            std::string extraInfo;
+        };
+
+        std::map<std::string, FileInfo, std::less<>> _fileData;
     };
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image );

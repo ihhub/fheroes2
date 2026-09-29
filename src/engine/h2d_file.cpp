@@ -37,7 +37,7 @@ namespace
     // 5 bytes - file name
     const size_t minFileSize = 4 + 4 + 4 + 4 + 5 + 1;
 
-    const uint8_t version{ 2U };
+    const uint8_t version{ 3U };
     const std::array<uint8_t, 4> magicSequence{ 'H', '2', 'D', version };
 }
 
@@ -73,6 +73,9 @@ namespace fheroes2
             const uint32_t size = _fileStream.getLE32();
             std::string name;
             _fileStream >> name;
+
+            std::string extraInfo;
+            _fileStream >> extraInfo;
             if ( size == 0 || static_cast<size_t>( offset ) + size > fileSize || name.empty() ) {
                 continue;
             }
@@ -127,21 +130,24 @@ namespace fheroes2
 
         // Calculate file info section size.
         size_t fileInfoSection = ( 4 + 4 ) * _fileData.size();
-        for ( const auto & [name, data] : _fileData ) {
+        for ( const auto & [name, info] : _fileData ) {
             // 4 byte for string size.
             fileInfoSection += ( name.size() + 4 );
+            fileInfoSection += ( info.extraInfo.size() + 4 );
         }
 
+        // 4 bytes for magic sequence and 4 bytes for the number of files.
         size_t offset = fileInfoSection + 4 + 4;
-        for ( const auto & [name, data] : _fileData ) {
+        for ( const auto & [name, info] : _fileData ) {
             fileStream.putLE32( static_cast<uint32_t>( offset ) );
-            fileStream.putLE32( static_cast<uint32_t>( data.size() ) );
+            fileStream.putLE32( static_cast<uint32_t>( info.data.size() ) );
             fileStream << name;
-            offset += data.size();
+            fileStream << info.extraInfo;
+            offset += info.data.size();
         }
 
-        for ( const auto & [name, data] : _fileData ) {
-            fileStream.putRaw( data.data(), data.size() );
+        for ( const auto & [name, info] : _fileData ) {
+            fileStream.putRaw( info.data.data(), info.data.size() );
         }
 
         return true;
@@ -153,7 +159,7 @@ namespace fheroes2
             return false;
         }
 
-        _fileData[name] = Compression::zipData( data.data(), data.size(), true );
+        _fileData[name] = { Compression::zipData( data.data(), data.size(), true ), {} };
         return true;
     }
 
