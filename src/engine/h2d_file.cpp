@@ -153,13 +153,13 @@ namespace fheroes2
         return true;
     }
 
-    bool H2DWriter::add( const std::string & name, const std::vector<uint8_t> & data )
+    bool H2DWriter::add( const std::string & name, const std::vector<uint8_t> & data, std::string extraInfo )
     {
         if ( name.empty() || data.empty() ) {
             return false;
         }
 
-        _fileData[name] = { Compression::zipData( data.data(), data.size(), true ), {} };
+        _fileData[name] = { Compression::zipData( data.data(), data.size(), true ), std::move( extraInfo ) };
         return true;
     }
 
