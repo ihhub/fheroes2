@@ -792,14 +792,14 @@ uint32_t Spell::getTotalSpellsPerLevel( const int32_t level )
                 continue;
             }
 
-            const int32_t level = spell.Level();
-            if ( level == 0 ) {
+            const int32_t spellLevel = spell.Level();
+            if ( spellLevel == 0 ) {
                 continue;
             }
 
-            assert( level >= 1 && level <= 5 );
+            assert( spellLevel >= 1 && spellLevel <= 5 );
 
-            ++counts[level - 1];
+            ++counts[spellLevel - 1];
         }
 
         return counts;
