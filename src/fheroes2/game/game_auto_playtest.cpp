@@ -401,6 +401,7 @@ namespace fheroes2
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
         HorizontalSlider playthroughCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::playthroughLimit, autoPlaytest.getMaxPlaythroughs() };
+        playthroughCountSlider.setPopupDialog( _( "autoPlaytest|Number of playthroughs:" ), _( "Set the number of playthroughs." ) );
         TextRestorer playthroughCountValue{ display, { valuePositionX, positionY + 2 } };
         playthroughCountValue.render( getValueString( autoPlaytest.getMaxPlaythroughs(), AutoPlaytest::playthroughLimit ) );
 
@@ -410,6 +411,8 @@ namespace fheroes2
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
         HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::dayLimit, autoPlaytest.getMaxDaysInPlaythrough() };
+        dayCountSlider.setPopupDialog( _( "autoPlaytest|Max days per playthrough:" ), _( "Set the maximum number of days within each playthrough is being run." ) );
+
         TextRestorer dayCountValue{ display, { valuePositionX, positionY + 2 } };
         dayCountValue.render( getValueString( autoPlaytest.getMaxDaysInPlaythrough(), AutoPlaytest::dayLimit ) );
 
@@ -439,6 +442,7 @@ namespace fheroes2
         auto animationTextAreaRestorer = std::make_unique<ImageRestorer>( display, animationTextOffset.x, animationTextOffset.y, text.width(), text.height() );
         text.draw( animationTextOffset.x, animationTextOffset.y, display );
         HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::animationLimit, autoPlaytest.getAnimationSpeed() };
+        speedCountSlider.setPopupDialog( _( "autoPlaytest|Animation speed:" ), _( "Set animation speed during playthrough." ) );
         TextRestorer speedCountValue{ display, { valuePositionX, positionY + 2 } };
         speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), AutoPlaytest::animationLimit ) );
         if ( !autoPlaytest.isAnimationEnabled() ) {
@@ -611,6 +615,12 @@ namespace fheroes2
             }
             else if ( eventHandler.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 showStandardTextMessage( _( "Cancel" ), _( "Return to the previous menu." ), Dialog::ZERO );
+            }
+            else if ( eventHandler.isMouseRightButtonPressedInArea( animationCheckboxArea ) ) {
+                showStandardTextMessage( _( "autoPlaytest|Animation" ), _( "Toggle animation during playthroughs." ), Dialog::ZERO );
+            }
+            else if ( eventHandler.isMouseRightButtonPressedInArea( soundsCheckboxArea ) ) {
+                showStandardTextMessage( _( "autoPlaytest|Sound Effects" ), _( "Toggle sound effects during playthroughs." ), Dialog::ZERO );
             }
         }
 

@@ -54,6 +54,12 @@ namespace fheroes2
 
         void enable();
 
+        void setPopupDialog( std::string title, std::string description )
+        {
+            _popupTitle = std::move( title );
+            _popupDescription = std::move( description );
+        }
+
     private:
         Scrollbar _scrollbar;
         Button _buttonLeft;
@@ -63,5 +69,8 @@ namespace fheroes2
 
         TimedEventValidator _timedButtonLeft;
         TimedEventValidator _timedButtonRight;
+
+        std::string _popupTitle;
+        std::string _popupDescription;
     };
 }
