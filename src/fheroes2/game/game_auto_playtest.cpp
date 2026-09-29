@@ -600,7 +600,7 @@ namespace fheroes2
 
                 for ( size_t i = 0; i < playerColorRect.size(); ++i ) {
                     if ( eventHandler.isMouseRightButtonPressedInArea( playerColorRect[i] ) ) {
-                        auto * player = players[i];
+                        const auto * player = players[i];
                         std::string message = _( "%{color} player" );
                         StringReplace( message, "%{color}", Color::String( player->GetColor() ) );
 
