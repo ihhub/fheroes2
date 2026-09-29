@@ -781,6 +781,34 @@ int32_t Spell::CalculateDimensionDoorDistance()
     return 14;
 }
 
+uint32_t Spell::getTotalSpellsPerLevel( const int32_t level )
+{
+    static const std::array<uint32_t, 5> spellCount = []() {
+        std::array<uint32_t, 5> counts = { 0 };
+
+        for ( int32_t i = NONE; i < SPELL_COUNT; ++i ) {
+            const auto spell = Spell( i );
+            if ( !spell.isValid() ) {
+                continue;
+            }
+
+            const int32_t spellLevel = spell.Level();
+            if ( spellLevel == 0 ) {
+                continue;
+            }
+
+            assert( spellLevel >= 1 && spellLevel <= 5 );
+
+            ++counts[spellLevel - 1];
+        }
+
+        return counts;
+    }();
+
+    assert( level >= 1 && level <= 5 );
+    return spellCount[level - 1];
+}
+
 OStreamBase & operator<<( OStreamBase & stream, const Spell & spell )
 {
     return stream << spell.id;
