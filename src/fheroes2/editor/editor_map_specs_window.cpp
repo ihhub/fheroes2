@@ -49,6 +49,7 @@
 #include "game_language.h"
 #include "game_over.h"
 #include "game_string.h"
+#include "game_tools.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -1728,7 +1729,7 @@ namespace
 
                 const int32_t offsetY = roi.y + fheroes2::ValueSelectionDialogElement::getArea().height + 14;
 
-                text.set( Editor::getDateDescription( _outOfTimeValue.getValue() ), fheroes2::FontType::normalWhite() );
+                text.set( Game::getDateDescription( _outOfTimeValue.getValue() ), fheroes2::FontType::normalWhite() );
                 text.draw( roi.x, offsetY, roi.width, output );
 
                 break;
