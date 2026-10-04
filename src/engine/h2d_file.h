@@ -38,17 +38,31 @@ namespace fheroes2
     class H2DReader
     {
     public:
+        struct EntryInfo final
+        {
+            uint32_t offset{ 0 };
+
+            uint32_t size{ 0 };
+
+            std::string info;
+        };
+
         // Returns true if file opening is successful.
         bool open( const std::string & path );
 
         // Returns non-empty vector if requested file exists.
         std::vector<uint8_t> getFile( const std::string & fileName );
 
+        const std::map<std::string, EntryInfo, std::less<>> & getAllEntries() const
+        {
+            return _fileNameVsInfo;
+        }
+
         std::set<std::string, std::less<>> getAllFileNames() const;
 
     private:
         // Relationship between file name in non-capital letters and its offset from the start of the archive.
-        std::map<std::string, std::pair<uint32_t, uint32_t>, std::less<>> _fileNameAndOffset;
+        std::map<std::string, EntryInfo, std::less<>> _fileNameVsInfo;
 
         // Stream for reading h2d file.
         StreamFile _fileStream;

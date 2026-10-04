@@ -45,7 +45,7 @@ namespace fheroes2
 {
     bool H2DReader::open( const std::string & path )
     {
-        _fileNameAndOffset.clear();
+        _fileNameVsInfo.clear();
         _fileStream.close();
 
         if ( !_fileStream.open( path, "rb" ) ) {
@@ -80,7 +80,7 @@ namespace fheroes2
                 continue;
             }
 
-            _fileNameAndOffset.try_emplace( std::move( name ), std::make_pair( offset, size ) );
+            _fileNameVsInfo.try_emplace( std::move( name ), EntryInfo{ offset, size, std::move( extraInfo ) } );
         }
 
         return true;
@@ -88,13 +88,13 @@ namespace fheroes2
 
     std::vector<uint8_t> H2DReader::getFile( const std::string & fileName )
     {
-        const auto it = _fileNameAndOffset.find( fileName );
-        if ( it == _fileNameAndOffset.end() ) {
+        const auto it = _fileNameVsInfo.find( fileName );
+        if ( it == _fileNameVsInfo.end() ) {
             return {};
         }
 
-        _fileStream.seek( it->second.first );
-        const auto compressedData = _fileStream.getRaw( it->second.second );
+        _fileStream.seek( it->second.offset );
+        const auto compressedData = _fileStream.getRaw( it->second.size );
 
         return Compression::unzipData( compressedData.data(), compressedData.size() );
     }
@@ -103,7 +103,7 @@ namespace fheroes2
     {
         std::set<std::string, std::less<>> names;
 
-        for ( const auto & [name, offset] : _fileNameAndOffset ) {
+        for ( const auto & [name, info] : _fileNameVsInfo ) {
             names.insert( name );
         }
 
@@ -165,10 +165,8 @@ namespace fheroes2
 
     bool H2DWriter::add( H2DReader & reader )
     {
-        const std::set<std::string, std::less<>> names = reader.getAllFileNames();
-
-        for ( const std::string & name : names ) {
-            if ( !add( name, reader.getFile( name ) ) ) {
+        for ( const auto & entry : reader.getAllEntries() ) {
+            if ( !add( entry.first, reader.getFile( entry.first ), entry.second.info ) ) {
                 return false;
             }
         }
