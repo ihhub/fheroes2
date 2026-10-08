@@ -907,7 +907,7 @@ msgid "Dwarfbane"
 msgstr "Mataenanos"
 
 msgid "Dragon Alliance"
-msgstr "Alianza dragontina"
+msgstr "Alianza de dragones"
 
 msgid "Elven Alliance"
 msgstr "Alianza élfica"
