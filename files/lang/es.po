@@ -386,7 +386,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 msgid "Hero Screen"
-msgstr "Pantalla de héroe"
+msgstr "Pantalla del héroe"
 
 msgid "Captain's Options"
 msgstr "Opciones del capitán"
@@ -516,7 +516,7 @@ msgid "Allows you to customize the combat screen."
 msgstr "Te permite personalizar la pantalla de combate."
 
 msgid "System Options"
-msgstr "Opciones de sistema"
+msgstr "Opciones del sistema"
 
 msgid "Skip this unit"
 msgstr "Saltar el turno de esta unidad"
@@ -758,7 +758,7 @@ msgid "Grid"
 msgstr "Rejilla"
 
 msgid "Damage Info"
-msgstr "Info de daño"
+msgstr "Información del daño"
 
 msgid "Shadow Movement"
 msgstr "Sombra del movimiento"
@@ -4508,7 +4508,7 @@ msgstr ""
 "en el mapa."
 
 msgid "Detail Mode"
-msgstr "Modo detallado"
+msgstr "Modo de detalles"
 
 msgid "Used for moving or customizing objects."
 msgstr "Se utiliza para mover o personalizar objetos."
@@ -4550,7 +4550,7 @@ msgid "Road Mode"
 msgstr "Modo carretera"
 
 msgid "Erase Mode"
-msgstr "Modo borrado"
+msgstr "Modo de borrado"
 
 msgid "Used to erase objects from the map."
 msgstr "Se utiliza para borrar objetos del mapa."
