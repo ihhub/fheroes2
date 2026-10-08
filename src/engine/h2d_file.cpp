@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
+#include <utility>
 
 #include "image.h"
 #include "zzlib.h"
