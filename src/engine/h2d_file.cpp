@@ -166,8 +166,8 @@ namespace fheroes2
 
     bool H2DWriter::add( H2DReader & reader )
     {
-        for ( const auto & entry : reader.getAllEntries() ) {
-            if ( !add( entry.first, reader.getFile( entry.first ), entry.second.info ) ) {
+        for ( const auto & [name, info] : reader.getAllEntries() ) {
+            if ( !add( name, reader.getFile( name ), info.info ) ) {
                 return false;
             }
         }
