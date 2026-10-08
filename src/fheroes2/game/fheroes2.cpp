@@ -65,15 +65,24 @@ int main( int argc, char ** argv )
 #endif
 
     try {
+#if defined( __3DS__ )
+        Game::initLogging();
+        COUT( "3DS startup: early SD log ready" )
+#endif
         auto hardwareComponent = Game::createHardwareComponent();
 
+#if !defined( __3DS__ )
         Game::initLogging();
+#endif
         Game::initDataDir();
         Game::initConfigDir( argv[0] );
 
         auto coreComponent = Game::createCoreComponent();
         auto displayComponent = Game::createDisplayComponent();
         auto dataComponent = Game::createDataComponent();
+#if defined( __3DS__ )
+        COUT( "3DS startup: display and game resources ready" )
+#endif
         auto audioComponent = Game::createAudioComponent( dataComponent.get() );
 
         Game::initPalette();
@@ -84,6 +93,9 @@ int main( int argc, char ** argv )
 
         try {
             Game::runMainGameLoop();
+#if defined( __3DS__ )
+            COUT( "3DS normal game loop exit" )
+#endif
         }
         catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )

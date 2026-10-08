@@ -65,9 +65,35 @@
 #include "logging.h"
 #include "math_tools.h"
 #include "system.h"
+#if defined( __3DS__ )
+#include <3ds.h>
+
+#include <SDL_timer.h>
+
+#include "localevent.h"
+#endif
 
 namespace
 {
+    // newlib may define int32_t as long even though SDL's output parameters use int.
+    void getWindowPosition( SDL_Window * window, int32_t & x, int32_t & y )
+    {
+        int windowX = 0;
+        int windowY = 0;
+        SDL_GetWindowPosition( window, &windowX, &windowY );
+        x = windowX;
+        y = windowY;
+    }
+
+    void getWindowSize( SDL_Window * window, int32_t & width, int32_t & height )
+    {
+        int windowWidth = 0;
+        int windowHeight = 0;
+        SDL_GetWindowSize( window, &windowWidth, &windowHeight );
+        width = windowWidth;
+        height = windowHeight;
+    }
+
     // Returns nearest screen supported resolution
     fheroes2::ResolutionInfo GetNearestResolution( fheroes2::ResolutionInfo resolutionInfo, const std::vector<fheroes2::ResolutionInfo> & resolutions )
     {
@@ -263,6 +289,148 @@ namespace
     }
 
     const fheroes2::RGB * currentRGBPalette = RGBPalette();
+#if defined( __3DS__ )
+    class RenderEngine3DS final : public fheroes2::BaseRenderEngine
+    {
+    public:
+        ~RenderEngine3DS() override
+        {
+            clear();
+        }
+
+        bool isFullScreen() const override
+        {
+            return true;
+        }
+
+        void toggleFullScreen() override {}
+
+        std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
+        {
+            return { { 800, 480 } };
+        }
+
+        fheroes2::Rect getActiveWindowROI() const override
+        {
+            return { 0, 0, 800, 480 };
+        }
+
+        fheroes2::Size getCurrentScreenResolution() const override
+        {
+            return { 800, 480 };
+        }
+
+    private:
+        SDL_Window * _top = nullptr;
+        SDL_Window * _bottom = nullptr;
+        std::array<uint32_t, 256> _colors{};
+        bool _wide = false;
+
+        void clear() override
+        {
+            SDL_DestroyWindow( _bottom );
+            _bottom = nullptr;
+            SDL_DestroyWindow( _top );
+            _top = nullptr;
+        }
+
+        bool allocate( fheroes2::ResolutionInfo & resolution, const bool ) override
+        {
+            clear();
+            resolution = { 800, 480 };
+            _top = SDL_CreateWindow( "fheroes2", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), 400, 240, SDL_WINDOW_FULLSCREEN );
+            _bottom = SDL_CreateWindow( "fheroes2 detail", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), 320, 240, SDL_WINDOW_FULLSCREEN );
+            if ( _top == nullptr || _bottom == nullptr ) {
+                ERROR_LOG( SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            // Old 2DS has no wide mode. A failed model query also retains standard output.
+            _wide = false;
+            if ( R_SUCCEEDED( cfguInit() ) ) {
+                u8 model = 0xff;
+                _wide = R_SUCCEEDED( CFGU_GetSystemModel( &model ) ) && model <= CFG_MODEL_N2DSXL && model != CFG_MODEL_2DS;
+                cfguExit();
+            }
+            gfxSet3D( false );
+            gfxSetWide( _wide );
+            gfxSetScreenFormat( GFX_TOP, GSP_RGBA8_OES );
+            gfxSetScreenFormat( GFX_BOTTOM, GSP_RGBA8_OES );
+            updatePalette( StandardPaletteIndexes() );
+            DEBUG_LOG( DBG_ENGINE, DBG_INFO, "3DS display: 800x480 game frame, " << ( _wide ? "800x240" : "400x240" ) << " overview, 320x240 detail" )
+            return true;
+        }
+
+        bool isMouseCursorActive() const override
+        {
+            return true;
+        }
+
+        void updatePalette( const std::vector<uint8_t> & indexes ) override
+        {
+            if ( indexes.size() != _colors.size() ) {
+                return;
+            }
+            for ( size_t i = 0; i < indexes.size(); ++i ) {
+                const fheroes2::RGB & color = currentRGBPalette[indexes[i]];
+                _colors[i] = ( uint32_t( color.r ) << 24 ) | ( uint32_t( color.g ) << 16 ) | ( uint32_t( color.b ) << 8 ) | 255;
+            }
+        }
+
+        void render( const fheroes2::Display & display, const fheroes2::Rect & ) override
+        {
+            if ( _top == nullptr || display.empty() ) {
+                return;
+            }
+            const fheroes2::Point cursor = LocalEvent::Get().getMouseCursorPos();
+            const int32_t cropX = std::clamp<int32_t>( cursor.x - 160, 0, display.width() - 320 );
+            const int32_t cropY = std::clamp<int32_t>( cursor.y - 120, 0, display.height() - 240 );
+            auto * top = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_TOP, GFX_LEFT, nullptr, nullptr ) );
+            auto * bottom = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_BOTTOM, GFX_LEFT, nullptr, nullptr ) );
+            const uint8_t * image = display.image();
+            const int32_t width = display.width();
+            const int topWidth = _wide ? 800 : 400;
+            const int step = _wide ? 1 : 2;
+
+            // libctru stores contiguous framebuffer columns bottom-to-top.
+            // Wide-mode pixels are half as wide physically; only vertical downsampling is needed.
+            for ( int x = 0; x < topWidth; ++x ) {
+                uint32_t * output = top + x * 240;
+                for ( int y = 239; y >= 0; --y ) {
+                    *output++ = _colors[image[y * 2 * width + x * step]];
+                }
+            }
+            for ( int x = 0; x < 320; ++x ) {
+                uint32_t * output = bottom + x * 240;
+                for ( int y = 239; y >= 0; --y ) {
+                    *output++ = _colors[image[( cropY + y ) * width + cropX + x]];
+                }
+            }
+
+            const int left = cropX / step;
+            const int right = left + 320 / step - 1;
+            const int upper = cropY / 2;
+            const int lower = upper + 119;
+            constexpr uint32_t red = 0xff3030ff;
+            for ( int x = left; x <= right; ++x ) {
+                top[x * 240 + 239 - upper] = red;
+                top[x * 240 + 239 - lower] = red;
+            }
+            for ( int y = upper; y <= lower; ++y ) {
+                top[left * 240 + 239 - y] = red;
+                top[right * 240 + 239 - y] = red;
+                if ( _wide ) {
+                    top[( left + 1 ) * 240 + 239 - y] = red;
+                    top[( right - 1 ) * 240 + 239 - y] = red;
+                }
+            }
+            gfxFlushBuffers();
+            gfxSwapBuffers();
+            gspWaitForVBlank();
+        }
+    };
+#endif
 
 // If SDL library is used
 #if !defined( TARGET_PS_VITA )
@@ -590,6 +758,10 @@ namespace
 
         RenderCursor()
         {
+#if defined( __3DS__ )
+            forceSoftwareEmulation();
+            return;
+#endif
             _emulation = false;
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -879,14 +1051,14 @@ namespace
 #endif
 
                 // Update the window position, in case we get queried for it
-                SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
+                getWindowPosition( _window, _prevWindowPos.x, _prevWindowPos.y );
 
                 // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
                 // to full-screen mode, the in-game display area may not occupy the entire screen, and black bars will remain on the sides of the screen. In this
                 // case, even if it is specified to use the SDL_WINDOW_FULLSCREEN, the SDL_WINDOW_FULLSCREEN_DESKTOP will still be used under the hood. To avoid
                 // this, we need to remember the window size (to restore it later when turning off full-screen mode) and then set the window size to the size of
                 // the in-game display area before switching to the full-screen mode.
-                SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
+                getWindowSize( _window, _windowedSize.width, _windowedSize.height );
 
                 if ( const fheroes2::Display & display = fheroes2::Display::instance(); display.width() != 0 && display.height() != 0 ) {
                     assert( display.screenSize().width >= display.width() && display.screenSize().height >= display.height() );
@@ -1067,7 +1239,7 @@ namespace
                 return { -1, -1 };
             }
             fheroes2::Point result;
-            SDL_GetWindowPosition( _window, &result.x, &result.y );
+            getWindowPosition( _window, result.x, result.y );
             return result;
         }
 
@@ -1114,7 +1286,7 @@ namespace
             if ( _window != nullptr ) {
                 // Let's collect needed info about previous setup
                 if ( !isFullScreen() ) {
-                    SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
+                    getWindowPosition( _window, _prevWindowPos.x, _prevWindowPos.y );
                 }
                 _previousWindowTitle = System::encUTF8ToLocal( SDL_GetWindowTitle( _window ) );
 
@@ -1401,8 +1573,8 @@ namespace
             // On a Nintendo Switch the game is always fullscreen
             _activeWindowROI = { 0, 0, _currentScreenResolution.width, _currentScreenResolution.height };
 #else
-            SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
-            SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
+            getWindowPosition( _window, _activeWindowROI.x, _activeWindowROI.y );
+            getWindowSize( _window, _activeWindowROI.width, _activeWindowROI.height );
 #endif
 
             return true;
@@ -1453,7 +1625,11 @@ namespace fheroes2
     }
 
     Display::Display()
+#if defined( __3DS__ )
+        : _engine( new RenderEngine3DS )
+#else
         : _engine( RenderEngine::create() )
+#endif
         , _cursor( RenderCursor::create() )
     {
         _disableTransformLayer();

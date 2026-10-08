@@ -119,10 +119,17 @@ namespace
 
         if ( SDL_Init( sdlFlags ) < 0 ) {
             ERROR_LOG( SDL_GetError() )
+#if defined( __3DS__ )
+            SDL_Quit();
+            if ( SDL_Init( sdlFlags & ~SDL_INIT_AUDIO ) < 0 )
+                return false;
+            COUT( "3DS audio unavailable: continuing without audio" )
+#else
             return false;
+#endif
         }
 
-        if ( components.count( System::SystemInitializationComponent::Audio ) > 0 ) {
+        if ( components.count( System::SystemInitializationComponent::Audio ) > 0 && SDL_WasInit( SDL_INIT_AUDIO ) ) {
             Audio::Init();
         }
 
@@ -173,7 +180,7 @@ namespace System
     {
         std::set<SystemInitializationComponent> components{ SystemInitializationComponent::Audio, SystemInitializationComponent::Video };
 
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( __3DS__ )
         components.emplace( SystemInitializationComponent::GameController );
 #endif
 

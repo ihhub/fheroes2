@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2025                                             #
+#   Copyright (C) 2022 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -47,12 +47,16 @@ if(MACOS_APP_BUNDLE)
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../resources/Info.plist.in)
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING ${CMAKE_PROJECT_VERSION})
 else(MACOS_APP_BUNDLE)
-	cmake_path(
-		ABSOLUTE_PATH FHEROES2_DATA
-		BASE_DIRECTORY ${CMAKE_INSTALL_PREFIX}
-		NORMALIZE
-		OUTPUT_VARIABLE FHEROES2_DATA_ABSOLUTE
-		)
+	if(NINTENDO_3DS)
+		set(FHEROES2_DATA_ABSOLUTE "${FHEROES2_DATA}")
+	else()
+		cmake_path(
+			ABSOLUTE_PATH FHEROES2_DATA
+			BASE_DIRECTORY ${CMAKE_INSTALL_PREFIX}
+			NORMALIZE
+			OUTPUT_VARIABLE FHEROES2_DATA_ABSOLUTE
+			)
+	endif()
 
 	add_executable(
 		fheroes2
@@ -70,14 +74,15 @@ else(MACOS_APP_BUNDLE)
 		FHEROES2_DATA=${FHEROES2_DATA_ABSOLUTE}
 		)
 
-	# Copy executable to root of the project.
-	add_custom_command(
-		TARGET fheroes2 POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy
-		$<TARGET_FILE:fheroes2>
-		${PROJECT_SOURCE_DIR}/$<TARGET_FILE_NAME:fheroes2>
-		)
-
+	if(NOT NINTENDO_3DS)
+		# Copy executable to root of the project.
+		add_custom_command(
+			TARGET fheroes2 POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy
+			$<TARGET_FILE:fheroes2>
+			${PROJECT_SOURCE_DIR}/$<TARGET_FILE_NAME:fheroes2>
+			)
+	endif()
 	install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif(MACOS_APP_BUNDLE)
 

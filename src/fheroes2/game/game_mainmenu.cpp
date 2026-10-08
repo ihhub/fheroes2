@@ -122,11 +122,13 @@ namespace
 
 void Game::runMainGameLoop()
 {
+#if !defined( __3DS__ )
     fheroes2::showTeamInfo();
     for ( const char * logo : { "NWCLOGO.SMK", "CYLOGO.SMK", "H2XINTRO.SMK" } ) {
         Video::ShowVideo( { { logo, Video::VideoControl::PLAY_CUTSCENE } } );
     }
 
+#endif
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Point windowPosAtStartup{ Settings::Get().getSavedWindowPos() };
