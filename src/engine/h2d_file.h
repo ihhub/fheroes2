@@ -25,7 +25,6 @@
 #include <map>
 #include <set>
 #include <string>
-#include <string>
 #include <vector>
 
 #include "serialize.h"
