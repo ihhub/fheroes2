@@ -2974,7 +2974,7 @@ msgid "Set %{resource-type} Count"
 msgstr "Establecer cantidad de %{resource-type}"
 
 msgid "Select Recipients"
-msgstr "Selecciona destinatarios"
+msgstr "Seleccionar destinatarios"
 
 msgid "Your Funds"
 msgstr "Tus fondos"
@@ -3580,7 +3580,7 @@ msgid "Select Tree Object:"
 msgstr "Seleccionar el objeto de árbol:"
 
 msgid "Select Power Up Object:"
-msgstr "Seleccionar el objeto de potenciador"
+msgstr "Seleccionar el objeto de potenciador:"
 
 msgid "Select Adventure Object:"
 msgstr "Seleccionar el objeto de aventura:"
@@ -8885,7 +8885,7 @@ msgid "Show next hero"
 msgstr "Mostrar el siguiente héroe"
 
 msgid "Set army combat formation to 'Spread'"
-msgstr "Ordenar al ejército formación Desplegada."
+msgstr "Ordenar al ejército formación desplegada"
 
 msgid "Set army combat formation to 'Grouped'"
 msgstr "Ordenar al ejército formación agrupada"
