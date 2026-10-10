@@ -41,8 +41,8 @@ Stylus input is deliberately disabled until lower-viewport coordinate mapping is
 ## Review scope and follow-ups
 
 This change adds a standalone CMake entry point, newlib/SDL type compatibility, SD paths/logging,
-controller initialization and native framebuffer presentation. Intro playback is skipped on this target.
-If SDL audio initialization fails, startup retries without audio.
+controller initialization and native framebuffer presentation. Startup logging, intro playback and SDL audio initialization retain the existing game behavior.
+SDL initialization errors follow the existing startup failure path; no platform-specific retry is introduced.
 
 The separate development port has been run on a real New 3DS XL for matches, AI turns, battles and saving/loading.
 Those reports cover the broader port, not an independent hardware run of this reduced branch.

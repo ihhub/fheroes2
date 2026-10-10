@@ -119,17 +119,10 @@ namespace
 
         if ( SDL_Init( sdlFlags ) < 0 ) {
             ERROR_LOG( SDL_GetError() )
-#if defined( __3DS__ )
-            SDL_Quit();
-            if ( SDL_Init( sdlFlags & ~SDL_INIT_AUDIO ) < 0 )
-                return false;
-            COUT( "3DS audio unavailable: continuing without audio" )
-#else
             return false;
-#endif
         }
 
-        if ( components.count( System::SystemInitializationComponent::Audio ) > 0 && SDL_WasInit( SDL_INIT_AUDIO ) ) {
+        if ( components.count( System::SystemInitializationComponent::Audio ) > 0 ) {
             Audio::Init();
         }
 

@@ -47,6 +47,7 @@ if(MACOS_APP_BUNDLE)
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../resources/Info.plist.in)
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING ${CMAKE_PROJECT_VERSION})
 else(MACOS_APP_BUNDLE)
+	# sdmc:/ is a device path, not an absolute host path; cmake_path would prepend the install prefix.
 	if(NINTENDO_3DS)
 		set(FHEROES2_DATA_ABSOLUTE "${FHEROES2_DATA}")
 	else()

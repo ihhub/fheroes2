@@ -68,32 +68,10 @@
 #if defined( __3DS__ )
 #include <3ds.h>
 
-#include <SDL_timer.h>
-
-#include "localevent.h"
 #endif
 
 namespace
 {
-    // newlib may define int32_t as long even though SDL's output parameters use int.
-    void getWindowPosition( SDL_Window * window, int32_t & x, int32_t & y )
-    {
-        int windowX = 0;
-        int windowY = 0;
-        SDL_GetWindowPosition( window, &windowX, &windowY );
-        x = windowX;
-        y = windowY;
-    }
-
-    void getWindowSize( SDL_Window * window, int32_t & width, int32_t & height )
-    {
-        int windowWidth = 0;
-        int windowHeight = 0;
-        SDL_GetWindowSize( window, &windowWidth, &windowHeight );
-        width = windowWidth;
-        height = windowHeight;
-    }
-
     // Returns nearest screen supported resolution
     fheroes2::ResolutionInfo GetNearestResolution( fheroes2::ResolutionInfo resolutionInfo, const std::vector<fheroes2::ResolutionInfo> & resolutions )
     {
@@ -290,12 +268,20 @@ namespace
 
     const fheroes2::RGB * currentRGBPalette = RGBPalette();
 #if defined( __3DS__ )
-    class RenderEngine3DS final : public fheroes2::BaseRenderEngine
+    class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
-        ~RenderEngine3DS() override
+        RenderEngine( const RenderEngine & ) = delete;
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
         {
             clear();
+        }
+
+        static RenderEngine * create()
+        {
+            return new RenderEngine;
         }
 
         bool isFullScreen() const override
@@ -307,24 +293,42 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            return { { 800, 480 } };
+            return { { gameWidth, gameHeight } };
         }
 
         fheroes2::Rect getActiveWindowROI() const override
         {
-            return { 0, 0, 800, 480 };
+            return { 0, 0, gameWidth, gameHeight };
         }
 
         fheroes2::Size getCurrentScreenResolution() const override
         {
-            return { 800, 480 };
+            return { gameWidth, gameHeight };
+        }
+
+        void setViewportCenter( const fheroes2::Point center ) override
+        {
+            _viewportCenter = center;
         }
 
     private:
+        static constexpr int32_t gameWidth = 800;
+        static constexpr int32_t gameHeight = 480;
+        static constexpr int32_t overviewWidth = 400;
+        static constexpr int32_t screenHeight = 240;
+        static constexpr int32_t detailWidth = 320;
+        static constexpr int32_t verticalScale = gameHeight / screenHeight;
+        static constexpr int32_t standardHorizontalScale = gameWidth / overviewWidth;
+        static constexpr size_t paletteSize = 256;
+        static constexpr uint32_t cropBorderColor = 0xff3030ff;
+
         SDL_Window * _top = nullptr;
         SDL_Window * _bottom = nullptr;
-        std::array<uint32_t, 256> _colors{};
+        std::array<uint32_t, paletteSize> _colors{};
+        fheroes2::Point _viewportCenter;
         bool _wide = false;
+
+        RenderEngine() = default;
 
         void clear() override
         {
@@ -337,34 +341,46 @@ namespace
         bool allocate( fheroes2::ResolutionInfo & resolution, const bool ) override
         {
             clear();
-            resolution = { 800, 480 };
-            _top = SDL_CreateWindow( "fheroes2", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), 400, 240, SDL_WINDOW_FULLSCREEN );
-            _bottom = SDL_CreateWindow( "fheroes2 detail", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), 320, 240, SDL_WINDOW_FULLSCREEN );
+            resolution = { gameWidth, gameHeight };
+            _top = SDL_CreateWindow( "fheroes2", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), overviewWidth, screenHeight,
+                                     SDL_WINDOW_FULLSCREEN );
+            _bottom = SDL_CreateWindow( "fheroes2 detail", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), detailWidth, screenHeight,
+                                        SDL_WINDOW_FULLSCREEN );
             if ( _top == nullptr || _bottom == nullptr ) {
                 ERROR_LOG( SDL_GetError() )
                 clear();
                 return false;
             }
 
-            // Old 2DS has no wide mode. A failed model query also retains standard output.
+            // Old 2DS has no wide mode. Failure to identify the model also retains standard output.
             _wide = false;
-            if ( R_SUCCEEDED( cfguInit() ) ) {
-                u8 model = 0xff;
-                _wide = R_SUCCEEDED( CFGU_GetSystemModel( &model ) ) && model <= CFG_MODEL_N2DSXL && model != CFG_MODEL_2DS;
+            const Result initResult = cfguInit();
+            if ( R_SUCCEEDED( initResult ) ) {
+                u8 model = CFG_MODEL_2DS;
+                const Result modelResult = CFGU_GetSystemModel( &model );
                 cfguExit();
+                if ( R_SUCCEEDED( modelResult ) ) {
+                    _wide = model <= CFG_MODEL_N2DSXL && model != CFG_MODEL_2DS;
+                }
+                else {
+                    ERROR_LOG( "Failed to query 3DS model: " << modelResult << ". Using standard output." )
+                }
             }
+            else {
+                ERROR_LOG( "Failed to initialize 3DS model service: " << initResult << ". Using standard output." )
+            }
+            // These libctru configuration functions return void.
             gfxSet3D( false );
             gfxSetWide( _wide );
             gfxSetScreenFormat( GFX_TOP, GSP_RGBA8_OES );
             gfxSetScreenFormat( GFX_BOTTOM, GSP_RGBA8_OES );
             updatePalette( StandardPaletteIndexes() );
-            DEBUG_LOG( DBG_ENGINE, DBG_INFO, "3DS display: 800x480 game frame, " << ( _wide ? "800x240" : "400x240" ) << " overview, 320x240 detail" )
             return true;
         }
 
         bool isMouseCursorActive() const override
         {
-            return true;
+            return _top != nullptr && _bottom != nullptr;
         }
 
         void updatePalette( const std::vector<uint8_t> & indexes ) override
@@ -380,51 +396,68 @@ namespace
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & ) override
         {
-            if ( _top == nullptr || display.empty() ) {
+            if ( _top == nullptr || _bottom == nullptr || display.width() != gameWidth || display.height() != gameHeight ) {
                 return;
             }
-            const fheroes2::Point cursor = LocalEvent::Get().getMouseCursorPos();
-            const int32_t cropX = std::clamp<int32_t>( cursor.x - 160, 0, display.width() - 320 );
-            const int32_t cropY = std::clamp<int32_t>( cursor.y - 120, 0, display.height() - 240 );
-            auto * top = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_TOP, GFX_LEFT, nullptr, nullptr ) );
-            auto * bottom = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_BOTTOM, GFX_LEFT, nullptr, nullptr ) );
+            const int32_t cropX = std::clamp<int32_t>( _viewportCenter.x - detailWidth / 2, 0, gameWidth - detailWidth );
+            const int32_t cropY = std::clamp<int32_t>( _viewportCenter.y - screenHeight / 2, 0, gameHeight - screenHeight );
+            u16 topHeight = 0;
+            u16 topWidth = 0;
+            u16 bottomHeight = 0;
+            u16 bottomWidth = 0;
+            auto * top = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_TOP, GFX_LEFT, &topHeight, &topWidth ) );
+            auto * bottom = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_BOTTOM, GFX_LEFT, &bottomHeight, &bottomWidth ) );
             const uint8_t * image = display.image();
-            const int32_t width = display.width();
-            const int topWidth = _wide ? 800 : 400;
-            const int step = _wide ? 1 : 2;
+            const int32_t outputWidth = _wide ? gameWidth : overviewWidth;
+            if ( top == nullptr || bottom == nullptr || image == nullptr || topHeight != screenHeight || topWidth != outputWidth || bottomHeight != screenHeight
+                 || bottomWidth != detailWidth ) {
+                ERROR_LOG( "Invalid 3DS framebuffer pointer or dimensions." )
+                return;
+            }
+            const int32_t horizontalScale = _wide ? 1 : standardHorizontalScale;
+            constexpr int32_t lastScreenRow = screenHeight - 1;
+            constexpr int32_t scaledDetailHeight = screenHeight / verticalScale;
+            constexpr int32_t sourceRowStride = verticalScale * gameWidth;
 
             // libctru stores contiguous framebuffer columns bottom-to-top.
             // Wide-mode pixels are half as wide physically; only vertical downsampling is needed.
-            for ( int x = 0; x < topWidth; ++x ) {
-                uint32_t * output = top + x * 240;
-                for ( int y = 239; y >= 0; --y ) {
-                    *output++ = _colors[image[y * 2 * width + x * step]];
+            for ( int32_t x = 0; x < outputWidth; ++x ) {
+                uint32_t * output = top + x * screenHeight;
+                for ( int32_t y = lastScreenRow; y >= 0; --y ) {
+                    *output++ = _colors[image[y * sourceRowStride + x * horizontalScale]];
                 }
             }
-            for ( int x = 0; x < 320; ++x ) {
-                uint32_t * output = bottom + x * 240;
-                for ( int y = 239; y >= 0; --y ) {
-                    *output++ = _colors[image[( cropY + y ) * width + cropX + x]];
+            for ( int32_t x = 0; x < detailWidth; ++x ) {
+                uint32_t * output = bottom + x * screenHeight;
+                for ( int32_t y = lastScreenRow; y >= 0; --y ) {
+                    *output++ = _colors[image[( cropY + y ) * gameWidth + cropX + x]];
                 }
             }
 
-            const int left = cropX / step;
-            const int right = left + 320 / step - 1;
-            const int upper = cropY / 2;
-            const int lower = upper + 119;
-            constexpr uint32_t red = 0xff3030ff;
-            for ( int x = left; x <= right; ++x ) {
-                top[x * 240 + 239 - upper] = red;
-                top[x * 240 + 239 - lower] = red;
+            const int32_t left = cropX / horizontalScale;
+            const int32_t right = left + detailWidth / horizontalScale - 1;
+            const int32_t upper = cropY / verticalScale;
+            const int32_t lower = upper + scaledDetailHeight - 1;
+            const int32_t upperRow = lastScreenRow - upper;
+            const int32_t lowerRow = lastScreenRow - lower;
+            for ( int32_t x = left; x <= right; ++x ) {
+                uint32_t * column = top + x * screenHeight;
+                column[upperRow] = cropBorderColor;
+                column[lowerRow] = cropBorderColor;
             }
-            for ( int y = upper; y <= lower; ++y ) {
-                top[left * 240 + 239 - y] = red;
-                top[right * 240 + 239 - y] = red;
+            uint32_t * leftColumn = top + left * screenHeight;
+            uint32_t * rightColumn = top + right * screenHeight;
+            for ( int32_t y = upper; y <= lower; ++y ) {
+                const int32_t row = lastScreenRow - y;
+                leftColumn[row] = cropBorderColor;
+                rightColumn[row] = cropBorderColor;
                 if ( _wide ) {
-                    top[( left + 1 ) * 240 + 239 - y] = red;
-                    top[( right - 1 ) * 240 + 239 - y] = red;
+                    // Two wide-mode pixels have the physical width of one standard-mode pixel.
+                    leftColumn[screenHeight + row] = cropBorderColor;
+                    rightColumn[row - screenHeight] = cropBorderColor;
                 }
             }
+            // Buffer flush/swap and the VBlank wait return void in libctru.
             gfxFlushBuffers();
             gfxSwapBuffers();
             gspWaitForVBlank();
@@ -758,10 +791,6 @@ namespace
 
         RenderCursor()
         {
-#if defined( __3DS__ )
-            forceSoftwareEmulation();
-            return;
-#endif
             _emulation = false;
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -983,7 +1012,7 @@ namespace
             }
         }
     };
-#else
+#elif !defined( __3DS__ )
     bool shouldUseFullscreenDesktopMode()
     {
         return fheroes2::cursor().isSoftwareEmulation();
@@ -1051,14 +1080,14 @@ namespace
 #endif
 
                 // Update the window position, in case we get queried for it
-                getWindowPosition( _window, _prevWindowPos.x, _prevWindowPos.y );
+                SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
 
                 // If the window size has been manually changed to one that does not match any of the resolutions supported by the display, then after switching
                 // to full-screen mode, the in-game display area may not occupy the entire screen, and black bars will remain on the sides of the screen. In this
                 // case, even if it is specified to use the SDL_WINDOW_FULLSCREEN, the SDL_WINDOW_FULLSCREEN_DESKTOP will still be used under the hood. To avoid
                 // this, we need to remember the window size (to restore it later when turning off full-screen mode) and then set the window size to the size of
                 // the in-game display area before switching to the full-screen mode.
-                getWindowSize( _window, _windowedSize.width, _windowedSize.height );
+                SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
 
                 if ( const fheroes2::Display & display = fheroes2::Display::instance(); display.width() != 0 && display.height() != 0 ) {
                     assert( display.screenSize().width >= display.width() && display.screenSize().height >= display.height() );
@@ -1239,7 +1268,7 @@ namespace
                 return { -1, -1 };
             }
             fheroes2::Point result;
-            getWindowPosition( _window, result.x, result.y );
+            SDL_GetWindowPosition( _window, &result.x, &result.y );
             return result;
         }
 
@@ -1286,7 +1315,7 @@ namespace
             if ( _window != nullptr ) {
                 // Let's collect needed info about previous setup
                 if ( !isFullScreen() ) {
-                    getWindowPosition( _window, _prevWindowPos.x, _prevWindowPos.y );
+                    SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
                 }
                 _previousWindowTitle = System::encUTF8ToLocal( SDL_GetWindowTitle( _window ) );
 
@@ -1573,8 +1602,8 @@ namespace
             // On a Nintendo Switch the game is always fullscreen
             _activeWindowROI = { 0, 0, _currentScreenResolution.width, _currentScreenResolution.height };
 #else
-            getWindowPosition( _window, _activeWindowROI.x, _activeWindowROI.y );
-            getWindowSize( _window, _activeWindowROI.width, _activeWindowROI.height );
+            SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
+            SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
 #endif
 
             return true;
@@ -1625,11 +1654,7 @@ namespace fheroes2
     }
 
     Display::Display()
-#if defined( __3DS__ )
-        : _engine( new RenderEngine3DS )
-#else
         : _engine( RenderEngine::create() )
-#endif
         , _cursor( RenderCursor::create() )
     {
         _disableTransformLayer();
