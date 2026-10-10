@@ -100,6 +100,9 @@ fheroes2::Rect Cursor::updateCursorPosition( const int32_t x, const int32_t y )
 void Cursor::Move( int32_t x, int32_t y ) const
 {
     fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y );
+#if defined( __3DS__ )
+    fheroes2::engine().setViewportCenter( { x, y } );
+#endif
 }
 
 void Cursor::SetOffset( const int name, const fheroes2::Point & defaultOffset )
