@@ -5197,9 +5197,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Лесна"
 
@@ -5544,6 +5541,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
+msgid "%{color} player"
+msgstr "%{color} играч"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5554,7 +5554,16 @@ msgstr "Файл за запазване:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5565,15 +5574,34 @@ msgstr "Анексирам"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Анексирам"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Това ти позволява да промениш класа на играч. Класовете не винаги могат да "
+"се променят. В зависимост от сценария, играчът може да получи допълнителни "
+"градове и/или герои, които не са от основното им подреждане."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Кликни, за да се върнеш към главното меню."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Превключи изтриването на %{type} обекти."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6808,6 +6836,9 @@ msgid ""
 msgstr ""
 "%{color} играч, теоите герои те изоставят и ти си прогонени от тази земя."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr "Лорд Килбърн"
 
@@ -7019,15 +7050,6 @@ msgstr ""
 "Конкретен цвят винаги ще започва от определено място. Някои позиции могат да "
 "се играят само от компютърен играч или само от човешки играч."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Това ти позволява да промениш класа на играч. Класовете не винаги могат да "
-"се променят. В зависимост от сценария, играчът може да получи допълнителни "
-"градове и/или герои, които не са от основното им подреждане."
-
 msgid "Handicap"
 msgstr "Недъг"
 
@@ -7043,9 +7065,6 @@ msgstr ""
 "да бъдат инвалиди. Играчите с увреждания започват с по-малко ресурси и "
 "печелят съответно 15 или 30% по-малко ресурси на ход за леки и тежки "
 "увреждания."
-
-msgid "%{color} player"
-msgstr "%{color} играч"
 
 msgid "No Handicap"
 msgstr "Без недъг"

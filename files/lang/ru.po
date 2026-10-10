@@ -4985,9 +4985,6 @@ msgstr "В вознаграждении не будет выдаваться а�
 msgid "Delete an artifact from the reward."
 msgstr "Удалить артефакт из вознаграждения."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "День: %{day} Неделя: %{week} Месяц: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Простая"
 
@@ -5339,6 +5336,9 @@ msgstr " превышений заданного ограничения врем
 msgid "Click to close the dialog."
 msgstr "Нажмите, чтобы закрыть диалоговое окно."
 
+msgid "%{color} player"
+msgstr "%{color} игрок"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr "Выиграл %{percent}% прогонов."
 
@@ -5349,7 +5349,18 @@ msgstr ""
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Количество прогонов:"
 
+#, fuzzy
+msgid "Set the number of playthroughs."
+msgstr "Количество прогонов:"
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr "Максимум дней на прогон:"
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Максимум дней на прогон:"
 
 msgid "autoPlaytest|Animation"
@@ -5358,16 +5369,36 @@ msgstr "Анимация"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Скорость анимации:"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr "Звуковые эффекты"
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr "Нажатие левой кнопки мыши в любой момент прервёт тестирование карты."
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Эта опция позволяет Вам задавать класс игрока. Классы не всегда можно "
+"изменять. В зависимости от сценария игрок может получать дополнительные "
+"города и/или героев, направленность которых изначально не совпадает с "
+"направленностью игрока."
+
 msgid "Click to run an automated map playtest."
 msgstr ""
 "Нажмите, чтобы запустить автоматическое тестирование игрового процесса на "
 "карте."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Включить или выключить анимацию объектов."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6587,6 +6618,9 @@ msgstr ""
 "%{color} игрок, Ваши герои отвернулись от Вас, а Вы изгоняетесь из этих "
 "земель."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "День: %{day} Неделя: %{week} Месяц: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Лорд Килбурн"
 
@@ -6794,16 +6828,6 @@ msgstr ""
 "цвету соответствует определённая стартовая позиция. Некоторые цвета жёстко "
 "закреплены либо за компьютерными, либо за живыми игроками."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Эта опция позволяет Вам задавать класс игрока. Классы не всегда можно "
-"изменять. В зависимости от сценария игрок может получать дополнительные "
-"города и/или героев, направленность которых изначально не совпадает с "
-"направленностью игрока."
-
 msgid "Handicap"
 msgstr "Фора"
 
@@ -6816,9 +6840,6 @@ msgstr ""
 "Эта опция позволяет любому игроку-человеку дать фору другим игрокам. Если "
 "игрок даёт другим фору, он начинает игру с меньшим количеством ресурсов и "
 "каждый ход получает на 15 или 30% меньше ресурсов, в зависимости от его форы."
-
-msgid "%{color} player"
-msgstr "%{color} игрок"
 
 msgid "No Handicap"
 msgstr "Нет форы"

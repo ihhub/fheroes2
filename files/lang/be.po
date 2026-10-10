@@ -4961,9 +4961,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr "Выдаліць артэфакт з узнагароды."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "(за %{month} мес, %{week} тыд і %{day} сут)"
-
 msgid "difficulty|Easy"
 msgstr "Лёгкая"
 
@@ -5334,6 +5331,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Націсніце, каб захаваць чуткі."
 
+msgid "%{color} player"
+msgstr "%{color} гулец"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5343,7 +5343,16 @@ msgstr ""
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5354,15 +5363,33 @@ msgstr "Анімацыя"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Анімацыя"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Дазваляе выбраць клас (фракцыю) гульца. Класы не заўсёды можна змяняць. У "
+"залежнасці ад сцэнара, гулец можа атрымліваць дадатковыя гарады і (або) "
+"герояў, фракцыя якіх не супадае з фракцыяй, за якую ён пачынае гульню."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Націсніце, каб вярнуцца ў галоўнае меню."
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6584,6 +6611,9 @@ msgid ""
 msgstr ""
 "%{color} гулец, вашы героі пакінулі вас, а вы выпраўляецеся ў выгнанне."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "(за %{month} мес, %{week} тыд і %{day} сут)"
+
 msgid "Lord Kilburn"
 msgstr "Валадар Кілбарн"
 
@@ -6794,15 +6824,6 @@ msgstr ""
 "гульню ў строга вызначаным месцы. За некаторых апанентаў могуць гуляць "
 "толькі камп’ютар або толькі гульцы-людзі."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Дазваляе выбраць клас (фракцыю) гульца. Класы не заўсёды можна змяняць. У "
-"залежнасці ад сцэнара, гулец можа атрымліваць дадатковыя гарады і (або) "
-"герояў, фракцыя якіх не супадае з фракцыяй, за якую ён пачынае гульню."
-
 msgid "Handicap"
 msgstr "Фора"
 
@@ -6815,9 +6836,6 @@ msgstr ""
 "Дазваляе чалавеку-гульцу даць фору іншым гульцам. Калі гулец дае фору, ён "
 "пачынае гульню з меншай колькасцю рэсурсаў і штоход атрымлівае на 15% (пры "
 "невялікай форы) або 30% (пры вялікай) менш рэсурсаў."
-
-msgid "%{color} player"
-msgstr "%{color} гулец"
 
 msgid "No Handicap"
 msgstr "Без форы"

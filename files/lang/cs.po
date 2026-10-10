@@ -4913,9 +4913,6 @@ msgstr "Žádný artefakt nebude udělen jako odměna."
 msgid "Delete an artifact from the reward."
 msgstr "Smazat artefakt z odměny."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "Den: %{day} týden: %{week} měsíc: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Lehká"
 
@@ -5265,6 +5262,9 @@ msgstr " průchod(ů) dosáhlo uvedeného časového limitu"
 msgid "Click to close the dialog."
 msgstr "Kliknutím zavřeš dialog."
 
+msgid "%{color} player"
+msgstr "%{color} hráč"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr "Výhra v %{percent}% průchodů."
 
@@ -5274,7 +5274,18 @@ msgstr "Příprava mapy pro automatické odehrání se nezdařila."
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Počet průchodů:"
 
+#, fuzzy
+msgid "Set the number of playthroughs."
+msgstr "Počet průchodů:"
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr "Maximum dní na průchod:"
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Maximum dní na průchod:"
 
 msgid "autoPlaytest|Animation"
@@ -5283,14 +5294,33 @@ msgstr "Animace"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Rychlost animací:"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr "Zvukové efekty"
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr "Kliknutím levým tlačítkem kdykoliv přerušíš simulaci."
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Umožňuje změnit rod hráče. Rody nejdou vždy měnit. V závislosti na scénáři "
+"může hráč získat další města a nebo hrdiny, kteří nepatří k jeho výchozímu "
+"zařazení."
+
 msgid "Click to run an automated map playtest."
 msgstr "Klikni pro spuštění automatického odehrání mapy."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Přepnout animaci objektů."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6493,6 +6523,9 @@ msgid ""
 msgstr ""
 "%{color} hráči, tvoji hrdinové tě opustili a byl jsi vyhnán z této země."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "Den: %{day} týden: %{week} měsíc: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6693,15 +6726,6 @@ msgstr ""
 "začínat na určitém místě. Některé pozice může hrát pouze počítačový hráč "
 "nebo pouze lidský hráč."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Umožňuje změnit rod hráče. Rody nejdou vždy měnit. V závislosti na scénáři "
-"může hráč získat další města a nebo hrdiny, kteří nepatří k jeho výchozímu "
-"zařazení."
-
 msgid "Handicap"
 msgstr "Postih"
 
@@ -6714,9 +6738,6 @@ msgstr ""
 "Toto umožňuje změnit postih konkrétního hráče. Postih může mít pouze člověk. "
 "Hráči s postihem začínají s méně surovinami a získávají o 15 % nebo 30 % "
 "méně surovin na tah, v závislosti na mírném nebo těžkém postihu."
-
-msgid "%{color} player"
-msgstr "%{color} hráč"
 
 msgid "No Handicap"
 msgstr "Bez postihu"

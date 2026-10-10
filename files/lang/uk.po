@@ -4949,9 +4949,6 @@ msgstr "Жоден артефакт не буде виданий у якості
 msgid "Delete an artifact from the reward."
 msgstr "Видалити артефакт з винагороди."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "День: %{day} Тиждень: %{week} Місяць: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Проста"
 
@@ -5313,6 +5310,9 @@ msgstr " кількість проходжень досягла встановл
 msgid "Click to close the dialog."
 msgstr "Тицьніть, щоб закрити діалог."
 
+msgid "%{color} player"
+msgstr "%{color} гравець"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr "Виграв %{percent}% проходжень гри."
 
@@ -5322,7 +5322,18 @@ msgstr "Не вдалося підготувати мапу для автома�
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Кількість проходжень:"
 
+#, fuzzy
+msgid "Set the number of playthroughs."
+msgstr "Кількість проходжень:"
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr "Максимальна кількість днів на одне проходження:"
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Максимальна кількість днів на одне проходження:"
 
 msgid "autoPlaytest|Animation"
@@ -5331,6 +5342,9 @@ msgstr "Анімація"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Швидкість анімації:"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr "Звукові ефекти"
 
@@ -5338,8 +5352,24 @@ msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 "Тицьнувши лівою кнопкою миші в будь-якому місці, перерветься тестування."
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Це дозволяє вам змінювати клас гравця. Класи не завжди можна змінити. "
+"Залежно від сценарію, гравець може отримати додаткові міста та/або героїв не "
+"свого класу."
+
 msgid "Click to run an automated map playtest."
 msgstr "Тицьніть, щоб запустити автоматичне тестування мапи."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Анімації об'єктів умівк/вимк."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6575,6 +6605,9 @@ msgstr ""
 "%{color} гравцю, ваші герої покидають вас, а вас самих проганяють з цієї "
 "землі."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "День: %{day} Тиждень: %{week} Місяць: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Лорд Кілбурн"
 
@@ -6780,15 +6813,6 @@ msgstr ""
 "завжди починатиметься в певному місці. На деяких позиціях може грати тільки "
 "комп'ютерний гравець або тільки гравець людина."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Це дозволяє вам змінювати клас гравця. Класи не завжди можна змінити. "
-"Залежно від сценарію, гравець може отримати додаткові міста та/або героїв не "
-"свого класу."
-
 msgid "Handicap"
 msgstr "Обмеження"
 
@@ -6803,9 +6827,6 @@ msgstr ""
 "мати лише гравці-люди. Гравці з обмеженнями починають з меншою кількістю "
 "ресурсів і заробляють на 15 або 30% менше ресурсів за хід для легких і "
 "важких обмежень відповідно."
-
-msgid "%{color} player"
-msgstr "%{color} гравець"
 
 msgid "No Handicap"
 msgstr "Без обмежень"
