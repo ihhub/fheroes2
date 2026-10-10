@@ -273,7 +273,7 @@ msgstr ""
 "juego."
 
 msgid "Hot Keys"
-msgstr "Atajos de Teclado"
+msgstr "Atajos de teclado"
 
 msgid "Exit this menu."
 msgstr "Salir de este menú."
@@ -374,7 +374,7 @@ msgid "Spell Points"
 msgstr "Maná"
 
 msgid "Cast Spell"
-msgstr "Lanzar Hechizo"
+msgstr "Lanzar hechizo"
 
 msgid "Retreat"
 msgstr "Retirarse"
@@ -386,13 +386,13 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 msgid "Hero Screen"
-msgstr "Pantalla de Héroe"
+msgstr "Pantalla del héroe"
 
 msgid "Captain's Options"
 msgstr "Opciones del capitán"
 
 msgid "Hero's Options"
-msgstr "Opciones del Héroe"
+msgstr "Opciones del héroe"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -500,7 +500,7 @@ msgid "Automatic combat modes"
 msgstr "Modos de combate automático"
 
 msgid "Automatic Combat Modes"
-msgstr "Modos de Combate Automático"
+msgstr "Modos de combate automático"
 
 msgid ""
 "Choose between proceeding the combat in auto combat mode or in quick combat "
@@ -516,7 +516,7 @@ msgid "Allows you to customize the combat screen."
 msgstr "Te permite personalizar la pantalla de combate."
 
 msgid "System Options"
-msgstr "Opciones de Sistema"
+msgstr "Opciones del sistema"
 
 msgid "Skip this unit"
 msgstr "Saltar el turno de esta unidad"
@@ -532,16 +532,16 @@ msgstr ""
 "volver a jugar hasta la siguiente ronda."
 
 msgid "View Captain's options"
-msgstr "Ver opciones de Capitán"
+msgstr "Ver opciones del capitán"
 
 msgid "View Hero's options"
 msgstr "Ver opciones del héroe"
 
 msgid "View opposing Captain"
-msgstr "Ver Capitán del oponente"
+msgstr "Ver capitán del oponente"
 
 msgid "View opposing Hero"
-msgstr "Ver Héroe del oponente"
+msgstr "Ver héroe del oponente"
 
 msgid "Hide logs"
 msgstr "Ocultar registro"
@@ -582,7 +582,7 @@ msgstr ""
 "izquierdo o derecho en cualquier parte de la pantalla del juego."
 
 msgid "Auto Combat"
-msgstr "Combate Automático"
+msgstr "Combate automático"
 
 msgid "The combat is resolved from the current state."
 msgstr "El combate se resuelve desde el estado actual."
@@ -591,7 +591,7 @@ msgid "quickCombat|This cannot be undone."
 msgstr "Esto no se puede deshacer."
 
 msgid "Quick Combat"
-msgstr "Combate Rápido"
+msgstr "Combate rápido"
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
@@ -758,7 +758,7 @@ msgid "Grid"
 msgstr "Rejilla"
 
 msgid "Damage Info"
-msgstr "Info de Daño"
+msgstr "Información del daño"
 
 msgid "Shadow Movement"
 msgstr "Sombra del movimiento"
@@ -898,7 +898,7 @@ msgid "Sorceress Guild"
 msgstr "Gremio de hechiceras"
 
 msgid "Necromancer Guild"
-msgstr "Gremio de Nigromantes"
+msgstr "Gremio de nigromantes"
 
 msgid "Ogre Alliance"
 msgstr "Alianza de ogros"
@@ -907,16 +907,16 @@ msgid "Dwarfbane"
 msgstr "Mataenanos"
 
 msgid "Dragon Alliance"
-msgstr "Alianza Dragontina"
+msgstr "Alianza de dragones"
 
 msgid "Elven Alliance"
-msgstr "Alianza Élfica"
+msgstr "Alianza élfica"
 
 msgid "Kraeger defeated"
 msgstr "Kraeger derrotado"
 
 msgid "Wayward Son"
-msgstr "Hijo Descarriado"
+msgstr "Hijo descarriado"
 
 msgid "Uncle Ivan"
 msgstr "Tío Iván"
@@ -925,16 +925,16 @@ msgid "Annexation"
 msgstr "Anexión"
 
 msgid "Force of Arms"
-msgstr "Fuerza de las Armas"
+msgstr "Fuerza de las armas"
 
 msgid "Save the Dwarves"
-msgstr "Salva a los Enanos"
+msgstr "Salva a los enanos"
 
 msgid "Carator Mines"
 msgstr "Minas de Carator"
 
 msgid "Turning Point"
-msgstr "Momento Crucial"
+msgstr "Momento crucial"
 
 msgid "scenarioName|Defender"
 msgstr "Defensor"
@@ -943,16 +943,16 @@ msgid "Corlagon's Defense"
 msgstr "Defensa de Corlagon"
 
 msgid "The Crown"
-msgstr "La Corona"
+msgstr "La corona"
 
 msgid "The Gauntlet"
-msgstr "El Guantelete"
+msgstr "El guantelete"
 
 msgid "Betrayal"
 msgstr "Traición"
 
 msgid "Final Justice"
-msgstr "Justicia Final"
+msgstr "Justicia final"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -1057,22 +1057,22 @@ msgstr ""
 "guerra... traidor."
 
 msgid "Barbarian Wars"
-msgstr "Guerras Bárbaras"
+msgstr "Guerras bárbaras"
 
 msgid "First Blood"
-msgstr "Primera Sangre"
+msgstr "Primera sangre"
 
 msgid "Necromancers"
 msgstr "Nigromantes"
 
 msgid "Slay the Dwarves"
-msgstr "Da muerte a los Enanos"
+msgstr "Da muerte a los enanos"
 
 msgid "Country Lords"
 msgstr "Señores del país"
 
 msgid "Dragon Master"
-msgstr "Maestro Dragón"
+msgstr "Maestro dragón"
 
 msgid "Rebellion"
 msgstr "Rebelión"
@@ -1081,7 +1081,7 @@ msgid "Apocalypse"
 msgstr "Apocalipsis"
 
 msgid "Greater Glory"
-msgstr "Gloria Mayor"
+msgstr "Gloria mayor"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region. They "
@@ -1177,7 +1177,7 @@ msgid "Arrow's Flight"
 msgstr "El vuelo de la flecha"
 
 msgid "Island of Chaos"
-msgstr "Isla del Caos"
+msgstr "Isla del caos"
 
 msgid "The Abyss"
 msgstr "El abismo"
@@ -1270,10 +1270,10 @@ msgid "Crazy Uncle Ivan"
 msgstr "Loco tío Iván"
 
 msgid "The Wayward Son"
-msgstr "El Hijo Descarriado"
+msgstr "El hijo descarriado"
 
 msgid "Ivory Gates"
-msgstr "Puertas de Marfil"
+msgstr "Puertas de marfil"
 
 msgid "The Elven Lands"
 msgstr "Las tierras élficas"
@@ -1351,10 +1351,10 @@ msgid "Power's End"
 msgstr "El fin del poder"
 
 msgid "The Eternal Scrolls"
-msgstr "Los Pergaminos Eternos"
+msgstr "Los pergaminos eternos"
 
 msgid "The Shrouded Isles"
-msgstr "Las Islas Veladas"
+msgstr "Las islas veladas"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
@@ -1390,10 +1390,10 @@ msgstr ""
 "hechicería. Hazlo y tu victoria será suprema."
 
 msgid "Blood is Thicker"
-msgstr "La Sangre es Espesa"
+msgstr "La sangre es espesa"
 
 msgid "King and Country"
-msgstr "Rey y Patria"
+msgstr "Rey y patria"
 
 msgid "Pirate Isles"
 msgstr "Islas de los piratas"
@@ -1591,10 +1591,10 @@ msgid "campaignBonus|Major Scroll"
 msgstr "Pergamino mayor"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "La Medalla de honor"
+msgstr "Medalla al honor"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr "La Medalla de valor"
+msgstr "Medalla al valor"
 
 msgid "campaignBonus|Minor Scroll"
 msgstr "Pergamino menor"
@@ -1624,13 +1624,13 @@ msgid "campaignBonus|White Pearl"
 msgstr "Perla blanca"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "Arquería básica"
+msgstr "Tiro con arco básico"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr "Arquería avanzada"
+msgstr "Tiro con arco avanzado"
 
 msgid "campaignBonus|Expert Archery"
-msgstr "Arquería Experta"
+msgstr "Tiro con arco experto"
 
 msgid "campaignBonus|Basic Ballistics"
 msgstr "Balística básica"
@@ -1798,13 +1798,13 @@ msgid "Archibald"
 msgstr "Archibald"
 
 msgid "Price of Loyalty"
-msgstr "El Precio de la Lealtad"
+msgstr "El precio de la lealtad"
 
 msgid "Voyage Home"
-msgstr "Viaje a Casa"
+msgstr "Viaje a casa"
 
 msgid "Wizard's Isle"
-msgstr "Isla del Mago"
+msgstr "Isla del mago"
 
 msgid "Descendants"
 msgstr "Descendientes"
@@ -2539,7 +2539,7 @@ msgid "Exit Town"
 msgstr "Salir de la ciudad"
 
 msgid "Show Income"
-msgstr "Mostrar Ingresos"
+msgstr "Mostrar ingresos"
 
 msgid "Show previous town"
 msgstr "Ver ciudad anterior"
@@ -2548,7 +2548,7 @@ msgid "Show next town"
 msgstr "Ver ciudad siguiente"
 
 msgid "View Hero"
-msgstr "Ver Héroe"
+msgstr "Ver héroe"
 
 msgid "Click to show the next town."
 msgstr "Haga clic para ver la siguiente ciudad."
@@ -2575,7 +2575,7 @@ msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Una generosa propina para el camarero te cede el siguiente rumor:"
 
 msgid "Recruit Hero"
-msgstr "Reclutar Héroe"
+msgstr "Reclutar héroe"
 
 msgid "%{name} is a level %{value} %{race} "
 msgstr "%{name} es un nivel %{value} %{race} "
@@ -2617,13 +2617,13 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr "Establece la formación de combate de la guarnición en 'Agrupada'"
 
 msgid "Exit Castle Options"
-msgstr "Salir de las Opciones del Castillo"
+msgstr "Salir de las opciones del castillo"
 
 msgid "Spread Formation"
-msgstr "Formación Desplegada"
+msgstr "Formación desplegada"
 
 msgid "Grouped Formation"
-msgstr "Formación Agrupada"
+msgstr "Formación agrupada"
 
 msgid "Not enough resources to recruit creatures."
 msgstr "No hay suficientes recursos para reclutar criaturas."
@@ -2635,7 +2635,7 @@ msgid "No creatures available for purchase."
 msgstr "No hay criaturas disponibles para comprar."
 
 msgid "Recruit Creatures"
-msgstr "Reclutar Criaturas"
+msgstr "Reclutar criaturas"
 
 msgid "Hire all creatures in the town."
 msgstr "Recluta a todas las criaturas de la ciudad."
@@ -2716,7 +2716,7 @@ msgid "Hit Points"
 msgstr "Pts. de Vida"
 
 msgid "Hit Points Left"
-msgstr "Vida Restante"
+msgstr "Vida restante"
 
 msgid "You can't afford to upgrade your troops!"
 msgstr "¡No puedes permitirte mejorar tus tropas!"
@@ -2810,7 +2810,7 @@ msgid "External"
 msgstr "Externa"
 
 msgid "Music Type"
-msgstr "Tipo de Música"
+msgstr "Tipo de música"
 
 msgid "3D Audio"
 msgstr "Sonido 3D"
@@ -2846,13 +2846,13 @@ msgid "There was an issue during saving."
 msgstr "Hubo un problema durante el guardado."
 
 msgid "New Game"
-msgstr "Nueva Partida"
+msgstr "Nueva partida"
 
 msgid "Start a single or multi-player game."
 msgstr "Comenzar una partida simple o multijugador."
 
 msgid "Load Game"
-msgstr "Cargar Partida"
+msgstr "Cargar partida"
 
 msgid "Load a previously saved game."
 msgstr "Cargar una partida previamente guardada."
@@ -2861,13 +2861,13 @@ msgid "Restart the scenario."
 msgstr "Reiniciar el escenario"
 
 msgid "Save Game"
-msgstr "Guardar Partida"
+msgstr "Guardar partida"
 
 msgid "Save the current game."
 msgstr "Guardar la partida en curso."
 
 msgid "Quick Save"
-msgstr "Guardado Rápido"
+msgstr "Guardado rápido"
 
 msgid "Save the current game without name selection."
 msgstr "Guardar la partida actual sin seleccionar un nombre."
@@ -2882,7 +2882,7 @@ msgid "Change the language of the game."
 msgstr "Cambia el idioma del juego."
 
 msgid "Select Game Language"
-msgstr "Seleccionar Idioma del Juego"
+msgstr "Seleccionar idioma del juego"
 
 msgid "Change the graphics settings of the game."
 msgstr "Cambia los ajustes gráficos del juego."
@@ -2891,7 +2891,7 @@ msgid "Graphics"
 msgstr "Gráficos"
 
 msgid "Mouse Cursor"
-msgstr "Cursor Ratón"
+msgstr "Cursor del ratón"
 
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
@@ -2904,7 +2904,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Cambia el tipo de interfaz que deseas utilizar."
 
 msgid "Text Support"
-msgstr "Soporte de Texto"
+msgstr "Soporte de texto"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -2974,13 +2974,13 @@ msgid "Set %{resource-type} Count"
 msgstr "Establecer cantidad de %{resource-type}"
 
 msgid "Select Recipients"
-msgstr "Selecciona Destinatarios"
+msgstr "Seleccionar destinatarios"
 
 msgid "Your Funds"
-msgstr "Tus Fondos"
+msgstr "Tus fondos"
 
 msgid "Planned Gift"
-msgstr "Tributo Planeado"
+msgstr "Tributo planeado"
 
 msgid "Gift from %{name}"
 msgstr "Regalo de %{name}"
@@ -2989,7 +2989,7 @@ msgid "Resolution"
 msgstr "Resolución"
 
 msgid "Fullscreen"
-msgstr "Pantalla Completa"
+msgstr "Pantalla completa"
 
 msgid "window|Mode"
 msgstr "Modo"
@@ -3004,7 +3004,7 @@ msgid "FPS"
 msgstr "FPS"
 
 msgid "System Info"
-msgstr "Información del Sistema"
+msgstr "Información del sistema"
 
 msgid "Nearest"
 msgstr "Más cercano"
@@ -3019,7 +3019,7 @@ msgid "Change the resolution of the game."
 msgstr "Cambia la resolución del juego."
 
 msgid "Select Game Resolution"
-msgstr "Seleccionar Resolución del Juego"
+msgstr "Seleccionar resolución del juego"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Alternar entre pantalla completa y modos de ventana."
@@ -3055,7 +3055,7 @@ msgid "Event: "
 msgstr "Evento: "
 
 msgid "Hot Keys:"
-msgstr "Atajos de Teclado:"
+msgstr "Atajos de teclado:"
 
 msgid "Hide"
 msgstr "Ocultar"
@@ -3064,7 +3064,7 @@ msgid "Show"
 msgstr "Mostrar"
 
 msgid "Army Estimation"
-msgstr "Estimación del Ejército"
+msgstr "Estimación del ejército"
 
 msgid "Canonical"
 msgstr "Canónico"
@@ -3099,7 +3099,7 @@ msgstr ""
 "ej., \"1-4\")."
 
 msgid "Select Game Language:"
-msgstr "Seleccionar Idioma del Juego:"
+msgstr "Seleccionar idioma del juego:"
 
 msgid "Select Language:"
 msgstr "Seleccionar idioma:"
@@ -3176,7 +3176,7 @@ msgid "Your Resources"
 msgstr "Tus recursos"
 
 msgid "Available Trades"
-msgstr "Tratos Disponibles"
+msgstr "Tratos disponibles"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "protegido por %{count} %{monster}"
@@ -3266,7 +3266,7 @@ msgid "Uncharted Territory"
 msgstr "Territorio inexplorado"
 
 msgid "Random Map Generator"
-msgstr "Generador de Mapas Aleatorios"
+msgstr "Generador de mapas aleatorios"
 
 msgid "rmg|Player count:"
 msgstr "Número de jugadores:"
@@ -3427,10 +3427,10 @@ msgid "Sort by Date"
 msgstr "Ordenar por fecha"
 
 msgid "File to Save:"
-msgstr "Archivo a Guardar:"
+msgstr "Archivo a guardar:"
 
 msgid "File to Load:"
-msgstr "Archivo a Cargar:"
+msgstr "Archivo a cargar:"
 
 msgid "Terrain object"
 msgstr "Objeto de terreno"
@@ -3460,37 +3460,37 @@ msgid "There are no secondary skills to select from."
 msgstr "No hay habilidades secundarias para seleccionar."
 
 msgid "Select Skill:"
-msgstr "Seleccionar Habilidad:"
+msgstr "Seleccionar habilidad:"
 
 msgid "There are no spells to select."
 msgstr "No hay hechizos para seleccionar."
 
 msgid "Select Spell:"
-msgstr "Seleccionar Hechizo:"
+msgstr "Seleccionar hechizo:"
 
 msgid "There are no artifacts to select from."
 msgstr "No hay artefactos para seleccionar."
 
 msgid "Select Artifact:"
-msgstr "Seleccionar Artefacto:"
+msgstr "Seleccionar artefacto:"
 
 msgid "There are no monsters to select from."
 msgstr "No hay monstruos para seleccionar."
 
 msgid "Select Monster:"
-msgstr "Seleccionar Monstruo:"
+msgstr "Seleccionar monstruo:"
 
 msgid "There are no heroes to select from."
 msgstr "No hay héroes para seleccionar."
 
 msgid "Select Hero:"
-msgstr "Seleccionar Héroe:"
+msgstr "Seleccionar héroe:"
 
 msgid "Select Monsters:"
-msgstr "Seleccionar Monstruos:"
+msgstr "Seleccionar monstruos:"
 
 msgid "Select Artifacts:"
-msgstr "Seleccionar Artefactos:"
+msgstr "Seleccionar artefactos:"
 
 msgid "race|Random"
 msgstr "Aleatorio"
@@ -3511,7 +3511,7 @@ msgid "Click to select this color."
 msgstr "Haz clic para seleccionar este color."
 
 msgid "Select Treasure:"
-msgstr "Seleccionar Tesoro:"
+msgstr "Seleccionar tesoro:"
 
 msgid "Select Ocean Object:"
 msgstr "Seleccionar objeto marítimo:"
@@ -3571,19 +3571,19 @@ msgstr ""
 "colocará."
 
 msgid "Select Mountain Object:"
-msgstr "Seleccionar el Objeto de Montaña:"
+msgstr "Seleccionar el objeto de montaña:"
 
 msgid "Select Rock Object:"
-msgstr "Seleccionar el Objeto de Roca:"
+msgstr "Seleccionar el objeto de roca:"
 
 msgid "Select Tree Object:"
-msgstr "Seleccionar el Objeto de Árbol:"
+msgstr "Seleccionar el objeto de árbol:"
 
 msgid "Select Power Up Object:"
-msgstr "Seleccionar el Objeto de Potenciador"
+msgstr "Seleccionar el objeto de potenciador:"
 
 msgid "Select Adventure Object:"
-msgstr "Seleccionar el Objeto de Aventura:"
+msgstr "Seleccionar el objeto de aventura:"
 
 msgid "Select color:"
 msgstr "Seleccionar el color:"
@@ -3611,10 +3611,10 @@ msgid "Size Icon"
 msgstr "Icono del tamaño"
 
 msgid "The Succession Wars"
-msgstr "Las Guerras de Sucesión"
+msgstr "Las guerras de sucesión"
 
 msgid "The Price of Loyalty"
-msgstr "El Precio de la Lealtad"
+msgstr "El precio de la lealtad"
 
 msgid "Resurrection"
 msgstr "Resurrección"
@@ -3626,7 +3626,7 @@ msgid "Map Type"
 msgstr "Tipo de mapa"
 
 msgid "Map Type:\n"
-msgstr "Tipo de Mapa:\n"
+msgstr "Tipo de mapa:\n"
 
 msgid ""
 "\n"
@@ -3825,7 +3825,7 @@ msgid "Gold in Treasury:"
 msgstr "Fondos de oro:"
 
 msgid "Wood & Ore:"
-msgstr "Madera y Hierro:"
+msgstr "Madera y hierro:"
 
 msgid "Gems, Cr, Slf & Mer:"
 msgstr "Gem, Cri, Azu y Mer:"
@@ -3855,10 +3855,10 @@ msgid "Best Monster:"
 msgstr "Mejor monstruo:"
 
 msgid "Random Castle Name"
-msgstr "Nombre de Castillo Aleatorio"
+msgstr "Nombre de castillo aleatorio"
 
 msgid "Random Town Name"
-msgstr "Nombre de Ciudad Aleatorio"
+msgstr "Nombre de ciudad aleatorio"
 
 msgid "BANNED SPELLS"
 msgstr "HECHIZOS PROHIBIDOS"
@@ -3894,7 +3894,7 @@ msgid "Default Army"
 msgstr "Ejército predeterminado"
 
 msgid "Castle Army"
-msgstr "Ejército del Castillo"
+msgstr "Ejército del castillo"
 
 msgid "Town Army"
 msgstr "Ejército de la ciudad"
@@ -4491,7 +4491,7 @@ msgstr ""
 "para seleccionar todos los demás tipos de objetos."
 
 msgid "Terrain Mode"
-msgstr "Modo Terreno"
+msgstr "Modo terreno"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
@@ -4499,7 +4499,7 @@ msgstr ""
 "en el mapa."
 
 msgid "Landscape Objects Mode"
-msgstr "Modo Objetos de paisaje"
+msgstr "Modo objetos de paisaje"
 
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
@@ -4508,13 +4508,13 @@ msgstr ""
 "en el mapa."
 
 msgid "Detail Mode"
-msgstr "Modo Detallado"
+msgstr "Modo de detalles"
 
 msgid "Used for moving or customizing objects."
 msgstr "Se utiliza para mover o personalizar objetos."
 
 msgid "Adventure Objects Mode"
-msgstr "Modo Objetos de aventura"
+msgstr "Modo objetos de aventura"
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
@@ -4524,7 +4524,7 @@ msgstr ""
 "tesoros, etc.) en el mapa."
 
 msgid "Kingdom Objects Mode"
-msgstr "Modo Objetos del reino"
+msgstr "Modo objetos del reino"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
@@ -4532,7 +4532,7 @@ msgstr ""
 "el mapa."
 
 msgid "Monsters Mode"
-msgstr "Modo Monstruos"
+msgstr "Modo monstruos"
 
 msgid "Used to place monsters on the map."
 msgstr "Se utiliza para colocar monstruos en el mapa."
@@ -4541,16 +4541,16 @@ msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Te permite dibujar arroyos haciendo clic y arrastrando."
 
 msgid "Stream Mode"
-msgstr "Modo Arroyo"
+msgstr "Modo arroyo"
 
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr "Te permite dibujar carreteras haciendo clic y arrastrando."
 
 msgid "Road Mode"
-msgstr "Modo Carretera"
+msgstr "Modo carretera"
 
 msgid "Erase Mode"
-msgstr "Modo Borrado"
+msgstr "Modo de borrado"
 
 msgid "Used to erase objects from the map."
 msgstr "Se utiliza para borrar objetos del mapa."
@@ -5615,13 +5615,13 @@ msgid "Art Director"
 msgstr "Director de arte"
 
 msgid "Assistant Art Director"
-msgstr "Subdirector de Arte"
+msgstr "Subdirector de arte"
 
 msgid "Artists"
 msgstr "Artistas"
 
 msgid "QA Manager"
-msgstr "Gerente de Control de Calidad"
+msgstr "Gerente de control de calidad"
 
 msgid "QA"
 msgstr "Control de calidad"
@@ -5669,16 +5669,16 @@ msgid "Town Themes"
 msgstr "Temas de la ciudad"
 
 msgid "Alto Sax"
-msgstr "Saxo Alto"
+msgstr "Saxo alto"
 
 msgid "Harpsichord and Piano"
-msgstr "Clavecín y Piano"
+msgstr "Clavecín y piano"
 
 msgid "Basso Vocal"
 msgstr "Voz de bajo"
 
 msgid "Soprano Vocal"
-msgstr "Voz de Soprano"
+msgstr "Voz de soprano"
 
 msgid "Recorded at %{recordingStudio}"
 msgstr "Grabado en %{recordingStudio}"
@@ -5718,7 +5718,7 @@ msgid "View High Scores for Standard Maps."
 msgstr "Consulta las puntuaciones más altas para mapas estándar."
 
 msgid "Campaign"
-msgstr "Partida de Campaña"
+msgstr "Partida de campaña"
 
 msgid "View High Scores for Campaigns."
 msgstr "Consulta las puntuaciones más altas de las campañas."
@@ -5769,7 +5769,7 @@ msgid "hotkey|standard game"
 msgstr "Juego estándar"
 
 msgid "hotkey|campaign game"
-msgstr "Partida de Campaña"
+msgstr "Partida de campaña"
 
 msgid "hotkey|multi-player game"
 msgstr "Juego multi-jugador"
@@ -5940,7 +5940,7 @@ msgid "hotkey|file options"
 msgstr "Opciones de archivo"
 
 msgid "hotkey|adventure options"
-msgstr "Opciones de la Aventura"
+msgstr "Opciones de la aventura"
 
 msgid "hotkey|puzzle map"
 msgstr ""
@@ -6165,7 +6165,7 @@ msgstr ""
 "mapas."
 
 msgid "Campaign Game"
-msgstr "Partida de Campaña"
+msgstr "Partida de campaña"
 
 msgid "Multi-Player Game"
 msgstr "Juego multi-jugador"
@@ -6543,7 +6543,7 @@ msgstr ""
 "configuración más recursos extra recibe el jugador virtual."
 
 msgid "Difficulty Rating"
-msgstr "Nivel de Dificultad"
+msgstr "Nivel de dificultad"
 
 msgid ""
 "The difficulty rating reflects a combination of various settings for your "
@@ -6694,13 +6694,13 @@ msgid "Maximus"
 msgstr "Maximus"
 
 msgid "Next Hero"
-msgstr "Siguiente Héroe"
+msgstr "Siguiente héroe"
 
 msgid "Select the next Hero."
 msgstr "Seleccione el siguiente Héroe."
 
 msgid "Hero Movement"
-msgstr "Movimiento del Héroe"
+msgstr "Movimiento del héroe"
 
 msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
@@ -6726,7 +6726,7 @@ msgid "End your turn and let the computer take its turn."
 msgstr "Finalizar tu turno y pasárselo al jugador virtual."
 
 msgid "Adventure Options"
-msgstr "Opciones de la Aventura"
+msgstr "Opciones de la aventura"
 
 msgid "Bring up the adventure options menu."
 msgstr "Desplegar el menú de opciones de aventura."
@@ -7086,7 +7086,7 @@ msgid "Evil"
 msgstr "Mal"
 
 msgid "Black & White"
-msgstr "Blanco y Negro"
+msgstr "Blanco y negro"
 
 msgid "Color"
 msgstr "Color"
@@ -7420,7 +7420,7 @@ msgid "You search through the flotsam, but find nothing."
 msgstr "Buscas entre los restos del naufragio pero no encuentras nada."
 
 msgid "Shrine of the 1st Circle"
-msgstr "Santuario del Primer Círculo"
+msgstr "Capilla del primer círculo"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
@@ -7432,7 +7432,7 @@ msgstr ""
 "'%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
-msgstr "Santuario del Segundo Círculo"
+msgstr "Capilla del segundo círculo"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
@@ -7444,7 +7444,7 @@ msgstr ""
 "'%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
-msgstr "Santuario del Tercer Círculo"
+msgstr "Capilla del tercer círculo"
 
 msgid ""
 "You come across a lavish shrine attended by a group of high priests.\n"
@@ -8811,7 +8811,7 @@ msgid "Hero class:"
 msgstr "Clase de héroe:"
 
 msgid "Are you sure you want to dismiss this Hero?"
-msgstr "¿Estas seguro que quieres despedir este Héroe?"
+msgstr "¿Estás seguro de que quieres despedir a este héroe?"
 
 msgid "Set custom Experience value. Current value is default."
 msgstr ""
@@ -8824,7 +8824,7 @@ msgstr ""
 "restablecer el valor predeterminado."
 
 msgid "View Experience Info"
-msgstr "Ver información sobre Experiencia"
+msgstr "Ver información sobre experiencia"
 
 msgid "Set custom Spell Points value. Current value is default."
 msgstr ""
@@ -8837,10 +8837,10 @@ msgstr ""
 "el valor predeterminado."
 
 msgid "Set Spell Points value:"
-msgstr "Establecer valor de Puntos de Hechizo:"
+msgstr "Establecer valor de puntos de hechizo:"
 
 msgid "View Spell Points Info"
-msgstr "Ver información sobre Maná"
+msgstr "Ver información sobre maná"
 
 msgid "Set patrol radius in tiles:"
 msgstr "Establecer el radio de patrulla en casillas:"
@@ -8867,7 +8867,7 @@ msgstr ""
 "centro de su lado del campo de batalla."
 
 msgid "Exit Hero Screen"
-msgstr "Salir de la Pantalla del héroe"
+msgstr "Salir de la pantalla del héroe"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr "No se puede despedir a un héroe en un castillo."
@@ -8885,10 +8885,10 @@ msgid "Show next hero"
 msgstr "Mostrar el siguiente héroe"
 
 msgid "Set army combat formation to 'Spread'"
-msgstr "Ordenar al ejército formación Desplegada."
+msgstr "Ordenar al ejército formación desplegada"
 
 msgid "Set army combat formation to 'Grouped'"
-msgstr "Ordenar al ejército formación Agrupada"
+msgstr "Ordenar al ejército formación agrupada"
 
 msgid "Set hero's Artifacts. Right-click to reset Artifact."
 msgstr ""
@@ -9075,7 +9075,7 @@ msgid "Pathfinding"
 msgstr "Orientación"
 
 msgid "Archery"
-msgstr "Tiro con Arco"
+msgstr "Tiro con arco"
 
 msgid "Logistics"
 msgstr "Logística"
@@ -9102,7 +9102,7 @@ msgid "Ballistics"
 msgstr "Balística"
 
 msgid "Eagle Eye"
-msgstr "Ojo de Águila"
+msgstr "Ojo de águila"
 
 msgid "Necromancy"
 msgstr "Nigromancia"
@@ -9735,7 +9735,7 @@ msgid "Beach"
 msgstr "Playa"
 
 msgid "Lava"
-msgstr "Zona Volcánica"
+msgstr "Zona volcánica"
 
 msgid "Dirt"
 msgstr "Terreno arcilloso"
@@ -9801,16 +9801,16 @@ msgid "Ore Mine"
 msgstr "Mina de mineral"
 
 msgid "Sulfur Mine"
-msgstr "Mina de Azufre"
+msgstr "Mina de azufre"
 
 msgid "Crystal Mine"
-msgstr "Mina de Cristal"
+msgstr "Mina de cristal"
 
 msgid "Gems Mine"
-msgstr "Mina de Gemas"
+msgstr "Mina de gemas"
 
 msgid "Gold Mine"
-msgstr "Mina de Oro"
+msgstr "Mina de oro"
 
 msgid "Mine"
 msgstr "Mina"
@@ -12907,10 +12907,10 @@ msgid "Your hero has %{sp} spell points remaining out of %{max}."
 msgstr "Tu héroe tiene %{sp} puntos de hechizo restantes de %{max}."
 
 msgid "View Adventure Spells"
-msgstr "Ver Hechizos de Aventura"
+msgstr "Ver hechizos de aventura"
 
 msgid "View Combat Spells"
-msgstr "Ver Hechizos de Combate"
+msgstr "Ver hechizos de combate"
 
 msgid "View previous page"
 msgstr "Ver página anterior"
