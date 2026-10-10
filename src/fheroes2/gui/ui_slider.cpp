@@ -25,6 +25,7 @@
 #include <functional>
 #include <utility>
 
+#include "dialog.h"
 #include "game_assets.h"
 #include "icn.h"
 #include "image.h"
@@ -32,6 +33,7 @@
 #include "pal.h"
 #include "screen.h"
 #include "settings.h"
+#include "ui_dialog.h"
 
 namespace fheroes2
 {
@@ -116,6 +118,10 @@ namespace fheroes2
 
             _scrollbar.forward();
             return true;
+        }
+
+        if ( !_popupTitle.empty() && !_popupDescription.empty() && le.isMouseRightButtonPressedInArea( _scrollbar.getArea() ) ) {
+            fheroes2::showStandardTextMessage( _popupTitle, _popupDescription, Dialog::ZERO );
         }
 
         return false;
