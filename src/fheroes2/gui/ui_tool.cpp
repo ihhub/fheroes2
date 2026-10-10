@@ -213,6 +213,7 @@ namespace fheroes2
         // We enlarge background to have space for cursor at text edges and space for diacritics.
         , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
         , _textInputArea( textArea )
+        , _isMultiLineText( isMultiLine )
         , _isSingleLineTextCenterAligned( !isMultiLine && isCenterAligned )
     {
         // Do nothing.
@@ -241,11 +242,29 @@ namespace fheroes2
 
         _text.set( newText, cursorPositionInText );
 
+        _verticalTextOffset = 0;
+
+        if ( _isMultiLineText ) {
+            const Rect cursorArea = _text.cursorArea();
+            const int32_t visibleBottom = _textInputArea.height - 2;
+            const int32_t cursorBottom = cursorArea.y + cursorArea.height;
+
+            if ( cursorBottom > visibleBottom ) {
+                const int32_t lineHeight = _text.height();
+                assert( lineHeight > 0 );
+
+                const int32_t overflow = cursorBottom - visibleBottom;
+                _verticalTextOffset = ( overflow + lineHeight - 1 ) / lineHeight * lineHeight;
+            }
+        }
+
         // Multi-line text is currently always automatically center-aligned.
         const int32_t offsetX = _isSingleLineTextCenterAligned ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
-        const int32_t offsetY = _textInputArea.y + 2;
+        const int32_t offsetY = _textInputArea.y + 2 - _verticalTextOffset;
 
-        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
+        const Rect & textRoi = _isMultiLineText ? _textInputArea : _background.rect();
+
+        _text.drawInRoi( offsetX, offsetY, _output, textRoi );
 
         _cursor.setPosition( _text.cursorArea().x + offsetX, _text.cursorArea().y + offsetY );
         _cursor.show();
