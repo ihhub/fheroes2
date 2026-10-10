@@ -4827,9 +4827,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Ușor"
 
@@ -5171,6 +5168,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
+msgid "%{color} player"
+msgstr ""
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5180,7 +5180,16 @@ msgstr ""
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5191,15 +5200,30 @@ msgstr "Anexare"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Anexare"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6337,6 +6361,9 @@ msgid ""
 "land."
 msgstr ""
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr ""
 
@@ -6523,12 +6550,6 @@ msgid ""
 "played by a computer player or only by a human player."
 msgstr ""
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-
 msgid "Handicap"
 msgstr ""
 
@@ -6538,9 +6559,6 @@ msgid ""
 "may have a handicap. Handicapped players start with fewer resources and earn "
 "15 or 30% fewer resources per turn for mild and severe handicaps, "
 "respectively."
-msgstr ""
-
-msgid "%{color} player"
 msgstr ""
 
 msgid "No Handicap"

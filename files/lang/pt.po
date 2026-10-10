@@ -4978,9 +4978,6 @@ msgstr "Nenhum artefato será dado como recompensa."
 msgid "Delete an artifact from the reward."
 msgstr "Apagar um artefato da recompensa."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "Dia: %{day} Semana: %{week} Mês: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
@@ -5336,6 +5333,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Clique para selecionar a cor."
 
+msgid "%{color} player"
+msgstr "Jogador %{color}"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5346,7 +5346,16 @@ msgstr "Falha ao salvar o mapa."
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5357,15 +5366,34 @@ msgstr "Velocidade"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Velocidade"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Isto permite que você mude a classe de um jogador. As classes nem sempre são "
+"mutáveis. Dependendo do cenário, um jogador pode receber cidades adicionais "
+"ou heróis que não sejam de seu alinhamento primário."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Clique para retornar ao menu principal."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Alternar animação dos objetos."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6596,6 +6624,9 @@ msgstr ""
 "Jogador %{color}, seus heróis abandonaram você, e você foi banido de sua "
 "terra."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "Dia: %{day} Semana: %{week} Mês: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Lorde Kilburn"
 
@@ -6808,15 +6839,6 @@ msgstr ""
 "podem ser jogadas apenas por um jogador de computador ou apenas por um "
 "jogador humano."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Isto permite que você mude a classe de um jogador. As classes nem sempre são "
-"mutáveis. Dependendo do cenário, um jogador pode receber cidades adicionais "
-"ou heróis que não sejam de seu alinhamento primário."
-
 msgid "Handicap"
 msgstr "Desvantagem"
 
@@ -6830,9 +6852,6 @@ msgstr ""
 "os jogadores humanos podem ter uma desvantagem. Os jogadores com desvantagem "
 "começam com menos recursos e ganham 15 ou 30% menos recursos por turno para "
 "desvantagens leves e graves, respectivamente."
-
-msgid "%{color} player"
-msgstr "Jogador %{color}"
 
 msgid "No Handicap"
 msgstr "Sem Desvantagem"

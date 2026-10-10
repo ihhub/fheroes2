@@ -5160,9 +5160,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Ľahká"
 
@@ -5507,6 +5504,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
+msgid "%{color} player"
+msgstr "%{color} hráč"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5517,7 +5517,16 @@ msgstr "Uložiť súbor:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5528,15 +5537,33 @@ msgstr "Anexia"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Anexia"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Toto ti umožní zmeniť triedu hráča. Triedy nie je vždy možné meniť. V "
+"závislosti od scenára môže hráč získať ďalšie mestá a/alebo hrdinov, ktorí "
+"nepatria do jeho primárnej línie."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6771,6 +6798,9 @@ msgid ""
 msgstr ""
 "%{color} hráč, tvoji hrdinovia ťa opustili a ty si vyhostený z tejto krajiny."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6976,15 +7006,6 @@ msgstr ""
 "začínať na určitom mieste. Niektoré pozície môže hrať iba počítačový hráč "
 "alebo iba ľudský hráč."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Toto ti umožní zmeniť triedu hráča. Triedy nie je vždy možné meniť. V "
-"závislosti od scenára môže hráč získať ďalšie mestá a/alebo hrdinov, ktorí "
-"nepatria do jeho primárnej línie."
-
 msgid "Handicap"
 msgstr "Hendikep"
 
@@ -6999,9 +7020,6 @@ msgstr ""
 "Tu je možné zmeniť hendikep konkrétneho hráča. Hendikep môžu mať len ľudia. "
 "Hendikepovaní hráči začínajú s menším množstvom zdrojov a získavajú o 15, "
 "resp. 30% menej zdrojov za ťah v prípade mierneho a ťažkého hendikepu."
-
-msgid "%{color} player"
-msgstr "%{color} hráč"
 
 msgid "No Handicap"
 msgstr "Bez hendikepu"

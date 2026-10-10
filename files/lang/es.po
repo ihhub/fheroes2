@@ -5013,9 +5013,6 @@ msgstr "No se entregará ningún artefacto como recompensa."
 msgid "Delete an artifact from the reward."
 msgstr "Eliminar un artefacto de la recompensa."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "Día: %{day} Semana: %{week} Mes: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
@@ -5380,6 +5377,9 @@ msgstr " partidas alcanzaron el límite de tiempo especificado"
 msgid "Click to close the dialog."
 msgstr "Haz clic para cerrar el diálogo."
 
+msgid "%{color} player"
+msgstr "%{color} jugador"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr "Ganó el %{percent}% de las partidas."
 
@@ -5389,7 +5389,18 @@ msgstr "No se pudo preparar el mapa para la prueba de juego automática."
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Número de partidas:"
 
+#, fuzzy
+msgid "Set the number of playthroughs."
+msgstr "Número de partidas:"
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr "Días máximos por partida:"
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Días máximos por partida:"
 
 msgid "autoPlaytest|Animation"
@@ -5397,6 +5408,9 @@ msgstr "Animación"
 
 msgid "autoPlaytest|Animation speed:"
 msgstr "Velocidad de animación:"
+
+msgid "Set animation speed during playthrough."
+msgstr ""
 
 msgid "autoPlaytest|Sound Effects"
 msgstr "Efectos de sonido"
@@ -5406,8 +5420,24 @@ msgstr ""
 "Haz clic con el botón izquierdo del ratón en cualquier momento para "
 "interrumpir la prueba de juego."
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Te permite cambiar la raza de un jugador. No siempre se pueden cambiar las "
+"razas. Dependiendo del escenario, un jugador puede recibir ciudades y/o "
+"héroes adicionales no pertenecientes a su primer alineamiento."
+
 msgid "Click to run an automated map playtest."
 msgstr "Haz clic para ejecutar una prueba de juego automatizada del mapa."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Activar/desactivar la animación de los objetos."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6633,6 +6663,9 @@ msgid ""
 msgstr ""
 "Jugador %{color}, tus héroes te abandonan y eres desterrado de estas tierras."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "Día: %{day} Semana: %{week} Mes: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6845,15 +6878,6 @@ msgstr ""
 "comenzará en una situación precisa. Algunas posiciones sólo puede ser "
 "jugadas por un jugador humano o uno virtual."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Te permite cambiar la raza de un jugador. No siempre se pueden cambiar las "
-"razas. Dependiendo del escenario, un jugador puede recibir ciudades y/o "
-"héroes adicionales no pertenecientes a su primer alineamiento."
-
 msgid "Handicap"
 msgstr "Handicap"
 
@@ -6868,9 +6892,6 @@ msgstr ""
 "jugadores humanos pueden tener una desventaja. Los jugadores con desventaja "
 "comienzan con menos recursos y ganan un 15 % o un 30 % menos de recursos por "
 "turno, según la desventaja sea leve o severa."
-
-msgid "%{color} player"
-msgstr "%{color} jugador"
 
 msgid "No Handicap"
 msgstr "Sin desventaja"

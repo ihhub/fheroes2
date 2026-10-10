@@ -5257,9 +5257,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Lett"
 
@@ -5588,6 +5585,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
 
+msgid "%{color} player"
+msgstr "%{color} spiller"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5598,7 +5598,16 @@ msgstr "Lagringsfil:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5609,15 +5618,33 @@ msgstr "Underleggelse"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Underleggelse"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Dette lar deg bytte helteslaget til en spiller. Helteslaget kan ikke alltid "
+"byttes. Avhengig av kartet, kan en spiller få flere byer og/eller helter som "
+"ikke er av spillerens hovedtilhørighet."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -6869,6 +6896,9 @@ msgid ""
 msgstr ""
 "%{color} spiller, dine helter forlater deg og du er bannlyst fra landet."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr "Fyrst Kilburn"
 
@@ -7081,15 +7111,6 @@ msgstr ""
 "er knyttet til en farge. Noen plasser kan kun tas av computerspillere, mens "
 "andre kun av menneskelige spillere."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Dette lar deg bytte helteslaget til en spiller. Helteslaget kan ikke alltid "
-"byttes. Avhengig av kartet, kan en spiller få flere byer og/eller helter som "
-"ikke er av spillerens hovedtilhørighet."
-
 msgid "Handicap"
 msgstr "Handikap"
 
@@ -7105,9 +7126,6 @@ msgstr ""
 "spillerne. Kun menneskelige spillere kan ha handikap. Spillere med handikap "
 "begynner kartet med færre råvarer og tjener 15 eller 30% færre råvarer hver "
 "runde for henholdsvis lett og sterkt handikap."
-
-msgid "%{color} player"
-msgstr "%{color} spiller"
 
 msgid "No Handicap"
 msgstr "Ingen handikap"
