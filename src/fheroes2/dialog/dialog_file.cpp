@@ -101,6 +101,7 @@ namespace
             else if ( le.MouseClickLeft( saveGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 background.hideWindow();
+                display.render( background.totalArea() );
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
