@@ -63,7 +63,6 @@ namespace
     void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections,
                                const std::optional<Game::HotKeyCategory> selectedCategory )
     {
-
         categorySelections.clear();
 
         int32_t offsetY = categoryRoi.y + 4;
