@@ -73,7 +73,7 @@ namespace fheroes2
 
 namespace
 {
-    const std::string_view highScoreFileName{ "fheroes2.hgs" };
+    constexpr std::string_view highScoreFileName{ "fheroes2.hgs" };
     fheroes2::HighScoreDataContainer highScoreDataContainer;
     const int32_t initialHighScoreEntryOffsetY = 72;
     const int32_t highScoreEntryStepY = 40;
