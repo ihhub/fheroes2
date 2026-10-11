@@ -878,6 +878,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                         hero->applyHeroMetadata( heroInfo, false, false );
 
                         hiredHeroTileId.emplace( tileId );
+
+                        if ( vec_tiles[tileId].isWater() ) {
+                            hero->SetShipMaster( true );
+                        }
                     }
                     else {
                         VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " failed to be hired." )

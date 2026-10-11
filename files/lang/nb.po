@@ -4460,6 +4460,9 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "Lagringsfil:"
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr ""
 
@@ -5254,9 +5257,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Lett"
 
@@ -5536,15 +5536,6 @@ msgstr ""
 "FOR\n"
 "LOJALITET"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"PRISEN\n"
-"FOR\n"
-"LOJALITET"
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -5594,6 +5585,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Klikk her for å velge hvilket kart du vil spille."
 
+msgid "%{color} player"
+msgstr "%{color} spiller"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5604,7 +5598,16 @@ msgstr "Lagringsfil:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5615,15 +5618,33 @@ msgstr "Underleggelse"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Underleggelse"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Dette lar deg bytte helteslaget til en spiller. Helteslaget kan ikke alltid "
+"byttes. Avhengig av kartet, kan en spiller få flere byer og/eller helter som "
+"ikke er av spillerens hovedtilhørighet."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5641,40 +5662,44 @@ msgstr ""
 msgid "and more..."
 msgstr "og mer..."
 
-msgid "Easy"
-msgstr "Enkel"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Felttogsnivå"
 
-msgid "Normal"
-msgstr "Middels"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Felttogsnivå"
 
-msgid "Hard"
-msgstr "Vanskelig"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
 msgstr "Felttogsnivå"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Velg dette nivået hvis du kun er ute etter å oppleve historien. Motstanderne "
 "dine vil være svakere enn ved middels nivå."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Velg dette nivået for å oppleve felttoget slik som det opprinnelig var "
 "tiltenkt."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Velg nivået hvis du ønsker en utfordring. Motstanderne dine vil være "
 "sterkere enn ved middels nivå."
+
+msgid "Campaign Difficulty"
+msgstr "Felttogsnivå"
 
 msgid ""
 "Congratulations!\n"
@@ -6871,6 +6896,9 @@ msgid ""
 msgstr ""
 "%{color} spiller, dine helter forlater deg og du er bannlyst fra landet."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr "Fyrst Kilburn"
 
@@ -7083,15 +7111,6 @@ msgstr ""
 "er knyttet til en farge. Noen plasser kan kun tas av computerspillere, mens "
 "andre kun av menneskelige spillere."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Dette lar deg bytte helteslaget til en spiller. Helteslaget kan ikke alltid "
-"byttes. Avhengig av kartet, kan en spiller få flere byer og/eller helter som "
-"ikke er av spillerens hovedtilhørighet."
-
 msgid "Handicap"
 msgstr "Handikap"
 
@@ -7107,9 +7126,6 @@ msgstr ""
 "spillerne. Kun menneskelige spillere kan ha handikap. Spillere med handikap "
 "begynner kartet med færre råvarer og tjener 15 eller 30% færre råvarer hver "
 "runde for henholdsvis lett og sterkt handikap."
-
-msgid "%{color} player"
-msgstr "%{color} spiller"
 
 msgid "No Handicap"
 msgstr "Ingen handikap"
@@ -7311,6 +7327,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Treg"
+
+msgid "Normal"
+msgstr "Middels"
 
 msgid "Fast"
 msgstr "Fort"
@@ -13009,8 +13028,10 @@ msgstr "En tropp får sitt angrep voldsomt forsterket mot drager."
 msgid "Blood Lust"
 msgstr "Blodlyst"
 
-msgid "Increases a unit's attack skill."
-msgstr "Øker en tropp sin angrepsevne."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr ""
@@ -13132,9 +13153,10 @@ msgstr "Tilkall skip"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Tilkaller det nærmeste ledige og vennlige skipet til det nærmeste "
 "kystpunktet. Med vennlig skip menes et som du har lagd eller som du var den "
@@ -13372,6 +13394,24 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Øker en tropp sin angrepsevne."
+
+#~ msgid "Easy"
+#~ msgstr "Enkel"
+
+#~ msgid "Hard"
+#~ msgstr "Vanskelig"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "PRISEN\n"
+#~ "FOR\n"
+#~ "LOJALITET"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."

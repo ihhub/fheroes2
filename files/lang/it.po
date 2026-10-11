@@ -4259,6 +4259,9 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "File da Salvare:"
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr ""
 
@@ -5021,9 +5024,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Facile"
 
@@ -5259,11 +5259,6 @@ msgid ""
 "CAMPAIGN"
 msgstr ""
 
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-
 msgid "editorMainMenu|BACK"
 msgstr ""
 
@@ -5312,6 +5307,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Clicca per andare alla città succ."
 
+msgid "%{color} player"
+msgstr "Giocatore %{color}"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5322,7 +5320,16 @@ msgstr "File da Salvare:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5333,15 +5340,30 @@ msgstr "Navigazione"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Navigazione"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Clicca per salvare la partita in corso."
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5356,33 +5378,36 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-msgid "Easy"
-msgstr ""
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Difficoltà Gioco"
 
 #, fuzzy
-msgid "Normal"
-msgstr "Normale"
+msgid "campaignDifficulty|Default"
+msgstr "Difficoltà Gioco"
 
-msgid "Hard"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Difficoltà Gioco"
+
+msgid ""
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Difficoltà Gioco"
-
-msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
-msgstr ""
-
-msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
-msgstr ""
-
-msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
-msgstr ""
 
 #, fuzzy
 msgid ""
@@ -6522,6 +6547,9 @@ msgid ""
 "land."
 msgstr ""
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr ""
 
@@ -6721,12 +6749,6 @@ msgid ""
 "played by a computer player or only by a human player."
 msgstr ""
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-
 msgid "Handicap"
 msgstr ""
 
@@ -6737,9 +6759,6 @@ msgid ""
 "15 or 30% fewer resources per turn for mild and severe handicaps, "
 "respectively."
 msgstr ""
-
-msgid "%{color} player"
-msgstr "Giocatore %{color}"
 
 msgid "No Handicap"
 msgstr ""
@@ -6939,6 +6958,10 @@ msgstr ""
 #, fuzzy
 msgid "Slow"
 msgstr "Pianissimo"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
 
 msgid "Fast"
 msgstr ""
@@ -11770,8 +11793,10 @@ msgstr "Incrementa di tanto i danni contro i draghi."
 msgid "Blood Lust"
 msgstr "Ferocia"
 
-msgid "Increases a unit's attack skill."
-msgstr "Incrementa la capacità d'attacco di un'unità."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Anima i Morti"
@@ -11886,9 +11911,10 @@ msgstr "Richiama Nave"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Convoca una nave attualmente libera, amica e più vicina ad una costa "
 "adiacente. Una nave amica vuol dire o una che hai appena costruita, o una "
@@ -12123,6 +12149,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Incrementa la capacità d'attacco di un'unità."
 
 #~ msgid "AI"
 #~ msgstr "Computer"

@@ -4251,6 +4251,9 @@ msgstr "Mapa zapisana do: "
 msgid "Failed to save the map."
 msgstr "Nie udało się zapisać mapy."
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr "Niezapisane zmiany"
 
@@ -4958,9 +4961,6 @@ msgstr "Żaden artefakt nie będzie dany jako nagroda."
 msgid "Delete an artifact from the reward."
 msgstr "Usuń artefakt z nagrody."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "Dzień: %{day} Tydzień: %{week} Miesiąc: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Łatwy"
 
@@ -5259,15 +5259,6 @@ msgstr ""
 "Z ROZSZE-\n"
 "RZENIA"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPANIA\n"
-"Z ROZSZE-\n"
-"RZENIA"
-
 msgid "editorMainMenu|BACK"
 msgstr "ANULUJ"
 
@@ -5323,6 +5314,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Kliknij, aby wybrać kolor."
 
+msgid "%{color} player"
+msgstr "%{color} gracz"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5333,7 +5327,16 @@ msgstr "Nie udało się zapisać mapy."
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5344,15 +5347,34 @@ msgstr "Szybkość"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Szybkość"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Pozwala ci zmienić klasę gracza. Opcja ta nie zawsze jest aktywna. W "
+"zależności od scenariusza, gracz może otrzymać dodatkowe miasta oraz/lub "
+"bohaterów niezgodne z przynależną im klasą."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Kliknij, aby wrócić do głównego menu."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Włącz/wyłącz animację obiektów."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5370,37 +5392,44 @@ msgstr ""
 msgid "and more..."
 msgstr "i więcej..."
 
-msgid "Easy"
-msgstr "Łatwa"
-
-msgid "Normal"
-msgstr "Normalnie"
-
-msgid "Hard"
-msgstr "Trudna"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
 msgstr "Stopień trudności kampanii"
 
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Stopień trudności kampanii"
+
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Stopień trudności kampanii"
+
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Wybierz tę opcję jeśli cenisz fabułę ponad wyzwanie. AI rozgrywa misje "
 "gorzej niż przy normalnym poziomie trudności."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Wybierz tę opcję by cieszyć się kampanią zgodnie z jej oryginalnymi "
 "założeniami."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Wybierz tę opcję jeśli jesteś gotów na wyzwanie. AI rozgrywa misje lepiej "
 "niż przy normalnym poziomie trudności."
+
+msgid "Campaign Difficulty"
+msgstr "Stopień trudności kampanii"
 
 msgid ""
 "Congratulations!\n"
@@ -6566,6 +6595,9 @@ msgid ""
 msgstr ""
 "%{color}, twoi bohaterowie cię opuszczają i zostajesz wygnany z tej krainy."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "Dzień: %{day} Tydzień: %{week} Miesiąc: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6773,15 +6805,6 @@ msgstr ""
 "zawsze będzie rozpoczynać grę w określonym miejscu. Niektóre pozycje mogą "
 "być zajęte jedynie przez komputer, a inne tylko przez graczy - ludzi."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Pozwala ci zmienić klasę gracza. Opcja ta nie zawsze jest aktywna. W "
-"zależności od scenariusza, gracz może otrzymać dodatkowe miasta oraz/lub "
-"bohaterów niezgodne z przynależną im klasą."
-
 msgid "Handicap"
 msgstr "Utrudnienie"
 
@@ -6795,9 +6818,6 @@ msgstr ""
 "utrudnienia. Gracze z utrudnieniami zaczynają z mniejszą ilością zasobów "
 "oraz otrzymują o 15% lub 30% mniej zasobów co turę, odpowiednio dla "
 "niewielkich i znacznych utrudnień."
-
-msgid "%{color} player"
-msgstr "%{color} gracz"
 
 msgid "No Handicap"
 msgstr "Brak utrudnień"
@@ -6991,6 +7011,9 @@ msgstr "Esperanto"
 
 msgid "Slow"
 msgstr "Wolno"
+
+msgid "Normal"
+msgstr "Normalnie"
 
 msgid "Fast"
 msgstr "Szybko"
@@ -12512,8 +12535,10 @@ msgstr "Znacznie zwiększa umiejętność ataku jednostki w walce ze smokami."
 msgid "Blood Lust"
 msgstr "Żądza Krwi"
 
-msgid "Increases a unit's attack skill."
-msgstr "Zwiększa umiejętność ataku jednostki."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Ożywienie Martwych"
@@ -12630,10 +12655,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Przywołanie Łodzi"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Przywołuje najbliższą, niezajętą, własną łódź na sąsiadujący z tobą fragment "
 "wybrzeża. Własna łódź to taka, która została przez ciebie zbudowana lub "
@@ -12868,6 +12895,24 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Zwiększa umiejętność ataku jednostki."
+
+#~ msgid "Easy"
+#~ msgstr "Łatwa"
+
+#~ msgid "Hard"
+#~ msgstr "Trudna"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "KAMPANIA\n"
+#~ "Z ROZSZE-\n"
+#~ "RZENIA"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Utwórz nową mapę od podstaw."
