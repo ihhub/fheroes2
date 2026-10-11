@@ -60,8 +60,8 @@ namespace
         fheroes2::Rect roi;
     };
 
-    void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections,
-                               const std::optional<Game::HotKeyCategory> selectedCategory )
+    void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, const std::optional<Game::HotKeyCategory> selectedCategory,
+                               std::vector<CategorySelection> & categorySelections )
     {
         categorySelections.clear();
 
@@ -329,7 +329,7 @@ namespace fheroes2
         std::optional<Game::HotKeyCategory> selectedCategory;
 
         std::vector<CategorySelection> categorySelections;
-        drawHotKeyCategories( categoryRoi, categorySelections, selectedCategory );
+        drawHotKeyCategories( categoryRoi, selectedCategory, categorySelections );
 
         listbox.SetListContent( displayedHotKeyEvents );
         listbox.updateScrollBarImage();
@@ -372,7 +372,7 @@ namespace fheroes2
 
                 listbox.SetListContent( displayedHotKeyEvents );
 
-                drawHotKeyCategories( categoryRoi, categorySelections, selectedCategory );
+                drawHotKeyCategories( categoryRoi, selectedCategory, categorySelections );
 
                 listbox.updateScrollBarImage();
                 listbox.Redraw();
