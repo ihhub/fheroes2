@@ -86,7 +86,7 @@ namespace
             const fheroes2::Text categoryText( _( Game::getHotKeyCategoryName( category ) ), fontType );
             categoryText.draw( categoryRoi.x + 4, offsetY, display );
 
-            categorySelections.emplace_back( category, { categoryRoi.x, offsetY, categoryRoi.width, categoryText.height() + 4 } );
+            categorySelections.push_back( { category, fheroes2::Rect{ categoryRoi.x, offsetY, categoryRoi.width, categoryText.height() + 4 } } );
 
             offsetY += categoryText.height() + 4;
         }
