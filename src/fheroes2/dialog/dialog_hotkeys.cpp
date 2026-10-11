@@ -60,35 +60,53 @@ namespace
         fheroes2::Rect roi;
     };
 
+    std::string getCategoryName( const std::optional<Game::HotKeyCategory> category )
+    {
+        return ( category == std::nullopt ) ? _( "hotkeys|All Categories" ) : _( Game::getHotKeyCategoryName( *category ) );
+    }
+
     void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, const std::optional<Game::HotKeyCategory> selectedCategory,
                                std::vector<CategorySelection> & categorySelections )
     {
-        categorySelections.clear();
+        // If Editor is not supported by the given assets then do not show "Editor" category.
+        const bool disableEditor = !Settings::Get().isPriceOfLoyaltySupported();
+        const Game::HotKeyCategory lastCategoty = disableEditor ? Game::HotKeyCategory::ARMY : Game::HotKeyCategory::EDITOR;
+
+        const size_t categorySelectionsSize = static_cast<size_t>( lastCategoty ) + 2;
+        const bool needInitCategories = categorySelections.size() != categorySelectionsSize;
+
+        if ( needInitCategories ) {
+            categorySelections.clear();
+            categorySelections.reserve( categorySelectionsSize );
+        }
 
         int32_t offsetY = categoryRoi.y + 4;
 
-        const fheroes2::FontType allFontType = selectedCategory ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow();
-        const fheroes2::Text allText( _( "hotkeys|All Categories" ), allFontType );
-
         fheroes2::Display & display = fheroes2::Display::instance();
-        allText.draw( categoryRoi.x + 4, offsetY, display );
 
-        categorySelections.push_back( { std::nullopt, { categoryRoi.x, offsetY, categoryRoi.width, allText.height() + 4 } } );
+        const auto renderCategotyText
+            = [needInitCategories, selectedCategory, &categoryRoi, &categorySelections, &display, &offsetY]( const std::optional<Game::HotKeyCategory> category ) {
+                  const bool isSelected = ( category == selectedCategory );
 
-        offsetY += allText.height() + 4;
+                  const fheroes2::FontType fontType = isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
-        for ( uint8_t i = static_cast<uint8_t>( Game::HotKeyCategory::DEFAULT ); i <= static_cast<uint8_t>( Game::HotKeyCategory::EDITOR ); ++i ) {
-            const auto category = static_cast<Game::HotKeyCategory>( i );
+                  fheroes2::Text categoryText( getCategoryName( category ), fontType );
+                  categoryText.fitToOneRow( categoryLength - 8 );
+                  categoryText.drawInRoi( categoryRoi.x + 4, offsetY, display, categoryRoi );
 
-            const bool isSelected = selectedCategory && ( category == *selectedCategory );
-            const fheroes2::FontType fontType = isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+                  const int32_t stepY = categoryText.height() + 4;
 
-            const fheroes2::Text categoryText( _( Game::getHotKeyCategoryName( category ) ), fontType );
-            categoryText.draw( categoryRoi.x + 4, offsetY, display );
+                  if ( needInitCategories ) {
+                      categorySelections.push_back( { category, { categoryRoi.x, offsetY, categoryRoi.width, stepY } } );
+                  }
 
-            categorySelections.push_back( { category, fheroes2::Rect{ categoryRoi.x, offsetY, categoryRoi.width, categoryText.height() + 4 } } );
+                  offsetY += stepY;
+              };
 
-            offsetY += categoryText.height() + 4;
+        renderCategotyText( std::nullopt );
+
+        for ( uint8_t i = static_cast<uint8_t>( Game::HotKeyCategory::DEFAULT ); i <= static_cast<uint8_t>( lastCategoty ); ++i ) {
+            renderCategotyText( static_cast<Game::HotKeyCategory>( i ) );
         }
     }
 
@@ -323,15 +341,15 @@ namespace fheroes2
         listbox.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         listbox.SetAreaMaxItems( ( hotKeyRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
 
-        std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> hotKeyEvents = Game::getAllHotKeyEvents();
-        std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> displayedHotKeyEvents = hotKeyEvents;
+        std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> allHotKeyEvents = Game::getAllHotKeyEvents();
+        std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> currentCategoryHotKeyEvents;
 
         std::optional<Game::HotKeyCategory> selectedCategory;
 
         std::vector<CategorySelection> categorySelections;
         drawHotKeyCategories( categoryRoi, selectedCategory, categorySelections );
 
-        listbox.SetListContent( displayedHotKeyEvents );
+        listbox.SetListContent( allHotKeyEvents );
         listbox.updateScrollBarImage();
         listbox.Redraw();
 
@@ -352,25 +370,32 @@ namespace fheroes2
                     clickedCategory = selection.category;
                     break;
                 }
+
+                if ( le.isMouseRightButtonPressedInArea( selection.roi ) ) {
+                    fheroes2::showStandardTextMessage( _( "Select hotkeys category" ), _( "Click here to select:\n" ) + getCategoryName( selection.category ),
+                                                       Dialog::ZERO );
+
+                    break;
+                }
             }
 
             if ( isCategoryClicked && clickedCategory != selectedCategory ) {
                 selectedCategory = clickedCategory;
 
-                displayedHotKeyEvents.clear();
+                currentCategoryHotKeyEvents.clear();
 
-                if ( !selectedCategory ) {
-                    displayedHotKeyEvents = hotKeyEvents;
+                if ( selectedCategory == std::nullopt ) {
+                    listbox.SetListContent( allHotKeyEvents );
                 }
                 else {
-                    for ( const auto & hotKeyEvent : hotKeyEvents ) {
+                    for ( const auto & hotKeyEvent : allHotKeyEvents ) {
                         if ( hotKeyEvent.second == *selectedCategory ) {
-                            displayedHotKeyEvents.push_back( hotKeyEvent );
+                            currentCategoryHotKeyEvents.push_back( hotKeyEvent );
                         }
                     }
-                }
 
-                listbox.SetListContent( displayedHotKeyEvents );
+                    listbox.SetListContent( currentCategoryHotKeyEvents );
+                }
 
                 drawHotKeyCategories( categoryRoi, selectedCategory, categorySelections );
 
