@@ -63,14 +63,15 @@ namespace
     void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, std::vector<CategorySelection> & categorySelections,
                                const std::optional<Game::HotKeyCategory> selectedCategory )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
 
         categorySelections.clear();
 
         int32_t offsetY = categoryRoi.y + 4;
 
         const fheroes2::FontType allFontType = selectedCategory ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow();
-        const fheroes2::Text allText( _( "All" ), allFontType );
+        const fheroes2::Text allText( _( "hotkeys|All Categories" ), allFontType );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
         allText.draw( categoryRoi.x + 4, offsetY, display );
 
         categorySelections.push_back( { std::nullopt, { categoryRoi.x, offsetY, categoryRoi.width, allText.height() + 4 } } );
@@ -284,18 +285,15 @@ namespace fheroes2
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Dialog height is capped with the current screen height minus 100 pixels.
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, std::min<int32_t>( display.height() - 100, 520 ), true, display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, std::max<int32_t>( display.height() - 100, fheroes2::Display::DEFAULT_HEIGHT ), true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
-        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 50, categoryLength + keyDescriptionLength + hotKeyLength + 8, roi.height - 88 );
+        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, categoryLength + keyDescriptionLength + hotKeyLength + 8, roi.height - 75 );
         const fheroes2::Rect categoryRoi( listRoi.x, listRoi.y, categoryLength, listRoi.height );
         const fheroes2::Rect hotKeyRoi( listRoi.x + categoryLength, listRoi.y, keyDescriptionLength + hotKeyLength + 8, listRoi.height );
 
         const fheroes2::Text title( _( "Hot Keys:" ), fheroes2::FontType::normalYellow() );
         title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 16, display );
-
-        const fheroes2::Text categoryHeader( _( "Categories:" ), fheroes2::FontType::normalWhite() );
-        categoryHeader.draw( categoryRoi.x + ( categoryRoi.width - categoryHeader.width() ) / 2, roi.y + 29, display );
 
         background.applyTextBackgroundShading( categoryRoi );
         background.applyTextBackgroundShading( { hotKeyRoi.x, hotKeyRoi.y, keyDescriptionLength + 8, hotKeyRoi.height } );
