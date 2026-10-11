@@ -80,7 +80,7 @@ namespace
         for ( uint8_t i = static_cast<uint8_t>( Game::HotKeyCategory::DEFAULT ); i <= static_cast<uint8_t>( Game::HotKeyCategory::EDITOR ); ++i ) {
             const auto category = static_cast<Game::HotKeyCategory>( i );
 
-            const bool isSelected = selectedCategory && category == *selectedCategory;
+            const bool isSelected = selectedCategory && ( category == *selectedCategory );
             const fheroes2::FontType fontType = isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
             const fheroes2::Text categoryText( _( Game::getHotKeyCategoryName( category ) ), fontType );
