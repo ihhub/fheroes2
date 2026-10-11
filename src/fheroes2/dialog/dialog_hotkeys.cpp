@@ -284,7 +284,8 @@ namespace fheroes2
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Dialog height is capped with the current screen height minus 100 pixels.
-        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, std::max<int32_t>( display.height() - 100, fheroes2::Display::DEFAULT_HEIGHT ), true, display );
+        fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, std::max<int32_t>( display.height() - 100, fheroes2::Display::DEFAULT_HEIGHT ), true,
+                                             display );
 
         const fheroes2::Rect roi( background.activeArea() );
         const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, categoryLength + keyDescriptionLength + hotKeyLength + 8, roi.height - 75 );
