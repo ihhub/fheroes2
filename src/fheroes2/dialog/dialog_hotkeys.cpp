@@ -69,17 +69,7 @@ namespace
     void drawHotKeyCategories( const fheroes2::Rect & categoryRoi, const std::optional<Game::HotKeyCategory> selectedCategory,
                                std::vector<CategorySelection> & categorySelections )
     {
-        // If Editor is not supported by the given assets then do not show "Editor" category.
-        const bool disableEditor = !Settings::Get().isPriceOfLoyaltySupported();
-        const Game::HotKeyCategory lastCategoty = disableEditor ? Game::HotKeyCategory::ARMY : Game::HotKeyCategory::EDITOR;
-
-        const size_t categorySelectionsSize = static_cast<size_t>( lastCategoty ) + 2;
-        const bool needInitCategories = categorySelections.size() != categorySelectionsSize;
-
-        if ( needInitCategories ) {
-            categorySelections.clear();
-            categorySelections.reserve( categorySelectionsSize );
-        }
+        const bool needInitCategories = categorySelections.empty();
 
         int32_t offsetY = categoryRoi.y + 4;
 
@@ -106,12 +96,18 @@ namespace
 
         renderCategotyText( std::nullopt );
 
-        for ( uint8_t i = static_cast<uint8_t>( Game::HotKeyCategory::DEFAULT ); i <= static_cast<uint8_t>( lastCategoty ); ++i ) {
+        for ( uint8_t i = static_cast<uint8_t>( Game::HotKeyCategory::DEFAULT ); i <= static_cast<uint8_t>( Game::HotKeyCategory::EDITOR ); ++i ) {
+            const Game::HotKeyCategory category = static_cast<Game::HotKeyCategory>( i );
+            // If Editor is not supported by the given assets then do not show "Editor" category.
+            if ( ( category == Game::HotKeyCategory::EDITOR ) && !Settings::Get().isPriceOfLoyaltySupported() ) {
+                continue;
+            }
+
             renderCategotyText( static_cast<Game::HotKeyCategory>( i ) );
         }
     }
 
-    class HotKeyElement : public fheroes2::DialogElement
+    class HotKeyElement final : public fheroes2::DialogElement
     {
     public:
         HotKeyElement( const fheroes2::Key key, fheroes2::Image & output )
@@ -179,7 +175,7 @@ namespace
         mutable bool _keyChanged{ false };
     };
 
-    class HotKeyList : public Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>
+    class HotKeyList final : public Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>
     {
     public:
         using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ListBox;
@@ -383,12 +379,12 @@ namespace fheroes2
             if ( isCategoryClicked && clickedCategory != selectedCategory ) {
                 selectedCategory = clickedCategory;
 
-                currentCategoryHotKeyEvents.clear();
-
                 if ( selectedCategory == std::nullopt ) {
                     listbox.SetListContent( allHotKeyEvents );
                 }
                 else {
+                    currentCategoryHotKeyEvents.clear();
+
                     for ( const auto & hotKeyEvent : allHotKeyEvents ) {
                         if ( hotKeyEvent.second == *selectedCategory ) {
                             currentCategoryHotKeyEvents.push_back( hotKeyEvent );
