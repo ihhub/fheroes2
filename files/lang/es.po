@@ -3045,6 +3045,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Muestra información adicional como FPS y la hora actual."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Puntuaciones más altas"
+
 msgid "Hotkey: "
 msgstr "Tecla de acceso rápido: "
 
@@ -3056,6 +3060,16 @@ msgstr "Evento: "
 
 msgid "Hot Keys:"
 msgstr "Atajos de Teclado:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Haz clic aquí para\n"
+"seleccionar un monstruo."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Seleccionar Monstruo:"
 
 msgid "Hide"
 msgstr "Ocultar"

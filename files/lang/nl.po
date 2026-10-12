@@ -3007,6 +3007,9 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "hotkeys|All Categories"
+msgstr ""
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -3018,6 +3021,15 @@ msgstr ""
 
 msgid "Hot Keys:"
 msgstr ""
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Selecteer spreuk doelwit"
 
 #, fuzzy
 msgid "Hide"

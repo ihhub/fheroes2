@@ -2982,6 +2982,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Zobrazit extra informace jako snímky za sekundu a místní čas."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Možnosti bitvy"
+
 msgid "Hotkey: "
 msgstr "Klávesová zkratka: "
 
@@ -2993,6 +2997,16 @@ msgstr "Událost: "
 
 msgid "Hot Keys:"
 msgstr "Klávesové zkratky:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Klikni zde pro\n"
+"výběr jednotky."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Vybrat jednotku:"
 
 msgid "Hide"
 msgstr "Skrýt"

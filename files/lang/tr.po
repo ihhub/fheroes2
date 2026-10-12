@@ -2912,6 +2912,9 @@ msgstr "Dikey eşitleme ayarı bazı monitörlerde yırtılma sorununu çözer."
 msgid "Show extra information such as FPS and current time."
 msgstr "FPS ve zaman hakkında ekstra bilgi göster."
 
+msgid "hotkeys|All Categories"
+msgstr ""
+
 msgid "Hotkey: "
 msgstr "Kısayol: "
 
@@ -2923,6 +2926,14 @@ msgstr "Etkinlik: "
 
 msgid "Hot Keys:"
 msgstr "Kısayollar:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Büyü hedefini seç"
 
 msgid "Hide"
 msgstr "Gizle"

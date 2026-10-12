@@ -3030,6 +3030,10 @@ msgstr ""
 "Паказваць дадатковую інфармацыю, такую як кадр/с (колькасць кадраў за "
 "секунду) і бягучы час."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "налады бою"
+
 msgid "Hotkey: "
 msgstr "Гарачая клавіша: "
 
@@ -3041,6 +3045,14 @@ msgstr "Падзея: "
 
 msgid "Hot Keys:"
 msgstr "Гарачыя клавішы:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Націсніце сюды, каб выбраць гэты колер."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Выберыце істоту:"
 
 msgid "Hide"
 msgstr "Не паказваць"

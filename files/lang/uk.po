@@ -3003,6 +3003,10 @@ msgstr "Верт. синхр. може усунути мерехтіння на 
 msgid "Show extra information such as FPS and current time."
 msgstr "Відобразити додаткову інформацію як FPS та поточний час."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "параметри бою"
+
 msgid "Hotkey: "
 msgstr "Гаряча клавіша: "
 
@@ -3014,6 +3018,14 @@ msgstr "Подія: "
 
 msgid "Hot Keys:"
 msgstr "Гарячі клавіші:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Натисніть щоб вибрати монстра."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Оберіть монстра:"
 
 msgid "Hide"
 msgstr "Сховати"

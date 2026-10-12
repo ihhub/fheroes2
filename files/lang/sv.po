@@ -2995,6 +2995,10 @@ msgstr "V-Sync kan aktiveras för att lösa flimmerproblem på vissa skärmar."
 msgid "Show extra information such as FPS and current time."
 msgstr "Visa extra information som FPS och nuvarande tid."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Stridsalternativ"
+
 msgid "Hotkey: "
 msgstr "Snabbtangent: "
 
@@ -3006,6 +3010,16 @@ msgstr "Händelse: "
 
 msgid "Hot Keys:"
 msgstr "Snabbtangenter:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Klicka här för att\n"
+"välja en varelse."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Välj Varelse:"
 
 msgid "Hide"
 msgstr "Dölj"

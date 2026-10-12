@@ -3070,6 +3070,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "опции на битка"
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -3082,6 +3086,14 @@ msgstr "Събитие"
 
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Избери чудовище:"
 
 msgid "Hide"
 msgstr "Скрий"

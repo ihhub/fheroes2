@@ -3017,6 +3017,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Mostrar informações adicionais, como FPS e hora atual."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "opções de batalha"
+
 msgid "Hotkey: "
 msgstr "Tecla de atalho: "
 
@@ -3028,6 +3032,16 @@ msgstr "Evento: "
 
 msgid "Hot Keys:"
 msgstr "Atalhos:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Clique aqui para\n"
+"selecionar um monstro."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Selecionar Monstro:"
 
 msgid "Hide"
 msgstr "Ocultar"

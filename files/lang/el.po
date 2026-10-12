@@ -2720,6 +2720,9 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "hotkeys|All Categories"
+msgstr ""
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -2730,6 +2733,12 @@ msgid "Event: "
 msgstr ""
 
 msgid "Hot Keys:"
+msgstr ""
+
+msgid "Click here to select:\n"
+msgstr ""
+
+msgid "Select hotkeys category"
 msgstr ""
 
 msgid "Hide"

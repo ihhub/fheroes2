@@ -2883,6 +2883,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Išeiti iš pilies"
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -2894,6 +2898,14 @@ msgstr ""
 
 msgid "Hot Keys:"
 msgstr ""
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Rodyti kitą miestą"
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Pasirinkti %{name}"
 
 msgid "Hide"
 msgstr ""
