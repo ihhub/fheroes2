@@ -2949,6 +2949,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Opzioni Castello"
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -2961,6 +2965,14 @@ msgstr "Evento"
 
 msgid "Hot Keys:"
 msgstr ""
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Scegli mostro:"
 
 msgid "Hide"
 msgstr "Nascondi"

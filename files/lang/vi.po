@@ -3064,6 +3064,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Hiển thị thêm thông tin như FPS và thời gian hiện tại."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "lựa chọn trận chiến"
+
 msgid "Hotkey: "
 msgstr "Phím nóng: "
 
@@ -3075,6 +3079,14 @@ msgstr "Sự kiện: "
 
 msgid "Hot Keys:"
 msgstr "Phím tắt:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Chọn Quái vật:"
 
 msgid "Hide"
 msgstr "Ẩn"

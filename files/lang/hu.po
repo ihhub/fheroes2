@@ -2998,6 +2998,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Extra információkat jelenít meg, mint például FPS, illetve pontos idő."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "csata beállítások"
+
 msgid "Hotkey: "
 msgstr "Gyorsbillentyű: "
 
@@ -3009,6 +3013,16 @@ msgstr "Esemény: "
 
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Kattints ide, a\n"
+"lény kiválasztásához."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Lény kiválasztása:"
 
 msgid "Hide"
 msgstr "Elrejt"

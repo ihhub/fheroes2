@@ -3066,6 +3066,10 @@ msgstr ""
 "Afficher des informations supplémentaires telles que le FPS et l'heure "
 "actuelle."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Options de bataille"
+
 msgid "Hotkey: "
 msgstr "Raccourci clavier : "
 
@@ -3077,6 +3081,16 @@ msgstr "Événement : "
 
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Cliquez ici pour\n"
+"sélectionner une créature."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Choisir créature :"
 
 msgid "Hide"
 msgstr "Libre"

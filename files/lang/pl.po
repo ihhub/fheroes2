@@ -3019,6 +3019,10 @@ msgstr "Włączenie V-Sync może rozwiązać problemy z migocącym ekranem."
 msgid "Show extra information such as FPS and current time."
 msgstr "Pokaż dodatkowe informacje jak na przykład FPS lub aktualną godzinę."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "opcje walki"
+
 msgid "Hotkey: "
 msgstr "Skrót klaw.: "
 
@@ -3030,6 +3034,16 @@ msgstr "Zdarzenie: "
 
 msgid "Hot Keys:"
 msgstr "Skróty klawiszowe:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Kliknij tutaj aby\n"
+"wybrać potwora."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Wybierz potwora:"
 
 msgid "Hide"
 msgstr "Ukryj"

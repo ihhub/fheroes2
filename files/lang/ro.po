@@ -2888,6 +2888,9 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "hotkeys|All Categories"
+msgstr ""
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -2899,6 +2902,14 @@ msgstr ""
 
 msgid "Hot Keys:"
 msgstr "Scurtături:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Selectați ținta vrăjii"
 
 msgid "Hide"
 msgstr "Ascunde"

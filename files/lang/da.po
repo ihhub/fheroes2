@@ -3068,6 +3068,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Vis flere informationer som billeder i sekundet (FPS) og klokkeslæt."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Kampindstillinger"
+
 msgid "Hotkey: "
 msgstr "Genvejstast: "
 
@@ -3079,6 +3083,16 @@ msgstr "Begivenhed: "
 
 msgid "Hot Keys:"
 msgstr "Genvejstaster:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Klik her, for at\n"
+"vælge et væsen."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Vælg væsen:"
 
 msgid "Hide"
 msgstr "Skjul"

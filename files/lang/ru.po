@@ -3023,6 +3023,10 @@ msgstr ""
 "Показать дополнительную информацию, такую как FPS (количество отображаемых "
 "кадров в секунду) и текущее время."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "настройки битвы"
+
 msgid "Hotkey: "
 msgstr "Горячая клавиша: "
 
@@ -3034,6 +3038,17 @@ msgstr "Событие: "
 
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Нажмите здесь,\n"
+"чтобы выбрать\n"
+"существо."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Выберите существо:"
 
 msgid "Hide"
 msgstr "Скрыть"

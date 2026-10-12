@@ -3055,6 +3055,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Ukáž informácie navyše ako FPS a momentálny čas."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "možnosti boja"
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -3067,6 +3071,14 @@ msgstr "Udalosť"
 
 msgid "Hot Keys:"
 msgstr "Skratky:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Zvoľ bojovníka:"
 
 msgid "Hide"
 msgstr "Skry"
