@@ -121,7 +121,6 @@ namespace AI
 
         static double getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget );
 
-
         static std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit );
         bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
