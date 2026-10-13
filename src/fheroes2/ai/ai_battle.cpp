@@ -737,16 +737,11 @@ bool AI::BattlePlanner::isLimitOfTurnsExceeded( const Battle::Arena & arena, Bat
 
     return false;
 }
-std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit );
-bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit )
+std::optional<const Battle::Unit *> AI::BattlePlanner::findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit )
 {
     const std::shared_ptr<const Battle::Units> order = arena.getOrderOfUnits();
     const Battle::Units * units = order.get();
-    if ( units == nullptr ) {
-        return std::nullopt;
-    }
 
     size_t i = 0;
     const size_t count = units->size();
@@ -766,7 +761,7 @@ std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, c
     return { next_unit };
 }
 
-bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit )
+bool AI::BattlePlanner::isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit )
 {
     const std::optional<const Battle::Unit *> maybeNextUnit = findNextUnit( arena, currentUnit );
     if ( !maybeNextUnit.has_value() ) {

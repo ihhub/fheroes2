@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 
 #include "color.h"
 
@@ -119,6 +120,10 @@ namespace AI
         bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Battle::Units & enemies, const Spell & spell ) const;
 
         static double getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget );
+
+
+        std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit );
+        bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto combat should be interrupted (one way or another)
