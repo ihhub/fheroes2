@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 
 #include "color.h"
 
@@ -119,6 +120,9 @@ namespace AI
         bool isSpellcastUselessForUnit( const Battle::Unit & unit, const Battle::Units & enemies, const Spell & spell ) const;
 
         static double getMeleeBestOutcome( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & enemies, BattleTargetPair & bestTarget );
+
+        static std::optional<const Battle::Unit *> findNextUnit( const Battle::Arena & arena, const Battle::Unit & currentUnit );
+        bool isPostponeRetreat( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto combat should be interrupted (one way or another)
