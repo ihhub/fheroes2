@@ -3046,6 +3046,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Zusätzliche Informationen wie die FPS und die aktuelle Zeit anzeigen."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Kampfoptionen"
+
 msgid "Hotkey: "
 msgstr "Hotkey: "
 
@@ -3057,6 +3061,16 @@ msgstr "Ereignis: "
 
 msgid "Hot Keys:"
 msgstr "Hotkeys:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Klickt, um\n"
+"ein Monster auszuwählen."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Monster auswählen:"
 
 msgid "Hide"
 msgstr "Ausblenden"
@@ -4308,6 +4322,9 @@ msgstr "Karte gespeichert in: "
 msgid "Failed to save the map."
 msgstr "Speichern der Karte fehlgeschlagen."
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr "Ungespeicherte Änderungen"
 
@@ -5045,9 +5062,6 @@ msgstr "Es wird kein Artefakt als Belohnung vergeben."
 msgid "Delete an artifact from the reward."
 msgstr "Entfernt ein Artefakt aus der Belohnung."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "Tag: %{day} Woche: %{week} Monat: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Leicht"
 
@@ -5406,6 +5420,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Klickt, um die Farbe auszuwählen."
 
+msgid "%{color} player"
+msgstr "Spieler %{color}"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5416,7 +5433,16 @@ msgstr "Speichern der Karte fehlgeschlagen."
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5427,15 +5453,34 @@ msgstr "Animation"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Animation"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Damit kann die Klasse eines Spielers geändert werden. Die Klassen sind nicht "
+"immer änderbar. Je nach Szenario kann ein Spieler zusätzliche Städte und/"
+"oder Helden erhalten, die nicht seiner primären Ausrichtung angehören."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Animation der Objekte ein-/ausschalten."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5453,38 +5498,45 @@ msgstr ""
 msgid "and more..."
 msgstr "und mehr..."
 
-msgid "Easy"
-msgstr "Leicht"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Hard"
-msgstr "Schwer"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
 msgstr "Feldzugschwierigkeit"
 
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Feldzugschwierigkeit"
+
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Feldzugschwierigkeit"
+
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, um die Geschichte des Spiels mit weniger "
 "Herausforderungen zu erleben. Die KI ist schwächer als im Schwierigkeitsgrad "
 "Normal."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, um den Feldzug so zu erleben, wie er "
 "ursprünglich konzipiert wurde."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, wenn Ihr eine größere Herausforderung "
 "sucht. Die KI ist stärker als in der normalen Schwierigkeit."
+
+msgid "Campaign Difficulty"
+msgstr "Feldzugschwierigkeit"
 
 msgid ""
 "Congratulations!\n"
@@ -6671,6 +6723,9 @@ msgstr ""
 "Spieler %{color}, Eure Helden lassen Euch im Stich, und Ihr werdet aus "
 "diesem Land verbannt."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "Tag: %{day} Woche: %{week} Monat: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6888,15 +6943,6 @@ msgstr ""
 "können nur von einem Computerspieler oder nur von einem menschlichen Spieler "
 "gespielt werden."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Damit kann die Klasse eines Spielers geändert werden. Die Klassen sind nicht "
-"immer änderbar. Je nach Szenario kann ein Spieler zusätzliche Städte und/"
-"oder Helden erhalten, die nicht seiner primären Ausrichtung angehören."
-
 msgid "Handicap"
 msgstr "Handicap"
 
@@ -6910,9 +6956,6 @@ msgstr ""
 "menschliche Spieler können ein Handicap haben. Spieler mit Handicap starten "
 "mit weniger Ressourcen und erhalten 15 bzw. 30 % weniger Ressourcen pro "
 "Runde bei leichten bzw. schweren Handicaps."
-
-msgid "%{color} player"
-msgstr "Spieler %{color}"
 
 msgid "No Handicap"
 msgstr "Kein Handicap"
@@ -7118,6 +7161,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Langsam"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Fast"
 msgstr "Schnell"
@@ -12716,8 +12762,10 @@ msgstr "Erhöht die Angriffsfertigkeit einer Einheit gegen Drachen erheblich."
 msgid "Blood Lust"
 msgstr "Blutdurst"
 
-msgid "Increases a unit's attack skill."
-msgstr "Erhöht die Angriffsfertigkeit einer Einheit."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Tote beleben"
@@ -12834,10 +12882,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Boot herbeirufen"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Ruft das nächstgelegene unbesetzte, eigene Boot an ein dem Helden "
 "angrenzendes Ufer. Ein eigenes Boot ist eines, das Ihr gerade gebaut oder "
@@ -13069,6 +13119,23 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Erhöht die Angriffsfertigkeit einer Einheit."
+
+#~ msgid "Easy"
+#~ msgstr "Leicht"
+
+#~ msgid "Hard"
+#~ msgstr "Schwer"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "ZUSATZ\n"
+#~ "FELDZUG"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Komplett neue Karte erstellen."

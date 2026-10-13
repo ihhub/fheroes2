@@ -303,9 +303,9 @@ namespace
             font = fheroes2::FontColor::GRAY;
             textAreaBorders.x = 4 + 4;
             textAreaBorders.y = 1 + 1;
-            minimumTextArea.width = 87;
+            minimumTextArea.width = 86;
             maximumTextArea.height = 50;
-            backgroundBorders.width = 6 + 3;
+            backgroundBorders.width = 6 + 4;
             backgroundBorders.height = 4 + 4;
             releasedOffset = { 6, 4 };
             pressedOffset = { 5, 5 };

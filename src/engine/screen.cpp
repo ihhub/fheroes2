@@ -550,11 +550,13 @@ namespace
 
         void enableSoftwareEmulation( const bool enable ) override
         {
-            if ( enable == _emulation ) {
+            const bool newState = enable || isSoftwareEmulationForced();
+
+            if ( newState == _emulation ) {
                 return;
             }
 
-            if ( enable ) {
+            if ( newState ) {
                 clear();
 
                 const int returnCode = SDL_ShowCursor( SDL_DISABLE );
@@ -613,7 +615,7 @@ namespace
         static RenderCursor * create()
         {
             auto * cursor = new RenderCursor;
-            cursor->enableSoftwareEmulation( true );
+            cursor->forceSoftwareEmulation();
 
             return cursor;
         }
@@ -1531,8 +1533,8 @@ namespace fheroes2
             Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
 
             if ( _cursor->_keepInScreenArea ) {
-                cursorROI.x = std::clamp( cursorROI.x, 0, width() - cursorROI.width );
-                cursorROI.y = std::clamp( cursorROI.y, 0, height() - cursorROI.height );
+                cursorROI.x = std::clamp<int32_t>( cursorROI.x, 0, width() - cursorROI.width );
+                cursorROI.y = std::clamp<int32_t>( cursorROI.y, 0, height() - cursorROI.height );
             }
 
             const Sprite backup = Crop( *this, cursorROI.x, cursorROI.y, cursorROI.width, cursorROI.height );

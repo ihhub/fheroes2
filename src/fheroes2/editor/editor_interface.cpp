@@ -687,6 +687,10 @@ namespace
     bool verifyTerrainPlacement( const fheroes2::Point & tilePos, const Maps::ObjectGroup groupType, const int32_t objectType, std::string & errorMessage )
     {
         switch ( groupType ) {
+        case Maps::ObjectGroup::KINGDOM_HEROES:
+            // Heroes can be placed on any terrain, including water.
+            break;
+
         case Maps::ObjectGroup::ADVENTURE_ARTIFACTS: {
             const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
@@ -717,7 +721,6 @@ namespace
         case Maps::ObjectGroup::ADVENTURE_MINES:
         case Maps::ObjectGroup::ADVENTURE_POWER_UPS:
         case Maps::ObjectGroup::ADVENTURE_TREASURES:
-        case Maps::ObjectGroup::KINGDOM_HEROES:
         case Maps::ObjectGroup::LANDSCAPE_MOUNTAINS:
         case Maps::ObjectGroup::LANDSCAPE_ROCKS:
         case Maps::ObjectGroup::LANDSCAPE_TREES:
@@ -993,9 +996,9 @@ namespace
             int32_t tileIndex{ -1 };
         };
 
-        const int32_t minX = std::max( 0, tilePos.x - Maps::maxObjectDimensions.width );
+        const int32_t minX = std::max<int32_t>( 0, tilePos.x - Maps::maxObjectDimensions.width );
         const int32_t maxX = std::min( mapFormat.width, tilePos.x + Maps::maxObjectDimensions.width + 1 );
-        const int32_t minY = std::max( 0, tilePos.y - Maps::maxObjectDimensions.height );
+        const int32_t minY = std::max<int32_t>( 0, tilePos.y - Maps::maxObjectDimensions.height );
         const int32_t maxY = std::min( mapFormat.width, tilePos.y + Maps::maxObjectDimensions.height + 1 );
 
         std::map<uint32_t, LocalObjectInfo> potentialObjects;
@@ -2741,6 +2744,8 @@ namespace Interface
             if ( hero ) {
                 hero->SetCenter( tilePos );
                 hero->SetColor( Color::IndexToColor( static_cast<int>( color ) ) );
+                hero->SetShipMaster( tile.isWater() );
+                tile.setHero( hero );
             }
             else {
                 // How is it possible that the action was successful but no hero?
@@ -3407,6 +3412,8 @@ namespace Interface
         _updateObjectUID( oldObjectUID, newObjectUID );
 
         action.commit();
+
+        _warningMessage.reset( _( "The selected object has been moved to the top layer." ) );
 
         // TODO: so far this is the only way to update objects for rendering.
         return Maps::readMapInEditor( _mapFormat );

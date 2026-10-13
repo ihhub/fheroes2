@@ -3023,6 +3023,10 @@ msgstr ""
 "Показать дополнительную информацию, такую как FPS (количество отображаемых "
 "кадров в секунду) и текущее время."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "настройки битвы"
+
 msgid "Hotkey: "
 msgstr "Горячая клавиша: "
 
@@ -3034,6 +3038,17 @@ msgstr "Событие: "
 
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Нажмите здесь,\n"
+"чтобы выбрать\n"
+"существо."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Выберите существо:"
 
 msgid "Hide"
 msgstr "Скрыть"
@@ -4263,6 +4278,9 @@ msgstr "Карта сохранена в: "
 msgid "Failed to save the map."
 msgstr "Не удалось сохранить карту."
 
+msgid "The selected object has been moved to the top layer."
+msgstr "Выбранный объект перемещён на верхний слой."
+
 msgid "Unsaved Changes"
 msgstr "Несохранённые изменения"
 
@@ -4982,9 +5000,6 @@ msgstr "В вознаграждении не будет выдаваться а�
 msgid "Delete an artifact from the reward."
 msgstr "Удалить артефакт из вознаграждения."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "День: %{day} Неделя: %{week} Месяц: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Простая"
 
@@ -5336,6 +5351,9 @@ msgstr " превышений заданного ограничения врем
 msgid "Click to close the dialog."
 msgstr "Нажмите, чтобы закрыть диалоговое окно."
 
+msgid "%{color} player"
+msgstr "%{color} игрок"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr "Выиграл %{percent}% прогонов."
 
@@ -5346,7 +5364,18 @@ msgstr ""
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Количество прогонов:"
 
+#, fuzzy
+msgid "Set the number of playthroughs."
+msgstr "Количество прогонов:"
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr "Максимум дней на прогон:"
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Максимум дней на прогон:"
 
 msgid "autoPlaytest|Animation"
@@ -5355,16 +5384,36 @@ msgstr "Анимация"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Скорость анимации:"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr "Звуковые эффекты"
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr "Нажатие левой кнопки мыши в любой момент прервёт тестирование карты."
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Эта опция позволяет Вам задавать класс игрока. Классы не всегда можно "
+"изменять. В зависимости от сценария игрок может получать дополнительные "
+"города и/или героев, направленность которых изначально не совпадает с "
+"направленностью игрока."
+
 msgid "Click to run an automated map playtest."
 msgstr ""
 "Нажмите, чтобы запустить автоматическое тестирование игрового процесса на "
 "карте."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Включить или выключить анимацию объектов."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5383,37 +5432,38 @@ msgstr ""
 msgid "and more..."
 msgstr "и т.д."
 
-msgid "Easy"
-msgstr "Лёгкая"
+msgid "campaignDifficulty|Decreased"
+msgstr "Сниженная"
 
-msgid "Normal"
+msgid "campaignDifficulty|Default"
 msgstr "Обычная"
 
-msgid "Hard"
-msgstr "Тяжёлая"
-
-msgid "Campaign Difficulty"
-msgstr "Сложность кампании"
+msgid "campaignDifficulty|Increased"
+msgstr "Повышенная"
 
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Выберите данный уровень сложности, если Вы предпочитаете сюжет, а не сложные "
 "сражения. ИИ слабее, чем обычно."
 
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Выберите данный уровень сложности, чтобы насладиться кампанией, как она "
 "первоначально задумывалась."
 
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Выберите данный уровень сложности, если хотите серьёзных сражений. ИИ "
 "сильнее, чем обычно."
+
+msgid "Campaign Difficulty"
+msgstr "Сложность кампании"
 
 msgid ""
 "Congratulations!\n"
@@ -6583,6 +6633,9 @@ msgstr ""
 "%{color} игрок, Ваши герои отвернулись от Вас, а Вы изгоняетесь из этих "
 "земель."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "День: %{day} Неделя: %{week} Месяц: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Лорд Килбурн"
 
@@ -6790,16 +6843,6 @@ msgstr ""
 "цвету соответствует определённая стартовая позиция. Некоторые цвета жёстко "
 "закреплены либо за компьютерными, либо за живыми игроками."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Эта опция позволяет Вам задавать класс игрока. Классы не всегда можно "
-"изменять. В зависимости от сценария игрок может получать дополнительные "
-"города и/или героев, направленность которых изначально не совпадает с "
-"направленностью игрока."
-
 msgid "Handicap"
 msgstr "Фора"
 
@@ -6812,9 +6855,6 @@ msgstr ""
 "Эта опция позволяет любому игроку-человеку дать фору другим игрокам. Если "
 "игрок даёт другим фору, он начинает игру с меньшим количеством ресурсов и "
 "каждый ход получает на 15 или 30% меньше ресурсов, в зависимости от его форы."
-
-msgid "%{color} player"
-msgstr "%{color} игрок"
 
 msgid "No Handicap"
 msgstr "Нет форы"
@@ -7011,6 +7051,9 @@ msgstr "Эсперанто"
 
 msgid "Slow"
 msgstr "Медленная"
+
+msgid "Normal"
+msgstr "Обычная"
 
 msgid "Fast"
 msgstr "Быстрая"
@@ -12215,7 +12258,7 @@ msgstr "Телепорт"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
-msgstr "Телепортирует выбранное существо в любую свободную точку на поле."
+msgstr "Телепортирует выбранный отряд в любую свободную точку на поле боя."
 
 msgid "Cure"
 msgstr "Лечение"
@@ -12242,16 +12285,16 @@ msgstr "Оживление"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
-"До конца боя оживляет воинов в отряде, которому был нанесён урон или который "
-"был уничтожен."
+"До конца боя оживляет существ в отряде, которому был нанесён урон или "
+"который был уничтожен."
 
 msgid "Resurrect True"
 msgstr "Воскрешение"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
-"Навсегда оживляет воинов в отряде, которому был нанесён урон или который был "
-"уничтожен."
+"Навсегда оживляет существ в отряде, которому был нанесён урон или который "
+"был уничтожен."
 
 msgid "Haste"
 msgstr "Ускорение"
@@ -12396,7 +12439,7 @@ msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
-"Призывает дождь из камней, наносящий урон всем существам, находящимся в поле "
+"Призывает дождь из камней, наносящий урон всем отрядам, находящимся в поле "
 "действия заклинания."
 
 msgid "Meteor Shower"
@@ -12462,13 +12505,17 @@ msgid "Dragon Slayer"
 msgstr "Убийца драконов"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Увеличивает атаку выбранного существа в схватке с драконами на 5."
+msgstr "Увеличивает атаку выбранного отряда в схватке с драконами на 5."
 
 msgid "Blood Lust"
 msgstr "Жажда крови"
 
-msgid "Increases a unit's attack skill."
-msgstr "Увеличивает атаку выбранного отряда на 3."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
+"Увеличивает атаку выбранного отряда на 3. Действует в течение 3 раундов, "
+"независимо от силы магии."
 
 msgid "Animate Dead"
 msgstr "Поднять нежить"
@@ -12504,8 +12551,8 @@ msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Принимает на себя половину урона стрелковых атак врага, направленных на всех "
-"Ваших существ. Не влияет на урон от замковых башен или баллисты."
+"Принимает на себя половину урона стрелковых атак врага, направленных на все "
+"Ваши отряды. Не влияет на урон от замковых башен или баллисты."
 
 msgid "Summon Earth Elemental"
 msgstr "Земной элементаль"
@@ -12580,10 +12627,12 @@ msgstr "Позволяет получить подробную информац�
 msgid "Summon Boat"
 msgstr "Призвать корабль"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Перемещает Ваш ближайший незанятый корабль в ближайшую точку побережья. "
 "Корабль считается Вашим, если Вы его только что построили, или тот на "
@@ -12811,6 +12860,23 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Увеличивает атаку выбранного отряда на 3."
+
+#~ msgid "Easy"
+#~ msgstr "Лёгкая"
+
+#~ msgid "Hard"
+#~ msgstr "Тяжёлая"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "ЦЕНА\n"
+#~ "ВЕРНОСТИ"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Создать новую карту с нуля."

@@ -2995,6 +2995,10 @@ msgstr "V-Sync kan aktiveras för att lösa flimmerproblem på vissa skärmar."
 msgid "Show extra information such as FPS and current time."
 msgstr "Visa extra information som FPS och nuvarande tid."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "Stridsalternativ"
+
 msgid "Hotkey: "
 msgstr "Snabbtangent: "
 
@@ -3006,6 +3010,16 @@ msgstr "Händelse: "
 
 msgid "Hot Keys:"
 msgstr "Snabbtangenter:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Klicka här för att\n"
+"välja en varelse."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Välj Varelse:"
 
 msgid "Hide"
 msgstr "Dölj"
@@ -4225,6 +4239,9 @@ msgstr "Kartan sparades i:"
 msgid "Failed to save the map."
 msgstr "Misslyckades att spara kartan."
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr "Osparade ändringar"
 
@@ -4936,9 +4953,6 @@ msgstr "Ingen artefakt kommer att ges som belöning."
 msgid "Delete an artifact from the reward."
 msgstr "Ta bort en artefakt från belöningen."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "Dag: %{day} Vecka: %{week} Månad: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Lätt"
 
@@ -5288,6 +5302,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Klicka för stänga dialogen."
 
+msgid "%{color} player"
+msgstr "%{color} spelare"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr "%{percent}% vunna testkörningar."
 
@@ -5297,7 +5314,18 @@ msgstr "Misslyckades att förbereda kartan för automatiskt testkörning."
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Antal testkörningar:"
 
+#, fuzzy
+msgid "Set the number of playthroughs."
+msgstr "Antal testkörningar:"
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr "Maximalt antal dagar per testkörning:"
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Maximalt antal dagar per testkörning:"
 
 msgid "autoPlaytest|Animation"
@@ -5306,14 +5334,33 @@ msgstr "Animering"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Animeringshastighet:"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr "Ljudeffekter"
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr "Vänsterklickning kommer att avbryta testkörningen."
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Detta låter dig ändra spelarnas startpositioner och färger. En speciell färg "
+"startar alltid vid en viss plats. Vissa positioner kan endast spelas av en "
+"datorstyrd eller mänsklig spelare."
+
 msgid "Click to run an automated map playtest."
 msgstr "Klicka för köra en karta med automatiskt testkörning."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Aktivera animationen för föremålen."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5330,37 +5377,44 @@ msgstr ""
 msgid "and more..."
 msgstr "och mer..."
 
-msgid "Easy"
-msgstr "Lätt"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Hard"
-msgstr "Svår"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
 msgstr "Kampanjsvårighet"
 
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Kampanjsvårighet"
+
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Kampanjsvårighet"
+
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Välj denna svårighetsgrad om du föredrar att följa historien framför "
 "utmaningen. Datorn är svagare i jämförelse med normal svårighetsgrad."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Välj denna svårighetsgrad för att uppleva kampanjen som den ursprungligen är "
 "tänkt att upplevas."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Välj denna svårighetsgrad om du vill ha en utmaning. Datorn är starkare i "
 "jämförelse med normal svårighetsgrad."
+
+msgid "Campaign Difficulty"
+msgstr "Kampanjsvårighet"
 
 msgid ""
 "Congratulations!\n"
@@ -6521,6 +6575,9 @@ msgid ""
 msgstr ""
 "%{color} spelare, dina hjältar överger dig och du utvisas från detta land."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "Dag: %{day} Vecka: %{week} Månad: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6730,15 +6787,6 @@ msgstr ""
 "startar alltid vid en viss plats. Vissa positioner kan endast spelas av en "
 "datorstyrd eller mänsklig spelare."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Detta låter dig ändra spelarnas startpositioner och färger. En speciell färg "
-"startar alltid vid en viss plats. Vissa positioner kan endast spelas av en "
-"datorstyrd eller mänsklig spelare."
-
 msgid "Handicap"
 msgstr "Handikapp"
 
@@ -6752,9 +6800,6 @@ msgstr ""
 "Ändra spelarens handikapp. Bara spelare kontrollerade av en människa kan ha "
 "handikapp. Handikappade spelare startar med färre resurser och tjänar 15 % "
 "mindre för milt och 30 % mindre för gravt handikapp."
-
-msgid "%{color} player"
-msgstr "%{color} spelare"
 
 msgid "No Handicap"
 msgstr "Inget Handikapp"
@@ -6946,6 +6991,9 @@ msgstr "Esperanto"
 
 msgid "Slow"
 msgstr "Långsam"
+
+msgid "Normal"
+msgstr "Normal"
 
 msgid "Fast"
 msgstr "Snabb"
@@ -12413,8 +12461,10 @@ msgstr "Höjer kraftigt en varelses Anfall mot Drakar."
 msgid "Blood Lust"
 msgstr "Blodtörst"
 
-msgid "Increases a unit's attack skill."
-msgstr "Höjer en varelses Anfall."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Animera Död"
@@ -12532,10 +12582,12 @@ msgstr ""
 "Inkalla\n"
 "Skepp"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Framkallar närmsta lediga skepp till en närliggande strand. Bara skepp som "
 "du nyligen byggt eller var den senaste att kontrollera kan framkallas."
@@ -12764,6 +12816,23 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Höjer en varelses Anfall."
+
+#~ msgid "Easy"
+#~ msgstr "Lätt"
+
+#~ msgid "Hard"
+#~ msgstr "Svår"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "EXPANSIONS-\n"
+#~ "KAMPANJ"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Skapa en ny blank karta."

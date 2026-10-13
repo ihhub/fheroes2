@@ -49,14 +49,16 @@ namespace fheroes2
         };
 
         static constexpr int32_t playthroughLimit{ 100 };
-        static constexpr int32_t dayLimit{ 1000 };
+
+        // Let's be reasonable. Having a playthrough over 10 years is an overkill.
+        static constexpr int32_t dayLimit{ 3360 };
         static constexpr int32_t animationLimit{ 10 };
 
         static AutoPlaytest & instance();
 
         void setMaxDaysInPlaythrough( const int32_t days )
         {
-            _maxDaysInPlaythrough = std::clamp( days, 1, dayLimit );
+            _maxDaysInPlaythrough = std::clamp<int32_t>( days, 1, dayLimit );
         }
 
         int32_t getMaxDaysInPlaythrough() const
@@ -66,7 +68,7 @@ namespace fheroes2
 
         void setAnimationSpeed( const int32_t speed )
         {
-            _animationSpeed = std::clamp( speed, 1, animationLimit );
+            _animationSpeed = std::clamp<int32_t>( speed, 1, animationLimit );
         }
 
         int32_t getAnimationSpeed() const
@@ -76,7 +78,7 @@ namespace fheroes2
 
         void setMaxPlaythroughs( const int32_t playthroughCount )
         {
-            _maxPlaythroughs = std::clamp( playthroughCount, 1, playthroughLimit );
+            _maxPlaythroughs = std::clamp<int32_t>( playthroughCount, 1, playthroughLimit );
         }
 
         int32_t getMaxPlaythroughs() const
@@ -194,7 +196,7 @@ namespace fheroes2
         std::vector<std::vector<PlayerInfo>> _playthroughResults;
 
         int32_t _maxPlaythroughs{ 1 };
-        int32_t _maxDaysInPlaythrough{ 365 };
+        int32_t _maxDaysInPlaythrough{ 336 };
         int32_t _animationSpeed{ animationLimit };
         bool _isAnimationEnabled{ true };
         bool _playEnvironmentSounds{ true };

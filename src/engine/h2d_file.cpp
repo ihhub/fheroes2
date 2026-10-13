@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
+#include <utility>
 
 #include "image.h"
 #include "zzlib.h"
@@ -37,7 +38,7 @@ namespace
     // 5 bytes - file name
     const size_t minFileSize = 4 + 4 + 4 + 4 + 5 + 1;
 
-    const uint8_t version{ 2U };
+    const uint8_t version{ 3U };
     const std::array<uint8_t, 4> magicSequence{ 'H', '2', 'D', version };
 }
 
@@ -45,7 +46,7 @@ namespace fheroes2
 {
     bool H2DReader::open( const std::string & path )
     {
-        _fileNameAndOffset.clear();
+        _fileNameVsInfo.clear();
         _fileStream.close();
 
         if ( !_fileStream.open( path, "rb" ) ) {
@@ -73,11 +74,14 @@ namespace fheroes2
             const uint32_t size = _fileStream.getLE32();
             std::string name;
             _fileStream >> name;
+
+            std::string extraInfo;
+            _fileStream >> extraInfo;
             if ( size == 0 || static_cast<size_t>( offset ) + size > fileSize || name.empty() ) {
                 continue;
             }
 
-            _fileNameAndOffset.try_emplace( std::move( name ), std::make_pair( offset, size ) );
+            _fileNameVsInfo.try_emplace( std::move( name ), EntryInfo{ offset, size, std::move( extraInfo ) } );
         }
 
         return true;
@@ -85,13 +89,13 @@ namespace fheroes2
 
     std::vector<uint8_t> H2DReader::getFile( const std::string & fileName )
     {
-        const auto it = _fileNameAndOffset.find( fileName );
-        if ( it == _fileNameAndOffset.end() ) {
+        const auto it = _fileNameVsInfo.find( fileName );
+        if ( it == _fileNameVsInfo.end() ) {
             return {};
         }
 
-        _fileStream.seek( it->second.first );
-        const auto compressedData = _fileStream.getRaw( it->second.second );
+        _fileStream.seek( it->second.offset );
+        const auto compressedData = _fileStream.getRaw( it->second.size );
 
         return Compression::unzipData( compressedData.data(), compressedData.size() );
     }
@@ -100,7 +104,7 @@ namespace fheroes2
     {
         std::set<std::string, std::less<>> names;
 
-        for ( const auto & [name, offset] : _fileNameAndOffset ) {
+        for ( const auto & [name, info] : _fileNameVsInfo ) {
             names.insert( name );
         }
 
@@ -127,42 +131,43 @@ namespace fheroes2
 
         // Calculate file info section size.
         size_t fileInfoSection = ( 4 + 4 ) * _fileData.size();
-        for ( const auto & [name, data] : _fileData ) {
+        for ( const auto & [name, info] : _fileData ) {
             // 4 byte for string size.
             fileInfoSection += ( name.size() + 4 );
+            fileInfoSection += ( info.extraInfo.size() + 4 );
         }
 
+        // 4 bytes for magic sequence and 4 bytes for the number of files.
         size_t offset = fileInfoSection + 4 + 4;
-        for ( const auto & [name, data] : _fileData ) {
+        for ( const auto & [name, info] : _fileData ) {
             fileStream.putLE32( static_cast<uint32_t>( offset ) );
-            fileStream.putLE32( static_cast<uint32_t>( data.size() ) );
+            fileStream.putLE32( static_cast<uint32_t>( info.data.size() ) );
             fileStream << name;
-            offset += data.size();
+            fileStream << info.extraInfo;
+            offset += info.data.size();
         }
 
-        for ( const auto & [name, data] : _fileData ) {
-            fileStream.putRaw( data.data(), data.size() );
+        for ( const auto & [name, info] : _fileData ) {
+            fileStream.putRaw( info.data.data(), info.data.size() );
         }
 
         return true;
     }
 
-    bool H2DWriter::add( const std::string & name, const std::vector<uint8_t> & data )
+    bool H2DWriter::add( const std::string & name, const std::vector<uint8_t> & data, std::string extraInfo )
     {
         if ( name.empty() || data.empty() ) {
             return false;
         }
 
-        _fileData[name] = Compression::zipData( data.data(), data.size(), true );
+        _fileData[name] = { Compression::zipData( data.data(), data.size(), true ), std::move( extraInfo ) };
         return true;
     }
 
     bool H2DWriter::add( H2DReader & reader )
     {
-        const std::set<std::string, std::less<>> names = reader.getAllFileNames();
-
-        for ( const std::string & name : names ) {
-            if ( !add( name, reader.getFile( name ) ) ) {
+        for ( const auto & [name, info] : reader.getAllEntries() ) {
+            if ( !add( name, reader.getFile( name ), info.info ) ) {
                 return false;
             }
         }
@@ -209,7 +214,7 @@ namespace fheroes2
         return true;
     }
 
-    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
+    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image, std::string extraInfo )
     {
         assert( !image.empty() );
 
@@ -226,6 +231,6 @@ namespace fheroes2
             stream.putRaw( image.transform(), imageSize );
         }
 
-        return writer.add( name, stream.getRaw( 0 ) );
+        return writer.add( name, stream.getRaw( 0 ), std::move( extraInfo ) );
     }
 }

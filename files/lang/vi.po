@@ -3064,6 +3064,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Hiển thị thêm thông tin như FPS và thời gian hiện tại."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "lựa chọn trận chiến"
+
 msgid "Hotkey: "
 msgstr "Phím nóng: "
 
@@ -3075,6 +3079,14 @@ msgstr "Sự kiện: "
 
 msgid "Hot Keys:"
 msgstr "Phím tắt:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Chọn Quái vật:"
 
 msgid "Hide"
 msgstr "Ẩn"
@@ -4375,6 +4387,9 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "Tệp để Lưu:"
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr ""
 
@@ -5163,9 +5178,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Dễ"
 
@@ -5507,6 +5519,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Nhấp để chọn màu này."
 
+msgid "%{color} player"
+msgstr "người chơi mầu %{color}"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5517,7 +5532,16 @@ msgstr "Tệp để Lưu:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5528,15 +5552,35 @@ msgstr "Thôn tính"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Thôn tính"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Điều này cho phép ngươi thay đổi lớp của một người chơi. Các chủng tộc không "
+"phải lúc nào cũng có thể thay đổi. Tùy thuộc vào kịch bản, người chơi có thể "
+"nhận được các thị trấn và/hoặc tướng bổ sung không thuộc liên kết chính của "
+"họ."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Nhấp để quay lại màn hình chính."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5553,38 +5597,42 @@ msgstr ""
 msgid "and more..."
 msgstr "và hơn thế nữa..."
 
-msgid "Easy"
-msgstr "Dễ"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Độ khó Chiến dịch"
 
-msgid "Normal"
-msgstr "Thường"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Độ khó Chiến dịch"
 
-msgid "Hard"
-msgstr "Khó"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
 msgstr "Độ khó Chiến dịch"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thích câu chuyện trò chơi hơn thử thách. AI "
 "yếu hơn so với độ khó bình thường."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr "Chọn độ khó này để tận hưởng chiến dịch theo thiết kế ban đầu."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thử thách. AI mạnh hơn so với độ khó bình "
 "thường."
+
+msgid "Campaign Difficulty"
+msgstr "Độ khó Chiến dịch"
 
 msgid ""
 "Congratulations!\n"
@@ -6754,6 +6802,9 @@ msgstr ""
 "Người chơi màu %{color}, các tướng đã bỏ rơi ngươi và ngươi bị trục xuất "
 "khỏi vùng đất này."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6966,16 +7017,6 @@ msgstr ""
 "Một màu cụ thể sẽ luôn bắt đầu ở một vị trí cụ thể. Một số vị trí chỉ có thể "
 "được chơi bởi người chơi máy tính hoặc chỉ bởi người chơi."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Điều này cho phép ngươi thay đổi lớp của một người chơi. Các chủng tộc không "
-"phải lúc nào cũng có thể thay đổi. Tùy thuộc vào kịch bản, người chơi có thể "
-"nhận được các thị trấn và/hoặc tướng bổ sung không thuộc liên kết chính của "
-"họ."
-
 msgid "Handicap"
 msgstr "Chấp"
 
@@ -6990,9 +7031,6 @@ msgstr ""
 "con người mới có thể bị khuyết tật. Người chơi bị khuyết tật bắt đầu với ít "
 "tài nguyên hơn và kiếm được ít tài nguyên hơn 15 hoặc 30% mỗi lượt tương ứng "
 "đối với người khuyết tật nhẹ và nặng."
-
-msgid "%{color} player"
-msgstr "người chơi mầu %{color}"
 
 msgid "No Handicap"
 msgstr "Không Chấp"
@@ -7192,6 +7230,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Chậm"
+
+msgid "Normal"
+msgstr "Thường"
 
 msgid "Fast"
 msgstr "Nhanh"
@@ -12830,8 +12871,10 @@ msgstr "Tăng đáng kể kỹ năng tấn công của đơn vị so với Rồn
 msgid "Blood Lust"
 msgstr "Khát máu"
 
-msgid "Increases a unit's attack skill."
-msgstr "Tăng kỹ năng tấn công của một đơn vị."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Sức sống Thần chết"
@@ -12946,10 +12989,12 @@ msgstr "Cho phép người thi triển xem thông tin chi tiết về Tướng �
 msgid "Summon Boat"
 msgstr "Triệu hồi Thuyền"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Triệu tập chiếc thuyền thân thiện, trống gần nhất đến vị trí bờ biển liền "
 "kề. Một chiếc thuyền thân thiện là chiếc thuyền mà ngươi vừa đóng hoặc là "
@@ -13177,6 +13222,23 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Tăng kỹ năng tấn công của một đơn vị."
+
+#~ msgid "Easy"
+#~ msgstr "Dễ"
+
+#~ msgid "Hard"
+#~ msgstr "Khó"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "CHIẾN DỊCH\n"
+#~ "MỞ RỘNG"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."

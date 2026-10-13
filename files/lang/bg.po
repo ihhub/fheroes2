@@ -3070,6 +3070,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "опции на битка"
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -3082,6 +3086,14 @@ msgstr "Събитие"
 
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Избери чудовище:"
 
 msgid "Hide"
 msgstr "Скрий"
@@ -4397,6 +4409,9 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "Файл за запазване:"
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr ""
 
@@ -5194,9 +5209,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Лесна"
 
@@ -5541,6 +5553,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
+msgid "%{color} player"
+msgstr "%{color} играч"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5551,7 +5566,16 @@ msgstr "Файл за запазване:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5562,15 +5586,34 @@ msgstr "Анексирам"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Анексирам"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Това ти позволява да промениш класа на играч. Класовете не винаги могат да "
+"се променят. В зависимост от сценария, играчът може да получи допълнителни "
+"градове и/или герои, които не са от основното им подреждане."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Кликни, за да се върнеш към главното меню."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Превключи изтриването на %{type} обекти."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5586,40 +5629,44 @@ msgstr "Искаш ли да си върнеш контрола от ИИ? Ще 
 msgid "and more..."
 msgstr "и още..."
 
-msgid "Easy"
-msgstr "Лесно"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Трудност на Кампанията"
 
-msgid "Normal"
-msgstr "Нормлано"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Трудност на Кампанията"
 
-msgid "Hard"
-msgstr "Трудно"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
 msgstr "Трудност на Кампанията"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Избери тази трудност, ако предпочиташ историята на играта пред "
 "предизвикателството. И.И. е по-слаб в сравнение с нормалната трудност."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Избери тази трудност, за да се насладиш на кампанията според оригиналния "
 "дизайн."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
+
+msgid "Campaign Difficulty"
+msgstr "Трудност на Кампанията"
 
 msgid ""
 "Congratulations!\n"
@@ -6801,6 +6848,9 @@ msgid ""
 msgstr ""
 "%{color} играч, теоите герои те изоставят и ти си прогонени от тази земя."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr "Лорд Килбърн"
 
@@ -7012,15 +7062,6 @@ msgstr ""
 "Конкретен цвят винаги ще започва от определено място. Някои позиции могат да "
 "се играят само от компютърен играч или само от човешки играч."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Това ти позволява да промениш класа на играч. Класовете не винаги могат да "
-"се променят. В зависимост от сценария, играчът може да получи допълнителни "
-"градове и/или герои, които не са от основното им подреждане."
-
 msgid "Handicap"
 msgstr "Недъг"
 
@@ -7036,9 +7077,6 @@ msgstr ""
 "да бъдат инвалиди. Играчите с увреждания започват с по-малко ресурси и "
 "печелят съответно 15 или 30% по-малко ресурси на ход за леки и тежки "
 "увреждания."
-
-msgid "%{color} player"
-msgstr "%{color} играч"
 
 msgid "No Handicap"
 msgstr "Без недъг"
@@ -7240,6 +7278,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Бавно"
+
+msgid "Normal"
+msgstr "Нормлано"
 
 msgid "Fast"
 msgstr "Бързо"
@@ -12800,8 +12841,10 @@ msgstr "Увеличава значително умението за атака
 msgid "Blood Lust"
 msgstr "Кръвожадност"
 
-msgid "Increases a unit's attack skill."
-msgstr "Увеличава умението за атака на единица."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Анимирана смърт"
@@ -12915,10 +12958,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Призови кораб"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Извиква най-близката незаета, приятелска лодка до съседно място на брега. "
 "Приятелска лодка е тази, която току-що си построил или си бил последният "
@@ -13144,6 +13189,21 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Увеличава умението за атака на единица."
+
+#~ msgid "Easy"
+#~ msgstr "Лесно"
+
+#~ msgid "Hard"
+#~ msgstr "Трудно"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr "ЕКСПАНЗИЯ"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."

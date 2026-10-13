@@ -3055,6 +3055,10 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Ukáž informácie navyše ako FPS a momentálny čas."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "možnosti boja"
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -3067,6 +3071,14 @@ msgstr "Udalosť"
 
 msgid "Hot Keys:"
 msgstr "Skratky:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Zvoľ bojovníka:"
 
 msgid "Hide"
 msgstr "Skry"
@@ -4375,6 +4387,9 @@ msgstr ""
 msgid "Failed to save the map."
 msgstr "Uložiť súbor:"
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr ""
 
@@ -5157,9 +5172,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Ľahká"
 
@@ -5504,6 +5516,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
+msgid "%{color} player"
+msgstr "%{color} hráč"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5514,7 +5529,16 @@ msgstr "Uložiť súbor:"
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5525,15 +5549,33 @@ msgstr "Anexia"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Anexia"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Toto ti umožní zmeniť triedu hráča. Triedy nie je vždy možné meniť. V "
+"závislosti od scenára môže hráč získať ďalšie mestá a/alebo hrdinov, ktorí "
+"nepatria do jeho primárnej línie."
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5549,38 +5591,42 @@ msgstr "Chceš prevziať kontrolu nad hráčom? Efekt sa prejaví v ďalšom kol
 msgid "and more..."
 msgstr "a viac..."
 
-msgid "Easy"
-msgstr "Ľahká"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr "Obtiažnosť kampane"
 
-msgid "Normal"
-msgstr "Normálna"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Obtiažnosť kampane"
 
-msgid "Hard"
-msgstr "Ťažká"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
 msgstr "Obtiažnosť kampane"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Zvoľ túto obtiažnosť pokiaľ preferuješ príbeh nad výzvou. Počítač je slabší "
 "v porovnaní s normálnou obtiažnosťou."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr "Zvoľ túto obtiažnosť pre pôžitok z pôvodne mieneného návrhu."
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Zvoľ túto obtiažnosť pokiaľ chceš výzvu. Počítač je silnejší v porovnaní s "
 "normálnou obtiažnosťou."
+
+msgid "Campaign Difficulty"
+msgstr "Obtiažnosť kampane"
 
 msgid ""
 "Congratulations!\n"
@@ -6764,6 +6810,9 @@ msgid ""
 msgstr ""
 "%{color} hráč, tvoji hrdinovia ťa opustili a ty si vyhostený z tejto krajiny."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
@@ -6969,15 +7018,6 @@ msgstr ""
 "začínať na určitom mieste. Niektoré pozície môže hrať iba počítačový hráč "
 "alebo iba ľudský hráč."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Toto ti umožní zmeniť triedu hráča. Triedy nie je vždy možné meniť. V "
-"závislosti od scenára môže hráč získať ďalšie mestá a/alebo hrdinov, ktorí "
-"nepatria do jeho primárnej línie."
-
 msgid "Handicap"
 msgstr "Hendikep"
 
@@ -6992,9 +7032,6 @@ msgstr ""
 "Tu je možné zmeniť hendikep konkrétneho hráča. Hendikep môžu mať len ľudia. "
 "Hendikepovaní hráči začínajú s menším množstvom zdrojov a získavajú o 15, "
 "resp. 30% menej zdrojov za ťah v prípade mierneho a ťažkého hendikepu."
-
-msgid "%{color} player"
-msgstr "%{color} hráč"
 
 msgid "No Handicap"
 msgstr "Bez hendikepu"
@@ -7196,6 +7233,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Pomalá"
+
+msgid "Normal"
+msgstr "Normálna"
 
 msgid "Fast"
 msgstr "Rýchla"
@@ -12699,8 +12739,10 @@ msgstr "Výrazne zvyšuje útočné schopnosti jednotky proti drakom."
 msgid "Blood Lust"
 msgstr "Krvilačnosť"
 
-msgid "Increases a unit's attack skill."
-msgstr "Zvyšuje útočné schopnosti jednotky."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Animácia mŕtvych"
@@ -12814,10 +12856,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Vyvolaj loď"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Privolá najbližšiu neobsadenú priateľskú loď na priľahlé miesto na pobreží. "
 "Priateľská loď je loď, ktorú si práve postavil alebo si ju obsadil ako "
@@ -13047,6 +13091,23 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Zvyšuje útočné schopnosti jednotky."
+
+#~ msgid "Easy"
+#~ msgstr "Ľahká"
+
+#~ msgid "Hard"
+#~ msgstr "Ťažká"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "KAMPAŇ\n"
+#~ "EXPANZIE"
 
 #, fuzzy
 #~ msgid "Create a new map from scratch."
