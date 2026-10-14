@@ -588,8 +588,8 @@ namespace
         const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, target.cell );
 
         if ( target.canAttackThisTurn ) {
-            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, target.unit->GetUID(), ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), -1,
-                                  -1 );
+            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, target.unit->GetUID(), ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ),
+                                  -1, -1 );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " from cell " << moveTargetIdx )
         }
