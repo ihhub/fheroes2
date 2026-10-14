@@ -613,18 +613,12 @@ AI::BerserkerTarget AI::getBerserkerTarget( Battle::Arena & arena, const Battle:
 
     // A unit under the Berserker spell has no allies, so any adjacent unit forces it to fight in close combat. Unit::isHandFighting() cannot
     // be used here, because the unit may not be under the spell yet, and then it would ignore the adjacent units of its own color.
-    const auto isNextToAnyUnit = [&unit]() {
-        for ( const int32_t nearbyIdx : Battle::Board::GetAroundIndexes( unit ) ) {
-            if ( Battle::Board::GetCell( nearbyIdx )->GetUnit() != nullptr ) {
-                return true;
-            }
-        }
-
-        return false;
-    };
+    const Battle::Indexes aroundIndexes = Battle::Board::GetAroundIndexes( unit );
+    const bool isNextToAnyUnit
+        = std::any_of( aroundIndexes.begin(), aroundIndexes.end(), []( const int32_t idx ) { return Battle::Board::GetCell( idx )->GetUnit() != nullptr; } );
 
     // If the berserker is an archer, then just shoot at the nearest unit
-    if ( unit.isArchers() && !isNextToAnyUnit() ) {
+    if ( unit.isArchers() && !isNextToAnyUnit ) {
         assert( nearestUnits.front() != nullptr );
 
         return { nearestUnits.front(), -1, true };
