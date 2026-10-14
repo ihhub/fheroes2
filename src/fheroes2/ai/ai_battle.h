@@ -70,6 +70,20 @@ namespace AI
         }
     };
 
+    struct BerserkerTarget
+    {
+        // The unit to attack or to move towards, nullptr if there is no such unit.
+        const Battle::Unit * unit{ nullptr };
+        // The cell next to the unit to move to, -1 if the unit is going to be shot.
+        int32_t cell{ -1 };
+        // Whether the unit can be attacked during the current turn.
+        bool canAttackThisTurn{ false };
+    };
+
+    // Returns the target that the given unit goes for while under the Berserker spell. The unit doesn't need to be under the spell yet,
+    // so this function can be used both to play a turn of a berserk unit and to predict the outcome of casting the spell.
+    BerserkerTarget getBerserkerTarget( Battle::Arena & arena, const Battle::Unit & unit );
+
     class BattlePlanner
     {
     public:
