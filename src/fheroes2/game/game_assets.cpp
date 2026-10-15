@@ -5188,9 +5188,18 @@ namespace
             // TODO: Cut the icons from the embedded background in resurrection.h2d and use the empty background ICN to make the icons instead.
             const fheroes2::Sprite & background = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
-            fheroes2::h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+            fheroes2::Sprite hotkeys;
+            fheroes2::h2d::readImage( "hotkeys_option_icon.image", hotkeys );
+            _icnVsSprite[id][0] = background;
+            fheroes2::Blit( hotkeys, 0, 0, _icnVsSprite[id][0], hotkeys.x(), hotkeys.y(), hotkeys.width(), hotkeys.height() );
+
             _icnVsSprite[id][0]._disableTransformLayer();
-            fheroes2::h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+
+            fheroes2::Sprite graphics;
+            fheroes2::h2d::readImage( "graphics_option_icon.image", graphics );
+            _icnVsSprite[id][1] = background;
+            fheroes2::Blit( graphics, 0, 0, _icnVsSprite[id][1], graphics.x(), graphics.y(), graphics.width(), graphics.height() );
+
             _icnVsSprite[id][1]._disableTransformLayer();
 
             fheroes2::Sprite monocle;
