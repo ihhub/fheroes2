@@ -5188,17 +5188,16 @@ namespace
             // TODO: Cut the icons from the embedded background in resurrection.h2d and use the empty background ICN to make the icons instead.
             const fheroes2::Sprite & background = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
-            fheroes2::Sprite hotkeys;
-            fheroes2::h2d::readImage( "hotkeys_option_icon.image", hotkeys );
+            fheroes2::Sprite icon;
+            fheroes2::h2d::readImage( "hotkeys_option_icon.image", icon );
             _icnVsSprite[id][0] = background;
-            fheroes2::Blit( hotkeys, 0, 0, _icnVsSprite[id][0], hotkeys.x(), hotkeys.y(), hotkeys.width(), hotkeys.height() );
+            fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][0], icon.x(), icon.y(), icon.width(), icon.height() );
 
             _icnVsSprite[id][0]._disableTransformLayer();
 
-            fheroes2::Sprite graphics;
-            fheroes2::h2d::readImage( "graphics_option_icon.image", graphics );
+            fheroes2::h2d::readImage( "graphics_option_icon.image", icon );
             _icnVsSprite[id][1] = background;
-            fheroes2::Blit( graphics, 0, 0, _icnVsSprite[id][1], graphics.x(), graphics.y(), graphics.width(), graphics.height() );
+            fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][1], icon.x(), icon.y(), icon.width(), icon.height() );
 
             _icnVsSprite[id][1]._disableTransformLayer();
 
