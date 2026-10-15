@@ -3017,9 +3017,8 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Mostrar informações adicionais, como FPS e hora atual."
 
-#, fuzzy
 msgid "hotkeys|All Categories"
-msgstr "opções de batalha"
+msgstr "Todas as Categorias"
 
 msgid "Hotkey: "
 msgstr "Tecla de atalho: "
@@ -3033,15 +3032,11 @@ msgstr "Evento: "
 msgid "Hot Keys:"
 msgstr "Atalhos:"
 
-#, fuzzy
 msgid "Click here to select:\n"
-msgstr ""
-"Clique aqui para\n"
-"selecionar um monstro."
+msgstr "Clique aqui para selecionar:\n"
 
-#, fuzzy
 msgid "Select hotkeys category"
-msgstr "Selecionar Monstro:"
+msgstr "Selecionar Categoria de Atalhos"
 
 msgid "Hide"
 msgstr "Ocultar"
@@ -4105,21 +4100,19 @@ msgstr "Objetos de ação devem ser colocados em ladrilhos livres."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Um máximo de %{count} %{objects} pode ser colocado no mapa."
 
-#, fuzzy
 msgid ""
 "To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Tem certeza de que deseja carregar um novo mapa? (Todas as alterações não "
-"salvas no mapa atual serão perdidas.)"
+"Para sair do fheroes2, pressione o botão Home ou deslize para cima. (Todas "
+"as alterações não salvas no mapa atual serão perdidas.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to quit? (Any unsaved changes to the current map will "
 "be lost.)"
 msgstr ""
-"Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
-"salvas no mapa atual serão perdidas.)"
+"Você tem certeza de que deseja sair? (Todas as alterações não salvas no mapa "
+"atual serão perdidas.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Não foi possível gerar um mapa com os parâmetros fornecidos."
@@ -4190,12 +4183,11 @@ msgstr "Salvar o mapa atual."
 msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
 
-#, fuzzy
 msgid "Auto Playtest"
-msgstr "Testadores"
+msgstr "Teste Automático"
 
 msgid "Run an automatic playtest of the map."
-msgstr ""
+msgstr "Executar um teste automático do mapa."
 
 msgid "Return to the game's Main Menu."
 msgstr "Retornar ao Menu Principal do jogo."
@@ -4272,7 +4264,7 @@ msgid "Failed to save the map."
 msgstr "Falha ao salvar o mapa."
 
 msgid "The selected object has been moved to the top layer."
-msgstr ""
+msgstr "O objeto selecionado foi movido para a camada superior."
 
 msgid "Unsaved Changes"
 msgstr "Alterações Não Salvas"
@@ -5220,6 +5212,8 @@ msgid ""
 "AUTO\n"
 "PLAYTEST"
 msgstr ""
+"TESTE\n"
+"AUTO"
 
 msgid "INFO"
 msgstr "INFO."
@@ -5331,63 +5325,58 @@ msgstr ""
 "A\n"
 "R"
 
-#, fuzzy
 msgid "Auto Playtest Results"
-msgstr "Testadores"
+msgstr "Resultados do Teste Automático"
 
 msgid "1 playthrough"
 msgid_plural "%{count} playthroughs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 partida"
+msgstr[1] "%{count} partidas"
 
 msgid " playthrough(s) reached the specified time limit"
-msgstr ""
+msgstr " partida(s) atingiram o limite de tempo especificado"
 
-#, fuzzy
 msgid "Click to close the dialog."
-msgstr "Clique para selecionar a cor."
+msgstr "Clique para fechar a caixa de diálogo."
 
 msgid "%{color} player"
 msgstr "Jogador %{color}"
 
 msgid "Won %{percent}% of playthroughs."
-msgstr ""
+msgstr "Venceu %{percent}% das partidas."
 
-#, fuzzy
 msgid "Failed to prepare the map for auto playtest."
-msgstr "Falha ao salvar o mapa."
+msgstr "Falha ao preparar o mapa para o teste automático."
 
 msgid "autoPlaytest|Number of playthroughs:"
-msgstr ""
+msgstr "Número de partidas:"
 
 msgid "Set the number of playthroughs."
-msgstr ""
+msgstr "Definir o número de partidas."
 
 msgid "autoPlaytest|Max days per playthrough:"
-msgstr ""
+msgstr "Máximo de dias por partida:"
 
 msgid "Set the maximum number of days within each playthrough is being run."
-msgstr ""
+msgstr "Definir o número máximo de dias de cada partida."
 
 msgid "autoPlaytest|Last day of playthrough:"
-msgstr ""
+msgstr "Último dia da partida:"
 
-#, fuzzy
 msgid "autoPlaytest|Animation"
-msgstr "Velocidade"
+msgstr "Animação"
 
-#, fuzzy
 msgid "autoPlaytest|Animation speed:"
-msgstr "Velocidade"
+msgstr "Velocidade da animação:"
 
 msgid "Set animation speed during playthrough."
-msgstr ""
+msgstr "Definir a velocidade da animação durante a partida."
 
 msgid "autoPlaytest|Sound Effects"
-msgstr ""
+msgstr "Efeitos Sonoros"
 
 msgid "Left-clicking at any point will interrupt the playtest."
-msgstr ""
+msgstr "Clicar com o botão esquerdo em qualquer ponto interromperá o teste."
 
 msgid ""
 "This lets you change the class of a player. Classes are not always "
@@ -5398,69 +5387,62 @@ msgstr ""
 "mutáveis. Dependendo do cenário, um jogador pode receber cidades adicionais "
 "ou heróis que não sejam de seu alinhamento primário."
 
-#, fuzzy
 msgid "Click to run an automated map playtest."
-msgstr "Clique para retornar ao menu principal."
+msgstr "Clique para executar um teste automático do mapa."
 
-#, fuzzy
 msgid "Toggle animation during playthroughs."
-msgstr "Alternar animação dos objetos."
+msgstr "Ativa ou desativa a animação durante as partidas."
 
 msgid "Toggle sound effects during playthroughs."
-msgstr ""
+msgstr "Ativa ou desativa os efeitos sonoros durante as partidas."
 
 msgid ""
 "Auto playtest\n"
 "(playthrough %{current} of %{total})"
 msgstr ""
+"Teste automático\n"
+"(partida %{current} de %{total})"
 
-#, fuzzy
 msgid ""
 "Do you want to interrupt the automatic playtest? The effect will take place "
 "only on the next turn."
 msgstr ""
-"Você deseja recuperar o controle da IA? O efeito ocorrerá somente no próximo "
-"turno."
+"Você deseja interromper o teste automático? O efeito ocorrerá somente no "
+"próximo turno."
 
 msgid "and more..."
 msgstr "e mais..."
 
-#, fuzzy
 msgid "campaignDifficulty|Decreased"
-msgstr "Dificuldade da Campanha"
+msgstr "Reduzida"
 
-#, fuzzy
 msgid "campaignDifficulty|Default"
-msgstr "Dificuldade da Campanha"
+msgstr "Padrão"
 
-#, fuzzy
 msgid "campaignDifficulty|Increased"
-msgstr "Dificuldade da Campanha"
+msgstr "Aumentada"
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Escolha esta dificuldade para experimentar a história do jogo com menos "
 "desafio. A inteligência artificial será mais fraca do que na dificuldade "
-"Normal."
+"padrão."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the campaign as close to the original "
 "design as possible with the fheroes2 AI."
 msgstr ""
-"Escolha esta dificuldade para experimentar a campanha conforme o design "
-"original."
+"Escolha esta dificuldade para experimentar a campanha o mais próximo "
+"possível do design original com a inteligência artificial do fheroes2."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty if you want more of a challenge. The AI will be "
 "stronger than at the default difficulty."
 msgstr ""
 "Escolha esta dificuldade se você deseja mais desafio. A inteligência "
-"artificial será mais forte do que na dificuldade Normal."
+"artificial será mais forte do que na dificuldade padrão."
 
 msgid "Campaign Difficulty"
 msgstr "Dificuldade da Campanha"
@@ -5838,9 +5820,8 @@ msgstr "abrir menu principal do jogo"
 msgid "hotkey|toggle passability"
 msgstr "alternar transitabilidade"
 
-#, fuzzy
 msgid "hotkey|auto playtest"
-msgstr "padrão para a esquerda"
+msgstr "teste automático"
 
 msgid "hotkey|re-generate random map"
 msgstr "gerar novo mapa aleatório"
@@ -5915,7 +5896,7 @@ msgid "hotkey|save game"
 msgstr "salvar jogo"
 
 msgid "hotkey|quick save"
-msgstr "combate rápido"
+msgstr "salvamento rápido"
 
 msgid "hotkey|next hero"
 msgstr "próximo herói"
@@ -12591,6 +12572,8 @@ msgid ""
 "Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
 "combat, regardless of spell power."
 msgstr ""
+"Aumenta a Habilidade de Ataque de uma unidade em 3. O efeito dura 3 turnos "
+"de combate, independente do Poder Mágico."
 
 msgid "Animate Dead"
 msgstr "Despertar Mortos"
@@ -12707,16 +12690,16 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Invocar Barco"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied and either friendly or neutral boat to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
 "occupied yet."
 msgstr ""
-"Invoca o barco amigo desocupado mais próximo a um local costeiro mais "
-"próximo. Um barco amigo é aquele que você acabou de construir ou foi o "
-"jogador mais recente a ocupar."
+"Invoca o barco desocupado mais próximo, amigo ou neutro, para um local "
+"costeiro adjacente. Um barco amigo é aquele que você acabou de construir ou "
+"que você foi o jogador mais recente a ocupar. Um barco neutro é aquele que "
+"nenhum jogador ocupou ainda."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
