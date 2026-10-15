@@ -119,6 +119,11 @@ namespace Interface
 
         static fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType );
 
+        void clearWarningMessage()
+        {
+            _warningMessage.reset( {} );
+        }
+
     private:
         class WarningMessage final
         {

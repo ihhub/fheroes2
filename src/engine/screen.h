@@ -329,6 +329,17 @@ namespace fheroes2
             return _emulation;
         }
 
+        void forceSoftwareEmulation()
+        {
+            _forceEmulation = true;
+            enableSoftwareEmulation( true );
+        }
+
+        bool isSoftwareEmulationForced() const
+        {
+            return _forceEmulation;
+        }
+
         void registerUpdater( void ( *cursorUpdater )() )
         {
             _cursorUpdater = cursorUpdater;
@@ -343,6 +354,7 @@ namespace fheroes2
         Sprite _image;
         void ( *_cursorUpdater )(){ nullptr };
         bool _emulation{ false };
+        bool _forceEmulation{ false };
         bool _show{ false };
         bool _keepInScreenArea{ false };
 

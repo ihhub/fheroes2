@@ -2888,6 +2888,9 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "hotkeys|All Categories"
+msgstr ""
+
 msgid "Hotkey: "
 msgstr ""
 
@@ -2899,6 +2902,14 @@ msgstr ""
 
 msgid "Hot Keys:"
 msgstr "Scurtături:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Selectați ținta vrăjii"
 
 msgid "Hide"
 msgstr "Ascunde"
@@ -4827,9 +4838,6 @@ msgstr ""
 msgid "Delete an artifact from the reward."
 msgstr ""
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Ușor"
 
@@ -5171,6 +5179,9 @@ msgstr ""
 msgid "Click to close the dialog."
 msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
+msgid "%{color} player"
+msgstr ""
+
 msgid "Won %{percent}% of playthroughs."
 msgstr ""
 
@@ -5180,7 +5191,16 @@ msgstr ""
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr ""
 
+msgid "Set the number of playthroughs."
+msgstr ""
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
 #, fuzzy
@@ -5191,15 +5211,30 @@ msgstr "Anexare"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Anexare"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr ""
 
 msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+
 #, fuzzy
 msgid "Click to run an automated map playtest."
 msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+msgid "Toggle animation during playthroughs."
+msgstr ""
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5229,9 +5264,6 @@ msgstr "Dificultatea campaniei"
 msgid "campaignDifficulty|Increased"
 msgstr "Dificultatea campaniei"
 
-msgid "Campaign Difficulty"
-msgstr "Dificultatea campaniei"
-
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
@@ -5246,6 +5278,9 @@ msgid ""
 "Choose this difficulty if you want more of a challenge. The AI will be "
 "stronger than at the default difficulty."
 msgstr ""
+
+msgid "Campaign Difficulty"
+msgstr "Dificultatea campaniei"
 
 msgid ""
 "Congratulations!\n"
@@ -6337,6 +6372,9 @@ msgid ""
 "land."
 msgstr ""
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr ""
+
 msgid "Lord Kilburn"
 msgstr ""
 
@@ -6523,12 +6561,6 @@ msgid ""
 "played by a computer player or only by a human player."
 msgstr ""
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-
 msgid "Handicap"
 msgstr ""
 
@@ -6538,9 +6570,6 @@ msgid ""
 "may have a handicap. Handicapped players start with fewer resources and earn "
 "15 or 30% fewer resources per turn for mild and severe handicaps, "
 "respectively."
-msgstr ""
-
-msgid "%{color} player"
 msgstr ""
 
 msgid "No Handicap"
@@ -11392,7 +11421,9 @@ msgstr ""
 msgid "Blood Lust"
 msgstr ""
 
-msgid "Increases a unit's attack skill."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
 msgstr ""
 
 msgid "Animate Dead"
@@ -11499,9 +11530,10 @@ msgid "Summon Boat"
 msgstr ""
 
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 
 msgid "Allows the caster to magically transport to a nearby location."
