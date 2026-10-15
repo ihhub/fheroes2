@@ -34,7 +34,7 @@ namespace fheroes2
     class Sprite;
 
     // Heroes 2 Data (H2D) file format used for storing files needed for the project. This format is not a part of original HoMM II.
-    class H2DReader
+    class H2DReader final
     {
     public:
         struct EntryInfo final
@@ -68,7 +68,7 @@ namespace fheroes2
     };
 
     // This class is not designed to be performance optimized as it will be used very rarely and out of game running session.
-    class H2DWriter
+    class H2DWriter final
     {
     public:
         // Returns true if file opening is successful.
@@ -78,6 +78,11 @@ namespace fheroes2
 
         // Add all entries from a H2D reader.
         bool add( H2DReader & reader );
+
+        void remove( const std::string & path )
+        {
+            _fileData.erase( path );
+        }
 
     private:
         struct FileInfo final
