@@ -418,6 +418,39 @@ namespace
                 fheroes2::showStandardTextMessage( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Dialog::OK );
             }
         }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::NotEnoughGold
+                  || join.reason == NeutralMonsterJoiningCondition::Reason::NotEnoughGoldAndRunAway ) {
+            fheroes2::showStandardTextMessage( "",
+                                               join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot
+                                                   ? _( "The creatures would join your army, but your army has no room for them.\nThey prepare to fight." )
+                                                   : _( "The creatures would join your army, but your army has no room for them." ),
+                                               Dialog::OK );
+
+            if ( join.reason == NeutralMonsterJoiningCondition::Reason::NotEnoughGoldAndRunAway ) {
+                std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
+                StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
+
+                if ( fheroes2::showStandardTextMessage( "", std::move( message ), Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+                    destroy = true;
+                }
+            }
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot || join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlotAndRunAway ) {
+            fheroes2::showStandardTextMessage( "",
+                                               join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlot
+                                                   ? _( "The creatures would join your army, but your army has no room for them.\nThey prepare to fight." )
+                                                   : _( "The creatures would join your army, but your army has no room for them." ),
+                                               Dialog::OK );
+
+            if ( join.reason == NeutralMonsterJoiningCondition::Reason::NoFreeSlotAndRunAway ) {
+                std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
+                StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
+
+                if ( fheroes2::showStandardTextMessage( "", std::move( message ), Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+                    destroy = true;
+                }
+            }
+        }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, troop.GetName() << " run away from " << hero.GetName() )
 
