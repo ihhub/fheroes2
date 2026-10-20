@@ -49,7 +49,6 @@
 #include "monster_info.h"
 #include "morale.h"
 #include "pal.h"
-#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
