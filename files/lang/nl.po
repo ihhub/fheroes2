@@ -2763,9 +2763,6 @@ msgid ""
 "Do you accept?"
 msgstr ""
 
-msgid "(Rate: %{percent})"
-msgstr ""
-
 msgid "off"
 msgstr ""
 

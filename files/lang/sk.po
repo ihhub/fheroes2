@@ -2795,9 +2795,6 @@ msgstr ""
 "%{gold} zlata.\n"
 "Prijímaš ponuku?"
 
-msgid "(Rate: %{percent})"
-msgstr "%{percent}% všetkých bojovníkov"
-
 msgid "off"
 msgstr "vypnuté"
 
@@ -13091,6 +13088,9 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "%{percent}% všetkých bojovníkov"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Zvyšuje útočné schopnosti jednotky."
