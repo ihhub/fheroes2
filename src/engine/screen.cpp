@@ -1161,6 +1161,8 @@ namespace
                 }
             }
 
+            // We should clear the renderer to avoid graphical artifacts with most window compositors (in example, Android; Linux with X11 or Wayland)
+            // when the aspect ratio of the texture is different from that of the game window.
             int returnCode = SDL_RenderClear( _renderer );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to clear renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
