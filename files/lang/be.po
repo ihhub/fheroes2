@@ -2774,9 +2774,6 @@ msgstr ""
 "%{offer} %{monster} далучацца да вашага войска за %{gold} залатых.\n"
 "Згаджаецеся на гэта?"
 
-msgid "(Rate: %{percent})"
-msgstr "Далучыцца %{percent}% ад усіх істот"
-
 msgid "off"
 msgstr "выкл."
 
@@ -12980,6 +12977,9 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "Далучыцца %{percent}% ад усіх істот"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr ""

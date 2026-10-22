@@ -2746,9 +2746,6 @@ msgstr ""
 "%{gold} guld.\n"
 "Accepterar du det?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Andel: %{percent} procent)"
-
 msgid "off"
 msgstr "av"
 
@@ -12816,6 +12813,9 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Andel: %{percent} procent)"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Höjer en varelses Anfall."

@@ -2788,9 +2788,6 @@ msgstr ""
 "%{gold} piezas de oro.\n"
 "¿Acepta?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Tasa: %{percent})"
-
 msgid "off"
 msgstr "apagado"
 
@@ -13043,6 +13040,9 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Tasa: %{percent})"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Incrementa la habilidad de ataque de una unidad."

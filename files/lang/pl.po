@@ -2765,9 +2765,6 @@ msgstr ""
 "złota.\n"
 "Zgadzasz się?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Przyłącza się %{percent}% oddziału)"
-
 msgid "off"
 msgstr "wyłączone"
 
@@ -12909,6 +12906,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Przyłącza się %{percent}% oddziału)"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Zwiększa umiejętność ataku jednostki."

@@ -2866,9 +2866,6 @@ msgstr ""
 "mot %{gold} gullstykker.\n"
 "Godtar du?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Grad: %{percent})"
-
 msgid "off"
 msgstr "av"
 
@@ -13406,6 +13403,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Grad: %{percent})"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Øker en tropp sin angrepsevne."
