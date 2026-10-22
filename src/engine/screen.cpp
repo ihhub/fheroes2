@@ -1161,7 +1161,13 @@ namespace
                 }
             }
 
-            const int returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+            int returnCode = SDL_RenderClear( _renderer );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to clear renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
                 return;
