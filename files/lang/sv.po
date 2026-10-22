@@ -90,7 +90,7 @@ msgid ""
 "Zounds...\n"
 "%{monster}"
 msgstr ""
-"Attans va många\n"
+"Attans vad många\n"
 "%{monster}"
 
 msgid ""
