@@ -9860,10 +9860,10 @@ msgid "Ore Mine"
 msgstr "Μεταλλωρυχείο"
 
 msgid "Sulfur Mine"
-msgstr "Θειωρυχείο"
+msgstr "Ορυχείο θείου"
 
 msgid "Crystal Mine"
-msgstr "Κρυσταλλωρυχείο"
+msgstr "Ορυχείο κρυστάλλων"
 
 msgid "Gems Mine"
 msgstr "Ορυχείο πετραδιών"
@@ -10085,7 +10085,7 @@ msgid "Temple"
 msgstr "Ναός"
 
 msgid "Hill Fort"
-msgstr "Λοφόκαστρο"
+msgstr "Λοφoφρούριο"
 
 msgid "Halfling Hole"
 msgstr "Λαγούμι χόμπιτ"
