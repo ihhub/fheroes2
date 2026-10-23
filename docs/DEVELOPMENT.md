@@ -14,7 +14,9 @@ Please follow the instructions below to be able to build the project from source
   be missing depending on the version of the original game) to the project root directory.
 * Alternatively, go to the directory `script/demo` and run the file `download_demo_version.bat`.
   This script will download a demo version of the original game, which is the minimum required for development.
-* Open the file `fheroes2-vs2019.vcxproj` (targeted for Visual Studio 2019) and build the project.
+* Open the file `fheroes2-vs2019.vcxproj` in Visual Studio 2026 with the Desktop development with C++ workload installed.
+  The project uses the v145 platform toolset; the historical project filename is retained. Select `Debug-SDL2` or
+  `Release-SDL2` and the `x64` or `Win32` platform, then build the project.
 * Visual Studio will automatically copy game files in the root directory to the build directory.
 
 ### macOS and Linux
