@@ -57,6 +57,10 @@ If you would like to build and run this project on PlayStation Vita please follo
 
 If you would like to build and run this project on Nintendo Switch please follow the instructions on [**this page**](README_switch.md).
 
+### Nintendo 3DS
+
+For the initial Nintendo 3DS homebrew build, follow the [platform guide](README_3ds.md).
+
 ### Emscripten (Wasm)
 
 If you would like to run this project in a web browser please follow the instructions on [**this page**](README_emscripten.md).
