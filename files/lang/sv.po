@@ -12402,7 +12402,7 @@ msgstr "Skadar alla levande (icke-odöda) varelser på slagfältet."
 
 msgid "Death Ripple"
 msgstr ""
-"Dödens \n"
+"Dödens\n"
 "Krusning"
 
 msgid "Death Wave"
