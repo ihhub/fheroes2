@@ -361,7 +361,6 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Rect marketplaceCountRoi;
 
     const uint32_t marketplaceEquivalentCount = fromTradingPost ? 3 : kingdom.GetCountMarketplace();
-    const std::string marketplaceEquivalentCountText = marketplaceEquivalentCount >= 9 ? " 9+" : " " + std::to_string( marketplaceEquivalentCount );
 
     // header
     fheroes2::Text text{ header, fheroes2::FontType::normalYellow() };
@@ -411,30 +410,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     RedrawToResource( pt2, false, kingdom, fromTradingPost, 0 );
 
     {
-        const int32_t tileSize = 32;
+        const fheroes2::Sprite & marketplaceIcon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
 
-        const fheroes2::Sprite & tradingPostLeft = Assets::getImage( ICN::OBJNMULT, 104 );
-        const fheroes2::Sprite & tradingPostRight = Assets::getImage( ICN::OBJNMULT, 111 );
-
-        fheroes2::Image fullTradingPostIcon( tileSize * 2, tileSize );
-        fullTradingPostIcon.reset();
-
-        fheroes2::Blit( tradingPostLeft, fullTradingPostIcon, 0, 0 );
-        fheroes2::Blit( tradingPostRight, fullTradingPostIcon, tileSize, 0 );
-
-        uint8_t * transform = fullTradingPostIcon.transform();
-        const int32_t transformSize = fullTradingPostIcon.width() * fullTradingPostIcon.height();
-
-        for ( int32_t i = 0; i < transformSize; ++i ) {
-            if ( transform[i] >= 2 && transform[i] <= 5 ) {
-                transform[i] = 1;
-            }
-        }
-
-        fheroes2::Image marketplaceIcon( 40, 20 );
-        fheroes2::Resize( fullTradingPostIcon, marketplaceIcon );
-
-        const fheroes2::Text marketplaceCountText( std::string( "x" ) + marketplaceEquivalentCountText, fheroes2::FontType::smallWhite() );
+        std::string marketplaceEquivalentCountText = marketplaceEquivalentCount >= 9 ? "x 9+" : "x " + std::to_string( marketplaceEquivalentCount );
+        const fheroes2::Text marketplaceCountText( std::move( marketplaceEquivalentCountText ), fheroes2::FontType::smallWhite() );
 
         const int32_t marketplaceCountElementHeight = std::max( marketplaceIcon.height(), marketplaceCountText.height() );
 
@@ -536,7 +515,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
                 StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
 
-                fheroes2::showStandardTextMessage( _( "Exchange Rate" ), std::move(marketplaceCountInfo), isLeftClick ? Dialog::OK : Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Exchange Rate" ), std::move( marketplaceCountInfo ), isLeftClick ? Dialog::OK : Dialog::ZERO );
 
                 display.render();
                 continue;
