@@ -113,6 +113,8 @@ namespace
 
     constexpr int32_t battleLogElementWidth{ fheroes2::Display::DEFAULT_WIDTH - 32 - 16 };
 
+    constexpr uint64_t troopCounterHoverDelayMs = 150;
+
     struct LightningPoint
     {
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), const int32_t thick = 1 )
@@ -1691,9 +1693,6 @@ void Battle::Interface::RedrawArmies()
     // Continue the idle animation for all troops on the battlefield: update idle animation frames before rendering the troops.
     IdleTroopsAnimation();
 
-    // `_unitToHighlight` is reset while rendering troop sprites, so preserve it for the counter redraw below.
-    const Unit * unitWithTopCounter = _unitToHighlight;
-
     const Castle * castle = Arena::GetCastle();
 
     std::array<int32_t, Board::heightInCells>
@@ -1977,22 +1976,15 @@ void Battle::Interface::RedrawArmies()
         RedrawTroopSprite( *_flyingUnit );
     }
 
-    if ( unitWithTopCounter == nullptr ) {
-        const Cell * cellUnderCursor = Board::GetCell( _currentCellIndex );
-        if ( cellUnderCursor != nullptr ) {
-            unitWithTopCounter = cellUnderCursor->GetUnit();
-        }
-    }
-
     // Redraw troop counter for highlighted troop.
-    if ( unitWithTopCounter != nullptr && unitWithTopCounter->isValid() && unitWithTopCounter != _movingUnit && unitWithTopCounter != _flyingUnit ) {
-        const int animationState = unitWithTopCounter->GetAnimationState();
+    if ( _showTroopCounterOnTop && _troopCounterHoverUnit != nullptr && _troopCounterHoverUnit->isValid() && _troopCounterHoverUnit != _movingUnit
+         && _troopCounterHoverUnit != _flyingUnit ) {
+        const int animationState = _troopCounterHoverUnit->GetAnimationState();
         const bool isStaticUnit = animationState == Monster_Info::STATIC || animationState == Monster_Info::IDLE;
-        const bool isFullyVisible = !unitWithTopCounter->Modes( CAP_SUMMONELEM ) || unitWithTopCounter->GetCustomAlpha() == 255;
+        const bool isFullyVisible = !_troopCounterHoverUnit->Modes( CAP_SUMMONELEM ) || _troopCounterHoverUnit->GetCustomAlpha() == 255;
 
         if ( isStaticUnit && isFullyVisible ) {
-            constexpr uint8_t highlightedCounterAlpha = 150;
-            RedrawTroopCount( *unitWithTopCounter, highlightedCounterAlpha );
+            RedrawTroopCount( *_troopCounterHoverUnit );
         }
     }
 }
@@ -2221,11 +2213,6 @@ bool Battle::Interface::_drawTroopSpriteWithMoatMask( const Unit & unit, const f
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
-    RedrawTroopCount( unit, 255 );
-}
-
-void Battle::Interface::RedrawTroopCount( const Unit & unit, const uint8_t alpha )
-{
     const fheroes2::Rect & rt = unit.GetRectPosition();
     const fheroes2::Sprite & bar = Assets::getImage( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
@@ -2244,18 +2231,10 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit, const uint8_t alpha
 
     sx += isReflected ? -xOffset : xOffset;
 
+    fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
+
     const fheroes2::Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
-
-    if ( alpha == 255 ) {
-        fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
-        text.draw( sx + ( bar.width() - text.width() ) / 2, sy + 2, _mainSurface );
-    }
-    else {
-        fheroes2::Sprite transparentCounter( bar );
-        text.draw( ( bar.width() - text.width() ) / 2, 2, transparentCounter );
-
-        fheroes2::AlphaBlit( transparentCounter, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height(), alpha );
-    }
+    text.draw( sx + ( bar.width() - text.width() ) / 2, sy + 2, _mainSurface );
 }
 
 void Battle::Interface::RedrawCover()
@@ -3126,6 +3105,9 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
 
     // Reset the highlighted unit.
     _highlightUnitMovementArea = nullptr;
+    _troopCounterHoverUnit = nullptr;
+    _showTroopCounterOnTop = false;
+    _troopCounterHoverTimer.reset();
 
     _currentUnit = &unit;
     _needRedraw = false;
@@ -3169,6 +3151,26 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
             HumanBattleTurn( unit, actions, msg );
         }
 
+        const Unit * hoveredUnit = _unitToHighlight;
+
+        if ( hoveredUnit == nullptr ) {
+            const Cell * cellUnderCursor = Board::GetCell( _currentCellIndex );
+            if ( cellUnderCursor != nullptr ) {
+                hoveredUnit = cellUnderCursor->GetUnit();
+            }
+        }
+
+        if ( hoveredUnit != _troopCounterHoverUnit ) {
+            _troopCounterHoverUnit = hoveredUnit;
+            _showTroopCounterOnTop = false;
+            _troopCounterHoverTimer.reset();
+            _needRedraw = true;
+        }
+        else if ( !_showTroopCounterOnTop && hoveredUnit != nullptr && _troopCounterHoverTimer.getMs() >= troopCounterHoverDelayMs ) {
+            _showTroopCounterOnTop = true;
+            _needRedraw = true;
+        }
+
         // update status
         if ( msg != status.getMessage() ) {
             status.setMessage( msg, false );
@@ -3197,6 +3199,8 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
 
     _currentCellIndex = -1;
     _currentUnit = nullptr;
+    _troopCounterHoverUnit = nullptr;
+    _showTroopCounterOnTop = false;
     _highlightUnitMovementArea = nullptr;
 }
 

@@ -42,6 +42,7 @@
 #include "math_base.h"
 #include "screen.h"
 #include "spell.h"
+#include "timing.h"
 #include "ui_button.h"
 #include "ui_text.h"
 
@@ -428,7 +429,6 @@ namespace Battle
         fheroes2::Point _drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
 
         void RedrawTroopCount( const Unit & unit );
-        void RedrawTroopCount( const Unit & unit, const uint8_t alpha );
 
         bool _drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset, const fheroes2::Point & movementDelta,
                                            const CellDirection movementDirection );
@@ -538,10 +538,14 @@ namespace Battle
         const Unit * _movingUnit{ nullptr };
         const Unit * _flyingUnit{ nullptr };
         const Unit * _unitToHighlight{ nullptr };
+        const Unit * _troopCounterHoverUnit{ nullptr };
         const Unit * _highlightUnitMovementArea{ nullptr };
         const fheroes2::Sprite * _spriteInsteadCurrentUnit{ nullptr };
+
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;
+        fheroes2::Time _troopCounterHoverTimer;
+        bool _showTroopCounterOnTop{ false };
 
         int32_t _currentCellIndex{ -1 };
         // Index of the cell selected as the source for the Teleport spell
