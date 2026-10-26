@@ -113,7 +113,7 @@ namespace
 
     constexpr int32_t battleLogElementWidth{ fheroes2::Display::DEFAULT_WIDTH - 32 - 16 };
 
-    constexpr uint64_t troopCounterHoverDelayMs = 150;
+    constexpr uint64_t troopCounterHoverDelayMs = 250;
 
     struct LightningPoint
     {
