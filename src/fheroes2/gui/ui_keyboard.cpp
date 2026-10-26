@@ -57,7 +57,7 @@ namespace
     const fheroes2::Size defaultSpecialButtonSize{ 54, defaultButtonHeight };
     const fheroes2::Size spacebarButtonSize{ 175, defaultButtonHeight };
     const fheroes2::Size enterButtonSize{ 72, defaultButtonHeight };
-    const fheroes2::Size multiLineSpacebarButtonSize{ 142, defaultButtonHeight };
+    const fheroes2::Size multiLineSpacebarButtonSize{ 110, defaultButtonHeight };
     const int32_t defaultWindowWidth{ 520 };
     const int32_t numpadWindowWidth{ 320 };
     const int32_t defaultWindowHeight{ 250 };
@@ -707,6 +707,16 @@ namespace
                 } );
             }
 
+            if ( isExtraLanguageSupported || !isMultiLineText ) {
+                lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                lastButtonRow.back().customTitle = _( "Change language" );
+                lastButtonRow.back().customDescription = _( "Click to switch between languages." );
+
+                if ( !isExtraLanguageSupported ) {
+                    lastButtonRow.back().button.hide();
+                }
+            }
+
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
                 return DialogAction::DoNothing;
@@ -737,6 +747,16 @@ namespace
                 } );
             }
 
+            if ( isExtraLanguageSupported || !isMultiLineText ) {
+                lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                lastButtonRow.back().customTitle = _( "Change language" );
+                lastButtonRow.back().customDescription = _( "Click to switch between languages." );
+
+                if ( !isExtraLanguageSupported ) {
+                    lastButtonRow.back().button.hide();
+                }
+            }
+
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
                 return DialogAction::DoNothing;
@@ -763,6 +783,16 @@ namespace
                     renderer.insertCharacter( '\n' );
                     return DialogAction::DoNothing;
                 } );
+            }
+
+            if ( isExtraLanguageSupported || !isMultiLineText ) {
+                lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                lastButtonRow.back().customTitle = _( "Change language" );
+                lastButtonRow.back().customDescription = _( "Click to switch between languages." );
+
+                if ( !isExtraLanguageSupported ) {
+                    lastButtonRow.back().button.hide();
+                }
             }
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
