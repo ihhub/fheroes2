@@ -242,20 +242,28 @@ namespace fheroes2
 
         _text.set( newText, cursorPositionInText );
 
-        _verticalTextOffset = 0;
-
         if ( _isMultiLineText ) {
             const Rect cursorArea = _text.cursorArea();
-            const int32_t visibleBottom = _textInputArea.height - 2;
-            const int32_t cursorBottom = cursorArea.y + cursorArea.height;
+            const int32_t visibleTextHeight = _textInputArea.height - 2;
 
-            if ( cursorBottom > visibleBottom ) {
-                const int32_t lineHeight = _text.height();
-                assert( lineHeight > 0 );
-
-                const int32_t overflow = cursorBottom - visibleBottom;
-                _verticalTextOffset = ( overflow + lineHeight - 1 ) / lineHeight * lineHeight;
+            if ( cursorArea.y < _verticalTextOffset ) {
+                _verticalTextOffset = cursorArea.y;
             }
+            else {
+                const int32_t cursorBottom = cursorArea.y + cursorArea.height;
+                const int32_t visibleBottom = _verticalTextOffset + visibleTextHeight;
+
+                if ( cursorBottom > visibleBottom ) {
+                    const int32_t lineHeight = _text.height();
+                    assert( lineHeight > 0 );
+
+                    const int32_t overflow = cursorBottom - visibleBottom;
+                    _verticalTextOffset += ( overflow + lineHeight - 1 ) / lineHeight * lineHeight;
+                }
+            }
+        }
+        else {
+            _verticalTextOffset = 0;
         }
 
         // Multi-line text is currently always automatically center-aligned.

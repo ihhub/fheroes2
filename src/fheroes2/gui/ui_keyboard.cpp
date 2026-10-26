@@ -66,7 +66,7 @@ namespace
     constexpr int32_t inputAreaBorders{ 2 };
     constexpr int32_t multiLineInputAreaRows{ 5 };
     constexpr int32_t multiLineInputAreaHeight{ inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) };
-    constexpr fheroes2::Size multiLineInputAreaSize{ inputAreaSize.width, multiLineInputAreaHeight };
+    constexpr fheroes2::Size multiLineInputAreaSize{ 220, multiLineInputAreaHeight };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
@@ -1110,6 +1110,10 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
+        int32_t textDragPositionY = 0;
+        bool isTextAreaDrag = false;
+        bool textAreaWasDragged = false;
+
         while ( le.HandleEvents() ) {
             okayButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( okayButton.area() ) );
 
@@ -1126,9 +1130,48 @@ namespace
 
             updateButtonStates( buttons, le );
 
-            if ( le.MouseClickLeft( textRoi ) ) {
-                renderer.setCursorPosition( le.getMouseLeftButtonPressedPos() );
+            if ( inputAreaHeightIncrease > 0 ) {
+            if ( le.isMouseWheelUpInArea( textRoi ) ) {
+                renderer.setCursorPosition( CursorPosition::PrevLine );
             }
+            else if ( le.isMouseWheelDownInArea( textRoi ) ) {
+                renderer.setCursorPosition( CursorPosition::NextLine );
+            }
+        }
+
+        if ( inputAreaHeightIncrease > 0 && le.isMouseLeftButtonPressedInArea( textRoi ) ) {
+            if ( !isTextAreaDrag ) {
+                textDragPositionY = le.getMouseLeftButtonPressedPos().y;
+                isTextAreaDrag = true;
+            }
+
+            if ( le.hasMouseMoved() ) {
+                const int32_t currentY = le.getMouseCursorPos().y;
+                const int32_t dragOffset = currentY - textDragPositionY;
+                const int32_t lineHeight = inputAreaSize.height - 2 * inputAreaBorders;
+
+                if ( std::abs( dragOffset ) >= lineHeight ) {
+                    renderer.setCursorPosition( dragOffset > 0 ? CursorPosition::PrevLine : CursorPosition::NextLine );
+
+                    textDragPositionY = currentY;
+                    textAreaWasDragged = true;
+                    le.registerDrag();
+                }
+            }
+        }
+
+        if ( le.isMouseLeftButtonReleased() ) {
+            isTextAreaDrag = false;
+
+            if ( textAreaWasDragged ) {
+                le.MouseClickLeft();
+                textAreaWasDragged = false;
+            }
+        }
+
+        if ( le.MouseClickLeft( textRoi ) ) {
+            renderer.setCursorPosition( le.getMouseLeftButtonPressedPos() );
+        }
             else if ( le.isMouseRightButtonPressedInArea( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply changes." ), Dialog::ZERO );
             }

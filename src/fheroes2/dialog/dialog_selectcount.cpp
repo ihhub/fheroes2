@@ -355,6 +355,12 @@ bool Dialog::inputString( const fheroes2::TextBase & title, const fheroes2::Text
             if ( charLimit > 0 && result.size() > charLimit ) {
                 result.resize( charLimit );
             }
+
+            if ( isMultiLine ) {
+                while ( !result.empty() && textInput.height( result ) > textInputArea.height ) {
+                    result.pop_back();
+                }
+            }
             charInsertPos = result.size();
             redraw = true;
         }
