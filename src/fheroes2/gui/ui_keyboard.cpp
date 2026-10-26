@@ -701,11 +701,10 @@ namespace
             } );
 
             if ( isMultiLineText ) {
-                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface,
-                                            []( KeyboardRenderer & renderer ) {
-                                                renderer.insertCharacter( '\n' );
-                                                return DialogAction::DoNothing;
-                                            } );
+                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                    renderer.insertCharacter( '\n' );
+                    return DialogAction::DoNothing;
+                } );
             }
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -732,11 +731,10 @@ namespace
             } );
 
             if ( isMultiLineText ) {
-                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface,
-                                            []( KeyboardRenderer & renderer ) {
-                                                renderer.insertCharacter( '\n' );
-                                                return DialogAction::DoNothing;
-                                            } );
+                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                    renderer.insertCharacter( '\n' );
+                    return DialogAction::DoNothing;
+                } );
             }
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -761,11 +759,10 @@ namespace
             } );
 
             if ( isMultiLineText ) {
-                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface,
-                                            []( KeyboardRenderer & renderer ) {
-                                                renderer.insertCharacter( '\n' );
-                                                return DialogAction::DoNothing;
-                                            } );
+                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                    renderer.insertCharacter( '\n' );
+                    return DialogAction::DoNothing;
+                } );
             }
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
