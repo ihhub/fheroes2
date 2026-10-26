@@ -2684,9 +2684,6 @@ msgstr ""
 "d'oro.\n"
 "Accetti?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Grado: %{percent})"
-
 msgid "off"
 msgstr "Muto"
 
@@ -12161,6 +12158,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Grado: %{percent})"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Incrementa la capacità d'attacco di un'unità."

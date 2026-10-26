@@ -2809,9 +2809,6 @@ msgstr ""
 "сумата от %{gold} злато.\n"
 "Приемаш ли?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Оценка: %{percent})"
-
 msgid "off"
 msgstr "изкл"
 
@@ -13189,6 +13186,9 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Оценка: %{percent})"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Увеличава умението за атака на единица."

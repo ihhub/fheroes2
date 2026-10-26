@@ -2813,9 +2813,6 @@ msgstr ""
 "pris af %{gold} guldstykker.\n"
 "Godtager du disse betingelser?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Grad: %{percent})"
-
 msgid "off"
 msgstr "fra"
 
@@ -13039,6 +13036,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Grad: %{percent})"
 
 #~ msgid "Increases a unit's attack skill."
 #~ msgstr "Øger en trops angrebsevne."
