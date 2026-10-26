@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <cstdlib>
 #include <deque>
 #include <functional>
@@ -183,6 +184,16 @@ namespace
         auto spriteInfo = Maps::getHeroSpritesPerTile( *hero );
         auto spriteShadowInfo = Maps::getHeroShadowSpritesPerTile( *hero );
 
+        // Parts of hero's sprites with negative X offset must be rendered before all other objects on the same tile.
+        // However, these parts must keep their relative order: hero (or boat) first and then the flag.
+        // Otherwise, the boat's own neutral flag is rendered over the player's flag while the boat moves to the left.
+        std::map<const std::deque<fheroes2::ObjectRenderingInfo> *, size_t> frontInsertedCount;
+        auto insertAtFront = [&frontInsertedCount]( std::deque<fheroes2::ObjectRenderingInfo> & container, const fheroes2::ObjectRenderingInfo & info ) {
+            size_t & insertedCount = frontInsertedCount[&container];
+            container.insert( container.begin() + static_cast<std::ptrdiff_t>( insertedCount ), info );
+            ++insertedCount;
+        };
+
         for ( auto & objectInfo : spriteInfo ) {
             const fheroes2::Point imagePos = objectInfo.tileOffset;
             objectInfo.alphaValue = heroAlphaValue;
@@ -249,7 +260,7 @@ namespace
 
                 // The very bottom part of hero (or hero on boat) image should not be rendered before it's shadow so we place it in the extra deque.
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.heroBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
+                    insertAtFront( tileUnfit.heroBackgroundImages[imagePos + heroPos], objectInfo );
                 }
                 else {
                     tileUnfit.heroBackgroundImages[imagePos + heroPos].emplace_back( objectInfo );
@@ -257,7 +268,7 @@ namespace
             }
             else if ( imagePos.y == 0 || ( isHeroInCastle && imagePos.y > 0 ) ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_front( objectInfo );
+                    insertAtFront( tileUnfit.bottomImages[imagePos + heroPos], objectInfo );
                 }
                 else {
                     tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
@@ -270,7 +281,7 @@ namespace
                 }
 
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.topImages[imagePos + heroPos].emplace_front( objectInfo );
+                    insertAtFront( tileUnfit.topImages[imagePos + heroPos], objectInfo );
                 }
                 else {
                     tileUnfit.topImages[imagePos + heroPos].emplace_back( objectInfo );
