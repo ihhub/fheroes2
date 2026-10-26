@@ -510,55 +510,37 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
-
-        if ( marketplaceCountRoi.width > 0 && le.MouseClickLeft( marketplaceCountRoi ) ) {
-            std::string marketplaceCountInfo;
-
-            if ( fromTradingPost ) {
-                marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} Marketplaces." );
-            }
-            else if ( marketplaceEquivalentCount == 1 ) {
-                marketplaceCountInfo = _( "You own %{count} Marketplace. More Marketplaces improve resource exchange rates." );
-            }
-            else if ( marketplaceEquivalentCount >= 9 ) {
-                marketplaceCountInfo = _( "You own 9 or more Marketplaces. This is the maximum level for resource exchange rates." );
-            }
-            else {
-                marketplaceCountInfo = _( "You own %{count} Marketplaces. More Marketplaces improve resource exchange rates." );
-            }
-
-            StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
-
-            fheroes2::showStandardTextMessage( _( "Exchange Rate" ), marketplaceCountInfo, Dialog::OK );
-
-            display.render();
-            continue;
         }
 
-        if ( marketplaceCountRoi.width > 0 && le.isMouseRightButtonPressedInArea( marketplaceCountRoi ) ) {
-            std::string marketplaceCountInfo;
+        if ( marketplaceCountRoi.width > 0 && le.isMouseCursorPosInArea( marketplaceCountRoi ) ) {
+            const bool isLeftClick = le.MouseClickLeft();
+            const bool isRighPress = !isLeftClick && le.isMouseRightButtonPressed();
 
-            if ( fromTradingPost ) {
-                marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} Marketplaces." );
-            }
-            else if ( marketplaceEquivalentCount == 1 ) {
-                marketplaceCountInfo = _( "You own %{count} Marketplace.\nMore Marketplaces improve resource exchange rates." );
-            }
-            else if ( marketplaceEquivalentCount >= 9 ) {
-                marketplaceCountInfo = _( "You own 9 or more Marketplaces. This is the maximum level for resource exchange rates." );
-            }
-            else {
-                marketplaceCountInfo = _( "You own %{count} Marketplaces.\nMore Marketplaces improve resource exchange rates." );
-            }
+            if ( isLeftClick || isRighPress ) {
+                std::string marketplaceCountInfo;
 
-            StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
+                if ( fromTradingPost ) {
+                    marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} Marketplaces." );
+                }
+                else if ( marketplaceEquivalentCount == 1 ) {
+                    marketplaceCountInfo = _( "You own %{count} Marketplace. More Marketplaces improve resource exchange rates." );
+                }
+                else if ( marketplaceEquivalentCount >= 9 ) {
+                    marketplaceCountInfo = _( "You own 9 or more Marketplaces. This is the maximum level for resource exchange rates." );
+                }
+                else {
+                    marketplaceCountInfo = _( "You own %{count} Marketplaces. More Marketplaces improve resource exchange rates." );
+                }
 
-            fheroes2::showStandardTextMessage( _( "Exchange Rate" ), marketplaceCountInfo, Dialog::ZERO );
+                StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
 
-            display.render();
-            continue;
+                fheroes2::showStandardTextMessage( _( "Exchange Rate" ), std::move(marketplaceCountInfo), isLeftClick ? Dialog::OK : Dialog::ZERO );
+
+                display.render();
+                continue;
+            }
         }
 
         // gift resources
