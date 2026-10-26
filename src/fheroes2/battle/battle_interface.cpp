@@ -2238,6 +2238,17 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     int32_t sx = rt.x + ( isReflected ? -7 : rt.width - 13 );
     int32_t sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
 
+    constexpr int32_t hitPointsBarHeight = 4;
+    const bool isHitPointsBarEnabled = Settings::Get().isBattleHitPointsBarEnabled();
+
+    if ( isHitPointsBarEnabled ) {
+        sy -= hitPointsBarHeight;
+
+        if ( isReflected ) {
+            sy -= hitPointsBarHeight;
+        }
+    }
+
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
     if ( xOffset > 0 && isValidFrontMonster && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != nullptr )
@@ -2245,11 +2256,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     sx += isReflected ? -xOffset : xOffset;
 
-    if ( Settings::Get().isBattleHitPointsBarEnabled() ) {
-        constexpr int32_t hitPointsBarHeight = 4;
-
-        sy = std::min( sy, _mainSurface.height() - bar.height() - hitPointsBarHeight );
-
+    if ( isHitPointsBarEnabled ) {
         drawHitPointsBar( _mainSurface, bar, { sx, sy }, hitPointsBarHeight, unit.GetHitPointsLeft(), unit.GetMonster().GetHitPoints() );
     }
 
