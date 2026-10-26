@@ -1943,6 +1943,10 @@ namespace
             return;
         }
 
+        // A hero might have stepped on the object by accident.
+        // We need to minimize the damage being made by this object.
+        // TODO: add logic to avoid extensive army loss.
+
         const uint32_t experience = hero.GetArmy().ActionToSirens();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " got " << experience << " experience" )

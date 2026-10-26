@@ -36,7 +36,7 @@
 
 namespace
 {
-    // 0 in shadow part means no shadow, 1 means skip any drawings so to don't waste extra CPU cycles for ( tableId - 2 ) command we just add extra fake tables
+    // 0 in transform part means original pixel, 1 means skip any rendering so to don't waste extra CPU cycles for ( tableId - 2 ) command we just add extra fake tables.
     // Mirror palette was modified as it was containing 238, 238, 239, 240 values instead of 238, 239, 240, 241
     // !!! WARNING !!!
     // If you modify "No cycle" part of the table make sure to update nonCyclingUniqueColorPos variable below (see GetPALColorId() function).

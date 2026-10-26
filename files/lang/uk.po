@@ -2755,9 +2755,6 @@ msgstr ""
 "Всі %{offer} із %{monster} приєднаються до вашої армії за %{gold} золота.\n"
 "Ви згодні?"
 
-msgid "(Rate: %{percent})"
-msgstr "(Ставка: %{percent})"
-
 msgid "off"
 msgstr "вимк"
 
@@ -3003,6 +3000,10 @@ msgstr "Верт. синхр. може усунути мерехтіння на 
 msgid "Show extra information such as FPS and current time."
 msgstr "Відобразити додаткову інформацію як FPS та поточний час."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "параметри бою"
+
 msgid "Hotkey: "
 msgstr "Гаряча клавіша: "
 
@@ -3014,6 +3015,14 @@ msgstr "Подія: "
 
 msgid "Hot Keys:"
 msgstr "Гарячі клавіші:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr "Натисніть щоб вибрати монстра."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Оберіть монстра:"
 
 msgid "Hide"
 msgstr "Сховати"
@@ -4229,6 +4238,9 @@ msgstr "Мапу збережено в: "
 msgid "Failed to save the map."
 msgstr "Не вдалося зберегти мапу."
 
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
 msgid "Unsaved Changes"
 msgstr "Незбережені зміни"
 
@@ -4946,9 +4958,6 @@ msgstr "Жоден артефакт не буде виданий у якості
 msgid "Delete an artifact from the reward."
 msgstr "Видалити артефакт з винагороди."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "День: %{day} Тиждень: %{week} Місяць: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Проста"
 
@@ -5254,14 +5263,6 @@ msgstr ""
 "КАМПАНІЇ\n"
 "ДОПОВНЕННЯ"
 
-#, fuzzy
-msgid ""
-"RESURRECTION\n"
-"CAMPAIGN"
-msgstr ""
-"КАМПАНІЇ\n"
-"ДОПОВНЕННЯ"
-
 msgid "editorMainMenu|BACK"
 msgstr "НАЗАД"
 
@@ -5318,6 +5319,9 @@ msgstr " кількість проходжень досягла встановл
 msgid "Click to close the dialog."
 msgstr "Тицьніть, щоб закрити діалог."
 
+msgid "%{color} player"
+msgstr "%{color} гравець"
+
 msgid "Won %{percent}% of playthroughs."
 msgstr "Виграв %{percent}% проходжень гри."
 
@@ -5327,7 +5331,18 @@ msgstr "Не вдалося підготувати мапу для автома�
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Кількість проходжень:"
 
+#, fuzzy
+msgid "Set the number of playthroughs."
+msgstr "Кількість проходжень:"
+
 msgid "autoPlaytest|Max days per playthrough:"
+msgstr "Максимальна кількість днів на одне проходження:"
+
+msgid "Set the maximum number of days within each playthrough is being run."
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Максимальна кількість днів на одне проходження:"
 
 msgid "autoPlaytest|Animation"
@@ -5336,6 +5351,9 @@ msgstr "Анімація"
 msgid "autoPlaytest|Animation speed:"
 msgstr "Швидкість анімації:"
 
+msgid "Set animation speed during playthrough."
+msgstr ""
+
 msgid "autoPlaytest|Sound Effects"
 msgstr "Звукові ефекти"
 
@@ -5343,8 +5361,24 @@ msgid "Left-clicking at any point will interrupt the playtest."
 msgstr ""
 "Тицьнувши лівою кнопкою миші в будь-якому місці, перерветься тестування."
 
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Це дозволяє вам змінювати клас гравця. Класи не завжди можна змінити. "
+"Залежно від сценарію, гравець може отримати додаткові міста та/або героїв не "
+"свого класу."
+
 msgid "Click to run an automated map playtest."
 msgstr "Тицьніть, щоб запустити автоматичне тестування мапи."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Анімації об'єктів умівк/вимк."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
 
 msgid ""
 "Auto playtest\n"
@@ -5363,38 +5397,51 @@ msgstr ""
 msgid "and more..."
 msgstr "і не тільки..."
 
-msgid "Easy"
-msgstr "Легко"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
+msgstr ""
+"Складність\n"
+"Кампанії"
 
-msgid "Normal"
-msgstr "Звичайна"
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr ""
+"Складність\n"
+"Кампанії"
 
-msgid "Hard"
-msgstr "Важко"
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr ""
+"Складність\n"
+"Кампанії"
+
+#, fuzzy
+msgid ""
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
+msgstr ""
+"Виберіть цю складність, щоб відчути історію гри з меншими труднощами. ШІ "
+"буде слабшим ніж на звичайній складності."
+
+#, fuzzy
+msgid ""
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
+msgstr ""
+"Виберіть цю складність, щоб пройти кампанію відповідно до початкового задуму."
+
+#, fuzzy
+msgid ""
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
+msgstr ""
+"Виберіть цю складність, якщо хочете більше виклику. ШІ буде сильнішим, ніж "
+"на звичайній складності."
 
 msgid "Campaign Difficulty"
 msgstr ""
 "Складність\n"
 "Кампанії"
-
-msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
-msgstr ""
-"Виберіть цю складність, щоб відчути історію гри з меншими труднощами. ШІ "
-"буде слабшим ніж на звичайній складності."
-
-msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
-msgstr ""
-"Виберіть цю складність, щоб пройти кампанію відповідно до початкового задуму."
-
-msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
-msgstr ""
-"Виберіть цю складність, якщо хочете більше виклику. ШІ буде сильнішим, ніж "
-"на звичайній складності."
 
 msgid ""
 "Congratulations!\n"
@@ -6567,6 +6614,9 @@ msgstr ""
 "%{color} гравцю, ваші герої покидають вас, а вас самих проганяють з цієї "
 "землі."
 
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "День: %{day} Тиждень: %{week} Місяць: %{month}"
+
 msgid "Lord Kilburn"
 msgstr "Лорд Кілбурн"
 
@@ -6772,15 +6822,6 @@ msgstr ""
 "завжди починатиметься в певному місці. На деяких позиціях може грати тільки "
 "комп'ютерний гравець або тільки гравець людина."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Це дозволяє вам змінювати клас гравця. Класи не завжди можна змінити. "
-"Залежно від сценарію, гравець може отримати додаткові міста та/або героїв не "
-"свого класу."
-
 msgid "Handicap"
 msgstr "Обмеження"
 
@@ -6795,9 +6836,6 @@ msgstr ""
 "мати лише гравці-люди. Гравці з обмеженнями починають з меншою кількістю "
 "ресурсів і заробляють на 15 або 30% менше ресурсів за хід для легких і "
 "важких обмежень відповідно."
-
-msgid "%{color} player"
-msgstr "%{color} гравець"
 
 msgid "No Handicap"
 msgstr "Без обмежень"
@@ -6998,6 +7036,9 @@ msgstr ""
 
 msgid "Slow"
 msgstr "Повільно"
+
+msgid "Normal"
+msgstr "Звичайна"
 
 msgid "Fast"
 msgstr "Швидко"
@@ -12470,8 +12511,10 @@ msgstr ""
 msgid "Blood Lust"
 msgstr "Кровожерливість"
 
-msgid "Increases a unit's attack skill."
-msgstr "Збільшує навичку атаки обраного дружнього загону."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Оживити мерців"
@@ -12583,10 +12626,12 @@ msgstr "Дозволяє заклиначу побачити повну інфо
 msgid "Summon Boat"
 msgstr "Виклик корабля"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Викликає найближчий дружній незайнятий корабель на розташовану поруч з "
 "героєм водойму. Корабель вважається дружнім, якщо він був збудований вами, "
@@ -12814,6 +12859,26 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Ставка: %{percent})"
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Збільшує навичку атаки обраного дружнього загону."
+
+#~ msgid "Easy"
+#~ msgstr "Легко"
+
+#~ msgid "Hard"
+#~ msgstr "Важко"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "КАМПАНІЇ\n"
+#~ "ДОПОВНЕННЯ"
 
 #~ msgid "Create a new map from scratch."
 #~ msgstr "Створити нову мапу з чистого аркуша."

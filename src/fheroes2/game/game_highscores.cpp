@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -28,6 +29,7 @@
 #include <functional>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -73,7 +75,7 @@ namespace fheroes2
 
 namespace
 {
-    const std::string highScoreFileName = "fheroes2.hgs";
+    constexpr std::string_view highScoreFileName{ "fheroes2.hgs" };
     fheroes2::HighScoreDataContainer highScoreDataContainer;
     const int32_t initialHighScoreEntryOffsetY = 72;
     const int32_t highScoreEntryStepY = 40;
@@ -84,6 +86,8 @@ namespace
     const int32_t ratingOffset = 484;
     const int32_t monsterOffsetX = 554;
     const int32_t monsterOffsetY = 91;
+
+    constexpr size_t maxDisplayedEntries{ 10 };
 
     // Calculate the mini monster sprites ROI.
     fheroes2::Rect getAnimationRoi( const fheroes2::Point & position, const bool isCampaign )
@@ -203,7 +207,11 @@ namespace
         int32_t scoreIndex = 0;
         int32_t offsetY = position.y;
 
-        for ( const fheroes2::HighscoreData & data : highScores ) {
+        const size_t entryCount{ std::min<size_t>( maxDisplayedEntries, highScores.size() ) };
+
+        for ( size_t i = 0; i < entryCount; ++i ) {
+            const fheroes2::HighscoreData & data = highScores[i];
+
             const fheroes2::FontType font = ( scoreIndex == selectedScoreIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
             // TODO: scenario name can have its own independent language.
