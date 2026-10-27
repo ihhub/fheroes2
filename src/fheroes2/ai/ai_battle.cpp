@@ -559,67 +559,12 @@ namespace
 
         Battle::Actions actions;
 
-        Battle::Board * board = Battle::Arena::GetBoard();
-        assert( board != nullptr );
-
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
-        const std::vector<Battle::Unit *> nearestUnits = board->GetNearestTroops( &currentUnit, {} );
-        assert( !nearestUnits.empty() );
-
-        // If the berserker is an archer, then just shoot at the nearest unit
-        if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, will shoot" )
-
-            const Battle::Unit * targetUnit = nearestUnits.front();
-            assert( targetUnit != nullptr );
-
-            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1, 0 );
-
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " shooting at enemy " << targetUnit->GetName() )
-
-            return actions;
-        }
-
-        AI::BattleTargetPair targetInfo;
-
-        // First, try to find a unit nearby that can be attacked on this turn
-        for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
-            assert( nearbyUnit != nullptr );
-
-            const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, currentUnit, *nearbyUnit );
-            if ( nearestCellInfo.idx == -1 ) {
-                continue;
-            }
-
-            if ( !Battle::Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, nearestCellInfo.idx ) ) {
-                continue;
-            }
-
-            targetInfo.cell = nearestCellInfo.idx;
-            targetInfo.unit = nearbyUnit;
-
-            break;
-        }
-
-        // If there is no unit to attack during this turn, then find the nearest one to try to attack it during subsequent turns
-        if ( targetInfo.cell == -1 ) {
-            for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
-                assert( nearbyUnit != nullptr );
-
-                const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, currentUnit, *nearbyUnit );
-                if ( nearestCellInfo.idx == -1 ) {
-                    continue;
-                }
-
-                targetInfo.cell = nearestCellInfo.idx;
-
-                break;
-            }
-        }
+        const AI::BerserkerTarget target = AI::getBerserkerTarget( arena, currentUnit );
 
         // There is no reachable unit in sight, skip the turn
-        if ( targetInfo.cell == -1 ) {
+        if ( target.unit == nullptr ) {
             actions.emplace_back( Battle::Command::SKIP, currentUnitUID );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " skipping the turn" )
@@ -627,18 +572,26 @@ namespace
             return actions;
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, target cell: " << targetInfo.cell )
+        if ( target.cell == -1 ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, will shoot" )
+
+            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, target.unit->GetUID(), -1, -1, 0 );
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " shooting at enemy " << target.unit->GetName() )
+
+            return actions;
+        }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, target cell: " << target.cell )
 
         // The target cell of the movement must be the cell that the unit's head will occupy
-        const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, targetInfo.cell );
+        const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, target.cell );
 
-        if ( targetInfo.unit ) {
-            const Battle::Unit * targetUnit = targetInfo.unit;
+        if ( target.canAttackThisTurn ) {
+            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, target.unit->GetUID(), ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ),
+                                  -1, -1 );
 
-            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, targetUnit->GetUID(), ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), -1,
-                                  -1 );
-
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << targetUnit->GetName() << " from cell " << moveTargetIdx )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " from cell " << moveTargetIdx )
         }
         else {
             actions.emplace_back( Battle::Command::MOVE, currentUnitUID, moveTargetIdx );
@@ -648,6 +601,58 @@ namespace
 
         return actions;
     }
+}
+
+AI::BerserkerTarget AI::getBerserkerTarget( Battle::Arena & arena, const Battle::Unit & unit )
+{
+    Battle::Board * board = Battle::Arena::GetBoard();
+    assert( board != nullptr );
+
+    const std::vector<Battle::Unit *> nearestUnits = board->GetNearestTroops( &unit, {} );
+    assert( !nearestUnits.empty() );
+
+    // A unit under the Berserker spell has no allies, so any adjacent unit forces it to fight in close combat. Unit::isHandFighting() cannot
+    // be used here, because the unit may not be under the spell yet, and then it would ignore the adjacent units of its own color.
+    const Battle::Indexes aroundIndexes = Battle::Board::GetAroundIndexes( unit );
+    const bool isNextToAnyUnit
+        = std::any_of( aroundIndexes.begin(), aroundIndexes.end(), []( const int32_t idx ) { return Battle::Board::GetCell( idx )->GetUnit() != nullptr; } );
+
+    // If the berserker is an archer, then just shoot at the nearest unit
+    if ( unit.isArchers() && !isNextToAnyUnit ) {
+        assert( nearestUnits.front() != nullptr );
+
+        return { nearestUnits.front(), -1, true };
+    }
+
+    // First, try to find a unit nearby that can be attacked on this turn
+    for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
+        assert( nearbyUnit != nullptr );
+
+        const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, unit, *nearbyUnit );
+        if ( nearestCellInfo.idx == -1 ) {
+            continue;
+        }
+
+        if ( !Battle::Board::CanAttackTargetFromPosition( unit, *nearbyUnit, nearestCellInfo.idx ) ) {
+            continue;
+        }
+
+        return { nearbyUnit, nearestCellInfo.idx, true };
+    }
+
+    // If there is no unit to attack during this turn, then find the nearest one to try to attack it during subsequent turns
+    for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
+        assert( nearbyUnit != nullptr );
+
+        const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, unit, *nearbyUnit );
+        if ( nearestCellInfo.idx == -1 ) {
+            continue;
+        }
+
+        return { nearbyUnit, nearestCellInfo.idx, false };
+    }
+
+    return {};
 }
 
 AI::BattlePlanner & AI::BattlePlanner::Get()

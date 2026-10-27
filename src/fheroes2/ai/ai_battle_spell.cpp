@@ -436,6 +436,17 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
             // TODO: add the logic for the above cases.
             return 0;
         }
+
+        // There is no use in this spell if the target is going to attack one of our units anyway.
+        Battle::Arena * arena = Battle::GetArena();
+        assert( arena != nullptr );
+
+        const BerserkerTarget berserkerTarget = getBerserkerTarget( *arena, target );
+        if ( berserkerTarget.unit != nullptr && berserkerTarget.unit->GetCurrentOrArmyColor() == _myColor ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Berserker is useless for " << target.GetName() << ": it would go for our " << berserkerTarget.unit->GetName() )
+            return 0;
+        }
+
         ratio = 0.85;
         break;
     }
