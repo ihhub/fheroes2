@@ -3462,6 +3462,12 @@ namespace
     // Greek uses CP1253
     void generateCP1253Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
+        // Reuse Latin punctuation, keeping the ASCII originals intact.
+        std::vector<std::vector<fheroes2::Sprite>> latinFonts( ICN::LASTICN );
+        latinFonts[ICN::FONT] = icnVsSprite[ICN::FONT];
+        latinFonts[ICN::SMALFONT] = icnVsSprite[ICN::SMALFONT];
+        generateCP1252Alphabet( latinFonts );
+
         resizeCodePage( icnVsSprite );
 
         // Normal font.
@@ -3560,7 +3566,7 @@ namespace
             // Greek capital letter chi
             font[215] = font[88];
 
-            // Greek capital letter gamma
+            // Greek small letter gamma
             font[227].resize( font[118].width(), font[118].height() + 2 );
             font[227].reset();
             fheroes2::Copy( font[118], 0, 0, font[227], 0, 0, 9, 7 );
@@ -3570,7 +3576,7 @@ namespace
             font[227].setPosition( font[118].x(), font[118].y() );
             updateNormalFontLetterShadow( font[227] );
 
-            // Greek capital letter eta
+            // Greek small letter eta
             font[231].resize( font[110].width() - 1, font[110].height() + 2 );
             font[231].reset();
             fheroes2::Copy( font[110], 0, 0, font[231], 0, 0, font[110].width() - 1, font[110].height() );
@@ -3578,12 +3584,12 @@ namespace
             font[231].setPosition( font[110].x(), font[110].y() );
             updateNormalFontLetterShadow( font[231] );
 
-            // Greek capital letter theta
+            // Greek small letter theta
             font[232] = font[48];
             fheroes2::Copy( font[53], 2, 4, font[232], 3, 5, 5, 2 );
             updateNormalFontLetterShadow( font[232] );
 
-            // Greek capital letter iota
+            // Greek small letter iota
             font[233].resize( font[105].width(), font[105].height() - 3 );
             font[233].reset();
             fheroes2::Copy( font[105], 1, 3, font[233], 1, 0, 4, 7 );
@@ -3747,8 +3753,10 @@ namespace
 
             // Greek small letter iota
             font[233].resize( font[105].width(), font[105].height() - 2 );
+            font[233].reset();
             fheroes2::Copy( font[105], 0, 2, font[233], 0, 0, font[233].width(), font[233].height() );
-            font[233].setPosition( font[233].x(), font[233].y() - 4 );
+            font[233].setPosition( font[105].x(), font[105].y() + 2 );
+            updateSmallFontLetterShadow( font[233] );
 
             // Greek small letter kappa
             font[234].resize( 5, 6 );
@@ -3772,19 +3780,221 @@ namespace
 
             // Greek small letter omicron
             font[239] = font[111];
+        }
 
-            // Greek small letter omicron with tonos
-            font[243].resize( font[111].width(), font[111].height() + 3 );
-            font[243].reset();
-            fheroes2::Copy( font[111], 0, 0, font[243], 0, 3, font[111].width(), font[111].height() );
-            fheroes2::Copy( font[122], 2, 2, font[243], 3, 0, 2, 2 );
-            font[243].setPosition( font[111].x(), font[111].y() - 3 );
-            updateSmallFontLetterShadow( font[243] );
+        // Complete the alphabet in both sizes. Coordinates below describe the ink area;
+        // reserve a border for the same shadows used by the original game fonts.
+        for ( const int fontId : { ICN::FONT, ICN::SMALFONT } ) {
+            const bool small = ( fontId == ICN::SMALFONT );
+            auto & font = icnVsSprite[fontId];
+            const auto & latin = latinFonts[fontId];
+            const auto shadow = [small]( fheroes2::Sprite & letter ) {
+                removeShadows( letter );
+                if ( small ) {
+                    updateSmallFontLetterShadow( letter );
+                }
+                else {
+                    updateNormalFontLetterShadow( letter );
+                }
+            };
 
-            // Greek small letter upsilon
-            font[239].resize( font[117].width() - 1, font[117].height() );
-            fheroes2::Copy( font[117], 0, 0, font[239], 0, 0, font[117].width() - 1, font[117].height() );
-            fheroes2::FillTransform( font[239], 6, 5, 1, 1, 1 );
+            // Draw connected strokes with the original font's vertical colour gradient.
+            const auto drawLetter = [&font, &shadow, small]( const int code, const int32_t width, const int32_t height, const int32_t y,
+                                                          const std::initializer_list<std::initializer_list<fheroes2::Point>> paths ) {
+                auto & letter = font[code];
+                letter.resize( width + 3, height + 2 );
+                letter.reset();
+                letter.setPosition( font[111].x(), y );
+                for ( const auto & path : paths ) {
+                    auto point = path.begin();
+                    auto previous = *point;
+                    for ( ++point; point != path.end(); ++point ) {
+                        // Draw into a temporary mask so that intersections do not change the shading.
+                        fheroes2::DrawLine( letter, { previous.x + 1, previous.y }, { point->x + 1, point->y }, 10 );
+                        if ( !small ) {
+                            fheroes2::DrawLine( letter, { previous.x + 2, previous.y }, { point->x + 2, point->y }, 10 );
+                        }
+                        previous = *point;
+                    }
+                }
+                const auto & reference = font[66];
+                const auto roi = fheroes2::GetActiveROI( reference );
+                for ( int32_t row = 0; row < height; ++row ) {
+                    const int32_t sourceRow = roi.y + row * roi.height / height;
+                    uint8_t colour = 255;
+                    for ( int32_t x = 0; x < reference.width(); ++x ) {
+                        const int32_t offset = sourceRow * reference.width() + x;
+                        if ( reference.transform()[offset] == 0 ) {
+                            colour = std::min( colour, reference.image()[offset] );
+                        }
+                    }
+                    for ( int32_t x = 0; x < letter.width(); ++x ) {
+                        const int32_t offset = row * letter.width() + x;
+                        if ( letter.transform()[offset] == 0 ) {
+                            letter.image()[offset] = colour;
+                        }
+                    }
+                }
+                shadow( letter );
+            };
+
+            const int32_t capHeight = small ? 7 : 11;
+            const int32_t capWidth = small ? 5 : 8;
+            const int32_t lowerHeight = small ? 5 : 7;
+            const int32_t lowerWidth = small ? 4 : 6;
+            const int32_t lowerY = font[111].y();
+            const int32_t descender = small ? 2 : 3;
+            const int32_t w = capWidth - 1;
+            const int32_t h = capHeight - 1;
+            const int32_t x = lowerWidth - 1;
+            const int32_t y = lowerHeight - 1;
+
+            if ( !small ) {
+                // Delta: close the bottom of the triangle; there is no Latin crossbar.
+                drawLetter( 196, capWidth, capHeight, font[65].y(), { { { 0, h }, { w / 2, 0 }, { w, h }, { 0, h } } } );
+            }
+            // Sigma, psi and omega have no Latin equivalents.
+            drawLetter( 211, capWidth, capHeight, font[69].y(), { { { w, 0 }, { 0, 0 }, { w / 2, h / 2 }, { 0, h }, { w, h } } } );
+            drawLetter( 216, capWidth + 2, capHeight, font[89].y(),
+                        { { { 0, 0 }, { 0, h / 3 }, { 2, h / 2 }, { w, h / 2 }, { w + 1, h / 3 }, { w + 1, 0 } },
+                          { { ( w + 1 ) / 2, 0 }, { ( w + 1 ) / 2, h } }, { { ( w + 1 ) / 2 - 1, h }, { ( w + 1 ) / 2 + 1, h } } } );
+            drawLetter( 217, capWidth + 1, capHeight, font[79].y(),
+                        { { { 0, h }, { 2, h }, { 2, h - 1 }, { 0, h - 3 }, { 0, 2 }, { 2, 0 }, { w - 1, 0 }, { w + 1, 2 },
+                            { w + 1, h - 3 }, { w - 1, h - 1 }, { w - 1, h }, { w + 1, h } } } );
+
+            // Alpha: reuse the round bowl and add the right-hand stem and foot.
+            font[225] = font[111];
+            fheroes2::Copy( font[117], font[117].width() - 3, 0, font[225], font[225].width() - 3, 0, 3, lowerHeight );
+            shadow( font[225] );
+
+            // Beta has two bowls and a stem descending below the baseline.
+            drawLetter( 226, lowerWidth, capHeight + descender, font[98].y(),
+                        { { { 0, h + descender }, { 0, 1 }, { 1, 0 }, { x - 1, 0 }, { x, 1 }, { x, h / 2 - 1 }, { x - 1, h / 2 },
+                            { 0, h / 2 }, { x - 1, h / 2 }, { x, h / 2 + 1 }, { x, h - 1 }, { x - 1, h }, { 0, h } } } );
+
+            if ( small ) {
+                // Gamma: the Latin y supplies the curved, descending stroke.
+                font[227] = font[121];
+                // Theta: a horizontal stroke across the oval.
+                font[232] = font[48];
+                fheroes2::Copy( font[101], 2, 2, font[232], 2, 3, 3, 1 );
+                shadow( font[232] );
+                // Mu: extend the left-hand stem of u below the baseline.
+                font[236].resize( font[117].width(), font[117].height() + descender );
+                font[236].reset();
+                fheroes2::Copy( font[117], 0, 0, font[236], 0, 0, font[117].width(), font[117].height() );
+                fheroes2::Copy( font[117], 2, 1, font[236], 2, lowerHeight, 1, descender );
+                font[236].setPosition( font[117].x(), font[117].y() );
+                shadow( font[236] );
+                font[239] = font[111];
+                // Pi, rho and sigma were missing from the small alphabet.
+                drawLetter( 240, lowerWidth + 1, lowerHeight, lowerY,
+                            { { { 0, 0 }, { x + 1, 0 } }, { { 1, 0 }, { 1, y } }, { { x, 0 }, { x, y } } } );
+                font[241] = font[112];
+                font[243] = font[111];
+                fheroes2::Copy( font[110], 2, 0, font[243], 3, 0, 3, 1 );
+                shadow( font[243] );
+                font[245] = font[117];
+            }
+
+            // Delta: close the lower oval beneath a curled, sloping ascender.
+            const int32_t ovalTop = h - y;
+            drawLetter( 228, lowerWidth, capHeight, font[98].y(),
+                        { { { x, 0 }, { 1, 0 }, { x - 1, ovalTop }, { x, ovalTop + 1 }, { x, h - 1 }, { x - 1, h }, { 1, h },
+                            { 0, h - 1 }, { 0, ovalTop + 1 }, { 1, ovalTop }, { x - 1, ovalTop } } } );
+            // Epsilon: two open lobes, rather than the closed upper bowl of Latin e.
+            drawLetter( 229, lowerWidth, lowerHeight, lowerY,
+                        { { { x, 0 }, { 1, 0 }, { 0, 1 }, { 1, y / 2 }, { x - 1, y / 2 } },
+                          { { 1, y / 2 }, { 0, y - 1 }, { 1, y }, { x, y } } } );
+            // Zeta and xi continue below the baseline with a curved tail.
+            drawLetter( 230, lowerWidth, capHeight + descender, font[122].y() - ( capHeight - lowerHeight ),
+                        { { { 0, 0 }, { x, 0 }, { 0, h - 2 }, { 1, h }, { x - 1, h }, { x, h + 1 }, { x - 1, h + descender } } } );
+            if ( !small ) {
+                // Lambda: two lower strokes and a tall sloping ascender.
+                drawLetter( 235, lowerWidth + 1, capHeight, font[98].y(),
+                            { { { 1, 0 }, { 2, 0 }, { x + 1, h } }, { { 3, h / 2 }, { 0, h } } } );
+            }
+            drawLetter( 238, lowerWidth + 1, capHeight + descender, font[98].y(),
+                        { { { x, 0 }, { 1, 0 }, { 0, 1 }, { 1, h / 3 }, { x - 1, h / 3 } },
+                          { { 1, h / 3 }, { 0, h / 2 }, { 1, h * 2 / 3 }, { x - 1, h * 2 / 3 } },
+                          { { 1, h * 2 / 3 }, { 0, h - 1 }, { 1, h }, { x - 1, h }, { x, h + 1 }, { x - 1, h + descender } } } );
+            // Final sigma: c with a curved descender, distinct from medial sigma.
+            drawLetter( 242, lowerWidth, lowerHeight + descender, lowerY,
+                        { { { x, 0 }, { 1, 0 }, { 0, 1 }, { 0, y - 1 }, { 1, y }, { x - 1, y }, { x, y + 1 }, { x - 1, y + descender } } } );
+            // Tau: a horizontal cap and a stem that turns right at the baseline.
+            drawLetter( 244, lowerWidth + 1, lowerHeight, lowerY,
+                        { { { 0, 0 }, { x + 1, 0 } }, { { x / 2, 0 }, { x / 2, y - 1 }, { x / 2 + 1, y }, { x, y } } } );
+            // Phi and psi have central stems descending below the baseline.
+            drawLetter( 246, lowerWidth + 2, capHeight + descender, lowerY - ( capHeight - lowerHeight ),
+                        { { { ( x + 1 ) / 2, 0 }, { ( x + 1 ) / 2, h + descender } },
+                          { { 1, h - y }, { x, h - y }, { x + 1, h - y + 1 }, { x + 1, h - 1 }, { x, h }, { 1, h },
+                            { 0, h - 1 }, { 0, h - y + 1 }, { 1, h - y } } } );
+            drawLetter( 247, lowerWidth + 1, lowerHeight + descender, lowerY,
+                        { { { 0, 0 }, { x + 1, y + descender } }, { { x, 0 }, { 0, y + descender } } } );
+            drawLetter( 248, lowerWidth + 2, lowerHeight + descender, lowerY,
+                        { { { 0, 0 }, { 0, y - 1 }, { 1, y }, { x, y }, { x + 1, y - 1 }, { x + 1, 0 } },
+                          { { ( x + 1 ) / 2, 0 }, { ( x + 1 ) / 2, y + descender } } } );
+            // Omega: two rounded bowls joined at their centre.
+            drawLetter( 249, lowerWidth + 3, lowerHeight, lowerY,
+                        { { { 1, 0 }, { 0, 1 }, { 0, y - 1 }, { 1, y }, { 2, y }, { ( x + 2 ) / 2, y - 1 },
+                            { ( x + 2 ) / 2, 1 }, { ( x + 2 ) / 2, y - 1 }, { x, y }, { x + 1, y }, { x + 2, y - 1 },
+                            { x + 2, 1 }, { x + 1, 0 } } } );
+
+            // Apply accents only after all unaccented Greek base glyphs exist.
+            // Regenerate the shadow after adding the tonos and/or dialytika.
+            const auto addAccent = [&font, &shadow, small]( const int target, const int base, const bool diaeresis, const bool tonos ) {
+                const auto source = font[base];
+                const int32_t top = ( diaeresis && tonos ) ? ( small ? 4 : 5 ) : ( small ? 2 : 3 );
+                const int32_t markWidth = diaeresis ? ( small ? 3 : 5 ) : ( small ? 2 : 3 );
+                const int32_t width = std::max( source.width(), markWidth + 3 );
+                auto & letter = font[target];
+                letter.resize( width, source.height() + top );
+                letter.reset();
+                fheroes2::Copy( source, 0, 0, letter, 0, top, source.width(), source.height() );
+                letter.setPosition( source.x(), source.y() - top );
+                const int32_t centre = ( width - 1 ) / 2;
+                // All accent pixels use the highlight colour of the original font.
+                const auto roi = fheroes2::GetActiveROI( font[65] );
+                uint8_t colour = 255;
+                for ( int32_t row = roi.y; row < roi.y + roi.height; ++row ) {
+                    for ( int32_t col = roi.x; col < roi.x + roi.width; ++col ) {
+                        const int32_t offset = row * font[65].width() + col;
+                        if ( font[65].transform()[offset] == 0 ) {
+                            colour = std::min( colour, font[65].image()[offset] );
+                        }
+                    }
+                }
+                if ( diaeresis ) {
+                    fheroes2::SetPixel( letter, centre - ( small ? 1 : 2 ), tonos ? top - 2 : 0, colour );
+                    fheroes2::SetPixel( letter, centre + ( small ? 1 : 2 ), tonos ? top - 2 : 0, colour );
+                }
+                if ( tonos ) {
+                    fheroes2::DrawLine( letter, { centre + 1, 0 }, { centre, small ? 0 : 1 }, colour );
+                    if ( small && !diaeresis ) {
+                        fheroes2::SetPixel( letter, centre, 1, colour );
+                    }
+                }
+                shadow( letter );
+            };
+            for ( const auto & pair : { std::pair<int, int>{ 162, 193 }, { 184, 197 }, { 185, 199 }, { 186, 201 }, { 188, 207 },
+                                       { 190, 213 }, { 191, 217 }, { 220, 225 }, { 221, 229 }, { 222, 231 }, { 223, 233 }, { 252, 239 },
+                                       { 253, 245 }, { 254, 249 } } ) {
+                addAccent( pair.first, pair.second, false, true );
+            }
+            addAccent( 218, 201, true, false );
+            addAccent( 219, 213, true, false );
+            addAccent( 250, 233, true, false );
+            addAccent( 251, 245, true, false );
+            addAccent( 192, 233, true, true );
+            addAccent( 224, 245, true, true );
+
+            // CP1253 shares these punctuation characters with CP1252.
+            for ( const int code : { 145, 146, 147, 148, 150, 151, 171, 187 } ) {
+                font[code] = latin[code];
+            }
+            // Greek ano teleia (middle dot).
+            font[183] = font[46];
+            font[183].setPosition( font[183].x(), font[183].y() - ( small ? 2 : 4 ) );
         }
     }
 
