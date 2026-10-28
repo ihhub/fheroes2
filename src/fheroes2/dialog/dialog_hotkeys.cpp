@@ -323,13 +323,13 @@ namespace fheroes2
                 continue;
             }
 
-            fheroes2::Text name( getCategoryName( category ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text name( getCategoryName( category ), fheroes2::FontType::normalWhite() );
             maxCategoryWidth = std::max( maxCategoryWidth, name.width() );
         }
 
         int32_t maxKeyDescriptionWidth = minKeyDescriptionWidth;
         for ( const auto & [event, category] : allHotKeyEvents ) {
-            fheroes2::Text name( _( Game::getHotKeyEventNameByEventId( event ) ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text name( _( Game::getHotKeyEventNameByEventId( event ) ), fheroes2::FontType::normalWhite() );
             maxKeyDescriptionWidth = std::max( maxKeyDescriptionWidth, name.width() );
         }
 
@@ -338,7 +338,7 @@ namespace fheroes2
         for ( keyUnderlyingType k = 0; k < static_cast<keyUnderlyingType>( fheroes2::Key::LAST_KEY ); ++k ) {
             std::string text = fheroes2::KeySymGetName( static_cast<fheroes2::Key>( k ) );
             if ( !text.empty() ) {
-                fheroes2::Text name( std::move( text ), fheroes2::FontType::normalWhite() );
+                const fheroes2::Text name( std::move( text ), fheroes2::FontType::normalWhite() );
                 maxHotKeyWidth = std::max( maxHotKeyWidth, name.width() );
             }
         }
