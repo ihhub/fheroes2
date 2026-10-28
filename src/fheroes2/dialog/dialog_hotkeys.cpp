@@ -51,9 +51,9 @@
 
 namespace
 {
-    constexpr int32_t minKeyDescriptionWidth = 260;
+    constexpr int32_t minKeyDescriptionWidth = 280;
     constexpr int32_t minHotKeyWidth = 120;
-    constexpr int32_t minCategoryWidth = 170;
+    constexpr int32_t minCategoryWidth = 150;
     constexpr int32_t dialogExtraWidth = 90;
 
     struct CategorySelection final
