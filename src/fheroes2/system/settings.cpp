@@ -107,6 +107,9 @@ Settings::Settings()
     , game_type( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
+#if defined( __3DS__ )
+    _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
+#endif
 
     _gameOptions.SetModes( GAME_SHOW_RADAR );
     _gameOptions.SetModes( GAME_SHOW_ICONS );
@@ -349,12 +352,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "cursor soft rendering" ) ) {
-        if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
-            _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
-        }
-        else {
-            _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
-        }
+        setCursorSoftwareEmulation( config.StrParams( "cursor soft rendering" ) == "on" );
     }
 
     if ( config.Exists( "screen scaling type" ) ) {
@@ -926,12 +924,18 @@ void Settings::setHighlightBattleMovementArea( const bool enable )
 
 void Settings::setCursorSoftwareEmulation( const bool enable )
 {
+#if defined( __3DS__ )
+    // The native framebuffer renderer cannot display a hardware cursor.
+    (void)enable;
+    _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
+#else
     if ( enable ) {
         _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
     }
     else {
         _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
     }
+#endif
 }
 
 void Settings::SetScrollSpeed( int speed )

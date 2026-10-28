@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,7 +73,7 @@ namespace
 
 namespace Logging
 {
-#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 ) || defined( __3DS__ )
     std::ofstream logFile;
     // This mutex protects operations with logFile
     std::mutex logMutex;
@@ -120,7 +120,7 @@ namespace Logging
         const std::scoped_lock<std::mutex> lock( logMutex );
 
         logFile.open( "fheroes2.log", std::ofstream::app );
-#elif defined( _WIN32 )
+#elif defined( _WIN32 ) || defined( __3DS__ )
         const std::scoped_lock<std::mutex> lock( logMutex );
 
         const std::string configDir = System::GetConfigDirectory( "fheroes2" );
