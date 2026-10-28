@@ -37,7 +37,11 @@ free demo version of the game. Please refer to the [**installation guide**](INST
 
 ## License
 
-This project is licensed under the [**GNU General Public License v2.0**](https://github.com/ihhub/fheroes2/blob/master/LICENSE).
+The fheroes2 project's engine's source code is licensed under the [**GNU General Public License v2.0**](https://github.com/ihhub/fheroes2/blob/master/LICENSE).
+
+The fheroes2 project's artwork is licensed under [**Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0)**](https://creativecommons.org/licenses/by-sa/4.0/deed.en).
+Up until September 2026 the artwork was licensed under [**GNU General Public License v2.0**](https://github.com/ihhub/fheroes2/blob/master/LICENSE).
+Each artist gave express permission to the project to add the CC-BY-SA 4.0 license to their contributed artwork.
 
 Initially, the project was developed on [**sourceforge**](https://sourceforge.net/projects/fheroes2/).
 
