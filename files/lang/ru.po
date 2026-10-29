@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-06-28 16:36+0300\n"
+"PO-Revision-Date: 2026-10-29 19:55+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3020,9 +3020,8 @@ msgstr ""
 "Показать дополнительную информацию, такую как FPS (количество отображаемых "
 "кадров в секунду) и текущее время."
 
-#, fuzzy
 msgid "hotkeys|All Categories"
-msgstr "настройки битвы"
+msgstr "Все категории"
 
 msgid "Hotkey: "
 msgstr "Горячая клавиша: "
@@ -3036,16 +3035,11 @@ msgstr "Событие: "
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
 
-#, fuzzy
 msgid "Click here to select:\n"
-msgstr ""
-"Нажмите здесь,\n"
-"чтобы выбрать\n"
-"существо."
+msgstr "Нажмите здесь, чтобы выбрать:\n"
 
-#, fuzzy
 msgid "Select hotkeys category"
-msgstr "Выберите существо:"
+msgstr "Выберите категорию горячих клавиш"
 
 msgid "Hide"
 msgstr "Скрыть"
@@ -5361,19 +5355,17 @@ msgstr ""
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Количество прогонов:"
 
-#, fuzzy
 msgid "Set the number of playthroughs."
-msgstr "Количество прогонов:"
+msgstr "Установить количество прогонов."
 
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Максимум дней на прогон:"
 
 msgid "Set the maximum number of days within each playthrough is being run."
-msgstr ""
+msgstr "Установить максимальную продолжительность одного прогона в днях."
 
-#, fuzzy
 msgid "autoPlaytest|Last day of playthrough:"
-msgstr "Максимум дней на прогон:"
+msgstr "Последний день прогона:"
 
 msgid "autoPlaytest|Animation"
 msgstr "Анимация"
@@ -5382,7 +5374,7 @@ msgid "autoPlaytest|Animation speed:"
 msgstr "Скорость анимации:"
 
 msgid "Set animation speed during playthrough."
-msgstr ""
+msgstr "Установить скорость анимации во время прогона."
 
 msgid "autoPlaytest|Sound Effects"
 msgstr "Звуковые эффекты"
@@ -5405,12 +5397,11 @@ msgstr ""
 "Нажмите, чтобы запустить автоматическое тестирование игрового процесса на "
 "карте."
 
-#, fuzzy
 msgid "Toggle animation during playthroughs."
-msgstr "Включить или выключить анимацию объектов."
+msgstr "Включить или выключить анимацию во время прогона."
 
 msgid "Toggle sound effects during playthroughs."
-msgstr ""
+msgstr "Включить или выключить звуковые эффекты во время прогона."
 
 msgid ""
 "Auto playtest\n"
@@ -12624,16 +12615,16 @@ msgstr "Позволяет получить подробную информац�
 msgid "Summon Boat"
 msgstr "Призвать корабль"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied and either friendly or neutral boat to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
 "occupied yet."
 msgstr ""
-"Перемещает Ваш ближайший незанятый корабль в ближайшую точку побережья. "
-"Корабль считается Вашим, если Вы его только что построили, или тот на "
-"котором Вы плавали последним."
+"Перемещает ближайший незанятый Ваш или нейтральный корабль в ближайшую точку "
+"побережья. Корабль считается Вашим, если Вы его только что построили, или "
+"тот на котором Вы плавали последним. Нейтральный корабль — это тот, который "
+"ещё на котором не плавал ни один игрок."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr "Переносит героя в расположенную поблизости точку на карте."
@@ -12857,26 +12848,3 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "%{percent}% от всех существ"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Увеличивает атаку выбранного отряда на 3."
-
-#~ msgid "Easy"
-#~ msgstr "Лёгкая"
-
-#~ msgid "Hard"
-#~ msgstr "Тяжёлая"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "ЦЕНА\n"
-#~ "ВЕРНОСТИ"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Создать новую карту с нуля."
