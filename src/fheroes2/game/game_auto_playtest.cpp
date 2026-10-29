@@ -272,9 +272,26 @@ namespace
 
         Game::UpdateGameSpeed();
 
+        auto & players = conf.GetPlayers();
+        std::vector<Player> playtestConfiguredPlayers;
+        playtestConfiguredPlayers.reserve( players.size() );
+
+        // Make a copy of players configuration to load it on the next playthrough start.
+        if ( autoPlaytest.getMaxPlaythroughs() > 0 ) {
+            std::for_each( players.cbegin(), players.cend(), [&playtestConfiguredPlayers]( const Player * player ) { playtestConfiguredPlayers.push_back( *player ); } );
+        }
+
         const fheroes2::GameInterfaceTypeRestorer interfaceRestorer{ conf.isEvilInterfaceEnabled() ? InterfaceType::EVIL : InterfaceType::GOOD };
 
         for ( int32_t playthroughId = 0; playthroughId < autoPlaytest.getMaxPlaythroughs(); ++playthroughId ) {
+            // Restore the players configuration for the next playthrough.
+            if ( playthroughId > 0 ) {
+                assert( players.size() == playtestConfiguredPlayers.size() );
+                for ( size_t i = 0; i < players.size(); ++i ) {
+                    *players[i] = playtestConfiguredPlayers[i];
+                }
+            }
+
             if ( !prepareMap() ) {
                 fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to prepare the map for auto playtest." ), Dialog::ZERO );
                 return;
