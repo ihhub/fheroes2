@@ -274,10 +274,10 @@ namespace
 
         auto & players = conf.GetPlayers();
         std::vector<Player> playtestConfiguredPlayers;
-        playtestConfiguredPlayers.reserve( players.size() );
 
         // Make a copy of players configuration to load it on the next playthrough start.
         if ( autoPlaytest.getMaxPlaythroughs() > 0 ) {
+            playtestConfiguredPlayers.reserve( players.size() );
             std::for_each( players.cbegin(), players.cend(), [&playtestConfiguredPlayers]( const Player * player ) { playtestConfiguredPlayers.push_back( *player ); } );
         }
 
