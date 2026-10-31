@@ -60,6 +60,8 @@ namespace
         "circular_stone_liths_top.image",
         "graphics_option_icon.image",
         "hotkeys_option_icon.image",
+        "icon_market_evil.image",
+        "icon_market_good.image",
         "keyboard_button_pressed_evil.image",
         "keyboard_button_pressed_good.image",
         "keyboard_button_released_evil.image",

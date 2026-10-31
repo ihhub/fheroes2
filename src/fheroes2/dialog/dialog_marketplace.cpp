@@ -46,6 +46,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
@@ -355,7 +356,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     Dialog::FrameBox box( 297, true );
 
     const fheroes2::Rect & pos_rt = box.GetArea();
+
     fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
+    fheroes2::Rect marketplaceCountRoi;
+
+    const uint32_t marketplaceEquivalentCount = fromTradingPost ? 3 : kingdom.GetCountMarketplace();
 
     // header
     fheroes2::Text text{ header, fheroes2::FontType::normalYellow() };
@@ -403,6 +408,30 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     dst_pt.y = pt2.y - 15;
     text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawToResource( pt2, false, kingdom, fromTradingPost, 0 );
+
+    {
+        const fheroes2::Sprite & marketplaceIcon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
+        std::string marketplaceEquivalentCountText = marketplaceEquivalentCount >= 9 ? "x 9+" : "x " + std::to_string( marketplaceEquivalentCount );
+        const fheroes2::Text marketplaceCountText( std::move( marketplaceEquivalentCountText ), fheroes2::FontType::smallWhite() );
+
+        const int32_t spacing = 2;
+        const int32_t elementWidth = std::max( marketplaceIcon.width(), marketplaceCountText.width() );
+        const int32_t elementHeight = marketplaceIcon.height() + spacing + marketplaceCountText.height();
+
+        const fheroes2::Rect & leftGoldRoi = rectsFrom.back();
+
+        const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - marketplaceIcon.width() ) / 2;
+        const int32_t iconOffsetY = leftGoldRoi.y + ( leftGoldRoi.height - elementHeight ) / 2 + 10;
+
+        fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
+
+        const int32_t textOffsetX = pos_rt.x + ( pos_rt.width - marketplaceCountText.width() ) / 2;
+        const int32_t textOffsetY = iconOffsetY + marketplaceIcon.height() + spacing;
+
+        marketplaceCountText.draw( textOffsetX, textOffsetY, display );
+
+        marketplaceCountRoi = { pos_rt.x + ( pos_rt.width - elementWidth ) / 2, iconOffsetY, elementWidth, elementHeight };
+    }
 
     uint32_t count_sell = 0;
     uint32_t count_buy = 0;
@@ -460,8 +489,38 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
+
+        if ( marketplaceCountRoi.width > 0 && le.isMouseCursorPosInArea( marketplaceCountRoi ) ) {
+            const bool isLeftClick = le.MouseClickLeft();
+            const bool isRighPress = !isLeftClick && le.isMouseRightButtonPressed();
+
+            if ( isLeftClick || isRighPress ) {
+                std::string marketplaceCountInfo;
+
+                if ( fromTradingPost ) {
+                    marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} Marketplaces." );
+                }
+                else if ( marketplaceEquivalentCount == 1 ) {
+                    marketplaceCountInfo = _( "You own %{count} Marketplace. More Marketplaces improve resource exchange rates." );
+                }
+                else if ( marketplaceEquivalentCount >= 9 ) {
+                    marketplaceCountInfo = _( "You own 9 or more Marketplaces. This is the maximum level for resource exchange rates." );
+                }
+                else {
+                    marketplaceCountInfo = _( "You own %{count} Marketplaces. More Marketplaces improve resource exchange rates." );
+                }
+
+                StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
+
+                fheroes2::showStandardTextMessage( _( "Exchange Rate" ), std::move( marketplaceCountInfo ), isLeftClick ? Dialog::OK : Dialog::ZERO );
+
+                display.render();
+                continue;
+            }
+        }
 
         // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
