@@ -56,14 +56,19 @@ namespace
     const int32_t defaultButtonHeight{ 25 };
     const fheroes2::Size defaultSpecialButtonSize{ 54, defaultButtonHeight };
     const fheroes2::Size spacebarButtonSize{ 175, defaultButtonHeight };
+    const fheroes2::Size enterButtonSize{ 72, defaultButtonHeight };
+    const fheroes2::Size multiLineSpacebarButtonSize{ 110, defaultButtonHeight };
     const int32_t defaultWindowWidth{ 520 };
     const int32_t numpadWindowWidth{ 320 };
     const int32_t defaultWindowHeight{ 250 };
     const int32_t defaultLetterRows{ 3 };
     const fheroes2::Point buttonShadowOffset{ -5, 5 };
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
-    const fheroes2::Size inputAreaSize{ 268, 21 };
-    const int32_t inputAreaBorders{ 2 };
+    constexpr fheroes2::Size inputAreaSize{ 268, 21 };
+    constexpr int32_t inputAreaBorders{ 2 };
+    constexpr int32_t multiLineInputAreaRows{ 5 };
+    constexpr int32_t multiLineInputAreaHeight{ inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) };
+    constexpr fheroes2::Size multiLineInputAreaSize{ 220, multiLineInputAreaHeight };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
@@ -120,6 +125,8 @@ namespace
     {
         PrevChar,
         NextChar,
+        PrevLine,
+        NextLine,
         BegOfText,
         EndOfText
     };
@@ -127,11 +134,12 @@ namespace
     class KeyboardRenderer final
     {
     public:
-        KeyboardRenderer( fheroes2::Display & output, std::string & info, const size_t lengthLimit, const bool evilInterface )
+        KeyboardRenderer( fheroes2::Display & output, std::string & info, const size_t lengthLimit, const bool isMultiLineText, const bool evilInterface )
             : _output( output )
             , _info( info )
             , _lengthLimit( lengthLimit )
             , _cursorPosition( info.size() )
+            , _isMultiLineText( isMultiLineText )
             , _isEvilInterface( evilInterface )
         {
             // Do nothing.
@@ -158,6 +166,11 @@ namespace
             return _isEvilInterface;
         }
 
+        int32_t getInputAreaHeightIncrease() const
+        {
+            return _isMultiLineText ? multiLineInputAreaSize.height - inputAreaSize.height : 0;
+        }
+
         // Returns true if keyboard dialog resize was made.
         bool resize( const fheroes2::Size & size )
         {
@@ -167,6 +180,8 @@ namespace
             }
 
             assert( size.width > 0 && size.height > 0 );
+
+            const fheroes2::Size currentInputAreaSize = _isMultiLineText ? multiLineInputAreaSize : inputAreaSize;
 
             const fheroes2::Point defaultOffset{ ( _output.width() - size.width ) / 2, ( _output.height() - defaultWindowHeight ) / 2 };
             const fheroes2::Point offset{ defaultOffset.x, defaultOffset.y - ( size.height - defaultWindowHeight ) };
@@ -180,22 +195,30 @@ namespace
             _window->render();
 
             const fheroes2::Rect & windowRoi = _window->activeArea();
-            _textInputArea.x = windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2;
+            _textInputArea.x = windowRoi.x + ( windowRoi.width - currentInputAreaSize.width ) / 2;
             _textInputArea.y = windowRoi.y + inputAreaOffsetFromWindowTop;
+            _textInputArea.width = currentInputAreaSize.width;
+            _textInputArea.height = currentInputAreaSize.height;
 
             // Draw the text input background.
-            const fheroes2::Sprite & initialWindow = Assets::getImage( ICN::REQBKG, 0 );
-            fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
+            if ( _isMultiLineText ) {
+                fheroes2::StandardWindow::applyTextBackgroundShading( _output, _textInputArea );
+            }
+            else {
+                const fheroes2::Sprite & initialWindow = Assets::getImage( ICN::REQBKG, 0 );
+                fheroes2::Copy( initialWindow, 40, 286, _output, _textInputArea );
 
-            if ( _isEvilInterface ) {
-                fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
-                                        _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                if ( _isEvilInterface ) {
+                    fheroes2::ApplyPalette( _output, _textInputArea.x, _textInputArea.y, _output, _textInputArea.x, _textInputArea.y, _textInputArea.width,
+                                            _textInputArea.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+                }
             }
 
-            _textUI
-                = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
-                                                                              inputAreaSize.width - 2 * inputAreaBorders, inputAreaSize.height - 2 * inputAreaBorders },
-                                                              false, false, _output );
+            _textUI = std::make_unique<fheroes2::TextInputField>( fheroes2::Rect{ _textInputArea.x + inputAreaBorders, _textInputArea.y + inputAreaBorders,
+                                                                                  currentInputAreaSize.width - 2 * inputAreaBorders,
+                                                                                  currentInputAreaSize.height - 2 * inputAreaBorders },
+                                                                  _isMultiLineText, false, _output );
+
             _textUI->draw( _info, static_cast<int32_t>( _cursorPosition ) );
 
             return true;
@@ -296,6 +319,17 @@ namespace
                 ++_cursorPosition;
 
                 break;
+            case CursorPosition::PrevLine:
+            case CursorPosition::NextLine:
+                if ( !_isMultiLineText ) {
+                    return;
+                }
+
+                assert( _textUI );
+
+                _cursorPosition = _textUI->getCursorPositionInAdjacentLine( _cursorPosition, pos == CursorPosition::PrevLine );
+
+                break;
             case CursorPosition::BegOfText:
                 _cursorPosition = 0;
 
@@ -321,6 +355,7 @@ namespace
         std::unique_ptr<fheroes2::TextInputField> _textUI;
         size_t _cursorPosition{ 0 };
         fheroes2::Rect _textInputArea{ 0, 0, inputAreaSize.width, inputAreaSize.height };
+        bool _isMultiLineText{ false };
         const bool _isEvilInterface{ false };
 
         void _renderInputArea()
@@ -643,9 +678,11 @@ namespace
     }
 
     void addExtraStandardButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const bool isEvilInterface,
-                                  const bool isExtraLanguageSupported )
+                                  const bool isExtraLanguageSupported, const bool isMultiLineText )
     {
         auto & lastButtonRow = buttons.emplace_back();
+
+        const fheroes2::Size & spaceButtonSize = ( isMultiLineText && isExtraLanguageSupported ) ? multiLineSpacebarButtonSize : spacebarButtonSize;
 
         switch ( layoutType ) {
         case LayoutType::LowerCase:
@@ -658,16 +695,26 @@ namespace
             lastButtonRow.back().customTitle = _( "Keyboard type" );
             lastButtonRow.back().customDescription = _( "Click to switch between keyboard types." );
 
-            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spaceButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
                 return DialogAction::DoNothing;
             } );
 
-            lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
-            lastButtonRow.back().customTitle = _( "Change language" );
-            lastButtonRow.back().customTitle = _( "Click to switch between languages." );
-            if ( !isExtraLanguageSupported ) {
-                lastButtonRow.back().button.hide();
+            if ( isMultiLineText ) {
+                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                    renderer.insertCharacter( '\n' );
+                    return DialogAction::DoNothing;
+                } );
+            }
+
+            if ( isExtraLanguageSupported || !isMultiLineText ) {
+                lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                lastButtonRow.back().customTitle = _( "Change language" );
+                lastButtonRow.back().customDescription = _( "Click to switch between languages." );
+
+                if ( !isExtraLanguageSupported ) {
+                    lastButtonRow.back().button.hide();
+                }
             }
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -675,7 +722,7 @@ namespace
                 return DialogAction::DoNothing;
             } );
             lastButtonRow.back().customTitle = _( "Backspace" );
-            lastButtonRow.back().customTitle = _( "Click to remove characters." );
+            lastButtonRow.back().customDescription = _( "Click to remove characters." );
             break;
         case LayoutType::UpperCase:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
@@ -688,16 +735,26 @@ namespace
             lastButtonRow.back().customTitle = _( "Keyboard type" );
             lastButtonRow.back().customDescription = _( "Click to switch between keyboard types." );
 
-            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spaceButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
                 return DialogAction::DoNothing;
             } );
 
-            lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
-            lastButtonRow.back().customTitle = _( "Change language" );
-            lastButtonRow.back().customTitle = _( "Click to switch between languages." );
-            if ( !isExtraLanguageSupported ) {
-                lastButtonRow.back().button.hide();
+            if ( isMultiLineText ) {
+                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                    renderer.insertCharacter( '\n' );
+                    return DialogAction::DoNothing;
+                } );
+            }
+
+            if ( isExtraLanguageSupported || !isMultiLineText ) {
+                lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                lastButtonRow.back().customTitle = _( "Change language" );
+                lastButtonRow.back().customDescription = _( "Click to switch between languages." );
+
+                if ( !isExtraLanguageSupported ) {
+                    lastButtonRow.back().button.hide();
+                }
             }
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -705,7 +762,7 @@ namespace
                 return DialogAction::DoNothing;
             } );
             lastButtonRow.back().customTitle = _( "Backspace" );
-            lastButtonRow.back().customTitle = _( "Click to remove characters." );
+            lastButtonRow.back().customDescription = _( "Click to remove characters." );
             break;
         case LayoutType::AlphaNumeric:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
@@ -716,20 +773,34 @@ namespace
             lastButtonRow.back().customTitle = _( "Keyboard type" );
             lastButtonRow.back().customDescription = _( "Click to switch between keyboard types." );
 
-            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spacebarButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), fheroes2::Key::KEY_SPACE, spaceButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.insertCharacter( ' ' );
                 return DialogAction::DoNothing;
             } );
 
-            lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            lastButtonRow.back().button.hide();
+            if ( isMultiLineText ) {
+                lastButtonRow.emplace_back( _( "Keyboard|ENTER" ), fheroes2::Key::KEY_ENTER, enterButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
+                    renderer.insertCharacter( '\n' );
+                    return DialogAction::DoNothing;
+                } );
+            }
+
+            if ( isExtraLanguageSupported || !isMultiLineText ) {
+                lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+                lastButtonRow.back().customTitle = _( "Change language" );
+                lastButtonRow.back().customDescription = _( "Click to switch between languages." );
+
+                if ( !isExtraLanguageSupported ) {
+                    lastButtonRow.back().button.hide();
+                }
+            }
 
             lastButtonRow.emplace_back( "~", fheroes2::Key::KEY_BACKSPACE, defaultSpecialButtonSize, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeCharacter();
                 return DialogAction::DoNothing;
             } );
             lastButtonRow.back().customTitle = _( "Backspace" );
-            lastButtonRow.back().customTitle = _( "Click to remove characters." );
+            lastButtonRow.back().customDescription = _( "Click to remove characters." );
             break;
         case LayoutType::SignedNumeric:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
@@ -741,7 +812,7 @@ namespace
                                             return DialogAction::DoNothing;
                                         } );
             lastButtonRow.back().customTitle = _( "Swap sign" );
-            lastButtonRow.back().customTitle = _( "Click to switch between signed and unsigned numbers." );
+            lastButtonRow.back().customDescription = _( "Click to switch between signed and unsigned numbers." );
 
             lastButtonRow.emplace_back( "0", fheroes2::Key::KEY_0, getDefaultButtonSize( fheroes2::SupportedLanguage::English ), isEvilInterface,
                                         []( KeyboardRenderer & renderer ) {
@@ -758,7 +829,7 @@ namespace
                 return DialogAction::DoNothing;
             } );
             lastButtonRow.back().customTitle = _( "Backspace" );
-            lastButtonRow.back().customTitle = _( "Click to remove characters." );
+            lastButtonRow.back().customDescription = _( "Click to remove characters." );
             break;
         case LayoutType::UnsignedNumeric:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonSize, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
@@ -783,7 +854,7 @@ namespace
                 return DialogAction::DoNothing;
             } );
             lastButtonRow.back().customTitle = _( "Backspace" );
-            lastButtonRow.back().customTitle = _( "Click to remove characters." );
+            lastButtonRow.back().customDescription = _( "Click to remove characters." );
             break;
         default:
             // Did you add a new layout type? Add the logic above!
@@ -793,7 +864,7 @@ namespace
     }
 
     void addExtraButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const fheroes2::SupportedLanguage language,
-                          const bool isEvilInterface, const bool isExtraLanguageSupported )
+                          const bool isEvilInterface, const bool isExtraLanguageSupported, const bool isMultiLineText )
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::Belarusian:
@@ -813,7 +884,7 @@ namespace
         case fheroes2::SupportedLanguage::Spanish:
         case fheroes2::SupportedLanguage::Swedish:
         case fheroes2::SupportedLanguage::Ukrainian:
-            addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported );
+            addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported, isMultiLineText );
             break;
         default:
             // Did you add a new supported language? Add the value above!
@@ -957,6 +1028,10 @@ namespace
                      return CursorPosition::PrevChar;
                  case fheroes2::Key::KEY_RIGHT:
                      return CursorPosition::NextChar;
+                 case fheroes2::Key::KEY_UP:
+                     return CursorPosition::PrevLine;
+                 case fheroes2::Key::KEY_DOWN:
+                     return CursorPosition::NextLine;
                  case fheroes2::Key::KEY_HOME:
                      return CursorPosition::BegOfText;
                  case fheroes2::Key::KEY_END:
@@ -1033,21 +1108,25 @@ namespace
 
         const int32_t windowWidth = isNumericOnlyLayout ? numpadWindowWidth : defaultWindowWidth;
 
-        const bool isResized = renderer.resize(
-            { windowWidth, defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
+        const int32_t inputAreaHeightIncrease = renderer.getInputAreaHeightIncrease();
+
+        const bool isResized
+            = renderer.resize( { windowWidth, defaultWindowHeight + inputAreaHeightIncrease
+                                                  + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
 
         const bool isEvilInterface = renderer.isEvilInterface();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
-        addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported );
+        addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported, inputAreaHeightIncrease > 0 );
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
-        const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders, windowWidth );
+        const fheroes2::Point buttonsOffset{ windowRoi.x + offsetFromWindowBorders.x, windowRoi.y + offsetFromWindowBorders.y + inputAreaHeightIncrease };
+        const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, buttonsOffset, windowWidth );
         const fheroes2::Rect & textRoi = renderer.getTextRoi();
 
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
 
-        renderButtons( buttons, windowRoi.getPosition() + offsetFromWindowBorders, display, windowWidth );
+        renderButtons( buttons, buttonsOffset, display, windowWidth );
 
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         const fheroes2::Sprite & okayButtonReleasedImage = Assets::getImage( buttonIcnId, 0 );
@@ -1069,6 +1148,10 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
+        int32_t textDragPositionY = 0;
+        bool isTextAreaDrag = false;
+        bool textAreaWasDragged = false;
+
         while ( le.HandleEvents() ) {
             okayButton.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( okayButton.area() ) );
 
@@ -1084,6 +1167,45 @@ namespace
             }
 
             updateButtonStates( buttons, le );
+
+            if ( inputAreaHeightIncrease > 0 ) {
+                if ( le.isMouseWheelUpInArea( textRoi ) ) {
+                    renderer.setCursorPosition( CursorPosition::PrevLine );
+                }
+                else if ( le.isMouseWheelDownInArea( textRoi ) ) {
+                    renderer.setCursorPosition( CursorPosition::NextLine );
+                }
+            }
+
+            if ( inputAreaHeightIncrease > 0 && le.isMouseLeftButtonPressedInArea( textRoi ) ) {
+                if ( !isTextAreaDrag ) {
+                    textDragPositionY = le.getMouseLeftButtonPressedPos().y;
+                    isTextAreaDrag = true;
+                }
+
+                if ( le.hasMouseMoved() ) {
+                    const int32_t currentY = le.getMouseCursorPos().y;
+                    const int32_t dragOffset = currentY - textDragPositionY;
+                    const int32_t lineHeight = inputAreaSize.height - 2 * inputAreaBorders;
+
+                    if ( std::abs( dragOffset ) >= lineHeight ) {
+                        renderer.setCursorPosition( dragOffset > 0 ? CursorPosition::PrevLine : CursorPosition::NextLine );
+
+                        textDragPositionY = currentY;
+                        textAreaWasDragged = true;
+                        le.registerDrag();
+                    }
+                }
+            }
+
+            if ( le.isMouseLeftButtonReleased() ) {
+                isTextAreaDrag = false;
+
+                if ( textAreaWasDragged ) {
+                    le.MouseClickLeft();
+                    textAreaWasDragged = false;
+                }
+            }
 
             if ( le.MouseClickLeft( textRoi ) ) {
                 renderer.setCursorPosition( le.getMouseLeftButtonPressedPos() );
@@ -1102,7 +1224,7 @@ namespace
 
 namespace fheroes2
 {
-    void openVirtualKeyboard( std::string & output, size_t lengthLimit )
+    void openVirtualKeyboard( std::string & output, size_t lengthLimit, const bool isMultiLineText )
     {
         if ( lengthLimit == 0 ) {
             // A string longer than 64KB is extremely impossible.
@@ -1118,7 +1240,7 @@ namespace fheroes2
             language = lastSelectedLanguage;
         }
 
-        KeyboardRenderer renderer( Display::instance(), output, lengthLimit, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( Display::instance(), output, lengthLimit, isMultiLineText, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
@@ -1166,7 +1288,7 @@ namespace fheroes2
         DialogAction action = DialogAction::DoNothing;
 
         // Lets limit to 11 digits: minus and 10 digits for INT32_MIN
-        KeyboardRenderer renderer( Display::instance(), strValue, 10, Settings::Get().isEvilInterfaceEnabled() );
+        KeyboardRenderer renderer( Display::instance(), strValue, 10, false, Settings::Get().isEvilInterfaceEnabled() );
 
         const LayoutType layoutType = ( minValue < 0 ) ? LayoutType::SignedNumeric : LayoutType::UnsignedNumeric;
 
