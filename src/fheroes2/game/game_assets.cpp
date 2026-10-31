@@ -5185,7 +5185,6 @@ namespace
         case ICN::GAME_OPTION_ICON: {
             _icnVsSprite[id].resize( 4 );
 
-            // TODO: Cut the icons from the embedded background in resurrection.h2d and use the empty background ICN to make the icons instead.
             const fheroes2::Sprite & background = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
             fheroes2::Sprite icon;
@@ -5238,7 +5237,12 @@ namespace
         case ICN::RESOLUTION_ICON: {
             _icnVsSprite[id].resize( 1 );
 
-            fheroes2::h2d::readImage( "resolution_icon.image", _icnVsSprite[id][0] );
+            const fheroes2::Sprite & background = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
+
+            fheroes2::Sprite icon;
+            fheroes2::h2d::readImage( "resolution_icon.image", icon );
+            _icnVsSprite[id][0] = background;
+            fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][0], icon.x(), icon.y(), icon.width(), icon.height() );
 
             break;
         }
