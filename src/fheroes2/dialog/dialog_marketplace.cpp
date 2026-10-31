@@ -411,26 +411,26 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     {
         const fheroes2::Sprite & marketplaceIcon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
-
         std::string marketplaceEquivalentCountText = marketplaceEquivalentCount >= 9 ? "x 9+" : "x " + std::to_string( marketplaceEquivalentCount );
         const fheroes2::Text marketplaceCountText( std::move( marketplaceEquivalentCountText ), fheroes2::FontType::smallWhite() );
 
-        const int32_t marketplaceCountElementHeight = std::max( marketplaceIcon.height(), marketplaceCountText.height() );
-
-        const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - marketplaceIcon.width() - marketplaceCountText.width() - 2 ) / 2;
+        const int32_t spacing = 2;
+        const int32_t elementWidth = std::max( marketplaceIcon.width(), marketplaceCountText.width() );
+        const int32_t elementHeight = marketplaceIcon.height() + spacing + marketplaceCountText.height();
 
         const fheroes2::Rect & leftGoldRoi = rectsFrom.back();
-        const fheroes2::Rect & rightGoldRoi = rectsTo.back();
 
-        const int32_t goldIconsBottomY = std::max( leftGoldRoi.y + leftGoldRoi.height, rightGoldRoi.y + rightGoldRoi.height );
-        const int32_t iconOffsetY = goldIconsBottomY - marketplaceCountElementHeight;
+        const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - marketplaceIcon.width() ) / 2;
+        const int32_t iconOffsetY = leftGoldRoi.y + ( leftGoldRoi.height - elementHeight ) / 2 + 10;
 
         fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
 
-        marketplaceCountText.draw( iconOffsetX + marketplaceIcon.width() + 2, iconOffsetY + ( marketplaceCountElementHeight - marketplaceCountText.height() ) / 2,
-                                   display );
+        const int32_t textOffsetX = pos_rt.x + ( pos_rt.width - marketplaceCountText.width() ) / 2;
+        const int32_t textOffsetY = iconOffsetY + marketplaceIcon.height() + spacing;
 
-        marketplaceCountRoi = { iconOffsetX, iconOffsetY, marketplaceIcon.width() + marketplaceCountText.width() + 2, marketplaceCountElementHeight };
+        marketplaceCountText.draw( textOffsetX, textOffsetY, display );
+
+        marketplaceCountRoi = { pos_rt.x + ( pos_rt.width - elementWidth ) / 2, iconOffsetY, elementWidth, elementHeight };
     }
 
     uint32_t count_sell = 0;
