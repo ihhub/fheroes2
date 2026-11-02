@@ -2253,6 +2253,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit, const bool isHitPoi
         sy -= hitPointsBarHeight;
 
         if ( isReflected ) {
+            // Avoid overlapping the counter of an opposing troop.
             sy -= hitPointsBarHeight;
         }
 
