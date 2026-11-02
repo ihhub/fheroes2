@@ -751,6 +751,9 @@ msgstr "Kurzor árnyék"
 msgid "Movement Area"
 msgstr "Mozgástér"
 
+msgid "Hit Points"
+msgstr "Életerő"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Csatában a támadási sorrend kijelzésének váltása."
 
@@ -776,6 +779,11 @@ msgstr "Be- és kikapcsolja az egérkurzor alatti árnyékot."
 msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 "A kijelölt teremtmény mozgástere megjelenítésének kapcsolója (BE vagy KI)."
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell %"
@@ -2661,9 +2669,6 @@ msgstr "Lövések"
 
 msgid "Shots Left"
 msgstr "Maradék lövés"
-
-msgid "Hit Points"
-msgstr "Életerő"
 
 msgid "Hit Points Left"
 msgstr "Maradék élete."

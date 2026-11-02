@@ -764,6 +764,9 @@ msgstr "Cursore Ombra"
 msgid "Movement Area"
 msgstr "Movimento Ombra"
 
+msgid "Hit Points"
+msgstr "Pt. Ferita"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr ""
 
@@ -785,6 +788,11 @@ msgid ""
 msgstr ""
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2607,9 +2615,6 @@ msgstr "Colpi"
 
 msgid "Shots Left"
 msgstr "Colpi Residui"
-
-msgid "Hit Points"
-msgstr "Pt. Ferita"
 
 msgid "Hit Points Left"
 msgstr "PF Rimasti"

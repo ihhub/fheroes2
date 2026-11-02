@@ -770,6 +770,9 @@ msgstr "Skyggemarkør"
 msgid "Movement Area"
 msgstr "Heltebevægelse"
 
+msgid "Hit Points"
+msgstr "Liv"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Vælg om kampens turorden skal vises eller ej."
 
@@ -800,8 +803,13 @@ msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 
 msgid ""
-"Through eagle-eyed observation, %{name} is able to learn the magic spell "
-"%{spell}."
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
+msgstr ""
+
+msgid ""
+"Through eagle-eyed observation, %{name} is able to learn the magic spell %"
+"{spell}."
 msgstr ""
 "Med sit ørneblik observerer %{name} magien %{spell} og lærer den selv at "
 "kende."
@@ -2730,9 +2738,6 @@ msgstr "Skud"
 
 msgid "Shots Left"
 msgstr "Skudreserve"
-
-msgid "Hit Points"
-msgstr "Liv"
 
 msgid "Hit Points Left"
 msgstr "Resterende liv"
