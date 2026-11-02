@@ -924,6 +924,16 @@ void Settings::setHighlightBattleMovementArea( const bool enable )
     }
 }
 
+void Settings::setCursorSoftwareEmulation( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
+    }
+}
+
 void Settings::SetScrollSpeed( int speed )
 {
     scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
@@ -1017,7 +1027,7 @@ bool Settings::isBattleMovementAreaHighlightEnabled() const
     return _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
 }
 
-bool Settings::isSoftwareEmulationEnabled() const
+bool Settings::isCursorSoftwareEmulationEnabled() const
 {
     return _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION );
 }

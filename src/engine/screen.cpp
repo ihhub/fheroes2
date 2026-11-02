@@ -550,11 +550,13 @@ namespace
 
         void enableSoftwareEmulation( const bool enable ) override
         {
-            if ( enable == _emulation ) {
+            const bool newState = enable || isSoftwareEmulationForced();
+
+            if ( newState == _emulation ) {
                 return;
             }
 
-            if ( enable ) {
+            if ( newState ) {
                 clear();
 
                 const int returnCode = SDL_ShowCursor( SDL_DISABLE );
@@ -613,7 +615,7 @@ namespace
         static RenderCursor * create()
         {
             auto * cursor = new RenderCursor;
-            cursor->enableSoftwareEmulation( true );
+            cursor->forceSoftwareEmulation();
 
             return cursor;
         }
@@ -1159,6 +1161,8 @@ namespace
                 }
             }
 
+            // We should clear the renderer to avoid graphical artifacts with most window compositors (in example, Android; Linux with X11 or Wayland)
+            // when the aspect ratio of the texture is different from that of the game window.
             int returnCode = SDL_RenderClear( _renderer );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to clear renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )

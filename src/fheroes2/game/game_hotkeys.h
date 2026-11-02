@@ -227,5 +227,6 @@ namespace Game
 
     void HotKeySave();
 
+    // The returned string is not translated.
     const char * getHotKeyCategoryName( const HotKeyCategory category );
 }
