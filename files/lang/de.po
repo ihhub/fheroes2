@@ -763,6 +763,9 @@ msgstr "Zeiger-schatten"
 msgid "Movement Area"
 msgstr "Heldenbewegung"
 
+msgid "Hit Points"
+msgstr "Trefferpunkte"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Die Anzeige der Reihenfolge von Truppen ein-/ausschalten."
 
@@ -792,6 +795,11 @@ msgstr ""
 "Bewegungsfeld visualisiert."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2708,9 +2716,6 @@ msgstr "Schüsse"
 
 msgid "Shots Left"
 msgstr "Schüsse übrig"
-
-msgid "Hit Points"
-msgstr "Trefferpunkte"
 
 msgid "Hit Points Left"
 msgstr "Übrige Trefferpunkte"

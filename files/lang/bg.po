@@ -767,6 +767,9 @@ msgstr "Курсор в сянка"
 msgid "Movement Area"
 msgstr "Движение на героя"
 
+msgid "Hit Points"
+msgstr "Живот"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Превключи, за да покажеш реда на ход по време на битката."
 
@@ -795,6 +798,11 @@ msgstr ""
 "на курсора на мишката."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2730,9 +2738,6 @@ msgstr "Изстрели"
 
 msgid "Shots Left"
 msgstr "Ост. изстрели"
-
-msgid "Hit Points"
-msgstr "Живот"
 
 msgid "Hit Points Left"
 msgstr "Ост. живот"

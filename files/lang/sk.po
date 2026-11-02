@@ -777,6 +777,9 @@ msgstr "Tieň kurzora"
 msgid "Movement Area"
 msgstr "Tieň pohybu"
 
+msgid "Hit Points"
+msgstr "Zdravie max"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Prepni zobrazenie poradia armády počas boja."
 
@@ -801,6 +804,11 @@ msgid ""
 msgstr "Zapne alebo vypne tieň zobrazujúci aktuálnu pozíciu kurzora v mriežke."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2717,9 +2725,6 @@ msgstr "Strely"
 
 msgid "Shots Left"
 msgstr "Ostáva striel"
-
-msgid "Hit Points"
-msgstr "Zdravie max"
 
 msgid "Hit Points Left"
 msgstr "Zdravie teraz"

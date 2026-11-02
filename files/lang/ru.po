@@ -775,6 +775,9 @@ msgstr "Курсор с тенью"
 msgid "Movement Area"
 msgstr "Область передвижения"
 
+msgid "Hit Points"
+msgstr "Здоровье"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Включить/выключить показ порядка действий отрядов в бою."
 
@@ -803,6 +806,11 @@ msgstr ""
 msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 "Включить/выключить отображение области передвижения существа под курсором."
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell %"
@@ -2687,9 +2695,6 @@ msgstr "Выстрелов"
 
 msgid "Shots Left"
 msgstr "Выстрелов"
-
-msgid "Hit Points"
-msgstr "Здоровье"
 
 msgid "Hit Points Left"
 msgstr "Тек. здоровье"

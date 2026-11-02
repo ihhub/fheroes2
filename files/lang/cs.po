@@ -761,6 +761,9 @@ msgstr "Stín kurzoru"
 msgid "Movement Area"
 msgstr "Oblast pohybu"
 
+msgid "Hit Points"
+msgstr "Životy"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Zobrazí pořadí tahu jednotek v bitvě."
 
@@ -785,6 +788,11 @@ msgstr "Zvýrazní aktuální pole pod kurzorem myši."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr "Zobrazí oblast možného pohybu zvýrazněné jednotky."
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell %"
@@ -2649,9 +2657,6 @@ msgstr "Střely"
 
 msgid "Shots Left"
 msgstr "Zbývá střel"
-
-msgid "Hit Points"
-msgstr "Životy"
 
 msgid "Hit Points Left"
 msgstr "Zbývá životů"

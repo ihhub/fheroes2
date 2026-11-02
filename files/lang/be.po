@@ -789,6 +789,9 @@ msgstr "Курсор з ценем"
 msgid "Movement Area"
 msgstr "Перамяшчэнне героя"
 
+msgid "Hit Points"
+msgstr "Здароўе"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Паказваць або не паказваць чарговасць хадоў у баі."
 
@@ -816,6 +819,11 @@ msgid ""
 msgstr "Зацяняць клетку, на якую наведзены курсор."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2697,9 +2705,6 @@ msgstr "Мае стрэлаў"
 
 msgid "Shots Left"
 msgstr "Заст.стрэлаў"
-
-msgid "Hit Points"
-msgstr "Здароўе"
 
 msgid "Hit Points Left"
 msgstr "Заст. здароўя"
