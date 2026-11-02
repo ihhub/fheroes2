@@ -493,11 +493,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             break;
         }
 
-        if ( marketplaceCountRoi.width > 0 && le.isMouseCursorPosInArea( marketplaceCountRoi ) ) {
+        if ( le.isMouseCursorPosInArea( marketplaceCountRoi ) ) {
             const bool isLeftClick = le.MouseClickLeft();
-            const bool isRighPress = !isLeftClick && le.isMouseRightButtonPressed();
+            const bool isRightClick = !isLeftClick && le.isMouseRightButtonPressed();
 
-            if ( isLeftClick || isRighPress ) {
+            if ( isLeftClick || isRightClick ) {
                 std::string marketplaceCountInfo;
 
                 if ( fromTradingPost ) {
