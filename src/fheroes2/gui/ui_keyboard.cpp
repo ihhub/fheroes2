@@ -328,6 +328,8 @@ namespace
             case CursorPosition::PrevLine:
             case CursorPosition::NextLine:
                 if ( !_isMultiLineText ) {
+                    // This value shall not be called for a single line text.
+                    assert( 0 );
                     return;
                 }
 
