@@ -42,6 +42,7 @@
       <description>
         <p>Changes in v1.1.18 (04 November 2026):</p>
         <ul>
+          <li>add Dhalsivia Pirenaica map into the fheroes2 bundle</li>
           <li>do not let the AI cast Berserker when the target's nearest unit is not an enemy</li>
           <li>resize the hotkey dialog width based on the current resolution</li>
           <li>fix an assertion being hit while re-running Auto Playtest</li>
