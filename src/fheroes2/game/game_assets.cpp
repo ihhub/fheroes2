@@ -5240,9 +5240,11 @@ namespace
             const fheroes2::Sprite & background = Assets::getImage( ICN::EMPTY_OPTION_ICON_BACKGROUND, 0 );
 
             fheroes2::Sprite icon;
-            fheroes2::h2d::readImage( "resolution_icon.image", icon );
+            fheroes2::h2d::readImage( "resolution_option_icon.image", icon );
             _icnVsSprite[id][0] = background;
             fheroes2::Blit( icon, 0, 0, _icnVsSprite[id][0], icon.x(), icon.y(), icon.width(), icon.height() );
+
+            _icnVsSprite[id][0]._disableTransformLayer();
 
             break;
         }
