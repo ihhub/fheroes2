@@ -753,6 +753,9 @@ msgstr "Sombra do Cursor"
 msgid "Movement Area"
 msgstr "Área de Movimento"
 
+msgid "Hit Points"
+msgstr "Pts. de Vida"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Alternar para exibir a ordem de turno durante a batalha."
 
@@ -785,6 +788,11 @@ msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr ""
 "Ativa ou desativa a exibição da área de movimento de uma criatura em "
 "destaque."
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
+msgstr ""
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell %"
@@ -2679,9 +2687,6 @@ msgstr "Tiros"
 
 msgid "Shots Left"
 msgstr "Tiros Restantes"
-
-msgid "Hit Points"
-msgstr "Pts. de Vida"
 
 msgid "Hit Points Left"
 msgstr "Vida Restante"

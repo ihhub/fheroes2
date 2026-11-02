@@ -769,6 +769,9 @@ msgstr "Ombre du curseur"
 msgid "Movement Area"
 msgstr "Déplacement du héros"
 
+msgid "Hit Points"
+msgstr "Points de vie"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr ""
 "Activer ou désactiver l'affichage de l'ordre de jeu des créatures pendant le "
@@ -799,6 +802,11 @@ msgstr ""
 "la souris."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2719,9 +2727,6 @@ msgstr "Tirs"
 
 msgid "Shots Left"
 msgstr "Tirs restants"
-
-msgid "Hit Points"
-msgstr "Points de vie"
 
 msgid "Hit Points Left"
 msgstr "PV restants"

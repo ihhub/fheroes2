@@ -753,6 +753,9 @@ msgstr "Gölge İmleci"
 msgid "Movement Area"
 msgstr "Gölge Hareketi"
 
+msgid "Hit Points"
+msgstr ""
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Savaş sırasında sıra sırasını görüntülemek için aktif edin."
 
@@ -781,6 +784,11 @@ msgstr ""
 "kapatın."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2595,9 +2603,6 @@ msgid "Shots"
 msgstr ""
 
 msgid "Shots Left"
-msgstr ""
-
-msgid "Hit Points"
 msgstr ""
 
 msgid "Hit Points Left"
