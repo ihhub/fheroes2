@@ -68,6 +68,7 @@ namespace
     constexpr int32_t inputAreaBorders{ 2 };
     constexpr int32_t multiLineInputAreaRows{ 5 };
     constexpr int32_t multiLineInputAreaHeight{ inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) };
+    // Match the effective text width of the multiline input field in Dialog::inputString().
     constexpr fheroes2::Size multiLineInputAreaSize{ 220, multiLineInputAreaHeight };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
@@ -164,6 +165,11 @@ namespace
         bool isEvilInterface() const
         {
             return _isEvilInterface;
+        }
+
+        bool isMultiLineText() const
+        {
+            return _isMultiLineText;
         }
 
         int32_t getInputAreaHeightIncrease() const
@@ -1108,6 +1114,7 @@ namespace
 
         const int32_t windowWidth = isNumericOnlyLayout ? numpadWindowWidth : defaultWindowWidth;
 
+        const bool isMultiLineText = renderer.isMultiLineText();
         const int32_t inputAreaHeightIncrease = renderer.getInputAreaHeightIncrease();
 
         const bool isResized
@@ -1116,7 +1123,7 @@ namespace
 
         const bool isEvilInterface = renderer.isEvilInterface();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
-        addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported, inputAreaHeightIncrease > 0 );
+        addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported, isMultiLineText );
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
         const fheroes2::Point buttonsOffset{ windowRoi.x + offsetFromWindowBorders.x, windowRoi.y + offsetFromWindowBorders.y + inputAreaHeightIncrease };
@@ -1168,7 +1175,7 @@ namespace
 
             updateButtonStates( buttons, le );
 
-            if ( inputAreaHeightIncrease > 0 ) {
+            if ( isMultiLineText ) {
                 if ( le.isMouseWheelUpInArea( textRoi ) ) {
                     renderer.setCursorPosition( CursorPosition::PrevLine );
                 }
@@ -1177,7 +1184,7 @@ namespace
                 }
             }
 
-            if ( inputAreaHeightIncrease > 0 && le.isMouseLeftButtonPressedInArea( textRoi ) ) {
+            if ( isMultiLineText && le.isMouseLeftButtonPressedInArea( textRoi ) ) {
                 if ( !isTextAreaDrag ) {
                     textDragPositionY = le.getMouseLeftButtonPressedPos().y;
                     isTextAreaDrag = true;
