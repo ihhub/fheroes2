@@ -219,7 +219,6 @@ public:
     bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
     bool isBattleMovementAreaHighlightEnabled() const;
-    bool isSoftwareEmulationEnabled() const;
     bool isBattleHitPointsBarEnabled() const;
     bool isCursorSoftwareEmulationEnabled() const;
 

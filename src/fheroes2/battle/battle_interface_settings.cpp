@@ -186,7 +186,7 @@ namespace
 
         if ( isHitPointsBarEnabled ) {
             // Display an illustrative creature with two thirds of its HP remaining.
-            Battle::drawHitPointsBar( image, troopCountBar, { troopCountBarX, troopCountBarY }, hitPointsBarHeight, 2, 3 );
+            Battle::Interface::drawHitPointsBar( image, troopCountBar, { troopCountBarX, troopCountBarY }, hitPointsBarHeight, 2, 3 );
         }
 
         fheroes2::drawOption( optionRoi, image, _( "Hit Points" ), isHitPointsBarEnabled ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
