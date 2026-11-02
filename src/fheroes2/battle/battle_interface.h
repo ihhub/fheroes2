@@ -397,8 +397,6 @@ namespace Battle
                                       const int32_t hitPointsBarHeight, const uint32_t remainingHitPoints, const uint32_t maximumHitPoints );
 
     private:
-        void RedrawTroopCount( const Unit & unit, const bool isHitPointsBarEnabled );
-
         enum CreatureSpellAnimation
         {
             NONE,
@@ -430,6 +428,8 @@ namespace Battle
         void RedrawTroopSprite( const Unit & unit );
 
         fheroes2::Point _drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
+
+        void RedrawTroopCount( const Unit & unit, const bool isHitPointsBarEnabled );
 
         bool _drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset, const fheroes2::Point & movementDelta,
                                            const CellDirection movementDirection );

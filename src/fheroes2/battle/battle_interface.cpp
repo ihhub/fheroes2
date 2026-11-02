@@ -2217,7 +2217,7 @@ void Battle::Interface::drawHitPointsBar( fheroes2::Image & output, const fheroe
         = std::clamp<int32_t>( static_cast<int32_t>( static_cast<uint64_t>( remainingHitPoints ) * innerHitPointsBarWidth / maximumHitPoints ), 1,
                                innerHitPointsBarWidth );
 
-    constexpr uint8_t outlineColor{ 123 };
+    constexpr uint8_t outlineColor{ 117 };
 
     static const uint8_t remainingHitPointsColor = fheroes2::GetColorId( 0, 200, 0 );
     static const uint8_t missingHitPointsColor = fheroes2::GetColorId( 200, 0, 0 );
@@ -2239,7 +2239,6 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit, const bool isHitPoi
 
     int32_t sx = rt.x + ( isReflected ? -7 : rt.width - 13 );
     int32_t sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
-
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
 
     // check if has unit standing in front
