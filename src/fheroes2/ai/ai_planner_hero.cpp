@@ -74,6 +74,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "spell_storage.h"
 #include "visit.h"
 #include "world.h"
 #include "world_pathfinding.h"
@@ -443,6 +444,19 @@ namespace
             }
 
             if ( !kingdom.isVisited( index, objectType ) ) {
+                const uint32_t totalSpellCount = Spell::getTotalSpellsPerLevel( spell.Level() );
+
+                const auto & spells = hero.getMagicBookSpells();
+
+                const uint32_t ownedSpells = static_cast<uint32_t>(
+                    std::count_if( spells.begin(), spells.end(), [level = spell.Level()]( const auto & existingSpell ) { return existingSpell.Level() == level; } ) );
+                if ( ownedSpells == totalSpellCount ) {
+                    // Nothing to learn from this shrine.
+                    return false;
+                }
+
+                assert( ownedSpells < totalSpellCount );
+
                 // This shrine has not been visited by any hero. It's worth to do it.
                 return true;
             }
@@ -1999,7 +2013,9 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
         const Spell & spell = getSpellFromTile( tile );
-        return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1;
+        // This value needs a cap so that in games where there is a very strong AI opponent, E.G. Price of Loyalty scenario 8, the hero's most important
+        // goal won't be to learn a level 4 spell. Thus we cap this value slightly lower than the value of a pyramid's 10000 because that has a level 5 spell.
+        return std::min( 8500.0, spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1 );
     }
     case MP2::OBJ_ARENA:
     case MP2::OBJ_FORT:

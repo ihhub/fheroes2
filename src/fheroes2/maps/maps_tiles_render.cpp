@@ -500,52 +500,46 @@ namespace
         const int frameId = heroMovementIndex % Heroes::heroFrameCountPerTile;
         icnIndex = icnIndex + frameId;
 
-        if ( !hero.isMoveEnabled() ) {
-            static const fheroes2::Point offsetTop[Heroes::heroFrameCountPerTile]
-                = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
-            static const fheroes2::Point offsetBottom[Heroes::heroFrameCountPerTile]
-                = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
-            static const fheroes2::Point offsetSideways[Heroes::heroFrameCountPerTile]
-                = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 }, { 0, 0 }, { 1, 0 } };
-            static const fheroes2::Point offsetTopSideways[Heroes::heroFrameCountPerTile]
-                = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
-            static const fheroes2::Point offsetBottomSideways[Heroes::heroFrameCountPerTile]
-                = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
+        if ( hero.isMoveEnabled() || hero.isShipMaster() ) {
+            flagOffset = {};
+            return;
+        }
 
-            static const fheroes2::Point offsetShipTopBottom[Heroes::heroFrameCountPerTile]
-                = { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
-            static const fheroes2::Point offsetShipSideways[Heroes::heroFrameCountPerTile]
-                = { { 0, -2 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
-            static const fheroes2::Point offsetShipTopSideways[Heroes::heroFrameCountPerTile]
-                = { { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
-            static const fheroes2::Point offsetShipBottomSideways[Heroes::heroFrameCountPerTile]
-                = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+        static const fheroes2::Point offsetTop[Heroes::heroFrameCountPerTile]
+            = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
+        static const fheroes2::Point offsetBottom[Heroes::heroFrameCountPerTile]
+            = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
+        static const fheroes2::Point offsetSideways[Heroes::heroFrameCountPerTile]
+            = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 }, { 0, 0 }, { 1, 0 } };
+        static const fheroes2::Point offsetTopSideways[Heroes::heroFrameCountPerTile]
+            = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
+        static const fheroes2::Point offsetBottomSideways[Heroes::heroFrameCountPerTile]
+            = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
 
-            const int heroDirection = hero.GetDirection();
-            switch ( heroDirection ) {
-            case Direction::TOP:
-                flagOffset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
-                break;
-            case Direction::BOTTOM:
-                flagOffset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
-                break;
-            case Direction::RIGHT:
-            case Direction::LEFT:
-                flagOffset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
-                break;
-            case Direction::TOP_RIGHT:
-            case Direction::TOP_LEFT:
-                flagOffset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
-                break;
-            case Direction::BOTTOM_RIGHT:
-            case Direction::BOTTOM_LEFT:
-                flagOffset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
-                break;
+        const int heroDirection = hero.GetDirection();
+        switch ( heroDirection ) {
+        case Direction::TOP:
+            flagOffset = offsetTop[frameId];
+            break;
+        case Direction::BOTTOM:
+            flagOffset = offsetBottom[frameId];
+            break;
+        case Direction::RIGHT:
+        case Direction::LEFT:
+            flagOffset = offsetSideways[frameId];
+            break;
+        case Direction::TOP_RIGHT:
+        case Direction::TOP_LEFT:
+            flagOffset = offsetTopSideways[frameId];
+            break;
+        case Direction::BOTTOM_RIGHT:
+        case Direction::BOTTOM_LEFT:
+            flagOffset = offsetBottomSideways[frameId];
+            break;
 
-            default:
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
-                break;
-            }
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
+            break;
         }
     }
 
@@ -1236,7 +1230,7 @@ namespace Maps
 
         const fheroes2::Sprite & spriteFlag = Assets::getImage( icnId, icnIndex );
         const fheroes2::Point flagSpriteOffset( offset.x
-                                                    + ( reflect ? ( fheroes2::tileWidthPx - spriteFlag.x() - flagOffset.x - spriteFlag.width() )
+                                                    + ( reflect ? ( fheroes2::tileWidthPx + 1 - spriteFlag.x() - flagOffset.x - spriteFlag.width() )
                                                                 : spriteFlag.x() + flagOffset.x ),
                                                 offset.y + spriteFlag.y() + flagOffset.y + fheroes2::tileWidthPx );
 

@@ -49,7 +49,6 @@
 #include "monster_info.h"
 #include "morale.h"
 #include "pal.h"
-#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
@@ -734,6 +733,8 @@ int Dialog::ArmyJoinFree( const Troop & troop )
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )
 {
+    assert( join > 0 );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -763,20 +764,14 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
     const fheroes2::Sprite & sprite = Assets::getImage( ICN::RESOURCE, 6 );
     int posy = 0;
 
-    message = _( "(Rate: %{percent})" );
-    StringReplace( message, "%{percent}", troop.GetMonster().GetCost().gold * join * 100 / gold );
-    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
-
-    const FrameBox box( 10 + textbox.height( fheroes2::boxAreaWidthPx ) + 10 + text.height() + 40 + sprite.height() + 10, true );
+    const FrameBox box( 10 + textbox.height( fheroes2::boxAreaWidthPx ) + 40 + sprite.height() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
     textbox.draw( pos.x, posy + 2, fheroes2::boxAreaWidthPx, display );
 
-    posy += textbox.height( fheroes2::boxAreaWidthPx ) + 10;
-    text.draw( pos.x + ( pos.width - text.width() ) / 2, posy + 2, display );
+    posy += textbox.height( fheroes2::boxAreaWidthPx ) + 40;
 
-    posy += text.height() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
     const fheroes2::Text goldText( std::to_string( gold ), fheroes2::FontType::smallWhite() );
