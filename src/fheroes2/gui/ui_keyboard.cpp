@@ -67,7 +67,7 @@ namespace
     constexpr fheroes2::Size inputAreaSize{ 268, 21 };
     constexpr int32_t inputAreaBorders{ 2 };
     constexpr int32_t multiLineInputAreaRows{ 5 };
-    constexpr int32_t multiLineInputAreaHeight{ inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) };
+    constexpr int32_t multiLineInputAreaHeight{ inputAreaBorders * 2 + multiLineInputAreaRows * ( inputAreaSize.height - 2 * inputAreaBorders ) + 1 };
     // Match the effective text width of the multiline input field in Dialog::inputString().
     constexpr fheroes2::Size multiLineInputAreaSize{ 220, multiLineInputAreaHeight };
     const int32_t inputAreaOffsetFromWindowTop{ 20 };
@@ -132,6 +132,7 @@ namespace
         EndOfText
     };
 
+    // TODO: Add vertical scrolling support for multiline text input.
     class KeyboardRenderer final
     {
     public:
