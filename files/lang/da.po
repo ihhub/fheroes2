@@ -5886,7 +5886,7 @@ msgid "hotkey|toggle passability"
 msgstr "Fremkommelighed (til/fra)"
 
 msgid "hotkey|auto playtest"
-msgstr "auto-spiltest"
+msgstr "Auto-spiltest"
 
 msgid "hotkey|re-generate random map"
 msgstr "Generer tilfældigt kort"
