@@ -789,6 +789,9 @@ msgstr ""
 "Uthevd\n"
 "rekkevidde"
 
+msgid "Hit Points"
+msgstr "Liv"
+
 #, fuzzy
 msgid "Toggle to display the turn order during the battle."
 msgstr ""
@@ -820,6 +823,11 @@ msgstr ""
 "mørkere."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2786,9 +2794,6 @@ msgstr "Skudd"
 
 msgid "Shots Left"
 msgstr "Skudd igjen"
-
-msgid "Hit Points"
-msgstr "Liv"
 
 msgid "Hit Points Left"
 msgstr "Liv igjen"
@@ -7210,6 +7215,10 @@ msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
+msgstr "MELLOMROM"
+
+#, fuzzy
+msgid "Keyboard|ENTER"
 msgstr "MELLOMROM"
 
 #, fuzzy

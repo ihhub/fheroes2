@@ -757,6 +757,9 @@ msgstr "Bóng Con trỏ"
 msgid "Movement Area"
 msgstr "Tướng Di chuyển"
 
+msgid "Hit Points"
+msgstr "Máu"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Chuyển đổi để hiển thị thứ tự xếp hàng trong trận chiến."
 
@@ -783,6 +786,11 @@ msgstr ""
 "Bật hoặc tắt bóng hiển thị vị trí của con trỏ chuột trên lưới lục giác."
 
 msgid "Toggle showing the movement area of a highlighted creature on or off."
+msgstr ""
+
+msgid ""
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
 msgstr ""
 
 msgid ""
@@ -2723,9 +2731,6 @@ msgstr "Bắn"
 
 msgid "Shots Left"
 msgstr "Còn Bắn"
-
-msgid "Hit Points"
-msgstr "Máu"
 
 msgid "Hit Points Left"
 msgstr "Còn Máu"
@@ -7101,6 +7106,9 @@ msgid "Click to switch between keyboard types."
 msgstr ""
 
 msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|ENTER"
 msgstr ""
 
 #, fuzzy

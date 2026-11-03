@@ -393,6 +393,8 @@ namespace Battle
         void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
         void RedrawBridgeAnimation( const bool bridgeDownAnimation );
         void RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, const double angle, const uint32_t monsterID );
+        static void drawHitPointsBar( fheroes2::Image & output, const fheroes2::Sprite & troopCountBar, const fheroes2::Point & troopCountBarPosition,
+                                      const int32_t hitPointsBarHeight, const uint32_t remainingHitPoints, const uint32_t maximumHitPoints );
 
     private:
         enum CreatureSpellAnimation
@@ -427,7 +429,7 @@ namespace Battle
 
         fheroes2::Point _drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
 
-        void RedrawTroopCount( const Unit & unit );
+        void RedrawTroopCount( const Unit & unit, const bool isHitPointsBarEnabled );
 
         bool _drawTroopSpriteWithMoatMask( const Unit & unit, const fheroes2::Sprite & sprite, const fheroes2::Point & offset, const fheroes2::Point & movementDelta,
                                            const CellDirection movementDirection );
