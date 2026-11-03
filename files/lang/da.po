@@ -3767,7 +3767,7 @@ msgstr ""
 "gør det sværere for menneskelige spillere."
 
 msgid "Selected Map Description"
-msgstr "Valgte Kortbeskrivelse"
+msgstr "Valgte korts beskrivelse"
 
 msgid "Jump"
 msgstr "Hop"
