@@ -133,7 +133,7 @@ if(NOT MACOS_APP_BUNDLE)
 		PATTERN *.h2d
 		)
 	install(
-		FILES files/data/LICENSE-ASSETS
+		FILES files/data/LICENSE-ART
 		DESTINATION ${FHEROES2_DATA}/files/data
 		)
 	install(

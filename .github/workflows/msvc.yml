@@ -97,7 +97,7 @@ jobs:
                                changelog.txt \
                                .\\docs\\README.txt \
                                files\\data\\*.h2d \
-                               files\\data\\LICENSE-ASSETS \
+                               files\\data\\LICENSE-ART \
                                files\\lang\\*.mo \
                                files\\timidity\\* \
                                maps\\*.fh2m \
