@@ -44,6 +44,7 @@ namespace Game
         DEFAULT_RIGHT,
         DEFAULT_UP,
         DEFAULT_DOWN,
+        DEFAULT_DELETE_ITEM,
 
         GLOBAL_TOGGLE_FULLSCREEN,
         GLOBAL_TOGGLE_TEXT_SUPPORT_MODE,
@@ -188,7 +189,7 @@ namespace Game
         ARMY_SWAP,
 
         // WARNING! Put all new event only above this line. No adding in between.
-        NO_EVENT,
+        NO_EVENT
     };
 
     enum class HotKeyCategory : uint8_t

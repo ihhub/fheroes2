@@ -557,7 +557,7 @@ namespace
             bool needRedraw = ( listId != listbox.getCurrentId() );
             bool listUpdated = false;
 
-            if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DELETE_ITEM ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
