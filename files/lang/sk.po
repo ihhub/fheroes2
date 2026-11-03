@@ -7114,6 +7114,10 @@ msgid "Keyboard|SPACE"
 msgstr "MEDZERNÍK"
 
 #, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "MEDZERNÍK"
+
+#, fuzzy
 msgid "Change language"
 msgstr "Zmeň jazyk hry."
 

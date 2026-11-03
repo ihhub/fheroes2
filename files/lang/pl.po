@@ -6908,6 +6908,10 @@ msgstr "Kliknij, aby zmienić pomiędzy rodzajami klawiatur."
 msgid "Keyboard|SPACE"
 msgstr "SPACJA"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "SPACJA"
+
 msgid "Change language"
 msgstr "Zmień język"
 

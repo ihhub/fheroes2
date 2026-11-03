@@ -6930,6 +6930,10 @@ msgid "Keyboard|SPACE"
 msgstr "ПРАБЕЛ"
 
 #, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "ПРАБЕЛ"
+
+#, fuzzy
 msgid "Change language"
 msgstr "Змяніць назву мапы"
 

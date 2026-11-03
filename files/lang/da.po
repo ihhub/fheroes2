@@ -7029,6 +7029,10 @@ msgid "Keyboard|SPACE"
 msgstr "MELLEMRUM"
 
 #, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "MELLEMRUM"
+
+#, fuzzy
 msgid "Change language"
 msgstr "Skift kortnavn"
 

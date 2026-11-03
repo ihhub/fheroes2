@@ -6828,6 +6828,10 @@ msgstr "Přepíná mezi jednotlivými typy klávesnice."
 msgid "Keyboard|SPACE"
 msgstr "Mezerník"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "Mezerník"
+
 msgid "Change language"
 msgstr "Změnit jazyk"
 

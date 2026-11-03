@@ -6336,6 +6336,10 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr "ΚΕΝΟ"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "ΚΕΝΟ"
+
 msgid "Change language"
 msgstr ""
 

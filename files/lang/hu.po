@@ -6882,6 +6882,10 @@ msgstr "Kattints a billentyűzettípusok közötti váltáshoz."
 msgid "Keyboard|SPACE"
 msgstr "SPACE"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "SPACE"
+
 msgid "Change language"
 msgstr "Nyelv megváltoztatása"
 

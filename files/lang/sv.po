@@ -6873,6 +6873,10 @@ msgstr "Klicka för att växla mellan tangentbordstyper."
 msgid "Keyboard|SPACE"
 msgstr "MELLANSLAG"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "MELLANSLAG"
+
 msgid "Change language"
 msgstr "Ändra språk"
 

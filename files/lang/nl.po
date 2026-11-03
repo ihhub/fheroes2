@@ -6703,6 +6703,9 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
+msgid "Keyboard|ENTER"
+msgstr ""
+
 #, fuzzy
 msgid "Change language"
 msgstr "Selecteer spreuk doelwit"
