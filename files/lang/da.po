@@ -548,7 +548,7 @@ msgid "Message Bar"
 msgstr "Beskedlinje"
 
 msgid "Shows the results of individual monster's actions."
-msgstr "Viser resultater for individuelle enheds handlinger."
+msgstr "Viser resultater for individuelle enheders handlinger."
 
 msgid ""
 "AUTO\n"
