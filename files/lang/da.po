@@ -5410,7 +5410,7 @@ msgstr[0] "1 gennemspilning"
 msgstr[1] "%{count} gennemspilning"
 
 msgid " playthrough(s) reached the specified time limit"
-msgstr "spilgennemgangen(e) nåede den angivne tidsgrænse"
+msgstr " spilgennemgang(e) nåede den angivne tidsgrænse"
 
 msgid "Click to close the dialog."
 msgstr "Klik for at lukke dialogboksen."
