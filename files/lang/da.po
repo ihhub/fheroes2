@@ -861,7 +861,7 @@ msgid ""
 "If this checkbox is checked, the defending hero is going be human-controlled."
 msgstr ""
 "Hvis dette afkrydsningsfelt er markeret, vil den forsvarende helt blive "
-"styret af en spiller."
+"styret af en menneskelig spiller."
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
