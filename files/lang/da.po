@@ -3290,7 +3290,7 @@ msgid "Uncharted Territory"
 msgstr "Ukendt område"
 
 msgid "Random Map Generator"
-msgstr "Tilfældigt Kort Generator"
+msgstr "Tilfældigt kortgenerator"
 
 #, fuzzy
 msgid "rmg|Player count:"
