@@ -35,6 +35,7 @@ free demo version of the game. Please refer to the [**installation guide**](docs
 The project's source code is licensed under the [**GNU General Public License v2.0**](LICENSE).
 
 The project's art is licensed under the [**Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0)**](files/data/LICENSE-ART).
+More details about each artwork can be found by opening [resurrection.h2d](files/data/resurrection.h2d) in a text editor.
 
 Initially, the project was developed on [**sourceforge**](https://sourceforge.net/projects/fheroes2/).
 
