@@ -6842,6 +6842,9 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
+msgid "Keyboard|ENTER"
+msgstr ""
+
 #, fuzzy
 msgid "Change language"
 msgstr "Cambia la lingua del gioco."

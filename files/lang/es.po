@@ -6986,6 +6986,10 @@ msgstr "Haz clic para cambiar entre los tipos de teclado."
 msgid "Keyboard|SPACE"
 msgstr "ESPACIO"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "ESPACIO"
+
 msgid "Change language"
 msgstr "Cambiar idioma"
 

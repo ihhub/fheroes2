@@ -7218,6 +7218,10 @@ msgid "Keyboard|SPACE"
 msgstr "MELLOMROM"
 
 #, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "MELLOMROM"
+
+#, fuzzy
 msgid "Change language"
 msgstr "Endre språket til spillet."
 

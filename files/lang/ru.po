@@ -6924,6 +6924,10 @@ msgstr "Нажмите для смены типа клавиатуры."
 msgid "Keyboard|SPACE"
 msgstr "ПРОБЕЛ"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "ПРОБЕЛ"
+
 msgid "Change language"
 msgstr "Сменить язык"
 

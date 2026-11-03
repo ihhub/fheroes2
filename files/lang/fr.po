@@ -7101,6 +7101,10 @@ msgid "Keyboard|SPACE"
 msgstr "ESPACE"
 
 #, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "ESPACE"
+
+#, fuzzy
 msgid "Change language"
 msgstr "Changer le nom de la carte"
 

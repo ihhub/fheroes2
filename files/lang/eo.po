@@ -6349,6 +6349,9 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
+msgid "Keyboard|ENTER"
+msgstr ""
+
 msgid "Change language"
 msgstr ""
 

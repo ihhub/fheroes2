@@ -7038,6 +7038,10 @@ msgid "Keyboard|SPACE"
 msgstr "LEERTASTE"
 
 #, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "LEERTASTE"
+
+#, fuzzy
 msgid "Change language"
 msgstr "Kartennamen ändern"
 

@@ -6921,6 +6921,10 @@ msgstr "Тицьніть, щоб перемикатися між типами к
 msgid "Keyboard|SPACE"
 msgstr "ПРОБІЛ"
 
+#, fuzzy
+msgid "Keyboard|ENTER"
+msgstr "ПРОБІЛ"
+
 msgid "Change language"
 msgstr "Змінити мову"
 

@@ -7108,6 +7108,9 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
+msgid "Keyboard|ENTER"
+msgstr ""
+
 #, fuzzy
 msgid "Change language"
 msgstr "Thay đổi ngôn ngữ của trò chơi."
