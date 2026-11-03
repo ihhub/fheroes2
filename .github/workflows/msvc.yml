@@ -94,10 +94,10 @@ jobs:
                                .\\"$BUILD_DIR"\\fheroes2.exe \
                                .\\"$BUILD_DIR"\\*.dll \
                                LICENSE \
+                               LICENSE-ART 
                                changelog.txt \
                                .\\docs\\README.txt \
                                files\\data\\*.h2d \
-                               files\\data\\LICENSE-ART \
                                files\\lang\\*.mo \
                                files\\timidity\\* \
                                maps\\*.fh2m \

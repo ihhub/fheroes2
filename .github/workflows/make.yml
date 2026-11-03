@@ -22,11 +22,11 @@ jobs:
           package_name: fheroes2_ubuntu_x86-64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
             files/data/*.h2d
-            files/data/LICENSE-ART
             files/lang/*.mo
             maps/*.fh2m
             ./script/demo/download_demo_version.sh
@@ -68,11 +68,11 @@ jobs:
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
             files/data/*.h2d
-            files/data/LICENSE-ART
             files/lang/*.mo
             maps/*.fh2m
             ./script/demo/download_demo_version.sh
@@ -118,11 +118,11 @@ jobs:
           package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
             files/data/*.h2d
-            files/data/LICENSE-ART
             files/lang/*.mo
             maps/*.fh2m
             ./script/demo/download_demo_version.sh
@@ -315,7 +315,7 @@ jobs:
         make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
-        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/data/LICENSE-ART files/lang/*.mo maps/*.fh2m
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE LICENSE-ART changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
