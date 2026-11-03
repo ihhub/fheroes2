@@ -1,4 +1,6 @@
 version 1.1.18 (04 November 2026)
+- add multiline text editing support to the Virtual Keyboard
+- add HP bar option for monsters during battles
 - add Dhalsivia Pirenaica map into the fheroes2 bundle
 - do not let the AI cast Berserker when the target's nearest unit is not an enemy
 - resize the hotkey dialog width based on the current resolution
