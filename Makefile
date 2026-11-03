@@ -44,6 +44,7 @@ ifdef FHEROES2_MACOS_APP_BUNDLE
 	mkdir -p fheroes2.app/Contents/Resources/maps
 	mkdir -p fheroes2.app/Contents/Resources/translations
 	cp files/data/*.h2d fheroes2.app/Contents/Resources/h2d
+	cp files/data/LICENSE-ASSETS fheroes2.app/Contents/Resources/h2d
 	cp files/lang/*.mo fheroes2.app/Contents/Resources/translations
 	cp maps/*.fh2m fheroes2.app/Contents/Resources/maps
 	cp src/dist/fheroes2/fheroes2 fheroes2.app/Contents/MacOS
