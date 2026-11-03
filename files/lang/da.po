@@ -3060,7 +3060,7 @@ msgid ""
 msgstr ""
 "Vælg den type skærmskalering, du vil anvende. Lineær skalering gør det "
 "skalerede skærmbillede sløret, mens nærmeste skalering bevarer skarpheden "
-"fra det oprindelige spil. Nærmeste skalering ser bedst ud ved heltal, for "
+"fra det oprindelige spil. Nærmeste skalering ser bedst ud ved heltalskaleringer, for "
 "eksempel 2,0x eller 3,0x."
 
 msgid ""
