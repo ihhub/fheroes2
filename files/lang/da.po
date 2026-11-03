@@ -3464,7 +3464,7 @@ msgid "There is nothing to select from."
 msgstr ""
 
 msgid "There are no castles to select from."
-msgstr "Der er ingen borge  at vælge imellem."
+msgstr "Der er ingen borge at vælge imellem."
 
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
