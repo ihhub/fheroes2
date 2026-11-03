@@ -946,7 +946,7 @@ msgid "The Crown"
 msgstr "La corona"
 
 msgid "The Gauntlet"
-msgstr "El guantelete"
+msgstr "Contrarreloj"
 
 msgid "Betrayal"
 msgstr "Traición"
@@ -1390,7 +1390,7 @@ msgstr ""
 "hechicería. Hazlo y tu victoria será suprema."
 
 msgid "Blood is Thicker"
-msgstr "La sangre es espesa"
+msgstr "La sangre tira"
 
 msgid "King and Country"
 msgstr "Rey y patria"
