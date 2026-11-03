@@ -5002,7 +5002,7 @@ msgid "Enable All Spells"
 msgstr "Aktiver alle besværgelser"
 
 msgid "Click to disable all spells."
-msgstr "Klik her for at deaktivere alle trylleformularer."
+msgstr "Klik her for at deaktivere alle besværgelser."
 
 #, fuzzy
 msgid "Disable All Spells"
