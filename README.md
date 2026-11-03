@@ -34,7 +34,7 @@ free demo version of the game. Please refer to the [**installation guide**](docs
 
 The project's source code is licensed under the [**GNU General Public License v2.0**](https://github.com/ihhub/fheroes2/blob/master/LICENSE).
 
-The project's assets is licensed under the [**Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0)**](https://creativecommons.org/licenses/by-sa/4.0/deed.en).
+The project's art is licensed under the [**Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0)**](https://github.com/ihhub/fheroes2/blob/master/files/data/LICENSE-ART).
 
 Initially, the project was developed on [**sourceforge**](https://sourceforge.net/projects/fheroes2/).
 
