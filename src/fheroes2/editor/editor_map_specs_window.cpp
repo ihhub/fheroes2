@@ -2301,7 +2301,13 @@ namespace Editor
                 renderMapName();
                 renderMapDescription();
 
-                display.render( fheroes2::getBoundaryRect( scenarioBoxRoi, descriptionTextRoi ) );
+                victoryConditionUI.updateCondition( mapFormat );
+                lossConditionUI.updateCondition( mapFormat );
+
+                victoryConditionUI.render( display, true );
+                lossConditionUI.render( display, true );
+
+                display.render( activeArea );
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 // TODO: Edit texts directly in this dialog.
