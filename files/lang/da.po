@@ -2596,7 +2596,7 @@ msgid "The spells the hero can learn have been added to their book."
 msgstr "De besværgelser, den besøgende helt kan lære, er nu i magibogen."
 
 msgid "Exit Mage Guild"
-msgstr "Forlad Magikerlauget"
+msgstr "Forlad magikerlauget"
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "En generøs mængde drikkepenge får krokarlen til at dele dette rygte:"
