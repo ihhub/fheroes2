@@ -130,7 +130,7 @@ namespace Interface
         void ActionListDoubleClick( HEROES & item ) override;
         void ActionListSingleClick( HEROES & item ) override;
         void ActionListPressRight( HEROES & item ) override;
-        void ActionListLongPress( HEROES & item ) override;
+        void ActionListLongPress( HEROES & item, const int /* id */ ) override;
         void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & pos ) override;
 

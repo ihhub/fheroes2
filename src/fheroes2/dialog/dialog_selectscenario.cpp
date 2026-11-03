@@ -454,11 +454,6 @@ const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( const uint8_t 
     return Assets::getImage( ICN::REQUESTS, iconIndex );
 }
 
-void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & /* unused */ )
-{
-    _isDoubleClicked = true;
-}
-
 const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const bool isForEditor )
 {
     if ( all.empty() ) {
@@ -623,6 +618,7 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     while ( le.HandleEvents() ) {
         buttonOk.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonOk.area() ) );
 
+        scenarioList.resetLongPressedState();
         scenarioList.QueueEventProcessing();
 
         bool needRedraw = false;
@@ -647,7 +643,11 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
             return nullptr;
         }
 
-        if ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) && scenarioList.isSelected() ) {
+#if defined( ANDROID ) || defined( __IPHONEOS__ )
+        if ( scenarioList.isSelected() && ( le.isKeyPressed( fheroes2::Key::KEY_DELETE ) || scenarioList.isLongPressed() ) ) {
+#else
+        if ( scenarioList.isSelected() && le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
+#endif
             std::string msg( _( "Are you sure you want to delete the map:" ) );
             msg.append( "\n\n" );
             msg.append( System::GetFileName( scenarioList.GetCurrent().filename ) );
