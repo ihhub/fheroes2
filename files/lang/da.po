@@ -7034,7 +7034,7 @@ msgid "Swap sign"
 msgstr "Byt skilt"
 
 msgid "Click to switch between signed and unsigned numbers."
-msgstr "Klik for at skifte mellem tal med eller uden fortegn"
+msgstr "Klik for at skifte mellem tal med eller uden fortegn."
 
 msgid "The entered value is invalid."
 msgstr "Den indtastede værdi er ugyldig."
