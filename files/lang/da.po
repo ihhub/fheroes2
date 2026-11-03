@@ -3507,7 +3507,7 @@ msgid "Select Monster:"
 msgstr "Vælg væsen:"
 
 msgid "There are no heroes to select from."
-msgstr "Der er ingen helte  at vælge imellem."
+msgstr "Der er ingen helte at vælge imellem."
 
 msgid "Select Hero:"
 msgstr "Vælg helt:"
