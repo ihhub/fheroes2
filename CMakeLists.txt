@@ -139,7 +139,7 @@ if(NOT MACOS_APP_BUNDLE)
 		PATTERN *.fh2m
 		)
 	install(
-		FILES docs/README.txt LICENSE LICENSE-ART changelog.txt 
+		FILES docs/README.txt LICENSE LICENSE-ART changelog.txt
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}
 		)
 
