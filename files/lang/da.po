@@ -9508,7 +9508,7 @@ msgstr "Blodig!"
 
 msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
 msgstr ""
-"%{morale-type} moral kan få heltens enheder til at handlingslammet i kamp."
+"%{morale-type} moral kan få heltens enheder til at handlingslammes i kamp."
 
 msgid ""
 "%{morale-type} morale means the hero's units will never be blessed with "
