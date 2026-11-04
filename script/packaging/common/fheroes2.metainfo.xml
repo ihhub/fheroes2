@@ -42,6 +42,9 @@
       <description>
         <p>Changes in v1.1.18 (04 November 2026):</p>
         <ul>
+          <li>add marketplace icon and counter to the dialogs</li>
+          <li>update Victory and Loss conditions while switching languages in the Editor</li>
+          <li>update the bundled Apocalypse map to 3.9</li>
           <li>add multiline text editing support to the Virtual Keyboard</li>
           <li>add HP bar option for monsters during battles</li>
           <li>add Dhalsivia Pirenaica map into the fheroes2 bundle</li>
@@ -52,7 +55,7 @@
           <li>remove the confusing Rate in the diplomacy dialog</li>
           <li>update the Brazilian Portuguese translation</li>
           <li>add category filtering for hotkeys in settings window</li>
-          <li>add small improvements for High Scores dialog</li>
+          <li>add small improvements to the High Scores dialog</li>
           <li>fix an extra frame being rendered while clicking on the Save Game button</li>
           <li>rework Auto-playtest dialog</li>
           <li>add extra logic to avoid visiting shrines by AI heroes if they have all spells</li>
@@ -74,8 +77,8 @@
           <li>allow to place heroes on water</li>
           <li>add the Utopeia map to the fheroes2 bundle</li>
           <li>add Good Titans, Bad Titans map to the fheroes2 bundle</li>
-          <li>explicitly state the action that the moved object got moved in the Editor</li>
-          <li>update the bundled Final Invasion map to version 7.9</li>
+          <li>explicitly state that an object was moved in the Editor</li>
+          <li>update the bundled Final Invasion map to version 8.0</li>
           <li>update the bundled Ravenhold map to version 1.9</li>
           <li>update the bundled Eruption map to version 3.2</li>
           <li>fix incorrect offset for evil empty button</li>
@@ -87,7 +90,7 @@
           <li>fix rendering delay after closing Auto Playtesting window</li>
           <li>add Lost Temple (1.1.17) to the fheroes2 bundle</li>
           <li>fix subpixel resize on bottom and right borders and near-transparent pixels</li>
-          <li>allow to quit the application anytime by closing the application window</li>
+          <li>allow to quit the application at any time by closing the application window</li>
           <li>prevent an assertion hit while loading a Resurrection map</li>
           <li>speed up rendering on PS Vita</li>
           <li>add neutral monster limit growth on original maps</li>
@@ -100,7 +103,7 @@
           <li>do not predict future object value for AI heroes on Easy difficulty</li>
           <li>fix the castle's well available text position for some languages</li>
           <li>fix invalid assertion for battle troops</li>
-          <li>improve battle logic for Ghosts and Vampire Lords to utilize their unique abilities</li>
+          <li>improve battle logic so Ghosts and Vampire Lords utilize their unique abilities</li>
         </ul>
       </description>
     </release>
