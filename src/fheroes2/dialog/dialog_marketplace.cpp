@@ -55,9 +55,11 @@
 
 namespace
 {
-    uint32_t GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost )
+    constexpr uint32_t tradingPostValue{ 3 };
+
+    uint32_t GetTradeCosts( const Kingdom & kingdom, const int rs_from, const int rs_to, const bool tradingPost )
     {
-        return fheroes2::getTradeCost( ( tradingPost ? 3 : kingdom.GetCountMarketplace() ), rs_from, rs_to );
+        return fheroes2::getTradeCost( ( tradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), rs_from, rs_to );
     }
 
     std::string GetStringTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost )
@@ -73,6 +75,49 @@ namespace
         }
 
         return res;
+    }
+
+    std::string getExchangeRateText( const bool isTradingPost, const uint32_t marketCount )
+    {
+        std::string temp;
+
+        if ( isTradingPost ) {
+            temp = _( "The Trading Post provides exchange rates equivalent to %{count} marketplaces." );
+        }
+        else if ( marketCount == 1 ) {
+            return _( "You currently control 1 marketplace. The more marketplaces you control, the better the exchange rate." );
+        }
+        else if ( marketCount >= 9 ) {
+            return _(
+                "You currently control enough marketplaces that the exchange rate has peaked. Controlling additional marketplaces will not improve the exchange rate." );
+        }
+        else {
+            temp = _( "You currently control %{count} marketplaces. The more marketplaces you control, the better the exchange rate." );
+        }
+
+        StringReplace( temp, "%{count}", isTradingPost ? tradingPostValue : marketCount );
+        return temp;
+    }
+
+    fheroes2::Rect renderExchangeRate( const fheroes2::Point offset, const uint32_t marketCount, fheroes2::Image & output, const bool isEvilInterface )
+    {
+        const fheroes2::Sprite & icon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
+        const fheroes2::Text text{ ( marketCount > 9 ) ? "x 9+" : "x " + std::to_string( marketCount ), fheroes2::FontType::smallWhite() };
+
+        constexpr int32_t spacing = 2;
+        const int32_t elementHeight = icon.height() + spacing + text.height();
+
+        const int32_t iconOffsetX = offset.x - icon.width() / 2;
+        const int32_t iconOffsetY = offset.y + 2;
+
+        fheroes2::Blit( icon, output, iconOffsetX, iconOffsetY );
+
+        const int32_t textOffsetX = offset.x - text.width() / 2;
+        const int32_t textOffsetY = iconOffsetY + icon.height() + spacing;
+
+        text.draw( textOffsetX, textOffsetY, output );
+
+        return { iconOffsetX, iconOffsetY, icon.width(), elementHeight };
     }
 
     class TradeWindowGUI
@@ -356,11 +401,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     Dialog::FrameBox box( 297, true );
 
     const fheroes2::Rect & pos_rt = box.GetArea();
-
     fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
-    fheroes2::Rect marketplaceCountRoi;
+    // fheroes2::Rect marketplaceCountRoi;
 
-    const uint32_t marketplaceEquivalentCount = fromTradingPost ? 3 : kingdom.GetCountMarketplace();
+    // const uint32_t marketplaceEquivalentCount = fromTradingPost ? 3 : kingdom.GetCountMarketplace();
 
     // header
     fheroes2::Text text{ header, fheroes2::FontType::normalYellow() };
@@ -409,30 +453,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawToResource( pt2, false, kingdom, fromTradingPost, 0 );
 
-    {
-        const fheroes2::Sprite & marketplaceIcon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
-        std::string marketplaceEquivalentCountText = marketplaceEquivalentCount > 9 ? "x 9+" : "x " + std::to_string( marketplaceEquivalentCount );
-        const fheroes2::Text marketplaceCountText( std::move( marketplaceEquivalentCountText ), fheroes2::FontType::smallWhite() );
-
-        const int32_t spacing = 2;
-        const int32_t elementHeight = marketplaceIcon.height() + spacing + marketplaceCountText.height();
-
-        const fheroes2::Rect & leftGoldRoi = rectsFrom.back();
-
-        const int32_t iconWidth = marketplaceIcon.width();
-
-        const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - iconWidth ) / 2;
-        const int32_t iconOffsetY = leftGoldRoi.y + ( leftGoldRoi.height - elementHeight ) / 2 + 10;
-
-        fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
-
-        const int32_t textOffsetX = pos_rt.x + ( pos_rt.width - marketplaceCountText.width() ) / 2;
-        const int32_t textOffsetY = iconOffsetY + marketplaceIcon.height() + spacing;
-
-        marketplaceCountText.draw( textOffsetX, textOffsetY, display );
-
-        marketplaceCountRoi = { pos_rt.x + ( pos_rt.width - iconWidth ) / 2, iconOffsetY, iconWidth, elementHeight };
-    }
+    const fheroes2::Rect marketplaceCountRoi = renderExchangeRate( { pos_rt.x + pos_rt.width / 2, rectsFrom.back().y },
+        ( fromTradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), display, isEvilInterface );
 
     uint32_t count_sell = 0;
     uint32_t count_buy = 0;
@@ -494,34 +516,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             break;
         }
 
-        if ( le.isMouseCursorPosInArea( marketplaceCountRoi ) ) {
-            const bool isLeftClick = le.MouseClickLeft();
-            const bool isRightClick = !isLeftClick && le.isMouseRightButtonPressed();
-
-            if ( isLeftClick || isRightClick ) {
-                std::string marketplaceCountInfo;
-
-                if ( fromTradingPost ) {
-                    marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} marketplaces." );
-                }
-                else if ( marketplaceEquivalentCount == 1 ) {
-                    marketplaceCountInfo = _( "You currently control %{count} marketplace. The more marketplaces you control, the better the exchange rate." );
-                }
-                else if ( marketplaceEquivalentCount >= 9 ) {
-                    marketplaceCountInfo = _(
-                        "You currently control enough marketplaces that the exchange rate has peaked. Controlling additional marketplaces will not improve the exchange rate." );
-                }
-                else {
-                    marketplaceCountInfo = _( "You currently control %{count} marketplaces. The more marketplaces you control, the better the exchange rate." );
-                }
-
-                StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
-
-                fheroes2::showStandardTextMessage( _( "Exchange Rate" ), std::move( marketplaceCountInfo ), isLeftClick ? Dialog::OK : Dialog::ZERO );
-
-                display.render();
-                continue;
-            }
+        if ( le.isMouseLeftButtonPressedInArea( marketplaceCountRoi ) ) {
+            fheroes2::showStandardTextMessage( _( "Exchange Rate" ), getExchangeRateText( fromTradingPost, kingdom.GetCountMarketplace() ), Dialog::OK );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( marketplaceCountRoi ) ) {
+            fheroes2::showStandardTextMessage( _( "Exchange Rate" ), getExchangeRateText( fromTradingPost, kingdom.GetCountMarketplace() ), Dialog::ZERO );
         }
 
         // gift resources
