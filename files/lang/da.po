@@ -4248,7 +4248,7 @@ msgid "Input %{object} text:"
 msgstr "Indtast text for %{object}:"
 
 msgid "Set Random Ultimate Artifact Radius:"
-msgstr "Indstil tilfældigt Ultimativt Artefakt radius:"
+msgstr "Indstil radius for tilfældigt Ultimativt Artefakt:"
 
 msgid "%{object} has no properties to change."
 msgstr "%{object} har ingen egenskaber at ændre."
