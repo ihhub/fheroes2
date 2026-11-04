@@ -266,7 +266,7 @@ jobs:
     - name: Create package
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.vpk
-        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
+        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE LICENSE-ART changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -372,7 +372,7 @@ jobs:
     - name: Create package
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.data
-        7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
+        7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE LICENSE-ART changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
