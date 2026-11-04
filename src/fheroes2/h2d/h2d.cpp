@@ -60,6 +60,7 @@ namespace
         "circular_stone_liths_center.image",
         "circular_stone_liths_left.image",
         "circular_stone_liths_top.image",
+        "genie_snap.sound",
         "graphics_option_icon.image",
         "hotkeys_option_icon.image",
         "market_icon_evil.image",
