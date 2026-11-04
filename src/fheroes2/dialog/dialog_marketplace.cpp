@@ -109,11 +109,7 @@ namespace
         const int32_t iconOffsetY = offset.y + spacing;
 
         fheroes2::Blit( icon, output, iconOffsetX, iconOffsetY );
-
-        const int32_t textOffsetX = offset.x - text.width() / 2;
-        const int32_t textOffsetY = iconOffsetY + icon.height() + spacing;
-
-        text.draw( textOffsetX, textOffsetY, output );
+        text.draw( offset.x - text.width() / 2, iconOffsetY + icon.height() + spacing, output );
 
         return { iconOffsetX, iconOffsetY, icon.width(), icon.height() + spacing + text.height() };
     }
