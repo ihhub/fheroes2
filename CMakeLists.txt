@@ -133,17 +133,13 @@ if(NOT MACOS_APP_BUNDLE)
 		PATTERN *.h2d
 		)
 	install(
-		FILES LICENSE-ART
-		DESTINATION ${FHEROES2_DATA}/files/data
-		)
-	install(
 		DIRECTORY maps/
 		DESTINATION ${FHEROES2_DATA}/maps
 		FILES_MATCHING
 		PATTERN *.fh2m
 		)
 	install(
-		FILES docs/README.txt LICENSE changelog.txt
+		FILES docs/README.txt LICENSE changelog.txt LICENSE-ART
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}
 		)
 
