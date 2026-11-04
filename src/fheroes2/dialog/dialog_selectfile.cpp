@@ -557,7 +557,7 @@ namespace
             bool needRedraw = ( listId != listbox.getCurrentId() );
             bool listUpdated = false;
 
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DELETE_ITEM ) && isListboxSelected ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DELETE ) && isListboxSelected ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 

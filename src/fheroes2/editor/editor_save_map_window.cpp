@@ -380,7 +380,7 @@ namespace Editor
                     continue;
                 }
             }
-            else if ( isListboxSelected && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DELETE_ITEM ) ) {
+            else if ( isListboxSelected && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DELETE ) ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 
