@@ -11190,7 +11190,7 @@ msgstr ""
 "firkløver."
 
 msgid "True Compass of Mobility"
-msgstr "Det sande Kompas for Bevægelighed"
+msgstr "Det sande kompas for bevægelighed"
 
 msgid "The %{name} increases the hero's movement on land and sea."
 msgstr "%{name} øger heltens bevægelsespoint, både til lands og til vands."
