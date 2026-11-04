@@ -5851,6 +5851,10 @@ msgstr "Standard: Hoch"
 msgid "hotkey|default down"
 msgstr "Standard: Runter"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Standard: Links"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Vollbild ein-/ausschalten"
 

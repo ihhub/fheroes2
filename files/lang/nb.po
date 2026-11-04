@@ -6024,6 +6024,10 @@ msgstr "Opp"
 msgid "hotkey|default down"
 msgstr "Ned"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Venstre"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Fullskjerm"
 

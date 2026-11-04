@@ -5581,6 +5581,10 @@ msgstr ""
 msgid "hotkey|default down"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Turgus"
+
 msgid "hotkey|toggle fullscreen"
 msgstr ""
 

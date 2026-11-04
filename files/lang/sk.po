@@ -5936,6 +5936,10 @@ msgstr "predvolené hore"
 msgid "hotkey|default down"
 msgstr "predvolené dole"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "predvolené vľavo"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "prepni celú obrazovku"
 

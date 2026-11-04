@@ -5297,6 +5297,9 @@ msgstr ""
 msgid "hotkey|default down"
 msgstr ""
 
+msgid "hotkey|default delete"
+msgstr ""
+
 msgid "hotkey|toggle fullscreen"
 msgstr ""
 

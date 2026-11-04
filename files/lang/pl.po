@@ -5754,6 +5754,10 @@ msgstr "w górę"
 msgid "hotkey|default down"
 msgstr "w dół"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "w lewo"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "pełny ekran/okno"
 

@@ -5756,6 +5756,10 @@ msgstr "вгору"
 msgid "hotkey|default down"
 msgstr "вниз"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "ліворуч"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "повноекранний режим увімк/вимк"
 

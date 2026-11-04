@@ -5763,6 +5763,10 @@ msgstr "уверх"
 msgid "hotkey|default down"
 msgstr "уніз"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "улева"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "на ўвесь экран (укл./выкл.)"
 

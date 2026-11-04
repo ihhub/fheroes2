@@ -5731,6 +5731,10 @@ msgstr "fel"
 msgid "hotkey|default down"
 msgstr "le"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "balra"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "teljes képernyő váltás"
 

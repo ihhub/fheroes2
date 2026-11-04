@@ -5578,6 +5578,10 @@ msgstr ""
 msgid "hotkey|default down"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Sistem seçeneklerini özelleştirin"
+
 msgid "hotkey|toggle fullscreen"
 msgstr ""
 
