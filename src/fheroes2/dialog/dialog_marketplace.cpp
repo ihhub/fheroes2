@@ -411,16 +411,17 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     {
         const fheroes2::Sprite & marketplaceIcon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
-        std::string marketplaceEquivalentCountText = marketplaceEquivalentCount >= 9 ? "x 9+" : "x " + std::to_string( marketplaceEquivalentCount );
+        std::string marketplaceEquivalentCountText = marketplaceEquivalentCount > 9 ? "x 9+" : "x " + std::to_string( marketplaceEquivalentCount );
         const fheroes2::Text marketplaceCountText( std::move( marketplaceEquivalentCountText ), fheroes2::FontType::smallWhite() );
 
         const int32_t spacing = 2;
-        const int32_t elementWidth = std::max( marketplaceIcon.width(), marketplaceCountText.width() );
         const int32_t elementHeight = marketplaceIcon.height() + spacing + marketplaceCountText.height();
 
         const fheroes2::Rect & leftGoldRoi = rectsFrom.back();
 
-        const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - marketplaceIcon.width() ) / 2;
+        const int32_t iconWidth = marketplaceIcon.width();
+
+        const int32_t iconOffsetX = pos_rt.x + ( pos_rt.width - iconWidth ) / 2;
         const int32_t iconOffsetY = leftGoldRoi.y + ( leftGoldRoi.height - elementHeight ) / 2 + 10;
 
         fheroes2::Blit( marketplaceIcon, display, iconOffsetX, iconOffsetY );
@@ -430,7 +431,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         marketplaceCountText.draw( textOffsetX, textOffsetY, display );
 
-        marketplaceCountRoi = { pos_rt.x + ( pos_rt.width - elementWidth ) / 2, iconOffsetY, elementWidth, elementHeight };
+        marketplaceCountRoi = { pos_rt.x + ( pos_rt.width - iconWidth ) / 2, iconOffsetY, iconWidth, elementHeight };
     }
 
     uint32_t count_sell = 0;
