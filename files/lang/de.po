@@ -3161,6 +3161,33 @@ msgid "n/a"
 msgstr "n/a"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Der Marktplatz kann dazu verwendet werden, eine Ressource in eine andere "
+"Ressource umzuwandeln. Je mehr Marktplätze Ihr kontrolliert, desto besser "
+"ist der Wechselkurs."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Der Marktplatz kann dazu verwendet werden, eine Ressource in eine andere "
+"Ressource umzuwandeln. Je mehr Marktplätze Ihr kontrolliert, desto besser "
+"ist der Wechselkurs."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3196,6 +3223,9 @@ msgstr "Eure Ressourcen"
 
 msgid "Available Trades"
 msgstr "Verfügbarer Handel"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bewacht von %{count} %{monster}"

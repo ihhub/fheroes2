@@ -3170,6 +3170,31 @@ msgid "n/a"
 msgstr "n/a"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Chợ có thể được sử dụng để chuyển đổi một loại tài nguyên thành một loại tài "
+"nguyên khác. Ngươi càng kiểm soát nhiều chợ, tỷ giá hối đoái càng tốt."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Chợ có thể được sử dụng để chuyển đổi một loại tài nguyên thành một loại tài "
+"nguyên khác. Ngươi càng kiểm soát nhiều chợ, tỷ giá hối đoái càng tốt."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3206,6 +3231,9 @@ msgstr "Tài nguyên của Ngươi"
 
 msgid "Available Trades"
 msgstr "Giao dịch Có sẵn"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bảo vệ bởi %{count} %{monster}"

@@ -3132,6 +3132,31 @@ msgid "n/a"
 msgstr "nd."
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Targowisko pozwala na wymianę jednego typu surowca na inny. Im więcej "
+"targowisk posiadasz tym lepszy kurs wymiany."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Targowisko pozwala na wymianę jednego typu surowca na inny. Im więcej "
+"targowisk posiadasz tym lepszy kurs wymiany."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3165,6 +3190,9 @@ msgstr "Twoje surowce"
 
 msgid "Available Trades"
 msgstr "Oferta"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "strzeżona przez %{count} %{monster}"
