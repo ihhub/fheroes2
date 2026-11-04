@@ -102,13 +102,14 @@ namespace
     fheroes2::Rect renderExchangeRate( const fheroes2::Point offset, const uint32_t marketCount, fheroes2::Image & output, const bool isEvilInterface )
     {
         const fheroes2::Sprite & icon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
-        const fheroes2::Text text{ ( marketCount > 9 ) ? "x 9+" : "x " + std::to_string( marketCount ), fheroes2::FontType::smallWhite() };
 
         constexpr int32_t spacing = 2;
         const int32_t iconOffsetX = offset.x - icon.width() / 2;
         const int32_t iconOffsetY = offset.y + spacing;
 
         fheroes2::Blit( icon, output, iconOffsetX, iconOffsetY );
+
+        const fheroes2::Text text{ ( marketCount > 9 ) ? "x 9+" : "x " + std::to_string( marketCount ), fheroes2::FontType::smallWhite() };
         text.draw( offset.x - text.width() / 2, iconOffsetY + icon.height() + spacing, output );
 
         return { iconOffsetX, iconOffsetY, icon.width(), icon.height() + spacing + text.height() };
