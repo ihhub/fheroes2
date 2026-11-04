@@ -450,8 +450,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawToResource( pt2, false, kingdom, fromTradingPost, 0 );
 
-    const fheroes2::Rect marketplaceCountRoi = renderExchangeRate( { pos_rt.x + pos_rt.width / 2, rectsFrom.back().y },
-                                                                   ( fromTradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), display, isEvilInterface );
+    const fheroes2::Rect exchangeRateRoi = renderExchangeRate( { pos_rt.x + pos_rt.width / 2, rectsFrom.back().y },
+                                                               ( fromTradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), display, isEvilInterface );
 
     uint32_t count_sell = 0;
     uint32_t count_buy = 0;
@@ -513,10 +513,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             break;
         }
 
-        if ( le.isMouseLeftButtonPressedInArea( marketplaceCountRoi ) ) {
+        if ( le.isMouseLeftButtonPressedInArea( exchangeRateRoi ) ) {
             fheroes2::showStandardTextMessage( _( "Exchange Rate" ), getExchangeRateText( fromTradingPost, kingdom.GetCountMarketplace() ), Dialog::OK );
         }
-        else if ( le.isMouseRightButtonPressedInArea( marketplaceCountRoi ) ) {
+        else if ( le.isMouseRightButtonPressedInArea( exchangeRateRoi ) ) {
             fheroes2::showStandardTextMessage( _( "Exchange Rate" ), getExchangeRateText( fromTradingPost, kingdom.GetCountMarketplace() ), Dialog::ZERO );
         }
 
