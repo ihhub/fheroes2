@@ -501,16 +501,17 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 std::string marketplaceCountInfo;
 
                 if ( fromTradingPost ) {
-                    marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} Marketplaces." );
+                    marketplaceCountInfo = _( "The Trading Post provides exchange rates equivalent to %{count} marketplaces." );
                 }
                 else if ( marketplaceEquivalentCount == 1 ) {
-                    marketplaceCountInfo = _( "You own %{count} Marketplace. More Marketplaces improve resource exchange rates." );
+                    marketplaceCountInfo = _( "You currently control %{count} marketplace. The more marketplaces you control, the better the exchange rate." );
                 }
                 else if ( marketplaceEquivalentCount >= 9 ) {
-                    marketplaceCountInfo = _( "You own 9 or more Marketplaces. This is the maximum level for resource exchange rates." );
+                    marketplaceCountInfo = _(
+                        "You currently control enough marketplaces that the exchange rate has peaked. Controlling additional marketplaces will not improve the exchange rate." );
                 }
                 else {
-                    marketplaceCountInfo = _( "You own %{count} Marketplaces. More Marketplaces improve resource exchange rates." );
+                    marketplaceCountInfo = _( "You currently control %{count} marketplaces. The more marketplaces you control, the better the exchange rate." );
                 }
 
                 StringReplace( marketplaceCountInfo, "%{count}", marketplaceEquivalentCount );
