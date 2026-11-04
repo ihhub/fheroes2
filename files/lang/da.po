@@ -6916,7 +6916,7 @@ msgstr ""
 "værdi"
 
 msgid "Set %{skill} Skill:"
-msgstr "Indstil %{skill} Evne:"
+msgstr "Indstil %{skill} evne:"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr "Indstil %{skill} startværdi. Højreklik: Nulstil evner til standard."
