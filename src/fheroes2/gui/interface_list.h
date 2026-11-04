@@ -75,7 +75,7 @@ namespace Interface
         virtual void ActionListSingleClick( Item & ) = 0;
         virtual void ActionListPressRight( Item & ) = 0;
 
-        virtual void ActionListLongPress( Item & /*unused*/ )
+        virtual void ActionListLongPress( Item & /*unused*/, const int /* id */ )
         {
             // Do nothing.
         }
@@ -478,7 +478,7 @@ namespace Interface
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
                 if ( static_cast<size_t>( id + 1 ) <= content->size() ) {
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
-                    ActionListLongPress( item );
+                    ActionListLongPress( item, id );
                 }
                 return true;
             }
@@ -565,7 +565,7 @@ namespace Interface
                         return true;
                     }
                     if ( le.isMouseLeftButtonPressedInArea( rtAreaItems ) ) {
-                        ActionListLongPress( item );
+                        ActionListLongPress( item, id );
                         return true;
                     }
 

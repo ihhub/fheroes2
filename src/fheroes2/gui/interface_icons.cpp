@@ -279,7 +279,7 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
     }
 }
 
-void Interface::HeroesIcons::ActionListLongPress( HEROES & item )
+void Interface::HeroesIcons::ActionListLongPress( HEROES & item, const int /* id */ )
 {
     if ( item ) {
         rotateHeroPortraits( item );

@@ -62,7 +62,10 @@ public:
         // Do nothing.
     }
 
-    void ActionListDoubleClick( Maps::FileInfo & ) override;
+    void ActionListDoubleClick( Maps::FileInfo & /* info */ ) override
+    {
+        _isDoubleClicked = true;
+    }
 
     void ActionListSingleClick( Maps::FileInfo & ) override
     {
@@ -84,11 +87,27 @@ public:
         _isForEditor = isForEditor;
     }
 
+    void ActionListLongPress( Maps::FileInfo & /* info */, const int id ) override
+    {
+        _isLongPressed = ( id == getCurrentId() );
+    }
+
+    void resetLongPressedState()
+    {
+        _isLongPressed = false;
+    }
+
+    bool isLongPressed() const
+    {
+        return _isLongPressed;
+    }
+
 private:
     int selectedSize{ Maps::ZERO };
     const int32_t _offsetX;
     bool _isDoubleClicked{ false };
     bool _isForEditor{ false };
+    bool _isLongPressed{ false };
 
     void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const;
     void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );
