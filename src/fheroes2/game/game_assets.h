@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,27 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace fheroes2
 {
-    void showTeamInfo();
+    class Image;
+    class Sprite;
+
+    enum class SupportedLanguage : uint8_t;
+}
+
+namespace Assets
+{
+    const fheroes2::Sprite & getImage( const int icnId, const uint32_t index );
+    uint32_t getImageCount( const int icnId );
+
+    // shapeId could be 0, 1, 2 or 3 only
+    const fheroes2::Image & getTileImage( const int tilId, const uint32_t index, const uint32_t shapeId );
+
+    // This function must be called only at the time of setting up a new language.
+    void updateLanguageDependentResources( const fheroes2::SupportedLanguage language, const bool loadOriginalAlphabet );
+
+    void resetAllScaledImages();
+    void resetScaledBackgroundImages();
 }

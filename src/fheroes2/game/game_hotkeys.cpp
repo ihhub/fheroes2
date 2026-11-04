@@ -31,7 +31,6 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include <string_view>
 #include <type_traits>
 #include <utility>
 
@@ -49,6 +48,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "version.h"
 
 namespace
 {
@@ -168,6 +168,8 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_AUTO_PLAYTEST )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|auto playtest" ), fheroes2::Key::KEY_A };
 
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE )]
@@ -347,7 +349,7 @@ namespace
     std::string getHotKeyFileContent()
     {
         std::ostringstream os;
-        os << "# fheroes2 hotkey file (saved by version " << Settings::GetVersion() << ")" << std::endl;
+        os << "# fheroes2 hotkey file (saved by version " ENGINE_VERSION ")" << std::endl;
         os << std::endl;
 
         Game::HotKeyCategory currentCategory = hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1].category;
@@ -454,22 +456,7 @@ void Game::HotKeysLoad( const std::string & filename )
                 const char * eventName = Translation::getNonTranslated( hotKeyEventInfo[eventId].name );
                 std::string value = config.StrParams( eventName );
                 if ( value.empty() ) {
-                    // TODO: remove this temporary workaround
-                    if ( eventName == std::string_view( "toggle auto combat mode" ) ) {
-                        value = config.StrParams( "toggle battle auto mode" );
-                        if ( value.empty() ) {
-                            continue;
-                        }
-                    }
-                    else if ( eventName == std::string_view( "quick combat" ) ) {
-                        value = config.StrParams( "finish the battle in auto mode" );
-                        if ( value.empty() ) {
-                            continue;
-                        }
-                    }
-                    else {
-                        continue;
-                    }
+                    continue;
                 }
 
                 value = StringUpper( value );
@@ -484,12 +471,13 @@ void Game::HotKeysLoad( const std::string & filename )
         }
     }
 
+    // TODO: do not save this file if no changes are present.
     HotKeySave();
 }
 
 void Game::HotKeySave()
 {
-    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), hotkeyFileName );
 
     StreamFile fileStream;
     if ( !fileStream.open( filename, "w" ) ) {
@@ -550,7 +538,7 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 
             const RecursionGuard recursionGuard( recursiveCall );
 
-            Player * player = Settings::Get().GetPlayers().GetCurrent();
+            Player * player = conf.GetPlayers().GetCurrent();
 
             // Do not allow to transfer control to/from AI during battle
             if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) && Battle::GetArena() == nullptr ) {

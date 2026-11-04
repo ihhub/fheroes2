@@ -28,10 +28,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "embedded_image.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -236,7 +236,7 @@ namespace
         listBox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listBox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listBox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        listBox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listBox.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         listBox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
         listBox.SetListContent( resolutions );
         listBox.updateScrollBarImage();
@@ -256,8 +256,15 @@ namespace
 
         RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
 
-        const fheroes2::Text title( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
-        title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 16, display );
+        fheroes2::Text title( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
+        if ( title.width() > listRoi.width ) {
+            // Make sure that the title isn't going beyond the dialog's borders.
+            title.fitToOneRow( roi.width - 10 );
+            title.draw( roi.x, roi.y + 16, roi.width, display );
+        }
+        else {
+            title.draw( listRoi.x, roi.y + 16, listRoi.width, display );
+        }
 
         display.render( background.totalArea() );
 

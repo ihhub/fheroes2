@@ -134,7 +134,7 @@ AI::SpellSelection AI::BattlePlanner::selectBestSpell( Battle::Arena & arena, co
             checkSelectBestSpell( spell, spellDragonSlayerValue( spell, friendly, enemies ) );
         }
         else if ( spell == Spell::TELEPORT ) {
-            checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, enemies ) );
+            checkSelectBestSpell( spell, spellTeleportValue( arena, spell, currentUnit, trueEnemies ) );
         }
         else if ( spell == Spell::EARTHQUAKE ) {
             checkSelectBestSpell( spell, spellEarthquakeValue( arena, spell, friendly ) );
@@ -436,6 +436,17 @@ double AI::BattlePlanner::spellEffectValue( const Spell & spell, const Battle::U
             // TODO: add the logic for the above cases.
             return 0;
         }
+
+        // There is no use in this spell if the target is going to attack one of our units anyway.
+        Battle::Arena * arena = Battle::GetArena();
+        assert( arena != nullptr );
+
+        const BerserkerTarget berserkerTarget = getBerserkerTarget( *arena, target );
+        if ( berserkerTarget.unit != nullptr && berserkerTarget.unit->GetCurrentOrArmyColor() == _myColor ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Berserker is useless for " << target.GetName() << ": it would go for our " << berserkerTarget.unit->GetName() )
+            return 0;
+        }
+
         ratio = 0.85;
         break;
     }
@@ -851,6 +862,11 @@ AI::SpellcastOutcome AI::BattlePlanner::spellTeleportValue( Battle::Arena & aren
                                                             const Battle::Units & enemies ) const
 {
     assert( spell == Spell::TELEPORT );
+
+    if ( currentUnit.Modes( Battle::SP_HYPNOTIZE ) ) {
+        // TODO: implement Teleport for Hypnotized units.
+        return {};
+    }
 
     // Teleport spell is useful in many cases. The current implementation focuses only on offensive movements for melee units.
 

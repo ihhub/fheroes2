@@ -74,6 +74,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "spell_storage.h"
 #include "visit.h"
 #include "world.h"
 #include "world_pathfinding.h"
@@ -443,6 +444,19 @@ namespace
             }
 
             if ( !kingdom.isVisited( index, objectType ) ) {
+                const uint32_t totalSpellCount = Spell::getTotalSpellsPerLevel( spell.Level() );
+
+                const auto & spells = hero.getMagicBookSpells();
+
+                const uint32_t ownedSpells = static_cast<uint32_t>(
+                    std::count_if( spells.begin(), spells.end(), [level = spell.Level()]( const auto & existingSpell ) { return existingSpell.Level() == level; } ) );
+                if ( ownedSpells == totalSpellCount ) {
+                    // Nothing to learn from this shrine.
+                    return false;
+                }
+
+                assert( ownedSpells < totalSpellCount );
+
                 // This shrine has not been visited by any hero. It's worth to do it.
                 return true;
             }
@@ -785,7 +799,9 @@ namespace
         case MP2::OBJ_ARTESIAN_SPRING:
         case MP2::OBJ_BARROW_MOUNDS:
         case MP2::OBJ_CAVE:
+        case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_EXCAVATION:
@@ -795,8 +811,10 @@ namespace
         case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_PEASANT_HUT:
         case MP2::OBJ_RUINS:
+        case MP2::OBJ_STABLES:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_WATER_ALTAR:
@@ -1995,7 +2013,9 @@ double AI::Planner::getFighterObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
         const Spell & spell = getSpellFromTile( tile );
-        return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1;
+        // This value needs a cap so that in games where there is a very strong AI opponent, E.G. Price of Loyalty scenario 8, the hero's most important
+        // goal won't be to learn a level 4 spell. Thus we cap this value slightly lower than the value of a pyramid's 10000 because that has a level 5 spell.
+        return std::min( 8500.0, spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1 );
     }
     case MP2::OBJ_ARENA:
     case MP2::OBJ_FORT:
@@ -2254,7 +2274,9 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_ARTESIAN_SPRING:
     case MP2::OBJ_BARROW_MOUNDS:
     case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
     case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_EARTH_ALTAR:
     case MP2::OBJ_EXCAVATION:
@@ -2264,8 +2286,10 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
     case MP2::OBJ_MAGIC_GARDEN:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_RUINS:
+    case MP2::OBJ_STABLES:
     case MP2::OBJ_TREE_CITY:
     case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_TROLL_BRIDGE:
     case MP2::OBJ_WAGON_CAMP:
     case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_WATER_ALTAR:
@@ -2275,7 +2299,7 @@ double AI::Planner::getFutureObjectValue( const Heroes & hero, const int32_t ind
 
         Maps::Tile & tile = world.getTile( index );
         const TileRestorer restorer( tile );
-        Maps::updateObjectInfoTile( tile, false );
+        Maps::updateObjectInfoTile( tile );
 
         return getObjectValue( hero, index, objectType, valueToIgnore, distanceToObject );
     }
@@ -2488,13 +2512,15 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
     ObjectValidator objectValidator( hero, _pathfinder, *this );
     ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator,
+    const bool isFutureObjectPredictionAllowed{ Difficulty::isFutureObjectPredictionAllowedForAI( Game::getDifficulty() ) };
+
+    const auto getObjectValue = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator, isFutureObjectPredictionAllowed,
                                  &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
         // Dimension door path does not include any objects on the way.
         if ( !isDimensionDoor ) {
             for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
                 const bool isValidObject = objectValidator.isCurrentlyValid( pair.first );
-                const int32_t dayToBecomeValid = objectValidator.whenGoingToBeValidInDays( pair.first );
+                const int32_t dayToBecomeValid = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( pair.first ) : 0;
 
                 if ( !isValidObject && dayToBecomeValid < 1 ) {
                     // This is not a valid object and it is not going to be valid in the future.
@@ -2511,6 +2537,8 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
                     extraValue = valueStorage.value( pair, 0 );
                 }
                 else {
+                    assert( isFutureObjectPredictionAllowed );
+
                     const auto path = _pathfinder.buildPath( pair.first, false );
                     assert( !path.empty() );
                     assert( path.back().GetIndex() == pair.first );
@@ -2577,7 +2605,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
 
     for ( const auto & [idx, objType] : _mapActionObjects ) {
         const bool isCurrentlyValid = objectValidator.isCurrentlyValid( idx );
-        const int32_t daysToBeAvailable = objectValidator.whenGoingToBeValidInDays( idx );
+        const int32_t daysToBeAvailable = isFutureObjectPredictionAllowed ? objectValidator.whenGoingToBeValidInDays( idx ) : 0;
 
         if ( !isCurrentlyValid && daysToBeAvailable < 1 ) {
             // This is not a valid object and it is not going to be valid in the future.
@@ -2611,6 +2639,7 @@ int AI::Planner::getPriorityTarget( Heroes & hero, double & maxPriority )
             value = valueStorage.value( { idx, objType }, dist );
         }
         else {
+            assert( isFutureObjectPredictionAllowed );
             value = valueStorage.futureValue( { idx, objType }, dist );
         }
 
@@ -2923,6 +2952,43 @@ void AI::Planner::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, 
             }
 
             reinforceCastle( *castle );
+
+            // If the hero has very little movement points, we can check whether it is worth keeping him in the castle for the next turn.
+            //
+            // Each step in monster speed gives 100 movement points (see Heroes::GetMaxMovePoints() method).
+            // So, we need to get the difference in speed between slowest and fastest units, and compare it with movement points left for this turn.
+            Army & heroArmy = hero.GetArmy();
+            const Troop * slowestTroop = heroArmy.GetSlowestTroop();
+            const Troop * fastestTroop = heroArmy.GetFastestTroop();
+
+            assert( slowestTroop != nullptr );
+            assert( fastestTroop != nullptr );
+
+            const uint32_t slowestSpeed{ slowestTroop->GetSpeed() };
+
+            uint32_t speedDifference{ fastestTroop->GetSpeed() - slowestSpeed };
+            if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                // Seems like leaving all slow units in the castle might give a movement boost next day.
+                const Troops castleBackup{ castle->GetArmy().getTroops() };
+                const Troops heroBackup{ heroArmy.getTroops() };
+
+                transferSlowestTroopsToGarrison( &hero, castle );
+
+                // Verify that the movement bonus is still applicable.
+                slowestTroop = heroArmy.GetSlowestTroop();
+                assert( slowestTroop != nullptr );
+
+                speedDifference = slowestTroop->GetSpeed() - slowestSpeed;
+                if ( speedDifference * 100U >= hero.GetMovePoints() ) {
+                    hero.SetModes( Heroes::SLEEPER );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << " stays in " << castle->GetName() << " castle till the next turn to get movement boost." )
+                }
+                else {
+                    // Nope. We can't get the movement bonus.
+                    castle->GetArmy().Assign( castleBackup );
+                    heroArmy.Assign( heroBackup );
+                }
+            }
         }
         else {
             OptimizeTroopsOrder( hero.GetArmy() );

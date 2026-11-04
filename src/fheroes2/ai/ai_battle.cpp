@@ -58,6 +58,7 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "monster.h"
 #include "monster_info.h"
 #include "resource.h"
 #include "settings.h"
@@ -157,7 +158,7 @@ namespace
         return bestAttackVector;
     }
 
-    double optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos )
+    double optimalAttackValue( const Battle::Unit & attacker, const Battle::Unit & target, const Battle::Position & attackPos, const double allEnemiesThreat )
     {
         assert( attackPos.isValidForUnit( attacker ) );
 
@@ -194,6 +195,49 @@ namespace
                                           attackTargetIdx );
         }
 
+        if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) || attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+            const bool isExtraLogicAllowed = Difficulty::isBasicAIBattleLogicApplicable( Game::getDifficulty(), attacker.isControlHuman() );
+            if ( !isExtraLogicAllowed ) {
+                return attackValue;
+            }
+
+            const uint32_t futureKilled = target.HowManyWillBeKilled( attacker.getPotentialDamage( target ) );
+
+            uint32_t ressurectPoints{ 0 };
+            if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+                ressurectPoints = futureKilled * attacker.Monster::GetHitPoints();
+            }
+            else {
+                // If this assertion blows up then you changed the above logic without changing it here.
+                assert( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) );
+
+                ressurectPoints = futureKilled * target.Monster::GetHitPoints();
+                ressurectPoints = std::min( ressurectPoints, attacker.GetMissingHitPoints() );
+            }
+
+            // The Soul Eater and HP Drain abilities affect the course of the battle in two ways:
+            // 1. During the turn, the target (and other powerful troops) would need to
+            //    attack the current monster (attacker) that is going to be resurrected.
+            constexpr double avgNumberOfPowerfulTargets{ 1.5 };
+            attackValue += ressurectPoints / avgNumberOfPowerfulTargets;
+
+            // 2. The attacker would become stronger and during the next turn would be able to make more damage.
+            //    As a result, the defender's army would make less turns.
+
+            // Average number of troops like attacker in attacker's army.
+            constexpr double avgNumOfAttackers{ 2.0 };
+
+            // Average number of turns needed to bring allEnemiesThreat to zero ( = number of battle turns).
+            constexpr double avgBattleTurns{ 5.0 };
+
+            // *0.5 is to get average hit points of the troop in the battle.
+            const double powerRatio = 1 + std::max( ressurectPoints - allEnemiesThreat / avgNumOfAttackers, 0.0 ) / ( attacker.GetHitPoints() * 0.5 );
+            const double killTimeRatio = 1 / powerRatio;
+            assert( killTimeRatio <= 1 );
+
+            attackValue += ( allEnemiesThreat / avgNumOfAttackers ) * avgBattleTurns * ( 1 - killTimeRatio );
+        }
+
         return attackValue;
     }
 
@@ -207,6 +251,10 @@ namespace
         // For each position near enemy units, select the maximum attack value among neighboring enemy melee units, and then add the sum of the attack values of
         // neighboring enemy archers to encourage the use of attacking positions that block these archers
         std::sort( enemies.begin(), enemies.end(), []( const Battle::Unit * unit1, const Battle::Unit * unit2 ) { return !unit1->isArchers() && unit2->isArchers(); } );
+
+        const double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), 0.0, [&attacker]( const double total, const Battle::Unit * unit ) {
+            return total + unit->evaluateThreatForUnit( attacker );
+        } );
 
         PositionValues result;
 
@@ -246,7 +294,7 @@ namespace
                     continue;
                 }
 
-                const double attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
+                const double attackValue = optimalAttackValue( attacker, *enemyUnit, pos, allEnemiesThreat );
 
                 if ( const auto [iter, inserted] = result.try_emplace( pos, attackValue ); !inserted ) {
                     // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
@@ -295,7 +343,7 @@ namespace
     }
 
     MeleeAttackOutcome BestAttackOutcome( const Battle::Unit & attacker, const Battle::Unit & defender, const PositionValues & valuesOfAttackPositions,
-                                          const std::function<bool( const Battle::Position & )> & posFilter = {} )
+                                          const double allEnemiesThreat, const std::function<bool( const Battle::Position & )> & posFilter = {} )
     {
         MeleeAttackOutcome bestOutcome;
 
@@ -332,7 +380,7 @@ namespace
             assert( posValueIter != valuesOfAttackPositions.end() );
 
             MeleeAttackOutcome current;
-            current.attackValue = optimalAttackValue( attacker, defender, pos );
+            current.attackValue = optimalAttackValue( attacker, defender, pos, allEnemiesThreat );
             current.positionValue = posValueIter->second;
             current.canAttackImmediately = Battle::Board::CanAttackTargetFromPosition( attacker, defender, posHeadIdx );
 
@@ -511,67 +559,12 @@ namespace
 
         Battle::Actions actions;
 
-        Battle::Board * board = Battle::Arena::GetBoard();
-        assert( board != nullptr );
-
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
-        const std::vector<Battle::Unit *> nearestUnits = board->GetNearestTroops( &currentUnit, {} );
-        assert( !nearestUnits.empty() );
-
-        // If the berserker is an archer, then just shoot at the nearest unit
-        if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, will shoot" )
-
-            const Battle::Unit * targetUnit = nearestUnits.front();
-            assert( targetUnit != nullptr );
-
-            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1, 0 );
-
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " shooting at enemy " << targetUnit->GetName() )
-
-            return actions;
-        }
-
-        AI::BattleTargetPair targetInfo;
-
-        // First, try to find a unit nearby that can be attacked on this turn
-        for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
-            assert( nearbyUnit != nullptr );
-
-            const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, currentUnit, *nearbyUnit );
-            if ( nearestCellInfo.idx == -1 ) {
-                continue;
-            }
-
-            if ( !Battle::Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, nearestCellInfo.idx ) ) {
-                continue;
-            }
-
-            targetInfo.cell = nearestCellInfo.idx;
-            targetInfo.unit = nearbyUnit;
-
-            break;
-        }
-
-        // If there is no unit to attack during this turn, then find the nearest one to try to attack it during subsequent turns
-        if ( targetInfo.cell == -1 ) {
-            for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
-                assert( nearbyUnit != nullptr );
-
-                const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, currentUnit, *nearbyUnit );
-                if ( nearestCellInfo.idx == -1 ) {
-                    continue;
-                }
-
-                targetInfo.cell = nearestCellInfo.idx;
-
-                break;
-            }
-        }
+        const AI::BerserkerTarget target = AI::getBerserkerTarget( arena, currentUnit );
 
         // There is no reachable unit in sight, skip the turn
-        if ( targetInfo.cell == -1 ) {
+        if ( target.unit == nullptr ) {
             actions.emplace_back( Battle::Command::SKIP, currentUnitUID );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " skipping the turn" )
@@ -579,18 +572,26 @@ namespace
             return actions;
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, target cell: " << targetInfo.cell )
+        if ( target.cell == -1 ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, will shoot" )
+
+            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, target.unit->GetUID(), -1, -1, 0 );
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " shooting at enemy " << target.unit->GetName() )
+
+            return actions;
+        }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, target cell: " << target.cell )
 
         // The target cell of the movement must be the cell that the unit's head will occupy
-        const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, targetInfo.cell );
+        const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, target.cell );
 
-        if ( targetInfo.unit ) {
-            const Battle::Unit * targetUnit = targetInfo.unit;
+        if ( target.canAttackThisTurn ) {
+            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, target.unit->GetUID(), ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ),
+                                  -1, -1 );
 
-            actions.emplace_back( Battle::Command::ATTACK, currentUnitUID, targetUnit->GetUID(), ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), -1,
-                                  -1 );
-
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << targetUnit->GetName() << " from cell " << moveTargetIdx )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " from cell " << moveTargetIdx )
         }
         else {
             actions.emplace_back( Battle::Command::MOVE, currentUnitUID, moveTargetIdx );
@@ -600,6 +601,58 @@ namespace
 
         return actions;
     }
+}
+
+AI::BerserkerTarget AI::getBerserkerTarget( Battle::Arena & arena, const Battle::Unit & unit )
+{
+    Battle::Board * board = Battle::Arena::GetBoard();
+    assert( board != nullptr );
+
+    const std::vector<Battle::Unit *> nearestUnits = board->GetNearestTroops( &unit, {} );
+    assert( !nearestUnits.empty() );
+
+    // A unit under the Berserker spell has no allies, so any adjacent unit forces it to fight in close combat. Unit::isHandFighting() cannot
+    // be used here, because the unit may not be under the spell yet, and then it would ignore the adjacent units of its own color.
+    const Battle::Indexes aroundIndexes = Battle::Board::GetAroundIndexes( unit );
+    const bool isNextToAnyUnit
+        = std::any_of( aroundIndexes.begin(), aroundIndexes.end(), []( const int32_t idx ) { return Battle::Board::GetCell( idx )->GetUnit() != nullptr; } );
+
+    // If the berserker is an archer, then just shoot at the nearest unit
+    if ( unit.isArchers() && !isNextToAnyUnit ) {
+        assert( nearestUnits.front() != nullptr );
+
+        return { nearestUnits.front(), -1, true };
+    }
+
+    // First, try to find a unit nearby that can be attacked on this turn
+    for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
+        assert( nearbyUnit != nullptr );
+
+        const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, unit, *nearbyUnit );
+        if ( nearestCellInfo.idx == -1 ) {
+            continue;
+        }
+
+        if ( !Battle::Board::CanAttackTargetFromPosition( unit, *nearbyUnit, nearestCellInfo.idx ) ) {
+            continue;
+        }
+
+        return { nearbyUnit, nearestCellInfo.idx, true };
+    }
+
+    // If there is no unit to attack during this turn, then find the nearest one to try to attack it during subsequent turns
+    for ( const Battle::Unit * nearbyUnit : nearestUnits ) {
+        assert( nearbyUnit != nullptr );
+
+        const CellDistanceInfo nearestCellInfo = findNearestCellNextToUnit( arena, unit, *nearbyUnit );
+        if ( nearestCellInfo.idx == -1 ) {
+            continue;
+        }
+
+        return { nearbyUnit, nearestCellInfo.idx, false };
+    }
+
+    return {};
 }
 
 AI::BattlePlanner & AI::BattlePlanner::Get()
@@ -1542,10 +1595,14 @@ double AI::BattlePlanner::getMeleeBestOutcome( Battle::Arena & arena, const Batt
 
     MeleeAttackOutcome bestOutcome;
 
+    const double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), 0.0, [&currentUnit]( const double total, const Battle::Unit * unit ) {
+        return total + unit->evaluateThreatForUnit( currentUnit );
+    } );
+
     for ( const Battle::Unit * enemy : enemies ) {
         assert( enemy != nullptr );
 
-        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat );
 
         if ( !outcome.canAttackImmediately ) {
             continue;
@@ -1715,14 +1772,18 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
     // Current unit can be under the influence of the Hypnotize spell
     const Battle::Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Battle::Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
+    const double allEnemiesThreat = std::accumulate( enemies.begin(), enemies.end(), 0.0, [&currentUnit]( const double total, const Battle::Unit * unit ) {
+        return total + unit->evaluateThreatForUnit( currentUnit );
+    } );
+
     // 1. Cover our archers and attack enemy units blocking them, if there are any. Units whose affiliation has been changed should not cover the archers, because
     // such units will block them instead of covering them.
     if ( currentUnit.GetArmyColor() == _myColor ) {
         const bool isAnyEnemyCanBeAttackedImmediately
-            = std::any_of( enemies.begin(), enemies.end(), [&currentUnit, &valuesOfAttackPositions]( const Battle::Unit * enemy ) {
+            = std::any_of( enemies.begin(), enemies.end(), [&currentUnit, &valuesOfAttackPositions, allEnemiesThreat]( const Battle::Unit * enemy ) {
                   assert( enemy != nullptr );
 
-                  const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                  const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat );
 
                   return outcome.canAttackImmediately;
               } );
@@ -1960,7 +2021,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                 for ( const Battle::Unit * enemy : adjacentEnemies ) {
                     assert( enemy != nullptr );
 
-                    const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                    const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat );
 
                     if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
                         bestOutcome = outcome;
@@ -2006,7 +2067,7 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
                     const Battle::Position pos = Battle::Position::GetReachable( currentUnit, target.cell );
                     assert( pos.isValidForUnit( currentUnit ) );
 
-                    const double attackValue = optimalAttackValue( currentUnit, *enemy, pos );
+                    const double attackValue = optimalAttackValue( currentUnit, *enemy, pos, allEnemiesThreat );
                     if ( bestAttackValue < attackValue ) {
                         bestAttackValue = attackValue;
 
@@ -2037,9 +2098,9 @@ AI::BattleTargetPair AI::BattlePlanner::meleeUnitDefense( Battle::Arena & arena,
         for ( const Battle::Unit * enemy : enemies ) {
             assert( enemy != nullptr );
 
-            const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, [this, &currentUnit]( const Battle::Position & pos ) {
-                return isPositionLocatedInDefendedArea( currentUnit, pos );
-            } );
+            const MeleeAttackOutcome outcome
+                = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, allEnemiesThreat,
+                                     [this, &currentUnit]( const Battle::Position & pos ) { return isPositionLocatedInDefendedArea( currentUnit, pos ); } );
 
             if ( !Battle::Board::isValidIndex( outcome.fromIndex ) ) {
                 continue;

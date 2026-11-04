@@ -119,6 +119,11 @@ namespace Interface
 
         static fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType );
 
+        void clearWarningMessage()
+        {
+            _warningMessage.reset( {} );
+        }
+
     private:
         class WarningMessage final
         {
@@ -203,6 +208,10 @@ namespace Interface
         void _resetMovableObjectInfo();
 
         void _removeObjectsAsAction( std::set<uint32_t> objectUIDs, const std::set<Maps::ObjectGroup> & groups );
+
+        bool _prepareMapForGameplay();
+
+        bool _runAutoPlaytest();
 
         EditorPanel _editorPanel;
 

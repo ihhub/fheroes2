@@ -27,15 +27,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -58,7 +54,7 @@ final class InnoExtract
 
     private static final Set<String> targetDirs = new HashSet<>( Arrays.asList( "data", "maps", "music", "anim" ) );
 
-    private static final String gogCdImageName = "homm2.gog";
+    private static final String GOG_CD_IMAGE = "homm2.gog";
 
     // Buffer size used for all I/O streaming operations.
     private static final int IO_BUFFER_SIZE = 65536;
@@ -250,7 +246,7 @@ final class InnoExtract
 
             // Check for GOG CD image (homm2.gog) which contains ANIM files
             final String fileName = pathParts[pathParts.length - 1].toLowerCase( Locale.ROOT );
-            if ( fileName.equals( gogCdImageName ) ) {
+            if ( fileName.equals( GOG_CD_IMAGE ) ) {
                 gogCdImageInfo = fileInfo;
                 continue;
             }
@@ -570,7 +566,7 @@ final class InnoExtract
     {
         final int lastSlash = lower.lastIndexOf( '/' );
         final String baseName = lastSlash >= 0 ? lower.substring( lastSlash + 1 ) : lower;
-        return baseName.equals( gogCdImageName );
+        return baseName.equals( GOG_CD_IMAGE );
     }
 
     // Returns true if the given lower-cased, forward-slash-normalised path belongs to
@@ -700,7 +696,7 @@ final class InnoExtract
         }
         System.arraycopy( stripped, 5, lzmaAlone, 13, stripped.length - 5 );
 
-        try ( final InputStream lzmaStream = new java.io.ByteArrayInputStream( lzmaAlone ) ) {
+        try ( final InputStream lzmaStream = new ByteArrayInputStream( lzmaAlone ) ) {
             try ( final org.tukaani.xz.LZMAInputStream decoder = new org.tukaani.xz.LZMAInputStream( lzmaStream ) ) {
                 return readAllBytes( decoder );
             }
@@ -723,7 +719,7 @@ final class InnoExtract
             dictSize = ( 2 | ( dictProp & 1 ) ) << ( dictProp / 2 + 11 );
         }
 
-        try ( final InputStream bis = new java.io.ByteArrayInputStream( data, 1, data.length - 1 ) ) {
+        try ( final InputStream bis = new ByteArrayInputStream( data, 1, data.length - 1 ) ) {
             try ( final org.tukaani.xz.LZMA2InputStream decoder = new org.tukaani.xz.LZMA2InputStream( bis, dictSize ) ) {
                 return readAllBytes( decoder );
             }

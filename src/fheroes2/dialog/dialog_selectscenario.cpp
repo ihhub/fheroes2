@@ -32,10 +32,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -294,7 +294,7 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/,
 void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQSBKG, 0 ), display, dst.x, dst.y );
+    fheroes2::Blit( Assets::getImage( ICN::REQSBKG, 0 ), display, dst.x, dst.y );
 
     if ( isSelected() ) {
         _renderSelectedScenarioInfo( display, dst );
@@ -361,10 +361,10 @@ void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected
 
 void ScenarioListBox::SelectMapSize( MapsFileInfoList & mapsList, const int selectedSize_ )
 {
-    const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-    const fheroes2::Image updatedScrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( mapsList.size() ),
-                                                                                      { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-    setScrollBarImage( updatedScrollbarSlider );
+    const fheroes2::Sprite & originalSlider = Assets::getImage( ICN::ESCROLL, 3 );
+    fheroes2::Image updatedScrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( mapsList.size() ),
+                                                                                { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+    setScrollBarImage( std::move( updatedScrollbarSlider ) );
     Maps::FileInfo currentScenario;
 
     if ( _size() > 0 ) {
@@ -414,44 +414,44 @@ void ScenarioListBox::_renderMapIcon( const uint16_t size, fheroes2::Display & d
         fheroes2::Blit( icon, display, coordX, coordY );
     }
     else {
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQUESTS, mapIconIndex ), display, coordX, coordY );
+        fheroes2::Blit( Assets::getImage( ICN::REQUESTS, mapIconIndex ), display, coordX, coordY );
     }
 }
 
 const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const PlayerColorsSet colors )
 {
     const uint32_t iconIndex = 19 + Color::Count( colors );
-    return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
+    return Assets::getImage( ICN::REQUESTS, iconIndex );
 }
 
 const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( const GameVersion version )
 {
     switch ( version ) {
     case GameVersion::SUCCESSION_WARS:
-        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 0 );
+        return Assets::getImage( ICN::MAP_TYPE_ICON, 0 );
     case GameVersion::PRICE_OF_LOYALTY:
-        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 1 );
+        return Assets::getImage( ICN::MAP_TYPE_ICON, 1 );
     case GameVersion::RESURRECTION:
-        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 2 );
+        return Assets::getImage( ICN::MAP_TYPE_ICON, 2 );
     default:
         // Did you add a new game version? Add the corresponding logic above!
         assert( 0 );
         break;
     }
 
-    return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
+    return Assets::getImage( ICN::UNKNOWN, 0 );
 }
 
 const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( const uint8_t condition )
 {
     uint32_t iconIndex = 30 + condition;
-    return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
+    return Assets::getImage( ICN::REQUESTS, iconIndex );
 }
 
 const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( const uint8_t condition )
 {
     uint32_t iconIndex = 36 + condition;
-    return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
+    return Assets::getImage( ICN::REQUESTS, iconIndex );
 }
 
 void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & /* unused */ )
@@ -514,12 +514,12 @@ const Maps::FileInfo * Dialog::SelectScenario( MapsFileInfoList & all, const boo
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
+    const fheroes2::Sprite & panel = Assets::getImage( ICN::REQSBKG, 0 );
     const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
     const fheroes2::ImageRestorer background( display, rt.x - fheroes2::shadowWidthPx, rt.y, rt.width + fheroes2::shadowWidthPx, rt.height + fheroes2::shadowWidthPx );
 
-    const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
+    const fheroes2::Sprite & shadow = Assets::getImage( ICN::REQSBKG, 1 );
     fheroes2::Blit( shadow, display, rt.x - fheroes2::shadowWidthPx, rt.y + fheroes2::shadowWidthPx );
 
     const fheroes2::Rect countPlayers( rt.x + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, rt.y + SCENARIO_LIST_ROW_OFFSET_Y, ICON_SIZE, SCENARIO_LIST_COLUMN_HEIGHT );

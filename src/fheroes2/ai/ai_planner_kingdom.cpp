@@ -622,7 +622,6 @@ void AI::Planner::updatePriorityAttackTarget( const Kingdom & kingdom, const Map
 
 fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
 {
-#if defined( WITH_DEBUG )
     class AIAutoControlModeCommitter
     {
     public:
@@ -649,7 +648,6 @@ fheroes2::GameMode AI::Planner::KingdomTurn( Kingdom & kingdom )
     };
 
     const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
-#endif
 
     _mapActionObjects.clear();
     _priorityTargets.clear();

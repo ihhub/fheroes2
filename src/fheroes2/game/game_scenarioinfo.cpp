@@ -30,7 +30,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
@@ -38,6 +37,7 @@
 #include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
@@ -192,14 +192,14 @@ namespace
         const fheroes2::Point pointOpponentInfo( roi.x + 8, roi.y + 181 );
         const fheroes2::Point pointClassInfo( roi.x + 8, roi.y + 265 );
 
-        const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+        const fheroes2::Sprite & scenarioBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
 
         const fheroes2::Rect scenarioBoxRoi( roi.x + ( roi.width - scenarioBox.width() ) / 2, roi.y + 24, scenarioBox.width(), scenarioBox.height() );
 
         fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
         fheroes2::addGradientShadow( scenarioBox, display, scenarioBoxRoi.getPosition(), { -5, 5 } );
 
-        const fheroes2::Sprite & difficultyCursor = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+        const fheroes2::Sprite & difficultyCursor = Assets::getImage( ICN::NGEXTRA, 62 );
 
         const int32_t difficultyCursorWidth = difficultyCursor.width();
         const int32_t difficultyCursorHeight = difficultyCursor.height();
@@ -214,7 +214,7 @@ namespace
         coordDifficulty.emplace_back( roi.x + 238, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
         coordDifficulty.emplace_back( roi.x + 315, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
 
-        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT_GOOD, 0 ).width();
+        const int32_t buttonSelectWidth = Assets::getImage( ICN::BUTTON_MAP_SELECT_GOOD, 0 ).width();
 
         fheroes2::Button buttonSelectMaps( scenarioBoxRoi.x + scenarioBoxRoi.width - 6 - buttonSelectWidth, scenarioBoxRoi.y + 5,
                                            isEvilInterface ? ICN::BUTTON_MAP_SELECT_EVIL : ICN::BUTTON_MAP_SELECT_GOOD, 0, 1 );
@@ -268,7 +268,7 @@ namespace
 
         // Draw difficulty icons.
         for ( int i = 0; i < 5; ++i ) {
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::DIFFICULTY_ICON_EASY + i, icnIndex );
+            const fheroes2::Sprite & icon = Assets::getImage( ICN::DIFFICULTY_ICON_EASY + i, icnIndex );
             fheroes2::Copy( icon, 0, 0, display, coordDifficulty[i] );
             fheroes2::addGradientShadow( icon, display, { coordDifficulty[i].x, coordDifficulty[i].y }, { -5, 5 } );
         }

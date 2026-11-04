@@ -2,16 +2,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\engine\image.cpp" />
+    <ClCompile Include="..\engine\image_color_conversion.cpp" />
     <ClCompile Include="..\engine\image_palette.cpp" />
     <ClCompile Include="..\engine\image_tool.cpp" />
     <ClCompile Include="..\engine\logging.cpp" />
     <ClCompile Include="..\engine\serialize.cpp" />
     <ClCompile Include="..\engine\system.cpp" />
+    <ClCompile Include="..\engine\zzlib.cpp" />
     <ClCompile Include="til2img.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\agg_file.h" />
     <ClInclude Include="..\engine\image.h" />
+    <ClInclude Include="..\engine\image_color_conversion.h" />
     <ClInclude Include="..\engine\image_palette.h" />
     <ClInclude Include="..\engine\image_tool.h" />
     <ClInclude Include="..\engine\logging.h" />
@@ -19,5 +22,6 @@
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\system.h" />
     <ClInclude Include="..\engine\tools.h" />
+    <ClInclude Include="..\engine\zzlib.h" />
   </ItemGroup>
 </Project>

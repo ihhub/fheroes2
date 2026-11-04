@@ -605,6 +605,11 @@ Troop * Troops::GetSlowestTroop() const
     return getBestMatchToCondition( Army::SlowestTroop );
 }
 
+Troop * Troops::GetFastestTroop() const
+{
+    return getBestMatchToCondition( Army::FastestTroop );
+}
+
 void Troops::MergeSameMonsterTroops()
 {
     for ( size_t slot = 0; slot < size(); ++slot ) {

@@ -41,6 +41,11 @@ namespace Compression
     // zero, the size of the decompressed data will be determined automatically.
     std::vector<uint8_t> unzipData( const uint8_t * src, const size_t srcSize, size_t realSize = 0 );
 
+    // Unzips the input data and puts the uncompressed data into the destination buffer.
+    // If the destination buffer is empty or the destination buffer size is not the same as the
+    // decompressed data size, the function returns false.
+    bool unzipData( const uint8_t * src, const size_t srcSize, uint8_t * dst, const size_t dstSize );
+
     // Zips the input data and returns the compressed data or an empty vector in case of an error.
     // Set isMaximumCompression only when compressing data not during the gameplay.
     std::vector<uint8_t> zipData( const uint8_t * src, const size_t srcSize, const bool isMaximumCompression );

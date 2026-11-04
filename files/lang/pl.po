@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 03:02+0000\n"
+"POT-Creation-Date: 2026-06-10 08:09+0000\n"
 "PO-Revision-Date: 2026-04-07 19:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -20,334 +20,6 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.8\n"
-
-msgid "SELECT"
-msgstr "WYBIERZ"
-
-msgid "ABOUT"
-msgstr "INFO"
-
-msgid "S"
-msgstr "M"
-
-msgid "M"
-msgstr "Ś"
-
-msgid "L"
-msgstr "D"
-
-msgid "X-L"
-msgstr "BD"
-
-msgid "ALL"
-msgstr "M-BD"
-
-msgid "EXIT"
-msgstr "WYJŚCIE"
-
-msgid "smallerButton|EXIT"
-msgstr "WYJDŹ"
-
-msgid "OKAY"
-msgstr "OK"
-
-msgid "HEROES"
-msgstr "BOHATEROWIE"
-
-msgid ""
-"TOWNS/\n"
-"CASTLES"
-msgstr ""
-"MIASTA/\n"
-"ZAMKI"
-
-msgid "CANCEL"
-msgstr "ANULUJ"
-
-msgid "ACCEPT"
-msgstr "ZGÓDŹ SIĘ"
-
-msgid "DECLINE"
-msgstr "ODRZUĆ"
-
-msgid "LEARN"
-msgstr "NAUKA"
-
-msgid "TRADE"
-msgstr "WYMIEŃ"
-
-msgid "YES"
-msgstr "TAK"
-
-msgid "NO"
-msgstr "NIE"
-
-msgid "DISMISS"
-msgstr "ZWOLNIJ"
-
-msgid "UPGRADE"
-msgstr "ULEPSZ"
-
-msgid "GIFT"
-msgstr "WYŚLIJ"
-
-msgid "RESTART"
-msgstr "OD NOWA"
-
-msgid "MAX"
-msgstr "MAKS"
-
-msgid "MIN"
-msgstr "MIN"
-
-msgid ""
-"D\n"
-"I\n"
-"S\n"
-"M\n"
-"I\n"
-"S\n"
-"S"
-msgstr ""
-"Z\n"
-"W\n"
-"O\n"
-"L\n"
-"N\n"
-"I\n"
-"J"
-
-msgid ""
-"E\n"
-"X\n"
-"I\n"
-"T"
-msgstr ""
-"W\n"
-"Y\n"
-"J\n"
-"Ś\n"
-"C\n"
-"I\n"
-"E"
-
-msgid ""
-"C\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"I\n"
-"G\n"
-"N"
-msgstr ""
-"K\n"
-"A\n"
-"M\n"
-"P\n"
-"A\n"
-"N\n"
-"I\n"
-"A"
-
-msgid ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-msgstr ""
-"S\n"
-"T\n"
-"A\n"
-"N\n"
-"D\n"
-"A\n"
-"R\n"
-"D"
-
-msgid ""
-"NEW\n"
-"GAME"
-msgstr ""
-"NOWA\n"
-"GRA"
-
-msgid ""
-"LOAD\n"
-"GAME"
-msgstr ""
-"WCZYTAJ\n"
-"GRĘ"
-
-msgid ""
-"RESTART\n"
-"GAME"
-msgstr "ZRESTARTUJ"
-
-msgid ""
-"SAVE\n"
-"GAME"
-msgstr ""
-"ZAPISZ\n"
-"GRĘ"
-
-msgid ""
-"QUICK\n"
-"SAVE"
-msgstr ""
-"SZYBKI\n"
-"ZAPIS"
-
-msgid "QUIT"
-msgstr "WYJŚCIE"
-
-msgid ""
-"START\n"
-"MAP"
-msgstr ""
-"URUCHOM\n"
-"MAPĘ"
-
-msgid ""
-"MAIN\n"
-"MENU"
-msgstr ""
-"MENU\n"
-"GŁÓWNE"
-
-msgid ""
-"NEW\n"
-"MAP"
-msgstr ""
-"NOWA\n"
-"MAPA"
-
-msgid ""
-"LOAD\n"
-"MAP"
-msgstr ""
-"WCZYTAJ\n"
-"MAPĘ"
-
-msgid ""
-"SAVE\n"
-"MAP"
-msgstr ""
-"ZAPISZ\n"
-"MAPĘ"
-
-msgid "INFO"
-msgstr "INFO"
-
-msgid ""
-"BATTLE\n"
-"ONLY"
-msgstr ""
-"TYLKO\n"
-"WALKA"
-
-msgid "SETTINGS"
-msgstr "OPCJE"
-
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"GRA STAN-\n"
-"DARDOWA"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "KAMPANIA"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"GRA DLA\n"
-"WIELU OSÓB"
-
-msgid "HOT SEAT"
-msgstr ""
-"ZMIANA\n"
-"MIEJSC"
-
-msgid "2 PLAYERS"
-msgstr "2 GRACZY"
-
-msgid "3 PLAYERS"
-msgstr "3 GRACZY"
-
-msgid "4 PLAYERS"
-msgstr "4 GRACZY"
-
-msgid "5 PLAYERS"
-msgstr "5 GRACZY"
-
-msgid "6 PLAYERS"
-msgstr "6 GRACZY"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr ""
-"ORYGINALNA\n"
-"KAMPANIA"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr ""
-"KAMPANIA\n"
-"Z ROZSZE-\n"
-"RZENIA"
-
-msgid "editorMainMenu|BACK"
-msgstr "ANULUJ"
-
-msgid ""
-"newMap|FROM\n"
-"SCRATCH"
-msgstr "OD NOWA"
-
-msgid "newMap|RANDOM"
-msgstr "LOSOWA"
-
-msgid "DIFFICULTY"
-msgstr "TRUDNOŚĆ"
-
-msgid "VIEW INTRO"
-msgstr "ZOBACZ INTRO"
-
-msgid "RESET"
-msgstr "RESET"
-
-msgid "START"
-msgstr "START"
-
-msgid ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-msgstr ""
-"P\n"
-"A\n"
-"T\n"
-"R\n"
-"O\n"
-"L"
-
-msgid "army|Few"
-msgstr "Mało"
 
 msgid "Warrior"
 msgstr "Wojownik"
@@ -430,6 +102,9 @@ msgid ""
 msgstr ""
 "Legion\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Mało"
 
 msgid "army|Several"
 msgstr "Parę"
@@ -765,8 +440,8 @@ msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"Przyjmę twą kapitulację i pozwolę ci odejść wraz z twą armią za cenę "
-"%{price} szt. złota."
+"Przyjmę twą kapitulację i pozwolę ci odejść wraz z twą armią za cenę %"
+"{price} szt. złota."
 
 msgid "View %{monster} info"
 msgstr "Informacje o jednostce: %{monster}"
@@ -1096,6 +771,9 @@ msgstr "Cieniowanie kursora"
 msgid "Movement Area"
 msgstr "Obszar ruchu"
 
+msgid "Hit Points"
+msgstr "Punkty życia"
+
 msgid "Toggle to display the turn order during the battle."
 msgstr "Przełącz, aby wyświetlić kolejność jednostek podczas bitwy."
 
@@ -1126,8 +804,13 @@ msgid "Toggle showing the movement area of a highlighted creature on or off."
 msgstr "Włącz lub wyłącz wyświetlanie obszaru ruchu podświetlonego stworzenia."
 
 msgid ""
-"Through eagle-eyed observation, %{name} is able to learn the magic spell "
-"%{spell}."
+"Toggle the hit points bar above each troop counter. The bar shows the "
+"remaining hit points of the top creature in the stack."
+msgstr ""
+
+msgid ""
+"Through eagle-eyed observation, %{name} is able to learn the magic spell %"
+"{spell}."
 msgstr ""
 "Dzięki swemu sokolemu wzrokowi, %{name} nauczył się zaklęcia '%{spell}'."
 
@@ -1371,8 +1054,8 @@ msgstr ""
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
-"battle will be the easiest one you will face for the rest of the war..."
-"traitor."
+"battle will be the easiest one you will face for the rest of the "
+"war...traitor."
 msgstr ""
 "Po zmianie stron będziesz mieć trzy zamki, a przeciwnik tylko jeden. To "
 "będzie najłatwiejsza z czekających cię bitew... zdrajco."
@@ -3014,9 +2697,6 @@ msgstr "Strzały"
 msgid "Shots Left"
 msgstr "Pozostałe strzały"
 
-msgid "Hit Points"
-msgstr "Punkty życia"
-
 msgid "Hit Points Left"
 msgstr "Aktualne PŻ"
 
@@ -3089,9 +2769,6 @@ msgstr ""
 "%{offer} %{monster} chce dołączyć do twojej armii za cenę %{gold} szt. "
 "złota.\n"
 "Zgadzasz się?"
-
-msgid "(Rate: %{percent})"
-msgstr "(Przyłącza się %{percent}% oddziału)"
 
 msgid "off"
 msgstr "wyłączone"
@@ -3344,6 +3021,10 @@ msgstr "Włączenie V-Sync może rozwiązać problemy z migocącym ekranem."
 msgid "Show extra information such as FPS and current time."
 msgstr "Pokaż dodatkowe informacje jak na przykład FPS lub aktualną godzinę."
 
+#, fuzzy
+msgid "hotkeys|All Categories"
+msgstr "opcje walki"
+
 msgid "Hotkey: "
 msgstr "Skrót klaw.: "
 
@@ -3355,6 +3036,16 @@ msgstr "Zdarzenie: "
 
 msgid "Hot Keys:"
 msgstr "Skróty klawiszowe:"
+
+#, fuzzy
+msgid "Click here to select:\n"
+msgstr ""
+"Kliknij tutaj aby\n"
+"wybrać potwora."
+
+#, fuzzy
+msgid "Select hotkeys category"
+msgstr "Wybierz potwora:"
 
 msgid "Hide"
 msgstr "Ukryj"
@@ -3441,6 +3132,31 @@ msgid "n/a"
 msgstr "nd."
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Targowisko pozwala na wymianę jednego typu surowca na inny. Im więcej "
+"targowisk posiadasz tym lepszy kurs wymiany."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Targowisko pozwala na wymianę jednego typu surowca na inny. Im więcej "
+"targowisk posiadasz tym lepszy kurs wymiany."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3474,6 +3190,9 @@ msgstr "Twoje surowce"
 
 msgid "Available Trades"
 msgstr "Oferta"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "strzeżona przez %{count} %{monster}"
@@ -3601,8 +3320,14 @@ msgstr "Rekrutuj:"
 msgid "Recruit selected monsters."
 msgstr "Rekrutuj wybrane stworzenia."
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "Select maximum monsters to be recruited."
 msgstr "Ustaw maksymalną liczbę stworzeń możliwych do zrekrutowania."
+
+msgid "MIN"
+msgstr "MIN"
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Ustaw jedno stworzenie do zrekrutowania."
@@ -4377,6 +4102,9 @@ msgstr ""
 msgid "Click to make selection."
 msgstr "Kliknij, aby dokonać wyboru."
 
+msgid "SELECT"
+msgstr "WYBIERZ"
+
 msgid "%{objects} cannot be placed on water."
 msgstr "%{objects} nie mogą być umieszczone na wodzie."
 
@@ -4452,30 +4180,6 @@ msgstr ""
 "Czy chcesz wrócić do głównego menu? (Wszelkie niezapisane zmiany w bieżącej "
 "mapie zostaną utracone.)"
 
-msgid "Unsaved Changes"
-msgstr "Niezapisane zmiany"
-
-msgid ""
-"This map has either terrain changes, undo history or has not yet been saved "
-"to a file.\n"
-"\n"
-"Do you wish to save the current map?"
-msgstr ""
-"Ta mapa zawiera zmiany terenu, historię cofania lub nie została jeszcze "
-"zapisana do pliku.\n"
-"\n"
-"Czy chcesz zapisać bieżącą mapę?"
-
-msgid "Unplayable Map"
-msgstr "Niegrywalna mapa"
-
-msgid ""
-"This map is not playable. You need at least one human player for the map to "
-"be playable."
-msgstr ""
-"Ta mapa nie jest grywalna. Na mapie musi być przynajmniej jeden gracz-"
-"człowiek."
-
 msgid "Start Map"
 msgstr "Uruchom mapę"
 
@@ -4486,8 +4190,10 @@ msgstr ""
 "Czy chcesz opuścić edytor i uruchomić mapę? (Wszelkie niezapisane zmiany w "
 "bieżącej mapie zostaną utracone.)"
 
-msgid "Create a new map from scratch."
-msgstr "Utwórz nową mapę od podstaw."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+"Stwórz nową mapę od podstaw, albo skorzystaj z generatora losowych map."
 
 msgid "New Map"
 msgstr "Nowa Mapa"
@@ -4506,6 +4212,13 @@ msgstr "Zapisz obecną mapę."
 
 msgid "Quit out of the map editor."
 msgstr "Wyjdź z edytora map."
+
+#, fuzzy
+msgid "Auto Playtest"
+msgstr "Testerzy gry"
+
+msgid "Run an automatic playtest of the map."
+msgstr ""
 
 msgid "Return to the game's Main Menu."
 msgstr "Wróć do głównego menu gry."
@@ -4581,6 +4294,33 @@ msgstr "Mapa zapisana do: "
 
 msgid "Failed to save the map."
 msgstr "Nie udało się zapisać mapy."
+
+msgid "The selected object has been moved to the top layer."
+msgstr ""
+
+msgid "Unsaved Changes"
+msgstr "Niezapisane zmiany"
+
+msgid ""
+"This map has either terrain changes, undo history or has not yet been saved "
+"to a file.\n"
+"\n"
+"Do you wish to save the current map?"
+msgstr ""
+"Ta mapa zawiera zmiany terenu, historię cofania lub nie została jeszcze "
+"zapisana do pliku.\n"
+"\n"
+"Czy chcesz zapisać bieżącą mapę?"
+
+msgid ""
+"This map is not playable. You need at least one human player for the map to "
+"be playable."
+msgstr ""
+"Ta mapa nie jest grywalna. Na mapie musi być przynajmniej jeden gracz-"
+"człowiek."
+
+msgid "Unplayable Map"
+msgstr "Niegrywalna mapa"
 
 msgid "Used to place %{object}."
 msgstr "Umieść %{object}."
@@ -4889,11 +4629,6 @@ msgstr "Usuń istniejący język."
 
 msgid "Failed to generate a random map with given parameters."
 msgstr "Nie udało się wygenerować losowej mapy z podanymi parametrami."
-
-msgid ""
-"Create a new map, either from scratch or using the random map generator."
-msgstr ""
-"Stwórz nową mapę od podstaw, albo skorzystaj z generatora losowych map."
 
 msgid "Exit the Editor and return to the game's Main Menu."
 msgstr "Wyjdź z edytora i wróć do głównego menu gry."
@@ -5270,9 +5005,6 @@ msgstr "Żaden artefakt nie będzie dany jako nagroda."
 msgid "Delete an artifact from the reward."
 msgstr "Usuń artefakt z nagrody."
 
-msgid "Day: %{day} Week: %{week} Month: %{month}"
-msgstr "Dzień: %{day} Tydzień: %{week} Miesiąc: %{month}"
-
 msgid "difficulty|Easy"
 msgstr "Łatwy"
 
@@ -5288,40 +5020,460 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Niemożliwy"
 
+msgid "ABOUT"
+msgstr "INFO"
+
+msgid "S"
+msgstr "M"
+
+msgid "M"
+msgstr "Ś"
+
+msgid "L"
+msgstr "D"
+
+msgid "X-L"
+msgstr "BD"
+
+msgid "ALL"
+msgstr "M-BD"
+
+msgid "EXIT"
+msgstr "WYJŚCIE"
+
+msgid "smallerButton|EXIT"
+msgstr "WYJDŹ"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "HEROES"
+msgstr "BOHATEROWIE"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"MIASTA/\n"
+"ZAMKI"
+
+msgid "CANCEL"
+msgstr "ANULUJ"
+
+msgid "ACCEPT"
+msgstr "ZGÓDŹ SIĘ"
+
+msgid "DECLINE"
+msgstr "ODRZUĆ"
+
+msgid "LEARN"
+msgstr "NAUKA"
+
+msgid "TRADE"
+msgstr "WYMIEŃ"
+
+msgid "YES"
+msgstr "TAK"
+
+msgid "NO"
+msgstr "NIE"
+
+msgid "DISMISS"
+msgstr "ZWOLNIJ"
+
+msgid "UPGRADE"
+msgstr "ULEPSZ"
+
+msgid "GIFT"
+msgstr "WYŚLIJ"
+
+msgid "RESTART"
+msgstr "OD NOWA"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"Z\n"
+"W\n"
+"O\n"
+"L\n"
+"N\n"
+"I\n"
+"J"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"W\n"
+"Y\n"
+"J\n"
+"Ś\n"
+"C\n"
+"I\n"
+"E"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"N\n"
+"I\n"
+"A"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"NOWA\n"
+"GRA"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"WCZYTAJ\n"
+"GRĘ"
+
+msgid ""
+"RESTART\n"
+"GAME"
+msgstr "ZRESTARTUJ"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"ZAPISZ\n"
+"GRĘ"
+
+msgid ""
+"QUICK\n"
+"SAVE"
+msgstr ""
+"SZYBKI\n"
+"ZAPIS"
+
+msgid "QUIT"
+msgstr "WYJŚCIE"
+
+msgid ""
+"NEW\n"
+"MAP"
+msgstr ""
+"NOWA\n"
+"MAPA"
+
+msgid ""
+"LOAD\n"
+"MAP"
+msgstr ""
+"WCZYTAJ\n"
+"MAPĘ"
+
+msgid ""
+"START\n"
+"MAP"
+msgstr ""
+"URUCHOM\n"
+"MAPĘ"
+
+msgid ""
+"SAVE\n"
+"MAP"
+msgstr ""
+"ZAPISZ\n"
+"MAPĘ"
+
+msgid ""
+"MAIN\n"
+"MENU"
+msgstr ""
+"MENU\n"
+"GŁÓWNE"
+
+msgid ""
+"AUTO\n"
+"PLAYTEST"
+msgstr ""
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"TYLKO\n"
+"WALKA"
+
+msgid "SETTINGS"
+msgstr "OPCJE"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"GRA STAN-\n"
+"DARDOWA"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr "KAMPANIA"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"GRA DLA\n"
+"WIELU OSÓB"
+
+msgid "HOT SEAT"
+msgstr ""
+"ZMIANA\n"
+"MIEJSC"
+
+msgid "2 PLAYERS"
+msgstr "2 GRACZY"
+
+msgid "3 PLAYERS"
+msgstr "3 GRACZY"
+
+msgid "4 PLAYERS"
+msgstr "4 GRACZY"
+
+msgid "5 PLAYERS"
+msgstr "5 GRACZY"
+
+msgid "6 PLAYERS"
+msgstr "6 GRACZY"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"ORYGINALNA\n"
+"KAMPANIA"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"KAMPANIA\n"
+"Z ROZSZE-\n"
+"RZENIA"
+
+msgid "editorMainMenu|BACK"
+msgstr "ANULUJ"
+
+msgid ""
+"newMap|FROM\n"
+"SCRATCH"
+msgstr "OD NOWA"
+
+msgid "newMap|RANDOM"
+msgstr "LOSOWA"
+
+msgid "DIFFICULTY"
+msgstr "TRUDNOŚĆ"
+
+msgid "VIEW INTRO"
+msgstr "ZOBACZ INTRO"
+
+msgid "RESET"
+msgstr "RESET"
+
+msgid "START"
+msgstr "START"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+
+#, fuzzy
+msgid "Auto Playtest Results"
+msgstr "Testerzy gry"
+
+msgid "1 playthrough"
+msgid_plural "%{count} playthroughs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid " playthrough(s) reached the specified time limit"
+msgstr ""
+
+#, fuzzy
+msgid "Click to close the dialog."
+msgstr "Kliknij, aby wybrać kolor."
+
+msgid "%{color} player"
+msgstr "%{color} gracz"
+
+msgid "Won %{percent}% of playthroughs."
+msgstr ""
+
+#, fuzzy
+msgid "Failed to prepare the map for auto playtest."
+msgstr "Nie udało się zapisać mapy."
+
+msgid "autoPlaytest|Number of playthroughs:"
+msgstr ""
+
+msgid "Set the number of playthroughs."
+msgstr ""
+
+msgid "autoPlaytest|Max days per playthrough:"
+msgstr ""
+
+msgid "Set the maximum number of days that each playthrough is run for."
+msgstr ""
+
+msgid "autoPlaytest|Last day of playthrough:"
+msgstr ""
+
+#, fuzzy
+msgid "autoPlaytest|Animation"
+msgstr "Szybkość"
+
+#, fuzzy
+msgid "autoPlaytest|Animation speed:"
+msgstr "Szybkość"
+
+msgid "Set animation speed during playthrough."
+msgstr ""
+
+msgid "autoPlaytest|Sound Effects"
+msgstr ""
+
+msgid "Left-clicking at any point will interrupt the playtest."
+msgstr ""
+
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+"Pozwala ci zmienić klasę gracza. Opcja ta nie zawsze jest aktywna. W "
+"zależności od scenariusza, gracz może otrzymać dodatkowe miasta oraz/lub "
+"bohaterów niezgodne z przynależną im klasą."
+
+#, fuzzy
+msgid "Click to run an automated map playtest."
+msgstr "Kliknij, aby wrócić do głównego menu."
+
+#, fuzzy
+msgid "Toggle animation during playthroughs."
+msgstr "Włącz/wyłącz animację obiektów."
+
+msgid "Toggle sound effects during playthroughs."
+msgstr ""
+
+msgid ""
+"Auto playtest\n"
+"(playthrough %{current} of %{total})"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Do you want to interrupt the automatic playtest? The effect will take place "
+"only on the next turn."
+msgstr ""
+"Czy chcesz odzyskać kontrolę z rąk AI? Efekt zadziała tylko w następnej "
+"turze."
+
 msgid "and more..."
 msgstr "i więcej..."
 
-msgid "Easy"
-msgstr "Łatwa"
-
-msgid "Normal"
-msgstr "Normalnie"
-
-msgid "Hard"
-msgstr "Trudna"
-
-msgid "Campaign Difficulty"
+#, fuzzy
+msgid "campaignDifficulty|Decreased"
 msgstr "Stopień trudności kampanii"
 
+#, fuzzy
+msgid "campaignDifficulty|Default"
+msgstr "Stopień trudności kampanii"
+
+#, fuzzy
+msgid "campaignDifficulty|Increased"
+msgstr "Stopień trudności kampanii"
+
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the game's story with less challenge. "
-"The AI will be weaker than at Normal difficulty."
+"Choose this difficulty to experience the game's story with decreased "
+"challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Wybierz tę opcję jeśli cenisz fabułę ponad wyzwanie. AI rozgrywa misje "
 "gorzej niż przy normalnym poziomie trudności."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to experience the campaign as per the original design."
+"Choose this difficulty to experience the campaign as close to the original "
+"design as possible with the fheroes2 AI."
 msgstr ""
 "Wybierz tę opcję by cieszyć się kampanią zgodnie z jej oryginalnymi "
 "założeniami."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want more challenge. The AI will be stronger "
-"than at Normal difficulty."
+"Choose this difficulty if you want more of a challenge. The AI will be "
+"stronger than at the default difficulty."
 msgstr ""
 "Wybierz tę opcję jeśli jesteś gotów na wyzwanie. AI rozgrywa misje lepiej "
 "niż przy normalnym poziomie trudności."
+
+msgid "Campaign Difficulty"
+msgstr "Stopień trudności kampanii"
 
 msgid ""
 "Congratulations!\n"
@@ -5695,6 +5847,10 @@ msgstr "otwórz główne menu gry"
 msgid "hotkey|toggle passability"
 msgstr "pokaż/ukryj przejezdność"
 
+#, fuzzy
+msgid "hotkey|auto playtest"
+msgstr "w lewo"
+
 msgid "hotkey|re-generate random map"
 msgstr "zregeneruj losową mapę"
 
@@ -5976,6 +6132,9 @@ msgstr "Ekran miasta"
 msgid "Army Actions"
 msgstr "Akcje armii"
 
+msgid "fheroes2 Resurrection Team presents"
+msgstr "fheroes2 Resurrection Team prezentuje"
+
 msgid "The save file is corrupted."
 msgstr "Plik z zapisaną grą jest uszkodzony."
 
@@ -6041,9 +6200,6 @@ msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Wróć do głównego menu."
-
-msgid "fheroes2 Resurrection Team presents"
-msgstr "fheroes2 Resurrection Team prezentuje"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
@@ -6304,8 +6460,8 @@ msgstr[1] "Musisz pokonać sprzymierzonych %{enemies}."
 msgstr[2] "Musisz pokonać sprzymierzonych %{enemies}."
 
 msgid ""
-"The alliance consisting of %{allies} and you must defeat the enemy "
-"%{enemies}."
+"The alliance consisting of %{allies} and you must defeat the enemy %"
+"{enemies}."
 msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
@@ -6482,6 +6638,9 @@ msgid ""
 "land."
 msgstr ""
 "%{color}, twoi bohaterowie cię opuszczają i zostajesz wygnany z tej krainy."
+
+msgid "Day: %{day} Week: %{week} Month: %{month}"
+msgstr "Dzień: %{day} Tydzień: %{week} Miesiąc: %{month}"
 
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
@@ -6690,15 +6849,6 @@ msgstr ""
 "zawsze będzie rozpoczynać grę w określonym miejscu. Niektóre pozycje mogą "
 "być zajęte jedynie przez komputer, a inne tylko przez graczy - ludzi."
 
-msgid ""
-"This lets you change the class of a player. Classes are not always "
-"changeable. Depending on the scenario, a player may receive additional towns "
-"and/or heroes not of their primary alignment."
-msgstr ""
-"Pozwala ci zmienić klasę gracza. Opcja ta nie zawsze jest aktywna. W "
-"zależności od scenariusza, gracz może otrzymać dodatkowe miasta oraz/lub "
-"bohaterów niezgodne z przynależną im klasą."
-
 msgid "Handicap"
 msgstr "Utrudnienie"
 
@@ -6712,9 +6862,6 @@ msgstr ""
 "utrudnienia. Gracze z utrudnieniami zaczynają z mniejszą ilością zasobów "
 "oraz otrzymują o 15% lub 30% mniej zasobów co turę, odpowiednio dla "
 "niewielkich i znacznych utrudnień."
-
-msgid "%{color} player"
-msgstr "%{color} gracz"
 
 msgid "No Handicap"
 msgstr "Brak utrudnień"
@@ -6787,6 +6934,10 @@ msgid "Click to switch between keyboard types."
 msgstr "Kliknij, aby zmienić pomiędzy rodzajami klawiatur."
 
 msgid "Keyboard|SPACE"
+msgstr "SPACJA"
+
+#, fuzzy
+msgid "Keyboard|ENTER"
 msgstr "SPACJA"
 
 msgid "Change language"
@@ -6908,6 +7059,9 @@ msgstr "Esperanto"
 
 msgid "Slow"
 msgstr "Wolno"
+
+msgid "Normal"
+msgstr "Normalnie"
 
 msgid "Fast"
 msgstr "Szybko"
@@ -7252,8 +7406,8 @@ msgstr "Kaplica pierwszego kręgu"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
-"In exchange for your protection, they agree to teach you a simple spell - "
-"'%{spell}'."
+"In exchange for your protection, they agree to teach you a simple spell - '%"
+"{spell}'."
 msgstr ""
 "Trafiasz do małej kaplicy, którą opiekuje się grupa akolitów.\n"
 "W zamian za ochronę proponują nauczyć cię prostego zaklęcia - '%{spell}'."
@@ -7263,8 +7417,8 @@ msgstr "Kaplica drugiego kręgu"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
-"In exchange for your protection, they agree to teach you a spell - "
-"'%{spell}'."
+"In exchange for your protection, they agree to teach you a spell - '%"
+"{spell}'."
 msgstr ""
 "Trafiasz do bogato zdobionej kaplicy, którą opiekuje się grupa pulchnych "
 "mnichów.\n"
@@ -7280,8 +7434,8 @@ msgid ""
 msgstr ""
 "Zbliżasz się do urządzonej z przepychem kaplicy, którą opiekuje się kilku "
 "wysokich rangą kapłanów.\n"
-"W zamian za ochronę proponują nauczyć cię skomplikowanego zaklęcia - "
-"'%{spell}'."
+"W zamian za ochronę proponują nauczyć cię skomplikowanego zaklęcia - '%"
+"{spell}'."
 
 msgid ""
 "\n"
@@ -7308,8 +7462,8 @@ msgstr ""
 "Niestety nie masz Księgi Zaklęć, w której można zapisać zaklęcie."
 
 msgid ""
-"You approach the hut and observe a witch inside studying an ancient tome on "
-"%{skill}.\n"
+"You approach the hut and observe a witch inside studying an ancient tome on %"
+"{skill}.\n"
 "\n"
 msgstr ""
 "Wchodzisz do chaty i widzisz wiedźmę uczącą umiejętności %{skill}.\n"
@@ -7615,11 +7769,11 @@ msgstr ""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
-"ocean. Grateful, he rewards you for your act of kindness by giving you the "
-"%{art}."
+"ocean. Grateful, he rewards you for your act of kindness by giving you the %"
+"{art}."
 msgstr ""
-"Uratowałeś rozbitka przed utonięciem. W podzięce za uratowanie, dostajesz "
-"%{art}."
+"Uratowałeś rozbitka przed utonięciem. W podzięce za uratowanie, dostajesz %"
+"{art}."
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
@@ -7627,8 +7781,8 @@ msgstr ""
 "złota."
 
 msgid ""
-"A leprechaun offers you the %{art} for the small price of %{gold} Gold and "
-"%{count} %{res}."
+"A leprechaun offers you the %{art} for the small price of %{gold} Gold and %"
+"{count} %{res}."
 msgstr ""
 "%{art} - leprekaun proponuje, że sprzeda ci ten artefakt za %{gold} sztuk "
 "złota i %{count} jednostki surowca (%{res})."
@@ -7657,8 +7811,8 @@ msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
 "that he is willing to give the %{art} to the first wise person he meets."
 msgstr ""
-"Trafiasz do skromnego domku starego pustelnika. Pustelnik oznajmia, że  "
-"%{art} będzie należeć do pierwszej mądrej osoby, która go odwiedzi."
+"Trafiasz do skromnego domku starego pustelnika. Pustelnik oznajmia, że  %"
+"{art} będzie należeć do pierwszej mądrej osoby, która go odwiedzi."
 
 msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
@@ -8088,8 +8242,8 @@ msgstr ""
 
 msgid "All of your %{monsters} have been upgraded into %{monsters2}."
 msgstr ""
-"Twoje jednostki, %{monsters}, zostają ulepszone. W twojej armii są teraz "
-"%{monsters2}."
+"Twoje jednostki, %{monsters}, zostają ulepszone. W twojej armii są teraz %"
+"{monsters2}."
 
 msgid ""
 "A blacksmith working at the foundry offers to convert all Pikemen and "
@@ -8217,8 +8371,8 @@ msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and receive %{exp} experience points and "
-"%{count} gold."
+"battle, you slay the monster and receive %{exp} experience points and %"
+"{count} gold."
 msgstr ""
 "Demon wykrzykując wyzywa Cię na pojedynek po czym atakuje. Po krótkiej, "
 "rozpaczliwej walce, zabijasz potwora i otrzymujesz %{exp} punktów "
@@ -11079,8 +11233,8 @@ msgstr "Zaklęta Klepsydra"
 msgid ""
 "The %{name} extends the duration of all the hero's spells by %{count} turns."
 msgstr ""
-"%{name} przedłuża czas trwania wszystkich zaklęć rzucanych przez bohatera o "
-"%{count} tury."
+"%{name} przedłuża czas trwania wszystkich zaklęć rzucanych przez bohatera o %"
+"{count} tury."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
@@ -11227,8 +11381,8 @@ msgid ""
 "The %{name} causes the hero's lightning spells to do %{count} percent more "
 "damage to enemy troops."
 msgstr ""
-"%{name} sprawia, że zaklęcia błyskawic rzucane przez bohatera zadają "
-"%{count} procent więcej obrażeń wrogim oddziałom."
+"%{name} sprawia, że zaklęcia błyskawic rzucane przez bohatera zadają %"
+"{count} procent więcej obrażeń wrogim oddziałom."
 
 msgid ""
 "While waiting out a storm, a lighting bolt strikes a nearby cottage's "
@@ -12185,18 +12339,18 @@ msgid "Cure"
 msgstr "Leczenie"
 
 msgid ""
-"Removes all negative spells cast upon one of your units, and restores up to "
-"%{count} HP per level of spell power."
+"Removes all negative spells cast upon one of your units, and restores up to %"
+"{count} HP per level of spell power."
 msgstr ""
-"Usuwa wszelkie negatywne efekty zaklęć z wybranej jednostki i przywraca do "
-"%{count} punktów życia na poziom mocy zaklęć."
+"Usuwa wszelkie negatywne efekty zaklęć z wybranej jednostki i przywraca do %"
+"{count} punktów życia na poziom mocy zaklęć."
 
 msgid "Mass Cure"
 msgstr "Grupowe Leczenie"
 
 msgid ""
-"Removes all negative spells cast upon your forces, and restores up to "
-"%{count} HP per level of spell power, per creature."
+"Removes all negative spells cast upon your forces, and restores up to %"
+"{count} HP per level of spell power, per creature."
 msgstr ""
 "Usuwa wszystkie negatywne efekty zaklęć z twoich jednostek i przywraca "
 "każdemu stworzeniu do %{count} punktów życia na poziom mocy zaklęć."
@@ -12375,8 +12529,8 @@ msgid "Hypnotize"
 msgstr "Hipnoza"
 
 msgid ""
-"Brings a single enemy unit under your control if its hits are less than "
-"%{count} times the caster's spell power."
+"Brings a single enemy unit under your control if its hits are less than %"
+"{count} times the caster's spell power."
 msgstr ""
 "Sprawia że wybrany oddział przeciwnika dostaje się pod twoją kontrolę, pod "
 "warunkiem że jego punkty życia są mniejsze niż moc zaklęć rzucającego czar "
@@ -12429,8 +12583,10 @@ msgstr "Znacznie zwiększa umiejętność ataku jednostki w walce ze smokami."
 msgid "Blood Lust"
 msgstr "Żądza Krwi"
 
-msgid "Increases a unit's attack skill."
-msgstr "Zwiększa umiejętność ataku jednostki."
+msgid ""
+"Increases a unit's attack skill by 3. The effect lasts for 3 rounds of "
+"combat, regardless of spell power."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Ożywienie Martwych"
@@ -12547,10 +12703,12 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Przywołanie Łodzi"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
-"A friendly boat is one which you just built or were the most recent player "
-"to occupy."
+"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"adjacent shore location. A friendly boat is one which you just built or were "
+"the most recent player to occupy. A neutral boat is one which no player has "
+"occupied yet."
 msgstr ""
 "Przywołuje najbliższą, niezajętą, własną łódź na sąsiadujący z tobą fragment "
 "wybrzeża. Własna łódź to taka, która została przez ciebie zbudowana lub "
@@ -12785,6 +12943,30 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "(Rate: %{percent})"
+#~ msgstr "(Przyłącza się %{percent}% oddziału)"
+
+#~ msgid "Increases a unit's attack skill."
+#~ msgstr "Zwiększa umiejętność ataku jednostki."
+
+#~ msgid "Easy"
+#~ msgstr "Łatwa"
+
+#~ msgid "Hard"
+#~ msgstr "Trudna"
+
+#, fuzzy
+#~ msgid ""
+#~ "RESURRECTION\n"
+#~ "CAMPAIGN"
+#~ msgstr ""
+#~ "KAMPANIA\n"
+#~ "Z ROZSZE-\n"
+#~ "RZENIA"
+
+#~ msgid "Create a new map from scratch."
+#~ msgstr "Utwórz nową mapę od podstaw."
 
 #~ msgid ""
 #~ "Cell\n"

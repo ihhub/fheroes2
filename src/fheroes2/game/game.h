@@ -36,8 +36,6 @@ class Castle;
 
 namespace Game
 {
-    void Init();
-
     enum
     {
         TYPE_MENU = 0,
@@ -46,6 +44,8 @@ namespace Game
         TYPE_HOTSEAT = 0x04,
         TYPE_NETWORK = 0x08,
         TYPE_BATTLEONLY = 0x10,
+        // This is mode used for automatic map playtesting.
+        TYPE_AUTO_PLAYTEST = 0x20,
 
         // TYPE_LOADFILE used in the Settings::LoadedGameVersion, if you change that value,
         // change in that function as well.
@@ -53,7 +53,7 @@ namespace Game
         TYPE_MULTI = TYPE_HOTSEAT
     };
 
-    void mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion );
+    void runMainGameLoop();
 
     fheroes2::GameMode MainMenu( const bool isFirstGameRun );
     fheroes2::GameMode NewGame( const bool isProbablyDemoVersion );

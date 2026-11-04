@@ -580,7 +580,7 @@ int Maps::Tile::getBoatDirection() const
     return Direction::UNKNOWN;
 }
 
-int Maps::Tile::getTileIndependentPassability() const
+int32_t Maps::Tile::getTileIndependentPassability() const
 {
     // Tile-independent passability is based purely on object parts located on this tile.
     // We need to run through all object parts on the ground level to calculate the resulting passability.
@@ -594,9 +594,9 @@ int Maps::Tile::getTileIndependentPassability() const
     // In other words, we have to go through object parts in the reverse order as they are being rendered.
     //
     // Top object parts do not affect passability.
-    int passability = DIRECTION_ALL;
+    int32_t passability = DIRECTION_ALL;
 
-    const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) {
+    const auto getObjectPartPassability = []( const Maps::ObjectPart & part, bool & isActionObject ) -> int32_t {
         if ( part.icnType == MP2::OBJ_ICN_TYPE_ROAD || part.icnType == MP2::OBJ_ICN_TYPE_STREAM || part.icnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
             // Rivers, streams and flags are completely passable.
             return DIRECTION_ALL;
@@ -1957,7 +1957,7 @@ IStreamBase & Maps::operator>>( IStreamBase & stream, Tile & tile )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1108_RELEASE && tile._mainObjectType == MP2::OBJ_MINE
          && tile.getMainObjectPart().icnType != MP2::OBJ_ICN_TYPE_EXTRAOVR ) {
         // Some maps have "hacked" mines with no resources. We need to try to fix these tiles.
-        updateObjectInfoTile( tile, true );
+        setInitialObjectInfo( tile );
     }
 
     return stream >> tile._boatOwnerColor;

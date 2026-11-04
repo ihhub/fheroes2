@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <initializer_list>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -37,10 +38,8 @@
 #include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
-#include "game_interface.h"
 #include "game_io.h"
 #include "game_static.h"
-#include "interface_icons.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -218,6 +217,9 @@ void Kingdom::ActionNewDay()
 
     // Reset the effect of the "Identify Hero" spell
     ResetModes( IDENTIFYHERO );
+
+    // Reset all monsters under Vision spell.
+    _monstersUnderVision = {};
 }
 
 void Kingdom::ActionNewDayResourceUpdate( const std::function<void( const EventDate & event, const Funds & funds )> & displayEventDialog )
@@ -311,11 +313,6 @@ void Kingdom::AddCastle( Castle * castle )
     if ( castle ) {
         if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) ) {
             castles.push_back( castle );
-        }
-
-        const Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) ) {
-            Interface::AdventureMap::Get().GetIconsPanel().resetIcons( ICON_CASTLES );
         }
     }
 
@@ -908,7 +905,8 @@ Cost Kingdom::_getKingdomStartingResources( const int difficulty ) const
 OStreamBase & operator<<( OStreamBase & stream, const Kingdom & kingdom )
 {
     return stream << kingdom.modes << kingdom._color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom._visitedTentsColors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
+                  << kingdom.visit_object << kingdom.puzzle_maps << kingdom._visitedTentsColors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView
+                  << kingdom._monstersUnderVision;
 }
 
 IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
@@ -934,7 +932,17 @@ IStreamBase & operator>>( IStreamBase & stream, Kingdom & kingdom )
         stream >> dummy;
     }
 
-    return stream >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
+    stream >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1180_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1180_RELEASE ) {
+        kingdom._monstersUnderVision = {};
+    }
+    else {
+        stream >> kingdom._monstersUnderVision;
+    }
+
+    return stream;
 }
 
 OStreamBase & operator<<( OStreamBase & stream, const Kingdoms & obj )

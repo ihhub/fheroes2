@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,10 +29,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -89,7 +89,7 @@ namespace
             const fheroes2::Rect box( ( display.width() - giftDialogSize.width ) / 2, ( display.height() - giftDialogSize.height ) / 2, giftDialogSize.width,
                                       giftDialogSize.height );
 
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::CELLWIN, 43 );
             const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
             const int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * recipientSpacing;
             const int32_t startX = box.x + ( giftDialogSize.width - playerContainerWidth ) / 2;
@@ -111,9 +111,9 @@ namespace
             for ( PlayerColorsVector::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
                 const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
 
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
+                fheroes2::Blit( Assets::getImage( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
                 if ( recipients & *it ) {
-                    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
+                    fheroes2::Blit( Assets::getImage( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace
             : resource( funds )
         {
             positions.reserve( 7 );
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::TRADPOST, 7 );
 
             positions.emplace_back( posx, posy, sprite.width(), sprite.height() );
             positions.emplace_back( posx + 40, posy, sprite.width(), sprite.height() );
@@ -163,7 +163,7 @@ namespace
         {
             fheroes2::Display & display = fheroes2::Display::instance();
             const fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
             fheroes2::Blit( sprite, display, posx, posy );
             text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
         }
@@ -242,7 +242,7 @@ int Dialog::MakeGiftResource( Kingdom & kingdom )
     Funds funds1( kingdom.GetFunds() );
     Funds funds2;
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
+    const fheroes2::Sprite & sprite = Assets::getImage( ICN::TRADPOST, 7 );
     const int32_t posX = box.x + ( giftDialogSize.width - ( sprite.width() + 240 ) ) / 2;
 
     const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
@@ -264,17 +264,17 @@ int Dialog::MakeGiftResource( Kingdom & kingdom )
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int okIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
     const int cancelIcnId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-    const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
-    const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
+    const fheroes2::Sprite & buttonOkSprite = Assets::getImage( okIcnId, 0 );
+    const fheroes2::Sprite & buttonCancelSprite = Assets::getImage( cancelIcnId, 0 );
 
     const int32_t border = 10;
     fheroes2::ButtonGroup btnGroup;
     btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + border, box.y + box.height - border - buttonOkSprite.height(), buttonOkSprite,
-                                                        fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
+                                                        Assets::getImage( okIcnId, 1 ), display ),
                         Dialog::OK );
     btnGroup.addButton( fheroes2::makeButtonWithShadow( box.x + box.width - border - buttonCancelSprite.width(),
-                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite,
-                                                        fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
+                                                        box.y + box.height - border - buttonCancelSprite.height(), buttonCancelSprite, Assets::getImage( cancelIcnId, 1 ),
+                                                        display ),
                         Dialog::CANCEL );
     btnGroup.button( 0 ).disable();
 
