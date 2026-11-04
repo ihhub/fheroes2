@@ -1,4 +1,5 @@
-version 1.1.18 (04 November 2026)
+version 1.1.18 (05 November 2026)
+- add a dedicated hotkey for item deletion
 - add marketplace icon and counter to the dialogs
 - update Victory and Loss conditions while switching languages in the Editor
 - update the bundled Apocalypse map to 3.9

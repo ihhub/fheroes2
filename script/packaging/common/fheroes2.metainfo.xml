@@ -37,11 +37,12 @@
     <control>touch</control>
   </recommends>
   <releases>
-    <release date="2026-11-04" version="v1.1.18">
+    <release date="2026-11-05" version="v1.1.18">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.18</url>
       <description>
-        <p>Changes in v1.1.18 (04 November 2026):</p>
+        <p>Changes in v1.1.18 (05 November 2026):</p>
         <ul>
+          <li>add a dedicated hotkey for item deletion</li>
           <li>add marketplace icon and counter to the dialogs</li>
           <li>update Victory and Loss conditions while switching languages in the Editor</li>
           <li>update the bundled Apocalypse map to 3.9</li>
