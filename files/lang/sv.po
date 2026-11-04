@@ -3111,6 +3111,31 @@ msgid "n/a"
 msgstr "Inga"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Marknaden används för att växla en resurs till en annan. Ju fler marknader "
+"du kontrollerar desto bättre växlingskurs."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Marknaden används för att växla en resurs till en annan. Ju fler marknader "
+"du kontrollerar desto bättre växlingskurs."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3144,6 +3169,9 @@ msgstr "Dina resurser"
 
 msgid "Available Trades"
 msgstr "Tillgänglig handel"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "vaktas av %{count} %{monster}"
