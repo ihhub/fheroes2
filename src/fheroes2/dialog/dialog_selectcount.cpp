@@ -157,7 +157,7 @@ bool Dialog::SelectCount( std::string header, const int32_t min, const int32_t m
             buttonMin.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonMin.area() ) );
         }
 
-        if ( topUiElement && topUiElement->update( display, bottomUiOffset ) ) {
+        if ( topUiElement && topUiElement->update( display, topUiOffset ) ) {
             needRedraw = true;
         }
 
