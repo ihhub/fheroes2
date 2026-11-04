@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image.h"
@@ -52,13 +52,13 @@ namespace fheroes2
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
 
-        const Sprite & shadowTop = AGG::GetICN( ICN::OBJNMUL2, 60 );
-        const Sprite & shadowMiddle = AGG::GetICN( ICN::OBJNMUL2, 71 );
-        const Sprite & shadowBottom = AGG::GetICN( ICN::OBJNMUL2, 72 );
-        const Sprite & lighthouseTop = AGG::GetICN( ICN::OBJNMUL2, 59 );
-        const Sprite & lighthouseMiddle = AGG::GetICN( ICN::OBJNMUL2, 61 );
-        const Sprite & lighthouseBottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
-        const Sprite & lighthouseLight = AGG::GetICN( ICN::OBJNMUL2, 62 );
+        const Sprite & shadowTop = Assets::getImage( ICN::OBJNMUL2, 60 );
+        const Sprite & shadowMiddle = Assets::getImage( ICN::OBJNMUL2, 71 );
+        const Sprite & shadowBottom = Assets::getImage( ICN::OBJNMUL2, 72 );
+        const Sprite & lighthouseTop = Assets::getImage( ICN::OBJNMUL2, 59 );
+        const Sprite & lighthouseMiddle = Assets::getImage( ICN::OBJNMUL2, 61 );
+        const Sprite & lighthouseBottom = Assets::getImage( ICN::OBJNMUL2, 73 );
+        const Sprite & lighthouseLight = Assets::getImage( ICN::OBJNMUL2, 62 );
 
         const int32_t topOffset = fheroes2::tileWidthPx - lighthouseTop.height();
 

@@ -26,9 +26,9 @@
 #include <cstdint>
 #include <vector>
 
-#include "agg_image.h"
 #include "castle.h" // IWYU pragma: associated
 #include "castle_building_info.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image.h"
@@ -66,7 +66,7 @@ namespace
 
     fheroes2::Rect CastleGetMaxArea( const Castle & castle, const fheroes2::Point & top )
     {
-        const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( getTownIcnId( castle.GetRace() ), 0 );
+        const fheroes2::Sprite & townbkg = Assets::getImage( getTownIcnId( castle.GetRace() ), 0 );
 
         return { top.x, top.y, townbkg.width(), townbkg.height() };
     }
@@ -305,8 +305,8 @@ namespace
                 }
             }
             else if ( castleRace == Race::KNGT && !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
-                const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
-                const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
+                const fheroes2::Sprite & rightFarm = Assets::getImage( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
+                const fheroes2::Sprite & leftFarm = Assets::getImage( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
                 fheroes2::drawCastleDialogBuilding( ICN::KNIGHT_CASTLE_LEFT_FARM, 0, castle, { offset.x + rightFarm.x() - leftFarm.width(), offset.y + rightFarm.y() },
                                                     roi, alpha );
             }
@@ -314,8 +314,8 @@ namespace
         else if ( building == BUILD_CAPTAIN ) {
             if ( castleRace == Race::BARB ) {
                 if ( !isBuildingFullyBuilt( castle, BUILD_CASTLE, buildingCurrentlyUnderConstruction ) ) {
-                    const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
-                    const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
+                    const fheroes2::Sprite & rightCaptainQuarters = Assets::getImage( ICN::TWNBCAPT, 0 );
+                    const fheroes2::Sprite & leftCaptainQuarters = Assets::getImage( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
                     fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
                                                         { offset.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), offset.y + rightCaptainQuarters.y() }, roi,
                                                         alpha );
@@ -334,13 +334,13 @@ namespace
 
         const int castleRace = castle.GetRace();
 
-        const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( getTownIcnId( castleRace ), 0 );
+        const fheroes2::Sprite & townbkg = Assets::getImage( getTownIcnId( castleRace ), 0 );
         const fheroes2::Rect max( offset.x, offset.y, townbkg.width(), townbkg.height() );
         fheroes2::Copy( townbkg, 0, 0, display, offset.x, offset.y, max.width, max.height );
 
         if ( castleRace == Race::BARB ) {
             // Render the river animation for the Barbarian castle.
-            const fheroes2::Sprite & sprite0 = fheroes2::AGG::GetICN( ICN::TWNBEXT1, 1 + animationIndex % 5 );
+            const fheroes2::Sprite & sprite0 = Assets::getImage( ICN::TWNBEXT1, 1 + animationIndex % 5 );
             fheroes2::Blit( sprite0, display, offset.x + sprite0.x(), offset.y + sprite0.y() );
         }
 

@@ -749,8 +749,8 @@ private:
     };
 
     HeroSeedsForLevelUp _getSeedsForLevelUp() const;
-    void _levelUp( const bool skipSecondary, const bool autoselect = false );
-    void _levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect = false );
+    void _levelUp( const bool skipSecondary, const bool autoselect, const bool isMapLoading );
+    void _levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect, const bool isMapLoading );
     void _angleStep( const int targetDirection );
     void _applyMovementPenalty( const uint32_t penalty );
     bool _moveStep( const bool jumpToNextTile );

@@ -28,13 +28,13 @@
 #include <cassert>
 #include <utility>
 
-#include "agg_image.h"
 #include "army_troop.h"
 #include "audio_manager.h"
 #include "castle.h"
 #include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_static.h"
 #include "icn.h"
 #include "localevent.h"
@@ -238,7 +238,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const BuildingType b )
 
     // fix area for captain
     if ( b == BUILD_CAPTAIN ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::getCaptainIcnId( castle.GetRace() ), ( _buildingType & BUILD_CAPTAIN ? 1 : 0 ) );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::getCaptainIcnId( castle.GetRace() ), ( _buildingType & BUILD_CAPTAIN ? 1 : 0 ) );
         area.width = sprite.width();
         area.height = sprite.height();
     }
@@ -318,29 +318,29 @@ void BuildingInfo::RedrawCaptain() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     if ( _status == BuildingStatus::ALREADY_BUILT ) {
-        const fheroes2::Sprite & captainSprite = fheroes2::AGG::GetICN( ICN::getCaptainIcnId( castle.GetRace() ), 1 );
-        const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::getFlagIcnId( castle.GetColor() ), 0 );
+        const fheroes2::Sprite & captainSprite = Assets::getImage( ICN::getCaptainIcnId( castle.GetRace() ), 1 );
+        const fheroes2::Sprite & flag = Assets::getImage( ICN::getFlagIcnId( castle.GetColor() ), 0 );
 
         fheroes2::Blit( captainSprite, display, area.x, area.y );
         const fheroes2::Point flagOffset = GetFlagOffset( castle.GetRace() );
         fheroes2::Blit( flag, display, area.x + flagOffset.x, area.y + flagOffset.y );
     }
     else {
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::getCaptainIcnId( castle.GetRace() ), 0 ), display, area.x, area.y );
+        fheroes2::Blit( Assets::getImage( ICN::getCaptainIcnId( castle.GetRace() ), 0 ), display, area.x, area.y );
     }
 
     // indicator
     if ( _status == BuildingStatus::ALREADY_BUILT ) {
-        const fheroes2::Sprite & spriteAllow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
+        const fheroes2::Sprite & spriteAllow = Assets::getImage( ICN::TOWNWIND, 11 );
         fheroes2::Blit( spriteAllow, display, area.x + 83 - 4 - spriteAllow.width(), area.y + 79 - 2 - spriteAllow.height() );
     }
     else if ( _status != BuildingStatus::ALLOW_BUILD ) {
         if ( BuildingStatus::LACK_RESOURCES == _status ) {
-            const fheroes2::Sprite & spriteMoney = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
+            const fheroes2::Sprite & spriteMoney = Assets::getImage( ICN::TOWNWIND, 13 );
             fheroes2::Blit( spriteMoney, display, area.x + 83 - 4 + 1 - spriteMoney.width(), area.y + 79 - 3 - spriteMoney.height() );
         }
         else {
-            const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+            const fheroes2::Sprite & spriteDeny = Assets::getImage( ICN::TOWNWIND, 12 );
             fheroes2::Blit( spriteDeny, display, area.x + 83 - 4 + 1 - spriteDeny.width(), area.y + 79 - 2 - spriteDeny.height() );
         }
     }
@@ -356,7 +356,7 @@ void BuildingInfo::Redraw() const
     fheroes2::Display & display = fheroes2::Display::instance();
     const int index = fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) );
 
-    const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+    const fheroes2::Sprite & buildingFrame = Assets::getImage( ICN::BLDGXTRA, 0 );
     fheroes2::Blit( buildingFrame, display, area.x, area.y );
     if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED ) {
         const fheroes2::Point offset( 6, 59 );
@@ -369,20 +369,20 @@ void BuildingInfo::Redraw() const
     // build image
     if ( BUILD_NOTHING == _buildingType ) {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const fheroes2::Sprite & buildBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 );
+        const fheroes2::Sprite & buildBackground = Assets::getImage( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 );
         fheroes2::Copy( buildBackground, 0, 0, display, area.x, area.y, buildBackground.width(), buildBackground.height() );
         return;
     }
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::getBuildingIcnId( castle.GetRace() ), index ), display, area.x + 1, area.y + 1 );
+    fheroes2::Blit( Assets::getImage( ICN::getBuildingIcnId( castle.GetRace() ), index ), display, area.x + 1, area.y + 1 );
 
     // indicator
     if ( _status == BuildingStatus::ALREADY_BUILT ) {
-        const fheroes2::Sprite & spriteAllow = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
+        const fheroes2::Sprite & spriteAllow = Assets::getImage( ICN::TOWNWIND, 11 );
         fheroes2::Blit( spriteAllow, display, area.x + buildingFrame.width() - 5 - spriteAllow.width(), area.y + 58 - 2 - spriteAllow.height() );
     }
     else if ( _status == BuildingStatus::BUILD_DISABLE || _status == BuildingStatus::SHIPYARD_NOT_ALLOWED ) {
-        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        const fheroes2::Sprite & spriteDeny = Assets::getImage( ICN::TOWNWIND, 12 );
         fheroes2::Sprite disabledSprite( spriteDeny );
         fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
         fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
@@ -390,19 +390,19 @@ void BuildingInfo::Redraw() const
     }
     else if ( _status != BuildingStatus::ALLOW_BUILD ) {
         if ( BuildingStatus::LACK_RESOURCES == _status ) {
-            const fheroes2::Sprite & spriteMoney = fheroes2::AGG::GetICN( ICN::TOWNWIND, 13 );
+            const fheroes2::Sprite & spriteMoney = Assets::getImage( ICN::TOWNWIND, 13 );
             fheroes2::Blit( spriteMoney, display, area.x + buildingFrame.width() - 5 + 1 - spriteMoney.width(), area.y + 58 - 3 - spriteMoney.height() );
         }
         else {
-            const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+            const fheroes2::Sprite & spriteDeny = Assets::getImage( ICN::TOWNWIND, 12 );
             fheroes2::Blit( spriteDeny, display, area.x + buildingFrame.width() - 5 + 1 - spriteDeny.width(), area.y + 58 - 2 - spriteDeny.height() );
         }
 
-        const fheroes2::Sprite & textBackground = fheroes2::AGG::GetICN( ICN::CASLXTRA, 2 );
+        const fheroes2::Sprite & textBackground = Assets::getImage( ICN::CASLXTRA, 2 );
         fheroes2::Copy( textBackground, 0, 0, display, area.x, area.y + 58, textBackground.width(), textBackground.height() );
     }
     else {
-        const fheroes2::Sprite & textBackground = fheroes2::AGG::GetICN( ICN::CASLXTRA, 1 );
+        const fheroes2::Sprite & textBackground = Assets::getImage( ICN::CASLXTRA, 1 );
         fheroes2::Copy( textBackground, 0, 0, display, area.x, area.y + 58, textBackground.width(), textBackground.height() );
     }
 
@@ -473,7 +473,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     Resource::BoxSprite rbs( PaymentConditions::BuyBuilding( castle.GetRace(), _buildingType ), fheroes2::boxAreaWidthPx );
 
-    const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
+    const fheroes2::Sprite & buildingFrame = Assets::getImage( ICN::BLDGXTRA, 0 );
 
     const int32_t totalDialogHeight = elementOffset + buildingFrame.height() + elementOffset + descriptionText.height( fheroes2::boxAreaWidthPx ) + elementOffset
                                       + requirementHeight + rbs.GetArea().height;
@@ -487,7 +487,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
 
     const fheroes2::Sprite & buildingImage
-        = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) ) );
+        = Assets::getImage( ICN::getBuildingIcnId( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<BuildingType>( _buildingType ) ) );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingImage.width() ) / 2;
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
@@ -660,11 +660,11 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, f
     const uint32_t dwType = castle.GetActualDwelling( dwl.dwType );
     const Monster mons{ castle.GetRace(), dwType };
 
-    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+    const fheroes2::Sprite & mons32 = Assets::getImage( ICN::MONS32, mons.GetSpriteIndex() );
     fheroes2::Blit( mons32, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + ( pos.height - 3 - mons32.height() ) );
 
     if ( !castle.isBuild( dwType ) ) {
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.width - 10, pos.y + 4 );
+        fheroes2::Blit( Assets::getImage( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.width - 10, pos.y + 4 );
 
         return;
     }

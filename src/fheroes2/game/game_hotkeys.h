@@ -32,6 +32,8 @@ namespace fheroes2
 
 namespace Game
 {
+    constexpr const char * hotkeyFileName{ "fheroes2.key" };
+
     enum class HotKeyEvent : int32_t
     {
         NONE,
@@ -225,5 +227,6 @@ namespace Game
 
     void HotKeySave();
 
+    // The returned string is not translated.
     const char * getHotKeyCategoryName( const HotKeyCategory category );
 }

@@ -25,8 +25,8 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -94,12 +94,12 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     if ( isDefaultScreenSize ) {
-        const Sprite & backgroundImage = AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+        const Sprite & backgroundImage = Assets::getImage( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
         Copy( backgroundImage, 0, 0, display, activeArea );
     }
 
     // Dialog title.
-    const Sprite & titleBox = AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+    const Sprite & titleBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
     const Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
     const Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
 
@@ -131,7 +131,7 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
 
     // Dropdown with map layout selection.
     const int dropListIcn = isEvilInterface ? ICN::DROPLISL_EVIL : ICN::DROPLISL;
-    const Sprite & itemBackground = AGG::GetICN( dropListIcn, 0 );
+    const Sprite & itemBackground = Assets::getImage( dropListIcn, 0 );
     const int32_t layoutBackgroundWidth = 200;
     const int32_t layoutBackgroundHeight = itemBackground.height();
 
@@ -143,8 +143,8 @@ bool fheroes2::randomMapGeneratorDialog( Maps::Random_Generator::Configuration &
     ApplyPalette( display, inputPositionX + 6, positionY - 5, display, inputPositionX + 6, positionY - 5, layoutBackgroundWidth, layoutBackgroundHeight,
                   PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-    const Sprite & dropListButtonSprite = AGG::GetICN( dropListIcn, 1 );
-    const Sprite & dropListButtonPressedSprite = AGG::GetICN( dropListIcn, 2 );
+    const Sprite & dropListButtonSprite = Assets::getImage( dropListIcn, 1 );
+    const Sprite & dropListButtonPressedSprite = Assets::getImage( dropListIcn, 2 );
 
     ButtonSprite layoutDroplistButton( inputPositionX + layoutBackgroundWidth + 6, positionY - 5, dropListButtonSprite, dropListButtonPressedSprite );
     // TODO: remove the next line when the dropdown is operational.

@@ -24,9 +24,9 @@
 #include <cassert>
 #include <utility>
 
-#include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game_assets.h"
 #include "heroes.h"
 #include "icn.h"
 #include "pal.h"
@@ -46,7 +46,7 @@ namespace
         icon.resize( 34, 34 );
         icon.reset();
         fheroes2::DrawBorder( icon, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HSICONS, 0 ), 26, 21, icon, 1, 1, 32, 32 );
+        fheroes2::Copy( Assets::getImage( ICN::HSICONS, 0 ), 26, 21, icon, 1, 1, 32, 32 );
         return icon;
     }
 }
@@ -62,7 +62,7 @@ PrimarySkillsBar::PrimarySkillsBar( Heroes * hero, const bool useSmallSize, cons
         setSingleItemSize( { backsf.width(), backsf.height() } );
     }
     else {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, 0 );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::PRIMSKIL, 0 );
         setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 
@@ -90,7 +90,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
     }
 
     if ( _useSmallSize ) {
-        const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        const fheroes2::Sprite & backSprite = Assets::getImage( ICN::SWAPWIN, 0 );
         const int ww = 32;
         const fheroes2::Point dstpt( pos.x + ( pos.width - ww ) / 2, pos.y + ( pos.height - ww ) / 2 );
 
@@ -134,7 +134,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
         }
     }
     else {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, skill - 1 );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::PRIMSKIL, skill - 1 );
         fheroes2::Copy( sprite, 0, 0, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2, pos.width, pos.height );
 
         fheroes2::Text text{ Skill::Primary::String( skill ), fheroes2::FontType::smallWhite() };
@@ -315,7 +315,7 @@ SecondarySkillsBar::SecondarySkillsBar( const Heroes & hero, const bool mini /* 
         setSingleItemSize( { backsf.width(), backsf.height() } );
     }
     else {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SECSKILL, 0 );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::SECSKILL, 0 );
         setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 }
@@ -328,14 +328,14 @@ void SecondarySkillsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2:
     else {
         if ( _showDefaultSkillsMessage && std::none_of( items.begin(), items.end(), []( Skill::Secondary const * skill ) { return skill->isValid(); } ) ) {
             // In editor when no skill are set it means that default skills will be applied on the game start.
-            fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::SECSKILL, 0 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
+            fheroes2::ApplyPalette( Assets::getImage( ICN::SECSKILL, 0 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
                                     PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
             const fheroes2::Text text( _( "Default\nskill" ), fheroes2::FontType::normalWhite() );
             text.drawInRoi( pos.x, pos.y + ( pos.height - text.height() * text.rows( pos.width ) ) / 2 + 2, pos.width, dstsf, pos );
         }
         else {
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::SECSKILL, 0 ), 0, 0, dstsf, pos );
+            fheroes2::Copy( Assets::getImage( ICN::SECSKILL, 0 ), 0, 0, dstsf, pos );
         }
     }
 }
@@ -348,7 +348,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
     }
 
     const fheroes2::Sprite & sprite
-        = use_mini_sprite ? fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ) : fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
+        = use_mini_sprite ? Assets::getImage( ICN::MINISS, skill.GetIndexSprite2() ) : Assets::getImage( ICN::SECSKILL, skill.GetIndexSprite1() );
     fheroes2::Copy( sprite, 0, 0, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2, pos.width, pos.height );
 
     if ( use_mini_sprite ) {

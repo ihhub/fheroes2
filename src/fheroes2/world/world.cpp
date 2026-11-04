@@ -42,6 +42,7 @@
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
+#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -462,9 +463,15 @@ void World::NewWeek()
 {
     // update objects
     if ( _week > 1 ) {
+        const bool isResurrectionMap{ Settings::Get().getCurrentMapInfo().version == GameVersion::RESURRECTION };
+        const uint32_t monsterLimit{ GameStatic::getNeutralMonsterLimit( isResurrectionMap ) };
+
         for ( Maps::Tile & tile : vec_tiles ) {
-            if ( MP2::isWeekLife( tile.getMainObjectType( false ) ) || tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
-                updateObjectInfoTile( tile, false );
+            if ( MP2::isWeekLife( tile.getMainObjectType( false ) ) ) {
+                updateObjectInfoTile( tile );
+            }
+            else if ( tile.getMainObjectType() == MP2::OBJ_MONSTER ) {
+                updateMonstersOnTile( tile, monsterLimit );
             }
         }
     }

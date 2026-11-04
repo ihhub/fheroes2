@@ -26,15 +26,16 @@
 #include <memory>
 #include <string>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_tools.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -43,6 +44,7 @@
 #include "mus.h"
 #include "pal.h"
 #include "players.h"
+#include "race.h"
 #include "screen.h"
 #include "settings.h"
 #include "tools.h"
@@ -64,6 +66,7 @@
 namespace
 {
     constexpr int32_t sliderWidth{ 150 };
+    constexpr int32_t playerStepX{ 80 };
 
     class TextRestorer final : public fheroes2::MovableText
     {
@@ -96,7 +99,6 @@ namespace
         }
 
         auto & players = conf.GetPlayers();
-        players.Init( conf.getCurrentMapInfo() );
         players.SetStartGame();
 
         return world.loadResurrectionMap( mapInfo.filename );
@@ -140,7 +142,6 @@ namespace
         }
 
         // Display the results.
-        constexpr int32_t playerStepX{ 80 };
         const int32_t playthroughCount{ static_cast<int32_t>( playtest.getResults().size() ) };
         const int32_t playerCount{ static_cast<int32_t>( playtest.getResults().front().size() ) };
 
@@ -153,7 +154,7 @@ namespace
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        const fheroes2::Sprite & titleBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+        const fheroes2::Sprite & titleBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
         const fheroes2::Rect titleBoxRoi{ activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() };
         const fheroes2::Rect titleTextRoi{ titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 };
 
@@ -176,7 +177,7 @@ namespace
 
         const PlayerColorsVector availableColors{ playerColorSet };
 
-        const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+        const fheroes2::Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
         for ( int32_t i = 0; i < playerCount; ++i ) {
             playerRects[i].x = offsetX + i * playerStepX;
             playerRects[i].y = offsetY;
@@ -185,7 +186,7 @@ namespace
 
             const uint32_t icnIndex = Color::GetIndex( availableColors[i] ) + 3;
 
-            const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, icnIndex );
+            const fheroes2::Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
             playerRects[i].width = playerIcon.width();
             playerRects[i].height = playerIcon.height();
             fheroes2::Copy( playerIcon, 0, 0, display, playerRects[i].x, playerRects[i].y, playerRects[i].width, playerRects[i].height );
@@ -232,6 +233,16 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to close the dialog." ), Dialog::ZERO );
             }
 
+            for ( size_t i = 0; i < playerRects.size(); ++i ) {
+                if ( le.isMouseRightButtonPressedInArea( playerRects[i] ) ) {
+                    std::string message = _( "%{color} player" );
+                    StringReplace( message, "%{color}", Color::String( availableColors[i] ) );
+
+                    fheroes2::showStandardTextMessage( _( "Opponents" ), std::move( message ), Dialog::ZERO );
+                    break;
+                }
+            }
+
             for ( size_t i = 0; i < availableColors.size(); ++i ) {
                 if ( le.isMouseRightButtonPressedInArea( playerRects[i] ) ) {
                     std::string playerString{ _( "Won %{percent}% of playthroughs." ) };
@@ -261,9 +272,26 @@ namespace
 
         Game::UpdateGameSpeed();
 
+        auto & players = conf.GetPlayers();
+        std::vector<Player> playtestConfiguredPlayers;
+
+        // Make a copy of players configuration to load it on the next playthrough start.
+        if ( autoPlaytest.getMaxPlaythroughs() > 0 ) {
+            playtestConfiguredPlayers.reserve( players.size() );
+            std::for_each( players.cbegin(), players.cend(), [&playtestConfiguredPlayers]( const Player * player ) { playtestConfiguredPlayers.push_back( *player ); } );
+        }
+
         const fheroes2::GameInterfaceTypeRestorer interfaceRestorer{ conf.isEvilInterfaceEnabled() ? InterfaceType::EVIL : InterfaceType::GOOD };
 
         for ( int32_t playthroughId = 0; playthroughId < autoPlaytest.getMaxPlaythroughs(); ++playthroughId ) {
+            // Restore the players configuration for the next playthrough.
+            if ( playthroughId > 0 ) {
+                assert( players.size() == playtestConfiguredPlayers.size() );
+                for ( size_t i = 0; i < players.size(); ++i ) {
+                    *players[i] = playtestConfiguredPlayers[i];
+                }
+            }
+
             if ( !prepareMap() ) {
                 fheroes2::showStandardTextMessage( _( "Warning" ), _( "Failed to prepare the map for auto playtest." ), Dialog::ZERO );
                 return;
@@ -329,19 +357,24 @@ namespace
         return std::to_string( value ) + '/' + std::to_string( limit );
     }
 
-    fheroes2::Rect renderCheckbox( const int32_t offsetX, const int32_t offsetY, const bool isEnabled, fheroes2::Image & output, const bool isEvilInterface )
+    fheroes2::Rect renderCheckbox( const int32_t offsetX, const int32_t offsetY, const bool isEnabled, fheroes2::Image & output, const bool isEvilInterface,
+                                   const bool isActive )
     {
-        const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
+        const fheroes2::Sprite & cell = Assets::getImage( ICN::CELLWIN, 1 );
 
         fheroes2::Blit( cell, output, offsetX, offsetY );
-        if ( isEnabled ) {
-            const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
+        if ( isEnabled && isActive ) {
+            const fheroes2::Sprite & mark = Assets::getImage( ICN::CELLWIN, 2 );
             fheroes2::Blit( mark, output, offsetX + mark.x(), offsetY + mark.y() );
         }
 
         if ( isEvilInterface ) {
             fheroes2::ApplyPalette( output, offsetX, offsetY, output, offsetX, offsetY, cell.width(), cell.height(),
                                     PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+
+        if ( !isActive ) {
+            fheroes2::ApplyPalette( output, offsetX, offsetY, output, offsetX, offsetY, cell.width(), cell.height(), PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         }
 
         return { offsetX, offsetY, cell.width(), cell.height() };
@@ -354,13 +387,13 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
-        StandardWindow window( 550, 345, true, display );
+        StandardWindow window( 550, 450, true, display );
         const Rect activeArea( window.activeArea() );
 
-        const Settings & conf = Settings::Get();
+        Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        const Sprite & titleBox = AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+        const Sprite & titleBox = Assets::getImage( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
         const Rect titleBoxRoi( activeArea.x + ( activeArea.width - titleBox.width() ) / 2, activeArea.y + 10, titleBox.width(), titleBox.height() );
         const Rect titleTextRoi( titleBoxRoi.x + 6, titleBoxRoi.y + 5, titleBoxRoi.width - 12, titleBoxRoi.height - 11 );
 
@@ -385,6 +418,7 @@ namespace fheroes2
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
         HorizontalSlider playthroughCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::playthroughLimit, autoPlaytest.getMaxPlaythroughs() };
+        playthroughCountSlider.setPopupDialog( _( "autoPlaytest|Number of playthroughs:" ), _( "Set the number of playthroughs." ) );
         TextRestorer playthroughCountValue{ display, { valuePositionX, positionY + 2 } };
         playthroughCountValue.render( getValueString( autoPlaytest.getMaxPlaythroughs(), AutoPlaytest::playthroughLimit ) );
 
@@ -394,12 +428,23 @@ namespace fheroes2
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
         HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::dayLimit, autoPlaytest.getMaxDaysInPlaythrough() };
+        dayCountSlider.setPopupDialog( _( "autoPlaytest|Max days per playthrough:" ), _( "Set the maximum number of days that each playthrough is run for." ) );
+
         TextRestorer dayCountValue{ display, { valuePositionX, positionY + 2 } };
         dayCountValue.render( getValueString( autoPlaytest.getMaxDaysInPlaythrough(), AutoPlaytest::dayLimit ) );
 
-        positionY += ySpacing;
+        positionY += 30;
 
-        const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface ) };
+        text.set( _( "autoPlaytest|Last day of playthrough:" ), FontType::normalWhite() );
+        text.fitToOneRow( optionTextMaxWidth );
+        text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
+
+        TextRestorer date{ display, { inputPositionX + 5, positionY } };
+        date.render( Game::getDateDescription( autoPlaytest.getMaxDaysInPlaythrough() ) );
+
+        positionY += 30;
+
+        const Rect animationCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.isAnimationEnabled(), display, isEvilInterface, true ) };
 
         text.set( _( "autoPlaytest|Animation" ), FontType::normalWhite() );
         text.draw( animationCheckboxArea.x + animationCheckboxArea.width + 5, animationCheckboxArea.y + 2, display );
@@ -414,6 +459,7 @@ namespace fheroes2
         auto animationTextAreaRestorer = std::make_unique<ImageRestorer>( display, animationTextOffset.x, animationTextOffset.y, text.width(), text.height() );
         text.draw( animationTextOffset.x, animationTextOffset.y, display );
         HorizontalSlider speedCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::animationLimit, autoPlaytest.getAnimationSpeed() };
+        speedCountSlider.setPopupDialog( _( "autoPlaytest|Animation speed:" ), _( "Set animation speed during playthrough." ) );
         TextRestorer speedCountValue{ display, { valuePositionX, positionY + 2 } };
         speedCountValue.render( getValueString( autoPlaytest.getAnimationSpeed(), AutoPlaytest::animationLimit ) );
         if ( !autoPlaytest.isAnimationEnabled() ) {
@@ -422,12 +468,48 @@ namespace fheroes2
 
         positionY += 30;
 
-        const Rect soundsCheckboxArea{ renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface ) };
+        const Rect soundsCheckboxArea{
+            renderCheckbox( inputPositionX + 3, positionY, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface, autoPlaytest.isAnimationEnabled() ) };
 
         text.set( _( "autoPlaytest|Sound Effects" ), FontType::normalWhite() );
+        auto soundsTextAreaRestorer = std::make_unique<ImageRestorer>( display, soundsCheckboxArea.x, soundsCheckboxArea.y, text.width(), text.height() );
         text.draw( soundsCheckboxArea.x + soundsCheckboxArea.width + 5, soundsCheckboxArea.y + 2, display );
 
-        positionY += ySpacing;
+        positionY += 30;
+
+        // Render players as all computers but with color names.
+        auto & players = conf.GetPlayers();
+        players.Init( conf.getCurrentMapInfo() );
+
+        const int32_t playerCount = static_cast<int32_t>( players.size() );
+        const int32_t playerOffsetX{ activeArea.x + ( activeArea.width - ( ( playerCount - 1 ) * playerStepX + 62 ) ) / 2 };
+
+        std::vector<Rect> playerColorRect;
+        std::vector<Rect> playerRaceRect;
+        playerColorRect.resize( playerCount );
+        playerRaceRect.resize( playerCount );
+
+        const Sprite & playerIconShadow = Assets::getImage( ICN::NGEXTRA, 61 );
+
+        for ( int32_t playerId = 0; playerId < playerCount; ++playerId ) {
+            const auto * player = players[playerId];
+            const uint32_t icnIndex = Color::GetIndex( player->GetColor() ) + 3;
+            const Sprite & playerIcon = Assets::getImage( ICN::NGEXTRA, icnIndex );
+
+            playerColorRect[playerId] = Rect( playerOffsetX + playerId * playerStepX, positionY, playerIcon.width(), playerIcon.height() );
+
+            Copy( playerIcon, 0, 0, display, playerColorRect[playerId].x, playerColorRect[playerId].y, playerColorRect[playerId].width,
+                  playerColorRect[playerId].height );
+            Blit( playerIconShadow, display, playerColorRect[playerId].x - 5, playerColorRect[playerId].y + 3 );
+
+            const Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
+
+            playerRaceRect[playerId] = Rect( playerColorRect[playerId].x, playerColorRect[playerId].y + 60, classIcon.width(), classIcon.height() );
+            Copy( classIcon, 0, 0, display, playerRaceRect[playerId].x, playerRaceRect[playerId].y, playerRaceRect[playerId].width, playerRaceRect[playerId].height );
+            Blit( playerIconShadow, display, playerRaceRect[playerId].x - 5, playerRaceRect[playerId].y + 3 );
+        }
+
+        positionY += 120;
         text.set( _( "Left-clicking at any point will interrupt the playtest." ), FontType::normalYellow() );
         text.draw( positionX, positionY, activeArea.width, display );
 
@@ -463,6 +545,7 @@ namespace fheroes2
             else if ( dayCountSlider.processEvents( eventHandler ) ) {
                 autoPlaytest.setMaxDaysInPlaythrough( dayCountSlider.getCurrentValue() );
                 dayCountValue.render( getValueString( dayCountSlider.getCurrentValue(), AutoPlaytest::dayLimit ) );
+                date.render( Game::getDateDescription( autoPlaytest.getMaxDaysInPlaythrough() ) );
                 display.render( window.activeArea() );
             }
             else if ( autoPlaytest.isAnimationEnabled() && speedCountSlider.processEvents( eventHandler ) ) {
@@ -486,14 +569,62 @@ namespace fheroes2
                 text.fitToOneRow( optionTextMaxWidth );
                 text.draw( animationTextOffset.x, animationTextOffset.y, display );
 
-                renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface );
+                soundsTextAreaRestorer->restore();
+                text.set( _( "autoPlaytest|Sound Effects" ),
+                          autoPlaytest.isAnimationEnabled() ? FontType::normalWhite() : FontType{ FontSize::NORMAL, FontColor::GRAY } );
+                text.draw( soundsCheckboxArea.x + soundsCheckboxArea.width + 5, soundsCheckboxArea.y + 2, display );
+
+                renderCheckbox( animationCheckboxArea.x, animationCheckboxArea.y, autoPlaytest.isAnimationEnabled(), display, isEvilInterface, true );
+
+                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface,
+                                autoPlaytest.isAnimationEnabled() );
+
                 display.render( window.activeArea() );
             }
-            else if ( eventHandler.MouseClickLeft( soundsCheckboxArea ) ) {
+            else if ( eventHandler.MouseClickLeft( soundsCheckboxArea ) && autoPlaytest.isAnimationEnabled() ) {
                 autoPlaytest.enableSounds( !autoPlaytest.areEnvironmentSoundsEnabled() );
 
-                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface );
+                renderCheckbox( soundsCheckboxArea.x, soundsCheckboxArea.y, autoPlaytest.areEnvironmentSoundsEnabled(), display, isEvilInterface,
+                                autoPlaytest.isAnimationEnabled() );
                 display.render( soundsCheckboxArea );
+            }
+            else {
+                for ( size_t i = 0; i < playerRaceRect.size(); ++i ) {
+                    auto * player = players[i];
+
+                    if ( eventHandler.isMouseRightButtonPressedInArea( playerRaceRect[i] ) ) {
+                        showStandardTextMessage(
+                            _( "Class" ),
+                            _( "This lets you change the class of a player. Classes are not always changeable. Depending on the scenario, a player may receive additional towns and/or heroes not of their primary alignment." ),
+                            Dialog::ZERO );
+                        break;
+                    }
+
+                    if ( !conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+                        continue;
+                    }
+
+                    if ( eventHandler.MouseClickLeft( playerRaceRect[i] ) ) {
+                        player->SetRace( Race::getNextRace( player->GetRace() ) );
+
+                        const Sprite & classIcon = Assets::getImage( ICN::NGEXTRA, Race::getRaceIcnIndex( player->GetRace(), true ) );
+                        Copy( classIcon, 0, 0, display, playerRaceRect[i].x, playerRaceRect[i].y, playerRaceRect[i].width, playerRaceRect[i].height );
+
+                        display.render( playerRaceRect[i] );
+                        break;
+                    }
+                }
+
+                for ( size_t i = 0; i < playerColorRect.size(); ++i ) {
+                    if ( eventHandler.isMouseRightButtonPressedInArea( playerColorRect[i] ) ) {
+                        const auto * player = players[i];
+                        std::string message = _( "%{color} player" );
+                        StringReplace( message, "%{color}", Color::String( player->GetColor() ) );
+
+                        showStandardTextMessage( _( "Opponents" ), std::move( message ), Dialog::ZERO );
+                        break;
+                    }
+                }
             }
 
             if ( eventHandler.isMouseRightButtonPressedInArea( buttonOk.area() ) ) {
@@ -501,6 +632,12 @@ namespace fheroes2
             }
             else if ( eventHandler.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 showStandardTextMessage( _( "Cancel" ), _( "Return to the previous menu." ), Dialog::ZERO );
+            }
+            else if ( eventHandler.isMouseRightButtonPressedInArea( animationCheckboxArea ) ) {
+                showStandardTextMessage( _( "autoPlaytest|Animation" ), _( "Toggle animation during playthroughs." ), Dialog::ZERO );
+            }
+            else if ( eventHandler.isMouseRightButtonPressedInArea( soundsCheckboxArea ) ) {
+                showStandardTextMessage( _( "autoPlaytest|Sound Effects" ), _( "Toggle sound effects during playthroughs." ), Dialog::ZERO );
             }
         }
 

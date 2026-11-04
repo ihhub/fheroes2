@@ -30,13 +30,13 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
 #include "battle_cell.h"
 #include "castle.h" // IWYU pragma: associated
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
@@ -219,7 +219,7 @@ void Castle::_openWell()
     fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUTTON_WELL_MAX, 0, 1 );
 
     // EXIT button.
-    fheroes2::Button buttonExit( roi.x + roi.width - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    fheroes2::Button buttonExit( roi.x + roi.width - Assets::getImage( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
     const std::array<fheroes2::Rect, maxNumOfDwellings> rectMonster
         = { fheroes2::Rect( roi.x + 20, roi.y + 18, 288, 124 ),   fheroes2::Rect( roi.x + 20, roi.y + 168, 288, 124 ),
@@ -349,7 +349,7 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
 
     if ( restoreBackground ) {
         // Restore background under "Available: <number>" text.
-        const fheroes2::Sprite & wellBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
+        const fheroes2::Sprite & wellBackground = Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
 
         fheroes2::Copy( wellBackground, offset.x, offset.y, background, offset.x, offset.y, 137, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
     }
@@ -376,7 +376,7 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
 
 void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
 {
-    const fheroes2::Sprite & wellBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
+    const fheroes2::Sprite & wellBackground = Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
     const int32_t backgroundWidth = wellBackground.width();
 
     fheroes2::Copy( wellBackground, 0, 0, background, 0, 0, backgroundWidth, bottomBarOffsetY );
@@ -384,10 +384,10 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     // TODO: Make Well bottom bar and buttons for Evil interface.
 
     // The original ICN::WELLBKG image has incorrect bottom message bar with no yellow outline. Also the original graphics did not have MAX button.
-    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const fheroes2::Sprite & bottomBar = Assets::getImage( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
-    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
-    const int32_t buttonMaxWidth = fheroes2::AGG::GetICN( ICN::BUTTON_WELL_MAX, 0 ).width();
+    const int32_t exitWidth = Assets::getImage( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    const int32_t buttonMaxWidth = Assets::getImage( ICN::BUTTON_WELL_MAX, 0 ).width();
     // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
     fheroes2::Copy( bottomBar, 1, 0, background, buttonMaxWidth, bottomBarOffsetY, backgroundWidth / 2 - buttonMaxWidth, barHeight );
     fheroes2::Copy( bottomBar, bottomBar.width() - backgroundWidth / 2 + exitWidth - 1, 0, background, backgroundWidth / 2, bottomBarOffsetY,
@@ -443,7 +443,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
 
         // Dwelling building image.
         fheroes2::Point renderPoint( offset.x + 21, offset.y + 35 );
-        const fheroes2::Sprite & dwellingImage = fheroes2::AGG::GetICN( ICN::getBuildingIcnId( _race ), icnIndex );
+        const fheroes2::Sprite & dwellingImage = Assets::getImage( ICN::getBuildingIcnId( _race ), icnIndex );
         fheroes2::Copy( dwellingImage, 0, 0, background, renderPoint.x, renderPoint.y, dwellingImage.width(), dwellingImage.height() );
 
         // Dwelling name.
@@ -585,7 +585,7 @@ void Castle::_wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array
         // monster
         const bool flipMonsterSprite = ( monsterId > 2 );
 
-        const fheroes2::Sprite & smonster = fheroes2::AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId() );
+        const fheroes2::Sprite & smonster = Assets::getImage( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId() );
         if ( flipMonsterSprite ) {
             outPos.x += 193 - ( smonster.x() + smonster.width() ) + ( monster.isWide() ? Battle::Cell::widthPx / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
         }

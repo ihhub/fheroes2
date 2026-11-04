@@ -32,7 +32,6 @@
 #include <sstream>
 #include <utility>
 
-#include "agg_image.h"
 #include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -44,6 +43,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_auto_playtest.h"
 #include "game_io.h"
 #include "game_static.h"
@@ -587,7 +587,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const PlayerColor colorType, c
         SetModes( CUSTOM );
 
         for ( int i = 1; i < level; ++i ) {
-            _levelUp( doesHeroHaveCustomSecondarySkills, true );
+            _levelUp( doesHeroHaveCustomSecondarySkills, true, true );
         }
     }
 
@@ -721,7 +721,7 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
             SetModes( CUSTOM );
 
             for ( int16_t i = 1; i < level; ++i ) {
-                _levelUp( doesHeroHaveCustomSecondarySkills, true );
+                _levelUp( doesHeroHaveCustomSecondarySkills, true, true );
             }
         }
     }
@@ -1488,13 +1488,13 @@ void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect /*
 
     for ( int level = oldLevel; level < newLevel - 1; ++level ) {
         _experience = GetExperienceFromLevel( level );
-        _levelUp( false, autoselect );
+        _levelUp( false, autoselect, false );
     }
 
     _experience = updatedExperience;
 
     if ( newLevel > oldLevel ) {
-        _levelUp( false, autoselect );
+        _levelUp( false, autoselect, false );
     }
 }
 
@@ -1845,7 +1845,7 @@ int Heroes::getNumOfTravelDays( const int32_t dstIdx ) const
     return days;
 }
 
-void Heroes::_levelUp( const bool skipSecondary, const bool autoselect /* = false */ )
+void Heroes::_levelUp( const bool skipSecondary, const bool autoselect, const bool isMapLoading )
 {
     const HeroSeedsForLevelUp seeds = _getSeedsForLevelUp();
 
@@ -1855,11 +1855,11 @@ void Heroes::_levelUp( const bool skipSecondary, const bool autoselect /* = fals
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) )
 
     if ( !skipSecondary ) {
-        _levelUpSecondarySkill( seeds, primarySkill, autoselect );
+        _levelUpSecondarySkill( seeds, primarySkill, autoselect, isMapLoading );
     }
 }
 
-void Heroes::_levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect /* = false */ )
+void Heroes::_levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect, const bool isMapLoading )
 {
     const auto [sec1, sec2] = _secondarySkills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2 );
 
@@ -1906,9 +1906,11 @@ void Heroes::_levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const in
             _secondarySkills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
         }
 
-        // Campaign-only heroes get additional experience immediately upon their creation, even while still neutral.
-        // We should not try to scout the area around such heroes.
-        if ( selected.Skill() == Skill::Secondary::SCOUTING && GetColor() != PlayerColor::NONE ) {
+        // We must not scout area around a hero for 2 cases:
+        // - while loading a map as we will clear the fog at the start of every player turn;
+        // - for human's campaign-only heroes as they get additional experience immediately upon their creation,
+        //   even while still neutral.
+        if ( !isMapLoading && selected.Skill() == Skill::Secondary::SCOUTING && GetColor() != PlayerColor::NONE ) {
             Scout( GetIndex() );
             if ( isControlHuman() ) {
                 ScoutRadar();
@@ -1963,6 +1965,10 @@ void Heroes::Dismiss( const int reason )
     // Reset army to default state for hero's race if hero did not surrender in battle.
     if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
         _army.Reset( true );
+    }
+    else if ( !_army.isValid() ) {
+        // Reset empty army for surrendered hero.
+        _army.Reset( false );
     }
 
     const PlayerColor heroColor = GetColor();
@@ -2058,7 +2064,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
     if ( isValidId( heroId ) )
         switch ( portraitType ) {
         case PORT_BIG:
-            return fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroId ), 0 );
+            return Assets::getImage( ICN::getHeroPortraitIcnId( heroId ), 0 );
         case PORT_MEDIUM: {
             // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
             // TODO: find a better way to store these images, ideally in agg_image.cpp file.
@@ -2068,7 +2074,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
                 return iter->second;
             }
 
-            const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::getHeroPortraitIcnId( heroId ), 0 );
+            const fheroes2::Sprite & original = Assets::getImage( ICN::getHeroPortraitIcnId( heroId ), 0 );
             fheroes2::Sprite output( 50, 47 );
             fheroes2::Resize( original, output );
 
@@ -2076,16 +2082,16 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
         }
         case PORT_SMALL:
             if ( heroId == Heroes::DEBUG_HERO ) {
-                return fheroes2::AGG::GetICN( ICN::MINIPORT, BRAX - 1 );
+                return Assets::getImage( ICN::MINIPORT, BRAX - 1 );
             }
 
             // Since hero IDs start from 1 we have to deduct 1 from the ID.
-            return fheroes2::AGG::GetICN( ICN::MINIPORT, heroId - 1 );
+            return Assets::getImage( ICN::MINIPORT, heroId - 1 );
         default:
             break;
         }
 
-    return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
+    return Assets::getImage( ICN::UNKNOWN, 0 );
 }
 
 void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
@@ -2104,9 +2110,7 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
-            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::PORTXTRA, 0 );
-            const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
-            const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, getManaIndexSprite() );
+            const fheroes2::Sprite & background = Assets::getImage( ICN::PORTXTRA, 0 );
 
             const int barw = 7;
 
@@ -2114,13 +2118,23 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             fheroes2::Blit( background, dstsf, px, py );
 
             // Draw mobility.
-            fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
+            const uint32_t mobilitySpriteIndex = GetMobilityIndexSprite();
+            // Don't draw this sprite if there are no movement points left.
+            if ( mobilitySpriteIndex > 0 ) {
+                const fheroes2::Sprite & mobility = Assets::getImage( ICN::MOBILITY, mobilitySpriteIndex );
+                fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
+            }
 
             // Draw hero's portrait.
             fheroes2::Copy( port, 0, 0, dstsf, px + barw + 1, py, port.width(), port.height() );
 
             // Draw mana.
-            fheroes2::Copy( mana, 0, 0, dstsf, px + barw + port.width() + 2, py + mana.y(), mana.width(), mana.height() );
+            const uint32_t manaSpriteIndex = getManaIndexSprite();
+            // Don't draw this sprite if there are no spell points left.
+            if ( manaSpriteIndex > 0 ) {
+                const fheroes2::Sprite & mana = Assets::getImage( ICN::MANA, manaSpriteIndex );
+                fheroes2::Copy( mana, 0, 0, dstsf, px + barw + port.width() + 2, py + mana.y(), mana.width(), mana.height() );
+            }
 
             mp.x = 35;
         }
@@ -2132,7 +2146,7 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
     }
 
     if ( Modes( Heroes::SLEEPER ) ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC4, 14 );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::MISC4, 14 );
         fheroes2::Image sleeperBG( sprite.width() - 4, sprite.height() - 4 );
         sleeperBG.fill( 0 );
 

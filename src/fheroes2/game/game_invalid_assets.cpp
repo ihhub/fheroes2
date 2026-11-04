@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2026                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,26 +18,39 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "game_invalid_assets.h"
 
-#include <cstdint>
+#include "embedded_image.h"
+#include "image.h"
+#include "localevent.h"
+#include "screen.h"
+#include "timing.h"
+#include "zzlib.h"
 
-namespace fheroes2
+void showMissingAssetsImage()
 {
-    class Image;
-    class Sprite;
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Image & image = Compression::CreateImageFromZlib( 290, 190, missingGameAssets, sizeof( missingGameAssets ), false );
 
-    enum class SupportedLanguage : uint8_t;
+    display.fill( 0 );
+    fheroes2::Resize( image, display );
 
-    namespace AGG
-    {
-        const Sprite & GetICN( int icnId, uint32_t index );
-        uint32_t GetICNCount( int icnId );
+    display.render();
 
-        // shapeId could be 0, 1, 2 or 3 only
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
+    LocalEvent & le = LocalEvent::Get();
 
-        // This function must be called only at the time of setting up a new language.
-        void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
+    // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
+    const fheroes2::Time timer;
+
+    bool closeWindow = false;
+
+    while ( le.HandleEvents( true, true ) ) {
+        if ( closeWindow && timer.getS() >= 5 ) {
+            break;
+        }
+
+        if ( le.isAnyKeyPressed() || le.MouseClickLeft() ) {
+            closeWindow = true;
+        }
     }
 }

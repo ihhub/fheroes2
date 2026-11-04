@@ -109,7 +109,8 @@ namespace fheroes2
         }
 
         const int32_t length = isVertical() ? _area.height - height() : _area.width - width();
-        const int32_t pos = isVertical() ? std ::clamp( position.y - height() / 2 - _area.y, 0, length ) : std ::clamp( position.x - width() / 2 - _area.x, 0, length );
+        const int32_t pos = isVertical() ? std ::clamp<int32_t>( position.y - height() / 2 - _area.y, 0, length )
+                                         : std ::clamp<int32_t>( position.x - width() / 2 - _area.x, 0, length );
         const int32_t newIndex = ( ( _maxIndex - _minIndex ) * pos + length / 2 ) / length + _minIndex;
 
         if ( newIndex != _currentIndex ) {

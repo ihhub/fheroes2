@@ -29,7 +29,6 @@
 #include <iterator>
 #include <sstream>
 
-#include "agg_image.h"
 #include "ai_planner.h"
 #include "army_troop.h"
 #include "artifact.h"
@@ -41,6 +40,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_io.h"
 #include "game_static.h"
 #include "ground.h"
@@ -1363,14 +1363,14 @@ void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
     }
 
     for ( uint32_t i = 0; i < 5; ++i ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTWBA, index + i );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::OBJNTWBA, index + i );
         dst_pt.x = pt.x + i * 32 + sprite.x();
         dst_pt.y = pt.y + 3 * 32 + sprite.y();
         fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
 
     for ( uint32_t i = 0; i < 5; ++i ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTWBA, index + 5 + i );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::OBJNTWBA, index + 5 + i );
         dst_pt.x = pt.x + i * 32 + sprite.x();
         dst_pt.y = pt.y + 4 * 32 + sprite.y();
         fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
@@ -1401,24 +1401,24 @@ void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
     }
     if ( !( BUILD_CASTLE & _constructedBuildings ) )
         index += 16;
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index );
+    const fheroes2::Sprite & sprite2 = Assets::getImage( ICN::OBJNTOWN, index );
     dst_pt.x = pt.x + 2 * 32 + sprite2.x();
     dst_pt.y = pt.y + sprite2.y();
     fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
     for ( uint32_t ii = 0; ii < 5; ++ii ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index + 1 + ii );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::OBJNTOWN, index + 1 + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 32 + sprite.y();
         fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
     for ( uint32_t ii = 0; ii < 5; ++ii ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index + 6 + ii );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::OBJNTOWN, index + 6 + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 2 * 32 + sprite.y();
         fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     }
     for ( uint32_t ii = 0; ii < 5; ++ii ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::OBJNTOWN, index + 11 + ii );
+        const fheroes2::Sprite & sprite = Assets::getImage( ICN::OBJNTOWN, index + 11 + ii );
         dst_pt.x = pt.x + ii * 32 + sprite.x();
         dst_pt.y = pt.y + 3 * 32 + sprite.y();
         fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );

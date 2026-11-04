@@ -25,8 +25,8 @@
 #include <cstdint>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -57,7 +57,7 @@ namespace Interface
     {
         const CursorRestorer cursorRestorer( false );
 
-        const fheroes2::Sprite & windowImage = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
+        const fheroes2::Sprite & windowImage = Assets::getImage( ICN::QWIKINFO, 0 );
 
         LocalEvent & le = LocalEvent::Get();
         const fheroes2::Rect windowRoi = Interface::getPopupWindowPosition( le.getMouseCursorPos(), interfaceArea, { windowImage.width(), windowImage.height() } );

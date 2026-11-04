@@ -24,7 +24,7 @@
 #include <cstdint>
 #include <utility>
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "screen.h"
@@ -94,7 +94,7 @@ namespace fheroes2
 
         assert( scrollSpeedIconIcn != ICN::UNKNOWN );
 
-        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
+        const fheroes2::Sprite & scrollSpeedIcon = Assets::getImage( scrollSpeedIconIcn, scrollSpeedIconId );
         fheroes2::drawOption( optionRoi, scrollSpeedIcon, _( "Scroll Speed" ), std::move( scrollSpeedName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
@@ -119,32 +119,32 @@ namespace fheroes2
             break;
         }
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, icnInx ), _( "Interface Type" ), std::move( value ), textMaxWidth );
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::SPANEL, icnInx ), _( "Interface Type" ), std::move( value ), textMaxWidth );
     }
 
     void drawCursorType( const fheroes2::Rect & optionRoi, const bool isMonochromeCursor, const int32_t textMaxWidth )
     {
         if ( isMonochromeCursor ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ), textMaxWidth );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ), textMaxWidth );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ), textMaxWidth );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ), textMaxWidth );
         }
     }
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ), textMaxWidth );
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ), textMaxWidth );
     }
 
     void drawAudioOptions( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), textMaxWidth );
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), textMaxWidth );
     }
 
     void drawGraphics( const fheroes2::Rect & optionRoi, const int32_t textMaxWidth )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ), textMaxWidth );
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ), textMaxWidth );
     }
 
     void drawLanguage( const fheroes2::Rect & optionRoi, const std::string & languageAbbreviation, const int32_t textMaxWidth )
@@ -152,16 +152,16 @@ namespace fheroes2
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( languageAbbreviation );
         const fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ), textMaxWidth );
+        fheroes2::drawOption( optionRoi, Assets::getImage( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ), textMaxWidth );
     }
 
     void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi, const bool isEnabled, const int32_t textMaxWidth )
     {
         if ( isEnabled ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), textMaxWidth );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), textMaxWidth );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), textMaxWidth );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), textMaxWidth );
         }
     }
 }

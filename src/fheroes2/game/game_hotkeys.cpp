@@ -48,6 +48,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "version.h"
 
 namespace
 {
@@ -348,7 +349,7 @@ namespace
     std::string getHotKeyFileContent()
     {
         std::ostringstream os;
-        os << "# fheroes2 hotkey file (saved by version " << Settings::GetVersion() << ")" << std::endl;
+        os << "# fheroes2 hotkey file (saved by version " ENGINE_VERSION ")" << std::endl;
         os << std::endl;
 
         Game::HotKeyCategory currentCategory = hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1].category;
@@ -470,12 +471,13 @@ void Game::HotKeysLoad( const std::string & filename )
         }
     }
 
+    // TODO: do not save this file if no changes are present.
     HotKeySave();
 }
 
 void Game::HotKeySave()
 {
-    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), hotkeyFileName );
 
     StreamFile fileStream;
     if ( !fileStream.open( filename, "w" ) ) {

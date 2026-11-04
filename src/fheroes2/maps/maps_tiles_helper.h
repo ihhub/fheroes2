@@ -150,9 +150,11 @@ namespace Maps
 
     void updateDwellingPopulationOnTile( Tile & tile, const bool isFirstLoad );
 
-    void updateObjectInfoTile( Tile & tile, const bool isFirstLoad );
+    void setInitialObjectInfo( Tile & tile );
 
-    void updateMonsterInfoOnTile( Tile & tile );
+    void updateObjectInfoTile( Tile & tile );
+
+    void updateMonstersOnTile( Tile & tile, const uint32_t monsterLimit );
 
     void setMonsterOnTile( Tile & tile, const Monster & mons, const uint32_t count );
 

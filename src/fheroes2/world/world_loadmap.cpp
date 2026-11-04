@@ -878,6 +878,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                         hero->applyHeroMetadata( heroInfo, false, false );
 
                         hiredHeroTileId.emplace( tileId );
+
+                        if ( vec_tiles[tileId].isWater() ) {
+                            hero->SetShipMaster( true );
+                        }
                     }
                     else {
                         VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " failed to be hired." )
@@ -1489,7 +1493,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
 {
     switch ( objectType ) {
     case MP2::OBJ_ARTIFACT:
-        updateObjectInfoTile( tile, true );
+        setInitialObjectInfo( tile );
         if ( checkPoLObjects ) {
             const Artifact art = Maps::getArtifactFromTile( tile );
             if ( fheroes2::isPriceOfLoyaltyArtifact( art.GetID() ) ) {
@@ -1559,7 +1563,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_WATER_WHEEL:
     case MP2::OBJ_WINDMILL:
     case MP2::OBJ_WITCHS_HUT:
-        updateObjectInfoTile( tile, true );
+        setInitialObjectInfo( tile );
         break;
 
     case MP2::OBJ_AIR_ALTAR:
@@ -1569,7 +1573,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     case MP2::OBJ_WATER_ALTAR:
         // We need to clear metadata because it is being stored as a part of an MP2 object.
         resetObjectMetadata( tile );
-        updateObjectInfoTile( tile, true );
+        setInitialObjectInfo( tile );
         break;
 
     case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:

@@ -27,12 +27,12 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "army.h"
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "heroes.h"
@@ -111,7 +111,7 @@ void Interface::StatusPanel::_redraw() const
     }
 
     // draw info: Day and Funds and Army
-    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const fheroes2::Sprite & ston = Assets::getImage( conf.isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const int32_t stonHeight = ston.height();
 
     if ( _state == StatusType::STATUS_AITURN ) {
@@ -182,7 +182,7 @@ void Interface::StatusPanel::_redraw() const
 void Interface::StatusPanel::NextState()
 {
     const int32_t areaHeight = GetArea().height;
-    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const fheroes2::Sprite & ston = Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const int32_t stonHeight = ston.height();
 
     const bool skipDayStatus = areaHeight >= ( stonHeight * 2 + 15 ) && areaHeight < ( stonHeight * 3 + 15 );
@@ -224,7 +224,7 @@ void Interface::StatusPanel::_drawKingdomInfo( const int32_t offsetY ) const
 
     // sprite all resource
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RESSMALL, 0 ), display, pos.x + 6, pos.y );
+    fheroes2::Blit( Assets::getImage( ICN::RESSMALL, 0 ), display, pos.x + 6, pos.y );
 
     pos.y += 27;
 
@@ -276,7 +276,7 @@ void Interface::StatusPanel::_drawDayInfo( const int32_t offsetY ) const
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Blit( fheroes2::AGG::GetICN( icnType, icnId ), display, pos.x, pos.y + 1 + offsetY );
+    fheroes2::Blit( Assets::getImage( icnType, icnId ), display, pos.x, pos.y + 1 + offsetY );
 
     std::string message = _( "Month: %{month} Week: %{week}" );
     StringReplace( message, "%{month}", month );
@@ -310,7 +310,7 @@ void Interface::StatusPanel::_drawResourceInfo( const int32_t offsetY ) const
     fheroes2::Text text{ std::move( message ), fheroes2::FontType::smallWhite() };
     text.draw( pos.x, pos.y + 6 + offsetY, pos.width, display );
 
-    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( _lastResource ) );
+    const fheroes2::Sprite & spr = Assets::getImage( ICN::RESOURCE, Resource::getIconIcnIndex( _lastResource ) );
     fheroes2::Blit( spr, display, pos.x + ( pos.width - spr.width() ) / 2, pos.y + 6 + offsetY + text.height( pos.width ) );
 
     text.set( std::to_string( _lastResourceCount ), fheroes2::FontType::smallWhite() );
@@ -341,7 +341,7 @@ void Interface::StatusPanel::_drawAITurns() const
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & glass = fheroes2::AGG::GetICN( ICN::HOURGLAS, 0 );
+    const fheroes2::Sprite & glass = Assets::getImage( ICN::HOURGLAS, 0 );
     const fheroes2::Rect & statusRoi = GetArea();
 
     int32_t posX = statusRoi.x + ( statusRoi.width - glass.width() ) / 2;
@@ -375,7 +375,7 @@ void Interface::StatusPanel::_drawAITurns() const
         return;
     }
 
-    const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::BRCREST, colorIndex );
+    const fheroes2::Sprite & crest = Assets::getImage( ICN::BRCREST, colorIndex );
 
     posX += 2;
     posY += 2;
@@ -395,17 +395,17 @@ void Interface::StatusPanel::_drawAITurns() const
         animationIndex = 21 + ( animationIndex % 10 );
     }
 
-    const fheroes2::Sprite & sandGains = fheroes2::AGG::GetICN( ICN::HOURGLAS, animationIndex );
+    const fheroes2::Sprite & sandGains = Assets::getImage( ICN::HOURGLAS, animationIndex );
     fheroes2::Blit( sandGains, display, posX - sandGains.width() - sandGains.x(), posY + sandGains.y() );
 
-    const fheroes2::Sprite & sand = fheroes2::AGG::GetICN( ICN::HOURGLAS, 1 + ( _aiTurnProgress % 10 ) );
+    const fheroes2::Sprite & sand = Assets::getImage( ICN::HOURGLAS, 1 + ( _aiTurnProgress % 10 ) );
     fheroes2::Blit( sand, display, posX - sand.width() - sand.x(), posY + sand.y() );
 }
 
 void Interface::StatusPanel::_drawBackground() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const fheroes2::Sprite & icnston = Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const fheroes2::Rect & pos = GetArea();
 
     if ( !Settings::Get().isHideInterfaceEnabled() && display.height() - fheroes2::borderWidthPx - icnston.height() > pos.y ) {
@@ -453,7 +453,7 @@ void Interface::StatusPanel::QueueEventProcessing()
         setRedraw();
     }
     else if ( le.isMouseRightButtonPressedInArea( GetRect() ) ) {
-        const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+        const fheroes2::Sprite & ston = Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
         const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {
             fheroes2::showStandardTextMessage( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ),

@@ -22,6 +22,7 @@ jobs:
           package_name: fheroes2_ubuntu_x86-64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
@@ -67,6 +68,7 @@ jobs:
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
@@ -103,7 +105,7 @@ jobs:
             FHEROES2_WITH_TSAN: ON
         - name: macOS SDL2
           on: [ 'pull_request', 'push' ]
-          os: macos-14
+          os: macos-26-intel
           arch: x86_64
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
@@ -116,6 +118,7 @@ jobs:
           package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
@@ -165,11 +168,6 @@ jobs:
     - name: Install dependencies (macOS)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
-        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
-            arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            # Homebrew uses /opt/homebrew for Apple Silicon packages and /usr/local for x86_64 packages
-            export PATH=/usr/local/bin:$PATH
-        fi
         brew install ${{ matrix.dependencies }}
       env:
         # Do not update outdated dependencies of installed packages
@@ -182,10 +180,6 @@ jobs:
     - name: Build (MacOS)
       if: ${{ contains( matrix.on, github.event_name ) && startsWith( matrix.os, 'macos-' ) }}
       run: |
-        if [[ "${{ matrix.arch }}" == x86_64 ]]; then
-            # Homebrew uses /opt/homebrew for Apple Silicon packages and /usr/local for x86_64 packages
-            export PATH=/usr/local/bin:$PATH
-        fi
         make -j "$(sysctl -n hw.logicalcpu)"
       env: ${{ matrix.env }}
     - name: Create packages
@@ -272,7 +266,7 @@ jobs:
     - name: Create package
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.vpk
-        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
+        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE LICENSE-ART changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -321,7 +315,7 @@ jobs:
         make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
-        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE LICENSE-ART changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -378,7 +372,7 @@ jobs:
     - name: Create package
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.data
-        7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
+        7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE LICENSE-ART changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:

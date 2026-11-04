@@ -31,7 +31,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "ground.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
@@ -47,12 +47,12 @@ namespace
     {
         const int icnId = MP2::getIcnIdFromObjectIcnType( objectPart.icnType );
 
-        const fheroes2::Sprite & imagePart = fheroes2::AGG::GetICN( icnId, objectPart.icnIndex );
+        const fheroes2::Sprite & imagePart = Assets::getImage( icnId, objectPart.icnIndex );
         Blit( imagePart, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + imagePart.x(),
               ( objectPart.tileOffset.y - minOffset.y ) * tileSize + imagePart.y(), imagePart.width(), imagePart.height() );
 
         if ( objectPart.animationFrames > 0 ) {
-            const fheroes2::Sprite & animationFrame = fheroes2::AGG::GetICN( icnId, objectPart.icnIndex + 1 );
+            const fheroes2::Sprite & animationFrame = Assets::getImage( icnId, objectPart.icnIndex + 1 );
             Blit( animationFrame, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + animationFrame.x(),
                   ( objectPart.tileOffset.y - minOffset.y ) * tileSize + animationFrame.y(), animationFrame.width(), animationFrame.height() );
         }
@@ -175,7 +175,7 @@ namespace fheroes2
                 renderObjectPart( image, objectPart, { 0, 0 } );
             }
             else {
-                image = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
+                image = Assets::getImage( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
             }
 
             // If it is a one tile image make sure that the offset is in the middle of the image.

@@ -34,6 +34,7 @@ namespace fheroes2
 {
     class Cursor;
     class Display;
+    struct RGB;
 
     struct ResolutionInfo
     {
@@ -251,7 +252,7 @@ namespace fheroes2
 
         // Change the whole color representation on the screen. Make sure that palette exists all the time!!!
         // nullptr input parameter is used to reset palette to default one.
-        void changePalette( const uint8_t * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
+        void changePalette( const RGB * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
 
         Size screenSize() const
         {
@@ -289,6 +290,11 @@ namespace fheroes2
     {
     public:
         friend Display;
+
+        Cursor( const Cursor & ) = delete;
+
+        Cursor & operator=( const Cursor & ) = delete;
+
         virtual ~Cursor() = default;
 
         virtual void show( const bool enable )
@@ -313,15 +319,25 @@ namespace fheroes2
             _image.setPosition( x, y );
         }
 
-        // Default implementation of Cursor uses software emulation.
-        virtual void enableSoftwareEmulation( const bool /*unused*/ )
+        virtual void enableSoftwareEmulation( const bool enable )
         {
-            // Do nothing.
+            _emulation = enable;
         }
 
         bool isSoftwareEmulation() const
         {
             return _emulation;
+        }
+
+        void forceSoftwareEmulation()
+        {
+            _forceEmulation = true;
+            enableSoftwareEmulation( true );
+        }
+
+        bool isSoftwareEmulationForced() const
+        {
+            return _forceEmulation;
         }
 
         void registerUpdater( void ( *cursorUpdater )() )
@@ -338,6 +354,7 @@ namespace fheroes2
         Sprite _image;
         void ( *_cursorUpdater )(){ nullptr };
         bool _emulation{ false };
+        bool _forceEmulation{ false };
         bool _show{ false };
         bool _keepInScreenArea{ false };
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,12 +31,12 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -119,7 +119,7 @@ namespace
             return;
         }
 
-        const int32_t sptireWidth = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 ).width();
+        const int32_t sptireWidth = Assets::getImage( ICN::TOWNWIND, 22 ).width();
         const int32_t offsetY = pos.y - 4;
 
         for ( size_t i = 0; i < flagGroups; ++i ) {
@@ -128,7 +128,7 @@ namespace
             int32_t offsetX = pos.x + static_cast<int32_t>( i ) * step - ( static_cast<int32_t>( colors.size() ) * sptireWidth ) / 2 + 3;
 
             for ( const PlayerColor color : colors ) {
-                const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 + Color::GetIndex( color ) );
+                const fheroes2::Sprite & flag = Assets::getImage( ICN::TOWNWIND, 22 + Color::GetIndex( color ) );
                 fheroes2::Blit( flag, output, offsetX, offsetY );
                 offsetX += sptireWidth;
             }
@@ -173,7 +173,7 @@ namespace
                 continue;
             }
 
-            const fheroes2::Sprite & window = fheroes2::AGG::GetICN( frameIcnID, 22 );
+            const fheroes2::Sprite & window = Assets::getImage( frameIcnID, 22 );
             fheroes2::Blit( window, output, offsetX - window.width() / 2, pos.y - 4 );
 
             const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
@@ -207,7 +207,7 @@ namespace
         for ( const PlayerColor color : colors ) {
             const Monster monster = world.GetKingdom( color ).GetStrongestMonster();
             if ( monster.isValid() ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
+                const fheroes2::Sprite & sprite = Assets::getImage( ICN::MONS32, monster.GetSpriteIndex() );
                 fheroes2::Blit( sprite, output, offsetX - sprite.width() / 2, pos.y - sprite.height() / 2 );
             }
 
@@ -273,7 +273,7 @@ void Dialog::ThievesGuild( const bool oracle )
 
     const bool isEvilInterfaceTown = Settings::Get().isEvilInterfaceEnabled();
 
-    const fheroes2::Sprite & backgroundSprite = fheroes2::AGG::GetICN( isEvilInterfaceTown ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+    const fheroes2::Sprite & backgroundSprite = Assets::getImage( isEvilInterfaceTown ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
     fheroes2::Copy( backgroundSprite, 0, 0, display, dialogRoi.x, dialogRoi.y, backgroundSprite.width(), backgroundSprite.height() );
 
     const uint32_t thievesGuildCount = oracle ? 0xFF : world.GetKingdom( Settings::Get().CurrentColor() ).GetCountBuilding( BUILD_THIEVESGUILD );
@@ -295,10 +295,10 @@ void Dialog::ThievesGuild( const bool oracle )
     }
 
     // Status bar.
-    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    const int32_t exitWidth = Assets::getImage( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
     const int32_t bottomBarOffsetY = 461;
 
-    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const fheroes2::Sprite & bottomBar = Assets::getImage( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
     offset.y = dialogRoi.y + bottomBarOffsetY;
 

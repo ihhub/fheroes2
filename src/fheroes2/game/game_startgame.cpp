@@ -34,7 +34,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "ai_planner.h"
 #include "army.h"
 #include "audio.h"
@@ -45,6 +44,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
+#include "game_assets.h"
 #include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_exit.h"
@@ -253,27 +253,27 @@ void Game::DialogPlayers( const PlayerColor color, std::string title, std::strin
     const Player * player = Players::Get( color );
     StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
-    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & border = Assets::getImage( ICN::BRCREST, 6 );
     fheroes2::Sprite sign = border;
 
     switch ( color ) {
     case PlayerColor::BLUE:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 0 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 0 ), sign, 4, 4 );
         break;
     case PlayerColor::GREEN:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 1 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 1 ), sign, 4, 4 );
         break;
     case PlayerColor::RED:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 2 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 2 ), sign, 4, 4 );
         break;
     case PlayerColor::YELLOW:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 3 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 3 ), sign, 4, 4 );
         break;
     case PlayerColor::ORANGE:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 4 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 4 ), sign, 4, 4 );
         break;
     case PlayerColor::PURPLE:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
         // Did you add a new color? Add the logic for it!
