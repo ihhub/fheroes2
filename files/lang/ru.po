@@ -5369,7 +5369,8 @@ msgstr "Установить количество прогонов."
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Максимум дней на прогон:"
 
-msgid "Set the maximum number of days within each playthrough is being run."
+#, fuzzy
+msgid "Set the maximum number of days that each playthrough is run for."
 msgstr "Установить максимальную продолжительность одного прогона в днях."
 
 msgid "autoPlaytest|Last day of playthrough:"

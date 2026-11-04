@@ -5330,8 +5330,9 @@ msgstr "Végigjátszások száma:"
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Max. napszám végigjátszásonként:"
 
-msgid "Set the maximum number of days within each playthrough is being run."
-msgstr ""
+#, fuzzy
+msgid "Set the maximum number of days that each playthrough is run for."
+msgstr "Végigjátszások száma:"
 
 #, fuzzy
 msgid "autoPlaytest|Last day of playthrough:"

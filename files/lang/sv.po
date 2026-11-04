@@ -5326,8 +5326,9 @@ msgstr "Antal testkörningar:"
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Maximalt antal dagar per testkörning:"
 
-msgid "Set the maximum number of days within each playthrough is being run."
-msgstr ""
+#, fuzzy
+msgid "Set the maximum number of days that each playthrough is run for."
+msgstr "Antal testkörningar:"
 
 #, fuzzy
 msgid "autoPlaytest|Last day of playthrough:"
