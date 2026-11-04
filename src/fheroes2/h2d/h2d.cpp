@@ -21,8 +21,10 @@
 #include "h2d.h"
 
 #include <functional>
+#include <initializer_list>
 #include <set>
 #include <stdexcept>
+#include <utility>
 
 #include "h2d_file.h"
 #include "logging.h"
