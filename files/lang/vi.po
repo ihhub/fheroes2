@@ -5942,6 +5942,10 @@ msgstr "mặc định lên"
 msgid "hotkey|default down"
 msgstr "mặc định xuống"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "mặc định trái"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "chuyển đổi chế độ toàn màn hình"
 

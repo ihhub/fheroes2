@@ -5693,6 +5693,10 @@ msgstr "Nahoru"
 msgid "hotkey|default down"
 msgstr "Dolů"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Vlevo"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Přepnout na celou obrazovku"
 

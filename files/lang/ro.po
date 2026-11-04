@@ -5569,6 +5569,10 @@ msgstr ""
 msgid "hotkey|default down"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Personalizează opțiunile sistemului"
+
 msgid "hotkey|toggle fullscreen"
 msgstr ""
 

@@ -5976,6 +5976,10 @@ msgstr "нагоре по подразбиране"
 msgid "hotkey|default down"
 msgstr "надолу по подразбиране"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "ляво по подразбиране"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "превключване на цял екран"
 

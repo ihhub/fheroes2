@@ -5925,6 +5925,10 @@ msgstr "Direction haut"
 msgid "hotkey|default down"
 msgstr "Direction bas"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Direction gauche"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Basculer en plein écran"
 

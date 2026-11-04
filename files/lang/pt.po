@@ -5758,6 +5758,10 @@ msgstr "padrão para cima"
 msgid "hotkey|default down"
 msgstr "padrão para baixo"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "padrão para a esquerda"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "alternar tela cheia"
 

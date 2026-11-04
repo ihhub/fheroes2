@@ -5723,6 +5723,10 @@ msgstr "Standard: Upp"
 msgid "hotkey|default down"
 msgstr "Standard: Ner"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Standard: Vänster"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Visa fullskärm"
 

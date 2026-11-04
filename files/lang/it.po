@@ -5722,6 +5722,10 @@ msgstr ""
 msgid "hotkey|default down"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Piazza del Mercato"
+
 msgid "hotkey|toggle fullscreen"
 msgstr ""
 
