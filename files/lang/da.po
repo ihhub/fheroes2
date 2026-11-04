@@ -8974,7 +8974,7 @@ msgid "Swap Armies"
 msgstr "Byt hære"
 
 msgid "Swap armies between heroes."
-msgstr "Byt heltenes hære"
+msgstr "Byt heltenes hære."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fjendtlige helte er nu fuldt identificerbare."
