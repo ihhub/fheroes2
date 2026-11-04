@@ -105,10 +105,8 @@ namespace
         const fheroes2::Text text{ ( marketCount > 9 ) ? "x 9+" : "x " + std::to_string( marketCount ), fheroes2::FontType::smallWhite() };
 
         constexpr int32_t spacing = 2;
-        const int32_t elementHeight = icon.height() + spacing + text.height();
-
         const int32_t iconOffsetX = offset.x - icon.width() / 2;
-        const int32_t iconOffsetY = offset.y + 2;
+        const int32_t iconOffsetY = offset.y + spacing;
 
         fheroes2::Blit( icon, output, iconOffsetX, iconOffsetY );
 
@@ -117,7 +115,7 @@ namespace
 
         text.draw( textOffsetX, textOffsetY, output );
 
-        return { iconOffsetX, iconOffsetY, icon.width(), elementHeight };
+        return { iconOffsetX, iconOffsetY, icon.width(), icon.height() + spacing + text.height() };
     }
 
     class TradeWindowGUI
