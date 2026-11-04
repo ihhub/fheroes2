@@ -3548,7 +3548,7 @@ msgid "Select Ocean Object:"
 msgstr "Vælg hav-objekt:"
 
 msgid "Castle/town placing:"
-msgstr "Borg/by placering"
+msgstr "Borg-/byplacering"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
