@@ -402,9 +402,6 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     const fheroes2::Rect & pos_rt = box.GetArea();
     fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
-    // fheroes2::Rect marketplaceCountRoi;
-
-    // const uint32_t marketplaceEquivalentCount = fromTradingPost ? 3 : kingdom.GetCountMarketplace();
 
     // header
     fheroes2::Text text{ header, fheroes2::FontType::normalYellow() };
