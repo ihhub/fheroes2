@@ -6,7 +6,7 @@
 
 This open source multi-platform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and
 logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based
-strategies.
+strategy games.
 
 ## Q: Is fheroes2 a mod?
 

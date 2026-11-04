@@ -173,7 +173,7 @@ namespace fheroes2
 
         size_t getCursorInTextPosition( const Point & pos ) const
         {
-            return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
+            return _text.getCursorPosition( { pos.x, pos.y + _verticalTextOffset }, _textInputArea, _isSingleLineTextCenterAligned );
         }
 
         size_t getCursorPositionInAdjacentLine( const size_t currentPos, const bool moveUp )
@@ -194,6 +194,8 @@ namespace fheroes2
         MovableSprite _cursor;
         ImageRestorer _background;
         Rect _textInputArea;
+        int32_t _verticalTextOffset{ 0 };
+        bool _isMultiLineText{ false };
         bool _isSingleLineTextCenterAligned{ false };
     };
 
