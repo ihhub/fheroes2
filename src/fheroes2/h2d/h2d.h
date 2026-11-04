@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace fheroes2
 {
@@ -39,5 +40,7 @@ namespace fheroes2
         };
 
         bool readImage( const std::string & name, Sprite & image );
+
+        bool readAudio( const std::string & name, std::vector<uint8_t> & data );
     }
 }

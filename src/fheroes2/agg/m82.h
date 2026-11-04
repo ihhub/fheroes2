@@ -348,6 +348,12 @@ namespace M82
         ZOMBMOVE,
         ZOMBWNCE,
 
+        // A marker for the last sound from the original game.
+        LAST_ORIGINAL_SOUND,
+
+        // These are new sounds specific only for the fheroes2 Resurrection project.
+        GENIE_SNAP,
+
         // Put all new sounds before this line.
         UNKNOWN
     };

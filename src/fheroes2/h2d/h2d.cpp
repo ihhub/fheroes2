@@ -148,4 +148,20 @@ namespace fheroes2::h2d
     {
         return readImageFromH2D( reader, name, image );
     }
+
+    bool readAudio( const std::string & name, std::vector<uint8_t> & data )
+    {
+        if ( name.empty() ) {
+            return false;
+        }
+
+        std::vector<uint8_t> temp = reader.getFile( name );
+        if ( temp.empty() ) {
+            data = {};
+            return false;
+        }
+
+        data = std::move( temp );
+        return true;
+    }
 }

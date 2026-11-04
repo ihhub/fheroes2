@@ -6134,7 +6134,7 @@ void Battle::Interface::_redrawActionGenieHalvingAttack( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = Assets::getImage( target.GetMonsterSprite(), target.GetFrame() );
 
     fheroes2::Sprite halvingEffect( unitSprite );
     fheroes2::ApplyPalette( halvingEffect, PAL::GetPalette( PAL::PaletteType::PURPLE ) );

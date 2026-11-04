@@ -94,7 +94,8 @@ namespace M82
                    { WSND06, "WSND06.82M" },     { WSND10, "WSND10.82M" },     { WSND11, "WSND11.82M" },     { WSND12, "WSND12.82M" },     { WSND13, "WSND13.82M" },
                    { WSND14, "WSND14.82M" },     { WSND15, "WSND15.82M" },     { WSND16, "WSND16.82M" },     { WSND20, "WSND20.82M" },     { WSND21, "WSND21.82M" },
                    { WSND22, "WSND22.82M" },     { WSND23, "WSND23.82M" },     { WSND24, "WSND24.82M" },     { WSND25, "WSND25.82M" },     { WSND26, "WSND26.82M" },
-                   { ZOMBATTK, "ZOMBATTK.82M" }, { ZOMBKILL, "ZOMBKILL.82M" }, { ZOMBMOVE, "ZOMBMOVE.82M" }, { ZOMBWNCE, "ZOMBWNCE.82M" }, { UNKNOWN, "UNKNOWN" } };
+                   { ZOMBATTK, "ZOMBATTK.82M" }, { ZOMBKILL, "ZOMBKILL.82M" }, { ZOMBMOVE, "ZOMBMOVE.82M" }, { ZOMBWNCE, "ZOMBWNCE.82M" }, { LAST_ORIGINAL_SOUND, "" },
+                   { GENIE_SNAP, "genie_snap.sound" }, { UNKNOWN, "UNKNOWN" } };
 }
 
 const char * M82::GetString( int m82 )
