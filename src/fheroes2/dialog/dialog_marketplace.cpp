@@ -451,7 +451,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     RedrawToResource( pt2, false, kingdom, fromTradingPost, 0 );
 
     const fheroes2::Rect marketplaceCountRoi = renderExchangeRate( { pos_rt.x + pos_rt.width / 2, rectsFrom.back().y },
-        ( fromTradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), display, isEvilInterface );
+                                                                   ( fromTradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), display, isEvilInterface );
 
     uint32_t count_sell = 0;
     uint32_t count_buy = 0;
