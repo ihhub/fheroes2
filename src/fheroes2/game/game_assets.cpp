@@ -5666,8 +5666,8 @@ namespace
             break;
         case ICN::MARKETPLACE_ICON:
             _icnVsSprite[id].resize( 2 );
-            fheroes2::h2d::readImage( "icon_market_good.image", _icnVsSprite[id][0] );
-            fheroes2::h2d::readImage( "icon_market_evil.image", _icnVsSprite[id][1] );
+            fheroes2::h2d::readImage( "market_icon_good.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "market_icon_evil.image", _icnVsSprite[id][1] );
             break;
         default:
             break;
