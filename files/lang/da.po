@@ -4245,7 +4245,7 @@ msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Forlad editoren og spil kortet i Enkeltspiller-tilstand."
 
 msgid "Input %{object} text:"
-msgstr "Indtast %{object} tekst:"
+msgstr "Indtast text for %{object}:"
 
 msgid "Set Random Ultimate Artifact Radius:"
 msgstr "Indstil tilfældigt Ultimativt Artefakt radius:"
