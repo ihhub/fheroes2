@@ -5359,7 +5359,8 @@ msgstr "Definir o número de partidas."
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Máximo de dias por partida:"
 
-msgid "Set the maximum number of days within each playthrough is being run."
+#, fuzzy
+msgid "Set the maximum number of days that each playthrough is run for."
 msgstr "Definir o número máximo de dias de cada partida."
 
 msgid "autoPlaytest|Last day of playthrough:"

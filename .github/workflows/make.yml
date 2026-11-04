@@ -22,6 +22,7 @@ jobs:
           package_name: fheroes2_ubuntu_x86-64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
@@ -67,6 +68,7 @@ jobs:
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
@@ -116,6 +118,7 @@ jobs:
           package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: >-
             LICENSE
+            LICENSE-ART
             changelog.txt
             fheroes2
             ./docs/README.txt
@@ -263,7 +266,7 @@ jobs:
     - name: Create package
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.vpk
-        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
+        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE LICENSE-ART changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -312,7 +315,7 @@ jobs:
         make -C files/lang -j "$(nproc)"
     - name: Create package
       run: |
-        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE LICENSE-ART changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo maps/*.fh2m
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -369,7 +372,7 @@ jobs:
     - name: Create package
       run: |
         # Translations, H2D files and FH2M maps are already bundled into fheroes2.data
-        7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
+        7z a -bb1 -tzip -- ${{ matrix.package_name }} LICENSE LICENSE-ART changelog.txt fheroes2.data fheroes2.js fheroes2.wasm ./docs/README.txt ./files/emscripten/*
     - uses: actions/upload-artifact@v7
       if: ${{ github.event_name == 'pull_request' }}
       with:

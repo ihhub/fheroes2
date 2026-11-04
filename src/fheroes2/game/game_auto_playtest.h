@@ -50,7 +50,7 @@ namespace fheroes2
 
         static constexpr int32_t playthroughLimit{ 100 };
 
-        // Let's be reasonable. Having a playthrough over 10 years is an overkill.
+        // Let's be reasonable. Having a playthrough last over 10 years is overkill.
         static constexpr int32_t dayLimit{ 3360 };
         static constexpr int32_t animationLimit{ 10 };
 

@@ -46,6 +46,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
@@ -54,9 +55,11 @@
 
 namespace
 {
-    uint32_t GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost )
+    constexpr uint32_t tradingPostValue{ 3 };
+
+    uint32_t GetTradeCosts( const Kingdom & kingdom, const int rs_from, const int rs_to, const bool tradingPost )
     {
-        return fheroes2::getTradeCost( ( tradingPost ? 3 : kingdom.GetCountMarketplace() ), rs_from, rs_to );
+        return fheroes2::getTradeCost( ( tradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), rs_from, rs_to );
     }
 
     std::string GetStringTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost )
@@ -72,6 +75,44 @@ namespace
         }
 
         return res;
+    }
+
+    std::string getExchangeRateText( const bool isTradingPost, const uint32_t marketCount )
+    {
+        std::string temp;
+
+        if ( isTradingPost ) {
+            temp = _( "The Trading Post provides exchange rates equivalent to %{count} marketplaces." );
+        }
+        else if ( marketCount == 1 ) {
+            return _( "You currently control 1 marketplace. The more marketplaces you control, the better the exchange rate." );
+        }
+        else if ( marketCount >= 9 ) {
+            return _(
+                "You currently control enough marketplaces that the exchange rate has peaked. Controlling additional marketplaces will not improve the exchange rate." );
+        }
+        else {
+            temp = _( "You currently control %{count} marketplaces. The more marketplaces you control, the better the exchange rate." );
+        }
+
+        StringReplace( temp, "%{count}", isTradingPost ? tradingPostValue : marketCount );
+        return temp;
+    }
+
+    fheroes2::Rect renderExchangeRate( const fheroes2::Point offset, const uint32_t marketCount, fheroes2::Image & output, const bool isEvilInterface )
+    {
+        const fheroes2::Sprite & icon = Assets::getImage( ICN::MARKETPLACE_ICON, isEvilInterface ? 1 : 0 );
+
+        constexpr int32_t spacing = 2;
+        const int32_t iconOffsetX = offset.x - icon.width() / 2;
+        const int32_t iconOffsetY = offset.y + spacing;
+
+        fheroes2::Blit( icon, output, iconOffsetX, iconOffsetY );
+
+        const fheroes2::Text text{ ( marketCount > 9 ) ? "x 9+" : "x " + std::to_string( marketCount ), fheroes2::FontType::smallWhite() };
+        text.draw( offset.x - text.width() / 2, iconOffsetY + icon.height() + spacing, output );
+
+        return { iconOffsetX, iconOffsetY, icon.width(), icon.height() + spacing + text.height() };
     }
 
     class TradeWindowGUI
@@ -404,6 +445,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawToResource( pt2, false, kingdom, fromTradingPost, 0 );
 
+    const fheroes2::Rect exchangeRateRoi = renderExchangeRate( { pos_rt.x + pos_rt.width / 2, rectsFrom.back().y },
+                                                               ( fromTradingPost ? tradingPostValue : kingdom.GetCountMarketplace() ), display, isEvilInterface );
+
     uint32_t count_sell = 0;
     uint32_t count_buy = 0;
 
@@ -460,8 +504,16 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         buttonExit.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonExit.area() ) );
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
+
+        if ( le.isMouseLeftButtonPressedInArea( exchangeRateRoi ) ) {
+            fheroes2::showStandardTextMessage( _( "Exchange Rate" ), getExchangeRateText( fromTradingPost, kingdom.GetCountMarketplace() ), Dialog::OK );
+        }
+        else if ( le.isMouseRightButtonPressedInArea( exchangeRateRoi ) ) {
+            fheroes2::showStandardTextMessage( _( "Exchange Rate" ), getExchangeRateText( fromTradingPost, kingdom.GetCountMarketplace() ), Dialog::ZERO );
+        }
 
         // gift resources
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
