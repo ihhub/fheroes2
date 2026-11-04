@@ -5275,7 +5275,7 @@ msgstr ""
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr ""
 
-msgid "Set the maximum number of days within each playthrough is being run."
+msgid "Set the maximum number of days that each playthrough is run for."
 msgstr ""
 
 msgid "autoPlaytest|Last day of playthrough:"
