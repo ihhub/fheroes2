@@ -189,7 +189,7 @@ namespace Game
         ARMY_SWAP,
 
         // WARNING! Put all new event only above this line. No adding in between.
-        NO_EVENT
+        NO_EVENT,
     };
 
     enum class HotKeyCategory : uint8_t
