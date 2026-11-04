@@ -173,7 +173,7 @@ msgid "Move the %{name}"
 msgstr "Flyt %{name}"
 
 msgid "Set %{monster} Count:"
-msgstr "Indstil %{monster} Antal:"
+msgstr "Indstil %{monster} antal:"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
