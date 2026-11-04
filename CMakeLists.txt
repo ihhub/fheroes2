@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2025                                             #
+#   Copyright (C) 2022 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -139,7 +139,7 @@ if(NOT MACOS_APP_BUNDLE)
 		PATTERN *.fh2m
 		)
 	install(
-		FILES docs/README.txt LICENSE changelog.txt
+		FILES docs/README.txt LICENSE LICENSE-ART changelog.txt
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}
 		)
 
