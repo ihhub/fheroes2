@@ -3779,26 +3779,20 @@ namespace
         const int centerDirection = getObjectDirecton( dstIndex, objectType );
 
         switch ( centerDirection ) {
-        case Direction::TOP:
-            movementVector = { 0, -3 };
-            break;
         case Direction::TOP_RIGHT:
-            movementVector = { 6, -3 };
+            movementVector = { 3, -3 };
             break;
         case Direction::BOTTOM_RIGHT:
-            movementVector = { 6, 3 };
-            break;
-        case Direction::BOTTOM:
-            movementVector = { 0, 3 };
+            movementVector = { 3, 3 };
             break;
         case Direction::BOTTOM_LEFT:
-            movementVector = { -6, 3 };
+            movementVector = { -3, 3 };
             break;
         case Direction::TOP_LEFT:
-            movementVector = { -6, -3 };
+            movementVector = { -3, -3 };
             break;
         default:
-            // This is not a valid direction for the Waterfall.
+            // This is not a valid direction for the Maelstrom.
             assert( 0 );
             break;
         }
@@ -3809,7 +3803,7 @@ namespace
         Interface::AdventureMap & interface = Interface::AdventureMap::Get();
         Interface::GameArea & gameArea = interface.getGameArea();
 
-        constexpr int32_t animationFrames = 7;
+        constexpr int32_t animationFrames = 6;
         uint8_t frame = 0;
 
         while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_FADE_DELAY } ) ) ) {

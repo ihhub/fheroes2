@@ -5393,22 +5393,26 @@ namespace
             auto & images = _icnVsSprite[id];
             if ( images.size() == 24 ) {
                 // Expand the existing set of Adventure Map objects:
-                // - 1 new "Maelstrom" object that has: 5 main (empty) image + 5 animation images divided to 3 horizontal and 2 vertical tiles.
+                // - 1 "Maelstrom" object that has: main (empty) image + 12 animation images divided to 4 horizontal and 2 vertical tiles.
+                // - 2 "Maelstrom" close animation that has: 7 animation images divided to 2 horizontal and 2 vertical tiles.
 
-                constexpr size_t maelstromAnimations = 6;
+                constexpr size_t maelstromAnimations = 12;
                 constexpr size_t maelstromCloseAnimations = 7;
-                constexpr size_t maelstromPartsX = 3;
+                constexpr size_t maelstromPartsX = 4;
+                constexpr size_t maelstromClosePartsX = 2;
                 constexpr size_t maelstromPartsY = 2;
+                constexpr size_t maelstromAnimationImages = ( maelstromAnimations + 1 ) * maelstromPartsX * maelstromPartsY;
+                constexpr size_t maelstromCloseAnimationImages = maelstromCloseAnimations * maelstromClosePartsX * maelstromPartsY;
 
-                // maelstrom.
+                // Maelstrom.
                 size_t imageNumber = images.size();
                 // Object has only animation images but for compatibility we need to have the main image (+1).
                 // The "close" animation is played by a special function and does not need the main image.
-                images.resize( images.size() + ( maelstromAnimations + 1 + maelstromCloseAnimations ) * maelstromPartsX * maelstromPartsY );
+                images.resize( images.size() + maelstromAnimationImages + maelstromCloseAnimationImages );
 
-                auto loadmaelstromSprites = [&]( std::string const & namePrefix, const size_t animationsCount, const bool skipMainImage ) {
+                auto loadmaelstromSprites = [&]( std::string const & namePrefix, const size_t animationsCount, const size_t partsCountX, const bool skipMainImage ) {
                     for ( size_t y = 0; y < maelstromPartsY; ++y ) {
-                        for ( size_t x = 0; x < maelstromPartsX; ++x ) {
+                        for ( size_t x = 0; x < partsCountX; ++x ) {
                             if ( skipMainImage ) {
                                 ++imageNumber;
                             }
@@ -5421,8 +5425,8 @@ namespace
                     }
                 };
 
-                loadmaelstromSprites( "maelstrom_animation_", maelstromAnimations, true );
-                loadmaelstromSprites( "maelstrom_close_animation_", maelstromCloseAnimations, false );
+                loadmaelstromSprites( "maelstrom_animation_", maelstromAnimations, maelstromPartsX, true );
+                loadmaelstromSprites( "maelstrom_close_animation_", maelstromCloseAnimations, maelstromClosePartsX, false );
             }
 
             break;

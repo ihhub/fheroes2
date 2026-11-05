@@ -5027,21 +5027,26 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Maelstrom. The center point is middle lower tile.
+        // Maelstrom, "fheroes2 Resurrection" object.
+        // We use Maps::TERRAIN_LAYER to make non-action tiles fully passable.
         {
             Maps::ObjectInfo object{ MP2::OBJ_MAELSTROM };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 52, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 59, fheroes2::Point{ 1, 0 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 45, fheroes2::Point{ -1, 0 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 31, fheroes2::Point{ 0, -1 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 38, fheroes2::Point{ 1, -1 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 24, fheroes2::Point{ -1, -1 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 89, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 76, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_MAELSTROM, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 102, fheroes2::Point{ 1, 0 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 115, fheroes2::Point{ 2, 0 }, MP2::OBJ_NON_ACTION_MAELSTROM, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 24, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_MAELSTROM, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 37, fheroes2::Point{ 0, -1 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 50, fheroes2::Point{ 1, -1 }, MP2::OBJ_MAELSTROM, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 63, fheroes2::Point{ 2, -1 }, MP2::OBJ_NON_ACTION_MAELSTROM, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 12;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -6111,7 +6116,7 @@ namespace
                 for ( const auto & info : objectInfo.groundLevelParts ) {
                     if ( info.layerType == Maps::SHADOW_LAYER || info.layerType == Maps::TERRAIN_LAYER ) {
                         // Shadow layer never has an object on it.
-                        assert( info.objectType == MP2::OBJ_NONE );
+                        assert( info.objectType == MP2::OBJ_NONE || info.objectType == MP2::OBJ_NON_ACTION_MAELSTROM );
                     }
                     else {
                         // All parts should belong to the object.

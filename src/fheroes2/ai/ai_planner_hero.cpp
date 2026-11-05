@@ -755,6 +755,8 @@ namespace
             return kingdom.AllowPayment( payment );
         }
 
+        // TODO: Add AI logic for visiting Maelstrom object.
+        case MP2::OBJ_MAELSTROM:
         // TODO: AI has no brains to handle Sirens object.
         case MP2::OBJ_SIRENS:
         // TODO: AI doesn't know how it use Sphinx object properly.
@@ -774,8 +776,6 @@ namespace
         case MP2::OBJ_SIGN:
         // AI should never consider a stone lith as a destination point. It uses them only to make a path.
         case MP2::OBJ_STONE_LITHS:
-        // TODO: Add AI logic for visiting Maelstrom object.
-        case MP2::OBJ_MAELSTROM:
         // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
         case MP2::OBJ_WHIRLPOOL:
             assert( 0 );

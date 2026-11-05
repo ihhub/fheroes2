@@ -2334,8 +2334,8 @@ namespace Maps
 
     void setMaelstromCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber )
     {
-        constexpr int8_t maelstromCloseImagesOffest = 66;
-        constexpr int8_t maelstromCloseAnimationCount = 7;
+        constexpr uint8_t maelstromCloseImagesOffest = 128;
+        constexpr uint8_t maelstromCloseAnimationCount = 7;
 
         if ( frameNumber >= maelstromCloseAnimationCount ) {
             assert( 0 );
@@ -2343,14 +2343,18 @@ namespace Maps
         }
 
         // Find the top-left tile.
-        int32_t startndex = tileIndex;
-        auto updateStartIndex = [&startndex]( const int32_t direction ) {
-            while ( isValidDirection( startndex, direction ) ) {
-                const Tile tile = world.getTile( GetDirectionIndex( startndex, direction ) );
+        // The "Maelstrom" object consists of 4 non-action (MP2::OBJ_NON_ACTION_MAELSTROM) and 4 action tiles (MP2::OBJ_MAELSTROM)
+        //   N | A | A | N
+        //   N | A | A | N
+        // We remove the non-action ones and replace the action tiles with the close animation.
+        int32_t startIndex = tileIndex;
+        auto updateStartIndex = [&startIndex]( const int32_t direction ) {
+            while ( isValidDirection( startIndex, direction ) ) {
+                const Tile tile = world.getTile( GetDirectionIndex( startIndex, direction ) );
                 if ( tile.getMainObjectType() != MP2::OBJ_MAELSTROM ) {
                     return;
                 }
-                startndex = tile.GetIndex();
+                startIndex = tile.GetIndex();
             }
         };
 
@@ -2370,23 +2374,46 @@ namespace Maps
             }
         };
 
-        updateImageIndex( world.getTile( startndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 0 );
-        if ( isValidDirection( startndex, Direction::RIGHT ) ) {
-            updateImageIndex( world.getTile( startndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 1 );
-            if ( isValidDirection( startndex + 1, Direction::RIGHT ) ) {
-                updateImageIndex( world.getTile( startndex + 2 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 2 );
+        if ( frameNumber == 0 ) {
+            // Set the non-action tiles invisible by changing icnType to MP2::OBJ_ICN_TYPE_UNKNOWN.
+            auto resetIcnType = [objectUid]( Tile & tile ) {
+                if ( tile.getMainObjectPart()._uid == objectUid ) {
+                    tile.getMainObjectPart().icnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+                    return;
+                }
+                for ( auto & part : tile.getGroundObjectParts() ) {
+                    if ( part._uid == objectUid ) {
+                        part.icnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+                        return;
+                    }
+                }
+            };
+
+            if ( isValidDirection( startIndex, Direction::LEFT ) ) {
+                resetIcnType( world.getTile( startIndex - 1 ) );
+                if ( isValidDirection( startIndex - 1, Direction::BOTTOM ) ) {
+                    resetIcnType( world.getTile( startIndex - 1 + world.w() ) );
+                }
+            }
+            if ( ( startIndex % world.w() ) + 2 < world.w() ) {
+                resetIcnType( world.getTile( startIndex + 2 ) );
+                if ( isValidDirection( startIndex - 1, Direction::BOTTOM ) ) {
+                    resetIcnType( world.getTile( startIndex + 2 + world.w() ) );
+                }
             }
         }
-        // Move to the second row;
-        if ( isValidDirection( startndex, Direction::BOTTOM ) ) {
-            startndex += world.w();
 
-            updateImageIndex( world.getTile( startndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 3 );
-            if ( isValidDirection( startndex, Direction::RIGHT ) ) {
-                updateImageIndex( world.getTile( startndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 4 );
-                if ( isValidDirection( startndex + 1, Direction::RIGHT ) ) {
-                    updateImageIndex( world.getTile( startndex + 2 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 5 );
-                }
+        updateImageIndex( world.getTile( startIndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 0 );
+        if ( isValidDirection( startIndex, Direction::RIGHT ) ) {
+            updateImageIndex( world.getTile( startIndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 1 );
+        }
+        // Move to the second row;
+        if ( isValidDirection( startIndex, Direction::BOTTOM ) ) {
+            startIndex += world.w();
+
+            updateImageIndex( world.getTile( startIndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 2 );
+            if ( isValidDirection( startIndex, Direction::RIGHT ) ) {
+                updateImageIndex( world.getTile( startIndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 3 );
             }
         }
     }
