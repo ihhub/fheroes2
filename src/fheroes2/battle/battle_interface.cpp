@@ -113,6 +113,8 @@ namespace
 
     constexpr int32_t battleLogElementWidth{ fheroes2::Display::DEFAULT_WIDTH - 32 - 16 };
 
+    constexpr uint64_t troopCounterHoverDelayMs = 250;
+
     struct LightningPoint
     {
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), const int32_t thick = 1 )
@@ -1975,6 +1977,18 @@ void Battle::Interface::RedrawArmies()
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
     }
+
+    // Redraw troop counter for highlighted troop.
+    if ( _showTroopCounterOnTop && _troopCounterHoverUnit != nullptr && _troopCounterHoverUnit->isValid() && _troopCounterHoverUnit != _movingUnit
+         && _troopCounterHoverUnit != _flyingUnit ) {
+        const int animationState = _troopCounterHoverUnit->GetAnimationState();
+        const bool isStaticUnit = animationState == Monster_Info::STATIC || animationState == Monster_Info::IDLE;
+        const bool isFullyVisible = !_troopCounterHoverUnit->Modes( CAP_SUMMONELEM ) || _troopCounterHoverUnit->GetCustomAlpha() == 255;
+
+        if ( isStaticUnit && isFullyVisible ) {
+            RedrawTroopCount( *_troopCounterHoverUnit );
+        }
+    }
 }
 
 void Battle::Interface::RedrawOpponents()
@@ -3134,6 +3148,9 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
 
     // Reset the highlighted unit.
     _highlightUnitMovementArea = nullptr;
+    _troopCounterHoverUnit = nullptr;
+    _showTroopCounterOnTop = false;
+    _troopCounterHoverTimer.reset();
 
     _currentUnit = &unit;
     _needRedraw = false;
@@ -3177,6 +3194,26 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
             HumanBattleTurn( unit, actions, msg );
         }
 
+        const Unit * hoveredUnit = _unitToHighlight;
+
+        if ( hoveredUnit == nullptr ) {
+            const Cell * cellUnderCursor = Board::GetCell( _currentCellIndex );
+            if ( cellUnderCursor != nullptr ) {
+                hoveredUnit = cellUnderCursor->GetUnit();
+            }
+        }
+
+        if ( hoveredUnit != _troopCounterHoverUnit ) {
+            _troopCounterHoverUnit = hoveredUnit;
+            _showTroopCounterOnTop = false;
+            _troopCounterHoverTimer.reset();
+            _needRedraw = true;
+        }
+        else if ( !_showTroopCounterOnTop && hoveredUnit != nullptr && _troopCounterHoverTimer.getMs() >= troopCounterHoverDelayMs ) {
+            _showTroopCounterOnTop = true;
+            _needRedraw = true;
+        }
+
         // update status
         if ( msg != status.getMessage() ) {
             status.setMessage( msg, false );
@@ -3203,7 +3240,10 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
 
     popup.reset();
 
+    _currentCellIndex = -1;
     _currentUnit = nullptr;
+    _troopCounterHoverUnit = nullptr;
+    _showTroopCounterOnTop = false;
     _highlightUnitMovementArea = nullptr;
 }
 
