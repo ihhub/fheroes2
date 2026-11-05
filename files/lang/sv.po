@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-11-05 23:55+0100\n"
+"PO-Revision-Date: 2026-11-06 00:45+0100\n"
 "Last-Translator: XCOM-HUB\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -1120,7 +1120,7 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
-"Dvärgarna måste besegras innan de kan omintetgöra kung Archibalds planer. "
+"Dvärgarna måste besegras innan de kan omintetgöra Kung Archibalds planer. "
 "Roland inleder scenariot med flera hjältar och städer, så var beredd på "
 "angrepp från flera håll. För att segra måste du erövra alla fiendens städer "
 "och borgar."
@@ -8086,8 +8086,8 @@ msgid ""
 "Some Liches living here are willing to join your army for a price. Do you "
 "want to recruit Liches?"
 msgstr ""
-"Några Lichar som befinner sig är villiga att låta sig rekryteras för ett "
-"pris. Vill du rekrytera Lichar?"
+"Några dödsmagiker som befinner sig är villiga att låta sig rekryteras för "
+"ett pris. Vill du rekrytera dödsmagiker?"
 
 msgid ""
 "You've found the ruins of an ancient city, now inhabited solely by the "
@@ -8100,8 +8100,9 @@ msgid ""
 "Some of the surviving Liches are impressed by your victory over their "
 "fellows, and offer to join you for a price. Do you want to recruit Liches?"
 msgstr ""
-"Några Lichar är imponerade över din seger över deras gelikar och erbjuder "
-"sig att ansluta till din armé för ett pris. Vill du rekrytera Lichar?"
+"Några dödsmagiker är imponerade över din seger över deras gelikar och "
+"erbjuder sig att ansluta till din armé för ett pris. Vill du rekrytera "
+"dödsmagiker?"
 
 msgid ""
 "You've found one of those bridges that Trolls are so fond of living under, "
@@ -10451,16 +10452,16 @@ msgid "Vampire Lords"
 msgstr "Vampyrbaroner"
 
 msgid "Lich"
-msgstr "Lich"
+msgstr "Dödsmagiker"
 
 msgid "Liches"
-msgstr "Licher"
+msgstr "Dödsmagiker"
 
 msgid "Power Lich"
-msgstr "Ärkelich"
+msgstr "Ärkedödsmagiker"
 
 msgid "Power Liches"
-msgstr "Ärkelichar"
+msgstr "Ärkedödsmagiker"
 
 msgid "Bone Dragon"
 msgstr "Bendrake"
@@ -10718,39 +10719,39 @@ msgid "The %{name} increases the hero's knowledge by %{count}."
 msgstr "%{name} ökar hjältens kunskap med %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr "Främsta Kunskapsboken"
+msgstr "Främsta kunskapsboken"
 
 msgid "The %{name} increases the hero's attack skill by %{count}."
 msgstr "%{name} ökar hjältens anfall med %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr "Främsta Herraväldessvärdet"
+msgstr "Främsta herraväldessvärdet"
 
 msgid "The %{name} increases the hero's defense skill by %{count}."
 msgstr "%{name} ökar hjältens försvar med %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr "Främsta Skyddsmanteln"
+msgstr "Främsta skyddsmanteln"
 
 msgid "The %{name} increases the hero's spell power by %{count}."
 msgstr "%{name} ökar hjältens trollkonst med %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr "Främsta Trollstaven"
+msgstr "Främsta trollstaven"
 
 msgid ""
 "The %{name} increases the hero's attack and defense skills by %{count} each."
 msgstr "%{name} ökar hjältens anfall och försvar med %{count} vardera."
 
 msgid "Ultimate Shield"
-msgstr "Främsta Skölden"
+msgstr "Främsta skölden"
 
 msgid ""
 "The %{name} increases the hero's spell power and knowledge by %{count} each."
 msgstr "%{name} ökar hjältens trollkonst och kunskap med %{count} vardera."
 
 msgid "Ultimate Staff"
-msgstr "Främsta Staven"
+msgstr "Främsta staven"
 
 msgid ""
 "The %{name} increases each of the hero's basic skills by %{count} points."
@@ -10758,16 +10759,16 @@ msgstr ""
 "%{name} ökar var och en av hjältens primära förmågor med %{count} poäng."
 
 msgid "Ultimate Crown"
-msgstr "Främsta Kronan"
+msgstr "Främsta kronan"
 
 msgid "Golden Goose"
-msgstr "Gyllene Gåsen"
+msgstr "Gyllene gåsen"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "%{name} inbringar en intäkt på %{count} guld per dag."
 
 msgid "Arcane Necklace of Magic"
-msgstr "Mystiskt Halsband"
+msgstr "Mystiskt halsband"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
@@ -10777,7 +10778,7 @@ msgstr ""
 "hjältemod med ett utsökt juvelhalsband."
 
 msgid "Caster's Bracelet of Magic"
-msgstr "Besvärjarens Armband"
+msgstr "Besvärjarens armband"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
@@ -10787,7 +10788,7 @@ msgstr ""
 "du räddar. Tacksam för din hjälp, ger dess ledare ett armband av guld."
 
 msgid "Mage's Ring of Power"
-msgstr "Trollkarlens Ring"
+msgstr "Trollkarlens ring"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
@@ -10799,7 +10800,7 @@ msgstr ""
 "skimrande juvelring."
 
 msgid "Witch's Broach of Magic"
-msgstr "Magisk Häxbrosch"
+msgstr "Magisk häxbrosch"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
@@ -10870,7 +10871,7 @@ msgstr ""
 "den oönskade Olycksfizbin, som gravt sänker din armés stridsmoral."
 
 msgid "Thunder Mace of Dominion"
-msgstr "Åskans Stridsgissel"
+msgstr "Åskans stridsgissel"
 
 msgid ""
 "During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
@@ -10904,7 +10905,7 @@ msgstr ""
 "en gyllene hjälm glömd under busken."
 
 msgid "Giant Flail of Dominion"
-msgstr "Herraväldets Stora Slaga"
+msgstr "Herraväldets stora slaga"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
@@ -10916,7 +10917,7 @@ msgstr ""
 "slagan från den fallna jätten."
 
 msgid "Ballista of Quickness"
-msgstr "Snabbhetens Ballist"
+msgstr "Snabbhetens ballist"
 
 msgid "The %{name} gives the hero's catapult one extra shot per combat round."
 msgstr "%{name} ger hjältens katapult ett extra skott per stridsrunda."
@@ -10963,7 +10964,7 @@ msgstr ""
 "skaftet och utan ansträngning så drar du loss den."
 
 msgid "Divine Breastplate of Protection"
-msgstr "Gudomlig Bröstharnesk"
+msgstr "Gudomlig bröstharnesk"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
@@ -10975,7 +10976,7 @@ msgstr ""
 "bröstharnesk."
 
 msgid "Minor Scroll of Knowledge"
-msgstr "Mindre Kunskapsrulle"
+msgstr "Mindre kunskapsrulle"
 
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
@@ -10987,7 +10988,7 @@ msgstr ""
 "rullen svävar genom luften och ner i dina händer."
 
 msgid "Major Scroll of Knowledge"
-msgstr "Större Kunskapsrulle"
+msgstr "Större kunskapsrulle"
 
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
@@ -10997,7 +10998,7 @@ msgstr ""
 "Han tar fram en gulblekt rulle ur en säck och ger den till dig."
 
 msgid "Superior Scroll of Knowledge"
-msgstr "Överordnad Kunskapsrulle"
+msgstr "Överordnad kunskapsrulle"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
@@ -11009,7 +11010,7 @@ msgstr ""
 "du finner en rulle med inskriptioner."
 
 msgid "Foremost Scroll of Knowledge"
-msgstr "Särskild Kunskapsrulle"
+msgstr "Särskild kunskapsrulle"
 
 msgid ""
 "Mangled bones, yellowed with age, peer from the ragged folds of a dead "
@@ -11019,7 +11020,7 @@ msgstr ""
 "död Druids kappa. Vid genomsökning av kappan finner du en besvärjelserulle."
 
 msgid "Endless Sack of Gold"
-msgstr "Bottenlös Guldsäck"
+msgstr "Bottenlös guldsäck"
 
 msgid "The %{name} provides the hero with %{count} gold per day."
 msgstr "%{name} förser hjälten med %{count} guld per dag."
@@ -11036,7 +11037,7 @@ msgstr ""
 "vunnet\" och tar säcken och går."
 
 msgid "Endless Bag of Gold"
-msgstr "Bottenlös Guldväska"
+msgstr "Bottenlös guldväska"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
@@ -11046,7 +11047,7 @@ msgstr ""
 "eskorterar henne hem och hon belönar dig med en säck fylld med guld."
 
 msgid "Endless Purse of Gold"
-msgstr "Bottenlös Guldbörs"
+msgstr "Bottenlös guldbörs"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
@@ -11058,7 +11059,7 @@ msgstr ""
 "renaste guld."
 
 msgid "Nomad Boots of Mobility"
-msgstr "Nomadens Kängor"
+msgstr "Nomadens kängor"
 
 msgid "The %{name} increase the hero's movement on land."
 msgstr "%{name} ökar hjältens förflyttning på mark."
@@ -11074,7 +11075,7 @@ msgstr ""
 "titt så ser du fascinerande uråldriga inskriptioner på lädret."
 
 msgid "Traveler's Boots of Mobility"
-msgstr "Vandrarens Kängor"
+msgstr "Vandrarens kängor"
 
 msgid ""
 "Discovering a pair of beautifully beaded boots made from the finest and "
@@ -11100,7 +11101,7 @@ msgstr ""
 "strid."
 
 msgid "Golden Horseshoe"
-msgstr "Gyllene Hästsko"
+msgstr "Gyllene hästsko"
 
 msgid ""
 "An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
@@ -11113,7 +11114,7 @@ msgstr ""
 "på marken."
 
 msgid "Gambler's Lucky Coin"
-msgstr "Spelarens Turmynt"
+msgstr "Spelarens turmynt"
 
 msgid ""
 "You have captured a mischievous imp who has been terrorizing the region. In "
@@ -11133,7 +11134,7 @@ msgstr ""
 "litet grönt och fint fyrklöver."
 
 msgid "True Compass of Mobility"
-msgstr "Mobilitetens Kompass"
+msgstr "Mobilitetens kompass"
 
 msgid "The %{name} increases the hero's movement on land and sea."
 msgstr "%{name} ökar hjältens förflyttningskapacitet på både land och hav."
@@ -11160,7 +11161,7 @@ msgstr ""
 "till en stjärna."
 
 msgid "Evil Eye"
-msgstr "Onda Ögat"
+msgstr "Onda ögat"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
 msgstr "%{name} sänker besvärjelsekostnaden för Förbannelser till hälften."
@@ -11175,7 +11176,7 @@ msgstr ""
 "glasöga som rullar runt inuti en skalle."
 
 msgid "Enchanted Hourglass"
-msgstr "Förtrollat Timglas"
+msgstr "Förtrollat timglas"
 
 msgid ""
 "The %{name} extends the duration of all the hero's spells by %{count} turns."
@@ -11273,7 +11274,7 @@ msgstr ""
 "hjälmen är förtrollad."
 
 msgid "Evercold Icicle"
-msgstr "Osmältbar Istapp"
+msgstr "Osmältbar istapp"
 
 msgid ""
 "The %{name} causes the hero's cold spells to do %{count} percent more damage "
@@ -11292,7 +11293,7 @@ msgstr ""
 "smälta från värmen i din hand."
 
 msgid "Everhot Lava Rock"
-msgstr "Outslocknad Lavasten"
+msgstr "Outslocknad lavasten"
 
 msgid ""
 "The %{name} causes the hero's fire spells to do %{count} percent more damage "
@@ -11397,7 +11398,7 @@ msgstr ""
 "glänsande stenar och en ring."
 
 msgid "Holy Pendant"
-msgstr "Heligt Hängsmycke"
+msgstr "Heligt hängsmycke"
 
 msgid "The %{name} makes all of the hero's troops immune to curse spells."
 msgstr "%{name} gör hjältens trupper immuna mot Förbannelsebesvärjelser."
@@ -11412,7 +11413,7 @@ msgstr ""
 "förbannelser och fortsätter sedan att meditera."
 
 msgid "Pendant of Free Will"
-msgstr "Fria Viljans Hängsmycke"
+msgstr "Fria viljans hängsmycke"
 
 msgid "The %{name} makes all of the hero's troops immune to hypnotize spells."
 msgstr "%{name} gör hjältens trupper immuna mot Hynotiseringsbesvärjelser."
@@ -11444,7 +11445,7 @@ msgstr ""
 "ägaren berättar att det skyddar mot svartkonstnärernas dödsbesvärjelser."
 
 msgid "Serenity Pendant"
-msgstr "Stillhetens Hängsmycke"
+msgstr "Stillhetens hängsmycke"
 
 msgid "The %{name} makes all of the hero's troops immune to berserk spells."
 msgstr "%{name}t gör hjältens trupper immuna mot Bärsärkbesvärjelser."
@@ -11460,7 +11461,7 @@ msgstr ""
 "ett hängsmycke som han brukar använda innan strid för att lugna sitt inre."
 
 msgid "Seeing-eye Pendant"
-msgstr "Seende Ögats Hängsmycke"
+msgstr "Seende ögats hängsmycke"
 
 msgid "The %{name} makes all of the hero's troops immune to blindness spells."
 msgstr "%{name}t gör hjältens trupper immuna mot Förblindningsbesvärjelser."
@@ -11477,7 +11478,7 @@ msgstr ""
 "dekorerat med ett stiliserat öga. Det låter dig se med dina ögon stängda."
 
 msgid "Kinetic Pendant"
-msgstr "Rörelsens Hängsmycke"
+msgstr "Rörelsens hängsmycke"
 
 msgid "The %{name} makes all of the hero's troops immune to paralyze spells."
 msgstr "%{name}t gör hjältens trupper immuna mot Paralyseringsbesvärjelser."
@@ -11493,7 +11494,7 @@ msgstr ""
 "smycket."
 
 msgid "Pendant of Death"
-msgstr "Dödens Hängsmycke"
+msgstr "Dödens hängsmycke"
 
 msgid "The %{name} makes all of the hero's troops immune to holy spells."
 msgstr "%{name}t gör hjältens trupper immuna mot Heliga besvärjelser."
@@ -11524,7 +11525,7 @@ msgstr ""
 "förskingringsbesvärjelser på dig och dina allierade."
 
 msgid "Golden Bow"
-msgstr "Gyllene Båge"
+msgstr "Gyllene båge"
 
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for the hero's troops "
@@ -11562,7 +11563,7 @@ msgstr ""
 "ett teleskop."
 
 msgid "Statesman's Quill"
-msgstr "Statsmannens Fjäderpenna"
+msgstr "Statsmannens fjäderpenna"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
@@ -11651,7 +11652,7 @@ msgstr ""
 "begära 250 guld per dag från dig... för resten av ditt liv."
 
 msgid "Hideous Mask"
-msgstr "Ohygglig Mask"
+msgstr "Ohygglig mask"
 
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
 msgstr ""
@@ -11671,7 +11672,7 @@ msgstr ""
 "fast med den."
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Bottenlös Svavelpåse"
+msgstr "Bottenlös svavelpåse"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} ger %{count} enheter svavel per dag."
@@ -11686,7 +11687,7 @@ msgstr ""
 "hjälpa dig med ditt krigsföretag."
 
 msgid "Endless Vial of Mercury"
-msgstr "Outtömlig Kvicksilverflaska"
+msgstr "Outtömlig kvicksilverflaska"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} ger %{count} enheter kvicksilver per dag."
@@ -11701,7 +11702,7 @@ msgstr ""
 "häller ur. Du inser värdet av ditt fynd och stoppar ner den i din ficka."
 
 msgid "Endless Pouch of Gems"
-msgstr "Bottenlös Ädelstenspung"
+msgstr "Bottenlös ädelstenspung"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} ger %{count} enheter ädelstenar per dag."
@@ -11718,7 +11719,7 @@ msgstr ""
 "Ädelstenspung i utbyte mot hans guld. Du tar budet."
 
 msgid "Endless Cord of Wood"
-msgstr "Ändlös Trätrave"
+msgstr "Ändlös trätrave"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} ger %{count} enheter ved per dag."
@@ -11735,7 +11736,7 @@ msgstr ""
 "med dig vedtraven."
 
 msgid "Endless Cart of Ore"
-msgstr "Bottenlös Malmkärra"
+msgstr "Bottenlös malmkärra"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} ger %{count} enheter malm per dag."
@@ -11751,7 +11752,7 @@ msgstr ""
 "malmkärra som aldrig blir tom på malm."
 
 msgid "Endless Pouch of Crystal"
-msgstr "Bottenlös Kristallpung"
+msgstr "Bottenlös kristallpung"
 
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
@@ -11796,7 +11797,7 @@ msgstr ""
 "tar dess Spiksköld som en trofé."
 
 msgid "White Pearl"
-msgstr "Vit Pärla"
+msgstr "Vit pärla"
 
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize: A white "
@@ -11806,7 +11807,7 @@ msgstr ""
 "hittar en Vit Pärla mitt bland snäckskal och bråte."
 
 msgid "Black Pearl"
-msgstr "Svart Pärla"
+msgstr "Svart pärla"
 
 msgid ""
 "Rumors of a Griffin of unusual size preying upon the countryside lead you to "
@@ -11872,7 +11873,7 @@ msgstr ""
 "så känner du dess magiska krafter i handen."
 
 msgid "Arm of the Martyr"
-msgstr "Martyrens Arm"
+msgstr "Martyrens arm"
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -11895,7 +11896,7 @@ msgstr ""
 "dennes levande trupper."
 
 msgid "Breastplate of Anduran"
-msgstr "Andurans Bröstharnesk"
+msgstr "Andurans bröstharnesk"
 
 msgid "The %{name} increases the hero's defense by %{count}."
 msgstr "%{name} ökar hjältens Försvar med %{count}."
@@ -11931,7 +11932,7 @@ msgstr ""
 "kappa och du accepterar erbjudandet."
 
 msgid "Battle Garb of Anduran"
-msgstr "Andurans Stridsmundering"
+msgstr "Andurans stridsmundering"
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts (+5 to "
@@ -12020,7 +12021,7 @@ msgstr ""
 "försvinna."
 
 msgid "Helmet of Anduran"
-msgstr "Andurans Hjälm"
+msgstr "Andurans hjälm"
 
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
@@ -12035,7 +12036,7 @@ msgstr ""
 "massivt guld."
 
 msgid "Holy Hammer"
-msgstr "Helig Hammare"
+msgstr "Helig hammare"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
@@ -12049,7 +12050,7 @@ msgstr ""
 "Zombierna ligger döda och hammaren är blodstänkt. Du tar hammaren."
 
 msgid "Legendary Scepter"
-msgstr "Legendarisk Spira"
+msgstr "Legendarisk spira"
 
 msgid "The %{name} adds %{count} points to all attributes."
 msgstr "%{name} ger hjälten %{count} till alla dennes primära förmågor."
@@ -12136,7 +12137,7 @@ msgstr ""
 "Svärdbrytaren som han bar under sin tjänstgöring."
 
 msgid "Sword of Anduran"
-msgstr "Andurans Svärd"
+msgstr "Andurans svärd"
 
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
@@ -12152,7 +12153,7 @@ msgstr ""
 "fel ände av det vassa objektet."
 
 msgid "Spade of Necromancy"
-msgstr "Svartkonstens Spade"
+msgstr "Svartkonstens spade"
 
 msgid "The %{name} gives the hero increased necromancy skill."
 msgstr "%{name} ökar hjältens svartkonstförmåga."
