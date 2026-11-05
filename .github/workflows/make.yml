@@ -14,11 +14,12 @@ jobs:
         - name: Linux x86-64 SDL2 Release
           on: [ 'pull_request', 'push' ]
           os: ubuntu-22.04
-          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
+            FHEROES2_WITH_NETWORK: ON
           package_name: fheroes2_ubuntu_x86-64_SDL2.zip
           package_files: >-
             LICENSE
@@ -50,21 +51,23 @@ jobs:
         - name: Linux x86-64 SDL2 Debug
           on: [ 'pull_request' ]
           os: ubuntu-latest
-          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
+            FHEROES2_WITH_NETWORK: ON
             FHEROES2_WITH_DEBUG: ON
             FHEROES2_WITH_ASAN: ON
         - name: Linux ARM64 SDL2 Release
           on: [ 'pull_request', 'push' ]
           os: ubuntu-22.04-arm
-          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
+            FHEROES2_WITH_NETWORK: ON
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
           package_files: >-
             LICENSE
@@ -96,18 +99,19 @@ jobs:
         - name: Linux ARM64 SDL2 Debug
           on: [ 'pull_request' ]
           os: ubuntu-24.04-arm
-          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
+            FHEROES2_WITH_NETWORK: ON
             FHEROES2_WITH_DEBUG: ON
             FHEROES2_WITH_TSAN: ON
         - name: macOS SDL2
           on: [ 'pull_request', 'push' ]
           os: macos-26-intel
           arch: x86_64
-          dependencies: sdl2 sdl2_mixer sdl2_image
+          dependencies: sdl2 sdl2_mixer sdl2_image asio
           env:
             CFLAGS: --target=x86_64-apple-macos10.15
             CXXFLAGS: --target=x86_64-apple-macos10.15
@@ -115,6 +119,7 @@ jobs:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
             FHEROES2_WITH_IMAGE: ON
+            FHEROES2_WITH_NETWORK: ON
           package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: >-
             LICENSE

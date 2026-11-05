@@ -12,13 +12,13 @@ jobs:
         include:
         - name: Linux SDL2
           os: ubuntu-latest
-          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext ninja-build
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev gettext ninja-build
         - name: macOS SDL2
           os: macos-latest
-          dependencies: sdl2 sdl2_mixer sdl2_image ninja
+          dependencies: sdl2 sdl2_mixer sdl2_image asio ninja
         - name: macOS SDL2 App Bundle
           os: macos-latest
-          dependencies: sdl2 sdl2_mixer sdl2_image ninja dylibbundler
+          dependencies: sdl2 sdl2_mixer sdl2_image asio ninja dylibbundler
           options: -DMACOS_APP_BUNDLE=ON
     name: CMake (${{ matrix.name }})
     runs-on: ${{ matrix.os }}
@@ -71,7 +71,7 @@ jobs:
           cmake-vcpkg-cache-
     - name: Install dependencies
       run: |
-        vcpkg.exe --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib
+        vcpkg.exe --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib asio
     - name: Build
       run: |
         cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -DENABLE_IMAGE=ON \

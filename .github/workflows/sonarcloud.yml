@@ -42,7 +42,7 @@ jobs:
       run: |
         bash script/android/install_packages.sh
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev
     - uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v8
       env:
         SONAR_HOST_URL: https://sonarcloud.io
