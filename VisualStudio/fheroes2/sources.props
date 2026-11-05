@@ -234,6 +234,53 @@
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster_anim.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster_info.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_action_watch.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_battle.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_build_id.cpp">
+      <AdditionalIncludeDirectories>$(IntDir)generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\multi\multi_command_line.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_android.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_connection.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_contact.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_crash_report.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_fingerprint.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_game.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_game_over.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_hero.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_live.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_live_battle.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_lobby.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_lobby_client.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_lobby_protocol.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_lobby_screen.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_machines.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_menu.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_network.cpp">
+      <AdditionalOptions>/external:I "$(MSBuildThisFileDirectory)..\packages\asio\include" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\multi\multi_notice.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_observer.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_payload.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_port_mapping.cpp">
+      <AdditionalOptions>/external:I "$(MSBuildThisFileDirectory)..\packages\asio\include" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+    </ClCompile>
+    <ClCompile Include="src\fheroes2\multi\multi_protocol.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_reservation.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_save_parts.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_selftest.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_settings.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_simultaneous.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_spectator.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_text.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_waiting_room.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_waiting_screen.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_websocket.cpp" />
+    <ClCompile Include="src\fheroes2\multi\multi_world_changes.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_info.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp" />
@@ -455,6 +502,42 @@
     <ClInclude Include="src\fheroes2\monster\monster.h" />
     <ClInclude Include="src\fheroes2\monster\monster_anim.h" />
     <ClInclude Include="src\fheroes2\monster\monster_info.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_action_watch.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_battle.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_build_id.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_command_line.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_android.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_connection.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_contact.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_crash_report.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_fingerprint.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_game.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_game_over.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_hero.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_live.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_live_battle.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_lobby.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_lobby_client.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_lobby_protocol.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_lobby_screen.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_machines.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_menu.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_network.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_notice.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_payload.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_port_mapping.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_protocol.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_reservation.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_save_parts.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_selftest.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_settings.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_simultaneous.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_spectator.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_text.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_waiting_room.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_waiting_screen.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_websocket.h" />
+    <ClInclude Include="src\fheroes2\multi\multi_world_changes.h" />
     <ClInclude Include="src\fheroes2\resource\artifact.h" />
     <ClInclude Include="src\fheroes2\resource\artifact_info.h" />
     <ClInclude Include="src\fheroes2\resource\artifact_ultimate.h" />
@@ -481,4 +564,8 @@
   <ItemGroup>
     <ResourceCompile Include="src\resources\fheroes2.rc" />
   </ItemGroup>
+  <!-- Computes the identity of the game sources used by network games. It is the same on every platform. -->
+  <Target Name="MultiSourceId" BeforeTargets="ClCompile">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)..\..\script\windows\generate_source_id.ps1&quot; &quot;$(IntDir)generated\multi_source_id.h&quot;" />
+  </Target>
 </Project>

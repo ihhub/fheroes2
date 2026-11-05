@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 
 #include "game_mode.h"
 #include "interface_base.h"
@@ -144,6 +145,10 @@ namespace Interface
         void EventKeyArrowPress( const int dir );
 
         fheroes2::GameMode StartGame();
+
+        // Read-only map while another player of a network game is making a move.
+        // Returns CANCEL once keepObserving() is false, otherwise the mode chosen by the player.
+        fheroes2::GameMode observeOtherPlayers( const std::function<bool()> & keepObserving );
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;

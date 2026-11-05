@@ -74,6 +74,12 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "multi_fingerprint.h"
+#include "multi_game.h"
+#include "multi_live.h"
+#include "multi_protocol.h"
+#include "multi_simultaneous.h"
+#include "multi_spectator.h"
 #include "mus.h"
 #include "players.h"
 #include "resource.h"
@@ -250,6 +256,10 @@ fheroes2::GameMode Game::StartGame()
 
 void Game::DialogPlayers( const PlayerColor color, std::string title, std::string message )
 {
+    if ( Multi::isTestMode() ) {
+        return;
+    }
+
     const Player * player = Players::Get( color );
     StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
@@ -289,6 +299,11 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    if ( Multi::isObservingOtherPlayers() ) {
+        Multi::visitCastle( castle );
+        return;
+    }
 
     // Stop all sounds, but not the music - it will be replaced by the music of the castle
     AudioManager::stopSounds();
@@ -397,7 +412,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog, false,
+        result = ( *it )->OpenDialog( Multi::isObservingOtherPlayers(), needFade, disableDismiss, false, renderBackgroundDialog, false,
                                       fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() ) );
 
         if ( needFade ) {
@@ -812,8 +827,27 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
+        Multi::onNewDay( isLoadedFromSave );
+
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
+
+            if ( skipTurns && Multi::isResumingTurn() ) {
+                // In a network game resume at the player set by the other computer, human or not.
+                if ( !player->isColor( conf.CurrentColor() ) ) {
+                    continue;
+                }
+
+                skipTurns = false;
+
+                const Multi::TurnStage stage = Multi::finishResumingTurn();
+                if ( stage != Multi::TurnStage::IN_PROGRESS ) {
+                    isLoadedFromSave = false;
+                }
+                if ( stage == Multi::TurnStage::ENDED ) {
+                    continue;
+                }
+            }
 
             if ( skipTurns ) {
                 // Game saves can only be performed during a human player's turn (including when it is under temporary AI control
@@ -834,8 +868,31 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             const PlayerColor playerColor = player->GetColor();
             Kingdom & kingdom = world.GetKingdom( playerColor );
 
+            // The other player of a network game left or the connection was lost
+            if ( const fheroes2::GameMode mode = Multi::leaveIfNetworkGameOver(); mode != fheroes2::GameMode::CANCEL ) {
+                res = mode;
+                break;
+            }
+
+            if ( Multi::isTurnSkippedToday( playerColor ) ) {
+                continue;
+            }
+
+            if ( !kingdom.isPlay() && Multi::isGuest() ) {
+                // Nothing to play for a vanquished player, the turn goes back to the host.
+                res = Multi::handOverTurn( playerColor, Multi::TurnStage::ENDED );
+                break;
+            }
+
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
+
+                if ( Multi::isRemoteColor( playerColor ) ) {
+                    res = Multi::handOverTurn( playerColor, isLoadedFromSave ? Multi::TurnStage::IN_PROGRESS : Multi::TurnStage::NOT_STARTED );
+                    break;
+                }
+
+                Multi::onTurnStart( playerColor );
 
                 _radar.SetHide( true );
                 _radar.SetRedraw( REDRAW_RADAR_CURSOR );
@@ -847,7 +904,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     conf.SetCurrentColor( playerColor );
 
-                    if ( isHotSeatGame ) {
+                    if ( isHotSeatGame && !Multi::announceTurnOnMap( playerColor ) ) {
                         // Move the area to the center of the map to avoid showing map borders.
                         _gameArea.SetCenter( fheroes2::Point{ world.w() / 2, world.h() / 2 } );
 
@@ -957,9 +1014,17 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     break;
                 }
 
+                Multi::onTurnEnd( playerColor );
+
+                if ( res == fheroes2::GameMode::END_TURN && Multi::isTurnHandedOverAtEnd() ) {
+                    res = Multi::handOverTurn( playerColor, Multi::TurnStage::ENDED );
+                }
+
                 if ( res != fheroes2::GameMode::END_TURN ) {
                     break;
                 }
+
+                Multi::logStateFingerprint( "at the end of the turn of " + Color::String( playerColor ) + " (" + world.DateString() + ")" );
 
                 // Check if the game is over after each player's turn
                 res = gameResult.checkGameOver();
@@ -976,12 +1041,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             isLoadedFromSave = false;
         }
 
+        res = Multi::onAllPlayersDone( res );
+
         // We went through all the players, but the current player from the save file is still not found,
         // something is clearly wrong here
         if ( skipTurns ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       "the current player from the save file was not found"
-                           << ", player color: " << Color::String( conf.CurrentColor() ) )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "the current player from the save file was not found" << ", player color: " << Color::String( conf.CurrentColor() ) )
 
             res = fheroes2::GameMode::MAIN_MENU;
         }
@@ -1126,6 +1191,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
 
         // Pending timer events
         _statusPanel.TimerEventProcessing();
+
+        if ( const fheroes2::GameMode mode = Multi::onAdventureMapFrame(); mode != fheroes2::GameMode::CANCEL ) {
+            res = mode;
+            break;
+        }
 
         if ( isHeroMoving ) {
             // Hero is moving, set the appropriate cursor

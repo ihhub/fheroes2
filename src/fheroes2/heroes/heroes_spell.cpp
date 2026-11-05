@@ -50,6 +50,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "multi_reservation.h"
 #include "resource.h"
 #include "route.h"
 #include "settings.h"
@@ -163,6 +164,10 @@ namespace
         // Player should have a summonable boat before calling this function.
         assert( Maps::isValidAbsIndex( boatSource ) );
 
+        if ( !Multi::reserveSpellTarget( hero, boatSource ) ) {
+            return false;
+        }
+
         const PlayerColor heroColor = hero.GetColor();
 
         Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
@@ -197,7 +202,7 @@ namespace
         assert( Maps::isValidAbsIndex( src ) );
 
         const int32_t dst = I.GetDimensionDoorDestination( src, Spell::CalculateDimensionDoorDistance(), hero.isShipMaster() );
-        if ( !Maps::isValidAbsIndex( dst ) ) {
+        if ( !Maps::isValidAbsIndex( dst ) || !Multi::reserveSpellTarget( hero, dst ) ) {
             return false;
         }
 
@@ -247,6 +252,10 @@ namespace
             return false;
         }
 
+        if ( !Multi::reserveSpellTarget( hero, castle->GetIndex() ) ) {
+            return false;
+        }
+
         HeroesTownGate( hero, castle );
 
         return true;
@@ -258,7 +267,7 @@ namespace
 
         const int32_t townPositionIndex = Dialog::selectKingdomCastle( hero.GetKingdom(), true, _( "Town Portal" ), _( "Select town to port to." ) );
 
-        if ( townPositionIndex == -1 ) {
+        if ( townPositionIndex == -1 || !Multi::reserveSpellTarget( hero, world.getCastleEntrance( Maps::GetPoint( townPositionIndex ) )->GetIndex() ) ) {
             return false;
         }
 
@@ -333,7 +342,7 @@ namespace
 
         const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower() );
 
-        if ( count == 0 ) {
+        if ( count == 0 || !Multi::reserveSpellTarget( hero, hero.GetIndex() ) ) {
             return false;
         }
 

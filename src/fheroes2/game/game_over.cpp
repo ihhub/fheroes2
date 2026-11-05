@@ -48,6 +48,7 @@
 #include "kingdom.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
+#include "multi_game_over.h"
 #include "mus.h"
 #include "players.h"
 #include "save_format_version.h"
@@ -272,6 +273,26 @@ namespace
         // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
         // Set subtitles top-center position (475,110) to render results over the black rectangle of burned picture in WIN.SMK video.
         return { ratingText, 5000, UINT32_MAX, { 475, 110 }, 140 };
+    }
+}
+
+void GameOver::showVictory( const uint32_t cond )
+{
+    DialogWins( cond );
+
+    AudioManager::ResetAudio();
+    Video::ShowVideo( { { "WIN.SMK", Video::VideoControl::PLAY_CUTSCENE_WAIT } }, { standardGameResults() }, true );
+
+    AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
+}
+
+void GameOver::showDefeat( const uint32_t cond, const bool isGameOver )
+{
+    DialogLoss( cond );
+
+    if ( isGameOver ) {
+        AudioManager::ResetAudio();
+        Video::ShowVideo( { { "LOSE.SMK", Video::VideoControl::PLAY_CUTSCENE_LOOP } } );
     }
 }
 
@@ -505,6 +526,8 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
                 }
             }
 
+            Multi::onPlayerVanquished( color );
+
             _colors &= ~color;
         }
         else if ( humanColors & color ) {
@@ -651,13 +674,17 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             // LOSS_ALL fulfillment by itself is not a reason to end the multiplayer game, unless all human-controlled players are vanquished
             const bool endGame = ( result != GameOver::LOSS_ALL || activeHumanColors == 0 );
 
-            if ( showLossDialog && !isAutoPlaytest ) {
+            if ( showLossDialog && !isAutoPlaytest && Multi::isResultShownHere( currentColor ) ) {
                 DialogLoss( result );
+            }
+
+            if ( showLossDialog || endGame ) {
+                Multi::onPlayerLoss( currentColor, result, endGame );
             }
 
             if ( endGame ) {
                 AudioManager::ResetAudio();
-                if ( !isAutoPlaytest ) {
+                if ( !isAutoPlaytest && Multi::isGameEndShown() ) {
                     Video::ShowVideo( { { "LOSE.SMK", Video::VideoControl::PLAY_CUTSCENE_LOOP } } );
                 }
 
@@ -665,6 +692,10 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             }
         }
         else if ( result & GameOver::WINS ) {
+            if ( const std::optional<fheroes2::GameMode> mode = Multi::onPlayerVictory( currentColor, result ); mode ) {
+                return *mode;
+            }
+
             if ( !isAutoPlaytest ) {
                 DialogWins( result );
             }

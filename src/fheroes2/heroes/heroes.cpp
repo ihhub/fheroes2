@@ -63,6 +63,8 @@
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
+#include "multi_hero.h"
+#include "multi_simultaneous.h"
 #include "payment.h"
 #include "players.h"
 #include "race.h"
@@ -1335,6 +1337,10 @@ void Heroes::SetVisited( const int32_t tileIndex, const Visit::Type type /* = Vi
 
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
+    if ( Multi::isAlliedVisitPutOff( *this, tileIndex ) ) {
+        return;
+    }
+
     const Maps::Tile & tile = world.getTile( tileIndex );
 
     const MP2::MapObjectType objectType = tile.getMainObjectType( false );
@@ -1883,6 +1889,9 @@ void Heroes::_levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const in
             selected = sec1.isValid() ? sec1 : sec2;
         }
     }
+    else if ( Multi::isPlayedOnOtherComputer( *this ) ) {
+        selected = Multi::chooseSecondarySkillOnOtherComputer( *this, primary, sec1, sec2 );
+    }
     else if ( isControlAI() ) {
         selected = AI::Planner::pickSecondarySkill( *this, sec1, sec2 );
     }
@@ -2359,7 +2368,7 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
                 continue;
             }
 
-            if ( !hero->isAvailableForHire() ) {
+            if ( !hero->isAvailableForHire() || !Multi::isHeroForHireHere( hero->GetID() ) ) {
                 continue;
             }
 

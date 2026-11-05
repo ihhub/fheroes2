@@ -150,6 +150,12 @@ namespace fheroes2
             // Do nothing
         }
 
+        // Flashes the window in the task bar when it is in the background.
+        virtual void requestAttention()
+        {
+            // Do nothing.
+        }
+
     protected:
         BaseRenderEngine() = default;
 

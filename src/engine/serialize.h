@@ -174,6 +174,10 @@ public:
     uint16_t get16();
     uint32_t get32();
 
+    // Reads the size of a container or string. Each element takes at least one byte. A size bigger than the remaining data
+    // fails the stream and returns 0.
+    uint32_t getContainerSize();
+
     uint8_t get()
     {
         return get8();
@@ -230,7 +234,7 @@ public:
     template <class Type>
     IStreamBase & operator>>( std::vector<Type> & v )
     {
-        v.resize( get32() );
+        v.resize( getContainerSize() );
 
         std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
 
@@ -240,7 +244,7 @@ public:
     template <class Type>
     IStreamBase & operator>>( std::list<Type> & v )
     {
-        v.resize( get32() );
+        v.resize( getContainerSize() );
 
         std::for_each( v.begin(), v.end(), [this]( auto & item ) { *this >> item; } );
 
@@ -250,7 +254,7 @@ public:
     template <class Type>
     IStreamBase & operator>>( std::set<Type> & v )
     {
-        const uint32_t size = get32();
+        const uint32_t size = getContainerSize();
 
         v.clear();
 
@@ -266,7 +270,7 @@ public:
     template <class Type1, class Type2>
     IStreamBase & operator>>( std::map<Type1, Type2> & v )
     {
-        const uint32_t size = get32();
+        const uint32_t size = getContainerSize();
 
         v.clear();
 
@@ -302,6 +306,9 @@ protected:
     IStreamBase() = default;
 
     virtual uint8_t get8() = 0;
+
+    // Returns the size of the data which is not read yet.
+    virtual size_t remainingSize() = 0;
 };
 
 // Interface that declares the methods needed to write to a stream
@@ -553,6 +560,11 @@ protected:
         return _itput - _itget;
     }
 
+    size_t remainingSize() override
+    {
+        return sizeg();
+    }
+
     size_t tellg() const
     {
         assert( _itbeg <= _itget );
@@ -695,6 +707,11 @@ public:
 
 private:
     size_t sizeg();
+
+    size_t remainingSize() override
+    {
+        return sizeg();
+    }
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;

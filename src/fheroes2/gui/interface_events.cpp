@@ -58,6 +58,8 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "mp2.h"
+#include "multi_game.h"
+#include "multi_simultaneous.h"
 #include "mus.h"
 #include "players.h"
 #include "puzzle.h"
@@ -243,6 +245,12 @@ void Interface::AdventureMap::EventCastSpell()
 
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
 {
+    // Waiting for the other player of a network game: the turn is over and can only be taken back.
+    if ( Multi::isObservingOtherPlayers() ) {
+        Multi::offerDayResume();
+        return fheroes2::GameMode::CANCEL;
+    }
+
 #ifndef NDEBUG
     const Heroes * focusedHero = GetFocusHeroes();
 #endif
@@ -254,6 +262,11 @@ fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
          || Dialog::YES
                 == fheroes2::showStandardTextMessage( _( "End Turn" ), _( "One or more heroes may still move, are you sure you want to end your turn?" ),
                                                       Dialog::YES | Dialog::NO ) ) {
+        // In a network game this may wait for the other player, false if the player takes the day back.
+        if ( !Multi::confirmEndOfTurn( myKingdom.GetColor() ) ) {
+            return fheroes2::GameMode::CANCEL;
+        }
+
         return fheroes2::GameMode::END_TURN;
     }
 

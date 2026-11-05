@@ -214,6 +214,12 @@ public:
         _globalKeyDownEventHook = std::move( hook );
     }
 
+    // Called every time events are processed, on any screen or dialog.
+    void setEventProcessingHook( std::function<void()> hook )
+    {
+        _eventProcessingHook = std::move( hook );
+    }
+
     // Return false when event handling should be stopped, true otherwise.
     bool HandleEvents( const bool sleepAfterEventProcessing = true, const bool allowExit = false );
 
@@ -500,6 +506,7 @@ private:
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
+    std::function<void()> _eventProcessingHook;
 
     std::function<bool()> _processQuitEventHook;
 

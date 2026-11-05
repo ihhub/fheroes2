@@ -206,8 +206,9 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
         }
     }
 
-    std::sort( foundUnits.begin(), foundUnits.end(),
-               []( const std::pair<Battle::Unit *, uint32_t> & first, const std::pair<Battle::Unit *, uint32_t> & second ) { return first.second < second.second; } );
+    std::stable_sort( foundUnits.begin(), foundUnits.end(), []( const std::pair<Battle::Unit *, uint32_t> & first, const std::pair<Battle::Unit *, uint32_t> & second ) {
+        return first.second < second.second;
+    } );
 
     std::vector<Battle::Unit *> units;
     units.reserve( foundUnits.size() );

@@ -37,6 +37,7 @@
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
+#include "multi_simultaneous.h"
 #include "race.h"
 #include "serialize.h"
 #include "spell_info.h"
@@ -432,6 +433,13 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
             if ( res != nullptr ) {
                 *res = _( "This spell cannot be cast on a boat." );
+            }
+            return false;
+        }
+
+        if ( !Multi::canCastAdventureSpell( *hero, spell.GetID() ) ) {
+            if ( res != nullptr ) {
+                *res = _( "This spell cannot be cast during simultaneous turns." );
             }
             return false;
         }

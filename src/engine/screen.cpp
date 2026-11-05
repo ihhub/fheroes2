@@ -1081,6 +1081,15 @@ namespace
             }
         }
 
+        void requestAttention() override
+        {
+#if SDL_VERSION_ATLEAST( 2, 0, 16 )
+            if ( _window != nullptr && ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_INPUT_FOCUS ) == 0 ) {
+                SDL_FlashWindow( _window, SDL_FLASH_UNTIL_FOCUSED );
+            }
+#endif
+        }
+
     private:
         SDL_Window * _window{ nullptr };
         SDL_Surface * _surface{ nullptr };

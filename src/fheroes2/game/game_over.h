@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -68,6 +68,10 @@ namespace GameOver
     };
 
     const char * GetString( uint32_t cond );
+
+    // For results received from the other computer of a network game
+    void showVictory( const uint32_t cond );
+    void showDefeat( const uint32_t cond, const bool isGameOver );
     std::vector<fheroes2::LocalizedString> GetActualDescription( const uint32_t conditions, const std::optional<fheroes2::SupportedLanguage> mapLanguage );
 
     class Result
@@ -81,6 +85,12 @@ namespace GameOver
         void ResetResult()
         {
             result = GameOver::COND_NONE;
+        }
+
+        // Result received from the other computer of a network game
+        void SetResult( const uint32_t cond )
+        {
+            result = cond;
         }
 
         uint32_t GetResult() const

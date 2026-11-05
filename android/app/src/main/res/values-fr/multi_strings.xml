@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="multi_network_game_channel">Partie en réseau</string>
+    <string name="multi_network_game_notification_title">Partie en réseau en cours</string>
+    <string name="multi_network_game_notification_text">Touchez pour revenir au jeu.</string>
+</resources>

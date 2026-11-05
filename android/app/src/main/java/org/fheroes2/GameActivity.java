@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2025                                             *
+ *   Copyright (C) 2022 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -68,9 +70,52 @@ public final class GameActivity extends SDLActivity
         }
     }
 
+    // Called by the game when a network game starts and ends (see NetworkGameService).
+    @SuppressWarnings( "unused" )
+    public static void setNetworkGameRunning( final boolean isRunning )
+    {
+        final SDLActivity activity = mSingleton;
+        if ( activity == null ) {
+            return;
+        }
+
+        final Intent intent = new Intent( activity, NetworkGameService.class );
+
+        try {
+            if ( !isRunning ) {
+                activity.stopService( intent );
+            }
+            else if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+                activity.startForegroundService( intent );
+            }
+            else {
+                activity.startService( intent );
+            }
+        }
+        catch ( final RuntimeException ex ) {
+            // The game can go on without it, a connection lost in the background is restored later.
+            Log.e( "fheroes2", "Unable to change the network game service.", ex );
+        }
+    }
+
+    // Network game self-tests: "args" of the launch intent, debuggable builds only.
+    @Override
+    protected String[] getArguments()
+    {
+        final String[] args = getIntent().getStringArrayExtra( "args" );
+        if ( args == null || ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) == 0 ) {
+            return new String[0];
+        }
+
+        return args;
+    }
+
     @Override
     protected void onDestroy()
     {
+        // The network game cannot continue once the game is closed.
+        setNetworkGameRunning( false );
+
         super.onDestroy();
 
         // When SDL_main() exits, the app process can still remain in memory, and restarting it

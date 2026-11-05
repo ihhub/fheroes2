@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022 - 2025                                             #
+#   Copyright (C) 2022 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -101,6 +101,7 @@ target_include_directories(
 	kingdom
 	maps
 	monster
+	multi
 	resource
 	spell
 	system
@@ -112,3 +113,24 @@ target_link_libraries(
 	engine
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}main
 	)
+
+# Network games use the standalone header-only version of asio.
+if(ENABLE_NETWORK)
+	find_path(
+		ASIO_INCLUDE_DIR
+		asio.hpp
+		HINTS ${CMAKE_SOURCE_DIR}/VisualStudio/packages/asio/include
+		REQUIRED
+		)
+
+	target_include_directories(fheroes2 SYSTEM PRIVATE ${ASIO_INCLUDE_DIR})
+	target_compile_definitions(fheroes2 PRIVATE WITH_NETWORK)
+
+	# Names are looked up by asio on a thread of its own.
+	target_link_libraries(fheroes2 $<TARGET_NAME_IF_EXISTS:Threads::Threads>)
+
+	if(WIN32)
+		target_link_libraries(fheroes2 ws2_32 mswsock)
+		set_source_files_properties(multi/multi_network.cpp multi/multi_port_mapping.cpp PROPERTIES COMPILE_DEFINITIONS _WIN32_WINNT=0x0A00)
+	endif()
+endif(ENABLE_NETWORK)

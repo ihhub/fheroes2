@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -76,6 +76,18 @@ uint32_t IStreamBase::get32()
     return bigendian() ? getBE32() : getLE32();
 }
 
+uint32_t IStreamBase::getContainerSize()
+{
+    const uint32_t size = get32();
+    if ( size > remainingSize() ) {
+        setFail();
+
+        return 0;
+    }
+
+    return size;
+}
+
 IStreamBase & IStreamBase::operator>>( bool & v )
 {
     v = ( get8() != 0 );
@@ -134,7 +146,7 @@ IStreamBase & IStreamBase::operator>>( uint32_t & v )
 
 IStreamBase & IStreamBase::operator>>( std::string & v )
 {
-    v.resize( get32() );
+    v.resize( getContainerSize() );
 
     std::for_each( v.begin(), v.end(), [this]( char & item ) { item = get8(); } );
 

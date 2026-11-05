@@ -42,6 +42,7 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "math_base.h"
+#include "multi_game.h"
 #include "players.h"
 #include "screen.h"
 #include "settings.h"
@@ -351,7 +352,7 @@ void Interface::StatusPanel::_drawAITurns() const
 
     uint32_t colorIndex = 0;
 
-    switch ( Settings::Get().CurrentColor() ) {
+    switch ( Multi::getPlayingColorShown( Settings::Get().CurrentColor() ) ) {
     case PlayerColor::BLUE:
         break;
     case PlayerColor::GREEN:

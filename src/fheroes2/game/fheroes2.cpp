@@ -25,6 +25,7 @@
 #include <exception>
 #include <iostream>
 #include <memory>
+#include <optional>
 
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
@@ -52,6 +53,7 @@
 #include "game_init.h"
 #include "game_invalid_assets.h"
 #include "logging.h"
+#include "multi_command_line.h"
 
 int main( int argc, char ** argv )
 {
@@ -83,6 +85,10 @@ int main( int argc, char ** argv )
         Game::initHotKeys();
 
         try {
+            if ( const std::optional<int> exitCode = Multi::runFromCommandLine( argc, argv ); exitCode ) {
+                return *exitCode;
+            }
+
             Game::runMainGameLoop();
         }
         catch ( const fheroes2::InvalidDataResources & ex ) {

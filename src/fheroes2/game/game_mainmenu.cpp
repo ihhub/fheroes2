@@ -56,6 +56,8 @@
 #include "localevent.h"
 #include "logging.h"
 #include "math_base.h"
+#include "multi_game.h"
+#include "multi_menu.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
@@ -139,6 +141,8 @@ void Game::runMainGameLoop()
     bool isDemoVersion{ isProbablyDemoVersion() };
 
     while ( !exit ) {
+        Multi::onMainLoopMode( result );
+
         switch ( result ) {
         case fheroes2::GameMode::QUIT_GAME:
             exit = true;
@@ -197,7 +201,7 @@ void Game::runMainGameLoop()
             break;
         }
         case fheroes2::GameMode::START_GAME:
-            result = Game::StartGame();
+            result = Multi::startGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
             result = Game::SelectCampaignScenario( fheroes2::GameMode::MAIN_MENU, false );
@@ -222,6 +226,12 @@ void Game::runMainGameLoop()
             break;
         case fheroes2::GameMode::EDITOR_LOAD_MAP:
             result = Editor::menuLoadMap();
+            break;
+        case fheroes2::GameMode::MULTI_WAIT_FOR_TURN:
+            result = Multi::waitForTurn();
+            break;
+        case fheroes2::GameMode::MULTI_NETWORK_MENU:
+            result = Multi::networkMenu();
             break;
 
         default:

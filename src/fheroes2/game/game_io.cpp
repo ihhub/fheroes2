@@ -38,6 +38,8 @@
 #include "game_over.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "multi_fingerprint.h"
+#include "multi_game.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
@@ -105,6 +107,11 @@ namespace
 
 bool Game::AutoSave()
 {
+    // Multi: the host keeps the network game, the guest keeps no copy of it.
+    if ( Multi::isGuest() ) {
+        return true;
+    }
+
     return Game::Save( System::concatPath( GetSaveDir(), autoSaveName + GetSaveFileExtension() ), true );
 }
 
@@ -159,6 +166,8 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     if ( !autoSave ) {
         Game::SetLastSaveName( filePath );
     }
+
+    Multi::logStateFingerprint( "after saving '" + filePath + "'" );
 
     return true;
 }
@@ -274,7 +283,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     // Settings should contain the full path to the current map file, if this map is available
     conf.getCurrentMapInfo().filename = Settings::GetLastFile( "maps", System::GetFileName( conf.getCurrentMapInfo().filename ) );
 
-    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
+    if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() && !Multi::isNetworkGame() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
         warningMessage.append( fheroes2::getLanguageName( fheroes2::getLanguageFromAbbreviation( conf.loadedFileLanguage() ) ) );
         warningMessage.append( _( "' language, but the current language of the game is '" ) );
@@ -300,6 +309,8 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
         world.fixFrenchCharactersInStrings();
     }
+
+    Multi::logStateFingerprint( "after loading '" + filePath + "'" );
 
     return returnValue;
 }

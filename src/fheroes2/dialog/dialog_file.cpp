@@ -30,6 +30,8 @@
 #include "game_mode.h"
 #include "icn.h"
 #include "localevent.h"
+#include "multi_game.h"
+#include "multi_menu.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
@@ -52,15 +54,23 @@ namespace
         fheroes2::ButtonGroup optionButtons( bigButtonsICN );
         fheroes2::StandardWindow background( optionButtons, false, 0, display );
 
-        const fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
-        const fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
+        fheroes2::ButtonBase & newGameButton = optionButtons.button( 0 );
+        fheroes2::ButtonBase & loadGameButton = optionButtons.button( 1 );
         fheroes2::ButtonBase & restartGameButton = optionButtons.button( 2 );
-        const fheroes2::ButtonBase & saveGameButton = optionButtons.button( 3 );
-        const fheroes2::ButtonBase & quickSaveButton = optionButtons.button( 4 );
+        fheroes2::ButtonBase & saveGameButton = optionButtons.button( 3 );
+        fheroes2::ButtonBase & quickSaveButton = optionButtons.button( 4 );
         const fheroes2::ButtonBase & quitButton = optionButtons.button( 5 );
 
         // For now this button is disabled.
         restartGameButton.disable();
+
+        // Only Quit while another player of a network game is making a move.
+        if ( Multi::isObservingOtherPlayers() ) {
+            newGameButton.disable();
+            loadGameButton.disable();
+            saveGameButton.disable();
+            quickSaveButton.disable();
+        }
 
         background.renderSymmetricButtons( optionButtons, 0, false );
 
@@ -68,6 +78,8 @@ namespace
 
         background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
                                  fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        fheroes2::ButtonSprite networkButton = Multi::makeFileDialogButton( buttonCancel.area() );
 
         display.render( background.totalArea() );
 
@@ -80,13 +92,18 @@ namespace
             optionButtons.drawOnState( le );
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
 
-            if ( le.MouseClickLeft( newGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
+            if ( Multi::handleFileDialogButton( networkButton ) ) {
+                result = fheroes2::GameMode::CANCEL;
+                break;
+            }
+
+            if ( newGameButton.isEnabled() && ( le.MouseClickLeft( newGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) ) {
                 if ( Interface::AdventureMap::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
                     result = fheroes2::GameMode::NEW_GAME;
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( loadGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            else if ( loadGameButton.isEnabled() && ( le.MouseClickLeft( loadGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) ) {
                 if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
                     result = fheroes2::GameMode::LOAD_GAME;
                     break;
@@ -98,14 +115,14 @@ namespace
                 result = fheroes2::GameMode::CANCEL;
                 break;
             }
-            else if ( le.MouseClickLeft( saveGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
+            else if ( saveGameButton.isEnabled() && ( le.MouseClickLeft( saveGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 background.hideWindow();
                 display.updateNextRenderRoi( background.totalArea() );
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
-            else if ( le.MouseClickLeft( quickSaveButton.area() ) ) {
+            else if ( quickSaveButton.isEnabled() && le.MouseClickLeft( quickSaveButton.area() ) ) {
                 if ( !Game::QuickSave() ) {
                     fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
                 }

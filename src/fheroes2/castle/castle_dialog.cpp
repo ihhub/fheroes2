@@ -55,6 +55,7 @@
 #include "math_base.h"
 #include "math_tools.h"
 #include "monster.h"
+#include "multi_spectator.h"
 #include "mus.h"
 #include "screen.h"
 #include "statusbar.h"
@@ -362,12 +363,15 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     };
 
     // Castle army (top) bar.
-    ArmyBar topArmyBar( &_army, false, false );
+    // Read-only while another player of a network game is making a move
+    const bool isReadOnly = Multi::isCastleVisit();
+
+    ArmyBar topArmyBar( &_army, false, isReadOnly );
     setArmyBarParameters( topArmyBar, { dialogRoi.x + 112, rectSign1.y } );
     topArmyBar.Redraw( display );
 
     // Hero army (bottom) bar.
-    ArmyBar bottomArmyBar( hero ? &hero->GetArmy() : nullptr, false, false );
+    ArmyBar bottomArmyBar( hero ? &hero->GetArmy() : nullptr, false, isReadOnly );
     setArmyBarParameters( bottomArmyBar, { dialogRoi.x + 112, rectSign2.y } );
 
     if ( hero && alphaHero != 0 ) {
@@ -453,7 +457,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         fheroes2::Rect area;
 
         if ( statusMessage.empty() ) {
-            area = statusBar.updateMessage( currentDate );
+            area = statusBar.updateMessage( Multi::getCastleStatus( currentDate ) );
         }
         else {
             area = statusBar.updateMessage( statusMessage );
@@ -550,7 +554,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             else if ( hero && le.isMouseRightButtonPressedInArea( rectSign2 ) ) {
                 Dialog::QuickInfo( *hero );
             }
-            else if ( hero && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
+            else if ( hero && !isReadOnly && HotKeyPressEvent( Game::HotKeyEvent::ARMY_SWAP ) && _army.isValid() ) {
                 hero->GetArmy().SwapTroops( _army );
 
                 topArmyBar.ResetSelected();
@@ -565,7 +569,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             needRedraw = needRedraw || updateStatusBar();
 
             // Actions with hero army.
-            if ( hero ) {
+            if ( hero && !isReadOnly ) {
                 bool isArmyActionPerformed = false;
 
                 // Preselecting of troop.
@@ -600,7 +604,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 }
             }
 
-            if ( hero && le.MouseClickLeft( rectSign2 ) ) {
+            if ( hero && !isReadOnly && le.MouseClickLeft( rectSign2 ) ) {
                 // View hero.
                 openHeroDialog( topArmyBar, bottomArmyBar, *hero );
 
@@ -655,7 +659,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     }
                 }
 
-                if ( isBuildingClicked ) {
+                if ( isBuildingClicked && !isReadOnly ) {
                     if ( topArmyBar.isSelected() ) {
                         topArmyBar.ResetSelected();
                     }
