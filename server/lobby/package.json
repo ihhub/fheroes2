@@ -1,0 +1,14 @@
+{
+    "name": "fheroes2-lobby",
+    "description": "Lobby and relay for network games of fheroes2",
+    "private": true,
+    "type": "module",
+    "license": "GPL-2.0-or-later",
+    "engines": {
+        "node": ">=22"
+    },
+    "scripts": {
+        "start": "node server.js",
+        "test": "node --test \"test/*.test.js\""
+    }
+}
