@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- While a network game goes on in the background. -->
+<resources>
+    <string name="multi_network_game_channel">Network game</string>
+    <string name="multi_network_game_notification_title">Network game in progress</string>
+    <string name="multi_network_game_notification_text">Touch to go back to the game.</string>
+</resources>

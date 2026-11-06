@@ -44,6 +44,8 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
+#include "multi_live.h"
+#include "multi_reservation.h"
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
@@ -208,6 +210,8 @@ bool Heroes::_moveStep( const bool jumpToNextTile )
     const int32_t nextStepIndex = Maps::GetDirectionIndex( heroIndex, _path.GetFrontDirection() );
 
     const auto makeStep = [this, nextStepIndex]( const bool performMovement ) {
+        Multi::onHeroStep( *this, nextStepIndex );
+
         _applyMovementPenalty( _path.GetFrontPenalty() );
 
         if ( !performMovement ) {
@@ -218,6 +222,8 @@ bool Heroes::_moveStep( const bool jumpToNextTile )
             assert( _path.empty() );
 
             Action( nextStepIndex );
+
+            Multi::onHeroStepDone( *this );
 
             return;
         }
@@ -237,6 +243,8 @@ bool Heroes::_moveStep( const bool jumpToNextTile )
         if ( isActive() ) {
             Action( nextStepIndex );
         }
+
+        Multi::onHeroStepDone( *this );
     };
 
     if ( jumpToNextTile ) {
@@ -596,6 +604,10 @@ void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offs
 bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
     ResetModes( ACTION );
+
+    if ( !Multi::onHeroMove( *this, jumpToNextTile ) ) {
+        return false;
+    }
 
     if ( _path.isValidForMovement() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
         // Jump to the next position.

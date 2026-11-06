@@ -1262,6 +1262,10 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing /* = true */
 
     bool isDisplayRefreshRequired = false;
 
+    if ( _eventProcessingHook ) {
+        _eventProcessingHook();
+    }
+
     if ( !_engine->handleEvents( *this, allowExit, isDisplayRefreshRequired ) ) {
         return false;
     }

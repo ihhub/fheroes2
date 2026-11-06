@@ -42,6 +42,7 @@
 #include "localevent.h"
 #include "maps.h"
 #include "math_base.h"
+#include "multi_notice.h"
 #include "screen.h"
 #include "settings.h"
 #include "ui_button.h"
@@ -135,6 +136,8 @@ void Interface::AdventureMap::redraw( const uint32_t force )
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
         if ( !conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) {
             _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+
+            Multi::drawMapNote( _gameArea.GetROI() );
         }
 
         if ( hideInterface && conf.ShowControlPanel() ) {

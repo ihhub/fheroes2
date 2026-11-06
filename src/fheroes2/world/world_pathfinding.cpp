@@ -44,6 +44,7 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
+#include "multi_simultaneous.h"
 #include "pairs.h"
 #include "players.h"
 #include "rand.h"
@@ -568,7 +569,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     const bool isSummonBoatSpellAvailable = [this, &hero]() {
         static const Spell summonBoat( Spell::SUMMONBOAT );
 
-        if ( !hero.HaveSpell( summonBoat ) ) {
+        if ( !hero.HaveSpell( summonBoat ) || !Multi::canCastAdventureSpell( hero, Spell::SUMMONBOAT ) ) {
             return false;
         }
 
@@ -584,7 +585,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     // The availability of a SP reserve for the use of this spell is not checked here because the need for a reserve depends
     // on the end point of the hero's DD route. For instance, if hero moves to an object that will replenish the SP, then the
     // need to reserve SP can be neglected.
-    const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor );
+    const bool isDimensionDoorSpellAvailable = hero.HaveSpell( dimensionDoor ) && Multi::canCastAdventureSpell( hero, Spell::DIMENSIONDOOR );
 
     const int32_t townGateCastleIndex = [this, &hero]() -> int32_t {
         static const Spell townGate( Spell::TOWNGATE );

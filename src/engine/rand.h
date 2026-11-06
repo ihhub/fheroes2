@@ -257,10 +257,23 @@ namespace Rand
         int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc ) const;
     };
 
+    // Unlike std::hash the value is the same on every platform. Network battles are played on both computers.
+    template <typename Value>
+    uint64_t getPortableHash( const Value & v )
+    {
+        static_assert( std::is_integral_v<Value> || std::is_enum_v<Value>, "Only integers and enumerations are supported" );
+
+        if constexpr ( std::is_enum_v<Value> ) {
+            return static_cast<uint64_t>( static_cast<std::underlying_type_t<Value>>( v ) );
+        }
+        else {
+            return static_cast<uint64_t>( v );
+        }
+    }
+
     template <typename Seed, typename Value, std::enable_if_t<std::is_same_v<Seed, uint32_t> || std::is_same_v<Seed, uint64_t>, bool> = true>
     void combineSeedWithValueHash( Seed & seed, const Value & v )
     {
-        std::hash<Value> hasher;
-        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+        seed ^= static_cast<Seed>( getPortableHash( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 ) );
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,6 +29,7 @@
 #include <functional>
 #include <tuple>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "spell.h"
@@ -123,6 +124,12 @@ namespace Battle
                 (void)( ( *this << params, dummy ) = ... );
             }
         }
+
+        // For commands received over the network. The values are not checked here.
+        Command( const CommandType cmd, std::vector<int> values )
+            : std::vector<int>( std::move( values ) )
+            , _type( cmd )
+        {}
 
         CommandType GetType() const
         {

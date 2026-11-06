@@ -1,0 +1,23 @@
+# The lobby on Cloudflare Workers (free plan): npx wrangler deploy
+# Games connect to ws://<name>.<account>.workers.dev (or wss://).
+
+name = "lobby"
+main = "cloudflare.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "LOBBY"
+class_name = "LobbyObject"
+
+# The free plan only has Durable Objects stored with SQLite.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["LobbyObject"]
+
+[vars]
+LOBBY_NAME = "fheroes2"
+LOBBY_MESSAGE = ""
+LOBBY_RELAY = "on"
+LOBBY_PROBE = "on"
+LOBBY_PRIVATE_ADDRESSES = "off"

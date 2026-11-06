@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1614,7 +1614,7 @@ void Battle::Arena::_applyActionSpellMirrorImage( Command & cmd )
     Indexes distances = Board::GetDistanceIndexes( unit->GetHeadIndex(), 4 );
 
     const int32_t centerIndex = unit->GetHeadIndex();
-    std::sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
+    std::stable_sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
         return Board::GetDistance( centerIndex, index1 ) < Board::GetDistance( centerIndex, index2 );
     } );
 

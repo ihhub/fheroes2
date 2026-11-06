@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -161,6 +161,10 @@ namespace Battle
         static void DialogBattleNecromancy( const uint32_t raiseCount );
 
         void FadeArena( bool clearMessageLog ) const;
+
+        // Plays a network battle without rendering it, then shows it. The battlefield keeps the geometry of a rendered battle.
+        void hideInterface();
+        void showInterface();
 
         // Checks whether the given position is reachable for the given unit, either on the current turn or in principle
         bool isPositionReachable( const Unit & unit, const Position & position, const bool isOnCurrentTurn )
@@ -350,6 +354,7 @@ namespace Battle
         std::unique_ptr<Bridge> _bridge;
 
         std::unique_ptr<Interface> _interface;
+        std::unique_ptr<Interface> _hiddenInterface;
         Result _battleResult;
 
         Graveyard _graveyard;

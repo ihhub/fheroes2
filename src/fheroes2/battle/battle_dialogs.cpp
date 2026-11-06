@@ -57,6 +57,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "morale.h"
+#include "multi_battle.h"
 #include "mus.h"
 #include "players.h"
 #include "race.h"
@@ -473,8 +474,10 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
 // Returns true if player wants to restart the battle
 bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToRestart ) const
 {
-    const bool attackerIsHuman = _attackingArmy->GetControl() & CONTROL_HUMAN;
-    const bool defenderIsHuman = _defendingArmy->GetControl() & CONTROL_HUMAN;
+    bool attackerIsHuman = _attackingArmy->GetControl() & CONTROL_HUMAN;
+    bool defenderIsHuman = _defendingArmy->GetControl() & CONTROL_HUMAN;
+
+    Multi::adjustBattleSummarySides( _attackingArmy->GetColor(), _defendingArmy->GetColor(), attackerIsHuman, defenderIsHuman );
 
     if ( !attackerIsHuman && !defenderIsHuman ) {
         // AI vs AI battle, this dialog should not be shown
@@ -1125,7 +1128,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
         btnAccept.disable();
     }
 
-    if ( kingdom.GetCountMarketplace() ) {
+    // No surrender trading in network battles, it would change resources on one computer only.
+    if ( kingdom.GetCountMarketplace() && !Multi::isBattleWithOtherComputer() ) {
         if ( kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
             btnMarket.disable();
         }

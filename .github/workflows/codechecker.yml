@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies and codechecker
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev clang-tools-18
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libasio-dev clang-tools-18
         python -m venv ~/.python-venv
         ~/.python-venv/bin/pip install codechecker
     - name: Prepare compile_commands.json

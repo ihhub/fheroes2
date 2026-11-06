@@ -23,3 +23,5 @@ brew "gettext"
 brew "sdl2"
 brew "sdl2_mixer"
 brew "sdl2_image"
+
+brew "asio"

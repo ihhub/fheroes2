@@ -2,7 +2,7 @@
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -21,4 +21,4 @@
 ###########################################################################
 
 # Install development dependencies targeting SDL2
-sudo apt-get install -y gettext libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+sudo apt-get install -y gettext libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libasio-dev

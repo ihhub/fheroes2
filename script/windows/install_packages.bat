@@ -27,6 +27,13 @@ set PKG_FILE_SHA256=DC3F6180552CF88074318EA416D5EDAF9E42025161407154EEA754E74066
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
+:: Network games use the standalone header-only version of asio
+set ASIO_VERSION=1-38-2
+set ASIO_FILE=asio-%ASIO_VERSION%.zip
+set ASIO_FILE_SHA256=1907E462B736F3B682E1539C6D7A8ECECDE66DCB25FE98C8386701C101A93388
+set ASIO_URL=https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-%ASIO_VERSION%.zip
+set ASIO_DST_DIR=%DST_DIR%\asio
+
 set EXIT_CODE=0
 
 call :install_packages || ^
@@ -42,28 +49,57 @@ exit /B %EXIT_CODE%
 
 if not exist "%DST_DIR%" ( mkdir "%DST_DIR%" || exit /B 1 )
 
-echo Downloading %PKG_URL%                                                                                        && ^
-powershell -Command "%PKG_TLS%; (New-Object System.Net.WebClient).DownloadFile('%PKG_URL%', '%TEMP%\%PKG_FILE%')" || ^
+call :download_file "%PKG_URL%" "%PKG_FILE%" "%PKG_FILE_SHA256%" || ^
+exit /B 1
+
+call :unpack_archive "%TEMP%\%PKG_FILE%" "%DST_DIR%" || ^
+exit /B 1
+
+call :download_file "%ASIO_URL%" "%ASIO_FILE%" "%ASIO_FILE_SHA256%" || ^
+exit /B 1
+
+call :install_asio || ^
+exit /B 1
+
+exit /B
+
+:download_file
+
+echo Downloading %~1                                                                                              && ^
+powershell -Command "%PKG_TLS%; (New-Object System.Net.WebClient).DownloadFile('%~1', '%TEMP%\%~2')" || ^
 exit /B 1
 
 set HASH_CALCULATED=false
 
-for /F "usebackq delims=" %%H in (`powershell -Command "(certutil.exe -hashfile '%TEMP%\%PKG_FILE%' sha256 | Select-String -Pattern '^[0-9A-Fa-f]{64}$').Line.ToUpper()"`) do (
+for /F "usebackq delims=" %%H in (`powershell -Command "(certutil.exe -hashfile '%TEMP%\%~2' sha256 | Select-String -Pattern '^[0-9A-Fa-f]{64}$').Line.ToUpper()"`) do (
     set HASH_CALCULATED=true
 
-    if not "%%H" == "%PKG_FILE_SHA256%" (
-        echo Invalid hash for %PKG_FILE%: expected %PKG_FILE_SHA256%, got %%H
+    if not "%%H" == "%~3" (
+        echo Invalid hash for %~2: expected %~3, got %%H
         exit /B 1
     )
 )
 
 if not "%HASH_CALCULATED%" == "true" (
-    echo Failed to calculate hash for %PKG_FILE%
+    echo Failed to calculate hash for %~2
     exit /B 1
 )
 
-call :unpack_archive "%TEMP%\%PKG_FILE%" "%DST_DIR%" || ^
-exit /B 1
+exit /B
+
+:install_asio
+
+echo Unpacking %ASIO_FILE%
+
+if exist "%TEMP%\asio-asio-%ASIO_VERSION%" ( rmdir /S /Q "%TEMP%\asio-asio-%ASIO_VERSION%" || exit /B 1 )
+if exist "%ASIO_DST_DIR%" ( rmdir /S /Q "%ASIO_DST_DIR%" || exit /B 1 )
+
+powershell -Command "Expand-Archive -LiteralPath '%TEMP%\%ASIO_FILE%' -DestinationPath '%TEMP%' -Force" || exit /B 1
+
+xcopy /E /I /Q "%TEMP%\asio-asio-%ASIO_VERSION%\include" "%ASIO_DST_DIR%\include" > nul || exit /B 1
+copy /Y "%TEMP%\asio-asio-%ASIO_VERSION%\LICENSE_1_0.txt" "%ASIO_DST_DIR%" > nul || exit /B 1
+
+rmdir /S /Q "%TEMP%\asio-asio-%ASIO_VERSION%"
 
 exit /B
 

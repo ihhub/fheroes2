@@ -13252,3 +13252,859 @@ msgstr "Une force inconnue est ressuscitée..."
 #, fuzzy
 #~ msgid "Click to set this hero to be AI-controlled."
 #~ msgstr "Cliquez ici pour sélectionner cette couleur."
+
+msgid "Network game"
+msgstr "Partie en réseau"
+
+msgid "Are you sure you want to leave the network game?"
+msgstr "Voulez-vous vraiment quitter la partie en réseau ?"
+
+msgid "Press Esc to leave."
+msgstr "Appuyez sur Échap pour quitter."
+
+msgid "The network game has been stopped:"
+msgstr "La partie en réseau a été arrêtée :"
+
+msgid "The host has left the game."
+msgstr "L'hôte a quitté la partie."
+
+msgid "Waiting for %{name}..."
+msgstr "En attente de %{name}..."
+
+msgid "Waiting for a player to join..."
+msgstr "En attente d'un joueur..."
+
+msgid "Connecting to the host..."
+msgstr "Connexion à l'hôte..."
+
+msgid "Unable to start the network game:"
+msgstr "Impossible de lancer la partie en réseau :"
+
+msgid "Unable to join the network game:"
+msgstr "Impossible de rejoindre la partie en réseau :"
+
+msgid "this game needs at least two human players still in the game"
+msgstr "cette partie doit avoir au moins deux joueurs humains encore en jeu"
+
+msgid "No network address found."
+msgstr "Aucune adresse réseau trouvée."
+
+msgid "Address to give to the other player:"
+msgstr "Adresse à donner à l'autre joueur :"
+
+msgid "NETWORK"
+msgstr "RÉSEAU"
+
+msgid "HOST A\nNEW GAME"
+msgstr "NOUVELLE\nPARTIE"
+
+msgid "HOST A\nSAVED GAME"
+msgstr "PARTIE\nSAUVEGARDÉE"
+
+msgid "JOIN\nA GAME"
+msgstr "REJOINDRE\nUNE PARTIE"
+
+msgid "Join a network game"
+msgstr "Rejoindre une partie en réseau"
+
+msgid "Address of the host:"
+msgstr "Adresse de l'hôte :"
+
+msgid "This address is not valid."
+msgstr "Cette adresse n'est pas valide."
+
+msgid "Host a new game"
+msgstr "Héberger une nouvelle partie"
+
+msgid "Start a new game with other players. Each one takes a color when joining."
+msgstr "Commencer une nouvelle partie avec d'autres joueurs. Chacun prend une couleur en arrivant."
+
+msgid "Host a saved game"
+msgstr "Héberger une partie sauvegardée"
+
+msgid "Load a Hot Seat game and play it with other players. Each one takes a color when joining."
+msgstr "Charger une partie « Jouer à plusieurs » et la jouer avec d'autres joueurs. Chacun prend une couleur en arrivant."
+
+msgid "Join the game of another player."
+msgstr "Rejoindre la partie d'un autre joueur."
+
+msgid "Play with a friend, each one on their own computer."
+msgstr "Jouer avec un ami, chacun sur son ordinateur."
+
+msgid "Castles can be opened during your turn. Right-click on a castle to see its summary."
+msgstr "Les châteaux s'ouvrent pendant votre tour. Faites un clic droit sur un château pour voir son résumé."
+
+msgid "%{name} is choosing a skill for their hero..."
+msgstr "%{name} choisit une compétence pour son héros..."
+
+msgid "%{color} player has won the game."
+msgstr "Le joueur %{color} a gagné la partie."
+
+msgid "The game is over."
+msgstr "La partie est terminée."
+
+msgid "You have no player left in this game. It goes on without you."
+msgstr "Vous n'avez plus aucun joueur dans cette partie. Elle continue sans vous."
+
+msgid "the other player closed the connection"
+msgstr "l'autre joueur a fermé la connexion"
+
+msgid "nobody is hosting a game at this address"
+msgstr "personne n'héberge de partie à cette adresse"
+
+msgid "unknown address"
+msgstr "adresse inconnue"
+
+msgid "the port is already used by another program"
+msgstr "le port est déjà utilisé par un autre programme"
+
+msgid "connection timed out"
+msgstr "délai de connexion dépassé"
+
+msgid "invalid data received"
+msgstr "données reçues invalides"
+
+msgid "network error"
+msgstr "erreur réseau"
+
+msgid "message too big"
+msgstr "message trop gros"
+
+msgid "cancelled"
+msgstr "annulé"
+
+msgid "connection closed"
+msgstr "connexion fermée"
+
+msgid "no player joined"
+msgstr "aucun joueur n'a rejoint la partie"
+
+msgid "handshake refused"
+msgstr "connexion refusée"
+
+msgid "unable to connect"
+msgstr "impossible de se connecter"
+
+msgid "no answer from the host"
+msgstr "pas de réponse de l'hôte"
+
+msgid "invalid answer from the host"
+msgstr "réponse de l'hôte invalide"
+
+msgid "accepted"
+msgstr "acceptée"
+
+msgid "different network protocol versions (this computer / the other player)"
+msgstr "versions du protocole réseau différentes (cet ordinateur / l'autre joueur)"
+
+msgid "the players do not run the same version of fheroes2 (this computer / the other player)"
+msgstr "les deux joueurs n'utilisent pas exactement le même fheroes2 (cet ordinateur / l'autre joueur)"
+
+msgid "invalid handshake message"
+msgstr "message de connexion invalide"
+
+msgid "the other computer does not host a game"
+msgstr "l'autre ordinateur n'héberge pas de partie"
+
+msgid "network games are not available in this version of fheroes2"
+msgstr "les parties en réseau ne sont pas disponibles dans cette version de fheroes2"
+
+msgid "unknown handshake result"
+msgstr "réponse de connexion inconnue"
+
+msgid "invalid turn data received"
+msgstr "données du tour reçues invalides"
+
+msgid "unexpected game snapshot"
+msgstr "image de la partie inattendue"
+
+msgid "unexpected turn stage"
+msgstr "étape du tour inattendue"
+
+msgid "the turn sent by the host is inconsistent"
+msgstr "le tour envoyé par l'hôte est incohérent"
+
+msgid "unexpected message"
+msgstr "message inattendu"
+
+msgid "unable to save the game"
+msgstr "impossible de sauvegarder la partie"
+
+msgid "unable to read the file"
+msgstr "impossible de lire le fichier"
+
+msgid "unable to write the file"
+msgstr "impossible d'écrire le fichier"
+
+msgid "unable to load the game sent by another computer"
+msgstr "impossible de charger la partie envoyée par un autre ordinateur"
+
+msgid "the connection with the host was lost"
+msgstr "la connexion avec l'hôte a été perdue"
+
+msgid "invalid game received"
+msgstr "partie reçue invalide"
+
+msgid "Simultaneous turns"
+msgstr "Tours simultanés"
+
+msgid "No battle between players during simultaneous turns. Tomorrow, each player will play in turn."
+msgstr "Pas de combat entre joueurs en tours simultanés. Demain, chacun jouera son tour."
+
+msgid "Another player has already been here. This place is theirs until tomorrow."
+msgstr "Un autre joueur est déjà passé par ici. Cet endroit est à lui jusqu'à demain."
+
+msgid "Every player plays their day at the same time and sees what the others do. The computer players play afterwards. The host makes the choice."
+msgstr "Chaque joueur joue sa journée en même temps que les autres et voit ce qu'ils font. Les ordinateurs jouent ensuite. C'est l'hôte qui choisit."
+
+msgid "This spell cannot be cast during simultaneous turns."
+msgstr "Ce sort ne peut pas être lancé en tours simultanés."
+
+msgid "Switch between simultaneous turns and turns one after the other."
+msgstr "Passer en tours simultanés ou en tours chacun son tour."
+
+msgid "Switch back to turns one after the other from tomorrow?"
+msgstr "Repasser en tours chacun son tour dès demain ?"
+
+msgid "Switch to simultaneous turns from tomorrow?"
+msgstr "Passer en tours simultanés dès demain ?"
+
+msgid "%{name} switches to simultaneous turns from tomorrow."
+msgstr "%{name} passe en tours simultanés à partir de demain."
+
+msgid "%{name} switches back to turns one after the other from tomorrow."
+msgstr "%{name} repasse en tours chacun son tour à partir de demain."
+
+msgid "Opening the internet box..."
+msgstr "Ouverture de la box internet..."
+
+msgid "Internet address to give to the other players:"
+msgstr "Adresse internet à donner aux autres joueurs :"
+
+msgid "The internet box is open."
+msgstr "La box internet est ouverte."
+
+msgid "This connection cannot be reached from the internet. Use Tailscale."
+msgstr "Cette connexion ne peut pas être jointe depuis internet. Utilisez Tailscale."
+
+msgid "Unable to open the internet box (%{reason}). Enable UPnP in the box, forward port %{port} (TCP) to this computer, or use Tailscale."
+msgstr "Impossible d'ouvrir la box internet (%{reason}). Activez l'UPnP dans la box, redirigez le port %{port} (TCP) vers ce PC, ou utilisez Tailscale."
+
+msgid "Same network or Tailscale:"
+msgstr "Même réseau ou Tailscale :"
+
+msgid "IPv6 address, if the box lets it through:"
+msgstr "Adresse IPv6, si la box la laisse passer :"
+
+msgid "no internet box answered"
+msgstr "aucune box internet n'a répondu"
+
+msgid "UPnP is off or missing in the box"
+msgstr "l'UPnP est désactivé ou absent dans la box"
+
+msgid "the port is already used by another computer"
+msgstr "le port est déjà utilisé par un autre ordinateur"
+
+msgid "the box refused"
+msgstr "la box a refusé"
+
+msgid "the box does not answer"
+msgstr "la box ne répond pas"
+
+msgid "Waiting for %{name} (Esc to call off the attack)"
+msgstr "En attente de %{name} (Échap pour annuler l'attaque)"
+
+msgid "Waiting for %{name} (touch the screen to call off the attack)"
+msgstr "En attente de %{name} (touchez l'écran pour annuler l'attaque)"
+
+msgid "%{name} is busy. Try again in a moment."
+msgstr "%{name} est occupé. Réessayez dans un instant."
+
+msgid "Your target has moved away."
+msgstr "Votre cible s'est éloignée."
+
+msgid "%{name} is attacking you!"
+msgstr "%{name} vous attaque !"
+
+msgid "%{name} is finishing their move..."
+msgstr "%{name} termine son action..."
+
+msgid "Do you want to take your turn back?"
+msgstr "Voulez-vous reprendre votre tour ?"
+
+msgid "%{name} has ended their turn."
+msgstr "%{name} a terminé son tour."
+
+msgid "Battle of your ally (B to watch)"
+msgstr "Combat de votre allié (B pour regarder)"
+
+msgid "Battle of your ally (Esc to leave)"
+msgstr "Combat de votre allié (Échap pour quitter)"
+
+msgid "Battle of your ally (touch to leave)"
+msgstr "Combat de votre allié (touchez pour quitter)"
+
+msgid "Battle of your ally (touch here to watch)"
+msgstr "Combat de votre allié (touchez ici pour regarder)"
+
+msgid "Touch the screen to leave."
+msgstr "Touchez l'écran pour quitter."
+
+msgid "Look only, while the others are playing"
+msgstr "Visite seulement, pendant que les autres jouent"
+
+msgid ""
+"The connection with the host is lost.\n"
+"\n"
+"Connecting again..."
+msgstr ""
+"La connexion avec l'hôte est coupée.\n"
+"\n"
+"Reconnexion..."
+
+msgid "The game waits for them. You can also go on: the computer plays for them until they come back."
+msgstr "La partie les attend. Vous pouvez aussi continuer : l'ordinateur joue pour eux jusqu'à leur retour."
+
+msgid "The connection with the host could not be restored."
+msgstr "La connexion avec l'hôte n'a pas pu être rétablie."
+
+msgid "TRY AGAIN"
+msgstr "RÉESSAYER"
+
+msgid "LEAVE"
+msgstr "QUITTER"
+
+msgid "the other player does not know this game any more"
+msgstr "l'autre joueur ne connaît plus cette partie"
+
+msgid "too much data is waiting for the other player"
+msgstr "trop de données attendent l'autre joueur"
+
+msgid "wrong lobby address"
+msgstr "adresse de salon incorrecte"
+
+msgid "secure connections to lobbies are not supported yet"
+msgstr "les connexions sécurisées aux salons ne sont pas encore possibles"
+
+msgid "this address is not a lobby"
+msgstr "cette adresse n'est pas un salon"
+
+msgid "there is no lobby at this address"
+msgstr "il n'y a pas de salon à cette adresse"
+
+msgid "the lobby does not answer"
+msgstr "le salon ne répond pas"
+
+msgid "the lobby closed the connection"
+msgstr "le salon a fermé la connexion"
+
+msgid "the lobby sent wrong data"
+msgstr "le salon a envoyé des données incorrectes"
+
+msgid "the lobby sent a message which is too big"
+msgstr "le salon a envoyé un message trop grand"
+
+msgid "the lobby does not know this version of the game"
+msgstr "le salon ne connaît pas cette version du jeu"
+
+msgid "the lobby refused the nickname"
+msgstr "le salon a refusé le pseudo"
+
+msgid "the lobby is full"
+msgstr "le salon est plein"
+
+msgid "too many games from this address"
+msgstr "trop de parties depuis cette adresse"
+
+msgid "the lobby refused the connection"
+msgstr "le salon a refusé la connexion"
+
+msgid "the lobby refused the name of the game"
+msgstr "le salon a refusé le nom de la partie"
+
+msgid "the lobby refused the game"
+msgstr "le salon a refusé la partie"
+
+msgid "the host cannot be reached directly"
+msgstr "l'hôte ne peut pas être joint directement"
+
+msgid "the lobby has no relay"
+msgstr "le salon n'a pas de relais"
+
+msgid "the game is not on the lobby any more"
+msgstr "la partie n'est plus sur le salon"
+
+msgid "the host does not wait on the relay of the lobby"
+msgstr "l'hôte n'attend pas sur le relais du salon"
+
+msgid "the relay of the lobby is busy, try again later"
+msgstr "le relais du salon est occupé, réessayez plus tard"
+
+msgid "the host closed the game"
+msgstr "l'hôte a fermé la partie"
+
+msgid "the relay of the lobby refused the connection"
+msgstr "le relais du salon a refusé la connexion"
+
+msgid "unable to reach the relay of the lobby"
+msgstr "impossible de joindre le relais du salon"
+
+msgid "wrong address of the relay of the lobby"
+msgstr "adresse incorrecte pour le relais du salon"
+
+msgid "lobby|simultaneous"
+msgstr "simultanés"
+
+msgid "lobby|one by one"
+msgstr "chacun son tour"
+
+msgid "The lobby is checking how to reach the host."
+msgstr "Le salon vérifie comment joindre l'hôte."
+
+msgid "Direct connection."
+msgstr "Connexion directe."
+
+msgid "Through the relay of the lobby."
+msgstr "Par le relais du salon."
+
+msgid "The host cannot be reached."
+msgstr "L'hôte ne peut pas être joint."
+
+msgid "Host: "
+msgstr "Hôte : "
+
+msgid "Version: "
+msgstr "Version : "
+
+msgid "Connecting to the lobby..."
+msgstr "Connexion au salon..."
+
+msgid "The lobby cannot be reached: %{reason}."
+msgstr "Le salon ne répond pas : %{reason}."
+
+msgid "%{lobby}. Players online: %{players}, games waiting: %{rooms}."
+msgstr "%{lobby}. Joueurs en ligne : %{players}, parties en attente : %{rooms}."
+
+msgid "%{count} lobbies. Players online: %{players}, games waiting: %{rooms}."
+msgstr "%{count} salons. Joueurs en ligne : %{players}, parties en attente : %{rooms}."
+
+msgid "This game was started with another version of fheroes2 (%{version}). Every player needs the same version."
+msgstr "Cette partie a été lancée avec une autre version de fheroes2 (%{version}). Tous les joueurs doivent avoir la même version."
+
+msgid "%{map}, %{width} x %{height}, day %{day}. Players: %{players}, of them human: %{humans}, for you: %{guests}."
+msgstr "%{map}, %{width} x %{height}, jour %{day}. Joueurs : %{players}, dont humains : %{humans}, pour vous : %{guests}."
+
+msgid "%{map}, %{width} x %{height}, new game. Players: %{players}, of them human: %{humans}, for you: %{guests}."
+msgstr "%{map}, %{width} x %{height}, nouvelle partie. Joueurs : %{players}, dont humains : %{humans}, pour vous : %{guests}."
+
+msgid "No game has this invite code. Check it with the host."
+msgstr "Aucune partie n'a ce code d'invitation. Vérifiez-le avec l'hôte."
+
+msgid "This game is not on the lobby any more."
+msgstr "Cette partie n'est plus sur le salon."
+
+msgid "This game has already started, or its players are all there."
+msgstr "Cette partie a déjà commencé, ou tous ses joueurs sont là."
+
+msgid "This game was started with another version of fheroes2. Every player needs the same version."
+msgstr "Cette partie a été lancée avec une autre version de fheroes2. Tous les joueurs doivent avoir la même version."
+
+msgid "The lobby refused to let you join this game."
+msgstr "Le salon a refusé que vous rejoigniez cette partie."
+
+msgid "Joining the game %{game}..."
+msgstr "Connexion à la partie %{game}..."
+
+msgid "Looking for the game of this invite code..."
+msgstr "Recherche de la partie de ce code d'invitation..."
+
+msgid "Online lobby"
+msgstr "Salon en ligne"
+
+msgid "Connecting to the game %{game}..."
+msgstr "Connexion à la partie %{game}..."
+
+msgid "Host a game"
+msgstr "Héberger une partie"
+
+msgid "No lobby answers for now. You can still host a game by address from the network menu."
+msgstr "Aucun salon ne répond pour l'instant. Vous pouvez toujours héberger une partie par adresse depuis le menu Réseau."
+
+msgid "Name of the game:"
+msgstr "Nom de la partie :"
+
+msgid "In the list of the lobby"
+msgstr "Dans la liste du salon"
+
+msgid "The name of the map"
+msgstr "Le nom de la carte"
+
+msgid "Lobby: %{lobby}"
+msgstr "Salon : %{lobby}"
+
+msgid "Name of the game"
+msgstr "Nom de la partie"
+
+msgid "The name other players see in the list. Leave it empty for the name of the map."
+msgstr "Le nom que les autres joueurs voient dans la liste. Laissez vide pour le nom de la carte."
+
+msgid "The name other players see in the list. Click to change it."
+msgstr "Le nom que les autres joueurs voient dans la liste. Cliquez pour le changer."
+
+msgid "Every player of the lobby sees your game and can join it. Otherwise only the players you give its invite code to can join it."
+msgstr "Tous les joueurs du salon voient votre partie et peuvent la rejoindre. Sinon, seuls les joueurs à qui vous donnez son code d'invitation peuvent la rejoindre."
+
+msgid "Lobby"
+msgstr "Salon"
+
+msgid "The lobby where your game is published. Click to choose another one."
+msgstr "Le salon où votre partie est publiée. Cliquez pour en choisir un autre."
+
+msgid "Choose a map. Your game is published on the lobby once the scenario is chosen."
+msgstr "Choisissez une carte. Votre partie est publiée sur le salon une fois le scénario choisi."
+
+msgid "Load a Hot Seat game. It is published on the lobby once loaded."
+msgstr "Chargez une partie Hot Seat. Elle est publiée sur le salon une fois chargée."
+
+msgid "Back to the list of games."
+msgstr "Retour à la liste des parties."
+
+msgid "Nickname"
+msgstr "Pseudo"
+
+msgid "The name other players see in the lobbies:"
+msgstr "Le nom que les autres joueurs voient dans les salons :"
+
+msgid "A nickname has 1 to 20 characters."
+msgstr "Un pseudo a de 1 à 20 caractères."
+
+msgid "lobby|Game"
+msgstr "Partie"
+
+msgid "lobby|Map"
+msgstr "Carte"
+
+msgid "lobby|Turns"
+msgstr "Tours"
+
+msgid "lobby|Host"
+msgstr "Hôte"
+
+msgid "lobby|HOST"
+msgstr "HÉBERGER"
+
+msgid "lobby|JOIN"
+msgstr "REJOINDRE"
+
+msgid "lobby|CODE"
+msgstr "CODE"
+
+msgid "lobby|SETTINGS"
+msgstr "RÉGLAGES"
+
+msgid "lobby|BACK"
+msgstr "RETOUR"
+
+msgid "No game is waiting for players.\n\nHost yours: other players will see it here."
+msgstr "Aucune partie n'attend de joueur.\n\nHébergez la vôtre : les autres joueurs la verront ici."
+
+msgid "Games of the lobby are shown here once it answers. You can also play by address from the network menu."
+msgstr "Les parties du salon s'affichent ici dès qu'il répond. Vous pouvez aussi jouer par adresse depuis le menu Réseau."
+
+msgid "Invite code"
+msgstr "Code d'invitation"
+
+msgid "The invite code given by the host:"
+msgstr "Le code d'invitation donné par l'hôte :"
+
+msgid "An invite code has 6 letters and digits."
+msgstr "Un code d'invitation a 6 lettres et chiffres."
+
+msgid "Host"
+msgstr "Héberger"
+
+msgid "Host a new or a saved game. It is shown in this list until all its players are there."
+msgstr "Hébergez une nouvelle partie ou une partie sauvegardée. Elle apparaît dans cette liste jusqu'à ce que tous ses joueurs soient là."
+
+msgid "Join"
+msgstr "Rejoindre"
+
+msgid "Join the selected game. A double click on a game does the same."
+msgstr "Rejoindre la partie choisie. Un double clic sur une partie fait de même."
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Join a game with the invite code its host gave you. Games for invited players only are not in the list."
+msgstr "Rejoindre une partie avec le code d'invitation que son hôte vous a donné. Les parties sur invitation ne sont pas dans la liste."
+
+msgid "Your nickname, the lobbies and the relay."
+msgstr "Votre pseudo, les salons et le relais."
+
+msgid "Back to the network menu."
+msgstr "Retour au menu Réseau."
+
+msgid "Back to the network menu, where the network settings are."
+msgstr "Retour au menu Réseau, où se trouvent les réglages réseau."
+
+msgid "lobby|online"
+msgstr "en ligne"
+
+msgid "lobby|connecting..."
+msgstr "connexion..."
+
+msgid "lobby|refused"
+msgstr "refusé"
+
+msgid "lobby|no answer"
+msgstr "ne répond pas"
+
+msgid "A lobby lists the games waiting for players and helps the computers to connect. Its relay passes the game on when no direct connection works."
+msgstr "Un salon liste les parties qui attendent des joueurs et aide les ordinateurs à se connecter. Son relais transmet la partie quand aucune connexion directe ne marche."
+
+msgid "Network settings"
+msgstr "Réglages réseau"
+
+msgid "Lobbies:"
+msgstr "Salons :"
+
+msgid "Always go through the relay"
+msgstr "Toujours passer par le relais"
+
+msgid "lobby|CHANGE"
+msgstr "CHANGER"
+
+msgid "lobby|ADD"
+msgstr "AJOUTER"
+
+msgid "lobby|REMOVE"
+msgstr "RETIRER"
+
+msgid "Nickname: "
+msgstr "Pseudo : "
+
+msgid "(shared)"
+msgstr "(commun)"
+
+msgid "Add a lobby"
+msgstr "Ajouter un salon"
+
+msgid "Address of the lobby, as given by the one who runs it:"
+msgstr "Adresse du salon, telle que donnée par celui qui le fait tourner :"
+
+msgid "Your games go through the relay of the lobby even when a direct connection would work. The other players never learn your address. The game may be a little slower."
+msgstr "Vos parties passent par le relais du salon même quand une connexion directe marcherait. Les autres joueurs ne connaissent jamais votre adresse. Le jeu peut être un peu plus lent."
+
+msgid "The name other players see in the lobbies."
+msgstr "Le nom que les autres joueurs voient dans les salons."
+
+msgid "The shared lobby, then the ones you added. A lobby is a small free program which anyone can run, for example for a group of friends. The list of games shows the games of all of them."
+msgstr "Le salon commun, puis ceux que vous avez ajoutés. Un salon est un petit programme libre que chacun peut faire tourner, par exemple pour un groupe d'amis. La liste montre les parties de tous les salons."
+
+msgid "Lobbies"
+msgstr "Salons"
+
+msgid "Add the address of another lobby. Its games are shown in the same list."
+msgstr "Ajouter l'adresse d'un autre salon. Ses parties s'affichent dans la même liste."
+
+msgid "Remove"
+msgstr "Retirer"
+
+msgid "Remove the selected lobby. The shared lobby always stays."
+msgstr "Retirer le salon choisi. Le salon commun reste toujours."
+
+msgid "Play by address"
+msgstr "Jouer par adresse"
+
+msgid "ONLINE\nLOBBY"
+msgstr "SALON\nEN LIGNE"
+
+msgid "PLAY BY\nADDRESS"
+msgstr "JOUER PAR\nADRESSE"
+
+msgid "network|SETTINGS"
+msgstr "RÉGLAGES"
+
+msgid "Find a game to join, or offer yours to the players of the lobby."
+msgstr "Trouvez une partie à rejoindre, ou proposez la vôtre aux joueurs du salon."
+
+msgid "Host a game, or join one with the address of its host: on the same network, through Tailscale or through an open internet box."
+msgstr "Hébergez une partie, ou rejoignez-en une avec l'adresse de son hôte : même réseau, Tailscale ou box ouverte."
+
+msgid "The lobby cannot be reached: %{reason}. The game tries again."
+msgstr "Le salon ne répond pas : %{reason}. Le jeu réessaie."
+
+msgid "Your game is in the list of the lobby %{lobby}."
+msgstr "Votre partie est dans la liste du salon %{lobby}."
+
+msgid "Your game is on the lobby %{lobby}, for invited players only."
+msgstr "Votre partie est sur le salon %{lobby}, sur invitation seulement."
+
+msgid "Invite code:"
+msgstr "Code d'invitation :"
+
+msgid "The connection to the lobby was lost. The game connects again."
+msgstr "La connexion au salon est coupée. Le jeu se reconnecte."
+
+msgid "The lobby checks whether other players can reach you directly..."
+msgstr "Le salon vérifie si les autres joueurs peuvent vous joindre directement..."
+
+msgid "Other players join you directly."
+msgstr "Les autres joueurs vous rejoignent directement."
+
+msgid "Other players join you through the relay of the lobby."
+msgstr "Les autres joueurs vous rejoignent par le relais du salon."
+
+msgid "Other players cannot reach you: your computer cannot be reached directly, and this lobby has no relay."
+msgstr "Les autres joueurs ne peuvent pas vous joindre : votre ordinateur n'est pas joignable directement, et ce salon n'a pas de relais."
+
+msgid "The lobby refused the game:"
+msgstr "Le salon a refusé la partie :"
+
+msgid "%{map}, %{width} x %{height}, day %{day}."
+msgstr "%{map}, %{width} x %{height}, jour %{day}."
+
+msgid "%{map}, %{width} x %{height}, new game."
+msgstr "%{map}, %{width} x %{height}, nouvelle partie."
+
+msgid "Simultaneous turns."
+msgstr "Tours simultanés."
+
+msgid "Turns one after the other."
+msgstr "Chacun son tour."
+
+msgid "player|Host"
+msgstr "Hôte"
+
+msgid "player|Guest"
+msgstr "Invité"
+
+msgid "Are you sure you want to close this network game?"
+msgstr "Voulez-vous vraiment fermer cette partie en réseau ?"
+
+msgid "Start the game once every player has a color. The colors nobody took are played by the computer."
+msgstr "Lancer la partie quand chaque joueur a une couleur. Les couleurs que personne n'a prises sont jouées par l'ordinateur."
+
+msgid "Leave"
+msgstr "Quitter"
+
+msgid "Close this game."
+msgstr "Fermer cette partie."
+
+msgid "Leave this game."
+msgstr "Quitter cette partie."
+
+msgid "Send"
+msgstr "Envoyer"
+
+msgid "Send your message to the other players. Enter does the same."
+msgstr "Envoyer votre message aux autres joueurs. Entrée fait de même."
+
+msgid "Chat"
+msgstr "Discussion"
+
+msgid "Only the players of this game see these messages. The chat ends when the game starts."
+msgstr "Seuls les joueurs de cette partie voient ces messages. La discussion s'arrête quand la partie commence."
+
+msgid "Players"
+msgstr "Joueurs"
+
+msgid "To join this game"
+msgstr "Pour rejoindre cette partie"
+
+msgid "The game"
+msgstr "La partie"
+
+msgid "lobby|SEND"
+msgstr "ENVOYER"
+
+msgid "lobby|START"
+msgstr "LANCER"
+
+msgid "lobby|LEAVE"
+msgstr "QUITTER"
+
+msgid "free (computer)"
+msgstr "libre (ordinateur)"
+
+msgid "%{color}: %{name}"
+msgstr "%{color} : %{name}"
+
+msgid "%{name}: "
+msgstr "%{name} : "
+
+msgid "computer"
+msgstr "ordinateur"
+
+msgid "You can chat with the other players once they are here."
+msgstr "Vous pourrez discuter avec les autres joueurs dès leur arrivée."
+
+msgid "%{name} has left."
+msgstr "%{name} est parti."
+
+msgid "The connection with %{name} is cut."
+msgstr "La connexion avec %{name} est coupée."
+
+msgid "The connection is back."
+msgstr "La connexion est rétablie."
+
+msgid "A player could not come in: %{reason}."
+msgstr "Un joueur n'a pas pu entrer : %{reason}."
+
+msgid "%{name} has joined the game."
+msgstr "%{name} a rejoint la partie."
+
+msgid "The game starts..."
+msgstr "La partie commence..."
+
+msgid "The game starts when the host is ready."
+msgstr "La partie commence quand l'hôte est prêt."
+
+msgid "You have joined the game."
+msgstr "Vous avez rejoint la partie."
+
+msgid "The connection with the host is cut. The game connects again..."
+msgstr "La connexion avec l'hôte est coupée. Le jeu se reconnecte..."
+
+msgid "The other games of this computer join this one."
+msgstr "Les autres jeux de cet ordinateur rejoignent celui-ci."
+
+msgid "network|GO ON"
+msgstr "CONTINUER"
+
+msgid "%{name} has left the game."
+msgstr "%{name} a quitté la partie."
+
+msgid "%{name} is back."
+msgstr "%{name} est de retour."
+
+msgid "The computer plays for %{name} from now on."
+msgstr "L'ordinateur joue désormais pour %{name}."
+
+msgid "the map is corrupted or doesn't exist"
+msgstr "la carte est abîmée ou n'existe pas"
+
+msgid "Waiting for the other players..."
+msgstr "En attente des autres joueurs..."
+
+msgid "Waiting for the host..."
+msgstr "En attente de l'hôte..."
+
+msgid "You have no player left in this game. Your computer keeps hosting it for the other players."
+msgstr "Vous n'avez plus aucun joueur dans cette partie. Votre ordinateur continue de l'héberger pour les autres joueurs."
+
+msgid "every player of the game is already taken"
+msgstr "tous les joueurs de la partie sont déjà pris"
+
+msgid "the game has started without this computer"
+msgstr "la partie a commencé sans cet ordinateur"
+
+msgid "Guest %{number}"
+msgstr "Invité %{number}"
+
+msgid "Click on a free color to play it, or on one of yours to give it back."
+msgstr "Cliquez sur une couleur libre pour la jouer, ou sur une des vôtres pour la rendre."
+
+msgid "Human players"
+msgstr "Joueurs humains"
+

@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2025                                             #
+#   Copyright (C) 2021 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -115,6 +115,10 @@ CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
 endif
 ifdef FHEROES2_WITH_IMAGE
 CCFLAGS := $(CCFLAGS) -DWITH_IMAGE
+endif
+ifdef FHEROES2_WITH_NETWORK
+CCFLAGS := $(CCFLAGS) -DWITH_NETWORK
+LIBS := $(LIBS) -pthread
 endif
 ifdef FHEROES2_DATA
 CCFLAGS := $(CCFLAGS) -DFHEROES2_DATA="$(FHEROES2_DATA)"

@@ -60,6 +60,7 @@
 #include "math_base.h"
 #include "math_tools.h"
 #include "monster.h"
+#include "multi_battle.h"
 #include "players.h"
 #include "rand.h"
 #include "skill.h"
@@ -477,7 +478,8 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
 
         Actions actions;
 
-        if ( _interface ) {
+        // In a network battle the computer of the current unit applies pending actions later, at the same moment for both battles.
+        if ( _interface && !Multi::isNetworkBattle() ) {
             _interface->getPendingActions( actions );
         }
 
@@ -504,13 +506,30 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
                 _bridge->SetPassability( *_currentUnit );
             }
 
-            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _autoCombatColors & _currentUnit->GetCurrentColor() ) ) {
-                AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
+            const bool isAIControlled = ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _autoCombatColors & _currentUnit->GetCurrentColor() );
+            const Multi::BattleTurnSource source = Multi::getBattleTurnSource( *_currentUnit, isAIControlled );
+
+            if ( source == Multi::BattleTurnSource::REMOTE ) {
+                Multi::receiveBattleActions( *this, *_currentUnit, actions );
             }
             else {
-                assert( _interface != nullptr );
+                if ( _interface && Multi::isNetworkBattle() ) {
+                    _interface->getPendingActions( actions );
+                }
 
-                _interface->HumanTurn( *_currentUnit, actions );
+                if ( !actions.empty() ) {
+                    // Pending actions first, the unit moves on the next iteration.
+                }
+                else if ( source == Multi::BattleTurnSource::AI ) {
+                    AI::BattlePlanner::Get().BattleTurn( *this, *_currentUnit, actions );
+                }
+                else {
+                    assert( _interface != nullptr );
+
+                    _interface->HumanTurn( *_currentUnit, actions );
+                }
+
+                Multi::sendBattleActions( *_currentUnit, actions );
             }
         }
 
@@ -852,6 +871,21 @@ const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
     }
 
     return nullptr;
+}
+
+void Battle::Arena::hideInterface()
+{
+    if ( _interface ) {
+        _hiddenInterface = std::move( _interface );
+    }
+}
+
+void Battle::Arena::showInterface()
+{
+    if ( _hiddenInterface ) {
+        _interface = std::move( _hiddenInterface );
+        _interface->fullRedraw();
+    }
 }
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const

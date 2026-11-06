@@ -54,6 +54,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
+#include "multi_menu.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
@@ -473,6 +474,10 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
     fheroes2::Button buttonHotSeat( buttonStandardGame.area().x, buttonStandardGame.area().y, menuButtonsIcnIndex, 12, 13 );
     buttonHotSeat.disable();
 
+    fheroes2::ButtonSprite buttonNetwork = Multi::makeNetworkButton(
+        { buttonHotSeat.area().x, buttonHotSeat.area().y + buttonHotSeat.area().height + spaceBetweenButtons, buttonHotSeat.area().width, buttonHotSeat.area().height } );
+    buttonNetwork.disable();
+
     fheroes2::ButtonGroup playerCountButtons;
 
     for ( int32_t i = 0; i < 5; ++i ) {
@@ -544,6 +549,9 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
                 buttonHotSeat.enable();
                 buttonHotSeat.draw();
                 buttonHotSeat.drawShadow( display );
+                buttonNetwork.enable();
+                buttonNetwork.draw();
+                buttonNetwork.drawShadow( display );
                 display.render( emptyDialog.rect() );
             }
 
@@ -617,8 +625,14 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
         }
         else {
             buttonHotSeat.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonHotSeat.area() ) );
+            buttonNetwork.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonNetwork.area() ) );
+
+            if ( le.MouseClickLeft( buttonNetwork.area() ) ) {
+                return fheroes2::GameMode::MULTI_NETWORK_MENU;
+            }
             if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
                 buttonHotSeat.disable();
+                buttonNetwork.disable();
                 emptyDialog.restore();
                 playerCountButtons.enable();
                 playerCountButtons.draw();
@@ -631,6 +645,9 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
                 fheroes2::showStandardTextMessage(
                     _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 6 players play on the same device, switching into the 'Hot Seat' when it is their turn." ),
                     Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( buttonNetwork.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Network game" ), _( "Play with a friend, each one on their own computer." ), Dialog::ZERO );
             }
         }
         buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );

@@ -67,6 +67,7 @@
 #include "monster_anim.h"
 #include "monster_info.h"
 #include "mp2.h"
+#include "multi_battle.h"
 #include "mus.h"
 #include "pal.h"
 #include "players.h"
@@ -7272,6 +7273,10 @@ void Battle::Interface::InterruptAutoCombatIfRequested( LocalEvent & le )
     PlayerColor color = arena.GetCurrentColor();
     if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
         color = arena.GetOppositeColor( color );
+    }
+
+    if ( !Multi::canControlBattleColor( color ) ) {
+        return;
     }
 
     // The battle interruption is already scheduled, no need for the dialog.

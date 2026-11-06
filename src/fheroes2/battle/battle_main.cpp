@@ -47,6 +47,8 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "monster.h"
+#include "multi_battle.h"
+#include "multi_hero.h"
 #include "players.h"
 #include "rand.h"
 #include "resource.h"
@@ -228,6 +230,8 @@ namespace
             }
         }
 
+        Multi::notifyLearnedSpells( hero, new_spells );
+
         hero.AppendSpellsToBook( new_spells, true );
     }
 
@@ -246,6 +250,8 @@ namespace
         if ( isControlHuman ) {
             Battle::Arena::DialogBattleNecromancy( raiseCount );
         }
+
+        Multi::notifyRaisedSkeletons( hero, raiseCount );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << " skeletons" )
     }
@@ -385,6 +391,12 @@ Battle::Result Battle::Loader( Army & attackingArmy, Army & defendingArmy, const
     const uint32_t battleSeed = computeBattleSeed( tileIndex, world.GetMapSeed(), attackingArmy, defendingArmy );
 
     while ( true ) {
+        // A battle restarted in manual mode is a new battle for the other computer.
+        if ( Multi::startNetworkBattleIfNeeded( attackingArmy, defendingArmy, tileIndex, battleSeed, showBattle ) ) {
+            // Each player sees the battle and controls only their own units.
+            showBattle = true;
+        }
+
         Rand::PCG32 randomGenerator( battleSeed );
         Arena arena( attackingArmy, defendingArmy, tileIndex, showBattle, randomGenerator );
 
@@ -395,6 +407,8 @@ Battle::Result Battle::Loader( Army & attackingArmy, Army & defendingArmy, const
             arena.Turns();
         }
         result = arena.GetResult();
+
+        Multi::endNetworkBattle( arena, result );
 
         HeroBase * const winnerHero = ( result.attacker & RESULT_WINS ? attackingArmyCommander : ( result.defender & RESULT_WINS ? defendingArmyCommander : nullptr ) );
         HeroBase * const loserHero = ( result.attacker & RESULT_LOSS ? attackingArmyCommander : ( result.defender & RESULT_LOSS ? defendingArmyCommander : nullptr ) );
@@ -440,9 +454,11 @@ Battle::Result Battle::Loader( Army & attackingArmy, Army & defendingArmy, const
 
                 const auto assembledArtifacts = winnerBag.assembleArtifactSetIfPossible();
 
-                if ( winnerHero->isControlHuman() ) {
+                if ( Multi::isPlayedHere( *winnerHero ) ) {
                     std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
                 }
+
+                Multi::notifyAssembledArtifacts( *winnerHero, assembledArtifacts );
             }
 
             if ( loserHero->isControlAI() ) {
@@ -464,11 +480,11 @@ Battle::Result Battle::Loader( Army & attackingArmy, Army & defendingArmy, const
         }
 
         if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLE_EYE ) && loserHero->isHeroes() ) {
-            eagleEyeSkillAction( *winnerHero, arena.GetUsedSpells(), winnerHero->isControlHuman(), randomGenerator );
+            eagleEyeSkillAction( *winnerHero, arena.GetUsedSpells(), Multi::isPlayedHere( *winnerHero ), randomGenerator );
         }
 
         if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) ) {
-            necromancySkillAction( *winnerHero, result.numOfDeadUnitsForNecromancy, winnerHero->isControlHuman() );
+            necromancySkillAction( *winnerHero, result.numOfDeadUnitsForNecromancy, Multi::isPlayedHere( *winnerHero ) );
         }
 
         break;

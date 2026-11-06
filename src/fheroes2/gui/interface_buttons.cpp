@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,6 +34,8 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "mp2.h"
+#include "multi_game.h"
+#include "multi_simultaneous.h"
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
@@ -198,10 +200,10 @@ fheroes2::GameMode Interface::ButtonsPanel::queueEventProcessing()
     else if ( _buttonSpell.isEnabled() && le.MouseClickLeft( _spellRect ) ) {
         _interface.EventCastSpell();
     }
-    else if ( le.MouseClickLeft( _endTurnRect ) ) {
+    else if ( _buttonEndTurn.isEnabled() && le.MouseClickLeft( _endTurnRect ) ) {
         res = _interface.EventEndTurn();
     }
-    else if ( le.MouseClickLeft( _adventureRect ) ) {
+    else if ( _buttonAdventure.isEnabled() && le.MouseClickLeft( _adventureRect ) ) {
         res = _interface.EventAdventureDialog();
     }
     else if ( le.MouseClickLeft( _fileRect ) ) {
@@ -288,5 +290,22 @@ void Interface::ButtonsPanel::_setButtonStatus()
     }
     else {
         _buttonNextHero.disable();
+    }
+
+    // Read-only map while another player of a network game is making a move. End Turn only to take the day back.
+    if ( Multi::isObservingOtherPlayers() ) {
+        _buttonHeroMovement.disable();
+        _buttonSpell.disable();
+        _buttonAdventure.disable();
+        if ( Multi::canResumeDay() ) {
+            _buttonEndTurn.enable();
+        }
+        else {
+            _buttonEndTurn.disable();
+        }
+    }
+    else {
+        _buttonAdventure.enable();
+        _buttonEndTurn.enable();
     }
 }
