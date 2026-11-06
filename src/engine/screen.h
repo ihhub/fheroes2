@@ -125,6 +125,12 @@ namespace fheroes2
             return {};
         }
 
+        // A renderer with a detail viewport can follow the pointer without reading input events.
+        virtual void setViewportCenter( const Point /*unused*/ )
+        {
+            // Do nothing.
+        }
+
         virtual void setVSync( const bool /*unused*/ )
         {
             // Do nothing.

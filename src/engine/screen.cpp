@@ -65,6 +65,10 @@
 #include "logging.h"
 #include "math_tools.h"
 #include "system.h"
+#if defined( __3DS__ )
+#include <3ds.h>
+
+#endif
 
 namespace
 {
@@ -263,6 +267,203 @@ namespace
     }
 
     const fheroes2::RGB * currentRGBPalette = RGBPalette();
+#if defined( __3DS__ )
+    class RenderEngine final : public fheroes2::BaseRenderEngine
+    {
+    public:
+        RenderEngine( const RenderEngine & ) = delete;
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
+        {
+            clear();
+        }
+
+        static RenderEngine * create()
+        {
+            return new RenderEngine;
+        }
+
+        bool isFullScreen() const override
+        {
+            return true;
+        }
+
+        void toggleFullScreen() override {}
+
+        std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
+        {
+            return { { gameWidth, gameHeight } };
+        }
+
+        fheroes2::Rect getActiveWindowROI() const override
+        {
+            return { 0, 0, gameWidth, gameHeight };
+        }
+
+        fheroes2::Size getCurrentScreenResolution() const override
+        {
+            return { gameWidth, gameHeight };
+        }
+
+        void setViewportCenter( const fheroes2::Point center ) override
+        {
+            _viewportCenter = center;
+        }
+
+    private:
+        static constexpr int32_t gameWidth = 800;
+        static constexpr int32_t gameHeight = 480;
+        static constexpr int32_t overviewWidth = 400;
+        static constexpr int32_t screenHeight = 240;
+        static constexpr int32_t detailWidth = 320;
+        static constexpr int32_t verticalScale = gameHeight / screenHeight;
+        static constexpr int32_t standardHorizontalScale = gameWidth / overviewWidth;
+        static constexpr size_t paletteSize = 256;
+        static constexpr uint32_t cropBorderColor = 0xff3030ff;
+
+        SDL_Window * _top = nullptr;
+        SDL_Window * _bottom = nullptr;
+        std::array<uint32_t, paletteSize> _colors{};
+        fheroes2::Point _viewportCenter;
+        bool _wide = false;
+
+        RenderEngine() = default;
+
+        void clear() override
+        {
+            SDL_DestroyWindow( _bottom );
+            _bottom = nullptr;
+            SDL_DestroyWindow( _top );
+            _top = nullptr;
+        }
+
+        bool allocate( fheroes2::ResolutionInfo & resolution, const bool ) override
+        {
+            clear();
+            resolution = { gameWidth, gameHeight };
+            _top = SDL_CreateWindow( "fheroes2", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 0 ), overviewWidth, screenHeight,
+                                     SDL_WINDOW_FULLSCREEN );
+            _bottom = SDL_CreateWindow( "fheroes2 detail", SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), SDL_WINDOWPOS_UNDEFINED_DISPLAY( 1 ), detailWidth, screenHeight,
+                                        SDL_WINDOW_FULLSCREEN );
+            if ( _top == nullptr || _bottom == nullptr ) {
+                ERROR_LOG( SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            // Old 2DS has no wide mode. Failure to identify the model also retains standard output.
+            _wide = false;
+            const Result initResult = cfguInit();
+            if ( R_SUCCEEDED( initResult ) ) {
+                u8 model = CFG_MODEL_2DS;
+                const Result modelResult = CFGU_GetSystemModel( &model );
+                cfguExit();
+                if ( R_SUCCEEDED( modelResult ) ) {
+                    _wide = model <= CFG_MODEL_N2DSXL && model != CFG_MODEL_2DS;
+                }
+                else {
+                    ERROR_LOG( "Failed to query 3DS model: " << modelResult << ". Using standard output." )
+                }
+            }
+            else {
+                ERROR_LOG( "Failed to initialize 3DS model service: " << initResult << ". Using standard output." )
+            }
+            // These libctru configuration functions return void.
+            gfxSet3D( false );
+            gfxSetWide( _wide );
+            gfxSetScreenFormat( GFX_TOP, GSP_RGBA8_OES );
+            gfxSetScreenFormat( GFX_BOTTOM, GSP_RGBA8_OES );
+            updatePalette( StandardPaletteIndexes() );
+            return true;
+        }
+
+        bool isMouseCursorActive() const override
+        {
+            return _top != nullptr && _bottom != nullptr;
+        }
+
+        void updatePalette( const std::vector<uint8_t> & indexes ) override
+        {
+            if ( indexes.size() != _colors.size() ) {
+                return;
+            }
+            for ( size_t i = 0; i < indexes.size(); ++i ) {
+                const fheroes2::RGB & color = currentRGBPalette[indexes[i]];
+                _colors[i] = ( uint32_t( color.r ) << 24 ) | ( uint32_t( color.g ) << 16 ) | ( uint32_t( color.b ) << 8 ) | 255;
+            }
+        }
+
+        void render( const fheroes2::Display & display, const fheroes2::Rect & ) override
+        {
+            if ( _top == nullptr || _bottom == nullptr || display.width() != gameWidth || display.height() != gameHeight ) {
+                return;
+            }
+            const int32_t cropX = std::clamp<int32_t>( _viewportCenter.x - detailWidth / 2, 0, gameWidth - detailWidth );
+            const int32_t cropY = std::clamp<int32_t>( _viewportCenter.y - screenHeight / 2, 0, gameHeight - screenHeight );
+            u16 topHeight = 0;
+            u16 topWidth = 0;
+            u16 bottomHeight = 0;
+            u16 bottomWidth = 0;
+            auto * top = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_TOP, GFX_LEFT, &topHeight, &topWidth ) );
+            auto * bottom = reinterpret_cast<uint32_t *>( gfxGetFramebuffer( GFX_BOTTOM, GFX_LEFT, &bottomHeight, &bottomWidth ) );
+            const uint8_t * image = display.image();
+            const int32_t outputWidth = _wide ? gameWidth : overviewWidth;
+            if ( top == nullptr || bottom == nullptr || image == nullptr || topHeight != screenHeight || topWidth != outputWidth || bottomHeight != screenHeight
+                 || bottomWidth != detailWidth ) {
+                ERROR_LOG( "Invalid 3DS framebuffer pointer or dimensions." )
+                return;
+            }
+            const int32_t horizontalScale = _wide ? 1 : standardHorizontalScale;
+            constexpr int32_t lastScreenRow = screenHeight - 1;
+            constexpr int32_t scaledDetailHeight = screenHeight / verticalScale;
+            constexpr int32_t sourceRowStride = verticalScale * gameWidth;
+
+            // libctru stores contiguous framebuffer columns bottom-to-top.
+            // Wide-mode pixels are half as wide physically; only vertical downsampling is needed.
+            for ( int32_t x = 0; x < outputWidth; ++x ) {
+                uint32_t * output = top + x * screenHeight;
+                for ( int32_t y = lastScreenRow; y >= 0; --y ) {
+                    *output++ = _colors[image[y * sourceRowStride + x * horizontalScale]];
+                }
+            }
+            for ( int32_t x = 0; x < detailWidth; ++x ) {
+                uint32_t * output = bottom + x * screenHeight;
+                for ( int32_t y = lastScreenRow; y >= 0; --y ) {
+                    *output++ = _colors[image[( cropY + y ) * gameWidth + cropX + x]];
+                }
+            }
+
+            const int32_t left = cropX / horizontalScale;
+            const int32_t right = left + detailWidth / horizontalScale - 1;
+            const int32_t upper = cropY / verticalScale;
+            const int32_t lower = upper + scaledDetailHeight - 1;
+            const int32_t upperRow = lastScreenRow - upper;
+            const int32_t lowerRow = lastScreenRow - lower;
+            for ( int32_t x = left; x <= right; ++x ) {
+                uint32_t * column = top + x * screenHeight;
+                column[upperRow] = cropBorderColor;
+                column[lowerRow] = cropBorderColor;
+            }
+            uint32_t * leftColumn = top + left * screenHeight;
+            uint32_t * rightColumn = top + right * screenHeight;
+            for ( int32_t y = upper; y <= lower; ++y ) {
+                const int32_t row = lastScreenRow - y;
+                leftColumn[row] = cropBorderColor;
+                rightColumn[row] = cropBorderColor;
+                if ( _wide ) {
+                    // Two wide-mode pixels have the physical width of one standard-mode pixel.
+                    leftColumn[screenHeight + row] = cropBorderColor;
+                    rightColumn[row - screenHeight] = cropBorderColor;
+                }
+            }
+            // Buffer flush/swap and the VBlank wait return void in libctru.
+            gfxFlushBuffers();
+            gfxSwapBuffers();
+            gspWaitForVBlank();
+        }
+    };
+#endif
 
 // If SDL library is used
 #if !defined( TARGET_PS_VITA )
@@ -811,7 +1012,7 @@ namespace
             }
         }
     };
-#else
+#elif !defined( __3DS__ )
     bool shouldUseFullscreenDesktopMode()
     {
         return fheroes2::cursor().isSoftwareEmulation();

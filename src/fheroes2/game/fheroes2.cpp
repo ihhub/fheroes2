@@ -69,7 +69,8 @@ int main( int argc, char ** argv )
 
         Game::initLogging();
         Game::initDataDir();
-        Game::initConfigDir( argv[0] );
+        // A launcher can start the application without command-line arguments.
+        Game::initConfigDir( ( argc > 0 && argv != nullptr && argv[0] != nullptr ) ? argv[0] : "" );
 
         auto coreComponent = Game::createCoreComponent();
         auto displayComponent = Game::createDisplayComponent();
