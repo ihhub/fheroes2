@@ -755,6 +755,8 @@ namespace
             return kingdom.AllowPayment( payment );
         }
 
+        // TODO: Add AI logic for visiting Maelstrom object.
+        case MP2::OBJ_MAELSTROM:
         // TODO: AI has no brains to handle Sirens object.
         case MP2::OBJ_SIRENS:
         // TODO: AI doesn't know how it use Sphinx object properly.
@@ -1602,6 +1604,10 @@ double AI::Planner::getGeneralObjectValue( const Heroes & hero, const int32_t in
     case MP2::OBJ_MAGELLANS_MAPS: {
         // Very valuable object.
         return 5000;
+    }
+    case MP2::OBJ_MAELSTROM: {
+        // TODO: Add the logic for visiting Maelstrom object and corresponding object value.
+        return -dangerousTaskPenalty;
     }
     case MP2::OBJ_BOAT:
     case MP2::OBJ_COAST:

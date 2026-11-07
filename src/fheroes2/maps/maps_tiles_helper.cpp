@@ -1990,32 +1990,10 @@ namespace Maps
     {
         assert( objectType != MP2::OBJ_NONE );
 
-        // Verify that this tile indeed contains an object with given object type.
-        uint32_t objectUID = 0;
-
-        if ( getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
-            objectUID = tile.getMainObjectPart()._uid;
-        }
+        const uint32_t objectUID = getObjectUid( tile, objectType );
 
         if ( objectUID == 0 ) {
-            for ( auto iter = tile.getTopObjectParts().rbegin(); iter != tile.getTopObjectParts().rend(); ++iter ) {
-                if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
-                    objectUID = iter->_uid;
-                    break;
-                }
-            }
-        }
-
-        if ( objectUID == 0 ) {
-            for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
-                if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
-                    objectUID = iter->_uid;
-                    break;
-                }
-            }
-        }
-
-        if ( objectUID == 0 ) {
+            // This tile does not contain an object with given object type.
             return false;
         }
 
@@ -2329,5 +2307,114 @@ namespace Maps
         }
 
         return objectsUids;
+    }
+
+    uint32_t getObjectUid( const Tile & tile, const MP2::MapObjectType objectType )
+    {
+        assert( objectType != MP2::OBJ_NONE );
+
+        if ( getObjectTypeByIcn( tile.getMainObjectPart().icnType, tile.getMainObjectPart().icnIndex ) == objectType ) {
+            return tile.getMainObjectPart()._uid;
+        }
+
+        for ( auto iter = tile.getTopObjectParts().rbegin(); iter != tile.getTopObjectParts().rend(); ++iter ) {
+            if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                return iter->_uid;
+            }
+        }
+
+        for ( auto iter = tile.getGroundObjectParts().rbegin(); iter != tile.getGroundObjectParts().rend(); ++iter ) {
+            if ( getObjectTypeByIcn( iter->icnType, iter->icnIndex ) == objectType ) {
+                return iter->_uid;
+            }
+        }
+
+        return 0;
+    }
+
+    void setMaelstromCloseFrame( const int32_t tileIndex, const uint32_t objectUid, const uint8_t frameNumber )
+    {
+        constexpr uint8_t maelstromCloseImagesOffest = 128;
+        constexpr uint8_t maelstromCloseAnimationCount = 7;
+
+        if ( frameNumber >= maelstromCloseAnimationCount ) {
+            assert( 0 );
+            return;
+        }
+
+        // Find the top-left tile.
+        // The "Maelstrom" object consists of 4 non-action (MP2::OBJ_NON_ACTION_MAELSTROM) and 4 action tiles (MP2::OBJ_MAELSTROM)
+        //   N | A | A | N
+        //   N | A | A | N
+        // We remove the non-action ones and replace the action tiles with the close animation.
+        int32_t startIndex = tileIndex;
+        auto updateStartIndex = [&startIndex]( const int32_t direction ) {
+            while ( isValidDirection( startIndex, direction ) ) {
+                const Tile tile = world.getTile( GetDirectionIndex( startIndex, direction ) );
+                if ( tile.getMainObjectType() != MP2::OBJ_MAELSTROM ) {
+                    return;
+                }
+                startIndex = tile.GetIndex();
+            }
+        };
+
+        updateStartIndex( Direction::TOP );
+        updateStartIndex( Direction::LEFT );
+
+        auto updateImageIndex = [frameNumber, objectUid]( Tile & tile, const uint8_t indexOffset ) {
+            if ( tile.getMainObjectPart()._uid == objectUid ) {
+                tile.getMainObjectPart().icnIndex = indexOffset + frameNumber;
+                return;
+            }
+            for ( auto & part : tile.getGroundObjectParts() ) {
+                if ( part._uid == objectUid ) {
+                    part.icnIndex = indexOffset + frameNumber;
+                    return;
+                }
+            }
+        };
+
+        if ( frameNumber == 0 ) {
+            // Set the non-action tiles invisible by changing icnType to MP2::OBJ_ICN_TYPE_UNKNOWN.
+            auto resetIcnType = [objectUid]( Tile & tile ) {
+                if ( tile.getMainObjectPart()._uid == objectUid ) {
+                    tile.getMainObjectPart().icnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+                    return;
+                }
+                for ( auto & part : tile.getGroundObjectParts() ) {
+                    if ( part._uid == objectUid ) {
+                        part.icnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+                        return;
+                    }
+                }
+            };
+
+            if ( isValidDirection( startIndex, Direction::LEFT ) ) {
+                resetIcnType( world.getTile( startIndex - 1 ) );
+                if ( isValidDirection( startIndex - 1, Direction::BOTTOM ) ) {
+                    resetIcnType( world.getTile( startIndex - 1 + world.w() ) );
+                }
+            }
+            if ( ( startIndex % world.w() ) + 2 < world.w() ) {
+                resetIcnType( world.getTile( startIndex + 2 ) );
+                if ( isValidDirection( startIndex - 1, Direction::BOTTOM ) ) {
+                    resetIcnType( world.getTile( startIndex + 2 + world.w() ) );
+                }
+            }
+        }
+
+        updateImageIndex( world.getTile( startIndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 0 );
+        if ( isValidDirection( startIndex, Direction::RIGHT ) ) {
+            updateImageIndex( world.getTile( startIndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 1 );
+        }
+        // Move to the second row;
+        if ( isValidDirection( startIndex, Direction::BOTTOM ) ) {
+            startIndex += world.w();
+
+            updateImageIndex( world.getTile( startIndex ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 2 );
+            if ( isValidDirection( startIndex, Direction::RIGHT ) ) {
+                updateImageIndex( world.getTile( startIndex + 1 ), maelstromCloseImagesOffest + maelstromCloseAnimationCount * 3 );
+            }
+        }
     }
 }
