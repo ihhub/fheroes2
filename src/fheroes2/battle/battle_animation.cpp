@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -187,6 +187,12 @@ AnimationReference::AnimationReference( const int monsterID )
         appendFrames( _ranged[Monster_Info::BOTTOM].start, Bin_Info::MonsterAnimInfo::DOUBLEHEX3 );
         appendFrames( _ranged[Monster_Info::BOTTOM].end, Bin_Info::MonsterAnimInfo::DOUBLEHEX3_END );
     }
+
+    if ( _monsterInfo.hasAnim( Bin_Info::MonsterAnimInfo::SPECIAL_UP ) ) {
+        appendFrames( _special[Monster_Info::TOP].start, Bin_Info::MonsterAnimInfo::SPECIAL_UP );
+        appendFrames( _special[Monster_Info::FRONT].start, Bin_Info::MonsterAnimInfo::SPECIAL_FRONT );
+        appendFrames( _special[Monster_Info::BOTTOM].start, Bin_Info::MonsterAnimInfo::SPECIAL_BOTTOM );
+    }
 }
 
 bool AnimationReference::appendFrames( std::vector<int> & target, const size_t animID )
@@ -262,6 +268,12 @@ const std::vector<int> & AnimationReference::getAnimationVector( const int animS
         return _wince;
     case Monster_Info::KILL:
         return _death;
+    case Monster_Info::SPECIAL_TOP:
+        return _special[Monster_Info::TOP].start;
+    case Monster_Info::SPECIAL_FRONT:
+        return _special[Monster_Info::FRONT].start;
+    case Monster_Info::SPECIAL_BOTTOM:
+        return _special[Monster_Info::BOTTOM].start;
     default:
         break;
     }

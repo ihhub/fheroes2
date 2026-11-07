@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,9 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
+#include <vector>
 
 namespace fheroes2
 {
@@ -39,5 +41,7 @@ namespace fheroes2
         };
 
         bool readImage( const std::string & name, Sprite & image );
+
+        bool readAudio( const std::string & name, std::vector<uint8_t> & data );
     }
 }

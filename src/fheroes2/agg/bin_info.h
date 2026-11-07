@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -66,7 +66,11 @@ namespace Bin_Info
             SHOOT2,
             SHOOT2_END,
             SHOOT3,
-            SHOOT3_END
+            SHOOT3_END,
+            // The below types are not present in the original files.
+            SPECIAL_UP,
+            SPECIAL_FRONT,
+            SPECIAL_BOTTOM,
         };
 
         std::vector<std::vector<int>> frameXOffset;

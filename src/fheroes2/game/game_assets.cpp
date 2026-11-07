@@ -5669,6 +5669,24 @@ namespace
             fheroes2::h2d::readImage( "market_icon_good.image", _icnVsSprite[id][0] );
             fheroes2::h2d::readImage( "market_icon_evil.image", _icnVsSprite[id][1] );
             break;
+        case ICN::GENIE_SNAP_EFFECT:
+            _icnVsSprite[id].resize( 5 );
+            fheroes2::h2d::readImage( "snap_effect_0.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "snap_effect_7.image", _icnVsSprite[id][1] );
+            fheroes2::h2d::readImage( "snap_effect_8.image", _icnVsSprite[id][2] );
+            fheroes2::h2d::readImage( "snap_effect_9.image", _icnVsSprite[id][3] );
+            fheroes2::h2d::readImage( "snap_effect_10.image", _icnVsSprite[id][4] );
+            break;
+        case ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER:
+            _icnVsSprite[id].resize( 7 );
+            fheroes2::h2d::readImage( "snap_effect_0.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "snap_effect_1.image", _icnVsSprite[id][1] );
+            fheroes2::h2d::readImage( "snap_effect_2.image", _icnVsSprite[id][2] );
+            fheroes2::h2d::readImage( "snap_effect_3.image", _icnVsSprite[id][3] );
+            fheroes2::h2d::readImage( "snap_effect_4.image", _icnVsSprite[id][4] );
+            fheroes2::h2d::readImage( "snap_effect_5.image", _icnVsSprite[id][5] );
+            fheroes2::h2d::readImage( "snap_effect_6.image", _icnVsSprite[id][6] );
+            break;
         default:
             break;
         }

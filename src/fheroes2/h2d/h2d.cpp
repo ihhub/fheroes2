@@ -21,8 +21,10 @@
 #include "h2d.h"
 
 #include <functional>
+#include <initializer_list>
 #include <set>
 #include <stdexcept>
+#include <utility>
 
 #include "h2d_file.h"
 #include "logging.h"
@@ -58,6 +60,7 @@ namespace
         "circular_stone_liths_center.image",
         "circular_stone_liths_left.image",
         "circular_stone_liths_top.image",
+        "genie_snap.sound",
         "graphics_option_icon.image",
         "hotkeys_option_icon.image",
         "market_icon_evil.image",
@@ -86,6 +89,17 @@ namespace
         "petrification_spell_icon_mini.image",
         "resolution_option_icon.image",
         "sorceress_castle_captain_quarter_left_side.image",
+        "snap_effect_0.image",
+        "snap_effect_1.image",
+        "snap_effect_2.image",
+        "snap_effect_3.image",
+        "snap_effect_4.image",
+        "snap_effect_5.image",
+        "snap_effect_6.image",
+        "snap_effect_7.image",
+        "snap_effect_8.image",
+        "snap_effect_9.image",
+        "snap_effect_10.image",
         "swordsman_walking_frame_extra_part.image",
         "swordsman_walking_frame_extra_part_mask.image",
         "toggle-all-off-pressed.image",
@@ -147,5 +161,21 @@ namespace fheroes2::h2d
     bool readImage( const std::string & name, Sprite & image )
     {
         return readImageFromH2D( reader, name, image );
+    }
+
+    bool readAudio( const std::string & name, std::vector<uint8_t> & data )
+    {
+        if ( name.empty() ) {
+            return false;
+        }
+
+        std::vector<uint8_t> temp = reader.getFile( name );
+        if ( temp.empty() ) {
+            data = {};
+            return false;
+        }
+
+        data = std::move( temp );
+        return true;
     }
 }
