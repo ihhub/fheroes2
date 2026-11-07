@@ -3865,6 +3865,17 @@ namespace
 
         Maps::removeObjectFromMapByUID( dstIndex, maelstromUid );
 
+        const int32_t newPos = world.findPassableRandomWaterTileIndex( hero, 1 );
+        if ( newPos != -1 ) {
+            hero.Scout( newPos );
+            hero.Move2Dest( newPos );
+
+            // Update the radar map image before changing the direction of the hero.
+            Interface::AdventureMap & I = Interface::AdventureMap::Get();
+            I.getRadar().SetRenderArea( hero.GetScoutRoi() );
+            I.redraw( Interface::REDRAW_RADAR );
+        }
+
         hero.SetOffset( { 0, 0 } );
         hero.ShowPath( true );
         hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
