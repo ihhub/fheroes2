@@ -1230,7 +1230,7 @@ int32_t World::findPassableRandomWaterTileIndex( const Heroes & hero, const int3
         const int32_t startIndex = q.front();
         q.pop();
 
-        if ( startIndex != currentIndex && isDeepWater( startIndex ) ) {
+        if ( startIndex != currentIndex && isDeepWater( startIndex ) && vec_tiles[startIndex].isPassabilityTransparent() ) {
             candidates.push_back( startIndex );
         }
 
