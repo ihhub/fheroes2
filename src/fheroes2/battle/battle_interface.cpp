@@ -4188,27 +4188,12 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
         attacker.SwitchAnimation( attackStart );
     }
 
-    const auto halvingTargetIter
-        = std::find_if( targets.begin(), targets.end(), []( const TargetInfo & target ) { return target.defender != nullptr && target.isHalvingAttack; } );
+    // targets damage animation
+    _redrawActionWincesKills( targets, &attacker, &defender );
 
-    if ( halvingTargetIter != targets.end() ) {
-        // Finish the Genie's attack animation first, so the special effect does not freeze the attacker mid-animation.
-        RedrawTroopDefaultDelay( attacker );
-        attacker.SwitchAnimation( Monster_Info::STATIC );
+    RedrawTroopDefaultDelay( attacker );
 
-        _redrawActionGenieHalvingAttack( *halvingTargetIter->defender );
-
-        // targets damage animation
-        _redrawActionWincesKills( targets, &attacker, &defender );
-    }
-    else {
-        // targets damage animation
-        _redrawActionWincesKills( targets, &attacker, &defender );
-
-        RedrawTroopDefaultDelay( attacker );
-
-        attacker.SwitchAnimation( Monster_Info::STATIC );
-    }
+    attacker.SwitchAnimation( Monster_Info::STATIC );
 
     const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
@@ -4269,6 +4254,36 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
     }
 
     _movingUnit = nullptr;
+}
+
+void Battle::Interface::redrawSpecialAttack( Unit & attacker, const Unit & defender )
+{
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
+    _currentUnit = nullptr;
+    _movingUnit = &attacker;
+    _movingPos = attacker.GetRectPosition().getPosition();
+
+    // Unit 'Position' is position of the tile he's standing at
+    const fheroes2::Rect & pos1 = attacker.GetRectPosition();
+    const fheroes2::Rect & pos2 = defender.GetRectPosition();
+
+    AudioManager::PlaySound( M82::GENIE_SNAP );
+
+    int specialAnimId = Monster_Info::SPECIAL_FRONT;
+    if ( pos2.y < pos1.y ) {
+        specialAnimId -= 1;
+    }
+    else if ( pos2.y > pos1.y ) {
+        specialAnimId += 1;
+    }
+
+    if ( attacker.SwitchAnimation( specialAnimId ) ) {
+        // Reset the delay to wait till the next frame.
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+
+        RedrawTroopDefaultDelay( attacker );
+    }
 }
 
 void Battle::Interface::_redrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */, const Unit * defender /* = nullptr */ )

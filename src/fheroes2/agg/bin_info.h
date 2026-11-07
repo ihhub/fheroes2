@@ -66,7 +66,11 @@ namespace Bin_Info
             SHOOT2,
             SHOOT2_END,
             SHOOT3,
-            SHOOT3_END
+            SHOOT3_END,
+            // The below types are not present in the original files.
+            SPECIAL_UP,
+            SPECIAL_FRONT,
+            SPECIAL_BOTTOM,
         };
 
         std::vector<std::vector<int>> frameXOffset;

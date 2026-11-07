@@ -199,7 +199,14 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
     TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, tgt, cellDir );
 
     if ( _interface ) {
-        _interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
+        // Check whether it is a special move.
+        auto iter = std::find_if( attackTargets.begin(), attackTargets.end(), []( const auto & target ) { return target.defender != nullptr && target.isSpecialMove; } );
+        if ( iter != attackTargets.end() ) {
+            _interface->redrawSpecialAttack( attacker, defender );
+        }
+        else {
+            _interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
+        }
     }
 
     uint32_t resurrected = 0;
@@ -887,10 +894,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         if ( const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbilityType::ENEMY_HALVING );
              abilityIter != attackerAbilities.end() ) {
             const uint32_t halvingDamage = ( defender.GetCount() / 2 + defender.GetCount() % 2 ) * defender.Monster::GetHitPoints();
-            if ( halvingDamage > res.damage && Rand::GetWithGen( 1, 100, _randomGenerator ) <= abilityIter->percentage ) {
+            if ( halvingDamage > res.damage /*&& Rand::GetWithGen( 1, 100, _randomGenerator ) <= abilityIter->percentage*/ ) {
                 // Replaces damage, not adds extra damage
                 res.damage = std::min( defender.GetHitPoints(), halvingDamage );
-                res.isHalvingAttack = true;
+                res.isSpecialMove = true;
 
                 Interface * iface = GetInterface();
                 if ( iface ) {
@@ -905,7 +912,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
     targets.push_back( res );
 
-    res.isHalvingAttack = false;
+    // Reset the special move state.
+    res.isSpecialMove = false;
 
     std::set<const Unit *> consideredTargets{ &defender };
 

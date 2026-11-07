@@ -173,6 +173,7 @@ protected:
     std::vector<int> _death;
     MonsterReturnAnim _melee[3];
     MonsterReturnAnim _ranged[3];
+    MonsterReturnAnim _special[3];
     std::vector<std::vector<int>> _idle;
     std::vector<std::vector<int>> _offsetX;
 
