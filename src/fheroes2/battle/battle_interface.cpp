@@ -4256,7 +4256,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::redrawSpecialAttack( Unit & attacker, const Unit & defender )
+void Battle::Interface::redrawSpecialAttack( Unit & attacker, Unit & defender )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -4283,6 +4283,14 @@ void Battle::Interface::redrawSpecialAttack( Unit & attacker, const Unit & defen
         Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
 
         RedrawTroopDefaultDelay( attacker );
+    }
+
+    // After the special move apply the special effect on the defender.
+    if ( defender.isWide() ) {
+        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT, M82::FromSpell( M82::PROTECT ), NONE );
+    }
+    else {
+        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER, M82::FromSpell( M82::PROTECT ), NONE );
     }
 }
 
@@ -6143,71 +6151,6 @@ void Battle::Interface::_redrawActionBloodLustSpell( const Unit & target )
 
     _currentUnit = nullptr;
     _spriteInsteadCurrentUnit = nullptr;
-}
-
-void Battle::Interface::_redrawActionGenieHalvingAttack( const Unit & target )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    const fheroes2::Sprite & unitSprite = Assets::getImage( target.GetMonsterSprite(), target.GetFrame() );
-
-    fheroes2::Sprite halvingEffect( unitSprite );
-    fheroes2::ApplyPalette( halvingEffect, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
-
-    fheroes2::Sprite mixSprite;
-
-    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
-
-    // Don't highlight the cursor position.
-    _currentCellIndex = -1;
-
-    // Don't highlight movement area cells while animating the effect.
-    Settings & conf = Settings::Get();
-    const bool showMoveShadowState = conf.BattleShowMoveShadow();
-    if ( showMoveShadowState ) {
-        conf.SetBattleMovementShaded( false );
-    }
-
-    _currentUnit = &target;
-    _spriteInsteadCurrentUnit = &mixSprite;
-
-    const uint32_t genieHalvingDelay = 1800 / 20;
-
-    AudioManager::PlaySound( M82::STONESKI );
-
-    uint8_t alpha = 0;
-    uint32_t frame = 0;
-
-    // Immediately indicate that the delay has passed to render first frame immediately.
-    Game::passCustomAnimationDelay( genieHalvingDelay );
-    // Make sure that the first run is passed immediately.
-    assert( !Game::isCustomDelayNeeded( genieHalvingDelay ) );
-
-    while ( le.HandleEvents( Game::isCustomDelayNeeded( genieHalvingDelay ) || Game::isDelayNeeded( _commonAnimationsDelays ) ) && frame < 20 ) {
-        _checkGlobalEvents( le );
-
-        // To smoothly render the software mouse cursor by `le.HandleEvents()` we need to reset all passed delays.
-        const bool needSpellAnimation = Game::validateCustomAnimationDelay( genieHalvingDelay );
-        if ( needSpellAnimation ) {
-            mixSprite = unitSprite;
-            fheroes2::AlphaBlit( halvingEffect, mixSprite, alpha );
-            Redraw();
-            _needRedraw = false;
-
-            alpha += ( frame < 10 ) ? 20 : -20;
-            ++frame;
-        }
-        else if ( _needRedraw ) {
-            Redraw();
-            _needRedraw = false;
-        }
-    }
-
-    _currentUnit = nullptr;
-    _spriteInsteadCurrentUnit = nullptr;
-    if ( showMoveShadowState ) {
-        conf.SetBattleMovementShaded( true );
-    }
 }
 
 void Battle::Interface::_redrawActionStoneSpell( const Unit & target )

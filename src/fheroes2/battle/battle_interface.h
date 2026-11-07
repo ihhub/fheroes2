@@ -373,7 +373,7 @@ namespace Battle
         void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
         void RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets, const uint32_t resurrects );
-        void redrawSpecialAttack( Unit & attacker, const Unit & defender );
+        void redrawSpecialAttack( Unit & attacker, Unit & defender );
         void redrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void redrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets );
         void redrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
@@ -447,7 +447,6 @@ namespace Battle
         void _redrawActionHolyShoutSpell( const uint8_t strength );
         void _redrawActionLightningBoltSpell( const Unit & target );
         void _redrawActionResurrectSpell( Unit & target, const Spell & spell );
-        void _redrawActionGenieHalvingAttack( const Unit & target );
         void _redrawActionStoneSpell( const Unit & target );
         void _redrawActionSummonElementalSpell( Unit & target );
         void _redrawActionTeleportSpell( Unit & target, const int32_t dst );
