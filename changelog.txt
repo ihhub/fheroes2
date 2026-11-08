@@ -1,4 +1,5 @@
 version 1.1.18 (08 November 2026)
+- add "Eternal Winter" map to the fheroes2 bundle
 - add a dedicated hotkey for item deletion
 - add marketplace icon and counter to the dialogs
 - update Victory and Loss conditions while switching languages in the Editor

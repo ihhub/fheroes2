@@ -42,6 +42,7 @@
       <description>
         <p>Changes in v1.1.18 (08 November 2026):</p>
         <ul>
+          <li>add "Eternal Winter" map to the fheroes2 bundle</li>
           <li>add a dedicated hotkey for item deletion</li>
           <li>add marketplace icon and counter to the dialogs</li>
           <li>update Victory and Loss conditions while switching languages in the Editor</li>
