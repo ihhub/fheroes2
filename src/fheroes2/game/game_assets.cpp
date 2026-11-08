@@ -5677,6 +5677,10 @@ namespace
             fheroes2::h2d::readImage( "snap_effect_9.image", _icnVsSprite[id][3] );
             fheroes2::h2d::readImage( "snap_effect_10.image", _icnVsSprite[id][4] );
             fheroes2::h2d::readImage( "snap_effect_6.image", _icnVsSprite[id][5] );
+
+            // The last frame needs offset correction.
+            _icnVsSprite[id][5].setPosition( _icnVsSprite[id][5].x() - 19, _icnVsSprite[id][5].y() + 15 );
+
             break;
         case ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER:
             _icnVsSprite[id].resize( 7 );
