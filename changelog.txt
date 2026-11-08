@@ -32,7 +32,7 @@ version 1.1.18 (08 November 2026)
 - improve the Bloodlust spell description
 - make the Campaign Difficulty Names More Accurate
 - disable "Sound Effects" in the Auto-playtest window if animation is off
-- add "Tetra Conflict" v1.1 map into the fheroes2 bundle
+- add "Tetra Conflict" v1.2 map into the fheroes2 bundle
 - allow placing heroes on water
 - add "Utopeia" map to the fheroes2 bundle
 - add "Good Titans, Bad Titans" map to the fheroes2 bundle
