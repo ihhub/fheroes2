@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-11-03 17:14+0300\n"
+"PO-Revision-Date: 2026-11-04 16:05+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3135,6 +3135,31 @@ msgid "n/a"
 msgstr "н/д"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr "Обменный курс на базаре соответствует количеству рынков: %{count}."
+
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Вы сейчас контролируете 1 рынок. Чем больше рынков Вы контролируете, тем "
+"выгоднее обменный курс."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+"Вы уже контролируете столько рынков, что обменный курс достиг максимума. "
+"Контроль над новыми рынками не сделает его выгоднее."
+
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Сейчас рынков под Вашим контролем: %{count}. Чем больше рынков Вы "
+"контролируете, тем выгоднее обменный курс."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3170,6 +3195,9 @@ msgstr "Ваши ресурсы"
 
 msgid "Available Trades"
 msgstr "Доступно к обмену"
+
+msgid "Exchange Rate"
+msgstr "Обменный курс"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охраняется: %{count} %{monster}"
@@ -5369,9 +5397,8 @@ msgstr "Установить количество прогонов."
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Максимум дней на прогон:"
 
-#, fuzzy
 msgid "Set the maximum number of days that each playthrough is run for."
-msgstr "Установить максимальную продолжительность одного прогона в днях."
+msgstr "Установить максимальную продолжительность каждого прогона в днях."
 
 msgid "autoPlaytest|Last day of playthrough:"
 msgstr "Последний день прогона:"
@@ -5744,6 +5771,10 @@ msgstr "клавиша вверх"
 
 msgid "hotkey|default down"
 msgstr "клавиша вниз"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "клавиша влево"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "переключить полноэкранный режим"

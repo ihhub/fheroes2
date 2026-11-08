@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-11-03 16:13+0100\n"
+"PO-Revision-Date: 2026-11-04 07:41+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -145,7 +145,7 @@ msgid ""
 "Default\n"
 "troop"
 msgstr ""
-"standard\n"
+"Standard\n"
 "trop"
 
 msgid "View %{name}"
@@ -172,9 +172,8 @@ msgstr "Sidste trop kan ikke flyttes"
 msgid "Move the %{name}"
 msgstr "Flyt %{name}"
 
-#, fuzzy
 msgid "Set %{monster} Count:"
-msgstr "Indstil antal %{monster}"
+msgstr "Indstil %{monster} antal:"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -222,7 +221,6 @@ msgstr ""
 "Voldgraven afbryder enhver bevægelse gennem den og reducerer forsvarsevnen "
 "for tropperne, der er til stede i den, med %{count} point."
 
-#, fuzzy
 msgid "battleAnimation|Speed: %{speed}"
 msgstr "Hastighed: %{speed}"
 
@@ -572,8 +570,8 @@ msgid ""
 "anywhere on the game screen."
 msgstr ""
 "Dette kan afbrydes til enhver tid, ved enten at trykke på autokamp-"
-"genvejstasten eller standardtasten Afbryd eller ved at udføre et venstre- "
-"eller højreklik, hvor som helst på spilskærmen."
+"genvejstasten eller standard afbryder-genvejstast, eller ved at udføre et "
+"venstre- eller højreklik, hvor som helst på spilskærmen."
 
 msgid "Auto Combat"
 msgstr "Autokamp"
@@ -609,7 +607,7 @@ msgstr[1] "%{count} %{defender} omkommer."
 
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "1 sjæl blev indsamlet"
+msgstr[0] "1 sjæl blev indsamlet."
 msgstr[1] "%{count} sjæle blev indsamlet."
 
 msgid "1 %{unit} is revived."
@@ -765,9 +763,8 @@ msgstr ""
 msgid "Shadow Cursor"
 msgstr "Skyggemarkør"
 
-#, fuzzy
 msgid "Movement Area"
-msgstr "Heltebevægelse"
+msgstr "Bevægelsesområde"
 
 msgid "Hit Points"
 msgstr "Liv"
@@ -837,7 +834,7 @@ msgid "Reset"
 msgstr "Nulstil"
 
 msgid "Reset to default settings."
-msgstr "Nulstil til standardindstillinger"
+msgstr "Nulstil til standardindstillinger."
 
 msgid ""
 "The battle will take place on a randomly selected terrain. Click to change "
@@ -3073,9 +3070,8 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Vis flere informationer som billeder i sekundet (FPS) og klokkeslæt."
 
-#, fuzzy
 msgid "hotkeys|All Categories"
-msgstr "Kampindstillinger"
+msgstr "Alle kategorier"
 
 msgid "Hotkey: "
 msgstr "Genvejstast: "
@@ -3092,9 +3088,8 @@ msgstr "Genvejstaster:"
 msgid "Click here to select:\n"
 msgstr "Klik her for at vælge:\n"
 
-#, fuzzy
 msgid "Select hotkeys category"
-msgstr "Vælg væsen:"
+msgstr "Vælg kategori for genvejstaster"
 
 msgid "Hide"
 msgstr "Skjul"
@@ -3182,6 +3177,33 @@ msgid "n/a"
 msgstr "i/t"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"På markedspladsen kan man bytte én resursetype til en anden. Du opnår mere "
+"og mere fordelagtige byttehandlinger, jo flere markedspladser du har i dit "
+"rige."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"På markedspladsen kan man bytte én resursetype til en anden. Du opnår mere "
+"og mere fordelagtige byttehandlinger, jo flere markedspladser du har i dit "
+"rige."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3216,11 +3238,14 @@ msgstr "Dine resurser"
 msgid "Available Trades"
 msgstr "Handlemuligheder"
 
+msgid "Exchange Rate"
+msgstr ""
+
 msgid "guarded by %{count} %{monster}"
-msgstr "Bevogtet af %{count} %{monster}"
+msgstr "bevogtet af %{count} %{monster}"
 
 msgid "guarded by "
-msgstr "Bevogtet af "
+msgstr "bevogtet af "
 
 msgid "(available: %{count})"
 msgstr "(tilgængelig: %{count})"
@@ -3306,13 +3331,11 @@ msgstr "Ukendt område"
 msgid "Random Map Generator"
 msgstr "Tilfældigt kortgenerator"
 
-#, fuzzy
 msgid "rmg|Player count:"
-msgstr "Spiller-ikon"
+msgstr "Spillerantal:"
 
-#, fuzzy
 msgid "rmg|Map layout:"
-msgstr "Spiller-ikon"
+msgstr "Kortopsætning:"
 
 msgid "rmg|Water percentage:"
 msgstr "Vand-procent:"
@@ -3329,9 +3352,8 @@ msgstr "Kort-seed:"
 msgid "Click to generate a new map."
 msgstr "Klik her for at generere et nyt kort."
 
-#, fuzzy
 msgid "Return to the previous menu."
-msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
+msgstr "Vend tilbage til det forrige menu."
 
 msgid "Cost per troop:"
 msgstr "Pris per trop:"
@@ -3407,7 +3429,7 @@ msgid "Select how many units to separate into:"
 msgstr "Vælg hvor mange gange troppen skal deles:"
 
 msgid "Map: "
-msgstr "Kort:"
+msgstr "Kort: "
 
 msgid ""
 "\n"
@@ -3493,7 +3515,7 @@ msgid "Click to disable all items."
 msgstr "Klik her for at deaktivere alle elementer."
 
 msgid "Disable All Items"
-msgstr "Deaktiver alle elementer."
+msgstr "Deaktiver alle elementer"
 
 msgid "There are no secondary skills to select from."
 msgstr "Der er ingen sekundære færdigheder at vælge imellem."
@@ -3501,9 +3523,8 @@ msgstr "Der er ingen sekundære færdigheder at vælge imellem."
 msgid "Select Skill:"
 msgstr "Vælg evne:"
 
-#, fuzzy
 msgid "There are no spells to select."
-msgstr "Ingen magi at kaste."
+msgstr "Der er ingen besværgelser at vælge:"
 
 msgid "Select Spell:"
 msgstr "Vælg magi:"
@@ -3529,9 +3550,8 @@ msgstr "Vælg helt:"
 msgid "Select Monsters:"
 msgstr "Vælg væsener:"
 
-#, fuzzy
 msgid "Select Artifacts:"
-msgstr "Vælg artefakt:"
+msgstr "Vælg artefakter:"
 
 msgid "race|Random"
 msgstr "Tilfældig"
@@ -3557,9 +3577,8 @@ msgstr "Vælg skat:"
 msgid "Select Ocean Object:"
 msgstr "Vælg hav-objekt:"
 
-#, fuzzy
 msgid "Castle/town placing:"
-msgstr "Borg/by-vindue"
+msgstr "Borg-/byplacering"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
@@ -3626,9 +3645,8 @@ msgstr "Vælg Power Up-objekt:"
 msgid "Select Adventure Object:"
 msgstr "Vælg Eventyr-objekt:"
 
-#, fuzzy
 msgid "Select color:"
-msgstr "Vælg farve"
+msgstr "Vælg farve:"
 
 msgid "Players Icon"
 msgstr "Spiller-ikon"
@@ -3727,7 +3745,7 @@ msgid "Are you sure you want to delete the map:"
 msgstr "Er du sikker på, at du vil slette dette kort:"
 
 msgid "No maps exist at that size."
-msgstr "Ingen kort i den størrelse"
+msgstr "Ingen kort i den størrelse."
 
 msgid "Small Maps"
 msgstr "Små kort"
@@ -3935,7 +3953,7 @@ msgstr "BEGRÆNS"
 
 msgid "Default Army"
 msgstr ""
-"standard\n"
+"Standard\n"
 "hær"
 
 msgid "Castle Army"
@@ -3944,16 +3962,14 @@ msgstr "Borghær"
 msgid "Town Army"
 msgstr "Byhær"
 
-#, fuzzy
 msgid "You have unsaved changes. Do you wish to proceed?"
-msgstr "Hvor mange væsener ønsker du at flytte?"
+msgstr "Du har ændringer, der ikke er gemt. Vil du fortsætte?"
 
 msgid "Click to change the Castle name."
 msgstr "Klik for at ændre borgnavn."
 
-#, fuzzy
 msgid "Enter Castle name:"
-msgstr "Skriv borgnavn"
+msgstr "Indtast borgnavn:"
 
 msgid "Reset the Castle name."
 msgstr "Nulstil borgnavn."
@@ -3979,7 +3995,7 @@ msgid "Reset the army."
 msgstr "Nulstil hæren."
 
 msgid "Set custom Castle Army."
-msgstr "Indstil brugerdefineret borghær"
+msgstr "Indstil brugerdefineret borghær."
 
 msgid "Set spells to appear in the Mage Guild."
 msgstr "Indstil magi til at vises i Magerlauget."
@@ -4055,9 +4071,8 @@ msgstr "Tekst til begivenhedsmeddelelse"
 msgid "Day: %{day}"
 msgstr "Dag: %{day}"
 
-#, fuzzy
 msgid "Daily events:"
-msgstr "Daglige begivenheder"
+msgstr "Daglige begivenheder:"
 
 msgid "Click to save the events."
 msgstr "Klik for at gemme begivenhederne."
@@ -4092,9 +4107,8 @@ msgstr "Aflys begivenheden efter første besøg"
 msgid "Computer colors allowed to get the event:"
 msgstr "Computerfarver er tilladt for at få begivenheden:"
 
-#, fuzzy
 msgid "Set Experience value:"
-msgstr "Indstil erfaringspoint"
+msgstr "Indstil erfaringspoint-værdi:"
 
 msgid "Artifact"
 msgstr "Artefakt"
@@ -4103,7 +4117,7 @@ msgid "No artifact will be given by the event."
 msgstr "Der gives ingen artefakter ved begivenheden."
 
 msgid "Delete Artifact"
-msgstr "Slet artefakt:"
+msgstr "Slet artefakt"
 
 msgid "Delete an artifact from the event."
 msgstr "Fjern et artefakt fra begivenheden."
@@ -4154,9 +4168,8 @@ msgstr ""
 msgid "%{objects} must be placed on water."
 msgstr "%{objects} må kun placeres på vand."
 
-#, fuzzy
 msgid "Action objects cannot be placed outside the map."
-msgstr "Objekter kan ikke placeres udenfor kortet."
+msgstr "Handlingsobjekter kan ikke placeres uden for kortet."
 
 msgid "Action objects must be placed on clear tiles."
 msgstr "Handlingsobjekter skal placeres på rene felter."
@@ -4164,21 +4177,19 @@ msgstr "Handlingsobjekter skal placeres på rene felter."
 msgid "A maximum of %{count} %{objects} can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} %{objects} på kortet."
 
-#, fuzzy
 msgid ""
 "To exit fheroes2, press the Home button or swipe up. (Any unsaved changes to "
 "the current map will be lost.)"
 msgstr ""
-"Er du sikker på, at du vil indlæse et nyt kort? (Alle ikke-gemte ændringer "
-"på det nuværende kort, vil gå tabt.)"
+"For at afslutte fheroes2 skal du trykke på Home-knappen eller stryge opad. "
+"(Ikke-gemte ændringer på nuværende kort vil gå tabt.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to quit? (Any unsaved changes to the current map will "
 "be lost.)"
 msgstr ""
-"Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
-"af det nuværende kort, vil gå tabt.)"
+"Er du sikker på, at du vil afslutte? (Ikke-gemte ændringer på nuværende kort "
+"vil gå tabt.)"
 
 msgid "Not able to generate a map with given parameters."
 msgstr "Det er ikke muligt at generere et kort med de angivne parametre."
@@ -4240,7 +4251,7 @@ msgid "Load Map"
 msgstr "Indlæs kort"
 
 msgid "Load an existing map."
-msgstr "indlæs et eksisterende kort."
+msgstr "Indlæs et eksisterende kort."
 
 msgid "Save Map"
 msgstr "Gem kort"
@@ -4263,13 +4274,11 @@ msgstr "Vend tilbage til spillets hovedmenu."
 msgid "Leave the Editor and play the map in the Standard Game mode."
 msgstr "Forlad editoren og spil kortet i Enkeltspiller-tilstand."
 
-#, fuzzy
 msgid "Input %{object} text:"
-msgstr "Indtast tekst til %{object}"
+msgstr "Indtast text for %{object}:"
 
-#, fuzzy
 msgid "Set Random Ultimate Artifact Radius:"
-msgstr "Indstil radius: Tilfældigt Ultimativt Artefakt"
+msgstr "Indstil radius for tilfældigt Ultimativt Artefakt:"
 
 msgid "%{object} has no properties to change."
 msgstr "%{object} har ingen egenskaber at ændre."
@@ -4309,9 +4318,8 @@ msgstr "Kun et tilfældigt artefakt kan placeres på kortet."
 msgid "A maximum of %{count} obelisks can be placed on the map."
 msgstr "Der kan maksimalt placeres %{count} obelisker på kortet."
 
-#, fuzzy
 msgid "The same object exists on the tile."
-msgstr "Dette svar findes allerede på listen."
+msgstr "Objektet eksisterer allerede på dette felt."
 
 msgid "The map is corrupted."
 msgstr "Kortet er beskadiget."
@@ -4365,7 +4373,7 @@ msgid "Used to place %{object}."
 msgstr "Bruges til at placere %{object}."
 
 msgid "Select object type"
-msgstr "Vælg objekttype:"
+msgstr "Vælg objekttype"
 
 msgid ""
 "Click here to\n"
@@ -4420,40 +4428,35 @@ msgstr "Helte"
 msgid "Towns"
 msgstr "Byer"
 
-#, fuzzy
 msgid "editorDetailMode|Edit"
-msgstr "Detalje-tilstand"
+msgstr "Rediger"
 
-#, fuzzy
 msgid "editorDetailMode|Move"
-msgstr "Detalje-tilstand"
+msgstr "Flyt"
 
-#, fuzzy
 msgid "editorDetailMode|Copy"
-msgstr "Detalje-tilstand"
+msgstr "Kopier"
 
-#, fuzzy
 msgid "editorErasure|Mountains"
-msgstr "Væsener"
+msgstr "Bjerge"
 
 msgid "editorErasure|Rocks"
 msgstr "Sten"
 
-#, fuzzy
 msgid "editorErasure|Trees"
-msgstr "Helte"
+msgstr "Træer"
 
 msgid "editorErasure|Miscellaneous and Water landscape objects"
 msgstr "Diverse genstande og vandlandskabsobjekter"
 
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "Ikke-opsamlingsobjekter"
+msgstr "Eventyr ikke-opsamlingsobjekter"
 
 msgid "editorErasure|Castles"
-msgstr "Borge"
+msgstr "Borge/Byer"
 
 msgid "editorErasure|Adventure pickable objects"
-msgstr "Opsamlingsobjekter"
+msgstr "Eventyr opsamlingsobjekter"
 
 msgid "editorErasure|Monsters"
 msgstr "Væsener"
@@ -4566,9 +4569,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr "Detalje-tilstand"
 
-#, fuzzy
 msgid "Used for moving or customizing objects."
-msgstr "Bruges til speciel redigering af handlingsobjekter."
+msgstr "Bruges til at flytte eller tilpasse objekter."
 
 msgid "Adventure Objects Mode"
 msgstr "Eventyr objekt-tilstand"
@@ -4648,16 +4650,14 @@ msgstr ""
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
 
-#, fuzzy
 msgid "Supported languages:"
-msgstr "Støt os på"
+msgstr "Understøttede sprog:"
 
 msgid "Language"
 msgstr "Sprog"
 
-#, fuzzy
 msgid "This language already exists in the list."
-msgstr "Rygtet findes allerede på listen."
+msgstr "Dette sprog findes allerede på listen."
 
 msgid "A map should have at least one language."
 msgstr "Et kort skal indeholde mindst ét sprog."
@@ -4665,16 +4665,14 @@ msgstr "Et kort skal indeholde mindst ét sprog."
 msgid "Click to apply changes."
 msgstr "Klik her for at gemme ændringerne."
 
-#, fuzzy
 msgid "Add Language"
-msgstr "Sprog"
+msgstr "Tilføj sprog"
 
 msgid "Add an additional language."
 msgstr "Tilføj endnu et sprog."
 
-#, fuzzy
 msgid "Delete Language"
-msgstr "Vælg spillets sprog:"
+msgstr "Fjern sprog"
 
 msgid "Delete an existing language."
 msgstr "Fjern et eksisterende sprog."
@@ -4704,17 +4702,17 @@ msgstr "Tilbage"
 msgid "Return to the Editor's main menu options."
 msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
 
-#, fuzzy
 msgid ""
 "Generate a random map that is %{size} squares wide and %{size} squares high."
-msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
+msgstr ""
+"Generer et tilfældigt kort, der er %{size} felter bredt og %{size} felter "
+"højt."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
 
-#, fuzzy
 msgid "Return to the previous menu options."
-msgstr "Gå tilbage til kort-skaberens hovedmenu-indstillinger."
+msgstr "Vend tilbage til de forrige menupunkter."
 
 msgid "No maps available!"
 msgstr "Intet kort tilgængelig!"
@@ -4835,19 +4833,15 @@ msgstr "BEGIVENHEDER"
 msgid "LANGUAGE"
 msgstr "SPROG"
 
-#, fuzzy
 msgid "map|ABOUT"
 msgstr "OM"
 
-#, fuzzy
 msgid "Change Map Name:"
-msgstr "Skift kortnavn"
+msgstr "Skift kortnavn:"
 
-#, fuzzy
 msgid "Change Map Description:"
-msgstr "Skift kortbeskrivelse"
+msgstr "Skift kortbeskrivelse:"
 
-#, fuzzy
 msgid "map|About"
 msgstr "Om"
 
@@ -4925,9 +4919,8 @@ msgstr "Slå animation af objekterne til eller fra."
 msgid "Toggle display of objects' passability."
 msgstr "Slå visning af objekters fremkommelighed til eller fra."
 
-#, fuzzy
 msgid "Rumors:"
-msgstr "Rygter"
+msgstr "Rygter:"
 
 msgid "Rumor:"
 msgstr "Rygte:"
@@ -5058,9 +5051,8 @@ msgstr "Fjern svar"
 msgid "Delete an existing answer for the question."
 msgstr "Fjern et eksisterende svar på gåden."
 
-#, fuzzy
 msgid "Riddle"
-msgstr "Gåde:"
+msgstr "Gåde"
 
 msgid "No artifact will be given as a reward."
 msgstr "Ingen artefakter vil blive givet som belønning."
@@ -5228,11 +5220,12 @@ msgstr ""
 "INDLÆS\n"
 "SPIL"
 
-#, fuzzy
 msgid ""
 "RESTART\n"
 "GAME"
-msgstr "OMKAMP"
+msgstr ""
+"GENSTART\n"
+"SPIL"
 
 msgid ""
 "SAVE\n"
@@ -5241,13 +5234,12 @@ msgstr ""
 "GEM\n"
 "SPIL"
 
-#, fuzzy
 msgid ""
 "QUICK\n"
 "SAVE"
 msgstr ""
 "HURTIG-\n"
-"KAMP"
+"GEM"
 
 msgid "QUIT"
 msgstr "AFSLUT"
@@ -5433,7 +5425,6 @@ msgstr "Indstil antallet af gennemspilninger."
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Maksimalt antal dage pr. gennemspilning:"
 
-#, fuzzy
 msgid "Set the maximum number of days that each playthrough is run for."
 msgstr "Indstil det maksimale antal dage, som hvert gennemspil skal vare."
 
@@ -5444,7 +5435,7 @@ msgid "autoPlaytest|Animation"
 msgstr "Animation"
 
 msgid "autoPlaytest|Animation speed:"
-msgstr "Animation hastighed:"
+msgstr "Animationshastighed:"
 
 msgid "Set animation speed during playthrough."
 msgstr "Indstil animationshastigheden under afspilningen."
@@ -5467,9 +5458,8 @@ msgstr ""
 msgid "Click to run an automated map playtest."
 msgstr "Klik her for at køre en automatisk spiltest af kortet."
 
-#, fuzzy
 msgid "Toggle animation during playthroughs."
-msgstr "Slå animation af objekterne til eller fra."
+msgstr "Slå animationer til eller fra under gennemspilninger."
 
 msgid "Toggle sound effects during playthroughs."
 msgstr "Slå lydeffekter til og fra under gennemspilninger."
@@ -5490,41 +5480,35 @@ msgstr ""
 msgid "and more..."
 msgstr "og mere..."
 
-#, fuzzy
 msgid "campaignDifficulty|Decreased"
-msgstr "Felttogsniveau"
+msgstr "Nedsat"
 
-#, fuzzy
 msgid "campaignDifficulty|Default"
-msgstr "Felttogsniveau"
+msgstr "Standard"
 
-#, fuzzy
 msgid "campaignDifficulty|Increased"
-msgstr "Felttogsniveau"
+msgstr "Øget"
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with decreased "
 "challenge. The AI will be weaker than at the default difficulty."
 msgstr ""
 "Vælg dette niveau, for at opleve felttoget med mindre udfordring. AI-"
-"spillerne vil være svagere end de vil være på 'normal'."
+"spillerne vil være svagere end de vil være på normal niveau."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the campaign as close to the original "
 "design as possible with the fheroes2 AI."
 msgstr ""
-"Vælg dette niveau, for at opleve felttoget i henhold til det originale "
-"design."
+"Vælg dette niveau for at opleve felttoget så tæt på det oprindelige design, "
+"som muligt, med fheroes2-AI’en."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty if you want more of a challenge. The AI will be "
 "stronger than at the default difficulty."
 msgstr ""
 "Vælg dette niveau, for at opleve felttoget med større udfordring. AI-"
-"spillerne vil være stærkere end de vil være på 'normal'."
+"spillerne vil være stærkere end de vil være på normal niveau."
 
 msgid "Campaign Difficulty"
 msgstr "Felttogsniveau"
@@ -5580,7 +5564,7 @@ msgid "Restart the current scenario."
 msgstr "Genstart det igangværende scenarie."
 
 msgid "Difficulty"
-msgstr "Kort-niveau:"
+msgstr "Kort-niveau"
 
 msgid ""
 "You have changed the campaign difficulty. The final high score will be "
@@ -5791,28 +5775,32 @@ msgid "View High Scores for Campaigns."
 msgstr "Vis højeste score for enkelt spiller kort."
 
 msgid "hotkey|default okay event"
-msgstr "Bekræft"
+msgstr "Standard okay handling"
 
 msgid "hotkey|default cancel event"
-msgstr "Afbryd"
+msgstr "Standard afbryd handling"
 
 msgid "hotkey|default left"
-msgstr "Venstre"
+msgstr "Standard venstre"
 
 msgid "hotkey|default right"
-msgstr "Højre"
+msgstr "Standard højre"
 
 msgid "hotkey|default up"
-msgstr "Op"
+msgstr "Standard op"
 
 msgid "hotkey|default down"
-msgstr "Ned"
+msgstr "Standard ned"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Venstre"
 
 msgid "hotkey|toggle fullscreen"
-msgstr "Fuldskærm"
+msgstr "Fuldskærm (til/fra)"
 
 msgid "hotkey|toggle text support mode"
-msgstr "Tekstunderstøttelsestilstand"
+msgstr "Tekstunderstøttelsestilstand (til/fra)"
 
 msgid "hotkey|toggle developer mode"
 msgstr "Udviklertilstand (til/fra)"
@@ -5857,7 +5845,7 @@ msgid "hotkey|select large map size"
 msgstr "Vælg stor kortstørrelse"
 
 msgid "hotkey|select extra large map size"
-msgstr "Vælg ekstrastor kortstørrelse"
+msgstr "Vælg ekstra stor kortstørrelse"
 
 msgid "hotkey|select all map sizes"
 msgstr "Vælg alle kortstørrelser"
@@ -5878,16 +5866,16 @@ msgid "hotkey|map editor main menu"
 msgstr "Korteditorens hovedmenu"
 
 msgid "hotkey|new map menu"
-msgstr "Nyt-kort menu"
+msgstr "Ny kort-menu"
 
 msgid "hotkey|load map menu"
-msgstr "Indlæs-kort menu"
+msgstr "Indlæs kort-menu"
 
 msgid "hotkey|new map from scratch"
-msgstr "Nyt blankt kort"
+msgstr "Nyt blankt kort fra bunden"
 
 msgid "hotkey|new random map"
-msgstr "Generer nyt kort"
+msgstr "Nyt tilfældigt kort"
 
 msgid "hotkey|undo last action"
 msgstr "Fortryd forrige handling"
@@ -5905,14 +5893,13 @@ msgid "hotkey|auto playtest"
 msgstr "Auto-spiltest"
 
 msgid "hotkey|re-generate random map"
-msgstr "Generer tilfældigt kort"
+msgstr "Generer tilfældigt kort påny"
 
 msgid "hotkey|re-configure random map"
-msgstr "Konfigurer tilfældigt kort"
+msgstr "Genkonfigurer tilfældigt kort"
 
-#, fuzzy
 msgid "hotkey|output all text"
-msgstr "Rul til venstre"
+msgstr "Udskriv al tekst"
 
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
@@ -5977,9 +5964,8 @@ msgstr "Verdenskort ned til højre"
 msgid "hotkey|save game"
 msgstr "Gem spil"
 
-#, fuzzy
 msgid "hotkey|quick save"
-msgstr "Hurtigkamp"
+msgstr "Hurtiggem"
 
 msgid "hotkey|next hero"
 msgstr "Næste helt"
@@ -5996,7 +5982,7 @@ msgid "hotkey|start hero movement"
 msgstr "Fortsæt heltebevægelse"
 
 msgid "hotkey|cast adventure spell"
-msgstr "Kast eventyrmagi"
+msgstr "Kast eventyrbesværgelse"
 
 msgid "hotkey|put hero to sleep"
 msgstr "Sæt helt i dvale"
@@ -6086,10 +6072,10 @@ msgid "hotkey|skip turn in battle"
 msgstr "Skift tur i kamp"
 
 msgid "hotkey|cast battle spell"
-msgstr "Kast kampmagi"
+msgstr "Kast kampbesværgelse"
 
 msgid "hotkey|toggle display of battle turn order"
-msgstr "skift visning af kampens turorden"
+msgstr "Skift visning af kampens turorden"
 
 msgid "hotkey|dwelling level 1"
 msgstr "Bosted niveau 1"
@@ -6128,21 +6114,19 @@ msgid "hotkey|tavern"
 msgstr "Kro"
 
 msgid "hotkey|construction screen"
-msgstr "Borg-vindue"
+msgstr "Bygningsskærm"
 
 msgid "hotkey|buy all monsters in well"
 msgstr "Rekruttér alle væsener fra brønden"
 
-#, fuzzy
 msgid "hotkey|merge troops with hero"
-msgstr "Næste helt"
+msgstr "Sammenlæg tropper med helten."
 
-#, fuzzy
 msgid "hotkey|merge troops with garrison"
-msgstr "Gentag forrige handling"
+msgstr "Sammenlæg tropper med garnisonen"
 
 msgid "hotkey|split stack by half"
-msgstr "Del tropper i to"
+msgstr "Halver tropper i to"
 
 msgid "hotkey|split stack by one"
 msgstr "Tag én enhed ud af en trop"
@@ -6157,7 +6141,7 @@ msgid "hotkey|dismiss hero or troop"
 msgstr "Bortvis helt eller trop"
 
 msgid "hotkey|exchange all troops"
-msgstr "Udveksel alle tropper"
+msgstr "Udveksl alle tropper"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -6790,7 +6774,7 @@ msgid "View a summary of your Kingdom."
 msgstr "Se en oversigt over dit kongerige."
 
 msgid "Cast an adventure spell."
-msgstr "Kast en eventyrbesværgelse"
+msgstr "Kast en eventyrbesværgelse."
 
 msgid "End Turn"
 msgstr "End tur"
@@ -6815,9 +6799,8 @@ msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 "Frembring menuen for systemindstillingerne, så du kan tilpasse dit spil."
 
-#, fuzzy
 msgid "Hero Movement Points"
-msgstr "Heltebevægelse"
+msgstr "Helts beværelsespoint"
 
 msgid ""
 "The hero's army cannot move anymore today. The movement points will be "
@@ -6963,12 +6946,11 @@ msgid ""
 "Default\n"
 "value"
 msgstr ""
-"standard\n"
+"Standard\n"
 "værdi"
 
-#, fuzzy
 msgid "Set %{skill} Skill:"
-msgstr "Indstil %{skill} Evne"
+msgstr "Indstil %{skill} evne:"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr "Indstil %{skill} startværdi. Højreklik: Nulstil evner til standard."
@@ -6980,7 +6962,7 @@ msgid ""
 "Default\n"
 "skill"
 msgstr ""
-"standard\n"
+"Standard\n"
 "evne"
 
 msgid "The available values range from %{min} to %{max}."
@@ -6995,9 +6977,8 @@ msgstr "Klik her for at skifte til store bogstaver."
 msgid "Keyboard|123"
 msgstr "123"
 
-#, fuzzy
 msgid "Keyboard type"
-msgstr "123"
+msgstr "Tastaturtype"
 
 msgid "Click to switch between keyboard types."
 msgstr "Klik her for at skifte mellem tastaturtyper."
@@ -7005,13 +6986,11 @@ msgstr "Klik her for at skifte mellem tastaturtyper."
 msgid "Keyboard|SPACE"
 msgstr "MELLEMRUM"
 
-#, fuzzy
 msgid "Keyboard|ENTER"
-msgstr "MELLEMRUM"
+msgstr "GÅ"
 
-#, fuzzy
 msgid "Change language"
-msgstr "Skift kortnavn"
+msgstr "Skift sprog:"
 
 msgid "Click to switch between languages."
 msgstr "Klik for at skifte mellem sprog."
@@ -7157,7 +7136,7 @@ msgid "Configure"
 msgstr "Indstil"
 
 msgid ", FPS: "
-msgstr ", FPS:"
+msgstr ", FPS: "
 
 msgid "Ector"
 msgstr "Hektor"
@@ -7881,7 +7860,7 @@ msgstr ""
 "og ignorerer dig."
 
 msgid "You've found the artifact: "
-msgstr "Du har fundet artefaktet:"
+msgstr "Du har fundet artefaktet: "
 
 msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
@@ -8882,20 +8861,17 @@ msgstr "Indstil magipointværdi. Højreklik: Nulstil til standardværdi."
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr "Skift magipointværdi. Højreklik: Nulstil til standardværdi."
 
-#, fuzzy
 msgid "Set Spell Points value:"
-msgstr "Indstil antal magipoint"
+msgstr "Indstil magipoint-værdi:"
 
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
-#, fuzzy
 msgid "Set patrol radius in tiles:"
-msgstr "Indstil patruljeradius i feltantal"
+msgstr "Indstil patruljeradius i feltantal:"
 
-#, fuzzy
 msgid "Enter hero's name:"
-msgstr "Indtast heltens navn"
+msgstr "Indtast helts navn:"
 
 msgid "Click to change class."
 msgstr "Klik for at skifte klasse."
@@ -8918,7 +8894,7 @@ msgid "Exit Hero Screen"
 msgstr "Forlad helteskærm"
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr "Du kan ikke bortvise en helt, som befinder sig i en borg."
+msgstr "Du kan ikke bortvise en helt, som befinder sig i en borg"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
 msgstr "Afvisning af %{race}en %{name} er ifølge scenariet forbudt"
@@ -9032,7 +9008,7 @@ msgid "Swap Armies"
 msgstr "Byt hære"
 
 msgid "Swap armies between heroes."
-msgstr "Byt hære mellem helte"
+msgstr "Byt heltenes hære."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fjendtlige helte er nu fuldt identificerbare."
@@ -9094,7 +9070,7 @@ msgstr ""
 "omstændigheder er en helt begrænset til at have 10 mana per level i kundskab."
 
 msgid "Current Modifiers:"
-msgstr "Nuværende modifikationer"
+msgstr "Nuværende modifikationer:"
 
 msgid "skill|Basic"
 msgstr "Begynder"
@@ -9522,29 +9498,26 @@ msgstr "Fremragende"
 msgid "luck|Irish"
 msgstr "Svineheldig"
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes falls on the hero's units in combat, causing "
 "their attacks to only do half damage."
 msgstr ""
-"Negativt held falder nogle gange på heltens tropper i kamp, hvilket halverer "
-"deres angrebsskade."
+"%{luck-type} held rammer nogle gange heltens enheder i kamp og gør, at deres "
+"angrebsskade halveres."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck means the hero's units will never get lucky or unlucky "
 "attacks on the enemy."
 msgstr ""
-"Neutralt held betyder, at heltens tropper hverken giver heldig eller uheldig "
-"angrebsskade."
+"%{luck-type} betyder, at heltens enheder aldrig vil udføre heldige eller "
+"uheldige angreb på fjenden."
 
-#, fuzzy
 msgid ""
 "%{luck-type} luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
-"Positivt held falder nogle gange på heltens tropper i kamp, hvilket "
-"fordobler deres angrebsskade."
+"%{luck-type} held giver undertiden heltens enheder mulighed for at udføre "
+"heldige angreb (skadefordobling) i kamp."
 
 msgid "morale|Treason"
 msgstr "Horribel"
@@ -9567,26 +9540,23 @@ msgstr "Fremragende"
 msgid "morale|Blood!"
 msgstr "Blodig!"
 
-#, fuzzy
 msgid "%{morale-type} morale may cause the hero's units to freeze in combat."
-msgstr "Negativ moral kan få heltens tropper til at fryse i kamp."
+msgstr ""
+"%{morale-type} moral kan få heltens enheder til at handlingslammes i kamp."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale means the hero's units will never be blessed with "
 "extra attacks or freeze in combat."
 msgstr ""
-"Neutral moral betyder, at heltens tropper hverken velsignes med ekstra træk "
-"eller fryser i kamp."
+"%{morale-type} moral betyder, at heltens enheder aldrig vil få ekstra angreb "
+"eller blive handlingslammet i kamp."
 
-#, fuzzy
 msgid ""
 "%{morale-type} morale may give the hero's units extra attacks in combat."
-msgstr "Positiv moral kan give heltens tropper ekstra træk i kamp."
+msgstr "%{morale-type} moral kan give heltens enheder ekstra angreb i kamp."
 
-#, fuzzy
 msgid "Blood"
-msgstr "Bloddum"
+msgstr "Blodrus"
 
 msgid "Knight"
 msgstr "Ridder"
@@ -9652,7 +9622,7 @@ msgid "speed|Slow"
 msgstr "Langsom"
 
 msgid "speed|Average"
-msgstr "Almindelig"
+msgstr "Jævn"
 
 msgid "speed|Fast"
 msgstr "Hurtig"
@@ -9807,7 +9777,6 @@ msgstr "Rigelig"
 msgid "monster_strength|Weak"
 msgstr "Svag"
 
-#, fuzzy
 msgid "monster_strength|Normal"
 msgstr "Jævn"
 
@@ -11255,7 +11224,7 @@ msgstr ""
 "firkløver."
 
 msgid "True Compass of Mobility"
-msgstr "Det sande Kompas for Bevægelighed."
+msgstr "Det sande kompas for bevægelighed"
 
 msgid "The %{name} increases the hero's movement on land and sea."
 msgstr "%{name} øger heltens bevægelsespoint, både til lands og til vands."
@@ -11627,7 +11596,7 @@ msgid "Pendant of Death"
 msgstr "Dødsamuletten"
 
 msgid "The %{name} makes all of the hero's troops immune to holy spells."
-msgstr "%{name} gør alle heltens tropper immune overfor hellige besværgelser"
+msgstr "%{name} gør alle heltens tropper immune overfor hellige besværgelser."
 
 msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "
@@ -12777,16 +12746,16 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Hidkald skib"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied and either friendly or neutral boat to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
 "occupied yet."
 msgstr ""
-"Hidkalder det nærmeste ubesatte, venlige skib til et tilstødende landsted. "
-"Et venligt skib kan være et skib, som du lige har bygget eller har været den "
-"seneste spiller til at besætte."
+"Tilkald den nærmeste ledige båd, der enten er allieret eller neutral, til en "
+"tilstødende kyststrækning. En allieret båd er enten en båd, du netop har "
+"bygget, eller en, du var den seneste spiller til at besætte. En neutral båd "
+"er en båd, som ingen spiller endnu har besat."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
@@ -12879,19 +12848,19 @@ msgid "Randomly selected 2nd level spell."
 msgstr "Tilfældigt valgt 2.niveau besværgelse."
 
 msgid "Random 3rd Level Spell"
-msgstr "Tilfældig 3.niveau besværgelse."
+msgstr "Tilfældig 3.niveau besværgelse"
 
 msgid "Randomly selected 3rd level spell."
 msgstr "Tilfældigt valgt 3.niveau besværgelse."
 
 msgid "Random 4th Level Spell"
-msgstr "Tilfældig 4.niveau besværgelse."
+msgstr "Tilfældig 4.niveau besværgelse"
 
 msgid "Randomly selected 4th level spell."
 msgstr "Tilfældigt valgt 4.niveau besværgelse."
 
 msgid "Random 5th Level Spell"
-msgstr "Tilfældig 5.niveau besværgelse."
+msgstr "Tilfældig 5.niveau besværgelse"
 
 msgid "Randomly selected 5th level spell."
 msgstr "Tilfældigt valgt 5.niveau besværgelse."

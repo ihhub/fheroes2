@@ -2814,6 +2814,25 @@ msgid "n/a"
 msgstr ""
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -2842,6 +2861,9 @@ msgid "Your Resources"
 msgstr ""
 
 msgid "Available Trades"
+msgstr ""
+
+msgid "Exchange Rate"
 msgstr ""
 
 msgid "guarded by %{count} %{monster}"
@@ -5273,6 +5295,9 @@ msgid "hotkey|default up"
 msgstr ""
 
 msgid "hotkey|default down"
+msgstr ""
+
+msgid "hotkey|default delete"
 msgstr ""
 
 msgid "hotkey|toggle fullscreen"

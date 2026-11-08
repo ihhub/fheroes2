@@ -3157,6 +3157,31 @@ msgid "n/a"
 msgstr "nie je"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Trhovisko možno použiť na zámenu jedného typu zdroja za iný. Čím viac "
+"trhovísk vlastníš, tým lepší je výmenný kurz."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Trhovisko možno použiť na zámenu jedného typu zdroja za iný. Čím viac "
+"trhovísk vlastníš, tým lepší je výmenný kurz."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3190,6 +3215,9 @@ msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
 msgstr "Možné obchody"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "strážené: %{monster} (%{count})"
@@ -5907,6 +5935,10 @@ msgstr "predvolené hore"
 
 msgid "hotkey|default down"
 msgstr "predvolené dole"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "predvolené vľavo"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "prepni celú obrazovku"
