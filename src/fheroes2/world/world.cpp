@@ -1224,13 +1224,14 @@ int32_t World::findPassableRandomWaterTileIndex( const Heroes & hero, const int3
     visited[currentIndex] = 1;
 
     std::vector<int32_t> candidates;
-    std::array<fheroes2::Point, 4> adjacentTiles = { fheroes2::Point{ 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    std::array<fheroes2::Point, 4> adjacentTiles = { fheroes2::Point{ -1, 0 }, { 0, -1 }, { 0, 1 }, { 0, 1 } };
+    std::array<int32_t, 4> directions = { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM };
 
     while ( !q.empty() ) {
         const int32_t startIndex = q.front();
         q.pop();
 
-        if ( startIndex != currentIndex && isDeepWater( startIndex ) && vec_tiles[startIndex].isPassabilityTransparent() ) {
+        if ( startIndex != currentIndex && isDeepWater( startIndex ) && ( vec_tiles[startIndex].GetPassable() & DIRECTION_AROUND ) == DIRECTION_AROUND ) {
             candidates.push_back( startIndex );
         }
 
@@ -1241,7 +1242,7 @@ int32_t World::findPassableRandomWaterTileIndex( const Heroes & hero, const int3
                 continue;
             }
             const int32_t nextIndex = pathPos.y * width + pathPos.x;
-            if ( visited[nextIndex] == 1 || !vec_tiles[nextIndex].isWater() ) {
+            if ( visited[nextIndex] == 1 || !vec_tiles[nextIndex].isWater() || !vec_tiles[nextIndex].isPassableFrom( directions[k] ) ) {
                 continue;
             }
             visited[nextIndex] = 1;

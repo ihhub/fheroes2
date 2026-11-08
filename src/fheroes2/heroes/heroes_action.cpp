@@ -3839,7 +3839,7 @@ namespace
 
         hero.IncreaseExperience( res.getAttackerExperience() );
 
-        AudioManager::PlaySound( M82::WSND00 );
+        AudioManager::PlaySound( M82::KILLFADE );
         hero.ShowPath( false );
         hero.FadeOut( Game::HumanHeroAnimSpeedMultiplier() );
 
@@ -3867,18 +3867,25 @@ namespace
 
         const int32_t newPos = world.findPassableRandomWaterTileIndex( hero, 1 );
         if ( newPos != -1 ) {
+            const fheroes2::Point prevPos = hero.GetCenter();
+
             hero.Scout( newPos );
             hero.Move2Dest( newPos );
+            hero.GetPath().Reset();
 
-            // Update the radar map image before changing the direction of the hero.
-            Interface::AdventureMap & I = Interface::AdventureMap::Get();
-            I.getRadar().SetRenderArea( hero.GetScoutRoi() );
-            I.redraw( Interface::REDRAW_RADAR );
+            interface.getRadar().SetRenderArea( { prevPos, { 1, 1 } } );
+            interface.redraw( Interface::REDRAW_RADAR );
+
+            interface.getGameArea().SetCenter( hero.GetCenter() );
+
+            interface.getRadar().SetRenderArea( hero.GetScoutRoi() );
+            interface.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         }
 
         hero.SetOffset( { 0, 0 } );
-        hero.ShowPath( true );
+        AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
+        hero.ShowPath( true );
     }
 }
 
