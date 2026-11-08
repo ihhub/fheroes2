@@ -5670,7 +5670,7 @@ namespace
             fheroes2::h2d::readImage( "market_icon_evil.image", _icnVsSprite[id][1] );
             break;
         case ICN::GENIE_SNAP_EFFECT:
-            _icnVsSprite[id].resize( 5 );
+            _icnVsSprite[id].resize( 6 );
             fheroes2::h2d::readImage( "snap_effect_0.image", _icnVsSprite[id][0] );
             fheroes2::h2d::readImage( "snap_effect_7.image", _icnVsSprite[id][1] );
             fheroes2::h2d::readImage( "snap_effect_8.image", _icnVsSprite[id][2] );
