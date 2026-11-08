@@ -101,9 +101,9 @@
           <li>update "New Game" button popup for the Editor</li>
           <li>do not do extra rendering for the same radar position on the popup window</li>
           <li>allow the use of the mouse wheel to navigate through the Magic Book</li>
-          <li>add more objects to be future predicted for AI heroes</li>
+          <li>make AI heroes future predict more objects</li>
           <li>do not predict future object value for AI heroes on Easy difficulty</li>
-          <li>fix the castle's well available text position for some languages</li>
+          <li>fix the castle's well's "Available" text position for some languages</li>
           <li>fix an invalid assertion for battle troops</li>
           <li>improve battle logic so Ghosts and Vampire Lords utilize their unique abilities</li>
         </ul>

@@ -58,9 +58,9 @@ version 1.1.18 (08 November 2026)
 - update "New Game" button popup for the Editor
 - do not do extra rendering for the same radar position on the popup window
 - allow the use of the mouse wheel to navigate through the Magic Book
-- add more objects to be future predicted for AI heroes
+- make AI heroes future predict more objects
 - do not predict future object value for AI heroes on Easy difficulty
-- fix the castle's well available text position for some languages
+- fix the castle's well's "Available" text position for some languages
 - fix an invalid assertion for battle troops
 - improve battle logic so Ghosts and Vampire Lords utilize their unique abilities
 
