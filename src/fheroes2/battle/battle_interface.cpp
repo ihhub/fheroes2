@@ -365,6 +365,13 @@ namespace
             result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
             result.y += unitSprite.y() / 2 - 1;
             break;
+        case ICN::GENIE_SNAP_EFFECT:
+            result.x -= 22;
+            result.y -= 96;
+            break;
+        case ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER:
+            result.y -= 96;
+            break;
         default:
             // center point of the unit
             result.x += pos.width / 2;
@@ -4287,10 +4294,10 @@ void Battle::Interface::redrawSpecialAttack( Unit & attacker, Unit & defender )
 
     // After the special move apply the special effect on the defender.
     if ( defender.isWide() ) {
-        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT, M82::FromSpell( M82::PROTECT ), NONE );
+        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER, M82::FromSpell( M82::PROTECT ), NONE );
     }
     else {
-        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER, M82::FromSpell( M82::PROTECT ), NONE );
+        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT, M82::FromSpell( M82::PROTECT ), NONE );
     }
 }
 
