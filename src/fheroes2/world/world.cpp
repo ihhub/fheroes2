@@ -1231,7 +1231,8 @@ int32_t World::findPassableRandomWaterTileIndex( const Heroes & hero, const int3
         const int32_t startIndex = q.front();
         q.pop();
 
-        if ( startIndex != currentIndex && isDeepWater( startIndex ) && ( vec_tiles[startIndex].GetPassable() & DIRECTION_AROUND ) == DIRECTION_AROUND ) {
+        if ( startIndex != currentIndex && ( vec_tiles[startIndex].GetPassable() & DIRECTION_AROUND ) == DIRECTION_AROUND
+             && !MP2::isInGameActionObject( vec_tiles[startIndex].getMainObjectType() ) && isDeepWater( startIndex ) ) {
             candidates.push_back( startIndex );
         }
 
@@ -1255,6 +1256,7 @@ int32_t World::findPassableRandomWaterTileIndex( const Heroes & hero, const int3
     }
 
     const uint32_t resultIndex = Rand::Get( 0, static_cast<uint32_t>( candidates.size() ) - 1 );
+
     return candidates[resultIndex];
 }
 

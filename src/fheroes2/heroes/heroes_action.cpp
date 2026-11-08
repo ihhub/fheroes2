@@ -3866,7 +3866,7 @@ namespace
         Maps::removeObjectFromMapByUID( dstIndex, maelstromUid );
 
         const int32_t newPos = world.findPassableRandomWaterTileIndex( hero, 1 );
-        if ( newPos != -1 ) {
+        if ( Maps::isValidAbsIndex( newPos ) ) {
             const fheroes2::Point prevPos = hero.GetCenter();
 
             hero.Scout( newPos );
