@@ -37,7 +37,7 @@ version 1.1.18 (08 November 2026)
 - add "Utopeia" map to the fheroes2 bundle
 - add "Good Titans, Bad Titans" map to the fheroes2 bundle
 - explicitly state that an object was moved in the Editor
-- update the bundled "Final Invasion" map to version 8.0
+- update the bundled "Final Invasion" map to version 8.1
 - update the bundled "Ravenhold" map to version 1.9
 - update the bundled "Eruption" map to version 3.2
 - fix incorrect offset for evil empty button
