@@ -1,3 +1,69 @@
+version 1.1.18 (08 November 2026)
+- add "Eternal Winter" map to the fheroes2 bundle
+- add a dedicated hotkey for item deletion
+- add marketplace icon and counter to the dialogs
+- update Victory and Loss conditions while switching languages in the Editor
+- update the bundled "Apocalypse" map to 3.9
+- add multiline text editing support to the Virtual Keyboard
+- add HP bar option for monsters during battles
+- add "Dhalsivia Pirenaica" map into the fheroes2 bundle
+- do not let the AI cast Berserker when the target's nearest unit is not an enemy
+- resize the hotkey dialog width based on the current resolution
+- fix an assertion being hit while re-running Auto Playtest
+- update the Swedish translation
+- remove the confusing "Rate" value in the diplomacy dialog
+- update the Brazilian Portuguese translation
+- add category filtering for hotkeys in settings window
+- add small improvements to the High Scores dialog
+- fix an extra frame being rendered while clicking on the Save Game button
+- rework Auto-playtest dialog
+- add extra logic to prevent AI heroes from visiting shrines if they have all spells
+- improve the Summon Boat spell description
+- make sure the AI doesn't value the 3rd level shrine higher than everything
+- update the Hungarian translation
+- hide Editor's system message if the game's language has been changed
+- reduce perks the AI gets on higher difficulties
+- use the forced Software Cursor Emulation state for touchscreen and gamepad systems
+- fix adventure non-action objects being set as fort
+- adapt campaign's difficulty dialog per language
+- update the Russian translation
+- fix transparent pixels in empty movement and mana bars
+- update the Czech translation
+- improve the Bloodlust spell description
+- make the Campaign Difficulty Names More Accurate
+- disable "Sound Effects" in the Auto-playtest window if animation is off
+- add "Tetra Conflict" v1.2 map into the fheroes2 bundle
+- allow placing heroes on water
+- add "Utopeia" map to the fheroes2 bundle
+- add "Good Titans, Bad Titans" map to the fheroes2 bundle
+- explicitly state that an object was moved in the Editor
+- update the bundled "Final Invasion" map to version 8.1
+- update the bundled "Ravenhold" map to version 1.9
+- update the bundled "Eruption" map to version 3.2
+- fix incorrect offset for evil empty button
+- fix an empty army for the surrendered hero
+- update the Spanish translation
+- make all buttons in the Main Menu and Editor Menu engine-generated for German game resources
+- fix invalid ranges of spell occurrence in Mage Guild
+- use the in-engine image scaling type according to the scaling type option
+- fix rendering delay after closing Auto Playtesting window
+- add Lost Temple (1.1.17) to the fheroes2 bundle
+- fix subpixel resize on bottom and right borders and near-transparent pixels
+- allow to quit the application at any time by closing the application window
+- prevent an assertion hit while loading a Resurrection map
+- speed up rendering on PS Vita
+- add neutral monster limit growth on original maps
+- generate all buttons for Editor's File Option dialog
+- make the "Visions" spell and the "Crystal Ball" artifact much more user-friendly and useful
+- update "New Game" button popup for the Editor
+- do not do extra rendering for the same radar position on the popup window
+- allow the use of the mouse wheel to navigate through the Magic Book
+- make AI heroes future predict more objects
+- do not predict future object value for AI heroes on Easy difficulty
+- fix the castle's well's "Available" text position for some languages
+- fix an invalid assertion for battle troops
+- improve battle logic so Ghosts and Vampire Lords utilize their unique abilities
+
 version 1.1.17 (30 June 2026)
 - update the Russian translation
 - greatly speed up application startup
