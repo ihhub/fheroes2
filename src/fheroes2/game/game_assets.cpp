@@ -5669,7 +5669,10 @@ namespace
         case ICN::MARKETPLACE_ICON:
             _icnVsSprite[id].resize( 2 );
             fheroes2::h2d::readImage( "market_icon_good.image", _icnVsSprite[id][0] );
-            fheroes2::h2d::readImage( "market_icon_evil.image", _icnVsSprite[id][1] );
+
+            _icnVsSprite[id][1] = _icnVsSprite[id][0];
+            fheroes2::ApplyPalette( _icnVsSprite[id][1], PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_BUTTON ) );
+
             break;
         default:
             break;
