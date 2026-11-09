@@ -1665,8 +1665,9 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            // German game resources are completed off with the engine's generated buttons.
-            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
+            // German and Czech game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German )
+                 && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::Czech ) ) {
                 for ( size_t i = 0; i < 3; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
@@ -1723,8 +1724,9 @@ namespace
         case ICN::BUTTONS_EDITOR_MENU_GOOD: {
             _icnVsSprite[id].resize( 20 );
 
-            // German game resources are completed off with the engine's generated buttons.
-            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
+            // German and Czech game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German )
+                 && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::Czech ) ) {
                 for ( size_t i = 0; i < 2; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 + 1 ) );
