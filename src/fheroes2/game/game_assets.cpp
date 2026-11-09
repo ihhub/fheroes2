@@ -1665,7 +1665,7 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            // German game resources are completed off with the engine's generated buttons.
+            // German and Czech game resources are completed off with the engine's generated buttons.
             if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German )
                  && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::Czech ) ) {
                 for ( size_t i = 0; i < 3; ++i ) {
@@ -1724,7 +1724,7 @@ namespace
         case ICN::BUTTONS_EDITOR_MENU_GOOD: {
             _icnVsSprite[id].resize( 20 );
 
-            // German game resources are completed off with the engine's generated buttons.
+            // German and Czech game resources are completed off with the engine's generated buttons.
             if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German )
                  && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::Czech ) ) {
                 for ( size_t i = 0; i < 2; ++i ) {
