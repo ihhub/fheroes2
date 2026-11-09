@@ -3173,6 +3173,33 @@ msgid "n/a"
 msgstr "n/a"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"La place du marché peut être utilisée pour convertir un type de ressource en "
+"un autre. Plus vous contrôlez de places de marchés, plus le taux de change "
+"est favorable."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"La place du marché peut être utilisée pour convertir un type de ressource en "
+"un autre. Plus vous contrôlez de places de marchés, plus le taux de change "
+"est favorable."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3207,6 +3234,9 @@ msgstr "Vos ressources"
 
 msgid "Available Trades"
 msgstr "Échanges possibles"
+
+msgid "Exchange Rate"
+msgstr ""
 
 # artifact is guarded by? (=gardé). A mine is guarded by? (=gardée). Ruins are guarded by? (=gardées).
 msgid "guarded by %{count} %{monster}"
@@ -5519,7 +5549,7 @@ msgstr ""
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr ""
 
-msgid "Set the maximum number of days within each playthrough is being run."
+msgid "Set the maximum number of days that each playthrough is run for."
 msgstr ""
 
 msgid "autoPlaytest|Last day of playthrough:"
@@ -5894,6 +5924,10 @@ msgstr "Direction haut"
 
 msgid "hotkey|default down"
 msgstr "Direction bas"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Direction gauche"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "Basculer en plein écran"

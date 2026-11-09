@@ -3113,6 +3113,31 @@ msgid "n/a"
 msgstr "н/д"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Ринок можна використовувати щоб обміняти один ресурс на інший. Чим більше "
+"ринків ви контролюєте, тим краще курс обміну."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Ринок можна використовувати щоб обміняти один ресурс на інший. Чим більше "
+"ринків ви контролюєте, тим краще курс обміну."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3146,6 +3171,9 @@ msgstr "Ваші ресурси"
 
 msgid "Available Trades"
 msgstr "Доступні ресурси"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охороняється %{count} %{monster}"
@@ -5343,8 +5371,9 @@ msgstr "Кількість проходжень:"
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Максимальна кількість днів на одне проходження:"
 
-msgid "Set the maximum number of days within each playthrough is being run."
-msgstr ""
+#, fuzzy
+msgid "Set the maximum number of days that each playthrough is run for."
+msgstr "Кількість проходжень:"
 
 #, fuzzy
 msgid "autoPlaytest|Last day of playthrough:"
@@ -5726,6 +5755,10 @@ msgstr "вгору"
 
 msgid "hotkey|default down"
 msgstr "вниз"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "ліворуч"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "повноекранний режим увімк/вимк"

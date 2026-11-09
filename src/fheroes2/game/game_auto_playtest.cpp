@@ -428,7 +428,7 @@ namespace fheroes2
         text.fitToOneRow( optionTextMaxWidth );
         text.draw( positionX + optionTextMaxWidth - text.width() - optionTitleOffsetX, positionY + 1, display );
         HorizontalSlider dayCountSlider{ sliderWidth, { inputPositionX, positionY }, 1, AutoPlaytest::dayLimit, autoPlaytest.getMaxDaysInPlaythrough() };
-        dayCountSlider.setPopupDialog( _( "autoPlaytest|Max days per playthrough:" ), _( "Set the maximum number of days within each playthrough is being run." ) );
+        dayCountSlider.setPopupDialog( _( "autoPlaytest|Max days per playthrough:" ), _( "Set the maximum number of days that each playthrough is run for." ) );
 
         TextRestorer dayCountValue{ display, { valuePositionX, positionY + 2 } };
         dayCountValue.render( getValueString( autoPlaytest.getMaxDaysInPlaythrough(), AutoPlaytest::dayLimit ) );

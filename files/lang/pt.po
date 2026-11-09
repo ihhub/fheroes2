@@ -3128,6 +3128,31 @@ msgid "n/a"
 msgstr "n/d"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"O Mercado pode ser usado para converter um tipo de recurso em outro. Quanto "
+"mais mercados você controla, melhor será a taxa de câmbio."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"O Mercado pode ser usado para converter um tipo de recurso em outro. Quanto "
+"mais mercados você controla, melhor será a taxa de câmbio."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3164,6 +3189,9 @@ msgstr "Seus Recursos"
 
 msgid "Available Trades"
 msgstr "Trocas Disponíveis"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "Guardado por %{count} %{monster}"
@@ -5359,7 +5387,8 @@ msgstr "Definir o número de partidas."
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Máximo de dias por partida:"
 
-msgid "Set the maximum number of days within each playthrough is being run."
+#, fuzzy
+msgid "Set the maximum number of days that each playthrough is run for."
 msgstr "Definir o número máximo de dias de cada partida."
 
 msgid "autoPlaytest|Last day of playthrough:"
@@ -5728,6 +5757,10 @@ msgstr "padrão para cima"
 
 msgid "hotkey|default down"
 msgstr "padrão para baixo"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "padrão para a esquerda"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "alternar tela cheia"

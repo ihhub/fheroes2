@@ -3094,6 +3094,31 @@ msgid "n/a"
 msgstr "n/a"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Tržnice slouží ke směně surovin. Čím více tržnic kontroluješ, tím lepší bude "
+"směnný kurz."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Tržnice slouží ke směně surovin. Čím více tržnic kontroluješ, tím lepší bude "
+"směnný kurz."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3127,6 +3152,9 @@ msgstr "Tvoje suroviny"
 
 msgid "Available Trades"
 msgstr "Možno zaměnit"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "hlídají %{monster} (%{count} jednotek)"
@@ -5297,8 +5325,9 @@ msgstr "Počet průchodů:"
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Maximum dní na průchod:"
 
-msgid "Set the maximum number of days within each playthrough is being run."
-msgstr ""
+#, fuzzy
+msgid "Set the maximum number of days that each playthrough is run for."
+msgstr "Počet průchodů:"
 
 #, fuzzy
 msgid "autoPlaytest|Last day of playthrough:"
@@ -5663,6 +5692,10 @@ msgstr "Nahoru"
 
 msgid "hotkey|default down"
 msgstr "Dolů"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Vlevo"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "Přepnout na celou obrazovku"

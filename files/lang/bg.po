@@ -3177,6 +3177,31 @@ msgid "n/a"
 msgstr "без"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Пазарът може да се използва за преобразуване на един вид ресурс в друг. "
+"Колкото повече пазари контролирате, толкова по-добър е обменният курс."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Пазарът може да се използва за преобразуване на един вид ресурс в друг. "
+"Колкото повече пазари контролирате, толкова по-добър е обменният курс."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3211,6 +3236,9 @@ msgstr "Твоите ресурси"
 
 msgid "Available Trades"
 msgstr "Налични сделки"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охранявано от %{count} %{monster}"
@@ -5574,7 +5602,7 @@ msgstr ""
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr ""
 
-msgid "Set the maximum number of days within each playthrough is being run."
+msgid "Set the maximum number of days that each playthrough is run for."
 msgstr ""
 
 msgid "autoPlaytest|Last day of playthrough:"
@@ -5947,6 +5975,10 @@ msgstr "нагоре по подразбиране"
 
 msgid "hotkey|default down"
 msgstr "надолу по подразбиране"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "ляво по подразбиране"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "превключване на цял екран"

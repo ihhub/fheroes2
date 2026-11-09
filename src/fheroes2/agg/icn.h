@@ -963,6 +963,8 @@ namespace ICN
 
         WIZARD_CASTLE_BAY,
 
+        MARKETPLACE_ICON,
+
         GOOD_ARMY_BUTTON,
         GOOD_MARKET_BUTTON,
         EVIL_ARMY_BUTTON,
