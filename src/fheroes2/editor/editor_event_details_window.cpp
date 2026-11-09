@@ -29,6 +29,7 @@
 #include <utility>
 #include <vector>
 
+#include "army_troop.h"
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -50,7 +51,6 @@
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
-#include "army_troop.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"
