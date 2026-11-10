@@ -1210,6 +1210,34 @@ namespace
 #endif
             }
 
+            // In windowed mode keep the whole window visible: clamp its size to the usable bounds
+            // (excluding the taskbar) of the largest connected display.
+            if ( !isFullScreen ) {
+                int32_t maxDisplayWidth = 0;
+                int32_t maxDisplayHeight = 0;
+                if ( const int numDisplays = SDL_GetNumVideoDisplays(); numDisplays > 0 ) {
+                    for ( int displayIndex = 0; displayIndex < numDisplays; ++displayIndex ) {
+                        SDL_Rect usableBounds;
+                        if ( SDL_GetDisplayUsableBounds( displayIndex, &usableBounds ) == 0 ) {
+                            maxDisplayWidth = std::max( maxDisplayWidth, static_cast<int32_t>( usableBounds.w ) );
+                            maxDisplayHeight = std::max( maxDisplayHeight, static_cast<int32_t>( usableBounds.h ) );
+                        }
+                    }
+                }
+
+                if ( maxDisplayWidth > 0 && maxDisplayHeight > 0
+                     && ( resolutionInfo.screenWidth > maxDisplayWidth || resolutionInfo.screenHeight > maxDisplayHeight ) ) {
+                    const double scale = std::min( static_cast<double>( maxDisplayWidth ) / resolutionInfo.screenWidth,
+                                                   static_cast<double>( maxDisplayHeight ) / resolutionInfo.screenHeight );
+                    // Never shrink below the in-game render resolution.
+                    resolutionInfo.screenWidth = std::max( resolutionInfo.gameWidth, static_cast<int32_t>( resolutionInfo.screenWidth * scale ) );
+                    resolutionInfo.screenHeight = std::max( resolutionInfo.gameHeight, static_cast<int32_t>( resolutionInfo.screenHeight * scale ) );
+
+                    VERBOSE_LOG( "Windowed resolution is clamped to " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
+                                                                      << " to fit into the display." )
+                }
+            }
+
             std::optional<bool> isInDisplay = isWindowInAnyDisplay( resolutionInfo, _prevWindowPos );
 
             // check if the previous window position is within display or error occured

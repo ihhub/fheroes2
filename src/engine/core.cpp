@@ -36,6 +36,7 @@
 
 #include <SDL.h>
 #include <SDL_error.h>
+#include <SDL_hints.h>
 
 // Managing compiler warnings for SDL headers
 #if defined( __GNUC__ )
@@ -116,6 +117,16 @@ namespace
     bool initCoreInternally( const std::set<System::SystemInitializationComponent> & components )
     {
         const uint32_t sdlFlags = getSDLInitFlags( components );
+
+#if defined( _WIN32 )
+        // Declare the process as DPI-aware before initializing the video subsystem. Without this, Windows applies
+        // bitmap scaling (DPI virtualization) to DPI-unaware processes: SDL coordinates no longer match real pixels
+        // on displays with a scale factor, so a window saved as larger than the virtualized desktop is rendered
+        // incompletely (part of it ends up outside the visible screen area).
+        if ( components.count( System::SystemInitializationComponent::Video ) > 0 ) {
+            SDL_SetHint( SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2" );
+        }
+#endif
 
         if ( SDL_Init( sdlFlags ) < 0 ) {
             ERROR_LOG( SDL_GetError() )
