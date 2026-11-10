@@ -3806,7 +3806,7 @@ namespace
                 letter.reset();
                 letter.setPosition( font[111].x(), y );
                 for ( const auto & path : paths ) {
-                    auto point = path.begin();
+                    const auto *point = path.begin();
                     auto previous = *point;
                     for ( ++point; point != path.end(); ++point ) {
                         // Draw into a temporary mask so that intersections do not change the shading.
