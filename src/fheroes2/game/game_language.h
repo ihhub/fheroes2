@@ -50,7 +50,8 @@ namespace fheroes2
         Swedish,
         Turkish,
         Ukrainian,
-        Vietnamese
+        Vietnamese,
+        Chinese // Simplified Chinese, original to fheroes2
     };
 
     enum class CodePage : uint8_t
@@ -65,5 +66,6 @@ namespace fheroes2
         CP1258,
         ISO8859_16,
         ISO8859_3,
+        UTF8, // Simplified Chinese (multi-byte encoding, cannot be represented in a single-byte code page)
     };
 }

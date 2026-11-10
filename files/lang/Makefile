@@ -67,6 +67,10 @@ ro.mo: ro.po
 eo.mo: eo.po
 	$(call MSGFMT,ISO-8859-3)
 
+# Simplified Chinese keeps UTF-8: it is a multi-byte language and cannot be represented in a single-byte code page
+cn.mo: cn.po
+	msgfmt -o $@ $<
+
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
 %.mo: %.po

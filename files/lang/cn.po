@@ -1,0 +1,337 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: fheroes2\n"
+"Language: cn\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "New Game"
+msgstr "新游戏"
+
+msgid "Load Game"
+msgstr "读取游戏"
+
+msgid "Campaign"
+msgstr "战役"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Exit"
+msgstr "退出"
+
+msgid "High Scores"
+msgstr "英雄榜"
+
+msgid "Credits"
+msgstr "制作人员"
+
+msgid "Editor"
+msgstr "编辑器"
+
+msgid "Quit"
+msgstr "退出游戏"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Okay"
+msgstr "确定"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Main Menu"
+msgstr "主菜单"
+
+msgid "Game Settings"
+msgstr "游戏设置"
+
+msgid "Standard Game"
+msgstr "标准游戏"
+
+msgid "Campaign Game"
+msgstr "战役模式"
+
+msgid "Multi-Player Game"
+msgstr "多人游戏"
+
+msgid "Battle Only"
+msgstr "战斗模式"
+
+msgid "Original Campaign"
+msgstr "原版战役"
+
+msgid "Expansion Campaign"
+msgstr "扩展战役"
+
+msgid "Hot Seat"
+msgstr "热座模式"
+
+msgid "2 Players"
+msgstr "双人"
+
+msgid "3 Players"
+msgstr "三人"
+
+msgid "4 Players"
+msgstr "四人"
+
+msgid "5 Players"
+msgstr "五人"
+
+msgid "6 Players"
+msgstr "六人"
+
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "退出魔法门之英雄无敌 II 并返回操作系统。"
+
+msgid "Load a previously saved game."
+msgstr "读取之前保存的游戏。"
+
+msgid "View the credits screen."
+msgstr "查看制作人员名单。"
+
+msgid "View the high scores screen."
+msgstr "查看英雄榜。"
+
+msgid "Start a single or multi-player game."
+msgstr "开始单人或多人游戏。"
+
+msgid "Create new or modify existing maps."
+msgstr "创建新地图或修改现有地图。"
+
+msgid "Change language, resolution and settings of the game."
+msgstr "更改游戏语言、分辨率和设置。"
+
+msgid "A single player game playing out a single map."
+msgstr "单人游戏，游玩单张地图。"
+
+msgid "A single player game playing through a series of maps."
+msgstr "单人游戏，游玩一系列连续地图。"
+
+msgid "A multi-player game, with several human players competing against each other on a single map."
+msgstr "多人游戏，多名玩家在一张地图上相互对抗。"
+
+msgid "Setup and play a battle without loading any map."
+msgstr "无需加载地图，直接设置并进行一场战斗。"
+
+msgid "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II."
+msgstr "原版英雄无敌 II 中罗兰德或阿基巴德的战役。"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr "忠诚的代价资料片中的四个新战役之一。"
+
+msgid "Play with 2 human players, and optionally, up to 4 additional computer players."
+msgstr "2 名人类玩家对战，可选最多 4 名电脑玩家。"
+
+msgid "Play with 3 human players, and optionally, up to 3 additional computer players."
+msgstr "3 名人类玩家对战，可选最多 3 名电脑玩家。"
+
+msgid "Play with 4 human players, and optionally, up to 2 additional computer players."
+msgstr "4 名人类玩家对战，可选最多 2 名电脑玩家。"
+
+msgid "Play with 5 human players, and optionally, up to 1 additional computer player."
+msgstr "5 名人类玩家对战，可选最多 1 名电脑玩家。"
+
+msgid "Play with 6 human players."
+msgstr "6 名人类玩家对战。"
+
+msgid "STANDARD\nGAME"
+msgstr "标准\n游戏"
+
+msgid "CAMPAIGN\nGAME"
+msgstr "战役\n模式"
+
+msgid "MULTI-\nPLAYER\nGAME"
+msgstr "多人\n游戏"
+
+msgid "BATTLE\nONLY"
+msgstr "战斗\n模式"
+
+msgid "SETTINGS"
+msgstr "设置"
+
+msgid "CANCEL"
+msgstr "取消"
+
+msgid "HOT SEAT"
+msgstr "热座\n模式"
+
+msgid "2 PLAYERS"
+msgstr "双人"
+
+msgid "3 PLAYERS"
+msgstr "三人"
+
+msgid "4 PLAYERS"
+msgstr "四人"
+
+msgid "5 PLAYERS"
+msgstr "五人"
+
+msgid "6 PLAYERS"
+msgstr "六人"
+
+msgid "ORIGINAL\nCAMPAIGN"
+msgstr "原版\n战役"
+
+msgid "EXPANSION\nCAMPAIGN"
+msgstr "扩展\n战役"
+
+msgid "QUIT"
+msgstr "退出"
+
+msgid "LOAD\nGAME"
+msgstr "读取\n游戏"
+
+msgid "SAVE\nGAME"
+msgstr "保存\n游戏"
+
+msgid "NEW\nGAME"
+msgstr "新建\n游戏"
+
+msgid "NEW\nMAP"
+msgstr "新建\n地图"
+
+msgid "LOAD\nMAP"
+msgstr "读取\n地图"
+
+msgid "SAVE\nMAP"
+msgstr "保存\n地图"
+
+msgid "START\nMAP"
+msgstr "开始\n游戏"
+
+msgid "MAIN\nMENU"
+msgstr "主菜单"
+
+msgid "editorMainMenu|BACK"
+msgstr "返回"
+
+msgid "newMap|FROM\nSCRATCH"
+msgstr "空白\n地图"
+
+msgid "newMap|RANDOM"
+msgstr "随机\n地图"
+
+msgid "ABOUT"
+msgstr "关于"
+
+msgid "smallerButton|EXIT"
+msgstr "退出"
+
+msgid "AUTO\nCOMBAT"
+msgstr "自动\n战斗"
+
+msgid "QUICK\nCOMBAT"
+msgstr "快速\n战斗"
+
+msgid "QUICK\nSAVE"
+msgstr "快速\n保存"
+
+msgid "RESTART\nGAME"
+msgstr "重新\n开始"
+
+msgid "OKAY"
+msgstr "确定"
+
+msgid "ACCEPT"
+msgstr "接受"
+
+msgid "DECLINE"
+msgstr "拒绝"
+
+msgid "YES"
+msgstr "是"
+
+msgid "NO"
+msgstr "否"
+
+msgid "MAX"
+msgstr "最大"
+
+msgid "MIN"
+msgstr "最小"
+
+msgid "RESET"
+msgstr "重置"
+
+msgid "RESTART"
+msgstr "重开"
+
+msgid "SELECT"
+msgstr "选择"
+
+msgid "START"
+msgstr "开始"
+
+msgid "TRADE"
+msgstr "交易"
+
+msgid "GIFT"
+msgstr "赠予"
+
+msgid "INFO"
+msgstr "信息"
+
+msgid "ALL"
+msgstr "全部"
+
+msgid "UPGRADE"
+msgstr "升级"
+
+msgid "DISMISS"
+msgstr "解散"
+
+msgid "LANGUAGE"
+msgstr "语言"
+
+msgid "DIFFICULTY"
+msgstr "难度"
+
+msgid "View All"
+msgstr "查看全部"
+
+msgid "View Artifacts"
+msgstr "查看宝物"
+
+msgid "View Heroes"
+msgstr "查看英雄"
+
+msgid "View Mines"
+msgstr "查看矿场"
+
+msgid "View Resources"
+msgstr "查看资源"
+
+msgid "View Towns"
+msgstr "查看城镇"
+
+msgid "Army Actions"
+msgstr "军队行动"
+
+msgid "Default Actions"
+msgstr "默认行动"
+
+msgid "Global Actions"
+msgstr "全局行动"
+
+msgid "Battle Screen"
+msgstr "战斗界面"
+
+msgid "Town Screen"
+msgstr "城镇界面"
+
+msgid "World Map"
+msgstr "世界地图"
+
+msgid "BANNED SPELLS"
+msgstr "禁用魔法"
+
+msgid "SET SPELLS"
+msgstr "设置魔法"
+
+msgid "RESTRICT"
+msgstr "限制"

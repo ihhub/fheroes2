@@ -69,7 +69,9 @@ namespace
             { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
             { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese },
             { "el", fheroes2::SupportedLanguage::Greek },      { "greek", fheroes2::SupportedLanguage::Greek },
-            { "eo", fheroes2::SupportedLanguage::Esperanto },  { "esperanto", fheroes2::SupportedLanguage::Esperanto } };
+            { "eo", fheroes2::SupportedLanguage::Esperanto },  { "esperanto", fheroes2::SupportedLanguage::Esperanto },
+            { "cn", fheroes2::SupportedLanguage::Chinese },    { "zh", fheroes2::SupportedLanguage::Chinese },
+            { "chinese", fheroes2::SupportedLanguage::Chinese } };
 }
 
 namespace fheroes2
@@ -128,7 +130,7 @@ namespace fheroes2
                                                              SupportedLanguage::Swedish,    SupportedLanguage::Turkish,    SupportedLanguage::Dutch,
                                                              SupportedLanguage::Hungarian,  SupportedLanguage::Czech,      SupportedLanguage::Danish,
                                                              SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese, SupportedLanguage::Greek,
-                                                             SupportedLanguage::Esperanto };
+                                                             SupportedLanguage::Esperanto,  SupportedLanguage::Chinese };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage ) {
@@ -208,6 +210,8 @@ namespace fheroes2
             return _( "Greek" );
         case SupportedLanguage::Esperanto:
             return _( "Esperanto" );
+        case SupportedLanguage::Chinese:
+            return _( "Chinese" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -264,6 +268,8 @@ namespace fheroes2
             return "el";
         case SupportedLanguage::Esperanto:
             return "eo";
+        case SupportedLanguage::Chinese:
+            return "cn";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -350,6 +356,9 @@ namespace fheroes2
             return CodePage::ISO8859_16;
         case SupportedLanguage::Esperanto:
             return CodePage::ISO8859_3;
+        case SupportedLanguage::Chinese:
+            // Simplified Chinese is a multi-byte language and cannot be represented by a single-byte code page.
+            return CodePage::UTF8;
         default:
             // Add new language handling code!
             assert( 0 );
