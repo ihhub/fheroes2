@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -45,6 +46,7 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_assets.h"
 #include "game_auto_playtest.h"
@@ -3724,6 +3726,167 @@ namespace
             _( "You come upon a great cat, purring as it rubs against your leg. Charmed, you reach down, but it bites you and flees. At least the laughter at your misfortune lifts your troops' spirits." ),
             Dialog::OK, elementUI );
     }
+
+    int getObjectDirecton( const int32_t tileIndex, const MP2::MapObjectType objectType )
+    {
+        int32_t directions = 0;
+
+        for ( const int32_t direction : Direction::allNeighboringDirections ) {
+            if ( !Maps::isValidDirection( tileIndex, direction ) ) {
+                continue;
+            }
+
+            const int32_t index = Maps::GetDirectionIndex( tileIndex, direction );
+
+            if ( world.getTile( index ).getMainObjectType() == objectType ) {
+                directions |= direction;
+            }
+        }
+
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT && ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT ) {
+            return Direction::TOP;
+        }
+        if ( ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT && ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::BOTTOM;
+        }
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT && ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT ) {
+            return Direction::LEFT;
+        }
+        if ( ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT && ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::RIGHT;
+        }
+        if ( ( directions & Direction::TOP_LEFT ) == Direction::TOP_LEFT ) {
+            return Direction::TOP_LEFT;
+        }
+        if ( ( directions & Direction::TOP_RIGHT ) == Direction::TOP_RIGHT ) {
+            return Direction::TOP_RIGHT;
+        }
+        if ( ( directions & Direction::BOTTOM_RIGHT ) == Direction::BOTTOM_RIGHT ) {
+            return Direction::BOTTOM_RIGHT;
+        }
+        if ( ( directions & Direction::BOTTOM_LEFT ) == Direction::BOTTOM_LEFT ) {
+            return Direction::BOTTOM_LEFT;
+        }
+
+        return Direction::CENTER;
+    }
+
+    void actionToMaelstrom( Heroes & hero, const MP2::MapObjectType objectType, int32_t dstIndex )
+    {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
+
+        fheroes2::Point movementVector;
+        const int centerDirection = getObjectDirecton( dstIndex, objectType );
+
+        switch ( centerDirection ) {
+        case Direction::TOP_RIGHT:
+            movementVector = { 3, -3 };
+            break;
+        case Direction::BOTTOM_RIGHT:
+            movementVector = { 3, 3 };
+            break;
+        case Direction::BOTTOM_LEFT:
+            movementVector = { -3, 3 };
+            break;
+        case Direction::TOP_LEFT:
+            movementVector = { -3, -3 };
+            break;
+        default:
+            // This is not a valid direction for the Maelstrom.
+            assert( 0 );
+            break;
+        }
+
+        const Maps::Tile & tile = world.getTile( dstIndex );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        LocalEvent & le = LocalEvent::Get();
+        Interface::AdventureMap & interface = Interface::AdventureMap::Get();
+        Interface::GameArea & gameArea = interface.getGameArea();
+
+        constexpr int32_t animationFrames = 6;
+        uint8_t frame = 0;
+
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::HEROES_FADE_DELAY } ) ) ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                break;
+            }
+
+            if ( Game::validateAnimationDelay( Game::DelayType::HEROES_FADE_DELAY ) ) {
+                hero.SetOffset( { movementVector.x * frame, movementVector.y * frame } );
+                gameArea.ShiftCenter( movementVector );
+
+                ++frame;
+
+                Game::updateAdventureMapAnimationIndex();
+                interface.redraw( Interface::REDRAW_GAMEAREA );
+
+                display.render( interface.getGameArea().GetROI() );
+            }
+        }
+
+        Army army( tile );
+
+        const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+        // Hero' spell points and army could have changed. Update heroes icons and status area.
+        Interface::AdventureMap::Get().renderWithFadeInOrPlanRender( Interface::REDRAW_HEROES | Interface::REDRAW_BUTTONS | Interface::REDRAW_STATUS );
+
+        if ( !res.isAttackerWin() ) {
+            BattleLose( hero, res, true );
+
+            return;
+        }
+
+        hero.IncreaseExperience( res.getAttackerExperience() );
+
+        AudioManager::PlaySound( M82::KILLFADE );
+        hero.ShowPath( false );
+        hero.FadeOut( Game::HumanHeroAnimSpeedMultiplier() );
+
+        frame = 0;
+        const uint32_t maelstromUid = Maps::getObjectUid( tile, objectType );
+
+        while ( frame < animationFrames && le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
+            if ( le.isAnyKeyPressed() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                break;
+            }
+
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
+                Maps::setMaelstromCloseFrame( dstIndex, maelstromUid, frame );
+
+                ++frame;
+
+                Game::updateAdventureMapAnimationIndex();
+                interface.redraw( Interface::REDRAW_GAMEAREA );
+
+                display.render( interface.getGameArea().GetROI() );
+            }
+        }
+
+        Maps::removeObjectFromMapByUID( dstIndex, maelstromUid );
+
+        const int32_t newPos = world.findPassableRandomWaterTileIndex( hero, 1 );
+        if ( Maps::isValidAbsIndex( newPos ) ) {
+            const fheroes2::Point prevPos = hero.GetCenter();
+
+            hero.Scout( newPos );
+            hero.Move2Dest( newPos );
+            hero.GetPath().Reset();
+
+            interface.getRadar().SetRenderArea( { prevPos, { 1, 1 } } );
+            interface.redraw( Interface::REDRAW_RADAR );
+
+            interface.getGameArea().SetCenter( hero.GetCenter() );
+
+            interface.getRadar().SetRenderArea( hero.GetScoutRoi() );
+            interface.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        }
+
+        hero.SetOffset( { 0, 0 } );
+        AudioManager::PlaySound( M82::KILLFADE );
+        hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
+        hero.ShowPath( true );
+    }
 }
 
 void Heroes::ScoutRadar() const
@@ -3937,6 +4100,10 @@ void Heroes::Action( const int tileIndex )
 
     case MP2::OBJ_DAEMON_CAVE:
         ActionToDaemonCave( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_MAELSTROM:
+        actionToMaelstrom( *this, objectType, tileIndex );
         break;
 
     case MP2::OBJ_STONE_LITHS:

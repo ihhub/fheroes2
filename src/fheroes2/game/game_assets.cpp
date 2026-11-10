@@ -5391,6 +5391,48 @@ namespace
 
             break;
         }
+        case ICN::OBJNWAT2: {
+            auto & images = _icnVsSprite[id];
+            if ( images.size() == 24 ) {
+                // Expand the existing set of Adventure Map objects:
+                // - 1 "Maelstrom" object that has: main (empty) image + 12 animation images divided to 4 horizontal and 2 vertical tiles.
+                // - 2 "Maelstrom" close animation that has: 7 animation images divided to 2 horizontal and 2 vertical tiles.
+
+                constexpr size_t maelstromAnimations = 12;
+                constexpr size_t maelstromCloseAnimations = 7;
+                constexpr size_t maelstromPartsX = 4;
+                constexpr size_t maelstromClosePartsX = 2;
+                constexpr size_t maelstromPartsY = 2;
+                constexpr size_t maelstromAnimationImages = ( maelstromAnimations + 1 ) * maelstromPartsX * maelstromPartsY;
+                constexpr size_t maelstromCloseAnimationImages = maelstromCloseAnimations * maelstromClosePartsX * maelstromPartsY;
+
+                // Maelstrom.
+                size_t imageNumber = images.size();
+                // Object has only animation images but for compatibility we need to have the main image (+1).
+                // The "close" animation is played by a special function and does not need the main image.
+                images.resize( images.size() + maelstromAnimationImages + maelstromCloseAnimationImages );
+
+                auto loadmaelstromSprites = [&]( std::string const & namePrefix, const size_t animationsCount, const size_t partsCountX, const bool skipMainImage ) {
+                    for ( size_t y = 0; y < maelstromPartsY; ++y ) {
+                        for ( size_t x = 0; x < partsCountX; ++x ) {
+                            if ( skipMainImage ) {
+                                ++imageNumber;
+                            }
+                            for ( size_t i = 0; i < animationsCount; ++i ) {
+                                fheroes2::h2d::readImage( namePrefix + std::to_string( i ) + "_x" + std::to_string( x ) + "_y" + std::to_string( y ) + ".image",
+                                                          images[imageNumber] );
+                                ++imageNumber;
+                            }
+                        }
+                    }
+                };
+
+                loadmaelstromSprites( "maelstrom_animation_", maelstromAnimations, maelstromPartsX, true );
+                loadmaelstromSprites( "maelstrom_close_animation_", maelstromCloseAnimations, maelstromClosePartsX, false );
+            }
+
+            break;
+        }
         case ICN::SCENIBKG_EVIL: {
             const int32_t originalId = ICN::SCENIBKG;
             loadICN( originalId );
@@ -5659,6 +5701,12 @@ namespace
             }
             break;
         }
+        case ICN::SHIP_BATTLEFIELD_UNDERWATER_BUBBLES:
+            _icnVsSprite[id].resize( 24 );
+            for ( size_t i = 0; i < 24; ++i ) {
+                fheroes2::h2d::readImage( "underwater_battlefield_bubbles_" + std::to_string( i + 1 ) + ".image", _icnVsSprite[id][i] );
+            }
+            break;
         case ICN::CSTLKNGT:
             if ( _icnVsSprite[id].size() > 30 ) {
                 // Knight castle construction images for Archery are swapped.
