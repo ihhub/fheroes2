@@ -390,6 +390,16 @@ namespace fheroes2
 
         const Sprite & getSprite( const uint8_t character ) const;
 
+        // Returns the sprite for the UTF-8 character located at 'data'. Advances 'data' past the whole character.
+        // Characters which cannot be rendered are displayed as '?'.
+        const Sprite & getSpriteAt( const uint8_t * & data, const uint8_t * dataEnd ) const;
+
+        // Returns the width of the UTF-8 character located at 'data'. Advances 'data' past the whole character.
+        int32_t getWidthAt( const uint8_t * & data, const uint8_t * dataEnd ) const;
+
+        // Returns the width of the UTF-8 character located at 'data' without advancing the pointer.
+        int32_t peekWidthAt( const uint8_t * data, const uint8_t * dataEnd ) const;
+
         int32_t getWidth( const uint8_t character ) const;
         int32_t getWidth( const std::string_view text ) const;
 

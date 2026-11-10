@@ -30,6 +30,7 @@
 
 #include "game_assets.h"
 #include "icn.h"
+#include "ui_font_ttf.h"
 #include "ui_language.h"
 
 namespace
@@ -41,6 +42,17 @@ namespace
     const uint8_t cursorChar{ '|' };
 
     const std::string truncationSymbol( "..." );
+
+    // Returns the number of bytes occupied by the character which starts with the given byte.
+    // When CJK text rendering is disabled every character occupies exactly 1 byte (single-byte code pages).
+    uint8_t getCharSizeInBytes( const uint8_t firstByte )
+    {
+        if ( fheroes2::CjkFont::isCjkTextRenderingEnabled() ) {
+            return fheroes2::CjkFont::getUtf8CharSize( firstByte );
+        }
+
+        return 1;
+    }
 
     // Returns true if character is a line separator ('\n').
     bool isLineSeparator( const uint8_t character )
@@ -167,8 +179,8 @@ namespace
         const uint8_t * dataEnd = data + size;
 
         if ( keepTrailingSpaces ) {
-            for ( ; data != dataEnd; ++data ) {
-                width += charHandler.getWidth( *data );
+            while ( data != dataEnd ) {
+                width += charHandler.getWidthAt( data, dataEnd );
             }
 
             return width;
@@ -177,14 +189,18 @@ namespace
         int32_t spaceWidth = 0;
         const int32_t spaceCharWidth = charHandler.getSpaceCharWidth();
 
-        for ( ; data != dataEnd; ++data ) {
+        while ( data != dataEnd ) {
             if ( isSpaceChar( *data ) ) {
                 spaceWidth += spaceCharWidth;
+                ++data;
             }
             else if ( !isLineSeparator( *data ) ) {
-                width += spaceWidth + charHandler.getWidth( *data );
+                width += spaceWidth + charHandler.getWidthAt( data, dataEnd );
 
                 spaceWidth = 0;
+            }
+            else {
+                ++data;
             }
         }
 
@@ -197,12 +213,11 @@ namespace
 
         const uint8_t * dataEnd = data + size;
 
-        const fheroes2::Sprite & firstCharSprite = charHandler.getSprite( *data );
+        const fheroes2::Sprite & firstCharSprite = charHandler.getSpriteAt( data, dataEnd );
         fheroes2::Rect area( firstCharSprite.x(), firstCharSprite.y(), firstCharSprite.width(), firstCharSprite.height() );
-        ++data;
 
-        for ( ; data != dataEnd; ++data ) {
-            const fheroes2::Sprite & sprite = charHandler.getSprite( *data );
+        while ( data != dataEnd ) {
+            const fheroes2::Sprite & sprite = charHandler.getSpriteAt( data, dataEnd );
 
             if ( const int32_t spriteY = sprite.y(); spriteY < area.y ) {
                 // This character sprite is drawn higher than all previous - update `height` and `y`.
@@ -226,15 +241,21 @@ namespace
 
         int32_t width = 0;
 
-        for ( int32_t characterCount = 0; characterCount < size; ++characterCount, ++data ) {
-            width += charHandler.getWidth( *data );
+        // The returned count is in bytes so that it can be used to directly slice the original text.
+        int32_t byteCount = 0;
+
+        while ( data != data + size ) {
+            const uint8_t * previousData = data;
+            width += charHandler.getWidthAt( data, data + size );
 
             if ( width > maxWidth ) {
-                return characterCount;
+                return byteCount;
             }
+
+            byteCount += static_cast<int32_t>( data - previousData );
         }
 
-        return size;
+        return byteCount;
     }
 
     int32_t renderSingleLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::Rect & imageRoi,
@@ -247,9 +268,10 @@ namespace
         const int32_t spaceCharWidth = charHandler.getSpaceCharWidth();
         const uint8_t * dataEnd = data + size;
 
-        for ( ; data != dataEnd; ++data ) {
+        while ( data != dataEnd ) {
             if ( isSpaceChar( *data ) ) {
                 offsetX += spaceCharWidth;
+                ++data;
                 continue;
             }
 
@@ -258,19 +280,21 @@ namespace
                 // This should never happen as a line cannot contain line separator in the middle.
                 // But due to some limitations in UI we have to deal with it.
                 // The only way is to just ignore it here.
+                ++data;
                 continue;
             }
 
-            const fheroes2::Sprite & charSprite = charHandler.getSprite( *data );
-            assert( !charSprite.empty() );
+            const fheroes2::Sprite & charSprite = charHandler.getSpriteAt( data, dataEnd );
 
-            const fheroes2::Rect charRoi{ offsetX + charSprite.x(), y + charSprite.y(), charSprite.width(), charSprite.height() };
+            if ( !charSprite.empty() ) {
+                const fheroes2::Rect charRoi{ offsetX + charSprite.x(), y + charSprite.y(), charSprite.width(), charSprite.height() };
 
-            const fheroes2::Rect overlappedRoi = imageRoi ^ charRoi;
+                const fheroes2::Rect overlappedRoi = imageRoi ^ charRoi;
 
-            fheroes2::Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
-                            overlappedRoi.height );
-            offsetX += charSprite.width() + charSprite.x();
+                fheroes2::Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
+                                overlappedRoi.height );
+                offsetX += charSprite.width() + charSprite.x();
+            }
         }
 
         return offsetX;
@@ -299,12 +323,11 @@ namespace
                 }
 
                 width = 0;
+                ++data;
             }
             else {
-                width += charHandler.getWidth( *data );
+                width += charHandler.getWidthAt( data, dataEnd );
             }
-
-            ++data;
         }
 
         return std::max( maxWidth, width );
@@ -608,7 +631,7 @@ namespace fheroes2
             else {
                 // This is another character in the line. Get its width.
 
-                const int32_t charWidth = charHandler.getWidth( *data );
+                const int32_t charWidth = charHandler.peekWidthAt( data, dataEnd );
 
                 if ( ( lineWidth != 0 ) && ( lineWidth + charWidth > maxWidth ) ) {
                     // Current character has exceeded the maximum line width
@@ -616,7 +639,7 @@ namespace fheroes2
 
                     if ( !_keepLineTrailingSpaces && isSpaceChar( *data ) ) {
                         // Current character could be a space character then current line is over.
-                        // For the characters count we take this space into the account.
+                        // For the characters count we we take this space into the account.
                         ++lineCharCount;
 
                         // Skip this space character.
@@ -679,14 +702,19 @@ namespace fheroes2
                     if ( isSpaceChar( *data ) ) {
                         lastWordCharCount = 0;
                         ++spaceCharCount;
+
+                        ++data;
+                        ++lineCharCount;
                     }
                     else {
-                        ++lastWordCharCount;
+                        const uint8_t charSizeInBytes = getCharSizeInBytes( *data );
+                        lastWordCharCount += charSizeInBytes;
                         spaceCharCount = 0;
+
+                        data += charSizeInBytes;
+                        lineCharCount += charSizeInBytes;
                     }
 
-                    ++data;
-                    ++lineCharCount;
                     lineWidth += charWidth;
                 }
             }
@@ -876,27 +904,30 @@ namespace fheroes2
 
         // If the cursor is to the right of or close to the visible text end position, we update this position to show the cursor and text around it.
         while ( ( textEndPos < _cursorPositionInText + cursorToTruncationDistance ) && ( textEndPos < originalTextSize ) ) {
-            currentWidth += charHandler.getWidth( textData[textEndPos] );
-            ++textEndPos;
-            ++_visibleTextLength;
+            const uint8_t nextCharSize = getCharSizeInBytes( textData[textEndPos] );
+            currentWidth += charHandler.peekWidthAt( textData + textEndPos, textData + originalTextSize );
+            textEndPos += nextCharSize;
+            _visibleTextLength += nextCharSize;
 
             while ( currentWidth > ( textEndPos != originalTextSize ? twiceTruncatedMaxWidth : truncatedMaxWidth ) ) {
                 // Remove characters from the begin.
-                currentWidth -= charHandler.getWidth( textData[_visibleTextBeginPos] );
-                ++_visibleTextBeginPos;
-                --_visibleTextLength;
+                const uint8_t beginCharSize = getCharSizeInBytes( textData[_visibleTextBeginPos] );
+                currentWidth -= charHandler.peekWidthAt( textData + _visibleTextBeginPos, textData + originalTextSize );
+                _visibleTextBeginPos += beginCharSize;
+                _visibleTextLength -= beginCharSize;
             }
 
             while ( textEndPos != originalTextSize ) {
                 // Some characters from the text end might also fit the width.
-                const int32_t charWidth = charHandler.getWidth( textData[textEndPos] );
+                const int32_t charWidth = charHandler.peekWidthAt( textData + textEndPos, textData + originalTextSize );
                 if ( currentWidth + charWidth > twiceTruncatedMaxWidth ) {
                     break;
                 }
 
-                currentWidth += charHandler.getWidth( textData[textEndPos] );
-                ++textEndPos;
-                ++_visibleTextLength;
+                const uint8_t charSize = getCharSizeInBytes( textData[textEndPos] );
+                currentWidth += charWidth;
+                textEndPos += charSize;
+                _visibleTextLength += charSize;
             }
         }
 
@@ -904,13 +935,19 @@ namespace fheroes2
 
         while ( _visibleTextBeginPos != 0 ) {
             // Some characters from the text begin might also fit the width.
-            const int32_t prevCharWidth = charHandler.getWidth( textData[_visibleTextBeginPos - 1] );
+            // Find the beginning of the previous character first (it might be a multi-byte one).
+            int32_t prevCharStart = _visibleTextBeginPos - 1;
+            while ( prevCharStart > 0 && ( textData[prevCharStart] & 0xC0 ) == 0x80 ) {
+                --prevCharStart;
+            }
+
+            const int32_t prevCharWidth = charHandler.peekWidthAt( textData + prevCharStart, textData + originalTextSize );
             if ( currentWidth + prevCharWidth > ( textEndPos != originalTextSize ? twiceTruncatedMaxWidth : truncatedMaxWidth ) ) {
                 break;
             }
 
-            --_visibleTextBeginPos;
-            ++_visibleTextLength;
+            _visibleTextLength += _visibleTextBeginPos - prevCharStart;
+            _visibleTextBeginPos = prevCharStart;
             currentWidth += prevCharWidth;
         }
 
@@ -974,14 +1011,16 @@ namespace fheroes2
         const FontCharHandler charHandler( _fontType );
         const size_t textSize = _text.size();
 
-        for ( size_t i = cursorPosition; i < textSize; ++i ) {
-            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( _text[i] ) );
+        for ( size_t i = cursorPosition; i < textSize; ) {
+            const uint8_t * charPtr = reinterpret_cast<const uint8_t *>( _text.data() ) + i;
+            const int32_t charWidth = charHandler.peekWidthAt( charPtr, reinterpret_cast<const uint8_t *>( _text.data() ) + textSize );
 
             if ( positionOffsetX + charWidth / 2 >= maxOffsetX ) {
                 return i;
             }
 
             positionOffsetX += charWidth;
+            i += getCharSizeInBytes( *charPtr );
         }
 
         return textSize - 1;
@@ -1007,13 +1046,15 @@ namespace fheroes2
         int32_t positionOffset = 0;
         const FontCharHandler charHandler( _fontType );
 
-        for ( size_t i = 0; i < textSize; ++i ) {
-            const int32_t currentCharWidth = charHandler.getWidth( static_cast<uint8_t>( visibleText[i] ) );
+        for ( size_t i = 0; i < textSize; ) {
+            const uint8_t * charPtr = reinterpret_cast<const uint8_t *>( visibleText.data() ) + i;
+            const int32_t currentCharWidth = charHandler.peekWidthAt( charPtr, reinterpret_cast<const uint8_t *>( visibleText.data() ) + textSize );
 
             if ( positionOffset + currentCharWidth / 2 >= maxOffset ) {
                 return i + _visibleTextBeginPos;
             }
             positionOffset += currentCharWidth;
+            i += getCharSizeInBytes( *charPtr );
         }
 
         return textSize + _visibleTextBeginPos;
@@ -1345,8 +1386,63 @@ namespace fheroes2
 
     const Sprite & FontCharHandler::getSprite( const uint8_t character ) const
     {
+        if ( character >= 0x80 && CjkFont::isCjkTextRenderingEnabled() ) {
+            // Non-ASCII bytes are rendered through the CJK font pipeline (see getSpriteAt).
+            // When accessed byte-by-byte (e.g. by the text input logic) render nothing.
+            return errorImage;
+        }
+
         // Display '?' in place of the invalid character.
         return getChar( _isValid( character ) ? character : invalidChar, _fontType );
+    }
+
+    const Sprite & FontCharHandler::getSpriteAt( const uint8_t * & data, const uint8_t * dataEnd ) const
+    {
+        const uint8_t firstByte = *data;
+        if ( firstByte < 0x80 ) {
+            ++data;
+            return getSprite( firstByte );
+        }
+
+        if ( !CjkFont::isCjkTextRenderingEnabled() ) {
+            // CJK rendering is disabled: display '?' in place of the invalid character.
+            ++data;
+            return getSprite( invalidChar );
+        }
+
+        const uint8_t charSize = CjkFont::getUtf8CharSize( firstByte );
+        if ( charSize > 1 && data + charSize <= dataEnd ) {
+            const uint32_t codePoint = CjkFont::decodeUtf8Char( data, charSize );
+            data += charSize;
+
+            const Sprite & glyph = CjkFont::getGlyph( codePoint, _fontType );
+            if ( !glyph.empty() ) {
+                return glyph;
+            }
+
+            // The glyph is not available in the font: display '?' instead.
+            return getSprite( invalidChar );
+        }
+
+        // A stray or incomplete non-ASCII byte: render nothing.
+        ++data;
+
+        return errorImage;
+    }
+
+    int32_t FontCharHandler::getWidthAt( const uint8_t * & data, const uint8_t * dataEnd ) const
+    {
+        const Sprite & sprite = getSpriteAt( data, dataEnd );
+        if ( sprite.empty() ) {
+            return 0;
+        }
+
+        return sprite.x() + sprite.width();
+    }
+
+    int32_t FontCharHandler::peekWidthAt( const uint8_t * data, const uint8_t * dataEnd ) const
+    {
+        return getWidthAt( data, dataEnd );
     }
 
     int32_t FontCharHandler::getWidth( const uint8_t character ) const
@@ -1399,6 +1495,15 @@ namespace fheroes2
     {
         if ( text.empty() ) {
             return true;
+        }
+
+        const bool hasNonAsciiCharacters = std::any_of( text.begin(), text.end(), []( const char character ) {
+            return static_cast<uint8_t>( character ) >= 0x80;
+        } );
+
+        if ( hasNonAsciiCharacters ) {
+            // Non-ASCII characters are rendered through the CJK font pipeline when it is available.
+            return CjkFont::isCjkTextRenderingEnabled() && CjkFont::isLoaded();
         }
 
         const FontCharHandler charHandler( fontType );

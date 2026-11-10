@@ -111,4 +111,5 @@ target_link_libraries(
 	fheroes2
 	engine
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}main
+	${USE_SDL_VERSION}_ttf::${USE_SDL_VERSION}_ttf
 	)

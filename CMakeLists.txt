@@ -56,6 +56,8 @@ set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL2)
 #
 find_package(${USE_SDL_VERSION} REQUIRED)
 find_package(${USE_SDL_VERSION}_mixer REQUIRED)
+# SDL2_ttf is used for rendering CJK (Simplified Chinese) glyphs from a TrueType font.
+find_package(${USE_SDL_VERSION}_ttf REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads)
 

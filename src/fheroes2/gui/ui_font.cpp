@@ -6788,6 +6788,10 @@ namespace fheroes2
         case CodePage::ISO8859_3:
             generateISO8859_3Alphabet( icnVsSprite );
             break;
+        case CodePage::UTF8:
+            // Simplified Chinese cannot be represented by the original bitmap fonts (they contain only single-byte characters).
+            // Keep the base ASCII font as a fallback until a proper CJK-capable font resource is available.
+            break;
         default:
             // Add new code page generation code!
             assert( 0 );
@@ -6838,6 +6842,9 @@ namespace fheroes2
             break;
         case CodePage::ISO8859_3:
             // generateISO8859_3GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case CodePage::UTF8:
+            // Simplified Chinese: bitmap fonts cannot render CJK characters, keep the base shape.
             break;
         default:
             // Add new code page generation code!
