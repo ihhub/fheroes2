@@ -74,6 +74,7 @@ namespace
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
     const std::set<int> languageDependentIcnId{ ICN::BUTTON_WELL_MAX,
+                                                ICN::BTNSHNGL,
                                                 ICN::BUTTONS_FILE_DIALOG_GOOD,
                                                 ICN::BUTTONS_FILE_DIALOG_EVIL,
                                                 ICN::BUTTONS_EDITOR_FILE_DIALOG_GOOD,
@@ -746,9 +747,136 @@ namespace
         }
     }
 
+    // Renders the given text in the middle of the sprite with a dark contour around it.
+    // This is used to put translated text on top of the original artwork which contains baked-in English text.
+    void overlayTextOnSprite( fheroes2::Sprite & sprite, const std::string & text )
+    {
+        if ( sprite.empty() || text.empty() ) {
+            return;
+        }
+
+        // Remove the baked-in English text: its pixels are much brighter than the surrounding door texture.
+        // Replace every bright pixel with the value of the nearest dark pixel to the left to keep the texture look.
+        {
+            uint8_t * imageData = sprite.image();
+            const int32_t scanStart = sprite.height() / 5;
+            const int32_t scanEnd = ( sprite.height() * 4 ) / 5;
+            const uint8_t brightThreshold = 130;
+
+            for ( int32_t y = scanStart; y < scanEnd; ++y ) {
+                for ( int32_t x = 0; x < sprite.width(); ++x ) {
+                    uint8_t & pixel = imageData[y * sprite.width() + x];
+                    if ( pixel > brightThreshold ) {
+                        if ( x > 0 ) {
+                            pixel = imageData[y * sprite.width() + x - 1];
+                        }
+                        else {
+                            pixel = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Match the look of the baked-in Chinese labels of the localized door buttons: golden yellow text
+        // with a dark contour around it.
+        const fheroes2::FontType font = fheroes2::FontType::normalYellow();
+        fheroes2::Text textObject( text, font );
+
+        const int32_t textWidth = textObject.width();
+        const int32_t textHeight = textObject.height();
+        if ( textWidth <= 0 || textHeight <= 0 || textWidth > sprite.width() || textHeight > sprite.height() ) {
+            return;
+        }
+
+        // The text image must be a Sprite (with a transform layer) so that its empty pixels stay transparent:
+        // blitting a plain Image would paint a solid black rectangle behind the text.
+        fheroes2::Sprite textImage( textWidth, textHeight );
+        textImage.reset();
+        textObject.draw( 0, 0, textImage );
+
+        const int32_t posX = ( sprite.width() - textWidth ) / 2;
+        const int32_t posY = ( sprite.height() - textHeight ) / 2 + 2;
+
+        for ( const fheroes2::Point & offset : { fheroes2::Point( -1, 0 ), fheroes2::Point( 1, 0 ), fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 1 ) } ) {
+            fheroes2::Blit( fheroes2::CreateContour( textImage, 0 ), sprite, posX + offset.x, posY + offset.y );
+        }
+
+        fheroes2::Blit( textImage, sprite, posX, posY );
+    }
+
+    // Detects the localized (Simplified Chinese) game resources: their BTNSHNGL main menu door buttons
+    // already contain baked-in Chinese labels, so the translated text must not be rendered on top of them
+    // (otherwise the baked label and the rendered one would be visible at the same time).
+    // The CRC32 value is that of the whole BTNSHNGL resource of the localized (Omei) HEROES2.AGG.
+    bool hasBakedChineseMainMenuLabels()
+    {
+        static const bool cached = []() {
+            const std::vector<uint8_t> data = AGG::getDataFromAggFile( ICN::getIcnFileName( ICN::BTNSHNGL ), false );
+            if ( data.empty() ) {
+                return false;
+            }
+
+            return fheroes2::calculateCRC32( data.data(), data.size() ) == 0x9BF2C061;
+        }();
+
+        return cached;
+    }
+
     void generateDefaultImages( const int id )
     {
         switch ( id ) {
+        case ICN::BTNSHNGL: {
+            // The Main Menu door buttons contain English text baked into the original artwork.
+            // For languages whose translations differ from the original artwork, render the translated text on top of the doors.
+            readIcnFromAgg( id );
+            if ( _icnVsSprite[id].empty() ) {
+                break;
+            }
+
+            // The original AGG resource has no Editor button, it comes from the engine's embedded images.
+            if ( _icnVsSprite[id].size() == 20 ) {
+                _icnVsSprite[id].resize( 23 );
+
+                fheroes2::h2d::readImage( "main_menu_editor_released_button.image", _icnVsSprite[id][20] );
+                fheroes2::h2d::readImage( "main_menu_editor_highlighted_button.image", _icnVsSprite[id][21] );
+                fheroes2::h2d::readImage( "main_menu_editor_pressed_button.image", _icnVsSprite[id][22] );
+            }
+
+            if ( fheroes2::getCurrentLanguage() != fheroes2::SupportedLanguage::Chinese ) {
+                break;
+            }
+
+            const bool bakedChineseLabels = hasBakedChineseMainMenuLabels();
+
+            static const std::array<std::pair<uint32_t, const char *>, 6> mainMenuButtons{ std::make_pair( 1, "New Game" ), std::make_pair( 5, "Load Game" ),
+                                                                                          std::make_pair( 9, "High Scores" ), std::make_pair( 13, "Credits" ),
+                                                                                          std::make_pair( 17, "Quit" ),       std::make_pair( 20, "Editor" ) };
+
+            for ( const auto & [frame, text] : mainMenuButtons ) {
+                // The localized resources already have Chinese labels baked into all door buttons except the Editor one
+                // (which contains no label at all), so only the Editor button needs the translated text.
+                if ( bakedChineseLabels && frame != 20 ) {
+                    continue;
+                }
+
+                if ( frame + 2 >= _icnVsSprite[id].size() ) {
+                    continue;
+                }
+
+                const char * translatedText = _( text );
+                if ( translatedText == text ) {
+                    // No translation is available for this button.
+                    continue;
+                }
+
+                for ( uint32_t spriteIndex = frame; spriteIndex <= frame + 2; ++spriteIndex ) {
+                    overlayTextOnSprite( _icnVsSprite[id][spriteIndex], translatedText );
+                }
+            }
+
+            break;
+        }
         case ICN::BUTTON_MAP_SELECT_GOOD: {
             _icnVsSprite[id].resize( 2 );
 
