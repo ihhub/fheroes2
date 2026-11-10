@@ -33,6 +33,15 @@
 #include <sstream>
 #include <type_traits>
 #include <utility>
+#include <vector>
+
+#if defined( _WIN32 )
+#define WIN32_LEAN_AND_MEAN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#endif
 
 #include "color.h"
 #include "difficulty.h"
@@ -59,6 +68,168 @@ namespace
 {
     const size_t mapNameLength = 16;
     const size_t mapDescriptionLength = 200;
+
+    // Verifies whether the given text is a valid UTF-8 string.
+    bool isValidUtf8Text( const std::string & text )
+    {
+        const size_t length = text.size();
+
+        size_t position = 0;
+        while ( position < length ) {
+            const uint8_t firstByte = static_cast<uint8_t>( text[position] );
+
+            size_t charSize = 1;
+            if ( ( firstByte & 0xE0 ) == 0xC0 ) {
+                charSize = 2;
+            }
+            else if ( ( firstByte & 0xF0 ) == 0xE0 ) {
+                charSize = 3;
+            }
+            else if ( ( firstByte & 0xF8 ) == 0xF0 ) {
+                charSize = 4;
+            }
+            else if ( firstByte >= 0x80 ) {
+                // Either a stray UTF-8 continuation byte or a byte from another encoding.
+                return false;
+            }
+
+            if ( position + charSize > length ) {
+                return false;
+            }
+
+            for ( size_t offset = 1; offset < charSize; ++offset ) {
+                if ( ( static_cast<uint8_t>( text[position + offset] ) & 0xC0 ) != 0x80 ) {
+                    return false;
+                }
+            }
+
+            position += charSize;
+        }
+
+        return true;
+    }
+
+    // Decodes the given UTF-8 text and reports whether it contains at least one CJK ideograph
+    // (or CJK punctuation / fullwidth forms commonly used in Chinese texts).
+    bool utf8TextHasCjkCharacters( const std::string & text )
+    {
+        const size_t length = text.size();
+
+        size_t position = 0;
+        while ( position < length ) {
+            const uint8_t firstByte = static_cast<uint8_t>( text[position] );
+
+            uint32_t codePoint = firstByte;
+            size_t charSize = 1;
+            if ( ( firstByte & 0xE0 ) == 0xC0 && position + 2 <= length ) {
+                charSize = 2;
+                codePoint = ( ( firstByte & 0x1F ) << 6 ) | ( static_cast<uint8_t>( text[position + 1] ) & 0x3F );
+            }
+            else if ( ( firstByte & 0xF0 ) == 0xE0 && position + 3 <= length ) {
+                charSize = 3;
+                codePoint = ( ( firstByte & 0x0F ) << 12 ) | ( ( static_cast<uint8_t>( text[position + 1] ) & 0x3F ) << 6 )
+                            | ( static_cast<uint8_t>( text[position + 2] ) & 0x3F );
+            }
+            else if ( ( firstByte & 0xF8 ) == 0xF0 && position + 4 <= length ) {
+                charSize = 4;
+                codePoint = ( ( firstByte & 0x07 ) << 18 ) | ( ( static_cast<uint8_t>( text[position + 1] ) & 0x3F ) << 12 )
+                            | ( ( static_cast<uint8_t>( text[position + 2] ) & 0x3F ) << 6 )
+                            | ( static_cast<uint8_t>( text[position + 3] ) & 0x3F );
+            }
+
+            if ( ( codePoint >= 0x4E00 && codePoint <= 0x9FFF ) // CJK Unified Ideographs
+                 || ( codePoint >= 0x3400 && codePoint <= 0x4DBF ) // CJK Unified Ideographs Extension A
+                 || ( codePoint >= 0x3000 && codePoint <= 0x303F ) // CJK Symbols and Punctuation
+                 || ( codePoint >= 0xFF01 && codePoint <= 0xFF5E ) ) { // Fullwidth Forms
+                return true;
+            }
+
+            position += charSize;
+        }
+
+        return false;
+    }
+
+    // Converts GBK (CP936) encoded text to UTF-8. Used for maps made by localized (Chinese) versions
+    // of the original game which store the map name and description in a multi-byte code page.
+    // Returns false when the text is not valid GBK and must not be touched.
+    bool tryConvertGbkToUtf8( const std::string & text, std::string & output )
+    {
+#if defined( _WIN32 )
+        if ( text.empty() ) {
+            return false;
+        }
+
+        // MB_ERR_INVALID_CHARS makes the conversion fail on any byte sequence which is not valid GBK.
+        const int wideSize = MultiByteToWideChar( 936 /* GBK */, MB_ERR_INVALID_CHARS, text.c_str(), static_cast<int>( text.size() ), nullptr, 0 );
+        if ( wideSize <= 0 ) {
+            return false;
+        }
+
+        std::vector<wchar_t> wideText( static_cast<size_t>( wideSize ) );
+        if ( MultiByteToWideChar( 936, MB_ERR_INVALID_CHARS, text.c_str(), static_cast<int>( text.size() ), wideText.data(), wideSize ) <= 0 ) {
+            return false;
+        }
+
+        const int utf8Size = WideCharToMultiByte( CP_UTF8, 0, wideText.data(), wideSize, nullptr, 0, nullptr, nullptr );
+        if ( utf8Size <= 0 ) {
+            return false;
+        }
+
+        std::vector<char> utf8Text( static_cast<size_t>( utf8Size ) );
+        if ( WideCharToMultiByte( CP_UTF8, 0, wideText.data(), wideSize, utf8Text.data(), utf8Size, nullptr, nullptr ) <= 0 ) {
+            return false;
+        }
+
+        output.assign( utf8Text.data(), static_cast<size_t>( utf8Size ) );
+        return true;
+#else
+        // No GBK conversion table is available on this platform.
+        return false;
+#endif
+    }
+
+    // Localized maps store their texts in the code page of the localized game version (GBK for Chinese maps).
+    // The engine works internally with UTF-8, so such texts must be converted before being rendered.
+    void fixMapTextEncoding( std::string & text )
+    {
+        if ( text.empty() || fheroes2::getCurrentLanguage() != fheroes2::SupportedLanguage::Chinese ) {
+            return;
+        }
+
+        // Pure ASCII needs no conversion.
+        const bool hasNonAscii = std::any_of( text.begin(), text.end(), []( const char character ) {
+            return static_cast<uint8_t>( character ) >= 0x80;
+        } );
+        if ( !hasNonAscii ) {
+            return;
+        }
+
+        if ( isValidUtf8Text( text ) ) {
+            // Genuine UTF-8 Chinese text: leave it as is.
+            if ( utf8TextHasCjkCharacters( text ) ) {
+                return;
+            }
+
+            // Ambiguous case: a GBK lead byte in the range 0xC2-0xDF followed by a trail byte in the
+            // range 0x80-0xBF is also a structurally valid UTF-8 sequence (which encodes Latin, Greek
+            // or combining characters that never appear in Chinese maps). Prefer the GBK interpretation
+            // when it decodes cleanly into CJK text.
+            std::string converted;
+            if ( tryConvertGbkToUtf8( text, converted ) && utf8TextHasCjkCharacters( converted ) ) {
+                text = std::move( converted );
+            }
+
+            return;
+        }
+
+        // Not valid UTF-8: this must be a GBK (or another legacy single-byte encoding) text.
+        // Convert it only when it is a valid GBK text; otherwise keep the original bytes untouched.
+        std::string converted;
+        if ( tryConvertGbkToUtf8( text, converted ) ) {
+            text = std::move( converted );
+        }
+    }
 
     // This function returns an unsorted array. It is a caller responsibility to take care of sorting if needed.
     MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const uint8_t humanPlayerCount, const bool isOriginalMapFormat )
@@ -337,6 +508,11 @@ bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
     // Map description
     fs.seek( 118 );
     description = fs.getString( mapDescriptionLength );
+
+    // Localized (Chinese) maps store their texts in GBK encoding. Convert them to UTF-8
+    // so the CJK font pipeline can render them properly.
+    fixMapTextEncoding( name );
+    fixMapTextEncoding( description );
 
     // Alliances of kingdoms
     if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
