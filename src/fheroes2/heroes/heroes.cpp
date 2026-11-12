@@ -27,7 +27,6 @@
 #include <array>
 #include <cmath>
 #include <iterator>
-#include <map>
 #include <set>
 #include <sstream>
 #include <utility>
