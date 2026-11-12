@@ -2065,21 +2065,6 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
         switch ( portraitType ) {
         case PORT_BIG:
             return Assets::getImage( ICN::getHeroPortraitIcnId( heroId ), 0 );
-        case PORT_MEDIUM: {
-            // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
-            // TODO: find a better way to store these images, ideally in agg_image.cpp file.
-            static std::map<int, fheroes2::Sprite> mediumSizePortrait;
-            auto iter = mediumSizePortrait.find( heroId );
-            if ( iter != mediumSizePortrait.end() ) {
-                return iter->second;
-            }
-
-            const fheroes2::Sprite & original = Assets::getImage( ICN::getHeroPortraitIcnId( heroId ), 0 );
-            fheroes2::Sprite output( 50, 47 );
-            fheroes2::Resize( original, output );
-
-            return mediumSizePortrait.try_emplace( heroId, std::move( output ) ).first->second;
-        }
         case PORT_SMALL:
             if ( heroId == Heroes::DEBUG_HERO ) {
                 return Assets::getImage( ICN::MINIPORT, BRAX - 1 );
@@ -2096,48 +2081,46 @@ const fheroes2::Sprite & Heroes::GetPortrait( const int heroId, const int portra
 
 void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
 {
-    const fheroes2::Sprite & port = GetPortrait( _portrait, type );
-    fheroes2::Point mp;
+    const fheroes2::Sprite & portrait = GetPortrait( _portrait, type );
+    if ( portrait.empty() ) {
+        // Nothing to draw then.
+        return;
+    }
 
-    if ( !port.empty() ) {
-        if ( PORT_BIG == type ) {
-            fheroes2::Copy( port, 0, 0, dstsf, px, py, port.width(), port.height() );
-            mp.y = 2;
-            mp.x = port.width() - 12;
+    int32_t portraitWidth{ 0 };
+
+    if ( PORT_BIG == type ) {
+        fheroes2::Copy( portrait, 0, 0, dstsf, px, py, portrait.width(), portrait.height() );
+        portraitWidth = portrait.width();
+    }
+    else if ( PORT_SMALL == type ) {
+        const fheroes2::Sprite & background = Assets::getImage( ICN::PORTXTRA, 0 );
+
+        const int barw = 7;
+
+        // Draw background.
+        fheroes2::Blit( background, dstsf, px, py );
+
+        // Draw mobility.
+        const uint32_t mobilitySpriteIndex = GetMobilityIndexSprite();
+        // Don't draw this sprite if there are no movement points left.
+        if ( mobilitySpriteIndex > 0 ) {
+            const fheroes2::Sprite & mobility = Assets::getImage( ICN::MOBILITY, mobilitySpriteIndex );
+            fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
         }
-        else if ( PORT_MEDIUM == type ) {
-            fheroes2::Copy( port, 0, 0, dstsf, px, py, port.width(), port.height() );
-            mp.x = port.width() - 10;
+
+        // Draw hero's portrait.
+        fheroes2::Copy( portrait, 0, 0, dstsf, px + barw + 1, py, portrait.width(), portrait.height() );
+
+        // Draw mana.
+        const uint32_t manaSpriteIndex = getManaIndexSprite();
+        // Don't draw this sprite if there are no spell points left.
+        if ( manaSpriteIndex > 0 ) {
+            const fheroes2::Sprite & mana = Assets::getImage( ICN::MANA, manaSpriteIndex );
+            fheroes2::Copy( mana, 0, 0, dstsf, px + barw + portrait.width() + 2, py + mana.y(), mana.width(), mana.height() );
         }
-        else if ( PORT_SMALL == type ) {
-            const fheroes2::Sprite & background = Assets::getImage( ICN::PORTXTRA, 0 );
 
-            const int barw = 7;
-
-            // Draw background.
-            fheroes2::Blit( background, dstsf, px, py );
-
-            // Draw mobility.
-            const uint32_t mobilitySpriteIndex = GetMobilityIndexSprite();
-            // Don't draw this sprite if there are no movement points left.
-            if ( mobilitySpriteIndex > 0 ) {
-                const fheroes2::Sprite & mobility = Assets::getImage( ICN::MOBILITY, mobilitySpriteIndex );
-                fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
-            }
-
-            // Draw hero's portrait.
-            fheroes2::Copy( port, 0, 0, dstsf, px + barw + 1, py, port.width(), port.height() );
-
-            // Draw mana.
-            const uint32_t manaSpriteIndex = getManaIndexSprite();
-            // Don't draw this sprite if there are no spell points left.
-            if ( manaSpriteIndex > 0 ) {
-                const fheroes2::Sprite & mana = Assets::getImage( ICN::MANA, manaSpriteIndex );
-                fheroes2::Copy( mana, 0, 0, dstsf, px + barw + port.width() + 2, py + mana.y(), mana.width(), mana.height() );
-            }
-
-            mp.x = 35;
-        }
+        portraitWidth = background.width();
     }
 
     if ( isControlAI() ) {
@@ -2146,12 +2129,16 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
     }
 
     if ( Modes( Heroes::SLEEPER ) ) {
-        const fheroes2::Sprite & sprite = Assets::getImage( ICN::MISC4, 14 );
-        fheroes2::Image sleeperBG( sprite.width() - 4, sprite.height() - 4 );
-        sleeperBG.fill( 0 );
+        if ( type == PORT_SMALL ) {
+            const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+            const fheroes2::Sprite & icon = Assets::getImage( ICN::SLEEPING_HERO_ICON, isEvilInterface ? 2 : 1 );
 
-        fheroes2::Blit( sleeperBG, dstsf, px + mp.x + 3, py + mp.y - 1 );
-        fheroes2::Blit( sprite, dstsf, px + mp.x + 1, py + mp.y - 3 );
+            fheroes2::Blit( icon, dstsf, px + portraitWidth + icon.x(), py + icon.y() );
+        }
+        else if ( type == PORT_BIG ) {
+            const fheroes2::Sprite & icon = Assets::getImage( ICN::SLEEPING_HERO_ICON, 0 );
+            fheroes2::Blit( icon, dstsf, px + portraitWidth + icon.x(), py + icon.y() );
+        }
     }
 }
 

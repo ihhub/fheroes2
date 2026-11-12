@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Josh Matthews  <josh@joshmatthews.net>          *
@@ -64,8 +64,7 @@ enum
 enum PortraitType
 {
     PORT_BIG = 1,
-    PORT_MEDIUM = 2,
-    PORT_SMALL = 3
+    PORT_SMALL = 2
 };
 
 class HeroBase : public Skill::Primary, public MapPosition, public BitModes, public Control
