@@ -629,7 +629,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 if ( Modes( SLEEPER ) && le.isMouseRightButtonPressedInArea( sleepingHeroIconArea ) ) {
                     fheroes2::showStandardTextMessage( _( "Sleep Mode" ),
                                                        _( "The Hero is currently in sleep mode. When a Hero is in sleep mode, the player will not "
-                                                          "be reminded of any remaining movement points for this Hero when ending the turn." ),
+                                                          "be reminded of any remaining movement points for this Hero when ending their turn." ),
                                                        Dialog::ZERO );
                 }
                 else {
