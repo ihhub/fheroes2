@@ -8805,6 +8805,16 @@ msgstr "Ustaw ilość Pkt. magii:"
 msgid "View Spell Points Info"
 msgstr "Punkty magii - informacje"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Tryb strumieni"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr "Ustaw promień patrolu w kwadratach:"
 
