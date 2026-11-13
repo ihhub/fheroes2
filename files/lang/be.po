@@ -172,9 +172,8 @@ msgstr "Нельга перадаць апошні атрад"
 msgid "Move the %{name}"
 msgstr "Перамясціць %{name}"
 
-#, fuzzy
 msgid "Set %{monster} Count:"
-msgstr "Укажыце колькасць істот \"%{monster}\""
+msgstr "Укажыце колькасць істот \"%{monster}\":"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -225,11 +224,9 @@ msgstr ""
 "з яго, ходзіць толькі адну клетку. Таксама абарона такога атрада зніжаецца "
 "на %{count}."
 
-#, fuzzy
 msgid "battleAnimation|Speed: %{speed}"
 msgstr "Хуткасць: %{speed}"
 
-#, fuzzy
 msgid "battleAnimation|Speed"
 msgstr "Анімацыя"
 
@@ -868,9 +865,8 @@ msgstr ""
 msgid "Please select another hero."
 msgstr "Выберыце іншага героя."
 
-#, fuzzy
 msgid "Click to select a hero."
-msgstr "Націсніце сюды, каб выбраць гэты колер."
+msgstr "Націсніце сюды, каб выбраць героя."
 
 msgid "Hero"
 msgstr "Герой"
@@ -3032,9 +3028,8 @@ msgstr ""
 "Паказваць дадатковую інфармацыю, такую як кадр/с (колькасць кадраў за "
 "секунду) і бягучы час."
 
-#, fuzzy
 msgid "hotkeys|All Categories"
-msgstr "налады бою"
+msgstr "Усе катэгорыі"
 
 msgid "Hotkey: "
 msgstr "Гарачая клавіша: "
@@ -3048,13 +3043,11 @@ msgstr "Падзея: "
 msgid "Hot Keys:"
 msgstr "Гарачыя клавішы:"
 
-#, fuzzy
 msgid "Click here to select:\n"
-msgstr "Націсніце сюды, каб выбраць гэты колер."
+msgstr "Націсніце сюды, каб выбраць:\n"
 
-#, fuzzy
 msgid "Select hotkeys category"
-msgstr "Выберыце істоту:"
+msgstr "Выберыце катэгорыю:"
 
 msgid "Hide"
 msgstr "Не паказваць"
@@ -3298,9 +3291,8 @@ msgstr "Тэра інкогніта"
 msgid "Random Map Generator"
 msgstr "Выпадковая істота"
 
-#, fuzzy
 msgid "rmg|Player count:"
-msgstr "Значок \"Колькасць гульцоў\""
+msgstr "Колькасць гульцоў:
 
 #, fuzzy
 msgid "rmg|Map layout:"
@@ -3510,16 +3502,14 @@ msgstr ""
 msgid "Select Artifact:"
 msgstr "Выберыце артэфакт:"
 
-#, fuzzy
 msgid "There are no monsters to select from."
-msgstr "Назва выбранай мапы."
+msgstr "Няма істот, якія можна выбраць."
 
 msgid "Select Monster:"
 msgstr "Выберыце істоту:"
 
-#, fuzzy
 msgid "There are no heroes to select from."
-msgstr "Назва выбранай мапы."
+msgstr "Няма герояў, якія можна выбраць."
 
 msgid "Select Hero:"
 msgstr "Выберыце героя:"
@@ -3527,9 +3517,8 @@ msgstr "Выберыце героя:"
 msgid "Select Monsters:"
 msgstr "Выберыце істот:"
 
-#, fuzzy
 msgid "Select Artifacts:"
-msgstr "Выберыце артэфакт:"
+msgstr "Выберыце артэфакты:"
 
 msgid "race|Random"
 msgstr "Выпадковы"
@@ -3555,9 +3544,8 @@ msgstr "Выберыце скарб:"
 msgid "Select Ocean Object:"
 msgstr "Выберыце марскі аб’ект:"
 
-#, fuzzy
 msgid "Castle/town placing:"
-msgstr "Размяшчэнне горада або замка"
+msgstr "Размяшчэнне горада або замка:"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральны"
@@ -3589,9 +3577,8 @@ msgstr "Выберыце жытло:"
 msgid "Select Landscape Object:"
 msgstr "Выберыце аб’ект ландшафту:"
 
-#, fuzzy
 msgid "Mine placing:"
-msgstr "Размяшчэнне капальні"
+msgstr "Размяшчэнне капальні:"
 
 msgid ""
 "Resource\n"
@@ -3624,9 +3611,8 @@ msgstr "Выберыце аб’ект тыпу \"Пасіленне\":"
 msgid "Select Adventure Object:"
 msgstr "Выберыце аб’ект тыпу \"Прыгода\":"
 
-#, fuzzy
 msgid "Select color:"
-msgstr "Выберыце колер"
+msgstr "Выберыце колер:"
 
 msgid "Players Icon"
 msgstr "Значок \"Колькасць гульцоў\""
@@ -3672,7 +3658,6 @@ msgstr "Тып мапы"
 msgid "Map Type:\n"
 msgstr "Тып мапы:\n"
 
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -3680,7 +3665,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Мова:\n"
+"Мовы:\n"
 
 msgid "Lose all your heroes and towns."
 msgstr "Страціць усіх сваіх герояў і ўсе свае гарады."
@@ -3952,9 +3937,8 @@ msgstr "Колькі істот хочаце перамясціць?"
 msgid "Click to change the Castle name."
 msgstr "Націсніце тут, каб змяніць назву замка."
 
-#, fuzzy
 msgid "Enter Castle name:"
-msgstr "Увядзіце назву замка"
+msgstr "Увядзіце назву замка:"
 
 msgid "Reset the Castle name."
 msgstr ""
@@ -4023,9 +4007,8 @@ msgid ""
 "if they are controlled by a computer."
 msgstr ""
 
-#, fuzzy
 msgid "Set %{resource-type} Count:"
-msgstr "Укажыце колькасць рэсурсу \"%{resource-type}\""
+msgstr "Укажыце колькасць рэсурсу \"%{resource-type}\":"
 
 msgid "Message:"
 msgstr ""
@@ -4051,9 +4034,8 @@ msgstr ""
 msgid "Day: %{day}"
 msgstr "Дзень: %{day}"
 
-#, fuzzy
 msgid "Daily events:"
-msgstr "Штодзённыя падзеі"
+msgstr "Штодзённыя падзеі:"
 
 msgid "Click to save the events."
 msgstr ""
@@ -4394,17 +4376,14 @@ msgstr "Уласцівасці аб’ектаў"
 msgid "editorDetailMode|Copy"
 msgstr "Уласцівасці аб’ектаў"
 
-#, fuzzy
 msgid "editorErasure|Mountains"
-msgstr "Істоты"
+msgstr "Горы"
 
-#, fuzzy
 msgid "editorErasure|Rocks"
-msgstr "Дарогі"
+msgstr "Камні"
 
-#, fuzzy
 msgid "editorErasure|Trees"
-msgstr "Героі"
+msgstr "Дрэвы"
 
 #, fuzzy
 msgid "editorErasure|Miscellaneous and Water landscape objects"
@@ -4780,13 +4759,11 @@ msgstr "МОВА"
 msgid "map|ABOUT"
 msgstr ""
 
-#, fuzzy
 msgid "Change Map Name:"
-msgstr "Змяніць назву мапы"
+msgstr "Змяніць назву мапы:"
 
-#, fuzzy
 msgid "Change Map Description:"
-msgstr "Змяніць апісанне мапы"
+msgstr "Змяніць апісанне мапы:"
 
 msgid "map|About"
 msgstr ""
@@ -4861,9 +4838,8 @@ msgstr ""
 msgid "Toggle display of objects' passability."
 msgstr ""
 
-#, fuzzy
 msgid "Rumors:"
-msgstr "Чуткі"
+msgstr "Чуткі:"
 
 msgid "Rumor:"
 msgstr "Чутка:"
@@ -5397,7 +5373,6 @@ msgstr ""
 msgid "autoPlaytest|Last day of playthrough:"
 msgstr ""
 
-#, fuzzy
 msgid "autoPlaytest|Animation"
 msgstr "Анімацыя"
 
@@ -5763,9 +5738,8 @@ msgstr "уверх"
 msgid "hotkey|default down"
 msgstr "уніз"
 
-#, fuzzy
 msgid "hotkey|default delete"
-msgstr "улева"
+msgstr "выдаліць"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "на ўвесь экран (укл./выкл.)"
@@ -6965,9 +6939,8 @@ msgstr "ПРАБЕЛ"
 msgid "Keyboard|ENTER"
 msgstr "ПРАБЕЛ"
 
-#, fuzzy
 msgid "Change language"
-msgstr "Змяніць назву мапы"
+msgstr "Змяніць мову"
 
 #, fuzzy
 msgid "Click to switch between languages."
@@ -8865,9 +8838,8 @@ msgstr "Паглядзець звесткі пра магічную энергі
 msgid "Set patrol radius in tiles:"
 msgstr ""
 
-#, fuzzy
 msgid "Enter hero's name:"
-msgstr "Увядзіце імя героя"
+msgstr "Увядзіце імя героя:"
 
 msgid "Click to change class."
 msgstr "Націсніце тут, каб змяніць клас."
@@ -13018,35 +12990,3 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "Далучыцца %{percent}% ад усіх істот"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr ""
-#~ "Павышаюць сілу атакі выбранага атрада героя на 3. Чары дзейнічаюць "
-#~ "колькасць раўндаў, роўную сіле магіі героя."
-
-#~ msgid "Easy"
-#~ msgstr "Лёгкая"
-
-#~ msgid "Hard"
-#~ msgstr "Цяжкая"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "ЦАНА\n"
-#~ "ВЕРНАСЦІ"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "і ўсім-усім, хто ўдзельнічае ў развіцці і падтрымлівае праект!"
-
-#~ msgid "AI"
-#~ msgstr "Камп’ютар"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Націсніце сюды, каб выбраць гэты колер."

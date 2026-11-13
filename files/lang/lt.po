@@ -11892,10 +11892,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Padidina kario puolimo įgūdžius."
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Rodyti kitą miestą"

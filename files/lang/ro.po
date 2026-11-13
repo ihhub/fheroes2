@@ -11774,27 +11774,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#~ msgid "Easy"
-#~ msgstr "Ușor"
-
-#~ msgid "Hard"
-#~ msgstr "Greu"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "CAMPANIE\n"
-#~ "EXPANSIUNE"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "și mulți alți contributori și suporteri!"
-
-#~ msgid "AI"
-#~ msgstr "AI"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Dați click pentru a reîncepe bătălia în mod manual."
