@@ -116,6 +116,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Hero portrait.
     const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
+
+    const fheroes2::Sprite & sleepingHeroIcon = Assets::getImage( ICN::SLEEPING_HERO_ICON, 0 );
+    const fheroes2::Rect sleepingHeroIconArea{ portPos.x + portPos.width + sleepingHeroIcon.x(), portPos.y + sleepingHeroIcon.y(), sleepingHeroIcon.width(),
+                                               sleepingHeroIcon.height() };
+
     if ( isEditor && !isValidId( _portrait ) ) {
         fheroes2::renderHeroRacePortrait( _race, portPos, display );
     }
@@ -619,7 +624,15 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 needRedraw = true;
             }
             else {
-                Dialog::QuickInfo( *this, true );
+                // A hero can have sleeping mode being enabled.
+                // In this case we need to show a different pop-up message when a player right clicks on the sleeping hero icon area.
+                if ( Modes( SLEEPER ) && le.isMouseRightButtonPressedInArea( sleepingHeroIconArea ) ) {
+                    fheroes2::showStandardTextMessage( _( "Sleep Mode" ), _( "The Hero is currently in sleep mode. When a Hero is in sleep mode, the player will not "
+                        "be reminded of any remaining movement points for this Hero when ending the turn." ), Dialog::ZERO );
+                }
+                else {
+                    Dialog::QuickInfo( *this, true );
+                }
             }
         }
         else if ( buttonPatrol && le.isMouseCursorPosInArea( buttonPatrol->area() ) ) {
