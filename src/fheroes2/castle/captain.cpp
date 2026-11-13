@@ -213,7 +213,6 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
         fheroes2::Blit( flag, portrait, offset.x, offset.y );
         return portrait;
     }
-    case PORT_MEDIUM:
     case PORT_SMALL:
         switch ( GetRace() ) {
         case Race::KNGT:
