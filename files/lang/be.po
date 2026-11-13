@@ -3292,7 +3292,7 @@ msgid "Random Map Generator"
 msgstr "Выпадковая істота"
 
 msgid "rmg|Player count:"
-msgstr "Колькасць гульцоў:
+msgstr "Колькасць гульцоў:"
 
 #, fuzzy
 msgid "rmg|Map layout:"
