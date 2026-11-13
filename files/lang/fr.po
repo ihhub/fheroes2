@@ -9066,6 +9066,16 @@ msgid "View Spell Points Info"
 msgstr "Voir les infos sur les points de magie"
 
 #, fuzzy
+msgid "Sleep Mode"
+msgstr "Rivières"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
+#, fuzzy
 msgid "Set patrol radius in tiles:"
 msgstr "Définir le rayon de patrouille en cases"
 

@@ -8817,6 +8817,16 @@ msgstr "Введите величину очков магии:"
 msgid "View Spell Points Info"
 msgstr "Очки магии"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Реки"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr "Введите радиус патрулирования в клетках:"
 

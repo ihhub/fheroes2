@@ -8848,6 +8848,16 @@ msgstr "Definir o valor da Mana:"
 msgid "View Spell Points Info"
 msgstr "Ver Informações Sobre a Mana"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Modo de Riacho"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr "Definir raio de patrulha em ladrilhos:"
 

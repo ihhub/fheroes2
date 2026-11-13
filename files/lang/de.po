@@ -9015,6 +9015,16 @@ msgid "View Spell Points Info"
 msgstr "Infos zu Zauberpunkten anzeigen"
 
 #, fuzzy
+msgid "Sleep Mode"
+msgstr "Wasserlauf-Modus"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
+#, fuzzy
 msgid "Set patrol radius in tiles:"
 msgstr "Legt den Radius in Feldern fest, innerhalb dessen der Held angreift."
 
