@@ -5772,9 +5772,8 @@ msgstr "клавиша вверх"
 msgid "hotkey|default down"
 msgstr "клавиша вниз"
 
-#, fuzzy
 msgid "hotkey|default delete"
-msgstr "клавиша влево"
+msgstr "клавиша удаления"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "переключить полноэкранный режим"

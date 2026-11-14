@@ -13091,27 +13091,3 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Tasa: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Incrementa la habilidad de ataque de una unidad."
-
-#~ msgid "Easy"
-#~ msgstr "Fácil"
-
-#~ msgid "Hard"
-#~ msgstr "Difícil"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "CAMPAÑA\n"
-#~ "DE EXPAN-\n"
-#~ "SIÓN"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Crea un nuevo mapa desde cero."
