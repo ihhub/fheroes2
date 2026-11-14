@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -347,6 +347,12 @@ namespace M82
         ZOMBKILL,
         ZOMBMOVE,
         ZOMBWNCE,
+
+        // A marker for the last sound from the original game.
+        LAST_ORIGINAL_SOUND,
+
+        // These are new sounds specific only for the fheroes2 Resurrection project.
+        GENIE_SNAP,
 
         // Put all new sounds before this line.
         UNKNOWN

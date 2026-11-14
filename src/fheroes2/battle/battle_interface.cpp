@@ -365,6 +365,13 @@ namespace
             result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
             result.y += unitSprite.y() / 2 - 1;
             break;
+        case ICN::GENIE_SNAP_EFFECT:
+            result.x -= 22;
+            result.y -= 96;
+            break;
+        case ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER:
+            result.y -= 96;
+            break;
         default:
             // center point of the unit
             result.x += pos.width / 2;
@@ -4190,6 +4197,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
 
     // targets damage animation
     _redrawActionWincesKills( targets, &attacker, &defender );
+
     RedrawTroopDefaultDelay( attacker );
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
@@ -4253,6 +4261,44 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
     }
 
     _movingUnit = nullptr;
+}
+
+void Battle::Interface::redrawSpecialAttack( Unit & attacker, Unit & defender )
+{
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
+    _currentUnit = nullptr;
+    _movingUnit = &attacker;
+    _movingPos = attacker.GetRectPosition().getPosition();
+
+    // Unit 'Position' is position of the tile he's standing at
+    const fheroes2::Rect & pos1 = attacker.GetRectPosition();
+    const fheroes2::Rect & pos2 = defender.GetRectPosition();
+
+    AudioManager::PlaySound( M82::GENIE_SNAP );
+
+    int specialAnimId = Monster_Info::SPECIAL_FRONT;
+    if ( pos2.y < pos1.y ) {
+        specialAnimId -= 1;
+    }
+    else if ( pos2.y > pos1.y ) {
+        specialAnimId += 1;
+    }
+
+    if ( attacker.SwitchAnimation( specialAnimId ) ) {
+        // Reset the delay to wait till the next frame.
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+
+        RedrawTroopDefaultDelay( attacker );
+    }
+
+    // After the special move apply the special effect on the defender.
+    if ( defender.isWide() ) {
+        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER, M82::FromSpell( M82::PROTECT ), NONE );
+    }
+    else {
+        RedrawTroopWithFrameAnimation( defender, ICN::GENIE_SNAP_EFFECT, M82::FromSpell( M82::PROTECT ), NONE );
+    }
 }
 
 void Battle::Interface::_redrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */, const Unit * defender /* = nullptr */ )

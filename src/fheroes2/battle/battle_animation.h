@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -173,6 +173,7 @@ protected:
     std::vector<int> _death;
     MonsterReturnAnim _melee[3];
     MonsterReturnAnim _ranged[3];
+    MonsterReturnAnim _special[3];
     std::vector<std::vector<int>> _idle;
     std::vector<std::vector<int>> _offsetX;
 

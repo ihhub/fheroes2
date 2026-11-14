@@ -5671,6 +5671,121 @@ namespace
             fheroes2::h2d::readImage( "market_icon_good.image", _icnVsSprite[id][0] );
             fheroes2::h2d::readImage( "market_icon_evil.image", _icnVsSprite[id][1] );
             break;
+        case ICN::GENIE_SNAP_ANIMATION: {
+            // We add 6 more frames so that we can duplicate the first 6 frames for the upwards angle attack animation.
+            _icnVsSprite[id].resize( 18 );
+
+            for ( int i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                const int nameNumber = i + 1;
+
+                if ( i < 9 ) {
+                    fheroes2::h2d::readImage( "genie_snap_animation_0" + std::to_string( nameNumber ) + ".image", _icnVsSprite[id][i] );
+                }
+                else if ( i < 12 ) {
+                    fheroes2::h2d::readImage( "genie_snap_animation_" + std::to_string( nameNumber ) + ".image", _icnVsSprite[id][i] );
+                }
+                else {
+                    int newNameNumber = i - 11;
+                    fheroes2::h2d::readImage( "genie_snap_animation_0" + std::to_string( newNameNumber ) + ".image", _icnVsSprite[id][i] );
+                }
+            }
+
+            // Downwards-facing head.
+            fheroes2::Sprite genieHeadDownwards;
+            genieHeadDownwards.resize( 17, 23 );
+            genieHeadDownwards.reset();
+
+            const fheroes2::Sprite & genieDownwardsAttackOriginal = Assets::getImage( ICN::GENIE, 22 );
+
+            Copy( genieDownwardsAttackOriginal, 26, 0, genieHeadDownwards, 0, 0, 17, 17 );
+            Copy( genieDownwardsAttackOriginal, 30, 17, genieHeadDownwards, 4, 17, 13, 2 );
+            Copy( genieDownwardsAttackOriginal, 33, 18, genieHeadDownwards, 5, 19, 1, 1 );
+            Copy( genieDownwardsAttackOriginal, 32, 19, genieHeadDownwards, 6, 19, 8, 2 );
+            Copy( genieDownwardsAttackOriginal, 40, 19, genieHeadDownwards, 14, 19, 3, 1 );
+
+            Copy( genieDownwardsAttackOriginal, 34, 21, genieHeadDownwards, 8, 21, 6, 1 );
+            Copy( genieDownwardsAttackOriginal, 35, 22, genieHeadDownwards, 9, 22, 6, 1 );
+
+            // Put the head on the neck.
+            Blit( genieHeadDownwards, 0, 0, _icnVsSprite[id][6], 13, 4, genieHeadDownwards.width(), genieHeadDownwards.height() );
+            Blit( genieHeadDownwards, 0, 0, _icnVsSprite[id][7], 13, 4, genieHeadDownwards.width(), genieHeadDownwards.height() );
+            Blit( genieHeadDownwards, 0, 0, _icnVsSprite[id][8], 13, 3, genieHeadDownwards.width(), genieHeadDownwards.height() );
+            Blit( genieHeadDownwards, 0, 0, _icnVsSprite[id][9], 12, 3, genieHeadDownwards.width(), genieHeadDownwards.height() );
+            Blit( genieHeadDownwards, 0, 0, _icnVsSprite[id][10], 12, 4, genieHeadDownwards.width(), genieHeadDownwards.height() );
+            Blit( genieHeadDownwards, 0, 0, _icnVsSprite[id][11], 13, 4, genieHeadDownwards.width(), genieHeadDownwards.height() );
+
+            // Upwards-facing head.
+            const fheroes2::Sprite & genieUpwardsAttackOriginal = Assets::getImage( ICN::GENIE, 26 );
+            fheroes2::Sprite genieHeadUpwards;
+            genieHeadUpwards.resize( 23, 23 );
+            genieHeadUpwards.reset();
+
+            Copy( genieUpwardsAttackOriginal, 0, 0, genieHeadUpwards, 0, 0, 23, 17 );
+            Copy( genieUpwardsAttackOriginal, 9, 8, genieHeadUpwards, 7, 16, 1, 1 );
+            Copy( genieUpwardsAttackOriginal, 13, 5, genieHeadUpwards, 8, 16, 1, 1 );
+            Copy( genieUpwardsAttackOriginal, 9, 8, genieHeadUpwards, 9, 16, 1, 1 );
+
+            Copy( genieUpwardsAttackOriginal, 14, 17, genieHeadUpwards, 14, 17, 8, 4 );
+            Copy( genieUpwardsAttackOriginal, 12, 3, genieHeadUpwards, 14, 20, 1, 1 );
+            Copy( genieUpwardsAttackOriginal, 12, 3, genieHeadUpwards, 15, 20, 1, 1 );
+
+            Copy( genieUpwardsAttackOriginal, 17, 21, genieHeadUpwards, 17, 21, 3, 1 );
+            Copy( genieUpwardsAttackOriginal, 19, 22, genieHeadUpwards, 19, 22, 2, 1 );
+            Copy( genieUpwardsAttackOriginal, 11, 17, genieHeadUpwards, 11, 17, 3, 1 );
+
+            Copy( genieUpwardsAttackOriginal, 13, 18, genieHeadUpwards, 13, 18, 1, 1 );
+
+            Blit( genieHeadUpwards, 0, 0, _icnVsSprite[id][12], 6, 6, genieHeadUpwards.width(), genieHeadUpwards.height() );
+            Blit( genieHeadUpwards, 0, 0, _icnVsSprite[id][13], 6, 5, genieHeadUpwards.width(), genieHeadUpwards.height() );
+            Blit( genieHeadUpwards, 0, 0, _icnVsSprite[id][14], 5, 5, genieHeadUpwards.width(), genieHeadUpwards.height() );
+            Blit( genieHeadUpwards, 0, 0, _icnVsSprite[id][15], 5, 5, genieHeadUpwards.width(), genieHeadUpwards.height() );
+            Blit( genieHeadUpwards, 0, 0, _icnVsSprite[id][16], 8, 5, genieHeadUpwards.width(), genieHeadUpwards.height() );
+            Blit( genieHeadUpwards, 0, 0, _icnVsSprite[id][17], 6, 6, genieHeadUpwards.width(), genieHeadUpwards.height() );
+
+            // Straight-facing head.
+            const fheroes2::Sprite & genieStraightAttackOriginal = Assets::getImage( ICN::GENIE, 3 );
+            fheroes2::Sprite genieHeadStraight;
+            genieHeadStraight.resize( 19, 23 );
+            genieHeadStraight.reset();
+
+            Copy( genieStraightAttackOriginal, 11, 1, genieHeadStraight, 0, 0, 19, 17 );
+            Copy( genieStraightAttackOriginal, 19, 18, genieHeadStraight, 8, 17, 9, 2 );
+            Copy( genieStraightAttackOriginal, 21, 20, genieHeadStraight, 10, 19, 7, 2 );
+            Copy( genieStraightAttackOriginal, 23, 22, genieHeadStraight, 12, 21, 5, 1 );
+            Copy( genieStraightAttackOriginal, 25, 23, genieHeadStraight, 14, 22, 4, 1 );
+
+            Blit( genieHeadStraight, 0, 0, _icnVsSprite[id][0], 9, 5, genieHeadStraight.width(), genieHeadStraight.height() );
+            Blit( genieHeadStraight, 0, 0, _icnVsSprite[id][1], 9, 4, genieHeadStraight.width(), genieHeadStraight.height() );
+            Blit( genieHeadStraight, 0, 0, _icnVsSprite[id][2], 8, 4, genieHeadStraight.width(), genieHeadStraight.height() );
+            Blit( genieHeadStraight, 0, 0, _icnVsSprite[id][3], 8, 4, genieHeadStraight.width(), genieHeadStraight.height() );
+            Blit( genieHeadStraight, 0, 0, _icnVsSprite[id][4], 10, 4, genieHeadStraight.width(), genieHeadStraight.height() );
+            Blit( genieHeadStraight, 0, 0, _icnVsSprite[id][5], 9, 5, genieHeadStraight.width(), genieHeadStraight.height() );
+
+            break;
+        }
+        case ICN::GENIE_SNAP_EFFECT:
+            _icnVsSprite[id].resize( 6 );
+            fheroes2::h2d::readImage( "snap_effect_0.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "snap_effect_7.image", _icnVsSprite[id][1] );
+            fheroes2::h2d::readImage( "snap_effect_8.image", _icnVsSprite[id][2] );
+            fheroes2::h2d::readImage( "snap_effect_9.image", _icnVsSprite[id][3] );
+            fheroes2::h2d::readImage( "snap_effect_10.image", _icnVsSprite[id][4] );
+            fheroes2::h2d::readImage( "snap_effect_6.image", _icnVsSprite[id][5] );
+
+            // The last frame needs offset correction.
+            _icnVsSprite[id][5].setPosition( _icnVsSprite[id][5].x() - 19, _icnVsSprite[id][5].y() + 15 );
+
+            break;
+        case ICN::GENIE_SNAP_EFFECT_2_HEX_MONSTER:
+            _icnVsSprite[id].resize( 7 );
+            fheroes2::h2d::readImage( "snap_effect_0.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "snap_effect_1.image", _icnVsSprite[id][1] );
+            fheroes2::h2d::readImage( "snap_effect_2.image", _icnVsSprite[id][2] );
+            fheroes2::h2d::readImage( "snap_effect_3.image", _icnVsSprite[id][3] );
+            fheroes2::h2d::readImage( "snap_effect_4.image", _icnVsSprite[id][4] );
+            fheroes2::h2d::readImage( "snap_effect_5.image", _icnVsSprite[id][5] );
+            fheroes2::h2d::readImage( "snap_effect_6.image", _icnVsSprite[id][6] );
+            break;
         case ICN::SLEEPING_HERO_ICON:
             _icnVsSprite[id].resize( 3 );
             fheroes2::h2d::readImage( "sleeping_hero_icon_normal.image", _icnVsSprite[id][0] );

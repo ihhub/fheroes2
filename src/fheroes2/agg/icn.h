@@ -1136,6 +1136,10 @@ namespace ICN
         EVIL_DIALOG_PLAIN_CORNERS,
         SLEEPING_HERO_ICON,
 
+        GENIE_SNAP_ANIMATION,
+        GENIE_SNAP_EFFECT,
+        GENIE_SNAP_EFFECT_2_HEX_MONSTER,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

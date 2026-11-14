@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -488,11 +488,26 @@ namespace Bin_Info
                 frameXOffset[MOVE_ONE].insert( frameXOffset[MOVE_ONE].begin() + 2, 8 );
             }
         }
+
+        // Genie is the only creature with a special attack.
+        if ( monsterID == Monster::GENIE ) {
+            animationFrames.resize( SPECIAL_BOTTOM + 1 );
+            frameXOffset.resize( SPECIAL_BOTTOM + 1 );
+
+            // TODO: replace the below animation frames with the newly added ones.
+            animationFrames[SPECIAL_UP] = animationFrames[WINCE_UP];
+            animationFrames[SPECIAL_FRONT] = animationFrames[DEATH];
+            animationFrames[SPECIAL_BOTTOM] = animationFrames[IDLE4];
+
+            frameXOffset[SPECIAL_UP] = frameXOffset[WINCE_UP];
+            frameXOffset[SPECIAL_FRONT] = frameXOffset[DEATH];
+            frameXOffset[SPECIAL_BOTTOM] = frameXOffset[IDLE4];
+        }
     }
 
     bool MonsterAnimInfo::isValid() const
     {
-        if ( animationFrames.size() != SHOOT3_END + 1 ) {
+        if ( ( animationFrames.size() != SHOOT3_END + 1 ) && ( animationFrames.size() != SPECIAL_BOTTOM + 1 ) ) {
             return false;
         }
 
