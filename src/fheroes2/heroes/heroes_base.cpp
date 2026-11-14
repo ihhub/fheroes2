@@ -598,7 +598,15 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 void HeroBase::SpellCasted( const Spell & spell )
 {
     _spellPoints -= std::min( spell.spellPoints( this ), _spellPoints );
+
+    const uint32_t requiredMovePoints{ spell.movePoints() };
+
     _movePoints -= std::min( spell.movePoints(), _movePoints );
+
+    if ( requiredMovePoints > 0 ) {
+        // A sleeping hero cannot move so wake him up.
+        ResetModes( Heroes::SLEEPER );
+    }
 }
 
 bool HeroBase::CanLearnSpell( const Spell & spell ) const
