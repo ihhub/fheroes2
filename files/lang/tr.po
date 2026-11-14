@@ -5578,6 +5578,10 @@ msgstr ""
 msgid "hotkey|default down"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Sistem seçeneklerini özelleştirin"
+
 msgid "hotkey|toggle fullscreen"
 msgstr ""
 
@@ -8121,6 +8125,15 @@ msgid "Set Spell Points value:"
 msgstr "Büyü Puanları"
 
 msgid "View Spell Points Info"
+msgstr ""
+
+msgid "Sleep Mode"
+msgstr ""
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
 msgstr ""
 
 msgid "Set patrol radius in tiles:"
@@ -11749,18 +11762,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "EKLENTİ\n"
-#~ "HİKAYESİ"
-
-#~ msgid "AI"
-#~ msgstr "Bilgisayar"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"

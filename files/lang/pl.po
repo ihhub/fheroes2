@@ -5754,6 +5754,10 @@ msgstr "w górę"
 msgid "hotkey|default down"
 msgstr "w dół"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "w lewo"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "pełny ekran/okno"
 
@@ -8800,6 +8804,16 @@ msgstr "Ustaw ilość Pkt. magii:"
 
 msgid "View Spell Points Info"
 msgstr "Punkty magii - informacje"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Tryb strumieni"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 msgid "Set patrol radius in tiles:"
 msgstr "Ustaw promień patrolu w kwadratach:"
@@ -12943,45 +12957,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Przyłącza się %{percent}% oddziału)"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Zwiększa umiejętność ataku jednostki."
-
-#~ msgid "Easy"
-#~ msgstr "Łatwa"
-
-#~ msgid "Hard"
-#~ msgstr "Trudna"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "KAMPANIA\n"
-#~ "Z ROZSZE-\n"
-#~ "RZENIA"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Utwórz nową mapę od podstaw."
-
-#~ msgid ""
-#~ "Cell\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Szczegóły\n"
-#~ "komórki"
-
-#, fuzzy
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "i wielu, wielu innym!"
-
-#~ msgid "AI"
-#~ msgstr "Komputer"
-
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr ""
-#~ "Kliknij, aby ustawić tego bohatera jako kontrolowanego przez komputer."

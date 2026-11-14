@@ -800,9 +800,10 @@ namespace AudioManager
                 Music::setMidiTimidityCfg( timidityCfgPath );
             }
 
-            Mixer::setVolume( 100 * Settings::Get().SoundVolume() / 10 );
+            const Settings & config = Settings::Get();
+            Mixer::setVolume( 100 * config.SoundVolume() / 10 );
 
-            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
+            Music::setVolume( 100 * config.MusicVolume() / 10 );
             Music::SetFadeInMs( 900 );
         }
 

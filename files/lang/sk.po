@@ -5936,6 +5936,10 @@ msgstr "predvolené hore"
 msgid "hotkey|default down"
 msgstr "predvolené dole"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "predvolené vľavo"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "prepni celú obrazovku"
 
@@ -8986,6 +8990,16 @@ msgstr "Body kúziel"
 
 msgid "View Spell Points Info"
 msgstr "Zobraz info o bodoch kúziel"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Režim tokov"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 msgid "Set patrol radius in tiles:"
 msgstr ""
@@ -13125,38 +13139,3 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "%{percent}% všetkých bojovníkov"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Zvyšuje útočné schopnosti jednotky."
-
-#~ msgid "Easy"
-#~ msgstr "Ľahká"
-
-#~ msgid "Hard"
-#~ msgstr "Ťažká"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "KAMPAŇ\n"
-#~ "EXPANZIE"
-
-#, fuzzy
-#~ msgid "Create a new map from scratch."
-#~ msgstr "nová mapa, od nuly"
-
-#, fuzzy
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "a mnoho ďalších podporovateľov!"
-
-#~ msgid "AI"
-#~ msgstr "UI"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."

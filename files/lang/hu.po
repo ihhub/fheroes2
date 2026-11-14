@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-10 08:09+0000\n"
-"PO-Revision-Date: 2026-09-22 20:59+0200\n"
+"PO-Revision-Date: 2026-11-11 22:33+0100\n"
 "Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: fheroes2 team <fhomm2@gmail.com>\n"
 "Language: hu\n"
@@ -784,6 +784,8 @@ msgid ""
 "Toggle the hit points bar above each troop counter. The bar shows the "
 "remaining hit points of the top creature in the stack."
 msgstr ""
+"Kapcsold be az életerő pont sávot minden csapategység felett. A sáv az "
+"egység legjobb lényének fennmaradó életpontjait mutatja."
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell %"
@@ -3000,9 +3002,8 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Extra információkat jelenít meg, mint például FPS, illetve pontos idő."
 
-#, fuzzy
 msgid "hotkeys|All Categories"
-msgstr "csata beállítások"
+msgstr "Minden kategória"
 
 msgid "Hotkey: "
 msgstr "Gyorsbillentyű: "
@@ -3016,15 +3017,11 @@ msgstr "Esemény: "
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
 
-#, fuzzy
 msgid "Click here to select:\n"
-msgstr ""
-"Kattints ide, a\n"
-"lény kiválasztásához."
+msgstr "Kattints ide, a kiválasztáshoz:\n"
 
-#, fuzzy
 msgid "Select hotkeys category"
-msgstr "Lény kiválasztása:"
+msgstr "Válaszd ki a gyorbillentyű kategóriát"
 
 msgid "Hide"
 msgstr "Elrejt"
@@ -3112,27 +3109,28 @@ msgstr "n/a"
 msgid ""
 "The Trading Post provides exchange rates equivalent to %{count} marketplaces."
 msgstr ""
+"A Kereskedelmi állomás %{count} piactérnek megfelelő átváltási arányt kínál."
 
-#, fuzzy
 msgid ""
 "You currently control 1 marketplace. The more marketplaces you control, the "
 "better the exchange rate."
 msgstr ""
-"A Piactéren vásárolhatsz és eladhatsz nyersanyagokat. Több Piactér "
-"birtoklása javítja az átváltási arányt."
+"Jelenleg 1 piacteret birtokolsz. Több piactér birtoklása javítja az "
+"átváltási arányt."
 
 msgid ""
 "You currently control enough marketplaces that the exchange rate has peaked. "
 "Controlling additional marketplaces will not improve the exchange rate."
 msgstr ""
+"Jelenleg annyi piacteret birtokolsz, hogy az átváltási arány maximális. "
+"További piacterek birtoklásával az átváltási arány már nem javul."
 
-#, fuzzy
 msgid ""
 "You currently control %{count} marketplaces. The more marketplaces you "
 "control, the better the exchange rate."
 msgstr ""
-"A Piactéren vásárolhatsz és eladhatsz nyersanyagokat. Több Piactér "
-"birtoklása javítja az átváltási arányt."
+"Jelenleg %{count} piacteret birtokolsz. Több piactér birtoklása javítja az "
+"átváltási arányt."
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3170,7 +3168,7 @@ msgid "Available Trades"
 msgstr "Üzleti lehetőségek"
 
 msgid "Exchange Rate"
-msgstr ""
+msgstr "Átváltási arány"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "%{count} %{monster} őrzi."
@@ -5351,20 +5349,18 @@ msgstr "A térkép előkészítése az automatikus játéktesztre sikertelen."
 msgid "autoPlaytest|Number of playthroughs:"
 msgstr "Végigjátszások száma:"
 
-#, fuzzy
 msgid "Set the number of playthroughs."
-msgstr "Végigjátszások száma:"
+msgstr "Végigjátszások számának beállítása."
 
 msgid "autoPlaytest|Max days per playthrough:"
 msgstr "Max. napszám végigjátszásonként:"
 
-#, fuzzy
 msgid "Set the maximum number of days that each playthrough is run for."
-msgstr "Végigjátszások száma:"
+msgstr ""
+"Az egyes végigjátszások maximális futási időtartamának beállítása napokban."
 
-#, fuzzy
 msgid "autoPlaytest|Last day of playthrough:"
-msgstr "Max. napszám végigjátszásonként:"
+msgstr "A végigjátszás utolsó napja:"
 
 msgid "autoPlaytest|Animation"
 msgstr "Animáció"
@@ -5373,7 +5369,7 @@ msgid "autoPlaytest|Animation speed:"
 msgstr "Animáció sebesség:"
 
 msgid "Set animation speed during playthrough."
-msgstr ""
+msgstr "Animáció sebességének beállítása végigjátszáskor."
 
 msgid "autoPlaytest|Sound Effects"
 msgstr "Hangeffektek"
@@ -5393,12 +5389,11 @@ msgstr ""
 msgid "Click to run an automated map playtest."
 msgstr "Kattints egy automatikus játékteszt indításához."
 
-#, fuzzy
 msgid "Toggle animation during playthroughs."
-msgstr "Objektumok animációjának kapcsolója."
+msgstr "Animáció kapcsolója a végigjátszások során."
 
 msgid "Toggle sound effects during playthroughs."
-msgstr ""
+msgstr "Hangeffektusok kapcsolója végigjátszáskor."
 
 msgid ""
 "Auto playtest\n"
@@ -5714,10 +5709,10 @@ msgid "View High Scores for Campaigns."
 msgstr "A hadjárat térképek dicsőségtáblájának megmutatása."
 
 msgid "hotkey|default okay event"
-msgstr "nyugtázás (OK)"
+msgstr "esemény nyugtázása"
 
 msgid "hotkey|default cancel event"
-msgstr "visszavonás (MÉGSE)"
+msgstr "esemény visszavonása"
 
 msgid "hotkey|default left"
 msgstr "balra"
@@ -5730,6 +5725,9 @@ msgstr "fel"
 
 msgid "hotkey|default down"
 msgstr "le"
+
+msgid "hotkey|default delete"
+msgstr "törlés"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "teljes képernyő váltás"
@@ -6911,9 +6909,8 @@ msgstr "Kattints a billentyűzettípusok közötti váltáshoz."
 msgid "Keyboard|SPACE"
 msgstr "SPACE"
 
-#, fuzzy
 msgid "Keyboard|ENTER"
-msgstr "SPACE"
+msgstr "ENTER"
 
 msgid "Change language"
 msgstr "Nyelv megváltoztatása"
@@ -8755,6 +8752,16 @@ msgstr "Varázspont érték beállítása:"
 
 msgid "View Spell Points Info"
 msgstr "Varázspont információ"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Vízfolyás mód"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 msgid "Set patrol radius in tiles:"
 msgstr "Járőrözési sugár beállítása:"
@@ -12603,16 +12610,15 @@ msgstr "Részletes információkat ad az ellenséges hősökről."
 msgid "Summon Boat"
 msgstr "Hajó idézése"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied and either friendly or neutral boat to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
 "occupied yet."
 msgstr ""
-"Megidézi egy közeli partra a legközelebbi használaton kívüli baráti "
-"tulajdonban lévő hajót. Baráti hajó az, amit te építettél, vagy hősöd "
-"használt legutóbb."
+"Megidézi a legközelebbi üres, baráti vagy semleges hajót egy szomszédos "
+"parti helyszínre. A baráti hajó az, amit te építettél, vagy amit a játékos "
+"foglalt el utoljára. A semleges hajó az, amit még senki sem foglalt el."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
@@ -12832,42 +12838,3 @@ msgstr "A férfi üres fecsegésére a nő így válaszolt: bla-bla-bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Egy ismeretlen erő kelt új életre ..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Arány: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Az egység támadóereje növekszik."
-
-#~ msgid "Easy"
-#~ msgstr "Könnyű"
-
-#~ msgid "Hard"
-#~ msgstr "Nehéz"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "KIEGÉSZÍTŐ\n"
-#~ "HADJÁRAT"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Teljesen új térkép létrehozása."
-
-#~ msgid ""
-#~ "Cell\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Cella\n"
-#~ "tulajdonságok"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "és sok-sok egyéb közreműködőnek és támogatónak!"
-
-#~ msgid "AI"
-#~ msgstr "Gép"
-
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Kattints a hős gépi irányításához."

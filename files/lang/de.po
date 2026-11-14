@@ -5851,6 +5851,10 @@ msgstr "Standard: Hoch"
 msgid "hotkey|default down"
 msgstr "Standard: Runter"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Standard: Links"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Vollbild ein-/ausschalten"
 
@@ -9009,6 +9013,16 @@ msgstr "Setzt den Wert der Zauberpunkte"
 
 msgid "View Spell Points Info"
 msgstr "Infos zu Zauberpunkten anzeigen"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Wasserlauf-Modus"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 #, fuzzy
 msgid "Set patrol radius in tiles:"
@@ -13155,26 +13169,3 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Grad: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Erhöht die Angriffsfertigkeit einer Einheit."
-
-#~ msgid "Easy"
-#~ msgstr "Leicht"
-
-#~ msgid "Hard"
-#~ msgstr "Schwer"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "ZUSATZ\n"
-#~ "FELDZUG"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Komplett neue Karte erstellen."

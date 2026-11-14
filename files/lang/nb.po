@@ -6024,6 +6024,10 @@ msgstr "Opp"
 msgid "hotkey|default down"
 msgstr "Ned"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Venstre"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Fullskjerm"
 
@@ -9167,6 +9171,16 @@ msgstr "Mana"
 
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Bekkmodus"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 msgid "Set patrol radius in tiles:"
 msgstr ""
@@ -13440,39 +13454,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Grad: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Øker en tropp sin angrepsevne."
-
-#~ msgid "Easy"
-#~ msgstr "Enkel"
-
-#~ msgid "Hard"
-#~ msgstr "Vanskelig"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "PRISEN\n"
-#~ "FOR\n"
-#~ "LOJALITET"
-
-#, fuzzy
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Nytt kart fra bunnen av"
-
-#, fuzzy
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "og mange flere bidragsytere!"
-
-#~ msgid "AI"
-#~ msgstr "Datamaskin"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Klikk her for å velge hvilket kart du vil spille."

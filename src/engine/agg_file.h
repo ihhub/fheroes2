@@ -51,7 +51,7 @@ namespace fheroes2
         std::map<std::string, std::pair<uint32_t, uint32_t>, std::less<>> _files;
     };
 
-    struct ICNHeader
+    struct ICNHeader final
     {
         int16_t offsetX{ 0 };
         int16_t offsetY{ 0 };

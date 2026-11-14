@@ -5693,6 +5693,10 @@ msgstr "Nahoru"
 msgid "hotkey|default down"
 msgstr "Dolů"
 
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Vlevo"
+
 msgid "hotkey|toggle fullscreen"
 msgstr "Přepnout na celou obrazovku"
 
@@ -8678,6 +8682,16 @@ msgstr "Nastavit počet bodů magie:"
 
 msgid "View Spell Points Info"
 msgstr "Zobrazit informace o bodech magie"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Režim řek"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 msgid "Set patrol radius in tiles:"
 msgstr "Nastavit hlídkový poloměr v polích:"
@@ -12695,29 +12709,3 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Kurz: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Zvyšuje útočnou sílu jednotky."
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Vytvořit novou mapu od základu."
-
-#~ msgid ""
-#~ "Cell\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Podrobnosti\n"
-#~ "buňky"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "a mnoho dalších přispěvatelů a podporovatelů!"
-
-#~ msgid "AI"
-#~ msgstr "AI"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Kliknout pro výběr barvy."

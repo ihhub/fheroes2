@@ -1665,8 +1665,9 @@ namespace
                 _icnVsSprite[id].resize( 24 );
             }
 
-            // German game resources are completed off with the engine's generated buttons.
-            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
+            // German and Czech game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German )
+                 && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::Czech ) ) {
                 for ( size_t i = 0; i < 3; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNNEWGM, static_cast<uint32_t>( i * 2 + 1 ) );
@@ -1723,8 +1724,9 @@ namespace
         case ICN::BUTTONS_EDITOR_MENU_GOOD: {
             _icnVsSprite[id].resize( 20 );
 
-            // German game resources are completed off with the engine's generated buttons.
-            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German ) ) {
+            // German and Czech game resources are completed off with the engine's generated buttons.
+            if ( useOriginalResources() && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::German )
+                 && ( fheroes2::getResourceLanguage() != fheroes2::SupportedLanguage::Czech ) ) {
                 for ( size_t i = 0; i < 2; ++i ) {
                     _icnVsSprite[id][i * 2] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 ) );
                     _icnVsSprite[id][i * 2 + 1] = Assets::getImage( ICN::BTNEMAIN, static_cast<uint32_t>( i * 2 + 1 ) );
@@ -5669,7 +5671,7 @@ namespace
             fheroes2::h2d::readImage( "market_icon_good.image", _icnVsSprite[id][0] );
             fheroes2::h2d::readImage( "market_icon_evil.image", _icnVsSprite[id][1] );
             break;
-        case ICN::GENIE_SNAP_ANIMATION:
+        case ICN::GENIE_SNAP_ANIMATION: {
             // We add 6 more frames so that we can duplicate the first 6 frames for the upwards angle attack animation.
             _icnVsSprite[id].resize( 18 );
 
@@ -5760,6 +5762,7 @@ namespace
             Blit( genieHeadStraight, 0, 0, _icnVsSprite[id][5], 9, 5, genieHeadStraight.width(), genieHeadStraight.height() );
 
             break;
+        }
         case ICN::GENIE_SNAP_EFFECT:
             _icnVsSprite[id].resize( 6 );
             fheroes2::h2d::readImage( "snap_effect_0.image", _icnVsSprite[id][0] );
@@ -5782,6 +5785,12 @@ namespace
             fheroes2::h2d::readImage( "snap_effect_4.image", _icnVsSprite[id][4] );
             fheroes2::h2d::readImage( "snap_effect_5.image", _icnVsSprite[id][5] );
             fheroes2::h2d::readImage( "snap_effect_6.image", _icnVsSprite[id][6] );
+            break;
+        case ICN::SLEEPING_HERO_ICON:
+            _icnVsSprite[id].resize( 3 );
+            fheroes2::h2d::readImage( "sleeping_hero_icon_normal.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "sleeping_hero_icon_small_good.image", _icnVsSprite[id][1] );
+            fheroes2::h2d::readImage( "sleeping_hero_icon_small_evil.image", _icnVsSprite[id][2] );
             break;
         default:
             break;

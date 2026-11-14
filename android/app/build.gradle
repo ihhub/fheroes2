@@ -8,13 +8,13 @@ plugins {
 android {
     namespace 'org.fheroes2'
 
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId 'org.fheroes2'
 
         minSdk 22
-        targetSdk 35
+        targetSdk 36
 
         // These paths are set relative to the android project directory
         versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
