@@ -29,6 +29,7 @@
 #include <utility>
 #include <vector>
 
+#include "army_troop.h"
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -52,6 +53,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -63,6 +65,69 @@ namespace
     const int32_t elementOffset{ 9 };
     const int32_t sectionWidth{ ( fheroes2::Display::DEFAULT_WIDTH - elementOffset * 3 ) / 2 };
     const fheroes2::Size messageArea{ sectionWidth, 207 };
+
+    class TroopDialogElement final : public fheroes2::DialogElement
+    {
+    public:
+        explicit TroopDialogElement( const Troop & troop )
+            : _troop( troop )
+        {
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
+            _area = { sprite.width(), sprite.height() };
+        }
+
+        ~TroopDialogElement() override = default;
+
+        void draw( fheroes2::Image & output, const fheroes2::Point & offset ) const override
+        {
+            fheroes2::Sprite sprite = Assets::getImage( ICN::STRIP, 12 );
+            if ( _troop.GetMonster().isValid() ) {
+                sprite._disableTransformLayer();
+                renderMonsterFrame( _troop, sprite, { 6, 6 } );
+                Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+
+                const fheroes2::Text text{ std::to_string( _troop.GetCount() ), fheroes2::FontType::normalWhite() };
+                text.draw( offset.x - 6 + sprite.width() - text.width() - 3, offset.y - 6 + sprite.height() - text.height() + 1, output );
+            }
+            else {
+                Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+                const fheroes2::Sprite & background = Assets::getImage( ICN::STRIP, 2 );
+                Copy( background, 0, 0, output, offset.x + 6, offset.y + 6, background.width(), background.height() );
+            }
+        }
+
+        void processEvents( const fheroes2::Point & offset ) const override
+        {
+            LocalEvent & le = LocalEvent::Get();
+            const fheroes2::Rect rect{ offset.x, offset.y, _area.width, _area.height };
+            if ( le.isMouseRightButtonPressedInArea( rect ) ) {
+                showPopup( Dialog::ZERO );
+            }
+            else if ( le.MouseClickLeft( rect ) ) {
+                showPopup( Dialog::BUTTONS );
+            }
+        }
+
+        void showPopup( const int /*buttons*/ ) const override
+        {
+            _updatedMonster = Dialog::selectMonster( _troop.GetID() );
+        }
+
+        bool update( fheroes2::Image & output, const fheroes2::Point & offset ) const override
+        {
+            if ( _updatedMonster != _troop.GetID() && _updatedMonster != Monster::UNKNOWN ) {
+                _troop = Troop( _updatedMonster, _troop.GetCount() );
+                draw( output, offset );
+                return true;
+            }
+
+            return false;
+        }
+
+    private:
+        mutable Troop _troop;
+        mutable Monster _updatedMonster;
+    };
 }
 
 namespace Editor
@@ -173,28 +238,17 @@ namespace Editor
                                                      minibuttonIcnId, 17, 18 );
         buttonDeleteSecondarySkill.draw();
 
+        // Monster
+        auto monsterUI = std::make_unique<TroopDialogElement>( Troop( eventMetadata.monsterType, eventMetadata.monsterCount ) );
+        const fheroes2::Rect monsterRoi{ secondarySkillRoi.x + ( secondarySkillRoi.width - monsterUI->area().width ) / 2,
+                                         messageRoi.y + messageRoi.height + elementOffset, monsterUI->area().width, monsterUI->area().height };
+        monsterUI->draw( display, monsterRoi.getPosition() );
+
+        fheroes2::Button buttonDeleteMonster( monsterRoi.x + ( monsterRoi.width - buttonWidth ) / 2, monsterRoi.y + monsterRoi.height + 5, minibuttonIcnId, 17, 18 );
+        buttonDeleteMonster.draw();
+
         // Conditions
-        offsetY = messageRoi.y + messageRoi.height + 2 * elementOffset;
-
-        text.set( _( "Conditions:" ), fheroes2::FontType::normalWhite() );
-        text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offsetY, display );
-
-        offsetY += text.height() + elementOffset;
-        const int32_t conditionSectionOffsetY = offsetY;
-
-        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, offsetY };
-
-        fheroes2::MovableSprite recurringEventCheckbox;
-        const fheroes2::Rect recurringEventArea = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x,
-                                                                        recurringEventPos.y, isEvilInterface, dialogRoi.width - 2 * elementOffset );
-        if ( eventMetadata.isRecurringEvent ) {
-            recurringEventCheckbox.hide();
-        }
-        else {
-            recurringEventCheckbox.show();
-        }
-
-        offsetY = conditionSectionOffsetY;
+        offsetY = messageRoi.y + messageRoi.height + elementOffset;
 
         text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
 
@@ -204,18 +258,18 @@ namespace Editor
             textWidth = textWidth * 2 / 3;
         }
 
-        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
+        text.draw( messageRoi.x + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
 
         const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
         const int32_t checkOffX = ( sectionWidth - availablePlayersCount * 32 ) / 2;
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
-        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, messageRoi.x + checkOffX, offsetY, display );
 
         assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
 
-        offsetY += 35;
+        offsetY += 30;
 
         text.set( _( "Computer colors allowed to get the event:" ), fheroes2::FontType::normalWhite() );
 
@@ -226,13 +280,25 @@ namespace Editor
             textWidth = textWidth * 2 / 3;
         }
 
-        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
+        text.draw( messageRoi.x + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
-        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, messageRoi.x + checkOffX, offsetY, display );
 
         assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
+
+        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, offsetY + computerCheckboxes.front()->getRect().height + 2 * elementOffset };
+
+        fheroes2::MovableSprite recurringEventCheckbox;
+        const fheroes2::Rect recurringEventArea = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x,
+                                                                        recurringEventPos.y, isEvilInterface, dialogRoi.width - 2 * elementOffset );
+        if ( eventMetadata.isRecurringEvent ) {
+            recurringEventCheckbox.hide();
+        }
+        else {
+            recurringEventCheckbox.show();
+        }
 
         // Window buttons
         fheroes2::Button buttonOk;
@@ -433,6 +499,14 @@ namespace Editor
                 }
 
                 // The opened SelectCount() dialog might be bigger than this dialog so we render the whole screen.
+                display.render();
+            }
+            else if ( le.MouseClickLeft( monsterRoi ) ) {
+                auto monsterUiElement = std::make_unique<const TroopDialogElement>( Troop( eventMetadata.monsterType, eventMetadata.monsterCount ) );
+
+                Dialog::SelectCount( "Meh", 0, 500000, eventMetadata.monsterCount, 1, monsterUiElement.get() );
+
+                // The opened selectSecondarySkill() dialog might be bigger than this dialog so we render the whole screen.
                 display.render();
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
