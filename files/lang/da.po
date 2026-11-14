@@ -8867,6 +8867,16 @@ msgstr "Indstil magipoint-værdi:"
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Å-tilstand"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr "Indstil patruljeradius i feltantal:"
 
