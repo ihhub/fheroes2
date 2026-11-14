@@ -601,7 +601,7 @@ void HeroBase::SpellCasted( const Spell & spell )
 
     const uint32_t requiredMovePoints{ spell.movePoints() };
 
-    _movePoints -= std::min( spell.movePoints(), _movePoints );
+    _movePoints -= std::min( requiredMovePoints, _movePoints );
 
     if ( requiredMovePoints > 0 ) {
         // A sleeping hero cannot move so wake him up.
