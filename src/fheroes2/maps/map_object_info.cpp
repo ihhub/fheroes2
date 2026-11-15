@@ -4601,6 +4601,18 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
+        // Witch Doctor's Hut in snow.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_WITCH_DOCTORS_HUT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 214U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WITCH_DOCTORS_HUT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 213U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 212U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 211U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_WITCH_DOCTORS_HUT );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
         // Mercenary Camp.
         {
             Maps::ObjectInfo object{ MP2::OBJ_MERCENARY_CAMP };
