@@ -5675,8 +5675,8 @@ namespace
             // We add 6 more frames so that we can duplicate the first 6 frames for the upwards angle attack animation.
             _icnVsSprite[id].resize( 18 );
 
-            for ( int i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                const int nameNumber = i + 1;
+            for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                const int32_t nameNumber = i + 1;
 
                 if ( i < 9 ) {
                     fheroes2::h2d::readImage( "genie_snap_animation_0" + std::to_string( nameNumber ) + ".image", _icnVsSprite[id][i] );
@@ -5685,7 +5685,7 @@ namespace
                     fheroes2::h2d::readImage( "genie_snap_animation_" + std::to_string( nameNumber ) + ".image", _icnVsSprite[id][i] );
                 }
                 else {
-                    int newNameNumber = i - 11;
+                    const int32_t newNameNumber = i - 11;
                     fheroes2::h2d::readImage( "genie_snap_animation_0" + std::to_string( newNameNumber ) + ".image", _icnVsSprite[id][i] );
                 }
             }
