@@ -9477,28 +9477,28 @@ msgid "Medusas"
 msgstr ""
 
 msgid "Earth Elemental"
-msgstr ""
+msgstr "Στοιχειακό Γης"
 
 msgid "Earth Elementals"
-msgstr ""
+msgstr "Στοιχειακά Γης"
 
 msgid "Air Elemental"
-msgstr ""
+msgstr "Στοιχειακό Αέρα"
 
 msgid "Air Elementals"
-msgstr ""
+msgstr "Στοιχειακά Αέρα"
 
 msgid "Fire Elemental"
-msgstr ""
+msgstr "Στοιχειακό Φωτιάς"
 
 msgid "Fire Elementals"
-msgstr ""
+msgstr "Στοιχειακά Φωτιάς"
 
 msgid "Water Elemental"
-msgstr ""
+msgstr "Στοιχειακό Νερού"
 
 msgid "Water Elementals"
-msgstr ""
+msgstr "Στοιχειακά Νερού"
 
 msgid "Random Monsters"
 msgstr ""
