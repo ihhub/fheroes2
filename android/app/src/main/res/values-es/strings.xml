@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_label">fheroes2</string>
+    <string name="activity_toolset_label">fh2 Herramientas</string>
+    <string name="activity_toolset_game_logo_img_content_description">Logotipo de fheroes2</string>
+    <string name="activity_toolset_game_status_lbl_text"><b>No puedes iniciar el juego en este momento porque faltan algunos archivos de datos del juego original.</b>\n\nComprime en un archivo ZIP el contenido de la carpeta del juego original Heroes of Might and Magic II (o solo las carpetas <b>ANIM</b>, <b>DATA</b>, <b>MAPS</b> y <b>MUSIC</b>), cópialo a este dispositivo, pulsa el botón \"<b>Extraer recursos de HoMM2</b>\" y selecciona ese archivo ZIP.\n\nSi no tienes una copia del juego original, puedes descargar un archivo ZIP con la versión demo. Cuando termine la descarga, pulsa el botón \"<b>Extraer recursos de HoMM2</b>\" y selecciona el archivo de la demo que acabas de descargar.</string>
+    <string name="activity_toolset_start_game_btn_text">Iniciar juego</string>
+    <string name="activity_toolset_extract_homm2_assets_btn_text">Extraer recursos de HoMM2</string>
+    <string name="activity_toolset_import_gog_exe_btn_text">Importar instalador de GOG (.exe)</string>
+    <string name="activity_toolset_download_homm2_demo_btn_text">Descargar demo de HoMM2</string>
+    <string name="activity_toolset_import_gog_exe_error_title">Error de importación</string>
+    <string name="activity_toolset_import_gog_exe_error_message">Se ha producido un error al intentar importar el instalador de GOG.</string>
+    <string name="activity_toolset_import_gog_exe_error_positive_btn_text">Aceptar</string>
+    <string name="activity_toolset_last_task_status_lbl_text_invalid_gog_file">El archivo seleccionado no es un instalador válido de GOG / Inno Setup.</string>
+    <string name="activity_toolset_save_file_manager_btn_text">Gestor de partidas guardadas</string>
+    <string name="activity_toolset_map_file_manager_btn_text">Gestor de mapas FH2M</string>
+    <string name="activity_toolset_last_task_status_lbl_text_completed_successfully">La operación se ha completado correctamente.</string>
+    <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">La operación se ha completado correctamente, pero no se ha encontrado ningún recurso de HoMM2.</string>
+    <string name="activity_toolset_last_task_status_lbl_text_failed">Se ha producido un error durante la operación: %s</string>
+    <string name="activity_toolset_extract_homm2_assets_error_title">Error de extracción</string>
+    <string name="activity_toolset_extract_homm2_assets_error_message">Se ha producido un error al intentar extraer los recursos de HoMM2.</string>
+    <string name="activity_toolset_extract_homm2_assets_error_positive_btn_text">Aceptar</string>
+    <string name="activity_toolset_download_homm2_demo_error_title">Error de descarga</string>
+    <string name="activity_toolset_download_homm2_demo_error_message">Se ha producido un error al intentar descargar la demo de HoMM2. Puede que no haya ninguna aplicación instalada capaz de descargar archivos de Internet. Prueba a instalar una aplicación de este tipo y vuelve a intentarlo.</string>
+    <string name="activity_toolset_download_homm2_demo_error_positive_btn_text">Aceptar</string>
+    <string name="activity_save_file_manager_label">fh2 Gestor de partidas guardadas</string>
+    <string name="activity_save_file_manager_filter_standard_btn_text">Estándar</string>
+    <string name="activity_save_file_manager_filter_campaign_btn_text">Campaña</string>
+    <string name="activity_save_file_manager_filter_multiplayer_btn_text">Multi</string>
+    <string name="activity_save_file_manager_save_file_list_empty_lbl_text">No hay partidas guardadas disponibles</string>
+    <string name="activity_save_file_manager_select_all_btn_content_description">Seleccionar todas las partidas guardadas</string>
+    <string name="activity_save_file_manager_unselect_all_btn_content_description">Anular la selección de todas las partidas guardadas</string>
+    <string name="activity_save_file_manager_import_btn_content_description">Importar partidas guardadas</string>
+    <string name="activity_save_file_manager_export_btn_content_description">Exportar las partidas guardadas seleccionadas</string>
+    <string name="activity_save_file_manager_delete_btn_content_description">Eliminar las partidas guardadas seleccionadas</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_no_save_files_found">La operación se ha completado correctamente, pero no se ha encontrado ninguna partida guardada.</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_failed">Se ha producido un error durante la operación: %s</string>
+    <string name="activity_save_file_manager_import_error_title">Error de importación</string>
+    <string name="activity_save_file_manager_import_error_message">Se ha producido un error al intentar importar las partidas guardadas.</string>
+    <string name="activity_save_file_manager_import_error_positive_btn_text">Aceptar</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_title">No hay archivos seleccionados para exportar</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_message">Selecciona las partidas guardadas que quieras exportar.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_positive_btn_text">Aceptar</string>
+    <string name="activity_save_file_manager_export_error_title">Error de exportación</string>
+    <string name="activity_save_file_manager_export_error_message">Se ha producido un error al intentar exportar las partidas guardadas.</string>
+    <string name="activity_save_file_manager_export_error_positive_btn_text">Aceptar</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_title">No hay archivos seleccionados para eliminar</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_message">Selecciona las partidas guardadas que quieras eliminar.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_positive_btn_text">Aceptar</string>
+    <plurals name="activity_save_file_manager_delete_confirmation_title">
+        <item quantity="one">Eliminar partida guardada</item>
+        <item quantity="other">Eliminar partidas guardadas</item>
+    </plurals>
+    <plurals name="activity_save_file_manager_delete_confirmation_message">
+        <item quantity="one">¿Estás seguro de que quieres eliminar el archivo seleccionado?</item>
+        <item quantity="other">¿Estás seguro de que quieres eliminar los %d archivos seleccionados?</item>
+    </plurals>
+    <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Sí</string>
+    <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">No</string>
+    <string name="activity_map_file_manager_label">fh2 Gestor de mapas</string>
+    <string name="activity_map_file_manager_map_file_list_empty_lbl_text">No hay mapas disponibles</string>
+    <string name="activity_map_file_manager_select_all_btn_content_description">Seleccionar todos los mapas</string>
+    <string name="activity_map_file_manager_unselect_all_btn_content_description">Anular la selección de todos los mapas</string>
+    <string name="activity_map_file_manager_import_btn_content_description">Importar mapas</string>
+    <string name="activity_map_file_manager_export_btn_content_description">Exportar los mapas seleccionados</string>
+    <string name="activity_map_file_manager_delete_btn_content_description">Eliminar los mapas seleccionados</string>
+    <string name="activity_map_file_manager_last_task_status_lbl_text_no_map_files_found">La operación se ha completado correctamente, pero no se ha encontrado ningún mapa.</string>
+    <string name="activity_map_file_manager_last_task_status_lbl_text_failed">Se ha producido un error durante la operación: %s</string>
+    <string name="activity_map_file_manager_import_error_title">Error de importación</string>
+    <string name="activity_map_file_manager_import_error_message">Se ha producido un error al intentar importar los mapas.</string>
+    <string name="activity_map_file_manager_import_error_positive_btn_text">Aceptar</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_title">No hay archivos seleccionados para exportar</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_message">Selecciona los mapas que quieras exportar.</string>
+    <string name="activity_map_file_manager_no_files_selected_for_export_positive_btn_text">Aceptar</string>
+    <string name="activity_map_file_manager_export_error_title">Error de exportación</string>
+    <string name="activity_map_file_manager_export_error_message">Se ha producido un error al intentar exportar los mapas.</string>
+    <string name="activity_map_file_manager_export_error_positive_btn_text">Aceptar</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_title">No hay archivos seleccionados para eliminar</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_message">Selecciona los mapas que quieras eliminar.</string>
+    <string name="activity_map_file_manager_no_files_selected_for_deletion_positive_btn_text">Aceptar</string>
+    <plurals name="activity_map_file_manager_delete_confirmation_title">
+        <item quantity="one">Eliminar mapa</item>
+        <item quantity="other">Eliminar mapas</item>
+    </plurals>
+    <plurals name="activity_map_file_manager_delete_confirmation_message">
+        <item quantity="one">¿Estás seguro de que quieres eliminar el archivo seleccionado?</item>
+        <item quantity="other">¿Estás seguro de que quieres eliminar los %d archivos seleccionados?</item>
+    </plurals>
+    <string name="activity_map_file_manager_delete_confirmation_positive_btn_text">Sí</string>
+    <string name="activity_map_file_manager_delete_confirmation_negative_btn_text">No</string>
+</resources>
