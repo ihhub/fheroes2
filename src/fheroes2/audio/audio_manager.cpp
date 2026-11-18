@@ -37,6 +37,7 @@
 #include "agg_file.h"
 #include "audio.h"
 #include "dir.h"
+#include "h2d.h"
 #include "logging.h"
 #include "m82.h"
 #include "mus.h"
@@ -193,6 +194,11 @@ namespace
 
     void LoadWAV( int m82, std::vector<uint8_t> & v )
     {
+        if ( m82 > M82::LAST_ORIGINAL_SOUND ) {
+            fheroes2::h2d::readAudio( M82::GetString( m82 ), v );
+            return;
+        }
+
         DEBUG_LOG( DBG_GAME, DBG_TRACE, M82::GetString( m82 ) )
         const std::vector<uint8_t> & body = getDataFromAggFile( M82::GetString( m82 ), false );
 

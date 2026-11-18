@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -488,11 +488,34 @@ namespace Bin_Info
                 frameXOffset[MOVE_ONE].insert( frameXOffset[MOVE_ONE].begin() + 2, 8 );
             }
         }
+
+        // Genie is the only creature with a special attack.
+        if ( monsterID == Monster::GENIE ) {
+            animationFrames.resize( SPECIAL_BOTTOM + 1 );
+            frameXOffset.resize( SPECIAL_BOTTOM + 1 );
+
+            for ( int i = 0; i < 6; ++i ) {
+                animationFrames[SPECIAL_UP].insert( animationFrames[SPECIAL_UP].begin() + i, 52 + i );
+                animationFrames[SPECIAL_FRONT].insert( animationFrames[SPECIAL_FRONT].begin() + i, 40 + i );
+                animationFrames[SPECIAL_BOTTOM].insert( animationFrames[SPECIAL_BOTTOM].begin() + i, 46 + i );
+            }
+            // Add return-to-position frames.
+            animationFrames[SPECIAL_UP].emplace_back( 52 );
+            animationFrames[SPECIAL_FRONT].emplace_back( 40 );
+            animationFrames[SPECIAL_BOTTOM].emplace_back( 46 );
+            animationFrames[SPECIAL_UP].emplace_back( 1 );
+            animationFrames[SPECIAL_FRONT].emplace_back( 1 );
+            animationFrames[SPECIAL_BOTTOM].emplace_back( 1 );
+
+            frameXOffset[SPECIAL_UP] = frameXOffset[WINCE_UP];
+            frameXOffset[SPECIAL_FRONT] = frameXOffset[DEATH];
+            frameXOffset[SPECIAL_BOTTOM] = frameXOffset[IDLE4];
+        }
     }
 
     bool MonsterAnimInfo::isValid() const
     {
-        if ( animationFrames.size() != SHOOT3_END + 1 ) {
+        if ( ( animationFrames.size() != SHOOT3_END + 1 ) && ( animationFrames.size() != SPECIAL_BOTTOM + 1 ) ) {
             return false;
         }
 

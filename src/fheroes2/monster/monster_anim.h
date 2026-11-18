@@ -66,6 +66,10 @@ namespace Monster_Info
         WNCE_DOWN,
         WNCE, // combined UP and RETURN anim
         KILL,
+        // These are fheroes2 specific moves.
+        SPECIAL_TOP,
+        SPECIAL_FRONT,
+        SPECIAL_BOTTOM,
         INVALID
     };
 }
