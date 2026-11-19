@@ -29,6 +29,7 @@
 #include <limits>
 #include <optional>
 #include <ostream>
+#include <queue>
 #include <set>
 #include <tuple>
 
@@ -1189,6 +1190,81 @@ void World::updatePassabilities()
     for ( Maps::Tile & tile : vec_tiles ) {
         tile.updatePassability();
     }
+}
+
+int32_t World::findPassableRandomWaterTileIndex( const Heroes & hero, const int32_t minDistFromLand, const int16_t maxPathLength )
+{
+    const int32_t currentIndex = hero.GetIndex();
+
+    // The initial cache value of (-1) corresponds to a "not analyzed" state, 0 - for `false`, 1 - for `true`.
+    std::vector<int8_t> deepWaterCache( vec_tiles.size(), -1 );
+    const auto isDeepWater = [this, minDistFromLand, &deepWaterCache]( const int32_t index ) {
+        int8_t & cached = deepWaterCache[index];
+        if ( cached != -1 ) {
+            return cached == 1;
+        }
+
+        bool deepWater = vec_tiles[index].isWater();
+        if ( deepWater ) {
+            const fheroes2::Point pos( index % width, index / width );
+            for ( int32_t offsetY = -minDistFromLand; offsetY <= minDistFromLand && deepWater; ++offsetY ) {
+                for ( int32_t offsetX = -minDistFromLand; offsetX <= minDistFromLand; ++offsetX ) {
+                    const int32_t x = pos.x + offsetX;
+                    const int32_t y = pos.y + offsetY;
+                    if ( !Maps::isValidAbsPoint( x, y ) || !vec_tiles[static_cast<size_t>( y ) * width + x].isWater() ) {
+                        deepWater = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        cached = deepWater ? 1 : 0;
+        return deepWater;
+    };
+
+    // The initial distance value of (-1) corresponds to a "not visited" tile state.
+    std::vector<int16_t> distance( vec_tiles.size(), -1 );
+    std::queue<int32_t> q;
+    q.push( currentIndex );
+    distance[currentIndex] = 0;
+
+    std::vector<int32_t> candidates;
+    const std::array<fheroes2::Point, 4> adjacentTiles = { fheroes2::Point{ -1, 0 }, { 0, -1 }, { 1, 0 }, { 0, 1 } };
+    const std::array<int32_t, 4> directions = { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM };
+
+    while ( !q.empty() ) {
+        const int32_t startIndex = q.front();
+        q.pop();
+
+        const int16_t currentDistance = distance[startIndex];
+
+        if ( startIndex != currentIndex && currentDistance <= maxPathLength && ( vec_tiles[startIndex].GetPassable() & DIRECTION_AROUND ) == DIRECTION_AROUND
+             && !MP2::isInGameActionObject( vec_tiles[startIndex].getMainObjectType() ) && isDeepWater( startIndex ) ) {
+            candidates.push_back( startIndex );
+        }
+
+        const fheroes2::Point pos( startIndex % width, startIndex / width );
+        for ( int32_t k = 0; k < 4; ++k ) {
+            const fheroes2::Point pathPos = pos + adjacentTiles[k];
+            if ( !Maps::isValidAbsPoint( pathPos.x, pathPos.y ) ) {
+                continue;
+            }
+            const int32_t nextIndex = pathPos.y * width + pathPos.x;
+            if ( distance[nextIndex] != -1 || !vec_tiles[nextIndex].isWater() || !vec_tiles[nextIndex].isPassableFrom( directions[k] ) ) {
+                continue;
+            }
+            distance[nextIndex] = currentDistance + 1;
+            q.push( nextIndex );
+        }
+    }
+
+    if ( candidates.empty() ) {
+        return -1;
+    }
+
+    const uint32_t resultIndex = Rand::Get( 0, static_cast<uint32_t>( candidates.size() ) - 1 );
+    return candidates[resultIndex];
 }
 
 void World::PostLoad( const bool setTilePassabilities, const bool updateUidCounterToMaximum )

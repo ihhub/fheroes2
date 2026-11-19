@@ -1172,6 +1172,14 @@ void Army::setFromTile( const Maps::Tile & tile )
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
 
+    case MP2::OBJ_MAELSTROM:
+        at( 0 )->Set( Monster::WATER_ELEMENT, 2 );
+        at( 1 )->Set( Monster::WATER_ELEMENT, 4 );
+        at( 2 )->Set( Monster::WATER_ELEMENT, 6 );
+        at( 3 )->Set( Monster::WATER_ELEMENT, 4 );
+        at( 4 )->Set( Monster::WATER_ELEMENT, 2 );
+        break;
+
     default:
         if ( isCaptureObject ) {
             const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
