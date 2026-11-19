@@ -3882,6 +3882,29 @@ namespace
             interface.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         }
 
+        const Troop troop( Monster::GIANT, Rand::Get( 3, 6 ) );
+        bool recruit = false;
+        {
+            const MusicalEffectPlayer musicalEffectPlayer;
+            AudioManager::PlaySound( M82::EXPERNCE );
+
+            const fheroes2::MonsterDialogElement monsterUi( troop );
+            const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( _( "As your ship is carried through the depths, you notice a group of drowned Giants near the hull. Do you wish to rescue them?" ),
+                                       fheroes2::FontType::normalWhite() );
+            recruit = ( fheroes2::showMessage( header, body, Dialog::YES | Dialog::NO, { &monsterUi } ) == Dialog::YES );
+        }
+
+        if ( recruit ) {
+            if ( !hero.GetArmy().CanJoinTroop( troop ) ) {
+                fheroes2::showStandardTextMessage( troop.GetName(), _( "You are unable to recruit at this time, your ranks are full." ), Dialog::OK );
+            }
+            else {
+                hero.GetArmy().JoinTroop( troop );
+                Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_STATUS );
+            }
+        }
+
         hero.SetOffset( { 0, 0 } );
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
