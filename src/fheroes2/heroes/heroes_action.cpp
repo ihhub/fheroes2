@@ -3824,6 +3824,43 @@ namespace
             }
         }
 
+        const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
+        std::string message = _(
+            "The Maelstrom yawns before you, its dark waters plunging into the unknown depths.You could dive to the bottom and scout what lies beneath. You cannot see what waits below, but a cold sense of foreboding warns you that the depths are not empty.\nDo you wish to descend through it and scout what lies beneath?" );
+        const fheroes2::Text introductionMessage( std::move( message ), fheroes2::FontType::normalWhite() );
+
+        if ( fheroes2::showMessage( header, introductionMessage, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+            AudioManager::PlaySound( M82::KILLFADE );
+            hero.ShowPath( false );
+            hero.FadeOut( Game::HumanHeroAnimSpeedMultiplier() );
+
+            // Find a "teleportation" point on a water that can be reached from this point.
+            // TODO: store the function parameters in map data.
+            const int32_t newPos = world.findPassableRandomWaterTileIndex( hero, 2, 10 );
+            if ( Maps::isValidAbsIndex( newPos ) ) {
+                const fheroes2::Point prevPos = hero.GetCenter();
+
+                hero.Scout( newPos );
+                hero.Move2Dest( newPos );
+                hero.GetPath().Reset();
+
+                interface.getRadar().SetRenderArea( { prevPos, { 1, 1 } } );
+                interface.redraw( Interface::REDRAW_RADAR );
+
+                interface.getGameArea().SetCenter( hero.GetCenter() );
+
+                interface.getRadar().SetRenderArea( hero.GetScoutRoi() );
+                interface.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+            }
+
+            hero.SetOffset( { 0, 0 } );
+            AudioManager::PlaySound( M82::KILLFADE );
+            hero.FadeIn( Game::HumanHeroAnimSpeedMultiplier() );
+            hero.ShowPath( true );
+
+            return;
+        }
+
         Army army( tile );
 
         const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
@@ -3865,23 +3902,9 @@ namespace
 
         Maps::removeObjectFromMapByUID( dstIndex, maelstromUid );
 
-        const int32_t newPos = world.findPassableRandomWaterTileIndex( hero, 1 );
-        if ( Maps::isValidAbsIndex( newPos ) ) {
-            const fheroes2::Point prevPos = hero.GetCenter();
+        // TODO: Move to a specified map point on the water.
 
-            hero.Scout( newPos );
-            hero.Move2Dest( newPos );
-            hero.GetPath().Reset();
-
-            interface.getRadar().SetRenderArea( { prevPos, { 1, 1 } } );
-            interface.redraw( Interface::REDRAW_RADAR );
-
-            interface.getGameArea().SetCenter( hero.GetCenter() );
-
-            interface.getRadar().SetRenderArea( hero.GetScoutRoi() );
-            interface.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
-        }
-
+        // Give a reward for the battle.
         const Troop troop( Monster::GIANT, Rand::Get( 3, 6 ) );
         bool recruit = false;
         {
@@ -3889,7 +3912,6 @@ namespace
             AudioManager::PlaySound( M82::EXPERNCE );
 
             const fheroes2::MonsterDialogElement monsterUi( troop );
-            const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
             const fheroes2::Text body( _( "As your ship is carried through the depths, you notice a group of drowned Giants near the hull. Do you wish to rescue them?" ),
                                        fheroes2::FontType::normalWhite() );
             recruit = ( fheroes2::showMessage( header, body, Dialog::YES | Dialog::NO, { &monsterUi } ) == Dialog::YES );

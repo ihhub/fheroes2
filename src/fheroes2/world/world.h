@@ -512,7 +512,7 @@ public:
 
     void updatePassabilities();
 
-    int32_t findPassableRandomWaterTileIndex( const Heroes & hero, int32_t minDistFromLand );
+    int32_t findPassableRandomWaterTileIndex( const Heroes & hero, int32_t minDistFromLand, const int16_t maxPathLength );
 
     const std::vector<int32_t> & getAllEyeOfMagiPositions() const
     {

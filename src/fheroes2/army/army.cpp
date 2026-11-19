@@ -1173,11 +1173,11 @@ void Army::setFromTile( const Maps::Tile & tile )
         break;
 
     case MP2::OBJ_MAELSTROM:
-        at( 0 )->Set( Monster::WATER_ELEMENT, 1 );
-        at( 1 )->Set( Monster::WATER_ELEMENT, 3 );
-        at( 2 )->Set( Monster::WATER_ELEMENT, 5 );
-        at( 3 )->Set( Monster::WATER_ELEMENT, 3 );
-        at( 4 )->Set( Monster::WATER_ELEMENT, 1 );
+        at( 0 )->Set( Monster::WATER_ELEMENT, 2 );
+        at( 1 )->Set( Monster::WATER_ELEMENT, 4 );
+        at( 2 )->Set( Monster::WATER_ELEMENT, 6 );
+        at( 3 )->Set( Monster::WATER_ELEMENT, 4 );
+        at( 4 )->Set( Monster::WATER_ELEMENT, 2 );
         break;
 
     default:
