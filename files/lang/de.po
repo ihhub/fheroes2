@@ -3161,6 +3161,33 @@ msgid "n/a"
 msgstr "n/a"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Der Marktplatz kann dazu verwendet werden, eine Ressource in eine andere "
+"Ressource umzuwandeln. Je mehr Marktplätze Ihr kontrolliert, desto besser "
+"ist der Wechselkurs."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Der Marktplatz kann dazu verwendet werden, eine Ressource in eine andere "
+"Ressource umzuwandeln. Je mehr Marktplätze Ihr kontrolliert, desto besser "
+"ist der Wechselkurs."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3196,6 +3223,9 @@ msgstr "Eure Ressourcen"
 
 msgid "Available Trades"
 msgstr "Verfügbarer Handel"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bewacht von %{count} %{monster}"
@@ -5820,6 +5850,10 @@ msgstr "Standard: Hoch"
 
 msgid "hotkey|default down"
 msgstr "Standard: Runter"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "Standard: Links"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "Vollbild ein-/ausschalten"
@@ -8979,6 +9013,16 @@ msgstr "Setzt den Wert der Zauberpunkte"
 
 msgid "View Spell Points Info"
 msgstr "Infos zu Zauberpunkten anzeigen"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Wasserlauf-Modus"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 #, fuzzy
 msgid "Set patrol radius in tiles:"
@@ -13125,26 +13169,3 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Grad: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Erhöht die Angriffsfertigkeit einer Einheit."
-
-#~ msgid "Easy"
-#~ msgstr "Leicht"
-
-#~ msgid "Hard"
-#~ msgstr "Schwer"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "ZUSATZ\n"
-#~ "FELDZUG"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Komplett neue Karte erstellen."

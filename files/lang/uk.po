@@ -3113,6 +3113,31 @@ msgid "n/a"
 msgstr "н/д"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"Ринок можна використовувати щоб обміняти один ресурс на інший. Чим більше "
+"ринків ви контролюєте, тим краще курс обміну."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"Ринок можна використовувати щоб обміняти один ресурс на інший. Чим більше "
+"ринків ви контролюєте, тим краще курс обміну."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3146,6 +3171,9 @@ msgstr "Ваші ресурси"
 
 msgid "Available Trades"
 msgstr "Доступні ресурси"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охороняється %{count} %{monster}"
@@ -5727,6 +5755,10 @@ msgstr "вгору"
 
 msgid "hotkey|default down"
 msgstr "вниз"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "ліворуч"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "повноекранний режим увімк/вимк"
@@ -8789,6 +8821,16 @@ msgstr "Задати кількість очок мани:"
 
 msgid "View Spell Points Info"
 msgstr "Переглянути інформацію про очки магії"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Річки"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 msgid "Set patrol radius in tiles:"
 msgstr "Встановити радіус патрулювання в стільниках:"
@@ -12869,51 +12911,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Ставка: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Збільшує навичку атаки обраного дружнього загону."
-
-#~ msgid "Easy"
-#~ msgstr "Легко"
-
-#~ msgid "Hard"
-#~ msgstr "Важко"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "КАМПАНІЇ\n"
-#~ "ДОПОВНЕННЯ"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Створити нову мапу з чистого аркуша."
-
-#~ msgid ""
-#~ "Cell\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Стільник\n"
-#~ "Деталі"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "та багато-багато інших дописувачів і підтримувачів!"
-
-#~ msgid "AI"
-#~ msgstr "Комп'ютер"
-
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Тицьніть, щоб встановити цього героя як керованого комп'ютером."
-
-#~ msgid ""
-#~ "You are about to change the map's language from %{oldLanguage} to %"
-#~ "{newLanguage}. Some texts might not be displayed properly after this. Do "
-#~ "you want to proceed?"
-#~ msgstr ""
-#~ "Ви збираєтеся змінити мову мапи з %{oldLanguage} на %{newLanguage}. Після "
-#~ "цього деякі тексти можуть відображатися неправильно. Ви бажаєте "
-#~ "продовжити?"

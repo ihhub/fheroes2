@@ -37,6 +37,78 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2026-11-08" version="v1.1.18">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.18</url>
+      <description>
+        <p>Changes in v1.1.18 (08 November 2026):</p>
+        <ul>
+          <li>add "Eternal Winter" map to the fheroes2 bundle</li>
+          <li>add a dedicated hotkey for item deletion</li>
+          <li>add marketplace icon and counter to the dialogs</li>
+          <li>update Victory and Loss conditions while switching languages in the Editor</li>
+          <li>update the bundled "Apocalypse" map to 3.9</li>
+          <li>add multiline text editing support to the Virtual Keyboard</li>
+          <li>add HP bar option for monsters during battles</li>
+          <li>add "Dhalsivia Pirenaica" map into the fheroes2 bundle</li>
+          <li>do not let the AI cast Berserker when the target's nearest unit is not an enemy</li>
+          <li>resize the hotkey dialog width based on the current resolution</li>
+          <li>fix an assertion being hit while re-running Auto Playtest</li>
+          <li>update the Swedish translation</li>
+          <li>remove the confusing "Rate" value in the diplomacy dialog</li>
+          <li>update the Brazilian Portuguese translation</li>
+          <li>add category filtering for hotkeys in settings window</li>
+          <li>add small improvements to the High Scores dialog</li>
+          <li>fix an extra frame being rendered while clicking on the Save Game button</li>
+          <li>rework Auto-playtest dialog</li>
+          <li>add extra logic to prevent AI heroes from visiting shrines if they have all spells</li>
+          <li>improve the Summon Boat spell description</li>
+          <li>make sure the AI doesn't value the 3rd level shrine higher than everything</li>
+          <li>update the Hungarian translation</li>
+          <li>hide Editor's system message if the game's language has been changed</li>
+          <li>reduce perks the AI gets on higher difficulties</li>
+          <li>use the forced Software Cursor Emulation state for touchscreen and gamepad systems</li>
+          <li>fix adventure non-action objects being set as fort</li>
+          <li>adapt campaign's difficulty dialog per language</li>
+          <li>update the Russian translation</li>
+          <li>fix transparent pixels in empty movement and mana bars</li>
+          <li>update the Czech translation</li>
+          <li>improve the Bloodlust spell description</li>
+          <li>make the Campaign Difficulty Names More Accurate</li>
+          <li>disable "Sound Effects" in the Auto-playtest window if animation is off</li>
+          <li>add "Tetra Conflict" v1.2 map into the fheroes2 bundle</li>
+          <li>allow placing heroes on water</li>
+          <li>add "Utopeia" map to the fheroes2 bundle</li>
+          <li>add "Good Titans, Bad Titans" map to the fheroes2 bundle</li>
+          <li>explicitly state that an object was moved in the Editor</li>
+          <li>update the bundled "Final Invasion" map to version 8.1</li>
+          <li>update the bundled "Ravenhold" map to version 1.9</li>
+          <li>update the bundled "Eruption" map to version 3.2</li>
+          <li>fix incorrect offset for evil empty button</li>
+          <li>fix an empty army for the surrendered hero</li>
+          <li>update the Spanish translation</li>
+          <li>make all buttons in the Main Menu and Editor Menu engine-generated for German game resources</li>
+          <li>fix invalid ranges of spell occurrence in Mage Guild</li>
+          <li>use the in-engine image scaling type according to the scaling type option</li>
+          <li>fix rendering delay after closing Auto Playtesting window</li>
+          <li>add Lost Temple (1.1.17) to the fheroes2 bundle</li>
+          <li>fix subpixel resize on bottom and right borders and near-transparent pixels</li>
+          <li>allow to quit the application at any time by closing the application window</li>
+          <li>prevent an assertion hit while loading a Resurrection map</li>
+          <li>speed up rendering on PS Vita</li>
+          <li>add neutral monster limit growth on original maps</li>
+          <li>generate all buttons for Editor's File Option dialog</li>
+          <li>make the "Visions" spell and the "Crystal Ball" artifact much more user-friendly and useful</li>
+          <li>update "New Game" button popup for the Editor</li>
+          <li>do not do extra rendering for the same radar position on the popup window</li>
+          <li>allow the use of the mouse wheel to navigate through the Magic Book</li>
+          <li>make AI heroes future predict more objects</li>
+          <li>do not predict future object value for AI heroes on Easy difficulty</li>
+          <li>fix the castle's well's "Available" text position for some languages</li>
+          <li>fix an invalid assertion for battle troops</li>
+          <li>improve battle logic so Ghosts and Vampire Lords utilize their unique abilities</li>
+        </ul>
+      </description>
+    </release>
     <release date="2026-06-30" version="v1.1.17">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.1.17</url>
       <description>

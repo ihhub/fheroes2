@@ -3128,6 +3128,31 @@ msgid "n/a"
 msgstr "n/d"
 
 msgid ""
+"The Trading Post provides exchange rates equivalent to %{count} marketplaces."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control 1 marketplace. The more marketplaces you control, the "
+"better the exchange rate."
+msgstr ""
+"O Mercado pode ser usado para converter um tipo de recurso em outro. Quanto "
+"mais mercados você controla, melhor será a taxa de câmbio."
+
+msgid ""
+"You currently control enough marketplaces that the exchange rate has peaked. "
+"Controlling additional marketplaces will not improve the exchange rate."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"You currently control %{count} marketplaces. The more marketplaces you "
+"control, the better the exchange rate."
+msgstr ""
+"O Mercado pode ser usado para converter um tipo de recurso em outro. Quanto "
+"mais mercados você controla, melhor será a taxa de câmbio."
+
+msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
@@ -3164,6 +3189,9 @@ msgstr "Seus Recursos"
 
 msgid "Available Trades"
 msgstr "Trocas Disponíveis"
+
+msgid "Exchange Rate"
+msgstr ""
 
 msgid "guarded by %{count} %{monster}"
 msgstr "Guardado por %{count} %{monster}"
@@ -5729,6 +5757,10 @@ msgstr "padrão para cima"
 
 msgid "hotkey|default down"
 msgstr "padrão para baixo"
+
+#, fuzzy
+msgid "hotkey|default delete"
+msgstr "padrão para a esquerda"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "alternar tela cheia"
@@ -8815,6 +8847,16 @@ msgstr "Definir o valor da Mana:"
 
 msgid "View Spell Points Info"
 msgstr "Ver Informações Sobre a Mana"
+
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Modo de Riacho"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
 
 msgid "Set patrol radius in tiles:"
 msgstr "Definir raio de patrulha em ladrilhos:"
@@ -12940,42 +12982,3 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Nível: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Aumenta a Habilidade de Ataque de uma unidade."
-
-#~ msgid "Easy"
-#~ msgstr "Fácil"
-
-#~ msgid "Hard"
-#~ msgstr "Difícil"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "CAMPANHA\n"
-#~ "DA EXPANSÃO"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Crie um novo mapa do zero."
-
-#~ msgid ""
-#~ "Cell\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Detalhes do\n"
-#~ "Ladrilho"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "e muitos outros colaboradores e apoiadores!"
-
-#~ msgid "AI"
-#~ msgstr "IA"
-
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Clique para definir este herói como controlado pela IA."

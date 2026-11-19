@@ -209,6 +209,9 @@ namespace
         "petrification_spell_icon.image",
         "petrification_spell_icon_mini.image",
         "resolution_option_icon.image",
+        "sleeping_hero_icon_normal.image",
+        "sleeping_hero_icon_small_good.image",
+        "sleeping_hero_icon_small_evil.image",
         "sorceress_castle_captain_quarter_left_side.image",
         "swordsman_walking_frame_extra_part.image",
         "swordsman_walking_frame_extra_part_mask.image",
@@ -283,13 +286,13 @@ namespace fheroes2::h2d
             throw std::logic_error( errorMessage );
         }
 
-        // if ( reader.getAllFileNames() != resurrectionH2DFileListSample ) {
-        //     const std::string errorMessage{ "The list of files contained in '" + filePath
-        //                                     + "' does not match the sample. Make sure that you are using the latest version of the '" + fileName + "' file." };
+        if ( reader.getAllFileNames() != resurrectionH2DFileListSample ) {
+            const std::string errorMessage{ "The list of files contained in '" + filePath
+                                            + "' does not match the sample. Make sure that you are using the latest version of the '" + fileName + "' file." };
 
-        //    VERBOSE_LOG( errorMessage )
-        //    throw std::logic_error( errorMessage );
-        //}
+            VERBOSE_LOG( errorMessage )
+            throw std::logic_error( errorMessage );
+        }
     }
 
     bool readImage( const std::string & name, Sprite & image )
