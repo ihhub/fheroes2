@@ -904,7 +904,6 @@ namespace fheroes2
     MonsterDialogElement::MonsterDialogElement( const Monster & monster )
         : _monster( monster )
     {
-        assert( _monster.isValid() );
         const Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
         _area = { sprite.width(), sprite.height() };
     }
@@ -912,9 +911,16 @@ namespace fheroes2
     void MonsterDialogElement::draw( Image & output, const Point & offset ) const
     {
         Sprite sprite = Assets::getImage( ICN::STRIP, 12 );
-        sprite._disableTransformLayer();
-        renderMonsterFrame( _monster, sprite, { 6, 6 } );
-        Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+        if ( _monster.isValid() ) {
+            sprite._disableTransformLayer();
+            renderMonsterFrame( _monster, sprite, { 6, 6 } );
+            Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+        }
+        else {
+            Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+            const Sprite & background = Assets::getImage( ICN::STRIP, 2 );
+            Copy( background, 0, 0, output, offset.x + 6, offset.y + 6, background.width(), background.height() );
+        }
     }
 
     void MonsterDialogElement::processEvents( const Point & offset ) const
@@ -931,7 +937,9 @@ namespace fheroes2
 
     void MonsterDialogElement::showPopup( const int buttons ) const
     {
-        Dialog::ArmyInfo( Troop{ _monster, 0 }, buttons );
+        if ( _monster.isValid() ) {
+            Dialog::ArmyInfo( Troop{ _monster, 0 }, buttons );
+        }
     }
 
     ValueSelectionDialogElement::ValueSelectionDialogElement( const int32_t minimum, const int32_t maximum, const int32_t current, const int32_t step,
