@@ -796,6 +796,32 @@ namespace
 
         return pos;
     }
+
+    // Draws the given part of the image reduced to fit the given area of the output image keeping its proportions.
+    void drawReducedImage( const fheroes2::Image & image, const fheroes2::Rect & imageRoi, fheroes2::Image & output, const fheroes2::Rect & outputRoi )
+    {
+        const double ratio = std::max( static_cast<double>( imageRoi.width ) / outputRoi.width, static_cast<double>( imageRoi.height ) / outputRoi.height );
+
+        fheroes2::Sprite reducedImage( static_cast<int32_t>( imageRoi.width / ratio ), static_cast<int32_t>( imageRoi.height / ratio ) );
+        fheroes2::Resize( image, imageRoi.x, imageRoi.y, imageRoi.width, imageRoi.height, reducedImage, 0, 0, reducedImage.width(), reducedImage.height() );
+
+        fheroes2::Blit( reducedImage, output, outputRoi.x + ( outputRoi.width - reducedImage.width() ) / 2, outputRoi.y + outputRoi.height - reducedImage.height() );
+    }
+
+    void showBallistaInfo( const int buttons )
+    {
+        const Castle * castle = Battle::Arena::GetCastle();
+        assert( castle != nullptr );
+
+        std::string ballistaMessage = Battle::Tower::GetInfo( *castle );
+
+        if ( castle->isBuild( BUILD_MOAT ) ) {
+            ballistaMessage.append( "\n\n" );
+            ballistaMessage.append( Battle::Board::GetMoatInfo() );
+        }
+
+        fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, buttons );
+    }
 }
 
 namespace Battle
@@ -1189,10 +1215,24 @@ bool Battle::TurnOrder::queueEventProcessing( Interface & interface, std::string
     LocalEvent & le = LocalEvent::Get();
 
     for ( const auto & [unit, unitPos] : _rects ) {
-        assert( unit != nullptr );
+        if ( unit == nullptr ) {
+            // This is the catapult which has no info dialog.
+            continue;
+        }
 
         const fheroes2::Rect unitRoi = _isInsideBattleField ? ( unitPos + offset ) : unitPos;
         if ( le.isMouseCursorPosInArea( unitRoi ) ) {
+            if ( unit->Modes( CAP_TOWER ) ) {
+                msg = _( "View Ballista info" );
+
+                if ( le.MouseClickLeft( unitRoi ) || le.isMouseRightButtonPressed() ) {
+                    showBallistaInfo( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
+                    return true;
+                }
+
+                return false;
+            }
+
             msg = _( "View %{monster} info" );
             StringReplaceWithLowercase( msg, "%{monster}", unit->GetName() );
 
@@ -1252,6 +1292,47 @@ void Battle::TurnOrder::_redrawUnit( const fheroes2::Rect & pos, const Battle::U
     }
 }
 
+void Battle::TurnOrder::_redrawSiegeWeapon( const fheroes2::Rect & pos, const bool isTowers, const bool isActed, const uint8_t color, fheroes2::Image & output )
+{
+    // Render background.
+    const fheroes2::Sprite & backgroundOriginal = Assets::getImage( ICN::SWAPWIN, 0 );
+    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, pos.width - 2, pos.height - 2 );
+
+    const fheroes2::Rect imageRoi( pos.x + 2, pos.y + 2, pos.width - 4, pos.height - 4 );
+
+    if ( isTowers ) {
+        // All castle towers are shown as a single item: draw the top part of the ballista tower and the number of valid towers.
+        const fheroes2::Sprite & towerSprite
+            = Assets::getImage( ICN::getCastleIcnId( Arena::GetCastle()->GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
+        const int32_t towerTopSize = std::min( towerSprite.width(), towerSprite.height() );
+
+        drawReducedImage( towerSprite, { 0, 0, towerTopSize, towerTopSize }, output, imageRoi );
+
+        int32_t towerCount = 0;
+        for ( const TowerType type : { TowerType::TWR_LEFT, TowerType::TWR_CENTER, TowerType::TWR_RIGHT } ) {
+            const Tower * tower = Arena::GetTower( type );
+            if ( tower != nullptr && tower->isValid() ) {
+                ++towerCount;
+            }
+        }
+
+        const fheroes2::Text number( std::to_string( towerCount ), fheroes2::FontType::smallWhite() );
+        number.drawInRoi( pos.x + 2, pos.y + 4, output, pos );
+    }
+    else {
+        const fheroes2::Sprite & catapultSprite = Assets::getImage( ICN::CATAPULT, 0 );
+        drawReducedImage( catapultSprite, { 0, 0, catapultSprite.width(), catapultSprite.height() }, output, imageRoi );
+    }
+
+    fheroes2::DrawRect( output, pos, color );
+
+    if ( isActed ) {
+        fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize,
+                                PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize, 3 );
+    }
+}
+
 void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output,
                                 const fheroes2::Rect & dialogRoi, const bool isAboveDialog )
 {
@@ -1279,7 +1360,11 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
     auto & display = fheroes2::Display::instance();
     _isInsideBattleField = isRenderingInsideBattlefieldWindow( dialogRoi );
 
-    const int32_t unitsToDraw = std::min( _battleRoi.width / turnOrderMonsterIconSize, validUnitCount );
+    // Castle towers and the catapult are shown as additional items.
+    const bool areTowersPresent = Arena::isAnyTowerPresent();
+    const bool isCatapultPresent = ( _catapultColor != PlayerColor::NONE );
+    const int32_t itemCount = validUnitCount + ( areTowersPresent ? 1 : 0 ) + ( isCatapultPresent ? 1 : 0 );
+    const int32_t unitsToDraw = std::min( _battleRoi.width / turnOrderMonsterIconSize, itemCount );
 
     if ( !_isInsideBattleField && ( isAboveDialog != _isAboveDialog ) ) {
         _isAboveDialog = isAboveDialog;
@@ -1341,6 +1426,24 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
 
     int32_t unitRectIndex = 0;
     int32_t unitsProcessed = 0;
+    bool areTowersProcessed = !areTowersPresent;
+    bool isCatapultProcessed = !isCatapultPresent;
+
+    const auto processSiegeWeapon = [this, &unitRectIndex, &unitsProcessed, itemCount, unitsToDraw, &output, &display]( const bool isTowers ) {
+        const bool isActed = isTowers ? _areTowersActed : _isCatapultActed;
+
+        if ( !isActed || ( itemCount - unitsProcessed <= unitsToDraw ) ) {
+            // Castle towers are represented by the ballista. The catapult has no info dialog, so there is no unit for it.
+            _rects[unitRectIndex].first = isTowers ? Arena::GetTower( TowerType::TWR_CENTER ) : nullptr;
+
+            _redrawSiegeWeapon( _rects[unitRectIndex].second, isTowers, isActed, GetArmyColorFromPlayerColor( isTowers ? _opponentColor : _catapultColor ),
+                                _isInsideBattleField ? output : display );
+
+            ++unitRectIndex;
+        }
+
+        ++unitsProcessed;
+    };
 
     for ( const Unit * unit : *unitsOrder ) {
         if ( unitRectIndex == unitsToDraw ) {
@@ -1348,11 +1451,27 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
         }
 
         assert( unit != nullptr );
+
+        // The catapult acts during the turn of the first unit from the attacking army
+        if ( !isCatapultProcessed && unit->GetColor() == _catapultColor ) {
+            isCatapultProcessed = true;
+            processSiegeWeapon( false );
+        }
+        // Castle towers act during the turn of the first unit from the defending army
+        else if ( !areTowersProcessed && unit->GetColor() == _opponentColor ) {
+            areTowersProcessed = true;
+            processSiegeWeapon( true );
+        }
+
+        if ( unitRectIndex == unitsToDraw ) {
+            break;
+        }
+
         if ( !unit->isValid() ) {
             continue;
         }
 
-        if ( unit->Modes( Battle::TR_MOVED ) && ( validUnitCount - unitsProcessed > unitsToDraw ) ) {
+        if ( unit->Modes( Battle::TR_MOVED ) && ( itemCount - unitsProcessed > unitsToDraw ) ) {
             ++unitsProcessed;
             continue;
         }
@@ -1368,6 +1487,14 @@ void Battle::TurnOrder::redraw( const Unit * current, const uint8_t currentUnitC
 
         ++unitRectIndex;
         ++unitsProcessed;
+    }
+
+    // The catapult and castle towers act at the end of the turn if none of the units from the corresponding army are able to act
+    if ( !isCatapultProcessed && unitRectIndex < unitsToDraw ) {
+        processSiegeWeapon( false );
+    }
+    if ( !areTowersProcessed && unitRectIndex < unitsToDraw ) {
+        processSiegeWeapon( true );
     }
 }
 
@@ -3297,15 +3424,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         msg = _( "View Ballista info" );
 
         if ( le.MouseClickLeft( _ballistaTowerRect ) || le.isMouseRightButtonPressedInArea( _ballistaTowerRect ) ) {
-            const Castle * cstl = Arena::GetCastle();
-            std::string ballistaMessage = Tower::GetInfo( *cstl );
-
-            if ( cstl->isBuild( BUILD_MOAT ) ) {
-                ballistaMessage.append( "\n\n" );
-                ballistaMessage.append( Battle::Board::GetMoatInfo() );
-            }
-
-            fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
+            showBallistaInfo( le.isMouseRightButtonPressed() ? Dialog::ZERO : Dialog::OK );
         }
     }
     else if ( ( conf.getBattleTurnOrderState() != BattleTurnOrderState::OFF ) && le.isMouseCursorPosInArea( _turnOrder.getRenderingRoi() ) ) {

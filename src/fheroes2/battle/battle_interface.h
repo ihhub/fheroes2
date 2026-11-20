@@ -247,6 +247,14 @@ namespace Battle
             _opponentColor = opponentColor;
         }
 
+        // Castle towers and the catapult are shown in the order of units right before the first unit from the defending and the attacking army respectively.
+        void setSiegeWeapons( const PlayerColor catapultColor, const bool isCatapultActed, const bool areTowersActed )
+        {
+            _catapultColor = catapultColor;
+            _isCatapultActed = isCatapultActed;
+            _areTowersActed = areTowersActed;
+        }
+
         void redraw( const Unit * current, const uint8_t currentUnitColor, const Unit * underCursor, fheroes2::Image & output, const fheroes2::Rect & dialogRoi,
                      const bool isAboveDialog );
 
@@ -276,6 +284,7 @@ namespace Battle
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
         static void _redrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const uint8_t currentUnitColor, fheroes2::Image & output );
+        static void _redrawSiegeWeapon( const fheroes2::Rect & pos, const bool isTowers, const bool isActed, const uint8_t color, fheroes2::Image & output );
 
         std::weak_ptr<const Units> _orderOfUnits;
         fheroes2::Rect _renderingRoi;
@@ -284,6 +293,10 @@ namespace Battle
 
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         PlayerColor _opponentColor{ PlayerColor::NONE };
+        // NONE means that there is no catapult in the battle.
+        PlayerColor _catapultColor{ PlayerColor::NONE };
+        bool _isCatapultActed{ false };
+        bool _areTowersActed{ false };
         bool _isInsideBattleField{ false };
         bool _isAboveDialog{ false };
     };
@@ -368,6 +381,12 @@ namespace Battle
         }
 
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
+
+        void setSiegeWeaponsInOrderOfUnits( const PlayerColor catapultColor, const bool isCatapultActed, const bool areTowersActed )
+        {
+            _turnOrder.setSiegeWeapons( catapultColor, isCatapultActed, areTowersActed );
+        }
+
         void FadeArena( const bool clearMessageLog );
 
         void RedrawActionNewTurn() const;
