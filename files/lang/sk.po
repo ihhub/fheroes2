@@ -12906,10 +12906,10 @@ msgstr "Vyvolaj loď"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Privolá najbližšiu neobsadenú priateľskú loď na priľahlé miesto na pobreží. "
 "Priateľská loď je loď, ktorú si práve postavil alebo si ju obsadil ako "

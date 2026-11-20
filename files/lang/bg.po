@@ -13007,10 +13007,10 @@ msgstr "Призови кораб"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Извиква най-близката незаета, приятелска лодка до съседно място на брега. "
 "Приятелска лодка е тази, която току-що си построил или си бил последният "
