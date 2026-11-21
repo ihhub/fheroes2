@@ -3047,9 +3047,8 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Muestra información adicional como FPS y la hora actual."
 
-#, fuzzy
 msgid "hotkeys|All Categories"
-msgstr "Puntuaciones más altas"
+msgstr "Todas las categorías"
 
 msgid "Hotkey: "
 msgstr "Tecla de acceso rápido: "
@@ -3063,15 +3062,11 @@ msgstr "Evento: "
 msgid "Hot Keys:"
 msgstr "Atajos de teclado:"
 
-#, fuzzy
 msgid "Click here to select:\n"
-msgstr ""
-"Haz clic aquí para\n"
-"seleccionar un monstruo."
+msgstr "Haz clic aquí para seleccionar:\n"
 
-#, fuzzy
 msgid "Select hotkeys category"
-msgstr "Seleccionar Monstruo:"
+msgstr "Seleccionar la categoría de atajos"
 
 msgid "Hide"
 msgstr "Ocultar"
@@ -5793,7 +5788,7 @@ msgid "View High Scores for Standard Maps."
 msgstr "Consulta las puntuaciones más altas para mapas estándar."
 
 msgid "Campaign"
-msgstr "Partida de campaña"
+msgstr "Campaña"
 
 msgid "View High Scores for Campaigns."
 msgstr "Consulta las puntuaciones más altas de las campañas."
@@ -5817,7 +5812,7 @@ msgid "hotkey|default down"
 msgstr "Abajo (general)"
 
 msgid "hotkey|default delete"
-msgstr ""
+msgstr "Eliminar (general)"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "Activar/desactivar pantalla completa"
