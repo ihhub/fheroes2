@@ -4902,7 +4902,7 @@ msgid "Animation"
 msgstr "Animación"
 
 msgid "Passability"
-msgstr "Pasabilidad"
+msgstr "Transitabilidad"
 
 msgid "Toggle animation of the objects."
 msgstr "Activar/desactivar la animación de los objetos."
@@ -5869,7 +5869,7 @@ msgid "hotkey|select all map sizes"
 msgstr "Seleccionar todos los tamaños de mapa"
 
 msgid "hotkey|hot seat game"
-msgstr "Partida en asiento caliente"
+msgstr "Partida de asiento caliente"
 
 msgid "hotkey|battle only game"
 msgstr "Partida de solo batalla"
@@ -5884,16 +5884,16 @@ msgid "hotkey|map editor main menu"
 msgstr "Menú principal del editor de mapas"
 
 msgid "hotkey|new map menu"
-msgstr "Menú de mapa nuevo"
+msgstr "Menú de nuevo mapa"
 
 msgid "hotkey|load map menu"
 msgstr "Menú de cargar mapa"
 
 msgid "hotkey|new map from scratch"
-msgstr "Mapa nuevo desde cero"
+msgstr "Nuevo mapa desde cero"
 
 msgid "hotkey|new random map"
-msgstr "Mapa aleatorio nuevo"
+msgstr "Nuevo mapa aleatorio"
 
 msgid "hotkey|undo last action"
 msgstr "Deshacer la última acción"
@@ -5905,7 +5905,7 @@ msgid "hotkey|open game main menu"
 msgstr "Abrir el menú principal del juego"
 
 msgid "hotkey|toggle passability"
-msgstr "Mostrar/ocultar la pasabilidad"
+msgstr "Mostrar/ocultar la transitabilidad"
 
 msgid "hotkey|auto playtest"
 msgstr "Prueba automática"
@@ -5992,7 +5992,7 @@ msgid "hotkey|change to hero under cursor"
 msgstr "Cambiar al héroe bajo el cursor"
 
 msgid "hotkey|hold and left click to move hero portrait to top of list"
-msgstr "Mantener y hacer clic para subir el héroe al principio"
+msgstr "Mantener la tecla y hacer clic para subir el héroe al principio"
 
 msgid "hotkey|start hero movement"
 msgstr "Continuar el movimiento del héroe"
