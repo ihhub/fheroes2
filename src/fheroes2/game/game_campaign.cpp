@@ -1350,9 +1350,6 @@ fheroes2::GameMode Game::startCampaignScenario( const int32_t difficulty, const 
         return fheroes2::GameMode::CANCEL;
     }
 
-    // Fade-out screen before loading a scenario.
-    fheroes2::fadeOutDisplay();
-
     // The rest of the scenario bonuses should be set after calling players.SetStartGame().
     if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
         SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
@@ -1686,6 +1683,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             const fheroes2::GameMode result = startCampaignScenario( currentDifficulty, allowToRestart, scenarioBonusId );
             if ( result != fheroes2::GameMode::CANCEL ) {
+                // Fade-out screen before loading a scenario.
+                fheroes2::fadeOutDisplay();
+
                 return result;
             }
 
