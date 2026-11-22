@@ -56,7 +56,11 @@ namespace
         const int chosenCampaignID = campaignSaveData.getCampaignID();
         const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
         const Campaign::ScenarioInfoId & currentScenarioInfoId = campaignSaveData.getCurrentScenarioInfoId();
+        assert( currentScenarioInfoId.scenarioId >= 0 );
+
         const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+
+        assert( scenarios.size() > static_cast<size_t>( currentScenarioInfoId.scenarioId ) );
         const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
         return scenario.isMapFilePresent();
@@ -128,7 +132,7 @@ namespace
                     break;
                 }
 
-                // TODO: restart the campaign here.
+                // TODO: restart the normal scenarios here.
                 fheroes2::showStandardTextMessage( _( "Restart Game" ), "This option is under construction.", Dialog::OK );
                 result = fheroes2::GameMode::CANCEL;
                 break;
